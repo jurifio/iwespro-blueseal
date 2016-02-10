@@ -1,0 +1,2 @@
+<?php
+$app->addResource("dataTables");

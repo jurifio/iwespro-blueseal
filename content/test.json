@@ -1,0 +1,167 @@
+{
+    "draw": "1",
+    "data": [
+        {
+            "DT_RowId": "row__de_homeMiddle1",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeMiddle1\">homeMiddle1<\/a>",
+            "description": "Immagine con testo",
+            "content": "Uomo",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__de_homeMiddle2",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeMiddle2\">homeMiddle2<\/a>",
+            "description": "Immagine con testo",
+            "content": "Donna",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__de_homeMiddle3",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeMiddle3\">homeMiddle3<\/a>",
+            "description": "Immagine con testo",
+            "content": "Accessori",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__de_homeMiddle4",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeMiddle4\">homeMiddle4<\/a>",
+            "description": "Immagine con testo",
+            "content": "Borse",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__de_homeMiddle5",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeMiddle5\">homeMiddle5<\/a>",
+            "description": "Immagine con testo",
+            "content": "Per lei",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__de_homeMiddle6",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeMiddle6\">homeMiddle6<\/a>",
+            "description": "Immagine con testo",
+            "content": "Per lui",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__de_homeTop1",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeTop1\">homeTop1<\/a>",
+            "description": "Immagine con testo",
+            "content": "New in",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__de_homeTop2",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeTop2\">homeTop2<\/a>",
+            "description": "Immagine con testo",
+            "content": "FW15",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__de_homeTop3",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeTop3\">homeTop3<\/a>",
+            "description": "Immagine con testo",
+            "content": "Bambino",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__de_homeTop4",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=homeTop4\">homeTop4<\/a>",
+            "description": "Immagine con testo",
+            "content": "Bambina",
+            "lang": "de"
+        },
+        {
+            "DT_RowId": "row__it_xmasBagMan",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasBagMan\">xmasBagMan<\/a>",
+            "description": "Immagine con testo",
+            "content": "Questione di Accessori",
+            "lang": "it"
+        },
+        {
+            "DT_RowId": "row__it_xmasBlueObsession",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasBlueObsession\">xmasBlueObsession<\/a>",
+            "description": "Immagine con testo",
+            "content": "Blu Obsession",
+            "lang": "it"
+        },
+        {
+            "DT_RowId": "row__it_xmasBoy",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasBoy\">xmasBoy<\/a>",
+            "description": "Immagine con testo",
+            "content": "Cool To School",
+            "lang": "it"
+        },
+        {
+            "DT_RowId": "row__it_xmasGirl",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasGirl\">xmasGirl<\/a>",
+            "description": "Immagine con testo",
+            "content": "Every Day Fun",
+            "lang": "it"
+        },
+        {
+            "DT_RowId": "row__it_xmasJewelsWoman",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasJewelsWoman\">xmasJewelsWoman<\/a>",
+            "description": "Immagine con testo",
+            "content": "Love Luxury",
+            "lang": "it"
+        },
+        {
+            "DT_RowId": "row__it_xmasMan",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasMan\">xmasMan<\/a>",
+            "description": "Immagine con testo",
+            "content": "Fashion Time",
+            "lang": "it"
+        },
+        {
+            "DT_RowId": "row__it_xmasRedDreams",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasRedDreams\">xmasRedDreams<\/a>",
+            "description": "Immagine con testo",
+            "content": "Christmas Dreams",
+            "lang": "it"
+        },
+        {
+            "DT_RowId": "row__it_xmasWinterCult",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasWinterCult\">xmasWinterCult<\/a>",
+            "description": "Immagine con testo",
+            "content": "Winter Must Have",
+            "lang": "it"
+        },
+        {
+            "DT_RowId": "row__it_xmasWoman",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasWoman\">xmasWoman<\/a>",
+            "description": "Immagine con testo",
+            "content": "Glamour Addict",
+            "lang": "it"
+        },
+        {
+            "DT_RowId": "row__it_xmasWomanShoes",
+            "DT_RowClass": "colore",
+            "id": "<a data-toggle=\"tooltip\" title=\"modifica\" data-placement=\"right\" href=\"\/blueseal\/marketing\/landing\/modifica?id=xmasWomanShoes\">xmasWomanShoes<\/a>",
+            "description": "Immagine con testo",
+            "content": "Absolute Black",
+            "lang": "it"
+        }
+    ],
+    "recordsTotal": 20,
+    "recordsFiltered": 20
+}

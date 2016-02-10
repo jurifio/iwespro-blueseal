@@ -1,0 +1,186 @@
+{
+    "css": {
+        "core": {
+            "pace.css": {
+                "path": "scheme://localdomain/blueseal/assets/css/",
+                "options": ["screen"]
+            },
+            "bootstrap.min.css": {
+                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/",
+                "options": ["screen,print"]
+            },
+            "font-awesome.min.css": {
+                "path": "scheme://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/",
+                "options": ["screen,print"]
+            },
+            "jqueryUi.css": {
+                "path": "scheme://localdomain/blueseal/assets/css/",
+                "options": ["screen"]
+            }
+        },
+        "ui": {
+            "jquery.scrollbar.css": {
+                "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-css/",
+                "options": ["screen"]
+            },
+            "bootstrap-colorpicker.min.css": {
+                "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-css/",
+                "options": ["screen"]
+            }
+        },
+        "forms": {
+            "selectize.css": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/",
+                "options": ["screen"]
+            },
+            "basic.min.css": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/",
+                "options": ["screen"]
+            },
+            "dropzone.min.css": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/",
+                "options": ["screen"]
+            },
+            "ui.dynatree.css": {
+                "path": "scheme://localdomain/blueseal/assets/css/",
+                "options": ["screen"]
+            },
+            "summernote.min.css": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/",
+                "options": ["screen"]
+            }
+        },
+        "tables": {
+            "datatables.min.css": {
+                "path": "scheme://cdn.datatables.net/r/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,cr-1.2.0,fc-3.1.0,fh-3.0.0,kt-2.0.0,r-1.0.7,rr-1.0.0,sc-1.3.0,se-1.0.1/",
+                "options": ["screen"]
+            }
+        },
+        "default": {
+            "pages-icons.css": {
+                "path": "scheme://localdomain/blueseal/assets/css/",
+                "options": ["screen,print"]
+            },
+            "pages.css": {
+                "path": "scheme://localdomain/blueseal/assets/css/",
+                "options": ["screen,print"]
+            },
+            "style.css": {
+                "path": "scheme://localdomain/blueseal/assets/css/",
+                "options": ["screen,print"]
+            }
+        }
+    },
+    "js": {
+        "core": {
+            "pace.min.js": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/",
+                "options": []
+            },
+            "jquery-2.1.4.min.js": {
+                "path": "scheme://code.jquery.com/",
+                "options": []
+            },
+            "jquery-ui.min.js": {
+                "path": "scheme://code.jquery.com/ui/1.11.4/",
+                "options": []
+            },
+            "bootstrap.min.js": {
+                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/",
+                "options": []
+            },
+            "pages.js": {
+                "path": "scheme://localdomain/blueseal/assets/js/",
+                "options": ["defer"]
+            },
+            "blueseal.prototype.js": {
+                "path": "scheme://localdomain/blueseal/assets/js/",
+                "options": ["defer"]
+            },
+            "blueseal.ui.js": {
+                "path": "scheme://localdomain/blueseal/assets/js/",
+                "options": ["defer"]
+            }
+        },
+        "ui": {
+            "jquery.easing.min.js": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/",
+                "options": ["defer"]
+            },
+            "jquery.bez.min.js": {
+                "path": "scheme://cdn.jsdelivr.net/jquery.bez/1.0.11/",
+                "options": ["defer"]
+            },
+            "jquery.unveil.min.js": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/unveil/1.3.0/",
+                "options": ["defer"]
+            },
+            "jquery.scrollbar.min.js": {
+                "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-js/",
+                "options": ["defer"]
+            },
+            "Sortable.min.js": {
+                "path": "scheme://localdomain/blueseal/assets/js/",
+                "options": ["defer"]
+            },
+            "bootstrap-colorpicker.min.js": {
+                "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-js/",
+                "options": ["defer"]
+            }
+        },
+        "forms": {
+            "selectize.js": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/",
+                "options": ["defer"]
+            },
+            "dropzone.min.js": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/",
+                "options": ["defer"]
+            },
+            "dropzone-amd-module.min.js": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/",
+                "options": ["defer"]
+            },
+            "jquery.dynatree.min.js": {
+                "path": "scheme://cdn.jsdelivr.net/jquery.dynatree/1.2.4/",
+                "options": ["defer"]
+            },
+            "summernote.min.js": {
+                "path": "scheme://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/",
+                "options": ["defer"]
+            },
+            "summernote-it-IT.js": {
+                "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-js/",
+                "options": ["defer"]
+            },
+            "jquery.validate.min.js": {
+                "path": "scheme://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/",
+                "options": ["defer"]
+            },
+            "additional-methods.min.js": {
+                "path": "scheme://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/",
+                "options": ["defer"]
+            }
+        },
+        "tables": {
+            "datatables.min.js": {
+                "path": "scheme://cdn.datatables.net/r/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,cr-1.2.0,fc-3.1.0,fh-3.0.0,kt-2.0.0,r-1.0.7,rr-1.0.0,sc-1.3.0,se-1.0.1/",
+                "options": ["defer"]
+            },
+            "datatables.init.js": {
+                "path": "scheme://localdomain/blueseal/assets/js/",
+                "options": ["defer"]
+            }
+        },
+        "default": {
+            "blueseal.kickstart.js": {
+                "path": "scheme://localdomain/blueseal/assets/js/",
+                "options": ["defer"]
+            },
+            "blueseal.page": {
+                "path": "scheme://localdomain/blueseal/assets/js/",
+                "options": ["defer"]
+            }
+        }
+    }
+}

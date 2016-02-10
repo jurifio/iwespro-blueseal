@@ -1,0 +1,8 @@
+{
+    "sha1": "5d2ad0354552f0772636abce9c02c90e11f59c2b",
+    "name": "ebay-api-interface",
+    "version": "0.1",
+    "date": "2016/01/18",
+    "compat": ["BlueSeal;1.0"],
+    "adminOnly": true
+}

@@ -1,0 +1,12 @@
+<?php
+$app->addResource('jquery');
+$app->addResource('bootstrap');
+$app->addResource('fontAwesome');
+$app->addResource('jqueryUi');
+$app->addResource('easing');
+$app->addResource('bez');
+$app->addResource('unveil');
+$app->addResource('scrollbar');
+$app->addResource('pace');
+$app->addResource('bamboo');
+$app->addEndResource('pages');

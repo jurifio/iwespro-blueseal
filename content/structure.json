@@ -1,0 +1,503 @@
+{
+    "sections": {
+        "homepage": {
+            "editorialimage": {
+                "id": "editorialimage",
+                "route": "CContent.home",
+                "cms": {
+                    "description": "Immagine con testo",
+                    "content": ["captionTitle","captionText"],
+                    "icon": "fa-file-image-o",
+                    "media": "image"
+                },
+                "text": {
+                    "captionTitle": {
+                        "label": "Titolo",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "captionText": {
+                        "label": "Testo",
+                        "tag": "textarea",
+                        "type": null,
+                        "css": "form-control",
+                        "required": false
+                    }
+                },
+                "buttons": {
+                    "buttonCallToAction": {
+                        "label": "Testo del pulsante",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "captionHref": {
+                        "label": "Link del pulsante",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    }
+                },
+                "files": {
+                    "image": {
+                        "label": "Immagine",
+                        "tag": "input",
+                        "type": "file",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "href": {
+                        "label": "Link immagine",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "alt": {
+                        "label": "Testo alternativo",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": false
+                    }
+                },
+                "color": {
+                    "colorCss": {
+                        "label": "Colore del testo",
+                        "tag": "input",
+                        "type": "radio",
+                        "css": null,
+                        "values": ["editorial-black","editorial-white"],
+                        "prettyValues": ["Colore font nero","Colore font bianco"],
+                        "required": true
+                    }
+                },
+                "grids": {
+                    "lg": {
+                        "label": "Colonne su schermo HD",
+                        "tag": "select",
+                        "type": null,
+                        "css": "full-width",
+                        "values": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "prettyValues": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "required": true
+                    },
+                    "md": {
+                        "label": "Colonne su schermo SD",
+                        "tag": "select",
+                        "type": null,
+                        "css": "full-width",
+                        "values": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "prettyValues": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "required": true
+                    },
+                    "sm": {
+                        "label": "Colonne su tablet",
+                        "tag": "select",
+                        "type": null,
+                        "css": "full-width",
+                        "values": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "prettyValues": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "required": true
+                    },
+                    "xs": {
+                        "label": "Colonne su smartphone",
+                        "tag": "select",
+                        "type": null,
+                        "css": "full-width",
+                        "values": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "prettyValues": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "required": true
+                    }
+                },
+                "animations": {
+                    "animation": {
+                        "label": "Animazione",
+                        "tag": "select",
+                        "type": null,
+                        "css": "full-width",
+                        "values": [
+                            "bounce",
+                            "flash",
+                            "pulse",
+                            "rubberBand",
+                            "shake",
+                            "swing",
+                            "tada",
+                            "wobble",
+                            "bounceIn",
+                            "bounceInDown",
+                            "bounceInLeft",
+                            "bounceInRight",
+                            "bounceInUp",
+                            "bounceOut",
+                            "bounceOutDown",
+                            "bounceOutLeft",
+                            "bounceOutRight",
+                            "bounceOutUp",
+                            "fadeIn",
+                            "fadeInDown",
+                            "fadeInDownBig",
+                            "fadeInLeft",
+                            "fadeInLeftBig",
+                            "fadeInRight",
+                            "fadeInRightBig",
+                            "fadeInUp",
+                            "fadeInUpBig",
+                            "fadeOut",
+                            "fadeOutDown",
+                            "fadeOutDownBig",
+                            "fadeOutLeft",
+                            "fadeOutLeftBig",
+                            "fadeOutRight",
+                            "fadeOutRightBig",
+                            "fadeOutUp",
+                            "fadeOutUpBig",
+                            "fadeOutBig",
+                            "flip",
+                            "flipInX",
+                            "flipInY",
+                            "flipOutX",
+                            "flipOutY",
+                            "lightSpeedIn",
+                            "lightSpeedOut",
+                            "rotateIn",
+                            "rotateInDownLeft",
+                            "rotateInDownRight",
+                            "rotateInUpLeft",
+                            "rotateInUpRight",
+                            "rotateOut",
+                            "rotateOutDownLeft",
+                            "rotateOutDownRight",
+                            "rotateOutUpLeft",
+                            "rotateOutUpRight",
+                            "hinge",
+                            "rollIn",
+                            "rollOut",
+                            "zoomIn",
+                            "zoomInDown",
+                            "zoomInLeft",
+                            "zoomInRight",
+                            "zoomInUp",
+                            "zoomOut",
+                            "zoomOutDown",
+                            "zoomOutLeft",
+                            "zoomOutRight",
+                            "zoomOutUp"
+                        ],
+                        "prettyValues": [
+                            "bounce",
+                            "flash",
+                            "pulse",
+                            "rubberBand",
+                            "shake",
+                            "swing",
+                            "tada",
+                            "wobble",
+                            "bounceIn",
+                            "bounceInDown",
+                            "bounceInLeft",
+                            "bounceInRight",
+                            "bounceInUp",
+                            "bounceOut",
+                            "bounceOutDown",
+                            "bounceOutLeft",
+                            "bounceOutRight",
+                            "bounceOutUp",
+                            "fadeIn",
+                            "fadeInDown",
+                            "fadeInDownBig",
+                            "fadeInLeft",
+                            "fadeInLeftBig",
+                            "fadeInRight",
+                            "fadeInRightBig",
+                            "fadeInUp",
+                            "fadeInUpBig",
+                            "fadeOut",
+                            "fadeOutDown",
+                            "fadeOutDownBig",
+                            "fadeOutLeft",
+                            "fadeOutLeftBig",
+                            "fadeOutRight",
+                            "fadeOutRightBig",
+                            "fadeOutUp",
+                            "fadeOutUpBig",
+                            "fadeOutBig",
+                            "flip",
+                            "flipInX",
+                            "flipInY",
+                            "flipOutX",
+                            "flipOutY",
+                            "lightSpeedIn",
+                            "lightSpeedOut",
+                            "rotateIn",
+                            "rotateInDownLeft",
+                            "rotateInDownRight",
+                            "rotateInUpLeft",
+                            "rotateInUpRight",
+                            "rotateOut",
+                            "rotateOutDownLeft",
+                            "rotateOutDownRight",
+                            "rotateOutUpLeft",
+                            "rotateOutUpRight",
+                            "hinge",
+                            "rollIn",
+                            "rollOut",
+                            "zoomIn",
+                            "zoomInDown",
+                            "zoomInLeft",
+                            "zoomInRight",
+                            "zoomInUp",
+                            "zoomOut",
+                            "zoomOutDown",
+                            "zoomOutLeft",
+                            "zoomOutRight",
+                            "zoomOutUp"
+                        ],
+                        "required": false
+                    }
+                }
+            }
+        },
+        "catalog": {
+            "gridtoolbar": {
+                "id": "gridtoolbar",
+                "route": "CContent.catalog",
+                "cms": {
+                    "description": "Toolbar catalogo",
+                    "content": ["title"],
+                    "icon": "fa-file-image-o",
+                    "media" : "image"
+                },
+                "text": {
+                    "latestLabel": {
+                        "label": "Testo per le novità",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "highPriceLabel": {
+                        "label": "Testo per prodotti più costosi",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "lowPriceLabel": {
+                        "label": "Testo per prodotti più economici",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "sortLabel": {
+                        "label": "Testo per l'ordinamento",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "showLabel": {
+                        "label": "Testo per la paginazione",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "limitDefault": {
+                        "label": "Prodotti per pagina",
+                        "tag": "select",
+                        "type": null,
+                        "css": "form-control",
+                        "values": "get.data.limits",
+                        "prettyValues": "get.data.limits",
+                        "required": true
+                    },
+                    "limit": {
+
+                    }
+                },
+                "buttons": {},
+                "files": {},
+                "color": {},
+                "grids": {},
+                "animations": {}
+            },
+            "addtocartbox": {
+                "id": "addtocartbox",
+                "route": "CProductsummary.detail",
+                "cms": {
+                    "description": "Pulsanti aggiunta carrello",
+                    "content": ["title"],
+                    "icon": "fa-file-image-o",
+                    "media" : "image"
+                },
+                "text": {
+                    "mailtoLabel": {
+                        "label": "Testo per contatto mail",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "calltoLabel": {
+                        "label": "Testo per contatto telefonico",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "sizeSelector": {
+                        "label": "Testo per selezionare la taglia",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "cartButton": {
+                        "label": "Testo per aggiungere al carrello",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    }
+                },
+                "buttons": {},
+                "files": {},
+                "color": {},
+                "grids": {},
+                "animations": {}
+            },
+            "productsummary": {
+                "id": "productsummary",
+                "route": "CProductsummary.detail",
+                "cms": {
+                    "description": "Scheda prodotto",
+                    "content": ["title"],
+                    "icon": "fa-file-image-o",
+                    "media" : "image"
+                },
+                "text": {
+                    "skuLabel": {
+                        "label": "Testo per il codice articolo",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "categoryLabel": {
+                        "label": "Testo per le categorie",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "tagLabel": {
+                        "label": "Testo per i tag",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "variablePriceBySize": {
+                        "label": "Testo per il prezzo variabile",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "descrLabel": {
+                        "label": "Testo per la descrizione",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "detailLabel": {
+                        "label": "Testo per i dettagli",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "shippingLabel": {
+                        "label": "Testo per la spedizione",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "sizeFitLabel": {
+                        "label": "Testo per le misure",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "compLabel": {
+                        "label": "Testo per la composizione",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    }
+                },
+                "buttons": {},
+                "files": {},
+                "color": {},
+                "grids": {},
+                "animations": {}
+            },
+            "productgrid": {
+                "id": "productgrid",
+                "route": "CContent.catalog",
+                "cms": {
+                    "description": "Griglia prodotti",
+                    "content": ["title"],
+                    "icon": "fa-file-image-o",
+                    "media" : "image"
+                },
+                "text": {
+                    "title": {
+                        "label": "Titolo",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "variablePriceBySize": {
+                        "label": "Messaggio prezzo variabile per taglia",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "noProductsAvailableText": {
+                        "label": "Messaggio prodotto non disponibile",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    },
+                    "productsPerRow": {
+                        "label": "Prodotti per riga",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
+                    }
+                },
+                "buttons": {},
+                "files": {},
+                "color": {},
+                "grids": {},
+                "animations": {}
+            }
+        }
+    }
+}
