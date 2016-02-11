@@ -1,0 +1,1318 @@
+{
+    "routes": [
+       {
+            "pattern": "/blueseal/?",
+            "behaviour": {
+                "ctrl": "BlueSealLoginController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti(/?)",
+            "behaviour": {
+                "ctrl": "TranslationController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/homepage(/?)",
+            "behaviour": {
+                "ctrl": "HomepageContentController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/homepage/modifica/:wlang/:type/:id(/?)",
+            "behaviour": {
+                "ctrl": "HomepageContentEditController"
+            },
+            "filters": {
+                "id": "[A-Za-z0-9_-]+",
+                "type": "[A-Za-z0-9_-]+",
+                "wlang": "[a-z]{2}"
+            },
+            "methods": [
+                "GET",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/homepage/aggiungi/:wlang/:type/:id(/?)",
+            "behaviour": {
+                "ctrl": "HomepageContentAddController"
+            },
+            "filters": {
+                "id": "[A-Za-z0-9_-]+",
+                "type": "[A-Za-z0-9_-]+",
+                "wlang": "[a-z]{2}"
+            },
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/homepage/traduci/:wlang/:type/:id(/?)",
+            "behaviour": {
+                "ctrl": "HomepageContentTranslateController"
+            },
+            "filters": {
+                "id": "[A-Za-z0-9_-]+",
+                "type": "[A-Za-z0-9_-]+",
+                "wlang": "[a-z]{2}"
+            },
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/catalogo(/?)",
+            "behaviour": {
+                "ctrl": "CatalogContentController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/checkout(/?)",
+            "behaviour": {
+                "ctrl": "CheckoutContentController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/database(/?)",
+            "behaviour": {
+                "ctrl": "DatabaseContentController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/generale(/?)",
+            "behaviour": {
+                "ctrl": "GenericContentController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/altro(/?)",
+            "behaviour": {
+                "ctrl": "OtherContentController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/prodotti/dettagli(/?)",
+            "behaviour": {
+                "ctrl": "ProductDetailContentController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/contenuti/prodotti/schede(/?)",
+            "behaviour": {
+                "ctrl": "ProductSheetContentController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/logout/?",
+            "behaviour": {
+                "ctrl": "BlueSealLogoutController"
+            },
+            "filters": {},
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/dashboard/?",
+            "behaviour": {
+                "ctrl": "BlueSealDashboardController"
+            },
+            "filters": {},
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/ordini(/)?",
+            "behaviour": {
+                "ctrl": "OrderListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/ordini/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "OrderManageController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti(/)?",
+            "behaviour": {
+                "ctrl": "ProductListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/dettagli(/)?",
+            "behaviour": {
+                "ctrl": "ProductDetailListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/traduzioni/dettagli(/)?",
+            "behaviour": {
+                "ctrl": "DetailTranslateListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/connettori/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "ConnectorController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/brand(/)?",
+            "behaviour": {
+                "ctrl": "DictionaryBrandListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/brand/modifica/:shopId(/)?",
+            "behaviour": {
+                "ctrl": "DictionaryBrandEditController"
+            },
+            "filters": {
+                "shopId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/taglie(/)?",
+            "behaviour": {
+                "ctrl": "DictionarySizeListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/taglie/modifica/:shopId(/)?",
+            "behaviour": {
+                "ctrl": "DictionarySizeEditController"
+            },
+            "filters": {
+                "shopId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/stagioni(/)?",
+            "behaviour": {
+                "ctrl": "DictionarySeasonListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/stagioni/modifica/:shopId(/)?",
+            "behaviour": {
+                "ctrl": "DictionarySeasonEditController"
+            },
+            "filters": {
+                "shopId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/tag(/)?",
+            "behaviour": {
+                "ctrl": "DictionaryTagListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/tag/modifica/:shopId(/)?",
+            "behaviour": {
+                "ctrl": "DictionaryTagEditController"
+            },
+            "filters": {
+                "shopId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/colori(/)?",
+            "behaviour": {
+                "ctrl": "DictionaryColorListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/colori/modifica/:shopId(/)?",
+            "behaviour": {
+                "ctrl": "DictionaryColorEditController"
+            },
+            "filters": {
+                "shopId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/categorie(/)?",
+            "behaviour": {
+                "ctrl": "DictionaryCategoryListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/categorie/modifica/:shopId(/)?",
+            "behaviour": {
+                "ctrl": "DictionaryCategoryEditController"
+            },
+            "filters": {
+                "shopId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/connettori(/)?",
+            "behaviour": {
+                "ctrl": "ShopController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/traduzioni/dettagli/modifica(/)?",
+            "behaviour": {
+                "ctrl": "DetailTranslateEditController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/traduzioni/dettagli/lingua/:langId(/)?",
+            "behaviour": {
+                "ctrl": "DetailTranslateLangListController"
+            },
+            "filters": {
+                "langId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/traduzioni/dettagli/lingua_list/:langId(/)?",
+            "behaviour": {
+                "ctrl": "DetailTranslateLangAllListController"
+            },
+            "filters": {
+                "langId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "ProductAddController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/roulette(/)?",
+            "behaviour": {
+                "ctrl": "ProductRouletteController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/modifica(/)?",
+            "behaviour": {
+                "ctrl": "ProductEditController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/incompleti(/)?",
+            "behaviour": {
+                "ctrl": "ProductIncompleteController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/attivi(/)?",
+            "behaviour": {
+                "ctrl": "ProductActiveListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/photos(/)?",
+            "behaviour": {
+                "ctrl": "ProductPhotoManageController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/incompleti/importatori(/)?",
+            "behaviour": {
+                "ctrl": "ProductImporterController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/brand(/)?",
+            "behaviour": {
+                "ctrl": "BrandListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/brand/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "BrandAddController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/gruppo-taglie(/)?",
+            "behaviour": {
+                "ctrl": "SizeListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/brand/modifica(/)?",
+            "behaviour": {
+                "ctrl": "BrandEditController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/gruppo-taglie/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "SizeManageController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/gruppo-colore(/)?",
+            "behaviour": {
+                "ctrl": "ColorListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/gruppo-colore/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "ColorAddController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/gruppo-colore/modifica(/)?",
+            "behaviour": {
+                "ctrl": "ColorEditController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/gruppo-colore/elimina(/)?",
+            "behaviour": {
+                "ctrl": "ColorDeleteController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/categorie(/)?",
+            "behaviour": {
+                "ctrl": "CategoryListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/categorie/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "CategoryManageController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/skus(/)?",
+            "behaviour": {
+                "ctrl": "SkuManageController"
+            },
+            "filters": {
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/utenti(/)?",
+            "behaviour": {
+                "ctrl": "UserListController"
+            },
+            "filters": {
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/xhr/:xcontroller(/)?",
+            "behaviour": {
+                "ctrl": "BluesealXhrController"
+            },
+            "filters": {
+                "xcontroller": "[a-zA-Z]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
+            "behaviour": {
+                "ctrl": "FriendConfirmationController"
+            },
+            "filters": {
+                "shop": "[0-9]+",
+                "orderId": "[0-9]+",
+                "orderLineId": "[0-9]+",
+                "confirm": "[a-z]{3}"
+            },
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/print/azteccode(/)?",
+            "behaviour": {
+                "ctrl": "PrintAztecCodeController"
+            },
+            "filters": {},
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/marketing/landing(/)?",
+            "behaviour": {
+                "ctrl": "LandingPageListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/marketing/landing/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "LandingPageAddController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/marketing/landing/modifica(/)?",
+            "behaviour": {
+                "ctrl": "LandingPageEditController"
+            },
+            "filters": {},
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/blog(/)?",
+            "behaviour": {
+                "ctrl": "BlogPostListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/blog/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "BlogPostAddController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/blog/modifica(/)?",
+            "behaviour": {
+                "ctrl": "BlogPostEditController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/blog/cestino(/)?",
+            "behaviour": {
+                "ctrl": "BlogPostBinController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/coupon(/?)",
+            "behaviour": {
+                "ctrl": "CouponListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/coupon/modifica/:id(/?)",
+            "behaviour": {
+                "ctrl": "CouponEditController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+            "pattern": "/blueseal/coupon/aggiungi(/?)",
+            "behaviour": {
+              "ctrl": "CouponAddController"
+            },
+            "filters": {},
+            "methods": [
+               "GET",
+                "POST"
+            ],
+            "hosts": [
+              "www.pickyshop.com",
+              "pickyshop.com",
+              "debug.pickyshop.clo.ud.it"
+            ]
+        },
+        {
+          "pattern": "/blueseal/tipocoupon(/?)",
+          "behaviour": {
+            "ctrl": "CouponTypeListController"
+          },
+          "filters": {},
+          "methods": [
+            "GET"
+          ],
+          "hosts": [
+            "www.pickyshop.com",
+            "pickyshop.com",
+            "debug.pickyshop.clo.ud.it"
+          ]
+        },
+        {
+          "pattern": "/blueseal/tipocoupon/modifica/:id(/?)",
+          "behaviour": {
+            "ctrl": "CouponTypeEditController"
+          },
+          "filters": {
+            "id": "[0-9]+"
+          },
+          "methods": [
+            "GET",
+            "PUT"
+          ],
+          "hosts": [
+            "www.pickyshop.com",
+            "pickyshop.com",
+            "debug.pickyshop.clo.ud.it"
+          ]
+        },
+        {
+          "pattern": "/blueseal/tipocoupon/aggiungi(/?)",
+          "behaviour": {
+            "ctrl": "CouponTypeAddController"
+          },
+          "filters": {},
+          "methods": [
+            "GET",
+            "POST"
+          ],
+          "hosts": [
+            "www.pickyshop.com",
+            "pickyshop.com",
+            "debug.pickyshop.clo.ud.it"
+          ]
+        },
+        {
+            "pattern": "/blueseal/eventocoupon(/?)",
+            "behaviour": {
+              "ctrl": "CouponEventListController"
+            },
+            "filters": {},
+            "methods": [
+              "GET"
+            ],
+            "hosts": [
+              "www.pickyshop.com",
+              "pickyshop.com",
+              "debug.pickyshop.clo.ud.it"
+          ]
+        },
+        {
+          "pattern": "/blueseal/eventocoupon/modifica/:id(/?)",
+          "behaviour": {
+            "ctrl": "CouponEventEditController"
+          },
+          "filters": {
+            "id": "[0-9]+"
+          },
+          "methods": [
+            "GET",
+            "PUT"
+          ],
+          "hosts": [
+            "www.pickyshop.com",
+            "pickyshop.com",
+            "debug.pickyshop.clo.ud.it"
+          ]
+        },
+        {
+            "pattern": "/blueseal/eventocoupon/aggiungi(/?)",
+            "behaviour": {
+              "ctrl": "CouponEventAddController"
+            },
+            "filters": {},
+            "methods": [
+              "GET",
+              "POST"
+            ],
+            "hosts": [
+              "www.pickyshop.com",
+              "pickyshop.com",
+              "debug.pickyshop.clo.ud.it"
+          ]
+        }
+    ]
+}
