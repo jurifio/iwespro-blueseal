@@ -5,12 +5,12 @@ namespace bamboo\blueseal\business;
 
 use bamboo\core\ecommerce\IBillingLogic;
 use bamboo\ecommerce\events\EGenericEvent;
-use bamboo\ecommerce\domain\entities\COrderLine;
-use bamboo\ecommerce\domain\entities\COrderLineStatus;
+use bamboo\domain\entities\COrderLine;
+use bamboo\domain\entities\COrderLineStatus;
 use bamboo\core\application\AApplication;
 use bamboo\ecommerce\domain\repositories\COrderLineStatusRepo;
 use bamboo\core\db\pandaorm\repositories\CRepo;
-use bamboo\ecommerce\domain\entities\CProductSku;
+use bamboo\domain\entities\CProductSku;
 use bamboo\core\exceptions\RedPandaException;
 
 class COrderLineManager

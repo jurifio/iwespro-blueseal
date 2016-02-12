@@ -1,7 +1,7 @@
 <?php
 namespace bamboo\blueseal\jobs;
 
-use bamboo\ecommerce\domain\entities\COrder;
+use bamboo\domain\entities\COrder;
 use bamboo\core\jobs\ACronJob;
 
 /**

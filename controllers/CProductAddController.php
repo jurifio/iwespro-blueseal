@@ -1,7 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
-use bamboo\ecommerce\domain\entities\CShop;
+use bamboo\domain\entities\CShop;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\CEntityManager;

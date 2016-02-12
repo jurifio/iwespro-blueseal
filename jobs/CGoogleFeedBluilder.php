@@ -1,7 +1,7 @@
 <?php
 namespace bamboo\blueseal\jobs;
 
-use bamboo\ecommerce\domain\entities\CProduct;
+use bamboo\domain\entities\CProduct;
 use bamboo\core\db\pandaorm\entities\AEntity;
 use bamboo\core\jobs\ACronJob;
 use bamboo\core\theming\CWidgetHelper;

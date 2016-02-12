@@ -1,7 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\ecommerce\domain\entities\CProduct;
+use bamboo\domain\entities\CProduct;
 use redpanda\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
