@@ -1,6 +1,6 @@
 <?php
 
-namespace bamboo\controllers;
+namespace bamboo\blueseal\controllers
 
 
 

@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\controllers;
+namespace bamboo\blueseal\controllers
 
 use bamboo\core\exceptions\RedPandaAssetException;
 use bamboo\core\utils\amazonPhotoManager\ImageManager;

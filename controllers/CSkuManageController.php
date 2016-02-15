@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\controllers;
+namespace bamboo\blueseal\controllers
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;

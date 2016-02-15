@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\controllers;
+namespace bamboo\blueseal\controllers
 
 use bamboo\domain\entities\CShop;
 use bamboo\ecommerce\views\VBase;

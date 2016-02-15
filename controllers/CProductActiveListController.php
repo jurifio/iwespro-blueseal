@@ -1,6 +1,6 @@
 <?php
 
-namespace bamboo\controllers;
+namespace bamboo\blueseal\controllers
 
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
