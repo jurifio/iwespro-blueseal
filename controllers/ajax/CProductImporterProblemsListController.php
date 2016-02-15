@@ -2,14 +2,14 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\domain\entities\CProduct;
-use redpanda\blueseal\business\CDataTables;
+use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 
 /**
  * Class CTestAjax.php
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CProductImporterProblemsListController extends AAjaxController
 {

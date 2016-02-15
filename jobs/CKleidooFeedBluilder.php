@@ -8,7 +8,7 @@ use bamboo\core\theming\CWidgetHelper;
 
 /**
  * Class CDispatchPreorderToFriend
- * @package redpanda\blueseal\jobs
+ * @package bamboo\blueseal\jobs
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  * @copyright (c) Bambooshoot snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -83,7 +83,7 @@ class CKleidooFeedBluilder extends ACronJob
 	 * @param CWidgetHelper $helper
 	 * @param $minized
 	 * @return string
-	 * @throws \redpanda\core\exceptions\RedPandaDBALException
+	 * @throws \bamboo\core\exceptions\RedPandaDBALException
 	 */
 	public function kleidooProductToXml(AEntity $pro,$categories,CWidgetHelper $helper,$minized)
 	{

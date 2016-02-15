@@ -7,7 +7,7 @@ use bamboo\core\exceptions\RedPandaConfigException;
 
 /**
  * Class CBlueSealPage
- * @package redpanda\blueseal\business
+ * @package bamboo\blueseal\business
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *
@@ -20,7 +20,7 @@ use bamboo\core\exceptions\RedPandaConfigException;
 class CBlueSealPage
 {
     /**
-     * @var \redpanda\core\db\pandaorm\entities\IEntity
+     * @var \bamboo\core\db\pandaorm\entities\IEntity
      */
     protected $data;
 

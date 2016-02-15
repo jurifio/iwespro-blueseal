@@ -6,7 +6,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class CBlueSealDashboardController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

@@ -8,7 +8,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class CDetailTranslateEditController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *
@@ -26,8 +26,8 @@ class CDetailTranslateEditController extends CDetailTranslateManageController
 
     /**
      * @throws \Exception
-     * @throws \redpanda\core\exceptions\RedPandaDBALException
-     * @throws \redpanda\core\exceptions\RedPandaORMException
+     * @throws \bamboo\core\exceptions\RedPandaDBALException
+     * @throws \bamboo\core\exceptions\RedPandaORMException
      */
     public function get()
     {

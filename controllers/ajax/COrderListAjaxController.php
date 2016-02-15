@@ -1,13 +1,13 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use redpanda\blueseal\business\CDataTables;
+use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 
 /**
  * Class COrderListAjaxController
- * @package redpanda\blueseal\controllers\ajax
+ * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

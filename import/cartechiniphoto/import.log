@@ -1,25 +1,25 @@
 Prodotto: 42 var: 1427 cartechini: 10323exception 'ErrorException' with message 'ftp_chdir(): Failed to change directory.' in /data/www/redpanda/core/base/CFTPClient.php:108
 Stack trace:
-#0 [internal function]: redpanda\core\debug\CDebugger->handleError(2, 'ftp_chdir(): Fa...', '/data/www/redpa...', 108, Array)
+#0 [internal function]: bamboo\core\debug\CDebugger->handleError(2, 'ftp_chdir(): Fa...', '/data/www/redpa...', 108, Array)
 #1 /data/www/redpanda/core/base/CFTPClient.php(108): ftp_chdir(Resource id #43, 'shootImport/')
-#2 /data/www/redpanda/htdocs/cartechinishop/blueseal/export/photosToAmazon/CProductPhotoExport.php(67): redpanda\core\base\CFTPClient->changeDir('shootImport/')
-#3 /data/www/redpanda/htdocs/cartechinishop/blueseal/import/cartechiniphoto/total_import.php(43): redpanda\blueseal\export\photosToAmazon\CProductPhotoExport->importFromCartechiniCode(42, 1427)
+#2 /data/www/redpanda/htdocs/cartechinishop/blueseal/export/photosToAmazon/CProductPhotoExport.php(67): bamboo\core\base\CFTPClient->changeDir('shootImport/')
+#3 /data/www/redpanda/htdocs/cartechinishop/blueseal/import/cartechiniphoto/total_import.php(43): bamboo\blueseal\export\photosToAmazon\CProductPhotoExport->importFromCartechiniCode(42, 1427)
 #4 {main}------------------Prodotto: 84 var: 1293 cartechini: 10282exception 'ErrorException' with message 'ftp_chdir(): Failed to change directory.' in /data/www/redpanda/core/base/CFTPClient.php:108
 Stack trace:
-#0 [internal function]: redpanda\core\debug\CDebugger->handleError(2, 'ftp_chdir(): Fa...', '/data/www/redpa...', 108, Array)
+#0 [internal function]: bamboo\core\debug\CDebugger->handleError(2, 'ftp_chdir(): Fa...', '/data/www/redpa...', 108, Array)
 #1 /data/www/redpanda/core/base/CFTPClient.php(108): ftp_chdir(Resource id #43, 'shootImport/')
-#2 /data/www/redpanda/htdocs/cartechinishop/blueseal/export/photosToAmazon/CProductPhotoExport.php(67): redpanda\core\base\CFTPClient->changeDir('shootImport/')
-#3 /data/www/redpanda/htdocs/cartechinishop/blueseal/import/cartechiniphoto/total_import.php(43): redpanda\blueseal\export\photosToAmazon\CProductPhotoExport->importFromCartechiniCode(84, 1293)
+#2 /data/www/redpanda/htdocs/cartechinishop/blueseal/export/photosToAmazon/CProductPhotoExport.php(67): bamboo\core\base\CFTPClient->changeDir('shootImport/')
+#3 /data/www/redpanda/htdocs/cartechinishop/blueseal/import/cartechiniphoto/total_import.php(43): bamboo\blueseal\export\photosToAmazon\CProductPhotoExport->importFromCartechiniCode(84, 1293)
 #4 {main}------------------Prodotto: 85 var: 1294 cartechini: 10298exception 'ErrorException' with message 'ftp_chdir(): Failed to change directory.' in /data/www/redpanda/core/base/CFTPClient.php:108
 Stack trace:
-#0 [internal function]: redpanda\core\debug\CDebugger->handleError(2, 'ftp_chdir(): Fa...', '/data/www/redpa...', 108, Array)
+#0 [internal function]: bamboo\core\debug\CDebugger->handleError(2, 'ftp_chdir(): Fa...', '/data/www/redpa...', 108, Array)
 #1 /data/www/redpanda/core/base/CFTPClient.php(108): ftp_chdir(Resource id #43, 'shootImport/')
-#2 /data/www/redpanda/htdocs/cartechinishop/blueseal/export/photosToAmazon/CProductPhotoExport.php(67): redpanda\core\base\CFTPClient->changeDir('shootImport/')
-#3 /data/www/redpanda/htdocs/cartechinishop/blueseal/import/cartechiniphoto/total_import.php(43): redpanda\blueseal\export\photosToAmazon\CProductPhotoExport->importFromCartechiniCode(85, 1294)
+#2 /data/www/redpanda/htdocs/cartechinishop/blueseal/export/photosToAmazon/CProductPhotoExport.php(67): bamboo\core\base\CFTPClient->changeDir('shootImport/')
+#3 /data/www/redpanda/htdocs/cartechinishop/blueseal/import/cartechiniphoto/total_import.php(43): bamboo\blueseal\export\photosToAmazon\CProductPhotoExport->importFromCartechiniCode(85, 1294)
 #4 {main}------------------Prodotto: 87 var: 1296 cartechini: 10306exception 'ErrorException' with message 'ftp_chdir(): Failed to change directory.' in /data/www/redpanda/core/base/CFTPClient.php:108
 Stack trace:
-#0 [internal function]: redpanda\core\debug\CDebugger->handleError(2, 'ftp_chdir(): Fa...', '/data/www/redpa...', 108, Array)
+#0 [internal function]: bamboo\core\debug\CDebugger->handleError(2, 'ftp_chdir(): Fa...', '/data/www/redpa...', 108, Array)
 #1 /data/www/redpanda/core/base/CFTPClient.php(108): ftp_chdir(Resource id #43, 'shootImport/')
-#2 /data/www/redpanda/htdocs/cartechinishop/blueseal/export/photosToAmazon/CProductPhotoExport.php(67): redpanda\core\base\CFTPClient->changeDir('shootImport/')
-#3 /data/www/redpanda/htdocs/cartechinishop/blueseal/import/cartechiniphoto/total_import.php(43): redpanda\blueseal\export\photosToAmazon\CProductPhotoExport->importFromCartechiniCode(87, 1296)
+#2 /data/www/redpanda/htdocs/cartechinishop/blueseal/export/photosToAmazon/CProductPhotoExport.php(67): bamboo\core\base\CFTPClient->changeDir('shootImport/')
+#3 /data/www/redpanda/htdocs/cartechinishop/blueseal/import/cartechiniphoto/total_import.php(43): bamboo\blueseal\export\photosToAmazon\CProductPhotoExport->importFromCartechiniCode(87, 1296)
 #4 {main}------------------

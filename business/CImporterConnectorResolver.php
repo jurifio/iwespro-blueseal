@@ -9,7 +9,7 @@ use bamboo\core\exceptions\RedPandaOutOfBoundException;
 
 /**
  * Class CImporterConnector
- * @package redpanda\htdocs\pickyshop\blueseal\business
+ * @package bamboo\htdocs\pickyshop\blueseal\business
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, 25/01/2016
  * @copyright (c) Bambooshoot snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited

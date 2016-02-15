@@ -9,7 +9,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 /**
  * Class CGetAutocompleteData
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CGetAutocompleteData extends AAjaxController
 {
@@ -20,7 +20,7 @@ class CGetAutocompleteData extends AAjaxController
     {
         $value = $_POST['value'];
         $keys = explode('_', $value);
-        /** @var \redpanda\core\db\pandaorm\adapter\CMySQLAdapter $mysql */
+        /** @var \bamboo\core\db\pandaorm\adapter\CMySQLAdapter $mysql */
         $mysql = $this->app->dbAdapter;
         $sql = 'SELECT distinct `name` FROM ProductAttributeValue where langId = ? and productAttributeId = ? ';
         $res = $mysql->query($sql,array($keys[1],$keys[2]))->fetchAll();

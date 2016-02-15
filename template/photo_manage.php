@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php
-/** @var $app redpanda\core\theming\CRestrictedAccessWidgetHelper */
-/** @var $productEdit redpanda\app\domain\entities\CProduct */
+/** @var $app bamboo\core\theming\CRestrictedAccessWidgetHelper */
+/** @var $productEdit bamboo\app\domain\entities\CProduct */
 ?>
 <html>
 <head>

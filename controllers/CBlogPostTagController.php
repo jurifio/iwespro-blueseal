@@ -6,7 +6,7 @@ use bamboo\ecommerce\views\VBase;
 
 /**
  * Class CBlogPostTagController
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CBlogPostTagController extends ARestrictedAccessRootController
 {

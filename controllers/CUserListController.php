@@ -6,7 +6,7 @@ use bamboo\ecommerce\views\VBase;
 
 /**
  * Class CUserListController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  * @copyright (c) Bambooshoot snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited

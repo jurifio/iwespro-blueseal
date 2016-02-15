@@ -9,7 +9,7 @@ use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 
 /**
  * Class CColorListController
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CColorListController extends ARestrictedAccessRootController
 {

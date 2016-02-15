@@ -9,7 +9,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class CPrintAztecCodeController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  */
 class CPrintAztecCodeController extends ARestrictedAccessRootController
 {

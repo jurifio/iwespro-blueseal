@@ -4,7 +4,7 @@ use bamboo\ecommerce\views\VBase;
 
 /**
  * Class CGetAutocompleteSize
- * @package redpanda\blueseal\controllers\ajax
+ * @package bamboo\blueseal\controllers\ajax
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  * @copyright (c) Bambooshoot snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -15,7 +15,7 @@ use bamboo\ecommerce\views\VBase;
 class CGetDataSheet extends AAjaxController
 {
     /**
-     * @throws \redpanda\core\exceptions\RedPandaDBALException
+     * @throws \bamboo\core\exceptions\RedPandaDBALException
      */
     public function get()
     {

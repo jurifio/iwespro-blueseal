@@ -2,12 +2,12 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\ecommerce\views\VBase;
-use redpanda\blueseal\business\CBlueSealPage;
+use bamboo\blueseal\business\CBlueSealPage;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class CChangeOrderStatus
- * @package redpanda\blueseal\controllers\ajax
+ * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

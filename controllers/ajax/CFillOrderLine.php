@@ -4,7 +4,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\ecommerce\views\widget\VBase;
-use redpanda\blueseal\business\COrderLineManager;
+use bamboo\blueseal\business\COrderLineManager;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\core\db\pandaorm\repositories\CRepo;

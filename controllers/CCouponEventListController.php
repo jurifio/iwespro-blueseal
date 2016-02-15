@@ -6,7 +6,7 @@ use bamboo\ecommerce\views\VBase;
 
 /**
  * Class CCouponEventListController
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CCouponEventListController extends ARestrictedAccessRootController
 {

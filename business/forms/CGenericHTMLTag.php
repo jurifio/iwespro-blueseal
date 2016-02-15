@@ -4,7 +4,7 @@ namespace bamboo\blueseal\business\forms;
 
 /**
  * Class CGenericHTMLTag
- * @package redpanda\blueseal\business\forms
+ * @package bamboo\blueseal\business\forms
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

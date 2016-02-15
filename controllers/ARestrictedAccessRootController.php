@@ -1,8 +1,8 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
-use redpanda\blueseal\business\CBlueSealPage;
-use redpanda\blueseal\business\CBlueSealSidebar;
+use bamboo\blueseal\business\CBlueSealPage;
+use bamboo\blueseal\business\CBlueSealSidebar;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\RedPandaConfigException;
 use bamboo\core\router\ARootController;
@@ -12,7 +12,7 @@ use bamboo\core\router\CRouter;
 
 /**
  * Class ARestrictedAccessRootController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

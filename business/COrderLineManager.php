@@ -83,7 +83,7 @@ class COrderLineManager
     }
 
     /**
-     * @return \redpanda\core\base\CObjectCollection
+     * @return \bamboo\core\base\CObjectCollection
      */
     public function possibleNext()
     {
@@ -150,7 +150,7 @@ class COrderLineManager
     }
 
     /**
-     * @return \redpanda\core\base\CObjectCollection
+     * @return \bamboo\core\base\CObjectCollection
      */
     public function getAlternativesSkus()
     {

@@ -4,7 +4,7 @@ namespace bamboo\app\business\api;
 
 /**
  * Class apiCallAbstract
- * @package redpanda\app\business\api
+ * @package bamboo\app\business\api
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

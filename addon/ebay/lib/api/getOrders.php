@@ -5,7 +5,7 @@ use bamboo\core\base\CConfig;
 
 /**
  * Class getOrders
- * @package redpanda\app\business\api
+ * @package bamboo\app\business\api
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

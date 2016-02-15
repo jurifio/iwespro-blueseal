@@ -4,7 +4,7 @@ namespace bamboo\blueseal\business\forms;
 
 /**
  * Class CImg
- * @package redpanda\blueseal\business\forms
+ * @package bamboo\blueseal\business\forms
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

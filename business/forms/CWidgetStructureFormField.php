@@ -5,7 +5,7 @@ use bamboo\core\exceptions\RedPandaInvalidArgumentException;
 
 /**
  * Class CWidgetStructureFormField
- * @package redpanda\blueseal\business\forms
+ * @package bamboo\blueseal\business\forms
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

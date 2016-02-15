@@ -2,11 +2,11 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\core\exceptions\RedPandaFileException,
-    redpanda\core\io\CJsonAdapter;
+    bamboo\core\io\CJsonAdapter;
 
 /**
  * Class CWidgetManager
- * @package redpanda\blueseal\controllers\ajax
+ * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

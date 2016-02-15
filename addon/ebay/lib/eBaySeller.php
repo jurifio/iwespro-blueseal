@@ -4,7 +4,7 @@ namespace bamboo\app\business;
 
 /**
  * Class eBaySeller
- * @package redpanda\app\business
+ * @package bamboo\app\business
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

@@ -6,7 +6,7 @@ use bamboo\core\io\CJsonAdapter;
 
 /**
  * Class CLanguageController
- * @package redpanda\blueseal\controllers\ajax
+ * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

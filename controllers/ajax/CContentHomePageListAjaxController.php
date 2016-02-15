@@ -1,13 +1,13 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use redpanda\blueseal\business\CWidgetStructureParser;
+use bamboo\blueseal\business\CWidgetStructureParser;
 use bamboo\core\intl\CLang;
 use bamboo\ecommerce\views\widget\VBase;
 
 /**
  * Class CContentHomePageListAjaxController
- * @package redpanda\htdocs\pickyshop\blueseal\controllers\ajax
+ * @package bamboo\htdocs\pickyshop\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

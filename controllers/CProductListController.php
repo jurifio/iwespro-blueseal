@@ -9,7 +9,7 @@ use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 
 /**
  * Class CProductListController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

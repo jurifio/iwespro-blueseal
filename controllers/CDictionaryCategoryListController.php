@@ -6,7 +6,7 @@ use bamboo\ecommerce\views\VBase;
 
 /**
  * Class CDictionaryCategoryListController
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CDictionaryCategoryListController extends ARestrictedAccessRootController
 {

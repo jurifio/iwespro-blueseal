@@ -5,7 +5,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
 /**
  * Class CBrandEditController
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CBrandEditController extends CBrandManageController
 {
@@ -19,7 +19,7 @@ class CBrandEditController extends CBrandManageController
     protected $pageSlug = "product_brand_edit";
 
     /**
-     * @throws \redpanda\core\exceptions\RedPandaORMException
+     * @throws \bamboo\core\exceptions\RedPandaORMException
      */
     public function get()
     {

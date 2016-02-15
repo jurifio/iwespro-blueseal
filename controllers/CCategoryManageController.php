@@ -9,7 +9,7 @@ use bamboo\core\base\CObjectCollection;
 
 /**
  * Class CCategoryManageController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

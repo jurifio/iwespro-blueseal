@@ -8,7 +8,7 @@ use bamboo\core\db\pandaorm\repositories\IRepo;
 
 /**
  * Class CBlueSealSidebar
- * @package redpanda\blueseal\business
+ * @package bamboo\blueseal\business
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

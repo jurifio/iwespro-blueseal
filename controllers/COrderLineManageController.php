@@ -7,7 +7,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class COrderManageController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  */
 class COrderLineManageController extends ARestrictedAccessRootController
 {

@@ -7,7 +7,7 @@ use bamboo\ecommerce\views\VBase;
 
 /**
  * Class CShopController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

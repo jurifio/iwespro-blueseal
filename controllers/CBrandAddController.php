@@ -6,7 +6,7 @@ use bamboo\ecommerce\views\VBase;
 
 /**
  * Class CBrandAddController
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CBrandAddController extends CBrandManageController
 {
@@ -20,7 +20,7 @@ class CBrandAddController extends CBrandManageController
     protected $pageSlug = "product_brand_add";
 
     /**
-     * @throws \redpanda\core\exceptions\RedPandaORMException
+     * @throws \bamboo\core\exceptions\RedPandaORMException
      */
     public function get()
     {

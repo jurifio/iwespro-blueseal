@@ -2,13 +2,13 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\ecommerce\views\VBase;
-use redpanda\blueseal\business\CJsonDataTables;
+use bamboo\blueseal\business\CJsonDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\core\io\CJsonAdapter;
 
 /**
  * Class CGetLandingPageList
- * @package redpanda\blueseal\controllers\ajax
+ * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, 10/22/2015
  *

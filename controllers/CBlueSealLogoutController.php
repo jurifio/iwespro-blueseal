@@ -6,7 +6,7 @@ namespace bamboo\blueseal\controllers;
 
 /**
  * Class CBlueSealLogoutPageController
- * @package redpanda\blueseal\controllers;
+ * @package bamboo\blueseal\controllers;
  */
 class CBlueSealLogoutController extends ARestrictedAccessRootController
 {

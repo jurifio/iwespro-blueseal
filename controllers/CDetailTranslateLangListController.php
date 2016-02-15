@@ -7,7 +7,7 @@ use bamboo\ecommerce\views\VBase;
 
 /**
  * Class CDetailTranslateLangListController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

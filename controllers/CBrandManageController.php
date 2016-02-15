@@ -8,7 +8,7 @@ use bamboo\core\utils\slugify\CSlugify;
 
 /**
  * Class CBrandManageController
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CBrandManageController extends ARestrictedAccessRootController
 {

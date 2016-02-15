@@ -2,16 +2,16 @@
 
 namespace bamboo\blueseal\business;
 
-use redpanda\blueseal\business\forms\CGenericHTMLTag,
-    redpanda\blueseal\business\forms\CInput,
-    redpanda\blueseal\business\forms\CSelect,
-    redpanda\blueseal\business\forms\CTextarea,
-    redpanda\blueseal\business\forms\CImg,
-    redpanda\blueseal\business\forms\CWidgetStructureFormField;
+use bamboo\blueseal\business\forms\CGenericHTMLTag,
+    bamboo\blueseal\business\forms\CInput,
+    bamboo\blueseal\business\forms\CSelect,
+    bamboo\blueseal\business\forms\CTextarea,
+    bamboo\blueseal\business\forms\CImg,
+    bamboo\blueseal\business\forms\CWidgetStructureFormField;
 
 /**
  * Class CWidgetStructure
- * @package redpanda\blueseal\business
+ * @package bamboo\blueseal\business
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

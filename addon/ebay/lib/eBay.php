@@ -7,7 +7,7 @@ use bamboo\core\base\CConfig;
 
 /**
  * Class eBay
- * @package redpanda\app\business
+ * @package bamboo\app\business
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

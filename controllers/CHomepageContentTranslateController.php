@@ -2,14 +2,14 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\ecommerce\views\VBase;
-use redpanda\blueseal\business\CBlueSealPage;
-use redpanda\blueseal\business\CWidgetStructureParser;
+use bamboo\blueseal\business\CBlueSealPage;
+use bamboo\blueseal\business\CWidgetStructureParser;
 use bamboo\core\io\CJsonAdapter;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class CHomepageContentTranslateController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *
@@ -33,7 +33,7 @@ class CHomepageContentTranslateController extends ARestrictedAccessRootControlle
     protected $pageSlug = "content_homepage_edit";
 
     /**
-     * @throws \redpanda\core\exceptions\RedPandaInvalidArgumentException
+     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
      */
     public function get()
     {
@@ -55,7 +55,7 @@ class CHomepageContentTranslateController extends ARestrictedAccessRootControlle
     }
 
     /**
-     * @throws \redpanda\core\exceptions\RedPandaInvalidArgumentException
+     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
      */
     public function gotoEdit()
     {
@@ -84,7 +84,7 @@ class CHomepageContentTranslateController extends ARestrictedAccessRootControlle
     }
 
     /**
-     * @throws \redpanda\core\exceptions\RedPandaInvalidArgumentException
+     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
      */
     public function gotoAdd()
     {

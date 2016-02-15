@@ -2,11 +2,11 @@
 
 namespace bamboo\blueseal\controllers;
 
-use redpanda\blueseal\controllers\ajax\AAjaxController;
+use bamboo\blueseal\controllers\ajax\AAjaxController;
 
 /**
  * Class CBluesealXhrController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *
@@ -28,7 +28,7 @@ class CBluesealXhrController extends ARestrictedAccessRootController
     public function reroute()
     {
         $controllerClass = $this->app->router->getMatchedRoute()->getComputedFilters()['xcontroller'];
-        $widgetController = "redpanda\\blueseal\\controllers\\ajax\\C".ucfirst($controllerClass)."";
+        $widgetController = "bamboo\\blueseal\\controllers\\ajax\\C".ucfirst($controllerClass)."";
 
         if (class_exists($widgetController)) {
             /** @var AAjaxController $ctrl */

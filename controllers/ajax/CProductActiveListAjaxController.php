@@ -1,14 +1,14 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use redpanda\blueseal\business\CDataTables;
+use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\core\intl\CLang;
 
 /**
  * Class CProductActiveListAjaxController.php
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CProductActiveListAjaxController extends AAjaxController
 {

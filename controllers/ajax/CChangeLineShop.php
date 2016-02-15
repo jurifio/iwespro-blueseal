@@ -6,17 +6,17 @@
  * Time: 13:00
  */
 namespace bamboo\blueseal\controllers\ajax;
-use redpanda\blueseal\business\COrderLineManager;
+use bamboo\blueseal\business\COrderLineManager;
 
 /**
  * Class CChangeLineShop
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CChangeLineShop extends AAjaxController
 {
     /**
      * @return bool
-     * @throws \redpanda\core\exceptions\RedPandaException
+     * @throws \bamboo\core\exceptions\RedPandaException
      */
     public function put()
     {

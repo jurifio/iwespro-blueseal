@@ -1,6 +1,6 @@
 <?php
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use redpanda\blueseal\business\COrderLineManager;
+use bamboo\blueseal\business\COrderLineManager;
 /** @var COrderLineManager $lineManager */
 /** @var CRestrictedAccessWidgetHelper $app*/
 $sku = unserialize($line->frozenProduct);

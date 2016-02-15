@@ -7,13 +7,13 @@ use bamboo\ecommerce\views\VBase;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\RedPandaException;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use redpanda\import\productsync\antonacci\CAntonacciImport;
-use redpanda\import\productsync\dellamartira\CDellaMartiraImport;
-use redpanda\import\productsync\thesquare\CThesquareImport;
+use bamboo\import\productsync\antonacci\CAntonacciImport;
+use bamboo\import\productsync\dellamartira\CDellaMartiraImport;
+use bamboo\import\productsync\thesquare\CThesquareImport;
 
 /**
  * Class CProductEditController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *
@@ -30,8 +30,8 @@ class CProductRouletteController extends CProductManageController
 
     /**
      * @throws \Exception
-     * @throws \redpanda\core\exceptions\RedPandaDBALException
-     * @throws \redpanda\core\exceptions\RedPandaORMException
+     * @throws \bamboo\core\exceptions\RedPandaDBALException
+     * @throws \bamboo\core\exceptions\RedPandaORMException
      */
     public function get()
 	{

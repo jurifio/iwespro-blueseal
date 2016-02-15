@@ -8,7 +8,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class CContentManagerContentForm
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CContentManagerContentForm extends AAjaxController
 {

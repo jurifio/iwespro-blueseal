@@ -5,7 +5,7 @@ error_reporting(~0);
 require "/data/www/redpanda/htdocs/cartechinishop/BlueSeal.php";
 use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
-use redpanda\import\photosToAmazon\CProductPhotoExport;
+use bamboo\import\photosToAmazon\CProductPhotoExport;
 
 $BlueSeal = new BlueSeal('BlueSeal','cartechinishop','/data/www/redpanda');
 $BlueSeal->enableDebugging();

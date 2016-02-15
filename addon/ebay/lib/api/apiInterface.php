@@ -4,7 +4,7 @@ namespace bamboo\app\business\api;
 
 /**
  * Interface apiInterface
- * @package redpanda\app\business\api
+ * @package bamboo\app\business\api
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

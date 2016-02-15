@@ -9,13 +9,13 @@ namespace bamboo\blueseal\controllers\ajax;
 
 /**
  * Class CChangeLineShop
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CSessionMonitor extends AAjaxController
 {
 	/**
 	 * @return bool
-	 * @throws \redpanda\core\exceptions\RedPandaException
+	 * @throws \bamboo\core\exceptions\RedPandaException
 	 */
 	public function get()
 	{

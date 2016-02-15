@@ -3,12 +3,12 @@ namespace bamboo\blueseal\jobs;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\jobs\ACronJob;
-use redpanda\export\order\COrderExport;
+use bamboo\export\order\COrderExport;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 
 /**
  * Class CDispatchPreorderToFriend
- * @package redpanda\blueseal\jobs
+ * @package bamboo\blueseal\jobs
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  * @copyright (c) Bambooshoot snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited

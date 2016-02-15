@@ -7,7 +7,7 @@ use bamboo\ecommerce\views\VBase;
 
 /**
  * Class CCouponTypeAddController
- * @package redpanda\app\controllers
+ * @package bamboo\app\controllers
  */
 class CCouponTypeAddController extends ARestrictedAccessRootController
 {
@@ -21,7 +21,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
     protected $pageSlug = "coupontype_add";
 
     /**
-     * @throws \redpanda\core\exceptions\RedPandaORMException
+     * @throws \bamboo\core\exceptions\RedPandaORMException
      */
     public function get()
     {

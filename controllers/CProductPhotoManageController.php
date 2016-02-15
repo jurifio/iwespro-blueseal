@@ -12,7 +12,7 @@ use bamboo\core\utils\slugify\CSlugify;
 
 /**
  * Class CProductPhotoManagerController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

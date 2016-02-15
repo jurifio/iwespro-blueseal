@@ -2,14 +2,14 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\ecommerce\views\VBase;
-use redpanda\blueseal\business\COrderLineManager;
-use redpanda\blueseal\controllers\ARestrictedAccessRootController;
+use bamboo\blueseal\business\COrderLineManager;
+use bamboo\blueseal\controllers\ARestrictedAccessRootController;
 use bamboo\core\router\CRouter;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class CFriendConfirmationController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  */
 class CFriendConfirmationController extends ARestrictedAccessRootController
 {

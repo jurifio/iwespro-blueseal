@@ -7,7 +7,7 @@ use bamboo\core\db\pandaorm\entities\CEntityManager;
 
 /**
  * Class CCategoryListController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

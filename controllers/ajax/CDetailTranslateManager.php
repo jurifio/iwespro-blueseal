@@ -4,7 +4,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 /**
  * Class CDetailTranslateManager
- * @package redpanda\blueseal\controllers\ajax
+ * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

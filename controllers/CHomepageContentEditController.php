@@ -2,14 +2,14 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\ecommerce\views\VBase;
-use redpanda\blueseal\business\CWidgetStructureParser;
+use bamboo\blueseal\business\CWidgetStructureParser;
 use bamboo\core\exceptions\RedPandaFileException;
 use bamboo\core\io\CJsonAdapter;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class CHomepageContentEditController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *
@@ -32,7 +32,7 @@ class CHomepageContentEditController extends ARestrictedAccessRootController
     protected $pageSlug = "content_homepage_edit";
 
     /**
-     * @throws \redpanda\core\exceptions\RedPandaInvalidArgumentException
+     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
      */
     public function get()
     {
@@ -59,7 +59,7 @@ class CHomepageContentEditController extends ARestrictedAccessRootController
 
     /**
      * @throws RedPandaFileException
-     * @throws \redpanda\core\exceptions\RedPandaInvalidArgumentException
+     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
      */
     public function put()
     {

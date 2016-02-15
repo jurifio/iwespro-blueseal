@@ -5,7 +5,7 @@ use bamboo\core\application\AApplication;
 
 /**
  * Class AAjaxController
- * @package redpanda\blueseal\controllers\ajax
+ * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

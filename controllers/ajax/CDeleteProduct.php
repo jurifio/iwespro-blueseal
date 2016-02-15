@@ -5,7 +5,7 @@ use Aws\CloudFront\Exception\Exception;
 
 /**
  * Class CDeleteProduct
- * @package redpanda\blueseal\controllers\ajax
+ * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
  *

@@ -3,13 +3,13 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\ecommerce\views\VBase;
-use redpanda\blueseal\business\CBlueSealPage;
+use bamboo\blueseal\business\CBlueSealPage;
 use bamboo\core\intl\CLang;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
  * Class CBlueSealLoginController
- * @package redpanda\blueseal\controllers
+ * @package bamboo\blueseal\controllers
  */
 class CBlueSealLoginController extends ARestrictedAccessRootController
 {
@@ -49,7 +49,7 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
     }
 
     /**
-     * @throws \redpanda\core\exceptions\RedPandaInvalidArgumentException
+     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
      */
     public function get()
     {
@@ -62,7 +62,7 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
     }
 
     /**
-     * @throws \redpanda\core\exceptions\RedPandaInvalidArgumentException
+     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
      */
     public function post()
     {

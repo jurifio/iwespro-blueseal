@@ -8,7 +8,7 @@ use bamboo\core\io\CJsonAdapter;
 
 /**
  * Class CWidgetStructureParser
- * @package redpanda\blueseal\business
+ * @package bamboo\blueseal\business
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *
