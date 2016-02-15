@@ -37,7 +37,7 @@ class CHomepageContentAddController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_add.php');
 
         $repo = $this->app->repoFactory->create('Lang');
         $languages = $repo->findAll();
@@ -65,7 +65,7 @@ class CHomepageContentAddController extends ARestrictedAccessRootController
     {
         $assetPath = $this->app->cfg()->fetch('paths', 'store-theme');
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_add.php');
         $appPath = $this->app->cfg()->fetch('paths', 'app');
 
         $data = $this->app->router->request()->getRequestData();

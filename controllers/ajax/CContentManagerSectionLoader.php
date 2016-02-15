@@ -20,7 +20,7 @@ class CContentManagerSectionLoader extends AAjaxController
     public function post()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/widgets/section.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/section.php');
         $root = $this->app->cfg()->fetch('paths','root');
         $this->app->setLang(new CLang(1,'it'));
 

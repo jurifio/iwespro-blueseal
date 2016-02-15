@@ -26,7 +26,7 @@ class CSizeListController extends ARestrictedAccessRootController
     {
         $ac = new CAssetCollection();
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/sizegroup_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/sizegroup_list.php');
 
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $pageURL = $blueseal."/sizes";

@@ -25,7 +25,7 @@ class CProductPhotoAjaxManage extends AAjaxController
         $imgSize = 562;
 
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/widgets/photos.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/widgets/photos.php');
         $id = $this->app->router->request()->getRequestData('id');
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
         $product = $this->app->repoFactory->create('Product')->findOne([$id, $productVariantId]);

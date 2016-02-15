@@ -19,7 +19,7 @@ class COrderManageController extends ARestrictedAccessRootController
     {
 
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/order_manage.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/order_manage.php');
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
 
         $repoStatus = $this->app->repoFactory->create('OrderStatus');

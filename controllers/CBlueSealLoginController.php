@@ -54,7 +54,7 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/index.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/index.php');
         echo $view->render(array(
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page

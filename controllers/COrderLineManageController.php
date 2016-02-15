@@ -20,7 +20,7 @@ class COrderLineManageController extends ARestrictedAccessRootController
     public function get(CInternalRequest $request)
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/manage_order_line.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/manage_order_line.php');
         $order = null;
         $repoStatus = $this->app->repoFactory->create('OrderLineStatus');
 

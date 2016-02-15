@@ -32,7 +32,7 @@ class CDetailTranslateEditController extends CDetailTranslateManageController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/detail_translate_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/detail_translate_edit.php');
 
         $productDetailId = $this->app->router->request()->getRequestData();
         $detailEdit = $this->app->repoFactory->create('ProductDetail')->findOneBy(['id' => $productDetailId]);

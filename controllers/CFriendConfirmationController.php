@@ -26,7 +26,7 @@ class CFriendConfirmationController extends ARestrictedAccessRootController
 
         /** @var CRouter $router */
         $router = $this->app->router;
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/order_confirm.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/order_confirm.php');
         $filters = $router->getMatchedRoute()->getComputedFilters();
         $orderLine = false;
 

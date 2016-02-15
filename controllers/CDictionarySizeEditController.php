@@ -26,7 +26,7 @@ class CDictionarySizeEditController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/dictionary_size_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/dictionary_size_edit.php');
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
         $shopId = $this->app->router->getMatchedRoute()->getComputedFilter('shopId');
         $shopName = $this->app->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);

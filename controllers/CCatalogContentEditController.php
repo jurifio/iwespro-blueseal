@@ -38,7 +38,7 @@ class CCatalogContentEditController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_catalog_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_catalog_edit.php');
 
         $repo = $this->app->repoFactory->create('Lang');
         $languages = $repo->findAll();
@@ -66,7 +66,7 @@ class CCatalogContentEditController extends ARestrictedAccessRootController
     {
         $assetPath = $this->app->cfg()->fetch('paths', 'store-theme');
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_catalog_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_catalog_edit.php');
         $appPath = $this->app->cfg()->fetch('paths', 'app');
 
         $data = $this->app->router->request()->getRequestData();

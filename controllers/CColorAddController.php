@@ -27,7 +27,7 @@ class CColorAddController extends CColorManageController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/colorgroup_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/colorgroup_add.php');
         /** @var $em CEntityManager * */
         $colorGroupEdit = null;
         if (isset($_GET['productColorGroupId'])) {

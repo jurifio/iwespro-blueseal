@@ -27,7 +27,7 @@ class CColorEditController extends CColorManageController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/colorgroup_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/colorgroup_edit.php');
 
         $colorGroupEdit = [];
         foreach ($this->app->router->request()->getRequestData() as $colorId) {

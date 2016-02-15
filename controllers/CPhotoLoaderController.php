@@ -24,7 +24,7 @@ class CPhotoLoaderController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/product_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_add.php');
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

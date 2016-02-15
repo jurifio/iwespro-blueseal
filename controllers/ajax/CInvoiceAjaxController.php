@@ -27,7 +27,7 @@ class CInvoiceAjaxController extends AAjaxController
     {
         $view = new VBase(array());
         $this->page = new CBlueSealPage($this->pageSlug, $this->app);
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/invoice_print.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/invoice_print.php');
 
         $orderId = $this->app->router->request()->getRequestData('orderId');
 

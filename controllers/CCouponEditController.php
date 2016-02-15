@@ -16,7 +16,7 @@ class CCouponEditController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/coupon_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/coupon_edit.php');
 
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
         $couponRepo = $this->app->repoFactory->create('Coupon');

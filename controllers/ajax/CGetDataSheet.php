@@ -20,7 +20,7 @@ class CGetDataSheet extends AAjaxController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/parts/sheetDetails.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/parts/sheetDetails.php');
         $langs = $this->app->repoFactory->create('Lang')->findAll('limit 9999', '');
 
         $name = $this->app->router->request()->getRequestData('value');

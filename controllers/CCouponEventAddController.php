@@ -26,7 +26,7 @@ class CCouponEventAddController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/couponevent_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/couponevent_add.php');
 
         $em = $this->app->entityManagerFactory->create('CouponType');
         $couponTypes = $em->findAll('limit 9999');

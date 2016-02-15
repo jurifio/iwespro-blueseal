@@ -25,7 +25,7 @@ class CBrandAddController extends CBrandManageController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/brand_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/brand_add.php');
 
         $em = $this->app->entityManagerFactory->create('ProductBrand');
 

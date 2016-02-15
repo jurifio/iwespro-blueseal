@@ -30,7 +30,7 @@ class CProductPhotoManageController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/photo_manage.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/photo_manage.php');
 
         /** @var $em CEntityManager * */
         $em = $this->app->entityManagerFactory->create('Product');

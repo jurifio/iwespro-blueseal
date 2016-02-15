@@ -16,7 +16,7 @@ class CBrandListController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/brand_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/brand_list.php');
 
         $blueseal = $this->app->baseUrl(false).'/blueseal';
         $addUrl = $blueseal."/prodotti/brand/aggiungi";

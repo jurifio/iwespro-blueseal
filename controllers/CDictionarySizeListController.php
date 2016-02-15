@@ -16,7 +16,7 @@ class CDictionarySizeListController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/dictionary_size_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/dictionary_size_list.php');
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

@@ -16,7 +16,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/blog_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/blog_edit.php');
 
 	    $id = $this->app->router->request()->getRequestData('id');
 	    $blogId = $this->app->router->request()->getRequestData('blogId');

@@ -16,7 +16,7 @@ class CFillOrderLine extends AAjaxController
     {
         try{
             $view = new VBase(array());
-            $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/widgets/orderLine.php');
+            $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/orderLine.php');
             $filters = $this->data;
 
             /** @var CRepo $repo */

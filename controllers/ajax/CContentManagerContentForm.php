@@ -36,7 +36,7 @@ class CContentManagerContentForm extends AAjaxController
     public function post()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/widgets/contentEditor.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/contentEditor.php');
         $root = $this->app->cfg()->fetch('paths','root');
         $approot = $this->app->cfg()->fetch('paths','app');
         $this->app->setLang(new CLang(1,'it'));

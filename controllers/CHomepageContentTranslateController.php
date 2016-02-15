@@ -63,7 +63,7 @@ class CHomepageContentTranslateController extends ARestrictedAccessRootControlle
         $this->page = new CBlueSealPage($this->pageSlug,$this->app);
 
         $view = new VBase();
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_edit.php');
 
         $repo = $this->app->repoFactory->create('Lang');
         $languages = $repo->findAll();
@@ -92,7 +92,7 @@ class CHomepageContentTranslateController extends ARestrictedAccessRootControlle
         $this->page = new CBlueSealPage($this->pageSlug,$this->app);
 
         $view = new VBase();
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_add.php');
 
         $repo = $this->app->repoFactory->create('Lang');
         $languages = $repo->findAll();

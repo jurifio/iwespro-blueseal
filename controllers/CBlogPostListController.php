@@ -16,7 +16,7 @@ class CBlogPostListController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/blog_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/blog_list.php');
 
         $blueseal = $this->app->baseUrl(false).'/blueseal';
         $addUrl = $blueseal."/blog/aggiungi";

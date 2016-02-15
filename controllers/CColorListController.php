@@ -19,7 +19,7 @@ class CColorListController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/colorgroup_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/colorgroup_list.php');
 
         $blueseal = $this->app->baseUrl(false).'/blueseal';
         $pageURL = $blueseal."/prodotti/gruppo-colore";

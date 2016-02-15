@@ -63,7 +63,7 @@ class CContentHomePageListAjaxController extends AAjaxController
         $bluesealPath = $this->app->cfg()->fetch('paths','blueseal');
 
         $view = new VBase(array());
-        $view->setTemplatePath($bluesealPath.'/template/widgets/section.php');
+        $view->setTemplatePath($this->app->rootPath().$bluesealPath.'/template/widgets/section.php');
         $this->app->setLang(new CLang(1,'it'));
 
         $repo = $this->app->repoFactory->create('Lang');

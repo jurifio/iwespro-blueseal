@@ -36,7 +36,7 @@ class CProductRouletteController extends CProductManageController
     public function get()
 	{
 		$view = new VBase([]);
-		$view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_roulette.php');
+		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_roulette.php');
 
 		/** LOGICA */
 		$bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
