@@ -1,6 +1,6 @@
 <?php
 
-namespace bamboo\blueseal\controllers\ajax;
+namespace bamboo\controllers\ajax;
 
 use bamboo\core\io\CJsonAdapter;
 

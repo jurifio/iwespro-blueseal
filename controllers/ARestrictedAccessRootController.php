@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\blueseal\controllers;
+namespace bamboo\controllers;
 
 use bamboo\blueseal\business\CBlueSealPage;
 use bamboo\blueseal\business\CBlueSealSidebar;

@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\blueseal\controllers\ajax;
+namespace bamboo\controllers\ajax;
 
 use Metzli\Encoder\Encoder;
 use Metzli\Renderer\PngRenderer;

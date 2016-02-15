@@ -5,7 +5,7 @@
  * Date: 20/05/2015
  * Time: 13:00
  */
-namespace bamboo\blueseal\controllers\ajax;
+namespace bamboo\controllers\ajax;
 
 /**
  * Class CGetAutocompleteData

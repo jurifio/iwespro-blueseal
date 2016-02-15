@@ -1,6 +1,6 @@
 <?php
 
-namespace bamboo\blueseal\controllers;
+namespace bamboo\controllers;
 
 use bamboo\blueseal\controllers\ajax\AAjaxController;
 

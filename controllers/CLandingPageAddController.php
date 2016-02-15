@@ -1,6 +1,6 @@
 <?php
 
-namespace bamboo\blueseal\controllers;
+namespace bamboo\controllers;
 
 use Aws\CloudFront\Exception\Exception;
 use bamboo\core\intl\CLang;

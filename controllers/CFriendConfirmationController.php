@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\blueseal\controllers;
+namespace bamboo\controllers;
 
 use bamboo\ecommerce\views\VBase;
 use bamboo\blueseal\business\COrderLineManager;

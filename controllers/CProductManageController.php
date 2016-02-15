@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\blueseal\controllers;
+namespace bamboo\controllers;
 
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\core\exceptions\RedPandaException;
