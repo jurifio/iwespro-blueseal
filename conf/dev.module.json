@@ -1,0 +1,82 @@
+{
+    "paths": {
+        "admin-theme": "/back",
+        "blueseal": "/back",
+        "packed-assets": "/client/public/themes/flatize/assets/",
+        "productSync": "/data/www/redpanda/htdocs/sync",
+        "tempFolder": "/data/www/redpanda/htdocs/pickyshop/temp",
+        "blueseal-addon": "/data/www/redpanda/htdocs/pickyshop/blueseal/addon"
+    },
+    "miscellaneous": {
+        "orderStatus": {
+            "CRT": "Cart status",
+            "CRT_MRG": "Cart merged in an older one, to be deleted",
+            "ORD_PENDNG_PP": "Pending, not paid, PayPal",
+            "ORD_PENDNG_CC": "Pending, not paid, CreditCard",
+            "ORD_PENDNG_CB": "Pending, not paid, Bonifico",
+            "ORD_PENDNG_PY": "Pending, not paid, PickAndPay",
+            "ORD_PENDNG_CS": "Pending, not paid, Contrassegno",
+            "ORD_WAIT_PAYD": "Paid",
+            "ORD_WAIT_NPAY": "Not Paid due to payment method",
+            "ORD_WAIT_PERR": "Error in payment"
+        },
+        "photoFTPClient": {
+            "host": "fiber.office.iwes.it",
+            "user": "shooting",
+            "pass": "PBYI34nbf",
+            "port": "21",
+            "timeout": "10",
+            "mode": "2"
+        },
+        "amazonConfiguration": {
+            "bucket": "iwes",
+            "credential": {
+                "key": "AKIAJAT27PGJ6XWXBY6A",
+                "secret": "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"
+            }
+        },
+        "ebayConfig": {
+            "version": "947",
+            "isProduction": false,
+            "config": {
+                "production": {
+                    "devId": "Production_devID",
+                    "appId": "Production_appID",
+                    "certId": "Production_certID",
+                    "serverUrl": "https://api.ebay.com/ws/api.dll",
+                    "userToken": "Production_usertoken",
+                    "payPalEmailAddress": "PAYPAL_EMAIL_ADDRESS"
+                },
+                "sandbox": {
+                    "devId": "sandbox_devID",
+                    "appId": "sandbox_appID",
+                    "certId": "sandbox_certID",
+                    "serverUrl": "https://api.sandbox.ebay.com/ws/api.dll",
+                    "userToken": "sandbox_usertoken",
+                    "payPalEmailAddress": "SANDBOX_PAYPAL_EMAIL_ADDRESS"
+                }
+            }
+        }
+    },
+    "uploadDrivers": {
+        "ftp": {
+            "shooting": {
+                "host": "fiber.office.iwes.it",
+                "user": "shooting",
+                "pass": "PBYI34nbf",
+                "port": "21",
+                "timeout": "10",
+                "mode": "2"
+            }
+        },
+        "cloud": {
+            "s3": {
+                "bucket": "iwes",
+                "credential": {
+                    "key": "AKIAJAT27PGJ6XWXBY6A",
+                    "secret": "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"
+                }
+            }
+        }
+    }
+}
