@@ -3,7 +3,6 @@ namespace bamboo\controllers;
 
 use bamboo\blueseal\business\CBlueSealPage;
 use bamboo\blueseal\business\CBlueSealSidebar;
-use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\RedPandaConfigException;
 use bamboo\core\router\ARootController;
 use bamboo\core\intl\CLang;
