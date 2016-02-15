@@ -1,9 +1,9 @@
 {
     "routes": [
-       {
+        {
             "pattern": "/blueseal/?",
             "behaviour": {
-                "ctrl": "BlueSealLoginController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLoginController"
             },
             "filters": {},
             "methods": [
@@ -19,7 +19,7 @@
         {
             "pattern": "/blueseal/contenuti(/?)",
             "behaviour": {
-                "ctrl": "TranslationController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CTranslationController"
             },
             "filters": {},
             "methods": [
@@ -35,7 +35,7 @@
         {
             "pattern": "/blueseal/contenuti/homepage(/?)",
             "behaviour": {
-                "ctrl": "HomepageContentController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CHomepageContentController"
             },
             "filters": {},
             "methods": [
@@ -51,7 +51,7 @@
         {
             "pattern": "/blueseal/contenuti/homepage/modifica/:wlang/:type/:id(/?)",
             "behaviour": {
-                "ctrl": "HomepageContentEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CHomepageContentEditController"
             },
             "filters": {
                 "id": "[A-Za-z0-9_-]+",
@@ -71,7 +71,7 @@
         {
             "pattern": "/blueseal/contenuti/homepage/aggiungi/:wlang/:type/:id(/?)",
             "behaviour": {
-                "ctrl": "HomepageContentAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CHomepageContentAddController"
             },
             "filters": {
                 "id": "[A-Za-z0-9_-]+",
@@ -91,7 +91,7 @@
         {
             "pattern": "/blueseal/contenuti/homepage/traduci/:wlang/:type/:id(/?)",
             "behaviour": {
-                "ctrl": "HomepageContentTranslateController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CHomepageContentTranslateController"
             },
             "filters": {
                 "id": "[A-Za-z0-9_-]+",
@@ -110,7 +110,7 @@
         {
             "pattern": "/blueseal/contenuti/catalogo(/?)",
             "behaviour": {
-                "ctrl": "CatalogContentController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCatalogContentController"
             },
             "filters": {},
             "methods": [
@@ -126,7 +126,7 @@
         {
             "pattern": "/blueseal/contenuti/checkout(/?)",
             "behaviour": {
-                "ctrl": "CheckoutContentController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCheckoutContentController"
             },
             "filters": {},
             "methods": [
@@ -142,7 +142,7 @@
         {
             "pattern": "/blueseal/contenuti/database(/?)",
             "behaviour": {
-                "ctrl": "DatabaseContentController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDatabaseContentController"
             },
             "filters": {},
             "methods": [
@@ -158,7 +158,7 @@
         {
             "pattern": "/blueseal/contenuti/generale(/?)",
             "behaviour": {
-                "ctrl": "GenericContentController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CGenericContentController"
             },
             "filters": {},
             "methods": [
@@ -174,7 +174,7 @@
         {
             "pattern": "/blueseal/contenuti/altro(/?)",
             "behaviour": {
-                "ctrl": "OtherContentController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COtherContentController"
             },
             "filters": {},
             "methods": [
@@ -190,7 +190,7 @@
         {
             "pattern": "/blueseal/contenuti/prodotti/dettagli(/?)",
             "behaviour": {
-                "ctrl": "ProductDetailContentController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductDetailContentController"
             },
             "filters": {},
             "methods": [
@@ -206,7 +206,7 @@
         {
             "pattern": "/blueseal/contenuti/prodotti/schede(/?)",
             "behaviour": {
-                "ctrl": "ProductSheetContentController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetContentController"
             },
             "filters": {},
             "methods": [
@@ -222,7 +222,7 @@
         {
             "pattern": "/blueseal/logout/?",
             "behaviour": {
-                "ctrl": "BlueSealLogoutController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLogoutController"
             },
             "filters": {},
             "methods": [
@@ -237,7 +237,7 @@
         {
             "pattern": "/blueseal/dashboard/?",
             "behaviour": {
-                "ctrl": "BlueSealDashboardController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealDashboardController"
             },
             "filters": {},
             "methods": [
@@ -252,7 +252,7 @@
         {
             "pattern": "/blueseal/ordini(/)?",
             "behaviour": {
-                "ctrl": "OrderListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderListController"
             },
             "filters": {},
             "methods": [
@@ -267,7 +267,7 @@
         {
             "pattern": "/blueseal/ordini/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "OrderManageController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderManageController"
             },
             "filters": {},
             "methods": [
@@ -284,7 +284,7 @@
         {
             "pattern": "/blueseal/prodotti(/)?",
             "behaviour": {
-                "ctrl": "ProductListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductListController"
             },
             "filters": {},
             "methods": [
@@ -302,7 +302,7 @@
         {
             "pattern": "/blueseal/prodotti/dettagli(/)?",
             "behaviour": {
-                "ctrl": "ProductDetailListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductDetailListController"
             },
             "filters": {},
             "methods": [
@@ -320,7 +320,7 @@
         {
             "pattern": "/blueseal/traduzioni/dettagli(/)?",
             "behaviour": {
-                "ctrl": "DetailTranslateListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateListController"
             },
             "filters": {},
             "methods": [
@@ -338,7 +338,7 @@
         {
             "pattern": "/blueseal/importatori/connettori/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "ConnectorController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CConnectorController"
             },
             "filters": {},
             "methods": [
@@ -356,7 +356,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/brand(/)?",
             "behaviour": {
-                "ctrl": "DictionaryBrandListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryBrandListController"
             },
             "filters": {},
             "methods": [
@@ -374,7 +374,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/brand/modifica/:shopId(/)?",
             "behaviour": {
-                "ctrl": "DictionaryBrandEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryBrandEditController"
             },
             "filters": {
                 "shopId": "[0-9]+"
@@ -394,7 +394,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/taglie(/)?",
             "behaviour": {
-                "ctrl": "DictionarySizeListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySizeListController"
             },
             "filters": {},
             "methods": [
@@ -412,7 +412,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/taglie/modifica/:shopId(/)?",
             "behaviour": {
-                "ctrl": "DictionarySizeEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySizeEditController"
             },
             "filters": {
                 "shopId": "[0-9]+"
@@ -432,7 +432,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/stagioni(/)?",
             "behaviour": {
-                "ctrl": "DictionarySeasonListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySeasonListController"
             },
             "filters": {},
             "methods": [
@@ -450,7 +450,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/stagioni/modifica/:shopId(/)?",
             "behaviour": {
-                "ctrl": "DictionarySeasonEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySeasonEditController"
             },
             "filters": {
                 "shopId": "[0-9]+"
@@ -470,7 +470,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/tag(/)?",
             "behaviour": {
-                "ctrl": "DictionaryTagListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryTagListController"
             },
             "filters": {},
             "methods": [
@@ -488,7 +488,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/tag/modifica/:shopId(/)?",
             "behaviour": {
-                "ctrl": "DictionaryTagEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryTagEditController"
             },
             "filters": {
                 "shopId": "[0-9]+"
@@ -508,7 +508,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/colori(/)?",
             "behaviour": {
-                "ctrl": "DictionaryColorListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryColorListController"
             },
             "filters": {},
             "methods": [
@@ -526,7 +526,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/colori/modifica/:shopId(/)?",
             "behaviour": {
-                "ctrl": "DictionaryColorEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryColorEditController"
             },
             "filters": {
                 "shopId": "[0-9]+"
@@ -546,7 +546,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/categorie(/)?",
             "behaviour": {
-                "ctrl": "DictionaryCategoryListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryCategoryListController"
             },
             "filters": {},
             "methods": [
@@ -564,7 +564,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari/categorie/modifica/:shopId(/)?",
             "behaviour": {
-                "ctrl": "DictionaryCategoryEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryCategoryEditController"
             },
             "filters": {
                 "shopId": "[0-9]+"
@@ -584,7 +584,7 @@
         {
             "pattern": "/blueseal/importatori/connettori(/)?",
             "behaviour": {
-                "ctrl": "ShopController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShopController"
             },
             "filters": {},
             "methods": [
@@ -602,7 +602,7 @@
         {
             "pattern": "/blueseal/traduzioni/dettagli/modifica(/)?",
             "behaviour": {
-                "ctrl": "DetailTranslateEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateEditController"
             },
             "filters": {},
             "methods": [
@@ -620,7 +620,7 @@
         {
             "pattern": "/blueseal/traduzioni/dettagli/lingua/:langId(/)?",
             "behaviour": {
-                "ctrl": "DetailTranslateLangListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateLangListController"
             },
             "filters": {
                 "langId": "[0-9]+"
@@ -640,7 +640,7 @@
         {
             "pattern": "/blueseal/traduzioni/dettagli/lingua_list/:langId(/)?",
             "behaviour": {
-                "ctrl": "DetailTranslateLangAllListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateLangAllListController"
             },
             "filters": {
                 "langId": "[0-9]+"
@@ -660,7 +660,7 @@
         {
             "pattern": "/blueseal/prodotti/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "ProductAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductAddController"
             },
             "filters": {},
             "methods": [
@@ -678,7 +678,7 @@
         {
             "pattern": "/blueseal/prodotti/roulette(/)?",
             "behaviour": {
-                "ctrl": "ProductRouletteController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductRouletteController"
             },
             "filters": {},
             "methods": [
@@ -696,7 +696,7 @@
         {
             "pattern": "/blueseal/prodotti/modifica(/)?",
             "behaviour": {
-                "ctrl": "ProductEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductEditController"
             },
             "filters": {},
             "methods": [
@@ -714,7 +714,7 @@
         {
             "pattern": "/blueseal/prodotti/incompleti(/)?",
             "behaviour": {
-                "ctrl": "ProductIncompleteController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductIncompleteController"
             },
             "filters": {},
             "methods": [
@@ -732,7 +732,7 @@
         {
             "pattern": "/blueseal/prodotti/attivi(/)?",
             "behaviour": {
-                "ctrl": "ProductActiveListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductActiveListController"
             },
             "filters": {},
             "methods": [
@@ -750,7 +750,7 @@
         {
             "pattern": "/blueseal/prodotti/photos(/)?",
             "behaviour": {
-                "ctrl": "ProductPhotoManageController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPhotoManageController"
             },
             "filters": {},
             "methods": [
@@ -768,7 +768,7 @@
         {
             "pattern": "/blueseal/prodotti/incompleti/importatori(/)?",
             "behaviour": {
-                "ctrl": "ProductImporterController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductImporterController"
             },
             "filters": {},
             "methods": [
@@ -786,7 +786,7 @@
         {
             "pattern": "/blueseal/prodotti/brand(/)?",
             "behaviour": {
-                "ctrl": "BrandListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandListController"
             },
             "filters": {},
             "methods": [
@@ -802,7 +802,7 @@
         {
             "pattern": "/blueseal/prodotti/brand/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "BrandAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandAddController"
             },
             "filters": {},
             "methods": [
@@ -818,7 +818,7 @@
         {
             "pattern": "/blueseal/prodotti/gruppo-taglie(/)?",
             "behaviour": {
-                "ctrl": "SizeListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeListController"
             },
             "filters": {},
             "methods": [
@@ -834,7 +834,7 @@
         {
             "pattern": "/blueseal/prodotti/brand/modifica(/)?",
             "behaviour": {
-                "ctrl": "BrandEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandEditController"
             },
             "filters": {},
             "methods": [
@@ -850,7 +850,7 @@
         {
             "pattern": "/blueseal/prodotti/gruppo-taglie/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "SizeManageController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeManageController"
             },
             "filters": {},
             "methods": [
@@ -867,7 +867,7 @@
         {
             "pattern": "/blueseal/prodotti/gruppo-colore(/)?",
             "behaviour": {
-                "ctrl": "ColorListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CColorListController"
             },
             "filters": {},
             "methods": [
@@ -883,7 +883,7 @@
         {
             "pattern": "/blueseal/prodotti/gruppo-colore/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "ColorAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CColorAddController"
             },
             "filters": {},
             "methods": [
@@ -901,7 +901,7 @@
         {
             "pattern": "/blueseal/prodotti/gruppo-colore/modifica(/)?",
             "behaviour": {
-                "ctrl": "ColorEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CColorEditController"
             },
             "filters": {},
             "methods": [
@@ -919,7 +919,7 @@
         {
             "pattern": "/blueseal/prodotti/gruppo-colore/elimina(/)?",
             "behaviour": {
-                "ctrl": "ColorDeleteController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CColorDeleteController"
             },
             "filters": {},
             "methods": [
@@ -936,7 +936,7 @@
         {
             "pattern": "/blueseal/prodotti/categorie(/)?",
             "behaviour": {
-                "ctrl": "CategoryListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryListController"
             },
             "filters": {},
             "methods": [
@@ -952,7 +952,7 @@
         {
             "pattern": "/blueseal/prodotti/categorie/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "CategoryManageController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryManageController"
             },
             "filters": {},
             "methods": [
@@ -969,7 +969,7 @@
         {
             "pattern": "/blueseal/skus(/)?",
             "behaviour": {
-                "ctrl": "SkuManageController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CSkuManageController"
             },
             "filters": {
             },
@@ -987,7 +987,7 @@
         {
             "pattern": "/blueseal/utenti(/)?",
             "behaviour": {
-                "ctrl": "UserListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CUserListController"
             },
             "filters": {
             },
@@ -1005,7 +1005,7 @@
         {
             "pattern": "/blueseal/xhr/:xcontroller(/)?",
             "behaviour": {
-                "ctrl": "BluesealXhrController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBluesealXhrController"
             },
             "filters": {
                 "xcontroller": "[a-zA-Z]+"
@@ -1025,7 +1025,7 @@
         {
             "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
             "behaviour": {
-                "ctrl": "FriendConfirmationController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendConfirmationController"
             },
             "filters": {
                 "shop": "[0-9]+",
@@ -1045,7 +1045,7 @@
         {
             "pattern": "/blueseal/print/azteccode(/)?",
             "behaviour": {
-                "ctrl": "PrintAztecCodeController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPrintAztecCodeController"
             },
             "filters": {},
             "methods": [
@@ -1060,7 +1060,7 @@
         {
             "pattern": "/blueseal/marketing/landing(/)?",
             "behaviour": {
-                "ctrl": "LandingPageListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageListController"
             },
             "filters": {},
             "methods": [
@@ -1075,7 +1075,7 @@
         {
             "pattern": "/blueseal/marketing/landing/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "LandingPageAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageAddController"
             },
             "filters": {},
             "methods": [
@@ -1091,7 +1091,7 @@
         {
             "pattern": "/blueseal/marketing/landing/modifica(/)?",
             "behaviour": {
-                "ctrl": "LandingPageEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageEditController"
             },
             "filters": {},
             "methods": [
@@ -1106,7 +1106,7 @@
         {
             "pattern": "/blueseal/blog(/)?",
             "behaviour": {
-                "ctrl": "BlogPostListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostListController"
             },
             "filters": {},
             "methods": [
@@ -1122,7 +1122,7 @@
         {
             "pattern": "/blueseal/blog/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "BlogPostAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostAddController"
             },
             "filters": {},
             "methods": [
@@ -1138,7 +1138,7 @@
         {
             "pattern": "/blueseal/blog/modifica(/)?",
             "behaviour": {
-                "ctrl": "BlogPostEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostEditController"
             },
             "filters": {},
             "methods": [
@@ -1154,7 +1154,7 @@
         {
             "pattern": "/blueseal/blog/cestino(/)?",
             "behaviour": {
-                "ctrl": "BlogPostBinController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostBinController"
             },
             "filters": {},
             "methods": [
@@ -1170,7 +1170,7 @@
         {
             "pattern": "/blueseal/coupon(/?)",
             "behaviour": {
-                "ctrl": "CouponListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponListController"
             },
             "filters": {},
             "methods": [
@@ -1185,7 +1185,7 @@
         {
             "pattern": "/blueseal/coupon/modifica/:id(/?)",
             "behaviour": {
-                "ctrl": "CouponEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEditController"
             },
             "filters": {
                 "id": "[0-9]+"
@@ -1203,116 +1203,116 @@
         {
             "pattern": "/blueseal/coupon/aggiungi(/?)",
             "behaviour": {
-              "ctrl": "CouponAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponAddController"
             },
             "filters": {},
             "methods": [
-               "GET",
+                "GET",
                 "POST"
             ],
             "hosts": [
-              "www.pickyshop.com",
-              "pickyshop.com",
-              "debug.pickyshop.clo.ud.it"
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
-          "pattern": "/blueseal/tipocoupon(/?)",
-          "behaviour": {
-            "ctrl": "CouponTypeListController"
-          },
-          "filters": {},
-          "methods": [
-            "GET"
-          ],
-          "hosts": [
-            "www.pickyshop.com",
-            "pickyshop.com",
-            "debug.pickyshop.clo.ud.it"
-          ]
+            "pattern": "/blueseal/tipocoupon(/?)",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
         },
         {
-          "pattern": "/blueseal/tipocoupon/modifica/:id(/?)",
-          "behaviour": {
-            "ctrl": "CouponTypeEditController"
-          },
-          "filters": {
-            "id": "[0-9]+"
-          },
-          "methods": [
-            "GET",
-            "PUT"
-          ],
-          "hosts": [
-            "www.pickyshop.com",
-            "pickyshop.com",
-            "debug.pickyshop.clo.ud.it"
-          ]
+            "pattern": "/blueseal/tipocoupon/modifica/:id(/?)",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeEditController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
         },
         {
-          "pattern": "/blueseal/tipocoupon/aggiungi(/?)",
-          "behaviour": {
-            "ctrl": "CouponTypeAddController"
-          },
-          "filters": {},
-          "methods": [
-            "GET",
-            "POST"
-          ],
-          "hosts": [
-            "www.pickyshop.com",
-            "pickyshop.com",
-            "debug.pickyshop.clo.ud.it"
-          ]
+            "pattern": "/blueseal/tipocoupon/aggiungi(/?)",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeAddController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
         },
         {
             "pattern": "/blueseal/eventocoupon(/?)",
             "behaviour": {
-              "ctrl": "CouponEventListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventListController"
             },
             "filters": {},
             "methods": [
-              "GET"
+                "GET"
             ],
             "hosts": [
-              "www.pickyshop.com",
-              "pickyshop.com",
-              "debug.pickyshop.clo.ud.it"
-          ]
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
         },
         {
-          "pattern": "/blueseal/eventocoupon/modifica/:id(/?)",
-          "behaviour": {
-            "ctrl": "CouponEventEditController"
-          },
-          "filters": {
-            "id": "[0-9]+"
-          },
-          "methods": [
-            "GET",
-            "PUT"
-          ],
-          "hosts": [
-            "www.pickyshop.com",
-            "pickyshop.com",
-            "debug.pickyshop.clo.ud.it"
-          ]
+            "pattern": "/blueseal/eventocoupon/modifica/:id(/?)",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventEditController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "PUT"
+            ],
+            "hosts": [
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
         },
         {
             "pattern": "/blueseal/eventocoupon/aggiungi(/?)",
             "behaviour": {
-              "ctrl": "CouponEventAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventAddController"
             },
             "filters": {},
             "methods": [
-              "GET",
-              "POST"
+                "GET",
+                "POST"
             ],
             "hosts": [
-              "www.pickyshop.com",
-              "pickyshop.com",
-              "debug.pickyshop.clo.ud.it"
-          ]
+                "www.pickyshop.com",
+                "pickyshop.com",
+                "debug.pickyshop.clo.ud.it"
+            ]
         }
     ]
 }
