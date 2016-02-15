@@ -1,4 +1,4 @@
-dev.module.json{
+{
     "paths": {
         "admin-theme": "/back",
         "blueseal": "/back",
