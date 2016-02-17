@@ -47,6 +47,7 @@ class CBluesealAssetController extends ARootController
             return;
         }
 
+		//pronti?
         switch(pathinfo($asset->getPath())['extension']) {
             case "css":
                 $this->response->setContentType('text/css');
