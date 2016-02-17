@@ -1,18 +1,6 @@
 {
     "routes": [
         {
-            "pattern": "/blueseal/assets/:file",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBluesealAssetController"
-            },
-            "filters": {
-                "loc": "[a-z]{2}",
-                "file": "[^\\s]+(\\.(?i)(jpg|png|gif|pdf|css|js|woff|eot|otf|svg|ttf|woff2))"
-            },
-            "methods": [
-                "GET"
-            ]
-        },{
             "pattern": "/blueseal/?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLoginController"
