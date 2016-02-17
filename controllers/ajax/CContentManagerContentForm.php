@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\controllers\ajax;
+namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\intl\CLang;

@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\controllers\ajax;
+namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace bamboo\controllers\ajax;
+namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\ecommerce\views\widget\VBase;
 use bamboo\blueseal\business\COrderLineManager;

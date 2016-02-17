@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\controllers\ajax;
+namespace bamboo\blueseal\controllers\ajax;
 
 /**
  * Class CBrandDelete
