@@ -3,6 +3,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\asset\CAssetBundle;
+use bamboo\core\asset\CAssetFinder;
 use bamboo\core\exceptions\RedPandaAssetException;
 use bamboo\core\router\ARootController;
 use bamboo\core\application\AApplication;
@@ -12,12 +13,15 @@ use bamboo\core\application\AApplication;
  */
 class CBluesealAssetController extends ARootController
 {
+	protected $assetFinder;
+
     public function __construct(AApplication $app, $action)
     {
         $this->app = $app;
         $this->request = $app->router->request();
         $this->response = $app->router->response();
         $this->action = $action;
+	    $this->assetFinder = new CAssetFinder($app);
     }
 
     /**
@@ -27,7 +31,6 @@ class CBluesealAssetController extends ARootController
 	public function createAction($action)
 	{
 		$this->{$action}($this->app->router->getMatchedRoute()->getComputedFilters());
-
 		return;
 	}
 
@@ -37,9 +40,9 @@ class CBluesealAssetController extends ARootController
      */
 	public function get($args)
 	{
-        $asset = $this->app->assetManager->fetchAsset($args['file']);
+        $asset = $this->assetFinder->getAsset(basename($args['file']));
 
-        if ($asset == null && !in_array(pathinfo($args['file'])['extension'],["css","js"])) {
+        if ($asset == false) {
             $this->response->raiseRoutingError()->sendHeaders();
             return;
         }
