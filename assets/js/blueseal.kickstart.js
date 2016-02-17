@@ -16,7 +16,7 @@ function updateOnlineUsers() {
 	Pace.ignore(function () {
 		$.ajax({
 			type: 'GET',
-			url: '/xhr/SessionMonitor'
+			url: '/blueseal/xhr/SessionMonitor'
 		}).done(function (content) {
 			sessionMonitor.html('<h2>' + content + ' Utenti Online</h2>');
 		});
