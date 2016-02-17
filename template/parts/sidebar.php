@@ -1,7 +1,7 @@
 <nav class="page-sidebar" data-pages="sidebar">
     <div id="appMenu" class="sidebar-overlay-slide from-top"></div>
     <div class="sidebar-header">
-        <div class="sidebar-logo"><img src="/blueseal/assets/img/blueseal_logo_symbol.png" alt="logo" class="brand" data-src="/blueseal/assets/img/blueseal_logo_symbol.png" data-src-retina="/blueseal/assets/img/blueseal_logo_symbol.png" width="42"></div>
+        <div class="sidebar-logo"><img src="/assets/img/blueseal_logo_symbol.png" alt="logo" class="brand" data-src="/assets/img/blueseal_logo_symbol.png" data-src-retina="/assets/img/blueseal_logo_symbol.png" width="42"></div>
     </div>
     <div class="sidebar-menu">
         <ul class="menu-items">

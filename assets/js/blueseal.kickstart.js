@@ -12,11 +12,11 @@ $(document).on('ready', function () {
 
 function updateOnlineUsers() {
 	var sessionMonitor = $('#sessionMonitor');
-	sessionMonitor.html('<img src="/blueseal/assets/img/ajax-loader.gif" />');
+	sessionMonitor.html('<img src="/assets/img/ajax-loader.gif" />');
 	Pace.ignore(function () {
 		$.ajax({
 			type: 'GET',
-			url: '/blueseal/xhr/SessionMonitor'
+			url: '/xhr/SessionMonitor'
 		}).done(function (content) {
 			sessionMonitor.html('<h2>' + content + ' Utenti Online</h2>');
 		});

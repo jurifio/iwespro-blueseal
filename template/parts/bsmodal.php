@@ -6,7 +6,7 @@
                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
             </div>
             <div class="modal-body">
-                <img src="/blueseal/assets/img/ajax-loader.gif" />
+                <img src="/assets/img/ajax-loader.gif" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>

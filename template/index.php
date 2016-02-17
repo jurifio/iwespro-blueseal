@@ -19,7 +19,7 @@
     </div>
     <div class="login-container bg-white">
         <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
-            <img src="/blueseal/assets/img/logo.png" alt="logo" data-src="/blueseal/assets/img/logo.png" data-src-retina="/blueseal/assets/img/logo_2x.png" width="150">
+            <img src="/assets/img/logo.png" alt="logo" data-src="/assets/img/logo.png" data-src-retina="/assets/img/logo_2x.png" width="150">
             <p class="p-t-35">Accedi al tuo account BlueSeal</p>
             <form id="form-login" class="p-t-15" role="form" method="POST" action="">
                 <div class="form-group form-group-default">

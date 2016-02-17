@@ -375,10 +375,10 @@ var Alert = function(config)
         loader: false,
         closeTimerMs: 5000,
         audio: {
-            warning: '/blueseal/assets/audio/alert.mp3',
-            danger: '/blueseal/assets/audio/alert.mp3',
-            info: '/blueseal/assets/audio/alert.mp3',
-            success: '/blueseal/assets/audio/alert.mp3'
+            warning: '/assets/audio/alert.mp3',
+            danger: '/assets/audio/alert.mp3',
+            info: '/assets/audio/alert.mp3',
+            success: '/assets/audio/alert.mp3'
         },
         icon: {
             warning: "fa-warning",
@@ -418,7 +418,7 @@ Alert.prototype.draw = function()
         that.alertBox.find('i').eq(0).hide();
 
         that.alertBox.find('p').eq(0)
-            .html('<img src="/blueseal/assets/img/bsloader.svg" width="32" />&nbsp;<span>'+that.data.message+'</span>');
+            .html('<img src="/assets/img/bsloader.svg" width="32" />&nbsp;<span>'+that.data.message+'</span>');
     } else {
         that.alertBox.find('p').eq(0)
             .html('<span>'+that.data.message+'</span>');

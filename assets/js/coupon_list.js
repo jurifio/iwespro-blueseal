@@ -2,7 +2,7 @@ $(document).on('bs.coupon.del', function() {
 
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
-    var loaderHtml = '<img src="/blueseal/assets/img/ajax-loader.gif" />';
+    var loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
     var header = $('.modal-header h4');
     var body = $('.modal-body');
     var cancelButton = $('.modal-footer .btn-default');

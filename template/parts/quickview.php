@@ -180,7 +180,7 @@
                                     <a data-view-animation="push-parrallax" data-view-port="#chat" data-navigate="view" class="" href="#">
                                             <span class="col-xs-height col-middle">
                                                 <span class="thumbnail-wrapper d32 circular bg-success">
-                                                    <img width="34" height="34" alt="" data-src-retina="/blueseal/assets/img/profiles/1x.jpg" data-src="/blueseal/assets/img/profiles/1.jpg" src="/blueseal/assets/img/profiles/1x.jpg" class="col-top">
+                                                    <img width="34" height="34" alt="" data-src-retina="/assets/img/profiles/1x.jpg" data-src="/assets/img/profiles/1.jpg" src="/assets/img/profiles/1x.jpg" class="col-top">
                                                 </span>
                                             </span>
                                         <p class="p-l-10 col-xs-height col-middle col-xs-12">
@@ -200,7 +200,7 @@
                                     <a data-view-animation="push-parrallax" data-view-port="#chat" data-navigate="view" class="" href="#">
                                             <span class="col-xs-height col-middle">
                                                 <span class="thumbnail-wrapper d32 circular bg-success">
-                                                    <img width="34" height="34" alt="" data-src-retina="assets/img/profiles/2x.jpg" data-src="/blueseal/assets/img/profiles/2.jpg" src="/blueseal/assets/img/profiles/2x.jpg" class="col-top">
+                                                    <img width="34" height="34" alt="" data-src-retina="assets/img/profiles/2x.jpg" data-src="/assets/img/profiles/2.jpg" src="/assets/img/profiles/2x.jpg" class="col-top">
                                                 </span>
                                             </span>
                                         <p class="p-l-10 col-xs-height col-middle col-xs-12">
@@ -215,7 +215,7 @@
                                     <a data-view-animation="push-parrallax" data-view-port="#chat" data-navigate="view" class="" href="#">
                                             <span class="col-xs-height col-middle">
                                                 <span class="thumbnail-wrapper d32 circular bg-success">
-                                                    <img width="34" height="34" alt="" data-src-retina="assets/img/profiles/3x.jpg" data-src="/blueseal/assets/img/profiles/3.jpg" src="/blueseal/assets/img/profiles/3x.jpg" class="col-top">
+                                                    <img width="34" height="34" alt="" data-src-retina="assets/img/profiles/3x.jpg" data-src="/assets/img/profiles/3.jpg" src="/assets/img/profiles/3x.jpg" class="col-top">
                                                 </span>
                                             </span>
                                         <p class="p-l-10 col-xs-height col-middle col-xs-12">

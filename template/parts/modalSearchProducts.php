@@ -1,7 +1,7 @@
 <div class="overlay" style="display: none" data-pages="search">
     <div class="overlay-content has-results m-t-20">
         <div class="container-fluid">
-            <img class="overlay-brand" src="/blueseal/assets/img/logo.png" alt="logo" data-src="/blueseal/assets/img/logo.png" data-src-retina="/blueseal/assets/img/logo_2x.png" width="78" height="22">
+            <img class="overlay-brand" src="/assets/img/logo.png" alt="logo" data-src="/assets/img/logo.png" data-src-retina="/assets/img/logo_2x.png" width="78" height="22">
             <a href="#" class="close-icon-light overlay-close text-black fs-16">
                 <i class="pg-close"></i>
             </a>
@@ -40,7 +40,7 @@
                         <div class="">
                             <div class="thumbnail-wrapper d48 circular bg-success text-white inline m-t-10">
                                 <div>
-                                    <img width="50" height="50" src="/blueseal/assets/img/profiles/default.jpg" data-src="/blueseal/assets/img/profiles/default.jpg" data-src-retina="/blueseal/assets/img/profiles/avatar2x.jpg" alt="">
+                                    <img width="50" height="50" src="/assets/img/profiles/default.jpg" data-src="/assets/img/profiles/default.jpg" data-src-retina="/assets/img/profiles/avatar2x.jpg" alt="">
                                 </div>
                             </div>
                             <div class="p-l-10 inline p-t-5">
