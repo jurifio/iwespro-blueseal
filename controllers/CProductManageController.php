@@ -25,7 +25,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
     public function put()
     {
-        $fileFolder = $this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
+        $fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
 
         $post = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
@@ -213,7 +213,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
     public function post()
     {
-        $fileFolder = $this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
+        $fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
         $post = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
 

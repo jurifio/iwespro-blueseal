@@ -43,7 +43,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
     {
         $newPostData = $this->app->router->request()->getRequestData();
         $coverImageData = $this->app->router->request()->getFiles();
-        $fileFolder = $this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
+        $fileFolder =  $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
 
         $files = $this->app->router->request()->getFiles();
 

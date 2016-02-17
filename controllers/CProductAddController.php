@@ -37,7 +37,7 @@ class CProductAddController extends CProductManageController
 
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false).'/blueseal/';
-        $fileFolder = $this->app->cfg()->fetch('paths','dummyFolder').'/';
+        $fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths','dummyFolder').'/';
         $dummyUrl =  $this->app->cfg()->fetch('paths','dummyUrl').'/';
         $elenco = $bluesealBase."prodotti";
         $nuovoprodotto = $bluesealBase."prodotti/aggiungi";
