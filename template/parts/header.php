@@ -1,5 +1,5 @@
 <div style="display:none">
-    <img src="<?php echo $app->urlForBlueseal() ?>/assets/img/blueseal_logo_symbol_black.png" />
+    <img src="/assets/img/blueseal_logo_symbol_black.png" />
 </div>
 <div class="header ">
     <div class="pull-left full-height visible-sm visible-xs">
