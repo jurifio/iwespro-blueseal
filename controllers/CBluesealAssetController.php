@@ -47,12 +47,20 @@ class CBluesealAssetController extends ARootController
             return;
         }
 
-        switch($asset->getType()) {
+        switch(pathinfo($asset->getPath())['extension']) {
             case "css":
                 $this->response->setContentType('text/css');
+	            $this->response->setCache("no-transform,public,max-age=3600,s-maxage=900");
+	            $this->response->setLastModified(filemtime($asset->getPath()));
+	            $this->response->sendHeaders();
+	            readfile($asset->getPath());
                 break;
             case "js":
                 $this->response->setContentType('application/javascript');
+	            $this->response->setCache("no-transform,public,max-age=3600,s-maxage=900");
+	            $this->response->setLastModified(filemtime($asset->getPath()));
+	            $this->response->sendHeaders();
+	            readfile($asset->getPath());
                 break;
             case "jpg":
             case "jpeg":
