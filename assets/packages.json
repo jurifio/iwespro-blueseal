@@ -2,7 +2,7 @@
     "css": {
         "core": {
             "pace.css": {
-                "path": "scheme://localdomain/blueseal/assets/css/",
+                "path": "scheme://localdomain/assets/css/",
                 "options": ["screen"]
             },
             "bootstrap.min.css": {
@@ -14,7 +14,7 @@
                 "options": ["screen,print"]
             },
             "jqueryUi.css": {
-                "path": "scheme://localdomain/blueseal/assets/css/",
+                "path": "scheme://localdomain/assets/css/",
                 "options": ["screen"]
             }
         },
@@ -42,7 +42,7 @@
                 "options": ["screen"]
             },
             "ui.dynatree.css": {
-                "path": "scheme://localdomain/blueseal/assets/css/",
+                "path": "scheme://localdomain/assets/css/",
                 "options": ["screen"]
             },
             "summernote.min.css": {
@@ -58,15 +58,15 @@
         },
         "default": {
             "pages-icons.css": {
-                "path": "scheme://localdomain/blueseal/assets/css/",
+                "path": "scheme://localdomain/assets/css/",
                 "options": ["screen,print"]
             },
             "pages.css": {
-                "path": "scheme://localdomain/blueseal/assets/css/",
+                "path": "scheme://localdomain/assets/css/",
                 "options": ["screen,print"]
             },
             "style.css": {
-                "path": "scheme://localdomain/blueseal/assets/css/",
+                "path": "scheme://localdomain/assets/css/",
                 "options": ["screen,print"]
             }
         }
@@ -90,15 +90,15 @@
                 "options": []
             },
             "pages.js": {
-                "path": "scheme://localdomain/blueseal/assets/js/",
+                "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             },
             "blueseal.prototype.js": {
-                "path": "scheme://localdomain/blueseal/assets/js/",
+                "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             },
             "blueseal.ui.js": {
-                "path": "scheme://localdomain/blueseal/assets/js/",
+                "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             }
         },
@@ -120,7 +120,7 @@
                 "options": ["defer"]
             },
             "Sortable.min.js": {
-                "path": "scheme://localdomain/blueseal/assets/js/",
+                "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             },
             "bootstrap-colorpicker.min.js": {
@@ -168,17 +168,17 @@
                 "options": ["defer"]
             },
             "datatables.init.js": {
-                "path": "scheme://localdomain/blueseal/assets/js/",
+                "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             }
         },
         "default": {
             "blueseal.kickstart.js": {
-                "path": "scheme://localdomain/blueseal/assets/js/",
+                "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             },
             "blueseal.page": {
-                "path": "scheme://localdomain/blueseal/assets/js/",
+                "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             }
         }
