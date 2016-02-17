@@ -47,7 +47,7 @@ class CBluesealAssetController extends ARootController
             return;
         }
 
-        switch(pathinfo($args['file'])['extension']) {
+        switch($asset->getType()) {
             case "css":
                 $this->response->setContentType('text/css');
                 break;
@@ -112,6 +112,12 @@ class CBluesealAssetController extends ARootController
                 $this->response->sendHeaders();
                 readfile($asset->getPath());
                 return;
+	        default:
+		        $this->response->setContentType($asset->getMime());
+		        $this->response->setLastModified(filemtime($asset->getPath()));
+		        $this->response->sendHeaders();
+		        readfile($asset->getPath());
+		        return;
         }
 
         /**
