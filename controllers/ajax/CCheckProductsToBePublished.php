@@ -25,7 +25,7 @@ class CCheckProductsToBePublished extends AAjaxController
           AND Product.id = ProductSku.productId
           AND Product.productVariantId = ProductSku.productVariantId
           AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
-          AND Product.status IN ('A', 'Q')", []);
+          AND Product.status IN ('A', 'Q', 'I')", []);
 
         return json_encode(
             [
@@ -50,7 +50,7 @@ class CCheckProductsToBePublished extends AAjaxController
           AND Product.id = ProductSku.productId
           AND Product.productVariantId = ProductSku.productVariantId
           AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
-          AND Product.status IN ('A', 'Q')", []);
+          AND Product.status IN ('A', 'Q', 'I')", []);
 
         $count = $result->fetchAll()[0]['conto'];
 
