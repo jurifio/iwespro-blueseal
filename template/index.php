@@ -8,7 +8,7 @@
 <body class="fixed-header   ">
 <div class="login-wrapper ">
     <div class="bg-pic">
-        <img src="<?php echo $app->urlForBlueseal() ?>/assets/img/blueseal.jpg" data-src="<?php echo $app->urlForBlueseal() ?>/assets/img/blueseal.jpg" data-src-retina="<?php echo $app->urlForBlueseal() ?>/assets/img/blueseal.jpg" alt="" class="lazy">
+        <img src="/assets/img/blueseal.jpg" data-src="/assets/img/blueseal.jpg" data-src-retina="/assets/img/blueseal.jpg" alt="" class="lazy">
         <div class="bg-caption pull-bottom sm-pull-bottom text-white p-l-20 m-b-20">
             <h2 class="semi-bold text-white">
                 BlueSeal ti permette di gestire il tuo ecommerce in maniera facile e immediata</h2>
