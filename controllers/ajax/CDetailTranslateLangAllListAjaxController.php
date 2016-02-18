@@ -69,6 +69,7 @@ class CDetailTranslateLangAllListAjaxController extends AAjaxController
 
         foreach($productsDetail as $val){
             $trans = $transRepo->findOneBy(['productDetailId' => $val->id, 'langId' => $langId]);
+            $transIta = $transRepo->findOneBy(['productDetailId' => $val->id, 'langId' => 1]);
             $name = '<div class="form-group form-group-default" style="width:604px">';
             if (!is_null($trans) && $okManage) {
                 $name .= '<input type="text" class="form-control" style="width: 580px" id="name_' . $val->id . '" name="name_' . $val->id . '" value="' . $trans->name . '" onBlur="modifica(this,' . $langId . ')" />';
@@ -80,7 +81,7 @@ class CDetailTranslateLangAllListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['name'] = $name;
-            $response['data'][$i]['slug'] = $val->slug;
+            $response['data'][$i]['slug'] = $transIta->name;
             $response['data'][$i]['id'] = $val->id;
 
             $i++;
