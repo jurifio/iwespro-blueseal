@@ -1,27 +1,32 @@
 {
     "ebay": {
-        "trading": {
-            "production": {
-                "devid": "aac4ef59-077d-45ed-b8f6-4e7d7c26d35b",
-                "appid": "Cartechi-cb2b-4638-9b3d-a0128941508d",
-                "certid": "b717e171-0952-43fd-ac97-4c4faeef603c",
-                "default_site": "101",
-                "error_language": "it_IT",
-                "warning_level": "High",
-                "schema": "http://developer.ebay.com/webservices/949/ebaySvc.xsd",
-                "endpoint": "https://api.ebay.com/ws/api.dll",
-                "version": "949"
-            },
-            "sandbox": {
-                "devid": "c9ba4236-32c9-4f1a-878c-30797535501d",
-                "appid": "Bamboosh-93fb-40e0-9001-19ff33823398",
-                "certid": "6b130625-4cc0-4f9e-89ed-aaa01c35e067",
-                "default_site": "101",
-                "error_language": "it_IT",
-                "warning_level": "High",
-                "schema": "http://developer.ebay.com/webservices/949/ebaySvc.xsd",
-                "endpoint": "https://api.sandbox.ebay.com/ws/api.dll",
-                "version": "949"
+        "cartechini": {
+            "token": "AgAAAA**AQAAAA**aAAAAA**ZgfYUg**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6AFlIekDZKGpw2dj6x9nY+seQ**YBcCAA**AAMAAA**NjJllHtVsOyjBnjFQYlWKkS/GNsBCR6ExGG+FbT2TdYSC3zOOsXly0cyOI02PmsZs9U8uoBdaxhX+AxLpBDS/NsxRoVdqhTxTqjCq96g2oCgLoCsU1xyHamYMPSxtiKybAFXo5Non+vp9DS9dMDgPBSA6aJKPSb1EuSgw7LCZJAQ1p3jP8608zU9JKelWi+QMFJC9BHzrgAXlUp5IyB0a73xR9/bqLxFD5lAMVk5rAelSu+cEWoo1BNjMIJvknx2re9xbi61wHDW+8Z5DYrkd52u+5cfTdiTIkBy7bZzjwgi9CIBkyGj4rDI9qv5+bHC/2rdv7xMP4+yxluR5Uokabqdub8MqPF+BELuLl2ErOER4ONye+eKQ0v2hdvEiKtfOGkn3oBqrVzStvKt+tIsC/wXzjf0gkswM1YdjSI2bC6S+F03k2rn9onJZvR1pWL2EyvlMDHFHGxGPdiGFyETTmt2IwjjeG3rt59LqglENv/BvTJSGtD1h9nMPF6pN/5E1oxivhBBMLl9lZFIlqxWXhis+0rYB+g1EXJmu1dEpmwprWIpyAqIi1QzEazKyCDEh7urW2IFQyVQb/KxXHR92cUs98iNp/+B5i0MWJ+JZ+B53I6OQWwk2Xi+V7tYF2oZBkbL49IHbQQeV1VJc1+C2smBlcaw3PoIhF4qegiI2q4wLGSDRSuKxN6F3iPKtkYmLQ4YXzsvLvpWYkEJw21lVMCU29MotI/U+LGKDr+szP+j+W9wteO0EtXEFRH7w/ei",
+            "api": {
+                "trading": {
+                    "production": {
+                        "devid": "aac4ef59-077d-45ed-b8f6-4e7d7c26d35b",
+                        "appid": "Cartechi-cb2b-4638-9b3d-a0128941508d",
+                        "certid": "b717e171-0952-43fd-ac97-4c4faeef603c",
+                        "default_site": "101",
+                        "error_language": "it_IT",
+                        "warning_level": "High",
+                        "schema": "http://developer.ebay.com/webservices/949/ebaySvc.xsd",
+                        "endpoint": "https://api.ebay.com/ws/api.dll",
+                        "version": "949"
+                    },
+                    "sandbox": {
+                        "devid": "c9ba4236-32c9-4f1a-878c-30797535501d",
+                        "appid": "Bamboosh-93fb-40e0-9001-19ff33823398",
+                        "certid": "6b130625-4cc0-4f9e-89ed-aaa01c35e067",
+                        "default_site": "101",
+                        "error_language": "it_IT",
+                        "warning_level": "High",
+                        "schema": "http://developer.ebay.com/webservices/949/ebaySvc.xsd",
+                        "endpoint": "https://api.sandbox.ebay.com/ws/api.dll",
+                        "version": "949"
+                    }
+                }
             }
         }
     }
