@@ -936,7 +936,7 @@
         },{
             "pattern": "/blueseal/tag(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\TagListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CTagListController"
             },
             "filters": {},
             "methods": [
@@ -949,7 +949,7 @@
         {
             "pattern": "/blueseal/tag/aggiungi(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\TagAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CTagAddController"
             },
             "filters": {},
             "methods": [
@@ -960,7 +960,7 @@
         {
             "pattern": "/blueseal/tag/modifica/:id(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\TagEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CTagEditController"
             },
             "filters": {
                 "id": "[0-9]+"
@@ -972,7 +972,7 @@
         },{
             "pattern": "/blueseal/traduzioni/descrizioni(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\DescriptionTranslateListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateListController"
             },
             "filters": {},
             "methods": [
@@ -985,7 +985,7 @@
         {
             "pattern": "/blueseal/traduzioni/descrizioni/modifica(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\DescriptionTranslateEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateEditController"
             },
             "filters": {},
             "methods": [
@@ -998,7 +998,7 @@
         {
             "pattern": "/blueseal/traduzioni/nomi(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\NameTranslateListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateListController"
             },
             "filters": {},
             "methods": [
@@ -1011,7 +1011,7 @@
         {
             "pattern": "/blueseal/traduzioni/nomi/modifica(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\NameTranslateEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateEditController"
             },
             "filters": {},
             "methods": [
@@ -1024,7 +1024,7 @@
         {
             "pattern": "/blueseal/traduzioni/nomi/lingua/:langId(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\NameTranslateLangListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateLangListController"
             },
             "filters": {
                 "langId": "[0-9]+"
@@ -1039,7 +1039,7 @@
         {
             "pattern": "/blueseal/traduzioni/nomi/lingua_list/:langId(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\NameTranslateLangAllListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateLangAllListController"
             },
             "filters": {
                 "langId": "[0-9]+"
@@ -1053,7 +1053,7 @@
         },{
             "pattern": "/blueseal/marketing/landing(/)?",
             "behaviour": {
-                "ctrl": "LandingPageListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageListController"
             },
             "filters": {},
             "methods": [
@@ -1063,7 +1063,7 @@
         {
             "pattern": "/blueseal/importatori(/)?",
             "behaviour": {
-                "ctrl": "ImporterListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CImporterListController"
             },
             "filters": {},
             "methods": [
@@ -1076,7 +1076,7 @@
         {
             "pattern": "/blueseal/importatori/dizionari(/)?",
             "behaviour": {
-                "ctrl": "DictionaryListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryListController"
             },
             "filters": {},
             "methods": [
