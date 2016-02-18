@@ -199,7 +199,3 @@ $(document).on('bs.save.connector', function() {
         }).open();
     });
 });
-
-$(document).on('bs.landing.randomcode', function() {
-    $('[data-json="code"]').val($.randomString(6));
-});

@@ -28,14 +28,14 @@ class CConnectorController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/connector_edit.php');
+        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/connector_edit.php');
+        $shopId = $this->app->router->request()->getRequestData('shopId');
 
         $importerFieldModifier = $this->app->repoFactory->create('ImporterFieldModifier')->findAll();
         $importerField = $this->app->repoFactory->create('ImporterField')->findAll();
         $importerOperator = $this->app->repoFactory->create('ImporterOperator')->findAll();
         $importerLogicConnector = $this->app->repoFactory->create('ImporterLogicConnector')->findAll();
 
-        $shopId = $this->app->router->request()->getRequestData('shopId');
         $shop = $this->app->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
         $productSizeGroup = $this->app->repoFactory->create('ProductSizeGroup')->findAll('limit 99999','order by macroName');
         $impConnector = $this->app->repoFactory->create('ImporterConnector')->findBy(['shopId' => $shopId]);
@@ -62,7 +62,15 @@ class CConnectorController extends ARestrictedAccessRootController
 
     public function post()
     {
+        $section = $this->app->router->request()->getRequestData();
+        foreach ($section['sections'] as $sec) {
+            foreach ($sec['field'] as $field) {
 
+            }
+
+        }
+        \BlueSeal::dump($section);
+        throw new \Exception();
 
     }
 }
