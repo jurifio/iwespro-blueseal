@@ -26,7 +26,7 @@ class CNameTranslateLangAllListController extends ARestrictedAccessRootControlle
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/name_langall_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/name_langall_list.php');
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
         $langId = $this->app->router->getMatchedRoute()->getComputedFilter('langId');
         $urlAll = $this->urls['base']."traduzioni/nomi/lingua_list/" .$langId;

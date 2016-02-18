@@ -19,13 +19,11 @@ class CTagAddController extends ARestrictedAccessRootController
      */
     protected $pageSlug = "tag_add";
 
-    /**
-     * @throws \redpanda\core\exceptions\RedPandaORMException
-     */
+
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths','blueseal').'/template/tag_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/tag_add.php');
 
         $em = $this->app->entityManagerFactory->create('Tag');
 

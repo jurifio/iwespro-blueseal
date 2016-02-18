@@ -32,7 +32,7 @@ class CNameTranslateEditController extends CNameTranslateManageController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->cfg()->fetch('paths', 'blueseal') . '/template/name_translate_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/name_translate_edit.php');
 
         $productId = $this->app->router->request()->getRequestData('productId');
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
