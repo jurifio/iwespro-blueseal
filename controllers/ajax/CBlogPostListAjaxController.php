@@ -64,7 +64,7 @@ class CBlogPostListAjaxController extends AAjaxController
             $creationDate = new \DateTime($post->creationDate);
             $publishDate = new \DateTime($post->publishDate);
 
-            $coverImage = empty($post->postTranslation->getFirst()->coverImage) ? "http://redpanda.clo.ud.it/dummyPictures/bs-dummy-16-9.png" : $post->postTranslation->getFirst()->coverImage;
+            $coverImage = empty($post->postTranslation->getFirst()->coverImage) ? "/assets/bs-dummy-16-9.png" : $post->postTranslation->getFirst()->coverImage;
 
             $response['data'][$i]["DT_RowId"] = 'row__'.$post->id.'__'.$post->blogId;
             $response['data'][$i]["DT_RowClass"] = 'colore';

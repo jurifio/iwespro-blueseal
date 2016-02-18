@@ -22,7 +22,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 	    $blogId = $this->app->router->request()->getRequestData('blogId');
 	    $post = $this->app->repoFactory->create('Post')->findOne(['id'=>$id,'blogId'=>$blogId]);
 
-	    $defaultImage = 'http://redpanda.clo.ud.it/dummyPictures/bs-dummy-16-9.png';
+	    $defaultImage = '/assets/bs-dummy-16-9.png';
 
 	    $cats = $this->app->repoFactory->create('PostCategory')->findAll();
 	    $tags = $this->app->repoFactory->create('PostTag')->findAll();

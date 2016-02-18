@@ -4,8 +4,7 @@
         "blueseal": "/back",
         "packed-assets": "/client/public/themes/flatize/assets/",
         "productSync": "/data/www/redpanda/htdocs/sync",
-        "tempFolder": "/data/www/redpanda/htdocs/pickyshop/temp",
-        "blueseal-addon": "/data/www/redpanda/htdocs/pickyshop/blueseal/addon"
+        "blueseal-addon": "/back/addon"
     },
     "miscellaneous": {
         "orderStatus": {

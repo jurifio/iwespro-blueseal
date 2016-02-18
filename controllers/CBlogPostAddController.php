@@ -25,7 +25,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
             if ($status->show) $statuses[$status->id] = $status->name;
         }
 
-	    $defaultImage = 'http://redpanda.clo.ud.it/dummyPictures/bs-dummy-16-9.png';
+	    $defaultImage = '/assets/bs-dummy-16-9.png';
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
