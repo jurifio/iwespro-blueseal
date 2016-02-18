@@ -3,7 +3,7 @@ var fr = new Replica($('[id^="field"]'));
 
 $(document).ready(function() {
 
-    var echo = new Echo();
+    var sizeEcho = new Echo();
     var modifierEcho = new Echo();
     var fieldEcho = new Echo();
     var operatorEcho = new Echo();
@@ -13,20 +13,10 @@ $(document).ready(function() {
     var $e = sr.replicateInto($('.replicaContainer'));
     var initialFieldId = $('[id^="field_"]').last().attr('id');
 
-    $('.section-summary .panel-body').append(
-        '<div class="section-recap" data-bind="'+sr.getLastReplicaId()+'">'+
-        '<p><span class="replicaTitle">&nbsp;</span></p>'+
-        '<p class="replicaField" data-bind="'+initialFieldId+'">'+
-        '<span class="replicaFieldModifier">&nbsp;</span> - <span class="replicaFieldField">&nbsp;</span>'+
-        ' - <span class="replicaFieldOperator">&nbsp;</span> - <span class="replicaFieldConnector">&nbsp;</span>'+
-        ' - <span class="replicaFieldValue">&nbsp;</span>'+
-        ' - <span class="replicaFieldTotal">&nbsp;</span></p>' +
-        '</div>');
-
-    echo.bind(
-        $e.find('[data-json="section.title"]'),
-        $('.section-recap[data-bind="'+$e.attr('id')+'"] .replicaTitle'),
-        ["keyup"]
+    sizeEcho.bind(
+        $e.find('[data-json="section.size"]'),
+        $('.section-recap[data-bind="'+$e.attr('id')+'"] .replicaSize'),
+        ["change"]
     );
 
     modifierEcho.bind(
@@ -64,14 +54,6 @@ $(document).on('bs.replica.field',function(evt, button, html, parentEvt) {
 
     var $e = fr.replicateInto($('#'+$(button).parentsUntil('[id^="section_"]').parent().attr('id')+' .fieldReplicaContainer'));
 
-    $('.section-recap[data-bind="'+sr.getLastReplicaId()+'"]').append(
-        '<p class="replicaField" data-bind="'+fr.getLastReplicaId()+'">'+
-        '<span class="replicaFieldModifier">&nbsp;</span> - <span class="replicaFieldField">&nbsp;</span>'+
-        ' - <span class="replicaFieldOperator">&nbsp;</span> - <span class="replicaFieldConnector">&nbsp;</span>'+
-        ' - <span class="replicaFieldValue">&nbsp;</span>'+
-        ' - <span class="replicaFieldTotal">&nbsp;</span></p>'
-    );
-
     var modifierEcho = new Echo();
     var fieldEcho = new Echo();
     var operatorEcho = new Echo();
@@ -89,6 +71,7 @@ $(document).on('bs.replica.field',function(evt, button, html, parentEvt) {
         $('.replicaField[data-bind="'+fr.getLastReplicaId()+'"] .replicaFieldField'),
         ["change"]
     );
+
     operatorEcho.bind(
         $e.find('[data-json="field.operator"]'),
         $('.replicaField[data-bind="'+fr.getLastReplicaId()+'"] .replicaFieldOperator'),
@@ -109,7 +92,7 @@ $(document).on('bs.replica.field',function(evt, button, html, parentEvt) {
 
 $(document).on('bs.replica.section',function() {
 
-    var echo = new Echo();
+    var sizeEcho = new Echo();
     var modifierEcho = new Echo();
     var fieldEcho = new Echo();
     var operatorEcho = new Echo();
@@ -119,20 +102,10 @@ $(document).on('bs.replica.section',function() {
     var $e = sr.replicateInto($('.replicaContainer'));
     var initialFieldId = $('[id^="field_"]').last().attr('id');
 
-    $('.section-summary .panel-body').append(
-        '<div class="section-recap" data-bind="'+sr.getLastReplicaId()+'">'+
-        '<p><span class="replicaTitle">&nbsp;</span></p>'+
-        '<p class="replicaField" data-bind="'+initialFieldId+'">'+
-        '<span class="replicaFieldModifier">&nbsp;</span> - <span class="replicaFieldField">&nbsp;</span>'+
-        ' - <span class="replicaFieldOperator">&nbsp;</span> - <span class="replicaFieldConnector">&nbsp;</span>'+
-        ' - <span class="replicaFieldValue">&nbsp;</span>'+
-        ' - <span class="replicaFieldTotal">&nbsp;</span></p>' +
-        '</div>');
-
-    echo.bind(
-        $e.find('[data-json="section.title"]'),
-        $('.section-recap[data-bind="'+$e.attr('id')+'"] .replicaTitle'),
-        ["keyup"]
+    sizeEcho.bind(
+        $e.find('[data-json="section.size"]'),
+        $('.section-recap[data-bind="'+$e.attr('id')+'"] .replicaSize'),
+        ["change"]
     );
 
     modifierEcho.bind(
@@ -168,78 +141,35 @@ $(document).on('bs.replica.section',function() {
 
 $(document).on('bs.save.connector', function() {
 
-    var date = new Date();
-
-    var landing = {};
-
     var data = {
-        background: "back.png",
-        sections: [],
-        links: []
+        sections: []
     };
 
-    var section = {
-        style: []
-    };
 
-    var link = {};
+    $('[id^="section_"]').each(function() {
 
-    $('.landing-header').find('[data-json]').each(function() {
-        data[$(this).data('json')] = $(this).vv();
-    });
-
-    $('.canonical').find('[data-json]').each(function() {
-        data[$(this).data('json')] = $(this).vv();
-    });
-
-    data['youmightlike'] = $('[data-json="youmightlike"]').val();
-    data.creationDate = date.toISOString();
-    data.updateDate = date.toISOString();
-
-    $('[id^="link_"]').each(function() {
-
-        var i = 1;
-        $(this).find('[data-json^="links."]').each(function() {
-            link[$(this).data('json').split('.')[1]] = $(this).vv();
-            if (i%2 == 0) {
-                data.links.push(link);
-                link = {};
-            }
-            i++;
-        });
-    });
-
-    $('[id^=section_]').each(function() {
+        var section = {
+            size: [],
+            field: []
+        };
 
         $(this).find('[data-json^="section."]').each(function() {
-            if ($(this).hasClass('summer')) {
-                section[$(this).data('json').split('.')[1]] = $(this).code();
-            } else {
-                section[$(this).data('json').split('.')[1]] = $(this).vv();
-            }
+            section[$(this).data('json').split('.')[1]] = $(this).val();
         });
 
-        $(this).find('[id^="style_"]').each(function() {
+        $(this).find('[id^="field_"]').each(function() {
 
-            var style = {};
+            var field = {};
 
-            $(this).find('[data-json^="style."]').each(function() {
-                if ($(this).hasClass('summer')) {
-                    style[$(this).data('json').split('.')[1]] = $(this).code();
-                } else {
-                    style[$(this).data('json').split('.')[1]] = $(this).val();
-                }
+            $(this).find('[data-json^="field."]').each(function() {
+                field[$(this).data('json').split('.')[1]] = $(this).val();
             });
 
-            section.style.push(style);
+            section.field.push(field);
         });
 
         data.sections.push(section);
     });
-
-    landing[data.code] = data;
-
-    delete(landing[data.code].code);
 
     var loader = new Alert({
         type: "info",
@@ -251,15 +181,15 @@ $(document).on('bs.save.connector', function() {
     loader.open();
 
     $.ajax({
-        url: '/blueseal/marketing/landing/aggiungi',
-        data: landing,
+        url: '#',
+        data: data,
         type: 'post'
     }).done(function () {
         loader.close();
-        console.log(landing);
+        console.log(connector);
         new Alert({
             type: "success",
-            message: "Landing page salvata con successo"
+            message: "Connettore salvato con successo"
         }).open();
     }).fail(function() {
         loader.close();

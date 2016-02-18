@@ -44,7 +44,6 @@ class CProductDetailListAjaxController extends AAjaxController
     public function get()
     {
         $datatable = new CDataTables('vBluesealProductDetailList',['id'],$_GET);
-
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
@@ -53,7 +52,6 @@ class CProductDetailListAjaxController extends AAjaxController
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $transRepo = $this->app->repoFactory->create('ProductDetailTranslation');
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -64,13 +62,16 @@ class CProductDetailListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($productsDetail as $val){
-                $trans = $transRepo->findOneBy(['productDetailId' => $val->id, 'langId' => 1]);
-                $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
-                $response['data'][$i]["DT_RowClass"] = 'colore';
-                $response['data'][$i]['name'] = $trans->name;
-                $response['data'][$i]['slug'] = $val->slug;
-                $response['data'][$i]['id'] = $val->id;
 
+            $query = $this->app->dbAdapter->query("SELECT count(psa.productVariantId) AS conto
+                                                  FROM ProductDetail pd, ProductSheetActual psa
+                                                  WHERE pd.id = psa.productDetailId and pd.id = ?",[$val->id])->fetchAll()[0];
+
+            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
+            $response['data'][$i]["DT_RowClass"] = 'colore';
+            $response['data'][$i]['name'] = $val->productDetailTranslation->findOneByKey('langId',1)->name;
+            $response['data'][$i]['slug'] = $val->slug;
+            $response['data'][$i]['num'] = $query['conto'];
             $i++;
         }
 

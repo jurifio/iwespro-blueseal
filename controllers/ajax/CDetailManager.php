@@ -24,14 +24,21 @@ class CDetailManager extends AAjaxController
         $repo = $this->app->repoFactory->create('ProductDetail');
 
         $html = 'Su quale dettaglio li vuoi unire?<br><br>';
-        $html .= '<select class="full-width" placeholder="Seleziona il dettaglio da tenere" data-init-plugin="selectize"  title="productDetailId" name="productDetailId" id="productDetailId">';
+        $html .= '<select class="full-width" placehoder="Seleziona il dettaglio da tenere" data-init-plugin="selectize"  title="productDetailId" name="productDetailId" id="productDetailId">';
 
+        $i = 0;
         foreach ($this->app->router->request()->getRequestData() as $detailId) {
-	        $detail = $repo->findOneBy(['id'=>$detailId], 'LIMIT 0,999','ORDER BY slug');
-            $html .= '<option value="' . $detail->id . '" required>' . $detail->slug . '</option>';
+            $detail = $repo->findOneBy(['id'=>$detailId], 'LIMIT 0,999','ORDER BY slug');
+            if ($i == 0){
+                $name = $detail->productDetailTranslation->findOneByKey('langId',1)->name;
+            }
 
+            $html .= '<option value="' . $detail->id . '" required>' . $detail->productDetailTranslation->findOneByKey('langId',1)->name . '</option>';
+        $i++;
         }
-        $html .= "</select>";
+        $html .= "</select><br><br>";
+        $html .= 'Inserisci il nuovo nome del dettaglio<br>';
+        $html .= '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="'. $name . '">';
 
         return json_encode(
             [
@@ -49,7 +56,9 @@ class CDetailManager extends AAjaxController
      */
     public function put()
     {
+        $productDetailName = "";
         $datas = $this->app->router->request()->getRequestData();
+
         $productDetailId = 0;
         $ids = [];
         $this->app->dbAdapter->beginTransaction();
@@ -57,6 +66,8 @@ class CDetailManager extends AAjaxController
         foreach ($datas as $key => $val) {
             if ($key == 'productDetailId') {
                 $productDetailId = $val;
+            } elseif ($key == 'productDetailName' ) {
+                $productDetailName = $val;
             } else {
                 $ids[$key] = $val;
             }
@@ -78,10 +89,16 @@ class CDetailManager extends AAjaxController
                 $productDetailTrans = $this->app->repoFactory->create("ProductDetailTranslation")->findOneBy(['productDetailId' => $id, 'langId' => 1]);
                 if ($productDetailTrans->productDetailId != $productDetailId) {
                     $productDetailTrans->delete();
+                } elseif ($productDetailName != ""){
+                    $productDetailTrans->name = $productDetailName;
+                    $productDetailTrans->update();
                 }
                 $productDetail = $this->app->repoFactory->create("ProductDetail")->findOneBy(['id' => $id]);
                 if ($productDetail->id != $productDetailId) {
                     $productDetail->delete();
+                } elseif ($productDetailName != ""){
+                    $productDetail->name = $productDetailName;
+                    $productDetail->update();
                 }
 
             }
@@ -91,4 +108,6 @@ class CDetailManager extends AAjaxController
             $this->app->dbAdapter->rollBack();
         }
     }
+
+
 }

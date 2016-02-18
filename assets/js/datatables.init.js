@@ -18,6 +18,7 @@
         scrollCollapse: true,
         responsive: true,
         select: true,
+        lengthMenu: [10,25,50,75,100],
         displayLength: 25,
         language: {
             "sEmptyTable": "Nessun dato presente nella tabella",
@@ -205,20 +206,26 @@
         ]
     });
 
-    tableSetup.productdetail_list = $.extend({}, tableSetup.common, {
+    tableSetup.product_detail_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
             {
                 data: "slug",
-                orderable: true,
-                searchable: true
+	            orderable: true,
+	            searchable: false
 
             }, {
                 data: "name",
+		        orderable: true,
+		        searchable: true
+            },{
+                data: "num",
                 orderable: true,
-                searchable: true
+                searchable: false
             }
-        ]
+        ],
+        lengthMenu: [10,25,50,75,100,200,500,1000],
+        displayLength: 100
     });
 
     tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
@@ -227,7 +234,7 @@
             {
                 data: "slug",
                 orderable: true,
-                searchable: true
+                searchable: false
             }, {
                 data: "name",
                 orderable: true,
@@ -240,13 +247,67 @@
         ]
     });
 
+    tableSetup.description_translate_list = $.extend({}, tableSetup.common, {
+        order: [[0, "asc"]],
+        columns: [
+            {
+                data: "description",
+                orderable: true,
+                searchable: true
+            },
+            {
+                data: "lang",
+                orderable: false,
+                searchable: false
+            }
+        ],
+        lengthMenu: [10,25,50,75,100,200,500,1000],
+        displayLength: 100
+    });
+
+    tableSetup.name_translate_list = $.extend({}, tableSetup.common, {
+        order: [[0, "asc"]],
+        columns: [
+            {
+                data: "name",
+                orderable: true,
+                searchable: true
+            },
+            {
+                data: "lang",
+                orderable: false,
+                searchable: false
+            }
+        ],
+        lengthMenu: [10,25,50,75,100,200,500,1000],
+        displayLength: 100
+    });
+
+    tableSetup.name_lang_list = $.extend({}, tableSetup.common, {
+        order: [[0, "asc"]],
+        columns: [
+            {
+                data: "name",
+                orderable: true,
+                searchable: true
+            },
+            {
+                data: "trans",
+                orderable: false,
+                searchable: false
+            }
+        ],
+        lengthMenu: [10,25,50,75,100,200,500,1000],
+        displayLength: 100
+    });
+
     tableSetup.detail_lang_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
             {
                 data: "slug",
                 orderable: true,
-                searchable: true
+                searchable: false
             }, {
                 data: "name",
                 orderable: true,
@@ -261,7 +322,7 @@
             {
                 data: "slug",
                 orderable: true,
-                searchable: true
+                searchable: false
             }, {
                 data: "name",
                 orderable: true,
@@ -588,6 +649,33 @@
         ]
     });
 
+    tableSetup.importer_list = $.extend({}, tableSetup.common, {
+        order: [[0,'asc']],
+        columns: [
+            {
+                data: "name",
+                orderable: true,
+                searchable: true
+            },
+            {
+                data: "trans",
+                orderable: true
+            },
+            {
+                data: "state",
+                orderable: true
+            },
+            {
+                data: "error",
+                orderable: true
+            },
+            {
+                data: "connector",
+                orderable: false
+            }
+        ]
+    });
+
     tableSetup.coupontype_list = $.extend({}, tableSetup.common, {
         order: [[0,'asc']],
         columns: [
@@ -682,6 +770,22 @@
         ]
     });
 
+    tableSetup.tag_list = $.extend({}, tableSetup.common, {
+        order: [[0,'asc']],
+        columns: [
+            {
+                data: "slug",
+                orderable: true,
+                searchable: true
+            },
+            {
+                data: "priority",
+                orderable: true,
+                searchable: true
+            }
+        ]
+    });
+
     $.each($('table[data-datatable-name]'), function () {
 
         var table = $(this);
@@ -711,11 +815,10 @@
 		    if (toolbarSearch.length == 0) {
 			    bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-search" style="float:right;"><div class=\"btn-group-label\">Cerca nella tabella</div></div>');
 			    bstoolbar.children('.dt-buttons').last().append(dtfilters);
+			    toolbarSearch = $('.bs-toolbar-search');
 		    }
 
-		    //FIXME potremmof are un lavoro piu pulito, il contenuto del selettore non veniva aggiornato
-		    $('.bs-toolbar-search').find('input').eq(0).off().on('keyup', function(e)  {
-			    console.log(toolbarSearch);
+		    toolbarSearch.find('input').eq(0).off().on('keyup', function(e)  {
 			    if (e.keyCode == 13) {
 				    table.DataTable().search($(this).val()).draw();
 			    }

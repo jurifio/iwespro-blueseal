@@ -25,7 +25,8 @@
                         <div class="panel panel-default clearfix">
                             <div class="panel-heading clearfix">
                                 <h5>Importatori Connettori
-                                <?php echo ' '. $shop->title;?></h5>
+                                <?php echo ' '. $shop->title;?>
+                                </h5>
                             </div>
                             <div class="panel panel-default clearfix" id="section">
                                 <div class="panel-heading clearfix">
@@ -35,15 +36,26 @@
                                                 <h5>Connettore #<bs-rcounter data-target="section" /></h5>
                                             </div>
                                         </div>
-
-                                        <div class="col-sm-3">
-                                            <bs-button data-tag="a" data-icon="fa-plus" data-class="btn btn-default" data-event="bs.replica.section"></bs-button>
+                                        <div class="col-sm-6">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="size">Gruppo taglia</label>
+                                                <select data-json="section.size" class="full-width selectpicker" placeholder="Sel. gruppo taglia" data-init-plugin="selectize" tabindex="-1" title="">
+                                                    <option></option>
+                                                    <?php foreach ($productSizeGroup as $sizeGr) {?>
+                                                        <option value="<?php echo $sizeGr->id ?>">
+                                                            <?php echo $sizeGr->macroName . ' ' . $sizeGr->locale . ''?>
+                                                        </option>
+                                                    <?php }?>
+                                                </select>
+                                            </div>
                                         </div>
+                                        <!--<div class="col-sm-3">
+                                            <bs-button data-tag="a" data-icon="fa-plus" data-class="btn btn-default" data-event="bs.replica.section"></bs-button>
+                                        </div>-->
                                     </div>
                                 </div>
                                 <div class="panel clearfix">
-                                <div class="panel panel-body clearfix">
-                                    <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post" autocomplete="off">
+                                    <div class="panel panel-body clearfix">
                                         <div class="fieldReplicaContainer">
                                         <div class="row" id="field">
                                             <div class="col-sm-2">
@@ -86,6 +98,12 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="value">Valore</label>
+                                                    <input type="text" data-json="field.value" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="logic">Connettore</label>
                                                     <select data-json="field.connector" class="full-width selectpicker" placeholder="Sel. connettore" data-init-plugin="selectize" tabindex="-1" title="">
@@ -99,32 +117,18 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-2">
-                                                <div class="form-group form-group-default">
-                                                    <label for="value">Valore</label>
-                                                    <input type="text" data-json="field.value" class="form-control" />
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
                                                 <br><bs-button data-tag="a" data-icon="fa-plus" data-class="btn btn-default" data-event="bs.replica.field"></bs-button>
                                             </div>
                                         </div>
                                         </div>
 
-                                    </form>
-                                </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <div class="panel panel-default clearfix section-summary">
-                            <div class="panel-heading clearfix">
-                                <h5>Struttura</h5>
-                            </div>
-                            <div class="panel-body clearfix">
-                                <!-- filled by Echo -->
-                            </div>
-                        </div>
                         <div class="panel panel-default clearfix">
                             <div class="panel-heading clearfix">
                                 <h5>Gruppi taglie</h5>
@@ -132,9 +136,9 @@
                             <div class="panel-body clearfix">
                                 <?php foreach ($productSizeGroup as $sizeGroup) {
                                     if ($sizeGroup->id == $value) {
-                                        echo '<p><strike>' . $sizeGroup->macroName . '</strike></p><br>';
+                                        echo '<p><strike>' . $sizeGroup->macroName . ' ' . $sizeGroup->locale. '</strike></p>';
                                     } else {
-                                        echo '<p>' . $sizeGroup->macroName . '</p><br>';
+                                        echo '<p>' . $sizeGroup->macroName . ' ' . $sizeGroup->locale. '</p>';
                                     }
                                 }?>
                             </div>
