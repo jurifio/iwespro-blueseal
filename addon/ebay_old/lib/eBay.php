@@ -30,6 +30,11 @@ class eBay
     private $config;
 
     /**
+     * @var string
+     */
+    private $api;
+
+    /**
      * eBay constructor.
      * @param eBaySeller $seller
      * @param AApplication $app
@@ -38,6 +43,16 @@ class eBay
     {
         $this->config = new CConfig($app->cfg()->fetch('paths','blueseal-addon').'/ebay/config/cfg.json');
         $this->token = $seller->getToken();
+    }
+
+    /**
+     * @param string $api
+     * @return $this
+     */
+    public function useApi($api = 'trading')
+    {
+        $this->api = $api;
+        return $this;
     }
 
     /**
