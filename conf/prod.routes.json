@@ -9,11 +9,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -25,11 +20,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -41,11 +31,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -61,11 +46,6 @@
             "methods": [
                 "GET",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -81,11 +61,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -100,11 +75,6 @@
             },
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -116,11 +86,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -132,11 +97,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -148,11 +108,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -164,11 +119,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -180,11 +130,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -196,11 +141,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -212,11 +152,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -227,11 +162,6 @@
             "filters": {},
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -242,11 +172,6 @@
             "filters": {},
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -257,11 +182,6 @@
             "filters": {},
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -274,11 +194,6 @@
                 "GET",
                 "POST",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -292,11 +207,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -310,11 +220,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -328,11 +233,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -346,11 +246,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -364,11 +259,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -384,11 +274,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -402,11 +287,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -422,11 +302,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -440,11 +315,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -460,11 +330,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -478,11 +343,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -498,11 +358,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -516,11 +371,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -536,11 +386,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -554,11 +399,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -574,11 +414,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -592,11 +427,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -610,11 +440,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -630,11 +455,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -650,11 +470,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -668,11 +483,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -686,11 +496,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -704,11 +509,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -722,11 +522,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -740,11 +535,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -758,11 +548,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -776,11 +561,6 @@
                 "POST",
                 "DELETE",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -792,11 +572,6 @@
             "methods": [
                 "GET",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -808,11 +583,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -824,11 +594,6 @@
             "methods": [
                 "GET",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -840,11 +605,6 @@
             "methods": [
                 "GET",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -857,11 +617,6 @@
                 "GET",
                 "POST",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -873,11 +628,6 @@
             "methods": [
                 "GET",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -891,11 +641,6 @@
                 "PUT",
                 "POST",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -909,11 +654,6 @@
                 "PUT",
                 "POST",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -926,11 +666,6 @@
                 "GET",
                 "POST",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -942,11 +677,6 @@
             "methods": [
                 "GET",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -959,11 +689,6 @@
                 "GET",
                 "POST",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -977,11 +702,6 @@
                 "GET",
                 "POST",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -995,11 +715,6 @@
                 "GET",
                 "POST",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1015,11 +730,6 @@
                 "POST",
                 "PUT",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1035,11 +745,6 @@
             },
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1050,11 +755,6 @@
             "filters": {},
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1065,11 +765,6 @@
             "filters": {},
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1081,11 +776,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1096,11 +786,6 @@
             "filters": {},
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1112,11 +797,6 @@
             "methods": [
                 "GET",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1128,11 +808,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1144,11 +819,6 @@
             "methods": [
                 "GET",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1160,11 +830,6 @@
             "methods": [
                 "GET",
                 "DELETE"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1175,11 +840,6 @@
             "filters": {},
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1193,11 +853,6 @@
             "methods": [
                 "GET",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1209,11 +864,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1224,11 +874,6 @@
             "filters": {},
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1242,11 +887,6 @@
             "methods": [
                 "GET",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1258,11 +898,6 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1273,11 +908,6 @@
             "filters": {},
             "methods": [
                 "GET"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1291,11 +921,6 @@
             "methods": [
                 "GET",
                 "PUT"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
             ]
         },
         {
@@ -1307,11 +932,158 @@
             "methods": [
                 "GET",
                 "POST"
-            ],
-            "hosts": [
-                "www.pickyshop.com",
-                "pickyshop.com",
-                "debug.pickyshop.clo.ud.it"
+            ]
+        },{
+            "pattern": "/blueseal/tag(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\TagListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/tag/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\TagAddController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST"
+            ]
+        },
+        {
+            "pattern": "/blueseal/tag/modifica/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\TagEditController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST"
+            ]
+        },{
+            "pattern": "/blueseal/traduzioni/descrizioni(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\DescriptionTranslateListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/traduzioni/descrizioni/modifica(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\DescriptionTranslateEditController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/traduzioni/nomi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\NameTranslateListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/traduzioni/nomi/modifica(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\NameTranslateEditController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/traduzioni/nomi/lingua/:langId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\NameTranslateLangListController"
+            },
+            "filters": {
+                "langId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/traduzioni/nomi/lingua_list/:langId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\NameTranslateLangAllListController"
+            },
+            "filters": {
+                "langId": "[0-9]+"
+            },
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
+            "pattern": "/blueseal/marketing/landing(/)?",
+            "behaviour": {
+                "ctrl": "LandingPageListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori(/)?",
+            "behaviour": {
+                "ctrl": "ImporterListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari(/)?",
+            "behaviour": {
+                "ctrl": "DictionaryListController"
+            },
+            "filters": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
             ]
         }
     ]
