@@ -7,8 +7,7 @@
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
-<div class="page-container">
-    <?php include "parts/header.php" ?>
+<div class="page-container"> <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
 
     <div class="page-content-wrapper">
