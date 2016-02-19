@@ -106,7 +106,7 @@ class CWidgetStructure
     public function makeForm($key, $wlang, $wpath, $assetPath = '')
     {
         $data = null;
-        if (file_exists($wpath.$this->get('id').'.'.$wlang.'.json')) {
+        if (file_exists($this->app->rootPath().$wpath.$this->get('id').'.'.$wlang.'.json')) {
             $data = json_decode(file_get_contents($wpath.$this->get('id').'.'.$wlang.'.json'));
             $data = $data->{$this->widgetConfig};
         }
