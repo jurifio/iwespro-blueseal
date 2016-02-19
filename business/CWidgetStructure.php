@@ -106,9 +106,10 @@ class CWidgetStructure
     public function makeForm($key, $wlang, $wpath, $assetPath = '')
     {
         $data = null;
+        \BlueSeal::dump($wpath);
+        throw new \Exception();
         if (file_exists($wpath.$this->get('id').'.'.$wlang.'.json')) {
-            \BlueSeal::dump($wpath);
-            throw new \Exception();
+
             $data = json_decode(file_get_contents($wpath.$this->get('id').'.'.$wlang.'.json'));
             $data = $data->{$this->widgetConfig};
         }
