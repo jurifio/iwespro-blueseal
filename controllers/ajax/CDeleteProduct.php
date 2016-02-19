@@ -39,6 +39,7 @@ class CDeleteProduct extends AAjaxController
         foreach($ids as $id){
             $conditions = ['id' => $id, 'productVariantId' => $productVariantId[$i]];
             $product = $em->findOneBy($conditions);
+            $i++;
 
             $html .= "<tr><td>" . $product->id . "-" . $product->productVariant->id . "</td><td><img width=\"100\" src=\"/assets/" . $product->dummyPicture . "\"></td></tr>";
         }
