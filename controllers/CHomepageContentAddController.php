@@ -63,7 +63,7 @@ class CHomepageContentAddController extends ARestrictedAccessRootController
      */
     public function post()
     {
-        $assetPath = $this->app->cfg()->fetch('paths', 'store-theme');
+        $assetPath = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'store-theme');
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_add.php');
         $appPath = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'public');
