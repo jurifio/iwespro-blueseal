@@ -119,7 +119,7 @@ class CWidgetStructureParser
             $dtArray = [];
 
             foreach ($this->languages as $lang) {
-                \BlueSeal::dump($this->rootPath());
+                \BlueSeal::dump($app->rootPath());
                 throw new \Exception();
                 if (!file_exists($this->app->rootPath().$this->appPath.'/data/widget/'.$widget->id().'.'.$lang->lang.'.json')) {
 
