@@ -21,12 +21,12 @@ use bamboo\ecommerce\views\VBase;
 class CProductDetailListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "productdetail_list";
+    protected $pageSlug = "product_detail_list";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/productdetail_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_detail_list.php');
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
