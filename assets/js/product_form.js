@@ -119,7 +119,7 @@ $(document).ready(function() {
                 },
                 autoexpand: true,
                 checkbox: true,
-                imagePath: "http://www.pickyshop.com/assets/img/skin/icons.gif",
+                imagePath: "/assets/img/skin/icons.gif",
                 selectMode: 2,
                 onPostInit: function () {
                     var vars = $("#ProductCategory_id").val().trim();

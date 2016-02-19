@@ -48,7 +48,7 @@ var contentManager = (function($) {
         },
         getLoader: function()
         {
-            return "<p style='width:100%;height:120px;background:url(http://www.pickyshop.com/blueseal/pages/img/progress/progress-circle-success.svg) no-repeat center'>&nbsp;</p>";
+            return "<p style='width:100%;height:120px;background:url(/assets/pages/img/progress/progress-circle-success.svg) no-repeat center'>&nbsp;</p>";
         },
         submitChanges: function()
         {
