@@ -7,6 +7,7 @@ use bamboo\core\exceptions\RedPandaFileException;
 use bamboo\core\io\CJsonAdapter;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
+
 /**
  * Class CHomepageContentEditController
  * @package bamboo\blueseal\controllers
@@ -66,7 +67,7 @@ class CHomepageContentEditController extends ARestrictedAccessRootController
         $assetPath = $this->app->cfg()->fetch('paths', 'store-theme');
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_edit.php');
-        $appPath = $this->app->cfg()->fetch('paths', 'app');
+        $appPath = $this->app->rootPath().$this->app->cfg()->fetch('paths','public');
 
         $data = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
@@ -86,7 +87,7 @@ class CHomepageContentEditController extends ARestrictedAccessRootController
 
         unset($data['widgetId'], $data['widgetType'], $data['widgetLang']);
 
-        $json = new CJsonAdapter($appPath . '/data/widget/' . $widgetType . '.' . $widgetLang . '.json');
+        $json = new CJsonAdapter($appPath . '/content/widget/' . $widgetType . '.' . $widgetLang . '.json');
 
         $grid = [];
         foreach ($data as $widgetKey => $widgetKeyValue) {
