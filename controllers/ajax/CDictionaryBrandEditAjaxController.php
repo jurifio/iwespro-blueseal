@@ -53,8 +53,6 @@ class CDictionaryBrandEditAjaxController extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
-        \BlueSeal::dump($shopId);
-        throw new \Exception();
         $datatable = new CDataTables('vBluesealDictionaryBrandEdit',['shopId','term'],$_GET);
         $datatable->addCondition('shopId',[$shopId]);
 
