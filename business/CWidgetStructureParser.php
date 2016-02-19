@@ -60,12 +60,12 @@ class CWidgetStructureParser
     public function __construct(AApplication $app, CObjectCollection $languages, $sectionName)
     {
         $this->bluesealPath = $app->rootPath().$app->cfg()->fetch('paths','blueseal');
-        $this->themePath = $app->cfg()->fetch('paths','store-theme');
+        $this->themePath = $app->rootPath().$app->cfg()->fetch('paths','store-theme');
         $this->data = new CJsonAdapter($this->bluesealPath.'/content/structure.json');
         $this->widgets = new CObjectCollection();
         $this->languages = $languages;
         $this->dtDrawId = $app->router->request()->getRequestData('draw');
-        $this->appPath = $app->cfg()->fetch('paths','app');
+        $this->appPath = $app->rootPath().$app->cfg()->fetch('paths','app');
         foreach ($this->data['sections'][$sectionName] as $widget => $data) {
             $this->widgets->add(new CWidgetStructure($data,$widget));
         }
