@@ -24,21 +24,25 @@ class CDeleteProduct extends AAjaxController
     {
         $em = $this->app->entityManagerFactory->create('Product');
 
-        $id = [];
+        $ids = [];
         $productVariantId = [];
 
+        $i=0;
         foreach ($this->app->router->request()->getRequestData() as $product) {
-            $id[] = explode('__', $product)[0];
-            $productVariantId[] = explode('__', $product)[1];
+            $ids[$i] = explode('__', $product)[0];
+            $productVariantId[$i] = explode('__', $product)[1];
+            $i++;
         }
-
-        $conditions = ['id' => $id, 'productVariantId' => $productVariantId];
-        $products = $em->findBy($conditions);
-
         $html = "<table><thead><tr><th>Code</th><th>Immagine</th></tr></thead><tbody>";
-        foreach ($products as $product) {
+
+        $i=0;
+        foreach($ids as $id){
+            $conditions = ['id' => $id, 'productVariantId' => $productVariantId[$i]];
+            $product = $em->findOneBy($conditions);
+
             $html .= "<tr><td>" . $product->id . "-" . $product->productVariant->id . "</td><td><img width=\"100\" src=\"/assets/" . $product->dummyPicture . "\"></td></tr>";
         }
+
         $html .= "</tbody></table>";
 
         return json_encode(
