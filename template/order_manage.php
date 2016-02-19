@@ -106,7 +106,6 @@
                                     <div class="panel-body">
                                         <address class="margin-bottom-20 margin-top-10">
                                             <?php
-                                            BlueSeal::dump($order->frozenShippingAddress);
                                             $address = unserialize($order->frozenShippingAddress);
                                             $address = $address != false ? $address : unserialize($order->frozenBillingAddress);
                                             $address->setEntityManager($app->application()->entityManagerFactory->create('UserAddress'));
