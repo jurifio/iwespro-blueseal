@@ -86,7 +86,7 @@ class CHomepageContentAddController extends ARestrictedAccessRootController
 
         unset($data['widgetId'], $data['widgetType'], $data['widgetLang']);
 
-        $json = new CJsonAdapter($appPath . '/data/widget/' . $widgetType . '.' . $widgetLang . '.json');
+        $json = new CJsonAdapter($appPath . '/content/widget/' . $widgetType . '.' . $widgetLang . '.json');
 
         $grid = [];
         foreach ($data as $widgetKey => $widgetKeyValue) {
