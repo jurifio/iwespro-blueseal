@@ -26,8 +26,6 @@ class COrderManageController extends ARestrictedAccessRootController
         $statuses = $repoStatus->findAll();
         $orderId =  $this->app->router->request()->getRequestData();
         $order = $this->app->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-        $repo = $this->app->repoFactory->create('User');
-        $order->user = $repo->em()->findOne(array("id"=>$order->userId));
 
 
         $em = $this->app->entityManagerFactory->create('Country');
