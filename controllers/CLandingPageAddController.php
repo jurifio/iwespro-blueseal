@@ -51,7 +51,7 @@ class CLandingPageAddController extends ARestrictedAccessRootController
     {
         $root = $this->app->cfg()->fetch('paths','root');
         $this->app->setLang(new CLang(1,'it'));
-        $json = new CJsonAdapter($root.'/htdocs/pickyshop/content/themes/flatize/layout/focusPage.it.json');
+        $json = new CJsonAdapter($this->app->rootPath().$this->app->cfg()->fetch('paths','store-theme').'/layout/focusPage.it.json');
         $json->append('\\',$this->app->router->request()->getRequestData(), true);
         $json->save();
     }
