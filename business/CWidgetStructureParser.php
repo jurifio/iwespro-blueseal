@@ -59,7 +59,7 @@ class CWidgetStructureParser
      */
     public function __construct(AApplication $app, CObjectCollection $languages, $sectionName)
     {
-        $this->bluesealPath = $this->app->rootPath().$app->cfg()->fetch('paths','blueseal');
+        $this->bluesealPath = $app->rootPath().$app->cfg()->fetch('paths','blueseal');
         $this->themePath = $app->cfg()->fetch('paths','store-theme');
         $this->data = new CJsonAdapter($this->bluesealPath.'/content/structure.json');
         $this->widgets = new CObjectCollection();
