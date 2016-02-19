@@ -53,7 +53,7 @@ class CCatalogContentEditController extends ARestrictedAccessRootController
             'widgetId' => $this->app->router->getMatchedRoute()->getComputedFilter('id'),
             'widgetLang' => $this->app->router->getMatchedRoute()->getComputedFilter('wlang'),
             'widgetPath' => $this->app->cfg()->fetch('paths', 'app') . '/data/widget/',
-            'assetPath' => 'http://' . $this->app->cfg()->fetch('paths', 'domain'),
+            'assetPath' => 'https://' . $this->app->cfg()->fetch('paths', 'domain'),
             'sidebar' => $this->sidebar->build()
         ]);
     }
