@@ -70,7 +70,7 @@ class CContentCatalogListAjaxController extends AAjaxController
         $repo = $this->app->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 
-        $structure = new CWidgetStructureParser($this->app,$installedLang,'catalog');
+        $structure = new CWidgetStructureParser($this->app->rootPath().$this->app,$installedLang,'catalog');
         return $structure->getDTJson();
     }
 }
