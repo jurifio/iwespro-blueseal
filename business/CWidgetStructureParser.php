@@ -59,7 +59,7 @@ class CWidgetStructureParser
      */
     public function __construct(AApplication $app, CObjectCollection $languages, $sectionName)
     {
-        $this->bluesealPath = $app->cfg()->fetch('paths','blueseal');
+        $this->bluesealPath = $app->rootPath().$app->cfg()->fetch('paths','blueseal');
         $this->themePath = $app->cfg()->fetch('paths','store-theme');
         $this->data = new CJsonAdapter($this->bluesealPath.'/content/structure.json');
         $this->widgets = new CObjectCollection();
@@ -119,7 +119,10 @@ class CWidgetStructureParser
             $dtArray = [];
 
             foreach ($this->languages as $lang) {
-                if (!file_exists($this->appPath.'/data/widget/'.$widget->id().'.'.$lang->lang.'.json')) {
+                \BlueSeal::dump($this->app->rootPath());
+                throw new \Exception();
+                if (!file_exists($this->app->rootPath().$this->appPath.'/data/widget/'.$widget->id().'.'.$lang->lang.'.json')) {
+
                     $languages[$lang->lang] = false;
                 } else {
                     $languages[$lang->lang] = true;
