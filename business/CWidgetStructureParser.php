@@ -66,8 +66,6 @@ class CWidgetStructureParser
         $this->languages = $languages;
         $this->dtDrawId = $app->router->request()->getRequestData('draw');
         $this->appPath = $app->rootPath().$app->cfg()->fetch('paths','app');
-        $this->app = $app->rootPath();
-
         foreach ($this->data['sections'][$sectionName] as $widget => $data) {
             $this->widgets->add(new CWidgetStructure($data,$widget));
         }
