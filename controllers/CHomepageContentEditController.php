@@ -52,7 +52,7 @@ class CHomepageContentEditController extends ARestrictedAccessRootController
             'widgetId' => $this->app->router->getMatchedRoute()->getComputedFilter('id'),
             'widgetLang' => $this->app->router->getMatchedRoute()->getComputedFilter('wlang'),
             'widgetPath' => $this->app->rootPath().$this->app->cfg()->fetch('paths', 'public') . '/content/widget/',
-            'assetPath' => 'http://' . $this->app->rootPath().$this->app->cfg()->fetch('paths', 'domain'),
+            'assetPath' => 'http://' . $this->app->cfg()->fetch('paths', 'domain'),
             'sidebar' => $this->sidebar->build()
         ]);
     }
