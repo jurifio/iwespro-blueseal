@@ -28,7 +28,6 @@ class CDeleteCoupon extends AAjaxController
         foreach ($this->app->router->request()->getRequestData() as $coupon) {
             $ids []= $coupon;
         }
-
         foreach ($ids as $id) {
             $conditions = ['id' => $id];
         }
