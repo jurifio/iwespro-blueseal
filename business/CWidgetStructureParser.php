@@ -121,9 +121,8 @@ class CWidgetStructureParser
             $dtArray = [];
 
             foreach ($this->languages as $lang) {
-                \BlueSeal::dump($this->app);
-                throw new \Exception();
-                if (!file_exists($this->app->rootPath().$this->appPath.'/data/widget/'.$widget->id().'.'.$lang->lang.'.json')) {
+
+                if (!file_exists($this->appPath.'/data/widget/'.$widget->id().'.'.$lang->lang.'.json')) {
 
                     $languages[$lang->lang] = false;
                 } else {
