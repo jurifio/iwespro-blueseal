@@ -24,11 +24,8 @@ class COrderManageController extends ARestrictedAccessRootController
 
         $repoStatus = $this->app->repoFactory->create('OrderStatus');
         $statuses = $repoStatus->findAll();
-        $orderId =  $this->app->router->request()->getRequestData();
-        $order = $this->app->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-        $repo = $this->app->repoFactory->create('User');
-        $order->user = $repo->em()->findOne(array("id"=>$order->userId));
-
+        $orderId =  $this->app->router->request()->getRequestData('order');
+	    $order = $this->app->repoFactory->create('Order')->findOne([$orderId]);
 
         $em = $this->app->entityManagerFactory->create('Country');
         $counties= $em->findAll("limit 999","");

@@ -2,10 +2,10 @@
 
 ini_set("display_errors",1);
 error_reporting(~0);
-require "/data/www/redpanda/htdocs/pickyshop/BlueSeal.php";
+//require "/data/www/redpanda/htdocs/pickyshop/BlueSeal.php";
 
 use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
-$BlueSeal = new BlueSeal('BlueSeal','pickyshop','/data/www/redpanda');
+//$BlueSeal = new BlueSeal('BlueSeal','pickyshop','/data/www/redpanda');
 $BlueSeal->enableDebugging();
 
 /* nome scheda prodotto (al singolare non piu lunga di 45 caratteri)*/

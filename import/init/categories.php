@@ -4,7 +4,7 @@ error_reporting(~0);
 
 require "../../../BlueSeal.php";
 
-$BlueSeal = new BlueSeal('BlueSeal','ilsalvagente','/data/www/redpanda');
+//$BlueSeal = new BlueSeal('BlueSeal','ilsalvagente','/data/www/redpanda');
 $BlueSeal->enableDebugging();
 $BlueSeal->setDefaultLanguage('it');
 

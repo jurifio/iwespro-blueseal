@@ -2,12 +2,12 @@
 
 ini_set("display_errors",1);
 error_reporting(~0);
-require "/data/www/redpanda/htdocs/cartechinishop/BlueSeal.php";
+//require "/data/www/redpanda/htdocs/cartechinishop/BlueSeal.php";
 use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\import\photosToAmazon\CProductPhotoExport;
 
-$BlueSeal = new BlueSeal('BlueSeal','cartechinishop','/data/www/redpanda');
+//$BlueSeal = new BlueSeal('BlueSeal','cartechinishop','/data/www/redpanda');
 $BlueSeal->enableDebugging();
 
 
