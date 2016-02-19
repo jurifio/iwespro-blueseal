@@ -65,7 +65,7 @@ class CWidgetStructureParser
         $this->widgets = new CObjectCollection();
         $this->languages = $languages;
         $this->dtDrawId = $app->router->request()->getRequestData('draw');
-        $this->appPath = $app->rootPath().$app->cfg()->fetch('paths','app');
+        $this->appPath = $app->rootPath().$app->cfg()->fetch('paths','public');
         foreach ($this->data['sections'][$sectionName] as $widget => $data) {
             $this->widgets->add(new CWidgetStructure($data,$widget));
         }
@@ -120,7 +120,7 @@ class CWidgetStructureParser
 
             foreach ($this->languages as $lang) {
 
-                if (!file_exists($this->appPath.'/data/widget/'.$widget->id().'.'.$lang->lang.'.json')) {
+                if (!file_exists($this->appPath.'/content/widget/'.$widget->id().'.'.$lang->lang.'.json')) {
 
                     $languages[$lang->lang] = false;
                 } else {
@@ -133,7 +133,7 @@ class CWidgetStructureParser
                 $dtArrayLang[] = '<span '.(($installed === true) ? 'class="badge"' : 'class="badge badge-red"').'>'.$language.'</span>';
             }
 
-            $widgetJson = new CJsonAdapter($this->appPath.'/data/widget/'.$widget->id().'.it.json');
+            $widgetJson = new CJsonAdapter($this->appPath.'/content/widget/'.$widget->id().'.it.json');
 
             foreach ($widgetJson as $k => $v) {
                 if ($k !== 'global') {
