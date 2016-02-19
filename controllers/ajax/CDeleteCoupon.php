@@ -32,7 +32,7 @@ class CDeleteCoupon extends AAjaxController
         $html = "<table><thead><tr><th>Codice</th><th>Valore</th><th>Tipo</th></tr></thead><tbody>";
         foreach ($ids as $id) {
             $conditions = ['id' => $id];
-            $coupon = $em->findBy($conditions);
+            $coupon = $em->findOneBy($conditions);
 
             $amType = ($coupon->amountType == 'F') ? '&euro;' : '%';
             $html .= "<tr><td>" . $coupon->code . "</td><td>" . $coupon->amount . "</td><td>" . $amType . "</td></tr>";
