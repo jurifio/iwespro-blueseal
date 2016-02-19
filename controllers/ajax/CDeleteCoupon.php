@@ -24,21 +24,20 @@ class CDeleteCoupon extends AAjaxController
     {
         $em = $this->app->entityManagerFactory->create('Coupon');
 
-        $id =[];
+        $ids =[];
         foreach ($this->app->router->request()->getRequestData() as $coupon) {
-            $id []= $coupon;
+            $ids []= $coupon;
         }
 
-        $conditions = ['id' => $id];
-        $coupons = $em->findBy($conditions);
-
         $html = "<table><thead><tr><th>Codice</th><th>Valore</th><th>Tipo</th></tr></thead><tbody>";
-        foreach ($coupons as $coupon) {
+        foreach ($ids as $id) {
+            $conditions = ['id' => $id];
+            $coupon = $em->findOneBy($conditions);
+
             $amType = ($coupon->amountType == 'F') ? '&euro;' : '%';
             $html .= "<tr><td>" . $coupon->code . "</td><td>" . $coupon->amount . "</td><td>" . $amType . "</td></tr>";
         }
         $html .= "</tbody></table>";
-
         return json_encode(
             [
                 'status' => 'ok',

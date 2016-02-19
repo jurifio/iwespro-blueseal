@@ -51,7 +51,7 @@ class CHomepageContentEditController extends ARestrictedAccessRootController
             'widgetType' => $this->app->router->getMatchedRoute()->getComputedFilter('type'),
             'widgetId' => $this->app->router->getMatchedRoute()->getComputedFilter('id'),
             'widgetLang' => $this->app->router->getMatchedRoute()->getComputedFilter('wlang'),
-            'widgetPath' => $this->app->cfg()->fetch('paths', 'app') . '/data/widget/',
+            'widgetPath' => $this->app->rootPath().$this->app->cfg()->fetch('paths', 'public') . '/content/widget/',
             'assetPath' => 'http://' . $this->app->cfg()->fetch('paths', 'domain'),
             'sidebar' => $this->sidebar->build()
         ]);
@@ -63,10 +63,10 @@ class CHomepageContentEditController extends ARestrictedAccessRootController
      */
     public function put()
     {
-        $assetPath = $this->app->cfg()->fetch('paths', 'store-theme');
+        $assetPath = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'store-theme');
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/content_homepage_edit.php');
-        $appPath = $this->app->cfg()->fetch('paths', 'app');
+        $appPath = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'public');
 
         $data = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
@@ -86,7 +86,7 @@ class CHomepageContentEditController extends ARestrictedAccessRootController
 
         unset($data['widgetId'], $data['widgetType'], $data['widgetLang']);
 
-        $json = new CJsonAdapter($appPath . '/data/widget/' . $widgetType . '.' . $widgetLang . '.json');
+        $json = new CJsonAdapter($appPath . '/content/widget/' . $widgetType . '.' . $widgetLang . '.json');
 
         $grid = [];
         foreach ($data as $widgetKey => $widgetKeyValue) {

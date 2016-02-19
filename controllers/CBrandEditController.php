@@ -26,7 +26,7 @@ class CBrandEditController extends CBrandManageController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/brand_edit.php');
 
-        $brandId =  $this->app->router->request()->getRequestData();
+        $brandId =  $this->app->router->request()->getRequestData('id');
         $brandEdit = $this->app->repoFactory->create('ProductBrand')->findOneBy(['id'=>$brandId]);
 
         echo $view->render([
