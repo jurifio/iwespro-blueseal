@@ -51,8 +51,8 @@ class CHomepageContentAddController extends ARestrictedAccessRootController
             'widgetType' => $this->app->router->getMatchedRoute()->getComputedFilter('type'),
             'widgetId' => $this->app->router->getMatchedRoute()->getComputedFilter('id'),
             'widgetLang' => $this->app->router->getMatchedRoute()->getComputedFilter('wlang'),
-            'widgetPath' => $this->app->cfg()->fetch('paths', 'app') . '/data/widget/',
-            'assetPath' => 'http://' . $this->app->cfg()->fetch('paths', 'domain'),
+            'widgetPath' => $this->app->rootPath().$this->app->cfg()->fetch('paths', 'public') . '/content/widget/',
+            'assetPath' => 'http://' . $this->app->rootPath().$this->app->cfg()->fetch('paths', 'domain'),
             'sidebar' => $this->sidebar->build()
         ]);
     }
