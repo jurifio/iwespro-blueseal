@@ -26,7 +26,7 @@ class COrderManageController extends ARestrictedAccessRootController
         $statuses = $repoStatus->findAll();
         $orderId =  $this->app->router->request()->getRequestData();
         $order = $this->app->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-
+		\BlueSeal::dump($order);
 
         $em = $this->app->entityManagerFactory->create('Country');
         $counties= $em->findAll("limit 999","");
