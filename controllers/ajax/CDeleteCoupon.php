@@ -25,10 +25,10 @@ class CDeleteCoupon extends AAjaxController
         $em = $this->app->entityManagerFactory->create('Coupon');
 
         $id =[];
-        \BlueSeal::dump($this->app->router->request()->getRequestData());
-        throw new \Exception();
         foreach ($this->app->router->request()->getRequestData() as $coupon) {
             $id []= $coupon;
+            \BlueSeal::dump($id);
+            throw new \Exception();
         }
 
         $conditions = ['id' => $id];
