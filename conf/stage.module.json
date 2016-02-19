@@ -3,7 +3,6 @@
         "admin-theme": "/back",
         "blueseal": "/back",
         "packed-assets": "/client/public/themes/flatize/assets/",
-        "productSync": "/data/www/redpanda/htdocs/sync",
         "blueseal-addon": "/back/addon"
     },
     "miscellaneous": {
