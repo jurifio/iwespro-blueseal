@@ -177,7 +177,7 @@ class CContentManagerContentForm extends AAjaxController
                 $output .= "</div>";
 
                 $sidebar .= "<div class=\"image-preview\">";
-                $sidebar .= "<img src=\"http://www.pickyshop.com/it/assets/$image\" width=\"100%\"/>";
+                $sidebar .= "<img src=\"/it/assets/$image\" width=\"100%\"/>";
                 $sidebar .= "</div>";
             }
         }

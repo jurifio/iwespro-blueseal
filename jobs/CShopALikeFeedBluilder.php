@@ -66,7 +66,7 @@ class CShopALikeFeedBluilder extends ACronJob
 		$writer->startElement('author');
 		$writer->writeElement('name', 'bambooshoot');
 		$writer->endElement();
-		$writer->writeElement('description', 'www.pickyshop.com/services/feed/it/shopalike');
+		$writer->writeElement('description', 'https://www.pickyshop.com/services/feed/it/shopalike');
 		$writer->writeElement('updated', date(DATE_ATOM, time()));
 
 		/** INIZIO INSERIMENTO PRODOTTI */

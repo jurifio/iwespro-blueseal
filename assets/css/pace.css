@@ -34,7 +34,7 @@ body:not(.pace-done) > :not(.pace),body:not(.pace-done):before,body:not(.pace-do
 
     z-index: 2000;
     position: fixed;
-    background: transparent url(http://www.pickyshop.com/assets/img/blueseal_logo_symbol_black.png) no-repeat 45px 20px;
+    background: transparent url(/assets/img/blueseal_logo_symbol_black.png) no-repeat 45px 20px;
     background-size: 100px;
     margin: auto;
     top: -50px;

@@ -168,7 +168,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
             <br>
             <br>
             <div>
-                <center><img alt="" class="invoice-thank" data-src-retina='http://www.pickyshop.com/assets/img/invoicethankyou.jpg' data-src='http://www.pickyshop.com/assets/img/invoicethankyou.jpg' src='http://www.pickyshop.com/assets/img/invoicethankyou.jpg'>
+                <center><img alt="" class="invoice-thank" data-src-retina='/assets/img/invoicethankyou.jpg' data-src='/assets/img/invoicethankyou.jpg' src='/assets/img/invoicethankyou.jpg'>
             </center>
             </div>
             <br>
