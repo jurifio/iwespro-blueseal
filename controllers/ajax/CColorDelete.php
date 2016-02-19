@@ -20,16 +20,15 @@ class CColorDelete extends AAjaxController
     {
         $em = $this->app->entityManagerFactory->create('ProductColorGroup');
 
-        $id = [];
+        $ids = [];
 
         foreach ($this->app->router->request()->getRequestData() as $colorId) {
-            $id[] = explode('__', $colorId)[0];
+            $ids[] = explode('__', $colorId)[0];
         }
-
-        $conditions = ['id' => $id];
-        $colors = $em->findBy($conditions);
         $html = "<table><thead><tr><th>Nome Colore</th></tr></thead><tbody>";
-        foreach ($colors as $color) {
+        foreach ($ids as $id) {
+            $conditions = ['id' => $id];
+            $color = $em->findOneBy($conditions);
             $html .= "<tr><td>" . $color->name . "</td></tr>";
         }
         $html .= "</tbody></table>";
