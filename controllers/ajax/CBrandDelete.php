@@ -22,17 +22,17 @@ class CBrandDelete extends AAjaxController
     {
         $em = $this->app->entityManagerFactory->create('ProductBrand');
 
-        $id = [];
+        $ids = [];
 
         foreach ($this->app->router->request()->getRequestData() as $product) {
-            $id[] = explode('__', $product)[0];
+            $ids[] = explode('__', $product)[0];
         }
 
-        $conditions = ['id' => $id];
-        $brands = $em->findBy($conditions);
-
         $html = "<table><thead><tr><th>Nome brand</th></tr></thead><tbody>";
-        foreach ($brands as $brand) {
+        foreach ($ids as $id) {
+            $conditions = ['id' => $id];
+            $brand = $em->findOneBy($conditions);
+
             $html .= "<tr><td>" . $brand->name . "</td></tr>";
         }
         $html .= "</tbody></table>";
