@@ -24,16 +24,15 @@ class CDeleteEventCoupon extends AAjaxController
     {
         $em = $this->app->entityManagerFactory->create('CouponEvent');
 
-        $id =[];
+        $ids =[];
         foreach ($this->app->router->request()->getRequestData() as $coupon) {
-            $id []= $coupon;
+            $ids []= $coupon;
         }
-
-        $conditions = ['id' => $id];
-        $coupons = $em->findBy($conditions);
-
         $html = "<table><thead><tr><th>Nome</th><th>Descrizione</th><th>Tipo</th></tr></thead><tbody>";
-        foreach ($coupons as $coupon) {
+        foreach ($ids as $id) {
+            $conditions = ['id' => $id];
+            $coupon = $em->findBy($conditions);
+
             if (is_null ($coupon->click) || ($coupon->click == 0)) {
                 $html .= "<tr><td>" . $coupon->name . "</td><td>" . $coupon->description . "</td><td>" . $coupon->couponType->name . "</td></tr>";
             }
