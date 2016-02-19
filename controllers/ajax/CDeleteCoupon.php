@@ -24,14 +24,15 @@ class CDeleteCoupon extends AAjaxController
     {
         $em = $this->app->entityManagerFactory->create('Coupon');
 
-        $id =[];
+        $ids =[];
         foreach ($this->app->router->request()->getRequestData() as $coupon) {
-            $id []= $coupon;
-            \BlueSeal::dump($id);
-            throw new \Exception();
+            $ids []= $coupon;
         }
 
-        $conditions = ['id' => $id];
+        foreach ($ids as $id) {
+            $conditions = ['id' => $id];
+        }
+
         $coupons = $em->findBy($conditions);
 
         $html = "<table><thead><tr><th>Codice</th><th>Valore</th><th>Tipo</th></tr></thead><tbody>";
