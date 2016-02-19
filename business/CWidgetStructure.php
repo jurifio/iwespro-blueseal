@@ -107,6 +107,8 @@ class CWidgetStructure
     {
         $data = null;
         if (file_exists($wpath.$this->get('id').'.'.$wlang.'.json')) {
+            \BlueSeal::dump($wpath);
+            throw new \Exception();
             $data = json_decode(file_get_contents($wpath.$this->get('id').'.'.$wlang.'.json'));
             $data = $data->{$this->widgetConfig};
         }
