@@ -38,9 +38,7 @@ $(document).on('bs.desc.edit', function (e,element,button) {
         formAutofill: true
     },new FormData()).done(function (content){
         body.html("Salvataggio riuscito");
-        bsModal.modal();
     }).fail(function (){
         body.html("Errore grave");
-        bsModal.modal();
     });
 });
