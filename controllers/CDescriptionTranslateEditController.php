@@ -33,28 +33,21 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
 
         $productId = $this->app->router->request()->getRequestData('productId');
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
-        \BlueSeal::dump($productId);
-        \BlueSeal::dump($productVariantId);
-        throw new \Exception();
-        $descriptionEm = $this->app->entityManagerFactory->create('ProductDescriptionTranslation', false);
+
+        $descriptionEdit = $this->app->repoFactory->create('ProductDescriptionTranslation')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'marketplace'=>1]);
+        /*$descriptionEm = $this->app->entityManagerFactory->create('ProductDescriptionTranslation', false);
         $descrEdit = $descriptionEm->findBySql("select productId, productVariantId, marketplaceId, langId from ProductDescriptionTranslation WHERE langId=1 AND description <> ''
                                                       AND description <> '<br>' AND description <> '<br><br>' ORDER BY productId,productVariantId",array())->getFirst();
         $descriptionEdit = $descriptionEm->findBySql("select * from ProductDescriptionTranslation WHERE productId = ? AND productVariantId = ? ", [$descrEdit->productId,$descrEdit->productVariantId]);
-
+*/
         $productName = [];
-        $descTr = false;
+
         foreach ($descriptionEdit as $des) {
-            if (($des->description == '') || ($des->description == '<p><br></p>')) {
-                $descTr = true;
-            }
-            $productsName = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $descrEdit->productId, 'productVariantId' => $descrEdit->productVariantId, 'langId' => $des->langId ]);
+
+            $productsName = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $des->productId, 'productVariantId' => $des->productVariantId, 'langId' => $des->langId ]);
             $productName[$des->langId] = $productsName->name;
         }
 
-        if (!$descTr) {
-            GET;
-
-        }
         $em = $this->app->entityManagerFactory->create('Lang');
         $langs = $em->findAll("limit 99999", "");
 
