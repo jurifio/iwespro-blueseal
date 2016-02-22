@@ -33,7 +33,6 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
 
         $productId = $this->app->router->request()->getRequestData('productId');
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
-        $url = $this->app->baseUrl(false)."/blueseal/traduzioni/modifica?productId=".$productId."&productVariantId=".$productVariantId;
 
         $descriptionEdit = $this->app->repoFactory->create('ProductDescriptionTranslation')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'marketplaceId'=>1]);
 
@@ -53,7 +52,6 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
             'descriptionEdit' => $descriptionEdit,
             'productName' => $productName,
             'langs' => $langs,
-            'url' => $url,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);
