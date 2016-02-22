@@ -30,6 +30,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
 
         /** LOGICHE DI UPDATE*/
         try {
+            $description=[];
             foreach ($post as $key=>$val){
                 $k = explode('_',$key);
                 $description[$k] = $val;
