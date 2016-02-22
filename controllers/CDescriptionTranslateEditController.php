@@ -34,7 +34,7 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
         $productId = $this->app->router->request()->getRequestData('productId');
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
 
-        $descriptionEdit = $this->app->repoFactory->create('ProductDescriptionTranslation')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'marketplace'=>1]);
+        $descriptionEdit = $this->app->repoFactory->create('ProductDescriptionTranslation')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'marketplaceId'=>1]);
         /*$descriptionEm = $this->app->entityManagerFactory->create('ProductDescriptionTranslation', false);
         $descrEdit = $descriptionEm->findBySql("select productId, productVariantId, marketplaceId, langId from ProductDescriptionTranslation WHERE langId=1 AND description <> ''
                                                       AND description <> '<br>' AND description <> '<br><br>' ORDER BY productId,productVariantId",array())->getFirst();
