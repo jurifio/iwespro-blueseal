@@ -33,7 +33,8 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
             $description=[];
             foreach ($post as $key=>$val){
                 $k = explode('_',$key);
-                \BlueSeal::dump($k);
+                \BlueSeal::dump($k[0]);
+                \BlueSeal::dump($k[1]);
                 throw new \Exception();
                 if ($k[1] == 'id') continue;
                 if ($k[1] == 'variantId')continue;
