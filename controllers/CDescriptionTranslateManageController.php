@@ -49,9 +49,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                     $descEdit->langId = $k[1];
                     $descEdit->description = $val;
                     $descEdit->insert();
-
                 }
-
             }
             $this->app->dbAdapter->commit();
             return true;
