@@ -34,7 +34,7 @@ $(document).on('bs.desc.edit', function (e,element,button) {
 
     $.ajaxForm({
         type: "PUT",
-        url: "#",
+        url: url.val(),
         formAutofill: true
     },new FormData()).done(function (content){
         body.html("Salvataggio riuscito");
