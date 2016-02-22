@@ -51,6 +51,8 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'descriptionEdit' => $descriptionEdit,
             'productName' => $productName,
+            'productId'=> $productId,
+            'productVariantId'=>$productVariantId,
             'langs' => $langs,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()

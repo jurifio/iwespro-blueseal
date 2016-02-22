@@ -65,13 +65,9 @@
                                                                 <div class="col-md-12">
                                                                     <div class="summernote-wrapper">
                                                                         <?php if (isset($descr)) unset($descr);
-                                                                        if (isset($productId)) unset($productId);
-                                                                        if (isset($productVariantId)) unset($productVariantId);
                                                                         foreach ($descriptionEdit as $val) {
                                                                             if ($val->langId == $lang->id) {
                                                                                 $descr = $val->description;
-                                                                                $productId = $val->productId;
-                                                                                $productVariantId = $val->productVariantId;
                                                                             }
 
                                                                         } ?>
