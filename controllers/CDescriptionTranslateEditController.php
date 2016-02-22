@@ -31,6 +31,11 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/description_translate_edit.php');
 
+        $productId = $this->app->router->request()->getRequestData('productId');
+        $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
+        \BlueSeal::dump($productId);
+        \BlueSeal::dump($productVariantId);
+        throw new \Exception();
         $descriptionEm = $this->app->entityManagerFactory->create('ProductDescriptionTranslation', false);
         $descrEdit = $descriptionEm->findBySql("select productId, productVariantId, marketplaceId, langId from ProductDescriptionTranslation WHERE langId=1 AND description <> ''
                                                       AND description <> '<br>' AND description <> '<br><br>' ORDER BY productId,productVariantId",array())->getFirst();
