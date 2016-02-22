@@ -38,7 +38,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                 if ($k[0] != 'ProductDescription') continue;
                 $description[$k[1]] = $val;
             }
-\BlueSeal::dump($productId);
+\BlueSeal::dump($description);
             throw new \Exception();
             $productIds = array("id" => $post['Product_id'], "productVariantId" => $post['Product_productVariantId']);
             $productIdsExt = array("productId" => $post['Product_id'], "productVariantId" => $post['Product_productVariantId']);
