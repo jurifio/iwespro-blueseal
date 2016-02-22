@@ -33,14 +33,13 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
             $description=[];
             foreach ($post as $key=>$val){
                 $k = explode('_',$key);
+                \BlueSeal::dump($k);
+                throw new \Exception();
                 if ($k[1] == 'id') continue;
                 if ($k[1] == 'variantId')continue;
                 $description[$k[1]] = $val;
             }
-            //\BlueSeal::dump($productId);
-            //\BlueSeal::dump($productVariantId);
-            \BlueSeal::dump($description);
-            throw new \Exception();
+
             $productIds = array("id" => $post['Product_id'], "productVariantId" => $post['Product_productVariantId']);
             $productIdsExt = array("productId" => $post['Product_id'], "productVariantId" => $post['Product_productVariantId']);
             /** @var CEntityManager $em */
