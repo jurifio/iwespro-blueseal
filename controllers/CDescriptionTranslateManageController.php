@@ -33,12 +33,12 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
             $description=[];
             foreach ($post as $key=>$val){
                 $k = explode('_',$key);
-                $description[$k] = $val;
-                if ($k == 'id'){
+                $description[$k[1]] = $val;
+                if ($k[1] == 'id'){
                     $productId = $val;
                     continue;
                 }
-                if ($k == 'variantId'){
+                if ($k[1] == 'variantId'){
                     $productVariantId = $val;
                     continue;
                 }
