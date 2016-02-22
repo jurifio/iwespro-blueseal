@@ -33,9 +33,9 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
             $description=[];
             foreach ($post as $key=>$val){
                 $k = explode('_',$key);
-                $description[$k[1]] = $val;
                 if ($k[1] == 'id') continue;
                 if ($k[1] == 'variantId')continue;
+                $description[$k[1]] = $val;
             }
             //\BlueSeal::dump($productId);
             //\BlueSeal::dump($productVariantId);
