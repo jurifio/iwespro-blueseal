@@ -27,18 +27,16 @@ $(document).on('bs.desc.edit', function (e,element,button) {
 
     header.html('Traduci Descrizione');
     okButton.html('Fatto').off().on('click', function () {
-        bsModal.modal('hide');
         okButton.off();
     });
     cancelButton.remove();
 
     $.ajaxForm({
         type: "PUT",
-        url: url.val(),
-        formAutofill: true
+        url: url.val()
     },new FormData()).done(function (content){
-        body.html("Salvataggio riuscito");
+        alert("Salvataggio riuscito");
     }).fail(function (){
-        body.html("Errore grave");
+        alert("Errore grave");
     });
 });
