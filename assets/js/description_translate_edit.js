@@ -19,24 +19,20 @@ $(document).ready(function() {
 
 $(document).on('bs.desc.edit', function (e,element,button) {
 
-    var bsModal = $('#bsModal');
-    var header = $('.modal-header h4');
-    var body = $('.modal-body');
-    var cancelButton = $('.modal-footer .btn-default');
-    var okButton = $('.modal-footer .btn-success');
-
-    header.html('Traduci Descrizione');
-    okButton.html('Fatto').off().on('click', function () {
-        okButton.off();
-    });
-    cancelButton.remove();
-
-    $.ajaxForm({
+    $.ajax({
         type: "PUT",
-        url: url.val()
-    },new FormData()).done(function (content){
-        alert("Salvataggio riuscito");
+        url:"#"
+    }).done(function (){
+        new Alert({
+            type: "success",
+            message: "Descrizioni tradotte correttamente"
+        }).open();
+        return false;
     }).fail(function (){
-        alert("Errore grave");
+        new Alert({
+            type: "danger",
+            message: "Problema con la traduzione delle descrizioni, riprova"
+        }).open();
+        return false;
     });
 });
