@@ -34,9 +34,11 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                 $k = explode('_',$key);
                 if ($k == 'id'){
                     $productId = $val;
+                    continue;
                 }
                 if ($k == 'variantId'){
                     $productVariantId = $val;
+                    continue;
                 }
                 $description[$k] = $val;
             }
