@@ -50,7 +50,7 @@
             data-tag="a"
             data-icon="fa-language"
             data-permission="/admin/product/edit"
-            data-href="<?php echo $base . 'traduzioni/descrizioni/modifica'; ?>"
+
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Traduci descrizioni"
