@@ -27,17 +27,15 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
     {
 
         $post = $this->app->router->request()->getRequestData();
+        $productId = $this->app->router->request()->getRequestData('Product_id');
+        $productVariantId = $this->app->router->request()->getRequestData('Product_variantId');
 
         /** LOGICHE DI UPDATE*/
         try {
             $description=[];
             foreach ($post as $key=>$val){
                 $k = explode('_',$key);
-                \BlueSeal::dump($k[0]);
-                \BlueSeal::dump($k[1]);
-                throw new \Exception();
-                if ($k[1] == 'id') continue;
-                if ($k[1] == 'variantId')continue;
+                if ($k[0] != 'ProductDescription') continue;
                 $description[$k[1]] = $val;
             }
 
