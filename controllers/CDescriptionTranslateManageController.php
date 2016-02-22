@@ -25,10 +25,10 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
 
     public function put()
     {
-        $fileFolder = $this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
 
         $post = $this->app->router->request()->getRequestData();
-        $files = $this->app->router->request()->getFiles();
+       \BlueSeal::dump($post);
+        throw new \Exception();
         /** LOGICHE DI UPDATE*/
         try {
             $productIds = array("id" => $post['Product_id'], "productVariantId" => $post['Product_productVariantId']);
