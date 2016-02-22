@@ -34,6 +34,8 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
         $this->urls['page'] = $this->urls['base']."prodotti";
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
+        \BlueSeal::dump($this->urls['base']);
+        throw new \Exception();
 
         $this->em = new \stdClass();
         $this->em->productsDesc = $this->app->entityManagerFactory->create('ProductDescriptionTranslation');
