@@ -88,8 +88,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" id="Product_id" name="Product_id" value="<?php echo $productId?>" />
-                                <input type="hidden" id="Product_variantId" name="Product_variantId" value="<?php echo $productVariantId?>" />
                                 <input type="hidden" id="url" name="url" value="<?php echo $url?>" />
                             </form>
                         </div>
