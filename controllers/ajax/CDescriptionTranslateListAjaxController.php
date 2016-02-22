@@ -44,6 +44,9 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
     public function get()
     {
         $datatable = new CDataTables('vBluesealProductDescriptionList',['productId','productVariantId','marketplaceId','langId'],$_GET);
+        $modifica = $this->urls['base']."traduzioni/descrizioni/modifica";
+
+        $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);
@@ -88,7 +91,7 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId. '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['description'] = $desc;
+            $response['data'][$i]['description'] = $okManage ? '<a target="_blank" data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?productId=' . $val->productId . '&productVariantId=' . $val->productVariantId . '">' . $desc . '</a>' : $desc;
             $response['data'][$i]['lang'] = $html;
 
             $i++;

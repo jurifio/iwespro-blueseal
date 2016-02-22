@@ -33,13 +33,22 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
 
         $descriptionEm = $this->app->entityManagerFactory->create('ProductDescriptionTranslation', false);
         $descrEdit = $descriptionEm->findBySql("select productId, productVariantId, marketplaceId, langId from ProductDescriptionTranslation WHERE langId=1 AND description <> ''
-                                                      AND description <> '<br>' AND description <> '<br><br>' ORDER BY description",array())->getFirst();
+                                                      AND description <> '<br>' AND description <> '<br><br>' ORDER BY productId,productVariantId",array())->getFirst();
         $descriptionEdit = $descriptionEm->findBySql("select * from ProductDescriptionTranslation WHERE productId = ? AND productVariantId = ? ", [$descrEdit->productId,$descrEdit->productVariantId]);
 
         $productName = [];
+        $descTr = false;
         foreach ($descriptionEdit as $des) {
+            if (($des->description == '') || ($des->description == '<p><br></p>')) {
+                $descTr = true;
+            }
             $productsName = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $descrEdit->productId, 'productVariantId' => $descrEdit->productVariantId, 'langId' => $des->langId ]);
             $productName[$des->langId] = $productsName->name;
+        }
+
+        if (!$descTr) {
+            GET;
+
         }
         $em = $this->app->entityManagerFactory->create('Lang');
         $langs = $em->findAll("limit 99999", "");
