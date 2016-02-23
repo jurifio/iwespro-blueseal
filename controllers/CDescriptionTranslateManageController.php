@@ -2,7 +2,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\core\exceptions\RedPandaException;
+use bamboo\core\exceptions\RedPandaAssetException;
 
 
 /**
@@ -22,7 +22,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
 
     protected $fallBack = "blueseal";
 
-    protected $pageSlug = "desciption_translate_edit";
+    protected $pageSlug = "description_translate_edit";
 
     public function put()
     {
