@@ -44,7 +44,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
 
                 if (!is_null($descEdit)) {
                     $descEdit->description = $val;
-                    \BlueSeal::dump($descEdit);
+                    \BlueSeal::dump($val);
 
                     //$descEdit->update();
                 } else {
