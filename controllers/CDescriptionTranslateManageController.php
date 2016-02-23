@@ -33,10 +33,10 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
 
         $productId = $this->app->router->request()->getRequestData('Product_id');
         $productVariantId = $this->app->router->request()->getRequestData('Product_variantId');
-        $productIds = array("id" => $productId, "productVariantId" => $productVariantId);
+        $productIds = ["id" => $productId, "productVariantId" => $productVariantId];
 
         /** LOGICHE DI UPDATE*/
-        //try {
+        try {
             $this->app->dbAdapter->beginTransaction();
             $descRepo = $this->app->repoFactory->create('ProductDescriptionTranslation');
             foreach ($post as $key => $val) {
@@ -46,9 +46,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
 
                 if (!is_null($descEdit)) {
                     $descEdit->description = $val;
-                    \BlueSeal::dump($val);
-
-                    //$descEdit->update();
+                    $descEdit->update();
                 } else {
                     $descEdit = $this->app->entityManagerFactory->create('ProductDescriptionTranslation')->getEmptyEntity();
                     $descEdit->productId = $productId;
@@ -56,18 +54,15 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                     $descEdit->marketplaceId = 1;
                     $descEdit->langId = $k[1];
                     $descEdit->description = $val;
-                    //$descEdit->insert();
+                    $descEdit->insert();
                 }
             }
-        //$this->app->dbAdapter->commit();
-        echo json_encode($productIds);
-        throw new \Exception();
-
-
-        //} catch (\Exception $e) {
-          //  $this->app->dbAdapter->rollBack();
-            //throw $e;
-        //}
+            $this->app->dbAdapter->commit();
+            echo json_encode($productIds);
+        } catch (\Exception $e) {
+            $this->app->dbAdapter->rollBack();
+            throw $e;
+        }
 
     }
 }
