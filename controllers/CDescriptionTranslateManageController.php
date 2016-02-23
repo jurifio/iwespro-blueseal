@@ -45,7 +45,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                 if (!is_null($descEdit)) {
                     $descEdit->description = $val;
                     \BlueSeal::dump($descEdit);
-                    throw new \Exception();
+
                     //$descEdit->update();
                 } else {
                     $descEdit = $this->app->entityManagerFactory->create('ProductDescriptionTranslation')->getEmptyEntity();
@@ -57,6 +57,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                     //$descEdit->insert();
                 }
             }
+        throw new \Exception();
             //$this->app->dbAdapter->commit();
             //return true;
         //} catch (\Exception $e) {
