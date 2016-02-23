@@ -80,12 +80,12 @@
                                                         endforeach; ?>
                                                     </div>
                                                 </div>
+                                                <input type="hidden" id="Product_id" name="Product_id" value="<?php echo $productId; ?>" />
+                                                <input type="hidden" id="Product_variantId" name="Product_variantId" value="<?php echo $productVariantId; ?>" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" id="Product_id" name="Product_id" value="<?php echo $productId?>" />
-                                <input type="hidden" id="Product_variantId" name="Product_variantId" value="<?php echo $productVariantId?>" />
                             </form>
                         </div>
                     </div>
