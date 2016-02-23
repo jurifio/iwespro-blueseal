@@ -81,7 +81,7 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
                 continue;
             } elseif ($okManage) {
                 $name .= '<div class="summernote-wrapper">';
-                $name .= '<textarea id="summernote" class="" rows="10" name="ProductDescription">""</textarea>';
+                $name .= '<textarea id="summernote" class="" rows="10" name="ProductDescription_' . $val->productId . '_' . $val->productVariantId . '"></textarea>';
             }
             $name .= '</div>';
 
