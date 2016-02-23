@@ -41,11 +41,12 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                 $k = explode('_', $key);
                 if ($k[0] != 'ProductDescription') continue;
                 $descEdit = $descRepo->findOneBy(['productId' => $productId, 'productVariantId' => $productVariantId, 'marketplaceId' => 1, 'langId' => $k[1]]);
-                \BlueSeal::dump($descEdit);
-                throw new \Exception();
-                if ($descEdit) {
+
+                if (!is_null($descEdit)) {
                     $descEdit->description = $val;
-                    $descEdit->update();
+                    \BlueSeal::dump($descEdit);
+                    throw new \Exception();
+                    //$descEdit->update();
                 } else {
                     $descEdit = $this->app->entityManagerFactory->create('ProductDescriptionTranslation')->getEmptyEntity();
                     $descEdit->productId = $productId;
@@ -53,7 +54,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                     $descEdit->marketplaceId = 1;
                     $descEdit->langId = $k[1];
                     $descEdit->description = $val;
-                    $descEdit->insert();
+                    //$descEdit->insert();
                 }
             }
             //$this->app->dbAdapter->commit();
