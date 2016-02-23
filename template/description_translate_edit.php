@@ -56,7 +56,7 @@
                                                             <div class="row clearfix">
                                                                 <div class="col-md-4">
                                                                     <div class="form-group form-group-default">
-                                                                        <label for="ProductName_<?php echo $lang->id ?>_name">Nome del prodotto</label>
+                                                                        <label for="ProductName_<?php echo $lang->id ?>">Nome del prodotto</label>
                                                                         <p><?php echo isset($name) ? $name : '' ?></p>
                                                                     </div>
                                                                 </div>

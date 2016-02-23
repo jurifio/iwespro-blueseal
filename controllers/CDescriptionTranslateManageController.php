@@ -3,7 +3,7 @@ namespace bamboo\blueseal\controllers;
 
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\core\exceptions\RedPandaException;
-use bamboo\core\traits\TFormInputValidate;
+
 
 /**
  * Class CDescriptionTranslateManageController
@@ -19,14 +19,16 @@ use bamboo\core\traits\TFormInputValidate;
  */
 class CDescriptionTranslateManageController extends ARestrictedAccessRootController
 {
-    use TFormInputValidate;
 
     protected $fallBack = "blueseal";
+
+    protected $pageSlug = "desciption_translate_edit";
 
     public function put()
     {
 
         $post = $this->app->router->request()->getRequestData();
+        \BlueSeal::dump($post);
         $productId = $this->app->router->getMatchedRoute()->getComputedFilters();;
         $productVariantId = $this->app->router->getMatchedRoute()->getComputedFilters('productVariantId');
         \BlueSeal::dump($productId);
