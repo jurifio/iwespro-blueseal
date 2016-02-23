@@ -4,7 +4,10 @@ $(document).ready(function() {
     textProductDescription.each(function () {
         if (textProductDescription.length) {
             textProductDescription.summernote({
-                height: 200
+                height: 200,
+                always: function (e) {
+                    $('body').removeClass('overlay-disabled');
+                }
             });
         }
     });
