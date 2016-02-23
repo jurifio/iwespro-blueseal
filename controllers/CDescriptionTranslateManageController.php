@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers;
 
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\core\exceptions\RedPandaAssetException;
+use bamboo\core\traits\TFormInputValidate;
 
 
 /**
@@ -19,6 +20,7 @@ use bamboo\core\exceptions\RedPandaAssetException;
  */
 class CDescriptionTranslateManageController extends ARestrictedAccessRootController
 {
+    use TFormInputValidate;
 
     protected $fallBack = "blueseal";
 
