@@ -72,7 +72,7 @@
 
                                                                         } ?>
                                                                         <label for="summernote<?php echo $lang->id ?>">Descrizione</label>
-                                                                        <textarea id="summernote<?php echo $lang->id ?>" class="" rows="10" name="ProductDescription_<?php echo $lang->id ?>"><?php echo isset($descr) ? $descr : '' ?></textarea>
+                                                                        <textarea id="summernote<?php echo $lang->id ?>" class="form-control" rows="10" name="ProductDescription_<?php echo $lang->id ?>"><?php echo isset($descr) ? $descr : '' ?></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
