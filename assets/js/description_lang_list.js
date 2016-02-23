@@ -13,12 +13,12 @@ $(document).on('focusout', $('name[descId]').val(), function(event) {
 
 $(document).on('focusin', $('name[descId]').val(), function(event) {
     var textProductDescription = $('textarea[name^="descId"]');
-    textProductDescription.each(function () {
+
         if (textProductDescription.length) {
             textProductDescription.summernote({
                 height: 200
             });
         }
-    });
+
 
 });
