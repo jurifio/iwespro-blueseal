@@ -34,13 +34,15 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
 
 
         /** LOGICHE DI UPDATE*/
-        try {
+        //try {
             $this->app->dbAdapter->beginTransaction();
             $descRepo = $this->app->repoFactory->create('ProductDescriptionTranslation');
             foreach ($post as $key => $val) {
                 $k = explode('_', $key);
                 if ($k[0] != 'ProductDescription') continue;
-                $descEdit = $descRepo->findOne(['productId' => $productId, 'productVariantId' => $productVariantId, 'marketplaceId' => 1, 'langId' => $k[1]]);
+                $descEdit = $descRepo->findOneBy(['productId' => $productId, 'productVariantId' => $productVariantId, 'marketplaceId' => 1, 'langId' => $k[1]]);
+                \BlueSeal::dump($descEdit);
+                throw new \Exception();
                 if ($descEdit) {
                     $descEdit->description = $val;
                     $descEdit->update();
@@ -54,12 +56,12 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                     $descEdit->insert();
                 }
             }
-            $this->app->dbAdapter->commit();
-            return true;
-        } catch (\Exception $e) {
-            $this->app->dbAdapter->rollBack();
-            return false;
-        }
+            //$this->app->dbAdapter->commit();
+            //return true;
+        //} catch (\Exception $e) {
+          //  $this->app->dbAdapter->rollBack();
+            //return false;
+        //}
 
     }
 }
