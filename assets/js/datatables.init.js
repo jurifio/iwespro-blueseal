@@ -305,7 +305,7 @@
         order: [[0, "asc"]],
         columns: [
             {
-                data: "name",
+                data: "description",
                 orderable: true,
                 searchable: true
             },
@@ -318,6 +318,7 @@
         lengthMenu: [10,25,50,75,100,200,500,1000],
         displayLength: 100
     });
+
     tableSetup.detail_lang_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [

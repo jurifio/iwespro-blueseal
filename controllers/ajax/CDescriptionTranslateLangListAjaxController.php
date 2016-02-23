@@ -60,7 +60,7 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
         $count = $this->em->productsDesc->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsDesc->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $transRepo = $this->app->repoFactory->create('ProductNameTranslation');
+        $transRepo = $this->app->repoFactory->create('ProductDescriptionTranslation');
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -77,14 +77,14 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             if (($trans->description != '' && $trans->description != '<p><br></p>') && $okManage) {
                 continue;
             } elseif ($okManage) {
-                $name .= '<input type="text" class="form-control full-width" data-lang="' . $langId . '" data-action="' . $this->urls['base'] .'xhr/NameTranslateLangListAjaxController" data-pid="' . $val->productId . '_' . $val->productVariantId. '" title="nameId" name="nameId" id="nameId" />';
+                $name .= '<input type="text" class="form-control full-width" data-lang="' . $langId . '" data-action="' . $this->urls['base'] .'xhr/DescriptionTranslateLangListAjaxController" data-pid="' . $val->productId . '_' . $val->productVariantId. '" title="descId" name="descId" id="descId" />';
             }
             $name .= '</div>';
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['trans'] = $name;
-            $response['data'][$i]['name'] = $val->description . ' - ' . $val->productId . '_' . $val->productVariantId;
+            $response['data'][$i]['description'] = $val->description . ' - ' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]['productId'] = $val->productId;
             $response['data'][$i]['productVariantId'] = $val->productVariantId;
 
