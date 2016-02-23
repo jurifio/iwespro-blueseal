@@ -70,8 +70,8 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($productsDesc as $val){
-            /*$desc = strip_tags(utf8_encode($val->description));
-            if (empty(trim($desc)) || (trim($desc) == ' ') ||  (trim($desc) == '') || (trim($desc) == '&nbsp;') || (trim($desc) == '&nbsp;&nbsp;') || (trim($desc) == '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')) {
+            $desc = strip_tags(utf8_encode($val->description));
+            /*if (empty(trim($desc)) || (trim($desc) == ' ') ||  (trim($desc) == '') || (trim($desc) == '&nbsp;') || (trim($desc) == '&nbsp;&nbsp;') || (trim($desc) == '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')) {
                 $response ['recordsTotal'] --;
                 $response ['recordsFiltered'] --;
                 continue;
