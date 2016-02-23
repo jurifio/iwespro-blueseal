@@ -52,7 +52,7 @@ class CProductPhotoAjaxManage extends AAjaxController
                                                                         $this->app->router->request()->getRequestData('productVariantId')]);
         $this->app->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
-        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'image-temp-folder')."/";
+        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
 
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
