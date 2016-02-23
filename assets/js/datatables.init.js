@@ -308,11 +308,6 @@
                 data: "description",
                 orderable: true,
                 searchable: true
-            },
-            {
-                data: "trans",
-                orderable: false,
-                searchable: false
             }
         ],
         lengthMenu: [10,25,50,75,100,200,500,1000],

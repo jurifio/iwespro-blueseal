@@ -74,18 +74,21 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             $desc = strip_tags(utf8_encode($val->description));
             $trans = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'marketplaceId'=>1, 'langId' => $langId]);
 
-            $name = '<div class="form-group form-group-default full-width">';
+            $name = '<div class="form-group form-group-default">';
+            $name .= '<p>' . $desc . '</p>';
+
             if (($trans->description != '' && $trans->description != '<p><br></p>') && $okManage) {
                 continue;
             } elseif ($okManage) {
-                $name .= '<textarea type="text" class="form-control full-width" data-lang="' . $langId . '" data-action="' . $this->urls['base'] .'xhr/DescriptionTranslateLangListAjaxController" data-pid="' . $val->productId . '_' . $val->productVariantId. '" title="descId" name="descId" id="descId"></textarea>';
+                $name .= '<div class="summernote-wrapper">';
+                $name .= '<textarea id="summernote" class="" rows="10" name="ProductDescription">""</textarea>';
             }
             $name .= '</div>';
 
+
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['trans'] = $name;
-            $response['data'][$i]['description'] = $desc;
+            $response['data'][$i]['description'] = $name;
             $response['data'][$i]['productId'] = $val->productId;
             $response['data'][$i]['productVariantId'] = $val->productVariantId;
 

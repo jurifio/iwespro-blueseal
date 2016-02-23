@@ -27,7 +27,6 @@
                         <table class="table table-striped responsive" width="100%" data-datatable-name="description_lang_list" data-controller="DescriptionTranslateLangListAjaxController" data-lang="<?php echo $langId; ?>" data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                                 <tr>
-                                    <th class="center sorting">Italiano</th>
                                     <th class="center sorting">Traduzione</th>
                                 </tr>
                             </thead>
