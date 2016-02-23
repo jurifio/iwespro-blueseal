@@ -28,6 +28,7 @@
                             <thead>
                                 <tr>
                                     <th class="center sorting">Traduzione</th>
+                                    <th class="center sorting">Salva</th>
                                 </tr>
                             </thead>
                             <tbody>

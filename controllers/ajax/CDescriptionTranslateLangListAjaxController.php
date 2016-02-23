@@ -90,6 +90,7 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['description'] = $name;
+            $response['data'][$i]['save'] = 'salva';
             $response['data'][$i]['productId'] = $val->productId;
             $response['data'][$i]['productVariantId'] = $val->productVariantId;
 
