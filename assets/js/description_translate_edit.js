@@ -1,11 +1,22 @@
+$(document).ready(function() {
 
+    var textProductDescription = $('textarea[name^="ProductDescription"]');
+    textProductDescription.each(function () {
+        if (textProductDescription.length) {
+            textProductDescription.summernote({
+                height: 200
+            });
+        }
+    });
+
+});
 
 $(document).on('bs.desc.edit', function (e,element,button) {
 
     $.ajax({
         type: "PUT",
         url:"#",
-        data: $('#form-project').serialize()
+        data: $('#form-project')
     }).done(function (){
         new Alert({
             type: "success",
