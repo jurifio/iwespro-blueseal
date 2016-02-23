@@ -32,7 +32,7 @@
 
                     <div class="panel panel-default clearfix">
                         <div class="panel-body clearfix">
-                            <form id="form-project" role="form" action="" method="PUT" autocomplete="on">
+                            <form id="form-project" role="form" action="" method="put" autocomplete="on">
 
                                 <div class="row">
                                     <div class="col-md-12">
