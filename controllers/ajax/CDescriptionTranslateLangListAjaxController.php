@@ -53,7 +53,8 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
         }
 
         $datatable->addCondition('langId',[1]);
-        $datatable->addCondition('name',[''],true);
+        $datatable->addCondition('description',[''],true);
+        $datatable->addCondition('description',['<p><br></p>'],true);
 
         $productsDesc = $this->app->repoFactory->create('ProductDescriptionTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDesc->findCountBySql($datatable->getQuery(true), $datatable->getParams());
