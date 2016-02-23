@@ -71,19 +71,17 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
 
         foreach($productsDesc as $val){
             $desc = strip_tags(utf8_encode($val->description));
-            if (empty(trim($desc)) || (trim($desc) == ' ') ||  (trim($desc) == '') || (trim($desc) == '&nbsp;') || (trim($desc) == '&nbsp;&nbsp;') || (trim($desc) == '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')) {
-                $response ['recordsTotal'] --;
-                $response ['recordsFiltered'] --;
-                continue;
-            }
-
 
             $html = '';
 
             foreach ($installedLang as $insLang) {
                 $lang = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'marketplaceId' => 1, 'langId' => $insLang->id]);
-                if(!is_null($lang) && ($lang->description != '<p><br></p>')) {
-                    $html .= '<span class="badge">' . $insLang->lang . '</span>';
+                if(!is_null($lang)) {
+                    if (($lang->description != '<p><br></p>') && ($lang->description != '')){
+                        $html .= '<span class="badge">' . $insLang->lang . '</span>';
+                    } else {
+                        $html .= '<span class="badge badge-red">' . $insLang->lang . '</span>';
+                    }
                 } else {
                     $html .= '<span class="badge badge-red">' . $insLang->lang . '</span>';
                 }
