@@ -301,6 +301,23 @@
         displayLength: 100
     });
 
+    tableSetup.description_lang_list = $.extend({}, tableSetup.common, {
+        order: [[0, "asc"]],
+        columns: [
+            {
+                data: "name",
+                orderable: true,
+                searchable: true
+            },
+            {
+                data: "trans",
+                orderable: false,
+                searchable: false
+            }
+        ],
+        lengthMenu: [10,25,50,75,100,200,500,1000],
+        displayLength: 100
+    });
     tableSetup.detail_lang_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
