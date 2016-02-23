@@ -995,7 +995,6 @@
                 "PUT"
             ]
         },
-        ,
         {
             "pattern": "/blueseal/traduzioni/descrizioni/lingua/:langId(/)?",
             "behaviour": {
