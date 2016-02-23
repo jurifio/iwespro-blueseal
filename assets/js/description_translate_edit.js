@@ -6,7 +6,7 @@ $(document).ready(function() {
             textProductDescription.summernote({
                 height: 200,
                 always: function (e) {
-                    $('body').removeClass('overlay-disabled');
+                    $('body').addClass('overlay-disabled');
                 }
             });
         }
