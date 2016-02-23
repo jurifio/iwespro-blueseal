@@ -71,6 +71,7 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($productsDesc as $val){
+            $desc = strip_tags(utf8_encode($val->description));
             $trans = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'marketplaceId'=>1, 'langId' => $langId]);
 
             $name = '<div class="form-group form-group-default full-width">';
@@ -84,7 +85,7 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['trans'] = $name;
-            $response['data'][$i]['description'] = $val->description . ' - ' . $val->productId . '_' . $val->productVariantId;
+            $response['data'][$i]['description'] = $desc;
             $response['data'][$i]['productId'] = $val->productId;
             $response['data'][$i]['productVariantId'] = $val->productVariantId;
 
