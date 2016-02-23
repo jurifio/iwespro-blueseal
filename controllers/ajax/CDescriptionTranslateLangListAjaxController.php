@@ -78,7 +78,7 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             if (($trans->description != '' && $trans->description != '<p><br></p>') && $okManage) {
                 continue;
             } elseif ($okManage) {
-                $name .= '<input type="text" class="form-control full-width" data-lang="' . $langId . '" data-action="' . $this->urls['base'] .'xhr/DescriptionTranslateLangListAjaxController" data-pid="' . $val->productId . '_' . $val->productVariantId. '" title="descId" name="descId" id="descId" />';
+                $name .= '<textarea type="text" class="form-control full-width" data-lang="' . $langId . '" data-action="' . $this->urls['base'] .'xhr/DescriptionTranslateLangListAjaxController" data-pid="' . $val->productId . '_' . $val->productVariantId. '" title="descId" name="descId" id="descId" />';
             }
             $name .= '</div>';
 
