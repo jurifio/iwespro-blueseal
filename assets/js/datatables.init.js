@@ -311,7 +311,7 @@
             }
         ],
         lengthMenu: [10,25,50,75,100,200,500,1000],
-        displayLength: 100
+        displayLength: 25
     });
 
     tableSetup.detail_lang_list = $.extend({}, tableSetup.common, {
