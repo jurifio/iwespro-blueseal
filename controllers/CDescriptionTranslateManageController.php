@@ -33,7 +33,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
 
         $productId = $this->app->router->request()->getRequestData('Product_id');
         $productVariantId = $this->app->router->request()->getRequestData('Product_variantId');
-
+        $productIds = array("id" => $productId, "productVariantId" => $productVariantId);
 
         /** LOGICHE DI UPDATE*/
         //try {
@@ -59,12 +59,14 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                     //$descEdit->insert();
                 }
             }
+        //$this->app->dbAdapter->commit();
+        echo json_encode($productIds);
         throw new \Exception();
-            //$this->app->dbAdapter->commit();
-            //return true;
+
+
         //} catch (\Exception $e) {
           //  $this->app->dbAdapter->rollBack();
-            //return false;
+            //throw $e;
         //}
 
     }
