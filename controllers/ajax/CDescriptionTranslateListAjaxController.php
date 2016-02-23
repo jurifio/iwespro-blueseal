@@ -82,8 +82,12 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
 
             foreach ($installedLang as $insLang) {
                 $lang = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'marketplaceId' => 1, 'langId' => $insLang->id]);
-                if(!is_null($lang) && ($lang->description != '<p><br></p>')) {
-                    $html .= '<span class="badge">' . $insLang->lang . '</span>';
+                if(!is_null($lang)) {
+                    if (($lang->description != '<p><br></p>') && ($lang->description != '')){
+                        $html .= '<span class="badge">' . $insLang->lang . '</span>';
+                    } else {
+                        $html .= '<span class="badge badge-red">' . $insLang->lang . '</span>';
+                    }
                 } else {
                     $html .= '<span class="badge badge-red">' . $insLang->lang . '</span>';
                 }
