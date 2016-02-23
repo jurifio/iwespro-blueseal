@@ -32,8 +32,6 @@ $(document).on('bs.desc.edit', function (e,element,button) {
     },new FormData()).done(function (content){
         body.html("Salvataggio riuscito");
         bsModal.modal();
-        var ids = $.parseJSON(content);
-        window.location.replace("blueseal/traduzioni/descrizioni/modifica?productId="+ids.id+"&productVariantId="+ids.productVariantId);
     }).fail(function (){
         body.html("Errore grave");
         bsModal.modal();
