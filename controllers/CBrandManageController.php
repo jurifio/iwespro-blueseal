@@ -27,6 +27,8 @@ class CBrandManageController extends ARestrictedAccessRootController
     public function put()
     {
         $data = $this->app->router->request()->getRequestData();
+        \BlueSeal::dump($data);
+        throw new \Exception();
         $slugify = new CSlugify();
 
         if (isset($data['ProductBrand_slug']) && !empty(trim($data['ProductBrand_slug']))) {
