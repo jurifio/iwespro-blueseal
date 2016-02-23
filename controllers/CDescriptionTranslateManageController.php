@@ -28,12 +28,10 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
     {
 
         $post = $this->app->router->request()->getRequestData();
-        \BlueSeal::dump($post);
-        $productId = $this->app->router->getMatchedRoute()->getComputedFilters();;
-        $productVariantId = $this->app->router->getMatchedRoute()->getComputedFilters('productVariantId');
-        \BlueSeal::dump($productId);
-        \BlueSeal::dump($productVariantId);
-        throw new \Exception();
+
+        $productId = $this->app->router->request()->getRequestData('Product_id');
+        $productVariantId = $this->app->router->request()->getRequestData('Product_variantId');
+
 
         /** LOGICHE DI UPDATE*/
         try {
