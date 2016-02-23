@@ -166,8 +166,6 @@ class CProductManageController extends ARestrictedAccessRootController
 	            $productDescription = $productEdit->productDescription->findOneByKeys(['langId'=>$inputName[1],'marketplaceId'=>1]);
 	            if($productDescription){
 		            $productDescription->description = $input;
-                    \BlueSeal::dump($input);
-                    throw new \Exception();
 		            $productDescription->update();
 	            } else {
 		            $where = array();
