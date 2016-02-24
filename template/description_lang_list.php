@@ -25,6 +25,7 @@
                     </div>
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%" data-datatable-name="description_lang_list" data-controller="DescriptionTranslateLangListAjaxController" data-lang="<?php echo $langId; ?>" data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                            <form data-ajax="true" data-controller="SaveDescription" data-address="<?php echo $app->urlForBluesealXhr() ?>" enctype="multipart/form-data" role="form" name="saveDescription" method="put">
                             <thead>
                                 <tr>
                                     <th class="center sorting">Traduzione</th>
@@ -33,6 +34,7 @@
                             </thead>
                             <tbody>
                             </tbody>
+                                </form>
                         </table>
                     </div>
                 </div>
