@@ -248,7 +248,7 @@
     });
 
     tableSetup.description_translate_list = $.extend({}, tableSetup.common, {
-        order: [[1, "asc"]],
+        order: [[0, "asc"]],
         columns: [
             {
                 data: "productId",
