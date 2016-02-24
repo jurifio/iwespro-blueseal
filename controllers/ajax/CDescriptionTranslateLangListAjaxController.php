@@ -87,7 +87,6 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             $save = '<input id="saveDescription" class="btn btn-success" value="Salva" type="submit"/>';
             $save .= '<input id="id" class="hidden" type="hidden" name="id" value="'. $val->productId . '_' . $val->productVariantId . '"/>';
 
-
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['description'] = $name;
