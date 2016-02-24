@@ -251,7 +251,7 @@
         order: [[0, "asc"]],
         columns: [
             {
-                data: "id",
+                data: "productId",
                 orderable: true,
                 searchable: true
             },
