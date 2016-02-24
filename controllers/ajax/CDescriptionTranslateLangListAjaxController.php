@@ -85,7 +85,7 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             $name .= '</div>';
 
 
-            $save = '<input id="save" class="btn btn-success" value="Salva" type="submit"/>';
+            $save = '<input id="saveDescription" class="btn btn-success" value="Salva" type="submit"/>';
             $save .= '<input id="id" class="hidden" type="hidden" name="id" value="'. $val->productId . '_' . $val->productVariantId . '"/>';
 
 
