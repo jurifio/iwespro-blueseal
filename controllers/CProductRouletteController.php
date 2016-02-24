@@ -7,9 +7,9 @@ use bamboo\ecommerce\views\VBase;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\RedPandaException;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use bamboo\import\productsync\antonacci\CAntonacciImport;
-use bamboo\import\productsync\dellamartira\CDellaMartiraImport;
-use bamboo\import\productsync\thesquare\CThesquareImport;
+use bamboo\offline\productsync\import\antonacci\CAntonacciImport;
+use bamboo\offline\productsync\import\dellamartira\CDellaMartiraImport;
+use bamboo\offline\productsync\import\thesquare\CThesquareImport;
 
 /**
  * Class CProductEditController
