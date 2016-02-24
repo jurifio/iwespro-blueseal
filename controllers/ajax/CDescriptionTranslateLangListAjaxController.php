@@ -53,8 +53,6 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
         }
 
         $datatable->addCondition('langId',[1]);
-        $datatable->addCondition('description',[''],true);
-        $datatable->addCondition('description',['<p><br></p>'],true);
 
         $productsDesc = $this->app->repoFactory->create('ProductDescriptionTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDesc->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -86,11 +84,12 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             }
             $name .= '</div>';
 
+            $save = '<input id="saveDescription_'. $val->productId . '_' . $val->productVariantId . '" class="btn btn-success" value="Salva" type="submit"/>';
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['description'] = $name;
-            $response['data'][$i]['save'] = 'salva';
+            $response['data'][$i]['save'] = $save;
             $response['data'][$i]['productId'] = $val->productId;
             $response['data'][$i]['productVariantId'] = $val->productVariantId;
 

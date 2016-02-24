@@ -2,7 +2,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\domain\entities\CShop;
-use bamboo\ecommerce\domain\repositories\CProductHistoryRepo;
+use bamboo\domain\repositories\CProductHistoryRepo;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\RedPandaException;
