@@ -72,7 +72,7 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             $desc = strip_tags(utf8_encode($val->description));
             $trans = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'marketplaceId'=>1, 'langId' => $langId]);
 
-            $name = '<div class="form-group form-group-default">';
+            $name = '<div id="description" class="form-group form-group-default">';
             $name .= '<p><b>' . $desc . '</b></p>';
 
             if (($trans->description != '' && $trans->description != '<p><br></p>') && $okManage) {
