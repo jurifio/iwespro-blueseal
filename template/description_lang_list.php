@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
+    <?php include "parts/head.php"?>
+    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php"; ?>
+<?php include "parts/sidebar.php";?>
 <div class="page-container">
     <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
@@ -21,16 +21,15 @@
             </div>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
+                    <div class="panel-heading">
+                    </div>
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="description_translate_list"
-                               data-controller="DescriptionTranslateListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                        <table class="table table-striped responsive" width="100%" data-datatable-name="description_lang_list" data-controller="DescriptionTranslateLangListAjaxController" data-lang="<?php echo $langId; ?>" data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
-                            <tr>
-                                <th class="center sorting">Termine</th>
-                                <th class="center sorting">Lingua</th>
-                            </tr>
+                                <tr>
+                                    <th class="center sorting">Traduzione</th>
+                                    <th class="center sorting">Salva</th>
+                                </tr>
                             </thead>
                             <tbody>
                             </tbody>
@@ -45,16 +44,28 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Traduzione descrizioni prodotto">
+    <bs-toolbar-group data-group-label="Visualizzazione descrizioni">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-list"
+            data-permission="/admin/product/edit"
+            data-event="bs.all.desc"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Tutti"
+            data-placement="bottom"
+            data-href="<?php echo $urlAll; ?>"
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-language"
             data-permission="/admin/product/edit"
-            data-event="bs.translate.desc"
+            data-event="bs.refresh.desc"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Traduci descrizioni"
+            data-title="Solo non tradotti"
             data-placement="bottom"
+            data-href="<?php echo $urlTrans; ?>"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
