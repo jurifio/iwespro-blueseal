@@ -70,7 +70,7 @@
                         </div>
                         <div><br>
                             <div class="pull-left font-montserrat small"><strong>Pagato :</strong>
-                                <?php echo '  '. (!is_null($order->payed)) ? money_format('%.2n', $order->payed) .' &euro;': '0.00 &euro;'; ?></div>
+                                <?php echo '  '. (!is_null($order->paidAmount)) ? money_format('%.2n', $order->paidAmount) .' &euro;': '0.00 &euro;'; ?></div>
 
                         </div>
                         <div><br>

@@ -110,7 +110,7 @@ class COrderListAjaxController extends AAjaxController
 
 
 	        $orderDate = date("D d-m-y H:i", strtotime($val->orderDate));
-            $payed = isset($val->payed) ? $val->payed : 0;
+            $paidAmount = isset($val->paidAmount) ? $val->paidAmount : 0;
             if ($val->lastUpdate != null) {
                 $timestamp = time() - strtotime($val->lastUpdate);
                 $day = date("z", $timestamp);
@@ -129,7 +129,7 @@ class COrderListAjaxController extends AAjaxController
             }
 
             $response['aaData'][$i]["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusHasLang->getFirst()->title . "</span>";
-            $response['aaData'][$i]["dareavere"] = (($val->netTotal !== $payed) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . number_format($val->netTotal, 2) . ' / ' . number_format($payed, 2) . "</span>" : number_format($val->netTotal, 2) . ' / ' . number_format($payed, 2);
+            $response['aaData'][$i]["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . number_format($val->netTotal, 2) . ' / ' . number_format($paidAmount, 2) . "</span>" : number_format($val->netTotal, 2) . ' / ' . number_format($paidAmount, 2);
             $response['aaData'][$i]["payment"] = $val->orderPaymentMethod->name;
             $i++;
         }
