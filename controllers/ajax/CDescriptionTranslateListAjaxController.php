@@ -70,7 +70,7 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($productsDesc as $val){
-            $desc = strip_tags(utf8_encode($val->description));
+            $desc = strip_tags($val->description);
 
             $html = '';
 
