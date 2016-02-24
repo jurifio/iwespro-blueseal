@@ -72,7 +72,7 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
             $desc = strip_tags(utf8_encode($val->description));
             $trans = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'marketplaceId'=>1, 'langId' => $langId]);
 
-            $name = '<div id="description" class="form-group form-group-default">';
+            $name = '<div class="form-group form-group-default">';
             $name .= '<p><b>' . $desc . '</b></p>';
 
             if (($trans->description != '' && $trans->description != '<p><br></p>') && $okManage) {
@@ -82,9 +82,9 @@ class CDescriptionTranslateLangListAjaxController extends AAjaxController
                 $name .= '<textarea id="summernote" class="" rows="10" name="ProductDescription_' . $val->productId . '_' . $val->productVariantId . '">' . $val->description . '</textarea>';
                 $name .= '</div>';
             }
+            $name .= '</div>';
 
             $save = '<input id="saveDescription_'. $val->productId . '_' . $val->productVariantId . '" class="btn btn-success" value="Salva" type="submit"/>';
-            $save .= '</div>';
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
