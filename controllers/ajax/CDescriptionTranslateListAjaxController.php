@@ -91,7 +91,7 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['description'] = $desc;
             $response['data'][$i]['lang'] = $html;
-            $response['data'][$i]['productId'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?productId=' . $val->productId . '&productVariantId=' . $val->productVariantId . '">' . $val->productId. '_' . $val->productVariantId . '</a>' : $val->productId. '_' . $val->productVariantId;
+            $response['data'][$i]['productId'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?productId=' . $val->productId . '&productVariantId=' . $val->productVariantId . '">' . $val->productId. '-' . $val->productVariantId . '</a>' : $val->productId. '-' . $val->productVariantId;
 
             $i++;
         }
