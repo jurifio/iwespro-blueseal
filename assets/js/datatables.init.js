@@ -251,6 +251,11 @@
         order: [[0, "asc"]],
         columns: [
             {
+                data: "id",
+                orderable: true,
+                searchable: true
+            },
+            {
                 data: "description",
                 orderable: true,
                 searchable: true

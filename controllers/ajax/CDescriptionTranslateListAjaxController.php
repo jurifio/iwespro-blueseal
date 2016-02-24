@@ -70,7 +70,7 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($productsDesc as $val){
-            $desc = strip_tags($val->description);
+            $desc = substr(strip_tags($val->description),0,20);
 
             $html = '';
 
@@ -91,6 +91,7 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['description'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?productId=' . $val->productId . '&productVariantId=' . $val->productVariantId . '">' . $desc . '</a>' : $desc;
             $response['data'][$i]['lang'] = $html;
+            $response['data'][$i]['id'] = $val->productId. '_' . $val->productVariantId;
 
             $i++;
         }

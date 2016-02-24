@@ -28,7 +28,8 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
-                                <th class="center sorting">Termine</th>
+                                <th class="center sorting">Id</th>
+                                <th class="center sorting">Descrizione</th>
                                 <th class="center sorting">Lingua</th>
                             </tr>
                             </thead>
