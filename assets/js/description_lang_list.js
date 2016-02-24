@@ -11,6 +11,6 @@ $(document).on('draw.dt', function() {
 
 });
 
-$(document).on('submit', $('name[saveDescription]').val(), function(event) {
+$(document).on('click', $('name[saveDescription]').val(), function(event) {
    alert('ciao');
 });
