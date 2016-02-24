@@ -90,7 +90,7 @@
                                             <span><strong>Email: </strong> <?php echo $order->user->email ?></span><br>
                                             <span><strong>Telefono: </strong> <?php echo isset($order->user->userDetails->phone) ? $order->user->userDetails->phone : '---' ?></span><br>
                                             <span><strong>Dovuto: </strong> <?php echo $order->netTotal ?></span><br>
-                                            <span><strong>Pagato: </strong> <?php echo isset($order->payed) ? $order->payed : 0 ?></span><br>
+                                            <span><strong>Pagato: </strong> <?php echo isset($order->paidAmount) ? $order->paidAmount : 0 ?></span><br>
                                             <span><strong>Metodo
                                                     Pagamento: </strong> <?php echo $order->orderPaymentMethod->name ?></span>
                                         </order>
@@ -249,7 +249,7 @@
             data-tag="a"
             data-icon="fa-money"
             data-permission="/admin/order/list"
-            data-event="bs.manage.payed"
+            data-event="bs.manage.paid"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Gestisci pagamento"

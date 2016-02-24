@@ -26,7 +26,7 @@ class COrderPayed extends AAjaxController
         $order = $this->app->repoFactory->create('Order')->findOneBy(['id'=>$id]);
 
         $html = "Importo pagato :";
-        $html .= '<input type="text" class="form-control" name="Payed" value=' . number_format($order->payed, 2) . ">";
+        $html .= '<input type="text" class="form-control" name="Payed" value=' . number_format($order->paidAmount, 2) . ">";
 
         return json_encode(
             [
