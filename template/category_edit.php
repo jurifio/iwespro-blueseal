@@ -48,9 +48,11 @@
                                             <div class="form-group form-group-default">
                                                 <label><?php echo $cat->slug . ' - ' . $lang->name ?></label>
                                                 <input type="text" class="form-control"
-                                                       name="<?php echo 'cat_' . $cat->id . '_' . $lang->id ?>"
+                                                       name="<?php echo 'cat_' . $cat->id . '_' . $lang->id; ?>"
                                                        value="<?php
-                                                       if ($val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id)) echo $val->name; else echo "" ?>">
+                                                       if ($val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id))
+                                                           echo $val->name;
+                                                       else echo '' ?>">
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
