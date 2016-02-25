@@ -55,8 +55,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                     $descEdit->langId = $k[1];
                     $descEdit->description = $val;
                     $descEdit->insert();
-                }
-            }
+                }            }
             $this->app->dbAdapter->commit();
             echo json_encode($productIds);
         } catch (\Exception $e) {
