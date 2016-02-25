@@ -52,7 +52,7 @@
                                                        value="<?php
                                                        //if ($catLang = $categoryLang->findOneBy(['productCategoryId'=>$cat->id,'langId'=>$lang->id]))
                                                        if ($val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id))
-                                                           echo $val->name . '_' . $catLang->productCategoryId .'-' .$lang->id;
+                                                           echo $val->name . '_' . $val->productCategoryId .'-' .$lang->id;
                                                        else echo '' ?>">
                                             </div>
                                         </div>
