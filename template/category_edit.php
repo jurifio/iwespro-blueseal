@@ -43,7 +43,8 @@
                                         </div>
                                     </div>
                                     <?php
-                                    foreach ($langs as $lang): ?>
+                                    foreach ($langs as $lang):
+                                        $val = null;?>
                                         <div class="col-sm-<?php echo $n ?>">
                                             <div class="form-group form-group-default">
                                                 <label><?php echo $cat->slug . ' - ' . $lang->name ?></label>
