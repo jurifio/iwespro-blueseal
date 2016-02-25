@@ -51,7 +51,7 @@
             data-tag="a"
             data-icon="fa-language"
             data-permission="/admin/product/edit"
-            data-event="bs.translate.desc"
+            data-href="<?php echo $url; ?>"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Traduci descrizioni"

@@ -996,24 +996,9 @@
             ]
         },
         {
-            "pattern": "/blueseal/traduzioni/descrizioni/lingua/:langId(/)?",
+            "pattern": "/blueseal/traduzioni/descrizioni/lingua(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateLangListController"
-            },
-            "filters": {
-                "langId": "[0-9]+"
-            },
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/descrizioni/lingua_list/:langId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateLangAllListController"
             },
             "filters": {
                 "langId": "[0-9]+"

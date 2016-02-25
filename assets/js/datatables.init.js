@@ -251,7 +251,7 @@
         order: [[0, "asc"]],
         columns: [
             {
-                data: "id",
+                data: "productId",
                 orderable: true,
                 searchable: true
             },
@@ -304,24 +304,6 @@
         ],
         lengthMenu: [10,25,50,75,100,200,500,1000],
         displayLength: 100
-    });
-
-    tableSetup.description_lang_list = $.extend({}, tableSetup.common, {
-        order: [[0, "asc"]],
-        columns: [
-            {
-                data: "description",
-                orderable: true,
-                searchable: true
-            },
-            {
-                data: "save",
-                orderable: true,
-                searchable: true
-            }
-        ],
-        lengthMenu: [10,25,50,75,100,200,500,1000],
-        displayLength: 25
     });
 
     tableSetup.detail_lang_list = $.extend({}, tableSetup.common, {
