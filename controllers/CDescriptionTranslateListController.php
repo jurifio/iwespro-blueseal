@@ -28,12 +28,13 @@ class CDescriptionTranslateListController extends ARestrictedAccessRootControlle
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/description_translate_list.php');
-        $urlAll = $this->urls['base']."traduzioni/descrizioni/lingua";
+        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
+        $url = $this->urls['base']."traduzioni/descrizioni/lingua";
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
-            'urlAll'=>$urlAll,
+            'url'=>$url,
             'sidebar' => $this->sidebar->build()
         ]);
     }
