@@ -31,6 +31,7 @@ class CCategoryManageController extends ARestrictedAccessRootController
         /** @var $em CEntityManager **/
         $categories = new CObjectCollection();
         if(isset($_GET['productCategoryId'])){
+            $categoryLang = $this->app->repoFactory->create('ProductCategoryHasLang');
             $cat = $this->app->categoryManager->categories()->getDescendantsByNodeId($_GET['productCategoryId']);
             /** @var $em CEntityManager **/
             $em = $this->app->entityManagerFactory->create('ProductCategory');
@@ -51,6 +52,7 @@ class CCategoryManageController extends ARestrictedAccessRootController
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'categories' => $categories,
+            'categoryLang'=>$categoryLang,
             'langs' => $langs,
             'elenco_prodotti' =>$elenco_prodotti,
             'page' => $this->page,
