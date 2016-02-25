@@ -49,10 +49,8 @@
                                                 <label><?php echo $cat->slug . ' - ' . $lang->name ?></label>
                                                 <input type="text" class="form-control"
                                                        name="<?php echo 'cat_' . $cat->id . '_' . $lang->id; ?>"
-                                                       value="<?php
-                                                       if ($val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id))
-                                                           echo 'pippo';
-                                                       else echo '' ?>">
+                                                       value="<?php $val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id);
+                                                           echo $val->name; ?>">
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
