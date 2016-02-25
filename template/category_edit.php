@@ -50,7 +50,7 @@
                                                 <input type="text" class="form-control"
                                                        name="<?php echo 'cat_' . $cat->id . '_' . $lang->id; ?>"
                                                        value="<?php
-                                                       $catLang = $ategoryLang->findOneBy(['productId'=>$cat->id,'langId'=>$lang->id]);
+                                                       $catLang = $categoryLang->findOneBy(['productId'=>$cat->id,'langId'=>$lang->id]);
                                                        //if ($val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id))
                                                            echo $catLang->name;
                                                        //else echo '' ?>">
