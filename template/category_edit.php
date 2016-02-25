@@ -51,7 +51,7 @@
                                                        name="<?php echo 'cat_' . $cat->id . '_' . $lang->id; ?>"
                                                        value="<?php
                                                        if ($val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id))
-                                                           echo $val->name;
+                                                           echo 'pippo';
                                                        else echo '' ?>">
                                             </div>
                                         </div>
