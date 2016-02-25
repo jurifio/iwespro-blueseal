@@ -1,7 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use Aws\CloudFront\Exception\Exception;
 
 /**
  * Class COrderPayed
