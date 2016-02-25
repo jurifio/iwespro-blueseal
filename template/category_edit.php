@@ -43,15 +43,16 @@
                                         </div>
                                     </div>
                                     <?php
-                                    foreach ($langs as $lang):
-                                        $val = null;?>
+                                    foreach ($langs as $lang): ?>
                                         <div class="col-sm-<?php echo $n ?>">
                                             <div class="form-group form-group-default">
                                                 <label><?php echo $cat->slug . ' - ' . $lang->name ?></label>
                                                 <input type="text" class="form-control"
                                                        name="<?php echo 'cat_' . $cat->id . '_' . $lang->id; ?>"
-                                                       value="<?php $val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id);
-                                                           echo $val->name; ?>">
+                                                       value="<?php
+                                                       if ($val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id))
+                                                           echo $val->name;
+                                                       else echo '' ?>">
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
