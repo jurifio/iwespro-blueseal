@@ -26,21 +26,7 @@ class CDescriptionTranslateLangManageController extends ARestrictedAccessRootCon
      */
     public function put()
     {
-        $marketplaceId = $this->app->router->request()->getRequestData('marketplaceId');
-        $brandId = $this->app->router->request()->getRequestData('brandId');
-        $langId = $this->app->router->request()->getRequestData('langId');
-        $description = $this->app->router->request()->getRequestData('Description');
 
-        try {
-            $productDecription = $this->app->repoFactory->create('ProductDescriptionTranslation')->findBy(['marketplaceId'=>$marketplaceId,'langId'=>$langId]);
-            foreach($productDecription as $descr) {
-                $descr->description = $description;
-                $descr->update();
-            }
-
-        } catch (\Exception $e) {
-            $this->app->router->response()->raiseUnauthorized();
-        }
-     }
+    }
 
 }
