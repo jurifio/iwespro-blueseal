@@ -77,7 +77,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
                                                         <label for="Shop">Shop</label>
-                                                        <select class="full-width" placeholder="Seleziona il proprietario" data-init-plugin="selectize"  title="" name="Shop_id" id="Shop" required>
+                                                        <select class="full-width" placeholder="Seleziona il proprietario" data-init-plugin="selectize" title="" name="Shop_id" id="Shop" required>
                                                             <option></option>
                                                             <?php foreach ($shops as $shop): ?>
                                                                 <option value="<?php echo $shop->id ?>" <?php if (!is_null($productEdit->shop) && (bool)$productEdit->shop->findOneByKey('id', $shop->id)) echo "selected"; ?>><?php echo $shop->title ?></option>
@@ -91,7 +91,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled required">
                                                         <label for="Product_productBrandId">Designer</label>
-                                                        <select class="full-width" placeholder="Seleziona il brand" data-init-plugin="selectize"  title="" name="Product_productBrandId" id="Product_productBrandId" required>
+                                                        <select class="full-width" placeholder="Seleziona il brand" data-init-plugin="selectize" title="" name="Product_productBrandId" id="Product_productBrandId" required>
                                                             <option></option>
                                                             <?php foreach ($brands as $brand): ?>
                                                                 <option value="<?php echo $brand->id ?>" <?php if (!is_null($productEdit->productBrand) && $productEdit->productBrand->id == $brand->id) echo "selected"; ?>><?php echo $brand->name ?></option>

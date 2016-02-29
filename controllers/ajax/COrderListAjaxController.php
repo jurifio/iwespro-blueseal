@@ -128,7 +128,7 @@ class COrderListAjaxController extends AAjaxController
                 $response['aaData'][$i]["user"] .= ' <i class="fa fa-diamond"></i>';
             }
 
-            $response['aaData'][$i]["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusHasLang->getFirst()->title . "</span>";
+            $response['aaData'][$i]["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
             $response['aaData'][$i]["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . number_format($val->netTotal, 2) . ' / ' . number_format($paidAmount, 2) . "</span>" : number_format($val->netTotal, 2) . ' / ' . number_format($paidAmount, 2);
             $response['aaData'][$i]["payment"] = $val->orderPaymentMethod->name;
             $i++;

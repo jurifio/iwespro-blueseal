@@ -31,7 +31,7 @@ class CCategoryManageController extends ARestrictedAccessRootController
         /** @var $em CEntityManager **/
         $categories = new CObjectCollection();
         if(isset($_GET['productCategoryId'])){
-            $categoryLang = $this->app->repoFactory->create('ProductCategoryHasLang',false);
+            $categoryLang = $this->app->repoFactory->create('ProductCategoryTranslation',false);
             $cat = $this->app->categoryManager->categories()->getDescendantsByNodeId($_GET['productCategoryId']);
             /** @var $em CEntityManager **/
             $em = $this->app->entityManagerFactory->create('ProductCategory',false);
@@ -64,11 +64,14 @@ class CCategoryManageController extends ARestrictedAccessRootController
     {
         $blueseal = $this->app->baseUrl(false).'/blueseal';
         $post= $_POST;
+        $productCategoryId = $this->app->router->request()->getRequestData('productCategoryId');
+
         /** @var CMySQLAdapter $mysql */
         $mysql = $this->app->dbAdapter;
 
         $id = 0;
         foreach($post as $key => $input){
+            if ($key == 'productCategoryId') continue;
             $temp = explode('_' ,$key);
             if($temp[0] != 'cat') continue;
             if($temp[2] == 'slug') {
@@ -76,18 +79,18 @@ class CCategoryManageController extends ARestrictedAccessRootController
                 continue;
             }
             $id = $temp[1];
-            $dbver = $mysql->select('ProductCategoryHasLang',array("productCategoryId"=>$temp[1],"langId"=>$temp[2]))->fetch();
+            $dbver = $mysql->select('ProductCategoryTranslation',array("productCategoryId"=>$temp[1],"langId"=>$temp[2]))->fetch();
             if(isset($dbver['name'])) {
                 if($dbver['name'] != $input){
-                    $mysql->update("ProductCategoryHasLang",array('name'=>trim($input)), array("productCategoryId"=>$temp[1],"langId"=>$temp[2]));
+                    $mysql->update("ProductCategoryTranslation",array('name'=>trim($input)), array("productCategoryId"=>$temp[1],"langId"=>$temp[2]));
                 }
             } else if(!empty($input)){
-                $mysql->insert("ProductCategoryHasLang", array("productCategoryId"=>$temp[1],"langId"=>$temp[2],'name'=>$input));
+                $mysql->insert("ProductCategoryTranslation", array("productCategoryId"=>$temp[1],"langId"=>$temp[2],'name'=>$input));
             }
         }
 
         if(!headers_sent()){
-            header("Location: ".$blueseal."/categories");
+            header("Location: ".$blueseal."/prodotti/categorie/aggiungi?productCategoryId=" . $productCategoryId);
         }
     }
 }

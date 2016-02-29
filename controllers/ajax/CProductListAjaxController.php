@@ -88,7 +88,7 @@ class CProductListAjaxController extends AAjaxController
             }
 
             $cats = [];
-            foreach($val->productCategoryHasLang as $cat){
+            foreach($val->productCategoryTranslation as $cat){
                 $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                 unset($path[0]);
                 $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';

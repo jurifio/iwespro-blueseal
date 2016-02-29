@@ -25,9 +25,9 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <form id="form-project" role="form"
-                              action="<?php echo $app->urlForBlueseal() ?>/category?productCategoryId=<?php echo $_GET['productCategoryId'] ?>"
+                              action="<?php echo $app->urlForBlueseal() ?>/prodotti/categorie/aggiungi?productCategoryId=<?php echo $_GET['productCategoryId'] ?>"
                               method="POST" autocomplete="on">
-
+                            <input type="hidden" id="productCategoryId" name="productCategoryId" value="<?php echo $_GET['productCategoryId'] ?>">
                             <?php
                             $depth = 1;
                             foreach ($categories as $cat): ?>
@@ -50,9 +50,11 @@
                                                 <input type="text" class="form-control"
                                                        name="<?php echo 'cat_' . $cat->id . '_' . $lang->id; ?>"
                                                        value="<?php
-                                                       //if ($catLang = $categoryLang->findOneBy(['productCategoryId'=>$cat->id,'langId'=>$lang->id]))
-                                                       if ($val = $cat->productCategoryHasLang->findOneByKey('langId', $lang->id))
-                                                           echo $val->name;
+                                                       if ($catLang = $categoryLang->findOneBy(['productCategoryId'=>$cat->id,'langId'=>$lang->id]))
+
+                                                       //if ($val = $cat->productCategoryTranslation->findOneByKey('langId', $lang->id))
+                                                           echo $catLang->name;
+
                                                        else echo '' ?>">
                                             </div>
                                         </div>
