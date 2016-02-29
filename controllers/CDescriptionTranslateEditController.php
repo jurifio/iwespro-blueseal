@@ -41,7 +41,11 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
         foreach ($descriptionEdit as $des) {
 
             $productsName = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $des->productId, 'productVariantId' => $des->productVariantId, 'langId' => $des->langId ]);
-            $productName[$des->langId] = $productsName->name;
+            if ($productsName) {
+                $productName[$des->langId] = $productsName->name;
+            } else {
+                $productName[$des->langId] = '';
+            }
         }
 
         $em = $this->app->entityManagerFactory->create('Lang');
