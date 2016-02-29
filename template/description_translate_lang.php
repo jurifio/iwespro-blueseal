@@ -25,9 +25,17 @@
                     <div class="panel-body">
                         <form id="form-project" role="form" action="" method="POST" autocomplete="on">
                             <div class="row clearfix">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label for="template">Nome template</label>
+                                        <input type="text" class="form-control" id="template" name="template" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="Marketplace">Marketplace</label>
+                                        <label for="marketplace">Marketplace</label>
                                         <select class="full-width selectpicker" placeholder="Seleziona il marketplace" data-init-plugin="selectize" tabindex="-1" title="marketplaceId" name="marketplaceId" id="marketplaceId">
                                             <?php foreach ($marketplaces as $marketplace): ?>
                                                 <option></option>
@@ -40,6 +48,21 @@
                             </div>
                             <div class="row clearfix">
                                 <div class="col-sm-6">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="lang">Lingua</label>
+                                        <select class="full-width selectpicker" placeholder="Seleziona la lingua" data-init-plugin="selectize" tabindex="-1" title="langId" name="langId" id="langId">
+                                            <?php foreach ($langs as $lang): ?>
+                                                <option></option>
+                                                <option value="<?php echo $lang->id ?>" require >
+                                                    <?php echo $lang->name . ""?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <label for="app">Applica solo a prodotti con:</label>
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="Brand">Brand</label>
                                         <select class="full-width selectpicker" placeholder="Seleziona il brand" data-init-plugin="selectize" tabindex="-1" title="brandId" name="brandId" id="brandId">
@@ -55,12 +78,26 @@
                             <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="Lang">Lingua</label>
-                                        <select class="full-width selectpicker" placeholder="Seleziona la lingua" data-init-plugin="selectize" tabindex="-1" title="langId" name="langId" id="langId">
-                                            <?php foreach ($langs as $lang): ?>
+                                        <label for="season">Stagione</label>
+                                        <select class="full-width selectpicker" placeholder="Seleziona la stagione" data-init-plugin="selectize" tabindex="-1" title="seasonId" name="seasonId" id="seasonId">
+                                            <?php foreach ($seasons as $season): ?>
                                                 <option></option>
-                                                <option value="<?php echo $lang->id ?>" require >
-                                                    <?php echo $lang->name . ""?></option>
+                                                <option value="<?php echo $season->id ?>" require >
+                                                    <?php echo $season->name . " " . $season->year . ''?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="color">Colore</label>
+                                        <select class="full-width selectpicker" placeholder="Seleziona il colore" data-init-plugin="selectize" tabindex="-1" title="colorId" name="colorId" id="colorId">
+                                            <?php foreach ($colors as $color): ?>
+                                                <option></option>
+                                                <option value="<?php echo $color->id . '_' . $color->langId?>" require >
+                                                    <?php echo $color->name . ''?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
