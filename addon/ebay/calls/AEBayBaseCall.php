@@ -37,7 +37,7 @@ abstract class AEBayBaseCall
 
 	protected abstract function build();
 
-	private function getWriter($indent = null)
+	protected function getWriter($indent = null)
 	{
 		$x = new \XMLWriter();
 		if(!is_bool($indent) && isset($this->environmentData['indent'])){
@@ -65,5 +65,8 @@ abstract class AEBayBaseCall
 		return $this->build();
 	}
 
-	public abstract function digestResponse($rawResponse);
+	public function digestResponse($rawResponse)
+	{
+		// TODO: Implement digestResponse() method.
+	}
 }

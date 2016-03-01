@@ -20,10 +20,11 @@ class CEBayCallGetSessionID extends AEBayBaseCall
 
 	protected function build(){
 
-
+		$x = $this->getWriter();
 		$x->startDocument('1.0','utf-8');
 		$x->startElement('GetSessionIDRequest');
 		$x->writeAttribute('xmlns','urn:ebay:apis:eBLBaseComponents');
+
 		$x->writeElement('RuName',$this->environmentData['RuName']);
 
 		$x->writeRaw($this->buildStandardInput());
@@ -32,8 +33,5 @@ class CEBayCallGetSessionID extends AEBayBaseCall
 		return $x->outputMemory();
 	}
 
-	public function digestResponse($rawResponse)
-	{
-		// TODO: Implement digestResponse() method.
-	}
+
 }
