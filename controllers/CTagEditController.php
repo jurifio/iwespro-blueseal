@@ -40,9 +40,8 @@ class CTagEditController extends ARestrictedAccessRootController
     public function put()
     {
         $data = $this->app->router->request()->getRequestData();
-        $tagId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
-        \BlueSeal::dump($tagId);
-        throw new \Exception();
+        $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
+
         $couponRepo = $this->app->repoFactory->create('Coupon');
         $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
 
