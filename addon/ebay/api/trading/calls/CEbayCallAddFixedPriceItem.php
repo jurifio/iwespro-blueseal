@@ -1,0 +1,374 @@
+<?php
+
+
+namespace bamboo\addon\ebay\api\trading\calls;
+use bamboo\addon\ebay\core\AXMLApiCall;
+
+
+/**
+ * Class CEbayCallAddFixedPriceItem
+ * @package bamboo\addon\ebay\api\trading\calls
+ * @author Bambooshoot Team <emanuele@bambooshoot.agency>, 01/03/2016
+ * @copyright (c) Bambooshoot snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @since ${VERSION}
+ */
+class CEbayCallAddFixedPriceItem extends AXMLApiCall
+{
+	protected function build($indent = false) {
+		$x = new \XMLWriter();
+		$x->setIndent($indent);
+		$x->startDocument($this->xmlVersion,$this->encoding);
+	}
+
+protected $application = 'x';
+	private $sample = '<?xml version="1.0" encoding="utf-8"?>
+<AddFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
+  <!-- Call-specific Input Fields -->
+  <Item> ItemType
+    <ApplicationData> string </ApplicationData>
+    <AutoPay> boolean </AutoPay>
+    <BuyerRequirementDetails> BuyerRequirementDetailsType
+      <LinkedPayPalAccount> boolean </LinkedPayPalAccount>
+      <MaximumBuyerPolicyViolations> MaximumBuyerPolicyViolationsType
+        <Count> int </Count>
+        <Period> PeriodCodeType </Period>
+      </MaximumBuyerPolicyViolations>
+      <MaximumItemRequirements> MaximumItemRequirementsType
+        <MaximumItemCount> int </MaximumItemCount>
+        <MinimumFeedbackScore> int </MinimumFeedbackScore>
+      </MaximumItemRequirements>
+      <MaximumUnpaidItemStrikesInfo> MaximumUnpaidItemStrikesInfoType
+        <Count> int </Count>
+        <Period> PeriodCodeType </Period>
+      </MaximumUnpaidItemStrikesInfo>
+      <MinimumFeedbackScore> int </MinimumFeedbackScore>
+      <ShipToRegistrationCountry> boolean </ShipToRegistrationCountry>
+      <VerifiedUserRequirements> VerifiedUserRequirementsType
+        <MinimumFeedbackScore> int </MinimumFeedbackScore>
+        <VerifiedUser> boolean </VerifiedUser>
+      </VerifiedUserRequirements>
+      <ZeroFeedbackScore> boolean </ZeroFeedbackScore>
+    </BuyerRequirementDetails>
+    <CategoryBasedAttributesPrefill> boolean </CategoryBasedAttributesPrefill>
+    <CategoryMappingAllowed> boolean </CategoryMappingAllowed>
+    <Charity> CharityType
+      <CharityID> string </CharityID>
+      <CharityNumber> int </CharityNumber>
+      <DonationPercent> float </DonationPercent>
+    </Charity>
+    <ConditionDescription> string </ConditionDescription>
+    <ConditionID> int </ConditionID>
+    <Country> CountryCodeType </Country>
+    <CrossBorderTrade> string </CrossBorderTrade>
+    <!-- ... more CrossBorderTrade values allowed here ... -->
+    <Currency> CurrencyCodeType </Currency>
+    <Description> string </Description>
+    <DigitalGoodInfo> DigitalGoodInfoType
+      <DigitalDelivery> boolean </DigitalDelivery>
+    </DigitalGoodInfo>
+    <DisableBuyerRequirements> boolean </DisableBuyerRequirements>
+    <DiscountPriceInfo> DiscountPriceInfoType
+      <MadeForOutletComparisonPrice> AmountType (double) </MadeForOutletComparisonPrice>
+      <MinimumAdvertisedPrice> AmountType (double) </MinimumAdvertisedPrice>
+      <MinimumAdvertisedPriceExposure> MinimumAdvertisedPriceExposureCodeType </MinimumAdvertisedPriceExposure>
+      <OriginalRetailPrice> AmountType (double) </OriginalRetailPrice>
+      <SoldOffeBay> boolean </SoldOffeBay>
+      <SoldOneBay> boolean </SoldOneBay>
+    </DiscountPriceInfo>
+    <DispatchTimeMax> int </DispatchTimeMax>
+    <eBayNowEligible> boolean </eBayNowEligible>
+    <eBayPlus> boolean </eBayPlus>
+    <GiftIcon> int </GiftIcon>
+    <GiftServices> GiftServicesCodeType </GiftServices>
+    <!-- ... more GiftServices values allowed here ... -->
+    <HitCounter> HitCounterCodeType </HitCounter>
+    <IncludeRecommendations> boolean </IncludeRecommendations>
+    <InventoryTrackingMethod> InventoryTrackingMethodCodeType </InventoryTrackingMethod>
+    <ItemCompatibilityList> ItemCompatibilityListType
+      <Compatibility> ItemCompatibilityType
+        <CompatibilityNotes> string </CompatibilityNotes>
+        <NameValueList> NameValueListType
+          <Name> string </Name>
+          <Value> string </Value>
+          <!-- ... more Value values allowed here ... -->
+        </NameValueList>
+        <!-- ... more NameValueList nodes allowed here ... -->
+      </Compatibility>
+      <!-- ... more Compatibility nodes allowed here ... -->
+    </ItemCompatibilityList>
+    <ItemSpecifics> NameValueListArrayType
+      <NameValueList> NameValueListType
+        <Name> string </Name>
+        <Value> string </Value>
+        <!-- ... more Value values allowed here ... -->
+      </NameValueList>
+      <!-- ... more NameValueList nodes allowed here ... -->
+    </ItemSpecifics>
+    <ListingCheckoutRedirectPreference> ListingCheckoutRedirectPreferenceType
+      <ProStoresStoreName> string </ProStoresStoreName>
+      <SellerThirdPartyUsername> string </SellerThirdPartyUsername>
+    </ListingCheckoutRedirectPreference>
+    <ListingDesigner> ListingDesignerType
+      <LayoutID> int </LayoutID>
+      <OptimalPictureSize> boolean </OptimalPictureSize>
+      <ThemeID> int </ThemeID>
+    </ListingDesigner>
+    <ListingDuration> token </ListingDuration>
+    <ListingEnhancement> ListingEnhancementsCodeType </ListingEnhancement>
+    <!-- ... more ListingEnhancement values allowed here ... -->
+    <ListingType> ListingTypeCodeType </ListingType>
+    <Location> string </Location>
+    <PaymentMethods> BuyerPaymentMethodCodeType </PaymentMethods>
+    <!-- ... more PaymentMethods values allowed here ... -->
+    <PayPalEmailAddress> string </PayPalEmailAddress>
+    <PickupInStoreDetails> PickupInStoreDetailsType
+      <EligibleForPickupDropOff> boolean </EligibleForPickupDropOff>
+      <EligibleForPickupInStore> boolean </EligibleForPickupInStore>
+    </PickupInStoreDetails>
+    <PictureDetails> PictureDetailsType
+      <GalleryDuration> token </GalleryDuration>
+      <GalleryType> GalleryTypeCodeType </GalleryType>
+      <GalleryURL> anyURI </GalleryURL>
+      <PhotoDisplay> PhotoDisplayCodeType </PhotoDisplay>
+      <PictureSource> PictureSourceCodeType </PictureSource>
+      <PictureURL> anyURI </PictureURL>
+      <!-- ... more PictureURL values allowed here ... -->
+    </PictureDetails>
+    <PostalCode> string </PostalCode>
+    <PostCheckoutExperienceEnabled> boolean </PostCheckoutExperienceEnabled>
+    <PrimaryCategory> CategoryType
+      <CategoryID> string </CategoryID>
+    </PrimaryCategory>
+    <PrivateListing> boolean </PrivateListing>
+    <PrivateNotes> string </PrivateNotes>
+    <ProductListingDetails> ProductListingDetailsType
+      <BrandMPN> BrandMPNType
+        <Brand> string </Brand>
+        <MPN> string </MPN>
+      </BrandMPN>
+      <EAN> string </EAN>
+      <IncludeeBayProductDetails> boolean </IncludeeBayProductDetails>
+      <IncludeStockPhotoURL> boolean </IncludeStockPhotoURL>
+      <ISBN> string </ISBN>
+      <ProductID> string </ProductID>
+      <ProductReferenceID> string </ProductReferenceID>
+      <ReturnSearchResultOnDuplicates> boolean </ReturnSearchResultOnDuplicates>
+      <TicketListingDetails> TicketListingDetailsType
+        <EventTitle> string </EventTitle>
+        <PrintedDate> string </PrintedDate>
+        <PrintedTime> string </PrintedTime>
+        <Venue> string </Venue>
+      </TicketListingDetails>
+      <UPC> string </UPC>
+      <UseFirstProduct> boolean </UseFirstProduct>
+      <UseStockPhotoURLAsGallery> boolean </UseStockPhotoURLAsGallery>
+    </ProductListingDetails>
+    <Quantity> int </Quantity>
+    <QuantityInfo> QuantityInfoType
+      <MinimumRemnantSet> int </MinimumRemnantSet>
+    </QuantityInfo>
+    <QuantityRestrictionPerBuyer> QuantityRestrictionPerBuyerInfoType
+      <MaximumQuantity> int </MaximumQuantity>
+    </QuantityRestrictionPerBuyer>
+    <ReturnPolicy> ReturnPolicyType
+      <Description> string </Description>
+      <EAN> string </EAN>
+      <ExtendedHolidayReturns> boolean </ExtendedHolidayReturns>
+      <RefundOption> token </RefundOption>
+      <RestockingFeeValueOption> token </RestockingFeeValueOption>
+      <ReturnsAcceptedOption> token </ReturnsAcceptedOption>
+      <ReturnsWithinOption> token </ReturnsWithinOption>
+      <ShippingCostPaidByOption> token </ShippingCostPaidByOption>
+      <WarrantyDurationOption> token </WarrantyDurationOption>
+      <WarrantyOfferedOption> token </WarrantyOfferedOption>
+      <WarrantyTypeOption> token </WarrantyTypeOption>
+    </ReturnPolicy>
+    <ScheduleTime> dateTime </ScheduleTime>
+    <SecondaryCategory> CategoryType
+      <CategoryID> string </CategoryID>
+    </SecondaryCategory>
+    <SellerProfiles> SellerProfilesType
+      <SellerPaymentProfile> SellerPaymentProfileType
+        <PaymentProfileID> long </PaymentProfileID>
+        <PaymentProfileName> string </PaymentProfileName>
+      </SellerPaymentProfile>
+      <SellerReturnProfile> SellerReturnProfileType
+        <ReturnProfileID> long </ReturnProfileID>
+        <ReturnProfileName> string </ReturnProfileName>
+      </SellerReturnProfile>
+      <SellerShippingProfile> SellerShippingProfileType
+        <ShippingProfileID> long </ShippingProfileID>
+        <ShippingProfileName> string </ShippingProfileName>
+      </SellerShippingProfile>
+    </SellerProfiles>
+    <SellerProvidedTitle> string </SellerProvidedTitle>
+    <ShippingDetails> ShippingDetailsType
+      <CalculatedShippingRate> CalculatedShippingRateType
+        <MeasurementUnit> MeasurementSystemCodeType </MeasurementUnit>
+        <OriginatingPostalCode> string </OriginatingPostalCode>
+        <PackageDepth> MeasureType (decimal) </PackageDepth>
+        <PackageLength> MeasureType (decimal) </PackageLength>
+        <PackageWidth> MeasureType (decimal) </PackageWidth>
+        <PackagingHandlingCosts> AmountType (double) </PackagingHandlingCosts>
+        <ShippingIrregular> boolean </ShippingIrregular>
+        <ShippingPackage> ShippingPackageCodeType </ShippingPackage>
+        <WeightMajor> MeasureType (decimal) </WeightMajor>
+        <WeightMinor> MeasureType (decimal) </WeightMinor>
+      </CalculatedShippingRate>
+      <CODCost> AmountType (double) </CODCost>
+      <ExcludeShipToLocation> string </ExcludeShipToLocation>
+      <!-- ... more ExcludeShipToLocation values allowed here ... -->
+      <GlobalShipping> boolean </GlobalShipping>
+      <InsuranceDetails> InsuranceDetailsType
+        <InsuranceFee> AmountType (double) </InsuranceFee>
+        <InsuranceOption> InsuranceOptionCodeType </InsuranceOption>
+      </InsuranceDetails>
+      <InsuranceFee> AmountType (double) </InsuranceFee>
+      <InsuranceOption> InsuranceOptionCodeType </InsuranceOption>
+      <InternationalInsuranceDetails> InsuranceDetailsType
+        <InsuranceFee> AmountType (double) </InsuranceFee>
+        <InsuranceOption> InsuranceOptionCodeType </InsuranceOption>
+      </InternationalInsuranceDetails>
+      <InternationalPromotionalShippingDiscount> boolean </InternationalPromotionalShippingDiscount>
+      <InternationalShippingDiscountProfileID> string </InternationalShippingDiscountProfileID>
+      <InternationalShippingServiceOption> InternationalShippingServiceOptionsType
+        <ShippingService> token </ShippingService>
+        <ShippingServiceAdditionalCost> AmountType (double) </ShippingServiceAdditionalCost>
+        <ShippingServiceCost> AmountType (double) </ShippingServiceCost>
+        <ShippingServicePriority> int </ShippingServicePriority>
+        <ShipToLocation> string </ShipToLocation>
+        <!-- ... more ShipToLocation values allowed here ... -->
+      </InternationalShippingServiceOption>
+      <!-- ... more InternationalShippingServiceOption nodes allowed here ... -->
+      <PaymentInstructions> string </PaymentInstructions>
+      <PromotionalShippingDiscount> boolean </PromotionalShippingDiscount>
+      <RateTableDetails> RateTableDetailsType
+        <DomesticRateTable> string </DomesticRateTable>
+        <InternationalRateTable> string </InternationalRateTable>
+      </RateTableDetails>
+      <SalesTax> SalesTaxType
+        <SalesTaxPercent> float </SalesTaxPercent>
+        <SalesTaxState> string </SalesTaxState>
+        <ShippingIncludedInTax> boolean </ShippingIncludedInTax>
+      </SalesTax>
+      <ShippingDiscountProfileID> string </ShippingDiscountProfileID>
+      <ShippingServiceOptions> ShippingServiceOptionsType
+        <FreeShipping> boolean </FreeShipping>
+        <ShippingService> token </ShippingService>
+        <ShippingServiceAdditionalCost> AmountType (double) </ShippingServiceAdditionalCost>
+        <ShippingServiceCost> AmountType (double) </ShippingServiceCost>
+        <ShippingServicePriority> int </ShippingServicePriority>
+        <ShippingSurcharge> AmountType (double) </ShippingSurcharge>
+      </ShippingServiceOptions>
+      <!-- ... more ShippingServiceOptions nodes allowed here ... -->
+      <ShippingType> ShippingTypeCodeType </ShippingType>
+    </ShippingDetails>
+    <ShippingPackageDetails> ShipPackageDetailsType
+      <MeasurementUnit> MeasurementSystemCodeType </MeasurementUnit>
+      <PackageDepth> MeasureType (decimal) </PackageDepth>
+      <PackageLength> MeasureType (decimal) </PackageLength>
+      <PackageWidth> MeasureType (decimal) </PackageWidth>
+      <ShippingIrregular> boolean </ShippingIrregular>
+      <ShippingPackage> ShippingPackageCodeType </ShippingPackage>
+      <WeightMajor> MeasureType (decimal) </WeightMajor>
+      <WeightMinor> MeasureType (decimal) </WeightMinor>
+    </ShippingPackageDetails>
+    <ShippingServiceCostOverrideList> ShippingServiceCostOverrideListType
+      <ShippingServiceCostOverride> ShippingServiceCostOverrideType
+        <ShippingServiceAdditionalCost> AmountType (double) </ShippingServiceAdditionalCost>
+        <ShippingServiceCost> AmountType (double) </ShippingServiceCost>
+        <ShippingServicePriority> int </ShippingServicePriority>
+        <ShippingServiceType> ShippingServiceType </ShippingServiceType>
+        <ShippingSurcharge> AmountType (double) </ShippingSurcharge>
+      </ShippingServiceCostOverride>
+      <!-- ... more ShippingServiceCostOverride nodes allowed here ... -->
+    </ShippingServiceCostOverrideList>
+    <ShippingTermsInDescription> boolean </ShippingTermsInDescription>
+    <ShipToLocations> string </ShipToLocations>
+    <!-- ... more ShipToLocations values allowed here ... -->
+    <Site> SiteCodeType </Site>
+    <SKU> SKUType (string) </SKU>
+    <SkypeContactOption> SkypeContactOptionCodeType </SkypeContactOption>
+    <!-- ... more SkypeContactOption values allowed here ... -->
+    <SkypeEnabled> boolean </SkypeEnabled>
+    <SkypeID> string </SkypeID>
+    <StartPrice> AmountType (double) </StartPrice>
+    <Storefront> StorefrontType
+      <StoreCategory2ID> long </StoreCategory2ID>
+      <StoreCategory2Name> string </StoreCategory2Name>
+      <StoreCategoryID> long </StoreCategoryID>
+      <StoreCategoryName> string </StoreCategoryName>
+    </Storefront>
+    <SubTitle> string </SubTitle>
+    <TaxCategory> string </TaxCategory>
+    <ThirdPartyCheckout> boolean </ThirdPartyCheckout>
+    <ThirdPartyCheckoutIntegration> boolean </ThirdPartyCheckoutIntegration>
+    <Title> string </Title>
+    <UseRecommendedProduct> boolean </UseRecommendedProduct>
+    <UseTaxTable> boolean </UseTaxTable>
+    <UUID> UUIDType (string) </UUID>
+    <Variations> VariationsType
+      <Pictures> PicturesType
+        <VariationSpecificName> string </VariationSpecificName>
+        <VariationSpecificPictureSet> VariationSpecificPictureSetType
+          <PictureURL> anyURI </PictureURL>
+          <!-- ... more PictureURL values allowed here ... -->
+          <VariationSpecificValue> string </VariationSpecificValue>
+        </VariationSpecificPictureSet>
+        <!-- ... more VariationSpecificPictureSet nodes allowed here ... -->
+      </Pictures>
+      <Variation> VariationType
+        <DiscountPriceInfo> DiscountPriceInfoType
+          <MadeForOutletComparisonPrice> AmountType (double) </MadeForOutletComparisonPrice>
+          <MinimumAdvertisedPrice> AmountType (double) </MinimumAdvertisedPrice>
+          <MinimumAdvertisedPriceExposure> MinimumAdvertisedPriceExposureCodeType </MinimumAdvertisedPriceExposure>
+          <OriginalRetailPrice> AmountType (double) </OriginalRetailPrice>
+          <SoldOffeBay> boolean </SoldOffeBay>
+          <SoldOneBay> boolean </SoldOneBay>
+        </DiscountPriceInfo>
+        <Quantity> int </Quantity>
+        <SKU> SKUType (string) </SKU>
+        <StartPrice> AmountType (double) </StartPrice>
+        <VariationProductListingDetails> VariationProductListingDetailsType
+          <EAN> string </EAN>
+          <ISBN> string </ISBN>
+          <UPC> string </UPC>
+        </VariationProductListingDetails>
+        <VariationSpecifics> NameValueListArrayType
+          <NameValueList> NameValueListType
+            <Name> string </Name>
+            <Value> string </Value>
+            <!-- ... more Value values allowed here ... -->
+          </NameValueList>
+          <!-- ... more NameValueList nodes allowed here ... -->
+        </VariationSpecifics>
+        <!-- ... more VariationSpecifics nodes allowed here ... -->
+      </Variation>
+      <!-- ... more Variation nodes allowed here ... -->
+      <VariationSpecificsSet> NameValueListArrayType
+        <NameValueList> NameValueListType
+          <Name> string </Name>
+          <Value> string </Value>
+          <!-- ... more Value values allowed here ... -->
+        </NameValueList>
+        <!-- ... more NameValueList nodes allowed here ... -->
+      </VariationSpecificsSet>
+    </Variations>
+    <VATDetails> VATDetailsType
+      <BusinessSeller> boolean </BusinessSeller>
+      <RestrictedToBusiness> boolean </RestrictedToBusiness>
+      <VATPercent> float </VATPercent>
+    </VATDetails>
+    <VIN> string </VIN>
+    <VRM> string </VRM>
+  </Item>
+  <!-- Standard Input Fields -->
+  <ErrorLanguage> string </ErrorLanguage>
+  <MessageID> string </MessageID>
+  <Version> string </Version>
+  <WarningLevel> WarningLevelCodeType </WarningLevel>
+</AddFixedPriceItemRequest>';
+}

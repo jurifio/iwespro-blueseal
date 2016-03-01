@@ -22,4 +22,6 @@ abstract class AXMLApiCall
     protected $ebaySiteId;
     protected $contentType;
     protected $contentLength;
+	protected $xmlVersion = '1.0';
+	protected $encoding = 'utf-8';
 }
