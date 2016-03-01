@@ -21,10 +21,17 @@ class CTagEditController extends ARestrictedAccessRootController
         $tagId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
         $tagRepo = $this->app->repoFactory->create('Tag');
         $tag = $tagRepo->findOneBy(['id'=>$tagId]);
+        $sorting = $this->app->repoFactory->create('SortingPriority')->findAll();
+
+        $langs = $this->app->repoFactory->create('Lang')->findAll();
+        $tagTrans = $this->app->repoFactory->create('TagTranslation')->findBy(['tagId'=>$tagId]);
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'tag' => $tag,
+            'sorting' => $sorting,
+            'langs' => $langs,
+            'tagTrans' => $tagTrans,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);
@@ -33,8 +40,9 @@ class CTagEditController extends ARestrictedAccessRootController
     public function put()
     {
         $data = $this->app->router->request()->getRequestData();
-        $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
-
+        $tagId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
+        \BlueSeal::dump($tagId);
+        throw new \Exception();
         $couponRepo = $this->app->repoFactory->create('Coupon');
         $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
 

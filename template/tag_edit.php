@@ -1,6 +1,3 @@
-<?php
-    $validThru = new DateTime($coupon->validThru);
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,18 +23,54 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Modifica tag</h5>
-                        <p><?php echo $tag->slug;?></p>
                     </div>
                     <div class="panel-body">
-                        <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post" autocomplete="off">
-                            <div class="row">
+                        <form id="form-project" role="form" action="" method="PUT" autocomplete="on">
+                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
-                                        <label for="amount">Valore</label>
-                                        <input type="text" class="form-control" id="amount" name="amount" value="<?php echo $tag->slug; ?>"/>
+                                        <label for="slug">Slug</label>
+                                        <input type="text" class="form-control" id="slug" name="slug" value="<?php echo $tag->slug; ?>"/>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="sorting">Priorità</label>
+                                        <select class="full-width selectpicker" placeholder="Seleziona la priorità" data-init-plugin="selectize" tabindex="-1" title="sortingId" name="sortingId" id="sortingId">
+                                            <?php foreach ($sorting as $val): ?>
+                                                <option value="<?php echo $val->id ?>" required
+                                                    <?php echo ($val->id == $tag->sortingPriorityId) ? 'selected="selected"' : ""; ?> >
+                                                    <?php echo $val->priority . ""?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <?php
+                            foreach ($langs as $lang):
+                                if(isset($name)) unset($name);
+                                foreach($tagTrans as $valTrans){
+                                    if($valTrans->langId == $lang->id){
+                                        $name = $valTrans->name;
+                                    }
+                                }
+
+                                ?>
+                                <h5><?php echo strtoupper($lang->name); ?></h5>
+                                <div class="row clearfix">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-default">
+                                            <label>Nome Tag</label>
+                                            <input type="text" class="form-control" name="TagName_<?php echo $lang->id; ?>" value="<?php echo isset($name) ? $name : "" ?>">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <?php
+                            endforeach; ?>
 
                         </form>
                     </div>
@@ -54,7 +87,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-floppy-o"
-            data-permission="/admin/marketing"
+            data-permission="/admin/product/edit"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-event="bs.tag.edit"
