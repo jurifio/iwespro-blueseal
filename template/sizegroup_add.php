@@ -78,7 +78,7 @@
                                 if(isset($sizeEdit) && $sizeEdit->valid()) $sizeEdit->next();
                                 endfor; ?>
                             </div>
-                            <?php if(isset($sizeGroup)):?>
+                            <?php if(isset($sizeEdit)):?>
                             <button class="btn btn-success" type="submit">Modifica</button>
                             <?php else: ?>
                             <button class="btn btn-success" type="submit">Crea</button>
