@@ -48,7 +48,7 @@
             data-rel="tooltip"
             data-title="Aggiungi un nuovo tag"
             data-placement="bottom"
-            data-href="/blueseal/tag/aggiungi">
+            data-href="/blueseal/prodotti/tag/aggiungi">
         </bs-toolbar-button>
     </bs-toolbar-group><!-- modificato qui, prevedere permessi? -->
 </bs-toolbar>

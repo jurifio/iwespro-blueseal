@@ -934,7 +934,7 @@
                 "POST"
             ]
         },{
-            "pattern": "/blueseal/tag(/)?",
+            "pattern": "/blueseal/prodotti/tag(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTagListController"
             },
@@ -947,7 +947,7 @@
             ]
         },
         {
-            "pattern": "/blueseal/tag/aggiungi(/)?",
+            "pattern": "/blueseal/prodotti/tag/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTagAddController"
             },
@@ -958,7 +958,7 @@
             ]
         },
         {
-            "pattern": "/blueseal/tag/modifica/:id(/)?",
+            "pattern": "/blueseal/prodotti/tag/modifica/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTagEditController"
             },

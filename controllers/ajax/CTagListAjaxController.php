@@ -26,7 +26,7 @@ class CTagListAjaxController extends AAjaxController              /** Modifica q
     {
         $this->app->setLang(new CLang(1, 'it'));
         $this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
-        $this->urls['page'] = $this->urls['base'] . "tag";                            /** Modifica qui */
+        $this->urls['page'] = $this->urls['base'] . "prodotti/tag";                            /** Modifica qui */
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
         if ($this->app->getUser()->hasRole('ownerEmployee')) {
@@ -52,7 +52,7 @@ class CTagListAjaxController extends AAjaxController              /** Modifica q
         $count = $this->em->tags->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->tags->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $modifica = $this->urls['base'] . "tag";
+        $modifica = $this->urls['base'] . "prodotti/tag/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
@@ -64,14 +64,12 @@ class CTagListAjaxController extends AAjaxController              /** Modifica q
 
         $i = 0;
 
-        \BlueSeal::dump($tags);
-
         foreach ($tags as $val) {
 
-            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id . '__' . $val->id;
+            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['slug'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '">' . $val->slug . '</a>' : $val->slug;
-            $response['data'][$i]['priority'] = $val->sortingPriority->priority;             /** ??? */
+            $response['data'][$i]['priority'] = $val->sortingPriority->priority;
 
             $i++;
         }
