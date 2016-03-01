@@ -1,0 +1,47 @@
+<?php
+namespace bamboo\blueseal\controllers;
+
+use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\ecommerce\views\VBase;
+
+/**
+ * Class CTagEditController
+ * @package bamboo\app\controllers
+ */
+class CTagEditController extends ARestrictedAccessRootController
+{
+    protected $fallBack = "blueseal";
+    protected $pageSlug = "tag_edit";
+
+    public function get()
+    {
+        $view = new VBase(array());
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/tag_edit.php');
+
+        $tagId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
+        $tagRepo = $this->app->repoFactory->create('Tag');
+        $tag = $tagRepo->findOneBy(['id'=>$tagId]);
+
+        echo $view->render([
+            'app' => new CRestrictedAccessWidgetHelper($this->app),
+            'tag' => $tag,
+            'page' => $this->page,
+            'sidebar' => $this->sidebar->build()
+        ]);
+    }
+
+    public function put()
+    {
+        $data = $this->app->router->request()->getRequestData();
+        $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
+
+        $couponRepo = $this->app->repoFactory->create('Coupon');
+        $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
+
+        foreach ($data as $k => $v) {
+            $coupon->{$k} = $v;
+        }
+
+        $couponRepo->update($coupon);
+    }
+}

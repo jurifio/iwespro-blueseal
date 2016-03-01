@@ -17,13 +17,14 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped" data-datatable-name="tag_list"
+                        <table class="table table-striped responsive" width="100%"
+                               data-datatable-name="tag_list"
                                data-controller="TagListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="tagTable"> <!-- modificato qui -->
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
-                                <th>Slug</th>                                                    <!-- modificato qui -->
-                                <th>Priorità Ordinamento</th>                                    <!-- modificato qui -->
+                                <th>Slug</th>
+                                <th>Priorità Ordinamento</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -39,7 +40,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione tag">                     <!-- modificato qui -->
+    <bs-toolbar-group data-group-label="Gestione tag">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-file-o fa-plus"
@@ -48,9 +49,9 @@
             data-rel="tooltip"
             data-title="Aggiungi un nuovo tag"
             data-placement="bottom"
-            data-href="/blueseal/prodotti/tag/aggiungi">
+            data-href="/blueseal/tag/aggiungi">
         </bs-toolbar-button>
-    </bs-toolbar-group><!-- modificato qui, prevedere permessi? -->
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

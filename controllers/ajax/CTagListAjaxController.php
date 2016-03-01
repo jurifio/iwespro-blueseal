@@ -12,7 +12,7 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 
-class CTagListAjaxController extends AAjaxController              /** Modifica qui */
+class CTagListAjaxController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
@@ -26,7 +26,7 @@ class CTagListAjaxController extends AAjaxController              /** Modifica q
     {
         $this->app->setLang(new CLang(1, 'it'));
         $this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
-        $this->urls['page'] = $this->urls['base'] . "prodotti/tag";                            /** Modifica qui */
+        $this->urls['page'] = $this->urls['base'] . "prodotti";
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
         if ($this->app->getUser()->hasRole('ownerEmployee')) {
@@ -52,7 +52,7 @@ class CTagListAjaxController extends AAjaxController              /** Modifica q
         $count = $this->em->tags->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->tags->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $modifica = $this->urls['base'] . "prodotti/tag/modifica";
+        $modifica = $this->urls['base'] . "tag/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 

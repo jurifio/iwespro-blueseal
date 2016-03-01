@@ -11,12 +11,12 @@ use bamboo\ecommerce\views\widget\VBase;
 class CTagListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "tag_list";           /* modificato qui */
+    protected $pageSlug = "tag_list";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/tag_list.php');    /* modificato qui */
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/tag_list.php');
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
