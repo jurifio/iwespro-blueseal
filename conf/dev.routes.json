@@ -954,11 +954,13 @@
             "filters": {},
             "methods": [
                 "GET",
-                "POST"
+                "POST",
+                "PUT",
+                "DELETE",
             ]
         },
         {
-            "pattern": "/blueseal/tag/modifica/:id(/)?",
+            "pattern": "/blueseal/tag/modifica/:id(/?)",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTagEditController"
             },
@@ -967,9 +969,12 @@
             },
             "methods": [
                 "GET",
-                "POST"
+                "PUT",
+                "POST",
+                "DELETE",
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/traduzioni/descrizioni(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateListController"

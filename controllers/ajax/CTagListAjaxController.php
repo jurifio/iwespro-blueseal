@@ -52,7 +52,7 @@ class CTagListAjaxController extends AAjaxController
         $count = $this->em->tags->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->tags->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $modifica = $this->urls['base'] . "tag/modifica";
+        $editTagLink = $this->urls['base'] . "tag/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
@@ -68,7 +68,7 @@ class CTagListAjaxController extends AAjaxController
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['slug'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '">' . $val->slug . '</a>' : $val->slug;
+            $response['data'][$i]['slug'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editTagLink . '/'.$val->id.'" style="font-family:consolas">' . $val->slug . '</a>' : $val->slug;
             $response['data'][$i]['priority'] = $val->sortingPriority->priority;
 
             $i++;
