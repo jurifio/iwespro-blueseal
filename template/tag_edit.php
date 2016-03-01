@@ -87,7 +87,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-floppy-o"
-            data-permission="/admin/marketing"
+            data-permission="/admin/product/edit"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-event="bs.tag.edit"

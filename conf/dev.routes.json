@@ -956,7 +956,7 @@
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE",
+                "DELETE"
             ]
         },
         {
@@ -971,7 +971,7 @@
                 "GET",
                 "PUT",
                 "POST",
-                "DELETE",
+                "DELETE"
             ]
         },
         {

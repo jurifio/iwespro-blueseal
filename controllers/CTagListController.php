@@ -24,8 +24,4 @@ class CTagListController extends ARestrictedAccessRootController
             'sidebar' => $this->sidebar->build()
         ]);
     }
-    public function put()
-    {
-
-    }
 }

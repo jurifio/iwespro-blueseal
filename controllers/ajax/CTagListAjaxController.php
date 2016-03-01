@@ -76,4 +76,8 @@ class CTagListAjaxController extends AAjaxController
 
         echo json_encode($response);
     }
+    public function put()
+    {
+
+    }
 }
