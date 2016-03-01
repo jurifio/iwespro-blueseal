@@ -62,8 +62,12 @@ class CSizeManageController extends ARestrictedAccessRootController
             $positions = array();
             $productSizeGroupId = "";
             foreach($post as $key=>$val){
-                if(!strstr($key, 'ProductSizeGroup_'.$k)) continue;
                 $keys = explode('_', $key);
+                if ($key == 'ProductSizeGroup_macroName') continue;
+                if(!strstr($key, 'ProductSizeGroup_'.$k)) {
+                    $productSizeGroupIn[$keys[2]] = $val;
+                    continue;
+                }
                 if($keys[2] == 'position') {
                     $positions[$keys[3]] = $val;
                     continue;
@@ -72,7 +76,6 @@ class CSizeManageController extends ARestrictedAccessRootController
                     $productSizeGroupId = $val;
                     continue;
                 };
-                $productSizeGroupIn[$keys[2]] = $val;
             }
             try{
                 if(empty($productSizeGroupIn) || empty($positions)) continue;
