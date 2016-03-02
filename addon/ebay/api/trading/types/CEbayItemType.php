@@ -1,6 +1,7 @@
 <?php
 
 namespace redpanda\blueseal\ebay\calls\trading\types;
+use bamboo\addon\ebay\core\AEbayCategory;
 use bamboo\addon\ebay\core\AEbaySite;
 use redpanda\blueseal\ebay\calls\trading\enum\CEBayCountryCodeEnum;
 
@@ -20,21 +21,41 @@ use redpanda\blueseal\ebay\calls\trading\enum\CEBayCountryCodeEnum;
 class CEbayItemType
 {
     /** @var string */
-    protected $ApplicationData;
+    protected $applicationData;
     /** @var bool */
-    protected $AutoPay;
+    protected $autoPay;
     /** @var bool */
-    protected $CategoryBasedAttributePrefill;
+    protected $categoryBasedAttributePrefill;
     /** @var bool */
-    protected $CategoryMappingAllowed;
+    protected $categoryMappingAllowed;
     /** @var string */
-    protected $ConditionDescription;
+    protected $conditionDescription;
     /** @var int */
-    protected $ConditionID;
+    protected $conditionId;
     /** @var CEBayCountryCodeEnum */
-    protected $CountryCodeType;
+    protected $country;
     /** @var string */
-    protected $CrossBorderTrade;
+    protected $crossBorderTrade;
+    /** @var  CEBayCountryCodeEnum */
+    protected $currency;
+    /** @var string */
+    protected $description;
+    /** @var bool */
+    protected $disableBuyerRequirements;
+    /** @var CEbayDiscountPriceInfoType */
+    protected $discountPriceInfo;
+
+    /**
+     * @param AEbayCategory $category
+     */
+    public function setConditionId(AEbayCategory $category)
+    {
+        /**
+         * L'id della condizione dipende dalla categoria in cui va inserito
+         * il prodotto. Il metodo non va bene, la firma è sbagliata
+         * ma lo teniamo come placeholder per ora.
+         **/
+    }
 
     /**
      * @param AEbaySite $site
