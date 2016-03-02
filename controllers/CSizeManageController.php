@@ -46,6 +46,7 @@ class CSizeManageController extends ARestrictedAccessRootController
     public function post()
     {
         $post = $this->app->router->request()->getRequestData();
+
         foreach($post as $key =>$val){
             if(empty($val) && $val != '0') unset($post[$key]);
         }
@@ -63,11 +64,7 @@ class CSizeManageController extends ARestrictedAccessRootController
             $productSizeGroupId = "";
             foreach($post as $key=>$val){
                 $keys = explode('_', $key);
-                if ($key == 'ProductSizeGroup_macroName') continue;
-                if(!strstr($key, 'ProductSizeGroup_'.$k)) {
-                    $productSizeGroupIn[$keys[2]] = $val;
-                    continue;
-                }
+                if(!strstr($key, 'ProductSizeGroup_'.$k)) continue;
                 if($keys[2] == 'position') {
                     $positions[$keys[3]] = $val;
                     continue;
@@ -76,7 +73,9 @@ class CSizeManageController extends ARestrictedAccessRootController
                     $productSizeGroupId = $val;
                     continue;
                 };
+                $productSizeGroupIn[$keys[2]] = $val;
             }
+
             try{
                 if(empty($productSizeGroupIn) || empty($positions)) continue;
                 $productSizeGroupIn['macroName'] = $macroName;
@@ -84,16 +83,16 @@ class CSizeManageController extends ARestrictedAccessRootController
                     $productSizeGroupId = $mysql->insert("ProductSizeGroup",$productSizeGroupIn);
                 }else{
                     if(empty($positions)){
-                        $mysql->delete("ProductSizeGroupHasProductSize", array("productSizeGroupId"=>$productSizeGroupId));
-                        $mysql->delete("ProductSizeGroup",array("id"=>$productSizeGroupId));
+                        $mysql->delete("ProductSizeGroupHasProductSize", ["productSizeGroupId"=>$productSizeGroupId]);
+                        $mysql->delete("ProductSizeGroup",["id"=>$productSizeGroupId]);
                         continue;
                     }
 
                     $productSizeGroup = $this->app->repoFactory->create("ProductSizeGroup")->findOneBy(['id' => $productSizeGroupId]);
-                    $productSizeGroup->macroName = $productSizeGroupIn['macroName'];
+                    $productSizeGroup->macroName = $macroName;
                     $productSizeGroup->locale = $productSizeGroupIn['locale'];
                     $productSizeGroup->name = $productSizeGroupIn['name'];
-                    $this->app->repoFactory->create("ProductSizeGroup")->update($productSizeGroup);
+                    $productSizeGroup->update();
                     //$mysql->update ("ProductSizeGroup",$productSizeGroupIn,array("id"=>$productSizeGroupId));
                 }
             }catch(\Exception $e){
@@ -103,16 +102,16 @@ class CSizeManageController extends ARestrictedAccessRootController
             }
 
             try{
-                $res = $mysql->delete("ProductSizeGroupHasProductSize", array("productSizeGroupId"=>$productSizeGroupId));
+                $res = $mysql->delete("ProductSizeGroupHasProductSize", ["productSizeGroupId"=>$productSizeGroupId]);
                 foreach($positions as $key=>$val){
-                    if($sizeId = $mysql->query("select id from ProductSize where name = ?",array($val))->fetch()){
+                    if($sizeId = $mysql->query("select id from ProductSize where name = ?",[$val])->fetch()){
                         $sizeId = $sizeId['id'];
                     } else {
                         $slug = str_replace('½','m',$val);
                         $slug = $slugy->slugify($slug);
-                        $sizeId = $mysql->insert("ProductSize", array("name"=>$val, "slug"=>$slug));
+                        $sizeId = $mysql->insert("ProductSize", ["name"=>$val, "slug"=>$slug]);
                     }
-                    $res = $mysql->insert("ProductSizeGroupHasProductSize", array("productSizeGroupId"=>$productSizeGroupId,"productSizeId"=>$sizeId,"position"=>$key));
+                    $res = $mysql->insert("ProductSizeGroupHasProductSize", ["productSizeGroupId"=>$productSizeGroupId,"productSizeId"=>$sizeId,"position"=>$key]);
                 }
             }catch(\Exception $e){
                 $this->app->dbAdapter->rollback();
