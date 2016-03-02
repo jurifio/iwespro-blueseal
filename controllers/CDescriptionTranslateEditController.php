@@ -36,15 +36,15 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
 
         $descriptionEdit = $this->app->repoFactory->create('ProductDescriptionTranslation')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'marketplaceId'=>1]);
 
-        $productName = [];
+        $productNameTranslation = [];
 
         foreach ($descriptionEdit as $des) {
 
             $productsName = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $des->productId, 'productVariantId' => $des->productVariantId, 'langId' => $des->langId ]);
             if ($productsName) {
-                $productName[$des->langId] = $productsName->name;
+                $productNameTranslation[$des->langId] = $productsName->name;
             } else {
-                $productName[$des->langId] = '';
+                $productNameTranslation[$des->langId] = '';
             }
         }
 
@@ -54,7 +54,7 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'descriptionEdit' => $descriptionEdit,
-            'productName' => $productName,
+            'productNameTranslation' => $productNameTranslation,
             'productId'=> $productId,
             'productVariantId'=>$productVariantId,
             'langs' => $langs,

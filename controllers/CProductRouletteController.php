@@ -452,11 +452,11 @@ class CProductRouletteController extends CProductManageController
 			/** INSERIMENTO NOME PRODOTTO */
 			foreach ($post as $key => $input) {
 				$inputName = explode('_', $key);
-				if ($inputName[0] != 'ProductName') continue;
+				if ($inputName[0] != 'ProductNameTranslation') continue;
 				$insertData = $productIdsExt;
 				$insertData['langId'] = $inputName[1];
 				$insertData['name'] = $input;
-				$this->app->dbAdapter->insert("ProductName", $insertData);
+				$this->app->dbAdapter->insert("ProductNameTranslation", $insertData);
 			}
 
 			/** INSERIMENTO DESCRIZIONE PRODOTTO */

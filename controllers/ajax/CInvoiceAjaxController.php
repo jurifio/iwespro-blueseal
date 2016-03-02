@@ -70,7 +70,7 @@ class CInvoiceAjaxController extends AAjaxController
                     $userShipping = unserialize($order->frozenShippingAddress);
                     $userShipping->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
 
-                    $productRepo = $this->app->repoFactory->create('ProductName');
+                    $productRepo = $this->app->repoFactory->create('ProductNameTranslation');
 
                     $invoice->invoiceText = $view->render([
                         'app' => new CRestrictedAccessWidgetHelper($this->app),

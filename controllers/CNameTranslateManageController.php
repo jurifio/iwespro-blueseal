@@ -36,20 +36,20 @@ class CNameTranslateManageController extends ARestrictedAccessRootController
                 $name = $val;
 
 
-                $productName = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId'=>$datas['ProductId'], 'productVariantId'=>$datas['ProductVariantId'], 'langId'=>$langId]);
+                $productNameTranslation = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId'=>$datas['ProductId'], 'productVariantId'=>$datas['ProductVariantId'], 'langId'=>$langId]);
 
-                if (!is_null($productName)) {
-                    $productName->name = $name;
-                    $productName->update();
+                if (!is_null($productNameTranslation)) {
+                    $productNameTranslation->name = $name;
+                    $productNameTranslation->update();
 
                 } elseif ($name != "") {
-                    $productName = $this->app->repoFactory->create("ProductNameTranslation")->getEmptyEntity();
+                    $productNameTranslation = $this->app->repoFactory->create("ProductNameTranslation")->getEmptyEntity();
 
-                    $productName->productId = $datas['ProductId'];
-                    $productName->productVariantId = $datas['ProductVariantId'];
-                    $productName->langId = $langId;
-                    $productName->name = $name;
-                    $productName->insert();
+                    $productNameTranslation->productId = $datas['ProductId'];
+                    $productNameTranslation->productVariantId = $datas['ProductVariantId'];
+                    $productNameTranslation->langId = $langId;
+                    $productNameTranslation->name = $name;
+                    $productNameTranslation->insert();
                 }
             }
             $this->app->dbAdapter->commit();

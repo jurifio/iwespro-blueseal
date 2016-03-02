@@ -145,15 +145,15 @@ class CProductManageController extends ARestrictedAccessRootController
             /** UPDATE NOME PRODOTTO */
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
-                if ($inputName[0] != 'ProductName') continue;
+                if ($inputName[0] != 'ProductNameTranslation') continue;
 
-                $productName = $productEdit->productName->findOneByKey('langId',$inputName[1]);
-	            if($productName){
-		            $productName->name = $input;
-					$productName->update();
+                $productNameTranslation = $productEdit->productNameTranslation->findOneByKey('langId',$inputName[1]);
+	            if($productNameTranslation){
+		            $productNameTranslation->name = $input;
+					$productNameTranslation->update();
 	            } else {
 		            try {
-			            $this->app->dbAdapter->insert("ProductName", $productIdsExt+['langId'=>$inputName[1],'name'=>$input]);
+			            $this->app->dbAdapter->insert("ProductNameTranslation", $productIdsExt+['langId'=>$inputName[1],'name'=>$input]);
 		            } catch (\Exception $e) {
 		            }
 	            }
@@ -404,12 +404,12 @@ class CProductManageController extends ARestrictedAccessRootController
             /** INSERIMENTO NOME PRODOTTO */
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
-                if ($inputName[0] != 'ProductName') continue;
+                if ($inputName[0] != 'ProductNameTranslation') continue;
                 $insertData = array();
                 $insertData = $productIdsExt;
                 $insertData['langId'] = $inputName[1];
                 $insertData['name'] = $input;
-                $this->app->dbAdapter->insert("ProductName", $insertData);
+                $this->app->dbAdapter->insert("ProductNameTranslation", $insertData);
             }
 
             /** INSERIMENTO DESCRIZIONE PRODOTTO */

@@ -139,7 +139,7 @@ class CProductIncompleteListController extends AAjaxController
         if (is_null($product->productSku) || ($product->productSku->isEmpty())) {
             $problems[] = "[E460] Quantità non caricate";
         }
-        if (is_null($product->productName) || empty($product->productName->getFirst()->name)) {
+        if (is_null($product->productNameTranslation) || empty($product->productNameTranslation->getFirst()->name)) {
             $problems[] = "[E470] Nome Prodotto";
         }
 	    if (is_null($product->productDescription) || empty($product->productDescription->getFirst()->description)) {
