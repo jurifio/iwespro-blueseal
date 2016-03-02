@@ -6,7 +6,7 @@ $(document).on('bs.tag.add', function() {
     var cancelButton = $('.modal-footer .btn-default');
     var okButton = $('.modal-footer .btn-success');
 
-    header.html('Aggiungi un tag');
+    header.html('Aggiunta tag');
     okButton.html('Fatto').off().on('click', function () {
         bsModal.modal('hide');
         okButton.off();

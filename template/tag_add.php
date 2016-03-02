@@ -39,14 +39,32 @@
                             <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <select class="full-width selectpicker" placeholder="Seleziona la priorità del tag" data-init-plugin="selectize" tabindex="-1" title="tagPriorityId" name="tagPriorityId" id="tagPriorityId">
-                                            <?php foreach ($sorting as $priorita): ?>
-                                                <option value="<?php echo $priorita->id?>"> <?php echo $priorita->priority?></option>
+                                        <label for="sorting">Priorità</label>
+                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                        <select class="full-width selectpicker" placeholder="Seleziona la priorità" data-init-plugin="selectize" tabindex="-1" title="sortingId" name="sortingId" id="sortingId">
+                                            <?php foreach ($sorting as $val): ?>
+                                                <option value="<?php echo $val->id ?>" required >
+                                                    <?php echo $val->priority . ""?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
                             </div>
+                            <?php
+                            foreach ($langs as $lang): ?>
+                                <h5><?php echo strtoupper($lang->name); ?></h5>
+                                <div class="row clearfix">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-default">
+                                            <label>Nome Tag</label>
+                                            <input type="text" class="form-control" name="tagName_<?php echo $lang->id; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <?php
+                            endforeach; ?>
+
                         </form>
                     </div>
                 </div>

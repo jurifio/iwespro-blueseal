@@ -64,7 +64,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group form-group-default">
                                             <label>Nome Tag</label>
-                                            <input type="text" class="form-control" name="TagName_<?php echo $lang->id; ?>" value="<?php echo isset($name) ? $name : "" ?>">
+                                            <input type="text" class="form-control" name="tagName_<?php echo $lang->id; ?>" value="<?php echo isset($name) ? $name : "" ?>">
                                         </div>
                                     </div>
                                 </div>
