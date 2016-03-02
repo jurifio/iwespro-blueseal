@@ -53,15 +53,15 @@ class CSizeManageController extends ARestrictedAccessRootController
         $slugy = new CSlugify();
 
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
-        $productSizeGroupId = "";
         $this->app->dbAdapter->beginTransaction();
         /** @var CMySQLAdapter $mysql */
         $mysql = $this->app->dbAdapter;
         $macroName = $post['ProductSizeGroup_macroName'];
         for($k=0;$k<12;$k++){
-            $productSizeGroupIn = array();
-            $positions = array();
+            $productSizeGroupIn = [];
+            $positions = [];
             $productSizeGroupId = "";
+            $keys = [];
             foreach($post as $key=>$val){
                 $keys = explode('_', $key);
                 if(!strstr($key, 'ProductSizeGroup_'.$k)) continue;
