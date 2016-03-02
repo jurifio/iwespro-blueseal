@@ -30,35 +30,8 @@ protected $application = 'x';
   <Item> ItemType
     <ApplicationData> string </ApplicationData>
     <AutoPay> boolean </AutoPay>
-    <BuyerRequirementDetails> BuyerRequirementDetailsType
-      <LinkedPayPalAccount> boolean </LinkedPayPalAccount>
-      <MaximumBuyerPolicyViolations> MaximumBuyerPolicyViolationsType
-        <Count> int </Count>
-        <Period> PeriodCodeType </Period>
-      </MaximumBuyerPolicyViolations>
-      <MaximumItemRequirements> MaximumItemRequirementsType
-        <MaximumItemCount> int </MaximumItemCount>
-        <MinimumFeedbackScore> int </MinimumFeedbackScore>
-      </MaximumItemRequirements>
-      <MaximumUnpaidItemStrikesInfo> MaximumUnpaidItemStrikesInfoType
-        <Count> int </Count>
-        <Period> PeriodCodeType </Period>
-      </MaximumUnpaidItemStrikesInfo>
-      <MinimumFeedbackScore> int </MinimumFeedbackScore>
-      <ShipToRegistrationCountry> boolean </ShipToRegistrationCountry>
-      <VerifiedUserRequirements> VerifiedUserRequirementsType
-        <MinimumFeedbackScore> int </MinimumFeedbackScore>
-        <VerifiedUser> boolean </VerifiedUser>
-      </VerifiedUserRequirements>
-      <ZeroFeedbackScore> boolean </ZeroFeedbackScore>
-    </BuyerRequirementDetails>
     <CategoryBasedAttributesPrefill> boolean </CategoryBasedAttributesPrefill>
     <CategoryMappingAllowed> boolean </CategoryMappingAllowed>
-    <Charity> CharityType
-      <CharityID> string </CharityID>
-      <CharityNumber> int </CharityNumber>
-      <DonationPercent> float </DonationPercent>
-    </Charity>
     <ConditionDescription> string </ConditionDescription>
     <ConditionID> int </ConditionID>
     <Country> CountryCodeType </Country>
@@ -66,9 +39,6 @@ protected $application = 'x';
     <!-- ... more CrossBorderTrade values allowed here ... -->
     <Currency> CurrencyCodeType </Currency>
     <Description> string </Description>
-    <DigitalGoodInfo> DigitalGoodInfoType
-      <DigitalDelivery> boolean </DigitalDelivery>
-    </DigitalGoodInfo>
     <DisableBuyerRequirements> boolean </DisableBuyerRequirements>
     <DiscountPriceInfo> DiscountPriceInfoType
       <MadeForOutletComparisonPrice> AmountType (double) </MadeForOutletComparisonPrice>
@@ -124,10 +94,6 @@ protected $application = 'x';
     <PaymentMethods> BuyerPaymentMethodCodeType </PaymentMethods>
     <!-- ... more PaymentMethods values allowed here ... -->
     <PayPalEmailAddress> string </PayPalEmailAddress>
-    <PickupInStoreDetails> PickupInStoreDetailsType
-      <EligibleForPickupDropOff> boolean </EligibleForPickupDropOff>
-      <EligibleForPickupInStore> boolean </EligibleForPickupInStore>
-    </PickupInStoreDetails>
     <PictureDetails> PictureDetailsType
       <GalleryDuration> token </GalleryDuration>
       <GalleryType> GalleryTypeCodeType </GalleryType>
