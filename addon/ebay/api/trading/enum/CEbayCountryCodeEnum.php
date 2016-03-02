@@ -69,7 +69,7 @@ class CEBayCountryCodeEnum extends CEnum
     const CODE_CO = 'CO';
     const CODE_CR = 'CR';
     const CODE_CU = 'CU';
-    const CODE_CustomCode = '00';
+    const CODE_CustomCode = 'Not used';
     const CODE_CV = 'CV';
     const CODE_CX = 'CX';
     const CODE_CY = 'CY';
