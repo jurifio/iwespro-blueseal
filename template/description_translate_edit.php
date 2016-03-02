@@ -47,7 +47,7 @@
                                                             if(isset($name)) unset($name);
                                                             foreach($descriptionEdit as $val){
                                                                 if($val->langId == $lang->id){
-                                                                    $name = $productName[$lang->id];
+                                                                    $name = $productNameTranslation[$lang->id];
                                                                 }
                                                             }
 

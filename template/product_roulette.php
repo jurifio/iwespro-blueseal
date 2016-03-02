@@ -271,8 +271,8 @@
                                                             <div class="col-md-12">
                                                                 <div class="form-group form-group-default">
                                                                     <?php if (isset($name)) unset($name);
-                                                                    if (isset($productEdit) && !is_null($productEdit->productName)) {
-                                                                        foreach ($productEdit->productName as $val) {
+                                                                    if (isset($productEdit) && !is_null($productEdit->productNameTranslation)) {
+                                                                        foreach ($productEdit->productNameTranslation as $val) {
                                                                             if ($val->langId == $lang->id) {
                                                                                 $name = $val->name;
                                                                             }

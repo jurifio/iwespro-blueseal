@@ -155,7 +155,7 @@
                                  <?php $productSku = unserialize($orderLine->frozenProduct);
                                  $productSku->setEntityManager($app->application()->entityManagerFactory->create('ProductSku'));
 
-                                 $productName = $productSku->product->productName->getFirst()->name; ?>
+                                 $productNameTranslation = $productSku->product->productNameTranslation->getFirst()->name; ?>
                             <td class=""><?php echo $productSku->printPublicSku(); ?></td>
                             <td class="text-center">
                                 <?php foreach ($statusesLine as $statusLine){
@@ -163,7 +163,7 @@
                                         echo $statusLine->title;
                                     }
                                 } ?></td>
-                            <td><?php echo '<p class="text-black">' . $productName; ?></p></td>
+                            <td><?php echo '<p class="text-black">' . $productNameTranslation; ?></p></td>
                             <td><img width="90" src="<?php echo $app->image($productSku->product->getPhoto(1,281),'amazon') ?>" /></td>
                             <td class="text-center"><?php echo $productSku->product->productBrand->name; ?></td>
                             <td class="text-center"><?php echo $productSku->shop->name; ?></td>
