@@ -1,9 +1,8 @@
 <?php
 
-
 namespace bamboo\addon\ebay\trading\calls;
-use bamboo\addon\ebay\trading\AEbayTradingCall;
 
+use bamboo\addon\ebay\trading\AEbayTradingCall;
 
 /**
  * Class CEbayGetSessionID
