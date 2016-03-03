@@ -1,12 +1,12 @@
 <?php
 
 
-namespace bamboo\addon\ebay\auth\calls;
+namespace bamboo\addon\ebay\trading\calls;
 use bamboo\addon\ebay\auth\AEbayAuthCall;
 
 
 /**
- * Class CEbayRevokeToken
+ * Class CEbayGetSessionID
  * @package bamboo\addon\ebay\auth\calls
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, 03/03/2016
  * @copyright (c) Bambooshoot snc - All rights reserved
@@ -15,7 +15,7 @@ use bamboo\addon\ebay\auth\AEbayAuthCall;
  *
  * @since ${VERSION}
  */
-class CEbayRevokeToken extends AEbayAuthCall
+class CEbayGetSessionID extends AEbayAuthCall
 {
 
 }

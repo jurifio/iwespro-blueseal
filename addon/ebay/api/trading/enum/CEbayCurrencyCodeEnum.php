@@ -1,6 +1,6 @@
 <?php
 
-namespace redpanda\blueseal\ebay\calls\trading\enum;
+namespace redpanda\blueseal\ebay\trading\enum;
 
 use bamboo\core\base\CEnum;
 
