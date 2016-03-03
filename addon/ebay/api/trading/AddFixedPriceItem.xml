@@ -39,7 +39,7 @@
         <CrossBorderTrade> string </CrossBorderTrade>
         <!-- ... more CrossBorderTrade values allowed here ... -->
         <Currency> CurrencyCodeType </Currency>
-        <Description> string </Description>
+        <Description><![CDATA[ test di altissimo livello ]]></Description>
         <DigitalGoodInfo> DigitalGoodInfoType
             <DigitalDelivery> boolean </DigitalDelivery>
         </DigitalGoodInfo>
