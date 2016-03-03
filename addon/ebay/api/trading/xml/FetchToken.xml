@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RevokeTokenRequest xmlns="urn:ebay:apis:eBLBaseComponents">
+<FetchTokenRequest xmlns="urn:ebay:apis:eBLBaseComponents">
     <!-- Call-specific Input Fields -->
-    <UnsubscribeNotification> boolean </UnsubscribeNotification>
+    <SecretID> string </SecretID>
+    <SessionID> string </SessionID>
     <!-- Standard Input Fields -->
     <ErrorLanguage> string </ErrorLanguage>
     <MessageID> string </MessageID>
     <Version> string </Version>
     <WarningLevel> WarningLevelCodeType </WarningLevel>
-</RevokeTokenRequest>
+</FetchTokenRequest>
