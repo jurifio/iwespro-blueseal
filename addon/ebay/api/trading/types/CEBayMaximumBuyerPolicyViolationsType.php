@@ -3,7 +3,7 @@
 namespace redpanda\blueseal\ebay\calls\trading\types;
 
 /**
- * Class CEbayBuyerRequirementDetailsType
+ * Class CEbayMaximumBuyerPolicyViolationsType
  * @package redpanda\blueseal\ebay\calls\trading\types
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -15,20 +15,11 @@ namespace redpanda\blueseal\ebay\calls\trading\types;
  * @date 03/03/2016
  * @since 1.0
  */
-class CEbayBuyerRequirementDetailsType
+class CEbayMaximumBuyerPolicyViolationsType
 {
-    /** @var bool */
-   public $linkedPayPalAccount;
-   /** @var  maximumBuyerPolicyViolationsType */
-   public $maximumBuyerPolicyViolations;
    /** @var int */
    public $count;
    /** @var periodCodeType */
    public $period;
-   /** @var maximumItemRequirementsType */
-   public $maximumItemRequirements;
-   /** @var maximumUnpaidItemStrikesInfoType */
-   public $maximumUnpaidItemStrikesInfo;
-
 
 }
