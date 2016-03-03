@@ -5,7 +5,7 @@ namespace bamboo\addon\ebay\api\trading\enum;
 use bamboo\core\base\CEnum;
 
 /**
- * Class CEbayPeriodCodeEnum
+ * Class CEbayItemSpecificSourceCodeEnum
  * @package bamboo\addon\ebay\api\trading\enum
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -17,12 +17,10 @@ use bamboo\core\base\CEnum;
  * @date 03/03/2016
  * @since 1.0
  */
-class CEbayPeriodCodeEnum extends CEnum
+class CEbayItemSpecificSourceCodeEnum extends CEnum
 {
+    const Attribute = 'Attribute';
     const CustomCode = 'CustomCode';
-    const Days_1 = 'Days_1';
-    const Days_180 = 'Days_180';
-    const Days_30 = 'Days_30';
-    const Days_360 = 'Days_360';
-    const Days_540 = 'Days_540';
+    const ItemSpecific = 'ItemSpecific';
+    const Product = 'Product';
 }
