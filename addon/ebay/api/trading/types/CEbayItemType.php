@@ -1,6 +1,6 @@
 <?php
 
-namespace redpanda\blueseal\ebay\calls\trading\types;
+namespace redpanda\blueseal\ebay\trading\types;
 use bamboo\addon\ebay\core\AEbayCategory;
 use bamboo\addon\ebay\core\AEbaySite;
 use redpanda\blueseal\ebay\calls\trading\enum\CEBayCountryCodeEnum;
