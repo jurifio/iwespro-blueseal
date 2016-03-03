@@ -1,19 +1,21 @@
 <?php
 
-
 namespace bamboo\addon\ebay\trading;
+
 use bamboo\addon\ebay\core\AXMLApiCall;
 
-
 /**
- * Class CEbayTradingCall
+ * Class AEbayTradingCall
  * @package bamboo\addon\ebay\trading
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, 02/03/2016
+ *
+ * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ *
  * @copyright (c) Bambooshoot snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @since ${VERSION}
+ * @date 01/03/2016
+ * @since 1.0
  */
 abstract class AEbayTradingCall extends AXMLApiCall
 {

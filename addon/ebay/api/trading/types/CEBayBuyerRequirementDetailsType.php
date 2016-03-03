@@ -4,7 +4,7 @@ namespace bamboo\addon\ebay\api\trading\calls\types;
 
 /**
  * Class CEbayBuyerRequirementDetailsType
- * @package redpanda\blueseal\ebay\calls\trading\types
+ * @package bamboo\addon\ebay\api\trading\calls\types
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

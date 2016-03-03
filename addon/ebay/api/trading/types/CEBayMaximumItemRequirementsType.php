@@ -1,10 +1,10 @@
 <?php
 
-namespace redpanda\blueseal\ebay\calls\trading\types;
+namespace bamboo\addon\ebay\api\trading\calls\types;
 
 /**
  * Class CEbayMaximumItemRequirementsType
- * @package redpanda\blueseal\ebay\calls\trading\types
+ * @package bamboo\addon\ebay\api\trading\calls\types
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

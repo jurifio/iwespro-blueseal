@@ -1,10 +1,10 @@
 <?php
 
-namespace redpanda\blueseal\ebay\trading\types;
+namespace bamboo\addon\ebay\api\trading\calls\types;
 
 /**
  * Class CEbayDiscountPriceInfoType
- * @package redpanda\blueseal\ebay\calls\trading\types
+ * @package bamboo\addon\ebay\api\trading\calls\types
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *
