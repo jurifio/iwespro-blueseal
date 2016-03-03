@@ -14,7 +14,7 @@ $(document).on('bs.tag.edit', function() {
     cancelButton.remove();
 
     $.ajaxForm({
-        type: "put",
+        type: "PUT",
         url: "#",
         formAutofill: true
     },new FormData()).done(function (content){

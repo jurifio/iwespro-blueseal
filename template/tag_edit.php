@@ -25,12 +25,13 @@
                         <h5>Modifica tag</h5>
                     </div>
                     <div class="panel-body">
-                        <form id="form-project" role="form" action="" method="PUT" autocomplete="on">
+                        <form id="form-project" enctype="multipart/form-data" role="form" action="" method="put" autocomplete="off">
                             <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="slug">Slug</label>
-                                        <input type="text" class="form-control" id="slug" name="slug" value="<?php echo $tag->slug; ?>"/>
+                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                        ​<input type="text" class="form-control" id="slug" name="slug" value="<?php echo $tag->slug; ?>" />
                                     </div>
                                 </div>
                             </div>
@@ -38,8 +39,9 @@
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="sorting">Priorità</label>
+                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                         <select class="full-width selectpicker" placeholder="Seleziona la priorità" data-init-plugin="selectize" tabindex="-1" title="sortingId" name="sortingId" id="sortingId">
-                                            <?php foreach ($sorting as $val): ?>
+                                            <?php foreach ($sortingPriority as $val): ?>
                                                 <option value="<?php echo $val->id ?>" required
                                                     <?php echo ($val->id == $tag->sortingPriorityId) ? 'selected="selected"' : ""; ?> >
                                                     <?php echo $val->priority . ""?></option>
@@ -48,17 +50,14 @@
                                     </div>
                                 </div>
                             </div>
-
                             <?php
                             foreach ($langs as $lang):
                                 if(isset($name)) unset($name);
-                                foreach($tagTrans as $valTrans){
-                                    if($valTrans->langId == $lang->id){
-                                        $name = $valTrans->name;
+                                foreach($tagTrans as $val){
+                                    if($val->langId == $lang->id){
+                                        $name = $val->name;
                                     }
-                                }
-
-                                ?>
+                                }?>
                                 <h5><?php echo strtoupper($lang->name); ?></h5>
                                 <div class="row clearfix">
                                     <div class="col-md-4">

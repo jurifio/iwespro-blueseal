@@ -969,9 +969,7 @@
             },
             "methods": [
                 "GET",
-                "PUT",
-                "POST",
-                "DELETE"
+                "PUT"
             ]
         },
         {
