@@ -6,6 +6,7 @@ use bamboo\addon\ebay\core\AEbayCategory;
 use bamboo\addon\ebay\core\AEbaySite;
 use bamboo\addon\ebay\api\trading\enum\CEbayCountryCodeEnum;
 use bamboo\addon\ebay\api\trading\enum\CEbayHitCounterCodeEnum;
+use bamboo\addon\ebay\api\trading\enum\CEbayInventoryTrackingMethodCodeEnum;
 
 /**
  * Class CEbayItemType
