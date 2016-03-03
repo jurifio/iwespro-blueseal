@@ -1,6 +1,6 @@
 <?php
 
-namespace redpanda\blueseal\ebay\trading\types;
+namespace bamboo\addon\ebay\trading\calls;
 
 /**
  * Class CEbayDiscountPriceInfoType

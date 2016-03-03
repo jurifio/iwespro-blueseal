@@ -1,6 +1,6 @@
 <?php
 
-namespace redpanda\blueseal\ebay\calls\trading\types;
+namespace bamboo\addon\ebay\trading\calls;
 
 /**
  * Class CEbayBuyerRequirementDetailsType

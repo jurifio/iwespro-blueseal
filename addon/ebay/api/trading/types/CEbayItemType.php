@@ -1,9 +1,9 @@
 <?php
 
-namespace redpanda\blueseal\ebay\trading\types;
+namespace bamboo\addon\ebay\api\trading\types;
 use bamboo\addon\ebay\core\AEbayCategory;
 use bamboo\addon\ebay\core\AEbaySite;
-use redpanda\blueseal\ebay\calls\trading\enum\CEBayCountryCodeEnum;
+use bamboo\addon\ebay\api\trading\enum\CEBayCountryCodeEnum;
 
 /**
  * Class CEbayItemType
