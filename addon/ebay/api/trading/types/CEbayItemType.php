@@ -36,11 +36,11 @@ class CEbayItemType
     protected $conditionDescription;
     /** @var int */
     protected $conditionId;
-    /** @var CEBayCountryCodeEnum */
+    /** @var CEbayCountryCodeEnum */
     protected $country;
     /** @var array (string values) */
     protected $crossBorderTrade;
-    /** @var  CEBayCountryCodeEnum */
+    /** @var  CEbayCountryCodeEnum */
     protected $currency;
     /** @var string */
     protected $description;

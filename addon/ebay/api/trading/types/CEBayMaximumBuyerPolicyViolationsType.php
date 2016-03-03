@@ -2,6 +2,8 @@
 
 namespace bamboo\addon\ebay\api\trading\calls\types;
 
+use bamboo\addon\ebay\api\trading\enum\CEbayPeriodCodeEnum;
+
 /**
  * Class CEbayMaximumBuyerPolicyViolationsType
  * @package bamboo\addon\ebay\api\trading\calls\types
@@ -18,8 +20,8 @@ namespace bamboo\addon\ebay\api\trading\calls\types;
 class CEbayMaximumBuyerPolicyViolationsType
 {
    /** @var int */
-   public $count;
-   /** @var periodCodeType */
-   public $period;
+   protected $count;
+   /** @var CEbayPeriodCodeEnum */
+   protected $period;
 
 }

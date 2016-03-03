@@ -18,17 +18,21 @@ namespace bamboo\addon\ebay\api\trading\calls\types;
 class CEbayBuyerRequirementDetailsType
 {
     /** @var bool */
-   public $linkedPayPalAccount;
-   /** @var  maximumBuyerPolicyViolationsType */
-   public $maximumBuyerPolicyViolations;
+   protected $linkedPayPalAccount;
+   /** @var CEbayMaximumBuyerPolicyViolationsType */
+   protected $maximumBuyerPolicyViolations;
+   /** @var CEbayMaximumItemRequirementsType */
+   protected $maximumItemRequirements;
+   /** @var CEbayMaximumUnpaidItemStrikesInfoType */
+   protected $maximumUnpaidItemStrikesInfo;
    /** @var int */
-   public $count;
-   /** @var periodCodeType */
-   public $period;
-   /** @var maximumItemRequirementsType */
-   public $maximumItemRequirements;
-   /** @var maximumUnpaidItemStrikesInfoType */
-   public $maximumUnpaidItemStrikesInfo;
+   protected $minimumFeedbackScore;
+   /** @var bool */
+   protected $shipToRegistrationCountry;
+   /** @var CEbayVerifiedUserRequirementsType */
+   protected $verifiedUserRequirements;
+   /** @var bool */
+   protected $zeroFeedbackScore;
 
 
 }

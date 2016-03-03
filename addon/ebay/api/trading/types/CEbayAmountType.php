@@ -1,11 +1,11 @@
 <?php
 
 namespace bamboo\addon\ebay\api\trading\calls\types;
-
 use bamboo\addon\ebay\core\IEbayValueType;
+use bamboo\addon\ebay\api\trading\enum\CEbayCurrencyCodeEnum;
 
 /**
- * Class CEbayDiscountPriceInfoType
+ * Class CEbayAmountType
  * @package bamboo\addon\ebay\api\trading\calls\types
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -21,7 +21,7 @@ class CEbayAmountType implements IEbayValueType
 {
     /** @var double */
     protected $value;
-    /** @var CEBayCurrencyCodeEnum */
+    /** @var CEbayCurrencyCodeEnum */
     protected $currencyId;
 
     /** @return float */

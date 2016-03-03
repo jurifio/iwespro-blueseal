@@ -1,10 +1,8 @@
 <?php
 
 namespace bamboo\addon\ebay\api\trading\calls\types;
-use bamboo\addon\ebay\api\trading\enum\CEBayPeriodCodeEnum;
-
 /**
- * Class CEbayMaximumUnpaidItemStrikesInfoType
+ * Class CEbayVerifiedUserRequirementsType
  * @package bamboo\addon\ebay\api\trading\calls\types
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -17,11 +15,11 @@ use bamboo\addon\ebay\api\trading\enum\CEBayPeriodCodeEnum;
  * @since 1.0
  */
 
-class CEbayMaximumUnpaidItemStrikesInfoType
+class CEbayVerifiedUserRequirementsType
 {
    /** @var int */
-   protected $count;
-   /** @var CEbayPeriodCodeEnum */
-   protected $period;
+   protected $minimumFeedbackScore;
+   /** @var bool */
+   protected $verifiedUser;
 
 }
