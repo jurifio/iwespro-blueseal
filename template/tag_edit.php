@@ -25,7 +25,7 @@
                         <h5>Modifica tag</h5>
                     </div>
                     <div class="panel-body">
-                        <form id="form-project" enctype="multipart/form-data" role="form" action="" method="put" autocomplete="off">
+                        <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post" autocomplete="off">
                             <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
@@ -60,7 +60,7 @@
                                 }?>
                                 <h5><?php echo strtoupper($lang->name); ?></h5>
                                 <div class="row clearfix">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Nome Tag</label>
                                             <input type="text" class="form-control" name="tagName_<?php echo $lang->id; ?>" value="<?php echo isset($name) ? $name : "" ?>">
