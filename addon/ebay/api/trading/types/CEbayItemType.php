@@ -24,6 +24,8 @@ class CEbayItemType
     protected $applicationData;
     /** @var bool */
     protected $autoPay;
+    /** @var CEBayBuyerRequirementDetails */
+    protected $buyerRequirementDetails;
     /** @var bool */
     protected $categoryBasedAttributePrefill;
     /** @var bool */
@@ -44,6 +46,7 @@ class CEbayItemType
     protected $disableBuyerRequirements;
     /** @var CEbayDiscountPriceInfoType */
     protected $discountPriceInfo;
+
 
     /**
      * @param AEbayCategory $category

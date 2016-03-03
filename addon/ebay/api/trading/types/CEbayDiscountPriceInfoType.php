@@ -14,6 +14,8 @@ namespace redpanda\blueseal\ebay\calls\trading\types;
  *
  * @date 02/03/2016
  * @since 1.0
+ *
+ * TODO: Vedi http://developer.ebay.com/Devzone/XML/docs/Reference/ebay/AddFixedPriceItem.html#Request.Item.DiscountPriceInfo
  */
 class CEbayDiscountPriceInfoType
 {
