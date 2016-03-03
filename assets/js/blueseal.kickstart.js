@@ -1,14 +1,13 @@
 /**
  * Created by Fabrizio Marconi on 14/10/2015.
  */
-$(document).on('ready', function () {
+/**$(document).on('ready', function () {
 	updateOnlineUsers();
 	setInterval(function () {
 		updateOnlineUsers();
 	}, 30000);
 
 });
-
 
 function updateOnlineUsers() {
 	var sessionMonitor = $('#sessionMonitor');
@@ -21,4 +20,4 @@ function updateOnlineUsers() {
 			sessionMonitor.html('<h2>' + content + ' Utenti Online</h2>');
 		});
 	});
-}
+}*/

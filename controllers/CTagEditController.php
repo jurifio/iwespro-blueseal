@@ -19,19 +19,18 @@ class CTagEditController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/tag_edit.php');
 
         $tagId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
-        $tagRepo = $this->app->repoFactory->create('Tag');
-        $tag = $tagRepo->findOneBy(['id'=>$tagId]);
-        $sorting = $this->app->repoFactory->create('SortingPriority')->findAll();
+        $tag = $this->app->repoFactory->create('Tag')->findOneBy(['id' => $tagId]);
+        $tagTrans = $this->app->repoFactory->create('TagTranslation')->findBy(['tagId' => $tagId]);
 
-        $langs = $this->app->repoFactory->create('Lang')->findAll();
-        $tagTrans = $this->app->repoFactory->create('TagTranslation')->findBy(['tagId'=>$tagId]);
+        $sortingPriority = $this->app->entityManagerFactory->create('SortingPriority')->findAll();
+        $langs = $this->app->entityManagerFactory->create('Lang')->findAll();
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'tag' => $tag,
-            'sorting' => $sorting,
-            'langs' => $langs,
             'tagTrans' => $tagTrans,
+            'langs' => $langs,
+            'sortingPriority' => $sortingPriority,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);
@@ -49,7 +48,7 @@ class CTagEditController extends ARestrictedAccessRootController
             foreach ($data as $k => $v) {
                 if(strstr($k, 'tagName_') && $v != '') {
                     $key = explode ('_',$k);
-                    $tagTrans = $tagTransRepo->findBy(['tagId'=>$tagId,'langId'=>$key[1]]);
+                    $tagTrans = $tagTransRepo->findOneBy(['tagId'=>$tagId,'langId'=>$key[1]]);
                     if (isset($tagTrans)) {
                         $tagTrans->name = $v;
                         $tagTrans->update();
@@ -82,5 +81,4 @@ class CTagEditController extends ARestrictedAccessRootController
 
         }
     }
-
 }
