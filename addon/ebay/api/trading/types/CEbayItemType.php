@@ -7,7 +7,7 @@ use bamboo\addon\ebay\core\AEbaySite;
 
 /**
  * Class CEbayItemType
- * @package redpanda\blueseal\ebay\calls\trading\types
+ * @package bamboo\addon\ebay\api\trading\calls\types
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

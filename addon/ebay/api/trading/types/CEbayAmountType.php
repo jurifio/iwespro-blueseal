@@ -6,7 +6,7 @@ use redpanda\blueseal\ebay\calls\trading\enum\CEBayCurrencyCodeEnum;
 
 /**
  * Class CEbayDiscountPriceInfoType
- * @package redpanda\blueseal\ebay\calls\trading\types
+ * @package bamboo\addon\ebay\api\trading\calls\types
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *

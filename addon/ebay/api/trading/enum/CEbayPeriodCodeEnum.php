@@ -6,7 +6,7 @@ use bamboo\core\base\CEnum;
 
 /**
  * Class CEBayPeriodCodeEnum
- * @package redpanda\blueseal\ebay\calls\trading\enum
+ * @package bamboo\addon\ebay\api\trading\enum
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *
