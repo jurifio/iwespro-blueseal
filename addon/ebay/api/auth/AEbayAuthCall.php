@@ -2,6 +2,7 @@
 
 
 namespace bamboo\addon\ebay\auth;
+use bamboo\addon\ebay\core\AXMLApiCall;
 
 
 /**
@@ -14,7 +15,7 @@ namespace bamboo\addon\ebay\auth;
  *
  * @since ${VERSION}
  */
-abstract class AEbayAuthCall
+abstract class AEbayAuthCall extends AXMLApiCall
 {
 
 }

@@ -13,7 +13,8 @@ namespace redpanda\blueseal\ebay\calls\trading;
  * Proprietary and confidential
  *
  * @date 16/02/2016
- * @since 1.0
+ * @since 1.0+
+ * @deprecated
  */
 class CGetSessionId extends ABaseRequest
 {
