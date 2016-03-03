@@ -14,6 +14,7 @@ namespace bamboo\app\business;
  *
  * @date 18/01/2016
  * @since 1.0
+ * @deprecated 
  */
 class eBaySeller
 {

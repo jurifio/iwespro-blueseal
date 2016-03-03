@@ -17,6 +17,7 @@ use redpanda\core\exceptions\RedPandaEbayException;
  *
  * @date 16/02/2016
  * @since 1.0
+ * @deprecated
  */
 class CEBayTradingApi
 {

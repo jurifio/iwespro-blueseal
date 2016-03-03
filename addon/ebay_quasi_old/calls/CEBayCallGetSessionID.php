@@ -14,6 +14,7 @@ use bamboo\addon\ebay\calls\AEBayBaseCall;
  * Proprietary and confidential
  *
  * @since ${VERSION}
+ * @deprecated
  */
 class CEBayCallGetSessionID extends AEBayBaseCall
 {

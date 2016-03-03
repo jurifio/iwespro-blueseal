@@ -2,6 +2,7 @@
 
 
 namespace bamboo\addon\ebay\trading;
+use bamboo\addon\ebay\core\AXMLApiCall;
 
 
 /**
@@ -14,7 +15,7 @@ namespace bamboo\addon\ebay\trading;
  *
  * @since ${VERSION}
  */
-abstract class AEbayTradingCall
+abstract class AEbayTradingCall extends AXMLApiCall
 {
 
 }

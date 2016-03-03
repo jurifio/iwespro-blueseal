@@ -17,6 +17,7 @@ use bamboo\core\base\CConfig;
  *
  * @date 18/01/2016
  * @since 1.0
+ * @deprecated
  */
 class eBay
 {

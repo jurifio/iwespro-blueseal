@@ -3,7 +3,7 @@
 namespace bamboo\addon\ebay\core;
 
 /**
- * Class AEbaySite
+ * Interface IEbayValueType
  * @package bamboo\addon\ebay\core
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -12,10 +12,13 @@ namespace bamboo\addon\ebay\core;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 01/03/2016
+ * @date 02/03/2016
  * @since 1.0
  */
-class AEbaySite
+interface IEbayValueType
 {
-    protected $categories;
+    /** @return mixed */
+    public function getValue();
+    /** @return array */
+    public function getProperties();
 }

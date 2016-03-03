@@ -2,7 +2,7 @@
 
 
 namespace bamboo\addon\ebay\api\trading\calls;
-use bamboo\addon\ebay\core\AXMLApiCall;
+use bamboo\addon\ebay\trading\AEbayTradingCall;
 
 
 /**
@@ -15,7 +15,7 @@ use bamboo\addon\ebay\core\AXMLApiCall;
  *
  * @since ${VERSION}
  */
-class CEbayCallAddFixedPriceItem extends AXMLApiCall
+class CEbayCallAddFixedPriceItem extends AEbayTradingCall
 {
 	protected function build($indent = false) {
 		$x = new \XMLWriter();

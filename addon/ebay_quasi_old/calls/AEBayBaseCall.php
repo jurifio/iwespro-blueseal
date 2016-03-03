@@ -16,6 +16,7 @@ use bamboo\core\base\CToken;
  *
  * @date 16/02/2016
  * @since 1.0
+ * @deprecated
  */
 abstract class AEBayBaseCall
 {
