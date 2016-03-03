@@ -1,6 +1,8 @@
 <?php
 
 namespace bamboo\addon\ebay\api\trading\calls\types;
+use bamboo\addon\ebay\api\trading\enum\CEBayPeriodCodeEnum;
+
 /**
  * Class CEbayMaximumUnpaidItemStrikesInfoType
  * @package bamboo\addon\ebay\api\trading\calls\types
@@ -19,7 +21,7 @@ class CEbayMaximumUnpaidItemStrikesInfoType
 {
    /** @var int */
    public $count;
-   /** @var periodCodeType */
+   /** @var CEbayPeriodCodeEnum */
    public $period;
 
 }

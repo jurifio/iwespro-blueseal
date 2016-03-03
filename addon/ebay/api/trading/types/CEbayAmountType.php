@@ -21,7 +21,7 @@ class CEbayAmountType implements IEbayValueType
 {
     /** @var double */
     protected $value;
-    /** @var CEBayCurrencyCodeEnum */
+    /** @var CEbayCurrencyCodeEnum */
     protected $currencyId;
 
     /** @return float */

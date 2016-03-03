@@ -5,7 +5,7 @@ namespace bamboo\addon\ebay\api\trading\enum;
 use bamboo\core\base\CEnum;
 
 /**
- * Class CEBayCountryCodeEnum
+ * Class CEbayCountryCodeEnum
  * @package bamboo\addon\ebay\api\trading\enum
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -17,7 +17,7 @@ use bamboo\core\base\CEnum;
  * @date 16/03/2016
  * @since 1.0
  */
-class CEBayCountryCodeEnum extends CEnum
+class CEbayCountryCodeEnum extends CEnum
 {
     const CODE_AA = 'AA';
     const CODE_AD = 'AD';

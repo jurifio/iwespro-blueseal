@@ -5,7 +5,7 @@ namespace bamboo\addon\ebay\api\trading\enum;
 use bamboo\core\base\CEnum;
 
 /**
- * Class CEBayCurrencyCodeEnum
+ * Class CEbayCurrencyCodeEnum
  * @package bamboo\addon\ebay\api\trading\enum
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -17,7 +17,7 @@ use bamboo\core\base\CEnum;
  * @date 16/03/2016
  * @since 1.0
  */
-class CEBayCurrencyCodeEnum extends CEnum
+class CEbayCurrencyCodeEnum extends CEnum
 {
     const CODE_ADP='ADP';
     const CODE_AED='AED';
