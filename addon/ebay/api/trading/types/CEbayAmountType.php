@@ -1,6 +1,6 @@
 <?php
 
-namespace redpanda\blueseal\ebay\calls\trading\types;
+namespace redpanda\blueseal\ebay\trading\types;
 use bamboo\addon\ebay\core\IEbayValueType;
 use redpanda\blueseal\ebay\calls\trading\enum\CEBayCurrencyCodeEnum;
 
