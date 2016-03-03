@@ -1,9 +1,9 @@
 <?php
 
-namespace bamboo\addon\ebay\api\trading\types;
+namespace bamboo\addon\ebay\api\trading\calls\types;
+
 use bamboo\addon\ebay\core\AEbayCategory;
 use bamboo\addon\ebay\core\AEbaySite;
-use bamboo\addon\ebay\api\trading\enum\CEBayCountryCodeEnum;
 
 /**
  * Class CEbayItemType
@@ -162,15 +162,6 @@ class CEbayItemType
     protected $vin;
     /** @var string */
     protected $vrm;
-
-    public function ciccio()
-    {
-        $x=[];
-        $y=['VIN'=>'vin'];
-        foreach ($this as $fld) {
-            $x[] = $fld;
-        }
-    }
 
     /**
      * @param AEbayCategory $category

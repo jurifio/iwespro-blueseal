@@ -1,6 +1,6 @@
 <?php
 
-namespace bamboo\addon\ebay\trading\calls;
+namespace bamboo\addon\ebay\api\trading\calls\types;
 
 /**
  * Class CEbayBuyerRequirementDetailsType

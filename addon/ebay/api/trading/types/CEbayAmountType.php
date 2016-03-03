@@ -1,7 +1,8 @@
 <?php
 
-namespace bamboo\addon\ebay\trading\calls;
-
+namespace redpanda\blueseal\ebay\trading\types;
+use bamboo\addon\ebay\core\IEbayValueType;
+use redpanda\blueseal\ebay\calls\trading\enum\CEBayCurrencyCodeEnum;
 
 /**
  * Class CEbayDiscountPriceInfoType
