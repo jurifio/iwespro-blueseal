@@ -19,16 +19,20 @@ class CEbayBuyerRequirementDetailsType
 {
     /** @var bool */
    public $linkedPayPalAccount;
-   /** @var  maximumBuyerPolicyViolationsType */
+   /** @var CEbayMaximumBuyerPolicyViolationsType */
    public $maximumBuyerPolicyViolations;
-   /** @var int */
-   public $count;
-   /** @var periodCodeType */
-   public $period;
-   /** @var maximumItemRequirementsType */
+   /** @var CEbayMaximumItemRequirementsType */
    public $maximumItemRequirements;
-   /** @var maximumUnpaidItemStrikesInfoType */
+   /** @var CEbayMaximumUnpaidItemStrikesInfoType */
    public $maximumUnpaidItemStrikesInfo;
+   /** @var int */
+   public $minimumFeedbackScore;
+   /** @var bool */
+   public $shipToRegistrationCountry;
+   /** @var CEbayVerifiedUserRequirementsType */
+   public $verifiedUserRequirements;
+   /** @var bool */
+   public $zeroFeedbackScore;
 
 
 }

@@ -2,7 +2,7 @@
 
 namespace bamboo\addon\ebay\api\trading\calls\types;
 /**
- * Class CEbayMaximumUnpaidItemStrikesInfoType
+ * Class CEbayVerifiedUserRequirementsType
  * @package bamboo\addon\ebay\api\trading\calls\types
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -15,11 +15,11 @@ namespace bamboo\addon\ebay\api\trading\calls\types;
  * @since 1.0
  */
 
-class CEbayMaximumUnpaidItemStrikesInfoType
+class CEbayVerifiedUserRequirementsType
 {
    /** @var int */
-   public $count;
-   /** @var periodCodeType */
-   public $period;
+   public $minimumFeedbackScore;
+   /** @var bool */
+   public $verifiedUser;
 
 }

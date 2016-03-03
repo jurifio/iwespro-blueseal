@@ -19,7 +19,7 @@ class CEbayMaximumBuyerPolicyViolationsType
 {
    /** @var int */
    public $count;
-   /** @var periodCodeType */
+   /** @var CEbayPeriodCodeEnum */
    public $period;
 
 }
