@@ -14,7 +14,7 @@ use bamboo\addon\ebay\trading\AEbayTradingCall;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 01/03/2016
+ * @date 03/03/2016
  * @since 1.0
  */
 class CEbayGetTokenStatus extends AEbayTradingCall
