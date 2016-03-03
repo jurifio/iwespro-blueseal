@@ -1,7 +1,8 @@
 <?php
 
 namespace bamboo\addon\ebay\api\trading\calls\types;
-use bamboo\addon\ebay\core\IEbayValueType;
+
+use bamboo\addon\ebay\api\trading\enum\CEbayCharityStatusCodeEnum;
 
 
 /**
@@ -33,6 +34,7 @@ class CEbayCharityType
     protected $logoURL;
     /** @var string */
     protected $mission;
+    /** @var CEbayCharityStatusCodeEnum */
     protected $status;
 
 }

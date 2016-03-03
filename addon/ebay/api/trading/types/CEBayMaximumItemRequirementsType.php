@@ -18,8 +18,8 @@ namespace bamboo\addon\ebay\api\trading\calls\types;
 class CEbayMaximumItemRequirementsType
 {
    /** @var int */
-   public $maximumItemCount;
+   protected $maximumItemCount;
    /** @var int */
-   public $minimumFeedbackScore;
+   protected $minimumFeedbackScore;
 
 }

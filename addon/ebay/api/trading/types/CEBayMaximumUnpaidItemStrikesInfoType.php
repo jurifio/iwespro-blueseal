@@ -20,8 +20,8 @@ use bamboo\addon\ebay\api\trading\enum\CEBayPeriodCodeEnum;
 class CEbayMaximumUnpaidItemStrikesInfoType
 {
    /** @var int */
-   public $count;
+   protected $count;
    /** @var CEbayPeriodCodeEnum */
-   public $period;
+   protected $period;
 
 }

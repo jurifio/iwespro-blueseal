@@ -18,8 +18,8 @@ namespace bamboo\addon\ebay\api\trading\calls\types;
 class CEbayVerifiedUserRequirementsType
 {
    /** @var int */
-   public $minimumFeedbackScore;
+   protected $minimumFeedbackScore;
    /** @var bool */
-   public $verifiedUser;
+   protected $verifiedUser;
 
 }
