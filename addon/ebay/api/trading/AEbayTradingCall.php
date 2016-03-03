@@ -17,7 +17,14 @@ use bamboo\addon\ebay\core\AXMLApiCall;
  * @date 01/03/2016
  * @since 1.0
  */
-abstract class AEbayTradingCall extends AXMLApiCall
+abstract class AEbayTradingCall
 {
-
+	/** @var string */
+	protected $errorLanguage;
+	/** @var string */
+	protected $messageId;
+	/** @var string */
+	protected $version;
+	/** @var CEbayWarningLevelCodeType */
+	protected $warningLevel;
 }
