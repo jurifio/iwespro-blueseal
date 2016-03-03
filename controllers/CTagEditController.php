@@ -48,7 +48,7 @@ class CTagEditController extends ARestrictedAccessRootController
             foreach ($data as $k => $v) {
                 if(strstr($k, 'tagName_') && $v != '') {
                     $key = explode ('_',$k);
-                    $tagTrans = $tagTransRepo->findBy(['tagId'=>$tagId,'langId'=>$key[1]]);
+                    $tagTrans = $tagTransRepo->findOneBy(['tagId'=>$tagId,'langId'=>$key[1]]);
                     if (isset($tagTrans)) {
                         $tagTrans->name = $v;
                         $tagTrans->update();
