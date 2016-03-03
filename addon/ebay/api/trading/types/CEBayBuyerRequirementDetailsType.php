@@ -18,5 +18,17 @@ namespace bamboo\addon\ebay\api\trading\calls\types;
 class CEbayBuyerRequirementDetailsType
 {
     /** @var bool */
-   protected $linkedPayPalAccount;
+   public $linkedPayPalAccount;
+   /** @var  maximumBuyerPolicyViolationsType */
+   public $maximumBuyerPolicyViolations;
+   /** @var int */
+   public $count;
+   /** @var periodCodeType */
+   public $period;
+   /** @var maximumItemRequirementsType */
+   public $maximumItemRequirements;
+   /** @var maximumUnpaidItemStrikesInfoType */
+   public $maximumUnpaidItemStrikesInfo;
+
+
 }

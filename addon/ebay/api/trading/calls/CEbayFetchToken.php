@@ -2,7 +2,7 @@
 
 
 namespace bamboo\addon\ebay\trading\calls;
-use bamboo\addon\ebay\auth\AEbayAuthCall;
+use bamboo\addon\ebay\trading\AEbayTradingCall;
 
 
 /**
@@ -15,7 +15,7 @@ use bamboo\addon\ebay\auth\AEbayAuthCall;
  *
  * @since ${VERSION}
  */
-class CEbayFetchToken extends AEbayAuthCall
+class CEbayFetchToken extends AEbayTradingCall
 {
 
 }
