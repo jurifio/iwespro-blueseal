@@ -2,9 +2,9 @@
 <html>
 <head>
     <?php if($error): ?>
-        <title>Conferma ordine: <?php echo $orderLine->orderId.'-'.$orderLine->id; ?></title>
-    <?php else: ?>
         <title>Conferma ordine fallita </title>
+    <?php else: ?>
+        <title>Conferma ordine: <?php echo $orderLine->orderId.'-'.$orderLine->id; ?></title>
     <?php endif;?>
 
     <?php include "parts/head.php" ?>
