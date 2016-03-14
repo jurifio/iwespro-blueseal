@@ -64,7 +64,7 @@ class CProductEditController extends CProductManageController
         $gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", array());
 
         $em = $this->app->entityManagerFactory->create('ProductSheet');
-        $productSheets = $em->query('SELECT DISTINCT `name` FROM ProductSheet ORDER BY `name`')->fetchAll();
+        $productSheets = $em->query('SELECT DISTINCT `name` FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();
 
         /** LETTURA GET PER PREPARARE MODIFICA */
         if (isset($_GET) && isset($_GET['id']) && isset($_GET['productVariantId'])) {

@@ -165,7 +165,7 @@
                                                 <select class="full-width selectpicker" placeholder="Seleziona un dettaglio" data-init-plugin="selectize"  title="" name="Product_dataSheet" id="Product_dataSheet">
                                                     <option></option>
                                                     <?php foreach ($productSheets as $productSheet): ?>
-                                                    <option value="<?php echo $productSheet['name'] ?>"> <?php echo $productSheet['name'] ?></option>
+                                                    <option value="<?php echo $productSheet->id ?>"> <?php echo $productSheet->name ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
