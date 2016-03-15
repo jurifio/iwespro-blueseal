@@ -2,8 +2,10 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\db\pandaorm\entities\CEntityManager;
+use bamboo\core\db\pandaorm\entities\IEntity;
 use bamboo\core\exceptions\RedPandaException;
 use bamboo\core\traits\TFormInputValidate;
+use bamboo\core\utils\slugify\CSlugify;
 
 /**
  * Class CProductAddController
@@ -26,7 +28,7 @@ class CProductManageController extends ARestrictedAccessRootController
     public function put()
     {
         $fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
-
+	    $slugify = new CSlugify();
         $post = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
         /** LOGICHE DI UPDATE*/
@@ -108,24 +110,46 @@ class CProductManageController extends ARestrictedAccessRootController
 
             /** UPDATE DEI DETTAGLI PRODOTTO */
             if ($this->isValidInput("Product_dataSheet", $post)) {
+	            $detailRepo = $this->app->repoFactory->create('ProductDetail');
+	            $detailTranslationRepo = $this->app->repoFactory->create('ProductDetailTranslation');
+	            $productSheetActualRepo = $this->app->repoFactory->create('ProductSheetActual');
                 /** INSERIMENTO DETTAGLI PRODOTTO */
-                $this->app->dbAdapter->delete("ProductHasProductAttributeValue", $productIdsExt,'AND', true);
-	            $productEdit->sheetName = $post['Product_dataSheet'];
-	            $productEdit->update();
-                //$this->app->dbAdapter->update("Product", array("sheetName" => $post['Product_dataSheet']), $productIds);
+	            if($post['Product_dataSheet'] != $productEdit->productSheetPrototype->id) {
+		            foreach($productEdit->productSheetActual as $val) $val->delete();
+		            $productEdit->productSheetPrototypeId = $post['Product_dataSheet'];
+		            unset($productEdit->productSheetPrototype);
+		            $productEdit->update();
+	            }
                 foreach ($post as $key => $input) {
                     $inputName = explode('_', $key);
                     if ($inputName[0] != 'ProductDetail') continue;
-                    $attrbuteValue = $this->app->repoFactory->create('ProductAttributeValue')->findOneBy(['langId' => $inputName[1], 'productAttributeId' => $inputName[2], 'name' => trim($input)]);
-                    if (is_null($attrbuteValue)) {
-                        $attrbuteValueId = $this->app->dbAdapter->insert('ProductAttributeValue', ['langId' => $inputName[1], 'productAttributeId' => $inputName[2], 'name' => trim($input)]);
-                    } else {
-	                    $attrbuteValueId  = $attrbuteValue->id;
+	                /** cerco il valore del dettaglio $detail */
+	                $detail = $detailRepo->findOneBy(['slug' => $slugify->slugify($input)]);
+                    if (is_null($detail)) {
+	                    $detail = $detailRepo->getEmptyEntity();
+	                    $detail->slug = $slugify->slugify($input);
+	                    $detail->id = $detail->insert();
+	                    $detailTranslation = $detailTranslationRepo->getEmptyEntity();
+	                    $detailTranslation->productDetailId = $detail->id;
+	                    $detailTranslation->name = $input;
+	                    $detailTranslation->langId = $inputName[1];
+	                    $detailTranslation->insert();
                     }
-                    $insertData = $productIdsExt;
-                    $insertData['productAttributeId'] = $inputName[2];
-                    $insertData['productAttributeValueId'] = $attrbuteValueId;
-                    $this->app->dbAdapter->insert("ProductHasProductAttributeValue", $insertData);
+	                /** cerco all'interno della sheet se esiste già un dettaglio con lo stesso label*/
+	                $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $inputName[2]);
+	                if(!$actual instanceof IEntity) {
+		                /** non esiste, lo aggiungo */
+		                $actual = $productSheetActualRepo->getEmptyEntity();
+		                $actual->productId = $productEdit->id;
+		                $actual->productVariantId = $productEdit->productVariantId;
+		                $actual->productDetailLabelId = $inputName[2];
+		                $actual->productDetailId = $detail->id;
+		                $actual->insert();
+	                } elseif($actual->productDetailId != $detail->id) {
+		                /** esiste ma è diverso, lo aggiorno */
+	                    $actual->productDetailId = $detail->id;
+		                $actual->update();
+	                }
                 }
             }
 
@@ -162,20 +186,18 @@ class CProductManageController extends ARestrictedAccessRootController
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
                 if ($inputName[0] != 'ProductDescription') continue;
-                $updateData = array();
-	            $productDescription = $productEdit->productDescription->findOneByKeys(['langId'=>$inputName[1],'marketplaceId'=>1]);
-	            if($productDescription){
-		            $productDescription->description = $input;
-		            $productDescription->update();
+	            $productDescriptionTranslation = $productEdit->productDescriptionTranslation->findOneByKeys(['langId'=>$inputName[1],'marketplaceId'=>1]);
+	            if($productDescriptionTranslation instanceof IEntity){
+		            $productDescriptionTranslation->description = $input;
+		            $productDescriptionTranslation->update();
 	            } else {
-		            $where = array();
-		            $where = $productIdsExt;
-		            $where['langId'] = $inputName[1];
-		            $where['marketplaceId'] = 1;
-		            $where['description'] = $input;
-		            try {
-			            $this->app->dbAdapter->insert("ProductDescription", $updateData + $where);
-		            } catch (\Exception $e) {}
+		            $productDescriptionTranslation = $this->app->repoFactory->create('ProductDescriptionTranslation')->getEmptyEntity();
+		            $productDescriptionTranslation->langId = $inputName[1];
+		            $productDescriptionTranslation->marketplaceId = 1;
+		            $productDescriptionTranslation->description = $input;
+		            $productDescriptionTranslation->productId = $productEdit->id;
+		            $productDescriptionTranslation->productVariantId = $productEdit->productVariantId;
+		            $productDescriptionTranslation->insert();
                 }
             }
             /** INSERIMENTO SHOP */
