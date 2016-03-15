@@ -69,8 +69,8 @@ class CProductRouletteController extends CProductManageController
 		$em = $this->app->entityManagerFactory->create('ProductColorGroup');
 		$gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", []);
 
-		$em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
-		$productSheets = $em->query('SELECT DISTINCT `name` FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();
+        $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
+        $productSheets = $em->query('SELECT id FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();
 
 		$em = $this->app->entityManagerFactory->create('ProductStatus');
 		$productStatuses = $em->findAll('limit 99', '');

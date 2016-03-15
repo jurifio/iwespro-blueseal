@@ -1,7 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
-use bamboo\domain\entities\CShop;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
@@ -37,57 +36,53 @@ class CProductEditController extends CProductManageController
 		    throw new \Exception('You are not editing anything');
 	    }
 
-        /** LOGICA */
-        $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
-        $fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
-        $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl') . '/';
-        $elenco = $bluesealBase . "prodotti";
-        $nuovoprodotto = $bluesealBase . "prodotti/aggiungi";
-        $productEdit = null;
-        $productRand = null;
-        $qrMessage = null;
+		/** LOGICA */
+		$bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
+		$fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
+		$dummyUrl = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyUrl') . '/';
+		$elenco = $bluesealBase . "prodotti";
+		$nuovoprodotto = $bluesealBase . "prodotti/modifica";
+		$productEdit = null;
+		$productRand = null;
+		$qrMessage = null;
 
-        $em = $this->app->entityManagerFactory->create('ProductBrand');
-        $brands = $em->findAll(null, 'order by `name`');
+		$em = $this->app->entityManagerFactory->create('ProductBrand');
+		$brands = $em->findAll(null, 'order by `name`');
 
-        $em = $this->app->entityManagerFactory->create('Lang');
-        $langs = $em->findAll();
+		$em = $this->app->entityManagerFactory->create('Lang');
+		$langs = $em->findAll();
 
-        $em = $this->app->entityManagerFactory->create('ProductSeason');
-        $seasons = $em->findAll();
+		$em = $this->app->entityManagerFactory->create('ProductSeason');
+		$seasons = $em->findAll();
 
-        $em = $this->app->entityManagerFactory->create('ProductSizeGroup');
-        $sizesGroups = $em->findAll(null, 'order by locale, macroName, `name`');
+		$em = $this->app->entityManagerFactory->create('ProductSizeGroup');
+		$sizesGroups = $em->findAll(null, 'order by locale, macroName, `name`');
 
-        $em = $this->app->entityManagerFactory->create('Shop');
-        $shops = $em->findAll(null, 'order by `name`');
+		$em = $this->app->entityManagerFactory->create('Shop');
+		$shops = $em->findAll(null, 'order by `name`');
 
-        $em = $this->app->entityManagerFactory->create('Tag');
-        $tag = $em->findAll(null, 'order by `slug`');
+		$em = $this->app->entityManagerFactory->create('Tag');
+		$tag = $em->findAll(null, 'order by `slug`');
 
-        $em = $this->app->entityManagerFactory->create('ProductColorGroup');
-        $gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", array());
+		$em = $this->app->entityManagerFactory->create('ProductColorGroup');
+		$gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", []);
 
         $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
-        $productSheets = $em->query('SELECT id FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();
+        $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');
 
 	    $em = $this->app->entityManagerFactory->create('Product', false);
 	    $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));
-	    $this->app->vendorLibraries->load("aztec");
+	    //$this->app->vendorLibraries->load("aztec");
 	    $qrMessage = $productEdit->getAztecCode();
 	    $qrMessage = base64_encode($qrMessage);
-        $em = $this->app->entityManagerFactory->create('ProductStatus');
+
+	    $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll();
 
-        $statuses = [];
-        $statuses['selected'] = $productEdit->status;
-        foreach($productStatuses as $status){
-            $statuses[$status->code] = $status->name;
-        }
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'statuses' => $statuses,
+            'statuses' => $productStatuses,
             'tags' => $tag,
             'dummyUrl' => $dummyUrl,
             'fileFolder' => $fileFolder,
@@ -104,7 +99,6 @@ class CProductEditController extends CProductManageController
             'sizesGroups' => $sizesGroups,
             'gruppicolore' => $gruppicolore,
             'productSheets' => $productSheets,
-            'detailsGroups' => $detailsGroups,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);

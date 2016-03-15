@@ -173,13 +173,13 @@
         order: [[6, "desc"]],
         columns: [
             {
-                data: "code",
+                data: "id",
                 orderable: true
             }, {
                 data: "shop",
                 orderable: true
             }, {
-                data: "cpf",
+                data: "code",
                 orderable: true
             }, {
                 data: "dummyPicture",

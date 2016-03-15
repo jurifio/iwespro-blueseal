@@ -81,12 +81,6 @@ class CProductListAjaxController extends AAjaxController
 
         foreach($prodotti as $val){
 
-            if(isset($statuses[$val->status])) {
-                $enable = $statuses[$val->status];
-            } else {
-                $enable = 'Sconosciuto';
-            }
-
             $cats = [];
             foreach($val->productCategoryTranslation as $cat){
                 $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
@@ -110,7 +104,7 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['dummyPicture'] = '<img width="80" src="'.$img.'" />';
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
             $response['data'][$i]['category'] = implode(',<br>',$cats);
-            $response['data'][$i]['status'] = $enable;
+            $response['data'][$i]['status'] = $val->productStatus->name;
             $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
 
             $i++;

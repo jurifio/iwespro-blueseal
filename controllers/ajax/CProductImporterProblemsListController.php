@@ -106,9 +106,9 @@ class CProductImporterProblemsListController extends AAjaxController
             $creationDate = new \DateTime($val->creationDate);
 
             $response['aaData'][$i]["DT_RowClass"] = 'colore';
-            $response['aaData'][$i]["code"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a></span>' : $val->id.'-'.$val->productVariantId;
+            $response['aaData'][$i]["id"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a></span>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["shop"] = implode(',',$shops);
-            $response['aaData'][$i]["cpf"] = $val->itemno.' # '.$val->productVariant->name;
+            $response['aaData'][$i]["code"] = $val->itemno.' # '.$val->productVariant->name;
             $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="'.$dummyUrl.'/'.$val->dummyPicture.'">' : "";
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
             //$response['aaData'][$i][$k++] = implode(',<br>',$cats);

@@ -184,7 +184,7 @@
                                                 <select class="full-width selectpicker" placeholder="Seleziona una scheda prodotto" data-init-plugin="selectize"  title="" name="Product_dataSheet" id="Product_dataSheet">
                                                     <option></option>
                                                     <?php foreach ($productSheets as $productSheet): ?>
-                                                        <option value="<?php echo $productSheet['name'] ?>" <?php if (isset($productEdit) && isset($productEdit->sheetName) && $productSheet['name'] == $productEdit->sheetName) echo "selected"; ?>> <?php echo $productSheet['name'] ?></option>
+                                                        <option value="<?php echo $productSheet->id ?>" <?php if($productSheet->id == $productEdit->productSheetPrototypeId) echo "selected"; ?>> <?php echo $productSheet->name ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -198,7 +198,7 @@
                                                 <?php foreach ($productEdit->productSheetPrototype->productDetailLabel as $detaillabel):  ?>
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
-                                                        <label for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->name ?></label>
+                                                        <label for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>
                                                         <?php if(isset($productEdit) && !is_null($productEdit->productSheetActual)) {
                                                                     $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId',$detaillabel->id);
                                                                     if($actual) {
@@ -237,7 +237,7 @@
                                                             <div class="form-group form-group-default">
 
                                                                 <label for="ProductName_1_name">Nome del prodotto</label>
-                                                                <?php if($productEdit->productNameTranslation && ($name = $productEdit->productNameTranslation->findOneByKey('langId',1))) ?>
+                                                                <?php if($productEdit->productNameTranslation != false  && ($name = $productEdit->productNameTranslation->findOneByKey('langId',1))) ?>
                                                                 <input autocomplete="off" type="text" class="form-control" id="ProductName_1_name" name="ProductName_1_name" value="<?php if($productEdit->productNameTranslation && ($name = $productEdit->productNameTranslation->findOneByKey('langId',1))) echo $name; ?>">
                                                             </div>
                                                         </div>
