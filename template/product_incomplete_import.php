@@ -38,15 +38,14 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>" id="productWithImporterProblems">
                             <thead>
                             <tr>
-                                <th class="center">Code</th>
+                                <th class="center">Codice</th>
                                 <th class="center">Shop</th>
-                                <th class="center">ExtID</th>
+                                <th class="center">CPF</th>
                                 <th class="center">Immagine</th>
                                 <th class="center">Brand</th>
                                 <th class="center">Stato</th>
                                 <th class="center">Creazione</th>
                                 <th class="center">Problemi</th>
-                                <th class="center">Strumenti</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -179,7 +179,7 @@
                 data: "shop",
                 orderable: true
             }, {
-                data: "externalId",
+                data: "cpf",
                 orderable: true
             }, {
                 data: "dummyPicture",
@@ -196,10 +196,6 @@
                 orderable: true
             }, {
                 data: "problems",
-                orderable: false,
-                searchable: false
-            }, {
-                data: "tools",
                 orderable: false,
                 searchable: false
             }

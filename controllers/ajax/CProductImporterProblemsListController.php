@@ -101,19 +101,20 @@ class CProductImporterProblemsListController extends AAjaxController
             $tools .= $this->app->getUser()->hasPermission("/admin/product/list") ? '<span class="tools-spaced"><a href="'.$bluesealBase.'printAztecCode.php?src='.base64_encode($val->id.'-'.$val->productVariantId.'__'.$val->productBrand->name.' - '.$val->itemno.' - '.$val->productVariant->name).'" target="_blank"><i class="fa fa-barcode"></i></a></span>' : '<span class="tools-spaced"><i class="fa fa-barcode"></i></span>';
             $tools .= $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'"><i class="fa fa-pencil-square-o"></i></a></span>' : '<span class="tools-spaced"><i class="fa fa-pencil-square-o"></i></span>';
 
+	        /** @var CProduct $val */
+
             $creationDate = new \DateTime($val->creationDate);
 
             $response['aaData'][$i]["DT_RowClass"] = 'colore';
-            $response['aaData'][$i]["code"] = $val->itemno.' # '.$val->productVariant->name;
+            $response['aaData'][$i]["code"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a></span>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["shop"] = implode(',',$shops);
-            $response['aaData'][$i]["externalId"] = isset($val->externalId) ? $val->externalId : "";
+            $response['aaData'][$i]["cpf"] = $val->itemno.' # '.$val->productVariant->name;
             $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="'.$dummyUrl.'/'.$val->dummyPicture.'">' : "";
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
             //$response['aaData'][$i][$k++] = implode(',<br>',$cats);
             $response['aaData'][$i]["status"] = $statusName;
             $response['aaData'][$i]["creationDate"] = $creationDate->format('d-m-Y H:i');
             $response['aaData'][$i]["problems"] = $this->parseProblem($val);
-            $response['aaData'][$i]["tools"] = $tools;
 
             $i++;
         }
