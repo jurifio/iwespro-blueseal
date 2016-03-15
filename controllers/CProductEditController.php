@@ -32,6 +32,11 @@ class CProductEditController extends CProductManageController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_edit.php');
 
+	    /** LETTURA GET PER PREPARARE MODIFICA */
+	    if (!isset($_GET) || !isset($_GET['id']) || !isset($_GET['productVariantId'])) {
+		    throw new \Exception('You are not editing anything');
+	    }
+
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
         $fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
@@ -63,18 +68,14 @@ class CProductEditController extends CProductManageController
         $em = $this->app->entityManagerFactory->create('ProductColorGroup');
         $gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", array());
 
-        $em = $this->app->entityManagerFactory->create('ProductSheet');
-        $productSheets = $em->query('SELECT DISTINCT `name` FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();
+        $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
+        $productSheets = $em->query('SELECT id FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();
 
-        /** LETTURA GET PER PREPARARE MODIFICA */
-        if (isset($_GET) && isset($_GET['id']) && isset($_GET['productVariantId'])) {
-            $em = $this->app->entityManagerFactory->create('Product', false);
-            $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));
-            $this->app->vendorLibraries->load("aztec");
-            $qrMessage = $productEdit->id . '-' . $productEdit->productVariantId . '__' . $productEdit->productBrand->slug . ' - ' . $productEdit->itemno . ' - ' . $productEdit->productVariant->name;
-            $qrMessage = base64_encode($qrMessage);
-
-        }
+	    $em = $this->app->entityManagerFactory->create('Product', false);
+	    $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));
+	    $this->app->vendorLibraries->load("aztec");
+	    $qrMessage = $productEdit->getAztecCode();
+	    $qrMessage = base64_encode($qrMessage);
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll();
 
@@ -82,15 +83,6 @@ class CProductEditController extends CProductManageController
         $statuses['selected'] = $productEdit->status;
         foreach($productStatuses as $status){
             $statuses[$status->code] = $status->name;
-        }
-
-        $detailsGroups = array();
-        if (isset($productEdit) && isset($productEdit->sheetName)) {
-            $em = $this->app->entityManagerFactory->create('ProductAttribute');
-            foreach ($langs as $lang) {
-                $sql = 'SELECT productAttributeId AS id FROM ProductSheet WHERE `name` = "' . $productEdit->sheetName . '"  ';
-                $detailsGroups[$lang->lang] = $em->findBySql($sql);
-            }
         }
 
         echo $view->render([

@@ -69,7 +69,7 @@ class CProductRouletteController extends CProductManageController
 		$em = $this->app->entityManagerFactory->create('ProductColorGroup');
 		$gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", []);
 
-		$em = $this->app->entityManagerFactory->create('ProductSheet');
+		$em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
 		$productSheets = $em->query('SELECT DISTINCT `name` FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();
 
 		$em = $this->app->entityManagerFactory->create('ProductStatus');
@@ -150,7 +150,7 @@ class CProductRouletteController extends CProductManageController
 		if (isset($productEdit) && isset($productEdit->sheetName)) {
 			$em = $this->app->entityManagerFactory->create('ProductAttribute');
 			foreach ($langs as $lang) {
-				$sql = 'SELECT productAttributeId AS id FROM ProductSheet WHERE `name` = "' . $productEdit->sheetName . '"  ';
+				$sql = 'SELECT productAttributeId AS id FROM ProductSheetPrototype WHERE `name` = "' . $productEdit->sheetName . '"  ';
 				$detailsGroups[$lang->lang] = $em->findBySql($sql);
 			}
 		}
