@@ -83,7 +83,7 @@ class CProductAddController extends CProductManageController
         if(isset($productEdit) && isset($productEdit->sheetName)){
             $em = $this->app->entityManagerFactory->create('ProductAttribute');
             foreach($langs as $lang){
-                $sql = 'SELECT productAttributeId as id FROM ProductSheet where `name` = "'.$productEdit->sheetName.'"  ';
+                $sql = 'SELECT productAttributeId as id FROM ProductSheetPrototype where `name` = "'.$productEdit->sheetName.'"  ';
                 $detailsGroups[$lang->lang] = $em->findBySql($sql);
             }
         }

@@ -43,7 +43,8 @@ try{
                 $id = $db->insert('ProductAttribute',['id'=>$newId,'langId'=>$langId,'name'=>$val,'order'=>$order]);
                 var_dump($id);
             }
-            $db->insert('ProductSheet',array('productAttributeId'=>$newId,'name'=>$sheetName));
+	        //FIXME ragiona ancora con il vecchio sistema
+            $db->insert('ProductSheetPrototype',array('productAttributeId'=>$newId,'name'=>$sheetName));
             var_dump('done '.$order);
             $order++;
         }
@@ -54,29 +55,6 @@ try{
     $db->rollBack();
     var_dump($e);
 }
-
-
-/** diviso per lingua */
-/*
-try{
-    var_dump('start insert');
-    if($db->beginTransaction()){
-        foreach($attrArr as $val){
-            foreach($val as $lang=>$name){
-                $id = $db->insert('ProductAttribute',array('langId'=>$lang,'name'=>$name,'order'=>$order));
-                $db->insert('ProductSheet',array('langId'=>$lang,'productAttributeId'=>$id,'name'=>$sheetName));
-            }
-            $order++;
-            var_dump('done '.$order);
-        }
-    }
-    $db->commit();
-    var_dump('commit');
-} catch (Exception $e){
-    $db->rollBack();
-    var_dump($e);
-}
-*/
 
 
 /*
