@@ -244,7 +244,7 @@
                                                                 <?php if (isset($productEdit) && !is_null($productEdit->productSheetActual)) {
                                                                     $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $detaillabel->id);
                                                                     if ($actual) {
-                                                                        $detailValue = $actual->productDetail->productDetailTranslation->name;
+                                                                        $detailValue = $actual->productDetail->productDetailTranslation->getFirst()->name;
                                                                     }
 
                                                                 }
@@ -253,7 +253,7 @@
                                                                        class="form-control"
                                                                        id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                                                        name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
-                                                                       value="<?php echo isset($detailValue) ? $detailValue->name : "" ?>"/>
+                                                                       value="<?php echo isset($detailValue) ? $detailValue : "" ?>"/>
                                                             </div>
                                                         </div>
                                                         <?php unset($detailValue); endforeach; ?>
