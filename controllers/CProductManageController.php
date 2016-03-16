@@ -217,12 +217,12 @@ class CProductManageController extends ARestrictedAccessRootController
             $this->app->dbAdapter->commit();
 
             if ($this->isValidInput("Product_status", $post)) {
-                if($post['Product_status'] == 'P' &&
+                if($post['Product_status'] == 6 &&
 	                (is_null($productEdit->productPhoto) || $productEdit->productPhoto->isEmpty() ||
                    is_null($productEdit->productSku) || $productEdit->productSku->isEmpty())) {
 	                throw new RedPandaException('Impossibile pubblicare un prodotto incompleto');
                 }
-	            $productEdit->status = $post['Product_status'];
+	            $productEdit->productStatusId = $post['Product_status'];
 	            $productEdit->update();
             }
 
@@ -350,7 +350,7 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 
             if ($this->isValidInput('Product_status', $post) && $post['Product_status'] != 'P') {
-                $productNew->status = $post['Product_status'];
+                $productNew->productStatusId = $post['Product_status'];
                // $this->app->dbAdapter->update("Product", array("status" => $post['Product_status']), $productIds);
             }
 

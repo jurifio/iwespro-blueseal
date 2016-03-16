@@ -147,6 +147,7 @@ class CProductRouletteController extends CProductManageController
 		$temp->id = $productRand['shopId'];
 		$productEdit->shop->add($temp);
 		$detailsGroups = [];
+		//FIXME to test when we have datas
 		if (isset($productEdit) && isset($productEdit->sheetName)) {
 			$em = $this->app->entityManagerFactory->create('ProductAttribute');
 			foreach ($langs as $lang) {
@@ -379,8 +380,8 @@ class CProductRouletteController extends CProductManageController
 				$productNew->productSeasonId = $post['Product_productSeasonId'];
 			}
 
-			if ($this->isValidInput('Product_status', $post) && $post['Product_status'] != 'P') {
-				$productNew->status = $post['Product_status'];
+			if ($this->isValidInput('Product_status', $post) && $post['Product_status'] != 6) {
+				$productNew->productStatusId = $post['Product_status'];
 			}
 
 			if ($this->isValidInput('Product_externalId', $post)) {

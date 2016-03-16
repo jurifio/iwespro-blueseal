@@ -60,14 +60,6 @@ class CProductActiveListAjaxController extends AAjaxController
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $em = $this->app->entityManagerFactory->create('ProductStatus');
-        $productStatuses = $em->findAll('limit 99', '');
-
-        $statuses = [];
-        foreach ($productStatuses as $status) {
-            $statuses[$status->code] = $status->name;
-        }
-
         $modifica = $bluesealBase . "prodotti/modifica";
 
         $response = [];
@@ -78,13 +70,6 @@ class CProductActiveListAjaxController extends AAjaxController
 
         $i = 0;
         foreach ($prodotti as $val) {
-
-            if (isset($statuses[$val->status])) {
-                $statusName = $statuses[$val->status];
-            } else {
-                $statusName = 'Sconosciuto';
-            }
-
             $shops = [];
             foreach ($val->shop as $shop) {
                 $shops[] = $shop->name;
@@ -95,7 +80,7 @@ class CProductActiveListAjaxController extends AAjaxController
             $response['aaData'][$i]["code"] = $val->id . '-' . $val->productVariantId;
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
             $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="' . $img . '">' : "";
-            $response['aaData'][$i]["status"] = $statusName;
+            $response['aaData'][$i]["status"] = $val->productStatus->name;
 
             $th = "";
             $tr = "";

@@ -62,13 +62,6 @@ class CProductImporterProblemsListController extends AAjaxController
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $em = $this->app->entityManagerFactory->create('ProductStatus');
-        $productStatuses = $em->findAll('limit 99','');
-
-        $statuses = [];
-        foreach($productStatuses as $status){
-            $statuses[$status->code] = $status->name;
-        }
         $modifica = $bluesealBase."prodotti/modifica";
 
         $response = [];
@@ -78,12 +71,6 @@ class CProductImporterProblemsListController extends AAjaxController
         $response ['data'] = [];
         $i = 0;
         foreach($prodotti as $val){
-
-            if(isset($statuses[$val->status])) {
-                $statusName = $statuses[$val->status];
-            } else {
-                $statusName = 'Sconosciuto';
-            }
 
             $cats = [];
             foreach($val->productCategoryTranslation as $cat){
@@ -112,7 +99,7 @@ class CProductImporterProblemsListController extends AAjaxController
             $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="'.$dummyUrl.'/'.$val->dummyPicture.'">' : "";
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
             //$response['aaData'][$i][$k++] = implode(',<br>',$cats);
-            $response['aaData'][$i]["status"] = $statusName;
+            $response['aaData'][$i]["status"] = $val->productStatus->name;
             $response['aaData'][$i]["creationDate"] = $creationDate->format('d-m-Y H:i');
             $response['aaData'][$i]["problems"] = $this->parseProblem($val);
 

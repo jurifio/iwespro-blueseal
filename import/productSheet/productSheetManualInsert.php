@@ -30,6 +30,7 @@ $attrArr[] = 'det15';
 
 $db = $BlueSeal->dbAdapter;
 $order = 1;
+//FIXME quando dobbiamo inserire qualche nuova scheda prodotto
 /** singola voce per 3 lingue */
 try{
     $lang = [1,2,3];

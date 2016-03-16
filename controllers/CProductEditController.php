@@ -79,10 +79,17 @@ class CProductEditController extends CProductManageController
 	    $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll();
 
+	    $statuses = [];
+	    $statuses['selected'] = 2;
+	    foreach($productStatuses as $status){
+		    $statuses[$status->id] = $status->name;
+	    }
+
+
 
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'statuses' => $productStatuses,
+            'statuses' => $statuses,
             'tags' => $tag,
             'dummyUrl' => $dummyUrl,
             'fileFolder' => $fileFolder,

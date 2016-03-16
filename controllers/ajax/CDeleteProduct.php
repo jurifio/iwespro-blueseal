@@ -78,7 +78,7 @@ class CDeleteProduct extends AAjaxController
 
         foreach ($products as $product) {
             try {
-                $product->status = 'C';
+                $product->productStatusId = 8;//'C';
                 $em->update($product);
                 $deletedProducts['ok'][] = $product;
             } catch (\Exception $e) {
