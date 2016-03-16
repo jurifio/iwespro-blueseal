@@ -25,7 +25,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <form id="form-project" role="form"
-                              action="<?php echo $app->urlForBlueseal() ?>/prodotti/categorie/aggiungi?productCategoryId=<?php echo $_GET['productCategoryId'] ?>"
+                              action="/blueseal/prodotti/categorie/aggiungi?productCategoryId=<?php echo $_GET['productCategoryId'] ?>"
                               method="POST" autocomplete="on">
                             <input type="hidden" id="productCategoryId" name="productCategoryId" value="<?php echo $_GET['productCategoryId'] ?>">
                             <?php

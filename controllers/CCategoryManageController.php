@@ -30,6 +30,7 @@ class CCategoryManageController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/category_edit.php');
         /** @var $em CEntityManager **/
         $categories = new CObjectCollection();
+	    $categoryLang = null;
         if(isset($_GET['productCategoryId'])){
             $categoryLang = $this->app->repoFactory->create('ProductCategoryTranslation',false);
             $cat = $this->app->categoryManager->categories()->getDescendantsByNodeId($_GET['productCategoryId']);

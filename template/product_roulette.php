@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui','forms'], $page); ?>
+    <?php echo $app->getAssets(['ui', 'forms'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -58,14 +58,20 @@
                                                 <div class="col-md-8">
                                                     <div class="form-group form-group-default required">
                                                         <label for="ooo">CPF</label>
-                                                        <input autocomplete="off" type="text" id="ooo" class="form-control" name="Product_itemno" value="<?php echo isset($productEdit->itemno) ? $productEdit->itemno : "" ?>" required>
+                                                        <input autocomplete="off" type="text" id="ooo"
+                                                               class="form-control" name="Product_itemno"
+                                                               value="<?php echo isset($productEdit->itemno) ? $productEdit->itemno : "" ?>"
+                                                               required>
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group form-group-default required">
                                                         <label for="ProductVariant_name">Variante</label>
-                                                        <input id="ProductVariant_name" autocomplete="off" type="text" class="form-control" name="ProductVariant_name" value="<?php echo isset($productEdit->productVariant) ? $productEdit->productVariant->name : "" ?>" required>
+                                                        <input id="ProductVariant_name" autocomplete="off" type="text"
+                                                               class="form-control" name="ProductVariant_name"
+                                                               value="<?php echo !is_null($productEdit->productVariant) ? $productEdit->productVariant->name : "" ?>"
+                                                               required>
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
@@ -74,10 +80,13 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
                                                         <label for="Shop">Shop</label>
-                                                        <select class="full-width" placeholder="Seleziona il proprietario" data-init-plugin="selectize"  title="" name="Shop_id" id="Shop" required>
+                                                        <select class="full-width"
+                                                                placeholder="Seleziona il proprietario"
+                                                                data-init-plugin="selectize" title="" name="Shop_id"
+                                                                id="Shop" required>
                                                             <option></option>
                                                             <?php foreach ($shops as $shop): ?>
-                                                                <option value="<?php echo $shop->id ?>" <?php if (isset($productEdit->shop) && (bool)$productEdit->shop->findOneByKey('id', $shop->id)) echo "selected"; ?>><?php echo $shop->title ?></option>
+                                                                <option value="<?php echo $shop->id ?>" <?php if (!is_null($productEdit->shop) && (bool)$productEdit->shop->findOneByKey('id', $shop->id)) echo "selected"; ?>><?php echo $shop->title ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
@@ -88,10 +97,13 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled required">
                                                         <label for="Product_productBrandId">Designer</label>
-                                                        <select class="full-width" placeholder="Seleziona il brand" data-init-plugin="selectize"  title="" name="Product_productBrandId" id="Product_productBrandId" required>
+                                                        <select class="full-width" placeholder="Seleziona il brand"
+                                                                data-init-plugin="selectize" title=""
+                                                                name="Product_productBrandId"
+                                                                id="Product_productBrandId" required>
                                                             <option></option>
                                                             <?php foreach ($brands as $brand): ?>
-                                                                <option value="<?php echo $brand->id ?>" <?php if (isset($productEdit->productBrand) && $productEdit->productBrand->id == $brand->id) echo "selected"; ?>><?php echo $brand->name ?></option>
+                                                                <option value="<?php echo $brand->id ?>" <?php if (!is_null($productEdit->productBrand) && $productEdit->productBrand->id == $brand->id) echo "selected"; ?>><?php echo $brand->name ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
@@ -102,10 +114,14 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
                                                         <label for="ProductColorGroup_id">Gruppo colore</label>
-                                                        <select class="full-width selectpicker" placeholder="Seleziona il gruppo colore" data-init-plugin="selectize"  title="ProductColorGroup_id" name="ProductColorGroup_id" id="ProductColorGroup_id">
+                                                        <select class="full-width selectpicker"
+                                                                placeholder="Seleziona il gruppo colore"
+                                                                data-init-plugin="selectize"
+                                                                title="ProductColorGroup_id" name="ProductColorGroup_id"
+                                                                id="ProductColorGroup_id">
                                                             <option></option>
                                                             <?php foreach ($gruppicolore as $color): ?>
-                                                                <option value="<?php echo $color->id ?>" <?php if (isset($productEdit->productColorGroup) && !$productEdit->productColorGroup->isEmpty() && $productEdit->productColorGroup->getFirst()->id == $color->id) echo 'selected="selected"'; ?>> <?php echo $color->name; ?></option>
+                                                                <option value="<?php echo $color->id ?>" <?php if (!is_null($productEdit->productColorGroup) && !$productEdit->productColorGroup->isEmpty() && $productEdit->productColorGroup->getFirst()->id == $color->id) echo 'selected="selected"'; ?>> <?php echo $color->name; ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>
@@ -114,8 +130,13 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default required">
-                                                        <label for="ProductVariant_description">Nome colore (produttore)</label>
-                                                        <input id="ProductVariant_description" autocomplete="off" type="text" class="form-control" name="ProductVariant_description" value="<?php echo isset($productEdit->productVariant)  && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>" required>
+                                                        <label for="ProductVariant_description">Nome colore
+                                                            (produttore)</label>
+                                                        <input id="ProductVariant_description" autocomplete="off"
+                                                               type="text" class="form-control"
+                                                               name="ProductVariant_description"
+                                                               value="<?php echo isset($productEdit->productVariant) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>"
+                                                               required>
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
@@ -123,8 +144,11 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default">
-                                                        <label for="Product_externalId">Identificativo di Origine</label>
-                                                        <input autocomplete="off" type="text" class="form-control" id="Product_externalId" name="Product_externalId" value="<?php echo isset($productEdit->externalId) ? $productEdit->externalId : ""; ?>">
+                                                        <label for="Product_externalId">Identificativo di
+                                                            Origine</label>
+                                                        <input autocomplete="off" type="text" class="form-control"
+                                                               id="Product_externalId" name="Product_externalId"
+                                                               value="<?php echo isset($productEdit->externalId) ? $productEdit->externalId : ""; ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -132,7 +156,10 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
                                                         <label for="Product_sizes">Schiera taglie</label>
-                                                        <select class="full-width selectpicker" placeholder="Seleziona la schiera delle taglie" data-init-plugin="selectize"  title="Product_sizes" name="Product_sizes" id="Product_sizes">
+                                                        <select class="full-width selectpicker"
+                                                                placeholder="Seleziona la schiera delle taglie"
+                                                                data-init-plugin="selectize" title="Product_sizes"
+                                                                name="Product_sizes" id="Product_sizes">
                                                             <option></option>
                                                             <?php foreach ($sizesGroups as $sizesGroup): ?>
                                                                 <option value="<?php echo $sizesGroup->id ?>" <?php if (!is_null($productEdit->productSizeGroup) && $productEdit->productSizeGroup->id == $sizesGroup->id) echo "selected"; ?>> <?php echo $sizesGroup->locale . " " . $sizesGroup->macroName . " " . $sizesGroup->name . "" ?></option>
@@ -145,7 +172,11 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
                                                         <label for="Product_ProductSeasonId">Stagione</label>
-                                                        <select class="full-width selectpicker" placeholder="Seleziona la stagione" data-init-plugin="selectize"  name="Product_productSeasonId" title="" id="Product_ProductSeasonId">
+                                                        <select class="full-width selectpicker"
+                                                                placeholder="Seleziona la stagione"
+                                                                data-init-plugin="selectize"
+                                                                name="Product_productSeasonId" title=""
+                                                                id="Product_ProductSeasonId">
                                                             <option></option>
                                                             <?php foreach ($seasons as $season): ?>
                                                                 <option value="<?php echo $season->id ?>" <?php
