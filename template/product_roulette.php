@@ -214,10 +214,13 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="Product_dataSheet">Tipo scheda prodotto</label>
-                                                <select class="full-width selectpicker" placeholder="Seleziona una scheda prodotto" data-init-plugin="selectize"  title="" name="Product_dataSheet" id="Product_dataSheet">
+                                                <select class="full-width selectpicker"
+                                                        placeholder="Seleziona una scheda prodotto"
+                                                        data-init-plugin="selectize" title="" name="Product_dataSheet"
+                                                        id="Product_dataSheet">
                                                     <option></option>
                                                     <?php foreach ($productSheets as $productSheet): ?>
-                                                    <option value="<?php echo $productSheet['name'] ?>" <?php if (isset($productEdit) && isset($productEdit->sheetName) && $productSheet['name'] == $productEdit->sheetName) echo "selected"; ?>> <?php echo $productSheet['name'] ?></option>
+                                                        <option value="<?php echo $productSheet->id ?>" <?php if ($productSheet->id == $productEdit->productSheetPrototypeId) echo "selected"; ?>> <?php echo $productSheet->name ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -226,55 +229,32 @@
 
                                     <div class="row" id="productDetails">
                                         <div class="col-md-12">
-                                            <?php if (isset($productEdit) && isset($productEdit->sheetName) && !empty($productEdit->sheetName)): ?>
-                                            <ul class="nav nav-tabs nav-tabs-simple bg-white" id="tab-3">
-                                                <?php foreach ($langs as $lang): ?>
-                                                <li class="<?php echo($lang->lang == 'it' ? "active" : "") ?>">
-                                                    <a data-toggle="tab" href="#<?php echo $lang->lang ?>"><?php echo $lang->name ?></a>
-                                                </li>
-                                                <?php endforeach; $langs->rewind(); ?>
-                                            </ul>
-
-                                            <div class="tab-content bg-white">
-                                                <?php foreach ($langs as $lang): ?>
-                                                <div class="tab-pane <?php echo($lang->lang == 'it' ? "active" : "") ?>" id="<?php echo $lang->lang ?>">
-                                                    <?php $i=1; foreach ($detailsGroups[$lang->lang] as $detail): if($i&2 == 0) continue; ?>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group form-group-default">
-                                                            <label for="<?php echo "ProductDetail_" . $lang->id . "_" . $detail->id ?>"><?php echo $detail->name ?></label>
-                                                            <?php if (isset($productEdit) && isset($productEdit->productAttributeValue)) {
-                                                                foreach ($productEdit->productAttributeValue as $key => $val) {
-                                                                    if ($val->productAttributeId == $detail->id && $val->langId == $lang->id) {
-                                                                        $detailValue = $val;
+                                            <?php if (isset($productEdit) && isset($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
+                                                <div class="tab-content bg-white">
+                                                    <?php foreach ($productEdit->productSheetPrototype->productDetailLabel as $detaillabel): ?>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>
+                                                                <?php if (isset($productEdit) && !is_null($productEdit->productSheetActual)) {
+                                                                    $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $detaillabel->id);
+                                                                    if ($actual) {
+                                                                        $detailValue = $actual->productDetail->productDetailTranslation->getFirst()->name;
                                                                     }
                                                                 }
-                                                            } ?>
-                                                            <input autocomplete="off" type="text" class="form-control" id="<?php echo "ProductDetail_" . $lang->id . "_" . $detail->id ?>" name="<?php echo "ProductDetail_" . $lang->id . "_" . $detail->id ?>" value="<?php echo isset($detailValue) ? $detailValue->name : "" ?>" />
+                                                                ?>
+                                                                <input autocomplete="off" type="text"
+                                                                       class="form-control"
+                                                                       id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                                                       name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                                                       value="<?php echo isset($detailValue) ? $detailValue : "" ?>"/>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <?php unset($detailValue); $i++; endforeach; ?>
-
-                                                    <?php $i=0; foreach ($detailsGroups[$lang->lang] as $detail): if($i&2 != 0) continue; ?>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group form-group-default">
-                                                            <label for="<?php echo "ProductDetail_" . $lang->id . "_" . $detail->id ?>"><?php echo $detail->name ?></label>
-                                                            <?php if (isset($productEdit) && isset($productEdit->productAttributeValue)) {
-                                                                foreach ($productEdit->productAttributeValue as $key => $val) {
-                                                                    if ($val->productAttributeId == $detail->id && $val->langId == $lang->id) {
-                                                                        $detailValue = $val;
-                                                                    }
-                                                                }
-                                                            } ?>
-                                                            <input autocomplete="off" type="text" class="form-control" id="<?php echo "ProductDetail_" . $lang->id . "_" . $detail->id ?>" name="<?php echo "ProductDetail_" . $lang->id . "_" . $detail->id ?>" value="<?php echo isset($detailValue) ? $detailValue->name : "" ?>" />
-                                                        </div>
-                                                    </div>
-                                                    <?php unset($detailValue); $i++; endforeach; ?>
+                                                        <?php unset($detailValue); endforeach; ?>
                                                 </div>
-                                                <?php endforeach; ?>
-                                            </div>
                                             <?php endif; ?>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -289,49 +269,29 @@
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <ul class="nav nav-tabs nav-tabs-simple bg-white" id="tab-2">
-                                                <?php foreach ($langs as $lang): ?>
-                                                    <li class="<?php echo($lang->lang == 'it' ? "active" : "") ?>"><a data-toggle="tab" href="#desc<?php echo $lang->lang ?>"><?php echo $lang->name ?></a></li>
-                                                <?php endforeach;
-                                                $langs->rewind(); ?>
-                                            </ul>
-                                            <div class="tab-content bg-white">
-                                                <?php foreach ($langs as $lang): ?>
-                                                    <div class="tab-pane <?php echo($lang->lang == 'it' ? "active" : "") ?>" id="desc<?php echo $lang->lang ?>">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group form-group-default">
-                                                                    <?php if (isset($name)) unset($name);
-                                                                    if (isset($productEdit) && !is_null($productEdit->productNameTranslation)) {
-                                                                        foreach ($productEdit->productNameTranslation as $val) {
-                                                                            if ($val->langId == $lang->id) {
-                                                                                $name = $val->name;
-                                                                            }
-                                                                        }
-                                                                    } ?>
-                                                                    <label for="ProductName_<?php echo $lang->id ?>_name">Nome del prodotto</label>
-                                                                    <input autocomplete="off" type="text" class="form-control" id="ProductName_<?php echo $lang->id ?>_name" name="ProductName_<?php echo $lang->id ?>_name" value="<?php echo isset($name) ? $name : ""; ?>">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="summernote-wrapper">
-                                                                    <?php if (isset($descr)) unset($descr);
-                                                                    if (isset($productEdit) && !is_null($productEdit->productDescription)) {
-                                                                        foreach ($productEdit->productDescription as $val) {
-                                                                            if ($val->langId == $lang->id) {
-                                                                                $descr = $val->description;
-                                                                            }
-                                                                        }
-                                                                    } ?>
-                                                                    <label for="summernote<?php echo $lang->id ?>">Descrizione</label>
-                                                                    <textarea id="summernote<?php echo $lang->id ?>" class="" rows="10" name="ProductDescription_<?php echo $lang->id ?>"><?php echo isset($descr) ? $descr : ""; ?></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; ?>
+                                            <div class="form-group form-group-default">
+                                                <label for="ProductName_1_name">Nome del prodotto</label>
+                                                <?php if ($productEdit->productNameTranslation != false && ($name = $productEdit->productNameTranslation->findOneByKey('langId', 1))) ?>
+                                                <input autocomplete="off" type="text" class="form-control"
+                                                       id="ProductName_1_name" name="ProductName_1_name"
+                                                       value="<?php if ($productEdit->productNameTranslation && ($name = $productEdit->productNameTranslation->findOneByKey('langId', 1))) echo $name->name; ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="summernote-wrapper">
+                                                <?php
+                                                if (isset($productEdit) && isset($productEdit->productDescription)) {
+                                                    foreach ($productEdit->productDescription as $val) {
+                                                        if ($val->langId == 1) {
+                                                            $descr = $val->description;
+                                                        }
+                                                    }
+                                                } ?>
+                                                <label for="summernote1">Descrizione</label>
+                                                        <textarea id="summernote1" class="" rows="10"
+                                                                  name="ProductDescription_1"><?php echo isset($descr) ? $descr : ""; ?></textarea>
                                             </div>
                                         </div>
                                     </div>

@@ -22,7 +22,7 @@ class CGetAutocompleteData extends AAjaxController
         $keys = explode('_', $value);
         /** @var \bamboo\core\db\pandaorm\adapter\CMySQLAdapter $mysql */
         $mysql = $this->app->dbAdapter;
-        $sql = 'SELECT distinct `name` FROM ProductAttributeValue where langId = ? and productAttributeId = ? ';
+        $sql = 'SELECT distinct `name` FROM ProductDetailTranslation where langId = ?';
         $res = $mysql->query($sql,array($keys[1],$keys[2]))->fetchAll();
         $rres= array();
         foreach($res as $val){

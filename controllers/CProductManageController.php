@@ -387,25 +387,43 @@ class CProductManageController extends ARestrictedAccessRootController
                 $this->app->dbAdapter->insert("ProductHasProductColorGroup", $insertColor);
             }
 
+	        $slugify = new CSlugify();
             /** INSERIMENTO DETTAGLI PRODOTTO */
-            if ($this->isValidInput('Product_dataSheet', $post)) {
-                $productNew->sheetName = $post['Product_dataSheet'];
-                //$this->app->dbAdapter->update("Product", array("sheetName" => $post['Product_dataSheet']), $productIds);
-                foreach ($post as $key => $input) {
-                    $inputName = explode('_', $key);
-                    if ($inputName[0] != 'ProductDetail') continue;
-                    $attrbuteValue = $this->app->dbAdapter->select('ProductAttributeValue', ['langId' => $inputName[1], 'productAttributeId' => $inputName[2], 'name' => trim($input)])->fetchAll();
-                    if (count($attrbuteValue) == 0) {
-                        $this->app->dbAdapter->insert('ProductAttributeValue', ['langId' => $inputName[1], 'productAttributeId' => $inputName[2], 'name' => trim($input)]);
-                        $attrbuteValue = $this->app->dbAdapter->select('ProductAttributeValue', ['langId' => $inputName[1], 'productAttributeId' => $inputName[2], 'name' => trim($input)])->fetchAll();
-                    }
-                    $insertData = $productIdsExt;
-                    $insertData['productAttributeId'] = $inputName[2];
-                    $insertData['productAttributeValueId'] = $attrbuteValue[0]['id'];
+	        if ($this->isValidInput("Product_dataSheet", $post)) {
+		        $detailRepo = $this->app->repoFactory->create('ProductDetail');
+		        $detailTranslationRepo = $this->app->repoFactory->create('ProductDetailTranslation');
+		        $productSheetActualRepo = $this->app->repoFactory->create('ProductSheetActual');
+		        /** INSERIMENTO DETTAGLI PRODOTTO */
 
-                    $this->app->dbAdapter->insert("ProductHasProductAttributeValue", $insertData);
-                }
-            }
+		        $productNew->productSheetPrototypeId = $post['Product_dataSheet'];
+		        $productNew->update();
+
+		        foreach ($post as $key => $input) {
+			        $inputName = explode('_', $key);
+			        if ($inputName[0] != 'ProductDetail') continue;
+			        /** cerco il valore del dettaglio $detail */
+			        $detail = $detailRepo->findOneBy(['slug' => $slugify->slugify($input)]);
+			        if (is_null($detail)) {
+				        $detail = $detailRepo->getEmptyEntity();
+				        $detail->slug = $slugify->slugify($input);
+				        $detail->id = $detail->insert();
+				        $detailTranslation = $detailTranslationRepo->getEmptyEntity();
+				        $detailTranslation->productDetailId = $detail->id;
+				        $detailTranslation->name = $input;
+				        $detailTranslation->langId = $inputName[1];
+				        $detailTranslation->insert();
+			        }
+
+			        /** non esiste, lo aggiungo */
+			        $actual = $productSheetActualRepo->getEmptyEntity();
+			        $actual->productId = $productNew->id;
+			        $actual->productVariantId = $productNew->productVariantId;
+			        $actual->productDetailLabelId = $inputName[2];
+			        $actual->productDetailId = $detail->id;
+			        $actual->insert();
+
+		        }
+	        }
 
             $this->app->repoFactory->create("Product")->update($productNew);
 

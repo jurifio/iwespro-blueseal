@@ -124,7 +124,7 @@ class CProductIncompleteListController extends AAjaxController
         if (is_null($product->productBrand) || ($product->productBrand->id === 1)) {
             $problems[] = "[E420] Brand";
         }
-        if (is_null($product->sheetName) || (empty($product->sheetName))) {
+        if (is_null($product->productSheetPrototype)) {
             $problems[] = "[E430] Scheda prodotto";
         }
         if (is_null($product->productColorGroup) || ($product->productColorGroup->isEmpty())) {
