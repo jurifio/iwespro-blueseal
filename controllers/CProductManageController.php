@@ -114,7 +114,7 @@ class CProductManageController extends ARestrictedAccessRootController
 	            $detailTranslationRepo = $this->app->repoFactory->create('ProductDetailTranslation');
 	            $productSheetActualRepo = $this->app->repoFactory->create('ProductSheetActual');
                 /** INSERIMENTO DETTAGLI PRODOTTO */
-	            if($post['Product_dataSheet'] != $productEdit->productSheetPrototype->id) {
+	            if(!$post['Product_dataSheet'] != $productEdit->productSheetPrototypeId) {
 		            foreach($productEdit->productSheetActual as $val) $val->delete();
 		            $productEdit->productSheetPrototypeId = $post['Product_dataSheet'];
 		            unset($productEdit->productSheetPrototype);
