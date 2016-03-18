@@ -1,4 +1,4 @@
-$(document).on('bs.manage.payed', function () {
+$(document).on('bs.manage.paidAmount', function () {
 
 	var bsModal = $('#bsModal');
 	var header = $('.modal-header h4');
@@ -18,7 +18,7 @@ $(document).on('bs.manage.payed', function () {
 			url: "#",
 			data: {
 				orderId: $("#orderId").val(),
-				payed: true
+				paidAmount: true
 			}
 		}).done(function (content) {
 			body.html("Ordine PAGATO");

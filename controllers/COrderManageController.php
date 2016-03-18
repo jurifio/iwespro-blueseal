@@ -68,8 +68,8 @@ class COrderManageController extends ARestrictedAccessRootController
 
     public function put()
     {
-        if($this->request->getRequestData('payed' == 'true')) {
-	        if(!$this->app->orderManager->pay($this->request->getRequestData('orderId'),true)) throw new RedPandaException('Error setting payed');
+        if($this->request->getRequestData('paidAmount' == 'true')) {
+	        if(!$this->app->orderManager->pay($this->request->getRequestData('orderId'),true)) throw new RedPandaException('Error setting paidAmount');
 	        return true;
         }
         return false;

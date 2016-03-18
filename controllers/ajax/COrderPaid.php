@@ -3,7 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 
 /**
- * Class COrderPayed
+ * Class COrderPaid
  * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
@@ -14,7 +14,7 @@ namespace bamboo\blueseal\controllers\ajax;
  *
  * @since ${VERSION}
  */
-class COrderPayed extends AAjaxController
+class COrderPaid extends AAjaxController
 {
     /**
      * @return string
@@ -25,7 +25,7 @@ class COrderPayed extends AAjaxController
         $order = $this->app->repoFactory->create('Order')->findOneBy(['id'=>$id]);
 
         $html = "Importo pagato :";
-        $html .= '<input type="text" class="form-control" name="Payed" value=' . number_format($order->paidAmount, 2) . ">";
+        $html .= '<input type="text" class="form-control" name="paidAmount" value=' . number_format($order->paidAmount, 2) . ">";
 
         return json_encode(
             [
