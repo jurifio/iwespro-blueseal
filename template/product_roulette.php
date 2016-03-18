@@ -229,7 +229,7 @@
 
                                     <div class="row" id="productDetails">
                                         <div class="col-md-12">
-                                            <?php if (isset($productEdit) && isset($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
+                                            <?php if (isset($productEdit) && !is_null($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
                                                 <div class="tab-content bg-white">
                                                     <?php foreach ($productEdit->productSheetPrototype->productDetailLabel as $detaillabel): ?>
                                                         <div class="col-md-6">
@@ -240,6 +240,7 @@
                                                                     if ($actual) {
                                                                         $detailValue = $actual->productDetail->productDetailTranslation->getFirst()->name;
                                                                     }
+
                                                                 }
                                                                 ?>
                                                                 <input autocomplete="off" type="text"
