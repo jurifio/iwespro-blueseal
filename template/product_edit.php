@@ -24,7 +24,7 @@
                       autocomplete="off">
                     <?php
                     $value = [];
-                    if (isset($productEdit) && isset($productEdit->productCategory)) {
+                    if (isset($productEdit) && !is_null($productEdit->productCategory)) {
                         foreach ($productEdit->productCategory as $val) {
                             $value[] = $val->id;
                         }
