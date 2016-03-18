@@ -169,7 +169,7 @@ class CProductManageController extends ARestrictedAccessRootController
             /** UPDATE NOME PRODOTTO */
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
-                if ($inputName[0] != 'ProductNameTranslation') continue;
+                if ($inputName[0] != 'ProductName') continue;
 
                 $productNameTranslation = $productEdit->productNameTranslation->findOneByKey('langId',$inputName[1]);
 	            if($productNameTranslation){
