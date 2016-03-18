@@ -444,7 +444,7 @@ class CProductManageController extends ARestrictedAccessRootController
             /** INSERIMENTO NOME PRODOTTO */
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
-                if ($inputName[0] != 'ProductNameTranslation') continue;
+                if ($inputName[0] != 'ProductName') continue;
                 $insertData = array();
                 $insertData = $productIdsExt;
                 $insertData['langId'] = $inputName[1];
@@ -461,7 +461,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 $insertData['langId'] = $inputName[1];
                 $insertData['marketplaceId'] = 1;
                 $insertData['description'] = $input;
-                $this->app->dbAdapter->insert("ProductDescription", $insertData);
+                $this->app->dbAdapter->insert("ProductDescriptionTranslation", $insertData);
             }
 
             $this->app->dbAdapter->commit();
