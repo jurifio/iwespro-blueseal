@@ -80,7 +80,7 @@ class CProductEditController extends CProductManageController
         $productStatuses = $em->findAll();
 
 	    $statuses = [];
-	    $statuses['selected'] = 2;
+	    $statuses['selected'] = $productEdit->productStatusId;
 	    foreach($productStatuses as $status){
 		    $statuses[$status->id] = $status->name;
 	    }

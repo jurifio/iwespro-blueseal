@@ -349,7 +349,7 @@ class CProductManageController extends ARestrictedAccessRootController
                // $this->app->dbAdapter->update("Product", array("productSeasonId" => $post['Product_productSeasonId']), $productIds);
             }
 
-            if ($this->isValidInput('Product_status', $post) && $post['Product_status'] != 'P') {
+            if ($this->isValidInput('Product_status', $post) && $post['Product_status'] != 6) {
                 $productNew->productStatusId = $post['Product_status'];
                // $this->app->dbAdapter->update("Product", array("status" => $post['Product_status']), $productIds);
             }
