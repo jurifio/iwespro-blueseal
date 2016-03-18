@@ -220,9 +220,7 @@
                                                         id="Product_dataSheet">
                                                     <option></option>
                                                     <?php foreach ($productSheets as $productSheet): ?>
-                                                        <option value="<?php BlueSeal::dump($productSheets); echo $productSheet->id ?>" <?php if ($productSheet->id ==
-                                                                $productEdit->productSheetPrototypeId) echo "selected"; ?>> <?php echo
-                                                            $productSheet->name ?></option>
+                                                        <option value="<?php echo $productSheet->id ?>" <?php if (!is_null($productEdit->productSheetPrototype) && $productSheet->id == $productEdit->productSheetPrototype->id) echo "selected"; ?>> <?php echo $productSheet->name ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
