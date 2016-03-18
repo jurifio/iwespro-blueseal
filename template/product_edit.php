@@ -289,8 +289,8 @@
                                         <div class="col-md-12">
                                             <div class="summernote-wrapper">
                                                 <?php
-                                                if (isset($productEdit) && isset($productEdit->productDescriptionTranslation)) {
-                                                    foreach ($productEdit->productDescriptionTranslation as $val) {
+                                                if (isset($productEdit) && !is_null($productEdit->ProductDescriptionTranslation)) {
+                                                    foreach ($productEdit->ProductDescriptionTranslation as $val) {
                                                         if ($val->langId == 1) {
                                                             $descr = $val->description;
                                                         }
