@@ -137,7 +137,7 @@ class CProductManageController extends ARestrictedAccessRootController
                     }
 	                /** cerco all'interno della sheet se esiste già un dettaglio con lo stesso label*/
 	                $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $inputName[2]);
-	                if(!$actual instanceof IEntity) {
+	                if(!($actual instanceof IEntity)) {
 		                /** non esiste, lo aggiungo */
 		                $actual = $productSheetActualRepo->getEmptyEntity();
 		                $actual->productId = $productEdit->id;
@@ -145,7 +145,7 @@ class CProductManageController extends ARestrictedAccessRootController
 		                $actual->productDetailLabelId = $inputName[2];
 		                $actual->productDetailId = $detail->id;
 		                $actual->insert();
-	                } elseif($actual->productDetailId != $detail->id) {
+	                } else if($actual->productDetailId != $detail->id) {
 		                /** esiste ma è diverso, lo aggiorno */
 	                    $actual->productDetailId = $detail->id;
 		                $actual->update();
