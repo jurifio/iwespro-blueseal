@@ -240,7 +240,6 @@
                                                                     if ($actual) {
                                                                         $detailValue = $actual->productDetail->productDetailTranslation->getFirst()->name;
                                                                     }
-
                                                                 }
                                                                 ?>
                                                                 <input autocomplete="off" type="text"

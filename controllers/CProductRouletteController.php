@@ -76,7 +76,7 @@ class CProductRouletteController extends CProductManageController
 		$productStatuses = $em->findAll('limit 99', '');
 
 		$statuses = [];
-		$statuses['selected'] = 'S';
+		$statuses['selected'] = 2;
 		foreach ($productStatuses as $status) {
 			$statuses[$status->code] = $status->name;
 		}
