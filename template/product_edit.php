@@ -291,7 +291,7 @@
                                                 <?php
                                                 if (isset($productEdit) && !is_null($productEdit->productDescriptionTranslation)) {
                                                     foreach ($productEdit->productDescriptionTranslation as $val) {
-                                                        if ($val->langId == 1) {
+                                                        if ($val->langId == 1 && $val->marketplaceId) {
                                                             $descr = $val->description;
                                                         }
                                                     }
