@@ -44,15 +44,15 @@ class CCheckProductsToBePublished extends AAjaxController
     public function get()
     {
         $result = $this->app->dbAdapter->query("
-          SELECT COUNT(DISTINCT Product.id, Product.productVariantId) AS conto
-          FROM Product,ProductHasProductPhoto,ProductPhoto,ProductSku,ProductStatus
-          WHERE Product.id = ProductHasProductPhoto.productId
-          AND Product.productStatusId = ProductStatus.id
-          AND Product.productVariantId = ProductHasProductPhoto.productVariantId
-          AND Product.id = ProductSku.productId
-          AND Product.productVariantId = ProductSku.productVariantId
-          AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
-          AND Product.status IN ('A', 'Q', 'I')", []);
+         SELECT COUNT(DISTINCT Product.id, Product.productVariantId) AS conto
+			FROM Product,ProductHasProductPhoto,ProductPhoto,ProductSku,ProductStatus
+			WHERE Product.id = ProductHasProductPhoto.productId
+      	      AND Product.productStatusId = ProductStatus.id
+		      AND Product.productVariantId = ProductHasProductPhoto.productVariantId
+		      AND Product.id = ProductSku.productId
+		      AND Product.productVariantId = ProductSku.productVariantId
+		      AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
+		      AND ProductStatus.code IN ('A', 'Q', 'I')", []);
 
         $count = $result->fetchAll()[0]['conto'];
 
