@@ -6,6 +6,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLoginController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -17,6 +18,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTranslationController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -28,6 +30,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CHomepageContentController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -43,6 +46,7 @@
                 "type": "[A-Za-z0-9_-]+",
                 "wlang": "[a-z]{2}"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "PUT"
@@ -58,6 +62,7 @@
                 "type": "[A-Za-z0-9_-]+",
                 "wlang": "[a-z]{2}"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -73,6 +78,7 @@
                 "type": "[A-Za-z0-9_-]+",
                 "wlang": "[a-z]{2}"
             },
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -83,6 +89,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCatalogContentController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -94,6 +101,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCheckoutContentController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -105,6 +113,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDatabaseContentController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -116,6 +125,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CGenericContentController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -127,6 +137,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COtherContentController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -138,6 +149,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductDetailContentController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -149,6 +161,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetContentController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -160,6 +173,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLogoutController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -170,6 +184,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealDashboardController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -180,6 +195,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COrderListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -190,6 +206,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COrderManageController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -202,6 +219,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -215,6 +233,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductDetailListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -228,6 +247,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -241,6 +261,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CConnectorController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -254,6 +275,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryBrandListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -269,6 +291,7 @@
             "filters": {
                 "shopId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -282,6 +305,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySizeListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -297,6 +321,7 @@
             "filters": {
                 "shopId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -310,6 +335,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySeasonListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -325,6 +351,7 @@
             "filters": {
                 "shopId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -338,6 +365,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryTagListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -353,6 +381,7 @@
             "filters": {
                 "shopId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -366,6 +395,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryColorListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -381,6 +411,7 @@
             "filters": {
                 "shopId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -394,6 +425,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryCategoryListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -409,6 +441,7 @@
             "filters": {
                 "shopId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -422,6 +455,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CShopController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -435,6 +469,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateEditController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -450,6 +485,7 @@
             "filters": {
                 "langId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -465,6 +501,7 @@
             "filters": {
                 "langId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -478,6 +515,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductAddController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -491,6 +529,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductRouletteController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -504,6 +543,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductEditController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -517,6 +557,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductIncompleteController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -530,6 +571,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductActiveListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -543,6 +585,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPhotoManageController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -556,6 +599,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductImporterController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -569,6 +613,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "DELETE"
@@ -580,6 +625,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandAddController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -591,6 +637,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "DELETE"
@@ -602,6 +649,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandEditController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "PUT"
@@ -613,6 +661,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeManageController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -625,6 +674,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CColorListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "DELETE"
@@ -636,6 +686,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CColorAddController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "PUT",
@@ -649,6 +700,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CColorEditController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "PUT",
@@ -662,6 +714,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CColorDeleteController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -674,6 +727,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "DELETE"
@@ -685,6 +739,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryManageController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -698,6 +753,7 @@
             },
             "filters": {
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -711,6 +767,7 @@
             },
             "filters": {
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -725,6 +782,7 @@
             "filters": {
                 "xcontroller": "[a-zA-Z]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -743,6 +801,7 @@
                 "orderLineId": "[0-9]+",
                 "confirm": "[a-z]{3}"
             },
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -753,6 +812,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPrintAztecCodeController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -763,6 +823,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -773,6 +834,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageAddController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -784,6 +846,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageEditController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -794,6 +857,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "DELETE"
@@ -805,6 +869,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostAddController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -816,6 +881,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostEditController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "PUT"
@@ -827,6 +893,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostBinController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "DELETE"
@@ -838,6 +905,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -850,6 +918,7 @@
             "filters": {
                 "id": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "PUT"
@@ -861,6 +930,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponAddController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -872,6 +942,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -884,6 +955,7 @@
             "filters": {
                 "id": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "PUT"
@@ -895,6 +967,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeAddController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -906,6 +979,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -918,6 +992,7 @@
             "filters": {
                 "id": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "PUT"
@@ -929,6 +1004,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventAddController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST"
@@ -939,6 +1015,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTagListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -952,29 +1029,35 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTagAddController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
-                "POST"
+                "POST",
+                "PUT",
+                "DELETE"
             ]
         },
         {
-            "pattern": "/blueseal/tag/modifica/:id(/)?",
+            "pattern": "/blueseal/tag/modifica/:id(/?)",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTagEditController"
             },
             "filters": {
                 "id": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
-                "POST"
+                "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/traduzioni/descrizioni(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -988,6 +1071,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateEditController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -996,28 +1080,14 @@
             ]
         },
         {
-            "pattern": "/blueseal/traduzioni/descrizioni/lingua/:langId(/)?",
+            "pattern": "/blueseal/traduzioni/descrizioni/lingua(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateLangListController"
             },
             "filters": {
                 "langId": "[0-9]+"
             },
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/descrizioni/lingua_list/:langId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateLangAllListController"
-            },
-            "filters": {
-                "langId": "[0-9]+"
-            },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -1031,6 +1101,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -1044,6 +1115,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateEditController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -1059,6 +1131,7 @@
             "filters": {
                 "langId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -1074,6 +1147,7 @@
             "filters": {
                 "langId": "[0-9]+"
             },
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -1086,6 +1160,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET"
             ]
@@ -1096,6 +1171,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CImporterListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
@@ -1109,6 +1185,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryListController"
             },
             "filters": {},
+            "translations": {},
             "methods": [
                 "GET",
                 "POST",
