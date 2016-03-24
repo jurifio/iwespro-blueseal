@@ -83,7 +83,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 //$this->app->dbAdapter->update("Product", array("externalId" => $post['Product_externalId']), $productIds);
             }
             if ($this->isValidInput("Product_sizes", $post)) {
-	            $productEdit->sizeGroupId = $post['Product_sizes'];
+	            $productEdit->productSizeGroupId = $post['Product_sizes'];
                 //$this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
             }
 	        if ($this->isValidInput("Product_note", $post)) {
@@ -363,7 +363,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 //$this->app->dbAdapter->update("Product", array("sortingPriorityId" => $post['Product_sortingPriorityId']), $productIds);
             }
             if ($this->isValidInput('Product_sizes', $post)) {
-                $productNew->sizeGroupId = $post['Product_sizes'];
+                $productNew->productSizeGroupId = $post['Product_sizes'];
                 //$this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
             }
             if ($this->isValidInput('Product_note', $post)) {

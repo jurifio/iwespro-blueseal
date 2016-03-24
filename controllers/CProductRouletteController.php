@@ -393,7 +393,7 @@ class CProductRouletteController extends CProductManageController
 			}
 
 			if ($this->isValidInput('Product_sizes', $post)) {
-				$productNew->sizeGroupId = $post['Product_sizes'];
+				$productNew->productSizeGroupId = $post['Product_sizes'];
 			}
 
 			if ($this->isValidInput('Product_note', $post)) {
