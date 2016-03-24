@@ -27,14 +27,14 @@ class CContentManagerSectionLoader extends AAjaxController
         $repo = $this->app->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 
-        $json = new CJsonAdapter($root.'/htdocs/pickyshop/blueseal/content/structure.json');
+        $json = new CJsonAdapter($root.'/back/content/structure.json');
         $languages['it'] = true;
         $return = "";
 
         foreach ($json['sections'][$this->data['section']] as $jsonFile => $descriptor) {
             foreach ($installedLang as $lang) {
-                if (!file_exists($root.'/htdocs/pickyshop/app/data/widget/'.$jsonFile.'.'.$lang->lang.'.json')) {
-                    copy($root.'/htdocs/pickyshop/app/data/widget/'.$jsonFile.'.it.json',$root.'/htdocs/pickyshop/app/data/widget/'.$jsonFile.'.'.$lang->lang.'.json');
+                if (!file_exists($root.'/client/public/data/widget/'.$jsonFile.'.'.$lang->lang.'.json')) {
+                    copy($root.'/client/public/data/widget/'.$jsonFile.'.it.json',$root.'/client/public/data/widget/'.$jsonFile.'.'.$lang->lang.'.json');
                     $languages[$lang->lang] = false;
                 }
             }
@@ -43,7 +43,7 @@ class CContentManagerSectionLoader extends AAjaxController
             $text = $descriptor['cmsDescription'];
             $icon = $descriptor['cmsIcon'];
 
-            $items = new CJsonAdapter($root.'/htdocs/pickyshop/app/data/widget/'.$jsonFile.'.it.json');
+            $items = new CJsonAdapter($root.'/client/public/data/widget/'.$jsonFile.'.it.json');
             unset($items['global']);
 
             $date = new \DateTime();

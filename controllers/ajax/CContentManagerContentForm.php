@@ -41,7 +41,7 @@ class CContentManagerContentForm extends AAjaxController
         $approot = $this->app->cfg()->fetch('paths','app');
         $this->app->setLang(new CLang(1,'it'));
 
-        $jsonDescriptor = new CJsonAdapter($root.'/htdocs/pickyshop/blueseal/content/structure.json');
+        $jsonDescriptor = new CJsonAdapter($root.'/back/content/structure.json');
         $repo = $this->app->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 

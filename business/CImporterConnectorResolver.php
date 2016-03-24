@@ -1,21 +1,24 @@
 <?php
 
 
-namespace bamboo\htdocs\pickyshop\blueseal\business;
+namespace bamboo\blueseal\business;
 use bamboo\core\application\AApplication;
 use bamboo\core\db\pandaorm\entities\AEntity;
 use bamboo\core\exceptions\RedPandaOutOfBoundException;
 
 
 /**
- * Class CImporterConnector
- * @package bamboo\htdocs\pickyshop\blueseal\business
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, 25/01/2016
+ * Class CImporterConnectorResolver
+ * @package bamboo\blueseal\business
+ *
+ * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ *
  * @copyright (c) Bambooshoot snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @since ${VERSION}
+ * @date 2016/03/24
+ * @since 1.0
  */
 class CImporterConnectorResolver
 {
