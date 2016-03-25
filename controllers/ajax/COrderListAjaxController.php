@@ -56,7 +56,7 @@ class COrderListAjaxController extends AAjaxController
         $shops = $em->findAll("limit 999", "");
 
         $datatable = new CDataTables('vBluesealOrders',['id'],$_GET);
-	    $datatable->addCondition('status',['Order Cancelled Definitively'],true);
+	    $datatable->addCondition('statusCode',['ORD_CANCEL'],true);
 	    $datatable->addSearchColumn('orderLineStatus');
 	    $datatable->addSearchColumn('shop');
 	    $datatable->addSearchColumn('product');
