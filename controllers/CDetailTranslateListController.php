@@ -28,10 +28,20 @@ class CDetailTranslateListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/detail_translate_list.php');
 
+        $repo = $this->app->repoFactory->create('Lang');
+        $activeLanguages = $repo->findBy(['isActive'=>true]);
+
         echo $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+            'languages' => (function() use ($activeLanguages) {
+                $languages = [];
+                foreach($activeLanguages as $activeLanguage) {
+                    $languages[$activeLanguage->id] = $activeLanguage->name;
+                }
+                return $languages;
+            })
         ]);
     }
 }

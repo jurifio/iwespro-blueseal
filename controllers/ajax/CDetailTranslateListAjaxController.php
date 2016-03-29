@@ -43,7 +43,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductDetailTranslation',['id'],$this->app->router->request()->getRequestData());
+        $datatable = new CDataTables('ProductDetailTranslationView',['id'],$this->app->router->request()->getRequestData());
         $modifica = $this->urls['base']."traduzioni/dettagli/modifica";
 
         $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/edit');
@@ -52,7 +52,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $productDetails = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productDetails = $this->app->repoFactory->create('ProductDetailTranslationView')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
 
@@ -60,7 +60,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
         $activeLanguages = $repo->findBy(['isActive'=>true]);
 
         $response = [];
-        $response ['draw'] = $_GET['draw'];
+        $response ['draw'] = $this->app->router->request()->getRequestData('draw');
         $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
@@ -71,12 +71,12 @@ class CDetailTranslateListAjaxController extends AAjaxController
         {
             $html = '';
 
+            $translationStatus = array_combine(explode('|',$productDetail->translatedLangId),explode('|',$productDetail->translatedName));
+
             foreach ($activeLanguages as $activeLanguage)
             {
-                $lang = explode('|',$productDetail->translatedLangId);
-
-                if(!is_null($lang)) {
-                    $html .= '<span class="badge">' . $activeLanguage->lang . '</span>';
+                if (in_array($activeLanguage->id,explode('|',$productDetail->translatedLangId))) {
+                    $html .= '<span class="badge badge-green" data-toggle="tooltip" title="'.$translationStatus[$activeLanguage->id].'" data-placement="left">' . $activeLanguage->lang . '</span>';
                 } else {
                     $html .= '<span class="badge badge-red">' . $activeLanguage->lang . '</span>';
                 }
@@ -84,10 +84,10 @@ class CDetailTranslateListAjaxController extends AAjaxController
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $productDetail->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['name'] = $trans->name;
-            $response['data'][$i]['slug'] = $userHasPermission ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?id=' . $productDetail->id . '">' . $productDetail->slug . '</a>' : $productDetail->slug;
-            $response['data'][$i]['id'] = $productDetail->id;
-            $response['data'][$i]['lang'] = $html;
+            $response['data'][$i]['id'] = $userHasPermission ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?id=' . $productDetail->id . '">' . $productDetail->id . '</a>' : $productDetail->id;
+            $response['data'][$i]['source'] = $translationStatus['1'];
+            $response['data'][$i]['target'] = $translationStatus['1'];
+            $response['data'][$i]['status'] = $html;
 
             $i++;
         }

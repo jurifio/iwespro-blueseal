@@ -10,7 +10,7 @@
                 "options": ["screen,print"]
             },
             "font-awesome.min.css": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/",
+                "path": "scheme://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/",
                 "options": ["screen,print"]
             },
             "jqueryUi.css": {

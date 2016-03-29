@@ -228,16 +228,19 @@
         order: [[0, "asc"]],
         columns: [
             {
-                data: "slug",
+                data: "id",
                 orderable: true,
                 searchable: false
             }, {
-                data: "name",
+                data: "source",
                 orderable: true,
                 searchable: true
-            },
-            {
-                data: "lang",
+            }, {
+                data: "target",
+                orderable: true,
+                searchable: true
+            }, {
+                data: "status",
                 orderable: false
             }
         ]
