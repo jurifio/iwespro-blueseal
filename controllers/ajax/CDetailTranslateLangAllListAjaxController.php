@@ -4,7 +4,6 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 
-
 /**
  * Class CDetailTranslateLangAllListAjaxController
  * @package bamboo\blueseal\controllers\ajax
@@ -44,7 +43,7 @@ class CDetailTranslateLangAllListAjaxController extends AAjaxController
     public function get()
     {
         $langId = $this->app->router->request()->getRequestData('lang');
-        $datatable = new CDataTables('vBluesealProductDetailList',['id'],$_GET);
+        $datatable = new CDataTables('vBluesealProductDetailTranslation',['id'],$_GET);
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
@@ -67,7 +66,8 @@ class CDetailTranslateLangAllListAjaxController extends AAjaxController
 
         $i = 0;
 
-        foreach($productsDetail as $val){
+        foreach ($productsDetail as $val)
+        {
             $trans = $transRepo->findOneBy(['productDetailId' => $val->id, 'langId' => $langId]);
             $transIta = $transRepo->findOneBy(['productDetailId' => $val->id, 'langId' => 1]);
             $name = '<div class="form-group form-group-default" style="width:604px">';

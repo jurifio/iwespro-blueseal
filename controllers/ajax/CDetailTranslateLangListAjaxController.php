@@ -44,7 +44,8 @@ class CDetailTranslateLangListAjaxController extends AAjaxController
     public function get()
     {
         $langId = $this->app->router->request()->getRequestData('lang');
-        $datatable = new CDataTables('vBluesealProductDetailList',['id'],$_GET);
+        $datatable = new CDataTables('vBluesealProductDetailTranslation',['id'],$_GET);
+        $datatable->addCondition('langId', [$langId]);
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
@@ -66,15 +67,13 @@ class CDetailTranslateLangListAjaxController extends AAjaxController
 
         $i = 0;
 
-        foreach($productsDetail as $val){
+        foreach ($productsDetail as $val)
+        {
             $trans = $transRepo->findOneBy(['productDetailId' => $val->id, 'langId' => $langId]);
             $transIta = $transRepo->findOneBy(['productDetailId' => $val->id, 'langId' => 1]);
+
             $name = '<div class="form-group form-group-default" style="width:604px">';
-            if (!is_null($trans) && $okManage) {
-                continue;
-            } elseif ($okManage) {
-                $name .= '<input type="text" class="form-control" style="width: 580px" id="name_' . $val->id . '" name="name_' . $val->id . '" onBlur="modifica(this,' . $langId . ')" />';
-            }
+            $name .= '<input type="text" class="form-control" style="width: 580px" id="name_' . $val->id . '" name="name_' . $val->id . '" onBlur="modifica(this,' . $langId . ')" />';
             $name .= '</div>';
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;

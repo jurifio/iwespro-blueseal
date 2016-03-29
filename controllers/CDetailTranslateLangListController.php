@@ -23,6 +23,9 @@ class CDetailTranslateLangListController extends ARestrictedAccessRootController
     protected $fallBack = "blueseal";
     protected $pageSlug = "detail_lang_list";
 
+    /**
+     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
+     */
     public function get()
     {
         $view = new VBase(array());

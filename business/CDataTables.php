@@ -2,22 +2,72 @@
 
 namespace bamboo\blueseal\business;
 
+/**
+ * Class CDataTables
+ * @package bamboo\blueseal\business
+ *
+ * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ *
+ * @copyright (c) Bambooshoot snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date 01/01/2014
+ * @since 1.0
+ */
 class CDataTables
 {
+    /**
+     * @var string
+     */
     protected $table;
+    /**
+     * @var array
+     */
     protected $keys;
+    /**
+     * @var array
+     */
     protected $columns = [];
+    /**
+     * @var array
+     */
     protected $conditions = [];
+    /**
+     * @var bool
+     */
     protected $search = false;
+    /**
+     * @var array
+     */
     protected $orders = [];
+    /**
+     * @var bool
+     */
     protected $limit = false;
+    /**
+     * @var bool
+     */
     protected $offset = false;
+    /**
+     * @var array
+     */
     protected $params = [];
+    /**
+     * @var string
+     */
     protected $rawSearch;
-
-
+    /**
+     * @var string
+     */
     protected $where;
 
+    /**
+     * CDataTables constructor.
+     * @param $table
+     * @param array $keys
+     * @param array $dtData
+     */
     public function __construct($table, array $keys, array $dtData)
     {
         $this->setUpDtData($dtData);
@@ -25,6 +75,9 @@ class CDataTables
         $this->table = $table;
     }
 
+    /**
+     * @param $dtData
+     */
     public function setUpDtData($dtData)
     {
         $this->readColumns($dtData['columns']);
@@ -42,6 +95,10 @@ class CDataTables
         $this->conditions[] = [$column,$values,$not];
     }
 
+    /**
+     * @param bool $raw
+     * @return bool
+     */
     public function getSearch($raw = true){
         return $raw ? $this->rawSearch : $this->search;
     }
@@ -77,6 +134,10 @@ class CDataTables
         return ["query"=>$this->getQuery($count), "params"=>$this->getParams()];
     }
 
+    /**
+     * @param bool $count
+     * @return string
+     */
     protected function select($count = false)
     {
         $keys = implode(',',$this->keys);
@@ -84,16 +145,26 @@ class CDataTables
 
     }
 
+    /**
+     * @return string
+     */
     protected function from()
     {
         return " FROM {$this->table} ";
     }
 
+    /**
+     *
+     */
     public function reset(){
         $this->where = "";
         $this->params = [];
     }
 
+    /**
+     * @param bool $count
+     * @return string
+     */
     protected function where($count = false)
     {
         if(!empty($this->where)){
@@ -141,6 +212,10 @@ class CDataTables
         return $this->where;
     }
 
+    /**
+     * @param $string
+     * @return mixed|string
+     */
     protected function likeSearch($string)
     {
         $string = str_replace('.','\.', $string);
@@ -150,6 +225,9 @@ class CDataTables
 
     }
 
+    /**
+     * @return string
+     */
     protected function orderBy()
     {
         if(!empty($this->orders)){
@@ -161,6 +239,9 @@ class CDataTables
         } else return " ";
     }
 
+    /**
+     * @return string
+     */
     protected function limit()
     {
         if($this->limit){
@@ -170,6 +251,9 @@ class CDataTables
         }
     }
 
+    /**
+     * @param $columns
+     */
     protected function readColumns($columns)
     {
         foreach($columns as $column){
@@ -177,6 +261,9 @@ class CDataTables
         }
     }
 
+    /**
+     * @param $orders
+     */
     protected function readOrder($orders)
     {
         foreach ($orders as $order) {
@@ -184,6 +271,9 @@ class CDataTables
         }
     }
 
+    /**
+     * @param $dtData
+     */
     protected function readSearch($dtData)
     {
         if(isset($dtData['search']) && isset($dtData['search']['value']) && !empty($dtData['search']['value'])){
@@ -191,18 +281,32 @@ class CDataTables
             $this->search = $this->likeSearch($dtData['search']['value']);
         }
     }
+
+    /**
+     * @param $dtData
+     */
     protected function readLimits($dtData)
     {
         $this->limit = isset($dtData['length']) ? $dtData['length'] : false;
         $this->offset= isset($dtData['start']) ? $dtData['start'] : 0;
     }
 
-    protected function createColumn($column,  $sortable = true, $searchable = true, $search = null, $permission = null)
+    /**
+     * @param $column
+     * @param bool $sortable
+     * @param bool $searchable
+     * @param null $search
+     * @param null $permission
+     */
+    protected function createColumn($column, $sortable = true, $searchable = true, $search = null, $permission = null)
     {
         $this->columns[] = ["name"=>$column,"sortable"=>filter_var($sortable, FILTER_VALIDATE_BOOLEAN),"searchable"=>filter_var($searchable, FILTER_VALIDATE_BOOLEAN),"search"=>$search,"permission"=>$permission,];
     }
 
-	public function addSearchColumn($column)
+    /**
+     * @param $column
+     */
+    public function addSearchColumn($column)
 	{
 		$this->columns[] = ["name"=>$column,"sortable"=>false,"searchable"=>true,"search"=>$this->search,"permission"=>null];
 	}

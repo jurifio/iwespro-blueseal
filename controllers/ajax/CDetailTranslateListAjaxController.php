@@ -43,22 +43,21 @@ class CDetailTranslateListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductDetailList',['id'],$_GET);
+        $datatable = new CDataTables('vBluesealProductDetailTranslation',['id'],$this->app->router->request()->getRequestData());
         $modifica = $this->urls['base']."traduzioni/dettagli/modifica";
 
-        $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
+        $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $productsDetail = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productDetails = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
 
-        $transRepo = $this->app->repoFactory->create('ProductDetailTranslation');
         $repo = $this->app->repoFactory->create('Lang');
-        $installedLang = $repo->findAll();
+        $activeLanguages = $repo->findBy(['isActive'=>true]);
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -68,26 +67,27 @@ class CDetailTranslateListAjaxController extends AAjaxController
 
         $i = 0;
 
-        foreach($productsDetail as $val){
-            $trans = $transRepo->findOneBy(['productDetailId' => $val->id, 'langId' => 1]);
-
+        foreach($productDetails as $productDetail)
+        {
             $html = '';
 
-            foreach ($installedLang as $insLang) {
-                $lang = $transRepo->findOneBy(['productDetailId' => $val->id, 'langId' => $insLang->id]);
+            foreach ($activeLanguages as $activeLanguage)
+            {
+                $lang = explode('|',$productDetail->translatedLangId);
+
                 if(!is_null($lang)) {
-                    $html .= '<span class="badge">' . $insLang->lang . '</span>';
+                    $html .= '<span class="badge">' . $activeLanguage->lang . '</span>';
                 } else {
-                    $html .= '<span class="badge badge-red">' . $insLang->lang . '</span>';
+                    $html .= '<span class="badge badge-red">' . $activeLanguage->lang . '</span>';
                 }
             }
 
-                $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
-                $response['data'][$i]["DT_RowClass"] = 'colore';
-                $response['data'][$i]['name'] = $trans->name;
-                $response['data'][$i]['slug'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?id=' . $val->id . '">' . $val->slug . '</a>' : $val->slug;
-                $response['data'][$i]['id'] = $val->id;
-                $response['data'][$i]['lang'] = $html;
+            $response['data'][$i]["DT_RowId"] = 'row__' . $productDetail->id;
+            $response['data'][$i]["DT_RowClass"] = 'colore';
+            $response['data'][$i]['name'] = $trans->name;
+            $response['data'][$i]['slug'] = $userHasPermission ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?id=' . $productDetail->id . '">' . $productDetail->slug . '</a>' : $productDetail->slug;
+            $response['data'][$i]['id'] = $productDetail->id;
+            $response['data'][$i]['lang'] = $html;
 
             $i++;
         }
