@@ -66,7 +66,6 @@
             }
         ]
     };
-
     tableSetup.blog_list = $.extend({}, tableSetup.common, {
         order: [[4, "desc"]],
         columns: [
@@ -95,7 +94,6 @@
             }
         ]
     });
-
     tableSetup.product_list = $.extend({}, tableSetup.common, {
         order: [[8, "desc"]],
         columns: [
@@ -131,7 +129,6 @@
             }
         ]
     });
-
     tableSetup.product_incomplete_list = $.extend({}, tableSetup.common, {
         order: [[6, "desc"]],
         columns: [
@@ -168,7 +165,6 @@
             }
         ]
     });
-
     tableSetup.product_importer_list = $.extend({}, tableSetup.common, {
         order: [[6, "desc"]],
         columns: [
@@ -201,7 +197,6 @@
             }
         ]
     });
-
     tableSetup.product_detail_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -223,29 +218,32 @@
         lengthMenu: [10,25,50,75,100,200,500,1000],
         displayLength: 100
     });
-
     tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
             {
                 data: "id",
+                name: "id",
                 orderable: true,
                 searchable: false
             }, {
                 data: "source",
+                name: "translatedName",
                 orderable: true,
                 searchable: true
             }, {
                 data: "target",
+                name: "translatedName",
                 orderable: true,
                 searchable: true
             }, {
                 data: "status",
-                orderable: false
+                name: "translatedLangId",
+                orderable: false,
+                searchable: false
             }
         ]
     });
-
     tableSetup.description_translate_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -268,7 +266,6 @@
         lengthMenu: [10,25,50,75,100,200,500,1000],
         displayLength: 100
     });
-
     tableSetup.name_translate_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -286,7 +283,6 @@
         lengthMenu: [10,25,50,75,100,200,500,1000],
         displayLength: 100
     });
-
     tableSetup.name_lang_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -304,7 +300,6 @@
         lengthMenu: [10,25,50,75,100,200,500,1000],
         displayLength: 100
     });
-
     tableSetup.detail_lang_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -319,7 +314,6 @@
             }
         ]
     });
-
     tableSetup.detail_langall_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -334,7 +328,6 @@
             }
         ]
     });
-
     tableSetup.dictionary_brand_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -350,7 +343,6 @@
             }
         ]
     });
-
     tableSetup.dictionary_edit = $.extend({}, tableSetup.common, {
         order: [[1, "asc"],
                 [0,"asc"]],
@@ -364,7 +356,6 @@
             }
         ]
     });
-
     tableSetup.dictionary_size_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -380,7 +371,6 @@
             }
         ]
     });
-
     tableSetup.dictionary_season_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -396,7 +386,6 @@
             }
         ]
     });
-
     tableSetup.dictionary_tag_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -412,7 +401,6 @@
             }
         ]
     });
-
     tableSetup.dictionary_category_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -428,7 +416,6 @@
             }
         ]
     });
-
     tableSetup.dictionary_color_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -444,7 +431,6 @@
             }
         ]
     });
-
     tableSetup.landing_list = $.extend({}, tableSetup.common, {
         order: [
             [4, "desc"],
@@ -469,7 +455,6 @@
             }
         ]
     });
-
     tableSetup.homepage_list = $.extend({}, tableSetup.common, {
         order: [[1, "asc"]],
         columns: [
@@ -494,7 +479,6 @@
             }
         ]
     });
-
     tableSetup.catalog_list = $.extend({}, tableSetup.common, {
         order: [[1, "asc"]],
         columns: [
@@ -519,7 +503,6 @@
             }
         ]
     });
-
     tableSetup.order_list = $.extend({}, tableSetup.common, {
         order: [[1, "desc"]],
         columns: [
@@ -552,7 +535,6 @@
             }
         ]
     });
-
     tableSetup.brand_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
@@ -569,7 +551,6 @@
             }
         ]
     });
-
     tableSetup.color_list = $.extend({}, tableSetup.common, {
         order: [[0, "desc"]],
         columns: [
@@ -582,7 +563,6 @@
             }
         ]
     });
-
     tableSetup.user_list = $.extend({}, tableSetup.common, {
         order: [[5, "desc"]],
         columns: [
@@ -607,7 +587,6 @@
             }
         ]
     });
-
     tableSetup.coupon_list = $.extend({}, tableSetup.common, {
         order: [[3,'desc']],
         columns: [
@@ -652,7 +631,6 @@
             }
         ]
     });
-
     tableSetup.importer_list = $.extend({}, tableSetup.common, {
         order: [[0,'asc']],
         columns: [
@@ -679,7 +657,6 @@
             }
         ]
     });
-
     tableSetup.coupontype_list = $.extend({}, tableSetup.common, {
         order: [[0,'asc']],
         columns: [
@@ -703,7 +680,6 @@
             }
         ]
     });
-
     tableSetup.product_active_list = $.extend({}, tableSetup.common, {
         order: [[3, "desc"]],
         columns: [
@@ -745,7 +721,6 @@
             }
         ]
     });
-
     tableSetup.couponevent_list = $.extend({}, tableSetup.common, {
         order: [[0,'asc']],
         columns: [
@@ -773,7 +748,6 @@
             }
         ]
     });
-
     tableSetup.tag_list = $.extend({}, tableSetup.common, {
         order: [[0,'asc']],
         columns: [

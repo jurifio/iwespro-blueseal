@@ -22,7 +22,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-datatable-name="detail_translate_list" data-controller="DetailTranslateListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>" data-search="<?php echo isset($_GET['search']) ?  $_GET['search'] : "" ?>">
+                        <table class="table table-striped responsive" width="100%" data-datatable-name="detail_translate_list" data-controller="DetailTranslateListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                                 <tr>
                                     <th class="center sorting">ID</th>
@@ -45,28 +45,42 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Filtri">
-        <bs-toolbar-button
+        <bs-toolbar-button-toggle
             data-tag="a"
-            data-icon="fa-filter"
+            data-icon="fa-cubes"
             data-permission="/admin/product/add"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Mostra solo dettagli usati in prodotti con quantità disponibili"
             data-placement="bottom"
-            data-href=""
-        ></bs-toolbar-button>
+            data-event="bs.detailTranslation.filterByQty"
+            data-on="bs-button-toggle"
+            data-key="draw"
+        ></bs-toolbar-button-toggle>
+        <bs-toolbar-button-toggle
+            data-tag="a"
+            data-icon="fa-language"
+            data-permission="/admin/product/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Mostra solo dettagli non tradotti nella lingua di destinazione corrente"
+            data-placement="bottom"
+            data-event="bs.detailTranslation.filterByUntranslated"
+            data-on="bs-button-toggle"
+            data-key="asdafasda"
+        ></bs-toolbar-button-toggle>
         <bs-toolbar-select
             data-tag="select"
             data-icon="fa-language"
             data-permission="/admin/content/publish"
             data-rel="tooltip"
-            data-button="true"
+            data-button="false"
             data-placement="bottom"
             data-class="btn btn-default"
             data-json="Post.postStatusId"
-            data-title="Modifica stato"
-            data-event="bs.translation.setTarget"
-            data-options='<?php echo json_encode($languages()); ?>'
+            data-title="Cambia lingua di destinazione in"
+            data-event="bs.detailTranslation.changeTargetLanguage"
+            data-options='<?php echo json_encode($languages); ?>'
         ></bs-toolbar-select>
     </bs-toolbar-group>
 </bs-toolbar>

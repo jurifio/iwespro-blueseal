@@ -205,10 +205,16 @@ var Button = function (data) {
 
         var theButton = $('#bsButton_' + that.id);
 
-        if (theButton.is('select')) {
+        if (theButton.is('select') && that.cfg.data.button == true) {
             theButton.next().on('click', function (e) {
                 if (that.cfg.data.event) {
                     $(this).trigger(that.cfg.data.event, [$(this).prev(), that, e]);
+                }
+            });
+        } else if (theButton.is('select') && that.cfg.data.button == false) {
+            theButton.on('change', function (e) {
+                if (that.cfg.data.event) {
+                    $(this).trigger(that.cfg.data.event, [$(this), that, e]);
                 }
             });
         } else {
@@ -314,7 +320,7 @@ var Select = function(data)
     Button.call(this, data);
 
     this.options = data.options;
-    this.template = "<{tag} {attributes} {id}>{options}</{tag}><a {attributes}>{icon}</a>";
+    this.template = "<{tag} {attributes} {id}>{icon}</{tag}>";
 };
 
 /**
@@ -352,6 +358,45 @@ Select.prototype.parse = function ()
     selectTag = selectTag.replace(/\{options}/gi, options);
 
     return selectTag;
+};
+
+/**
+ * @param data
+ * @constructor
+ */
+var ButtonToggle = function(data)
+{
+    Button.call(this, data);
+
+    this.on = data.on;
+    this.key = data.key;
+    this.stateController = (function($,key) {
+        var dt = $('table[data-datatable-name]').DataTable();
+        return dt.ajax.params()[key]
+    })(jQuery,this.key);
+    this.template = "<{tag} {attributes} {id}>{icon}</{tag}>";
+};
+
+/**
+ * @type {Button}
+ */
+ButtonToggle.prototype = Object.create(Button.prototype);
+
+/**
+ * @returns {string}
+ */
+ButtonToggle.prototype.parse = function()
+{
+    var buttonToggleTag = Button.prototype.parse.call(this);
+    var css = '';
+
+    if (typeof this.stateController !== 'undefined') {
+        css = this.on;
+    }
+
+    buttonToggleTag = buttonToggleTag.replace(/(class=")(btn [a-z-]+)(")/i, '$1$2 '+css+'$3');
+
+    return buttonToggleTag;
 };
 
 /**

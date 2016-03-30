@@ -21,6 +21,12 @@
                 select.draw($("div.bs-toolbar .dt-buttons").last());
                 select.checkPermission();
             });
+
+            $.each($(this).children('bs-toolbar-button-toggle'), function () {
+                var buttonToggle = new ButtonToggle($(this).data());
+                buttonToggle.draw($("div.bs-toolbar .dt-buttons").last());
+                buttonToggle.checkPermission();
+            });
         });
 
         operations.append('<div class="dt-buttons btn-group bs-toolbar-responsive"><div class="btn-group-label">&nbsp;</div></div>');

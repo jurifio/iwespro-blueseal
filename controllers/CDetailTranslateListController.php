@@ -35,7 +35,7 @@ class CDetailTranslateListController extends ARestrictedAccessRootController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'sidebar' => $this->sidebar->build(),
-            'languages' => (function() use ($activeLanguages) {
+            'languages' => call_user_func(function() use ($activeLanguages) {
                 $languages = [];
                 foreach($activeLanguages as $activeLanguage) {
                     $languages[$activeLanguage->id] = $activeLanguage->name;

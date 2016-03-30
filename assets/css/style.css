@@ -675,3 +675,22 @@ ul.roulette-importer-details {
 ul.roulette-importer-details li {
     padding-left: 0;
 }
+
+.dataTable .form-group-default {
+    padding-bottom:7px;
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+.dataTable .form-group-default.loading:after {
+    content: url(/assets/ripple.gif);
+    position: absolute;
+    right: 15px;
+}
+
+.bs-button-toggle {
+    box-shadow: inset 1px 1px 1px #c0c0c0;
+    color:#009900;
+}

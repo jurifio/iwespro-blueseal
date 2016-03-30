@@ -1,41 +1,32 @@
-$(document).on('bs.translate.detail', function() {
+$(document).on('bs.detailTranslation.changeTargetLanguage', function(event,select,selectObj) {
+    var $t = $('table[data-datatable-name]');
+    $t.data('useTargetLang',select.val());
+    var dt = $t.DataTable();
+    dt.draw();
+});
 
-    var bsModal = $('#bsModal');
-    var header = $('.modal-header h4');
-    var body = $('.modal-body');
-    var cancelButton = $('.modal-footer .btn-default');
-    var okButton = $('.modal-footer .btn-success');
-
-    var result = {
-        status: "ko",
-        bodyMessage: "Errore di caricamento, controlla la rete",
-        okButtonLabel: "Ok",
-        cancelButtonLabel: null
-    };
-
-    header.html('Traduci in:');
+$(document).on('blur','.dt-input',function() {
+    var $formControl = $(this).parent();
+    $formControl.addClass('loading');
     $.ajax({
-        url: "/blueseal/xhr/DetailTranslateManager",
-        type: "GET"
-    }).done(function (response) {
-        result = JSON.parse(response);
-        body.html(result.bodyMessage);
-        $(bsModal).find('table').addClass('table');
-
-        if (result.cancelButtonLabel == null) {
-            cancelButton.hide();
-        } else {
-            cancelButton.html(result.cancelButtonLabel);
+        url: $('table[data-datatable-name]').data('url')+"/CDetailTranslationController",
+        type: "PUT",
+        data: {
+            lang: $(this).data('lang'),
+            name: $(this).val(),
+            id: $(this).attr('id').split('_')[1]
         }
-
-        bsModal.modal();
-        if (result.status == 'ok') {
-            okButton.html(result.okButtonLabel).off().on('click', function (e) {
-                var selected = $('input[name="langId"]:checked').val();
-                window.location.replace('/blueseal/traduzioni/dettagli/lingua/'+selected);
-            });
-
-        }
-
+    }).done(function(data) {
+        $formControl.removeClass('loading');
+        $formControl.css('box-shadow','inset 0 0 1px 1px #009900');
+        $formControl.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',function() {
+            $formControl.css('box-shadow','inset 0 0 1px #c0c0c0');
+        });
+    }).fail(function(data) {
+        $formControl.removeClass('loading');
+        $formControl.css('box-shadow','inset 0 0 1px 1px #990000');
+        $formControl.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',function() {
+            $formControl.css('box-shadow','inset 0 0 1px #c0c0c0');
+        });
     });
 });

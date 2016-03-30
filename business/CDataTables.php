@@ -257,7 +257,8 @@ class CDataTables
     protected function readColumns($columns)
     {
         foreach($columns as $column){
-            $this->createColumn($column['data'],$column['orderable'],$column['searchable'],$column['search']['value'],null);
+            $key = (isset($column['name']) && $column['name'] != '') ? $column['name'] : $column['data'];
+            $this->createColumn($key,$column['orderable'],$column['searchable'],$column['search']['value'],null);
         }
     }
 
