@@ -2,6 +2,8 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\db\pandaorm\entities\IEntity;
+use bamboo\core\exceptions\BambooDBALException;
 use bamboo\core\intl\CLang;
 
 
@@ -45,6 +47,8 @@ class CDetailTranslateListAjaxController extends AAjaxController
     {
         $datatable = new CDataTables('ProductDetailTranslationView', ['id'], $this->app->router->request()->getRequestData());
         $modifica = $this->urls['base'] . "traduzioni/dettagli/modifica";
+
+
 
         $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/edit');
 
@@ -106,5 +110,37 @@ class CDetailTranslateListAjaxController extends AAjaxController
         }
 
         echo json_encode($response);
+    }
+
+    public function put()
+    {
+        $langId = $this->app->router->request()->getRequestData('lang');
+        $detailName = $this->app->router->request()->getRequestData('name');
+        $detailId = $this->app->router->request()->getRequestData('id');
+
+        $detailRepo = $this->app->repoFactory->create('ProductDetailTranslation');
+        $entity = $detailRepo->findOneBy(['langId'=>$langId, 'productDetailId'=>$detailId]);
+
+        try {
+            if (!$entity instanceof IEntity) {
+                $entity = $detailRepo->getEmptyEntity();
+                $entity->productDetailId = $detailId;
+                $entity->langId = $langId;
+                $entity->name = $detailName;
+                $entity->insert();
+             }
+        } catch (BambooDBALException $e) {
+        } catch (\Exception $e) {
+            $this->app->router->response()->raiseProcessingError()->sendHeaders();
+            return;
+        }
+
+        try {
+            $entity->name = $detailName;
+            $entity->update();
+        } catch (BambooDBALException $e) {
+            $this->app->router->response()->raiseProcessingError()->sendHeaders();
+            return;
+        }
     }
 }

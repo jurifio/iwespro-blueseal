@@ -1,123 +1,48 @@
 window.bsToolbarLastButtonId = 0;
 
-/**
- * @param a
- * @param b
- * @param inclusive
- * @returns {boolean}
- */
-Number.prototype.between = function (a, b, inclusive) {
-    var min = Math.min(a, b),
-        max = Math.max(a, b);
-
-    return inclusive ? this >= min && this <= max : this > min && this < max;
+var ui = function()
+{
+    this.registry = [];
 };
 
-jQuery.fn.selectText = function(){
-    var doc = document
-        , element = this[0]
-        , range, selection
-        ;
-    if (doc.body.createTextRange) {
-        range = document.body.createTextRange();
-        range.moveToElementText(element);
-        range.select();
-    } else if (window.getSelection) {
-        selection = window.getSelection();
-        range = document.createRange();
-        range.selectNodeContents(element);
-        selection.removeAllRanges();
-        selection.addRange(range);
+ui.prototype.register = function(widget)
+{
+    if (widget instanceof Widget) {
+        this.registry.push(widget)
+    } else {
+        throw new Error('The widget you are trying to register must be an instance of Widget');
     }
 };
 
-(function($) {
-
-    $.MatchMedia = function(a) {
-        return window.styleMedia.matchMedium(a);
-    };
-
-    $.QueryString = (function(a) {
-        if (a == "") return {};
-        var b = {};
-        for (var i = 0; i < a.length; ++i)
-        {
-            var p=a[i].split('=');
-            if (p.length != 2) continue;
-            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+ui.prototype.unregister = function(widget)
+{
+    if (widget instanceof Widget) {
+        var idx = this.registry.indexOf(widget);
+        if (idx > -1) {
+            this.registry.splice(widget, 1);
+        } else {
+            throw new Error('The widget you are trying to unregister does not exist');
         }
-        return b;
-    })(window.location.search.substr(1).split('&'));
-
-    $.ajaxForm = function(ajaxConf, formDataObject) {
-
-        var dff = $.Deferred();
-        var conf = $.extend({},{
-            contentType: 'multipart/form-data',
-            processData: false
-        },ajaxConf);
-
-        if (conf.formAutofill && conf.formAutofill == true) {
-            $('input:not([type=file],[type=radio]), textarea, select').each(function() {
-                if(typeof $(this).attr('name') == 'undefined') return;
-                formDataObject.append($(this).attr('name'), $(this).val());
-            });
-
-            var radioNames = [];
-            $('input[type=radio]').each(function() {
-                radioNames.push($(this).attr('name'));
-            });
-            var unique = radioNames.filter(function(value,index,self) {
-                return self.indexOf(value) === index;
-            });
-            unique.forEach(function(element,index,array) {
-                formDataObject.append(element, $('[name='+element+']:checked').val());
-            });
-
-            $(':file').each(function() {
-                if(typeof this.name == 'undefined') return;
-                formDataObject.append(this.name,this.files[0]);
-            });
-        }
-
-        conf.data = formDataObject;
-
-        var promise = $.ajax(conf);
-
-        promise.then(function(data) {
-            dff.resolve(data);
-        }, function(data) {
-            dff.reject(data.responseText);
-        });
-
-        return dff.promise();
-    };
-
-})(jQuery);
-
-/**
- * @constructor
- */
-var DffBooleanAjax = function () {};
-
-/**
- * @param $ajaxConfig
- * @returns {*}
- */
-DffBooleanAjax.prototype.getDeferred = function ($ajaxConfig) {
-
-    var dff = $.Deferred();
-    var ajaxPromise = $.ajax($ajaxConfig);
-
-    ajaxPromise.then(function (data) {
-        var result = Boolean(data);
-        dff.resolve(result);
-    }, function () {
-        dff.reject();
-    });
-
-    return dff.promise();
+    } else {
+        throw new Error('The widget you are trying to register must be an instance of Widget');
+    }
 };
+
+var Widget = function() {};
+
+var UiElement = function(uiElementTagObject, allowedConfigKeyArray) {
+    Widget.call(this);
+    this.uiElementTagObject = uiElementTagObject;
+    this.allowedConfigKeyArray = allowedConfigKeyArray;
+    this.data = null;
+};
+UiElement.prototype = Object.create(Widget.prototype);
+UiElement.prototype.constructor = UiElement;
+
+UiElement.prototype.parseConfig = function() {
+
+};
+
 
 /**
  * @param data
@@ -132,6 +57,8 @@ var ButtonCfg = function (data, expected) {
     this.expected = expected;
     this.data = this.extractFrom(data);
 };
+ButtonCfg.prototype = Object.create(UiElement.prototype);
+ButtonCfg.prototype.constructor = UiElement;
 
 /**
  * @param data
@@ -372,6 +299,8 @@ var ButtonToggle = function(data)
     this.key = data.key;
     this.stateController = (function($,key) {
         var dt = $('table[data-datatable-name]').DataTable();
+        console.log('params++++');
+        console.log(dt.ajax.params());
         return dt.ajax.params()[key]
     })(jQuery,this.key);
     this.template = "<{tag} {attributes} {id}>{icon}</{tag}>";
@@ -389,6 +318,13 @@ ButtonToggle.prototype.parse = function()
 {
     var buttonToggleTag = Button.prototype.parse.call(this);
     var css = '';
+
+    console.log('statecontroller++++');
+    console.log(this.stateController);
+    console.log('on++++');
+    console.log(this.on);
+    console.log('key++++');
+    console.log(this.key);
 
     if (typeof this.stateController !== 'undefined') {
         css = this.on;
@@ -794,4 +730,29 @@ $.drawUI = function() {
         lang: "it-IT",
         height: 100
     });
+};
+
+
+/**
+ * @constructor
+ */
+var DffBooleanAjax = function () {};
+
+/**
+ * @param $ajaxConfig
+ * @returns {*}
+ */
+DffBooleanAjax.prototype.getDeferred = function ($ajaxConfig) {
+
+    var dff = $.Deferred();
+    var ajaxPromise = $.ajax($ajaxConfig);
+
+    ajaxPromise.then(function (data) {
+        var result = Boolean(data);
+        dff.resolve(result);
+    }, function () {
+        dff.reject();
+    });
+
+    return dff.promise();
 };

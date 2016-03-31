@@ -55,7 +55,7 @@
             data-placement="bottom"
             data-event="bs.detailTranslation.filterByQty"
             data-on="bs-button-toggle"
-            data-key="draw"
+            data-key="mustHaveQty"
         ></bs-toolbar-button-toggle>
         <bs-toolbar-button-toggle
             data-tag="a"
@@ -67,7 +67,7 @@
             data-placement="bottom"
             data-event="bs.detailTranslation.filterByUntranslated"
             data-on="bs-button-toggle"
-            data-key="asdafasda"
+            data-key="showOnlyUntranslated"
         ></bs-toolbar-button-toggle>
         <bs-toolbar-select
             data-tag="select"

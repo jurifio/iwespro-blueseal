@@ -5,11 +5,25 @@ $(document).on('bs.detailTranslation.changeTargetLanguage', function(event,selec
     dt.draw();
 });
 
+$(document).on('bs.detailTranslation.filterByQty',function() {
+    var $t = $('table[data-datatable-name]');
+    $t.data('mustHaveQty',1);
+    var dt = $t.DataTable();
+    dt.draw();
+});
+
+$(document).on('bs.detailTranslation.changeTargetLanguage',function() {
+    var $t = $('table[data-datatable-name]');
+    $t.data('showOnlyUntranslated',1);
+    var dt = $t.DataTable();
+    dt.draw();
+});
+
 $(document).on('blur','.dt-input',function() {
     var $formControl = $(this).parent();
     $formControl.addClass('loading');
     $.ajax({
-        url: $('table[data-datatable-name]').data('url')+"/CDetailTranslationController",
+        url: $('table[data-datatable-name]').data('url')+"/DetailTranslateListAjaxController",
         type: "PUT",
         data: {
             lang: $(this).data('lang'),
