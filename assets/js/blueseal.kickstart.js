@@ -42,8 +42,6 @@ function responsiveToolBar()
         return w;
     })(customToolbars);
 
-    console.log(customToolbars);
-
     if (customToolbarsWidth > toolbarWidth * 0.5) {
         dropdown.append(customToolbars.last());
         $('.bs-toolbar-responsive').show();
@@ -51,8 +49,6 @@ function responsiveToolBar()
         toolbar.append($('.other-actions .btn-group').last());
         $('.bs-toolbar-responsive').hide();
     }
-
-    console.log(customToolbarsWidth,toolbarWidth * 0.5);
 }
 
 Pace.on('done', function() {
