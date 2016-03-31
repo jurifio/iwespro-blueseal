@@ -45,6 +45,30 @@ UiElement.prototype.parseConfig = function() {
 
 
 /**
+ * @constructor
+ */
+var DffBooleanAjax = function () {};
+
+/**
+ * @param $ajaxConfig
+ * @returns {*}
+ */
+DffBooleanAjax.prototype.getDeferred = function ($ajaxConfig) {
+
+    var dff = $.Deferred();
+    var ajaxPromise = $.ajax($ajaxConfig);
+
+    ajaxPromise.then(function (data) {
+        var result = Boolean(data);
+        dff.resolve(result);
+    }, function () {
+        dff.reject();
+    });
+
+    return dff.promise();
+};
+
+/**
  * @param data
  * @param expected
  * @returns {ButtonCfg}
@@ -730,29 +754,4 @@ $.drawUI = function() {
         lang: "it-IT",
         height: 100
     });
-};
-
-
-/**
- * @constructor
- */
-var DffBooleanAjax = function () {};
-
-/**
- * @param $ajaxConfig
- * @returns {*}
- */
-DffBooleanAjax.prototype.getDeferred = function ($ajaxConfig) {
-
-    var dff = $.Deferred();
-    var ajaxPromise = $.ajax($ajaxConfig);
-
-    ajaxPromise.then(function (data) {
-        var result = Boolean(data);
-        dff.resolve(result);
-    }, function () {
-        dff.reject();
-    });
-
-    return dff.promise();
 };
