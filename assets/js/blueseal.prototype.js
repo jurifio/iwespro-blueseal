@@ -126,62 +126,56 @@ var Button = function (data) {
     this.dataAttr = new ButtonCfg(data, ['placement', 'toggle', 'target', 'json']);
 
     this.permissionCheckerEndPoint = "/blueseal/xhr/CheckPermission";
-
-    var that = this;
-
-    this.getHref = function () {
-        return this.tagAttr.data.href;
-    };
-
-    this.getTitle = function () {
-        return this.tagAttr.data.title;
-    };
-
-    this.setTemplate = function (template) {
-        if (template.indexOf('{tag}') < 0 || template.indexOf('{attributes}') < 0 || template.indexOf('{id}') < 0) {
-            throw new Error('Invalid tag template. Must contain at least {tag}, {attributes} and {id} placeholders');
-        }
-        this.template = template;
-    };
-
-    this.draw = function (element) {
-
-        var html = that.parse();
-
-        if (element.prop('tagName') == 'BS-BUTTON') {
-            $(document).trigger('bs.draw.inpage.button', [element, that, html])
-        } else{
-            $(document).trigger('bs.draw.toolbar.button', [element, that, html])
-        }
-
-        var theButton = $('#bsButton_' + that.id);
-
-        if (theButton.is('select') && that.cfg.data.button == true) {
-            theButton.next().on('click', function (e) {
-                if (that.cfg.data.event) {
-                    $(this).trigger(that.cfg.data.event, [$(this).prev(), that, e]);
-                }
-            });
-        } else if (theButton.is('select') && that.cfg.data.button == false) {
-            theButton.on('change', function (e) {
-                if (that.cfg.data.event) {
-                    $(this).trigger(that.cfg.data.event, [$(this), that, e]);
-                }
-            });
-        } else {
-            theButton.on('click', function (e) {
-                if (that.cfg.data.event) {
-                    $(this).trigger(that.cfg.data.event, [$(this), that, e]);
-                }
-            });
-        }
-    };
 };
 
 /**
  * @type {DffBooleanAjax}
  */
 Button.prototype = Object.create(DffBooleanAjax.prototype);
+
+/**
+ * @returns {*}
+ */
+Button.prototype.getHref = function() {
+    return this.tagAttr.data.href;
+};
+
+/**
+ * @returns {*}
+ */
+Button.prototype.getTitle = function() {
+    return this.tagAttr.data.title;
+};
+
+/**
+ * @param template
+ */
+Button.prototype.setTemplate = function(template) {
+    if (template.indexOf('{tag}') < 0 || template.indexOf('{attributes}') < 0 || template.indexOf('{id}') < 0) {
+        throw new Error('Invalid tag template. Must contain at least {tag}, {attributes} and {id} placeholders');
+    }
+    this.template = template;
+};
+
+/**
+ * @param element
+ */
+Button.prototype.draw = function(element) {
+    var that = this;
+    var html = this.parse();
+
+    if (element.prop('tagName') == 'BS-BUTTON') {
+        $(document).trigger('bs.draw.inpage.button', [element, this, html])
+    } else{
+        $(document).trigger('bs.draw.toolbar.button', [element, this, html])
+    }
+
+    $('#bsButton_' + this.id).on('click', function (e) {
+        if (that.cfg.data.event) {
+            $(this).trigger(that.cfg.data.event, [$(this), that, e]);
+        }
+    });
+};
 
 /**
  * @returns {string}
@@ -269,29 +263,52 @@ Button.prototype.checkPermission = function () {
 var Select = function(data)
 {
     Button.call(this, data);
-
     this.options = data.options;
-    this.template = "<{tag} {attributes} {id}>{icon}</{tag}>";
+    this.template = "<{tag} {attributes} {id}>{options}</{tag}>";
 };
-
 /**
  * @type {Button}
  */
 Select.prototype = Object.create(Button.prototype);
 
 /**
- * @returns {string}
+ * @param element
  */
-Select.prototype.parse = function ()
-{
-    var options = "";
-    console.log('ciccio');
+Select.prototype.draw = function(element) {
+    var that = this;
+    var html = this.parse();
 
-    if (this.cfg.data.button == false) {
-        this.setTemplate("<{tag} {attributes} {id}>{options}</{tag}>");
+    if (element.prop('tagName') == 'BS-BUTTON') {
+        $(document).trigger('bs.draw.inpage.button', [element, this, html])
+    } else{
+        $(document).trigger('bs.draw.toolbar.button', [element, this, html])
     }
 
-    var selectTag  = Button.prototype.parse.call(this);
+    var theButton = $('#bsButton_' + this.id);
+
+    if (that.cfg.data.button == 'true') {
+        theButton.next().on('click', function (e) {
+            if (that.cfg.data.event) {
+                $(this).trigger(that.cfg.data.event, [$(this).prev(), that, e]);
+            }
+        });
+    } else {
+        theButton.on('change', function (e) {
+            if (that.cfg.data.event) {
+                $(this).trigger(that.cfg.data.event, [$(this), that, e]);
+            }
+        });
+    }
+};
+
+/**
+ * @returns {string}
+ */
+Select.prototype.parse = function()
+{
+    var options = "";
+
+    var selectTag = Button.prototype.parse.call(this);
     var selectedOption = 'undefined';
 
     if (typeof this.options.selected != 'undefined') {
@@ -324,8 +341,6 @@ var ButtonToggle = function(data)
     this.key = data.key;
     this.stateController = (function($,key) {
         var dt = $('table[data-datatable-name]').DataTable();
-        console.log('params++++');
-        console.log(dt.ajax.params());
         return dt.ajax.params()[key]
     })(jQuery,this.key);
     this.template = "<{tag} {attributes} {id}>{icon}</{tag}>";
@@ -343,13 +358,6 @@ ButtonToggle.prototype.parse = function()
 {
     var buttonToggleTag = Button.prototype.parse.call(this);
     var css = '';
-
-    console.log('statecontroller++++');
-    console.log(this.stateController);
-    console.log('on++++');
-    console.log(this.on);
-    console.log('key++++');
-    console.log(this.key);
 
     if (typeof this.stateController !== 'undefined') {
         css = this.on;

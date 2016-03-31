@@ -26,35 +26,42 @@ function mq() {
     }
 }
 
-Pace.on('done', function() {
-    mq();
-});
+function responsiveToolBar()
+{
+    var toolbar = $('.bs-toolbar');
+    var dropdown = $('.other-actions');
+    var customToolbars = $('.bs-toolbar > .bs-toolbar-custom');
+    var toolbarCount = customToolbars.length;
 
-var lastMatchedMq;
+    var toolbarWidth = $('.bs-toolbar').width();
+    var customToolbarsWidth = (function(customToolbars) {
+        var w = 0;
+        customToolbars.each(function(k,v) {
+            w += $(v).width();
+        });
+        return w;
+    })(customToolbars);
+
+    console.log(customToolbars);
+
+    if (customToolbarsWidth > toolbarWidth * 0.5) {
+        dropdown.append(customToolbars.last());
+        $('.bs-toolbar-responsive').show();
+    } else {
+        toolbar.append($('.other-actions .btn-group').last());
+        $('.bs-toolbar-responsive').hide();
+    }
+
+    console.log(customToolbarsWidth,toolbarWidth * 0.5);
+}
+
+Pace.on('done', function() {
+    responsiveToolBar();
+});
 
 $(window).on('resize', function () {
-    if ($.MatchMedia('(min-width:1276px)')) {
-        if (lastMatchedMq !== '(min-width:1276px)') {
-            lastMatchedMq = '(min-width:1276px)';
-            mq();
-        }
-    }
-
-    if ($.MatchMedia('(min-width:1166px) and (max-width:1275px)')) {
-        if (lastMatchedMq !== '(min-width:1166px) and (max-width:1275px)') {
-            lastMatchedMq = '(min-width:1166px) and (max-width:1275px)';
-            mq();
-        }
-    }
-
-    if ($.MatchMedia('(max-width:1165px)')) {
-        if (lastMatchedMq !== '(max-width:1165px)') {
-            lastMatchedMq = '(max-width:1165px)';
-            mq();
-        }
-    }
+    responsiveToolBar();
 });
-
 
 $(document).ready(function() {
     $('[data-init-plugin=selectize]').each(function() {
