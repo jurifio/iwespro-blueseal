@@ -285,6 +285,7 @@ Select.prototype = Object.create(Button.prototype);
 Select.prototype.parse = function ()
 {
     var options = "";
+    console.log('ciccio');
 
     if (this.cfg.data.button == false) {
         this.setTemplate("<{tag} {attributes} {id}>{options}</{tag}>");
