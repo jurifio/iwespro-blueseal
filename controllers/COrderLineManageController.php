@@ -35,7 +35,7 @@ class COrderLineManageController extends ARestrictedAccessRootController
         $em = $this->app->entityManagerFactory->create('Country');
         $counties= $em->findAll("limit 999","");
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'order' => $order,
             'statuses' => $statuses,

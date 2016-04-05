@@ -28,7 +28,7 @@ class CProductDetailListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_detail_list.php');
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'sidebar' => $this->sidebar->build()

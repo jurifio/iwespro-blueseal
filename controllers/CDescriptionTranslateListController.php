@@ -31,7 +31,7 @@ class CDescriptionTranslateListController extends ARestrictedAccessRootControlle
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
         $url = $this->urls['base']."traduzioni/descrizioni/lingua";
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'url'=>$url,

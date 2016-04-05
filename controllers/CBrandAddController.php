@@ -34,7 +34,7 @@ class CBrandAddController extends CBrandManageController
             $brandEdit = $em->findOne([$_GET['productBrandId']]);
         }
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'brandEdit' => $brandEdit,
             'page'=>$this->page,

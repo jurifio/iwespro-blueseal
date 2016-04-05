@@ -27,7 +27,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
 
 	    $defaultImage = '/assets/bs-dummy-16-9.png';
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'user'=>$this->app->getUser(),

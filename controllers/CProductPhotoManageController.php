@@ -36,7 +36,7 @@ class CProductPhotoManageController extends ARestrictedAccessRootController
         $em = $this->app->entityManagerFactory->create('Product');
         $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'productEdit' => $productEdit,
             'page' => $this->page,

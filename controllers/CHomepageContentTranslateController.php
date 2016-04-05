@@ -70,7 +70,7 @@ class CHomepageContentTranslateController extends ARestrictedAccessRootControlle
 
         $parser = new CWidgetStructureParser($this->app, $languages, 'homepage');
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'structure' => $parser,
@@ -99,7 +99,7 @@ class CHomepageContentTranslateController extends ARestrictedAccessRootControlle
 
         $parser = new CWidgetStructureParser($this->app, $languages, 'homepage');
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'structure' => $parser,

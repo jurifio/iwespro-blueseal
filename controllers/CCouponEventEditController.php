@@ -25,7 +25,7 @@ class CCouponEventEditController extends ARestrictedAccessRootController
         $em = $this->app->entityManagerFactory->create('CouponType');
         $couponTypes = $em->findAll('limit 9999');
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'coupon' => $coupon,
             'couponTypes' => $couponTypes,

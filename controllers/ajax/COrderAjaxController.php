@@ -50,7 +50,7 @@ class COrderAjaxController extends AAjaxController
 
         $productRepo = $this->app->repoFactory->create('ProductNameTranslation');
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'userAddress' => $userAddress,
             'userShipping' => $userShipping,

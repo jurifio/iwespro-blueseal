@@ -42,7 +42,7 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
 
         $aztecFactoryEndpoint = $this->app->baseUrl(false).'/blueseal/xhr/GetAztecCode?src=';
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'aztecFactoryEndpoint'=> $aztecFactoryEndpoint,
             'products' => $products,

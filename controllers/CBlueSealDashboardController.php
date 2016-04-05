@@ -27,7 +27,7 @@ class CBlueSealDashboardController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/dashboard.php');
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'data' => $this->request->getUrlPath(),
             'page' => $this->page,

@@ -31,7 +31,7 @@ class CDictionaryColorEditController extends ARestrictedAccessRootController
         $shopId = $this->app->router->getMatchedRoute()->getComputedFilter('shopId');
         $shopName = $this->app->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'shopName' => $shopName->title,
             'shopId' => $shopId,

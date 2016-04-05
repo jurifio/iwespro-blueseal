@@ -31,7 +31,7 @@ class CDetailTranslateListController extends ARestrictedAccessRootController
         $repo = $this->app->repoFactory->create('Lang');
         $activeLanguages = $repo->findBy(['isActive'=>true]);
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'sidebar' => $this->sidebar->build(),

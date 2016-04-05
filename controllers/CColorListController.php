@@ -33,7 +33,7 @@ class CColorListController extends ARestrictedAccessRootController
         $gruppicolore = $em->findBySql("select * from ProductColorGroup where langId = 1",array());
 
         $modifica = $blueseal."/prodotti/gruppo-colore/modifica";
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'gruppicolore' => $gruppicolore,
             'modifica' => $modifica,

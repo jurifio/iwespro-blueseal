@@ -37,7 +37,7 @@ class CLandingPageAddController extends ARestrictedAccessRootController
 
         $categoryCollection = $this->app->categoryManager->categories()->bidim();
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'brandList' => $brandCollection,

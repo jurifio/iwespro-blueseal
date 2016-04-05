@@ -31,7 +31,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 		    if ($status->show) $statuses[$status->id] = $status->name;
 	    }
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
 	        'post' => $post,
 	        'cats' => $cats,

@@ -63,7 +63,7 @@ class CSkuManageController extends ARestrictedAccessRootController
             $shop = $productEdit->shop->getFirst();
         }
 
-        echo $view->render([
+        return $view->render([
             'shop' => $shop,
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'productEdit' => $productEdit,

@@ -25,7 +25,7 @@ class CTagEditController extends ARestrictedAccessRootController
         $sortingPriority = $this->app->entityManagerFactory->create('SortingPriority')->findAll();
         $langs = $this->app->entityManagerFactory->create('Lang')->findAll();
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'tag' => $tag,
             'tagTrans' => $tagTrans,

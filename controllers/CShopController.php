@@ -30,7 +30,7 @@ class CShopController extends ARestrictedAccessRootController
 
         $shops = $this->app->repoFactory->create('Shop')->findAll();
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'shops' => $shops,
             'page' => $this->page,

@@ -38,7 +38,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
         $possValidity[1] = 'P1M';
         $possValidity[2] = 'P7D';
 
-         echo $view->render([
+         return $view->render([
              'app' => new CRestrictedAccessWidgetHelper($this->app),
              'possValids' => $possValids,
              'possValidity' => $possValidity,

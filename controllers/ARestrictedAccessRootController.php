@@ -93,8 +93,7 @@ abstract class ARestrictedAccessRootController extends ARootController
 
         /** @var CRouter $router */
         $router = $this->app->router;
-        $this->{$action}(new CInternalRequest('','',$router->getMatchedRoute()->getComputedFilters(),$router->request()->getMethod(),$action));
-        return;
+        return $this->{$action}(new CInternalRequest('','',$router->getMatchedRoute()->getComputedFilters(),$router->request()->getMethod(),$action));
     }
 
     /**
