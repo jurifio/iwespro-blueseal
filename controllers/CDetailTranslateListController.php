@@ -29,7 +29,7 @@ class CDetailTranslateListController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/detail_translate_list.php');
 
         $repo = $this->app->repoFactory->create('Lang');
-        $activeLanguages = $repo->findBy(['isActive'=>true]);
+        $activeLanguages = $repo->findBy([]);
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
