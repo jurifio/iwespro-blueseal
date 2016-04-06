@@ -32,7 +32,7 @@ class CDescriptionTranslateLangListController extends CDescriptionTranslateLangM
         $seasons = $this->app->repoFactory->create('ProductSeason')->findAll();
         $colors = $this->app->repoFactory->create('ProductColorGroup')->findAll();
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'marketplaces' => $marketplaces,
             'brands' => $brands,

@@ -53,7 +53,7 @@ class CSizeListController extends ARestrictedAccessRootController
         $groups = $em->findBySql("SELECT distinct id from ProductSizeGroup GROUP BY macroName ",[]);
         $modifica = $blueseal."prodotti/gruppo-taglie/aggiungi";
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'groups' => $groups,
             'modifica' => $modifica,

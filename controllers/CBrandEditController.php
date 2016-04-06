@@ -29,7 +29,7 @@ class CBrandEditController extends CBrandManageController
         $brandId =  $this->app->router->request()->getRequestData('id');
         $brandEdit = $this->app->repoFactory->create('ProductBrand')->findOneBy(['id'=>$brandId]);
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'brandEdit' => $brandEdit,
             'page'=>$this->page,

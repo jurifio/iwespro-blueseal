@@ -50,7 +50,7 @@ class CCategoryManageController extends ARestrictedAccessRootController
 
         $blueseal = $this->app->baseUrl().'/blueseal';
         $elenco_prodotti = $blueseal."/prodotti";
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'categories' => $categories,
             'categoryLang'=>$categoryLang,

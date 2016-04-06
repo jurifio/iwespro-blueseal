@@ -35,7 +35,7 @@ class CSizeManageController extends ARestrictedAccessRootController
             $sizeEdit = $em->findBySql("select id  from ProductSizeGroup where `macroName` = (select `macroName` from ProductSizeGroup where id = ?)",array($_GET['productSizeGroupId']));
         }
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'sizeEdit' => $sizeEdit,
             'page' => $this->page,

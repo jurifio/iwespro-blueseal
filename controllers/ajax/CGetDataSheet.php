@@ -26,7 +26,7 @@ class CGetDataSheet extends AAjaxController
 
 	    $productSheetPrototype = $this->app->entityManagerFactory->create('ProductSheetPrototype')->findOne(['id'=>$name]);
 
-        echo $view->render([
+        return $view->render([
             'productSheetPrototype' =>$productSheetPrototype
         ]);
     }

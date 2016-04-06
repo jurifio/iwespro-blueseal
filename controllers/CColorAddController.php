@@ -38,7 +38,7 @@ class CColorAddController extends CColorManageController
         $em = $this->app->entityManagerFactory->create('Lang');
         $langs = $em->findAll("limit 99999", "");
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'colorGroupEdit' => $colorGroupEdit,
             'langs' => $langs,

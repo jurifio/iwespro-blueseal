@@ -26,7 +26,7 @@ class CLandingPageListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/landing_list.php');
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'previewUrl' => $this->app->router->request()->getScheme().'://'.$this->app->cfg()->fetch('paths','domain').'/it/focus/demo/L',
             'page' => $this->page,

@@ -24,7 +24,7 @@ class CUserListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/user_list.php');
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()

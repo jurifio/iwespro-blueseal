@@ -86,7 +86,7 @@ class CProductActiveListController extends ARestrictedAccessRootController
             $imgs++;
         }
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'dummyUrl' => $dummyUrl,
             'statuses' => $statuses,

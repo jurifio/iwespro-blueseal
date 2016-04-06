@@ -33,7 +33,7 @@ class CCategoryListController extends ARestrictedAccessRootController
         $categories = $this->app->categoryManager->categories()->children(1);
         $modifica = $blueseal."/prodotti/categorie/aggiungi";
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'categories' => $categories,
             'modifica' => $modifica,

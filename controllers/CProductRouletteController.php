@@ -188,7 +188,7 @@ class CProductRouletteController extends CProductManageController
 	    $datas['dettagli'] = $textlist;
 	    $productEdit->rouletteNotes = $datas;
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'statuses' => $statuses,
             'tags' => $tag,

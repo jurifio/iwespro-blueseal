@@ -28,7 +28,7 @@ class CTagAddController extends ARestrictedAccessRootController
         $sortings = $this->app->repoFactory->create('SortingPriority')->findAll();
         $langs = $this->app->repoFactory->create('Lang')->findAll();
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'sorting' => $sortings,
             'langs' => $langs,

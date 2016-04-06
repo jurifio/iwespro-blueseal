@@ -75,7 +75,7 @@ class CProductAddController extends CProductManageController
             $statuses[$status->code] = $status->name;
         }
 
-	    echo $view->render([
+	    return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'statuses' =>$statuses,
             'tags' =>$tag,

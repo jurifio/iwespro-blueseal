@@ -45,7 +45,7 @@ class CCatalogContentEditController extends ARestrictedAccessRootController
 
         $parser = new CWidgetStructureParser($this->app, $languages, 'catalog');
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'structure' => $parser,

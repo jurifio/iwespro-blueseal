@@ -35,7 +35,7 @@ class COrderListController extends ARestrictedAccessRootController
         $opera = $blueseal."order";
         $aggiungi = $blueseal."order";
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'pageURL' =>$pageURL,
             'operaURL' =>$opera,

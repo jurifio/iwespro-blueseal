@@ -32,7 +32,7 @@ class CNameTranslateLangListController extends ARestrictedAccessRootController
         $urlAll = $this->urls['base']."traduzioni/nomi/lingua_list/" .$langId;
         $urlTrans = $this->urls['base']."traduzioni/nomi/lingua/" .$langId;
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'langId' => $langId,
             'page'=>$this->page,

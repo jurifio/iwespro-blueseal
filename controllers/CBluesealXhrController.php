@@ -49,8 +49,7 @@ class CBluesealXhrController extends ARestrictedAccessRootController
         }
 
         $this->response->sendHeaders();
-        echo $this->response->getBody();
-        return true;
+        return $this->response->getBody();
     }
 
     /**

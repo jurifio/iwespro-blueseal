@@ -46,7 +46,7 @@ class CConnectorController extends ARestrictedAccessRootController
             $value = $impConnectorStart->value;
         }
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'importerFieldModifier' => $importerFieldModifier,
             'importerField' => $importerField,

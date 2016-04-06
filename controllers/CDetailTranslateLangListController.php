@@ -35,7 +35,7 @@ class CDetailTranslateLangListController extends ARestrictedAccessRootController
         $urlAll = $this->urls['base']."traduzioni/dettagli/lingua_list/" .$langId;
         $urlTrans = $this->urls['base']."traduzioni/dettagli/lingua/" .$langId;
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'langId' => $langId,
             'page'=>$this->page,

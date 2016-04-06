@@ -32,7 +32,7 @@ class COrderManageController extends ARestrictedAccessRootController
         $invoicePrint = $this->urls['base']."xhr/InvoiceAjaxController";
         $orderPrint = $this->urls['base'] . "xhr/OrderAjaxController";
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'order' => $order,
             'statuses' => $statuses,

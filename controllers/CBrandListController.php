@@ -21,7 +21,7 @@ class CBrandListController extends ARestrictedAccessRootController
         $blueseal = $this->app->baseUrl(false).'/blueseal';
         $addUrl = $blueseal."/prodotti/brand/aggiungi";
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'addUrl' => $addUrl,

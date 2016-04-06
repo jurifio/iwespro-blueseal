@@ -87,7 +87,7 @@ class CProductEditController extends CProductManageController
 
 
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'statuses' => $statuses,
             'tags' => $tag,

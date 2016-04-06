@@ -22,7 +22,7 @@ class CCouponEditController extends ARestrictedAccessRootController
         $couponRepo = $this->app->repoFactory->create('Coupon');
         $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'coupon' => $coupon,
             'page' => $this->page,

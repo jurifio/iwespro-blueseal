@@ -38,7 +38,7 @@ class CCouponAddController extends ARestrictedAccessRootController
         $expire = new \DateInterval('P1Y');
         $today->add($expire);
 
-        echo $view->render([
+        return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'couponTypes' => $couponTypes,
             'couponCode' => $serial->__toString(),
