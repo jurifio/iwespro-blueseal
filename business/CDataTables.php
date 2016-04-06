@@ -33,6 +33,10 @@ class CDataTables
      * @var array
      */
     protected $conditions = [];
+	/**
+     * @var array
+     */
+    protected $likeConditions = [];
     /**
      * @var bool
      */
@@ -93,6 +97,15 @@ class CDataTables
 	 */
     public function addCondition($column, array $values, $not = false){
         $this->conditions[] = [$column,$values,$not];
+    }
+
+	/**
+	 * @param $column
+	 * @param string $values
+	 * @param bool|false $not
+	 */
+    public function addLikeCondition($column, $values, $not = false){
+        $this->likeConditions[] = [$column,$values,$not];
     }
 
     /**
@@ -183,6 +196,15 @@ class CDataTables
                 $this->params[] = $condition[1][$i];
             }
             $conditions[] = rtrim($single,', ').') ';
+        }
+	    foreach ($this->likeConditions as $condition ){
+            $single = $condition[0];
+	        if($condition[2] == true){
+		        $single.=" NOT ";
+	        }
+	        $single.=" like ?";
+		    $conditions[] = $single;
+            $this->params[] = $condition[1];
         }
 
         if($count != 'full'){
