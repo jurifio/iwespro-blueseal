@@ -48,7 +48,16 @@ class CDetailTranslateListAjaxController extends AAjaxController
         $datatable = new CDataTables('ProductDetailTranslationView', ['id'], $this->app->router->request()->getRequestData());
         $modifica = $this->urls['base'] . "traduzioni/dettagli/modifica";
 
-
+	    $langs = [];
+		foreach($this->app->repoFactory->create('Lang')->findAll() as $lang) {
+			if($this->app->router->request()->getRequestData('useTargetLang') == $lang->id) {
+				$langs[] = 'x';
+			} else {
+				$langs[] = '_';
+			}
+		}
+	    $langs[0] = 1;
+	    $datatable->addCondition('translatedLangId',[implode('|',$langs)]);
 
         $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/edit');
 
