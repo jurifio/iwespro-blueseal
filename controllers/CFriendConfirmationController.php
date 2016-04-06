@@ -47,6 +47,7 @@ class CFriendConfirmationController extends ARestrictedAccessRootController
             }
 
         } catch(\Exception $e) {
+	        $this->app->applicationError("CFriendConfirmationController",'Error confirming',$e->getMessage(),$e);
             $error = true;
         }
 
