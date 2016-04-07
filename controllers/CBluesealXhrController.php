@@ -35,8 +35,8 @@ class CBluesealXhrController extends ARestrictedAccessRootController
             $ctrl = new $widgetController($this->app);
         } else{
             $this->response->setBody('widget route not found _ 1');
-            $this->response->raiseRoutingError()->sendHeaders();
-            return false;
+            $this->response->raiseRoutingError();
+            return $this->response->getBody();
         }
 
         /** Check and execute method */
@@ -44,11 +44,10 @@ class CBluesealXhrController extends ARestrictedAccessRootController
             $this->response->setBody($ctrl->createAction($this->app->router->request()->getMethod()));
         } else {
             $this->response->setBody('method not found _ 2');
-            $this->response->raiseRoutingError()->sendHeaders();
-            return false;
+            $this->response->raiseRoutingError();
+	        return $this->response->getBody();
         }
 
-        $this->response->sendHeaders();
         return $this->response->getBody();
     }
 
