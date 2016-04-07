@@ -78,7 +78,7 @@ class CProductRouletteController extends CProductManageController
 		$statuses = [];
 		$statuses['selected'] = 2;
 		foreach ($productStatuses as $status) {
-			$statuses[$status->code] = $status->name;
+			$statuses[$status->id] = $status->name;
 		}
 
 		if (empty($_GET['roulette'])) {
