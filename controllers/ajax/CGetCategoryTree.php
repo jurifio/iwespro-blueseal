@@ -17,6 +17,6 @@ class CGetCategoryTree extends AAjaxController
 {
     public function get()
     {
-        echo $this->app->categoryManager->categories()->treeToJson(1);
+        return $this->app->categoryManager->categories()->treeToJson(1);
     }
 }

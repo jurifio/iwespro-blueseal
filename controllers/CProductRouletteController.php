@@ -108,7 +108,7 @@ class CProductRouletteController extends CProductManageController
                                               s.name = ? AND
                                               dp.dirtyStatus in ('E', '', 'F') GROUP BY dp.id LIMIT 0, 300", [$shop])->fetchAll();
 		if (count($rand) == 0) {
-			echo 'Nessun prodotto da Aggiungere';
+			return 'Nessun prodotto da Aggiungere';
 			die;
 		}
 		$productRand = $rand[rand(0, (count($rand) - 1))];
@@ -281,18 +281,17 @@ class CProductRouletteController extends CProductManageController
 					$shopInput['response'] = 'duplicate';
 					$shopInput['url'] = $this->app->baseUrl(false).'/blueseal/prodotti/modifica?id='.$shopInput['productId'].'&productVariantId='.$shopInput['productVariantId'];
 
-					echo json_encode($shopInput);
+					return json_encode($shopInput);
 					$this->app->router->response()->setBody(json_encode($shopInput));
 					$this->app->router->response()->raiseProcessingError()->sendHeaders();
 					return true;
 				} catch(\Exception $e) {};
-
-				echo '<br>prodotto già esistente:';
-				echo '<br>brand: ' . $post['Product_productBrandId'];
-				echo '<br>cpf: ' . $post['Product_itemno'];
-				echo '<br>var: ' . $post['ProductVariant_name'];
-				echo '<br>altri valori:<br>';
-				throw new RedPandaException('Existing Product');
+				$this->app->router->response()->raiseProcessingError();
+				return '<br>prodotto già esistente:'.
+						'<br>brand: ' . $post['Product_productBrandId'].
+						'<br>cpf: ' . $post['Product_itemno'].
+						'<br>var: ' . $post['ProductVariant_name'].
+						'<br>altri valori:<br>';
 			}
 
 			/** INSERISCO IL PRODOTTO DI BASE */
@@ -478,7 +477,7 @@ class CProductRouletteController extends CProductManageController
 			throw $e;
 		}
 
-		echo json_encode($productIds);
+		return json_encode($productIds);
 	}
 
 	public function delete()
@@ -486,7 +485,7 @@ class CProductRouletteController extends CProductManageController
 		$asd = $this->app->router->request()->getRequestData('dirtyProductId');
         $dirtyProduct = $this->app->repoFactory->create("DirtyProduct")->findOneBy(['id' => $asd]);
         $dirtyProduct->dirtyStatus = 'N';
-        echo $this->app->repoFactory->create("DirtyProduct")->update($dirtyProduct);
+        return $this->app->repoFactory->create("DirtyProduct")->update($dirtyProduct);
 		return;
 	}
 }
