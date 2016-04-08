@@ -12,7 +12,7 @@
     });
 
 
-	$(document).on('bs.product.edit', function (e,element,button) {
+	$(document).on('bs.sku.edit', function (e,element,button) {
 
 		var bsModal = $('#bsModal');
 		var header = $('.modal-header h4');
