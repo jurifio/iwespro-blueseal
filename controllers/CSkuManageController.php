@@ -78,7 +78,7 @@ class CSkuManageController extends ARestrictedAccessRootController
     {
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
 
-        $post = $_POST;
+        $post = $this->app->router->request()->getRequestData();
         /** @var CMySQLAdapter $mysql */
 		$done =0 ;
         foreach ($post as $key => $val) {

@@ -151,8 +151,8 @@
 
             </div>
         </div>
+        <?php include "parts/footer.php" ?>
     </div>
-    <?php include "parts/footer.php" ?>
     <?php include "parts/bsmodal.php"; ?>
     <?php include "parts/alert.php"; ?>
     <bs-toolbar class="toolbar-definition">
