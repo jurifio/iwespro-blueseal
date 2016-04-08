@@ -114,7 +114,7 @@ class CProductListAjaxController extends AAjaxController
 				        }
 			        }
 		        }
-		        $ext = implode(',',$ext);
+		        $ext = implode('<br>',$ext);
 	        } elseif (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
 		        $ext = $val->shopHasProduct->extId;
 	        }
