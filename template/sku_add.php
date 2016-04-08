@@ -142,16 +142,9 @@
                                     </div>
                                 </div>
                             <?php endforeach; ?>
-                            <div class="row">
-                                <?php if (isset($productSkuEdit) && !$productSkuEdit->isEmpty()): ?>
-                                    <input type="hidden" name="ProductSku_edit" value="<?php echo "true" ?>">
-
-                                    <button class="btn btn-success" type="submit">Modifica</button>
-                                <?php else: ?>
-                                    <button class="btn btn-success" type="submit">Crea</button>
-                                <?php endif; ?>
-                                <button class="btn btn-default"><i class="pg-close"></i> Cancella</button>
-                            </div>
+                            <?php if (isset($productSkuEdit) && !$productSkuEdit->isEmpty()): ?>
+                                <input type="hidden" name="ProductSku_edit" value="<?php echo "true" ?>">
+                            <?php endif; ?>
                         </form>
                     </div>
                 </div>
@@ -169,7 +162,7 @@
                     data-permission="/admin/product/add"
                     data-class="btn btn-default"
                     data-rel="tooltip"
-                    data-event="bs.product.edit"
+                    data-event="bs.sku.edit"
                     data-title="Salva"
                     data-placement="bottom"
             ></bs-toolbar-button>
