@@ -54,6 +54,8 @@ class CProductListAjaxController extends AAjaxController
         if(!empty($this->authorizedShops)){
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
+	    $datatable->addSearchColumn('extId');
+	    $datatable->addSearchColumn('extSkuId');
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
