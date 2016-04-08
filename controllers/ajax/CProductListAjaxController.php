@@ -54,6 +54,8 @@ class CProductListAjaxController extends AAjaxController
         if(!empty($this->authorizedShops)){
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
+	    $datatable->addSearchColumn('extId');
+	    $datatable->addSearchColumn('extSkuId');
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -98,7 +100,25 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['codice'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['data'][$i]['shop'] = implode(',',$shops);
-            $response['data'][$i]['externalId'] = isset($val->externalId) ? $val->externalId : "";
+	        if(isset($val->externalId)) {
+		        $ext = $val->externalId;
+	        } elseif(!is_null($val->shopHasProduct) && !is_null($val->shopHasProduct->dirtyProduct)) {
+		        $ext = [];
+		        if(!empty($val->shopHasProduct->dirtyProduct->extId)) {
+			        $ext[] = $val->shopHasProduct->dirtyProduct->extId;
+		        }
+		        if(!is_null($val->shopHasProduct->dirtyProduct->dirtySku)) {
+			        foreach ($val->shopHasProduct->dirtyProduct->dirtySku as $sku) {
+				        if(!empty($sku->extSkuId)) {
+					        $ext[] = $sku->extSkuId;
+				        }
+			        }
+		        }
+		        $ext = implode('<br>',$ext);
+	        } elseif (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
+		        $ext = $val->shopHasProduct->extId;
+	        }
+            $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
             $response['data'][$i]['cpf'] = $val->itemno.' # '.$val->productVariant->name;
             $img = strpos($val->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $this->urls['dummy']."/".$val->dummyPicture;
             $response['data'][$i]['dummyPicture'] = '<img width="80" src="'.$img.'" />';
@@ -110,6 +130,6 @@ class CProductListAjaxController extends AAjaxController
             $i++;
         }
 
-        echo json_encode($response);
+        return json_encode($response);
     }
 }

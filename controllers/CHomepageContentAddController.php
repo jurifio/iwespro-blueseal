@@ -110,9 +110,9 @@ class CHomepageContentAddController extends ARestrictedAccessRootController
 
         try {
             $json->save();
-            echo json_encode(['widget' => $widgetType,'key' => $widgetId,'lang' => $widgetLang,'status'=>'ok','message'=>'Widget aggiornato']);
+            return json_encode(['widget' => $widgetType,'key' => $widgetId,'lang' => $widgetLang,'status'=>'ok','message'=>'Widget aggiornato']);
         } catch (\Exception $e) {
-            echo json_encode(['widget' => $widgetType,'key' => $widgetId,'lang' => $widgetLang,'status'=>'ko','message'=>$e->getMessage()]);
+            return json_encode(['widget' => $widgetType,'key' => $widgetId,'lang' => $widgetLang,'status'=>'ko','message'=>$e->getMessage()]);
         }
     }
 }

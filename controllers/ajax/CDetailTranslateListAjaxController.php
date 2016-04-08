@@ -120,7 +120,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
             $i++;
         }
 
-        echo json_encode($response);
+        return json_encode($response);
     }
 
     public function put()

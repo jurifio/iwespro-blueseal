@@ -25,7 +25,7 @@ class CGetAutocompleteSize extends AAjaxController
             $rres[] = $val['name'];
         }
         $rres = implode(',', $rres);
-        echo $rres;
+        return $rres;
     }
 
     public function post(){

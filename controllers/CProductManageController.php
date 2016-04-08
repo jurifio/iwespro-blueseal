@@ -226,7 +226,7 @@ class CProductManageController extends ARestrictedAccessRootController
 	            $productEdit->update();
             }
 
-            echo json_encode($productIds);
+            return json_encode($productIds);
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
@@ -253,12 +253,12 @@ class CProductManageController extends ARestrictedAccessRootController
             /** CONTROLLO SE IL PRODOTTO ESISTE GIA' */
             $conto = $this->app->dbAdapter->query("SELECT count(*) AS conto FROM Product, ProductVariant WHERE Product.productVariantId = ProductVariant.id AND Product.itemno LIKE ? AND Product.productBrandId = ? AND ProductVariant.name LIKE ? ", array($post['Product_itemno'], $post['Product_productBrandId'], $post['ProductVariant_name']))->fetch()['conto'];
             if ($conto > 0) {
-                echo '<br>prodotto già esistente:';
-                echo '<br>brand: ' . $post['Product_productBrandId'];
-                echo '<br>cpf: ' . $post['Product_itemno'];
-                echo '<br>var: ' . $post['ProductVariant_name'];
-                echo '<br>altri valori:<br>';
-                throw new RedPandaException('Existing Product');
+	            $this->app->router->response()->raiseProcessingError();
+                return '<br>prodotto già esistente:'.
+                        '<br>brand: ' . $post['Product_productBrandId'].
+		                '<br>cpf: ' . $post['Product_itemno'].
+	                    '<br>var: ' . $post['ProductVariant_name'].
+	                    '<br>altri valori:<br>';
             }
 
             /** INSERISCO IL PRODOTTO DI BASE */
@@ -471,6 +471,6 @@ class CProductManageController extends ARestrictedAccessRootController
             throw $e;
         }
 
-        echo json_encode($productIds);
+        return json_encode($productIds);
     }
 }

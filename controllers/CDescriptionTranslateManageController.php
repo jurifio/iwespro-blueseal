@@ -57,7 +57,7 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                     $descEdit->insert();
                 }            }
             $this->app->dbAdapter->commit();
-            echo json_encode($productIds);
+            return json_encode($productIds);
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
