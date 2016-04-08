@@ -81,7 +81,7 @@ class CSkuManageController extends ARestrictedAccessRootController
         $post = $_POST;
         /** @var CMySQLAdapter $mysql */
         //$mysql = $this->app->dbAdapter;
-
+		$done =0 ;
         foreach ($post as $key => $val) {
             $keys = explode('_', $key);
             if (count($keys) != 3) continue;
@@ -96,6 +96,7 @@ class CSkuManageController extends ARestrictedAccessRootController
                     $productSku->salePrice = $post['ProductSku_salePrice_' . $keys[2]];
                     $productSku->isOnSale = isset($post['isOnSale']) ? 1 : 0;
                     $this->app->repoFactory->create("ProductSku")->update($productSku);
+	                $done++;
                 } else {
                     if (!empty($val)) {
                         $productSku = $this->app->repoFactory->create("ProductSku")->getEmptyEntity();
@@ -104,28 +105,21 @@ class CSkuManageController extends ARestrictedAccessRootController
                         $productSku->productVariantId = $post['productVariantId'];
                         $productSku->shopId = $post['shopId'];
                         $productSku->productSizeId = $keys[2];
-                        $productSku->stockQty = empty($val) ? 0 : $val;
+                        $productSku->stockQty = $val;
                         $productSku->value = $post['ProductSku_value_' . $keys[2]];
                         $productSku->price = $post['ProductSku_price_' . $keys[2]];
                         $productSku->salePrice = $post['ProductSku_salePrice_' . $keys[2]];
                         $productSku->isOnSale = isset($post['isOnSale']) ? 1 : 0;
-                        $this->app->repoFactory->create("ProductSku")->insert($productSku);
+	                    $productSku->insert($productSku);
+	                    $done++;
                     }
                 }
 
+
             } catch (\Exception $e) {
-
-                $this->app->router->response()->raiseUnauthorized();
+                $this->app->router->response()->raiseProcessingError();
             }
-
-            //$count = $mysql->update('ProductSku', $vals, $ids2);
-            /*if ($count == 0 && $productSku->stockQty != 0) {
-                try {
-                    $mysql->insert('ProductSku', ($ids2 + $vals));
-                } catch (\Exception $e) {
-                }
-            }*/
         }
-        return $this->get();
+        return json_encode($done);
     }
 }
