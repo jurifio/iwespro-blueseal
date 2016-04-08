@@ -28,7 +28,7 @@ function mq() {
 
 function responsiveToolBar()
 {
-    var toolbar = $('.bs-toolbar');
+    /** var toolbar = $('.bs-toolbar');
     var dropdown = $('.other-actions');
     var customToolbars = $('.bs-toolbar > .bs-toolbar-custom');
     var toolbarCount = customToolbars.length;
@@ -48,7 +48,7 @@ function responsiveToolBar()
     } else {
         toolbar.append($('.other-actions .btn-group').last());
         $('.bs-toolbar-responsive').hide();
-    }
+    }**/
 }
 
 Pace.on('done', function() {
