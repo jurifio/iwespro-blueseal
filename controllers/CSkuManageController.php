@@ -80,7 +80,6 @@ class CSkuManageController extends ARestrictedAccessRootController
 
         $post = $_POST;
         /** @var CMySQLAdapter $mysql */
-        //$mysql = $this->app->dbAdapter;
 		$done =0 ;
         foreach ($post as $key => $val) {
             $keys = explode('_', $key);
