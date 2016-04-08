@@ -34,7 +34,7 @@
 		},new FormData()).done(function (content){
 			body.html("Salvataggio riuscito");
 			bsModal.modal();
-			Location.reload();
+			window.location.reload(true);
 		}).fail(function (){
 			body.html("Errore");
 			bsModal.modal();
