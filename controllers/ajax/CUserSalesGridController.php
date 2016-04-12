@@ -47,7 +47,7 @@ class CUserSalesGridController extends AAjaxController
 
 		$view = new VBase(array());
 
-		$limit = $this->app->router->request()->getRequestData('limit') ? $this->app->router->request()->getRequestData('limit') : 30;
+		$limit = $this->app->router->request()->getRequestData('limit') ? $this->app->router->request()->getRequestData('limit') : 100;
 
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_grid.php');
 		$groupBy = "group BY orderId,id";

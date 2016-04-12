@@ -180,7 +180,7 @@
                         <div class="col-md-6 col-lg-4 m-b-10">
                             <div class="row">
                                 <bs-portlet data-controller="UserSalesGridController"
-                                            data-params="period=list"
+                                            data-params=""
                                             data-url="<?php echo $app->urlForBluesealXhr() ?>">
                                 </bs-portlet>
                             </div>
