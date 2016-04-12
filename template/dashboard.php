@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php"; ?>
-    <?php echo $app->getAssets(['ui','forms'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms','charts'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -189,8 +189,8 @@
                 </div>
             </div>
         </div>
+        <?php include "parts/footer.php"; ?>
     </div>
-    <?php include "parts/footer.php"; ?>
     <?php include "parts/bsmodal.php"; ?>
     <?php include "parts/alert.php"; ?>
 </body>

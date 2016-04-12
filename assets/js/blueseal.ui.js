@@ -146,7 +146,6 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
 	$(document).ready(function () {
 		var portlet = $('bs-portlet');
 		$.each($(portlet), function() {
-			console.log($(this).data);
 			var port = new Portlet($(this).data());
 			port.draw(this);
 		});

@@ -28,6 +28,12 @@
                 "options": ["screen"]
             }
         },
+        "charts": {
+            "nv.d3.css": {
+                "path": "https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/",
+                "options": ["screen"]
+            }
+        },
         "forms": {
             "selectize.css": {
                 "path": "scheme://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/",
@@ -127,6 +133,21 @@
                 "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-js/",
                 "options": ["defer"]
             }
+        },
+        "charts": {
+            "d3.v3.min.js": {
+                "path": "https://d3js.org/",
+                "options": ["defer"]
+            },
+            "nv.d3.min.js":{
+                "path": "https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/",
+                "options": ["defer"]
+            },
+            "charts.js": {
+                "path": "scheme://localdomain/assets/js/",
+                "options": ["defer"]
+            }
+
         },
         "forms": {
             "selectize.js": {

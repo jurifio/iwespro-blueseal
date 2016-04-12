@@ -2,30 +2,6 @@
 
     'use strict';
     $(document).ready(function() {
-
-        // Widget 13
-        $('.widget-13-map').mapplic({
-            source: '/assets/charts/map.json',
-            height: 438,
-            sidebar: false,
-            minimap: false,
-            locations: true,
-            deeplinking: true,
-            fullscreen: false,
-            developer: false,
-            maxscale: 3
-        });
-
-        // Disable scroll to zoom
-        setTimeout(function() {
-            $('.mapplic-layer').unbind('mousewheel DOMMouseScroll');
-        }, 1000);
-
-        setInterval(function() {
-            var hash = ["#usa","#af","#ru"];
-            window.location.hash = hash[Math.floor(Math.random() * 3)];
-        }, 3000);
-
         //Get from JSON data and build
         d3.json('/assets/charts/sales.json', function(data) {
 
@@ -76,107 +52,107 @@
             });
         });
 
-        //NVD3 Charts
-        d3.json('/assets/charts/charts.json', function(data) {
+	    //NVD3 Charts
+	    d3.json('/assets/charts/charts.json', function(data) {
 
-            //Grafico del widget "vendite"
-            (function() {
-                nv.addGraph(function() {
-                    var chart = nv.models.lineChart()
-                        .x(function(d) {
-                            return d[0]
-                        })
-                        .y(function(d) {
-                            return d[1]
-                        })
-                        .color([
-                            $.Pages.getColor('success'), //vendite
-                            $.Pages.getColor('complete'),
-                            $.Pages.getColor('complete'),
-                            $.Pages.getColor('primary') //clienti
-                        ])
-                        .showLegend(false)
-                        .margin({
-                            left: 30,
-                            bottom: 35
-                        })
-                        .useInteractiveGuideline(true);
+		    //Grafico del widget "vendite"
+		    (function() {
+			    nv.addGraph(function() {
+				    var chart = nv.models.lineChart()
+					    .x(function(d) {
+						    return d[0]
+					    })
+					    .y(function(d) {
+						    return d[1]
+					    })
+					    .color([
+						    $.Pages.getColor('success'), //vendite
+						    $.Pages.getColor('complete'),
+						    $.Pages.getColor('complete'),
+						    $.Pages.getColor('primary') //clienti
+					    ])
+					    .showLegend(false)
+					    .margin({
+						    left: 30,
+						    bottom: 35
+					    })
+					    .useInteractiveGuideline(true);
 
-                    chart.xAxis
-                        .tickFormat(function(d) {
-                            return d3.time.format('%a')(new Date(d))
-                        });
+				    chart.xAxis
+					    .tickFormat(function(d) {
+						    return d3.time.format('%a')(new Date(d))
+					    });
 
-                    chart.yAxis.tickFormat(d3.format('d'));
+				    chart.yAxis.tickFormat(d3.format('d'));
 
-                    d3.select('.nvd3-line svg')
-                        .datum(data.nvd3.line)
-                        .transition().duration(500)
-                        .call(chart);
+				    d3.select('.nvd3-line svg')
+					    .datum(data.nvd3.line)
+					    .transition().duration(500)
+					    .call(chart);
 
-                    nv.utils.windowResize(chart.update);
+				    nv.utils.windowResize(chart.update);
 
-                    $('.nvd3-line').data('chart', chart);
+				    $('.nvd3-line').data('chart', chart);
 
-                    return chart;
-                });
-            })();
+				    return chart;
+			    });
+		    })();
 
-            //Widget visitatori
-            (function() {
-                var container = '.widget-15-chart';
+		    //Widget visitatori
+		    (function() {
+			    var container = '.widget-15-chart';
 
-                var seriesData = [
-                    [],
-                    []
-                ];
-                var random = new Rickshaw.Fixtures.RandomData(40);
-                for (var i = 0; i < 40; i++) {
-                    random.addData(seriesData);
-                }
+			    var seriesData = [
+				    [],
+				    []
+			    ];
+			    var random = new Rickshaw.Fixtures.RandomData(40);
+			    for (var i = 0; i < 40; i++) {
+				    random.addData(seriesData);
+			    }
 
-                var graph = new Rickshaw.Graph({
-                    renderer: 'bar',
-                    element: document.querySelector(container),
-                    height: 200,
-                    padding: {
-                        top: 0.5
-                    },
-                    series: [{
-                        data: seriesData[0],
-                        color: $.Pages.getColor('complete-light'),
-                        name: "Nuovi utenti"
-                    }, {
-                        data: seriesData[1],
-                        color: $.Pages.getColor('master-lighter'),
-                        name: "Utenti di ritorno"
-                    }]
-                });
+			    var graph = new Rickshaw.Graph({
+				    renderer: 'bar',
+				    element: document.querySelector(container),
+				    height: 200,
+				    padding: {
+					    top: 0.5
+				    },
+				    series: [{
+					    data: seriesData[0],
+					    color: $.Pages.getColor('complete-light'),
+					    name: "Nuovi utenti"
+				    }, {
+					    data: seriesData[1],
+					    color: $.Pages.getColor('master-lighter'),
+					    name: "Utenti di ritorno"
+				    }]
+			    });
 
-                var hoverDetail = new Rickshaw.Graph.HoverDetail({
-                    graph: graph,
-                    formatter: function(series, x, y) {
-                        var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
-                        var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-                        var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
-                        return content;
-                    }
-                });
+			    var hoverDetail = new Rickshaw.Graph.HoverDetail({
+				    graph: graph,
+				    formatter: function(series, x, y) {
+					    var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
+					    var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
+					    var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
+					    return content;
+				    }
+			    });
 
-                graph.render();
+			    graph.render();
 
-                $(window).resize(function() {
-                    graph.configure({
-                        width: $(container).width(),
-                        height: 200
-                    });
+			    $(window).resize(function() {
+				    graph.configure({
+					    width: $(container).width(),
+					    height: 200
+				    });
 
-                    graph.render()
-                });
+				    graph.render()
+			    });
 
-                $(container).data('chart', graph);
-            })();
-        });
+			    $(container).data('chart', graph);
+		    })();
+	    });
 
         // Init portlets
 
