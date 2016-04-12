@@ -51,7 +51,7 @@ class CFriendConfirmationController extends ARestrictedAccessRootController
             $error = true;
         }
 
-        echo $view->render(array(
+        return $view->render(array(
             'error' => $error,
             'page'=> $this->page,
             'confirm'=> $ok,

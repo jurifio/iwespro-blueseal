@@ -88,6 +88,6 @@ class CCouponTypeListAjaxController extends AAjaxController
             $i++;
         }
 
-        echo json_encode($response);
+        return json_encode($response);
     }
 }

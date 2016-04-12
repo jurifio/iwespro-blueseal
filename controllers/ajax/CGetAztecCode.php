@@ -26,7 +26,7 @@ class CGetAztecCode extends AAjaxController
         $renderer = new PngRenderer();
 
         header('Content-Type: image/png');
-        echo $renderer->render($code);
+        return $renderer->render($code);
     }
 
     public function put()

@@ -143,4 +143,12 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
         $('.btn-group-label').next().css('border-radius', '2px');
     });
 
+	$(document).ready(function () {
+		var portlet = $('bs-portlet');
+		$.each($(portlet), function() {
+			var port = new Portlet($(this).data());
+			port.draw(this);
+		});
+	});
+
 })(jQuery);
