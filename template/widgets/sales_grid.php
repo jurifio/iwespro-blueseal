@@ -10,9 +10,9 @@
 	<div class="padding-25">
 		<div class="pull-left">
 			<h2 class="text-success no-margin"><?php echo $title ?></h2>
-			<p class="no-margin">Ultime <?php echo $limit ?> Vendite</p>
+			<p class="no-margin">Ordini in elaborazione</p>
 		</div>
-		<h3 class="pull-right semi-bold"><sup><small class="semi-bold">&euro;</small></sup> <?php echo $sum ?></h3>
+		<h3 class="pull-right semi-bold"><sup><small class="semi-bold">&euro;</small></sup> <?php echo round($sum,2); ?></h3>
 		<div class="clearfix"></div>
 	</div>
 	<div class="auto-overflow widget-11-2-table">
@@ -29,7 +29,7 @@
 					<span class="hint-text small"><?php echo $orderLine->productSku->product->itemno.' # '.$orderLine->productSku->product->productVariant->name; ?></span>
 				</td>
 				<td class="col-lg-2">
-					<span class="font-montserrat fs-18">&euro;<?php echo $orderLine->show; ?></span>
+					<span class="font-montserrat fs-18">&euro;<?php echo round($orderLine->show,2); ?></span>
 				</td>
 			</tr>
             <?php endforeach; ?>

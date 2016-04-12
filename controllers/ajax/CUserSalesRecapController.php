@@ -87,7 +87,7 @@ class CUserSalesRecapController extends AAjaxController
 		$sql = "SELECT ol.orderId, ol.id, 
 						ifnull(sum(friendRevenue),0) AS friend, 
 						ifnull(sum(netPrice),0) AS costumer, 
-						ifnull(sum(netPrice) - sum(friendRevenue),0) AS iwes,
+						ifnull(sum(netPrice) - sum(friendRevenue) - sum(ol.vat),0) AS iwes,
 						o.orderDate,
 						YEAR(orderDate) as year,
 						MONTH(orderDate) as month,

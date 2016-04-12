@@ -76,14 +76,14 @@ class CUserSalesGridController extends AAjaxController
 					WHERE 	o.id = ol.orderId AND 
 							ol.status = ols.code AND
 							o.status not like 'ORD_CANCEL' and
-						    ols.phase >= 5 AND 
+						    ols.phase >= 5 AND ols.phase <= 12 AND
 						    o.orderDate is not null ".$shopsWhere.$groupBy." order by o.orderDate desc LIMIT ".$limit;
 
 		$data = $this->app->repoFactory->create('OrderLine')->em()->findBySql($sql,[]);
 		$sum = 0;
 		foreach ($data as $key=>$val){
 			if($valueToSelect == "iwes") {
-				$val->show = $val->netPrice - $val->friendRevenue;
+				$val->show = $val->netPrice - $val->friendRevenue - $val->vat;
 			} else {
 				$val->show = $val->friendRevenue;
 			}
