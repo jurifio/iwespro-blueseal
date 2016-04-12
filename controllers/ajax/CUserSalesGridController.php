@@ -50,7 +50,7 @@ class CUserSalesGridController extends AAjaxController
 		$limit = $this->app->router->request()->getRequestData('limit') ? $this->app->router->request()->getRequestData('limit') : 100;
 
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_grid.php');
-		$groupBy = "group BY orderId,id";
+		$groupBy = "";
 
 		if ($this->app->getUser()->hasRole('manager')) {
 			$valueToSelect = "iwes";
@@ -71,13 +71,15 @@ class CUserSalesGridController extends AAjaxController
 		$sql = "SELECT ol.orderId, ol.id
 				FROM 
 					`Order` o,
+					OrderStatus os,
 					OrderLine ol, 
 					OrderLineStatus ols 
-					WHERE 	o.id = ol.orderId AND 
+					WHERE 	o.id = ol.orderId AND
+					 		o.status = os.code AND
 							ol.status = ols.code AND
-							o.status not like 'ORD_CANCEL' and
-						    ols.phase >= 5 AND ols.phase <= 12 AND
-						    o.orderDate is not null ".$shopsWhere.$groupBy." order by o.orderDate desc LIMIT ".$limit;
+							os.order BETWEEN 2 AND 6 and
+						    ols.phase BETWEEN 5 AND 11 AND 
+						    o.orderDate is not null ".$shopsWhere." group BY orderId,id order by o.orderDate desc LIMIT ".$limit;
 
 		$data = $this->app->repoFactory->create('OrderLine')->em()->findBySql($sql,[]);
 		$sum = 0;
