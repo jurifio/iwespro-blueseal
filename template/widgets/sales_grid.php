@@ -10,7 +10,7 @@
 	<div class="padding-25">
 		<div class="pull-left">
 			<h2 class="text-success no-margin"><?php echo $title ?></h2>
-			<p class="no-margin">Ordini in elaborazione</p>
+			<p class="no-margin">Ordini in elaborazione (<?php echo count($orders);?>)</p>
 		</div>
 		<h3 class="pull-right semi-bold"><sup><small class="semi-bold">&euro;</small></sup> <?php echo round($sum,2); ?></h3>
 		<div class="clearfix"></div>
