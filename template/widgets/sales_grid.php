@@ -20,11 +20,12 @@
 			<tbody>
             <?php foreach($orders as $orderLine): ?>
 			<tr>
-				<td class="font-montserrat all-caps fs-12 col-lg-3">Ordine <?php echo $orderLine->printLineId(); ?></td>
+				<td class="text-left b-r b-dashed b-grey col-lg-2"><span class="hint-text small"><?php echo $orderLine->order->orderDate; ?></span></td>
+				<td class="font-montserrat all-caps fs-12 col-lg-2"><?php echo $orderLine->printLineId(); ?></td>
 				<td class="text-left col-lg-3">
 					<span class="hint-text small"><?php echo $orderLine->productSku->product->productBrand->name; ?></span>
 				</td>
-				<td class="text-left b-r b-dashed b-grey col-lg-4">
+				<td class="text-left b-r b-dashed b-grey col-lg-3">
 					<span class="hint-text small"><?php echo $orderLine->productSku->product->itemno.' # '.$orderLine->productSku->product->productVariant->name; ?></span>
 				</td>
 				<td class="col-lg-2">

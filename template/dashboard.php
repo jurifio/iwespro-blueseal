@@ -78,7 +78,7 @@
                                             <div class="row">
                                                 <div class="col-xlg-8 ">
                                                     <div class="p-l-10">
-                                                        <h2 class="pull-left">Vendite</h2>
+                                                        <h2 class="pull-left">Vendite (Demo)</h2>
                                                         <h2 class="pull-left m-l-50 text-success">
                                                             <span class="bold">448</span>
                                                             <span class="text-success fs-12">+121</span>

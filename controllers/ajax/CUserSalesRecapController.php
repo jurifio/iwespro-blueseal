@@ -119,7 +119,7 @@ class CUserSalesRecapController extends AAjaxController
 			'value'=>$data[0][$valueToSelect],
 			'periodProgress'=>$periodProgress,
 			'title'=>$title,
-			'class'=>$this->app->router->request()->getRequestData('class') ? $this->app->router->request()->getRequestData('class') : "bg-primary"
+			'class'=>$this->app->router->request()->getRequestData('class') ? $this->app->router->request()->getRequestData('class') : "bg-white"
 		]);
 	}
 }
