@@ -180,6 +180,13 @@
             // Hack: FF doesn't play SVG animations set as background-image
             $('.progress-bar-indeterminate, .progress-circle-indeterminate, .mapplic-pin').hide().show(0);
         });
+	    $(document).on('ajaxComplete', function() {
+		    $('.progress-bar').each(function() {
+			    $(this).css('width', $(this).attr("data-percentage"));
+		    });
+		    // Hack: FF doesn't play SVG animations set as background-image
+		    $('.progress-bar-indeterminate, .progress-circle-indeterminate, .mapplic-pin').hide().show(0);
+	    });
     };
 
     Pages.prototype.initView = function() {

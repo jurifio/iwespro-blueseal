@@ -5,7 +5,7 @@
 
         // Widget 13
         $('.widget-13-map').mapplic({
-            source: 'assets/charts/map.json',
+            source: '/assets/charts/map.json',
             height: 438,
             sidebar: false,
             minimap: false,
@@ -27,7 +27,7 @@
         }, 3000);
 
         //Get from JSON data and build
-        d3.json('assets/charts/sales.json', function(data) {
+        d3.json('/assets/charts/sales.json', function(data) {
 
             //Widget venite giornaliere
             nv.addGraph(function() {
@@ -77,7 +77,7 @@
         });
 
         //NVD3 Charts
-        d3.json('assets/charts/charts.json', function(data) {
+        d3.json('/assets/charts/charts.json', function(data) {
 
             //Grafico del widget "vendite"
             (function() {

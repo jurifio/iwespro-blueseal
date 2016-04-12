@@ -1,8 +1,9 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\ecommerce\views\widget\VBase;
 
 /**
  * Class CUserSellRecapController
@@ -17,7 +18,7 @@ use bamboo\core\intl\CLang;
  * @date 2016/04/08
  * @since 1.0
  */
-class CUserSellRecapController extends AAjaxController
+class CUserSalesGridController extends AAjaxController
 {
 	protected $urls = [];
 	protected $authorizedShops = [];
@@ -44,29 +45,32 @@ class CUserSellRecapController extends AAjaxController
 	{
 		$okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
-		if($this->app->router->request()->getRequestData('day')) {
-			$groupBy = "group BY YEAR(orderDate), DAYOFYEAR(orderDate)";
-		} else if($this->app->router->request()->getRequestData('week')) {
-			$groupBy = "group BY YEAR(orderDate), WEEKOFYEAR(orderDate)";
-		} else if($this->app->router->request()->getRequestData('month')) {
-			$groupBy = "group BY YEAR(orderDate), MONTH(orderDate)";
-		} else if($this->app->router->request()->getRequestData('year')) {
-			$groupBy = "group BY YEAR(orderDate) ";
-		} else if($this->app->router->request()->getRequestData('list')) {
-			$groupBy = "group BY orderId,id";
+		$view = new VBase(array());
+		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_box.php');
+
+		if($this->app->router->request()->getRequestData('period') == 'list') {
+			$title = 'Vendite Recenti';
+			$periodProgress = 0;
+			$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_grid.php');
+			$groupBy = "group BY orderId,id LIMIT 30 ";
+		} else {
+			$title = '';
+			$periodProgress = 0;
+			$groupBy = "";
 		}
-		$valueToSelect = "";
-		if ($this->app->getUser()->hasRole('ownerEmployee')) {
+
+		//$completed = (($current - $start) / ($end - $start)) * 100;
+
+		if ($this->app->getUser()->hasRole('manager')) {
 			$valueToSelect = "iwes";
 			$shopsWhere = "";
-		} else if($this->app->getUser()->hasRole('friendEmployee')){
+		} else{
 			$valueToSelect = "friend";
 			$authorizedShops = [];
 			foreach($this->app->getUser()->shop as $val) {
 				$authorizedShops[] = $val['id'];
 			}
 			$shopsWhere = " AND ol.shopId in (".implode(',',$authorizedShops)." ";
-
 		}
 
 		$sql = "SELECT ol.orderId, ol.id, 
@@ -91,11 +95,21 @@ class CUserSellRecapController extends AAjaxController
 		$data = $this->app->dbAdapter->query($sql,[])->fetchAll();
 
 		$trend = 0;
-		if(isset($groupBy) && !$this->app->router->request()->getRequestData('list')) {
-			$trend = 100*$data[0][$valueToSelect] / $data[1][$valueToSelect];
+		if(isset($groupBy) && $this->app->router->request()->getRequestData('period') != 'list') {
+			$trend = 100 * $data[0][$valueToSelect] / $data[1][$valueToSelect];
+			if($data[0][$valueToSelect] - $data[1][$valueToSelect] < 0) {
+				$trend=$trend*-1;
+			}
 		}
 		$response = ['trend'=>$trend,'value'=>$valueToSelect];
 
-		return json_encode($response);
+		return $view->render([
+			'app'=>new CRestrictedAccessWidgetHelper($this->app),
+			'trend'=>$trend,
+			'value'=>$data[0][$valueToSelect],
+			'periodProgress'=>$periodProgress,
+			'title'=>$title,
+			'class'=>$this->app->router->request()->getRequestData('class') ? $this->app->router->request()->getRequestData('class') : "bg-primary"
+		]);
 	}
 }
