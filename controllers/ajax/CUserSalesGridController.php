@@ -46,70 +46,57 @@ class CUserSalesGridController extends AAjaxController
 		$okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
 		$view = new VBase(array());
-		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_box.php');
 
-		if($this->app->router->request()->getRequestData('period') == 'list') {
-			$title = 'Vendite Recenti';
-			$periodProgress = 0;
-			$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_grid.php');
-			$groupBy = "group BY orderId,id LIMIT 30 ";
-		} else {
-			$title = '';
-			$periodProgress = 0;
-			$groupBy = "";
-		}
+		$limit = $this->app->router->request()->getRequestData('limit') ? $this->app->router->request()->getRequestData('limit') : 30;
 
-		//$completed = (($current - $start) / ($end - $start)) * 100;
+		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_grid.php');
+		$groupBy = "group BY orderId,id";
 
 		if ($this->app->getUser()->hasRole('manager')) {
 			$valueToSelect = "iwes";
 			$shopsWhere = "";
+			$title = $this->app->cfg()->fetch("general","name");
 		} else{
 			$valueToSelect = "friend";
 			$authorizedShops = [];
+			$authorizedShopsNames = [];
 			foreach($this->app->getUser()->shop as $val) {
-				$authorizedShops[] = $val['id'];
+				$authorizedShops[] = $val->id;
+				$authorizedShopsNames[] = $val->name;
 			}
 			$shopsWhere = " AND ol.shopId in (".implode(',',$authorizedShops)." ";
+			$title = implode(',',$authorizedShopsNames);
 		}
 
-		$sql = "SELECT ol.orderId, ol.id, 
-						ifnull(sum(friendRevenue),0) AS friend, 
-						ifnull(sum(netPrice),0) AS costumer, 
-						ifnull(sum(netPrice) - sum(friendRevenue),0) AS iwes,
-						o.orderDate,
-						YEAR(orderDate) as year,
-						MONTH(orderDate) as month,
-						WEEKOFYEAR(orderDate) as week,
-						DAYOFYEAR(orderDate) as day
-						FROM 
-						`Order` o,
-						OrderLine ol, 
-						OrderLineStatus ols 
-						WHERE 	o.id = ol.orderId AND 
-								ol.status = ols.code AND
-								o.status not like 'ORD_CANCEL' and
-							  	ols.phase >= 5 AND 
-							  	o.orderDate is not null ".$shopsWhere.$groupBy." order by orderDate desc";
+		$sql = "SELECT ol.orderId, ol.id
+				FROM 
+					`Order` o,
+					OrderLine ol, 
+					OrderLineStatus ols 
+					WHERE 	o.id = ol.orderId AND 
+							ol.status = ols.code AND
+							o.status not like 'ORD_CANCEL' and
+						    ols.phase >= 5 AND 
+						    o.orderDate is not null ".$shopsWhere.$groupBy." order by o.orderDate desc LIMIT ".$limit;
 
-		$data = $this->app->dbAdapter->query($sql,[])->fetchAll();
-
-		$trend = 0;
-		if(isset($groupBy) && $this->app->router->request()->getRequestData('period') != 'list') {
-			$trend = 100 * $data[0][$valueToSelect] / $data[1][$valueToSelect];
-			if($data[0][$valueToSelect] - $data[1][$valueToSelect] < 0) {
-				$trend=$trend*-1;
+		$data = $this->app->repoFactory->create('OrderLine')->em()->findBySql($sql,[]);
+		$sum = 0;
+		foreach ($data as $key=>$val){
+			if($valueToSelect == "iwes") {
+				$val->show = $val->netPrice - $val->friendRevenue;
+			} else {
+				$val->show = $val->friendRevenue;
 			}
+			$sum += $val->show;
 		}
-		$response = ['trend'=>$trend,'value'=>$valueToSelect];
+
 
 		return $view->render([
 			'app'=>new CRestrictedAccessWidgetHelper($this->app),
-			'trend'=>$trend,
-			'value'=>$data[0][$valueToSelect],
-			'periodProgress'=>$periodProgress,
-			'title'=>$title,
-			'class'=>$this->app->router->request()->getRequestData('class') ? $this->app->router->request()->getRequestData('class') : "bg-primary"
+			'orders'=>$data,
+			'limit'=>$limit,
+			'sum'=>$sum,
+			'title'=>$title
 		]);
 	}
 }

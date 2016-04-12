@@ -58,11 +58,11 @@ class CUserSalesRecapController extends AAjaxController
 			$groupBy = "group BY YEAR(orderDate), WEEKOFYEAR(orderDate)";
 		} else if($this->app->router->request()->getRequestData('period') == 'month') {
 			$title = 'Vendite Mensili';
-			$periodProgress = (time() - strtotime('First Day of this Month')) / (60*60*24*cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'))) * 100;
+			$periodProgress = (time() - strtotime('First day of this Month')) / (60*60*24*cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'))) * 100;
 			$groupBy = "group BY YEAR(orderDate), MONTH(orderDate)";
 		} else if($this->app->router->request()->getRequestData('period') == 'year') {
 			$title = 'Vendite Annuali';
-			$periodProgress = (time() - strtotime('First Day of this year')) / (60*60*24*365)*100;
+			$periodProgress = (time() - strtotime('first day of January')) / (60*60*24*365)*100;
 			$groupBy = "group BY YEAR(orderDate) ";
 		} else {
 			$title = '';

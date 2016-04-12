@@ -1,6 +1,6 @@
 <?php if($trend > 25) $color = 'green';
-        else if ($trend < -25) $color= 'black';
-        else $color = 'red';
+        else if ($trend < -25) $color= 'red';
+        else $color = 'black';
 ?>
 <div class="col-md-12 m-b-10">
     <div class="widget-9 panel no-border <?php echo $class ?> no-margin widget-loader-bar">
@@ -23,7 +23,7 @@
                 <div class="col-xs-height col-top">
                     <div class="p-l-20 p-t-15">
                         <h3 class="no-margin p-b-5 text-<?php echo $color ?>">&euro; <?php echo round($value,2); ?></h3>
-                        <a href="#" class="btn-circle-arrow text-black"><i class="pg-arrow_minimize"></i></a>
+                        <a href="#" class="btn-circle-arrow text-black"><i class="<?php echo $trend > 0 ? "pg-arrow_up" : "pg-arrow_down" ?>"></i></a>
                         <span class="small hint-text"><?php echo round($trend,0); ?>% rispetto all'ultimo periodo</span>
                     </div>
                 </div>

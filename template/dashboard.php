@@ -41,12 +41,6 @@
                                             data-url="<?php echo $app->urlForBluesealXhr() ?>">
                                 </bs-portlet>
                             </div>
-                            <div class="row">
-                                <bs-portlet data-controller="UserSalesRecapController"
-                                            data-params="period=year"
-                                            data-url="<?php echo $app->urlForBluesealXhr() ?>">
-                                </bs-portlet>
-                            </div>
                         </div>
                         <div class="col-md-8 col-lg-5 col-xlg-6 m-b-10">
                             <div class="row">
@@ -185,7 +179,7 @@
                         </div>
                         <div class="col-md-6 col-lg-4 m-b-10">
                             <div class="row">
-                                <bs-portlet data-controller="UserSalesRecapController"
+                                <bs-portlet data-controller="UserSalesGridController"
                                             data-params="period=list"
                                             data-url="<?php echo $app->urlForBluesealXhr() ?>">
                                 </bs-portlet>
