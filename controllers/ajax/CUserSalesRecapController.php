@@ -79,7 +79,7 @@ class CUserSalesRecapController extends AAjaxController
 			foreach($this->app->getUser()->shop as $val) {
 				$authorizedShops[] = $val->id;
 			}
-			$shopsWhere = " AND ol.shopId in (".implode(',',$authorizedShops)." ";
+			$shopsWhere = " AND ol.shopId in (".implode(',',$authorizedShops).") ";
 		}
 
 		$sql = "SELECT ol.orderId, ol.id, 
