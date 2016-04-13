@@ -64,7 +64,7 @@ class CUserSalesGridController extends AAjaxController
 				$authorizedShops[] = $val->id;
 				$authorizedShopsNames[] = $val->name;
 			}
-			$shopsWhere = " AND ol.shopId in (".implode(',',$authorizedShops)." ";
+			$shopsWhere = " AND ol.shopId in (".implode(',',$authorizedShops).") ";
 			$title = implode(',',$authorizedShopsNames);
 		}
 

@@ -77,7 +77,7 @@ class CUserSalesRecapController extends AAjaxController
 			$valueToSelect = "friend";
 			$authorizedShops = [];
 			foreach($this->app->getUser()->shop as $val) {
-				$authorizedShops[] = $val['id'];
+				$authorizedShops[] = $val->id;
 			}
 			$shopsWhere = " AND ol.shopId in (".implode(',',$authorizedShops)." ";
 		}
