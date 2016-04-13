@@ -95,12 +95,14 @@ class CUserSalesRecapController extends AAjaxController
 						DAYOFYEAR(orderDate) as day
 						FROM 
 						`Order` o,
+						OrderStatus os,
 						OrderLine ol, 
 						OrderLineStatus ols 
 						WHERE 	o.id = ol.orderId AND 
+								o.status =  os.code AND
 								ol.status = ols.code AND
-								o.status not like 'ORD_CANCEL' and
-							  	ols.phase >= 5 AND 
+								os.order > 2 AND os.id != 13 AND
+						    	ols.phase >= 5 AND ols.id != 15 AND
 							  	o.orderDate is not null ".$shopsWhere.$groupBy." order by orderDate desc";
 
 		$data = $this->app->dbAdapter->query($sql,[])->fetchAll();
