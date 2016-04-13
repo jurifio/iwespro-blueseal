@@ -1192,6 +1192,20 @@
                 "PUT",
                 "DELETE"
             ]
+        },
+        {
+            "pattern": "/blueseal/importatori/importa(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CImportProductFileController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
         }
     ]
 }
