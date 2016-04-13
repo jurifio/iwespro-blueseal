@@ -43,8 +43,6 @@ class CUserSalesRecapController extends AAjaxController
 
 	public function get()
 	{
-		$okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
-
 		$view = new VBase(array());
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_box.php');
 

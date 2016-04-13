@@ -27,9 +27,9 @@ class CProductActiveListAjaxController extends AAjaxController
         $this->urls['page'] = $this->urls['base'] . "prodotti";
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
-        if ($this->app->getUser()->hasRole('ownerEmployee')) {
+        if ($this->app->getUser()->hasPermission('allShops')) {
 
-        } else if ($this->app->getUser()->hasRole('friendEmployee')) {
+        } else {
             $res = $this->app->dbAdapter->select('UserHasShop', ['userId' => $this->app->getUser()->getId()])->fetchAll();
             foreach ($res as $val) {
                 $this->authorizedShops[] = $val['shopId'];

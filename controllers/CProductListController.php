@@ -38,9 +38,9 @@ class CProductListController extends ARestrictedAccessRootController
         $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
         $shops = [];
-        if ($this->app->getUser()->hasRole('ownerEmployee')) {
+        if ($this->app->getUser()->hasPermission('allShops')) {
 
-        } else if ($this->app->getUser()->hasRole('friendEmployee')) {
+        } else {
             $res = $this->app->dbAdapter->select('UserHasShop', ['userId' => $this->app->getUser()->getId()])->fetchAll();
             foreach ($res as $val) {
                 $shops[] = $val['shopId'];
