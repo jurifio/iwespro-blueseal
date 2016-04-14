@@ -46,11 +46,12 @@ class CImportProductFileController extends ARestrictedAccessRootController
 			for(;fgets($f) !== false;$i++);
 			if($i < $this->app->router->request()->getRequestData('csvRows')) {
 				$this->app->router->response()->raiseProcessingError();
-				return json_encode(['reason'=>'rows','rows'=>$i,'input'=>$this->app->router->request()->getRequestData('csvRows')]);
+				return json_encode(['reason'=>'rows','number'=>$i,'input'=>$this->app->router->request()->getRequestData('csvRows')]);
 			}
 			//CHECK IF IS CSV
 			$separators = [",",";","|","\t"];
 			$ok = 0;
+			$columns = 0;
 			foreach ($separators as $separator) {
 				try {
 					rewind($f);
@@ -74,19 +75,19 @@ class CImportProductFileController extends ARestrictedAccessRootController
 			}
 			if($ok == -1) {
 				$this->app->router->response()->raiseProcessingError();
-				return json_encode(['reason'=>'csv','file'=>$i,'input'=>$this->app->router->request()->getRequestData('csvRows')]);
+				return json_encode(['reason'=>'csv','number'=>$i,'input'=>$this->app->router->request()->getRequestData('csvRows')]);
 			} else if ($ok == 0) {
 				$this->app->router->response()->raiseProcessingError();
-				return json_encode(['reason'=>'columns','file'=>$i,'input'=>$this->app->router->request()->getRequestData('csvRows')]);
+				return json_encode(['reason'=>'columns','number'=>$columns,'input'=>$this->app->router->request()->getRequestData('csvRows')]);
 			}
 
 			$shop = $this->app->router->request()->getRequestData('shopId');
-			$shop = $this->app->repoFactory->create('shop')->findOne([$shop]);
+			$shop = $this->app->repoFactory->create('Shop')->findOne([$shop]);
 			$path = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'productSync') . '/' . $shop->name.'/import/';
 			$name = $this->app->router->request()->getRequestData('action').'_'
 						.$shop->id.'_'
 						.date('YmdHis').'_'
-						.$this->app->router->request()->getRequestData('csvRows').'.csv';
+						.$this->app->router->request()->getRequestData('csvRows').'_'.$files['importerFile']['name'].'.csv';
 			if (!rename($files['importerFile']['tmp_name'], $path . $name)) throw new \Exception();
 
 			return ['ok'=>'done'];

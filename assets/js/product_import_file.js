@@ -19,37 +19,37 @@ $(document).on('bs.file.send', function (e,element,button) {
     var okButton = $('.modal-footer .btn-success');
 
     header.html('Invio File');
-    okButton.html('Fatto').off().on('click', function () {
-        bsModal.modal('hide');
-        okButton.off();
-    });
-    cancelButton.remove();
+	body.html('Vuoi davvero inviare il file?');
 
-    $.ajaxForm({
-        type: "POST",
-        url: "#",
-        formAutofill: true
-    },new FormData()).done(function (content){
-        body.html("Invio Riuscito");
-	    okButton.html('Fatto').off().on('click', function () {
-		    location.reload();
-		    okButton.off();
-	    });
-        bsModal.modal();
-    }).fail(function (content){
-	    try{
-		    content = JSON.parse(content);
-		    if(content['reason'] == 'csv') {
-			    body.html("Il file csv non è stato riconosciuto <br> prova a esportare il file come csv e riprovare");
-		    } else if(content['reason'] == 'rows') {
-			    body.html("Le righe all'interno del file sono inferiori a quelle indicate <br> il file potrebbe essere corrotto, prova a ripetere l'upload ");
-		    } else {
-			    body.html("Errore <br> il file inviato non è conforme");
+    okButton.html('Invia').off().on('click', function () {
+	    okButton.off();
+	    body.html('Attendi...');
+	    $.ajaxForm({
+		    type: "POST",
+		    url: "#",
+		    formAutofill: true
+	    },new FormData()).done(function (content){
+		    body.html("Invio Riuscito");
+		    okButton.html('Fatto').off().on('click', function () {
+			    location.reload();
+			    okButton.off();
+		    });
+		    bsModal.modal();
+	    }).fail(function (content){
+		    try{
+			    content = JSON.parse(content);
+			    if(content.reason == 'csv') {
+				    body.html("Il file csv non è stato riconosciuto <br> prova a esportare il file come csv e riprovare");
+			    } else if(content.reason == 'rows') {
+				    body.html("Le righe all'interno del file sono inferiori a quelle indicate ("+content.number+") <br> il file potrebbe essere corrotto, prova a ripetere l'upload ");
+			    } else {
+				    body.html("Errore <br> il file inviato non è conforme");
+			    }
+		    } catch(e) {
+			    body.html("Errore Generico");
 		    }
-
-	    } catch(e) {
-		    body.html("Errore Generico");
-	    }
-        bsModal.modal();
+		    bsModal.modal();
+	    });
     });
+	bsModal.modal();
 });
