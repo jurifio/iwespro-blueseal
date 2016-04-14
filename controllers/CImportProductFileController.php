@@ -58,7 +58,7 @@ class CImportProductFileController extends ARestrictedAccessRootController
 						if(count($values) == 1) {
 							$ok = -1;
 							break;
-						} else if(count($values) < 3 ) {
+						} else if(count($values) < 51 ) {
 							$ok = 0;
 							$columns = count($values);
 							break;
