@@ -90,7 +90,7 @@ class CImportProductFileController extends ARestrictedAccessRootController
 						.$this->app->router->request()->getRequestData('csvRows').'_'.$files['importerFile']['name'].'.csv';
 			if (!rename($files['importerFile']['tmp_name'], $path . $name)) throw new \Exception();
 
-			return ['ok'=>'done'];
+			return json_encode(['ok'=>'done']);
 		}
 		throw new \Exception();
 	}
