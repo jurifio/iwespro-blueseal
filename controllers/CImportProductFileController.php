@@ -25,7 +25,7 @@ class CImportProductFileController extends ARestrictedAccessRootController
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_import_file.php');
 
 		if($this->app->getUser()->hasPermission('allShops')) {
-			$shops = $this->app->repoFactory->create('Shop')->fetchAll();
+			$shops = $this->app->repoFactory->create('Shop')->findAll();
 		} else {
 			$shops = $this->app->getUser()->shop;
 		}
@@ -37,7 +37,60 @@ class CImportProductFileController extends ARestrictedAccessRootController
 			'sidebar' => $this->sidebar->build()
 		]);
 	}
-	public function post(){
-		return "asdaasd";
+	public function post()
+	{
+		$files = $this->app->router->request()->getFiles();
+		if(isset($files['importerFile'])) {
+			$f = fopen($files['importerFile']['tmp_name'],'r');
+			$i =0;
+			for(;fgets($f) !== false;$i++);
+			if($i < $this->app->router->request()->getRequestData('csvRows')) {
+				$this->app->router->response()->raiseProcessingError();
+				return json_encode(['reason'=>'rows','rows'=>$i,'input'=>$this->app->router->request()->getRequestData('csvRows')]);
+			}
+			//CHECK IF IS CSV
+			$separators = [",",";","|","\t"];
+			$ok = 0;
+			foreach ($separators as $separator) {
+				try {
+					rewind($f);
+					while($values = fgetcsv($f,null,$separator)) {
+						if(count($values) == 1) {
+							$ok = -1;
+							break;
+						} else if(count($values) < 3 ) {
+							$ok = 0;
+							$columns = count($values);
+							break;
+						} else {
+							$ok = 1;
+						}
+					}
+					if($ok == 1) break;
+				} catch(\Exception $e) {
+					$ok = -1;
+					$a = $e;
+				}
+			}
+			if($ok == -1) {
+				$this->app->router->response()->raiseProcessingError();
+				return json_encode(['reason'=>'csv','file'=>$i,'input'=>$this->app->router->request()->getRequestData('csvRows')]);
+			} else if ($ok == 0) {
+				$this->app->router->response()->raiseProcessingError();
+				return json_encode(['reason'=>'columns','file'=>$i,'input'=>$this->app->router->request()->getRequestData('csvRows')]);
+			}
+
+			$shop = $this->app->router->request()->getRequestData('shopId');
+			$shop = $this->app->repoFactory->create('shop')->findOne([$shop]);
+			$path = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'productSync') . '/' . $shop->name.'/import/';
+			$name = $this->app->router->request()->getRequestData('action').'_'
+						.$shop->id.'_'
+						.date('YmdHis').'_'
+						.$this->app->router->request()->getRequestData('csvRows').'.csv';
+			if (!rename($files['importerFile']['tmp_name'], $path . $name)) throw new \Exception();
+
+			return ['ok'=>'done'];
+		}
+		throw new \Exception();
 	}
 }
