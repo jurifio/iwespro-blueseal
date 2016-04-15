@@ -22,13 +22,37 @@ class CJobLogDownloadController extends AAjaxController
 	 */
 	public function get()
 	{
-		$job = $this->app->router->request()->getRequestData('job');
-		$sql = "SELECT jl.severity,jl.subject,jl.content,jl.context,jl.timestamp from Job j, JobExecution je, JobLog jl WHERE j.id= je.jobId and je.jobId = jl.jobId and je.id = jl.jobExecutionId and j.id = ? and je.status = 'END' order by je.id desc, jl.id asc";
-		$a = $this->app->dbAdapter->query($sql,[$job])->fetchAll();
-		$output = "";
-		foreach($a as $x) {
-			$output.=implode(';',$x)."\n";
-		};
-		return $output;
+		try {
+			$job = $this->app->router->request()->getRequestData('job');
+			return file_get_contents($this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/log" . $job . ".csv");
+		} catch (\Exception $e) {
+			var_dump($e);
+		}
+
+		return "";
+	}
+
+	public function post()
+	{
+		try {
+			$job = $this->app->router->request()->getRequestData('job');
+			$sql = "SELECT id, jobId from JobExecution where status = 'END' and  jobId = ? order by id desc limit 1";
+			$a = $this->app->dbAdapter->query($sql, [$job])->fetchAll()[0];
+			$sql = "SELECT jl.severity,jl.subject,jl.content,jl.context,jl.timestamp 
+					FROM JobLog jl 
+					WHERE jl.jobExecutionId = ? and jobId = ?
+					ORDER BY jl.id ASC";
+			$a = $this->app->dbAdapter->query($sql, [$a['id'],$a['jobId']])->fetchAll();
+			$file = fopen($this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/log" . $job . ".csv", 'w');
+			foreach ($a as $x) {
+				fputs($file, '"'.implode('";"', $x).'"');
+			};
+			fflush($file);
+			fclose($file);
+		} catch (\Exception $e) {
+			var_dump($e);
+		}
+
+		return $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/log" . $job . ".csv";
 	}
 }
