@@ -63,4 +63,20 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 </body>
+<bs-toolbar>
+    <bs-toolbar-group data-group-label="Log ultimo inserimento">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-long-arrow-down"
+                data-permission="/admin/product/add"
+                data-event="bs.log.download"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-download="job-2-<?php echo date('YmdHmi') ?>.log"
+                data-href="/blueseal/xhr/JobLogDownloadController?job=2"
+                data-title="Scarica Log"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+</bs-toolbar>
 </html>
