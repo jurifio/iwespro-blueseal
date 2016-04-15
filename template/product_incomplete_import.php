@@ -72,7 +72,7 @@
                 data-event="bs.log.download"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-download="job-2-<?php echo date('YmdHmi') ?>.log"
+                data-download="job-2-<?php echo date('YmdHmi') ?>.csv"
                 data-href="/blueseal/xhr/JobLogDownloadController?job=2"
                 data-title="Scarica Log"
                 data-placement="bottom"

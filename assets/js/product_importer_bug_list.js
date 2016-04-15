@@ -5,25 +5,28 @@ var alertHtml = "" +
 	"<strong class=\"alert-title\">{title}</strong> <span class=\"alert-message\">{body}</span> </div>";
 
 var tagList = "";
+
 $(document).on('bs.log.download', function (e,element,button) {
+	if(window.running != true) {
+		window.downloadIconSave = element.html();
+		element.html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+		e.preventDefault();
+		$.ajax({
+			type: "POST",
+			async: false,
+			url:"/blueseal/xhr/JobLogDownloadController",
+			data: {
+				job: 2
+			}
+		}).progress(function() {
 
-	console.log(e,element,button);
-	var save = element.html()
-	element.html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>')
-	$.ajax({
-		type: "POST",
-		async: false,
-		url:"/blueseal/xhr/JobLogDownloadController",
-		data: {
-			job: 2
-		}
-	}).progress(function() {
-
-	}).done(function() {
-		element.html(save);
-	}).fail(function() {
-		console.log('fails');
-	});
-
-	console.log('fattp');
+		}).done(function() {
+			window.running = true;
+			element.trigger('click');
+		}).fail(function() {
+		});
+	} else {
+		window.running = false;
+		element.html(window.downloadIconSave);
+	}
 });
