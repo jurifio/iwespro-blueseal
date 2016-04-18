@@ -92,7 +92,7 @@ class CInvoiceAjaxController extends AAjaxController
                     }
                 }
 
-                echo $invoice->invoiceText;
+                return $invoice->invoiceText;
             }
         }
 

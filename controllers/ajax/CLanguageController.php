@@ -52,6 +52,6 @@ class CLanguageController extends AAjaxController
         }
         $html .= "</tbody></table>";
 
-        echo $html;
+        return $html;
     }
 }

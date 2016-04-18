@@ -62,7 +62,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
 	    }
 
         $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/edit');
-
+		$datatable->addCondition('hasQuantity',[1]);
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
@@ -120,7 +120,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
             $i++;
         }
 
-        echo json_encode($response);
+        return json_encode($response);
     }
 
     public function put()

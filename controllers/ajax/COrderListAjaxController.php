@@ -4,6 +4,7 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
+use bamboo\domain\entities\CProductSku;
 
 /**
  * Class COrderListAjaxController
@@ -34,9 +35,9 @@ class COrderListAjaxController extends AAjaxController
         $this->urls['page'] = $this->urls['base']."prodotti";
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
 
-        if ($this->app->getUser()->hasRole('ownerEmployee')) {
+        if ($this->app->getUser()->hasPermission('allShops')) {
 
-        } else if($this->app->getUser()->hasRole('friendEmployee')){
+        } else{
             $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
             foreach($res as $val) {
                 $this->authorizedShops[] = $val['shopId'];
@@ -60,6 +61,7 @@ class COrderListAjaxController extends AAjaxController
 	    $datatable->addSearchColumn('orderLineStatus');
 	    $datatable->addSearchColumn('shop');
 	    $datatable->addSearchColumn('product');
+	    $datatable->addSearchColumn('productBrand');
 	    $datatable->addSearchColumn('email');
         //var_dump($datatable->getQuery());
         //die();
@@ -97,8 +99,11 @@ class COrderListAjaxController extends AAjaxController
 	        $alert = false;
 	        foreach ($val->orderLine as $line) {
 		        try {
+			        /** @var CProductSku $sku */
 			        $sku = unserialize($line->frozenProduct);
-			        $code = $shops->findOneByKey('id', $sku->shopId)->name . ' ' . $sku->printPublicSku();
+			        $sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
+
+			        $code = $sku->shop->name . ' ' . $sku->printPublicSku(). " (".$sku->product->productBrand->name.")";
 			        if($line->orderLineStatus->notify === 1) $alert = true;
 		        } catch (\Exception $e) {
 			        $code = 'non trovato';

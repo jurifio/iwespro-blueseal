@@ -29,8 +29,8 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
         }
         $this->app->setLang(new CLang(1,'it'));
         $this->page = new CBlueSealPage('login',$this->app);
-        $this->{$action}();
-        return;
+        return $this->{$action}();
+
     }
 
     /**
@@ -55,7 +55,7 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/index.php');
-        echo $view->render(array(
+        return $view->render(array(
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page
         ));
@@ -66,6 +66,6 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
      */
     public function post()
     {
-        $this->get();
+        return $this->get();
     }
 }

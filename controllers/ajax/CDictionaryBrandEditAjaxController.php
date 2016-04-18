@@ -35,9 +35,9 @@ class CDictionaryBrandEditAjaxController extends AAjaxController
         $this->urls['page'] = $this->urls['base']."importatori/dizionari/brand";
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
 
-        if ($this->app->getUser()->hasRole('ownerEmployee')) {
+        if ($this->app->getUser()->hasPermission('allShops')) {
 
-        } else if($this->app->getUser()->hasRole('friendEmployee')){
+        } else{
             $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
             foreach($res as $val) {
                 $this->authorizedShops[] = $val['shopId'];
@@ -95,7 +95,7 @@ class CDictionaryBrandEditAjaxController extends AAjaxController
             $i++;
         }
 
-        echo json_encode($response);
+        return json_encode($response);
     }
 
     public function put()
