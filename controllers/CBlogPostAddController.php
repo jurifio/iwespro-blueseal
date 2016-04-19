@@ -67,8 +67,8 @@ class CBlogPostAddController extends ARestrictedAccessRootController
         $PostTranslation->postId = $postId;
         $PostTranslation->blogId = $newPostData['Post.blogId'];
 
-        $postRepo->setCategories($postId,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
-        $postRepo->setTags($postId,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
+        //$postRepo->setCategories($postId,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
+        //$postRepo->setTags($postId,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
         $postTranslationRepo->insert($PostTranslation);
 
         $this->app->router->response()->autoRedirectTo($this->app->baseUrl(false)."/blueseal/blog/modifica?id=".$postId."&blogId=".$Post->blogId);
