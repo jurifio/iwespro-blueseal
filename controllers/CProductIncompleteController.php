@@ -36,9 +36,9 @@ class CProductIncompleteController extends ARestrictedAccessRootController
         $importa_foto_newage = $bluesealBase."import/cartechiniphoto/total_import_newage.php";
         $dummyUrl = $this->app->cfg()->fetch('paths','dummyUrl');
 
-        if ($this->app->getUser()->hasRole('ownerEmployee')) {
+        if ($this->app->getUser()->hasPermission('allShops')) {
 
-        } else if($this->app->getUser()->hasRole('friendEmployee')) {
+        } else {
             $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
             $shops = [];
             foreach($res as $val){

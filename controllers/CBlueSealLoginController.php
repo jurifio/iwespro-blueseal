@@ -29,8 +29,8 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
         }
         $this->app->setLang(new CLang(1,'it'));
         $this->page = new CBlueSealPage('login',$this->app);
-        $this->{$action}();
-        return;
+        return $this->{$action}();
+
     }
 
     /**
@@ -66,6 +66,6 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
      */
     public function post()
     {
-        $this->get();
+        return $this->get();
     }
 }

@@ -764,3 +764,47 @@ $.drawUI = function() {
         height: 100
     });
 };
+
+var Portlet = function (data) {
+	if (!(this instanceof Portlet)) {
+		return new Portlet();
+	}
+
+	this.controller = new ButtonCfg(data, ['controller','url']);
+	this.params = new ButtonCfg(data,['params']);
+	this.cfg = new ButtonCfg(data, ['tag', 'icon', 'permission', 'event', 'button']);
+	this.tagAttr = new ButtonCfg(data, ['class', 'rel', 'href', 'title', 'name', 'download']);
+	this.dataAttr = new ButtonCfg(data, ['placement', 'toggle', 'target', 'json']);
+
+	this.permissionCheckerEndPoint = "/blueseal/xhr/CheckPermission";
+
+	if(this.controller.data.url == 'undefined') {
+		this.controller.data.url = '/blueseal/xhr';
+	}
+
+	this.ajaxPromise = $.ajax({
+		url: this.controller.data.url+'/'+this.controller.data.controller,
+		method: "GET",
+		data: this.params.data.params
+	}).promise();
+
+	this.loadingTemplate = "Loading";
+	this.failTemplate = "Failed Loading";
+
+};
+
+Portlet.prototype = Object.create(UiElement.prototype);
+Portlet.prototype.constructor = UiElement;
+
+Portlet.prototype.draw = function(that) {
+	var _this = this;
+
+	_this.ajaxPromise.progress(function(){
+		$(that).replaceWith(_this.loadingTemplate)
+	}).done(function(result) {
+		$(that).replaceWith(result);
+	}).fail(function() {
+		$(that).replaceWith(_this.failTemplate);
+	});
+};
+

@@ -43,7 +43,7 @@ class CSkuManageController extends ARestrictedAccessRootController
         $productSkuEdit = $productEdit->productSku;
 
         $em = $this->app->entityManagerFactory->create('Shop');
-        if ($this->app->getUser()->hasRole('friendEmployee') || $this->app->getUser()->hasRole('friendAdmin')) {
+        if (!$this->app->getUser()->hasPermission('allShops')) {
             $shop = $em->findBySql("SELECT id FROM Shop, UserHasShop WHERE id = UserHasShop.shopId AND UserHasShop.userId = ?", array($this->app->getUser()->getId()));
             if ($shop instanceof CObjectCollection) {
                 $shop = $shop->getFirst();
