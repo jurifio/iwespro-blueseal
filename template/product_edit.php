@@ -278,10 +278,10 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
                                                 <label for="ProductName_1_name">Nome del prodotto</label>
-                                                <?php if ($productEdit->productNameTranslation != false && ($name = $productEdit->productNameTranslation->findOneByKey('langId', 1))) ?>
+                                                <?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>
                                                 <input autocomplete="off" type="text" class="form-control"
                                                        id="ProductName_1_name" name="ProductName_1_name"
-                                                       value="<?php if ($productEdit->productNameTranslation && ($name = $productEdit->productNameTranslation->findOneByKey('langId', 1))) echo $name->name; ?>">
+                                                       value="<?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>">
                                             </div>
                                         </div>
                                     </div>
