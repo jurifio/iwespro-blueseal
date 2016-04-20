@@ -278,7 +278,6 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
                                                 <label for="ProductName_1_name">Nome del prodotto</label>
-                                                <?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>
                                                 <input autocomplete="off" type="text" class="form-control"
                                                        id="ProductName_1_name" name="ProductName_1_name"
                                                        value="<?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>">
