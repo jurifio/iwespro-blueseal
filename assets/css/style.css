@@ -694,3 +694,8 @@ ul.roulette-importer-details li {
     box-shadow: inset 1px 1px 1px #c0c0c0;
     color:#009900;
 }
+.btn-search {
+    background-color: black;
+    border-color: black;
+    color: #fff;
+}
