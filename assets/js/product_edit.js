@@ -77,7 +77,7 @@ $(document).on('bs.category.edit', function (e,element,button) {
                 },
                 autoexpand: true,
                 checkbox: true,
-                imagePath: "/assets/img/skin/icons.gif",
+                imagePath: "/assets/img/skin/icons_better.gif",
                 selectMode: 2,
                 onPostInit: function () {
                     var vars = $("#ProductCategory_id").val().trim();

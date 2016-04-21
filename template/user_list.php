@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 <head>
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
@@ -53,14 +52,36 @@
     <bs-toolbar-group data-group-label="Gestione utenti">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-file-o fa-plus"
+            data-icon="fa-user-plus"
             data-permission="/admin/user/add"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Aggiungi un nuovo utente"
             data-placement="bottom"
             data-href="#"
-            >
+            ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Assegna Ruoli">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-street-view"
+            data-permission="/admin/user"
+            data-event="bs.roles.show"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Vedi ruoli"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-gavel"
+            data-permission="/admin/user"
+            data-event="bs.permission.show"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Vedi permessi"
+            data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 
