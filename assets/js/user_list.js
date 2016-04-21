@@ -1,3 +1,5 @@
+//TODO gestire la temporizzazione delle chiamate
+
 $(document).on('bs.roles.show', function (e,element,button) {
 	var bsModal = $('#bsModal');
 	var header = $('#bsModal .modal-header h4');
@@ -19,51 +21,53 @@ $(document).on('bs.roles.show', function (e,element,button) {
 		var selectedRows = $('.table').DataTable().rows('.selected').data();
 		var selectedRowsCount = selectedRows.length;
 
-		var userRoles = [];
-		if (selectedRowsCount > 1) {
+		if (selectedRowsCount ==  1) {
+			$.ajax({
+				url: "/blueseal/xhr/GetRolesForUser",
+				async: false,
+				data: { id: selectedRows[0].DT_RowId.split('__')[1] }
+			}).done(function (res) {
+
+				userRoles = JSON.parse(res);
+
+				var radioTree = $("#rolesTree");
+				if (radioTree.length) {
+					radioTree.dynatree({
+						debugLevel: 0,
+						initAjax: {
+							url: "/blueseal/xhr/GetRolesTree"
+						},
+						autoexpand: true,
+						checkbox: true,
+						imagePath: "/assets/img/skin/icons_better.gif",
+						selectMode: 2,
+						onPostInit: function () {
+							for (var i = 0; i < userRoles.length; i++) {
+								if (this.getNodeByKey(userRoles[i].id) != null) {
+									this.getNodeByKey(userRoles[i].id).select();
+								}
+							}
+							$.map(this.getSelectedNodes(), function (node) {
+								node.makeVisible();
+							});
+							$('#rolesTree').scrollbar({
+								axis: "y"
+							});
+						},
+						onSelect: function (select, node) {
+							//seleziona
+						}
+					});
+				}
+			});
+		} else {
 			new Alert({
 				type: "warning",
 				message: "Devi selezionare un solo utente per visualizzare i ruoli"
 			}).open();
-		} else {
-			$.ajax({
-				url: "/blueseal/xhr/GetRolesForUser",
-				async: true,
-				data: { id: selectedRows[0].DT_RowId.split('__')[1] }
-			}).done(function (res) {
-				userRoles = JSON.parse(res);
-			});
 		}
 
-		var radioTree = $("#rolesTree");
-		if (radioTree.length) {
-			radioTree.dynatree({
-				debugLevel: 0,
-				initAjax: {
-					url: "/blueseal/xhr/GetRolesTree"
-				},
-				autoexpand: true,
-				checkbox: true,
-				imagePath: "/assets/img/skin/icons_better.gif",
-				selectMode: 2,
-				onPostInit: function () {
-					for (var i = 0; i < userRoles.length; i++) {
-						if (this.getNodeByKey(userRoles[i].id) != null) {
-							this.getNodeByKey(userRoles[i].id).select();
-						}
-					}
-					$.map(this.getSelectedNodes(), function (node) {
-						node.makeVisible();
-					});
-					$('#rolesTree').scrollbar({
-						axis: "y"
-					});
-				},
-				onSelect: function (select, node) {
-					//seleziona
-				}
-			});
-		}
+
 		bsModal.modal('show');
 	});
 });
@@ -88,51 +92,52 @@ $(document).on('bs.permission.show', function (e,element,button) {
 		var selectedRows = $('.table').DataTable().rows('.selected').data();
 		var selectedRowsCount = selectedRows.length;
 
-		var userPermissions = [];
-		if (selectedRowsCount > 1) {
+		if (selectedRowsCount == 1) {
+			$.ajax({
+				url: "/blueseal/xhr/GetPermissionsForUser",
+				async: false,
+				data: { id: selectedRows[0].DT_RowId.split('__')[1] }
+			}).done(function (res) {
+				userPermissions = JSON.parse(res);
+
+				var radioTree = $("#permissionTree");
+				if (radioTree.length) {
+					radioTree.dynatree({
+						debugLevel: 0,
+						initAjax: {
+							url: "/blueseal/xhr/GetPermissionsTree"
+						},
+						autoexpand: true,
+						checkbox: true,
+						imagePath: "/assets/img/skin/icons_better.gif",
+						selectMode: 2,
+						onPostInit: function () {
+							for (var i = 0; i < userPermissions.length; i++) {
+								if (this.getNodeByKey(userPermissions[i]) != null) {
+									this.getNodeByKey(userPermissions[i]).select();
+								}
+							}
+							$.map(this.getSelectedNodes(), function (node) {
+								node.makeVisible();
+							});
+							$('#permissionTree').scrollbar({
+								axis: "y"
+							});
+						},
+						onSelect: function (select, node) {
+							//seleziona
+						}
+					});
+				}
+			});
+		} else {
 			new Alert({
 				type: "warning",
 				message: "Devi selezionare un solo utente per visualizzare i permessi"
 			}).open();
-		} else {
-			$.ajax({
-				url: "/blueseal/xhr/GetPermissionsForUser",
-				async:true,
-				data: { id: selectedRows[0].DT_RowId.split('__')[1] }
-			}).done(function (res) {
-				userPermissions = JSON.parse(res);
-			});
+			return;
 		}
 
-		var radioTree = $("#permissionTree");
-		if (radioTree.length) {
-			radioTree.dynatree({
-				debugLevel: 0,
-				initAjax: {
-					url: "/blueseal/xhr/GetPermissionsTree"
-				},
-				autoexpand: true,
-				checkbox: true,
-				imagePath: "/assets/img/skin/icons_better.gif",
-				selectMode: 2,
-				onPostInit: function () {
-					for (var i = 0; i < userPermissions.length; i++) {
-						if (this.getNodeByKey(userPermissions[i]) != null) {
-							this.getNodeByKey(userPermissions[i]).select();
-						}
-					}
-					$.map(this.getSelectedNodes(), function (node) {
-						node.makeVisible();
-					});
-					$('#permissionTree').scrollbar({
-						axis: "y"
-					});
-				},
-				onSelect: function (select, node) {
-					//seleziona
-				}
-			});
-		}
 		bsModal.modal('show');
 	});
 });
