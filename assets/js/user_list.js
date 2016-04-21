@@ -28,6 +28,7 @@ $(document).on('bs.roles.show', function (e,element,button) {
 		} else {
 			$.ajax({
 				url: "/blueseal/xhr/GetRolesForUser",
+				async: true,
 				data: { id: selectedRows[0].DT_RowId.split('__')[1] }
 			}).done(function (res) {
 				userRoles = JSON.parse(res);
@@ -37,6 +38,7 @@ $(document).on('bs.roles.show', function (e,element,button) {
 		var radioTree = $("#rolesTree");
 		if (radioTree.length) {
 			radioTree.dynatree({
+				debugLevel: 0,
 				initAjax: {
 					url: "/blueseal/xhr/GetRolesTree"
 				},
@@ -53,7 +55,7 @@ $(document).on('bs.roles.show', function (e,element,button) {
 					$.map(this.getSelectedNodes(), function (node) {
 						node.makeVisible();
 					});
-					$('#categoriesTree').scrollbar({
+					$('#rolesTree').scrollbar({
 						axis: "y"
 					});
 				},
@@ -95,6 +97,7 @@ $(document).on('bs.permission.show', function (e,element,button) {
 		} else {
 			$.ajax({
 				url: "/blueseal/xhr/GetPermissionsForUser",
+				async:true,
 				data: { id: selectedRows[0].DT_RowId.split('__')[1] }
 			}).done(function (res) {
 				userPermissions = JSON.parse(res);
@@ -104,6 +107,7 @@ $(document).on('bs.permission.show', function (e,element,button) {
 		var radioTree = $("#permissionTree");
 		if (radioTree.length) {
 			radioTree.dynatree({
+				debugLevel: 0,
 				initAjax: {
 					url: "/blueseal/xhr/GetPermissionsTree"
 				},
@@ -120,7 +124,7 @@ $(document).on('bs.permission.show', function (e,element,button) {
 					$.map(this.getSelectedNodes(), function (node) {
 						node.makeVisible();
 					});
-					$('#categoriesTree').scrollbar({
+					$('#permissionTree').scrollbar({
 						axis: "y"
 					});
 				},
