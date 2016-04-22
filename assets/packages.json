@@ -51,6 +51,10 @@
                 "path": "scheme://localdomain/assets/css/",
                 "options": ["screen"]
             },
+            "ui.fancytree.min.css": {
+                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.17.0/skin-themeroller/",
+                "options": ["screen"]
+            },
             "summernote.min.css": {
                 "path": "scheme://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/",
                 "options": ["screen"]
@@ -164,6 +168,10 @@
             },
             "jquery.dynatree.min.js": {
                 "path": "scheme://cdn.jsdelivr.net/jquery.dynatree/1.2.4/",
+                "options": ["defer"]
+            },
+            "jquery.fancytree-all.min.js": {
+                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.17.0/",
                 "options": ["defer"]
             },
             "summernote.min.js": {
