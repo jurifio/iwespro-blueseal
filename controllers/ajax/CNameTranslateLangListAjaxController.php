@@ -83,7 +83,7 @@ class CNameTranslateLangListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['trans'] = $name;
-            $response['data'][$i]['name'] = $val->name . ' - ' . $val->productId . '_' . $val->productVariantId;
+            $response['data'][$i]['name'] = $val->name . ' - ' . $val->productId . '-' . $val->productVariantId;
             $response['data'][$i]['productId'] = $val->productId;
             $response['data'][$i]['productVariantId'] = $val->productVariantId;
 
