@@ -27,6 +27,8 @@ $(document).on('bs.roles.show', function (e,element,button) {
 				radioTree.fancytree({
 					selectMode: 2,
 					checkbox: true,
+					focusOnSelect: true,
+					minExpandLevel: 2,
 					source: {
 						url: "/blueseal/xhr/GetRolesTree",
 						cache:false,
@@ -55,7 +57,7 @@ $(document).on('bs.rolesTree.loaded',function() {
 		}).done(function (res) {
 			var userRoles = JSON.parse(res);
 			for (var i = 0; i < userRoles.length; i++) {
-				$("#rolesTree").fancytree("getTree").getNodeByKey(userRoles[i].id).setSelected();
+				$("#rolesTree").fancytree("getTree").getNodeByKey(String(userRoles[i].id)).setSelected();
 			}
 		});
 	});
@@ -88,6 +90,8 @@ $(document).on('bs.permission.show', function (e,element,button) {
 				radioTree.fancytree({
 					selectMode: 2,
 					checkbox: true,
+					focusOnSelect: true,
+					minExpandLevel: 2,
 					source: {
 						url: "/blueseal/xhr/GetPermissionsTree",
 						cache:false,
@@ -117,7 +121,9 @@ $(document).on('bs.permissionsTree.loaded',function() {
 		}).done(function (res) {
 			var userPermissions = JSON.parse(res);
 			for (var i = 0; i < userPermissions.length; i++) {
-				$("#permissionsTree").fancytree("getTree").getNodeByKey(userPermissions[i]).setSelected();
+				var node = $("#permissionsTree").fancytree("getTree").getNodeByKey(String(userPermissions[i]));
+				node.setSelected(true);
+				node.toggleExpanded(true);
 			}
 		});
 	});
