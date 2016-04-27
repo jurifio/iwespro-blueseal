@@ -95,7 +95,10 @@
                                 <?php
                                 $i = 1;
                                 $prod = $productSizeGroup->productSize->count();
-                                foreach ($productSizeGroup->productSize as $val): ?>
+                                $shown = [];
+                                foreach ($productSizeGroup->productSize as $val):
+                                    if(isset($done[$val->id])) continue;
+                                    $done[$val->id] = "done"; ?>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default">
