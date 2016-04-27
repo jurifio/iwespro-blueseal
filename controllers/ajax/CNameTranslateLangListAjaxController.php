@@ -71,7 +71,7 @@ class CNameTranslateLangListAjaxController extends AAjaxController
 
         foreach($productsName as $val){
             $trans = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'langId' => $langId]);
-
+			if(is_null($trans)) continue;
             $name = '<div class="form-group form-group-default full-width">';
             if (($trans->name != '') && $okManage) {
                 continue;
@@ -83,7 +83,7 @@ class CNameTranslateLangListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['trans'] = $name;
-            $response['data'][$i]['name'] = $val->name . ' - ' . $val->productId . '_' . $val->productVariantId;
+            $response['data'][$i]['name'] = $val->name . ' - ' . $val->productId . '-' . $val->productVariantId;
             $response['data'][$i]['productId'] = $val->productId;
             $response['data'][$i]['productVariantId'] = $val->productVariantId;
 
