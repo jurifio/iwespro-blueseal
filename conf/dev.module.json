@@ -3,7 +3,8 @@
         "admin-theme": "/back",
         "blueseal": "/back",
         "packed-assets": "/client/public/themes/flatize/assets/",
-        "blueseal-addon": "/back/addon"
+        "blueseal-addin": "/back/addon",
+        "friend-logo": "/back/assets/img/clientLogo/"
     },
     "miscellaneous": {
         "orderStatus": {

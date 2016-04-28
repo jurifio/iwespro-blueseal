@@ -19,7 +19,7 @@
     <div class="pull-left sm-table">
         <div class="header-inner">
             <div class="brand inline">
-                <img src="/assets/img/logo_no_symbol.png" alt="logo" data-src="/assets/img/logo_no_symbol.png" data-src-retina="/assets/img/logo_no_symbol.png" width="120">
+                <img class="shop-logo" src="<?php echo $app->getUserShopLogo(); ?>" alt="logo" data-src="<?php echo $app->getUserShopLogo(); ?>" data-src-retina="<?php echo $app->getUserShopLogo(); ?>">
             </div>
             <!--<a href="#" class="search-link" data-toggle="search"><i class="pg-search"></i>Scrivi ovunque per <span class="bold">cercare</span></a>-->
         </div>

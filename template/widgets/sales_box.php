@@ -21,10 +21,23 @@
             </div>
             <div class="row-xs-height">
                 <div class="col-xs-height col-top">
-                    <div class="p-l-20 p-t-15">
-                        <h3 class="no-margin p-b-5 text-<?php echo $color ?>">&euro; <?php echo round($value,2); ?></h3>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="p-l-20 p-t-15">
+                                <?php //var_dump($value); ?>
+                                <p>Fatturato</p>
+                                <h3 class="no-margin p-b-5 text-<?php echo $color ?>">&euro; <?php echo round($value['costumer'],2); ?></h3>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="p-l-20 p-t-15">
+                                <p>Margine</p>
+                                <h4 class="no-margin p-b-5">&euro; <?php echo round($value['iwes'],2); ?></h4>
+                            </div>
+                        </div>
+                        <br style="clear:both" />
                         <a href="#" class="btn-circle-arrow text-black"><i class="<?php echo $trend > 0 ? "pg-arrow_up" : "pg-arrow_down" ?>"></i></a>
-                        <span class="small hint-text"><?php echo round($trend,0); ?>% rispetto all'ultimo periodo</span>
+                        <span class="small hint-text">Ricavi: <?php echo round($trend,0); ?>% rispetto all'ultimo periodo</span>
                     </div>
                 </div>
             </div>

@@ -116,7 +116,7 @@ class CUserSalesRecapController extends AAjaxController
 		return $view->render([
 			'app'=>new CRestrictedAccessWidgetHelper($this->app),
 			'trend'=>$trend,
-			'value'=>$data[0][$valueToSelect],
+			'value'=>$data[0], //[$valueToSelect],
 			'periodProgress'=>$periodProgress,
 			'title'=>$title,
 			'class'=>$this->app->router->request()->getRequestData('class') ? $this->app->router->request()->getRequestData('class') : "bg-white"

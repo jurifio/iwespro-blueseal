@@ -113,6 +113,10 @@ table.table {
     width: 320px;
 }
 
+.shop-logo {
+    height: 50px;
+}
+
 .footer a, .footer a:visited {
     color: #fff;
 }
@@ -344,6 +348,9 @@ select.btn {
 .sidebar-logo {
     transform: translate3d(195px, 0px, 0px);
     transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sidebar-logo img:first-child {
+    margin-right: 15px;
 }
 
 body.sidebar-visible .sidebar-logo {
