@@ -69,7 +69,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
 		    $s = new CSlugify();
 		    $pathinfo = pathinfo($coverImageData['PostTranslation.coverImage']['name']);
 		    $uploadfile = rand(0, 9999999999) . '-' .$s->slugify($pathinfo['filename']).'.'. $pathinfo['extension'];
-		    if (!rename($coverImageData['coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
+		    if (!rename($coverImageData['PostTranslation.coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
 		    $PostTranslation->blogId = $uploadfile;
 	    }
 
