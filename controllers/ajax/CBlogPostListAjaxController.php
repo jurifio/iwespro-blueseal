@@ -61,19 +61,16 @@ class CBlogPostListAjaxController extends AAjaxController
 
         foreach($posts as $post){
 
-            $creationDate = new \DateTime($post->creationDate);
-            $publishDate = new \DateTime($post->publishDate);
-
             $coverImage = empty($post->postTranslation->getFirst()->coverImage) ? "/assets/bs-dummy-16-9.png" : $post->postTranslation->getFirst()->coverImage;
 
             $response['data'][$i]["DT_RowId"] = 'row__'.$post->id.'__'.$post->blogId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['id'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$post->id.'&blogId='.$post->blogId.'">'.$post->id.'</a>' : $post->id;
-            $response['data'][$i]['coverImage'] = '<img width="80" src="'.$coverImage.'" />';
+            $response['data'][$i]['coverImage'] = '<img width="80" src="/assets/'.$coverImage.'" />';
             $response['data'][$i]['title'] = $post->postTranslation->getFirst()->title;
             $response['data'][$i]['content'] = substr(strip_tags($post->postTranslation->getFirst()->content),0,50)."&hellip;";
-            $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
-            $response['data'][$i]['publishDate'] = $publishDate->format('d-m-Y H:i');
+            $response['data'][$i]['creationDate'] = (new \DateTime($post->creationDate))->format('d-m-Y H:i');
+            $response['data'][$i]['publishDate'] = is_null($post->publishDate) ? 'Non definita' : (new \DateTime($post->publishDate))->format('d-m-Y H:i');
             $response['data'][$i]['stato'] = $post->postStatus->name;
 
             $i++;
