@@ -34,7 +34,9 @@ $(document).on('bs.save.post', function() {
     $.ajaxForm({
         url: '#',
         type: 'post'
-    },f);
+    },f).done(function() {
+		    window.location.href("/blueseal/blog");
+	    });
 
 });
 
