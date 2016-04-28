@@ -35,7 +35,7 @@ $(document).on('bs.save.post', function() {
         url: '#',
         type: 'post'
     },f).done(function() {
-		    window.location.href("/blueseal/blog");
+	        window.location.href = "/blueseal/blog";
 	    });
 
 });

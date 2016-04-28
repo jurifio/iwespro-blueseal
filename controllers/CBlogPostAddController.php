@@ -70,7 +70,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
 		    $pathinfo = pathinfo($coverImageData['PostTranslation.coverImage']['name']);
 		    $uploadfile = rand(0, 9999999999) . '-' .$s->slugify($pathinfo['filename']).'.'. $pathinfo['extension'];
 		    if (!rename($coverImageData['PostTranslation.coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
-		    $PostTranslation->blogId = $uploadfile;
+		    $PostTranslation->coverImage = $uploadfile;
 	    }
 
         //$postRepo->setCategories($postId,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
