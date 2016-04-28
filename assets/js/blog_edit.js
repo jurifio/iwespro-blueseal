@@ -34,7 +34,9 @@ $(document).on('bs.save.post', function() {
     $.ajaxForm({
         url: '#',
         type: 'put'
-    },f);
+    },f).done(function () {
+	    window.location.reload(false);  
+    });
 
 });
 

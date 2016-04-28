@@ -1,4 +1,3 @@
-<?php $date = new DateTime(); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,7 +73,7 @@
                             <div class="panel-body clearfix">
                                 <div class="form-group form-group-default">
                                     <label>Data pubblicazione</label>
-                                    <input type="datetime-local" data-json="Post.publishDate" value="<?php echo $post->publishDate; ?>" autocomplete="off" class="form-control" title="Data pubblicazione"/>
+                                    <input type="datetime-local" data-json="Post.publishDate" value="<?php echo (new DateTime($post->publishDate))->format('Y-m-d\TH:i'); ?>" autocomplete="off" class="form-control" title="Data pubblicazione"/>
                                 </div>
                             </div>
                         </div>
@@ -108,7 +107,7 @@
                                 <h5 data-toggle="popover" data-placement="left" data-container="body" data-title="Formato e dimensioni" data-content="Formato 16:9: larghezza minima 1140px"><i class="fa fa-question-circle"></i> Cover photo</h5>
                             </div>
                             <div class="panel-body clearfix">
-                                <img src="<?php echo !empty($post->postTranslation->getFirst()->coverImage) ? $post->postTranslation->getFirst()->coverImage : $defaultImage ?>" id="cover" class="img-responsive image-uploader" />
+                                <img src="<?php echo !empty($post->postTranslation->getFirst()->coverImage) ? "/assets/".$post->postTranslation->getFirst()->coverImage : $defaultImage ?>" id="cover" class="img-responsive image-uploader" />
                                 <div class="form-group form-group-default" style="display:none;">
                                     <label>Cover photo</label>
                                     <input type="file" data-json="PostTranslation.coverImage" autocomplete="off" class="form-control" title="Cover photo"/>
@@ -136,36 +135,6 @@
             data-title="Salva"
             data-placement="bottom"
         ></bs-toolbar-button>
-        <!--<bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-picture-o"
-            data-permission="/admin/content/add"
-            data-event="bs.add.gallery"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi gallery"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-youtube"
-            data-permission="/admin/content/add"
-            data-event="bs.add.youtube"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un video da youtube"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-film"
-            data-permission="/admin/content/add"
-            data-event="bs.add.productslider"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi uno slider prodotti"
-            data-placement="bottom"
-        ></bs-toolbar-button>-->
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Stato del post">
         <bs-toolbar-select
