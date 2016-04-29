@@ -5,18 +5,19 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 
 /**
- * Class CProductListAjaxController
+ * Class CBlogPostTrashListAjaxController
  * @package bamboo\blueseal\controllers\ajax
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
+ * @author Bambooshoot Team <emanuele@bambooshoot.agency>
  *
  * @copyright (c) Bambooshoot snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @since ${VERSION}
+ * @date 29/04/2016
+ * @since 1.0
  */
-class CBlogPostListAjaxController extends AAjaxController
+class CBlogPostTrashListAjaxController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
@@ -43,7 +44,7 @@ class CBlogPostListAjaxController extends AAjaxController
     {
         $datatable = new CDataTables('vBluesealPostList',['id','blogId'],$_GET);
 
-	    $datatable->addCondition('postStatusId',[3],true);
+	    $datatable->addCondition('postStatusId',[3]);
 
         $posts = $this->app->repoFactory->create('Post')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
