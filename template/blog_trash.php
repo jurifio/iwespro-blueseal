@@ -47,7 +47,7 @@
             data-tag="a"
             data-icon="fa-cloud-upload"
             data-permission="/admin/content/publish"
-            data-event="bs.pub.post"
+            data-event="bs.post.restore"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Ripristina Post"

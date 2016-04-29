@@ -890,7 +890,7 @@
         {
             "pattern": "/blueseal/blog/cestino(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostBinController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostTrashController"
             },
             "filters": {},
             "translations": {},
