@@ -19,10 +19,8 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
     }
 });
 
-$(document).on('bs.save.post', function() {
-
+$(document).on('bs.post.save', function() {
     var f = new FormData();
-
     $('[data-json]').each(function() {
         if ($(this).is(':file')) {
             f.append($(this).data('json'), this.files[0])
@@ -30,14 +28,49 @@ $(document).on('bs.save.post', function() {
             f.append($(this).data('json'),$(this).val());
         }
     });
-
     $.ajaxForm({
         url: '#',
         type: 'put'
     },f).done(function () {
 	    window.location.reload(false);  
     });
+});
 
+$(document).on('bs.post.delete', function() {
+
+	var bsModal = $('#bsModal');
+	var header = $('.modal-header h4');
+	var body = $('.modal-body');
+	var cancelButton = $('.modal-footer .btn-default');
+	var okButton = $('.modal-footer .btn-success');
+
+	header.html('Elimina Post');
+
+	body.html('<p>Vuoi davvero eliminare questo post?</p>');
+	okButton.html('Ok').off().on('click', function () {
+		okButton.on('click', function (){
+			bsModal.modal('hide')
+		});
+		body.html('<img src="/assets/img/ajax-loader.gif" />');
+
+		var blogId = $('[data-json="Post.blogId"]').val();
+		var id = $('[data-json="Post.id"]').val();
+
+		$.ajax({
+			url: '/blueseal/blog',
+			type: "DELETE",
+			data: {
+				ids: id+'-'+blogId
+			}
+		}).done(function (response){
+			body.html('<p>Post Eliminato</p>');
+			window.location.href = "/blueseal/blog";
+		}).fail(function (response){
+			body.html('<p>Errore</p>');
+		});
+	});
+
+	bsModal.modal();
 });
 
 $(document).on('bs.add.gallery', function() {

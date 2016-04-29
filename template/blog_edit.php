@@ -127,10 +127,19 @@
             data-tag="a"
             data-icon="fa-floppy-o"
             data-permission="/admin/content/add"
-            data-event="bs.save.post"
+            data-event="bs.post.save"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Salva"
+            data-placement="bottom"
+        ></bs-toolbar-button><bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-trash-o"
+            data-permission="/admin/content/delete"
+            data-event="bs.post.delete"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Elimina"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
