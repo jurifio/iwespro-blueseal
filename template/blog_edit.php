@@ -85,7 +85,6 @@
                                 <div class="form-group form-group-default selectize-enabled required">
                                     <label>Categorie</label>
                                     <select data-json="PostHasPostCategory.id" class="full-width" multiple="multiple" placeholder="Seleziona una o più categorie" data-init-plugin="selectize" tabindex="-1" title="" required>
-                                        <option></option>
                                         <?php foreach ($cats as $cat): ?>
                                         <option value="<?php echo $cat->id ?>"<?php if($post->postCategory->findOneByKey('id',$cat->id)) echo ' selected="selected"'; ?>><?php echo $cat->postCategoryTranslation->getFirst()->name ?></option>
                                         <?php endforeach; ?>
@@ -94,7 +93,6 @@
                                 <div class="form-group form-group-default selectize-enabled required">
                                     <label>Tag</label>
                                     <select data-json="PostHasPostTag.id" class="full-width" multiple="multiple" placeholder="Seleziona una o più tag" data-init-plugin="selectize" tabindex="-1" title="" required>
-                                        <option></option>
                                         <?php foreach ($tags as $tag): ?>
                                         <option value="<?php echo $tag->id ?>"<?php if($post->postTag->findOneByKey('id',$tag->id)) echo ' selected="selected"';?>><?php echo $tag->postTagTranslation->getFirst()->name ?></option>
                                         <?php endforeach; ?>

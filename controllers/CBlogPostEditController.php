@@ -57,7 +57,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 
 		foreach ($newPostData as $k => $v) {
 			$tableField = explode('.',$k);
-			if (is_int(stripos($k,'PostHasPostCategory')) || is_int(stripos($k,'PostHasPostTag'))) {
+			if (is_int(stripos($k,'PostHasPostCategory')) || is_int(stripos($k,'PostHasPostTag'))|| is_int(stripos($k,'coverImage')) ) {
 				continue;
 			}
 			${$tableField[0]}->{$tableField[1]} = $v;

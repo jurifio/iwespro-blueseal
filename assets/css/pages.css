@@ -12913,3 +12913,16 @@ Responsive Util
     background-size: 114px 29px;
   }
 }
+
+.recursive-dented-list {
+    list-style-type: disc;
+}
+
+.recursive-dented-list > li > span {
+    cursor: pointer;
+}
+
+.tree-selected > span {
+    background-color: #5bc0de;
+    color: black;
+}

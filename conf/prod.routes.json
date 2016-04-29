@@ -900,6 +900,32 @@
             ]
         },
         {
+            "pattern": "/blueseal/blog/categorie(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostCategoryController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
+        },
+        {
+            "pattern": "/blueseal/blog/tags(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostTagController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ]
+        },
+        {
             "pattern": "/blueseal/coupon(/?)",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponListController"
