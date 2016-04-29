@@ -82,6 +82,16 @@
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
+            data-icon="fa-tag"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.tag"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Tagga prodotti"
+            data-placement="bottom"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
             data-icon="fa-clone"
             data-permission="/admin/product/add"
             data-event="bs.dupe.product"
