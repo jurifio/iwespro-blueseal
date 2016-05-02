@@ -331,6 +331,10 @@ $(document).on('bs.product.tag', function () {
 					}
 				}).done(function (response) {
 					body.html('<p>Post Pubblicati</p>');
+					okButton.on('click', function () {
+						bsModal.modal('hide');
+						$('.table').DataTable().ajax.reload();
+					});
 				}).fail(function (response) {
 					body.html('<p>Errore</p>');
 				});

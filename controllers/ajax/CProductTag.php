@@ -36,9 +36,20 @@ class CProductTag extends AAjaxController
 	    ]);
     }
 
+	/**
+	 *
+	 */
 	public function post()
 	{
-		$a = $this->app->router->request()->getRequestData();
-		return $a;
+		if($this->app->router->request()->getRequestData('rows')) {
+			foreach ($this->app->router->request()->getRequestData('rows') as $row) {
+				$pKeys = explode('__',explode('=',$row)[1]);
+				if($this->app->router->request()->getRequestData('tags')) {
+					foreach ($this->app->router->request()->getRequestData('tags') as $tags) {
+						$this->app->dbAdapter->insert('ProductHasTag',['productId'=>$pKeys[0],'productVariantId'=>$pKeys[1],'tagId'=>$tags],false,true);
+					}
+				}
+			}
+		}
 	}
 }

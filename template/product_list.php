@@ -30,6 +30,7 @@
                                     <th class="center">Immagine </th>
                                     <th class="center">Brand</th>
                                     <th class="center">Categorie</th>
+                                    <th class="center">Tags</th>
                                     <th class="center">Stato</th>
                                     <th class="center">Creazione</th>
                                 </tr>

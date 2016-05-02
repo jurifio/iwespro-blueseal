@@ -118,12 +118,16 @@ class CProductListAjaxController extends AAjaxController
 	        } elseif (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
 		        $ext = $val->shopHasProduct->extId;
 	        }
+	        $tags = [];
+	        foreach ($val->tag as $tag) $tags[] = $tag->tagTranslation->getFirst()->name;
+
             $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
             $response['data'][$i]['cpf'] = $val->itemno.' # '.$val->productVariant->name;
             $img = strpos($val->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $this->urls['dummy']."/".$val->dummyPicture;
             $response['data'][$i]['dummyPicture'] = '<img width="80" src="'.$img.'" />';
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
             $response['data'][$i]['category'] = implode(',<br>',$cats);
+            $response['data'][$i]['tag'] = implode(',',$tags);
             $response['data'][$i]['status'] = $val->productStatus->name;
             $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
 
