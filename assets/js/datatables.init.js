@@ -120,6 +120,10 @@
                 data: "category",
                 orderable: false,
                 searchable: false
+            },{
+                data: "tag",
+                orderable: false,
+                searchable: true
             }, {
                 data: "status",
                 orderable: true

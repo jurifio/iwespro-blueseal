@@ -1,4 +1,3 @@
-
 $(document).on('bs.post.restore', function() {
 
 	var bsModal = $('#bsModal');
@@ -30,9 +29,7 @@ $(document).on('bs.post.restore', function() {
 
 	var getVars = getVarsArray.join('&');
 
-
-
-	body.html('<p>Vuoi davvero eliminare questi post?</p>');
+	body.html('<p>Vuoi davvero ripristinare questi post?</p>');
 	okButton.html('Ok').off().on('click', function () {
 		okButton.on('click', function (){
 			bsModal.modal('hide')
@@ -43,19 +40,15 @@ $(document).on('bs.post.restore', function() {
 		var id = $('[data-json="Post.id"]').val();
 
 		$.ajax({
-			url: '/blueseal/blog',
-			type: "DELETE",
-			data: {
-				action: 'restore',
-				ids: getVars
-			}
+			url: '#',
+			type: "put",
+			data: getVars
 		}).done(function (response){
 			body.html('<p>Post Ripristinati</p>');
-			window.location.href = "/blueseal/blog";
+			window.location.reload();
 		}).fail(function (response){
 			body.html('<p>Errore</p>');
 		});
 	});
-
-	bsModal.modal();
+	bsModal.modal('show');
 });

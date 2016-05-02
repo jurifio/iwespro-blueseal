@@ -30,6 +30,7 @@
                                     <th class="center">Immagine </th>
                                     <th class="center">Brand</th>
                                     <th class="center">Categorie</th>
+                                    <th class="center">Tags</th>
                                     <th class="center">Stato</th>
                                     <th class="center">Creazione</th>
                                 </tr>
@@ -78,6 +79,16 @@
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Stampa aztec"
+            data-placement="bottom"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-tag"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.tag"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Tagga prodotti"
             data-placement="bottom"
             ></bs-toolbar-button>
         <bs-toolbar-button

@@ -52,8 +52,6 @@
             data-rel="tooltip"
             data-title="Ripristina Post"
             data-placement="bottom"
-            data-toggle="modal"
-            data-target="#bsModal"
             ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
