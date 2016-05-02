@@ -860,6 +860,8 @@
             "translations": {},
             "methods": [
                 "GET",
+                "POST",
+                "PUT",
                 "DELETE"
             ]
         },
@@ -890,12 +892,41 @@
         {
             "pattern": "/blueseal/blog/cestino(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostBinController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostTrashController"
             },
             "filters": {},
             "translations": {},
             "methods": [
                 "GET",
+                "PUT",
+                "DELETE"
+            ]
+        },
+        {
+            "pattern": "/blueseal/blog/categorie(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostCategoryController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
+        },
+        {
+            "pattern": "/blueseal/blog/tag(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostTagController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
                 "DELETE"
             ]
         },

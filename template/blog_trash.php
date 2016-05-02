@@ -17,7 +17,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-datatable-name="blog_list" data-controller="BlogPostListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                        <table class="table table-striped responsive" width="100%" data-datatable-name="blog_list" data-controller="BlogPostTrashListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
                                 <th class="center">ID</th>
@@ -45,44 +45,13 @@
     <bs-toolbar-group data-group-label="Gestione post">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="/admin/content/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Nuovo post"
-            data-placement="bottom"
-            data-href="<?php echo $addUrl; ?>"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
             data-icon="fa-cloud-upload"
             data-permission="/admin/content/publish"
-            data-event="bs.post.publish"
+            data-event="bs.post.restore"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Pubblica i post"
+            data-title="Ripristina Post"
             data-placement="bottom"
-            ></bs-toolbar-button>
-        <!--
-            data-tag="a"
-            data-icon="fa-clone"
-            data-permission="/admin/content/add"
-            data-event="bs.dupe.post"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Duplica un post"
-            data-placement="bottom"
-            >< -->
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-trash"
-            data-permission="/admin/content/delete"
-            data-event="bs.post.delete"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Elimina un post"
-            data-placement="bottom"
-            data-toggle="modal"
             ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

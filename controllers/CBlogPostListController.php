@@ -28,4 +28,40 @@ class CBlogPostListController extends ARestrictedAccessRootController
             'sidebar' => $this->sidebar->build()
         ]);
     }
+
+	/**
+	 * @return bool
+	 */
+	public function delete()
+	{
+		$a = $this->app->router->request()->getRequestData();
+		foreach ($a as $key => $row) {
+			if(strpos($key,'row') !== 0 ) continue;
+			$ids = explode('__',$row);
+			$post = $this->app->repoFactory->create('Post')->findOne(['id'=>$ids[0],'blogId'=>$ids[1]]);
+			$post->postStatusId = 3;
+			$post->update();
+		}
+
+		return true;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function put()
+	{
+		$a = $this->app->router->request()->getRequestData();
+		foreach ($a as $key => $row) {
+			if(strpos($key,'row') !== 0 ) continue;
+			$ids = explode('__',$row);
+			$post = $this->app->repoFactory->create('Post')->findOne(['id'=>$ids[0],'blogId'=>$ids[1]]);
+			$post->postStatusId = 2;
+			$post->update();
+		}
+
+		return true;
+	}
+
+
 }

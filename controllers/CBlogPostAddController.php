@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\core\utils\slugify\CSlugify;
 use bamboo\ecommerce\views\VBase;
 
 /**
@@ -43,9 +44,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
     {
         $newPostData = $this->app->router->request()->getRequestData();
         $coverImageData = $this->app->router->request()->getFiles();
-        $fileFolder =  $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
-
-        $files = $this->app->router->request()->getFiles();
+        $fileFolder =  $this->app->rootPath().$this->app->cfg()->fetch('paths', 'blogImages') . '/';
 
         $postRepo = $this->app->repoFactory->create('Post');
         $postTranslationRepo = $this->app->repoFactory->create('PostTranslation');
@@ -61,14 +60,21 @@ class CBlogPostAddController extends ARestrictedAccessRootController
             ${$tableField[0]}->{$tableField[1]} = $v;
         }
 
-
         $postId = $postRepo->insert($Post);
 
         $PostTranslation->postId = $postId;
         $PostTranslation->blogId = $newPostData['Post.blogId'];
 
-        //$postRepo->setCategories($postId,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
-        //$postRepo->setTags($postId,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
+	    if(!empty($coverImageData) && isset($coverImageData['PostTranslation.coverImage'])) {
+		    $s = new CSlugify();
+		    $pathinfo = pathinfo($coverImageData['PostTranslation.coverImage']['name']);
+		    $uploadfile = rand(0, 9999999999) . '-' .$s->slugify($pathinfo['filename']).'.'. $pathinfo['extension'];
+		    if (!rename($coverImageData['PostTranslation.coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
+		    $PostTranslation->coverImage = $uploadfile;
+	    }
+
+        $postRepo->setCategories($postId,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
+        $postRepo->setTags($postId,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
         $postTranslationRepo->insert($PostTranslation);
 
         $this->app->router->response()->autoRedirectTo($this->app->baseUrl(false)."/blueseal/blog/modifica?id=".$postId."&blogId=".$Post->blogId);
