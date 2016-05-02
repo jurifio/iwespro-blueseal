@@ -30,9 +30,24 @@ class CProductTag extends AAjaxController
 
         $tags = $this->app->repoFactory->create('Tag')->findAll('Tag');
 
+	    $deleteTags = [];
+	    foreach ($this->app->router->request()->getRequestData('rows') as $key => $val ) {
+			$pro = $this->app->repoFactory->create('Product')->findOne(explode('__',$val));
+		    if(empty($deleteTags)) {
+				foreach ($pro->tag as $tag) {
+					$deleteTags[$tag->id] = $tag;
+				}
+			} else {
+			    foreach ($deleteTags as $id=>$tag) {
+				    if(!$pro->tag->findOneByKey('id',$tag->id)) unset($deleteTags[$id]);
+			    }
+		    }
+	    }
+
 	    return $view->render([
 		    'app'=>new CRestrictedAccessWidgetHelper($this->app),
-		    'tags'=>$tags
+		    'allTags'=>$tags,
+		    'deleteTags'=>$deleteTags
 	    ]);
     }
 
@@ -43,10 +58,27 @@ class CProductTag extends AAjaxController
 	{
 		if($this->app->router->request()->getRequestData('rows')) {
 			foreach ($this->app->router->request()->getRequestData('rows') as $row) {
-				$pKeys = explode('__',explode('=',$row)[1]);
+				$pKeys = explode('__',$row);
 				if($this->app->router->request()->getRequestData('tags')) {
 					foreach ($this->app->router->request()->getRequestData('tags') as $tags) {
 						$this->app->dbAdapter->insert('ProductHasTag',['productId'=>$pKeys[0],'productVariantId'=>$pKeys[1],'tagId'=>$tags],false,true);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function put()
+	{
+		if($this->app->router->request()->getRequestData('rows')) {
+			foreach ($this->app->router->request()->getRequestData('rows') as $row) {
+				$pKeys = explode('__',$row);
+				if($this->app->router->request()->getRequestData('tags')) {
+					foreach ($this->app->router->request()->getRequestData('tags') as $tags) {
+						$this->app->dbAdapter->delete('ProductHasTag',['productId'=>$pKeys[0],'productVariantId'=>$pKeys[1],'tagId'=>$tags],'AND',true);
 					}
 				}
 			}

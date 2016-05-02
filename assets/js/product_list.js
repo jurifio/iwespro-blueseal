@@ -296,26 +296,39 @@ $(document).on('bs.product.tag', function () {
 		return false;
 	}
 
+	$.each(selectedRows, function (k, v) {
+		var rowId = v.DT_RowId.split('__');
+		getVarsArray.push(rowId[1] + '__' + rowId[2]);
+	});
+
+
 	body.html('<img src="/assets/img/ajax-loader.gif" />');
 
 	Pace.ignore(function () {
 		$.ajax({
-			url: '/blueseal/xhr/ProductTag ',
-			type: "get"
+			url: '/blueseal/xhr/ProductTag',
+			type: "get",
+			data: {
+				rows: getVarsArray
+			}
 		}).done(function (response) {
 			body.html(response);
 			okButton.html('Ok').off().on('click', function () {
 				okButton.on('click', function () {
 					bsModal.modal('hide')
 				});
-
-
-				var i = 0;
-				$.each(selectedRows, function (k, v) {
-					var rowId = v.DT_RowId.split('__');
-					getVarsArray[i] = rowId[0] + i + '=' + rowId[1] + '__' + rowId[2];
-					i++;
-				});
+				var action;
+				var message;
+				switch($('.tab-pane.active').eq(0).attr('id')){
+					case 'add':
+						action = 'post';
+						message = 'Tag Applicate';
+						break;
+					case 'delete':
+						action = 'put';
+						message = 'Tag Rimosse';
+						break;
+				}
 
 				var getTagsArray = [];
 				$.each($('.tree-selected'), function () {
@@ -324,13 +337,13 @@ $(document).on('bs.product.tag', function () {
 				body.html('<img src="/assets/img/ajax-loader.gif" />');
 				$.ajax({
 					url: '/blueseal/xhr/ProductTag',
-					type: "post",
+					type: action,
 					data: {
 						rows: getVarsArray,
 						tags: getTagsArray
 					}
 				}).done(function (response) {
-					body.html('<p>Post Pubblicati</p>');
+					body.html('<p>'+message+'</p>');
 					okButton.on('click', function () {
 						bsModal.modal('hide');
 						$('.table').DataTable().ajax.reload();
