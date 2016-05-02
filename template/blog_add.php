@@ -73,7 +73,7 @@
                             <div class="panel-body clearfix">
                                 <div class="form-group form-group-default">
                                     <label>Data pubblicazione</label>
-                                    <input type="datetime-local" data-json="Post.publishDate" autocomplete="off" class="form-control" title="Data pubblicazione"/>
+                                    <input type="datetime-local" data-json="Post.publishDate" autocomplete="off" value="<?php echo (new DateTime())->format('Y-m-d\TH:i') ?>" class="form-control" title="Data pubblicazione"/>
                                 </div>
                             </div>
                         </div>

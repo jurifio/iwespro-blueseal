@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\core\utils\slugify\CSlugify;
 use bamboo\ecommerce\views\VBase;
 
 /**
@@ -27,6 +28,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 	    $cats = $this->app->repoFactory->create('PostCategory')->findAll();
 	    $tags = $this->app->repoFactory->create('PostTag')->findAll();
 	    $statuses = [];
+	    $statuses['selected'] = $post->postStatusId;
 	    foreach($this->app->repoFactory->create('PostStatus')->findAll() as $status) {
 		    if ($status->show) $statuses[$status->id] = $status->name;
 	    }
@@ -46,31 +48,38 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 	public function put(){
 		$newPostData = $this->app->router->request()->getRequestData();
 		$coverImageData = $this->app->router->request()->getFiles();
+		$fileFolder =  $this->app->rootPath().$this->app->cfg()->fetch('paths', 'blogImages') . '/';
 
 		$postRepo = $this->app->repoFactory->create('Post');
-		$postTranslationRepo = $this->app->repoFactory->create('PostTranslation');
 
-		$PostTranslation = $postTranslationRepo->getEmptyEntity();
-		$Post = $postRepo->getEmptyEntity();
+		$Post = $postRepo->findOneBy(['id'=>$newPostData['Post.id'],'blogId'=>$newPostData['Post.blogId']]);
+		$PostTranslation = $Post->postTranslation->getFirst();
 
 		foreach ($newPostData as $k => $v) {
 			$tableField = explode('.',$k);
-			if (is_int(stripos($k,'PostHasPostCategory')) || is_int(stripos($k,'PostHasPostTag'))) {
+			if (is_int(stripos($k,'PostHasPostCategory')) || is_int(stripos($k,'PostHasPostTag'))|| is_int(stripos($k,'coverImage')) ) {
 				continue;
 			}
 			${$tableField[0]}->{$tableField[1]} = $v;
 		}
 
+		$Post->update();
 
-		$postRepo->update($Post);
+		if(!empty($coverImageData) && isset($coverImageData['PostTranslation.coverImage'])) {
+			$s = new CSlugify();
+			$pathinfo = pathinfo($coverImageData['PostTranslation.coverImage']['name']);
+			$uploadfile = rand(0, 9999999999) . '-' .$s->slugify($pathinfo['filename']).'.'. $pathinfo['extension'];
+			if (!rename($coverImageData['PostTranslation.coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
+			$PostTranslation->coverImage = $uploadfile;
+		}
 
 		$PostTranslation->postId = $Post->id;
 		$PostTranslation->blogId = $newPostData['Post.blogId'];
+		$PostTranslation->update();
 
 		$postRepo->setCategories($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
 		$postRepo->setTags($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
-		$postTranslationRepo->update($PostTranslation);
 
-		return $this->get();
+		return true;
 	}
 }

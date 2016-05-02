@@ -34,30 +34,8 @@ $(document).on('bs.save.post', function() {
     $.ajaxForm({
         url: '#',
         type: 'post'
-    },f);
-
-});
-
-$(document).on('bs.add.gallery', function() {
-
-    var m = new Modal();
-    m.setTitle('Crea una gallery');
-    m.show();
-
-});
-
-$(document).on('bs.add.youtube', function() {
-
-    var m = new Modal();
-    m.setTitle('Aggiungi un video');
-    m.show();
-
-});
-
-$(document).on('bs.add.productslider', function() {
-
-    var m = new Modal();
-    m.setTitle('Aggiungi uno slideshow di prodotti');
-    m.show();
+    },f).done(function() {
+		    window.location.href("/blueseal/blog");
+	    });
 
 });
