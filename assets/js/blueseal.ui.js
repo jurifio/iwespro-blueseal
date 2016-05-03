@@ -54,7 +54,7 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
     },ajaxConf);
 
     if (conf.formAutofill && conf.formAutofill == true) {
-        $('input:not([type=file],[type=radio]), textarea, select').each(function() {
+        $('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function() {
             if(typeof $(this).attr('name') == 'undefined') return;
             formDataObject.append($(this).attr('name'), $(this).val());
         });
@@ -69,6 +69,10 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
         unique.forEach(function(element,index,array) {
             formDataObject.append(element, $('[name='+element+']:checked').val());
         });
+	    
+	    $('input[type=checkbox]:checked').each(function() {
+		    formDataObject.append($(this).attr('name'), $(this).val());
+	    });
 
         $(':file').each(function() {
             if(typeof this.name == 'undefined') return;

@@ -46,7 +46,7 @@ class CTagListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealTagList', ['id'], $_GET);
+        $datatable = new CDataTables('Tag', ['id'], $_GET);
 
         $tags = $this->em->tags->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->em->tags->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -70,6 +70,7 @@ class CTagListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['slug'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editTagLink . '/'.$val->id.'" style="font-family:consolas">' . $val->slug . '</a>' : $val->slug;
             $response['data'][$i]['priority'] = $val->sortingPriority->priority;
+            $response['data'][$i]['isPublic'] = $val->isPublic == 1 ? 'Visibile' : 'Nascosto';
 
             $i++;
         }

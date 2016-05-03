@@ -25,6 +25,7 @@
                             <tr>
                                 <th>Slug</th>
                                 <th>Priorità Ordinamento</th>
+                                <th>Visibilità</th>
                             </tr>
                             </thead>
                             <tbody>

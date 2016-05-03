@@ -764,6 +764,10 @@
                 data: "priority",
                 orderable: true,
                 searchable: true
+            },
+            {
+                data: "isPublic",
+                orderable: true
             }
         ]
     });

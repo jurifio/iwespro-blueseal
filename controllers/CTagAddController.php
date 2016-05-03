@@ -30,7 +30,7 @@ class CTagAddController extends ARestrictedAccessRootController
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'sorting' => $sortings,
+            'sortingPriority' => $sortings,
             'langs' => $langs,
             'page'=>$this->page,
             'sidebar'=>$this->sidebar->build()
@@ -62,6 +62,12 @@ class CTagAddController extends ARestrictedAccessRootController
                         $tag->sortingPriorityId = $v;
                     }
                 }
+
+	            if(isset($data['isPublic'])) {
+		            $tag->isPublic = 1;
+	            } else {
+		            $tag->isPublic = 0;
+	            }
             }
             $tagId = $tag->insert();
             $tagTrans->tagId = $tagId;

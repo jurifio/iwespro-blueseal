@@ -67,8 +67,12 @@ class CTagEditController extends ARestrictedAccessRootController
                         $tag->sortingPriorityId = $v;
                     }
                 }
-
             }
+	        if(isset($data['isPublic'])) {
+		        $tag->isPublic = 1;
+	        } else {
+		        $tag->isPublic = 0;
+	        }
 
             $tag->update();
 
