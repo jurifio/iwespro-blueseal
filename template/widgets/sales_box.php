@@ -19,20 +19,25 @@
                     </div>
                 </div>
             </div>
+            <?php
+         
+            ?>
             <div class="row-xs-height">
                 <div class="col-xs-height col-top">
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="p-l-20 p-t-15">
+                                <?php
+                                ?>
                                 <?php //var_dump($value); ?>
                                 <p>Fatturato</p>
-                                <h3 class="no-margin p-b-5 text-<?php echo $color ?>">&euro; <?php echo round($value['costumer'],2); ?></h3>
+                                <h4 class="no-margin p-b-5 text-<?php echo $color ?>">&euro; <?php echo round($value['current']['customer'],2); ?></h4>
                             </div>
                         </div>
                         <div class="col-xs-6">
                             <div class="p-l-20 p-t-15">
                                 <p>Margine</p>
-                                <h4 class="no-margin p-b-5">&euro; <?php echo round($value['iwes'],2); ?></h4>
+                                <h5 class="no-margin p-b-5">&euro; <?php echo round($value['current']['margin'],2); ?></h5>
                             </div>
                         </div>
                         <br style="clear:both" />

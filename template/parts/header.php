@@ -19,9 +19,14 @@
     <div class="pull-left sm-table">
         <div class="header-inner">
             <div class="brand inline">
-                <img class="shop-logo" src="<?php echo $app->getUserShopLogo(); ?>" alt="logo" data-src="<?php echo $app->getUserShopLogo(); ?>" data-src-retina="<?php echo $app->getUserShopLogo(); ?>">
+                <?php
+                $logo = $app->user()->shop->getFirst()->getShopLogo();
+                if (!($app->user()->shop->count() == 1 && file_exists($app->application()->rootPath()."/client/public/media".$logo))) {
+                    $logo = "img/logo_no_symbol.png";
+                }
+                ?>
+                <img class="shop-logo" src="/assets/<?php echo $logo ?>" alt="logo" data-src="/assets/<?php echo $logo ?>" data-src-retina="/assets/<?php echo $logo ?>" />
             </div>
-            <!--<a href="#" class="search-link" data-toggle="search"><i class="pg-search"></i>Scrivi ovunque per <span class="bold">cercare</span></a>-->
         </div>
     </div>
 
