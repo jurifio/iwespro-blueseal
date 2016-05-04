@@ -20,8 +20,9 @@
         <div class="header-inner">
             <div class="brand inline">
                 <?php
-                $logo = $app->user()->shop->getFirst()->getShopLogo();
-                if (!($app->user()->shop->count() == 1 && file_exists($app->application()->rootPath()."/client/public/media".$logo))) {
+                if($app->user()->shop->count() == 1 && file_exists($app->application()->rootPath()."/client/public/media".$app->user()->shop->getFirst()->getShopLogo())) {
+                    $logo = $app->user()->shop->getFirst()->getShopLogo();
+                } else {
                     $logo = "img/logo_no_symbol.png";
                 }
                 ?>
