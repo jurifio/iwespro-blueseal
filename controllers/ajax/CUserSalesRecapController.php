@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
+use Aws\CloudFront\Exception\Exception;
 use bamboo\core\intl\CLang;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\widget\VBase;
@@ -43,80 +44,90 @@ class CUserSalesRecapController extends AAjaxController
 
 	public function get()
 	{
+		$title = "boh";
 		$view = new VBase(array());
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_box.php');
 
-		if($this->app->router->request()->getRequestData('period') == 'day') {
-			$title = 'Vendite Giornaliere';
-			$periodProgress = (gettimeofday(true) - strtotime('00:00') )/(60*60*24)*100;
-			$groupBy = "group BY YEAR(orderDate), DAYOFYEAR(orderDate)";
-		} else if($this->app->router->request()->getRequestData('period') == 'week') {
-			$title = 'Vendite Settimanali';
-			$periodProgress = (time()- strtotime('Last Monday')) / (60*60*24*7) * 100;
-			$groupBy = "group BY YEAR(orderDate), WEEKOFYEAR(orderDate)";
-		} else if($this->app->router->request()->getRequestData('period') == 'month') {
-			$title = 'Vendite Mensili';
-			$periodProgress = (time() - strtotime('First day of this Month')) / (60*60*24*cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'))) * 100;
-			$groupBy = "group BY YEAR(orderDate), MONTH(orderDate)";
-		} else if($this->app->router->request()->getRequestData('period') == 'year') {
-			$title = 'Vendite Annuali';
-			$periodProgress = (time() - strtotime('first day of January')) / (60*60*24*365)*100;
-			$groupBy = "group BY YEAR(orderDate) ";
-		} else {
-			$title = '';
-			$periodProgress = 0;
-			$groupBy = "";
-		}
+		$orders = $this->app->repoFactory->create("Order");
 
+		$get = $this->app->router->request()->getRequestData();
 		//$completed = (($current - $start) / ($end - $start)) * 100;
 
+		$shopsWhere = [];
 		if ($this->app->getUser()->hasRole('manager')) {
 			$valueToSelect = "iwes";
-			$shopsWhere = "";
 		} else{
 			$valueToSelect = "friend";
 			$authorizedShops = [];
 			foreach($this->app->getUser()->shop as $val) {
 				$authorizedShops[] = $val->id;
 			}
-			$shopsWhere = " AND ol.shopId in (".implode(',',$authorizedShops).") ";
+		}
+		
+		//recupero i dati dal db
+		$res = [];
+		$res['current'] = $orders->statisticsByDate($shopsWhere, $get['period'], $get['period']);
+
+		$res['last'] = $orders->statisticsByDate($shopsWhere, $get['period'], $get['period'], -1);
+		
+		$data = [];
+		foreach($res as $k => $v) {
+			if (!array_key_exists(0, $v)) {
+				$data[$k]['margin'] = 0;
+				$data[$k]['customer'] = 0;
+			} else {
+				$data[$k] = $res[$k][0];
+				$data[$k]['margin'] = $data[$k][$valueToSelect];
+			}
 		}
 
-		$sql = "SELECT ol.orderId, ol.id, 
-						ifnull(sum(friendRevenue),0) AS friend, 
-						ifnull(sum(netPrice),0) AS costumer, 
-						ifnull(sum(netPrice) - sum(friendRevenue) - sum(ol.vat),0) AS iwes,
-						o.orderDate,
-						YEAR(orderDate) as year,
-						MONTH(orderDate) as month,
-						WEEKOFYEAR(orderDate) as week,
-						DAYOFYEAR(orderDate) as day
-						FROM 
-						`Order` o,
-						OrderStatus os,
-						OrderLine ol, 
-						OrderLineStatus ols 
-						WHERE 	o.id = ol.orderId AND 
-								o.status =  os.code AND
-								ol.status = ols.code AND
-								os.order > 2 AND os.id != 13 AND
-						    	ols.phase >= 5 AND ols.id != 15 AND
-							  	o.orderDate is not null ".$shopsWhere.$groupBy." order by orderDate desc";
-
-		$data = $this->app->dbAdapter->query($sql,[])->fetchAll();
-
 		$trend = 0;
-		if(isset($groupBy) && $this->app->router->request()->getRequestData('period') != 'list') {
-			$trend = 100 * $data[0][$valueToSelect] / $data[1][$valueToSelect];
-			if($data[0][$valueToSelect] - $data[1][$valueToSelect] < 0) {
+		if($get['period'] != 'list') {
+			$trend = ($data['last']['margin']) ? 100 * $data['current']['margin'] / $data['last']['margin'] : 0;
+
+			if($data['current']['margin'] - $data['last']['margin'] < 0) {
 				$trend=$trend*-1;
 			}
 		}
 
+		//title
+		switch ($get['period']){
+			case "year":
+				$title = "Anno";
+				$timeStartMask = strtotime("first day of this year midnight");
+				$timeEndMasks = strtotime("last day of this year midnight");
+				break;
+			case "month":
+				$title = "Mese";
+				$timeStartMask = strtotime("first day of this month midnight");
+				$timeEndMasks = strtotime("last day of this month midnight");
+
+				break;
+			case "week":
+				$title = "Settimana";
+				$timeStartMask = strtotime("last monday midnight");
+				$timeEndMasks = strtotime("next monday midnight");
+
+				break;
+			case "day":
+				$title = "Giorno";
+				$timeStartMask = strtotime("midnight");
+				$timeEndMasks = strtotime("tomorrow midnight");
+
+				break;
+			case "hour":
+				$title = "Ora";
+				$timeStartMask = strToTime("Y-m-d H:00:00");
+				$timeEndMasks = strToTime("Y-m-d H:00:00");
+				break;
+		}
+
+		$periodProgress = (time() - $timeStartMask) / ( ($timeEndMasks - $timeStartMask) / 100 );
+
 		return $view->render([
 			'app'=>new CRestrictedAccessWidgetHelper($this->app),
 			'trend'=>$trend,
-			'value'=>$data[0][$valueToSelect],
+			'value'=>$data,
 			'periodProgress'=>$periodProgress,
 			'title'=>$title,
 			'class'=>$this->app->router->request()->getRequestData('class') ? $this->app->router->request()->getRequestData('class') : "bg-white"
