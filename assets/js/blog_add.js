@@ -13,10 +13,14 @@ $('textarea.summer').summernote({
 		'Raleway',
 		'Serif',
 		'Sans',
-		'Sacramento'
+		'Sacramento',
+		'Tahoma',
+		'Times New Roman',
+		'Verdana'
 	],
 	fontNamesIgnoreCheck: ['Raleway']
 });
+
 
 $('[data-toggle="popover"]').popover();
 
