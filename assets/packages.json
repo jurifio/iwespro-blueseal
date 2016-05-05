@@ -58,6 +58,10 @@
             "summernote.min.css": {
                 "path": "scheme://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/",
                 "options": ["screen"]
+            },
+            "Raleway": {
+                "path": "scheme://fonts.googleapis.com/css?family=",
+                "options": ["screen"]
             }
         },
         "tables": {
