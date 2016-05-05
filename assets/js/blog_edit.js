@@ -11,6 +11,7 @@ $('textarea.summer').summernote({
 		'Impact',
 		'Lucida Grande',
 		'Raleway',
+		'Roboto Slab',
 		'Serif',
 		'Sans',
 		'Sacramento',
@@ -18,7 +19,7 @@ $('textarea.summer').summernote({
 		'Times New Roman',
 		'Verdana'
 	],
-	fontNamesIgnoreCheck: ['Raleway']
+	fontNamesIgnoreCheck: ['Raleway','Roboto Slab']
 });
 
 $('[data-toggle="popover"]').popover();

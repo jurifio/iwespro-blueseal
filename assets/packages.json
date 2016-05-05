@@ -62,6 +62,10 @@
             "Raleway": {
                 "path": "scheme://fonts.googleapis.com/css?family=",
                 "options": ["screen"]
+            },
+            "Roboto+Slab:400,700,300": {
+                "path": "scheme://fonts.googleapis.com/css?family=",
+                "options": ["screen"]
             }
         },
         "tables": {
