@@ -2,10 +2,20 @@ $('textarea.summer').summernote({
     lang: "it-IT",
     height: 300,
 	fontNames: [
-		'Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
-		'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande',
+		'Arial',
+		'Arial Black',
+		'Comic Sans MS',
+		'Courier',
+		'Courier New',
+		'Helvetica',
+		'Impact',
+		'Lucida Grande',
+		'Raleway',
+		'Serif',
+		'Sans',
 		'Sacramento'
 	],
+	fontNamesIgnoreCheck: ['Raleway']
 });
 
 $('[data-toggle="popover"]').popover();

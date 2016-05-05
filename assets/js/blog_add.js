@@ -1,6 +1,21 @@
 $('textarea.summer').summernote({
-    lang: "it-IT",
-    height: 300
+	lang: "it-IT",
+	height: 300,
+	fontNames: [
+		'Arial',
+		'Arial Black',
+		'Comic Sans MS',
+		'Courier',
+		'Courier New',
+		'Helvetica',
+		'Impact',
+		'Lucida Grande',
+		'Raleway',
+		'Serif',
+		'Sans',
+		'Sacramento'
+	],
+	fontNamesIgnoreCheck: ['Raleway']
 });
 
 $('[data-toggle="popover"]').popover();
