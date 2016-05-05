@@ -37,7 +37,7 @@
                             </div>
                             <div class="row">
                                 <bs-portlet data-controller="UserSalesRecapController"
-                                            data-params="period=year"
+                                            data-params="period=month"
                                             data-url="<?php echo $app->urlForBluesealXhr() ?>">
                                 </bs-portlet>
                             </div>
