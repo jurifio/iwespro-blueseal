@@ -114,7 +114,8 @@ table.table {
 }
 
 .shop-logo {
-    height: 50px;
+    max-width: 130px;
+    max-height: 50px;
 }
 
 .footer a, .footer a:visited {
