@@ -19,6 +19,6 @@ class CGetPermissionsForUser extends AAjaxController
     public function get()
     {
 	    $id = $this->app->router->request()->getRequestData('id');
-        return json_encode($this->app->rbacManager->getPermissionsForUser($id));
+        return json_encode($this->app->rbacManager->getAllPermissionForUser($id));
     }
 }
