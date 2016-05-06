@@ -54,6 +54,18 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
     },ajaxConf);
 
     if (conf.formAutofill && conf.formAutofill == true) {
+	    var errors = [];
+	    $('input:not([type=file]), textarea, select').each(function() {
+		    if($(this).attr('required') == 'required' && $(this).val().length  === 0){
+			    errors.push($(this).attr('name'));
+		    }
+	    });
+
+	    if(errors.length) {
+		    //TODO GESTIRE MEGLIO QUESTA COSA
+		    return dff.reject();
+	    }
+
         $('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function() {
             if(typeof $(this).attr('name') == 'undefined') return;
             formDataObject.append($(this).attr('name'), $(this).val());
