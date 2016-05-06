@@ -72,7 +72,7 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group form-group-default">
                                                     <label><?php echo strtoupper($lang->name); ?></label>
-                                                    <input type="text" class="form-control"
+                                                    <input <?php if($lang->id == 1) echo 'required="required" ';?>type="text" class="form-control"
                                                            name="tagName_<?php echo $lang->id; ?>"
                                                            value="">
                                                 </div>
