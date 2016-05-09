@@ -229,7 +229,11 @@ class CProductRouletteController extends CProductManageController
 		$dirtyProduct->dirtyStatus = 'K';
 
 		$this->app->dbAdapter->beginTransaction();
-		$this->app->dbAdapter->insert('ShopHasProduct', ['productId'=>$dirtyProduct->productId,'productVariantId'=>$dirtyProduct->productVariantId,'shopId'=>$dirtyProduct->shopId]);
+		try {
+			$this->app->dbAdapter->insert('ShopHasProduct', ['productId'=>$dirtyProduct->productId,'productVariantId'=>$dirtyProduct->productVariantId,'shopId'=>$dirtyProduct->shopId]);
+		} catch(\Exception $e) {
+
+		}
 		$due = $dirtyProduct->update();
 
         $history->add($post['productId'],$post['productVariantId'],$this->app->getUser()->getId(),'Prodotto unito','DirtyProduct '.$post['dirtyProductId']);
@@ -281,10 +285,9 @@ class CProductRouletteController extends CProductManageController
 					$shopInput['response'] = 'duplicate';
 					$shopInput['url'] = $this->app->baseUrl(false).'/blueseal/prodotti/modifica?id='.$shopInput['productId'].'&productVariantId='.$shopInput['productVariantId'];
 
+					$this->app->router->response()->raiseProcessingError();
 					return json_encode($shopInput);
-					$this->app->router->response()->setBody(json_encode($shopInput));
-					$this->app->router->response()->raiseProcessingError()->sendHeaders();
-					return true;
+
 				} catch(\Exception $e) {};
 				$this->app->router->response()->raiseProcessingError();
 				return '<br>prodotto già esistente:'.
@@ -365,6 +368,7 @@ class CProductRouletteController extends CProductManageController
 					$this->app->repoFactory->create("DirtyProduct")->update($dirtyProduct);
 				} catch (\Exception $e) {
 					$this->app->router->response()->raiseUnauthorized();
+					return json_encode($e);
 				}
 			}
 			$this->app->dbAdapter->commit();
