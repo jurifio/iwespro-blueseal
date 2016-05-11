@@ -100,10 +100,15 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['codice'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['data'][$i]['shop'] = implode(',',$shops);
+
+	        $ext = [];
+	        if (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
+		        $ext[] = $val->shopHasProduct->extId;
+	        }
 	        if(isset($val->externalId)) {
-		        $ext = $val->externalId;
-	        } elseif(!is_null($val->shopHasProduct) && !is_null($val->shopHasProduct->dirtyProduct)) {
-		        $ext = [];
+		        $ext[] = $val->externalId;
+	        }
+	        if(!is_null($val->shopHasProduct) && !is_null($val->shopHasProduct->dirtyProduct)) {
 		        if(!empty($val->shopHasProduct->dirtyProduct->extId)) {
 			        $ext[] = $val->shopHasProduct->dirtyProduct->extId;
 		        }
@@ -114,10 +119,10 @@ class CProductListAjaxController extends AAjaxController
 				        }
 			        }
 		        }
-		        $ext = implode('<br>',$ext);
-	        } elseif (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
-		        $ext = $val->shopHasProduct->extId;
+
 	        }
+	        $ext = implode('<br>',array_unique($ext));
+
 	        $tags = [];
 	        foreach ($val->tag as $tag) $tags[] = $tag->tagTranslation->getFirst()->name;
 
