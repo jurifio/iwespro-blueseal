@@ -43,10 +43,7 @@ class CProductDetailListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductDetailList',['id'],$_GET);
-        if (!empty($this->authorizedShops)) {
-            $datatable->addCondition('shopId',$this->authorizedShops);
-        }
+        $datatable = new CDataTables('ProductDetail',['id'],$_GET);
 
         $productsDetail = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -62,17 +59,16 @@ class CProductDetailListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($productsDetail as $val){
+			try {
+				$response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
+				$response['data'][$i]["DT_RowClass"] = 'colore';
+				$response['data'][$i]['name'] = $val->productDetailTranslation->getFirst()->name;
+				$response['data'][$i]['slug'] = $val->slug;
+				$i++;
+			} catch (\Exception $e) {
+				throw $e;
+			}
 
-            $query = $this->app->dbAdapter->query("SELECT count(psa.productVariantId) AS conto
-                                                  FROM ProductDetail pd, ProductSheetActual psa
-                                                  WHERE pd.id = psa.productDetailId and pd.id = ?",[$val->id])->fetchAll()[0];
-
-            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['name'] = $val->productDetailTranslation->findOneByKey('langId',1)->name;
-            $response['data'][$i]['slug'] = $val->slug;
-            $response['data'][$i]['num'] = $query['conto'];
-            $i++;
         }
 
         return json_encode($response);

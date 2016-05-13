@@ -21,7 +21,7 @@ class CDetailManager extends AAjaxController
      */
     public function get()
     {
-        $repo = $this->app->repoFactory->create('ProductDetail');
+        $repo = $this->app->repoFactory->create('ProductDetail',false);
 
         $html = 'Su quale dettaglio li vuoi unire?<br><br>';
         $html .= '<select class="full-width" placehoder="Seleziona il dettaglio da tenere" data-init-plugin="selectize"  title="productDetailId" name="productDetailId" id="productDetailId">';
@@ -32,8 +32,12 @@ class CDetailManager extends AAjaxController
             if ($i == 0){
                 $name = $detail->productDetailTranslation->findOneByKey('langId',1)->name;
             }
+	        $langs = [];
+	        foreach ($detail->productDetailTranslation as $trans) {
+		        if(!empty($trans->name)) $langs[] = $trans->lang->lang;
+	        }
 
-            $html .= '<option value="' . $detail->id . '" required>' . $detail->productDetailTranslation->findOneByKey('langId',1)->name . '</option>';
+            $html .= '<option value="' . $detail->id . '" required>' . $detail->productDetailTranslation->findOneByKey('langId',1)->name . '('.implode(',',$langs).') </option>';
         $i++;
         }
         $html .= "</select><br><br>";
@@ -56,56 +60,45 @@ class CDetailManager extends AAjaxController
      */
     public function put()
     {
-        $productDetailName = "";
         $datas = $this->app->router->request()->getRequestData();
 
-        $productDetailId = 0;
+	    $productDetailId = $datas['productDetailId'];
+	    $productDetailName = $datas['productDetailName'];
+
         $ids = [];
         $this->app->dbAdapter->beginTransaction();
 
         foreach ($datas as $key => $val) {
-            if ($key == 'productDetailId') {
-                $productDetailId = $val;
-            } elseif ($key == 'productDetailName' ) {
-                $productDetailName = $val;
-            } else {
-                $ids[$key] = $val;
-            }
+	        if($val == $productDetailId) continue;
+            $ids[] = $val;
         }
+
+	    $productDetailPrimary = $this->app->repoFactory->create("ProductDetail")->findOneBy(['id' => $productDetailId]);
+	    $productDetailPrimary->productDetailTranslation->getFirst()->name = $productDetailName;
+	    $productDetailPrimary->productDetailTranslation->getFirst()->update();
 
         $em = $this->app->entityManagerFactory->create('ProductSheetActual');
         try {
             foreach ($ids as $id) {
+                $productSheets = $em->findBy(['productDetailId' => $id]);
 
-                if ($productDetailId != $id) {
-                    $productSheets = $em->findBy(['productDetailId' => $id]);
+                foreach ($productSheets as $productSheet) {
+                    $productSheet->delete();
+                    $productSheet->productDetailId = $productDetailId;
+                    $productSheet->insert();
+                }
+	            $productDetail = $this->app->repoFactory->create("ProductDetail",false)->findOneBy(['id' => $id]);
 
-                    foreach ($productSheets as $productSheet) {
-                        $productSheet->delete();
-                        $productSheet->productDetailId = $productDetailId;
-                        $productSheet->insert();
-                    }
-                }
-                $productDetailTrans = $this->app->repoFactory->create("ProductDetailTranslation")->findOneBy(['productDetailId' => $id, 'langId' => 1]);
-                if ($productDetailTrans->productDetailId != $productDetailId) {
-                    $productDetailTrans->delete();
-                } elseif ($productDetailName != ""){
-                    $productDetailTrans->name = $productDetailName;
-                    $productDetailTrans->update();
-                }
-                $productDetail = $this->app->repoFactory->create("ProductDetail")->findOneBy(['id' => $id]);
-                if ($productDetail->id != $productDetailId) {
-                    $productDetail->delete();
-                } elseif ($productDetailName != ""){
-                    $productDetail->name = $productDetailName;
-                    $productDetail->update();
-                }
-
+	            foreach ($productDetail->productDetailTranslation as $detailTranslation) {
+					$detailTranslation->delete();
+	            }
+	            $productDetail->delete();
             }
             $this->app->dbAdapter->commit();
             return true;
         } catch (\Exception $e){
             $this->app->dbAdapter->rollBack();
+	        throw $e;
         }
     }
 
