@@ -65,6 +65,9 @@ class CDetailManager extends AAjaxController
 	    $productDetailId = $datas['productDetailId'];
 	    $productDetailName = $datas['productDetailName'];
 
+	    unset($datas['productDetailId']);
+	    unset($datas['productDetailName']);
+
         $ids = [];
         $this->app->dbAdapter->beginTransaction();
 
