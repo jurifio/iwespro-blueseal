@@ -30,7 +30,6 @@
                             <tr>
                                 <th class="center">Termine</th>
                                 <th class="center">Italiano</th>
-                                <th class="center">N. di occorrenze
                                 <th class="center">Utilizzato in</th>
                             </tr>
                             </thead>

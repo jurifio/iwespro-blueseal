@@ -37,15 +37,13 @@ class CProductDetailListAjaxController extends AAjaxController
 
         $this->em = new \stdClass();
         $this->em->productsDetail = $this->app->entityManagerFactory->create('ProductDetail');
+
         return $this->{$action}();
     }
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductDetailList',['id'],$_GET);
-        if (!empty($this->authorizedShops)) {
-            $datatable->addCondition('shopId',$this->authorizedShops);
-        }
+        $datatable = new CDataTables('ProductDetail',['id'],$_GET);
 
         $modifica = $this->urls['base']."prodotti/modifica";
 
@@ -63,44 +61,40 @@ class CProductDetailListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($productsDetail as $val){
+			try {
+                $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
+                $response['data'][$i]["DT_RowClass"] = 'colore';
+                $response['data'][$i]['name'] = $val->productDetailTranslation->findOneByKey('langId',1)->name;
+                $response['data'][$i]['slug'] = $val->slug;
 
-            \BlueSeal::dump($val);
-
-
-            $query = $this->app->dbAdapter->query("SELECT count(psa.productVariantId) AS conto
-                                                  FROM ProductDetail pd, ProductSheetActual psa
-                                                  WHERE pd.id = psa.productDetailId and pd.id = ?",[$val->id])->fetchAll()[0];
-
-            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['name'] = $val->productDetailTranslation->findOneByKey('langId',1)->name;
-            $response['data'][$i]['slug'] = $val->slug;
-
-            $pId = $this->app->dbAdapter->query(
-                "SELECT 
+                $pId = $this->app->dbAdapter->query(
+                    "SELECT 
                   psa.productId as productId,
                   psa.productVariantId as productVariantId 
                   FROM ProductSheetActual psa, ProductDetail pd  
                   WHERE pd.id = psa.productDetailId AND psa.productDetailId = ? ",
-                [$val->id ]
-                        )->fetchAll();
-            $productList = '<div class="visualizzaButton" data-lineCollapse="' . $response['data'][$i]['slug'] .'" style="width: 250px">Visualizza &darr;</div><div style="display: hidden" id="dettCollaps-' . $response['data'][$i]['slug'] . '" class="detCollapsed">';
+                    [$val->id ]
+                )->fetchAll();
+                $productList = '<div class="visualizzaButton" data-lineCollapse="' . $response['data'][$i]['slug'] .'" style="width: 250px">Visualizza &darr;</div><div style="display: hidden" id="dettCollaps-' . $response['data'][$i]['slug'] . '" class="detCollapsed">';
 
-            foreach($pId as $v) {
-                $cats = $this->app->categoryManager->getCategoriesForProduct($v['productId'], $v['productVariantId']);
-                $catsName = [];
-                foreach($cats as $catv) {
-                    $catName = $this->app->dbAdapter->select('ProductCategoryTranslation', ['productCategoryId' => $catv['id'], 'langId' => 1])->fetchAll();
-                    \BlueSeal::dump($catName);
-                    if (isset($catName[0])) $catsName[] = $catName[0]['name'];
+                foreach($pId as $v) {
+                    $cats = $this->app->categoryManager->getCategoriesForProduct($v['productId'], $v['productVariantId']);
+                    $catsName = [];
+                    foreach($cats as $catv) {
+                        $catName = $this->app->dbAdapter->select('ProductCategoryTranslation', ['productCategoryId' => $catv['id'], 'langId' => 1])->fetchAll();
+                        \BlueSeal::dump($catName);
+                        if (isset($catName[0])) $catsName[] = $catName[0]['name'];
+                    }
+                    $cats = implode( " - " , $catsName);
+                    $productList .= '<a style="width: 120px" href="' . $modifica . "?id=" . $v['productId'] . '&productVariantId=' . $v['productVariantId'] . '">' . $v['productId'] . '-' . $v['productVariantId'] . '</a><span style="width: 250px;"> cat: '. $cats  .'</span><br />';
                 }
-                $cats = implode( " - " , $catsName);
-                $productList .= '<a style="width: 120px" href="' . $modifica . "?id=" . $v['productId'] . '&productVariantId=' . $v['productVariantId'] . '">' . $v['productId'] . '-' . $v['productVariantId'] . '</a><span style="width: 250px;"> cat: '. $cats  .'</span><br />';
-            }
-            $productList .= '</div>';
-            $response['data'][$i]['products'] = $productList;
-            $response['data'][$i]['num'] = $query['conto'];
-            $i++;
+                $productList .= '</div>';
+                $response['data'][$i]['products'] = $productList;
+				$i++;
+			} catch (\Exception $e) {
+				throw $e;
+			}
+
         }
 
         return json_encode($response);

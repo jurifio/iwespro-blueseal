@@ -214,10 +214,6 @@
 		        orderable: true,
 		        searchable: true
             },{
-                data: "num",
-                orderable: true,
-                searchable: false
-            },{
                 data: "products",
                 orderable: false,
                 searchable: false
