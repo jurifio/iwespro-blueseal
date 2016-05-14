@@ -37,7 +37,6 @@ class CProductDetailListAjaxController extends AAjaxController
 
         $this->em = new \stdClass();
         $this->em->productsDetail = $this->app->entityManagerFactory->create('ProductDetail');
-
         return $this->{$action}();
     }
 
@@ -47,6 +46,8 @@ class CProductDetailListAjaxController extends AAjaxController
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
+
+        $modifica = $this->urls['base']."prodotti/modifica";
 
         $productsDetail = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -63,6 +64,9 @@ class CProductDetailListAjaxController extends AAjaxController
 
         foreach($productsDetail as $val){
 
+            \BlueSeal::dump($val);
+
+
             $query = $this->app->dbAdapter->query("SELECT count(psa.productVariantId) AS conto
                                                   FROM ProductDetail pd, ProductSheetActual psa
                                                   WHERE pd.id = psa.productDetailId and pd.id = ?",[$val->id])->fetchAll()[0];
@@ -71,6 +75,30 @@ class CProductDetailListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['name'] = $val->productDetailTranslation->findOneByKey('langId',1)->name;
             $response['data'][$i]['slug'] = $val->slug;
+
+            $pId = $this->app->dbAdapter->query(
+                "SELECT 
+                  psa.productId as productId,
+                  psa.productVariantId as productVariantId 
+                  FROM ProductSheetActual psa, ProductDetail pd  
+                  WHERE pd.id = psa.productDetailId AND psa.productDetailId = ? ",
+                [$val->id ]
+                        )->fetchAll();
+            $productList = '<div class="visualizzaButton" data-lineCollapse="' . $response['data'][$i]['slug'] .'" style="width: 250px">Visualizza &darr;</div><div style="display: hidden" id="dettCollaps-' . $response['data'][$i]['slug'] . '" class="detCollapsed">';
+
+            foreach($pId as $v) {
+                $cats = $this->app->categoryManager->getCategoriesForProduct($v['productId'], $v['productVariantId']);
+                $catsName = [];
+                foreach($cats as $catv) {
+                    $catName = $this->app->dbAdapter->select('ProductCategoryTranslation', ['productCategoryId' => $catv['id'], 'langId' => 1])->fetchAll();
+                    \BlueSeal::dump($catName);
+                    if (isset($catName[0])) $catsName[] = $catName[0]['name'];
+                }
+                $cats = implode( " - " , $catsName);
+                $productList .= '<a style="width: 120px" href="' . $modifica . "?id=" . $v['productId'] . '&productVariantId=' . $v['productVariantId'] . '">' . $v['productId'] . '-' . $v['productVariantId'] . '</a><span style="width: 250px;"> cat: '. $cats  .'</span><br />';
+            }
+            $productList .= '</div>';
+            $response['data'][$i]['products'] = $productList;
             $response['data'][$i]['num'] = $query['conto'];
             $i++;
         }

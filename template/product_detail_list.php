@@ -30,7 +30,8 @@
                             <tr>
                                 <th class="center">Termine</th>
                                 <th class="center">Italiano</th>
-                                <th class="center">N. di occorrenze</th>
+                                <th class="center">N. di occorrenze
+                                <th class="center">Utilizzato in</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -59,5 +60,17 @@
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".visualizzaButton").click(
+            function(){
+                var id = "dettCollaps-" + $(this).data("rowCollapse");
+                var state = ($(id).css("display") == "hidden") ? "block" : "hidden";
+                $(id).css("display", state);
+            }
+        );
+    });
+
+</script>
 </body>
 </html>
