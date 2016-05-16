@@ -30,7 +30,6 @@
                             <tr>
                                 <th class="center">Termine</th>
                                 <th class="center">Italiano</th>
-                                <th class="center">Utilizzato in</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -52,6 +51,16 @@
             data-icon="fa-language"
             data-permission="/admin/product/edit"
             data-event="bs.manage.detail"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Unisci dettagli"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-sitemap"
+            data-permission="/admin/product/edit"
+            data-event="bs.manage.detailproducts"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Unisci dettagli"

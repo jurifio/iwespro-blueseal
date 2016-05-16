@@ -88,3 +88,60 @@ $(document).on('bs.manage.detail', function () {
     });
 
 });
+
+$(document).on('bs.manage.detailproducts', function () {
+    var bsModal = $('#bsModal');
+    var dataTable = $('.dataTable').DataTable();
+    var header = $('.modal-header h4');
+    var body = $('.modal-body');
+    var loader = body.html();
+    var cancelButton = $('.modal-footer .btn-default');
+    var okButton = $('.modal-footer .btn-success');
+
+    var getVarsArray = [];
+    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRowsCount = selectedRows.length;
+
+    if (selectedRowsCount < 1 || selectedRowsCount > 1) {
+        header.html('Prodotti che usano il dettaglio');
+        okButton.html('Fatto').off().on('click', function () {
+            bsModal.modal('hide');
+            okButton.off();
+        });
+        cancelButton.remove();
+
+        $.ajaxForm({
+            type: "GET",
+            url: "#",
+            formAutofill: true
+        }, new FormData()).done(function (content) {
+            body.html("Deve essere selezionato un dettaglio alla volta");
+            bsModal.modal();
+        })
+    }
+
+    var i = 0;
+    $.each(selectedRows, function (k, v) {
+        var rowId = v.DT_RowId.split('__');
+        getVarsArray[i] = rowId[0] + i + '=' + rowId[1];
+        i++;
+    });
+
+    var getVars = getVarsArray.join('&');
+
+    header.html('Prodotti che usano il dettaglio');
+
+    $.ajax({
+        url: "/blueseal/xhr/ProductListAjaxDetail",
+        type: "GET",
+        data: getVars
+    }).done(function (response) {
+        body.html(response);
+        $(bsModal).modal("show");
+        okButton.html('Fatto').on('click', function () {
+            bsModal.modal('hide');
+            okButton.off();
+        });
+    });
+
+});
