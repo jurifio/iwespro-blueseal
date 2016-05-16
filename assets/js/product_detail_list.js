@@ -13,21 +13,11 @@ $(document).on('bs.manage.detail', function () {
     var selectedRowsCount = selectedRows.length;
 
     if (selectedRowsCount < 1) {
-        header.html('Unione dettagli');
-        okButton.html('Fatto').off().on('click', function () {
-            bsModal.modal('hide');
-            okButton.off();
-        });
-        cancelButton.remove();
-
-        $.ajaxForm({
-            type: "GET",
-            url: "#",
-            formAutofill: true
-        }, new FormData()).done(function (content) {
-            body.html("Devi selezionare almeno un dettaglio da unire");
-            bsModal.modal();
-        })
+	    new Alert({
+		    type: "warning",
+		    message: "Devi selezionare almeno un dettaglio da unire"
+	    }).open();
+	    return false;
     }
 
     var i = 0;
@@ -68,25 +58,27 @@ $(document).on('bs.manage.detail', function () {
                 var selected = $("#productDetailId").val();
                 var name = $("#productDetailName").val();
                 body.html(loader);
-                $.ajax({
-                    url: "/blueseal/xhr/DetailManager",
-                    type: "PUT",
-                    data: getVars+"&productDetailId="+selected+"&productDetailName="+name
-                }).done(function (content) {
-                    body.html("Modifica eseguita con successo");
-                }).fail(function () {
-                    body.html("Modifica non eseguita");
-                }).always(function() {
-                    okButton.html('Ok');
-                    okButton.on('click', function(){
-                        window.location.reload();
-                    });
-                })
+	            Pace.ignore(function () {
+		            $.ajax({
+			            url: "/blueseal/xhr/DetailManager",
+			            type: "PUT",
+			            data: getVars + "&productDetailId=" + selected + "&productDetailName=" + name
+		            }).done(function (content) {
+			            body.html("Modifica eseguita con successo");
+		            }).fail(function () {
+			            body.html("Modifica non eseguita");
+		            }).always(function () {
+			            okButton.html('Ok');
+			            okButton.off().on('click', function () {
+				            bsModal.hide();
+				            dataTable.ajax.reload();
+			            });
+		            });
+	            });
             });
             bsModal.modal();
         }
     });
-
 });
 
 $(document).on('bs.manage.detailproducts', function () {

@@ -202,7 +202,7 @@
         ]
     });
     tableSetup.product_detail_list = $.extend({}, tableSetup.common, {
-        order: [[0, "asc"]],
+        order: [[1, "asc"]],
         columns: [
             {
                 data: "slug",
@@ -215,8 +215,8 @@
 		        searchable: true
             }
         ],
-        lengthMenu: [10,25,50,75,100,200,500,1000],
-        displayLength: 100
+        lengthMenu: [100,200,500,1000,5000],
+        displayLength: 1000
     });
     tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],

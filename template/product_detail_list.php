@@ -48,7 +48,7 @@
     <bs-toolbar-group data-group-label="Gestione dettagli prodotto">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-language"
+            data-icon="fa-magic"
             data-permission="/admin/product/edit"
             data-event="bs.manage.detail"
             data-class="btn btn-default"
@@ -58,12 +58,12 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-sitemap"
+            data-icon="fa-question-circle"
             data-permission="/admin/product/edit"
             data-event="bs.manage.detailproducts"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Unisci dettagli"
+            data-title="Visualizza Prodotti"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
