@@ -215,7 +215,7 @@
 		        searchable: true
             }
         ],
-        lengthMenu: [100,200,500,1000,5000],
+        lengthMenu: [100,200,500,1000,3000],
         displayLength: 1000
     });
     tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
