@@ -66,6 +66,16 @@
             data-title="Visualizza Prodotti"
             data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-exclamation-triangle"
+            data-permission="/admin/product/edit"
+            data-event="bs.manage.deletedetails"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Visualizza Prodotti"
+            data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 <script type="text/javascript">
