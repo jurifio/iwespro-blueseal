@@ -43,7 +43,7 @@ class CProductDetailListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('ProductDetail',['id'],$_GET);
+        $datatable = new CDataTables('vBluesealProductDetailList',['id'],$_GET);
 
         $productsDetail = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -62,8 +62,8 @@ class CProductDetailListAjaxController extends AAjaxController
 			try {
 				$response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
-				$response['data'][$i]['name'] = $val->productDetailTranslation->getFirst()->name;
 				$response['data'][$i]['slug'] = $val->slug;
+				$response['data'][$i]['name'] = $val->productDetailTranslation->getFirst()->name;
 				$i++;
 			} catch (\Exception $e) {
 				throw $e;

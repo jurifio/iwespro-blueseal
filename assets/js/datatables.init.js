@@ -211,8 +211,8 @@
 
             }, {
                 data: "name",
-		        orderable: false,
-		        searchable: false
+		        orderable: true,
+		        searchable: true
             }
         ],
         lengthMenu: [10,25,50,75,100,200,500,1000],
