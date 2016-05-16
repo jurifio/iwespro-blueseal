@@ -159,6 +159,7 @@ $(document).on('bs.manage.deletedetails', function () {
         cancelButton.off();
 
     });
+    
     okButton.html('Continua').off().on('click', function() {
         bsModal.modal('hide');
         okButton.off();
