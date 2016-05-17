@@ -70,7 +70,7 @@ $(document).on('bs.manage.detail', function () {
 		            }).always(function () {
 			            okButton.html('Ok');
 			            okButton.off().on('click', function () {
-				            bsModal.hide();
+				            bsModal.modal('hide');
 				            dataTable.ajax.reload();
 			            });
 		            });
@@ -159,7 +159,7 @@ $(document).on('bs.manage.deletedetails', function () {
         cancelButton.off();
 
     });
-    
+
     okButton.html('Continua').off().on('click', function() {
         bsModal.modal('hide');
         okButton.off();
@@ -171,9 +171,9 @@ $(document).on('bs.manage.deletedetails', function () {
             body.html(response);
             $(bsModal).modal("show");
             okButton.html('Fatto').on('click', function () {
-                bsModal.modal('hide');
                 okButton.off();
                 cancelButton.show();
+                $(bsModal).modal("hide");
             });
             cancelButton.hide();
         });
