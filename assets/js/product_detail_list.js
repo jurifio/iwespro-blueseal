@@ -137,3 +137,47 @@ $(document).on('bs.manage.detailproducts', function () {
     });
 
 });
+
+$(document).on('bs.manage.deletedetails', function () {
+    var bsModal = $('#bsModal');
+    var dataTable = $('.dataTable').DataTable();
+    var header = $('.modal-header h4');
+    var body = $('.modal-body');
+    var loader = body.html();
+    var cancelButton = $('.modal-footer .btn-default');
+    var okButton = $('.modal-footer .btn-success');
+
+
+    header.html('Cancellazione dei dettagli');
+
+    body.html("<p>Saranno eliminati tutti i dettagli non associati a prodotti o associati a prodotti senza disponibilità</p>" +
+        "L'azione non è reversibile.<br />" +
+        "Continuare?</p>");
+    $(bsModal).modal("show");
+    cancelButton.html("Non voglio farlo").off().on('click', function(){
+        bsModal.modal('hide');
+        cancelButton.off();
+
+    });
+    
+    okButton.html('Continua').off().on('click', function() {
+        bsModal.modal('hide');
+        okButton.off();
+        $.ajax({
+            url: "/blueseal/xhr/ProductListAjaxDetail",
+            type: "DELETE",
+        }).done(function (response) {
+            header.html('Dettagli cancellati');
+            body.html(response);
+            $(bsModal).modal("show");
+            okButton.html('Fatto').on('click', function () {
+                bsModal.modal('hide');
+                okButton.off();
+                cancelButton.show();
+            });
+            cancelButton.hide();
+        });
+    });
+
+
+});
