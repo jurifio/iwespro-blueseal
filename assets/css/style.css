@@ -725,3 +725,8 @@ ul.roulette-importer-details li {
 .tag-list {
     text-align: left;
 }
+
+.radioMimic ul li.item-selected {
+    background-color: #5bc0de;
+    color: black;
+}

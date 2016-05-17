@@ -52,6 +52,56 @@ $(document).on('bs.product.edit', function (e,element,button) {
 
 });
 
+$(document).on('bs.priority.edit', function (e,element,button) {
+	var bsModal = $('#bsModal');
+	var header = $('#bsModal .modal-header h4');
+	var body = $('#bsModal .modal-body');
+	var cancelButton = $('#bsModal .modal-footer .btn-default');
+	var okButton = $('#bsModal .modal-footer .btn-success');
+
+	header.html('Seleziona Categoria');
+	okButton.html('Fatto').off().on('click', function () {
+		bsModal.modal('hide');
+		okButton.off();
+	});
+	cancelButton.remove();
+	body.css("text-align", 'left');
+	var html = '<div class="radioMimic"><ul>';
+
+	var priority = button.dataAttr.data.json;
+	var productSorting = $('#Product_sortingPriorityId').val();
+	for (var key in priority) {
+		// skip loop if the property is from prototype
+		if (!priority.hasOwnProperty(key)) continue;
+
+		var obj = priority[key];
+		if(key == productSorting) {
+			html+= '<li class="item-selected" id="'+key+'">('+key+') '+obj+'</li>';
+		} else {
+			html+= '<li id="'+key+'">('+key+') '+obj+'</li>';
+		}
+
+	}
+
+	html+='</ul></div>';
+
+	okButton.off().on('click', function() {
+		$('#Product_sortingPriorityId').val($('.radioMimic ul li.item-selected').prop('id'));
+		bsModal.modal('hide');
+	});
+	body.html(html);
+	bsModal.modal();
+
+});
+
+$(document).on('click', '.radioMimic ul li', function() {
+	$(".radioMimic ul li").each(function() {
+		$(this).removeClass('item-selected');
+	});
+	$(this).addClass('item-selected');
+});
+
+
 $(document).on('bs.category.edit', function (e,element,button) {
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');

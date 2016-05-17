@@ -85,11 +85,20 @@ class CProductEditController extends CProductManageController
 		    $statuses[$status->id] = $status->name;
 	    }
 
+	    $em = $this->app->entityManagerFactory->create('SortingPriority');
+        $sortingPriorities = $em->findAll();
+
+	    $sortingOptions = [];
+	    foreach($sortingPriorities as $sortingPriority){
+		    $sortingOptions[$sortingPriority->id] = $sortingPriority->priority;
+	    }
+
 
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'statuses' => $statuses,
+            'sortingOptions' => $sortingOptions,
             'tags' => $tag,
             'dummyUrl' => $dummyUrl,
             'fileFolder' => $fileFolder,

@@ -32,11 +32,14 @@
                     <input type="hidden" id="ProductCategory_id" name="ProductCategory_id"
                            value="<?php echo implode(',', $value) ?>"/>
                     <input type="hidden" id="Product_id" name="Product_id" value="<?php echo $productEdit->id ?>"/>
+
                     <input type="hidden" id="Product_productVariantId" name="Product_productVariantId"
                            value="<?php echo $productEdit->productVariantId ?>"/>
                     <?php if (isset($productRand)): ?>
                         <input type="hidden" name="dirtyProductId" value="<?php echo $productRand['id'] ?>">
                     <?php endif; ?>
+
+                    <input type="hidden" id="Product_sortingPriorityId" name="Product_sortingPriorityId" value="<?php echo $productEdit->sortingPriorityId ?>"/>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -362,6 +365,17 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Tag"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-sort-numeric-asc"
+                data-permission="/admin/product/edit"
+                data-event="bs.priority.edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Priorità"
+                data-json='<?php echo json_encode($sortingOptions); ?>'
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
