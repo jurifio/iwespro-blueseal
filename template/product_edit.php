@@ -145,8 +145,7 @@
                                                         <input id="ProductVariant_description" autocomplete="off"
                                                                type="text" class="form-control"
                                                                name="ProductVariant_description"
-                                                               value="<?php echo isset($productEdit->productVariant) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>"
-                                                               required>
+                                                               value="<?php echo isset($productEdit->productVariant) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>">
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
