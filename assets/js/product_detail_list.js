@@ -173,6 +173,7 @@ $(document).on('bs.manage.deletedetails', function () {
             okButton.html('Fatto').on('click', function () {
                 okButton.off();
                 cancelButton.show();
+                $(bsModal).modal("hide");
             });
             cancelButton.hide();
         });
