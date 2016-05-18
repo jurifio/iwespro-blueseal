@@ -71,6 +71,7 @@ class CUserListAjaxController extends AAjaxController
             $response['data'][$i]['name'] = $val->userDetails->name;
             $response['data'][$i]['surname'] = $val->userDetails->surname;
             $response['data'][$i]['email'] = $val->email;
+            $response['data'][$i]['method'] = $val->registrationEntryPoint;
             $response['data'][$i]['sex'] = $val->userDetails->gender == 'M' ? 'Uomo' : 'Donna';
             $color = $val->isActive == 1 ? '#008200' : '';
             $icon = "fa-user";

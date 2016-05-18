@@ -564,7 +564,7 @@
         ]
     });
     tableSetup.user_list = $.extend({}, tableSetup.common, {
-        order: [[5, "desc"]],
+        order: [[6, "desc"]],
         columns: [
             {
                 data: "name",
@@ -581,6 +581,10 @@
             }, {
                 data: "status",
                 orderable: true
+            },{
+                data: "method",
+                orderable: false,
+		        searchable: false
             }, {
                 data: "creationDate",
                 orderable: true

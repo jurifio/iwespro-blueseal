@@ -33,6 +33,7 @@
                                 <th>Email</th>
                                 <th>Sesso</th>
                                 <th>Stato</th>
+                                <th>Metodo</th>
                                 <th>Registrazione</th>
                             </tr>
                             </thead>
