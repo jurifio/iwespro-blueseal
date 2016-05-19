@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
+use bamboo\core\theming\nestedCategory\CCategoryManager;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
@@ -93,6 +94,8 @@ class CProductEditController extends CProductManageController
 		    $sortingOptions[$sortingPriority->id] = $sortingPriority->priority;
 	    }
 
+		$CCat = new CCategoryManager($this->app);
+		$categories = $CCat->getCategoriesTranslation($_GET['id'], $_GET['productVariantId'], 1);
 
 
         return $view->render([
@@ -116,7 +119,8 @@ class CProductEditController extends CProductManageController
             'gruppicolore' => $gruppicolore,
             'productSheets' => $productSheets,
             'page' => $this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+            'categories' => $categories
         ]);
     }
 }

@@ -48,6 +48,15 @@
                                     <h5 class="m-t-10"><a
                                                 href="<?php echo $app->productUrl($productEdit); ?>"><?php echo $productEdit->id . '-' . $productEdit->productVariantId; ?></a>
                                         - Informazioni di base</h5>
+
+                                    <?php
+                                    $cats = "";
+                                    foreach($categories as $cat) {
+                                        $cats .= $cat['translation'] . " - ";
+                                    }
+                                    $cats = trim($cats, '- ');
+                                    ?>
+                                    <p><strong>Categorie:</strong> <?php echo $cats?></p>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
