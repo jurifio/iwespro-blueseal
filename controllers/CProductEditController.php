@@ -73,6 +73,20 @@ class CProductEditController extends CProductManageController
 
 	    $em = $this->app->entityManagerFactory->create('Product', false);
 	    $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));
+
+        $cats = [];
+
+        foreach($productEdit->productCategory as $v) {
+            $path = $this->app->categoryManager->categories()->getPath($v->id);
+            unset($path[0]);
+            $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';
+        }
+
+        //\BlueSeal::dump($cats);
+
+        //throw new \Exception;
+
+
 	    //$this->app->vendorLibraries->load("aztec");
 	    $qrMessage = $productEdit->getAztecCode();
 	    $qrMessage = base64_encode($qrMessage);
@@ -93,10 +107,6 @@ class CProductEditController extends CProductManageController
 	    foreach($sortingPriorities as $sortingPriority){
 		    $sortingOptions[$sortingPriority->id] = $sortingPriority->priority;
 	    }
-
-		$CCat = new CCategoryManager($this->app);
-		$categories = $CCat->getCategoriesTranslation($_GET['id'], $_GET['productVariantId'], 1);
-
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
@@ -120,7 +130,7 @@ class CProductEditController extends CProductManageController
             'productSheets' => $productSheets,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
-            'categories' => $categories
+            'categories' => $cats
         ]);
     }
 }
