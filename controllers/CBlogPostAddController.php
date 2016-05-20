@@ -59,7 +59,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
             }
             ${$tableField[0]}->{$tableField[1]} = $v;
         }
-
+		$this->app->dbAdapter->beginTransaction();
         $postId = $postRepo->insert($Post);
 
         $PostTranslation->postId = $postId;
@@ -76,7 +76,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
         $postRepo->setCategories($postId,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
         $postRepo->setTags($postId,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
         $postTranslationRepo->insert($PostTranslation);
-
+		$this->app->dbAdapter->commit();
         $this->app->router->response()->autoRedirectTo($this->app->baseUrl(false)."/blueseal/blog/modifica?id=".$postId."&blogId=".$Post->blogId);
 	    return;
     }
