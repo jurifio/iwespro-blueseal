@@ -1,45 +1,45 @@
-$(document).on('ready', function() {
-	var summer = $('textarea.summer');
-	summer.summernote({
-		lang: "it-IT",
-		height: 300,
-		fontNames: [
-			'Arial',
-			'Arial Black',
-			'Comic Sans MS',
-			'Courier',
-			'Courier New',
-			'Helvetica',
-			'Impact',
-			'Lucida Grande',
-			'Raleway',
-			'Serif',
-			'Sans',
-			'Sacramento',
-			'Tahoma',
-			'Times New Roman',
-			'Verdana'
-		],
-		fontNamesIgnoreCheck: ['Raleway']
-	});
+var summer = $('textarea.summer');
+summer.summernote({
+	lang: "it-IT",
+	height: 300,
+	fontNames: [
+		'Arial',
+		'Arial Black',
+		'Comic Sans MS',
+		'Courier',
+		'Courier New',
+		'Helvetica',
+		'Impact',
+		'Lucida Grande',
+		'Raleway',
+		'Serif',
+		'Sans',
+		'Sacramento',
+		'Tahoma',
+		'Times New Roman',
+		'Verdana'
+	],
+	onImageUpload: function() {},
+	fontNamesIgnoreCheck: ['Raleway']
+});
 
-	summer.on('summernote.image.upload', function(we, files) {
-		// upload image to server and create imgNode...
-		var data = new FormData();
-		data.append("file", files[0]);
-		$.ajaxForm({
-			url: '/blueseal/xhr/BlogPostPhotoUploadAjaxController',
-			type: 'POST',
-			formAutofill: false
-		},data).done(function (result) {
-			var i = new Image;
-			i.src = result;
-			summer.summernote('insertNode', i);
-		}).fail(function (result) {
-			console.log('fail');
-		});
+summer.on('summernote.image.upload', function(we, files) {
+	// upload image to server and create imgNode...
+	var data = new FormData();
+	data.append("file", files[0]);
+	$.ajaxForm({
+		url: '/blueseal/xhr/BlogPostPhotoUploadAjaxController',
+		type: 'POST',
+		formAutofill: false
+	},data).done(function (result) {
+		var i = new Image;
+		i.src = result;
+		summer.summernote('insertNode', i);
+	}).fail(function (result) {
+		console.log('fail');
 	});
 });
+
 
 $('[data-toggle="popover"]').popover();
 
