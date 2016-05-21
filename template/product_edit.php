@@ -221,6 +221,24 @@
                                     <h5 class="m-t-10">Scheda prodotto e dettagli</h5>
                                 </div>
                                 <div class="panel-body clearfix">
+                                    <button style="float: right; margin-bottom: 5px" class="btn" id="deleteDetails">Cancella i dettagli</button>
+                                    <script type="text/javascript">
+                                        $(document).ready(function(){
+                                                removeDetails();
+                                        });
+
+                                        function removeDetails() {
+
+                                            $("button#deleteDetails").click(function(e){
+                                                e.preventDefault();
+                                                $("#productDetails input").each(function(){
+                                                    $(this).val("");
+                                                });
+                                                $("#ProductName_1_name").val("");
+                                                $(".panel-body p").html("");
+                                            });
+                                        }
+                                    </script>
 
                                     <div class="row">
                                         <div class="col-md-12">
@@ -240,6 +258,7 @@
                                     </div>
 
                                     <div class="row" id="productDetails">
+
                                         <div class="col-md-12">
                                             <?php if (isset($productEdit) && !is_null($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
                                                 <div class="tab-content bg-white">
