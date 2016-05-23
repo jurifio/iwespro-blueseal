@@ -142,7 +142,7 @@ class CProductIncompleteListController extends AAjaxController
         if (is_null($product->productNameTranslation) || empty($product->productNameTranslation->getFirst()->name)) {
             $problems[] = "[E470] Nome Prodotto";
         }
-	    if (is_null($product->productDescription) || empty($product->productDescription->getFirst()->description)) {
+	    if (is_null($product->productDescriptionTranslation) || empty($product->productDescriptionTranslation->getFirst()->description)) {
             $problems[] = "[E480] Descrizione Prodotto";
         }
 
