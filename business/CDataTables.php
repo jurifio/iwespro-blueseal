@@ -236,6 +236,8 @@ class CDataTables
         return $this->where;
     }
 
+    
+
     /**
      * @param $string
      * @return mixed|string
