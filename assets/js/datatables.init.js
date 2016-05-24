@@ -823,7 +823,7 @@
             ths.each(function () {
                 if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
                     var title = $(this).text();
-                    $(this).html(title + ' <input type="text" id="searchCol-' + i + '" class="search-col" placeholder="Cerca" />');
+                    $(this).html(title + ' <input type="text" class="search-' + title + ' search-col" placeholder="Cerca" />');
                 }
                 i++
             });
@@ -836,27 +836,24 @@
                 e.stopPropagation();
             });
         });
-        searchCols.each(function() {
-            $(this).on('keyup keydown keypress change', function(e){
-                e.stopPropagation();
-            });
-        });
 
+        var compTable = table.DataTable();
         var startedSearch = false;
 
-        $( 'input.search-col').on('keyup', function (e) {
-            var id = $(e.target).attr("id");
-            id = id.substring(10);
-            console.log(id);
-            var that = this;
-            if (13 == e.which) {
-                table.DataTable().search("").draw();
-            } else {
-                table.DataTable().columns(id).search($(this).val());
-            }
-        });
+        compTable.columns().every( function () {
+	        var that = $(this);
+            $( 'input', this.header() ).on('blur', function (e) {
+	            console.log(that);
+	            table.DataTable().column(that.selector.cols).search($(this).val()).draw();
+            });
+        } );
 
-
+	    table.on('bs.column.search', function () {
+		    table.DataTable().columns().each(function() {
+			    console.log(this.search());
+		    });
+		    table.DataTable().columns().search().draw();
+	    });
 
         tableSetup[table.data('datatable-name')].ajax = {
             "url" : table.data('url') + "/" + table.data('controller'),
