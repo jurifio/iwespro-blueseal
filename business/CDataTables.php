@@ -208,14 +208,15 @@ class CDataTables
         }
 
         if($count != 'full'){
+            $columns = [];
             foreach ($this->columns as $idx => $column) {
                 if ($column['searchable'] == true) {
                     if($this->search){
                         $search[] = $column['name']." RLIKE ?";
                         $this->params[] = $this->search;
                     }
-                    if(!empty($column['search'])){
-                        $search[] = $column['name']." RLIKE ?";
+                    if(!empty($column['search']) && ("extId" !== $column['name']) && ( "extSkuId" !== $column['name'])){ // @TODO: l'esclusione dei campi extId e extSkuId (che vengono sempre passati, anche se non ci sono le colonne corrispondenti nelle tabelle), crea sicuramente problemi da qualche parte.
+                        $columns[] = $column['name']." RLIKE ?";
                         $this->params[] = $this->likeSearch($column['search']);
                     }
                 }
@@ -230,7 +231,8 @@ class CDataTables
 
         $conditions = empty($conditions) ? " 1=1 " : implode(' AND ' , $conditions );
         $search = empty($search) ? " 1=1 " : ' ( '.implode(' OR ',$search).' ) ';
-        $this->where = " WHERE ".$conditions." AND ".$search;
+        $columns = empty($columns) ? " 1=1 " : ' ( ' . implode(' AND ' , $columns) . ' ) ';
+        $this->where = " WHERE ".$conditions." AND ".$search . ' AND ' . $columns;
         return $this->where;
     }
 
