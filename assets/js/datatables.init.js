@@ -840,25 +840,20 @@
         var compTable = table.DataTable();
         var startedSearch = false;
 
-        compTable.on('xhr',function() {
-            var data = compTable.ajax.params();
-            console.log( 'Search term was: '+data);
-        });
-
         compTable.columns().every( function () {
-            var that = this;
-
-            $( 'input', this.header() ).on('keyup keydown keypress change', function (e) {
-                e.stopPropagation();
-                if (13 == e.which) {
-                    compTable.search().draw();
-                } else {
-                    compTable.column(1).search($(this).val());
-                    //that.search($(this).val()).draw();
-                    console.log($(this).val() + " - " + that.search());
-                }
+	        var that = $(this);
+            $( 'input', this.header() ).on('blur', function (e) {
+	            console.log(that);
+	            table.DataTable().column(that.selector.cols).search($(this).val()).draw();
             });
         } );
+
+	    table.on('bs.column.search', function () {
+		    table.DataTable().columns().each(function() {
+			    console.log(this.search());
+		    });
+		    table.DataTable().columns().search().draw();
+	    });
 
         tableSetup[table.data('datatable-name')].ajax = {
             "url" : table.data('url') + "/" + table.data('controller'),
