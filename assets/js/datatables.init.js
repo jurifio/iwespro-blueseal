@@ -823,7 +823,7 @@
             ths.each(function () {
                 if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
                     var title = $(this).text();
-                    $(this).html(title + ' <input type="text" class="search-' + title + ' search-col" placeholder="Cerca" />');
+                    $(this).html(title + ' <input type="text" id="searchCol-' + i + '" class="search-col" placeholder="Cerca" />');
                 }
                 i++
             });
@@ -836,29 +836,27 @@
                 e.stopPropagation();
             });
         });
-
-        var compTable = table.DataTable();
-        var startedSearch = false;
-
-        compTable.on('xhr',function() {
-            var data = compTable.ajax.params();
-            console.log( 'Search term was: '+data);
+        searchCols.each(function() {
+            $(this).on('keyup keydown keypress change', function(e){
+                e.stopPropagation();
+            });
         });
 
-        compTable.columns().every( function () {
-            var that = this;
+        var startedSearch = false;
 
-            $( 'input', this.header() ).on('keyup keydown keypress change', function (e) {
-                e.stopPropagation();
-                if (13 == e.which) {
-                    compTable.search().draw();
-                } else {
-                    compTable.column(1).search($(this).val());
-                    //that.search($(this).val()).draw();
-                    console.log($(this).val() + " - " + that.search());
-                }
-            });
-        } );
+        $( 'input.search-col').on('keyup', function (e) {
+            var id = $(e.target).attr("id");
+            id = id.substring(10);
+            console.log(id);
+            var that = this;
+            if (13 == e.which) {
+                table.DataTable().search("").draw();
+            } else {
+                table.DataTable().columns(id).search($(this).val());
+            }
+        });
+
+
 
         tableSetup[table.data('datatable-name')].ajax = {
             "url" : table.data('url') + "/" + table.data('controller'),
