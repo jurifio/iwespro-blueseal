@@ -187,7 +187,7 @@
             }, {
                 data: "season",
                 orderable: true,
-		        searchable: false
+                searchable: false
             }, {
                 data: "dummyPicture",
                 orderable: false,
@@ -245,13 +245,13 @@
         columns: [
             {
                 data: "slug",
-	            orderable: true,
-	            searchable: true
+                orderable: true,
+                searchable: true
 
             }, {
                 data: "name",
-		        orderable: true,
-		        searchable: true
+                orderable: true,
+                searchable: true
             }
         ],
         lengthMenu: [100,200,500,1000,3000],
@@ -384,7 +384,7 @@
     });
     tableSetup.dictionary_edit = $.extend({}, tableSetup.common, {
         order: [[1, "asc"],
-                [0,"asc"]],
+            [0,"asc"]],
         columns: [
             {
                 data: "term",
@@ -623,7 +623,7 @@
             },{
                 data: "method",
                 orderable: false,
-		        searchable: false
+                searchable: false
             }, {
                 data: "creationDate",
                 orderable: true
@@ -823,7 +823,7 @@
             ths.each(function () {
                 if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
                     var title = $(this).text();
-                    $(this).html(title + ' <input type="text" class="search-' + title + ' search-col" placeholder="Cerca" />');
+                    $(this).html(title + ' <input type="text" id="searchCol-' + i + '" class="search-col" placeholder="Cerca" />');
                 }
                 i++
             });
@@ -836,24 +836,27 @@
                 e.stopPropagation();
             });
         });
+        searchCols.each(function() {
+            $(this).on('keyup keydown keypress change', function(e){
+                e.stopPropagation();
+            });
+        });
 
-        var compTable = table.DataTable();
         var startedSearch = false;
 
-        compTable.columns().every( function () {
-	        var that = $(this);
-            $( 'input', this.header() ).on('blur', function (e) {
-	            console.log(that);
-	            table.DataTable().column(that.selector.cols).search($(this).val()).draw();
-            });
-        } );
+        $( 'input.search-col').on('keyup', function (e) {
+            var id = $(e.target).attr("id");
+            id = id.substring(10);
+            console.log(id);
+            var that = this;
+            if (13 == e.which) {
+                table.DataTable().search("").draw();
+            } else {
+                table.DataTable().columns(id).search($(this).val());
+            }
+        });
 
-	    table.on('bs.column.search', function () {
-		    table.DataTable().columns().each(function() {
-			    console.log(this.search());
-		    });
-		    table.DataTable().columns().search().draw();
-	    });
+
 
         tableSetup[table.data('datatable-name')].ajax = {
             "url" : table.data('url') + "/" + table.data('controller'),
@@ -862,57 +865,57 @@
             }
         };
 
-	    table.on('draw.dt', function () {
+        table.on('draw.dt', function () {
 
-		    var bstoolbar = $('.toolbar-container .bs-toolbar');
-		    var dtfilters = $('.dataTables_filter input');
-		    var dtlength = $('.dataTables_length select');
-		    var toolbarSearch = $('.bs-toolbar-search');
+            var bstoolbar = $('.toolbar-container .bs-toolbar');
+            var dtfilters = $('.dataTables_filter input');
+            var dtlength = $('.dataTables_length select');
+            var toolbarSearch = $('.bs-toolbar-search');
 
-		    bstoolbar.append($('.dt-buttons'));
-		    bstoolbar.children('.dt-buttons').last().addClass('bs-toolbar-custom bs-toolbar-datatables');
+            bstoolbar.append($('.dt-buttons'));
+            bstoolbar.children('.dt-buttons').last().addClass('bs-toolbar-custom bs-toolbar-datatables');
 
-		    if ($('.bs-toolbar-rows').length == 0) {
-			    bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-rows" style="float:right;"><div class=\"btn-group-label\">Righe per pagina</div></div>');
-			    bstoolbar.children('.dt-buttons').last().append(dtlength);
-		    }
+            if ($('.bs-toolbar-rows').length == 0) {
+                bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-rows" style="float:right;"><div class=\"btn-group-label\">Righe per pagina</div></div>');
+                bstoolbar.children('.dt-buttons').last().append(dtlength);
+            }
 
-		    if (toolbarSearch.length == 0) {
-			    bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-search" style="float:right;"><div class=\"btn-group-label\">Cerca nella tabella</div></div>');
-			    bstoolbar.children('.dt-buttons').last().append(dtfilters);
-			    toolbarSearch = $('.bs-toolbar-search');
-		    }
+            if (toolbarSearch.length == 0) {
+                bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-search" style="float:right;"><div class=\"btn-group-label\">Cerca nella tabella</div></div>');
+                bstoolbar.children('.dt-buttons').last().append(dtfilters);
+                toolbarSearch = $('.bs-toolbar-search');
+            }
 
-		    toolbarSearch.find('input').eq(0).off().on('keyup', function(e)  {
-			    if (e.keyCode == 13) {
-				    table.DataTable().search($(this).val()).draw();
-			    }
-		    });
+            toolbarSearch.find('input').eq(0).off().on('keyup', function(e)  {
+                if (e.keyCode == 13) {
+                    table.DataTable().search($(this).val()).draw();
+                }
+            });
 
-		    bstoolbar.append($('.bs-toolbar-responsive'));
+            bstoolbar.append($('.bs-toolbar-responsive'));
 
-		    $('.btn-toolbar').remove();
-		    $('.dataTables_filter label').remove();
-		    $('.dataTables_length label').remove();
+            $('.btn-toolbar').remove();
+            $('.dataTables_filter label').remove();
+            $('.dataTables_length label').remove();
 
-		    $.fn.tooltip && $('[data-toggle="tooltip"], [rel="tooltip"]').tooltip(
-			    {
-				    container: 'body',
-				    delay: {"show": 500, "hide": 100}
-			    }
-		    );
+            $.fn.tooltip && $('[data-toggle="tooltip"], [rel="tooltip"]').tooltip(
+                {
+                    container: 'body',
+                    delay: {"show": 500, "hide": 100}
+                }
+            );
 
-		    $('[data-init-plugin=selectize]').each(function() {
-			    $(this).selectize({
-				    create: false,
-				    dropdownDirection: 'auto'
-			    });
-			    $('.selectize-dropdown-content').scrollbar();
-		    });
+            $('[data-init-plugin=selectize]').each(function() {
+                $(this).selectize({
+                    create: false,
+                    dropdownDirection: 'auto'
+                });
+                $('.selectize-dropdown-content').scrollbar();
+            });
 
-	    }).DataTable(tableSetup[table.data('datatable-name')]);
+        }).DataTable(tableSetup[table.data('datatable-name')]);
 
-	    $('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
+        $('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
     });
 
 })(jQuery);
