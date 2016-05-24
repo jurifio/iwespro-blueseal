@@ -33,7 +33,7 @@ class CDataTables
      * @var array
      */
     protected $conditions = [];
-	/**
+    /**
      * @var array
      */
     protected $likeConditions = [];
@@ -90,20 +90,20 @@ class CDataTables
         $this->readLimits($dtData);
     }
 
-	/**
-	 * @param $column
-	 * @param array $values
-	 * @param bool|false $not
-	 */
+    /**
+     * @param $column
+     * @param array $values
+     * @param bool|false $not
+     */
     public function addCondition($column, array $values, $not = false){
         $this->conditions[] = [$column,$values,$not];
     }
 
-	/**
-	 * @param $column
-	 * @param string $values
-	 * @param bool|false $not
-	 */
+    /**
+     * @param $column
+     * @param string $values
+     * @param bool|false $not
+     */
     public function addLikeCondition($column, $values, $not = false){
         $this->likeConditions[] = [$column,$values,$not];
     }
@@ -187,36 +187,35 @@ class CDataTables
         $search = [];
         foreach ($this->conditions as $condition ){
             $single = $condition[0];
-	        if($condition[2] == true){
-		        $single.=" NOT ";
-	        }
-	        $single.=" IN (";
+            if($condition[2] == true){
+                $single.=" NOT ";
+            }
+            $single.=" IN (";
             for($i=0;$i<count($condition[1]);$i++){
                 $single .= '?,';
                 $this->params[] = $condition[1][$i];
             }
             $conditions[] = rtrim($single,', ').') ';
         }
-	    foreach ($this->likeConditions as $condition ){
+        foreach ($this->likeConditions as $condition ){
             $single = $condition[0];
-	        if($condition[2] == true){
-		        $single.=" NOT ";
-	        }
-	        $single.=" like ?";
-		    $conditions[] = $single;
+            if($condition[2] == true){
+                $single.=" NOT ";
+            }
+            $single.=" like ?";
+            $conditions[] = $single;
             $this->params[] = $condition[1];
         }
 
         if($count != 'full'){
-            $columns = [];
             foreach ($this->columns as $idx => $column) {
                 if ($column['searchable'] == true) {
                     if($this->search){
-                        $columns[] = $column['name']." RLIKE ?";
+                        $search[] = $column['name']." RLIKE ?";
                         $this->params[] = $this->search;
                     }
                     if(!empty($column['search'])){
-                        $columns[] = $column['name']." RLIKE ?";
+                        $search[] = $column['name']." RLIKE ?";
                         $this->params[] = $this->likeSearch($column['search']);
                     }
                 }
@@ -231,13 +230,9 @@ class CDataTables
 
         $conditions = empty($conditions) ? " 1=1 " : implode(' AND ' , $conditions );
         $search = empty($search) ? " 1=1 " : ' ( '.implode(' OR ',$search).' ) ';
-        $columns = empty($columns) ? " 1=1 " : ' ( ' . implode(' AND ', $columns) . ' ) ';
-        $this->where = " WHERE ".$conditions." AND ".$search . " AND " . $columns ;
+        $this->where = " WHERE ".$conditions." AND ".$search;
         return $this->where;
-        
     }
-
-    
 
     /**
      * @param $string
@@ -335,7 +330,7 @@ class CDataTables
      * @param $column
      */
     public function addSearchColumn($column)
-	{
-		$this->columns[] = ["name"=>$column,"sortable"=>false,"searchable"=>true,"search"=>$this->search,"permission"=>null];
-	}
+    {
+        $this->columns[] = ["name"=>$column,"sortable"=>false,"searchable"=>true,"search"=>$this->search,"permission"=>null];
+    }
 }
