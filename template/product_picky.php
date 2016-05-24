@@ -23,7 +23,7 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
-                                <th data-name="code" data-searchable="true" data-orderable="true" class="center">Codice</th>
+                                <th class="center">Codice</th>
                                 <th class="center">Shop</th>
                                 <th class="center">ID Orig.</th>
                                 <th class="center">CPF</th>

@@ -16,7 +16,7 @@ use bamboo\core\intl\CLang;
  *
  * @since ${VERSION}
  */
-class CProductListAjaxController extends AAjaxController
+class CProductPickyAjaxController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];

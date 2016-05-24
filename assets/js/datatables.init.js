@@ -816,15 +816,18 @@
         var table = $(this);
 
         var ths = table.find('th');
-        /*var i = 0;
-        ths.each( function () {
-            if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
-                var title = $(this).text();
-                $(this).html(title + ' <input type="text" class="search-' + title + ' search-col" placeholder="Cerca" />');
-            }
-            i++
-        } );*/
 
+        if ('product_picky' == table.data('datatable-name')) {
+
+            var i = 0;
+            ths.each(function () {
+                if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
+                    var title = $(this).text();
+                    $(this).html(title + ' <input type="text" class="search-' + title + ' search-col" placeholder="Cerca" />');
+                }
+                i++
+            });
+        }
 
         //fermo la propagazione
         var searchCols = $(".search-col");
@@ -832,31 +835,29 @@
             $(this).click(function(e){
                 e.stopPropagation();
             });
-            $(this).on('keydown keyup change', function(e){
-                e.stopPropagation();
-            });
-            $(this).keydown(function(e){
-                e.stopPropagation();
-            });
         });
 
         var compTable = table.DataTable();
+        var startedSearch = false;
+
+        compTable.on('xhr',function() {
+            var data = compTable.ajax.params();
+            console.log( 'Search term was: '+data);
+        });
 
         compTable.columns().every( function () {
             var that = this;
 
-            $( 'input', this.header() ).on( 'keyup change', function (e) {
-                e.preventDefault();
+            $( 'input', this.header() ).on('keyup keydown keypress change', function (e) {
+                e.stopPropagation();
                 if (13 == e.which) {
-                    var i = 0;
-                    $.each($(".search-col"), function(){
-                        if ( "" != $(this).val()) {
-                            console.log(tableSetup[table.data("datatable-name")].columns[i]);
-                        }
-                        i++;
-                    });
+                    compTable.search().draw();
+                } else {
+                    compTable.column(1).search($(this).val());
+                    //that.search($(this).val()).draw();
+                    console.log($(this).val() + " - " + that.search());
                 }
-            } );
+            });
         } );
 
         tableSetup[table.data('datatable-name')].ajax = {
