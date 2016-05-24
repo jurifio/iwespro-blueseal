@@ -232,6 +232,7 @@ class CDataTables
         $search = empty($search) ? " 1=1 " : ' ( '.implode(' OR ',$search).' ) ';
         $this->where = " WHERE ".$conditions." AND ".$search;
         return $this->where;
+        
     }
 
     /**
