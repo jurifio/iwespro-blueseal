@@ -847,7 +847,6 @@
         $( 'input.search-col').on('keyup', function (e) {
             var id = $(e.target).attr("id");
             id = id.substring(10);
-            console.log(id);
             var that = this;
             if (13 == e.which) {
                 table.DataTable().search("").draw();
