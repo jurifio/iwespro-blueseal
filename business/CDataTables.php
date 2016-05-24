@@ -234,6 +234,7 @@ class CDataTables
         $columns = empty($columns) ? " 1=1 " : ' ( ' . implode(' AND ', $columns) . ' ) ';
         $this->where = " WHERE ".$conditions." AND ".$search . " AND " . $columns ;
         return $this->where;
+        
     }
 
     
