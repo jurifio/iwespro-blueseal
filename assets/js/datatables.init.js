@@ -133,6 +133,45 @@
             }
         ]
     });
+    tableSetup.product_picky = $.extend({}, tableSetup.common, {
+        order: [[9, "desc"]],
+        columns: [
+            {
+                data: "codice",
+                orderable: true
+            }, {
+                data: "shop",
+                orderable: true
+            }, {
+                data: "externalId",
+                orderable: true
+            }, {
+                data: "cpf",
+                orderable: true
+            }, {
+                data: "dummyPicture",
+                orderable: false,
+                searchable: false
+            }, {
+                data: "brand",
+                orderable: true
+            }, {
+                data: "category",
+                orderable: false,
+                searchable: false
+            },{
+                data: "tag",
+                orderable: false,
+                searchable: true
+            }, {
+                data: "status",
+                orderable: true
+            }, {
+                data: "creationDate",
+                orderable: true
+            }
+        ]
+    });
     tableSetup.product_incomplete_list = $.extend({}, tableSetup.common, {
         order: [[6, "desc"]],
         columns: [
@@ -775,6 +814,50 @@
     $.each($('table[data-datatable-name]'), function () {
 
         var table = $(this);
+
+        var ths = table.find('th');
+        /*var i = 0;
+        ths.each( function () {
+            if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
+                var title = $(this).text();
+                $(this).html(title + ' <input type="text" class="search-' + title + ' search-col" placeholder="Cerca" />');
+            }
+            i++
+        } );*/
+
+
+        //fermo la propagazione
+        var searchCols = $(".search-col");
+        searchCols.each(function() {
+            $(this).click(function(e){
+                e.stopPropagation();
+            });
+            $(this).on('keydown keyup change', function(e){
+                e.stopPropagation();
+            });
+            $(this).keydown(function(e){
+                e.stopPropagation();
+            });
+        });
+
+        var compTable = table.DataTable();
+
+        compTable.columns().every( function () {
+            var that = this;
+
+            $( 'input', this.header() ).on( 'keyup change', function (e) {
+                e.preventDefault();
+                if (13 == e.which) {
+                    var i = 0;
+                    $.each($(".search-col"), function(){
+                        if ( "" != $(this).val()) {
+                            console.log(tableSetup[table.data("datatable-name")].columns[i]);
+                        }
+                        i++;
+                    });
+                }
+            } );
+        } );
 
         tableSetup[table.data('datatable-name')].ajax = {
             "url" : table.data('url') + "/" + table.data('controller'),

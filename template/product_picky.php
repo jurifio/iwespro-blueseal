@@ -18,22 +18,22 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="product_list"
-                               data-controller="ProductListAjaxController"
+                               data-datatable-name="product_picky"
+                               data-controller="ProductPickyAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
-                                <tr>
-                                    <th data-name="code" data-searchable="true" data-orderable="true" class="center">Codice</th>
-                                    <th class="center">Shop</th>
-                                    <th class="center">ID Orig.</th>
-                                    <th class="center">CPF</th>
-                                    <th class="center">Immagine </th>
-                                    <th class="center">Brand</th>
-                                    <th class="center">Categorie</th>
-                                    <th class="center">Tags</th>
-                                    <th class="center">Stato</th>
-                                    <th class="center">Creazione</th>
-                                </tr>
+                            <tr>
+                                <th data-name="code" data-searchable="true" data-orderable="true" class="center">Codice</th>
+                                <th class="center">Shop</th>
+                                <th class="center">ID Orig.</th>
+                                <th class="center">CPF</th>
+                                <th class="center">Immagine </th>
+                                <th class="center">Brand</th>
+                                <th class="center">Categorie</th>
+                                <th class="center">Tags</th>
+                                <th class="center">Stato</th>
+                                <th class="center">Creazione</th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>
@@ -58,7 +58,7 @@
             data-title="Aggiungi un nuovo prodotto"
             data-placement="bottom"
             data-href="<?php echo $aggiungi; ?>"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-cloud-upload"
@@ -70,7 +70,7 @@
             data-placement="bottom"
             data-toggle="modal"
             data-target="#bsModal"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-qrcode"
@@ -80,7 +80,7 @@
             data-rel="tooltip"
             data-title="Stampa aztec"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-tag"
@@ -90,7 +90,7 @@
             data-rel="tooltip"
             data-title="Tagga prodotti"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-clone"
@@ -100,7 +100,7 @@
             data-rel="tooltip"
             data-title="Duplica prodotto"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-archive"
@@ -110,7 +110,7 @@
             data-rel="tooltip"
             data-title="Movimenta"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-camera-retro"
@@ -120,7 +120,7 @@
             data-rel="tooltip"
             data-title="Gestisci foto"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-trash"
@@ -131,7 +131,7 @@
             data-title="Elimina prodotto"
             data-placement="bottom"
             data-toggle="modal"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 
     <bs-toolbar-group data-group-label="Roulette">
@@ -146,7 +146,7 @@
             data-title="Roulette prodotti"
             data-event="bs.roulette.add"
             data-options='<?php echo json_encode($roulette); ?>'
-            ></bs-toolbar-select>
+        ></bs-toolbar-select>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
