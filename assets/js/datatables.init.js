@@ -98,7 +98,7 @@
         order: [[9, "desc"]],
         columns: [
             {
-                data: "codice",
+                data: "code",
                 orderable: true
             }, {
                 data: "shop",
