@@ -17,7 +17,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-datatable-name="blog_list" data-controller="BlogPostListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                        <table class="table table-striped responsive" width="100%" data-column-filter="true" data-datatable-name="blog_list" data-controller="BlogPostListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
                                 <th class="center">ID</th>

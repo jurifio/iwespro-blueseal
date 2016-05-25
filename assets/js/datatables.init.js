@@ -885,7 +885,7 @@
 				toolbarSearch = $('.bs-toolbar-search');
 			}
 
-			if ($('.bs-toolbar-filter').length == 0) {
+			if (table.data('column-filter') && $('.bs-toolbar-filter').length == 0) {
 				bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-filter" style="float:right"><div class="btn-group-label">Filtra</div></div>');
 				bstoolbar.children('.dt-buttons').last().append('<a class="btn btn-default buttons-html5 btn-group-label table-per-column-filter" style="border-radius: 2px;">' +
 																	'<i class="fa fa-filter" aria-hidden="true"></i>' +

@@ -19,6 +19,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="dictionary_size_list"
+                               data-column-filter="true"
                                data-controller="DictionarySizeListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>

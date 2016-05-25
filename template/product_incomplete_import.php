@@ -33,7 +33,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-striped" data-datatable-name="product_importer_list"
+                        <table class="table table-striped" data-column-filter="true" data-datatable-name="product_importer_list"
                                data-controller="ProductImporterProblemsListController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>" id="productWithImporterProblems">
                             <thead>

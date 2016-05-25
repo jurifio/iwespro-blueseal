@@ -18,7 +18,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="product_picky"
+                               data-datatable-name="product_picky" data-column-filter="true"
                                data-controller="ProductPickyAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
