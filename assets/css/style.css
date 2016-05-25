@@ -376,8 +376,12 @@ body.sidebar-visible .sidebar-logo {
     float: right !important;
 }
 
-.bs-toolbar-rows input, .bs-toolbar-search select {
+.bs-toolbar-rows input, .bs-toolbar-search select, .bs-toolbar-filter a {
     height: 35px !important;
+}
+
+.bs-toolbar-filter a {
+    float:right !important;
 }
 
 .other-actions {
@@ -729,4 +733,9 @@ ul.roulette-importer-details li {
 .radioMimic ul li.item-selected {
     background-color: #5bc0de;
     color: black;
+}
+
+.search-col {
+    width: 90%;
+    display: none;
 }
