@@ -137,7 +137,7 @@
         order: [[9, "desc"]],
         columns: [
             {
-                data: "codice",
+                data: "code",
                 orderable: true
             }, {
                 data: "shop",
@@ -817,13 +817,12 @@
 
         var ths = table.find('th');
 
-        if ('product_picky' == table.data('datatable-name')) {
-
+        if (table.data('column-filter')) {
             var i = 0;
             ths.each(function () {
                 if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
                     var title = $(this).text();
-                    $(this).html(title + ' <input type="text" id="searchCol-' + i + '" class="search-col" placeholder="Cerca" />');
+                    $(this).html(title + ' <input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="'+(i+1)+'" placeholder="Cerca" />');
                 }
                 i++
             });
