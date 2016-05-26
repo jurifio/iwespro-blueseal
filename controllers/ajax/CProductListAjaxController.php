@@ -129,7 +129,9 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
             $response['data'][$i]['cpf'] = $val->itemno.' # '.$val->productVariant->name;
             $img = strpos($val->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $this->urls['dummy']."/".$val->dummyPicture;
-            $response['data'][$i]['dummyPicture'] = '<img width="80" src="'.$img.'" />';
+	        if($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
+	        else $imgs = "";
+            $response['data'][$i]['dummyPicture'] = '<img width="80" src="'.$img.'" />'.$imgs;
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
             $response['data'][$i]['category'] = implode(',<br/>',$cats);
             $response['data'][$i]['tag'] = implode(',',$tags);
