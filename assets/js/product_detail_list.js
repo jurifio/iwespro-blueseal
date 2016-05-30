@@ -46,7 +46,9 @@ $(document).on('bs.manage.detail', function () {
         result = JSON.parse(response);
         body.html(result.bodyMessage);
         $(bsModal).find('table').addClass('table');
-
+        $('#productDetailId').change(function(){
+            $('#productDetailName').val($('#productDetailId option:selected').text());
+        });
         if (result.cancelButtonLabel == null) {
             cancelButton.hide();
         } else {
