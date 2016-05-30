@@ -254,8 +254,8 @@
 				searchable: true
 			}
 		],
-		lengthMenu: [100, 200, 500, 1000, 3000, 5000],
-		displayLength: 3000
+		lengthMenu: [100, 200, 500, 1000, 2000, 3000, 5000],
+		displayLength: 2000
 	});
 	tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
 		order: [[0, "asc"]],
