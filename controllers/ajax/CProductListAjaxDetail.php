@@ -57,14 +57,14 @@ class CProductListAjaxDetail extends AAjaxController
         foreach ($idDetail as $k => $idD) {
             $idDetail[$k] = "psa.productDetailId = " . $idD;
         }
-        $where = implode(" AND ", $idDetail);
+        $where = implode(" OR ", $idDetail);
 
         $pId = $this->app->dbAdapter->query(
             "SELECT 
                   psa.productId as productId,
                   psa.productVariantId as productVariantId 
                   FROM ProductSheetActual psa, ProductDetail pd  
-                  WHERE pd.id = psa.productDetailId AND " . $where,
+                  WHERE pd.id = psa.productDetailId AND (" . $where . ")",
             []
         )->fetchAll();
         $productList = "";
@@ -79,7 +79,6 @@ class CProductListAjaxDetail extends AAjaxController
             
             $productList .= '<a style="width: 120px" href="' . $modifica . "?id=" . $v['productId'] . '&productVariantId=' . $v['productVariantId'] . '">' . $v['productId'] . '-' . $v['productVariantId'] . '</a><span style="width: 250px;"> cat: '. $cats  .'</span><br />';
         }
-
         return $productList;
     }
 
@@ -89,12 +88,45 @@ class CProductListAjaxDetail extends AAjaxController
     public function delete(){
 
         //$sql ="SELECT pd.id as id FROM ProductDetail as pd LEFT JOIN ProductSheetActual as psa WHERE pd.id = psa.productDetailId AND psa.productDetailId IS NULL";
-
+        $idDetail = $this->app->router->request()->getRequestData();
         $error = false;
-        try {
-            $this->app->dbAdapter->beginTransaction();
-            
-            $resPDA = $this->app->dbAdapter->query("DELETE pda FROM ProductSheetActual pda, (SELECT pd.id
+        $this->app->dbAdapter->beginTransaction();
+
+        if (count($idDetail)) {
+            $ids = [];
+            foreach ($idDetail as $idD) {
+                $ids[] = $idD;
+            }
+
+            $in = implode(", ", $ids);
+            $error = false;
+            try {
+                $resPDA = $this->app->dbAdapter->query("DELETE FROM ProductSheetActual WHERE productDetailId IN (" . $in . ")", [])->countAffectedRows();
+            } catch (\PDOException $e) {
+                $this->app->dbAdapter->rollBack();
+                $error = true;
+                $pdoErr = $e->errorInfo;
+            }
+            try {
+                $resDT = $this->app->dbAdapter->query("DELETE FROM ProductDetailTranslation WHERE productDetailId IN (" . $in . ")", [])->countAffectedRows();
+            } catch (\PDOException $e) {
+                $this->app->dbAdapter->rollBack();
+                $error = true;
+                $pdoErr = $e->errorInfo;
+            }
+            try {
+                $resD = $this->app->dbAdapter->query("DELETE FROM `ProductDetail` WHERE id IN (" . $in . ")", [])->countAffectedRows();
+            } catch (\PDOException $e) {
+                $this->app->dbAdapter->rollBack();
+                $error = true;
+                $pdoErr = $e->errorInfo;
+            }
+            $message = "I dettagli selezionati sono stati cancellati";
+
+        } else {
+
+            try {
+                $resPDA = $this->app->dbAdapter->query("DELETE pda FROM ProductSheetActual pda, (SELECT pd.id
                                          FROM `ProductDetail` `pd`
                                            JOIN `ProductSheetActual` `psa`
                                            JOIN `ProductSku` `ps`
@@ -104,23 +136,27 @@ class CProductListAjaxDetail extends AAjaxController
                                                 (`pd`.`slug` <> ''))
                                          GROUP BY `psa`.`productDetailId`
                                          HAVING (sum(`ps`.`stockQty`) = 0)) q1
-WHERE pda.productDetailId = q1.id", [] )->countAffectedRows();
+              WHERE pda.productDetailId = q1.id", [])->countAffectedRows();
 
-            $resDT = $this->app->dbAdapter->query("Delete pdt
-                      FROM ProductDetailTranslation pdt join `ProductDetail` `pd` on (pdt.productDetailId = pd.id) LEFT JOIN
-                      `ProductSheetActual` `psa` on (pd.id = psa.productDetailId)
-                      WHERE psa.productDetailId is null", [])->countAffectedRows();
+                $resDT = $this->app->dbAdapter->query("DELETE pdt
+                      FROM ProductDetailTranslation pdt JOIN `ProductDetail` `pd` ON (pdt.productDetailId = pd.id) LEFT JOIN
+                      `ProductSheetActual` `psa` ON (pd.id = psa.productDetailId)
+                      WHERE psa.productDetailId IS NULL", [])->countAffectedRows();
 
-            $resD = $this->app->dbAdapter->query("Delete pd FROM `ProductDetail` `pd` LEFT JOIN `ProductSheetActual` `psa` on (pd.id = psa.productDetailId) WHERE psa.productDetailId is null", [])->countAffectedRows();
+                $resD = $this->app->dbAdapter->query("DELETE pd FROM `ProductDetail` `pd` LEFT JOIN `ProductSheetActual` `psa` ON (pd.id = psa.productDetailId) WHERE psa.productDetailId IS NULL", [])->countAffectedRows();
 
-        } catch (\Exception $e) {
-            $this->app->dbAdapter->rollBack();
-            $error = true;
+            } catch (\PDOException $e) {
+                $this->app->dbAdapter->rollBack();
+                $error = true;
+                $PDOError = $e->errorInfo;
+            }
+            $message = $resD . " dettagli non associati a nessun prodotto sono stati cancellati, insieme alle relative " . $resDT . " traduzioni";
         }
 
         $this->app->dbAdapter->commit();
-        if ($error) return "OOPS! C'è stato un errore nella cancellazione dei dettagli!<br />Niente è andato perduto. Contatta l'amministratore.";
-        $message = $resD . " dettagli non associati a nessun prodotto sono stati cancellati, insieme alle relative " . $resDT . " traduzioni";
+        // NON TOGLIERE "OOPS" DAL MESSAGGIO D'ERRORE. Viene cercato nel js che chiama sto metodo
+        if ($error) return "OOPS! C'è stato un errore nella cancellazione dei dettagli!<br />Niente è andato perduto. Contatta l'amministratore.<br />"
+            . "$PDOError<br />";
         return $message;
     }
 }

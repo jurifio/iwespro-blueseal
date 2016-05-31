@@ -73,7 +73,7 @@
             data-event="bs.manage.deletedetails"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Visualizza Prodotti"
+            data-title="Cancella i dettagli"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
