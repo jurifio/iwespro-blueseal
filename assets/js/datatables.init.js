@@ -246,7 +246,7 @@
 			{
 				data: "slug",
 				orderable: true,
-				searchable: true
+				searchable: false
 
 			}, {
 				data: "name",
