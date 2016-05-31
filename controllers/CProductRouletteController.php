@@ -148,13 +148,13 @@ class CProductRouletteController extends CProductManageController
 		$productEdit->shop->add($temp);
 		$detailsGroups = [];
 		//FIXME to test when we have datas
-		if (isset($productEdit) && isset($productEdit->sheetName)) {
-			$em = $this->app->entityManagerFactory->create('ProductAttribute');
+		/*if (isset($productEdit) && isset($productEdit->productSheetPrototypeId)) {
+			$em = $this->app->entityManagerFactory->create('ProductDetail');
 			foreach ($langs as $lang) {
 				$sql = 'SELECT productAttributeId AS id FROM ProductSheetPrototype WHERE `name` = "' . $productEdit->sheetName . '"  ';
 				$detailsGroups[$lang->lang] = $em->findBySql($sql);
 			}
-		}
+		}*/
 		/** RIEMPIO LE NOTE CON TUTTI I CAMPI UTILI DI DIRTY PRODUCT */
 		$datas = [];
 		$datas['brand'] = $productRand['brand'];
@@ -421,7 +421,7 @@ class CProductRouletteController extends CProductManageController
 
 			/** INSERIMENTO DETTAGLI PRODOTTO */
 			if ($this->isValidInput('Product_dataSheet', $post)) {
-				$productNew->sheetName = $post['Product_dataSheet'];
+				//$productNew->sheetName = $post['Product_dataSheet'];
 				foreach ($post as $key => $input) {
 					$inputName = explode('_', $key);
 					if ($inputName[0] != 'ProductDetail') continue;

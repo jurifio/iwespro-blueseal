@@ -56,29 +56,42 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 		$PostTranslation = $Post->postTranslation->getFirst();
 
 		foreach ($newPostData as $k => $v) {
-			$tableField = explode('.',$k);
-			if (is_int(stripos($k,'PostHasPostCategory')) || is_int(stripos($k,'PostHasPostTag'))|| is_int(stripos($k,'coverImage')) ) {
-				continue;
+			try {
+				$tableField = explode('.',$k);
+				if (is_int(stripos($k,'PostHasPostCategory')) || is_int(stripos($k,'PostHasPostTag'))|| is_int(stripos($k,'coverImage')) ) {
+					continue;
+				}
+				${$tableField[0]}->{$tableField[1]} = $v;
+			} catch (\Exception $e) {
+				\BlueSeal::dump($k);
+				\BlueSeal::dump($v);
+				throw $e;
 			}
-			${$tableField[0]}->{$tableField[1]} = $v;
 		}
+		try {
+			$this->app->dbAdapter->beginTransaction();
 
-		$Post->update();
+			$Post->update();
 
-		if(!empty($coverImageData) && isset($coverImageData['PostTranslation.coverImage'])) {
-			$s = new CSlugify();
-			$pathinfo = pathinfo($coverImageData['PostTranslation.coverImage']['name']);
-			$uploadfile = rand(0, 9999999999) . '-' .$s->slugify($pathinfo['filename']).'.'. $pathinfo['extension'];
-			if (!rename($coverImageData['PostTranslation.coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
-			$PostTranslation->coverImage = $uploadfile;
+			if(!empty($coverImageData) && isset($coverImageData['PostTranslation.coverImage'])) {
+				$s = new CSlugify();
+				$pathinfo = pathinfo($coverImageData['PostTranslation.coverImage']['name']);
+				$uploadfile = rand(0, 9999999999) . '-' .$s->slugify($pathinfo['filename']).'.'. $pathinfo['extension'];
+				if (!rename($coverImageData['PostTranslation.coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
+				$PostTranslation->coverImage = $uploadfile;
+			}
+
+			$PostTranslation->postId = $Post->id;
+			$PostTranslation->blogId = $newPostData['Post.blogId'];
+			$PostTranslation->update();
+
+			$postRepo->setCategories($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
+			$postRepo->setTags($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
+			$this->app->dbAdapter->commit();
+		} catch(\Exception $e) {
+			$this->app->dbAdapter->rollBack();
+			throw $e;
 		}
-
-		$PostTranslation->postId = $Post->id;
-		$PostTranslation->blogId = $newPostData['Post.blogId'];
-		$PostTranslation->update();
-
-		$postRepo->setCategories($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
-		$postRepo->setTags($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
 
 		return true;
 	}

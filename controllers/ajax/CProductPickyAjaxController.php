@@ -16,7 +16,7 @@ use bamboo\core\intl\CLang;
  *
  * @since ${VERSION}
  */
-class CProductListAjaxController extends AAjaxController
+class CProductPickyAjaxController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
@@ -54,8 +54,8 @@ class CProductListAjaxController extends AAjaxController
         if(!empty($this->authorizedShops)){
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
-	    $datatable->addSearchColumn('extId');
-	    $datatable->addSearchColumn('extSkuId');
+        $datatable->addSearchColumn('extId');
+        $datatable->addSearchColumn('extSkuId');
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -101,37 +101,35 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['data'][$i]['shop'] = implode(',',$shops);
 
-	        $ext = [];
-	        if (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
-		        $ext[] = $val->shopHasProduct->extId;
-	        }
-	        if(isset($val->externalId)) {
-		        $ext[] = $val->externalId;
-	        }
-	        if(!is_null($val->shopHasProduct) && !is_null($val->shopHasProduct->dirtyProduct)) {
-		        if(!empty($val->shopHasProduct->dirtyProduct->extId)) {
-			        $ext[] = $val->shopHasProduct->dirtyProduct->extId;
-		        }
-		        if(!is_null($val->shopHasProduct->dirtyProduct->dirtySku)) {
-			        foreach ($val->shopHasProduct->dirtyProduct->dirtySku as $sku) {
-				        if(!empty($sku->extSkuId)) {
-					        $ext[] = $sku->extSkuId;
-				        }
-			        }
-		        }
+            $ext = [];
+            if (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
+                $ext[] = $val->shopHasProduct->extId;
+            }
+            if(isset($val->externalId)) {
+                $ext[] = $val->externalId;
+            }
+            if(!is_null($val->shopHasProduct) && !is_null($val->shopHasProduct->dirtyProduct)) {
+                if(!empty($val->shopHasProduct->dirtyProduct->extId)) {
+                    $ext[] = $val->shopHasProduct->dirtyProduct->extId;
+                }
+                if(!is_null($val->shopHasProduct->dirtyProduct->dirtySku)) {
+                    foreach ($val->shopHasProduct->dirtyProduct->dirtySku as $sku) {
+                        if(!empty($sku->extSkuId)) {
+                            $ext[] = $sku->extSkuId;
+                        }
+                    }
+                }
 
-	        }
-	        $ext = implode('<br>',array_unique($ext));
+            }
+            $ext = implode('<br>',array_unique($ext));
 
-	        $tags = [];
-	        foreach ($val->tag as $tag) $tags[] = $tag->tagTranslation->getFirst()->name;
+            $tags = [];
+            foreach ($val->tag as $tag) $tags[] = $tag->tagTranslation->getFirst()->name;
 
             $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
             $response['data'][$i]['cpf'] = $val->itemno.' # '.$val->productVariant->name;
             $img = strpos($val->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $this->urls['dummy']."/".$val->dummyPicture;
-	        if($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
-	        else $imgs = "";
-            $response['data'][$i]['dummyPicture'] = '<img width="80" src="'.$img.'" />'.$imgs;
+            $response['data'][$i]['dummyPicture'] = '<img width="80" src="'.$img.'" />';
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
             $response['data'][$i]['category'] = implode(',<br/>',$cats);
             $response['data'][$i]['tag'] = implode(',',$tags);

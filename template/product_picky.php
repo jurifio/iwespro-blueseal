@@ -15,29 +15,25 @@
         <div class="content sm-gutter">
 
             <div class="container-fluid container-fixed-lg bg-white">
-                <div class="row">
-                    <div class="col-md-4 col-md-offset-4 alert-container closed">
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-column-filter="true" data-datatable-name="product_active_list" data-controller="ProductActiveListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>" >
+                        <table class="table table-striped responsive" width="100%"
+                               data-datatable-name="product_picky" data-column-filter="true"
+                               data-controller="ProductPickyAjaxController"
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
-                                <tr>
-                                    <th class="center">Codice</th>
-                                    <th class="center">Brand</th>
-                                    <th class="center">Shops</th>
-                                    <th class="center">Stato</th>
-                                    <th class="center">Immagine</th>
-                                    <th class="center">Skus</th>
-                                    <th class="center">Listino</th>
-                                    <th class="center">Valore Vendite</th>
-                                    <th class="center">Qty Venduta</th>
-                                </tr>
+                            <tr>
+                                <th class="center">Codice</th>
+                                <th class="center">Shop</th>
+                                <th class="center">ID Orig.</th>
+                                <th class="center">CPF</th>
+                                <th class="center">Immagine </th>
+                                <th class="center">Brand</th>
+                                <th class="center">Categorie</th>
+                                <th class="center">Tags</th>
+                                <th class="center">Stato</th>
+                                <th class="center">Creazione</th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>
@@ -49,10 +45,8 @@
         <?php include "parts/footer.php"?>
     </div>
 </div>
-<?php //include "parts/modalSearchProducts.php"?>
-<?php include "parts/bsmodal.php"?>
-<?php include "parts/alert.php"?>
-
+<?php include "parts/bsmodal.php"; ?>
+<?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
@@ -64,7 +58,7 @@
             data-title="Aggiungi un nuovo prodotto"
             data-placement="bottom"
             data-href="<?php echo $aggiungi; ?>"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-cloud-upload"
@@ -76,7 +70,7 @@
             data-placement="bottom"
             data-toggle="modal"
             data-target="#bsModal"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-qrcode"
@@ -86,7 +80,17 @@
             data-rel="tooltip"
             data-title="Stampa aztec"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-tag"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.tag"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Tagga prodotti"
+            data-placement="bottom"
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-clone"
@@ -96,7 +100,7 @@
             data-rel="tooltip"
             data-title="Duplica prodotto"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-archive"
@@ -106,7 +110,7 @@
             data-rel="tooltip"
             data-title="Movimenta"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-camera-retro"
@@ -116,7 +120,7 @@
             data-rel="tooltip"
             data-title="Gestisci foto"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-trash"
@@ -127,7 +131,7 @@
             data-title="Elimina prodotto"
             data-placement="bottom"
             data-toggle="modal"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 
     <bs-toolbar-group data-group-label="Roulette">
@@ -142,7 +146,7 @@
             data-title="Roulette prodotti"
             data-event="bs.roulette.add"
             data-options='<?php echo json_encode($roulette); ?>'
-            ></bs-toolbar-select>
+        ></bs-toolbar-select>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

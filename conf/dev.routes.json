@@ -1237,6 +1237,20 @@
                 "PUT",
                 "DELETE"
             ]
+        },
+        {
+            "pattern": "/blueseal/picky/prodotti(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPickyController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

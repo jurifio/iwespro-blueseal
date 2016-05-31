@@ -23,7 +23,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped" data-datatable-name="user_list"
+                        <table class="table table-striped" data-column-filter="true" data-datatable-name="user_list"
                                data-controller="UserListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>" id="userTable">
                             <thead>
@@ -33,6 +33,7 @@
                                 <th>Email</th>
                                 <th>Sesso</th>
                                 <th>Stato</th>
+                                <th>Metodo</th>
                                 <th>Registrazione</th>
                             </tr>
                             </thead>

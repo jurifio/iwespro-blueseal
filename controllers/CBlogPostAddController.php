@@ -59,24 +59,29 @@ class CBlogPostAddController extends ARestrictedAccessRootController
             }
             ${$tableField[0]}->{$tableField[1]} = $v;
         }
+		$this->app->dbAdapter->beginTransaction();
+        try {
+	        $postId = $postRepo->insert($Post);
+	        $PostTranslation->postId = $postId;
+	        $PostTranslation->blogId = $newPostData['Post.blogId'];
 
-        $postId = $postRepo->insert($Post);
+	        if(!empty($coverImageData) && isset($coverImageData['PostTranslation.coverImage'])) {
+		        $s = new CSlugify();
+		        $pathinfo = pathinfo($coverImageData['PostTranslation.coverImage']['name']);
+		        $uploadfile = rand(0, 9999999999) . '-' .$s->slugify($pathinfo['filename']).'.'. $pathinfo['extension'];
+		        if (!rename($coverImageData['PostTranslation.coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
+		        $PostTranslation->coverImage = $uploadfile;
+	        }
 
-        $PostTranslation->postId = $postId;
-        $PostTranslation->blogId = $newPostData['Post.blogId'];
-
-	    if(!empty($coverImageData) && isset($coverImageData['PostTranslation.coverImage'])) {
-		    $s = new CSlugify();
-		    $pathinfo = pathinfo($coverImageData['PostTranslation.coverImage']['name']);
-		    $uploadfile = rand(0, 9999999999) . '-' .$s->slugify($pathinfo['filename']).'.'. $pathinfo['extension'];
-		    if (!rename($coverImageData['PostTranslation.coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
-		    $PostTranslation->coverImage = $uploadfile;
-	    }
-
-        $postRepo->setCategories($postId,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
-        $postRepo->setTags($postId,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
-        $postTranslationRepo->insert($PostTranslation);
-
+	        $postRepo->setCategories($postId,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
+	        $postRepo->setTags($postId,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
+	        $postTranslationRepo->insert($PostTranslation);
+	        $this->app->dbAdapter->commit();
+        } catch (\Exception $e) {
+			$this->app->dbAdapter->rollBack();
+	        throw $e;
+        }
+	    
         $this->app->router->response()->autoRedirectTo($this->app->baseUrl(false)."/blueseal/blog/modifica?id=".$postId."&blogId=".$Post->blogId);
 	    return;
     }

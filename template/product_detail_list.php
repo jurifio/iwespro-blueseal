@@ -48,7 +48,7 @@
     <bs-toolbar-group data-group-label="Gestione dettagli prodotto">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-language"
+            data-icon="fa-magic"
             data-permission="/admin/product/edit"
             data-event="bs.manage.detail"
             data-class="btn btn-default"
@@ -56,7 +56,39 @@
             data-title="Unisci dettagli"
             data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-question-circle"
+            data-permission="/admin/product/edit"
+            data-event="bs.manage.detailproducts"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Visualizza Prodotti"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-exclamation-triangle"
+            data-permission="/admin/product/edit"
+            data-event="bs.manage.deletedetails"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Visualizza Prodotti"
+            data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".visualizzaButton").click(
+            function(){
+                var id = "dettCollaps-" + $(this).data("rowCollapse");
+                var state = ($(id).css("display") == "hidden") ? "block" : "hidden";
+                $(id).css("display", state);
+            }
+        );
+    });
+
+</script>
 </body>
 </html>

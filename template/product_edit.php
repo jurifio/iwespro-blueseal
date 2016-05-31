@@ -32,11 +32,14 @@
                     <input type="hidden" id="ProductCategory_id" name="ProductCategory_id"
                            value="<?php echo implode(',', $value) ?>"/>
                     <input type="hidden" id="Product_id" name="Product_id" value="<?php echo $productEdit->id ?>"/>
+
                     <input type="hidden" id="Product_productVariantId" name="Product_productVariantId"
                            value="<?php echo $productEdit->productVariantId ?>"/>
                     <?php if (isset($productRand)): ?>
                         <input type="hidden" name="dirtyProductId" value="<?php echo $productRand['id'] ?>">
                     <?php endif; ?>
+
+                    <input type="hidden" id="Product_sortingPriorityId" name="Product_sortingPriorityId" value="<?php echo $productEdit->sortingPriorityId ?>"/>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -45,6 +48,10 @@
                                     <h5 class="m-t-10"><a
                                                 href="<?php echo $app->productUrl($productEdit); ?>"><?php echo $productEdit->id . '-' . $productEdit->productVariantId; ?></a>
                                         - Informazioni di base</h5>
+                                    <?php
+                                  $cats = (count($categories)) ? implode("<br />", $categories) : "non assegnate";
+                                    ?>
+                                <p><strong>Categorie:</strong> <?php echo $cats; ?></p>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
@@ -145,8 +152,7 @@
                                                         <input id="ProductVariant_description" autocomplete="off"
                                                                type="text" class="form-control"
                                                                name="ProductVariant_description"
-                                                               value="<?php echo isset($productEdit->productVariant) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>"
-                                                               required>
+                                                               value="<?php echo isset($productEdit->productVariant) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>">
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
@@ -215,6 +221,24 @@
                                     <h5 class="m-t-10">Scheda prodotto e dettagli</h5>
                                 </div>
                                 <div class="panel-body clearfix">
+                                    <button style="float: right; margin-bottom: 5px" class="btn" id="deleteDetails">Cancella i dettagli</button>
+                                    <script type="text/javascript">
+                                        $(document).ready(function(){
+                                                removeDetails();
+                                        });
+
+                                        function removeDetails() {
+
+                                            $("button#deleteDetails").click(function(e){
+                                                e.preventDefault();
+                                                $("#productDetails input").each(function(){
+                                                    $(this).val("");
+                                                });
+                                                $("#ProductName_1_name").val("");
+                                                $(".panel-body p").html("");
+                                            });
+                                        }
+                                    </script>
 
                                     <div class="row">
                                         <div class="col-md-12">
@@ -234,6 +258,7 @@
                                     </div>
 
                                     <div class="row" id="productDetails">
+
                                         <div class="col-md-12">
                                             <?php if (isset($productEdit) && !is_null($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
                                                 <div class="tab-content bg-white">
@@ -363,6 +388,17 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Tag"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-sort-numeric-asc"
+                data-permission="/admin/product/edit"
+                data-event="bs.priority.edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Priorità"
+                data-json='<?php echo json_encode($sortingOptions); ?>'
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

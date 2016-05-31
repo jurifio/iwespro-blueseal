@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
+use bamboo\core\theming\nestedCategory\CCategoryManager;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
@@ -72,6 +73,20 @@ class CProductEditController extends CProductManageController
 
 	    $em = $this->app->entityManagerFactory->create('Product', false);
 	    $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));
+
+        $cats = [];
+
+        foreach($productEdit->productCategory as $v) {
+            $path = $this->app->categoryManager->categories()->getPath($v->id);
+            unset($path[0]);
+            $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';
+        }
+
+        //\BlueSeal::dump($cats);
+
+        //throw new \Exception;
+
+
 	    //$this->app->vendorLibraries->load("aztec");
 	    $qrMessage = $productEdit->getAztecCode();
 	    $qrMessage = base64_encode($qrMessage);
@@ -85,11 +100,18 @@ class CProductEditController extends CProductManageController
 		    $statuses[$status->id] = $status->name;
 	    }
 
+	    $em = $this->app->entityManagerFactory->create('SortingPriority');
+        $sortingPriorities = $em->findAll();
 
+	    $sortingOptions = [];
+	    foreach($sortingPriorities as $sortingPriority){
+		    $sortingOptions[$sortingPriority->id] = $sortingPriority->priority;
+	    }
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'statuses' => $statuses,
+            'sortingOptions' => $sortingOptions,
             'tags' => $tag,
             'dummyUrl' => $dummyUrl,
             'fileFolder' => $fileFolder,
@@ -107,7 +129,8 @@ class CProductEditController extends CProductManageController
             'gruppicolore' => $gruppicolore,
             'productSheets' => $productSheets,
             'page' => $this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+            'categories' => $cats
         ]);
     }
 }

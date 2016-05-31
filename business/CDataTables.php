@@ -33,7 +33,7 @@ class CDataTables
      * @var array
      */
     protected $conditions = [];
-	/**
+    /**
      * @var array
      */
     protected $likeConditions = [];
@@ -90,20 +90,20 @@ class CDataTables
         $this->readLimits($dtData);
     }
 
-	/**
-	 * @param $column
-	 * @param array $values
-	 * @param bool|false $not
-	 */
+    /**
+     * @param $column
+     * @param array $values
+     * @param bool|false $not
+     */
     public function addCondition($column, array $values, $not = false){
         $this->conditions[] = [$column,$values,$not];
     }
 
-	/**
-	 * @param $column
-	 * @param string $values
-	 * @param bool|false $not
-	 */
+    /**
+     * @param $column
+     * @param string $values
+     * @param bool|false $not
+     */
     public function addLikeCondition($column, $values, $not = false){
         $this->likeConditions[] = [$column,$values,$not];
     }
@@ -187,50 +187,71 @@ class CDataTables
         $search = [];
         foreach ($this->conditions as $condition ){
             $single = $condition[0];
-	        if($condition[2] == true){
-		        $single.=" NOT ";
-	        }
-	        $single.=" IN (";
+            if($condition[2] == true){
+                $single.=" NOT ";
+            }
+            $single.=" IN (";
             for($i=0;$i<count($condition[1]);$i++){
                 $single .= '?,';
                 $this->params[] = $condition[1][$i];
             }
             $conditions[] = rtrim($single,', ').') ';
         }
-	    foreach ($this->likeConditions as $condition ){
+        foreach ($this->likeConditions as $condition ){
             $single = $condition[0];
-	        if($condition[2] == true){
-		        $single.=" NOT ";
-	        }
-	        $single.=" like ?";
-		    $conditions[] = $single;
+            if($condition[2] == true){
+                $single.=" NOT ";
+            }
+            $single.=" like ?";
+            $conditions[] = $single;
             $this->params[] = $condition[1];
         }
 
         if($count != 'full'){
+            $columnsFilter = [];
             foreach ($this->columns as $idx => $column) {
                 if ($column['searchable'] == true) {
                     if($this->search){
-                        $search[] = $column['name']." RLIKE ?";
-                        $this->params[] = $this->search;
+                        $search['cols'][] = $column['name']." RLIKE ?";
+                        $search['params'][] = $this->search;
                     }
                     if(!empty($column['search'])){
-                        $search[] = $column['name']." RLIKE ?";
-                        $this->params[] = $this->likeSearch($column['search']);
+	                    $search['cols'][] = $column['name']." RLIKE ?";
+	                    $search['params'][] = $this->search;
                     }
+	                if(!empty($column['filter'])) {
+		                $columnsFilter['cols'][] = $column['name']." RLIKE ?";
+		                $columnsFilter['params'][] = $this->likeSearch($column['filter']);
+	                }
                 }
             }
             if($this->search){
                 foreach($this->keys as $key){
-                    $search[] = $key." RLIKE ?";
-                    $this->params[] = $this->search;
+	                $search['cols'][] = $key." RLIKE ?";
+	                $search['params'][] = $this->search;
                 }
             }
         }
 
-        $conditions = empty($conditions) ? " 1=1 " : implode(' AND ' , $conditions );
-        $search = empty($search) ? " 1=1 " : ' ( '.implode(' OR ',$search).' ) ';
-        $this->where = " WHERE ".$conditions." AND ".$search;
+        $conditionsWhere = empty($conditions) ? " 1=1 " : implode(' AND ' , $conditions );
+
+	    if(!empty($search['cols'])) {
+		    $searchWhere = ' ( '.implode(' OR ',($search['cols'])).' ) ';
+		    //MISTERO DELLA FEDE
+		    array_push($this->params,...$search['params']);
+	    } else {
+		    $searchWhere = " 1=1 ";
+	    }
+
+	    if(!empty($columnsFilter['cols'])) {
+		    $columnsFilterWhere = ' ( ' . implode(' AND ' , $columnsFilter['cols']) . ' ) ';
+		    //MISTERO DELLA FEDE
+		    array_push($this->params,...$columnsFilter['params']);
+	    } else {
+		    $columnsFilterWhere = " 1=1 ";
+	    }
+        $this->where = " WHERE ".$conditionsWhere." AND ".$searchWhere . ' AND ' . $columnsFilterWhere;
+
         return $this->where;
     }
 
@@ -280,7 +301,7 @@ class CDataTables
     {
         foreach($columns as $column){
             $key = (isset($column['name']) && $column['name'] != '') ? $column['name'] : $column['data'];
-            $this->createColumn($key,$column['orderable'],$column['searchable'],$column['search']['value'],null);
+            $this->createColumn($key,$column['orderable'],$column['searchable'],null,null,$column['search']['value']);
         }
     }
 
@@ -314,23 +335,24 @@ class CDataTables
         $this->offset= isset($dtData['start']) ? $dtData['start'] : 0;
     }
 
-    /**
-     * @param $column
-     * @param bool $sortable
-     * @param bool $searchable
-     * @param null $search
-     * @param null $permission
-     */
-    protected function createColumn($column, $sortable = true, $searchable = true, $search = null, $permission = null)
+	/**
+	 * @param $column
+	 * @param bool $sortable
+	 * @param bool $searchable
+	 * @param null $search
+	 * @param null $permission
+	 * @param null $filter
+	 */
+    protected function createColumn($column, $sortable = true, $searchable = true, $search = null, $permission = null, $filter = null)
     {
-        $this->columns[] = ["name"=>$column,"sortable"=>filter_var($sortable, FILTER_VALIDATE_BOOLEAN),"searchable"=>filter_var($searchable, FILTER_VALIDATE_BOOLEAN),"search"=>$search,"permission"=>$permission,];
+        $this->columns[] = ["name"=>$column,"sortable"=>filter_var($sortable, FILTER_VALIDATE_BOOLEAN),"searchable"=>filter_var($searchable, FILTER_VALIDATE_BOOLEAN),"search"=>$search,"permission"=>$permission,"filter"=>$filter];
     }
 
     /**
      * @param $column
      */
     public function addSearchColumn($column)
-	{
-		$this->columns[] = ["name"=>$column,"sortable"=>false,"searchable"=>true,"search"=>$this->search,"permission"=>null];
-	}
+    {
+        $this->columns[] = ["name"=>$column,"sortable"=>false,"searchable"=>true,"search"=>$this->search,"permission"=>null];
+    }
 }

@@ -1,4 +1,5 @@
-$('textarea.summer').summernote({
+var summer = $('textarea.summer');
+summer.summernote({
 	lang: "it-IT",
 	height: 300,
 	fontNames: [
@@ -18,9 +19,27 @@ $('textarea.summer').summernote({
 		'Times New Roman',
 		'Verdana'
 	],
+	onImageUpload: function() {},
 	fontNamesIgnoreCheck: ['Raleway']
 });
 
+summer.on('summernote.image.upload', function(we, files) {
+	we.preventDefault();
+	we.stopPropagation();
+	var data = new FormData();
+	data.append("file", files[0]);
+	$.ajaxForm({
+		url: '/blueseal/xhr/BlogPostPhotoUploadAjaxController',
+		type: 'POST',
+		formAutofill: false
+	},data).done(function (result) {
+		var i = new Image;
+		i.src = result;
+		summer.summernote('insertNode', i);
+	}).fail(function (result) {
+		console.log('fail');
+	});
+});
 
 $('[data-toggle="popover"]').popover();
 
