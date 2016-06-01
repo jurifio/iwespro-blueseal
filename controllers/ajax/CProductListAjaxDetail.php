@@ -122,7 +122,6 @@ class CProductListAjaxDetail extends AAjaxController
                 $pdoErr = $e->errorInfo;
             }
             $message = "I dettagli selezionati sono stati cancellati";
-
         } else {
 
             try {

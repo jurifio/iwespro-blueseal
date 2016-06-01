@@ -173,7 +173,20 @@ $(document).on('bs.manage.deletedetails', function () {
         body.html("<p>Nessun prodotto selezionato.</p><p>Saranno eliminati tutti i dettagli non associati a prodotti o associati a prodotti senza disponibilità</p>" +
             "L'azione non è reversibile.<br />" +
             "Continuare?</p>");
-        $(bsModal).modal("show");
+        bsModal.modal();
+        cancelButton.html("Non cancellare nulla").show();
+        okButton.html("Cancella").off().on("click", function(){
+            $.ajax({
+                url: "/blueseal/xhr/ProductListAjaxDetail",
+                type: "DELETE"
+            }).done(function (response) {
+                body.html(response);
+                cancelButton.hide();
+                okButton.html("Fatto").off().show().on("click", function(){
+                    bsModal.modal("hide");
+                });
+            });
+        });
     } else {
             $.ajax({
                 url: "/blueseal/xhr/ProductListAjaxDetail",
@@ -185,6 +198,7 @@ $(document).on('bs.manage.deletedetails', function () {
                     "<p>L'azione non è reversibile.<br />" +
                     "Continuare?</p>");
                 bsModal.modal();
+                cancelButton.html("Non cancellare nulla").show();
                 okButton.html('Cancella').off().on('click', function() {
                     okButton.off();
                     $.ajax({
