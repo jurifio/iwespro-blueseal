@@ -29,6 +29,9 @@ $(document).on('bs.manage.sizeGroups', function() {
             type: "GET"
         }).done(function (response) {
             body.html(response);
+            $('#size-group-select').selectize({
+                sortField: "text"
+            });
             cancelButton.html("Annulla");
             bsModal.modal();
             okButton.html('Assegna').off().on('click', function () {
