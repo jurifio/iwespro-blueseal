@@ -45,11 +45,11 @@ class CProductIncompleteAjaxController extends AAjaxController
 
     public function get()
     {
-        $psg = $this->app->repoFactory->create('ProductSizeGroup')->findAll('', 'macroName');
+        $psg = $this->app->repoFactory->create('ProductSizeGroup')->findAll(null, 'order by locale, macroName, `name`');
 
         $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo taglie</option>';
         foreach($psg as $v) {
-            $ret .= '<option value="' . $v->id . '">' . $v->macroName . '</option>';
+            $ret .= '<option value="' . $v->id . '">' . $v->locale . " " . $v->macroName . " " . $v->name . '</option>';
         }
             $ret .= '</select></div>';
         return $ret;
