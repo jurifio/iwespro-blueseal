@@ -67,7 +67,7 @@ class CProductColorListAjaxController extends AAjaxController
                 $colorGroupCollection = $v->productColorGroup->findOneByKey("langId", 1);
 				$response['data'][$i]['colorGroupName'] = ($colorGroupCollection) ? $colorGroupCollection->name : '-';
                 $dummyPic = ($v->dummyPicture) ? $v->dummyPicture : "/assets/bs-dummy-16-9.png";
-                $response['data'][$i]['dummyPic'] = ''; //'<img width="80" src="' . $dummyPic . '">';
+                $response['data'][$i]['dummyPic'] = '<img width="80" src="' . $dummyPic . '">';
                 $response['data'][$i]['categorie'] = '';
 
                 foreach($v->productCategory as $cat) {
