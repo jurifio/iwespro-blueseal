@@ -285,6 +285,10 @@
 				data: "categorie",
 				orderable: false,
 				searchable: false
+			}, {
+				data: "stato",
+				orderable: false,
+				searchable: false
 			}
 		],
 		lengthMenu: [100, 200, 500, 1000, 2000],

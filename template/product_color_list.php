@@ -34,6 +34,7 @@
                                 <th class="centar">Colore Friend</th>
                                 <th class="center">Immagine</th>
                                 <th class="center">Categorie</th>
+                                <th class="center">Stato</th>
                             </tr>
                             </thead>
                             <tbody>

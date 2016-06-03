@@ -79,6 +79,7 @@ class CProductColorListAjaxController extends AAjaxController
                 }
                 $res = $this->app->repoFactory->create("DirtyProduct")->em()->findOneBy(['productId' => $v->id, 'productVariantId' => $v->productVariantId]);
                 $response['data'][$i]['var'] = $res->var;
+                $response['data'][$i]['stato'] = $v->productStatus->name;
                 $i++;
 			} catch (\Exception $e) {
 				throw $e;
