@@ -242,9 +242,9 @@
             ]
         },
         {
-            "pattern": "/blueseal/prodotti/taglie(/)?",
+            "pattern": "/blueseal/prodotti/colori(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSizeListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductColorListController"
             },
             "filters": {},
             "translations": {},

@@ -11,7 +11,7 @@ use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
  * Class CProductIncompleteListController.php
  * @package bamboo\app\controllers
  */
-class CProductIncompleteAjaxController extends AAjaxController
+class CProductColorAjaxController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
@@ -45,41 +45,51 @@ class CProductIncompleteAjaxController extends AAjaxController
 
     public function get()
     {
-        $psg = $this->app->repoFactory->create('ProductSizeGroup')->findAll(null, 'order by locale, macroName, `name`');
+        $pcg = $this->app->repoFactory->create('ProductColorGroup')->findBy(['langId' => 1], '', 'order by name');
 
         $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo taglie</option>';
-        foreach($psg as $v) {
-            $ret .= '<option value="' . $v->id . '">' . $v->locale . " " . $v->macroName . " " . $v->name . '</option>';
+        foreach($pcg as $v) {
+            $ret .= '<option value="' . $v->id . '">' . $v->name . '</option>';
         }
-            $ret .= '</select></div>';
+        $ret .= '</select></div>';
         return $ret;
     }
 
     public function put() {
         $id = $this->app->router->request()->getRequestData();
-        $whereAnds = [];
+        $variants = [];
         $groupId = null;
+
+        $i = 0;
         foreach($id as $k => $v){
             if (false !== strpos($k, "row")) {
                 list($id, $productVariantId) = explode("-", $v);
-                $whereAnds[] = "( id = " . $id . " AND productVariantId = " . $productVariantId . ")";
+                $variants[$i]['id'] = $id;
+                $variants[$i]['productVariantId'] = $productVariantId;
+                $i++;
             } elseif (false !== strpos($k, "groupId")) {
                 $groupId = $v;
             }
+        }
 
-        }
-        if(!$groupId){
-            return "Errore: nessun gruppo taglie selezionato.";
-        } else {
-            $where = implode(" OR ", $whereAnds);
-            $sql = "UPDATE Product SET productSizegroupId = " . $groupId . " WHERE " .  $where;
-            try {
-                $res = $this->app->dbAdapter->query($sql, [])->countAffectedRows();
-            } catch(\PDOException $e) {
-                return $e->getMessage();
+        $affected = 0;
+        try {
+            foreach ($variants as $k => $v) {
+                $sql = "SELECT * FROM `ProductHasProductColorGroup` WHERE productId = " . $v['id'] . " AND productVariantId = " . $v['productVariantId'];
+                if (count($this->app->dbAdapter->query($sql, [])->fetchAll())) {
+                    $sql = "UPDATE `ProductHasProductColorGroup` SET `productColorGroupId` = " . $groupId . " WHERE productId = " . $v['id'] . " AND productVariantId = " . $v['productVariantId'];
+                } else {
+                    $sql = "INSERT INTO `ProductHasProductColorGroup` (`productId`, `productVariantId`, `productColorGroupId`) VALUES ('" . $v['id'] . "', '" . $v['productVariantId'] . "', '" . $groupId . "')";
+                }
+                $affected = $affected + $this->app->dbAdapter->query($sql, [])->countAffectedRows();
             }
-            return "Il gruppo colore è stato assegnato alle righe selezionate.";
+        } catch(\Exception $e) {
+            $ret = "OOPS! Qualcosa è andato storto. $affected prodotti aggiornati. Contatta l'amministratore<br />";
+            //$ret .= $sql . "<br />";
+            //$ret.= $e->getMessage();
+            return $ret;
         }
+        return "$affected prodotti sono stati correttamente aggiornati.";
     }
 
     public function post()

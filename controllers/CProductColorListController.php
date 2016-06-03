@@ -18,15 +18,15 @@ use bamboo\ecommerce\views\VBase;
  * @date $date
  * @since 1.0
  */
-class CProductSizeListController extends ARestrictedAccessRootController
+class CProductColorListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "product_size_list";
+    protected $pageSlug = "product_color_list";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal') . '/template/product_size_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal') . '/template/product_color_list.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
