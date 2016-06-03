@@ -242,6 +242,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/colori(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductColorListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/traduzioni/dettagli(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateListController"
