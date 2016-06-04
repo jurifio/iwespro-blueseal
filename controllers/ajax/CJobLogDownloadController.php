@@ -48,7 +48,7 @@ class CJobLogDownloadController extends AAjaxController
 			foreach ($a as $x) {
 				$contents = explode('Id ', $x['content']);
 				$lines['content'] = explode(" - ", $contents[1])[0] . "-" . $contents[2];
-				$lines['context'] = explode(PHP_EOL, $x['context'])[0];
+				$lines['context'] = explode(', id:', $x['context'])[0];
 				fputs($file, '"'.implode('";"', $lines).'"' . PHP_EOL);
 			};
 			fflush($file);
