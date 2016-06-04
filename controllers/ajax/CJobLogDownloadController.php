@@ -40,13 +40,16 @@ class CJobLogDownloadController extends AAjaxController
 			$a = $this->app->dbAdapter->query($sql, [$job])->fetchAll()[0];
 			$sql = "SELECT jl.severity,jl.subject,jl.content,jl.context,jl.timestamp 
 					FROM JobLog jl 
-					WHERE jl.jobExecutionId = ? and jobId = ?
+					WHERE jl.jobExecutionId = ? and jobId = ? AND jl.content LIKE '%Error while linking skus for product%'
 					ORDER BY jl.id ASC";
 			$a = $this->app->dbAdapter->query($sql, [$a['id'],$a['jobId']])->fetchAll();
 			$file = fopen($this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/log" . $job . ".csv", 'w');
+			$lines = [];
 			foreach ($a as $x) {
-				$x['context'] = explode(PHP_EOL, $x['context'])[0];
-				fputs($file, '"'.implode('";"', $x).'"' . PHP_EOL);
+				$contents = explode('Id ', $x['content']);
+				$lines['content'] = explode(" - ", $contents[0]) . "-" . $contents[2];
+				$lines['context'] = explode(PHP_EOL, $x['context'])[0];
+				fputs($file, '"'.implode('";"', $lines).'"' . PHP_EOL);
 			};
 			fflush($file);
 			fclose($file);
