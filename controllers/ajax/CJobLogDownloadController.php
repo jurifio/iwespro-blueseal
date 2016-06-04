@@ -45,6 +45,7 @@ class CJobLogDownloadController extends AAjaxController
 			$a = $this->app->dbAdapter->query($sql, [$a['id'],$a['jobId']])->fetchAll();
 			$file = fopen($this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/log" . $job . ".csv", 'w');
 			foreach ($a as $x) {
+				$x['context'] = explode(PHP_EOL, $x['context'])[0];
 				fputs($file, '"'.implode('";"', $x).'"');
 			};
 			fflush($file);
