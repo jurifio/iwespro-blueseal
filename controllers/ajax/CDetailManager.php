@@ -23,7 +23,7 @@ class CDetailManager extends AAjaxController
     {
         $repo = $this->app->repoFactory->create('ProductDetail',false);
 
-        $html = 'Su quale dettaglio li vuoi unire?<br><br>';
+        $html = 'Su quale dettaglio li vuoi unire?<br /><br />';
         $html .= '<select class="full-width" placehoder="Seleziona il dettaglio da tenere" data-init-plugin="selectize"  title="productDetailId" name="productDetailId" id="productDetailId">';
 
         $i = 0;

@@ -246,7 +246,7 @@
 			{
 				data: "slug",
 				orderable: true,
-				searchable: true
+				searchable: false
 
 			}, {
 				data: "name",
@@ -254,8 +254,45 @@
 				searchable: true
 			}
 		],
-		lengthMenu: [100, 200, 500, 1000, 3000],
-		displayLength: 1000
+		lengthMenu: [100, 200, 500, 1000, 2000, 3000, 5000],
+		displayLength: 2000
+	});
+	tableSetup.product_color_list = $.extend({}, tableSetup.common, {
+		order: [[2, "asc"]],
+		columns: [
+			{
+				data: "code",
+				orderable: true,
+				searchable: false
+
+			}, {
+				data: "colorName",
+				orderable: true,
+				searchable: false
+			}, {
+				data: "colorGroupName",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "var",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "dummyPic",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "categorie",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "stato",
+				orderable: false,
+				searchable: false
+			}
+		],
+		lengthMenu: [100, 200, 500, 1000, 2000],
+		displayLength: 200
 	});
 	tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
 		order: [[0, "asc"]],

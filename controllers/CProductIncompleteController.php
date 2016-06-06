@@ -24,7 +24,7 @@ class CProductIncompleteController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_incomplete.php');
+        $view->setTemplatePath($this->app->rootPath() . $this->app->cfg()->fetch('paths','blueseal') . '/template/product_incomplete.php');
 
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false).'/blueseal/';

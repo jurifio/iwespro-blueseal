@@ -16,7 +16,7 @@ use bamboo\core\intl\CLang;
  *
  * @since ${VERSION}
  */
-class CProductListAjaxDetail extends AAjaxController
+class CProductListAjaxSize extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
@@ -122,6 +122,7 @@ class CProductListAjaxDetail extends AAjaxController
                 $pdoErr = $e->errorInfo;
             }
             $message = "I dettagli selezionati sono stati cancellati";
+
         } else {
 
             try {

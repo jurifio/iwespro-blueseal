@@ -46,7 +46,10 @@ $(document).on('bs.manage.detail', function () {
         result = JSON.parse(response);
         body.html(result.bodyMessage);
         $(bsModal).find('table').addClass('table');
-
+        $('#productDetailId').change(function(){
+            var detName = $('#productDetailId option:selected').text();
+            $('#productDetailName').val(detName.substring(0, detName.indexOf('(')));
+        });
         if (result.cancelButtonLabel == null) {
             cancelButton.hide();
         } else {
@@ -148,36 +151,82 @@ $(document).on('bs.manage.deletedetails', function () {
     var okButton = $('.modal-footer .btn-success');
 
 
+
+    var getVarsArray = [];
+    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRowsCount = selectedRows.length;
+
+    var i = 0;
+    $.each(selectedRows, function (k, v) {
+        var rowId = v.DT_RowId.split('__');
+        getVarsArray[i] = rowId[0] + i + '=' + rowId[1];
+        i++;
+    });
+
+    var getVars = getVarsArray.join('&');
+
+    console.log(getVars);
     header.html('Cancellazione dei dettagli');
 
-    body.html("<p>Saranno eliminati tutti i dettagli non associati a prodotti o associati a prodotti senza disponibilità</p>" +
-        "L'azione non è reversibile.<br />" +
-        "Continuare?</p>");
-    $(bsModal).modal("show");
-    cancelButton.html("Non voglio farlo").off().on('click', function(){
+
+    if (!selectedRowsCount) {
+        body.html("<p>Nessun prodotto selezionato.</p><p>Saranno eliminati tutti i dettagli non associati a prodotti o associati a prodotti senza disponibilità</p>" +
+            "L'azione non è reversibile.<br />" +
+            "Continuare?</p>");
+        bsModal.modal();
+        cancelButton.html("Non cancellare nulla").show();
+        okButton.html("Cancella").off().on("click", function(){
+            $.ajax({
+                url: "/blueseal/xhr/ProductListAjaxDetail",
+                type: "DELETE"
+            }).done(function (response) {
+                body.html(response);
+                cancelButton.hide();
+                okButton.html("Fatto").off().show().on("click", function(){
+                    bsModal.modal("hide");
+                });
+            });
+        });
+    } else {
+            $.ajax({
+                url: "/blueseal/xhr/ProductListAjaxDetail",
+                type: "GET",
+                data: getVars
+            }).done(function (response) {
+                body.html("<p>Numero prodotti selezionati: " + selectedRowsCount + "</p><p>I dettagli selezionati sono associati ai seguenti prodotti:</p><p>" +
+                    response +
+                    "<p>L'azione non è reversibile.<br />" +
+                    "Continuare?</p>");
+                bsModal.modal();
+                cancelButton.html("Non cancellare nulla").show();
+                okButton.html('Cancella').off().on('click', function() {
+                    okButton.off();
+                    $.ajax({
+                        url: "/blueseal/xhr/ProductListAjaxDetail",
+                        type: "DELETE",
+                        data: getVars
+                    }).done(function (response) {
+                        header.html('Cancellazione Dettagli');
+                        body.html(response);
+                        okButton.html('Fatto').off().on('click', function () {
+                            okButton.off();
+                            bsModal.modal("hide");
+                        });
+                        cancelButton.hide();
+                        if (0 > response.search("OOPS")) {
+                            $('table[data-datatable-name="product_detail_list"]').DataTable().draw();
+                        }
+                    });
+                });
+            });
+
+
+    }
+    cancelButton.html("Non voglio farlo").off().on('click', function () {
         bsModal.modal('hide');
         cancelButton.off();
-
     });
 
-    okButton.html('Continua').off().on('click', function() {
-        bsModal.modal('hide');
-        okButton.off();
-        $.ajax({
-            url: "/blueseal/xhr/ProductListAjaxDetail",
-            type: "DELETE",
-        }).done(function (response) {
-            header.html('Dettagli cancellati');
-            body.html(response);
-            $(bsModal).modal("show");
-            okButton.html('Fatto').on('click', function () {
-                okButton.off();
-                cancelButton.show();
-                $(bsModal).modal("hide");
-            });
-            cancelButton.hide();
-        });
-    });
 
 
 });
