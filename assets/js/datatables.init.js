@@ -272,7 +272,7 @@
 			}, {
 				data: "colorGroupName",
 				orderable: true,
-				searchable: false
+				searchable: true
 			}, {
 				data: "var",
 				orderable: true,
