@@ -268,7 +268,7 @@
 			}, {
 				data: "colorName",
 				orderable: true,
-				searchable: false
+				searchable: true
 			}, {
 				data: "colorGroupName",
 				orderable: true,
