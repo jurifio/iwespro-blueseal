@@ -67,8 +67,13 @@ class CInvoiceAjaxController extends AAjaxController
                 if (is_null($invoice->invoiceText)) {
                     $userAddress = unserialize($order->frozenBillingAddress);
                     $userAddress->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
-                    $userShipping = unserialize($order->frozenShippingAddress);
-                    $userShipping->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
+	                if(!is_null($order->frozenShippingAddress)) {
+		                $userShipping = unserialize($order->frozenShippingAddress);
+		                $userShipping->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
+	                } else {
+		                $userShipping = $userAddress;
+	                }
+
 
                     $productRepo = $this->app->repoFactory->create('ProductNameTranslation');
 
