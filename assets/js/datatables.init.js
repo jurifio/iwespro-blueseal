@@ -294,6 +294,31 @@
 		lengthMenu: [100, 200, 500, 1000, 2000],
 		displayLength: 200
 	});
+	tableSetup.newsletter_email_list = $.extend({}, tableSetup.common, {
+		order: [[1, "asc"]],
+		columns: [
+			{
+				data: "email",
+				orderable: true,
+				searchable: true
+
+			}, {
+				data: "isActive",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "subscriptionDate",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "unsubscriptionDate",
+				orderable: true,
+				searchable: true
+			}
+		],
+		lengthMenu: [100, 200, 500, 1000, 2000],
+		displayLength: 200
+	});
 	tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
 		order: [[0, "asc"]],
 		columns: [
