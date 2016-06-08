@@ -258,27 +258,31 @@
                                     </div>
 
                                     <div class="row" id="productDetails">
-
                                         <div class="col-md-12">
                                             <?php if (isset($productEdit) && !is_null($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
                                                 <div class="tab-content bg-white">
                                                     <?php foreach ($productEdit->productSheetPrototype->productDetailLabel as $detaillabel): ?>
                                                         <div class="col-md-6">
-                                                            <div class="form-group form-group-default">
+                                                            <div class="form-group form-group-default selectize-enabled">
                                                                 <label for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>
                                                                 <?php if (isset($productEdit) && !is_null($productEdit->productSheetActual)) {
                                                                     $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $detaillabel->id);
+                                                                    $detailValueId = 0;
                                                                     if ($actual) {
-                                                                        $detailValue = $actual->productDetail->productDetailTranslation->getFirst()->name;
+                                                                        $detailValueId = $actual->productDetail->id;
                                                                     }
 
                                                                 }
                                                                 ?>
-                                                                <input autocomplete="off" type="text"
-                                                                       class="form-control"
+                                                                <select type="text"
+                                                                       class="form-control details-form selectpicker"
+                                                                        data-init-plugin = "selectize"
+                                                                        data-init-selection = "<?php echo $detailValueId; ?>"
                                                                        id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                                                        name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
-                                                                       value="<?php echo isset($detailValue) ? $detailValue : "" ?>"/>
+                                                                >
+                                                                    <option></option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <?php unset($detailValue); endforeach; ?>
