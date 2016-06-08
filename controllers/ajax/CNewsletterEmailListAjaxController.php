@@ -36,7 +36,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
 
         $this->em = new \stdClass();
-        $this->em->newsletter = $this->app->entityManagerFactory->create('ProductDetail');
+        $this->em->newsletter = $this->app->entityManagerFactory->create('newsletter');
 
         return $this->{$action}();
     }
@@ -44,10 +44,11 @@ class CNewsletterEmailListAjaxController extends AAjaxController
     public function get()
     {
         $datatable = new CDataTables('vBluesealNewsletterEmailList',['id'],$_GET);
+        $users = $this->app->repoFactory->create('User');
 
-        $newsletter = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $newsletter = $this->app->repoFactory->create('Newsletter')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = $this->em->newsletter->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->em->newsletter->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
 
         $response = [];
@@ -59,8 +60,11 @@ class CNewsletterEmailListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($newsletter as $val){
+            \BlueSeal::dump($val);
+            $user = $users->findOneBy(["email" => $val->email]);
+            \BlueSeal::dump($user);
 			try {
-				$response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
+				$response['data'][$i]["DT_RowId"] = 'row__' . $val->email;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
 				$response['data'][$i]['email'] = $val->email;
 				$response['data'][$i]['name'] = ($val->name) ? $val->name : '-';
