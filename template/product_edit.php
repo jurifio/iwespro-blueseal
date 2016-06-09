@@ -256,7 +256,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div style="display:none" id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>
                                     <div class="row" id="productDetails">
                                         <div class="col-md-12">
                                             <?php if (isset($productEdit) && !is_null($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
@@ -274,12 +274,11 @@
 
                                                                 }
                                                                 ?>
-                                                                <select type="text"
-                                                                       class="form-control details-form selectpicker"
+                                                                <select class="full-width"
                                                                         data-init-plugin = "selectize"
                                                                         data-init-selection = "<?php echo $detailValueId; ?>"
-                                                                       id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
-                                                                       name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                                                        id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                                                        name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                                                 >
                                                                     <option></option>
                                                                 </select>

@@ -193,6 +193,29 @@ var autocompleteDetail = function(){
     });
 };
 
+$("#productDetails").find('select').each(function() {
+	if(window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
+		try{
+			window.detailsStorage = [];
+			var temp = JSON.parse($("#productDetailsStorage").html());
+			$.each(temp,function(k,v) {
+				window.detailsStorage.push({
+					item : v,
+					id : k
+				});
+			});
+		} catch(e) {
+
+		}
+	}
+	$(this).selectize({
+		valueField: 'id',
+		labelField: 'item',
+		searchField: ['item'],
+		options: window.detailsStorage
+	});
+});
+
 $(document).ready(function() {
 
     autocompleteDetail();
@@ -270,7 +293,6 @@ $(document).ready(function() {
         });
     }
 });
-
 // detailDatas = [];
 //
 // var data = [ "option 1", "option 2", "option 3" ];

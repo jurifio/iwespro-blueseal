@@ -108,6 +108,18 @@ class CProductEditController extends CProductManageController
 		    $sortingOptions[$sortingPriority->id] = $sortingPriority->priority;
 	    }
 
+	    $productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
+	    $productDetails = [];
+
+	    foreach ($productDetailsCollection as $detail) {
+		    try {
+			    $productDetails[$detail->productDetailId] = $detail->name;
+		    } catch(\Exception $e) {
+
+		    }
+	    }
+	    unset($productDetailsCollection);
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'statuses' => $statuses,
@@ -130,7 +142,8 @@ class CProductEditController extends CProductManageController
             'productSheets' => $productSheets,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
-            'categories' => $cats
+            'categories' => $cats,
+	        'productDetails' => $productDetails
         ]);
     }
 }
