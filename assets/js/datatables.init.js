@@ -958,9 +958,10 @@
 			);
 
 			$('[data-init-plugin=selectize]').each(function () {
+				var self = this;
 				$(this).selectize({
 					create: false,
-					dropdownDirection: 'auto'
+					dropdownDirection: 'auto',
 				});
 				$('.selectize-dropdown-content').scrollbar();
 			});
