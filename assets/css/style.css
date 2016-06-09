@@ -421,8 +421,7 @@ body.sidebar-visible .sidebar-logo {
 
 .selectize-dropdown {
     border: 1px solid rgb(240, 240, 240) !important;
-    background-color: white;
-
+    background-color: white !important;
 }
 
 /**

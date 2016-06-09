@@ -164,14 +164,15 @@
                                                 <label for="Product_dataSheet">Tipo scheda prodotto</label>
                                                 <select class="full-width selectpicker" placeholder="Seleziona un dettaglio" data-init-plugin="selectize"  title="" name="Product_dataSheet" id="Product_dataSheet">
                                                     <option></option>
+                                                    <?php \BlueSeal::dump($productSheets); ?>
                                                     <?php foreach ($productSheets as $productSheet): ?>
-                                                    <option value="<?php echo $productSheet->id ?>"> <?php echo $productSheet->name ?></option>
+                                                    <option value="<?php echo $productSheet['id'] ?>"> <?php echo $productSheet['name'] ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div style="display:none" id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>
                                     <div class="row" id="productDetails">
                                         <div class="col-md-12">
                                             <!-- getProductSheetById -->

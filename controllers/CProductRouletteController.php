@@ -75,6 +75,17 @@ class CProductRouletteController extends CProductManageController
 		$em = $this->app->entityManagerFactory->create('ProductStatus');
 		$productStatuses = $em->findAll('limit 99', '');
 
+
+		$productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
+		$productDetails = [];
+		foreach ($productDetailsCollection as $detail) {
+			try {
+				$productDetails[$detail->productDetailId] = $detail->name;
+			} catch(\Exception $e) {
+
+			}
+		}
+
 		$statuses = [];
 		$statuses['selected'] = 2;
 		foreach ($productStatuses as $status) {
@@ -208,7 +219,8 @@ class CProductRouletteController extends CProductManageController
             'productSheets' => $productSheets,
             'detailsGroups' => $detailsGroups,
             'page' => $this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+			'productDetails' => $productDetails
         ]);
     }
 

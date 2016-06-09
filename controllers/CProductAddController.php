@@ -64,11 +64,21 @@ class CProductAddController extends CProductManageController
         $gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", array());
 
         $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
-        $productSheets = $em->query('SELECT id FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();
+        $productSheets = $em->query('SELECT id, name FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll();
 
+        $productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
+        $productDetails = [];
+        foreach ($productDetailsCollection as $detail) {
+            try {
+                $productDetails[$detail->productDetailId] = $detail->name;
+            } catch(\Exception $e) {
+
+            }
+        }
+        
         $statuses = [];
         $statuses['selected'] = 'S';
         foreach($productStatuses as $status){
@@ -96,7 +106,8 @@ class CProductAddController extends CProductManageController
             'gruppicolore' => $gruppicolore,
             'productSheets' => $productSheets,
             'page' => $this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+            'productDetails' => $productDetails
         ]);
     }
 }
