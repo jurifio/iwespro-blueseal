@@ -212,7 +212,8 @@ $("#productDetails").find('select').each(function() {
 		valueField: 'id',
 		labelField: 'item',
 		searchField: ['item'],
-		options: window.detailsStorage
+		options: window.detailsStorage,
+		currentValue:$(this).data('init-selection')
 	});
 });
 
