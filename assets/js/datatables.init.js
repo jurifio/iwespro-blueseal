@@ -99,11 +99,16 @@
 		columns: [
 			{
 				data: "code",
-				orderable: true
+				orderable: true,
+                searchable: false
 			}, {
 				data: "shop",
 				orderable: true
-			}, {
+			},{
+				data: "season",
+				orderable: true,
+				searchable: true
+			},{
 				data: "externalId",
 				orderable: true
 			}, {
