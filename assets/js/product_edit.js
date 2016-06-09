@@ -171,13 +171,14 @@ $(document).on('bs.print.aztec', function (e, element, button) {
 
 var autocompleteDetail = function(){
 
-    $.each($('input[id^="ProductDetail_"]'),function() {
+    $.each($('select[id^="ProductDetail_"]'),function() {
+        console.log($(this)[0].id);
         var me = $(this);
         me.autocomplete({
             source: function(request, response) {
                 var asd = $(this)[0].element[0].id;
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     async: false,
                     url: "/blueseal/xhr/GetAutocompleteData",
                     data: { value: asd }
@@ -216,7 +217,7 @@ $("#productDetails").find('select').each(function() {
 	});
 	var initVal = $(this).data('init-selection');
 	if(initVal != 'undefined' && initVal.lenght != 0) {
-		$(this)[0].selectize.setValue(initVal);
+		sel[0].selectize.setValue(initVal);
 	}
 });
 
@@ -232,6 +233,19 @@ $(document).ready(function() {
         }).done(function ($content) {
             $("#productDetails").html($content);
             autocompleteDetail();
+
+            $("#productDetails").find('select').each(function() {
+                var sel = $(this).selectize({
+                    valueField: 'id',
+                    labelField: 'item',
+                    searchField: ['item'],
+                    options: window.detailsStorage
+                });
+                var initVal = $(this).data('init-selection');
+                if(initVal != 'undefined' && initVal.lenght != 0) {
+                    sel[0].selectize.setValue(initVal);
+                }
+            });
         });
     });
 
