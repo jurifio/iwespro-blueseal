@@ -30,6 +30,8 @@
                             <tr>
                                 <th class="center">Email</th>
                                 <th class="center">Attiva?</th>
+                                <th class="center">Nome</th>
+                                <th class="center">Cognome</th>
                                 <th class="center">Data iscrizione</th>
                                 <th class="center">Data disiscrizione</th>
                             </tr>

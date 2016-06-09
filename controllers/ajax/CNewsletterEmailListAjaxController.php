@@ -67,11 +67,11 @@ class CNewsletterEmailListAjaxController extends AAjaxController
 				$response['data'][$i]["DT_RowId"] = 'row__' . $val->email;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
 				$response['data'][$i]['email'] = $val->email;
-				$response['data'][$i]['name'] = ($val->name) ? $val->name : '-';
-                $response['data'][$i]['surname'] = ($val->surname) ? $val->surname : `-`;
+				$response['data'][$i]['name'] = ($user) ? $user->name : '-';
+                $response['data'][$i]['surname'] = ($user) ? $user->surname : `-`;
                 $response['data'][$i]['isActive'] = ($val->isActive) ? "Attiva" : "Non Attiva";
                 $response['data'][$i]['subscriptionDate'] = ($val->subscriptionDate) ? $val->subscriptionDate : "-";
-                $response['data'][$i]['subscriptionDate'] = ($val->unsubscriptionDate) ? $val->unsubscriptionDate : "-";
+                $response['data'][$i]['unsubscriptionDate'] = ($val->unsubscriptionDate) ? $val->unsubscriptionDate : "-";
 				$i++;
 			} catch (\Exception $e) {
 				throw $e;

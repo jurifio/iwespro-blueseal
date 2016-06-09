@@ -308,10 +308,18 @@
 				searchable: true
 
 			}, {
-				data: "isActive",
-				orderable: true,
-				searchable: true
-			}, {
+                data: "isActive",
+                orderable: true,
+                searchable: true
+            },{
+                data: "name",
+                orderable: true,
+                searchable: true
+            },{
+                data: "surname",
+                orderable: true,
+                searchable: true
+            }, {
 				data: "subscriptionDate",
 				orderable: true,
 				searchable: true
