@@ -171,13 +171,14 @@ $(document).on('bs.print.aztec', function (e, element, button) {
 
 var autocompleteDetail = function(){
 
-    $.each($('input[id^="ProductDetail_"]'),function() {
+    $.each($('select[id^="ProductDetail_"]'),function() {
+        console.log($(this)[0].id);
         var me = $(this);
         me.autocomplete({
             source: function(request, response) {
                 var asd = $(this)[0].element[0].id;
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     async: false,
                     url: "/blueseal/xhr/GetAutocompleteData",
                     data: { value: asd }
@@ -193,6 +194,33 @@ var autocompleteDetail = function(){
     });
 };
 
+$("#productDetails").find('select').each(function() {
+	if(window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
+		try{
+			window.detailsStorage = [];
+			var temp = JSON.parse($("#productDetailsStorage").html());
+			$.each(temp,function(k,v) {
+				window.detailsStorage.push({
+					item : v,
+					id : k
+				});
+			});
+		} catch(e) {
+
+		}
+	}
+	var sel = $(this).selectize({
+		valueField: 'id',
+		labelField: 'item',
+		searchField: ['item'],
+		options: window.detailsStorage
+	});
+	var initVal = $(this).data('init-selection');
+	if(initVal != 'undefined' && initVal.lenght != 0) {
+		sel[0].selectize.setValue(initVal);
+	}
+});
+
 $(document).ready(function() {
 
     autocompleteDetail();
@@ -205,6 +233,19 @@ $(document).ready(function() {
         }).done(function ($content) {
             $("#productDetails").html($content);
             autocompleteDetail();
+
+            $("#productDetails").find('select').each(function() {
+                var sel = $(this).selectize({
+                    valueField: 'id',
+                    labelField: 'item',
+                    searchField: ['item'],
+                    options: window.detailsStorage
+                });
+                var initVal = $(this).data('init-selection');
+                if(initVal != 'undefined' && initVal.lenght != 0) {
+                    sel[0].selectize.setValue(initVal);
+                }
+            });
         });
     });
 
@@ -270,3 +311,18 @@ $(document).ready(function() {
         });
     }
 });
+// detailDatas = [];
+//
+// var data = [ "option 1", "option 2", "option 3" ];
+// var items = data.map(function(x) { return { detail: x }; });
+// console.log(items);
+// $('.details-form').each( function(){
+//     $(this).selectize({
+//         delimiter: ',',
+//         persist: false,
+//         maxItems: 1,
+//         options: items,
+//         labelField: "detail",
+//         valueField: "detail"
+//     });
+// });

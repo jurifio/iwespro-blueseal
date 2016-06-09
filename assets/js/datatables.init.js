@@ -99,11 +99,16 @@
 		columns: [
 			{
 				data: "code",
-				orderable: true
+				orderable: true,
+                searchable: false
 			}, {
 				data: "shop",
 				orderable: true
-			}, {
+			},{
+				data: "season",
+				orderable: true,
+				searchable: true
+			},{
 				data: "externalId",
 				orderable: true
 			}, {
@@ -983,9 +988,10 @@
 			);
 
 			$('[data-init-plugin=selectize]').each(function () {
+				var self = this;
 				$(this).selectize({
 					create: false,
-					dropdownDirection: 'auto'
+					dropdownDirection: 'auto',
 				});
 				$('.selectize-dropdown-content').scrollbar();
 			});
