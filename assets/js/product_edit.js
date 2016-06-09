@@ -212,10 +212,12 @@ $("#productDetails").find('select').each(function() {
 		valueField: 'id',
 		labelField: 'item',
 		searchField: ['item'],
-		options: window.detailsStorage,
+		options: window.detailsStorage
 	});
-    console.log(window.detailsStorage);
-    //sel[0].selectize.setValue(30, true);
+	var initVal = $(this).data('init-selection');
+	if(initVal != 'undefined' && initVal.lenght != 0) {
+		$(this)[0].selectize.setValue(initVal);
+	}
 });
 
 $(document).ready(function() {
