@@ -280,7 +280,7 @@
                                                                         id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                                                         name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                                                 >
-                                                                    <option></option>
+                                                                    
                                                                 </select>
                                                             </div>
                                                         </div>

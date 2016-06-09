@@ -208,13 +208,14 @@ $("#productDetails").find('select').each(function() {
 
 		}
 	}
-	$(this).selectize({
+	var sel = $(this).selectize({
 		valueField: 'id',
 		labelField: 'item',
 		searchField: ['item'],
 		options: window.detailsStorage,
-		currentValue:$(this).data('init-selection')
 	});
+    console.log(window.detailsStorage);
+    //sel[0].selectize.setValue(30, true);
 });
 
 $(document).ready(function() {
