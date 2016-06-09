@@ -100,7 +100,8 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['data'][$i]['shop'] = implode(',',$shops);
-
+            \BlueSeal::dump($val);
+            $response['data'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
 	        $ext = [];
 	        if (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
 		        $ext[] = $val->shopHasProduct->extId;
