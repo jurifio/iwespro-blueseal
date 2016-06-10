@@ -99,8 +99,8 @@
 		columns: [
 			{
 				data: "code",
-				orderable: true,
-                searchable: false
+				orderable: false,
+                searchable: true
 			}, {
 				data: "shop",
 				orderable: true
