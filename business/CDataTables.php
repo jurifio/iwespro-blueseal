@@ -220,8 +220,12 @@ class CDataTables
 	                    $search['params'][] = $this->search;
                     }
 	                if(!empty($column['filter'])) {
-		                $columnsFilter['cols'][] = $column['name']." RLIKE ?";
-		                $columnsFilter['params'][] = $this->likeSearch($column['filter']);
+                        $not = (0 === strpos($column['filter'], '-')) ? true : false;
+		                $columnsFilter['cols'][] = ($not) ? $column['name'] . " NOT LIKE ? " : $column['name'] . " RLIKE ? ";
+		                $columnsFilter['params'][] = ($not) ? '%' . substr($column['filter'], 1) . '%' : $this->likeSearch($column['filter']);
+                        \BlueSeal::dump(($not) ? $column['name'] . " NOT LIKE ? " : $column['name'] . " RLIKE ? ");
+                        \BlueSeal::dump(($not) ? '%' . substr($column['filter'], 1) . '%' : $this->likeSearch($column['filter']));
+                        //throw new \Exception;
 	                }
                 }
             }
@@ -323,6 +327,7 @@ class CDataTables
         if(isset($dtData['search']) && isset($dtData['search']['value']) && !empty($dtData['search']['value'])){
             $this->rawSearch = $dtData['search']['value'];
             $this->search = $this->likeSearch($dtData['search']['value']);
+//            if(value inizia per '-') aallora addcondition (not value)
         }
     }
 
