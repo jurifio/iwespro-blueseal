@@ -270,6 +270,7 @@
                                                                     $detailValueId = 0;
                                                                     if ($actual) {
                                                                         $detailValueId = $actual->productDetail->id;
+                                                                        $detailValueName = $actual->productDetail->productDetailTranslation->getFirst()->name;
                                                                     }
 
                                                                 }

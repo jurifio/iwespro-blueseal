@@ -123,6 +123,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 foreach ($post as $key => $input) {
                     $inputName = explode('_', $key);
                     if ($inputName[0] != 'ProductDetail') continue;
+                    if (0 == $input) continue;
 
 	                /** cerco all'interno della sheet se esiste già un dettaglio con lo stesso label*/
 	                $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $inputName[2]);

@@ -82,10 +82,6 @@ class CProductEditController extends CProductManageController
             $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';
         }
 
-        //\BlueSeal::dump($cats);
-
-        //throw new \Exception;
-
 
 	    //$this->app->vendorLibraries->load("aztec");
 	    $qrMessage = $productEdit->getAztecCode();
