@@ -241,6 +241,7 @@
                                                                     if ($actual) {
                                                                         $detailValueId = $actual->productDetail->id;
                                                                     }
+
                                                                 }
                                                                 ?>
                                                                 <select class="full-width"
@@ -249,6 +250,7 @@
                                                                         id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                                                         name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                                                 >
+
                                                                 </select>
                                                             </div>
                                                         </div>

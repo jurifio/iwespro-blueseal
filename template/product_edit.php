@@ -269,8 +269,7 @@
                                                                     $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $detaillabel->id);
                                                                     $detailValueId = 0;
                                                                     if ($actual) {
-                                                                        $detailValueId = $actual->productDetail->id;
-                                                                        $detailValueName = $actual->productDetail->productDetailTranslation->getFirst()->name;
+                                                                        $detailValueId = $actual->productDetail->id;                                                                        
                                                                     }
 
                                                                 }
