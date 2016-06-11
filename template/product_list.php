@@ -26,6 +26,7 @@
                                 <tr>
                                     <th class="center">Codice</th>
                                     <th class="center">Shop</th>
+                                    <th class="center">Gruppo Colore</th>
                                     <th class="center">Stagione</th>
                                     <th class="center">ID Orig.</th>
                                     <th class="center">CPF</th>

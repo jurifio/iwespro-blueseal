@@ -105,6 +105,11 @@
 				data: "shop",
 				orderable: true
 			},{
+				data: "colorGroup",
+				orderable: true,
+				searchable: true
+			},
+			{
 				data: "season",
 				orderable: true,
 				searchable: true

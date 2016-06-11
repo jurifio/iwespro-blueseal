@@ -129,6 +129,9 @@ class CProductListAjaxController extends AAjaxController
 
             $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
             $response['data'][$i]['cpf'] = $val->itemno.' # '.$val->productVariant->name;
+            //\BlueSeal::dump($val->productColorGroup);
+            $colorGroup = $val->productColorGroup->getFirst();
+            $response['data'][$i]['colorGroup'] = ($colorGroup) ? $colorGroup->name : "[Non assegnato]";
             $img = strpos($val->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $this->urls['dummy']."/".$val->dummyPicture;
 	        if($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
 	        else $imgs = "";
