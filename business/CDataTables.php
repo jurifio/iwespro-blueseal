@@ -212,26 +212,23 @@ class CDataTables
             foreach ($this->columns as $idx => $column) {
                 if ($column['searchable'] == true) {
                     if($this->search){
-                        $search['cols'][] = $column['name']." RLIKE ?";
+                        $search['cols'][] = "`" . $column['name']."` RLIKE ?";
                         $search['params'][] = $this->search;
                     }
                     if(!empty($column['search'])){
-	                    $search['cols'][] = $column['name']." RLIKE ?";
+	                    $search['cols'][] = "`" . $column['name']."` RLIKE ?";
 	                    $search['params'][] = $this->search;
                     }
 	                if(!empty($column['filter'])) {
                         $not = (0 === strpos($column['filter'], '-')) ? true : false;
-		                $columnsFilter['cols'][] = ($not) ? $column['name'] . " NOT LIKE ? " : $column['name'] . " RLIKE ? ";
+		                $columnsFilter['cols'][] = ($not) ? "`" . $column['name'] . "` NOT LIKE ? " : "`" . $column['name'] . "` RLIKE ? ";
 		                $columnsFilter['params'][] = ($not) ? '%' . substr($column['filter'], 1) . '%' : $this->likeSearch($column['filter']);
-                        //\BlueSeal::dump(($not) ? $column['name'] . " NOT LIKE ? " : $column['name'] . " RLIKE ? ");
-                        //\BlueSeal::dump(($not) ? '%' . substr($column['filter'], 1) . '%' : $this->likeSearch($column['filter']));
-                        //throw new \Exception;
 	                }
                 }
             }
             if($this->search){
                 foreach($this->keys as $key){
-	                $search['cols'][] = $key." RLIKE ?";
+	                $search['cols'][] = "`" . $key."` RLIKE ?";
 	                $search['params'][] = $this->search;
                 }
             }
