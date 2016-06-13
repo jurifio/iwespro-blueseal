@@ -365,6 +365,28 @@
             data-placement="bottom"
             ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione dettagli">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-eraser"
+            data-permission="/admin/product/add"
+            data-event="bs.det.erase"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Vuota i dettagli"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-plus-square"
+            data-permission="/admin/product/edit"
+            data-event="bs.det.add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi un nuovo dettaglio"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Stato del prodotto">
         <bs-toolbar-select
             data-tag="select"

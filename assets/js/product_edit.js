@@ -269,16 +269,19 @@ $(document).on('bs.det.add', function (e) {
             $.ajax({
                     type: "POST",
                     async: false,
-                    url: "/blueseal/xhr/CProductDetailAddNewAjaxController",
+                    url: "/blueseal/xhr/ProductDetailAddNewAjaxController",
                     data: {
-                        value: $('.new-dett-ita').val()
+                        name: $('.new-dett-ita').val()
                     }
                 }
             ).done( function(result) {
-                body.html(result);
+                var res = result.split("-");
+                body.html(res[0]);
                 cancelButton.hide();
-                okButton.html('Ok').off().on('click', function(){
-                    bsModal.hide();
+                okButton.html('Ok').off().on('click', function () {
+                    bsModal.modal('hide');
+                    console.log("ciao");
+                    window.location.reload();
                 });
             });
          }
