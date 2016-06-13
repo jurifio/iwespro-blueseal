@@ -223,21 +223,7 @@
                                 <div class="panel-body clearfix">
                                     <button style="float: right; margin-bottom: 5px" class="btn" id="deleteDetails">Cancella i dettagli</button>
                                     <script type="text/javascript">
-                                        $(document).ready(function(){
-                                                removeDetails();
-                                        });
-
-                                        function removeDetails() {
-
-                                            $("button#deleteDetails").click(function(e){
-                                                e.preventDefault();
-                                                $("#productDetails input").each(function(){
-                                                    $(this).val("");
-                                                });
-                                                $("#ProductName_1_name").val("");
-                                                $(".panel-body p").html("");
-                                            });
-                                        }
+                                        
                                     </script>
 
                                     <div class="row">
@@ -271,7 +257,6 @@
                                                                     if ($actual) {
                                                                         $detailValueId = $actual->productDetail->id;                                                                        
                                                                     }
-
                                                                 }
                                                                 ?>
                                                                 <select class="full-width"
@@ -280,7 +265,7 @@
                                                                         id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                                                         name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                                                 >
-                                                                    
+
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -403,6 +388,28 @@
                 data-title="Priorità"
                 data-json='<?php echo json_encode($sortingOptions); ?>'
                 data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione dettagli">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-eraser"
+            data-permission="/admin/product/add"
+            data-event="bs.det.erase"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Vuota i dettagli"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-plus-square"
+            data-permission="/admin/product/edit"
+            data-event="bs.det.add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi un nuovo dettaglio"
+            data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Stato del prodotto">

@@ -205,6 +205,10 @@ $("#productDetails").find('select').each(function() {
 					id : k
 				});
 			});
+            window.detailsStorage.push({
+                item: '',
+                id: 0
+            });
 		} catch(e) {
 
 		}
@@ -215,11 +219,72 @@ $("#productDetails").find('select').each(function() {
 		searchField: ['item'],
 		options: window.detailsStorage
 	});
-	var initVal = $(this).data('init-selection');
-	if(initVal != 'undefined' && initVal.lenght != 0) {
-		sel[0].selectize.setValue(initVal);
-	}
+    var initVal = $(this).data('init-selection');
+    if(initVal != 'undefined' && initVal.lenght != 0) {
+        sel[0].selectize.setValue(initVal);
+    } else {
+        sel[0].selectize.setValue(0);
+    }
 });
+
+
+//Cancellazione campi dettagli
+
+$(document).on('bs.det.erase', function(e){
+   e.preventDefault();
+    $("#productDetails").find('select').each(function(){
+        $(this)[0].selectize.setValue(0);
+    });
+    $("#ProductName_1_name").val("");
+    $(".note-editable").html("");
+});
+
+$(document).on('bs.det.add', function (e) {
+    e.preventDefault();
+
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+    //new Cslugify
+    header.html('Aggiungi dettaglio');
+    body.html(
+        '<div class="alert alert-danger modal-alert" style="display: none">Il campo <strong>Italiano</strong> è obbligatorio</div>' +
+        '<form id="detailAdd"><div class="form-group">' +
+            '<label>Italiano*</label>' +
+            '<input type="text" class="form-control new-dett-ita" name="newDettIta" />' +
+        '</div></form>'
+    );
+    cancelButton.html("Annulla").off().on('click', function(){
+        bsModal.hide();
+    });
+    bsModal.modal('show');
+     okButton.html('Inserisci').off().on('click', function(){
+         console.log($('.new-dett-ita').val());
+         if ('' === $('.new-dett-ita').val()) {
+             $('.modal-alert').css('display', 'block');
+         } else {
+            $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "/blueseal/xhr/CProductDetailAddNewAjaxController",
+                    data: {
+                        value: $('.new-dett-ita').val()
+                    }
+                }
+            ).done( function(result) {
+                body.html(result);
+                cancelButton.hide();
+                okButton.html('Ok').off().on('click', function(){
+                    bsModal.hide();
+                });
+            });
+         }
+     });
+});
+
 
 $(document).ready(function() {
 
@@ -244,6 +309,8 @@ $(document).ready(function() {
                 var initVal = $(this).data('init-selection');
                 if(initVal != 'undefined' && initVal.lenght != 0) {
                     sel[0].selectize.setValue(initVal);
+                } else {
+                    sel[0].selectize.setValue(0);
                 }
             });
         });
