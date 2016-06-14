@@ -194,27 +194,25 @@ var autocompleteDetail = function(){
     });
 };
 
-if(window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
-    try{
-        window.detailsStorage = [];
-        var temp = JSON.parse($("#productDetailsStorage").html());
-        $.each(temp,function(k,v) {
-            window.detailsStorage.push({
-                item : v,
-                id : k
-            });
-        });
-        window.detailsStorage.push({
-            item: '',
-            id: 0
-        });
-    } catch(e) {
-
-    }
-}
-
 $("#productDetails").find('select').each(function() {
+	if(window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
+		try{
+			window.detailsStorage = [];
+			var temp = JSON.parse($("#productDetailsStorage").html());
+			$.each(temp,function(k,v) {
+				window.detailsStorage.push({
+					item : v,
+					id : k
+				});
+			});
+            window.detailsStorage.push({
+                item: '-',
+                id: 0
+            });
+		} catch(e) {
 
+		}
+	}
 	var sel = $(this).selectize({
 		valueField: 'id',
 		labelField: 'item',
@@ -224,9 +222,9 @@ $("#productDetails").find('select').each(function() {
   var initVal = $(this).data('init-selection');
     if(initVal != 'undefined' && initVal.lenght != 0) {
         sel[0].selectize.setValue(initVal, true);
-    }/*  else {
+    }  else {
         sel[0].selectize.setValue(0, true);
-    }*/
+    }
 });
 
 //Cancellazione campi dettagli
@@ -312,9 +310,9 @@ $(document).ready(function() {
                 var initVal = $(this).data('init-selection');
                 if(initVal != 'undefined' && initVal.lenght != 0) {
                     sel[0].selectize.setValue(initVal, true);
-                } /*else {
+                } else {
                     sel[0].selectize.setValue(0, true);
-                }*/
+                }
             });
         });
     });
