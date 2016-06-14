@@ -195,24 +195,6 @@ var autocompleteDetail = function(){
 };
 
 $("#productDetails").find('select').each(function() {
-	if(window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
-		try{
-			window.detailsStorage = [];
-			var temp = JSON.parse($("#productDetailsStorage").html());
-			$.each(temp,function(k,v) {
-				window.detailsStorage.push({
-					item : v,
-					id : k
-				});
-			});
-            window.detailsStorage.push({
-                item: '',
-                id: 0
-            });
-		} catch(e) {
-
-		}
-	}
 	var sel = $(this).selectize({
 		valueField: 'id',
 		labelField: 'item',
@@ -288,6 +270,23 @@ $(document).on('bs.det.add', function (e) {
 
 
 $(document).ready(function() {
+
+    try{
+       window.detailsStorage = [];
+       var temp = JSON.parse($("#productDetailsStorage").html());
+       $.each(temp,function(k,v) {
+           window.detailsStorage.push({
+               item : v,
+               id : k
+           });
+       });
+       window.detailsStorage.push({
+          item: '',
+          id: 0
+       });
+       } catch(e) {
+
+    }
 
     autocompleteDetail();
 
