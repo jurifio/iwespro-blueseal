@@ -222,9 +222,9 @@ $("#productDetails").find('select').each(function() {
   var initVal = $(this).data('init-selection');
     if(initVal != 'undefined' && initVal.lenght != 0) {
         sel[0].selectize.setValue(initVal, true);
-    }  else {
+    }/*  else {
         sel[0].selectize.setValue(0, true);
-    }
+    }*/
 });
 
 //Cancellazione campi dettagli
@@ -310,9 +310,9 @@ $(document).ready(function() {
                 var initVal = $(this).data('init-selection');
                 if(initVal != 'undefined' && initVal.lenght != 0) {
                     sel[0].selectize.setValue(initVal, true);
-                } else {
+                } /*else {
                     sel[0].selectize.setValue(0, true);
-                }
+                }*/
             });
         });
     });
