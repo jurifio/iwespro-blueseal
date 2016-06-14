@@ -72,7 +72,7 @@ $(document).on('bs.product.add', function (e,element,button) {
     });
     cancelButton.off();
 
-    $.ajaxFproductyorm({
+    $.ajaxForm({
         type: "POST",
         url: "#",
         formAutofill: true
@@ -84,6 +84,7 @@ $(document).on('bs.product.add', function (e,element,button) {
         window.location.reload();
     }).fail(function(content,a,b,c){
 	    try {
+            console.log(content);
 		    var jhon = $.parseJSON(content);
 		    body.html('<span>Prodotto, esistente, vuoi fondere questo prodotto a quello presente?</span></br><a target="_blank" href="' + jhon.url + '" > Prodotto </a>');
 		    cancelButton.on('click', function(){
