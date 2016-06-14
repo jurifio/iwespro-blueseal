@@ -219,14 +219,13 @@ $("#productDetails").find('select').each(function() {
 		searchField: ['item'],
 		options: window.detailsStorage
 	});
-    var initVal = $(this).data('init-selection');
+  var initVal = $(this).data('init-selection');
     if(initVal != 'undefined' && initVal.lenght != 0) {
-        sel[0].selectize.setValue(initVal);
-    } else {
-        sel[0].selectize.setValue(0);
+        sel[0].selectize.setValue(initVal, true);
+    }  else {
+        sel[0].selectize.setValue(0, true);
     }
 });
-
 
 //Cancellazione campi dettagli
 
@@ -280,7 +279,6 @@ $(document).on('bs.det.add', function (e) {
                 cancelButton.hide();
                 okButton.html('Ok').off().on('click', function () {
                     bsModal.modal('hide');
-                    console.log("ciao");
                     window.location.reload();
                 });
             });
@@ -311,9 +309,9 @@ $(document).ready(function() {
                 });
                 var initVal = $(this).data('init-selection');
                 if(initVal != 'undefined' && initVal.lenght != 0) {
-                    sel[0].selectize.setValue(initVal);
+                    sel[0].selectize.setValue(initVal, true);
                 } else {
-                    sel[0].selectize.setValue(0);
+                    sel[0].selectize.setValue(0, true);
                 }
             });
         });
