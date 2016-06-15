@@ -194,25 +194,27 @@ var autocompleteDetail = function(){
     });
 };
 
-$("#productDetails").find('select').each(function() {
-	if(window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
-		try{
-			window.detailsStorage = [];
-			var temp = JSON.parse($("#productDetailsStorage").html());
-			$.each(temp,function(k,v) {
-				window.detailsStorage.push({
-					item : v,
-					id : k
-				});
-			});
+if(window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
+    try{
+        window.detailsStorage = [];
+        var temp = JSON.parse($("#productDetailsStorage").html());
+        $.each(temp,function(k,v) {
             window.detailsStorage.push({
-                item: '-',
-                id: 0
+                item : v,
+                id : k
             });
-		} catch(e) {
+        });
+        window.detailsStorage.push({
+            item: '-',
+            id: 0
+        });
+    } catch(e) {
 
-		}
-	}
+    }
+}
+
+$("#productDetails").find('select').each(function() {
+
 	var sel = $(this).selectize({
 		valueField: 'id',
 		labelField: 'item',
