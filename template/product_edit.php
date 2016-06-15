@@ -393,7 +393,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-eraser"
-            data-permission="/admin/product/add"
+            data-permission="/admin/product/edit"
             data-event="bs.det.erase"
             data-class="btn btn-default"
             data-rel="tooltip"

@@ -263,7 +263,6 @@ $(document).on('bs.det.add', function (e) {
     });
     bsModal.modal('show');
      okButton.html('Inserisci').off().on('click', function(){
-         console.log($('.new-dett-ita').val());
          if ('' === $('.new-dett-ita').val()) {
              $('.modal-alert').css('display', 'block');
          } else {
@@ -284,6 +283,7 @@ $(document).on('bs.det.add', function (e) {
                     window.location.reload();
                 });
             });
+             return false;
          }
      });
 });
