@@ -30,7 +30,7 @@ class CProductDetailAddNewAjaxController extends AAjaxController
             try {
                 $this->app->dbAdapter->beginTransaction();
                 $retId = $this->app->dbAdapter->insert('ProductDetail', ['slug' => $slug]);
-                $this->app->dbAdapter->insert('ProductDetailTranslation',['productDetailId' => $retId, 'langId' => 1, 'name' => $get]);
+                $retTrad = $this->app->dbAdapter->insert('ProductDetailTranslation',['productDetailId' => $retId, 'langId' => 1, 'name' => $get]);
                 $this->app->dbAdapter->commit();
                 return "Dettaglio inserito!-" . $retId;
             } catch (\Exception $e) {

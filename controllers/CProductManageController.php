@@ -127,7 +127,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
 	                /** cerco all'interno della sheet se esiste già un dettaglio con lo stesso label e lo cancella */
 	                $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $inputName[2]);
-                    $actual->delete();
+                    if ($actual) $actual->delete();
                     if (0 == $input) continue;
 //	                if(!($actual instanceof IEntity)) {
 //		                /** non esiste, lo aggiungo */
