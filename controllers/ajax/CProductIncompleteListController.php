@@ -149,36 +149,6 @@ class CProductIncompleteListController extends AAjaxController
         return '<ul style="padding:0;margin:0;list-style-type:decimal-leading-zero"><li>'.implode('</li><li>',$problems).'</ul>';
     }
 
-    /*public function orderBy(){
-        $dtOrderingColumns = $_GET['order'];
-        $dbOrderingColumns = [
-            ['column'=>'vProductShopView.itemno'],
-            ['column'=>'vProductShopView.shopId'],
-            ['column'=>'vProductShopView.externalId'],
-            ['column'=>null],
-            ['column'=>'vProductShopView.productBrandId'],
-            ['column'=>null],
-            ['column'=>'vProductShopView.status'],
-            ['column'=>'vProductShopView.creationDate']
-        ];
-        $dbOrderingDefault = [
-            ['column'=>'vProductShopView.creationDate','dir'=>'desc']
-        ];
-
-        $sqlOrder = " ORDER BY ";
-        foreach ($dtOrderingColumns as $column) {
-            if (isset($dbOrderingColumns[$column['column']]) && $dbOrderingColumns[$column['column']]['column'] !== null) {
-                $sqlOrder .= $dbOrderingColumns[$column['column']]['column']." ".$column['dir'].", ";
-            }
-        }
-        if (substr($sqlOrder,-1,2) != ', ') {
-            foreach($dbOrderingDefault as $column) {
-                $sqlOrder .= $column['column'].' '.$column['dir'].', ';
-            }
-        }
-        return rtrim($sqlOrder,', ');
-    }
-*/
     public function post(){
         throw new \Exception();
     }
@@ -186,25 +156,4 @@ class CProductIncompleteListController extends AAjaxController
     public function delete(){
         throw new \Exception();
     }
-
-    //TODO: Le query giuste sono queste, le altre sono cambiate per questioni di emergenza e da sistemare in seguito
-    /*
-$fromSalvagente = " FROM vProductShopView LEFT OUTER JOIN
-                        ProductSkuHasProductPhoto pp ON
-                          pp.productId = vProductShopView.id AND
-                          pp.productVariantId = vProductShopView.productVariantId LEFT OUTER JOIN
-                        ProductHasProductColorGroup pc ON
-                          pc.productId = vProductShopView.id AND
-                          pc.productVariantId = vProductShopView.productVariantId LEFT OUTER JOIN
-                        ProductSku ps ON
-                          ps.productId = vProductShopView.id AND
-                          ps.productVariantId = vProductShopView.productVariantId ";
-$whereSalvagente = " WHERE (ps.productId IS NULL OR
-                            pc.productColorGroupId IS NULL OR
-                            pp.productPhotoId IS NULL OR
-                            sizeGroupId IS NULL OR
-                            productSeasonId IS NULL OR
-                            productBrandId = 1 OR
-                            sheetName IS NULL OR
-                            vProductShopView.status in ('W', 'G')) AND dummyPicture <> '0000000000.jpg' ";*/
 }
