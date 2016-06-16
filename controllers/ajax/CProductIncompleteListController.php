@@ -187,24 +187,4 @@ class CProductIncompleteListController extends AAjaxController
         throw new \Exception();
     }
 
-    //TODO: Le query giuste sono queste, le altre sono cambiate per questioni di emergenza e da sistemare in seguito
-    /*
-$fromSalvagente = " FROM vProductShopView LEFT OUTER JOIN
-                        ProductSkuHasProductPhoto pp ON
-                          pp.productId = vProductShopView.id AND
-                          pp.productVariantId = vProductShopView.productVariantId LEFT OUTER JOIN
-                        ProductHasProductColorGroup pc ON
-                          pc.productId = vProductShopView.id AND
-                          pc.productVariantId = vProductShopView.productVariantId LEFT OUTER JOIN
-                        ProductSku ps ON
-                          ps.productId = vProductShopView.id AND
-                          ps.productVariantId = vProductShopView.productVariantId ";
-$whereSalvagente = " WHERE (ps.productId IS NULL OR
-                            pc.productColorGroupId IS NULL OR
-                            pp.productPhotoId IS NULL OR
-                            sizeGroupId IS NULL OR
-                            productSeasonId IS NULL OR
-                            productBrandId = 1 OR
-                            sheetName IS NULL OR
-                            vProductShopView.status in ('W', 'G')) AND dummyPicture <> '0000000000.jpg' ";*/
 }
