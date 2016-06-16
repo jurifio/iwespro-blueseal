@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
+use bamboo\app\business\api\apiInterface;
 use bamboo\domain\entities\CProduct;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
@@ -150,7 +151,7 @@ class CProductIncompleteListController extends AAjaxController
     }
 
     public function post(){
-        throw new \Exception();
+        
     }
     
     public function delete(){
