@@ -21,16 +21,18 @@ class CProductDetailAddNewAjaxController extends AAjaxController
     public function post()
     {
         $get = trim($this->app->router->request()->getRequestData()['name']);
-        $last2 = substr($get, strlen($get)-2);
-        $get = ( ' !' !== $last2) ? $get . ' !' : $get;
+        $last2 = substr($get, -2);
         $slugify = new CSlugify();
         $slug = $slugify->slugify($get);
-        $res = $this->app->dbAdapter->select('ProductDetail', ['slug' => $slug])->fetchAll();
+        $get = ( ' !' == $last2) ? substr($get, 0, -2) : $get;
+        $sql = "SELECT productDetailId FROM `ProductDetailTranslation` WHERE langId = 1 AND name LIKE '" . $get . "%'";
+        $res = $this->app->dbAdapter->query($sql, [])->fetchAll();
         if (!count($res)) {
             try {
+                $get .= ' !';
                 $this->app->dbAdapter->beginTransaction();
                 $retId = $this->app->dbAdapter->insert('ProductDetail', ['slug' => $slug]);
-                $this->app->dbAdapter->insert('ProductDetailTranslation',['productDetailId' => $retId, 'langId' => 1, 'name' => $get]);
+                $retTrad = $this->app->dbAdapter->insert('ProductDetailTranslation',['productDetailId' => $retId, 'langId' => 1, 'name' => $get]);
                 $this->app->dbAdapter->commit();
                 return "Dettaglio inserito!-" . $retId;
             } catch (\Exception $e) {

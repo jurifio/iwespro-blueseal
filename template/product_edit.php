@@ -221,7 +221,6 @@
                                     <h5 class="m-t-10">Scheda prodotto e dettagli</h5>
                                 </div>
                                 <div class="panel-body clearfix">
-                                    <button style="float: right; margin-bottom: 5px" class="btn" id="deleteDetails">Cancella i dettagli</button>
                                     <script type="text/javascript">
                                         
                                     </script>
@@ -394,7 +393,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-eraser"
-            data-permission="/admin/product/add"
+            data-permission="/admin/product/edit"
             data-event="bs.det.erase"
             data-class="btn btn-default"
             data-rel="tooltip"

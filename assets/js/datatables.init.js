@@ -305,7 +305,7 @@
 		displayLength: 200
 	});
 	tableSetup.newsletter_email_list = $.extend({}, tableSetup.common, {
-		order: [[1, "asc"]],
+		order: [[4, "desc"]],
 		columns: [
 			{
 				data: "email",

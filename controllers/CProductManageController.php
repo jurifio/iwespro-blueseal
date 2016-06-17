@@ -120,26 +120,36 @@ class CProductManageController extends ARestrictedAccessRootController
 		            unset($productEdit->productSheetPrototype);
 		            $productEdit->update();
 	            }
+
                 foreach ($post as $key => $input) {
                     $inputName = explode('_', $key);
                     if ($inputName[0] != 'ProductDetail') continue;
-                    if (0 == $input) continue;
 
-	                /** cerco all'interno della sheet se esiste già un dettaglio con lo stesso label*/
+	                /** cerco all'interno della sheet se esiste già un dettaglio con lo stesso label e lo cancella */
 	                $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $inputName[2]);
-	                if(!($actual instanceof IEntity)) {
-		                /** non esiste, lo aggiungo */
-		                $actual = $productSheetActualRepo->getEmptyEntity();
-		                $actual->productId = $productEdit->id;
-		                $actual->productVariantId = $productEdit->productVariantId;
-		                $actual->productDetailLabelId = $inputName[2];
-		                $actual->productDetailId = $input;
-		                $actual->insert();
-	                } else if($actual->productDetailId != $input) {
-		                /** esiste ma è diverso, lo aggiorno */
-	                    $actual->productDetailId = $input;
-		                $actual->update();
-	                }
+                    if ($actual) $actual->delete();
+                    if (0 == $input) continue;
+//	                if(!($actual instanceof IEntity)) {
+//		                /** non esiste, lo aggiungo */
+//		                $actual = $productSheetActualRepo->getEmptyEntity();
+//		                $actual->productId = $productEdit->id;
+//		                $actual->productVariantId = $productEdit->productVariantId;
+//		                $actual->productDetailLabelId = $inputName[2];
+//		                $actual->productDetailId = $input;
+//		                $actual->insert();
+//	                } else if($actual->productDetailId != $input) {
+//		                /** esiste ma è diverso, lo aggiorno */
+//	                    $actual->productDetailId = $input;
+//		                $actual->update();
+//	                }
+                    //if($actual instanceof IEntity) $actual->delete();
+
+                    $actual = $productSheetActualRepo->getEmptyEntity();
+                    $actual->productId = $productEdit->id;
+                    $actual->productVariantId = $productEdit->productVariantId;
+                    $actual->productDetailLabelId = $inputName[2];
+                    $actual->productDetailId = $input;
+                    $actual->insert();
                 }
             }
 
