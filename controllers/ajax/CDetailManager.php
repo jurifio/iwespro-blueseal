@@ -21,13 +21,19 @@ class CDetailManager extends AAjaxController
      */
     public function get()
     {
-        $repo = $this->app->repoFactory->create('ProductDetail',false);
-
-        $html = 'Su quale dettaglio li vuoi unire?<br /><br />';
-        $html .= '<select class="full-width" placehoder="Seleziona il dettaglio da tenere" data-init-plugin="selectize"  title="productDetailId" name="productDetailId" id="productDetailId">';
-
-        $i = 0;
-        foreach ($this->app->router->request()->getRequestData() as $detailId) {
+        $search = $this->app->router->request()->getRequestData()['search'];
+        //$repo = $this->app->repoFactory->create('ProductDetailTranslation',false);
+        $res = $this->app->dbAdapter->query("SELECT `productDetailId` as `id`, `name` FROM `ProductDetailTranslation` WHERE `langId` = 1 AND `name` like '%" . $search . "%' ORDER BY `name` LIMIT 10", [])->fetchAll();
+        //$res = $repo->findBy(['name' => $search, 'langId' => 1], " LIMIT 10 ")->toArray();
+        return json_encode($res);
+        //$emDetails = $repo->findAll();
+        //$allDetails = [];
+        //$i = 0;
+        
+        /*$i = 0;
+        $get = $this->app->router->request()->getRequestData();
+        $def = false; //una volta settato un valore di default
+        foreach ($allDetails as $detailId) {
             $detail = $repo->findOneBy(['id'=>$detailId], 'LIMIT 0,999','ORDER BY slug');
             if ($i == 0){
                 $name = $detail->productDetailTranslation->findOneByKey('langId',1)->name;
@@ -39,10 +45,10 @@ class CDetailManager extends AAjaxController
 
             $html .= '<option value="' . $detail->id . '" required>' . $detail->productDetailTranslation->findOneByKey('langId',1)->name . '('.implode(',',$langs).') </option>';
         $i++;
-        }
+        }*/
         $html .= "</select><br><br>";
         $html .= 'Inserisci il nuovo nome del dettaglio<br>';
-        $html .= '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="'. $name . '">';
+        $html .= '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
 
         return json_encode(
             [
