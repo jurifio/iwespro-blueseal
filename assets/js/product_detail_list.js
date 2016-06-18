@@ -10,6 +10,7 @@ $(document).on('bs.manage.detail', function () {
 
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();
+    console.log(selectedRows);
     var selectedRowsCount = selectedRows.length;
 
     if (selectedRowsCount < 1) {
@@ -21,13 +22,13 @@ $(document).on('bs.manage.detail', function () {
     }
 
     var i = 0;
+    var row = [];
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = rowId[0] + i + '=' + rowId[1];
+        row[i] = {};
+        row[i].id = v.DT_RowId.split('__')[1];
+        row[i].name = v.name;
         i++;
     });
-
-    var getVars = getVarsArray.join('&');
 
     var result = {
         status: "ko",
@@ -45,6 +46,7 @@ $(document).on('bs.manage.detail', function () {
         valueField: 'id',
         labelField: 'name',
         searchField: 'name',
+        options: row,
         create: false,
         /*score: function(search) {
          var score = this.getScoreFunction(search);
@@ -78,6 +80,7 @@ $(document).on('bs.manage.detail', function () {
             });
         }
     });
+    $('#productDetailId').selectize()[0].selectize.setValue(row[0].id);
 
     $(bsModal).find('table').addClass('table');
     $('#productDetailId').change(function () {
@@ -86,11 +89,9 @@ $(document).on('bs.manage.detail', function () {
         console.log(detName.substring(0, detName.indexOf('(')));
         $('#productDetailName').val(detName);
     });
-    if (result.cancelButtonLabel == null) {
-        cancelButton.hide();
-    } else {
-        cancelButton.html(result.cancelButtonLabel);
-    }
+    cancelButton.html("Annulla");
+    cancelButton.show();
+
     bsModal.modal('show');
 
     okButton.html(result.okButtonLabel).off().on('click', function (e) {
