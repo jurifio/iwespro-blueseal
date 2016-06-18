@@ -37,7 +37,9 @@ $(document).on('bs.manage.detail', function () {
     };
 
     header.html('Unione dettagli');
-    var bodyContent = '<select class="full-width" placehoder="Seleziona il dettaglio da tenere" name="productDetailId" id="productDetailId"><option value=""></option></select>';
+    var bodyContent = '<div style="min-height: 250px"><select class="full-width" placehoder="Seleziona il dettaglio da tenere" name="productDetailId" id="productDetailId"><option value=""></option></select></div>';
+    bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
+    bodyContent += '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
     body.html(bodyContent);
     $('#productDetailId').selectize({
         valueField: 'id',
@@ -51,18 +53,9 @@ $(document).on('bs.manage.detail', function () {
          };
          },*/
         render: {
-            option: function(item, escape) {
+            option: function (item, escape) {
                 return '<div>' +
-                    '<span class="title">' +
-                    '<span class="name"><i class="icon ' + (item.fork ? 'fork' : 'source') + '"></i>' + escape(item.name) + '</span>' +
-                    '<span class="by">' + escape(item.username) + '</span>' +
-                    '</span>' +
-                    '<span class="description">' + escape(item.description) + '</span>' +
-                    '<ul class="meta">' +
-                    (item.language ? '<li class="language">' + escape(item.language) + '</li>' : '') +
-                    '<li class="watchers"><span>' + escape(item.watchers) + '</span> watchers</li>' +
-                    '<li class="forks"><span>' + escape(item.forks) + '</span> forks</li>' +
-                    '</ul>' +
+                    escape(item.name) +
                     '</div>';
             }
         },
@@ -89,7 +82,9 @@ $(document).on('bs.manage.detail', function () {
     $(bsModal).find('table').addClass('table');
     $('#productDetailId').change(function () {
         var detName = $('#productDetailId option:selected').text();
-        $('#productDetailName').val(detName.substring(0, detName.indexOf('(')));
+
+        console.log(detName.substring(0, detName.indexOf('(')));
+        $('#productDetailName').val(detName);
     });
     if (result.cancelButtonLabel == null) {
         cancelButton.hide();
@@ -97,31 +92,31 @@ $(document).on('bs.manage.detail', function () {
         cancelButton.html(result.cancelButtonLabel);
     }
     bsModal.modal('show');
-    if (result.status == 'ok') {
-        okButton.html(result.okButtonLabel).off().on('click', function (e) {
-            var selected = $("#productDetailId").val();
-            var name = $("#productDetailName").val();
-            body.html(loader);
-            Pace.ignore(function () {
-                $.ajax({
-                    url: "/blueseal/xhr/DetailManager",
-                    type: "PUT",
-                    data: getVars + "&productDetailId=" + selected + "&productDetailName=" + name
-                }).done(function (content) {
-                    body.html("Modifica eseguita con successo");
-                }).fail(function () {
-                    body.html("Modifica non eseguita");
-                }).always(function () {
-                    okButton.html('Ok');
-                    okButton.off().on('click', function () {
-                        bsModal.modal('hide');
-                        dataTable.ajax.reload();
-                    });
+
+    okButton.html(result.okButtonLabel).off().on('click', function (e) {
+        var selected = $("#productDetailId").val();
+        var name = $("#productDetailName").val();
+        body.html(loader);
+        Pace.ignore(function () {
+            $.ajax({
+                url: "/blueseal/xhr/DetailManager",
+                type: "PUT",
+                data: getVars + "&productDetailId=" + selected + "&productDetailName=" + name
+            }).done(function (content) {
+                body.html("Modifica eseguita con successo");
+            }).fail(function () {
+                body.html("Modifica non eseguita");
+            }).always(function () {
+                okButton.html('Ok');
+                okButton.off().on('click', function () {
+                    bsModal.modal('hide');
+                    dataTable.ajax.reload();
                 });
             });
         });
-        bsModal.modal();
-    }
+    });
+    bsModal.modal();
+
 });
 
 

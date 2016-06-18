@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+use bamboo\core\utils\slugify\CSlugify;
 
 /**
  * Class CDetailManager
@@ -23,7 +24,7 @@ class CDetailManager extends AAjaxController
     {
         $search = $this->app->router->request()->getRequestData()['search'];
         //$repo = $this->app->repoFactory->create('ProductDetailTranslation',false);
-        $res = $this->app->dbAdapter->query("SELECT `productDetailId` as `id`, `name` FROM `ProductDetailTranslation` WHERE `langId` = 1 AND `name` like '%" . $search . "%' ORDER BY `name` LIMIT 10", [])->fetchAll();
+        $res = $this->app->dbAdapter->query("SELECT `productDetailId` as `id`, `name` FROM `ProductDetailTranslation` WHERE `langId` = 1 AND `name` like '%" . $search . "%' ORDER BY `name` LIMIT 30", [])->fetchAll();
         //$res = $repo->findBy(['name' => $search, 'langId' => 1], " LIMIT 10 ")->toArray();
         return json_encode($res);
         //$emDetails = $repo->findAll();
@@ -45,7 +46,7 @@ class CDetailManager extends AAjaxController
 
             $html .= '<option value="' . $detail->id . '" required>' . $detail->productDetailTranslation->findOneByKey('langId',1)->name . '('.implode(',',$langs).') </option>';
         $i++;
-        }*/
+        }
         $html .= "</select><br><br>";
         $html .= 'Inserisci il nuovo nome del dettaglio<br>';
         $html .= '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
@@ -57,7 +58,7 @@ class CDetailManager extends AAjaxController
                 'okButtonLabel' => 'Unisci',
                 'cancelButtonLabel' => 'Annulla'
             ]
-        );
+        );*/
     }
 
     /**
@@ -66,24 +67,26 @@ class CDetailManager extends AAjaxController
      */
     public function put()
     {
-        $datas = $this->app->router->request()->getRequestData();
+        $data = $this->app->router->request()->getRequestData();
 
-	    $productDetailId = $datas['productDetailId'];
-	    $productDetailName = $datas['productDetailName'];
+	    $productDetailId = $data['productDetailId'];
+	    $productDetailName = $data['productDetailName'];
 
-	    unset($datas['productDetailId']);
-	    unset($datas['productDetailName']);
+	    unset($data['productDetailId']);
+	    unset($data['productDetailName']);
 
         $ids = [];
         $this->app->dbAdapter->beginTransaction();
 
-        foreach ($datas as $key => $val) {
+        foreach ($data as $key => $val) {
 	        if($val == $productDetailId) continue;
             $ids[] = $val;
         }
 
 	    $productDetailPrimary = $this->app->repoFactory->create("ProductDetail")->findOneBy(['id' => $productDetailId]);
 	    $productDetailPrimary->productDetailTranslation->getFirst()->name = $productDetailName;
+        $slug = new CSlugify();
+        $productDetailPrimary->slug = $slug->slugify($productDetailName);
 	    $productDetailPrimary->productDetailTranslation->getFirst()->update();
 
         $em = $this->app->entityManagerFactory->create('ProductSheetActual');
