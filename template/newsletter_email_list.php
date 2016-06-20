@@ -23,19 +23,17 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="product_color_list"
-                               data-column-filter="true"
-                               data-controller="ProductColorListAjaxController"
+                               data-datatable-name="newsletter_email_list"
+                               data-controller="NewsletterEmailListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
-                                <th class="center">Codice</th>
-                                <th class="center">Colore</th>
-                                <th class="center">Gruppo Colore</th>
-                                <th class="centar">Colore Friend</th>
-                                <th class="center">Immagine</th>
-                                <th class="center">Categorie</th>
-                                <th class="center">Stato</th>
+                                <th class="center">Email</th>
+                                <th class="center">Attiva?</th>
+                                <th class="center">Nome</th>
+                                <th class="center">Cognome</th>
+                                <th class="center">Data iscrizione</th>
+                                <th class="center">Data disiscrizione</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -51,15 +49,35 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione Colori">
+    <bs-toolbar-group data-group-label="Gestione dettagli prodotto">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-paint-brush"
+            data-icon="fa-magic"
             data-permission="/admin/product/edit"
-            data-event="bs.manage.color"
+            data-event="bs.manage.detail"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Assegna Gruppo Colore"
+            data-title="Unisci dettagli"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-question-circle"
+            data-permission="/admin/product/edit"
+            data-event="bs.manage.detailproducts"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Visualizza Prodotti"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-exclamation-triangle"
+            data-permission="/admin/product/edit"
+            data-event="bs.manage.deletedetails"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Cancella i dettagli"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

@@ -10,24 +10,25 @@ $(document).on('bs.manage.detail', function () {
 
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();
+
     var selectedRowsCount = selectedRows.length;
 
     if (selectedRowsCount < 1) {
-	    new Alert({
-		    type: "warning",
-		    message: "Devi selezionare almeno un dettaglio da unire"
-	    }).open();
-	    return false;
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare almeno un dettaglio da unire"
+        }).open();
+        return false;
     }
 
     var i = 0;
+    var row = [];
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = rowId[0] + i + '=' + rowId[1];
+        row[i] = {};
+        row[i].id = v.DT_RowId.split('__')[1];
+        row[i].name = v.name;
         i++;
     });
-
-    var getVars = getVarsArray.join('&');
 
     var result = {
         status: "ko",
@@ -37,52 +38,86 @@ $(document).on('bs.manage.detail', function () {
     };
 
     header.html('Unione dettagli');
-
-    $.ajax({
-        url: "/blueseal/xhr/DetailManager",
-        type: "GET",
-        data: getVars
-    }).done(function (response) {
-        result = JSON.parse(response);
-        body.html(result.bodyMessage);
-        $(bsModal).find('table').addClass('table');
-        $('#productDetailId').change(function(){
-            var detName = $('#productDetailId option:selected').text();
-            $('#productDetailName').val(detName.substring(0, detName.indexOf('(')));
-        });
-        if (result.cancelButtonLabel == null) {
-            cancelButton.hide();
-        } else {
-            cancelButton.html(result.cancelButtonLabel);
-        }
-        bsModal.modal('show');
-        if (result.status == 'ok') {
-            okButton.html(result.okButtonLabel).off().on('click', function (e) {
-                var selected = $("#productDetailId").val();
-                var name = $("#productDetailName").val();
-                body.html(loader);
-	            Pace.ignore(function () {
-		            $.ajax({
-			            url: "/blueseal/xhr/DetailManager",
-			            type: "PUT",
-			            data: getVars + "&productDetailId=" + selected + "&productDetailName=" + name
-		            }).done(function (content) {
-			            body.html("Modifica eseguita con successo");
-		            }).fail(function () {
-			            body.html("Modifica non eseguita");
-		            }).always(function () {
-			            okButton.html('Ok');
-			            okButton.off().on('click', function () {
-				            bsModal.modal('hide');
-				            dataTable.ajax.reload();
-			            });
-		            });
-	            });
+    var bodyContent = '<div style="min-height: 250px"><select class="full-width" placehoder="Seleziona il dettaglio da tenere" name="productDetailId" id="productDetailId"><option value=""></option></select></div>';
+    bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
+    bodyContent += '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
+    body.html(bodyContent);
+    $('#productDetailId').selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        options: row,
+        create: false,
+        /*score: function(search) {
+         var score = this.getScoreFunction(search);
+         return function(item) {
+         return score(item) * (1 + Math.min(item.watchers / 100, 1));
+         };
+         },*/
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    escape(item.name) +
+                    '</div>';
+            }
+        },
+        load: function (query, callback) {
+            if (3 > query.length) {
+                return callback();
+            }
+            $.ajax({
+                url: '/blueseal/xhr/DetailManager',
+                type: 'GET',
+                data: "search=" + query,
+                dataType: 'json',
+                error: function () {
+                    callback();
+                },
+                success: function (res) {
+                    callback(res);
+                }
             });
-            bsModal.modal();
         }
     });
+    $('#productDetailId').selectize()[0].selectize.setValue(row[0].id);
+
+    $(bsModal).find('table').addClass('table');
+    $('#productDetailId').change(function () {
+        var detName = $('#productDetailId option:selected').text();
+
+        $('#productDetailName').val(detName);
+    });
+    cancelButton.html("Annulla");
+    cancelButton.show();
+
+    bsModal.modal('show');
+
+    okButton.html(result.okButtonLabel).off().on('click', function (e) {
+        var selected = $("#productDetailId").val();
+        var name = $("#productDetailName").val();
+        body.html(loader);
+        Pace.ignore(function () {
+            $.ajax({
+                url: "/blueseal/xhr/DetailManager",
+                type: "PUT",
+                data: getVars + "&productDetailId=" + selected + "&productDetailName=" + name
+            }).done(function (content) {
+                body.html("Modifica eseguita con successo");
+            }).fail(function () {
+                body.html("Modifica non eseguita");
+            }).always(function () {
+                okButton.html('Ok');
+                okButton.off().on('click', function () {
+                    bsModal.modal('hide');
+                    dataTable.ajax.reload();
+                });
+            });
+        });
+    });
+    bsModal.modal();
+
 });
+
 
 $(document).on('bs.manage.detailproducts', function () {
     var bsModal = $('#bsModal');
@@ -151,7 +186,6 @@ $(document).on('bs.manage.deletedetails', function () {
     var okButton = $('.modal-footer .btn-success');
 
 
-
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();
     var selectedRowsCount = selectedRows.length;
@@ -165,7 +199,6 @@ $(document).on('bs.manage.deletedetails', function () {
 
     var getVars = getVarsArray.join('&');
 
-    console.log(getVars);
     header.html('Cancellazione dei dettagli');
 
 
@@ -175,50 +208,50 @@ $(document).on('bs.manage.deletedetails', function () {
             "Continuare?</p>");
         bsModal.modal();
         cancelButton.html("Non cancellare nulla").show();
-        okButton.html("Cancella").off().on("click", function(){
+        okButton.html("Cancella").off().on("click", function () {
             $.ajax({
                 url: "/blueseal/xhr/ProductListAjaxDetail",
                 type: "DELETE"
             }).done(function (response) {
                 body.html(response);
                 cancelButton.hide();
-                okButton.html("Fatto").off().show().on("click", function(){
+                okButton.html("Fatto").off().show().on("click", function () {
                     bsModal.modal("hide");
                 });
             });
         });
     } else {
-            $.ajax({
-                url: "/blueseal/xhr/ProductListAjaxDetail",
-                type: "GET",
-                data: getVars
-            }).done(function (response) {
-                body.html("<p>Numero prodotti selezionati: " + selectedRowsCount + "</p><p>I dettagli selezionati sono associati ai seguenti prodotti:</p><p>" +
-                    response +
-                    "<p>L'azione non è reversibile.<br />" +
-                    "Continuare?</p>");
-                bsModal.modal();
-                cancelButton.html("Non cancellare nulla").show();
-                okButton.html('Cancella').off().on('click', function() {
-                    okButton.off();
-                    $.ajax({
-                        url: "/blueseal/xhr/ProductListAjaxDetail",
-                        type: "DELETE",
-                        data: getVars
-                    }).done(function (response) {
-                        header.html('Cancellazione Dettagli');
-                        body.html(response);
-                        okButton.html('Fatto').off().on('click', function () {
-                            okButton.off();
-                            bsModal.modal("hide");
-                        });
-                        cancelButton.hide();
-                        if (0 > response.search("OOPS")) {
-                            $('table[data-datatable-name="product_detail_list"]').DataTable().draw();
-                        }
+        $.ajax({
+            url: "/blueseal/xhr/ProductListAjaxDetail",
+            type: "GET",
+            data: getVars
+        }).done(function (response) {
+            body.html("<p>Numero prodotti selezionati: " + selectedRowsCount + "</p><p>I dettagli selezionati sono associati ai seguenti prodotti:</p><p>" +
+                response +
+                "<p>L'azione non è reversibile.<br />" +
+                "Continuare?</p>");
+            bsModal.modal();
+            cancelButton.html("Non cancellare nulla").show();
+            okButton.html('Cancella').off().on('click', function () {
+                okButton.off();
+                $.ajax({
+                    url: "/blueseal/xhr/ProductListAjaxDetail",
+                    type: "DELETE",
+                    data: getVars
+                }).done(function (response) {
+                    header.html('Cancellazione Dettagli');
+                    body.html(response);
+                    okButton.html('Fatto').off().on('click', function () {
+                        okButton.off();
+                        bsModal.modal("hide");
                     });
+                    cancelButton.hide();
+                    if (0 > response.search("OOPS")) {
+                        $('table[data-datatable-name="product_detail_list"]').DataTable().draw();
+                    }
                 });
             });
+        });
 
 
     }
@@ -226,7 +259,6 @@ $(document).on('bs.manage.deletedetails', function () {
         bsModal.modal('hide');
         cancelButton.off();
     });
-
 
 
 });

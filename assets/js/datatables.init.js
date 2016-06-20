@@ -99,11 +99,21 @@
 		columns: [
 			{
 				data: "code",
-				orderable: true
+				orderable: true,
+                searchable: true
 			}, {
 				data: "shop",
 				orderable: true
-			}, {
+			},{
+				data: "colorGroup",
+				orderable: true,
+				searchable: true
+			},
+			{
+				data: "season",
+				orderable: true,
+				searchable: true
+			},{
 				data: "externalId",
 				orderable: true
 			}, {
@@ -284,11 +294,11 @@
 			}, {
 				data: "colorName",
 				orderable: true,
-				searchable: false
+				searchable: true
 			}, {
 				data: "colorGroupName",
 				orderable: true,
-				searchable: false
+				searchable: true
 			}, {
 				data: "var",
 				orderable: true,
@@ -305,6 +315,39 @@
 				data: "stato",
 				orderable: false,
 				searchable: false
+			}
+		],
+		lengthMenu: [100, 200, 500, 1000, 2000],
+		displayLength: 200
+	});
+	tableSetup.newsletter_email_list = $.extend({}, tableSetup.common, {
+		order: [[4, "desc"]],
+		columns: [
+			{
+				data: "email",
+				orderable: true,
+				searchable: true
+
+			}, {
+                data: "isActive",
+                orderable: true,
+                searchable: true
+            },{
+                data: "name",
+                orderable: true,
+                searchable: true
+            },{
+                data: "surname",
+                orderable: true,
+                searchable: true
+            }, {
+				data: "subscriptionDate",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "unsubscriptionDate",
+				orderable: true,
+				searchable: true
 			}
 		],
 		lengthMenu: [100, 200, 500, 1000, 2000],
@@ -974,9 +1017,10 @@
 			);
 
 			$('[data-init-plugin=selectize]').each(function () {
+				var self = this;
 				$(this).selectize({
 					create: false,
-					dropdownDirection: 'auto'
+					dropdownDirection: 'auto',
 				});
 				$('.selectize-dropdown-content').scrollbar();
 			});

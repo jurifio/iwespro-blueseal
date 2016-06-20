@@ -3,13 +3,17 @@
         <div class="tab-content bg-white">
             <?php foreach ($productSheetPrototype->productDetailLabel as $detaillabel): ?>
                 <div class="col-md-6">
-                    <div class="form-group form-group-default">
+                    <div class="form-group form-group-default selectize-enabled">
                         <label for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>
-                        <input autocomplete="off" type="text"
-                               class="form-control"
-                               id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
-                               name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
-                               value=""/>
+                        <select type="text"
+                                class="full-width"
+                                data-init-plugin = "selectize"
+                                data-init-selection = ""
+                                id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                value="">
+                            <option></option>
+                        </select>
                     </div>
                 </div>
                 <?php  endforeach; ?>

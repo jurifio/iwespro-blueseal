@@ -420,7 +420,8 @@ body.sidebar-visible .sidebar-logo {
 }
 
 .selectize-dropdown {
-    border: 1px solid rgba(0, 0, 0, 0.07) !important;
+    border: 1px solid rgb(240, 240, 240) !important;
+    background-color: white !important;
 }
 
 /**

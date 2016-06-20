@@ -19,6 +19,8 @@ $(document).on('bs.manage.color', function () {
         return false;
     }
 
+    header.html("Modifica Gruppo Colore");
+
     var i = 0;
 
     $.each(selectedRows, function (k, v) {
@@ -51,6 +53,7 @@ $(document).on('bs.manage.color', function () {
                     body.html(response);
                     okButton.html("Ok").off().on('click', function() {
                         bsModal.modal("hide");
+                        dataTable.search("").draw();
                     });
                 });
             }

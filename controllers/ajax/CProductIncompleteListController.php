@@ -148,39 +148,8 @@ class CProductIncompleteListController extends AAjaxController
 
         return '<ul style="padding:0;margin:0;list-style-type:decimal-leading-zero"><li>'.implode('</li><li>',$problems).'</ul>';
     }
-
-    /*public function orderBy(){
-        $dtOrderingColumns = $_GET['order'];
-        $dbOrderingColumns = [
-            ['column'=>'vProductShopView.itemno'],
-            ['column'=>'vProductShopView.shopId'],
-            ['column'=>'vProductShopView.externalId'],
-            ['column'=>null],
-            ['column'=>'vProductShopView.productBrandId'],
-            ['column'=>null],
-            ['column'=>'vProductShopView.status'],
-            ['column'=>'vProductShopView.creationDate']
-        ];
-        $dbOrderingDefault = [
-            ['column'=>'vProductShopView.creationDate','dir'=>'desc']
-        ];
-
-        $sqlOrder = " ORDER BY ";
-        foreach ($dtOrderingColumns as $column) {
-            if (isset($dbOrderingColumns[$column['column']]) && $dbOrderingColumns[$column['column']]['column'] !== null) {
-                $sqlOrder .= $dbOrderingColumns[$column['column']]['column']." ".$column['dir'].", ";
-            }
-        }
-        if (substr($sqlOrder,-1,2) != ', ') {
-            foreach($dbOrderingDefault as $column) {
-                $sqlOrder .= $column['column'].' '.$column['dir'].', ';
-            }
-        }
-        return rtrim($sqlOrder,', ');
-    }
-*/
     public function post(){
-        throw new \Exception();
+        
     }
     
     public function delete(){

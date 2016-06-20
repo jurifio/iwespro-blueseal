@@ -63,7 +63,7 @@ class CProductColorListAjaxController extends AAjaxController
 				$response['data'][$i]["DT_RowId"] = 'row__' . $v->id;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
                 $response['data'][$i]['code'] = '<a href="/blueseal/prodotti/modifica?id=' . $v->id . '&productVariantId=' .$v->productVariantId .'">' . $v->id . '-' . $v->productVariantId . '</a>';
-				$response['data'][$i]['colorName'] = $v->productVariant->name;
+				$response['data'][$i]['colorName'] = $v->productVariant->description;
                 $colorGroupCollection = $v->productColorGroup->findOneByKey("langId", 1);
 				$response['data'][$i]['colorGroupName'] = ($colorGroupCollection) ? $colorGroupCollection->name : '-';
                 $dummyPic = ($v->dummyPicture) ? $v->dummyPicture : "bs-dummy-16-9.png";

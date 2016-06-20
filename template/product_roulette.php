@@ -226,7 +226,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div style="display:none" id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>
                                     <div class="row" id="productDetails">
                                         <div class="col-md-12">
                                             <?php if (isset($productEdit) && !is_null($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
@@ -237,16 +237,21 @@
                                                                 <label for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>
                                                                 <?php if (isset($productEdit) && !is_null($productEdit->productSheetActual)) {
                                                                     $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $detaillabel->id);
+                                                                    $detailValueId = 0;
                                                                     if ($actual) {
-                                                                        $detailValue = $actual->productDetail->productDetailTranslation->getFirst()->name;
+                                                                        $detailValueId = $actual->productDetail->id;
                                                                     }
+
                                                                 }
                                                                 ?>
-                                                                <input autocomplete="off" type="text"
-                                                                       class="form-control"
-                                                                       id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
-                                                                       name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
-                                                                       value="<?php echo isset($detailValue) ? $detailValue : "" ?>"/>
+                                                                <select class="full-width"
+                                                                        data-init-plugin = "selectize"
+                                                                        data-init-selection = "<?php echo $detailValueId; ?>"
+                                                                        id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                                                        name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                                                >
+
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <?php unset($detailValue); endforeach; ?>
@@ -359,6 +364,28 @@
             data-title="Hide"
             data-placement="bottom"
             ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione dettagli">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-eraser"
+            data-permission="/admin/product/add"
+            data-event="bs.det.erase"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Vuota i dettagli"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-plus-square"
+            data-permission="/admin/product/edit"
+            data-event="bs.det.add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi un nuovo dettaglio"
+            data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Stato del prodotto">
         <bs-toolbar-select

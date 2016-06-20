@@ -84,6 +84,7 @@ $(document).on('bs.product.add', function (e,element,button) {
         window.location.reload();
     }).fail(function(content,a,b,c){
 	    try {
+            console.log(content);
 		    var jhon = $.parseJSON(content);
 		    body.html('<span>Prodotto, esistente, vuoi fondere questo prodotto a quello presente?</span></br><a target="_blank" href="' + jhon.url + '" > Prodotto </a>');
 		    cancelButton.on('click', function(){
@@ -195,7 +196,94 @@ var autocompleteDetail = function(){
     });
 };
 
+
+$(document).on('bs.det.erase', function(e){
+    e.preventDefault();
+    $("#productDetails").find('select').each(function(){
+        $(this)[0].selectize.setValue(0);
+    });
+    $("#ProductName_1_name").val("");
+    $(".note-editable").html("");
+});
+
+$(document).on('bs.det.add', function (e) {
+    e.preventDefault();
+
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+    //new Cslugify
+    header.html('Aggiungi dettaglio');
+    body.html(
+        '<div class="alert alert-danger modal-alert" style="display: none">Il campo <strong>Italiano</strong> è obbligatorio</div>' +
+        '<form id="detailAdd"><div class="form-group">' +
+        '<label>Italiano*</label>' +
+        '<input type="text" class="form-control new-dett-ita" name="newDettIta" />' +
+        '</div></form>'
+    );
+    cancelButton.html("Annulla").off().on('click', function(){
+        bsModal.hide();
+    });
+    bsModal.modal('show');
+    okButton.html('Inserisci').off().on('click', function(){
+        console.log($('.new-dett-ita').val());
+        if ('' === $('.new-dett-ita').val()) {
+            $('.modal-alert').css('display', 'block');
+        } else {
+            $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "/blueseal/xhr/ProductDetailAddNewAjaxController",
+                    data: {
+                        name: $('.new-dett-ita').val()
+                    }
+                }
+            ).done( function(result) {
+                var res = result.split("-");
+                body.html(res[0]);
+                cancelButton.hide();
+                okButton.html('Ok').off().on('click', function () {
+                    bsModal.modal('hide');
+                    console.log("ciao");
+                    window.location.reload();
+                });
+            });
+        }
+    });
+});
+
 $(document).ready(function() {
+
+    if(window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
+        try{
+            window.detailsStorage = [];
+            var temp = JSON.parse($("#productDetailsStorage").html());
+            $.each(temp,function(k,v) {
+                window.detailsStorage.push({
+                    item : v,
+                    id : k
+                });
+            });
+        } catch(e) {
+
+        }
+    }
+
+    $("#productDetails").find('select').each(function() {
+        var sel = $(this).selectize({
+            valueField: 'id',
+            labelField: 'item',
+            searchField: ['item'],
+            options: window.detailsStorage
+        });
+        var initVal = $(this).data('init-selection');
+        if(initVal != 'undefined' && initVal.lenght != 0) {
+            sel[0].selectize.setValue(initVal, true);
+        }
+    });
 
     autocompleteDetail();
 
@@ -207,8 +295,22 @@ $(document).ready(function() {
         }).done(function ($content) {
             $("#productDetails").html($content);
             autocompleteDetail();
+
+            $("#productDetails").find('select').each(function() {
+                var sel = $(this).selectize({
+                    valueField: 'id',
+                    labelField: 'item',
+                    searchField: ['item'],
+                    options: window.detailsStorage
+                });
+                var initVal = $(this).data('init-selection');
+                if(initVal != 'undefined' && initVal.lenght != 0) {
+                    sel[0].selectize.setValue(initVal, true);
+                }
+            });
         });
     });
+
 
     var tagNames = $("#Tag_names");
     if (tagNames.length) {

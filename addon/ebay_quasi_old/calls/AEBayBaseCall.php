@@ -70,4 +70,9 @@ abstract class AEBayBaseCall
 	{
 		// TODO: Implement digestResponse() method.
 	}
+
+	/**
+	 *
+	 */
+
 }

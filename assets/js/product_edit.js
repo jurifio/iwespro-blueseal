@@ -171,13 +171,14 @@ $(document).on('bs.print.aztec', function (e, element, button) {
 
 var autocompleteDetail = function(){
 
-    $.each($('input[id^="ProductDetail_"]'),function() {
+    $.each($('select[id^="ProductDetail_"]'),function() {
+        console.log($(this)[0].id);
         var me = $(this);
         me.autocomplete({
             source: function(request, response) {
                 var asd = $(this)[0].element[0].id;
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     async: false,
                     url: "/blueseal/xhr/GetAutocompleteData",
                     data: { value: asd }
@@ -193,6 +194,101 @@ var autocompleteDetail = function(){
     });
 };
 
+if(window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
+    try{
+        window.detailsStorage = [];
+        var temp = JSON.parse($("#productDetailsStorage").html());
+        $.each(temp,function(k,v) {
+            window.detailsStorage.push({
+                item : v,
+                id : k
+            });
+        });
+        window.detailsStorage.push({
+            item: '-',
+            id: 0
+        });
+    } catch(e) {
+
+    }
+}
+
+$("#productDetails").find('select').each(function() {
+
+	var sel = $(this).selectize({
+		valueField: 'id',
+		labelField: 'item',
+		searchField: ['item'],
+		options: window.detailsStorage
+	});
+  var initVal = $(this).data('init-selection');
+    if(initVal != 'undefined' && initVal.lenght != 0) {
+        sel[0].selectize.setValue(initVal, true);
+    }  else {
+        sel[0].selectize.setValue(0, true);
+    }
+});
+
+//Cancellazione campi dettagli
+
+$(document).on('bs.det.erase', function(e){
+   e.preventDefault();
+    $("#productDetails").find('select').each(function(){
+        $(this)[0].selectize.setValue(0);
+    });
+    $("#ProductName_1_name").val("");
+    $(".note-editable").html("");
+});
+
+$(document).on('bs.det.add', function (e) {
+    e.preventDefault();
+
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+    //new Cslugify
+    header.html('Aggiungi dettaglio');
+    body.html(
+        '<div class="alert alert-danger modal-alert" style="display: none">Il campo <strong>Italiano</strong> è obbligatorio</div>' +
+        '<form id="detailAdd"><div class="form-group">' +
+            '<label>Italiano*</label>' +
+            '<input type="text" class="form-control new-dett-ita" name="newDettIta" />' +
+        '</div></form>'
+    );
+    cancelButton.html("Annulla").off().on('click', function(){
+        bsModal.hide();
+    });
+    bsModal.modal('show');
+     okButton.html('Inserisci').off().on('click', function(){
+         if ('' === $('.new-dett-ita').val()) {
+             $('.modal-alert').css('display', 'block');
+         } else {
+            $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "/blueseal/xhr/ProductDetailAddNewAjaxController",
+                    data: {
+                        name: $('.new-dett-ita').val()
+                    }
+                }
+            ).done( function(result) {
+                var res = result.split("-");
+                body.html(res[0]);
+                cancelButton.hide();
+                okButton.html('Ok').off().on('click', function () {
+                    bsModal.modal('hide');
+                    window.location.reload();
+                });
+            });
+             return false;
+         }
+     });
+});
+
+
 $(document).ready(function() {
 
     autocompleteDetail();
@@ -205,6 +301,21 @@ $(document).ready(function() {
         }).done(function ($content) {
             $("#productDetails").html($content);
             autocompleteDetail();
+
+            $("#productDetails").find('select').each(function() {
+                var sel = $(this).selectize({
+                    valueField: 'id',
+                    labelField: 'item',
+                    searchField: ['item'],
+                    options: window.detailsStorage
+                });
+                var initVal = $(this).data('init-selection');
+                if(initVal != 'undefined' && initVal.lenght != 0) {
+                    sel[0].selectize.setValue(initVal, true);
+                } else {
+                    sel[0].selectize.setValue(0, true);
+                }
+            });
         });
     });
 
@@ -270,3 +381,18 @@ $(document).ready(function() {
         });
     }
 });
+// detailDatas = [];
+//
+// var data = [ "option 1", "option 2", "option 3" ];
+// var items = data.map(function(x) { return { detail: x }; });
+// console.log(items);
+// $('.details-form').each( function(){
+//     $(this).selectize({
+//         delimiter: ',',
+//         persist: false,
+//         maxItems: 1,
+//         options: items,
+//         labelField: "detail",
+//         valueField: "detail"
+//     });
+// });

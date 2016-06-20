@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
+use bamboo\core\utils\slugify\CSlugify;
 use bamboo\domain\entities\CShop;
 use bamboo\domain\repositories\CProductHistoryRepo;
 use bamboo\ecommerce\views\VBase;
@@ -74,6 +75,17 @@ class CProductRouletteController extends CProductManageController
 
 		$em = $this->app->entityManagerFactory->create('ProductStatus');
 		$productStatuses = $em->findAll('limit 99', '');
+
+
+		$productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
+		$productDetails = [];
+		foreach ($productDetailsCollection as $detail) {
+			try {
+				$productDetails[$detail->productDetailId] = $detail->name;
+			} catch(\Exception $e) {
+
+			}
+		}
 
 		$statuses = [];
 		$statuses['selected'] = 2;
@@ -208,7 +220,8 @@ class CProductRouletteController extends CProductManageController
             'productSheets' => $productSheets,
             'detailsGroups' => $detailsGroups,
             'page' => $this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+			'productDetails' => $productDetails
         ]);
     }
 
@@ -252,6 +265,7 @@ class CProductRouletteController extends CProductManageController
 	 */
 	public function post()
 	{
+		$slugify = new CSlugify();
 		$fileFolder = $this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
 		$post = $this->app->router->request()->getRequestData();
 		$files = $this->app->router->request()->getFiles();
@@ -420,21 +434,39 @@ class CProductRouletteController extends CProductManageController
 			}
 
 			/** INSERIMENTO DETTAGLI PRODOTTO */
-			if ($this->isValidInput('Product_dataSheet', $post)) {
-				//$productNew->sheetName = $post['Product_dataSheet'];
+			if ($this->isValidInput("Product_dataSheet", $post)) {
+				$detailRepo = $this->app->repoFactory->create('ProductDetail');
+				$detailTranslationRepo = $this->app->repoFactory->create('ProductDetailTranslation');
+				$productSheetActualRepo = $this->app->repoFactory->create('ProductSheetActual');
+				/** INSERIMENTO DETTAGLI PRODOTTO */
+
+				$productNew->productSheetPrototypeId = $post['Product_dataSheet'];
+				$productNew->update();
+
 				foreach ($post as $key => $input) {
 					$inputName = explode('_', $key);
 					if ($inputName[0] != 'ProductDetail') continue;
-					$attrbuteValue = $this->app->dbAdapter->select('ProductAttributeValue', ['langId' => $inputName[1], 'productAttributeId' => $inputName[2], 'name' => trim($input)])->fetchAll();
-					if (count($attrbuteValue) == 0) {
-						$this->app->dbAdapter->insert('ProductAttributeValue', ['langId' => $inputName[1], 'productAttributeId' => $inputName[2], 'name' => trim($input)]);
-						$attrbuteValue = $this->app->dbAdapter->select('ProductAttributeValue', ['langId' => $inputName[1], 'productAttributeId' => $inputName[2], 'name' => trim($input)])->fetchAll();
+					/** cerco il valore del dettaglio $detail */
+					$detail = $detailRepo->findOneBy(['slug' => $slugify->slugify($input)]);
+					if (is_null($detail)) {
+						$detail = $detailRepo->getEmptyEntity();
+						$detail->slug = $slugify->slugify($input);
+						$detail->id = $detail->insert();
+						$detailTranslation = $detailTranslationRepo->getEmptyEntity();
+						$detailTranslation->productDetailId = $detail->id;
+						$detailTranslation->name = $input;
+						$detailTranslation->langId = $inputName[1];
+						$detailTranslation->insert();
 					}
-					$insertData = $productIdsExt;
-					$insertData['productAttributeId'] = $inputName[2];
-					$insertData['productAttributeValueId'] = $attrbuteValue[0]['id'];
 
-					$this->app->dbAdapter->insert("ProductHasProductAttributeValue", $insertData);
+					/** non esiste, lo aggiungo */
+					$actual = $productSheetActualRepo->getEmptyEntity();
+					$actual->productId = $productNew->id;
+					$actual->productVariantId = $productNew->productVariantId;
+					$actual->productDetailLabelId = $inputName[2];
+					$actual->productDetailId = $detail->id;
+					$actual->insert();
+
 				}
 			}
 

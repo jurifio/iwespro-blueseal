@@ -18,7 +18,7 @@ use bamboo\core\intl\CLang;
  * @date $date
  * @since 1.0
  */
-class CProductDetailListAjaxController extends AAjaxController
+class CNewsletterEmailListAjaxController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
@@ -36,18 +36,19 @@ class CProductDetailListAjaxController extends AAjaxController
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
 
         $this->em = new \stdClass();
-        $this->em->productsDetail = $this->app->entityManagerFactory->create('ProductDetail');
+        $this->em->newsletter = $this->app->entityManagerFactory->create('newsletter');
 
         return $this->{$action}();
     }
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductDetailList',['id'],$_GET);
+        $datatable = new CDataTables('vBluesealNewsletterEmailList',['id'],$_GET);
+        $users = $this->app->repoFactory->create('User');
 
-        $productsDetail = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $newsletter = $this->app->repoFactory->create('Newsletter')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = $this->em->newsletter->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->em->newsletter->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
 
         $response = [];
@@ -58,21 +59,19 @@ class CProductDetailListAjaxController extends AAjaxController
 
         $i = 0;
 
-        foreach($productsDetail as $val){
+        foreach($newsletter as $val){
+            \BlueSeal::dump($val);
+            $user = $users->findOneBy(["email" => $val->email]);
+            \BlueSeal::dump($user);
 			try {
-				$response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
+				$response['data'][$i]["DT_RowId"] = 'row__' . $val->email;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
-				$response['data'][$i]['slug'] = $val->slug;
-				$response['data'][$i]['name'] = $val->productDetailTranslation->getFirst()->name;
-                $response['data'][$i]['name'] .= " (";
-                $dt = $this->app->repoFactory->create('productDetailTranslation')->findBy(['productDetailId' => $val->id]);
-                $lang = [];
-                foreach ($dt as $vt) {
-                    $rLang = $this->app->repoFactory->create('Lang')->findOneBy(['id' => $vt->langId]);
-                    $lang[] = $rLang->lang;
-                }
-                $response['data'][$i]['name'] .= implode(',', $lang);
-                $response['data'][$i]['name'] .= ')';
+				$response['data'][$i]['email'] = $val->email;
+				$response['data'][$i]['name'] = ($user) ? $user->name : '-';
+                $response['data'][$i]['surname'] = ($user) ? $user->surname : `-`;
+                $response['data'][$i]['isActive'] = ($val->isActive) ? "Attiva" : "Non Attiva";
+                $response['data'][$i]['subscriptionDate'] = ($val->subscriptionDate) ? $val->subscriptionDate : "-";
+                $response['data'][$i]['unsubscriptionDate'] = ($val->unsubscriptionDate) ? $val->unsubscriptionDate : "-";
 				$i++;
 			} catch (\Exception $e) {
 				throw $e;

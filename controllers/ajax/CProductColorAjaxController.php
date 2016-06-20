@@ -47,7 +47,7 @@ class CProductColorAjaxController extends AAjaxController
     {
         $pcg = $this->app->repoFactory->create('ProductColorGroup')->findBy(['langId' => 1], '', 'order by name');
 
-        $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo taglie</option>';
+        $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo colore</option>';
         foreach($pcg as $v) {
             $ret .= '<option value="' . $v->id . '">' . $v->name . '</option>';
         }
