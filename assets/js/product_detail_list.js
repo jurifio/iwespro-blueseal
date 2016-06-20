@@ -81,6 +81,9 @@ $(document).on('bs.manage.detail', function () {
     });
     $('#productDetailId').selectize()[0].selectize.setValue(row[0].id);
 
+    var detName = $('#productDetailId option:selected').text();
+    $('#productDetailName').val(detName);
+
     $(bsModal).find('table').addClass('table');
     $('#productDetailId').change(function () {
         var detName = $('#productDetailId option:selected').text();
