@@ -138,6 +138,10 @@
 				data: "status",
 				orderable: true
 			}, {
+				data: "available",
+				orderable: true,
+				searchable: true
+			}, {
 				data: "creationDate",
 				orderable: true
 			}
