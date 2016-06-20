@@ -140,6 +140,12 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['category'] = implode(',<br/>',$cats);
             $response['data'][$i]['tag'] = implode(',',$tags);
             $response['data'][$i]['status'] = $val->productStatus->name;
+
+            $qty=0;
+            foreach ($val->productSku as $sku) {
+                $qty += $sku->stockQty;
+            }
+            $response['data'][$i]['available'] = ($qty) ? 'disponibile' : 'non disponibile' ;
             $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
 
             $i++;

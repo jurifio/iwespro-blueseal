@@ -138,6 +138,10 @@
 				data: "status",
 				orderable: true
 			}, {
+				data: "available",
+				orderable: true,
+				searchable: true
+			}, {
 				data: "creationDate",
 				orderable: true
 			}
@@ -258,6 +262,22 @@
 				orderable: true,
 				searchable: false
 
+			}, {
+				data: "name",
+				orderable: true,
+				searchable: true
+			}
+		],
+		lengthMenu: [100, 200, 500, 1000, 2000, 3000, 5000],
+		displayLength: 2000
+	});
+	tableSetup.product_names_list = $.extend({}, tableSetup.common, {
+		order: [[1, "asc"]],
+		columns: [
+			{
+				data: "slug",
+				orderable: true,
+				searchable: false
 			}, {
 				data: "name",
 				orderable: true,
