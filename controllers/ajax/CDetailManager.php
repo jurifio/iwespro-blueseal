@@ -25,6 +25,19 @@ class CDetailManager extends AAjaxController
         $search = $this->app->router->request()->getRequestData()['search'];
         //$repo = $this->app->repoFactory->create('ProductDetailTranslation',false);
         $res = $this->app->dbAdapter->query("SELECT `productDetailId` as `id`, `name` FROM `ProductDetailTranslation` WHERE `langId` = 1 AND `name` like '%" . $search . "%' ORDER BY `name` LIMIT 30", [])->fetchAll();
+
+
+        foreach ($res as $k => $v) {
+            $res[$k]['name'] .= " (";
+            $dt = $this->app->repoFactory->create('productDetailTranslation')->findBy(['productDetailId' => $v['id']]);
+            $lang = [];
+            foreach ($dt as $vt) {
+                $rLang = $this->app->repoFactory->create('Lang')->findOneBy(['id' => $vt->langId]);
+                $lang[] = $rLang->lang;
+            }
+            $res[$k]['name'] .= implode(',', $lang);
+            $res[$k]['name'] .= ')';
+        }
         //$res = $repo->findBy(['name' => $search, 'langId' => 1], " LIMIT 10 ")->toArray();
         return json_encode($res);
         //$emDetails = $repo->findAll();

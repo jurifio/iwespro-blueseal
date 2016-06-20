@@ -64,6 +64,15 @@ class CProductDetailListAjaxController extends AAjaxController
 				$response['data'][$i]["DT_RowClass"] = 'colore';
 				$response['data'][$i]['slug'] = $val->slug;
 				$response['data'][$i]['name'] = $val->productDetailTranslation->getFirst()->name;
+                $response['data'][$i]['name'] .= " (";
+                $dt = $this->app->repoFactory->create('productDetailTranslation')->findBy(['productDetailId' => $val->id]);
+                $lang = [];
+                foreach ($dt as $vt) {
+                    $rLang = $this->app->repoFactory->create('Lang')->findOneBy(['id' => $vt->langId]);
+                    $lang[] = $rLang->lang;
+                }
+                $response['data'][$i]['name'] .= implode(',', $lang);
+                $response['data'][$i]['name'] .= ')';
 				$i++;
 			} catch (\Exception $e) {
 				throw $e;

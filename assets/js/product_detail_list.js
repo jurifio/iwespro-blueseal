@@ -10,7 +10,7 @@ $(document).on('bs.manage.detail', function () {
 
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();
-    console.log(selectedRows);
+
     var selectedRowsCount = selectedRows.length;
 
     if (selectedRowsCount < 1) {
@@ -74,7 +74,6 @@ $(document).on('bs.manage.detail', function () {
                     callback();
                 },
                 success: function (res) {
-                    console.log(res)
                     callback(res);
                 }
             });
@@ -86,7 +85,6 @@ $(document).on('bs.manage.detail', function () {
     $('#productDetailId').change(function () {
         var detName = $('#productDetailId option:selected').text();
 
-        console.log(detName.substring(0, detName.indexOf('(')));
         $('#productDetailName').val(detName);
     });
     cancelButton.html("Annulla");
@@ -201,7 +199,6 @@ $(document).on('bs.manage.deletedetails', function () {
 
     var getVars = getVarsArray.join('&');
 
-    console.log(getVars);
     header.html('Cancellazione dei dettagli');
 
 
