@@ -62,6 +62,7 @@ class CDetailManager extends AAjaxController
 
         foreach ($data as $key => $val) {
 	        if($val == $productDetailId) continue;
+            if($val == $productDetailName) continue;
             $ids[] = $val;
         }
 

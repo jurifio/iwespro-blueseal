@@ -23,11 +23,13 @@ $(document).on('bs.manage.detail', function () {
 
     var i = 0;
     var row = [];
+    var getVars = '';
     $.each(selectedRows, function (k, v) {
         row[i] = {};
         row[i].id = v.DT_RowId.split('__')[1];
         row[i].name = v.name;
         i++;
+        getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
 
     var result = {
@@ -103,7 +105,7 @@ $(document).on('bs.manage.detail', function () {
             $.ajax({
                 url: "/blueseal/xhr/DetailManager",
                 type: "PUT",
-                data: getVars + "&productDetailId=" + selected + "&productDetailName=" + name
+                data: getVars + "productDetailId=" + selected + "&productDetailName=" + name
             }).done(function (content) {
                 body.html("Modifica eseguita con successo");
             }).fail(function () {
