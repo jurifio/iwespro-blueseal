@@ -53,7 +53,7 @@ class CCleanOrders extends ACronJob
     public function deleteCarts()
     {
         $time = 2592000; //seconds to 1 month
-        $query = "SELECT *
+        $query = "SELECT id
                   FROM `Order` o
                   where o.`status` like 'CRT%' and ( lastUpdate < ? or ( lastUpdate is null and creationDate < ?)) LIMIT 1000";
         $timestamp = date('Y-m-d H:i:s',( time() - $time));
