@@ -146,6 +146,7 @@ class CProductListAjaxController extends AAjaxController
                 $qty += $sku->stockQty;
             }
             $response['data'][$i]['available'] = ($qty) ? 'disponibile' : 'non disponibile' ;
+            $response['data'][$i]['available'].= ' - ' . $qty;
             $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
 
             $i++;
