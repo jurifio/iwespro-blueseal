@@ -83,13 +83,12 @@ $(document).on('bs.manage.detail', function () {
     });
     $('#productDetailId').selectize()[0].selectize.setValue(row[0].id);
 
-    var detName = $('#productDetailId option:selected').text();
+    var detName = $('#productDetailId option:selected').text().split('(')[0];
     $('#productDetailName').val(detName);
 
     $(bsModal).find('table').addClass('table');
     $('#productDetailId').change(function () {
-        var detName = $('#productDetailId option:selected').text();
-
+        var detName = $('#productDetailId option:selected').text().split('(')[0];
         $('#productDetailName').val(detName);
     });
     cancelButton.html("Annulla");
@@ -120,7 +119,6 @@ $(document).on('bs.manage.detail', function () {
         });
     });
     bsModal.modal();
-
 });
 
 
