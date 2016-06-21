@@ -136,6 +136,17 @@
             data-placement="bottom"
             data-toggle="modal"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-eye"
+            data-permission="/admin/product/edit"
+            data-event="bs.manage.changeStatus"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Cambia Stato Prodotto"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 
     <bs-toolbar-group data-group-label="Roulette">

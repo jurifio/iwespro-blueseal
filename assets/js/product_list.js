@@ -366,3 +366,89 @@ $(document).on('click',".tag-list > li", function(a,b,c) {
 		$(this).addClass('tree-selected');
 	}
 });
+
+$(document).on('bs.manage.changeStatus', function () {
+
+	var bsModal = $('#bsModal');
+	var dataTable = $('.dataTable').DataTable();
+	var header = $('.modal-header h4');
+	var body = $('.modal-body');
+	var loader = body.html();
+	var cancelButton = $('.modal-footer .btn-default');
+	var okButton = $('.modal-footer .btn-success');
+
+	var getVarsArray = [];
+	var selectedRows = $('.table').DataTable().rows('.selected').data();
+
+	var selectedRowsCount = selectedRows.length;
+
+	if (selectedRowsCount < 1) {
+		new Alert({
+			type: "warning",
+			message: "Devi selezionare almeno un prodotto"
+		}).open();
+		return false;
+	}
+
+	var i = 0;
+	var row = [];
+	var getVars = '';
+	$.each(selectedRows, function (k, v) {
+		row[i] = {};
+		var idsVars = v.DT_RowId.split('__');
+		row[i].id = idsVars[1];
+		row[i].productVariantId = idsVars[2];
+		row[i].name = v.name;
+		i++;
+		getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+	});
+	$.ajax({
+		url: "/blueseal/xhr/CheckProductsToBePublished",
+		type: "post",
+		data: {
+			action: "listStatus"
+		}
+	}).done(function(res){
+		header.html('Unione dettagli');
+		var bodyContent = '<div style="min-height: 220px"><select class="full-width" placehoder="Seleziona lo status" name="productStatusId" id="productStatusId"><option value=""></option></select></div>';
+		body.html(bodyContent);
+		$('#productStatusId').selectize({
+			valueField: 'id',
+			labelField: 'name',
+			searchField: 'name',
+			options: JSON.parse(res)
+		});
+        $('#productStatusId').selectize()[0].selectize.setValue(1);
+	});
+	cancelButton.html("Annulla");
+	cancelButton.show();
+
+	bsModal.modal('show');
+
+	okButton.html("Cambia Stato").off().on('click', function (e) {
+		var statusId = $('#productStatusId').val();
+		console.log(statusId);
+		Pace.ignore(function () {
+			$.ajax({
+				url: "/blueseal/xhr/CheckProductsToBePublished",
+				type: "POST",
+				data: {
+					action: 'updateProductStatus',
+					rows: row,
+					productStatusId : statusId
+				}
+			}).done(function (res) {
+				body.html(res);
+			}).fail(function () {
+				body.html("OOPS! Modifica non eseguita!");
+			}).always(function () {
+				okButton.html('Ok');
+				okButton.off().on('click', function () {
+					bsModal.modal('hide');
+					dataTable.ajax.reload();
+				});
+			});
+		});
+	});
+	bsModal.modal();
+});
