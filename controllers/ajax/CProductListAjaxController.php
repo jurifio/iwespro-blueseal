@@ -145,7 +145,7 @@ class CProductListAjaxController extends AAjaxController
             foreach ($val->productSku as $sku) {
                 $qty += $sku->stockQty;
             }
-            $response['data'][$i]['available'] = ($qty) ? 'disponibile' : 'non disponibile' ;
+            $response['data'][$i]['available'] = ($qty) ? 'sì' : 'no';
             $response['data'][$i]['available'].= ' - ' . $qty;
             $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
 
