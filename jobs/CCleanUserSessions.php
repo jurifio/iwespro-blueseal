@@ -51,14 +51,15 @@ class CCleanUserSessions extends ACronJob
     {
         $query = "SELECT us.id
                   FROM `UserSession` us
-                  where us.expire < current_timestamp and userId is not null";
+                  where us.expire < current_timestamp and userId is null";
 	    $res = $this->app->dbAdapter->query($query,[])->fetchAll();
         $this->log('REPORT','Delete Start', "To do: ".count($res));
 		$i = 0;
         foreach($res as $us){
             if($i%100) $this->app->dbAdapter->beginTransaction();
             $resp = $this->deleteSession($us);
-            if($i%100) $this->app->dbAdapter->commit();
+            if($i%200) $this->log('REPORT','Delete Running', "Deleted: ".$i);
+	        if($i%100) $this->app->dbAdapter->commit();
             if($resp) $i++;
         }
         $this->log('REPORT','Delete End', "Deleted: ".$i);
