@@ -100,7 +100,7 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['data'][$i]['shop'] = implode(',',$shops);
-            \BlueSeal::dump($val);
+
             $response['data'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
 	        $ext = [];
 	        if (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
@@ -129,7 +129,7 @@ class CProductListAjaxController extends AAjaxController
 
             $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
             $response['data'][$i]['cpf'] = $val->itemno.' # '.$val->productVariant->name;
-            //\BlueSeal::dump($val->productColorGroup);
+
             $colorGroup = $val->productColorGroup->getFirst();
             $response['data'][$i]['colorGroup'] = ($colorGroup) ? $colorGroup->name : "[Non assegnato]";
             $img = strpos($val->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $this->urls['dummy']."/".$val->dummyPicture;
