@@ -158,6 +158,17 @@
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-sitemap"
+            data-permission="/admin/product/edit"
+            data-event="bs.category.edit"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Cambia Stagione ai prodotti selezionati"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 
     <bs-toolbar-group data-group-label="Roulette">

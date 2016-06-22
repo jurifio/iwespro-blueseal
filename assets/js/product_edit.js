@@ -381,18 +381,3 @@ $(document).ready(function() {
         });
     }
 });
-// detailDatas = [];
-//
-// var data = [ "option 1", "option 2", "option 3" ];
-// var items = data.map(function(x) { return { detail: x }; });
-// console.log(items);
-// $('.details-form').each( function(){
-//     $(this).selectize({
-//         delimiter: ',',
-//         persist: false,
-//         maxItems: 1,
-//         options: items,
-//         labelField: "detail",
-//         valueField: "detail"
-//     });
-// });
