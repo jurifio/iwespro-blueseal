@@ -23,11 +23,8 @@ class CChangeProductsSeason extends AAjaxController
         $act = $get['action'];
         if (array_key_exists('rows', $get)) $rows = $get['rows'];
         switch ($act) {
-            case "listStatus":
-                $res = $this->app->dbAdapter->select('ProductStatus', [])->fetchAll();
-                return json_encode($res);
-            case "updateProductStatus":
-                if ($get['productStatusId']) {
+            case "updateSeason":
+                if ($get['productSeasonId']) {
                     $count = 0;
                     $this->app->dbAdapter->beginTransaction();
                     try {
@@ -37,18 +34,20 @@ class CChangeProductsSeason extends AAjaxController
                                     'id' => $v['id'],
                                     'productVariantId' => $v['productVariantId']
                                 ]);
-                            $product->productStatusId = $get['productStatusId'];
+                            $product->productSeasonId = $get['productSeasonId'];
                             $count += $product->update();
                         }
                         $this->app->dbAdapter->commit();
+                        return "Aggiornato lo stato di " . $count . " prodotti";
                     } catch (\Exception $e) {
                         return "Errore nell'aggiornamento dello stato dei prodotti:<br />" .
                             $e->getMessage();
                             "Contattare l'amministratore<br />";
+                        $this->app->dbAdapter->rollBack();
                     }
-                return "Aggiornato lo stato di " . $count . " prodotti";
+
                 }
-            break;
+                break;
         }
     }
 

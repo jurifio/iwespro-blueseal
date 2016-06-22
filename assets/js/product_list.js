@@ -427,7 +427,6 @@ $(document).on('bs.manage.changeStatus', function () {
 
 	okButton.html("Cambia Stato").off().on('click', function (e) {
 		var statusId = $('#productStatusId').val();
-		console.log(statusId);
 		Pace.ignore(function () {
 			$.ajax({
 				url: "/blueseal/xhr/CheckProductsToBePublished",
@@ -502,34 +501,35 @@ $(document).on('bs.manage.changeSeason', function () {
             labelField: 'name',
             searchField: 'name',
             options: arrRes,
+			placeholder: 'Seleziona una stagione',
             render: {
-                item: function (item, escape) {
+                option: function (item, escape) {
                     return '<div>' +
                         (item.name ? '<span class="name"' +
-                        (item.isActive ? ' style="color: #555;" ' : '') +
+                        (0 == item.isActive ? ' style="color: #888;" ' : '') +
                         '>' + escape(item.name) + '</span>' : '') +
                         '</div>';
                 }
             }
         });
-        $('#productSeasonId').selectize()[0].selectize.setValue(arrRes[arrRes.length-1]);
+        $('#productSeasonsId').selectize()[0].selectize.setValue(arrRes.length-1);
     });
     cancelButton.html("Annulla");
     cancelButton.show();
 
     bsModal.modal('show');
 
-    okButton.html("Cambia Stato").off().on('click', function (e) {
-        var statusId = $('#productStatusId').val();
-        console.log(statusId);
+    okButton.html("Cambia Stagione").off().on('click', function (e) {
+        var seasonId = $('#productSeasonsId option:selected').val();
+		
         Pace.ignore(function () {
             $.ajax({
-                url: "/blueseal/xhr/CheckProductsToBePublished",
+                url: "/blueseal/xhr/ChangeProductsSeason",
                 type: "POST",
                 data: {
-                    action: 'updateProductStatus',
+                    action: 'updateSeason',
                     rows: row,
-                    productStatusId : statusId
+                    productSeasonId : seasonId
                 }
             }).done(function (res) {
                 body.html(res);

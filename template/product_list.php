@@ -149,7 +149,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-eye"
+            data-icon="fa-calendar"
             data-permission="/admin/product/edit"
             data-event="bs.manage.changeSeason"
             data-class="btn btn-default"
