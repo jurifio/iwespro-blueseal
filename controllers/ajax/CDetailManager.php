@@ -29,7 +29,7 @@ class CDetailManager extends AAjaxController
 
         foreach ($res as $k => $v) {
             $res[$k]['name'] .= " (";
-            $dt = $this->app->repoFactory->create('productDetailTranslation')->findBy(['productDetailId' => $v['id']]);
+            $dt = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['productDetailId' => $v['id']]);
             $lang = [];
             foreach ($dt as $vt) {
                 $rLang = $this->app->repoFactory->create('Lang')->findOneBy(['id' => $vt->langId]);
