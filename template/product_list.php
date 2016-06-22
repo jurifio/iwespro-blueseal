@@ -143,7 +143,18 @@
             data-event="bs.manage.changeStatus"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Cambia Stato Prodotto"
+            data-title="Cambia Status ai prodotti selezionati"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-calendar"
+            data-permission="/admin/product/edit"
+            data-event="bs.manage.changeSeason"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Cambia Stagione ai prodotti selezionati"
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
