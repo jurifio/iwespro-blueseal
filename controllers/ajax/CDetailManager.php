@@ -38,9 +38,7 @@ class CDetailManager extends AAjaxController
             $res[$k]['name'] .= implode(',', $lang);
             $res[$k]['name'] .= ')';
         }
-
         return json_encode($res);
-
     }
 
     /**
