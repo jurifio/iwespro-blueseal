@@ -137,7 +137,7 @@ class CProductListAjaxController extends AAjaxController
 	        else $imgs = "";
             $response['data'][$i]['dummyPicture'] = '<img width="80" src="'.$img.'" />'.$imgs;
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $response['data'][$i]['category'] = implode(',<br/>',$cats);
+            $response['data'][$i]['slug'] = implode(',<br/>',$cats); //category
             $response['data'][$i]['tag'] = implode(',',$tags);
             $response['data'][$i]['status'] = $val->productStatus->name;
 
