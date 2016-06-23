@@ -25,7 +25,7 @@ class CProductDetailAddNewAjaxController extends AAjaxController
         $slugify = new CSlugify();
         $slug = $slugify->slugify($get);
         $get = ( ' !' == $last2) ? substr($get, 0, -2) : $get;
-        $sql = "SELECT productDetailId FROM `ProductDetailTranslation` WHERE langId = 1 AND name LIKE '" . $get . "%'";
+        $sql = "SELECT productDetailId FROM `ProductDetailTranslation` WHERE langId = 1 AND (name LIKE '" . $get . "' OR name LIKE '" . $get . " !')";
         $res = $this->app->dbAdapter->query($sql, [])->fetchAll();
         if (!count($res)) {
             try {

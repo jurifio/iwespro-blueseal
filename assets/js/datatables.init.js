@@ -127,9 +127,9 @@
 				data: "brand",
 				orderable: true
 			}, {
-				data: "category",
+				data: "slug",
 				orderable: false,
-				searchable: false
+				searchable: true
 			}, {
 				data: "tag",
 				orderable: false,

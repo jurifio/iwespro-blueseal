@@ -544,6 +544,7 @@ $(document).on('bs.manage.changeSeason', function () {
             });
         });
     });
+	
     bsModal.modal();
 });
 
