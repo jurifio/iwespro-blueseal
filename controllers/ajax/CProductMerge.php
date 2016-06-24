@@ -60,6 +60,15 @@ class CProductMerge extends AAjaxController
     }
 
     private function mergeProducts($rows, $choosen) {
-        // Controll if there is
+        //controllo che i prodotti non scelti per la fusione non abbiano ordini
+
+        foreach($rows as $k => $v) {
+            if ($choosen != $k) {
+                $repo = $this->app->repoFactory->create('OrderLine')->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+                if ($repo->count()) {
+                    return "ERRORE: Il prodotto da fondere non può contenere ordini!";
+                }
+            }
+        }
     }
 }

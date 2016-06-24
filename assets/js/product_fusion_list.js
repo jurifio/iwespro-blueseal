@@ -25,7 +25,7 @@ $(document).on('bs.product.merge', function(){
         var idsVars = v.DT_RowId.split('__');
         row[i].id = idsVars[1];
         row[i].productVariantId = idsVars[2];
-        row[i].name = v.name;
+        row[i].name = v.brand;
         row[i].cpf = v.cpf;
         i++;
         getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
@@ -34,50 +34,70 @@ $(document).on('bs.product.merge', function(){
     header.html('Fondi 2 prodotti');
 
     body.css("text-align", 'left');
-    var bodyMsg = '<form>';
-    var radio = '';
+
     $.ajax({
         url: '/blueseal/xhr/ProductMerge',
         type: 'GET',
         data: {rows: row}
     }).done(function(res){
         res = JSON.parse(res);
+        var error = '';
 
         //controllo se entrambi i prodotti hanno ordini
-        countOrderedProducts = 0;
+        var countOrderedProducts = 0;
         $.each(res.rows, function(k, v){
-
+            if (v.areOrders) countOrderedProducts++;
         });
 
-        var notPermitted = false;
+        if (1 < countOrderedProducts) {
+            error += "2 o più prodotti selezionati hanno associati degli ordini. La fusione è impraticabile.";
+        }
+
         if (false === res.sizeGroupCompatibility) {
-            body.html('I gruppi taglia non coincidono, la fusione non può essere portata a termine');
+            error += "I due prodotti sono associati con gruppi taglia incompatibili."
+        }
+
+        if ('' !== error) {
+            body.html(':-( Non posso procedere alla fusione:');
             cancelButton.hide();
-            okButton.off().on("click", function(){
+            okButton.html('Ok').off().on("click", function () {
                 bsModal.modal("hide");
             });
         } else {
-
-        }
-
-        bodyMsg += radio;
-        bodyMsg += '</form>';
-        body.html(bodyMsg);
-        cancelButton.html("Annulla").show().on('click', function(){
-            bsModal.hide();
-        });
-        okButton.html("Fondi").off().on('click', function(){
-            var choosen = $('input[name="mainProd"]').val();
-            body.html("Pensaci un momento. L'azione non è reversibile!");
-            cancelButton.html("Ci ho ripensato");
-            okButton.html("Mi assumo le mie responsabilità davanti a Dio").off().on('click', function(){
-                $.ajax({
-                    url: '/blueseal/xhr/ProductMerge',
-                    type: 'POST',
-                    data: {action: "merge", rows: row, choosen: choosen}
+            var bodyMsg = '<p>Seleziona il prodotto che rimarrà in catalogo:</p><form>';
+            var radio = '';
+            var selected = false;
+            $.each(res.rows, function(k, v){
+                radio += '<input type="radio" name="choosen" value="' + k + '" ';
+                if ((0 < countOrderedProducts) && (0 == v['areOrders'])) {
+                    radio += 'disabled="disabled"'
+                } else {
+                    if (false == selected) {
+                        radio += 'checked';
+                        selected = true;
+                    }
+                }
+                radio += ' /> ' + v['id'] + '-' + v['productVariantId'] + ' ' + v['name'] + '<br />';
+            });
+            bodyMsg += radio;
+            bodyMsg += '</form><p>Se uno dei prodotti è stato acquistato sarà la scelta obbligata</p>';
+            body.html(bodyMsg);
+            cancelButton.html("Annulla").show().on('click', function () {
+                bsModal.hide();
+            });
+            okButton.html("Fondi").off().on('click', function () {
+                var choosen = $('input[name="choosen"]').val();
+                body.html("Pensaci un momento. L'azione non è reversibile!");
+                cancelButton.html("Ci ho ripensato");
+                okButton.html("Mi assumo le mie responsabilità davanti a Dio").off().on('click', function () {
+                    $.ajax({
+                        url: '/blueseal/xhr/ProductMerge',
+                        type: 'POST',
+                        data: {action: "merge", rows: row, choosen: choosen}
+                    });
                 });
             });
-        }); 
+        }
     });
     bsModal.modal('show');
 });
