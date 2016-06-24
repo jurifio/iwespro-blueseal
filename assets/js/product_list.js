@@ -544,12 +544,12 @@ $(document).on('bs.manage.changeSeason', function () {
             });
         });
     });
-	
     bsModal.modal();
 });
 
 $(document).on('bs.category.edit', function (e,element,button) {
 	var bsModal = $('#bsModal');
+	var dataTable = $('.dataTable').DataTable();
 	var header = $('#bsModal .modal-header h4');
 	var body = $('#bsModal .modal-body');
 	var cancelButton = $('#bsModal .modal-footer .btn-default');
@@ -638,7 +638,7 @@ $(document).on('bs.category.edit', function (e,element,button) {
 					}).done(function(res) {
 						body.html(res);
 						okButton.html('Ok').off().on('click', function () {
-							bsModal.hide();
+							bsModal.modal('hide');
 							dataTable.draw();
 						});
 						cancelButton.hide();
@@ -646,12 +646,12 @@ $(document).on('bs.category.edit', function (e,element,button) {
 				} else {
 					body.html('Nessuna categoria selezionata.');
 					okButton.html('Ok').off().on('click', function () {
-						bsModal.hide();
+						bsModal.modal('hide');
 					});
 					cancelButton.hide();
 				}
 			});
 		}
-		bsModal.modal('show');
+		bsModal.modal();
 	});
 });
