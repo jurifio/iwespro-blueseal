@@ -82,6 +82,12 @@ class CProductMerge extends AAjaxController
             elseif ($sizeGroup != $prod->productSizeGroupId) return "ERRORE: Il prodotto da fondere non può contenere ordini!";
         }
 
+        //controllo che nessuno dei prodotti siano già fusi.
+        foreach ($rows as $k => $v) {
+            $prod = $this->app->repoFactory->create('Product')->findOneBy(['Id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            if (13 == $prod->productStatusId) return "ERRORE: I prodotti da fondere non possono essere già fusi!";
+        }
+
         //inizio la fusione
 
         try {
@@ -145,13 +151,13 @@ class CProductMerge extends AAjaxController
 
             // sposto gli sku dei prodotti da fondere, facendoli puntare al prodotto scelto
             try {
-                $p = $this->app->repoFactory->create('Product')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+                $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                 $p->productStatusId = 13;
                 $p->update();
             } catch(\Exception $e) {
                 throw new BambooException(
                     $this->buildErrorMsg(
-                        "Il cambio di stato di uno dei prodotti",
+                        "Il cambio di stato di uno dei prodotti non è stato eseguito.",
                         $e->getMessage()),
                     [],
                     0,
@@ -159,7 +165,8 @@ class CProductMerge extends AAjaxController
                 );
             }
             
-            $this->app->dbAdapter->rollBack(); //debug
+            $this->app->dbAdapter->commit();
+            return "Fusione eseguita!";
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
             return $e->getMessage();

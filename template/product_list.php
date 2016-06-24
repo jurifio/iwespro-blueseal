@@ -169,17 +169,6 @@
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-magnet"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.merge"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Fondi due prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Roulette">
         <bs-toolbar-select

@@ -44,6 +44,9 @@ class CCheckProductsToBePublished extends AAjaxController
         switch ($act) {
             case "listStatus":
                 $res = $this->app->dbAdapter->select('ProductStatus', [])->fetchAll();
+                foreach($res as $k => $v) {
+                    if (13 == $v['id']) unset($res[$k]);
+                }
                 return json_encode($res);
             case "updateProductStatus":
                 if ($get['productStatusId']) {

@@ -393,62 +393,76 @@ $(document).on('bs.manage.changeStatus', function () {
 	var i = 0;
 	var row = [];
 	var getVars = '';
+	var fused = false;
 	$.each(selectedRows, function (k, v) {
 		row[i] = {};
 		var idsVars = v.DT_RowId.split('__');
 		row[i].id = idsVars[1];
 		row[i].productVariantId = idsVars[2];
 		row[i].name = v.name;
+		if ('Fuso' == v.status) fused = true;
 		i++;
 		getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
 	});
-	$.ajax({
-		url: "/blueseal/xhr/CheckProductsToBePublished",
-		type: "post",
-		data: {
-			action: "listStatus"
-		}
-	}).done(function(res){
-		header.html('Unione dettagli');
-		var bodyContent = '<div style="min-height: 220px"><select class="full-width" placehoder="Seleziona lo status" name="productStatusId" id="productStatusId"><option value=""></option></select></div>';
-		body.html(bodyContent);
-		$('#productStatusId').selectize({
-			valueField: 'id',
-			labelField: 'name',
-			searchField: 'name',
-			options: JSON.parse(res)
+	
+	if (!fused) {
+		$.ajax({
+			url: "/blueseal/xhr/CheckProductsToBePublished",
+			type: "post",
+			data: {
+				action: "listStatus"
+			}
+		}).done(function (res) {
+			header.html('Cambio stato dei prodotti');
+			var bodyContent = '<div style="min-height: 220px"><select class="full-width" placehoder="Seleziona lo status" name="productStatusId" id="productStatusId"><option value=""></option></select></div>';
+			body.html(bodyContent);
+			$('#productStatusId').selectize({
+				valueField: 'id',
+				labelField: 'name',
+				searchField: 'name',
+				options: JSON.parse(res)
+			});
+			$('#productStatusId').selectize()[0].selectize.setValue(1);
 		});
-        $('#productStatusId').selectize()[0].selectize.setValue(1);
-	});
-	cancelButton.html("Annulla");
-	cancelButton.show();
+		cancelButton.html("Annulla");
+		cancelButton.show();
 
-	bsModal.modal('show');
+		bsModal.modal('show');
 
-	okButton.html("Cambia Stato").off().on('click', function (e) {
-		var statusId = $('#productStatusId').val();
-		Pace.ignore(function () {
-			$.ajax({
-				url: "/blueseal/xhr/CheckProductsToBePublished",
-				type: "POST",
-				data: {
-					action: 'updateProductStatus',
-					rows: row,
-					productStatusId : statusId
-				}
-			}).done(function (res) {
-				body.html(res);
-			}).fail(function () {
-				body.html("OOPS! Modifica non eseguita!");
-			}).always(function () {
-				okButton.html('Ok');
-				okButton.off().on('click', function () {
-					bsModal.modal('hide');
-					dataTable.ajax.reload();
+		okButton.html("Cambia Stato").off().on('click', function (e) {
+			var statusId = $('#productStatusId').val();
+			Pace.ignore(function () {
+				$.ajax({
+					url: "/blueseal/xhr/CheckProductsToBePublished",
+					type: "POST",
+					data: {
+						action: 'updateProductStatus',
+						rows: row,
+						productStatusId: statusId
+					}
+				}).done(function (res) {
+					body.html(res);
+				}).fail(function () {
+					body.html("OOPS! Modifica non eseguita!");
+				}).always(function () {
+					okButton.html('Ok');
+					okButton.off().on('click', function () {
+						bsModal.modal('hide');
+						dataTable.ajax.reload();
+					});
 				});
 			});
 		});
-	});
+	} else { //if !fused
+		header.html('Cambio stato dei prodotti');
+		var bodyContent = 'Lo stato "Fuso" non può essere modificato';
+		body.html(bodyContent);
+		cancelButton.hide();
+		okButton.html("Ok").off().on('click', function(){
+			bsModal.modal("hide");
+		});
+		bsModal.modal();
+	}
 	bsModal.modal();
 });
 

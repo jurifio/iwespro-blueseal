@@ -1,4 +1,5 @@
 $(document).on('bs.product.merge', function(){
+    var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');
     var body = $('#bsModal .modal-body');
@@ -94,6 +95,13 @@ $(document).on('bs.product.merge', function(){
                         url: '/blueseal/xhr/ProductMerge',
                         type: 'POST',
                         data: {action: "merge", rows: row, choosen: choosen}
+                    }).done(function(res){
+                        body.html(res);
+                        cancelButton.hide();
+                        okButton.html("Ok").off().on('click', function () {
+                            bsModal.modal("hide");
+                            dataTable.draw();
+                        });
                     });
                 });
             });
