@@ -46,20 +46,20 @@ $(document).on('bs.product.merge', function(){
 
         //controllo se entrambi i prodotti hanno ordini
         var countOrderedProducts = 0;
-        $.each(res.rows, function(k, v){
+        /*$.each(res.rows, function(k, v){
             if (v.areOrders) countOrderedProducts++;
         });
 
         if (1 < countOrderedProducts) {
-            error += "2 o più prodotti selezionati hanno associati degli ordini. La fusione è impraticabile.";
-        }
+            error += "due o più prodotti selezionati hanno associati degli ordini. La fusione è impraticabile.";
+        }*/
 
         if (false === res.sizeGroupCompatibility) {
-            error += "I due prodotti sono associati con gruppi taglia incompatibili."
+            error += "i due prodotti sono associati con gruppi taglia incompatibili."
         }
 
         if ('' !== error) {
-            body.html(':-( Non posso procedere alla fusione:');
+            body.html(':-( Non posso procedere alla fusione:<br />' + error);
             cancelButton.hide();
             okButton.html('Ok').off().on("click", function () {
                 bsModal.modal("hide");

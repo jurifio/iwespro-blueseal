@@ -65,24 +65,39 @@ class CProductMerge extends AAjaxController
     {
         //controllo che i prodotti non scelti per la fusione non abbiano ordini
 
-        foreach ($rows as $k => $v) {
+       /* foreach ($rows as $k => $v) {
             if ($choosen != $k) {
                 $ol = $this->app->repoFactory->create('OrderLine')->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                 if ($ol->count()) {
                     return "ERRORE: Il prodotto da fondere non può contenere ordini!";
                 }
             }
-        }
+        }*/
 
-        //controllo di nuovo i gruppi taglie
+        //controllo di nuovo i gruppi taglie e i
         $sizeGroup = 0;
         foreach ($rows as $k => $v) {
             $prod = $this->app->repoFactory->create('Product')->findOneBy(['Id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
             if (0 == $sizeGroup) $sizeGroup = $prod->productSizeGroupId;
             elseif ($sizeGroup != $prod->productSizeGroupId) return "ERRORE: Il prodotto da fondere non può contenere ordini!";
         }
+        //controllo che i prodotti da fondere non siano dello stesso shop
+        $shopControl = [];
+        foreach ($rows as $k => $v) {
+            $sku = $this->app->repoFactory->create('ProductSku')->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            $shopSku = [];
+            foreach($sku as $v) {
+                $shopSku[] = $v->shopId;
+            }
+            $shopSku = array_unique($shopSku);
+            if (!empty(array_intersect($shopSku, $shopControl))) {
+                return "ERRORE: i prodotti selezionati per la fusione non possono venire dallo stesso Friend";
+            } else {
+                $shopControl = array_merge($shopControl, $shopSku);
+            }
+        }
 
-        //controllo che nessuno dei prodotti siano già fusi.
+        //controllo che nessuno dei prodotti sia già fuso.
         foreach ($rows as $k => $v) {
             $prod = $this->app->repoFactory->create('Product')->findOneBy(['Id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
             if (13 == $prod->productStatusId) return "ERRORE: I prodotti da fondere non possono essere già fusi!";
@@ -101,7 +116,7 @@ class CProductMerge extends AAjaxController
                     $sop = $this->app->repoFactory->create('ShopHasProduct')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                     $sop->productId = $rows[$choosen]['id'];
                     $sop->productVariantId = $rows[$choosen]['productVariantId'];
-                    $sop->update();
+                    $sop->insert();
                 } catch (\Exception $e) {
                     throw new BambooException(
                         $this->buildErrorMsg(
@@ -116,7 +131,11 @@ class CProductMerge extends AAjaxController
 
             //aggiorno la relazione tra product e dirtyProduct del prodotto da fondere
             try {
-                $dp = $this->app->repoFactory->create('DirtyProduct')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+                $dp = $this->app->repoFactory->create('DirtyProduct')->findOneBy([
+                    'productId' => $v['id'],
+                    'productVariantId' => $v['productVariantId'],
+                    'shopId' => $sop->shopId
+                ]);
                 $dp->productId = $rows[$choosen]['id'];
                 $dp->productVariantId = $rows[$choosen]['productVariantId'];
                 $dp->update();
@@ -132,10 +151,15 @@ class CProductMerge extends AAjaxController
             }
             // sposto gli sku dei prodotti da fondere, facendoli puntare al prodotto scelto
             try {
-                $ps = $this->app->repoFactory->create('ProductSku')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-                $ps->productId = $rows[$choosen]['id'];
-                $ps->productVariantId = $rows[$choosen]['productVariantId'];
-                $ps->update();
+                $psarr = $this->app->repoFactory->create('ProductSku')->findBy([
+                    'productId' => $v['id'],
+                    'productVariantId' => $v['productVariantId']
+                    ]);
+                foreach($psarr as $k => $ps) {
+                    $ps->productId = $rows[$choosen]['id'];
+                    $ps->productVariantId = $rows[$choosen]['productVariantId'];
+                    $ps->insert();
+                }
             } catch(\Exception $e) {
                 throw new BambooException(
                     $this->buildErrorMsg(

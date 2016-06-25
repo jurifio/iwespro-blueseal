@@ -17,27 +17,21 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="product_list"
-                               data-column-filter="true"
-                               data-controller="ProductListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                        <table class="table table-striped responsive" width="100%" data-column-filter="true" data-datatable-name="product_fusion_list" data-controller="ProductFusionListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>" >
                             <thead>
-                                <tr>
-                                    <th class="center">Codice</th>
-                                    <th class="center">Shop</th>
-                                    <th class="center">Gruppo Colore</th>
-                                    <th class="center">Stagione</th>
-                                    <th class="center">ID Orig.</th>
-                                    <th class="center">CPF</th>
-                                    <th class="center">Immagine </th>
-                                    <th class="center">Brand</th>
-                                    <th class="center">Categorie</th>
-                                    <th class="center">Tags</th>
-                                    <th class="center">Stato</th>
-                                    <th class="center">Disponibile?</th>
-                                    <th class="center">Creazione</th>
-                                </tr>
+                            <tr>
+                                <th class="center">Codice</th>
+                                <th class="center">Brand</th>
+                                <th class="center">CPF</th>
+                                <th class="center">Variante</th>
+                                <th class="center">Shops</th>
+                                <th class="center">Stato</th>
+                                <th class="center">Immagine</th>
+                                <th class="center">Skus</th>
+                                <th class="center">Listino</th>
+                                <th class="center">Valore Vendite</th>
+                                <th class="center">Qty Venduta</th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>

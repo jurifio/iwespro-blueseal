@@ -864,6 +864,55 @@
 			}
 		]
 	});
+	tableSetup.product_fusion_list = $.extend({}, tableSetup.common, {
+		order: [[3, "desc"]],
+		columns: [
+			{
+				data: "code",
+				orderable: false,
+				searchable: true
+			}, {
+				data: "brand",
+				orderable: true
+			}, {
+				data: "CPF",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "variant",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "shops",
+				orderable: false,
+				searchable: true
+			}, {
+				data: "status",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "dummyPicture",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "skus",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "price",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "income",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "sells",
+				orderable: false,
+				searchable: false
+			}
+		]
+	});
 	tableSetup.couponevent_list = $.extend({}, tableSetup.common, {
 		order: [[0, 'asc']],
 		columns: [
