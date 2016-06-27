@@ -113,10 +113,12 @@ class CProductMerge extends AAjaxController
 
                 //assegno lo shop assegnato al prodotto da fondere al prodotto scelto
                 try {
-                    $sop = $this->app->repoFactory->create('ShopHasProduct')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-                    $sop->productId = $rows[$choosen]['id'];
-                    $sop->productVariantId = $rows[$choosen]['productVariantId'];
-                    $sop->insert();
+                    $sop = $this->app->repoFactory->create('ShopHasProduct')->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+                    foreach($sop as $kshop => $vshop) {
+                        $vshop->productId = $rows[$choosen]['id'];
+                        $vshop->productVariantId = $rows[$choosen]['productVariantId'];
+                        $vshop->insert();
+                    }
                 } catch (\Exception $e) {
                     throw new BambooException(
                         $this->buildErrorMsg(
@@ -131,14 +133,16 @@ class CProductMerge extends AAjaxController
 
             //aggiorno la relazione tra product e dirtyProduct del prodotto da fondere
             try {
-                $dp = $this->app->repoFactory->create('DirtyProduct')->findOneBy([
-                    'productId' => $v['id'],
-                    'productVariantId' => $v['productVariantId'],
-                    'shopId' => $sop->shopId
-                ]);
-                $dp->productId = $rows[$choosen]['id'];
-                $dp->productVariantId = $rows[$choosen]['productVariantId'];
-                $dp->update();
+                foreach($sop as $kshop => $vshop) {
+                    $dp = $this->app->repoFactory->create('DirtyProduct')->findOneBy([
+                        'productId' => $v['id'],
+                        'productVariantId' => $v['productVariantId'],
+                        'shopId' => $vshop->shopId
+                    ]);
+                    $dp->productId = $rows[$choosen]['id'];
+                    $dp->productVariantId = $rows[$choosen]['productVariantId'];
+                    $dp->update();
+                }
             } catch(\Exception $e) {
                 throw new BambooException(
                     $this->buildErrorMsg(

@@ -28,7 +28,8 @@ $(document).on('bs.product.merge', function(){
         row[i].productVariantId = idsVars[2];
         row[i].name = v.brand;
         row[i].cpf = v.CPF;
-        row[i].brand = v.brand
+        row[i].brand = v.brand;
+        row[i].shops = v.shops;
         i++;
         getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
@@ -80,7 +81,7 @@ $(document).on('bs.product.merge', function(){
                         selected = true;
                     }
                 }
-                radio += ' /> ' + v['id'] + '-' + v['productVariantId'] + ' ' + v['name'] + ' - CPF: ' + v['cpf'] + ' - Brand: ' + v['brand'] + '<br />';
+                radio += ' /> ' + v['id'] + '-' + v['productVariantId'] + ' - CPF: ' + v['cpf'] + ' - Brand: ' + v['brand'] + ' - Friend: ' + v['shops'] + '<br />';
             });
             bodyMsg += radio;
             bodyMsg += '</form><p>Se uno dei prodotti è stato acquistato sarà la scelta obbligata</p>';
