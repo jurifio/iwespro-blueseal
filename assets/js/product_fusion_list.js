@@ -78,7 +78,7 @@ $(document).on('bs.product.merge', function(){
                         selected = true;
                     }
                 }
-                radio += ' /> ' + v['id'] + '-' + v['productVariantId'] + ' ' + v['name'] + '<br />';
+                radio += ' /> ' + v['id'] + '-' + v['productVariantId'] + ' ' + v['name'] + ' ' + v['cpf'] + '<br />';
             });
             bodyMsg += radio;
             bodyMsg += '</form><p>Se uno dei prodotti è stato acquistato sarà la scelta obbligata</p>';
@@ -90,7 +90,7 @@ $(document).on('bs.product.merge', function(){
                 var choosen = $('input[name="choosen"]').val();
                 body.html("Pensaci un momento. L'azione non è reversibile!");
                 cancelButton.html("Ci ho ripensato");
-                okButton.html("Mi assumo le mie responsabilità davanti a Dio").off().on('click', function () {
+                okButton.html("Fondi!").off().on('click', function () {
                     $.ajax({
                         url: '/blueseal/xhr/ProductMerge',
                         type: 'POST',
@@ -100,7 +100,7 @@ $(document).on('bs.product.merge', function(){
                         cancelButton.hide();
                         okButton.html("Ok").off().on('click', function () {
                             bsModal.modal("hide");
-                            dataTable.draw();
+                            $('.dataTable').find('').draw();
                         });
                     });
                 });

@@ -25,6 +25,7 @@
                                 <th class="center">CPF</th>
                                 <th class="center">Variante</th>
                                 <th class="center">Shops</th>
+                                <th class="center">Gruppo taglie</th>
                                 <th class="center">Stato</th>
                                 <th class="center">Immagine</th>
                                 <th class="center">Skus</th>

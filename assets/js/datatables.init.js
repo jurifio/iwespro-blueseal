@@ -873,7 +873,7 @@
 		]
 	});
 	tableSetup.product_fusion_list = $.extend({}, tableSetup.common, {
-		order: [[3, "desc"]],
+		order: [[2, "asc"]],
 		columns: [
 			{
 				data: "code",
@@ -894,6 +894,10 @@
 				data: "shops",
 				orderable: false,
 				searchable: true
+			}, {
+				data: "sizeGroup",
+				orderable: false,
+				searchable: false
 			}, {
 				data: "status",
 				orderable: true,

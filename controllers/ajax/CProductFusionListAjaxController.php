@@ -86,7 +86,7 @@ class CProductFusionListAjaxController extends AAjaxController
             $response['aaData'][$i]["status"] = $val->productStatus->name;
             $response['aaData'][$i]['CPF'] = $val->itemno.' # '.$val->productVariant->name;
             $response['aaData'][$i]['variant'] = $val->productVariant->name;
-
+            $response['aaData'][$i]['sizeGroup'] = '<span class="small">' . $val->productSizeGroup->macroName . ' - ' . $val->productSizeGroup->locale . '</span>';
             $th = "";
             $tr = "";
             $res = $this->app->dbAdapter->query("SELECT s.name, sum(ps.stockQty) stock
