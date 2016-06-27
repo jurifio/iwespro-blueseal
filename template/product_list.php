@@ -30,12 +30,14 @@
                                     <th class="center">Stagione</th>
                                     <th class="center">ID Orig.</th>
                                     <th class="center">CPF</th>
+                                    <th class="center">Gruppo Taglie</th>
+                                    <th class="center">Dettagli</th>
                                     <th class="center">Immagine </th>
                                     <th class="center">Brand</th>
                                     <th class="center">Categorie</th>
                                     <th class="center">Tags</th>
                                     <th class="center">Stato</th>
-                                    <th class="center">Disponibile?</th>
+                                    <th class="center">Disponibile</th>
                                     <th class="center">Creazione</th>
                                 </tr>
                             </thead>

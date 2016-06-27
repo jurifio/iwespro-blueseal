@@ -100,6 +100,13 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['data'][$i]['shop'] = implode(',',$shops);
+            $response['data'][$i]['sizeGroup'] = '<span class="small">' . $val->productSizeGroup->name . '</span>';
+            $response['data'][$i]['details'] = '';
+
+            $details = $this->app->repoFactory->create('ProductSheetActual')->em()->findBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
+            foreach($details as $k => $v) {
+            $response['data'][$i]['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
+            }
 
             $response['data'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
 	        $ext = [];

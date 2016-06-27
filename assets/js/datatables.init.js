@@ -116,10 +116,18 @@
 			},{
 				data: "externalId",
 				orderable: true
-			}, {
+			},{
 				data: "cpf",
 				orderable: true
-			}, {
+			},{
+				data: "sizeGroup",
+				orderable: false,
+				searchable: false
+			},{
+				data: "details",
+				orderable: false,
+				searchable: false
+			},{
 				data: "dummyPicture",
 				orderable: false,
 				searchable: false
