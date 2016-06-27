@@ -100,7 +100,7 @@ $(document).on('bs.product.merge', function(){
                         cancelButton.hide();
                         okButton.html("Ok").off().on('click', function () {
                             bsModal.modal("hide");
-                            $('.dataTable').find('').draw();
+                            dataTable.ajax.reload();
                         });
                     });
                 });
