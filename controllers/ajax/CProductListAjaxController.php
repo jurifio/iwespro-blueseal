@@ -105,7 +105,9 @@ class CProductListAjaxController extends AAjaxController
 
             $details = $this->app->repoFactory->create('ProductSheetActual')->em()->findBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
             foreach($details as $k => $v) {
-            $response['data'][$i]['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
+                if ($trans = $v->productDetail->productDetailTranslation->getFirst()) {
+                    $response['data'][$i]['details'] .= '<span class="small">' . $trans->name . "</span><br />";
+                }
             }
 
             $response['data'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
