@@ -95,7 +95,7 @@
 		]
 	});
 	tableSetup.product_list = $.extend({}, tableSetup.common, {
-		order: [[9, "desc"]],
+		order: [[11, "desc"]],
 		columns: [
 			{
 				data: "code",
