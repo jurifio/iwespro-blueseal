@@ -276,8 +276,8 @@
 				searchable: true
 			}
 		],
-		lengthMenu: [100, 200, 500, 1000, 2000, 3000, 5000],
-		displayLength: 2000
+		lengthMenu: [100, 200, 500],
+		displayLength: 200
 	});
 	tableSetup.product_names_list = $.extend({}, tableSetup.common, {
 		order: [[0, "asc"]],

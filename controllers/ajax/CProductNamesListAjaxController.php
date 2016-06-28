@@ -51,6 +51,9 @@ class CProductNamesListAjaxController extends AAjaxController
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
+        $modifica = $this->urls['base'] . "prodotti/modifica";
+        $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
+
         $response = [];
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
@@ -71,12 +74,14 @@ class CProductNamesListAjaxController extends AAjaxController
                 $iterator = 0;
                 foreach($res as $v) {
                     $prod = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
-                    $response['data'][$i]['productsList'] .= $prod->id . '-';
-                    $response['data'][$i]['productsList'] .= $prod->productVariantId;
+                    $response['data'][$i]['productsList'] .=
+                        $okManage ?
+                            '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id='.$prod->id.'&productVariantId='.$prod->productVariantId.'">'.$prod->id.'-'.$prod->productVariantId.'</a>'
+                            : $val->id.'-'.$val->productVariantId;
                     $response['data'][$i]['productsList'] .= ' - CPF: ' . $prod->itemno;
                     $response['data'][$i]['productsList'] .= ' - brand: ' . $prod->productBrand->name;
-                    $img = strpos($prod->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $prod->dummyPicture : $this->urls['dummy']."/".$prod->dummyPicture;
-                    $response['data'][$i]['productsList'] .= ' <img width="30" src="' . $img . '" /><br />';
+                    //$img = strpos($prod->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $prod->dummyPicture : $this->urls['dummy']."/".$prod->dummyPicture;
+                    //$response['data'][$i]['productsList'] .= ' <img width="30" src="' . $img . '" /><br />';
                     $iterator++;
                     if (10 == $iterator) break;
                 }
@@ -90,4 +95,6 @@ class CProductNamesListAjaxController extends AAjaxController
         }
         return json_encode($response);
     }
+
+    
 }

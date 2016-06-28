@@ -67,7 +67,7 @@ abstract class ARestrictedAccessRootController extends ARootController
         $this->sidebar = new CBlueSealSidebar($this->app);
 
         $this->app->authManager->auth();
-
+        
         if ($this->app->getUser()->getId()!=0) {
             if (!$this->checkPermission($this->page->getPermissionPath())) {
                 try{

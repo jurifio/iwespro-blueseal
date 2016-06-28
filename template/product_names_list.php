@@ -57,7 +57,16 @@
             data-title="Pulisci i nomi prodotto"
             data-placement="bottom"
         ></bs-toolbar-button>
-    </bs-toolbar-group>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-magnet"
+            data-permission="/admin/product/edit"
+            data-event="bs.names.merge"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Unisci i nomi prodotto"
+            data-placement="bottom"
+        ></bs-toolbar-button>
 </bs-toolbar>
 <script type="text/javascript">
     $(document).ready(function(){

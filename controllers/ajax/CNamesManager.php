@@ -27,6 +27,9 @@ class CNamesManager extends AAjaxController
                 case "clean":
                     $res = $this->cleanNames();
                     break;
+                case "merge":
+                    $res = $this->mergeNames($get['newName'], $get['oldNames']);
+                    break;
                 default:
                     return "OOPS! Non so cosa devo fare. Contatta un amministratore";
             }
@@ -43,6 +46,15 @@ class CNamesManager extends AAjaxController
         return $res . " dei prodotti sono stati normalizzati";
     }
 
+    private function mergeNames($new, $old){
+        $SQLCond = str_repeat('`name` = ? OR ', count($old));
+        $SQLCond = rtrim($SQLCond, 'OR ');
+        $cond = array_merge([$new], $old);
+
+        $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
+        return 'Nomi aggiornati!';
+    }
+
     /**
      * @return string
      */
@@ -50,20 +62,8 @@ class CNamesManager extends AAjaxController
     {
        $search = $this->app->router->request()->getRequestData()['search'];
         //$repo = $this->app->repoFactory->create('ProductDetailTranslation',false);
-        $res = $this->app->dbAdapter->query("SELECT `productDetailId` as `id`, `name` FROM `ProductDetailTranslation` WHERE `langId` = 1 AND `name` like '%" . $search . "%' ORDER BY `name` LIMIT 30", [])->fetchAll();
+        $res = $this->app->dbAdapter->query("SELECT `name` FROM `ProductNameTranslation` WHERE `langId` = 1 AND `name` like '%" . $search . "%' ORDER BY `name` LIMIT 30", [])->fetchAll();
 
-
-        foreach ($res as $k => $v) {
-            $res[$k]['name'] .= " (";
-            $dt = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['productDetailId' => $v['id']]);
-            $lang = [];
-            foreach ($dt as $vt) {
-                $rLang = $this->app->repoFactory->create('Lang')->findOneBy(['id' => $vt->langId]);
-                $lang[] = $rLang->lang;
-            }
-            $res[$k]['name'] .= implode(',', $lang);
-            $res[$k]['name'] .= ')';
-        }
         return json_encode($res);
     }
 
