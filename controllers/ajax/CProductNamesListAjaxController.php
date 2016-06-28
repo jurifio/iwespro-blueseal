@@ -80,8 +80,8 @@ class CProductNamesListAjaxController extends AAjaxController
                             : $val->id.'-'.$val->productVariantId;
                     $response['data'][$i]['productsList'] .= ' - CPF: ' . $prod->itemno;
                     $response['data'][$i]['productsList'] .= ' - brand: ' . $prod->productBrand->name;
-                    //$img = strpos($prod->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $prod->dummyPicture : $this->urls['dummy']."/".$prod->dummyPicture;
-                    //$response['data'][$i]['productsList'] .= ' <img width="30" src="' . $img . '" /><br />';
+                    $img = strpos($prod->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $prod->dummyPicture : $this->urls['dummy']."/".$prod->dummyPicture;
+                    $response['data'][$i]['productsList'] .= ' <img width="30" src="' . $img . '" /><br />';
                     $iterator++;
                     if (10 == $iterator) break;
                 }
