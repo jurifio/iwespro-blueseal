@@ -43,9 +43,11 @@ class CProductNamesListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductDetailList',['id'],$_GET);
+        $datatable = new CDataTables('ProductNameTranslation', ['productId', 'productVariantId', 'langId'], $_GET);
+        $datatable->addCondition('langId', [1]);
+        $datatable->addGroup(['name']);
 
-        $productsDetail = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productNames = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -57,19 +59,35 @@ class CProductNamesListAjaxController extends AAjaxController
 
         $i = 0;
 
-        foreach($productsDetail as $val){
+        foreach($productNames as $val){
 			try {
-				$response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
+				$response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '__' . $val->productVariantId;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
-				$response['data'][$i]['slug'] = $val->slug;
-				$response['data'][$i]['name'] = $val->productDetailTranslation->getFirst()->name;
+				$response['data'][$i]['name'] = $val->name;
+                $res = $this->app->dbAdapter->query("SELECT * FROM ProductNameTranslation WHERE `langId` = 1 AND `name` = ?",[$val->name])->fetchAll();
+                $response['data'][$i]['count'] = count($res); //$products->count();
+                $response['data'][$i]['productsList'] = '';
+                $response['data'][$i]['productsList'] .= '<span class="small">';
+                $iterator = 0;
+                foreach($res as $v) {
+                    $prod = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                    $response['data'][$i]['productsList'] .= $prod->id . '-';
+                    $response['data'][$i]['productsList'] .= $prod->productVariantId;
+                    $response['data'][$i]['productsList'] .= ' - CPF: ' . $prod->itemno;
+                    $response['data'][$i]['productsList'] .= ' - brand: ' . $prod->productBrand->name;
+                    $img = strpos($prod->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $prod->dummyPicture : $this->urls['dummy']."/".$prod->dummyPicture;
+                    $response['data'][$i]['productsList'] .= ' <img width="30" src="' . $img . '" /><br />';
+                    $iterator++;
+                    if (10 == $iterator) break;
+                }
+                if (10 < $response['data'][$i]['count']) $response['data'][$i]['productsList'] .= "...";
+                $response['data'][$i]['productsList'] .= '</span>';
 				$i++;
 			} catch (\Exception $e) {
 				throw $e;
 			}
 
         }
-
         return json_encode($response);
     }
 }

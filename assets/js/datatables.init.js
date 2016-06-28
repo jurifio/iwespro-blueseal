@@ -280,20 +280,24 @@
 		displayLength: 2000
 	});
 	tableSetup.product_names_list = $.extend({}, tableSetup.common, {
-		order: [[1, "asc"]],
+		order: [[0, "asc"]],
 		columns: [
 			{
-				data: "slug",
+				data: "name",
 				orderable: true,
 				searchable: false
 			}, {
-				data: "name",
-				orderable: true,
-				searchable: true
+				data: "count",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "productsList",
+				orderable: false,
+				searchable: false
 			}
 		],
 		lengthMenu: [100, 200, 500, 1000, 2000, 3000, 5000],
-		displayLength: 2000
+		displayLength: 200
 	});
 	tableSetup.product_color_list = $.extend({}, tableSetup.common, {
 		order: [[2, "asc"]],

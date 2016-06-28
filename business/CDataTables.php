@@ -44,6 +44,10 @@ class CDataTables
     /**
      * @var array
      */
+    protected $groups = [];
+    /**
+     * @var array
+     */
     protected $orders = [];
     /**
      * @var bool
@@ -125,7 +129,7 @@ class CDataTables
         if($count){
             $sqlSelect.= $this->where($count);
         } else{
-            $sqlSelect.= $this->where(false).$this->orderBy().$this->limit();
+            $sqlSelect.= $this->where(false). $this->groupBy() . $this->orderBy().$this->limit();
         }
         return $sqlSelect;
     }
@@ -267,6 +271,32 @@ class CDataTables
         $string.='.*';
         return $string;
 
+    }
+
+    /**
+     * @param array $fields
+     * @throws \Exception
+     */
+    public function addGroup($fields = [])
+    {
+        if (!is_array($fields)) throw new \Exception('Il parametro Fields deve essere un array');
+        foreach($fields as $v) {
+            $this->group[] = $v;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function groupBy()
+    {
+        if(!empty($this->group)){
+            $ord = [];
+            foreach($this->group as $column){
+                $grp[] = "`" . $column . "`";
+            }
+            return " GROUP BY ".implode(',',$grp) . " ";
+        } else return " ";
     }
 
     /**

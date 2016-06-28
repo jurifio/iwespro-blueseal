@@ -28,8 +28,9 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
-                                <th class="center">Termine</th>
-                                <th class="center">Italiano</th>
+                                <th class="center">Name</th>
+                                <th class="center">N. Prodotti Associati</th>
+                                <th class="center">Lista Prodotti</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -45,35 +46,15 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione dettagli prodotto">
+    <bs-toolbar-group data-group-label="Pulisci prodotti">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-magic"
             data-permission="/admin/product/edit"
-            data-event="bs.manage.detail"
+            data-event="bs.manage.names"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Unisci dettagli"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-question-circle"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.detailproducts"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Visualizza Prodotti"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-exclamation-triangle"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.deletedetails"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cancella i dettagli"
+            data-title="Pulisci i nomi prodotto"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
