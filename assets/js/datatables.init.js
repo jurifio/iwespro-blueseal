@@ -876,6 +876,59 @@
 			}
 		]
 	});
+	tableSetup.product_sales_list = $.extend({}, tableSetup.common, {
+		order: [[2, "asc"]],
+		columns: [
+			{
+				data: "code",
+				orderable: false,
+				searchable: true
+			}, {
+				data: "brand",
+				orderable: true
+			}, {
+				data: "CPF",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "category",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "season",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "variant",
+				orderable: true,
+				searchable: true
+			}, {
+				data: "shops",
+				orderable: false,
+				searchable: true
+			}, {
+				data: "dummyPicture",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "skus",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "price",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "sale",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "percentage",
+				orderable: false,
+				searchable: false
+			}
+		]
+	});
 	tableSetup.product_fusion_list = $.extend({}, tableSetup.common, {
 		order: [[2, "asc"]],
 		columns: [
