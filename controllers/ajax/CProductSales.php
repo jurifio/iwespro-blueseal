@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+
 use bamboo\core\exceptions\BambooException;
 
 /**
@@ -29,7 +30,10 @@ class CProductSales extends AAjaxController
 
         switch ($action) {
             case 'assign':
-                $res = $this->assign($get['rows'], $get['isSale'], $get['percentage']);
+                $res = $this->assign($get['rows'], $get['percentage']);
+                break;
+            case 'set':
+                $res = $this->set($get['rows'], $get['isSale']);
                 break;
             default:
                 $res = "Nessuna azione è stata selezionata";
@@ -37,42 +41,35 @@ class CProductSales extends AAjaxController
         return $res;
     }
 
-    private function assign($rows, $isSale, $percent = 0)
+    private function assign($rows, $percent = 0)
     {
-        if ($isSale && !$percent) return "Non è stata specificata la percentuale di sconto";
-        $ids = [];
-        $varIds = [];
-
-        if (!$isSale) {
-            foreach ($rows as $v) {
-                $ids[] = $v['id'];
-                $varIds[] = $v['productVariantId'];
-            }
-            $ids = implode(',', $ids);
-            $varIds = implode(',', $varIds);
-
-            $sql = "UPDATE ProductSku SET salePrice = 0, isOnsale = 0 WHERE productId IN (" . $ids . ") AND productVariantId IN (" . $varIds . ")";
+        foreach ($rows as $v) {
+            $this->app->dbAdapter->beginTransaction();
             try {
-                $res = $this->app->dbAdapter->query($sql, []);
+                $sql = "UPDATE ProductSku SET salePrice = FLOOR(price / 100 * (100 - ? )) WHERE productId = ? AND productVariantId = ? ";
+                $res = $this->app->dbAdapter->query($sql, [$percent, $v['id'], $v['productVariantId']]);
             } catch (\Exception $e) {
-                return "Non riesco a rimuovere le promozioni dai prodotti selezionati:<br />" . $e->getMessage();
+                $this->app->dbAdapter->rollback();
+                return "Non riesco ad avviare le promozioni le promozioni dai prodotti selezionati:<br />" . $e->getMessage();
             }
-            return "I prodotti selezionati non sono più in sconto";
         }
+        $this->app->dbAdapter->commit();
+        return "Promozioni aggiunte e aggiornate!";
+    }
 
-        if ($isSale) {
-            foreach ($rows as $v) {
-                $this->app->dbAdapter->beginTransaction();
+    private function set($rows, $isSale)
+    {
+        foreach ($rows as $v) {
+                        $psku = $this->app->repoFactory->create('ProductSku')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            if (0 != $psku->salePrice) {
+                $sql = "UPDATE ProductSku SET isOnsale = ? WHERE productId = ? AND productVariantId = ?";
                 try {
-                    $sql = "UPDATE ProductSku SET salePrice = FLOOR(price / 100 * (100 - " . $percent . ")), isOnsale = 1 WHERE productId = " . $v['id'] . " AND productVariantId = (" . $v['productVariantId'] . ")";
-                    $res = $this->app->dbAdapter->query($sql, []);
+                    $res = $this->app->dbAdapter->query($sql, [$isSale, $v['id'], $v['productVariantId']]);
                 } catch (\Exception $e) {
-                    $this->app->dbAdapter->rollback();
-                    return "Non riesco ad avviare le promozioni le promozioni dai prodotti selezionati:<br />" . $e->getMessage();
+                    return "OOPS! Non riesco a impostare le promozioni:<br />" . $e->getMessage();
                 }
             }
-            $this->app->dbAdapter->commit();
-            return "Promozioni aggiunte e aggiornate!";
         }
+        return "Le promozioni sono state impostate correttamente.";
     }
 }

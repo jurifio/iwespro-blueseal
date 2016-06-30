@@ -50,15 +50,26 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label='Fusione Prodotti'>
+    <bs-toolbar-group data-group-label='Gestione delle Promozioni'>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-shopping-cart"
+            data-permission="/admin/product/edit"
+            data-event="bs.sales.set"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Imposta le promozioni"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-dollar"
             data-permission="/admin/product/edit"
-            data-event="bs.product.sale"
+            data-event="bs.sales.price"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Fondi due prodotti"
+            data-title="Definisci gli sconti"
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>

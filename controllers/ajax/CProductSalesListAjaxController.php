@@ -137,8 +137,10 @@ class CProductSalesListAjaxController extends AAjaxController
             foreach($res as $v) {
                 $shopRepo = $this->app->repoFactory->create("Shop")->findOneBy(['name' => $v['shop']]);
                 $response['aaData'][$i]["price"] .= $this->formatPrice($v['price']) . " | " . $this->formatPrice($v['val']) . "<br />";
-                $response['aaData'][$i]["sale"] .=  $this->formatPrice($v['sale']) . "<br />";
-                $response['aaData'][$i]["percentage"] .= ($v['isOnSale']) ? floor(100 - 100 / ($res[0]['price'] / $res[0]['sale'])) . '%' : '-' . "<br />";
+                $styleStart = ($v['isOnSale']) ? '<span style="color: #662222; font-weight: bold">' : '';
+                $styleEnd = ($v['isOnSale']) ? '</span>' : '';
+                $response['aaData'][$i]["sale"] .=  $styleStart . $this->formatPrice($v['sale']) . $styleEnd . "<br />";
+                $response['aaData'][$i]["percentage"] .= ($res[0]['sale']) ? floor(100 - 100 / ($res[0]['price'] / $res[0]['sale'])) . '%' . "<br />" : '-';
                 $response['aaData'][$i]["shops"] .= $v['shop'] . "<br />";
                 $response['aaData'][$i]["friendRevenue"] .= $this->formatPrice($v['val'] + $v['val'] * $shopRepo->currentSeasonMultiplier / 100) . " | " . $shopRepo->currentSeasonMultiplier . "<br />";
                 $response['aaData'][$i]["friendSaleRevenue"] .= $this->formatPrice($v['val'] + $v['val'] * $shopRepo->saleMultiplier / 100) . " | " . $shopRepo->saleMultiplier. "<br />";
