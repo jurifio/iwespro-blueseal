@@ -72,21 +72,29 @@ class CProductSalesListAjaxController extends AAjaxController
 
         $i = 0;
         foreach ($prodotti as $val) {
-            $shops = [];
-            foreach ($val->shop as $shop) {
-                $shops[] = $shop->name;
+
+            $cats = [];
+            foreach($val->productCategoryTranslation as $cat){
+                $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
+                unset($path[0]);
+                $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';
             }
+            $shops = [];
+            foreach($val->shop as $shop){
+                $shops[] = $shop->title;
+            }
+
 
             $img = strpos($val->dummyPicture, 's3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $dummyUrl . "/" . $val->dummyPicture;
             $response['aaData'][$i]["DT_RowId"] = 'row__'.$val->id.'__'.$val->productVariant->id;
-            $response['aaData'][$i]["code"] = $val->id . '-' . $val->productVariantId;
+            //$response['aaData'][$i]["code"] = $val->id . '-' . $val->productVariantId;
             $response['aaData'][$i]['code'] = ($okManage) ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
+            $response['aaData'][$i]["category"] = implode(", ", $cats);
+            $response['aaData'][$i]['season'] = $val->productSeason->name;
             $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="' . $img . '">' : "";
-            $response['aaData'][$i]["status"] = $val->productStatus->name;
             $response['aaData'][$i]['CPF'] = $val->itemno.' # '.$val->productVariant->name;
             $response['aaData'][$i]['variant'] = $val->productVariant->name;
-            $response['aaData'][$i]['sizeGroup'] = '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>';
             $th = "";
             $tr = "";
             $res = $this->app->dbAdapter->query("SELECT s.name, sum(ps.stockQty) stock
@@ -102,7 +110,7 @@ class CProductSalesListAjaxController extends AAjaxController
             }
             $response['aaData'][$i]["skus"] = '<table class="nested-table"><thead><tr>'.$th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
 
-            $res = $this->app->dbAdapter->query("SELECT max(ps.price) as price,  group_concat(distinct s.title SEPARATOR ',') as shops
+            $res = $this->app->dbAdapter->query("SELECT max(ps.price) as price,  max(ps.saleprice) as sale, isOnSale, group_concat(distinct s.title SEPARATOR ',') as shops
                                           FROM ProductSku ps, Shop s
                                           WHERE ps.shopId = s.id AND
                                               ps.productId = ? AND
@@ -111,6 +119,8 @@ class CProductSalesListAjaxController extends AAjaxController
 
 
             $response['aaData'][$i]["price"] = isset($res[0]) ? $res[0]['price'] : 0;
+            $response['aaData'][$i]["sale"] = isset($res[0]) && ($res[0]['isOnSale']) ? $res[0]['sale'] : 0;
+            $response['aaData'][$i]["percentage"] = ($response['aaData'][$i]["sale"]) ? floor($res[0]['sale'] / ($res[0]['price'] / 100)) : '-';
             $response['aaData'][$i]["shops"] = isset($res[0]) ? $res[0]['shops'] : 0;
 
             $res = $this->app->dbAdapter->query("SELECT sum(ol.activePrice) incasso, count(DISTINCT ol.id) conto
