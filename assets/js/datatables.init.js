@@ -891,7 +891,7 @@
 				orderable: true,
 				searchable: true
 			}, {
-				data: "category",
+				data: "slug",
 				orderable: true,
 				searchable: true
 			}, {

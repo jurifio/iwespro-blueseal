@@ -90,7 +90,7 @@ class CProductSalesListAjaxController extends AAjaxController
             //$response['aaData'][$i]["code"] = $val->id . '-' . $val->productVariantId;
             $response['aaData'][$i]['code'] = ($okManage) ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $response['aaData'][$i]["category"] = '<span class="small">' . implode(", ", $cats) . '</span>';
+            $response['aaData'][$i]["slug"] = '<span class="small">' . implode(", ", $cats) . '</span>';
             $response['aaData'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
             $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="' . $img . '">' : "";
             $response['aaData'][$i]['CPF'] = $val->itemno.' # '.$val->productVariant->name;
@@ -137,7 +137,7 @@ class CProductSalesListAjaxController extends AAjaxController
             foreach($res as $v) {
                 $shopRepo = $this->app->repoFactory->create("Shop")->findOneBy(['name' => $v['shop']]);
                 $response['aaData'][$i]["price"] .= $this->formatPrice($v['price']) . " | " . $this->formatPrice($v['val']) . "<br />";
-                $styleStart = ($v['isOnSale']) ? '<span style="color: #662222; font-weight: bold">' : '';
+                $styleStart = ($v['isOnSale']) ? '<span style="color: #992222; font-weight: bold">' : '';
                 $styleEnd = ($v['isOnSale']) ? '</span>' : '';
                 $response['aaData'][$i]["sale"] .=  $styleStart . $this->formatPrice($v['sale']) . $styleEnd . "<br />";
                 $response['aaData'][$i]["percentage"] .= ($res[0]['sale']) ? floor(100 - 100 / ($res[0]['price'] / $res[0]['sale'])) . '%' . "<br />" : '-';
