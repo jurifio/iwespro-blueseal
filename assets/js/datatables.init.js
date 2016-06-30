@@ -903,10 +903,6 @@
 				orderable: true,
 				searchable: true
 			}, {
-				data: "shops",
-				orderable: false,
-				searchable: true
-			}, {
 				data: "dummyPicture",
 				orderable: false,
 				searchable: false
@@ -914,6 +910,10 @@
 				data: "skus",
 				orderable: false,
 				searchable: false
+			},{
+				data: "shops",
+				orderable: true,
+				searchable: true
 			}, {
 				data: "price",
 				orderable: false,
@@ -924,6 +924,18 @@
 				searchable: false
 			}, {
 				data: "percentage",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "friendRevenue",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "friendSaleRevenue",
+				orderable: false,
+				searchable: false
+			}, {
+				data: "friendPreRevenue",
 				orderable: false,
 				searchable: false
 			}

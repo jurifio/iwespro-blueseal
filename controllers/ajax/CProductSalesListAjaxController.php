@@ -51,7 +51,7 @@ class CProductSalesListAjaxController extends AAjaxController
         $bluesealBase = $this->app->baseUrl(false) . "/blueseal/";
         $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
-        $datatable = new CDataTables('vBluesealProductFusion', ['id', 'productVariantId'], $_GET);
+        $datatable = new CDataTables('vBluesealProductSales', ['id', 'productVariantId'], $_GET);
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
@@ -90,8 +90,8 @@ class CProductSalesListAjaxController extends AAjaxController
             //$response['aaData'][$i]["code"] = $val->id . '-' . $val->productVariantId;
             $response['aaData'][$i]['code'] = ($okManage) ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $response['aaData'][$i]["category"] = implode(", ", $cats);
-            $response['aaData'][$i]['season'] = $val->productSeason->name;
+            $response['aaData'][$i]["category"] = '<span class="small">' . implode(", ", $cats) . '</span>';
+            $response['aaData'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
             $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="' . $img . '">' : "";
             $response['aaData'][$i]['CPF'] = $val->itemno.' # '.$val->productVariant->name;
             $response['aaData'][$i]['variant'] = $val->productVariant->name;
@@ -110,31 +110,55 @@ class CProductSalesListAjaxController extends AAjaxController
             }
             $response['aaData'][$i]["skus"] = '<table class="nested-table"><thead><tr>'.$th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
 
-            $res = $this->app->dbAdapter->query("SELECT max(ps.price) as price,  max(ps.saleprice) as sale, isOnSale, group_concat(distinct s.title SEPARATOR ',') as shops
+            $res = $this->app->dbAdapter->query("SELECT max(ps.price) as price,  max(ps.saleprice) as sale, isOnSale, ps.value as val, /*group_concat(distinct s.title SEPARATOR ',')*/ s.name as shop
                                           FROM ProductSku ps, Shop s
                                           WHERE ps.shopId = s.id AND
                                               ps.productId = ? AND
                                               ps.productVariantId = ?
-                                          GROUP BY ps.productId, ps.productVariantId", [$val->id, $val->productVariantId])->fetchAll();
+                                          GROUP BY ps.productId, ps.productVariantId, s.title", [$val->id, $val->productVariantId])->fetchAll();
 
 
+            $response['aaData'][$i]["price"] = '<span class="small">';
+            $response['aaData'][$i]["sale"] = '<span class="small">';
+            $response['aaData'][$i]["percentage"] = '<span class="small">';
+            $response['aaData'][$i]["shops"] = '<span class="small">';
+            $response['aaData'][$i]["friendRevenue"] = '<span class="small">';
+            $response['aaData'][$i]["friendSaleRevenue"] = '<span class="small">';
+            $response['aaData'][$i]["friendPreRevenue"] = '<span class="small">';
+            /*
+            $response['aaData'][$i]["price"] = '<span>';
+            $response['aaData'][$i]["sale"] = '<span>';
+            $response['aaData'][$i]["percentage"] = '<span>';
+            $response['aaData'][$i]["shops"] = '<span>';
+            $response['aaData'][$i]["friendRevenue"] = '<span>';
+            $response['aaData'][$i]["friendSaleRevenue"] = '<span>';
+            $response['aaData'][$i]["friendPreRevenue"] = '<span>';
+            */
+            foreach($res as $v) {
+                $shopRepo = $this->app->repoFactory->create("Shop")->findOneBy(['name' => $v['shop']]);
+                $response['aaData'][$i]["price"] .= $this->formatPrice($v['price']) . " | " . $this->formatPrice($v['val']) . "<br />";
+                $response['aaData'][$i]["sale"] .=  $this->formatPrice($v['sale']) . "<br />";
+                $response['aaData'][$i]["percentage"] .= ($v['isOnSale']) ? floor(100 - 100 / ($res[0]['price'] / $res[0]['sale'])) . '%' : '-' . "<br />";
+                $response['aaData'][$i]["shops"] .= $v['shop'] . "<br />";
+                $response['aaData'][$i]["friendRevenue"] .= $this->formatPrice($v['val'] + $v['val'] * $shopRepo->currentSeasonMultiplier / 100) . " | " . $shopRepo->currentSeasonMultiplier . "<br />";
+                $response['aaData'][$i]["friendSaleRevenue"] .= $this->formatPrice($v['val'] + $v['val'] * $shopRepo->saleMultiplier / 100) . " | " . $shopRepo->saleMultiplier. "<br />";
+                $response['aaData'][$i]["friendPreRevenue"] .= $this->formatPrice($v['val'] + $v['val'] * $shopRepo->pastSeasonMultiplier / 100) . " | " . $shopRepo->pastSeasonMultiplier . "<br />";
+            }
+
+            $response['aaData'][$i]["price"] .= '</span>';
+            $response['aaData'][$i]["sale"] .= '</span>';
+            $response['aaData'][$i]["percentage"] .= '</span>';
+            $response['aaData'][$i]["shops"] .= '</span>';
+            $response['aaData'][$i]["friendRevenue"] .= '</span>';
+            $response['aaData'][$i]["friendSaleRevenue"] .= '</span>';
+            $response['aaData'][$i]["friendPreRevenue"] .= '</span>';
+
+            /*
             $response['aaData'][$i]["price"] = isset($res[0]) ? $res[0]['price'] : 0;
             $response['aaData'][$i]["sale"] = isset($res[0]) && ($res[0]['isOnSale']) ? $res[0]['sale'] : 0;
             $response['aaData'][$i]["percentage"] = ($response['aaData'][$i]["sale"]) ? floor($res[0]['sale'] / ($res[0]['price'] / 100)) : '-';
             $response['aaData'][$i]["shops"] = isset($res[0]) ? $res[0]['shops'] : 0;
-
-            $res = $this->app->dbAdapter->query("SELECT sum(ol.activePrice) incasso, count(DISTINCT ol.id) conto
-                                          FROM OrderLine ol, `Order` o
-                                          WHERE o.status LIKE 'ORD%' AND
-                                              o.id = ol.orderId AND
-                                              ol.productId = ? AND
-                                              ol.productVariantId = ?
-                                          GROUP BY ol.productId, ol.productVariantId", [$val->id, $val->productVariantId])->fetchAll();
-
-            $response['aaData'][$i]["income"] = isset($res[0]) ? $res[0]['incasso'] : 0;
-            $response['aaData'][$i]["sells"] = isset($res[0]) ? $res[0]['conto'] : 0;
-
-
+            */
             $i++;
         }
 
@@ -149,5 +173,10 @@ class CProductSalesListAjaxController extends AAjaxController
     public function delete()
     {
         throw new \Exception();
+    }
+    private function formatPrice($val) {
+        return str_replace(".", ",",
+            floor($val * 100) / 100
+        );
     }
 }

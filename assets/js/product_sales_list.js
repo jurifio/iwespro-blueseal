@@ -1,4 +1,4 @@
-$(document).on('bs.product.merge', function(){
+$(document).on('bs.product.sale', function(){
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');
@@ -10,10 +10,10 @@ $(document).on('bs.product.merge', function(){
 
     var selectedRowsCount = selectedRows.length;
 
-    if (selectedRowsCount != 2) {
+    if (!selectedRowsCount) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare esattamente due prodotti"
+            message: "Devi selezionare almeno un prodotto"
         }).open();
         return false;
     }
@@ -30,85 +30,64 @@ $(document).on('bs.product.merge', function(){
         row[i].cpf = v.CPF;
         row[i].brand = v.brand;
         row[i].shops = v.shops;
+        row[i].price = v.price;
+        row[i].sale = v.sale;
+        row[i].percentage = v.percentage;
         i++;
         getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
     console.log(selectedRows);
     console.log(row);
-    header.html('Fondi 2 prodotti');
+    header.html('Assegna sconti');
 
-    body.css("text-align", 'left');
+    body.html('<form>' +
+        '<div class="container-fluid">' +
+        '<div class="row">' +
+        '<div class="col-xs-4">' +
+            '<label for="isSale">I prodotti selezionati vanno in sconto?</label></div>' +
+        '<div class="col-xs-8">' +
+            '<input type="radio" name="isSale" class="checkit" value="1"/> Sì&nbsp;&nbsp;&nbsp;<input type="radio" name="isSale" value="0"/> No' +
+        '<input type="hidden" name="isOnSale" value="1" />' +
+        '</div>' +
+        '</div>' +
+        '<div class="row">' +
+        '<div class="col-xs-4">' +
+            '<label for="percentage">Percentuale di sconto: </label></div>' +
+        '<div class="col-xs-8">' +
+        '<input type="text" maxlength="2" name="percentage" class="percentage" />' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</form>');
+    $('.checkit').prop("checked", true);
+    $('input[name="isSale"]').change(function(){
+        if (1 == $(this).val()) $('.percentage').prop("disabled", false);
+        else $('.percentage').prop("disabled", true);
 
-    $.ajax({
-        url: '/blueseal/xhr/ProductMerge',
-        type: 'GET',
-        data: {rows: row}
-    }).done(function(res){
-        res = JSON.parse(res);
-        var error = '';
-
-        //controllo se entrambi i prodotti hanno ordini
-        var countOrderedProducts = 0;
-        /*$.each(res.rows, function(k, v){
-            if (v.areOrders) countOrderedProducts++;
-        });
-
-        if (1 < countOrderedProducts) {
-            error += "due o più prodotti selezionati hanno associati degli ordini. La fusione è impraticabile.";
-        }*/
-
-        if (false === res.sizeGroupCompatibility) {
-            error += "i due prodotti sono associati con gruppi taglia incompatibili."
-        }
-
-        if ('' !== error) {
-            body.html(':-( Non posso procedere alla fusione:<br />' + error);
-            cancelButton.hide();
-            okButton.html('Ok').off().on("click", function () {
-                bsModal.modal("hide");
-            });
-        } else {
-            var bodyMsg = '<p>Seleziona il prodotto che rimarrà in catalogo:</p><form>';
-            var radio = '';
-            var selected = false;
-            $.each(res.rows, function(k, v){
-                radio += '<input type="radio" name="choosen" value="' + k + '" ';
-                if ((0 < countOrderedProducts) && (0 == v['areOrders'])) {
-                    radio += 'disabled="disabled"'
-                } else {
-                    if (false == selected) {
-                        radio += 'checked';
-                        selected = true;
-                    }
-                }
-                radio += ' /> ' + v['id'] + '-' + v['productVariantId'] + ' - CPF: ' + v['cpf'] + ' - Brand: ' + v['brand'] + ' - Friend: ' + v['shops'] + '<br />';
-            });
-            bodyMsg += radio;
-            bodyMsg += '</form><p>Se uno dei prodotti è stato acquistato sarà la scelta obbligata</p>';
-            body.html(bodyMsg);
-            cancelButton.html("Annulla").show().on('click', function () {
-                bsModal.hide();
-            });
-            okButton.html("Fondi").off().on('click', function () {
-                var choosen = $('input[name="choosen"]').val();
-                body.html("Pensaci un momento. L'azione non è reversibile!");
-                cancelButton.html("Ci ho ripensato");
-                okButton.html("Fondi!").off().on('click', function () {
-                    $.ajax({
-                        url: '/blueseal/xhr/ProductMerge',
-                        type: 'POST',
-                        data: {action: "merge", rows: row, choosen: choosen}
-                    }).done(function(res){
-                        body.html(res);
-                        cancelButton.hide();
-                        okButton.html("Ok").off().on('click', function () {
-                            bsModal.modal("hide");
-                            dataTable.ajax.reload();
-                        });
-                    });
-                });
-            });
-        }
     });
+    body.css("text-align", 'left');
     bsModal.modal('show');
+
+    okButton.off().on('click', function(){
+        console.log($('input[name="isSale"]:checked').val());
+        console.log($('input[name="percentage"]').val());
+
+        $.ajax({
+            url: "/blueseal/xhr/ProductSales",
+            method: "POST",
+            data: {
+                action: "assign",
+                rows: row,
+                isSale: $('input[name="isSale"]:checked').val(),
+                percentage: $('input[name="percentage"]').val()
+            }
+        }).done(function(res, a, b){
+            body.html(res);
+            cancelButton.hide();
+            okButton.html('ok').off().on("click", function(){
+                bsModal.modal('hide');
+                dataTable.ajax.reload();
+            });
+        });
+    });
 });

@@ -26,12 +26,15 @@
                                 <th class="center">Categorie</th>
                                 <th class="center">Stagione</th>
                                 <th class="center">Variante</th>
-                                <th class="center">Shops</th>
                                 <th class="center">Immagine</th>
                                 <th class="center">Skus</th>
+                                <th class="center">Shops</th>
                                 <th class="center">Listino</th>
-                                <th class="center">Listino Promozione</th>
+                                <th class="center">Scontato</th>
                                 <th class="center">% Sconto</th>
+                                <th class="center">Costo Friend</th>
+                                <th class="center">Costo Friend Sale</th>
+                                <th class="center">Costo F. Pre. Stag.</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -52,7 +55,7 @@
             data-tag="a"
             data-icon="fa-dollar"
             data-permission="/admin/product/edit"
-            data-event="bs.product.merge"
+            data-event="bs.product.sale"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Fondi due prodotti"
