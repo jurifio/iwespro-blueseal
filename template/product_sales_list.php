@@ -30,7 +30,7 @@
                                 <th class="center">Skus</th>
                                 <th class="center">Shops</th>
                                 <th class="center">Listino</th>
-                                <th class="center">Scontato</th>
+                                <th class="center">Scon.</th>
                                 <th class="center">% Sconto</th>
                                 <th class="center">Costo Friend</th>
                                 <th class="center">Costo Friend Sale</th>

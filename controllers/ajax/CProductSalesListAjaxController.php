@@ -134,17 +134,33 @@ class CProductSalesListAjaxController extends AAjaxController
             $response['aaData'][$i]["friendSaleRevenue"] = '<span>';
             $response['aaData'][$i]["friendPreRevenue"] = '<span>';
             */
+
             foreach($res as $v) {
+                $friendMargin = '';
+                $friendSaleMargin = '';
+                $friendPastMargin = '';
+
                 $shopRepo = $this->app->repoFactory->create("Shop")->findOneBy(['name' => $v['shop']]);
+                $friendRevenue = $v['val'] + $v['val'] * $shopRepo->currentSeasonMultiplier / 100;
+                $friendSaleRevenue = $v['val'] + $v['val'] * $shopRepo->saleMultiplier / 100;
+                $pastSeasonRevenue = $v['val'] + $v['val'] * $shopRepo->pastSeasonMultiplier / 100;
+
+                if ($val->productSeason->isActive) {
+                    if ($res[0]['isOnSale']) $friendSaleMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['sale'] / 1.22 - $friendSaleRevenue) / $friendSaleRevenue * 100) . '</span>';
+                    else $friendMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['sale'] / 1.22 - $friendRevenue) / $friendRevenue * 100) . '</span>';
+                } else {
+                    $friendPastMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['sale'] / 1.22 - $pastSeasonRevenue) / $pastSeasonRevenue * 100) . '</span>';
+                }
+
                 $response['aaData'][$i]["price"] .= $this->formatPrice($v['price']) . " | " . $this->formatPrice($v['val']) . "<br />";
                 $styleStart = ($v['isOnSale']) ? '<span style="color: #992222; font-weight: bold">' : '';
                 $styleEnd = ($v['isOnSale']) ? '</span>' : '';
                 $response['aaData'][$i]["sale"] .=  $styleStart . $this->formatPrice($v['sale']) . $styleEnd . "<br />";
                 $response['aaData'][$i]["percentage"] .= ($res[0]['sale']) ? floor(100 - 100 / ($res[0]['price'] / $res[0]['sale'])) . '%' . "<br />" : '-';
                 $response['aaData'][$i]["shops"] .= $v['shop'] . "<br />";
-                $response['aaData'][$i]["friendRevenue"] .= $this->formatPrice($v['val'] + $v['val'] * $shopRepo->currentSeasonMultiplier / 100) . " | " . $shopRepo->currentSeasonMultiplier . "<br />";
-                $response['aaData'][$i]["friendSaleRevenue"] .= $this->formatPrice($v['val'] + $v['val'] * $shopRepo->saleMultiplier / 100) . " | " . $shopRepo->saleMultiplier. "<br />";
-                $response['aaData'][$i]["friendPreRevenue"] .= $this->formatPrice($v['val'] + $v['val'] * $shopRepo->pastSeasonMultiplier / 100) . " | " . $shopRepo->pastSeasonMultiplier . "<br />";
+                $response['aaData'][$i]["friendRevenue"] .= $this->formatPrice( $friendRevenue ) . " | " . $shopRepo->currentSeasonMultiplier . $friendMargin . "<br />";
+                $response['aaData'][$i]["friendSaleRevenue"] .= $this->formatPrice( $friendSaleRevenue ) . " | " . $shopRepo->saleMultiplier. $friendSaleMargin . "<br />";
+                $response['aaData'][$i]["friendPreRevenue"] .= $this->formatPrice( $pastSeasonRevenue ) . " | " . $shopRepo->pastSeasonMultiplier . $friendPastMargin . "<br />";
             }
 
             $response['aaData'][$i]["price"] .= '</span>';
