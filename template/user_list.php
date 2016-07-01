@@ -61,6 +61,17 @@
             data-placement="bottom"
             data-href="#"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-thumbs-o-up"
+            data-permission="/admin/user/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-event="bs.user.activate"
+            data-title="Attiva un utente"
+            data-placement="bottom"
+            data-href="#"
+            ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Assegna Ruoli">
         <bs-toolbar-button

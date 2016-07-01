@@ -128,3 +128,31 @@ $(document).on('bs.permissionsTree.loaded',function() {
 		});
 	});
 });
+
+$(document).on('bs.user.activate',function() {
+	var selectedRows = $('.table').DataTable().rows('.selected').data();
+	var selection = [];
+
+	$.each(selectedRows, function(k,v) {
+		selection.push(v.DT_RowId.split('__')[1])
+	});
+	$.ajax({
+		method: "PUT",
+		url: "/blueseal/xhr/ActivateUser",
+		data: {
+			users: selection
+		}
+	}).done(function() {
+		new Alert({
+			type: "success",
+			message: "Utenti Attivati"
+		}).open();
+	}).fail(function() {
+		new Alert({
+			type: "danger",
+			message: "Impossibile attivare gli utenti"
+		}).open();
+	}).always(function() {
+		$('.table').DataTable().ajax.reload();
+	});
+});
