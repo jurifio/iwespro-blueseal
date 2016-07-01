@@ -274,12 +274,13 @@
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="form-group form-group-default">
+                                            <div class="form-group form-group-default" style="height: 50px">
                                                 <label for="ProductName_1_name">Nome del prodotto</label>
-                                                <?php if ($productEdit->productNameTranslation != false && ($name = $productEdit->productNameTranslation->findOneByKey('langId', 1))) ?>
-                                                <input autocomplete="off" type="text" class="form-control"
+                                                <input type="hidden" name="hidden-name" class="hidden-name" value="<?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>" />
+                                                <select id="ProductName_1_name" name="ProductName_1_name" class="form-control" data-preset-name="<?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>"></select>
+                                                <!--<input autocomplete="off" type="text" class="form-control"
                                                        id="ProductName_1_name" name="ProductName_1_name"
-                                                       value="<?php if ($productEdit->productNameTranslation && ($name = $productEdit->productNameTranslation->findOneByKey('langId', 1))) echo $name->name; ?>">
+                                                       value="<?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>">-->
                                             </div>
                                         </div>
                                     </div>

@@ -340,6 +340,50 @@ $(document).ready(function() {
         });
     }
 
+
+    var nameOptions = [];
+    nameOptions[0] = {name: $(".hidden-name").val()};
+
+    $("#ProductName_1_name").selectize({
+        valueField: 'name',
+        labelField: 'name',
+        searchField: 'name',
+        options: nameOptions,
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    escape(item.name) +
+                    '</div>';
+            }
+        },
+        load: function (query, callback) {
+            if (3 >= query.length) {
+                return callback();
+            }
+            $.ajax({
+                url: '/blueseal/xhr/NamesManager',
+                type: 'GET',
+                data: "search=" + query,
+                dataType: 'json',
+                error: function () {
+                    callback();
+                },
+                success: function (res) {
+                    console.log(res);
+                    if (!res.length) {
+                        var resArr = [];
+                        resArr[0] = {name: query.trim()};
+                        res = resArr;
+                    }
+                    callback(res);
+                }
+            });
+        }
+    });
+    $('#ProductName_1_name').selectize()[0].selectize.setValue($("#ProductName_1_name").data('preset-name'));
+
+
     var textProductDescription = $('textarea[name^="ProductDescription"]');
     textProductDescription.each(function () {
         if (textProductDescription.length) {
