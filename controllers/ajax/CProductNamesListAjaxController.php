@@ -43,8 +43,7 @@ class CProductNamesListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('ProductNameTranslation', ['productId', 'productVariantId', 'langId'], $_GET);
-        $datatable->addCondition('langId', [1]);
+        $datatable = new CDataTables('vBluesealProductSales', ['id', 'productVariantId', 'name'], $_GET);
         $datatable->addGroup(['name']);
 
         $productNames = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
@@ -71,6 +70,23 @@ class CProductNamesListAjaxController extends AAjaxController
                 $response['data'][$i]['count'] = count($res); //$products->count();
                 $response['data'][$i]['productsList'] = '';
                 $response['data'][$i]['productsList'] .= '<span class="small">';
+                $iterator = 0;
+                foreach($res as $v) {
+                    $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                    $cats = [];
+                    foreach($p->productCategoryTranslation as $cat){
+
+                        $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
+                        unset($path[0]);
+                        $newCat = '<span class="small">'.implode('/',array_column($path, 'slug')).'</span><br />';
+                        if (array_search($newCat, $cats)) continue;
+                        $cats[] = $newCat;
+                        $iterator++;
+                        if (10 == $iterator) break;
+                    }
+                    if (10 == $iterator) break;
+                }
+                $response['data'][$i]['slug'] = implode('', $cats);
                 $iterator = 0;
                 foreach($res as $v) {
                     $prod = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);

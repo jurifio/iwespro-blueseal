@@ -287,6 +287,10 @@
 				orderable: true,
 				searchable: false
 			}, {
+				data: "slug",
+				orderable: true,
+				searchable: true
+			}, {
 				data: "count",
 				orderable: false,
 				searchable: false

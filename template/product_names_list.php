@@ -29,6 +29,7 @@
                             <thead>
                             <tr>
                                 <th class="center">Name</th>
+                                <th class="center">Categorie</th>
                                 <th class="center">N. Prodotti Associati</th>
                                 <th class="center">Lista Prodotti</th>
                             </tr>
