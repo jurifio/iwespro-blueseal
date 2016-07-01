@@ -43,8 +43,7 @@ class CProductNamesListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductSales', ['id', 'productVariantId', 'name'], $_GET);
-        $datatable->addGroup(['name']);
+        $datatable = new CDataTables('vBluesealProductSales', ['productId', 'productVariantId', 'name', 'langId'], $_GET);
 
         $productNames = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
