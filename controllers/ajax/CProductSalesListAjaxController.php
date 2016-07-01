@@ -145,7 +145,7 @@ class CProductSalesListAjaxController extends AAjaxController
                 $friendSaleRevenue = $v['val'] + $v['val'] * $shopRepo->saleMultiplier / 100;
                 $pastSeasonRevenue = $v['val'] + $v['val'] * $shopRepo->pastSeasonMultiplier / 100;
 
-                \BlueSeal::dump($pastSeasonRevenue . " - " . $v['val']);
+                \BlueSeal::dump($val->id ."-".$val->productVariantId . " :::: " . $pastSeasonRevenue . " - " . $v['val']);
                 if ($val->productSeason->isActive) {
                     if ($res[0]['isOnSale']) $friendSaleMargin = ' | <span style="font-weight: bold;" >' .
                         $this->formatPrice(
