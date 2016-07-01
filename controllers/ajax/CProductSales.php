@@ -54,7 +54,6 @@ class CProductSales extends AAjaxController
 	            }*/
                 $sql = "UPDATE ProductSku SET salePrice = FLOOR(price / 100 * (100 - ? )) WHERE productId = ? AND productVariantId = ? ";
                 $res = $this->app->dbAdapter->query($sql, [$percent, $v['id'], $v['productVariantId']]);
-	            $this->app->cacheService->getCache('entity')->flush();
             } catch (\Exception $e) {
                 $this->app->dbAdapter->rollback();
                 return "Non riesco ad avviare le promozioni le promozioni dai prodotti selezionati:<br />" . $e->getMessage();
