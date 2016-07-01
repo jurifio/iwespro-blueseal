@@ -61,7 +61,7 @@ class CProductSales extends AAjaxController
             }
         }
         $this->app->dbAdapter->commit();
-	    $this->app->cacheService->getCache('entity')->flush();
+	    $this->app->cacheService->getCache('entities')->flush();
         return "Promozioni aggiunte e aggiornate!";
     }
 
@@ -78,7 +78,7 @@ class CProductSales extends AAjaxController
                 }
             }
         }
-	    $this->app->cacheService->getCache('entity')->flush();
+	    $this->app->cacheService->getCache('entities')->flush();
         return "Le promozioni sono state impostate correttamente.";
     }
 }
