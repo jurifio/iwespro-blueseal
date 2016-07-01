@@ -147,9 +147,10 @@ class CProductSalesListAjaxController extends AAjaxController
 
                 if ($val->productSeason->isActive) {
                     if ($res[0]['isOnSale']) $friendSaleMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['sale'] / 1.22 - $friendSaleRevenue) / $friendSaleRevenue * 100) . '</span>';
-                    else $friendMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['sale'] / 1.22 - $friendRevenue) / $friendRevenue * 100) . '</span>';
+                    else $friendMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['price'] / 1.22 - $friendRevenue) / $friendRevenue * 100) . '</span>';
                 } else {
-                    $friendPastMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['sale'] / 1.22 - $pastSeasonRevenue) / $pastSeasonRevenue * 100) . '</span>';
+                    if ($res[0]['isOnSale']) $friendPastMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['sale'] / 1.22 - $pastSeasonRevenue) / $pastSeasonRevenue * 100) . '</span>';
+                    else $friendPastMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['price'] / 1.22 - $pastSeasonRevenue) / $pastSeasonRevenue * 100) . '</span>';
                 }
 
                 $response['aaData'][$i]["price"] .= $this->formatPrice($v['price']) . " | " . $this->formatPrice($v['val']) . "<br />";
