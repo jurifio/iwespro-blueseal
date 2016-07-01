@@ -46,14 +46,22 @@ class CProductSales extends AAjaxController
         foreach ($rows as $v) {
             $this->app->dbAdapter->beginTransaction();
             try {
+	            /*
+	            $prod = $this->app->repoFactory->create('Product')->findOne([$v]);
+	            foreach($prod->productSku as $sku ) {
+		            $sku->salePrice = floor($sku->pice / 100 * (100 - $percent ));
+		            $sku->update();
+	            }*/
                 $sql = "UPDATE ProductSku SET salePrice = FLOOR(price / 100 * (100 - ? )) WHERE productId = ? AND productVariantId = ? ";
                 $res = $this->app->dbAdapter->query($sql, [$percent, $v['id'], $v['productVariantId']]);
+	            $this->app->cacheService->getCache('entity')->flush();
             } catch (\Exception $e) {
                 $this->app->dbAdapter->rollback();
                 return "Non riesco ad avviare le promozioni le promozioni dai prodotti selezionati:<br />" . $e->getMessage();
             }
         }
         $this->app->dbAdapter->commit();
+	    $this->app->cacheService->getCache('entity')->flush();
         return "Promozioni aggiunte e aggiornate!";
     }
 
@@ -70,6 +78,7 @@ class CProductSales extends AAjaxController
                 }
             }
         }
+	    $this->app->cacheService->getCache('entity')->flush();
         return "Le promozioni sono state impostate correttamente.";
     }
 }
