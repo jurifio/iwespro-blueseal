@@ -176,6 +176,7 @@ class CProductSalesListAjaxController extends AAjaxController
                 $response['aaData'][$i]["sale"] .=  $styleStart . $this->formatPrice($v['sale']) . $styleEnd . "<br />";
                 $response['aaData'][$i]["percentage"] .= ($res[0]['sale']) ? floor(100 - 100 / ($res[0]['price'] / $res[0]['sale'])) . '%' . "<br />" : '-';
                 $response['aaData'][$i]["shops"] .= $v['shop'] . "<br />";
+                $response['aaData'][$i]['isOnSale'] = '<span class="small">' . $v['isOnSale'] . '</span>';
                 $response['aaData'][$i]["friendRevenue"] .= $this->formatPrice( $friendRevenue ) . " | " . $shopRepo->currentSeasonMultiplier . $friendMargin . "<br />";
                 $response['aaData'][$i]["friendSaleRevenue"] .= $this->formatPrice( $friendSaleRevenue ) . " | " . $shopRepo->saleMultiplier. $friendSaleMargin . "<br />";
                 $response['aaData'][$i]["friendPreRevenue"] .= $this->formatPrice( $pastSeasonRevenue ) . " | " . $shopRepo->pastSeasonMultiplier . $friendPastMargin . "<br />";

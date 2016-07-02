@@ -930,6 +930,10 @@
 				data: "percentage",
 				orderable: false,
 				searchable: false
+			},{
+				data: "isOnSale",
+				orderable: true,
+				searchable: true
 			}, {
 				data: "friendRevenue",
 				orderable: false,
