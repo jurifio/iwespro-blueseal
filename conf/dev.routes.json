@@ -1306,19 +1306,6 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
-            "pattern": "/blueseal/prodotti/sconti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSalesListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
         }
     ]
 }
