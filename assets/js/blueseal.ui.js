@@ -56,6 +56,7 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
     if (conf.formAutofill && conf.formAutofill == true) {
 	    var errors = [];
 	    $('input:not([type=file]), textarea, select').each(function() {
+		    if(typeof $(this).attr('name') == 'undefined') return;
 		    if($(this).attr('required') == 'required' && $(this).val().length  === 0){
 			    errors.push($(this).attr('name'));
 		    }
@@ -73,6 +74,7 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
 
         var radioNames = [];
         $('input[type=radio]').each(function() {
+	        if(typeof $(this).attr('name') == 'undefined') return;
             radioNames.push($(this).attr('name'));
         });
         var unique = radioNames.filter(function(value,index,self) {
@@ -83,11 +85,13 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
         });
 	    
 	    $('input[type=checkbox]:checked').each(function() {
+		    if(typeof $(this).attr('name') == 'undefined') return;
 		    formDataObject.append($(this).attr('name'), $(this).val());
 	    });
 
         $(':file').each(function() {
             if(typeof this.name == 'undefined') return;
+            if(this.files.length == 0) return;
             formDataObject.append(this.name,this.files[0]);
         });
     }

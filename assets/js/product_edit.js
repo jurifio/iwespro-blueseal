@@ -381,7 +381,7 @@ $(document).ready(function() {
     }
 
     var nameOptions = [];
-    nameOptions[0] = {name: $(".hidden-name").val()};
+    nameOptions[0] = {name: $("#hidden-name").val()};
 
     $("#ProductName_1_name").selectize({
         valueField: 'name',
