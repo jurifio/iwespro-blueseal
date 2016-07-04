@@ -56,16 +56,15 @@ $(document).on('bs.sales.set', function(){
     bsModal.modal('show');
 
     okButton.off().on('click', function(){
-        console.log($('input[name="isSale"]:checked').val());
-
-        if ($('input[name="isSale"]:checked').val()) {
+	    var val = $('input[name="isSale"]:checked').val();
+		if (val) {
             $.ajax({
                 url: "/blueseal/xhr/ProductSales",
                 method: "POST",
                 data: {
                     action: "set",
                     rows: row,
-                    isSale: $('input[name="isSale"]:checked').val()
+                    isSale: val
                 }
             }).done(function (res, a, b) {
                 body.html(res);
