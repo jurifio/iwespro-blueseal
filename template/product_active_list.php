@@ -98,15 +98,15 @@
             data-placement="bottom"
             ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-archive"
-            data-permission="/admin/product/mag"
-            data-event="bs.add.sku"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Movimenta"
-            data-placement="bottom"
-            ></bs-toolbar-button>
+                data-tag="a"
+                data-icon="fa-archive"
+                data-permission="/admin/product/mag"
+                data-event="bs.add.sku"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Movimenta"
+                data-placement="bottom"
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-camera-retro"

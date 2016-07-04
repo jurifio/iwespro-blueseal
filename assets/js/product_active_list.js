@@ -128,36 +128,36 @@ $(document).on('bs.dupe.product', function () {
 
 $(document).on('bs.add.sku', function () {
 
-    var getVarsArray = [];
-    var selectedRows = $('.table').DataTable().rows('.selected').data();
-    var selectedRowsCount = selectedRows.length;
+	var getVarsArray = [];
+	var selectedRows = $('.table').DataTable().rows('.selected').data();
+	var selectedRowsCount = selectedRows.length;
 
-    if (selectedRowsCount < 1) {
-        new Alert({
-            type: "warning!",
-            message: "Devi selezionare un prodotto da movimentare"
-        }).open();
-        return false;
-    }
+	if (selectedRowsCount < 1) {
+		new Alert({
+			type: "warning!",
+			message: "Devi selezionare un prodotto da movimentare"
+		}).open();
+		return false;
+	}
 
-    if (selectedRowsCount > 1) {
-        new Alert({
-            type: "warning!",
-            message: "Puoi movimentare un solo prodotto per volta"
-        }).open();
-        return false;
-    }
+	if (selectedRowsCount > 1) {
+		new Alert({
+			type: "warning!",
+			message: "Puoi movimentare un solo prodotto per volta"
+		}).open();
+		return false;
+	}
 
-    var i = 0;
-    $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = 'id=' + rowId[1] + '&productVariantId=' + rowId[2];
-        i++;
-    });
+	var i = 0;
+	$.each(selectedRows, function (k, v) {
+		var rowId = v.DT_RowId.split('__');
+		getVarsArray[i] = 'id=' + rowId[1] + '&productVariantId=' + rowId[2];
+		i++;
+	});
 
-    var getVars = getVarsArray.join('&');
+	var getVars = getVarsArray.join('&');
 
-    window.open('/blueseal/skus?' + getVars, 'product-sku-add-' + Math.random() * (9999999999));
+	window.open('/blueseal/skus?' + getVars, 'product-sku-add-' + Math.random() * (9999999999));
 });
 
 $(document).on('bs.manage.photo', function () {
