@@ -42,7 +42,7 @@ class CFillOrderLine extends AAjaxController
                 $pricer = $sku->shop->billingLogic;
                 /** @var IBillingLogic $pricer */
                 $pricer = new $pricer($this->app);
-                $sku->friendRevenue = $pricer->calculateFriendReturn($line);
+                $line->friendRevenue = $pricer->calculateFriendReturn($line);
             }
 
             return $view->render([
