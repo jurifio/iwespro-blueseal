@@ -172,7 +172,7 @@
             data-toggle="modal"
         ></bs-toolbar-button><bs-toolbar-button
             data-tag="a"
-            data-icon="fa-sitemap"
+            data-icon="fa-usd"
             data-permission="/admin/product/edit"
             data-event="bs.sales.set"
             data-class="btn btn-default"
@@ -182,7 +182,7 @@
             data-toggle="modal"
         ></bs-toolbar-button><bs-toolbar-button
             data-tag="a"
-            data-icon="fa-sitemap"
+            data-icon="fa-percent"
             data-permission="/admin/product/edit"
             data-event="bs.sales.price"
             data-class="btn btn-default"
