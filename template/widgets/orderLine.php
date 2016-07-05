@@ -42,6 +42,7 @@ $sku->setEntityManager($app->application()->entityManagerFactory->create('Produc
 </td>
 <td class="center"><img width="90" src="<?php echo $app->image($line->product->getPhoto(1,281),'amazon') ?>" /></td>
 <td class="center"><?php echo $line->product->productBrand->name ;?></td>
+<td class="center"><?php echo $line->product->productSeason->name . " " . $line->product->productSeason->year; ?></td>
 <td class="center"><?php echo $line->product->itemno ;?></td>
 <td class="center"><?php
     $actualSku = $line->skus->getFirst();
@@ -54,21 +55,30 @@ $sku->setEntityManager($app->application()->entityManagerFactory->create('Produc
             <input type="hidden" name="orderId" value="<?php echo $line->orderId ?>" />
             <input type="hidden" name="orderLineId" value="<?php echo $line->id ?>" />
             <select id="select_shop" name="selectShop">
-                <?php foreach($line->skus as $sku): ?>
-                    <option <?php if($i == 0){ echo 'selected="selected"'; $i++; $actualSku = $sku; } ?> value="<?php echo $sku->shopId ?>"> <?php echo $sku->shop->name.' ('.number_format($sku->friendRevenue,2).')<br>'; ?></option>
-                <?php endforeach; ?>
+                <?php $iSku = 0;
+                foreach($line->skus as $sku): ?>
+                    <option <?php if($iSku == $line->defaultSku){ echo 'selected="selected"'; $i++; $actualSku = $sku; } ?> value="<?php echo $sku->shopId ?>"> <?php echo $sku->shop->name.' ('.number_format($sku->friendRevenue,2).')<br>'; ?></option>
+                <?php $iSku++;
+                endforeach; ?>
             </select>
             <button id="changeShop" class="btn btn-success" type="submit"><i class="fa fa-random"></i></button>
         </form>
     <?php } ?>
     </td>
 <td class="center"><?php echo $line->productSize ;?></td>
-<td class="center"><?php echo number_format($line->fullPrice,2); ?></td>
-<td class="center"><?php echo number_format($line->activePrice,2); ?></td>
-<td class="center"><?php echo number_format($line->netPrice,2);?></td>
-<td class="center"><?php echo number_format($line->cost,2); ?></td>
+<td class="center"><?php
+        if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
+        else echo number_format($line->fullPrice, 2);
+    ?></td>
+<td class="center"><?php if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
+    else echo number_format($line->activePrice, 2); ?></td>
+<td class="center"><?php if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
+    else echo number_format($line->netPrice, 2);?></td>
+<td class="center"><?php if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
+    else echo number_format($line->cost, 2); ?></td>
 <td class="center"><?php if(!$lineManager->isFriendValueChangable()) {
-                            echo number_format($line->friendRevenue,2);
+                            if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
+                            else echo number_format($line->friendRevenue, 2);
                          } else { ?>
                             <form data-ajax="true" data-always="reloadLineFromForm" data-controller="ChangeFriendRevenue"
                                   data-address="<?php echo $app->urlForBluesealXhr() ?>"

@@ -37,12 +37,15 @@ class CFillOrderLine extends AAjaxController
             if($lineManager->isFriendChangable()){
                 $line->skus->addAll($lineManager->getAlternativesSkus());
             }
-
+            $friendRev = 1000000;
+            $iSku = 0;
             foreach($line->skus as $sku) {
                 $pricer = $sku->shop->billingLogic;
                 /** @var IBillingLogic $pricer */
                 $pricer = new $pricer($this->app);
-                $line->friendRevenue = $pricer->calculateFriendReturn($line);
+                $sku->friendRevenue = $pricer->calculateFriendReturnSku($sku);
+                if ($friendRev > $sku->friendRevenue) $line->defaultSku = $iSku;
+                $iSku++;
             }
 
             return $view->render([

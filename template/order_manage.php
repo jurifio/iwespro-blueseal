@@ -193,6 +193,7 @@
                                         <th class="center sorting">Opera Stato</th>
                                         <th class="center sorting">Foto</th>
                                         <th class="center sorting">Brand</th>
+                                        <th class="center sorting">Stagione</th>
                                         <th class="center sorting">CPF</th>
                                         <th class="center sorting">Shop</th>
                                         <th class="center sorting">Taglia</th>

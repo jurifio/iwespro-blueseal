@@ -25,6 +25,11 @@ class COrderLineManager
     protected $orderLine;
 
     /**
+     * @var int
+     */
+    protected $defaultSku;
+    
+    /**
      * @param AApplication $app
      * @param COrderLine $orderLine
      */
