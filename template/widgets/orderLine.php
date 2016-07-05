@@ -57,7 +57,8 @@ $sku->setEntityManager($app->application()->entityManagerFactory->create('Produc
             <select id="select_shop" name="selectShop">
                 <?php $iSku = 0;
                 foreach($line->skus as $sku): ?>
-                    <option <?php if($iSku == $line->defaultSku){ echo 'selected="selected"'; $i++; $actualSku = $sku; } ?> value="<?php echo $sku->shopId ?>"> <?php echo $sku->shop->name.' ('.number_format($sku->friendRevenue,2).')<br>'; ?></option>
+                    <option value="0">Seleziona:</option>
+                    <option <?php if($iSku == $line->defaultSku){ /*echo 'selected="selected"'; */$i++; $actualSku = $sku; } ?> value="<?php echo $sku->shopId ?>"> <?php echo $sku->shop->name.' ('.number_format($sku->friendRevenue,2).')<br>'; ?></option>
                 <?php $iSku++;
                 endforeach; ?>
             </select>
@@ -67,16 +68,16 @@ $sku->setEntityManager($app->application()->entityManagerFactory->create('Produc
     </td>
 <td class="center"><?php echo $line->productSize ;?></td>
 <td class="center"><?php
-        if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
+        if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
         else echo number_format($line->fullPrice, 2);
     ?></td>
-<td class="center"><?php if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
+<td class="center"><?php if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
     else echo number_format($line->activePrice, 2); ?></td>
-<td class="center"><?php if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
+<td class="center"><?php if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
     else echo number_format($line->netPrice, 2);?></td>
-<td class="center"><?php if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
+<td class="center"><?php if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
     else echo number_format($line->cost, 2); ?></td>
-<td class="center"><?php if(!$lineManager->isFriendValueChangable()) {
+<td class="center"><?php if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) {
                             if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
                             else echo number_format($line->friendRevenue, 2);
                          } else { ?>

@@ -117,6 +117,13 @@ $(document).on('click','button[data-ajax="true"]',function (e) {
     var buttonClass = button.attr('class');
     button.addClass('fa fa-spinner fa-spin').fadeIn();
 
+    var selectFriend = $('select[name="changeLineShop"]');
+    if ($('select[name="changeLineShop"]')) {
+        if (0 == $('select[name="changeLineShop"] option:selected').val()) {
+            return false;
+        }
+    }
+
     $.ajax({
         type: method,
         url: address,
