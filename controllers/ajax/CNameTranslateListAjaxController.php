@@ -83,7 +83,7 @@ class CNameTranslateListAjaxController extends AAjaxController
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId. '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?productId=' . $val->productId . '&productVariantId=' . $val->productVariantId.'">' . $val->name . '</a>' : $val->name;
+            $response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?name=' . urlencode($val->name) . '">' . $val->name . '</a>' : $val->name;
             $response['data'][$i]['lang'] = $html;
 
             $i++;
