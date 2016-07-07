@@ -171,3 +171,68 @@ $(document).on('bs.names.merge', function () {
     });
     bsModal.modal();
 });
+
+$(document).on('bs.names.products', function () {
+
+    var bsModal = $('#bsModal');
+    var dataTable = $('.dataTable').DataTable();
+    var header = $('.modal-header h4');
+    var body = $('.modal-body');
+    var loader = body.html();
+    var cancelButton = $('.modal-footer .btn-default');
+    var okButton = $('.modal-footer .btn-success');
+
+    var selectedRows = $('.table').DataTable().rows('.selected').data();
+
+    var selectedRowsCount = selectedRows.length;
+
+    if (1 != selectedRowsCount) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare un prodotto"
+        }).open();
+        return false;
+    }
+
+    var i = 0;
+    var row = [];
+    $.each(selectedRows, function (k, v) {
+        row[i] = {};
+        row[i].name = v.name;
+        i++;
+    });
+    
+    header.html('Elenco dei prodotti (max 500)');
+    $.ajax({
+        url: "/blueseal/xhr/NamesProductAssociated",
+        type: "GET",
+        data: {search: row[0].name}
+    }).done(function (result) {
+        body.html('');
+        body.css('max-height', '400px');
+        body.css('overflow-y', 'auto');
+        var bodyRes = '<ul>';
+        result = JSON.parse(result);
+        console.log(result);
+        $.each(result, function(k, v){
+            bodyRes += '<li>' + v['link'] + ': ' + v['brand'] + ' - ' + v['season'] + '  <img style="width: 40px" src="' + v['pic'] + '" /></li>';
+        });
+        bodyRes += '</ul>';
+        body.html(bodyRes);
+        okButton.html('Ok').off().on('click', function () {
+            bsModal.modal('hide');
+        });
+        cancelButton.hide();
+        bsModal.modal();
+    }).fail(function (res, a, b) {
+        console.log(res);
+        console.log(a);
+        console.log(b);
+        body.html("OOPS! C'è stato un problemino!");
+        okButton.html('Ok').off().on('click', function () {
+            bsModal.modal('hide');
+        });
+        cancelButton.hide();
+        bsModal.modal();
+    });
+});

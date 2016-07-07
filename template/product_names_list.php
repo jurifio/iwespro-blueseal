@@ -31,7 +31,6 @@
                                 <th class="center">Name</th>
                                 <th class="center">Categorie</th>
                                 <th class="center">N. Prodotti Associati</th>
-                                <th class="center">Lista Prodotti</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -63,6 +62,16 @@
             data-icon="fa-magnet"
             data-permission="/admin/product/edit"
             data-event="bs.names.merge"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Unisci i nomi prodotto"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-search"
+            data-permission="/admin/product/edit"
+            data-event="bs.names.products"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Unisci i nomi prodotto"
