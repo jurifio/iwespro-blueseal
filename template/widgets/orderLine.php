@@ -55,9 +55,9 @@ $sku->setEntityManager($app->application()->entityManagerFactory->create('Produc
             <input type="hidden" name="orderId" value="<?php echo $line->orderId ?>" />
             <input type="hidden" name="orderLineId" value="<?php echo $line->id ?>" />
             <select id="select_shop" name="selectShop">
+                <option value="0">Seleziona:</option>
                 <?php $iSku = 0;
                 foreach($line->skus as $sku): ?>
-                    <option value="0">Seleziona:</option>
                     <option <?php if($iSku == $line->defaultSku){ /*echo 'selected="selected"'; */$i++; $actualSku = $sku; } ?> value="<?php echo $sku->shopId ?>"> <?php echo $sku->shop->name.' ('.number_format($sku->friendRevenue,2).')<br>'; ?></option>
                 <?php $iSku++;
                 endforeach; ?>

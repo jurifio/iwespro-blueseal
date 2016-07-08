@@ -46,7 +46,7 @@ class COrderLineManager
      */
     public function changeStatus($newStatus)
     {
-        /** @var COrderLineStatusRepo $repo */
+        /** @var \bamboo\domain\repositories\COrderLineStatusRepo $repo */
         $repo = $this->app->repoFactory->create('OrderLineStatus');
         if (!($newStatus instanceof COrderLineStatus)) {
             $newStatus = $repo->em()->findBy(['id' => $newStatus])->getFirst();
@@ -57,10 +57,8 @@ class COrderLineManager
         if (!($newStatus instanceof COrderLineStatus)) {
             throw new RedPandaException("Can't find the status you are speaking about");
         }
-        //var_dump($possible);
-        //$possible = $this->possibleNext();
         //FIXME la ricerca è rotta perchè i puntatori definiti nella query durano per piu di una query... verificare se è possibile definirli per una singola query
-        //if ($possible->findOneByKey('id', $newStatus->id)) {
+
         /** @var  $this ->app->dbAdapter CMySQLAdapter */
         $this->log("Change Line", "Changing Status to ".$newStatus->code);
         $res = $this->app->eventManager->trigger(new EGenericEvent("orderLineStatusChange", ['orderLine' => $this->orderLine, 'newStatus' => $newStatus]));
@@ -72,10 +70,6 @@ class COrderLineManager
         } catch (\Exception $e) {
             $this->app->router->response()->raiseUnauthorized();
         }
-      //  $rows = $this->app->dbAdapter->update('OrderLine', ['status' => $newStatus->code,], ['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
-    //    if ($rows == 1) return true;
-        //}
-       // return false;
     }
 
     /**
@@ -122,7 +116,7 @@ class COrderLineManager
      */
     public function isFriendChangable()
     {
-        if ($this->orderLine->orderLineStatus->phase == 3) {
+        if ($this->orderLine->orderLineStatus->phase <= 3) {
             $conto = $this->app->dbAdapter->query("SELECT count(DISTINCT productId, productVariantId, productSizeId, shopId) AS conto
                                           FROM ProductSku
                                           WHERE productId = ? AND
