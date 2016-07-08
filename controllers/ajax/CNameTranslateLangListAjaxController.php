@@ -45,7 +45,7 @@ class CNameTranslateLangListAjaxController extends AAjaxController
     {
         $langId = $this->app->router->request()->getRequestData('lang');
         $datatable = new CDataTables('vBluesealProductNameList',['productId','productVariantId','langId'],$_GET);
-
+        
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         if (!empty($this->authorizedShops)) {
@@ -70,61 +70,64 @@ class CNameTranslateLangListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($productsName as $val){
-            $trans = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'langId' => $langId]);
-			if(is_null($trans)) continue;
-            $name = '<div class="form-group form-group-default full-width">';
-            if (($trans->name != '') && $okManage) {
-                continue;
-            } elseif ($okManage) {
-                $name .= '<input type="text" class="form-control full-width" data-lang="' . $langId . '" data-action="' . $this->urls['base'] .'xhr/NameTranslateLangListAjaxController" data-pid="' . $val->productId . '_' . $val->productVariantId. '" title="nameId" name="nameId" id="nameId" />';
+            $translated = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'langId' => $langId]);
+            $translation = (is_null($translated)) ? '' : $translated->name ;
+			$name = '<div class="form-group form-group-default full-width">';
+            if ($okManage) {
+                $name .= '<input type="text" class="form-control full-width nameId" data-lang="' . $langId . '" data-action="' . $this->urls['base'] . 'xhr/NameTranslateLangListAjaxController" data-name="' . $val->name . '" title="nameId" class="nameId" value="' . htmlentities($translation) .'"/>';
             }
             $name .= '</div>';
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['trans'] = $name;
-            $response['data'][$i]['name'] = $val->name . ' - ' . $val->productId . '-' . $val->productVariantId;
+            $response['data'][$i]['name'] = $val->name;
             $response['data'][$i]['productId'] = $val->productId;
             $response['data'][$i]['productVariantId'] = $val->productVariantId;
 
             $i++;
         }
-
         return json_encode($response);
     }
 
     public function put()
     {
-        $nameId = $this->app->router->request()->getRequestData('nameId');
 
-        $id = $this->app->router->request()->getRequestData('id');
-        $names = explode('_', $id);
-        $productId = $names[0];
-        $productVariantId = $names[1];
+        $name = $this->app->router->request()->getRequestData('name');
+        $translated = $this->app->router->request()->getRequestData('translated');
+        if ("" == $translated) return false;
 
         $langId = $this->app->router->request()->getRequestData('lang');
 
         $this->app->dbAdapter->beginTransaction();
         try {
-            $trans = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $productId, 'productVariantId' => $productVariantId, 'langId' => $langId]);
+            $italians = $this->app->repoFactory->create('ProductNameTranslation')->findBy(['name' => $name, 'langId' => 1]);
+            foreach($italians as $productName) {
+                $newLang = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(
+                    [
+                        'productId' => $productName->productId,
+                        'productVariantId' => $productName->productVariantId,
+                        'langId' => $langId
+                    ]
+                );
 
-            if (!is_null($trans)) {
-                $trans->name = $nameId;
-                $trans->update();
-
-            } elseif ($nameId != '') {
-                $trans = $this->app->repoFactory->create("ProductNameTranslation")->getEmptyEntity();
-
-                $trans->productId = $productId;
-                $trans->productVariantId = $productVariantId;
-                $trans->langId = $langId;
-                $trans->name = $nameId;
-                $trans->insert();
+                if (!is_null($newLang)) {
+                    $newLang->name = $translated;
+                    $newLang->update();
+                } else {
+                    $createName = $this->app->repoFactory->create('ProductNameTranslation')->getEmptyEntity();
+                    $createName->productId = $productName->productId;
+                    $createName->productVariantId = $productName->productVariantId;
+                    $createName->langId = $langId;
+                    $createName->name = $translated;
+                    $createName->insert();
+                }
             }
             $this->app->dbAdapter->commit();
             return true;
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
+           return $e->getMessage();
         }
     }
 }

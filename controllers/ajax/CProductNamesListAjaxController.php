@@ -43,7 +43,7 @@ class CProductNamesListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductSales', ['productId', 'productVariantId', 'name', 'langId'], $_GET);
+        $datatable = new CDataTables('vBluesealProductNameList', ['productId', 'productVariantId', 'name', 'langId'], $_GET);
 
         $productNames = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -65,43 +65,27 @@ class CProductNamesListAjaxController extends AAjaxController
 				$response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '__' . $val->productVariantId;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
 				$response['data'][$i]['name'] = $val->name;
-                $res = $this->app->dbAdapter->query("SELECT * FROM ProductNameTranslation WHERE `langId` = 1 AND `name` = ?",[$val->name])->fetchAll();
+                $res = $this->app->dbAdapter->query("SELECT * FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P','I')",
+                    [$val->name])->fetchAll();
                 $response['data'][$i]['count'] = count($res); //$products->count();
-                $response['data'][$i]['productsList'] = '';
-                $response['data'][$i]['productsList'] .= '<span class="small">';
+             
                 $iterator = 0;
+                $cats = [];
                 foreach($res as $v) {
+                    if (10 == $iterator) break;
                     $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
-                    $cats = [];
-                    foreach($p->productCategoryTranslation as $cat){
-
+                    foreach($p->productCategoryTranslation as $cat) {
                         $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                         unset($path[0]);
                         $newCat = '<span class="small">'.implode('/',array_column($path, 'slug')).'</span><br />';
-                        if (array_search($newCat, $cats)) continue;
+                        if (in_array($newCat, $cats)) continue;
                         $cats[] = $newCat;
                         $iterator++;
                         if (10 == $iterator) break;
                     }
-                    if (10 == $iterator) break;
                 }
                 $response['data'][$i]['slug'] = implode('', $cats);
-                $iterator = 0;
-                foreach($res as $v) {
-                    $prod = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
-                    $response['data'][$i]['productsList'] .=
-                        $okManage ?
-                            '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id='.$prod->id.'&productVariantId='.$prod->productVariantId.'">'.$prod->id.'-'.$prod->productVariantId.'</a>'
-                            : $val->id.'-'.$val->productVariantId;
-                    $response['data'][$i]['productsList'] .= ' - CPF: ' . $prod->itemno;
-                    $response['data'][$i]['productsList'] .= ' - brand: ' . $prod->productBrand->name;
-                    $img = strpos($prod->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $prod->dummyPicture : $this->urls['dummy']."/".$prod->dummyPicture;
-                    $response['data'][$i]['productsList'] .= ' <img width="30" src="' . $img . '" /><br />';
-                    $iterator++;
-                    if (10 == $iterator) break;
-                }
-                if (10 < $response['data'][$i]['count']) $response['data'][$i]['productsList'] .= "...";
-                $response['data'][$i]['productsList'] .= '</span>';
+
 				$i++;
 			} catch (\Exception $e) {
 				throw $e;
@@ -110,6 +94,5 @@ class CProductNamesListAjaxController extends AAjaxController
         }
         return json_encode($response);
     }
-
-    
+   
 }

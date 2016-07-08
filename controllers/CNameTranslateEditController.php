@@ -34,19 +34,28 @@ class CNameTranslateEditController extends CNameTranslateManageController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/name_translate_edit.php');
 
-        $productId = $this->app->router->request()->getRequestData('productId');
-        $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
+        $name = $this->app->router->request()->getRequestData('name');
 
-        $productEdit = $this->app->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $productId, 'productVariantId' => $productVariantId]);
+        $langs = $this->app->repoFactory->create('Lang')->findAll();
+        $productsEdit = [];
+             $product= $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['name' => $name, 'langId' => 1]);
+        foreach($langs as $lang) {
+            $productsEdit[$lang->id] = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(
+                [
+                    'productId' => $product->productId,
+                    'productVariantId' => $product->productVariantId,
+                    'langId' => $lang->id
+                ]
+            );
+        }
 
         $em = $this->app->entityManagerFactory->create('Lang');
         $langs = $em->findAll("limit 99999", "");
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'productId' => $productId,
-            'productVariantId' => $productVariantId,
-            'productEdit' => $productEdit,
+            'name' => $name,
+            'productEdit' => $productsEdit,
             'langs' => $langs,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()

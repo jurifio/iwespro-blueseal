@@ -292,11 +292,7 @@
 				searchable: true
 			}, {
 				data: "count",
-				orderable: false,
-				searchable: false
-			}, {
-				data: "productsList",
-				orderable: false,
+				orderable: true,
 				searchable: false
 			}
 		],

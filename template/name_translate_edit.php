@@ -43,29 +43,23 @@
                         <form id="form-project" role="form" action="" method="PUT" autocomplete="on">
 
                             <?php
+                            \BlueSeal::dump($productEdit);
                             foreach ($langs as $lang):
-                                if(isset($name)) unset($name);
-                                foreach($productEdit as $val){
-                                    if($val->langId == $lang->id){
-                                        $name = $val->name;
-                                    }
-                                }
-
+                                $name = ($productEdit[$lang->id]) ? $productEdit[$lang->id]->name : '';
                                 ?>
                                 <h5><?php echo strtoupper($lang->name); ?></h5>
                                 <div class="row clearfix">
                                     <div class="col-md-4">
                                         <div class="form-group form-group-default">
                                             <label>Nome Prodotto</label>
-                                            <input type="text" class="form-control" name="ProductName_<?php echo $lang->id; ?>" value="<?php echo isset($name) ? $name : "" ?>">
+                                            <input type="text" class="form-control" name="ProductName_<?php echo $lang->id; ?>" value="<?php echo htmlentities($name); ?>">
                                         </div>
                                     </div>
                                 </div>
 
                                 <?php
                             endforeach; ?>
-                            <input type="hidden" id="ProductId" name="ProductId" value="<?php echo $productId; ?>" />
-                            <input type="hidden" id="ProductVariantId" name="ProductVariantId" value="<?php echo $productVariantId; ?>" />
+                           
                         </form>
                     </div>
                 </div>
