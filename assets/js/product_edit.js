@@ -414,6 +414,8 @@ $(document).ready(function() {
                         var resArr = [];
                         resArr[0] = {name: query.trim()};
                         res = resArr;
+                    } else {
+                        res.push({name: query.trim()});
                     }
                     callback(res);
                 }
