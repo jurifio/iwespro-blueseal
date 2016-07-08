@@ -33,8 +33,6 @@ $(document).on('bs.product.merge', function(){
         i++;
         getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
-    console.log(selectedRows);
-    console.log(row);
     header.html('Fondi 2 prodotti');
 
     body.css("text-align", 'left');
