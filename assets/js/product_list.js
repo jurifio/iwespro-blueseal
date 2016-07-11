@@ -888,7 +888,7 @@ $(document).on('bs.product.mergedetails', function () {
                 render: {
                     option: function (item, escape) {
                         return '<div>' +
-                            escape(item.code) +
+                            escape(item.code) + " - " + escape(item.variant) +
                             '</div>';
                     }
                 }
