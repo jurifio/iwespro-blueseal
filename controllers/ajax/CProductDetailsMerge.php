@@ -37,9 +37,15 @@ class CProductDetailsMerge extends AAjaxController
     public function post()
     {
         $get = $this->app->router->request()->getRequestData();
-
         $choosen = $this->getEntityByCode($get['choosen']);
 
+        if (!$choosen) return "Attenzione! Il codice inserito non è un codice valido";
+
+        $choosenPsa = $this->app->repoFactory->create('ProductSheetActual')->findBy(
+            [
+                'productId' => $choosen->id, 'productVariantId' => $choosen->productVariantId
+            ]
+        );
         try {
             foreach ($get['rows'] as $v) {
 
@@ -55,13 +61,6 @@ class CProductDetailsMerge extends AAjaxController
                 $psa = $this->app->repoFactory->create('ProductSheetActual')->findBy(
                     [
                         'productId' => $prod->id, 'productVariantId' => $prod->productVariantId
-                    ]
-                );
-
-
-                $choosenPsa = $this->app->repoFactory->create('ProductSheetActual')->findBy(
-                    [
-                        'productId' => $choosen->id, 'productVariantId' => $choosen->productVariantId
                     ]
                 );
 
@@ -88,14 +87,17 @@ class CProductDetailsMerge extends AAjaxController
 
     public function getEntityByCode($code, $single = true)
     {
-
+        $position = strpos($code, "-");
+        if ( (false === $position) || (0 === $position) || ( (strlen($code)-1) == $position) ) return false;
         list($id, $productVariantId) = explode('-', $code);
+        if (!((is_numeric($id)) AND (is_numeric($productVariantId)))) return false;
         $ent = $this->app->repoFactory->create('product');
         if ($single) {
             $res = $ent->findOneBy(['id' => $id, 'productVariantId' => $productVariantId]);
         } else {
             $res = $ent->findBy(['id' => $id, 'productVariantId' => $productVariantId]);
         }
+        if ( (null === $res) || (!iterator_count($res)) ) return false;
         return $res;
     }
 }
