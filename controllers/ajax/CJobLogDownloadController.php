@@ -54,7 +54,7 @@ class CJobLogDownloadController extends AAjaxController
 				$prod = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId]);
 				$brand = $prod->productBrand->name;
 				$shops = [];
-				foreach($prod->shop->name as $shop) $shops[] = $prod->productSizeGroup->name;
+				foreach($prod->shop as $shop) $shops[] = $shop->name;
 				$shops = implode(', ', $shops);
 
 				$sizeGroup = $prod->productSizeGroup->name;

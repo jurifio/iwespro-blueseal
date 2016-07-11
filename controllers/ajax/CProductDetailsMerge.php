@@ -51,7 +51,7 @@ class CProductDetailsMerge extends AAjaxController
         );
         try {
             foreach ($get['rows'] as $v) {
-
+                if ($choosen->id == $v['id']) continue;
                 $prod = $this->app->repoFactory->create('Product')->findOneBy(
                     [
                         'id' => $v['id'],
@@ -60,6 +60,35 @@ class CProductDetailsMerge extends AAjaxController
                 );
                 $prod->productSheetPrototypeId = $choosen->productSheetPrototypeId;
                 $prod->update();
+
+                $prodName = $this->app->repoFactory->create('ProductNameTranslation')->findBy(
+                    [
+                        'productId' => $prod->id,
+                        'productVariantId' => $prod->productVariantId,
+                    ]
+                );
+                foreach($prodName as $name) {
+                    $name->delete();
+                }
+                
+                $choosenName = $this->app->repoFactory->create('ProductNameTranslation')->findBy(
+                    [
+                        'productId' => $choosen->id,
+                        'productVariantId' => $choosen->productVariantId,
+                    ]
+                );
+
+                foreach($choosenName as $name) {
+                    $newProdName = $this->app->repoFactory->create('ProductNameTranslation')->getEmptyEntity();
+                    $newProdName->productId = $prod->id;
+                    $newProdName->productVariantId = $prod->productVariantId;
+                    $newProdName->langId = $name->langId;
+                    $newProdName->name = $name->name;
+                    $newProdName->insert();
+                }
+
+
+                $prod->productNameTranslation = $choosen->productNameTranslation;
 
                 $psa = $this->app->repoFactory->create('ProductSheetActual')->findBy(
                     [
