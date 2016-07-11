@@ -239,9 +239,13 @@
 			}, {
 				data: "shop",
 				orderable: true
-			}, {
+			},{
 				data: "code",
 				orderable: true
+			},{
+				data: "sizeGroup",
+				orderable: false,
+				searchable: false
 			}, {
 				data: "dummyPicture",
 				orderable: false,

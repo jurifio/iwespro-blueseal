@@ -41,6 +41,7 @@
                                 <th class="center">Codice</th>
                                 <th class="center">Shop</th>
                                 <th class="center">CPF</th>
+                                <th class="center">Gr. Taglie</th>
                                 <th class="center">Immagine</th>
                                 <th class="center">Brand</th>
                                 <th class="center">Stato</th>
