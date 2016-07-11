@@ -90,11 +90,7 @@ class CProductSalesListAjaxController extends AAjaxController
             //$response['aaData'][$i]["code"] = $val->id . '-' . $val->productVariantId;
             $response['aaData'][$i]['code'] = ($okManage) ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $response['aaData'][$i]["slug"] = '<span class="small">' . implode(", <br />", $cats) . '</span>';
-            $response['aaData'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
-            $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="' . $img . '">' : "";
-            $response['aaData'][$i]['CPF'] = $val->itemno.' # '.$val->productVariant->name;
-            $response['aaData'][$i]['variant'] = $val->productVariant->name;
+            $response['aaData'][$i]["slug"] = '<span class="small">' . implode(", <br />", $cats) . '</span><br />';
             $th = "";
             $tr = "";
             $res = $this->app->dbAdapter->query("SELECT s.name, sum(ps.stockQty) stock
@@ -108,7 +104,13 @@ class CProductSalesListAjaxController extends AAjaxController
                 $th .= "<th>" . $sums['name'] . "</th>";
                 $tr .= "<td>" . $sums['stock'] . "</td>";
             }
-            $response['aaData'][$i]["skus"] = '<table class="nested-table"><thead><tr>'.$th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
+            $response['aaData'][$i]["slug"] .= '<table class="nested-table"><thead><tr>'.$th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
+            $response['aaData'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
+            $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="' . $img . '">' : "";
+            $response['aaData'][$i]['CPF'] = $val->itemno.' # '.$val->productVariant->name;
+            $response['aaData'][$i]['variant'] = $val->productVariant->name;
+
+            //$response['aaData'][$i]["skus"] = '<table class="nested-table"><thead><tr>'.$th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
 
             $res = $this->app->dbAdapter->query("SELECT max(ps.price) as price,  max(ps.saleprice) as sale, isOnSale, ps.value as val, /*group_concat(distinct s.title SEPARATOR ',')*/ s.name as shop
                                           FROM ProductSku ps, Shop s

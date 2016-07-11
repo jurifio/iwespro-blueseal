@@ -910,10 +910,6 @@
 				data: "dummyPicture",
 				orderable: false,
 				searchable: false
-			}, {
-				data: "skus",
-				orderable: false,
-				searchable: false
 			},{
 				data: "shops",
 				orderable: true,

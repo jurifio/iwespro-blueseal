@@ -23,11 +23,10 @@
                                 <th class="center">Codice</th>
                                 <th class="center">Brand</th>
                                 <th class="center">CPF</th>
-                                <th class="center">Categorie</th>
+                                <th class="center">Cat. & Skus</th>
                                 <th class="center">Stagione</th>
                                 <th class="center">Variante</th>
                                 <th class="center">Immagine</th>
-                                <th class="center">Skus</th>
                                 <th class="center">Shops</th>
                                 <th class="center">Listino</th>
                                 <th class="center">Scon.</th>

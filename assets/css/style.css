@@ -577,12 +577,12 @@ body.sidebar-visible .sidebar-logo {
 }
 
 .nested-table tbody tr td {
-    padding: 10px 5px;
+    padding: 5px 5px;
     border: solid #c0c0c0 1px;
 }
 
 .nested-table thead tr th {
-    padding: 10px 5px;
+    padding: 5px 5px;
     border: solid #c0c0c0 1px;
 }
 
