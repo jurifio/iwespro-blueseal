@@ -191,6 +191,17 @@
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-tasks"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.mergedetails"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Cambia prezzi ai prodotti selezionati"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Roulette">
         <bs-toolbar-select
