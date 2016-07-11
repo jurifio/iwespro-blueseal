@@ -96,7 +96,7 @@ class CProductImporterProblemsListController extends AAjaxController
             $response['aaData'][$i]["shop"] = implode(',',$shops);
             $response['aaData'][$i]["code"] = $val->itemno.' # '.$val->productVariant->name;
             $macroname = explode("_", explode("-", $val->productSizeGroup->macroName)[0])[0];
-            $response['aaData'][$i]["sizeGroup"] = '<span class="small">' . $val->productSizeGroup->locale . ' ' . $macroname . '</span>';
+            $response['aaData'][$i]["sizeGroup"] = '<span class="small">' . $val->productSizeGroup->locale . '-' . $macroname . '</span>';
             $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="'.$dummyUrl.'/'.$val->dummyPicture.'">' : "";
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
             //$response['aaData'][$i][$k++] = implode(',<br>',$cats);
