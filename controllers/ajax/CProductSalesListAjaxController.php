@@ -154,17 +154,15 @@ class CProductSalesListAjaxController extends AAjaxController
                                 ($v['sale'] / 1.22 - $friendSaleRevenue) / $friendSaleRevenue * 100
                             ) .
                             '</span>';
-                        else $friendMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['price'] / 1.22 - $friendRevenue) / $friendRevenue * 100) . '</span>';
+                        else $friendMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['price'] / 1.22 - $friendRevenue) / ($v['price'] / 1.22)) . '</span>';
                     } else {
                         if ($res[0]['isOnSale']) $friendPastMargin = ' | <span style="font-weight: bold;" >' .
                             $this->formatPrice(
                                 (
                                     $v['sale'] / 1.22 - $pastSeasonRevenue
-                                ) / $pastSeasonRevenue
-                                * 100
-                            ) .
+                                ) / ($v['price'] / 1.22)                            ) .
                             '</span>';
-                        else $friendPastMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['price'] / 1.22 - $pastSeasonRevenue) / $pastSeasonRevenue * 100) . '</span>';
+                        else $friendPastMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['price'] / 1.22 - $pastSeasonRevenue) / ($v['price'] / 1.22)) . '</span>';
                     }
                 } else {
                     $friendMargin = ' | -';
