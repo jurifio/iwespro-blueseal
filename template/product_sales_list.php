@@ -29,7 +29,7 @@
                                 <th class="center">Immagine</th>
                                 <th class="center">Skus</th>
                                 <th class="center">Shops</th>
-                                <th class="center">Listino</th>
+                                <th class="center">R.P|CF</th>
                                 <th class="center">Scon.</th>
                                 <th class="center">% Sconto</th>
                                 <th class="center">ScA</th>
