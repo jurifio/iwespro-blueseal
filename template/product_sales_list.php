@@ -29,13 +29,13 @@
                                 <th class="center">Immagine</th>
                                 <th class="center">Skus</th>
                                 <th class="center">Shops</th>
-                                <th class="center">R.P|CF</th>
-                                <th class="center">R.P.P.</th>
-                                <th class="center">DISV./th>
+                                <th class="center">Listino</th>
+                                <th class="center">Scon.</th>
+                                <th class="center">% Sconto</th>
                                 <th class="center">ScA</th>
-                                <th class="center">CF|M.UP</th>
-                                <th class="center">CFS|M.UPS</th>
-                                <th class="center">CFSP|MUPSP</th>
+                                <th class="center">Costo Friend</th>
+                                <th class="center">Costo Friend Sale</th>
+                                <th class="center">Costo F. Pre. Stag.</th>
                             </tr>
                             </thead>
                             <tbody>
