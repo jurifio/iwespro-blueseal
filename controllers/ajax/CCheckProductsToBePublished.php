@@ -15,6 +15,7 @@ namespace bamboo\blueseal\controllers\ajax;
  */
 class CCheckProductsToBePublished extends AAjaxController
 {
+
     public function put()
     {
         $result = $this->app->dbAdapter->query("
@@ -42,12 +43,6 @@ class CCheckProductsToBePublished extends AAjaxController
         $act = $get['action'];
         if (array_key_exists('rows', $get)) $rows = $get['rows'];
         switch ($act) {
-            case "listStatus":
-                $res = $this->app->dbAdapter->select('ProductStatus', [])->fetchAll();
-                foreach($res as $k => $v) {
-                    if (13 == $v['id']) unset($res[$k]);
-                }
-                return json_encode($res);
             case "updateProductStatus":
                 if ($get['productStatusId']) {
                     $count = 0;
