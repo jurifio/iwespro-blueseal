@@ -20,7 +20,7 @@
                         <table class="table table-striped responsive" width="100%" data-column-filter="true" data-datatable-name="product_sales_list" data-controller="ProductSalesListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>" >
                             <thead>
                             <tr>
-                                <th class="center">Codice</th>
+                                <th class="center">Codice1</th>
                                 <th class="center">Brand</th>
                                 <th class="center">CPF</th>
                                 <th class="center">Categorie</th>
