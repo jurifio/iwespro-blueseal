@@ -29,7 +29,10 @@ class CProductDetailsMerge extends AAjaxController
         $resProds = [];
         foreach ($prods as $k => $v) {
             $prod = $repoPro->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-            if (!is_null($prod->productSheetPrototypeId)) $resProds[$k]['code'] = $prod->id . "-" . $prod->productVariantId;
+            if (!is_null($prod->productSheetPrototypeId)) {
+                $resProds[$k]['code'] = $prod->id . "-" . $prod->productVariantId;
+                $resProds[$k]['variant'] = $prod->productVariant->name;
+            }
         }
         return json_encode($resProds);
     }
@@ -91,13 +94,16 @@ class CProductDetailsMerge extends AAjaxController
         if ( (false === $position) || (0 === $position) || ( (strlen($code)-1) == $position) ) return false;
         list($id, $productVariantId) = explode('-', $code);
         if (!((is_numeric($id)) AND (is_numeric($productVariantId)))) return false;
-        $ent = $this->app->repoFactory->create('product');
+        $ent = $this->app->repoFactory->create('Product');
         if ($single) {
             $res = $ent->findOneBy(['id' => $id, 'productVariantId' => $productVariantId]);
         } else {
             $res = $ent->findBy(['id' => $id, 'productVariantId' => $productVariantId]);
         }
-        if ( (null === $res) || (!iterator_count($res)) ) return false;
+        if (null === $res) return false;
+        if (is_array($res) || $res instanceof Traversable)  {
+            if (count($res)) return false;
+        }
         return $res;
     }
 }
