@@ -47,7 +47,19 @@ class CJobLogDownloadController extends AAjaxController
 			$lines = [];
 			foreach ($a as $x) {
 				$contents = explode('Id ', $x['content']);
-				$lines['content'] = explode(" - ", $contents[1])[0] . "-" . $contents[2];
+				$id = explode(" - ", $contents[1])[0];
+				$variantId = $contents[2];
+				$lines['content'] =  $id . "-" . $variantId;
+
+				$prod = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId]);
+				$brand = $prod->productBrand->name;
+				$shops = [];
+				foreach($prod->shop->name as $shop) $shops[] = $prod->productSizeGroup->name;
+				$shops = implode(', ', $shops);
+
+				$sizeGroup = $prod->productSizeGroup->name;
+				$lines['content'] = ": " . $brand . " - " . $shops . " - " . $sizeGroup;
+
 				$lines['context'] = explode(', id:', $x['context'])[0];
 				fputs($file, '"'.implode('";"', $lines).'"' . PHP_EOL);
 			};
