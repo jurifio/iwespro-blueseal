@@ -17,8 +17,10 @@ class CProductStatusList extends AAjaxController
 {
     public function get() {
         $res = $this->app->dbAdapter->select('ProductStatus', [])->fetchAll();
+        $statuses = [];
         foreach($res as $k => $v) {
-            if(13 == $v['id']) unset($res[$k]);
+            if(13 == $v['id']) continue;
+            $statuses[] = $v;
         }
         return json_encode($res);
     }
