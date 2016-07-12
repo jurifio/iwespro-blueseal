@@ -49,7 +49,7 @@ class CJobLogDownloadController extends AAjaxController
 				$contents = explode('Id ', $x['content']);
 				$id = explode(" - ", $contents[1])[0];
 				$variantId = $contents[2];
-				$lines['content'] =  $id . "-" . $variantId;
+				//$lines['content'] =  $id . "-" . $variantId;
 
 				$prod = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId]);
 				$brand = $prod->productBrand->name;
