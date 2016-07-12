@@ -128,7 +128,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                  $productSku->setEntityManager($app->application()->entityManagerFactory->create('ProductSku'));
 
                                  $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
-                             echo (($productNameTranslation->name) ? $productNameTranslation->name : '' ) . '<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId;  ?>
+                             echo (($productNameTranslation) ? $productNameTranslation->name : '' ) . '<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId;  ?>
                             </td><td class="text-center"><?php echo $productSku->productSize->name; ?>
                             <td></td>
                             </td>
