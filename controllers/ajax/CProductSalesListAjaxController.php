@@ -152,7 +152,7 @@ class CProductSalesListAjaxController extends AAjaxController
                     $pastSeasonRevenue = $v['val'] + $v['val'] * $shopRepo->pastSeasonMultiplier / 100;
 
                     $priceNoVAT = ($v['price']) ? $this->formatPrice($v['price'] / 1.22) : 0;
-                    $salePriceNoVAT = ($v['sale']) ? $this->formatPrice($v['price'] / 1.22) : 0;
+                    $salePriceNoVAT = ($v['sale']) ? $this->formatPrice($v['sale'] / 1.22) : 0;
 
                     if ($val->productSeason->isActive) {
                         if ($res[0]['isOnSale']) {
