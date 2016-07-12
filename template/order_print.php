@@ -155,7 +155,7 @@
                                  <?php $productSku = unserialize($orderLine->frozenProduct);
                                  $productSku->setEntityManager($app->application()->entityManagerFactory->create('ProductSku'));
 
-                                 $productNameTranslation = $productSku->product->productNameTranslation->getFirst()->name; ?>
+                                 $productNameTranslation = $productSku->product->getName(); ?>
                             <td class=""><?php echo $productSku->printPublicSku(); ?></td>
                             <td class="text-center">
                                 <?php foreach ($statusesLine as $statusLine){
