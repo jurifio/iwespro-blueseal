@@ -410,6 +410,7 @@ $(document).on('bs.manage.changeStatus', function () {
             url: "/blueseal/xhr/ProductStatusList",
             type: "GET",
         }).done(function (res) {
+            res = JSON.parse(res);
             header.html('Cambio stato dei prodotti');
             var bodyContent = '<div style="min-height: 220px"><select class="full-width" placehoder="Seleziona lo status" name="productStatusId" id="productStatusId"><option value=""></option></select></div>';
             body.html(bodyContent);
@@ -417,7 +418,7 @@ $(document).on('bs.manage.changeStatus', function () {
                 valueField: 'id',
                 labelField: 'name',
                 searchField: 'name',
-                options: JSON.parse(res)
+                options: res
             });
             $('#productStatusId').selectize()[0].selectize.setValue(1);
         });
