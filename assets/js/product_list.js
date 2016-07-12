@@ -411,6 +411,7 @@ $(document).on('bs.manage.changeStatus', function () {
             type: "GET",
         }).done(function (res) {
             res = JSON.parse(res);
+            console.log(res);
             header.html('Cambio stato dei prodotti');
             var bodyContent = '<div style="min-height: 220px"><select class="full-width" placehoder="Seleziona lo status" name="productStatusId" id="productStatusId"><option value=""></option></select></div>';
             body.html(bodyContent);
