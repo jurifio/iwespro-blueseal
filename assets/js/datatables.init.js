@@ -145,6 +145,9 @@
 			}, {
 				data: "status",
 				orderable: true
+			},{
+				data: "mup",
+				orderable: true
 			}, {
 				data: "available",
 				orderable: true,

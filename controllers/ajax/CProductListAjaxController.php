@@ -89,17 +89,17 @@ class CProductListAjaxController extends AAjaxController
                 unset($path[0]);
                 $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';
             }
-            $shops = [];
+            /*$shops = [];
             foreach($val->shop as $shop){
                 $shops[] = $shop->title;
-            }
+            }*/
 
             $creationDate = new \DateTime($val->creationDate);
 
             $response['data'][$i]["DT_RowId"] = 'row__'.$val->id.'__'.$val->productVariant->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
-            $response['data'][$i]['shop'] = implode(',',$shops);
+
             $response['data'][$i]['sizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
             $response['data'][$i]['details'] = '';
 
@@ -151,13 +151,35 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['status'] = $val->productStatus->name;
 
             $qty=0;
-            $isOnSale = 0;
+            $isOnSale = [];
+            $shopz = [];
+            $mup = [];
             foreach ($val->productSku as $sku) {
                 $qty += $sku->stockQty;
                 $isOnSale = $sku->isOnSale;
+                $iShop = $sku->shop->name;
+                if (!in_array($iShop, $shopz)) {
+                    $shopz[] = $iShop;
+                    
+                    $price = ($isOnSale) ? $sku->price : $sku->salePrice;
+                    $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
+                    $friendRevenue = $price + $price * $multiplier / 100;
+                    $priceNoVat = $price / 1.22;
+                    $mup[] = format_number(($priceNoVat - $friendRevenue) / $priceNoVat * 100, 2, ",", ".");
+                }
             }
             $response['data'][$i]['available'] = ($qty) ? 'sì' : 'no';
             $response['data'][$i]['available'].= ' - ' . $qty;
+            
+            
+            $response['data'][$i]['shop'] = '<span class="small">';
+            $response['data'][$i]['shop'] .= implode('<br />',$shopz);
+            $response['data'][$i]['shop'] .= '</span>';
+            
+            $response['data'][$i]['mup'] = '<span class="small">';
+            $response['data'][$i]['mup'] .= implode('<br /> ',$mup);
+            $response['data'][$i]['mup'] .= '</span>';
+            
             $response['data'][$i]['isOnSale'] = $isOnSale;
             $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
 
