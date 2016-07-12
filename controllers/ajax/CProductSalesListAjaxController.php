@@ -137,6 +137,9 @@ class CProductSalesListAjaxController extends AAjaxController
             $response['aaData'][$i]["friendPreRevenue"] = '<span>';
             */
 
+
+            // Si, lo so sta robba è un zozzo, sto a mette pezze in corsa
+
             foreach($res as $v) {
                 $friendMargin = '';
                 $friendSaleMargin = '';
@@ -147,22 +150,40 @@ class CProductSalesListAjaxController extends AAjaxController
                     $friendRevenue = $v['val'] + $v['val'] * $shopRepo->currentSeasonMultiplier / 100;
                     $friendSaleRevenue = $v['val'] + $v['val'] * $shopRepo->saleMultiplier / 100;
                     $pastSeasonRevenue = $v['val'] + $v['val'] * $shopRepo->pastSeasonMultiplier / 100;
-                    
+
+                    $priceNoVAT = ($v['price']) ? $this->formatPrice($v['price'] / 1.22) : 0;
+                    $salePriceNoVAT = ($v['sale']) ? $this->formatPrice($v['price'] / 1.22) : 0;
+
                     if ($val->productSeason->isActive) {
-                        if ($res[0]['isOnSale']) $friendSaleMargin = ' | <span style="font-weight: bold;" >' .
-                            $this->formatPrice(
-                                ($v['sale'] / 1.22 - $friendSaleRevenue) / $friendSaleRevenue * 100
-                            ) .
-                            '</span>';
-                        else $friendMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['price'] / 1.22 - $friendRevenue) / ($v['price'] / 1.22)) . '</span>';
+                        if ($res[0]['isOnSale']) {
+                            if (!$salePriceNoVAT) $friendSaleMargin = ' | -';
+                            else {
+                                $friendSaleMargin = ' | <span style="font-weight: bold;" >' .
+                                    $this->formatPrice(($salePriceNoVAT - $friendSaleRevenue) / $salePriceNoVAT * 100) . '%</span>';
+                            }
+                        }
+                        else {
+                            if (!$priceNoVAT) $friendMargin = ' | -';
+                            else {
+                                $friendMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($priceNoVAT - $friendRevenue) / $priceNoVAT * 100) . '%</span>';
+                            }
+                        }
                     } else {
-                        if ($res[0]['isOnSale']) $friendPastMargin = ' | <span style="font-weight: bold;" >' .
-                            $this->formatPrice(
-                                (
-                                    $v['sale'] / 1.22 - $pastSeasonRevenue
-                                ) / ($v['price'] / 1.22)                            ) .
-                            '</span>';
-                        else $friendPastMargin = ' | <span style="font-weight: bold;" >' . $this->formatPrice(($v['price'] / 1.22 - $pastSeasonRevenue) / ($v['price'] / 1.22)) . '</span>';
+                        if ($res[0]['isOnSale']) {
+                            if (!$salePriceNoVAT) {
+                                $friendPastMargin = ' | -';
+                            } else {
+                                $friendPastMargin = ' | <span style="font-weight: bold;" >' .
+                                    $this->formatPrice(($salePriceNoVAT - $pastSeasonRevenue) / $salePriceNoVAT * 100) . '%</span>';
+                            }
+                        }
+                        else {
+                            if (!$priceNoVAT) {
+                                $friendPastMargin = ' | -';
+                            } else {
+                                $friendPastMargin = ' | <span style="font-weight: bold;">' . $this->formatPrice(($priceNoVAT - $pastSeasonRevenue) / $priceNoVAT * 100) . '%</span>';
+                            }
+                        }
                     }
                 } else {
                     $friendMargin = ' | -';
@@ -198,10 +219,8 @@ class CProductSalesListAjaxController extends AAjaxController
             */
             $i++;
         }
-
         return json_encode($response);
     }
-
     public function post()
     {
         throw new \Exception();
