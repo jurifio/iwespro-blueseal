@@ -160,12 +160,17 @@ class CProductListAjaxController extends AAjaxController
                 $iShop = $sku->shop->name;
                 if (!in_array($iShop, $shopz)) {
                     $shopz[] = $iShop;
-                    
+
                     $price = ($isOnSale) ? $sku->price : $sku->salePrice;
-                    $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
-                    $friendRevenue = ($price) ? $price + $price * $multiplier / 100 : 0;
-                    $priceNoVat = $price / 1.22;
-                    $mup[] = number_format(($priceNoVat - $friendRevenue) / $priceNoVat * 100, 2, ",", ".");
+                    
+                    if ((float)$price) {
+                        $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
+                        $friendRevenue = $price + $price * $multiplier / 100;
+                        $priceNoVat = $price / 1.22;
+                        $mup[] = number_format(($priceNoVat - $friendRevenue) / $priceNoVat * 100, 2, ",", ".");
+                    } else {
+                        $mup[] = '-';
+                    }
                 }
             }
             $response['data'][$i]['available'] = ($qty) ? 'sì' : 'no';
@@ -177,7 +182,7 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['shop'] .= '</span>';
             
             $response['data'][$i]['mup'] = '<span class="small">';
-            $response['data'][$i]['mup'] .= implode('<br /> ',$mup);
+            $response['data'][$i]['mup'] .= implode('<br />',$mup);
             $response['data'][$i]['mup'] .= '</span>';
             
             $response['data'][$i]['isOnSale'] = $isOnSale;
