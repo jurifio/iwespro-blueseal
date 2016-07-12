@@ -149,6 +149,10 @@
 				data: "available",
 				orderable: true,
 				searchable: true
+			},{
+				data: "isOnSale",
+				orderable: true,
+				searchable: true
 			}, {
 				data: "creationDate",
 				orderable: true

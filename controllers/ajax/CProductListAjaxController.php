@@ -151,11 +151,14 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['status'] = $val->productStatus->name;
 
             $qty=0;
+            $isOnSale = 0;
             foreach ($val->productSku as $sku) {
                 $qty += $sku->stockQty;
+                $isOnSale = $sku->isOnSale;
             }
             $response['data'][$i]['available'] = ($qty) ? 'sì' : 'no';
             $response['data'][$i]['available'].= ' - ' . $qty;
+            $response['data'][$i]['isOnSale'] = $isOnSale;
             $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
 
             $i++;

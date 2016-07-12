@@ -38,6 +38,7 @@
                                     <th class="center">Tags</th>
                                     <th class="center">Stato</th>
                                     <th class="center">Disponibile</th>
+                                    <th class="center">SCA</th>
                                     <th class="center">Creazione</th>
                                 </tr>
                             </thead>
