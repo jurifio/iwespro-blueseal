@@ -57,14 +57,23 @@ class CProductListAjaxDetail extends AAjaxController
         foreach ($idDetail as $k => $idD) {
             $idDetail[$k] = "psa.productDetailId = " . $idD;
         }
-        $where = implode(" OR ", $idDetail);
+        
+        $idDetailCond = "(";
+        
+        $idDetailCond .= implode(" OR ", $idDetail);
+        
+        $idDetailCond .= ")";
+        
+        
+        $where = $idDetailCond . " AND ps.code in ('A', 'P', 'I')";
 
         $pId = $this->app->dbAdapter->query(
             "SELECT 
                   psa.productId as productId,
-                  psa.productVariantId as productVariantId 
-                  FROM ProductSheetActual psa, ProductDetail pd  
-                  WHERE pd.id = psa.productDetailId AND (" . $where . ")",
+                  psa.productVariantId as productVariantId,
+                  ps.name as `status`
+                  FROM ProductSheetActual psa, ProductDetail pd, Product p, ProductStatus ps  
+                  WHERE pd.id = psa.productDetailId AND psa.productVariantId = p.productVariantId AND ps.id = p.productStatusId AND (" . $where . ")",
             []
         )->fetchAll();
         $productList = "";
@@ -77,7 +86,7 @@ class CProductListAjaxDetail extends AAjaxController
             }
             $cats = implode( " - " , $catsName);
             
-            $productList .= '<a style="width: 120px" href="' . $modifica . "?id=" . $v['productId'] . '&productVariantId=' . $v['productVariantId'] . '">' . $v['productId'] . '-' . $v['productVariantId'] . '</a><span style="width: 250px;"> cat: '. $cats  .'</span><br />';
+            $productList .= '<a style="width: 120px" href="' . $modifica . "?id=" . $v['productId'] . '&productVariantId=' . $v['productVariantId'] . '">' . $v['productId'] . '-' . $v['productVariantId'] . '</a> (' . $v['status'] . ') <span style="width: 250px;"> cat: '. $cats  .'</span><br />';
         }
         return $productList;
     }

@@ -58,7 +58,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-question-circle"
+            data-icon="fa-search"
             data-permission="/admin/product/edit"
             data-event="bs.manage.detailproducts"
             data-class="btn btn-default"
