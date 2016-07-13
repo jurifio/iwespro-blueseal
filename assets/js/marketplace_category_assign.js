@@ -10,10 +10,10 @@ $(document).on('change', $('name[brandId]').val, function(event) {
     });
 });
 
-$('table[data-datatable-name]')[0].on('draw', function() {
-	if(window.categories.lenght = 0) {
+$('table[data-datatable-name]').on('draw.dt', function() {
+	if(typeof window.categories == 'undefined' || window.categories.lenght == 0) {
 		$.ajax({
-			url: "/blueseal/cagegories/getlist"
+			url: "/blueseal/xhr/ProductCategoryPathList"
 		}).done(function(res) {
 			window.categories = JSON.parse(res);
 		})

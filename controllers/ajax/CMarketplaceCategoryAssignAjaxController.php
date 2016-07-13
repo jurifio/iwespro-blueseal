@@ -55,7 +55,7 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 		        $html = '<select class="full-width selectpicker" 
 		                         placeholder="Seleziona la categoria" 
 		                         data-name="categorySelect"
-		                         data-selected="'.$val->productCateogryId.'"
+		                         data-selected="'.$val->productCategoryId.'"
 		                         data-id="' . $val->marketplaceId.'-'.$val->marketplaceCategoryId . '" 
 		                         tabindex="-1" >';
 		        $html .= '<option value=""></option>';
