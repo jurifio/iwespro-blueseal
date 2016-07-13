@@ -118,27 +118,32 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['season'] .= $val->productSeason->name . " " . $val->productSeason->year;
             $response['data'][$i]['season'] .= '</span>';
 	        $ext = [];
-            /*if(isset($val->externalId)) {
+            if(isset($val->externalId)) {
                 $ext[] = $val->externalId;
             }
             //foreach ($val->shopHasProduct as $shopHasProduct)
-	        if (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
-		        $ext[] = $val->shopHasProduct->extId;
+	        if (iterator_count($val->shopHasProduct)) {
+                foreach($val->shopHasProduct as $shp) {
+                    if (!empty($shp->extId)) {
+                        $ext[] = $shp->extId;
+                    }
+
+                    if(!empty($shp->dirtyProduct->extId)) {
+                        $ext[] = $shp->dirtyProduct->extId;
+                    }
+                    if(!empty($shp->dirtyProduct->dirtySku)) {
+                        if (iterator_count($shp->dirtyProduct->dirtySku)) {
+                            foreach ($shp->dirtyProduct->dirtySku as $sku) {
+                                if (!empty($sku->extSkuId)) {
+                                    $ext[] = $sku->extSkuId;
+                                }
+                            }
+                        }
+                    }
+
+                }
 	        }
-
-	        if(!is_null($val->shopHasProduct) && !is_null($val->shopHasProduct->dirtyProduct)) {
-		        if(!empty($val->shopHasProduct->dirtyProduct->extId)) {
-			        $ext[] = $val->shopHasProduct->dirtyProduct->extId;
-		        }
-		        if(!is_null($val->shopHasProduct->dirtyProduct->dirtySku)) {
-			        foreach ($val->shopHasProduct->dirtyProduct->dirtySku as $sku) {
-				        if(!empty($sku->extSkuId)) {
-					        $ext[] = $sku->extSkuId;
-				        }
-			        }
-		        }
-
-	        }*/
+            
 	        $ext = implode('<br>',array_unique($ext));
 
 	        $tags = [];
