@@ -54,8 +54,8 @@ class CProductListAjaxController extends AAjaxController
         if(!empty($this->authorizedShops)){
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
-	    $datatable->addSearchColumn('extId');
-	    $datatable->addSearchColumn('extSkuId');
+	    //$datatable->addSearchColumn('extId');
+	    //$datatable->addSearchColumn('extSkuId');
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -100,9 +100,13 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
 
-            $response['data'][$i]['sizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
-            $response['data'][$i]['details'] = '';
-
+            //$response['data'][$i]['sizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
+            $img = strpos($val->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $this->urls['dummy']."/".$val->dummyPicture;
+            if($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
+            else $imgs = "";
+            //$response['data'][$i]['dummyPicture'] = '<img width="60" src="'.$img.'" />'.$imgs;
+            $response['data'][$i]['details'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
+            $response['data'][$i]['details'] .= ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span><br />' : '';
             $details = $this->app->repoFactory->create('ProductSheetActual')->em()->findBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
             foreach($details as $k => $v) {
                 if ($trans = $v->productDetail->productDetailTranslation->getFirst()) {
@@ -110,14 +114,18 @@ class CProductListAjaxController extends AAjaxController
                 }
             }
 
-            $response['data'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
+            $response['data'][$i]['season'] = '<span class="small">';
+            $response['data'][$i]['season'] .= $val->productSeason->name . " " . $val->productSeason->year;
+            $response['data'][$i]['season'] .= '</span>';
 	        $ext = [];
+            /*if(isset($val->externalId)) {
+                $ext[] = $val->externalId;
+            }
+            //foreach ($val->shopHasProduct as $shopHasProduct)
 	        if (!is_null($val->shopHasProduct) && !empty($val->shopHasProduct->extId)) {
 		        $ext[] = $val->shopHasProduct->extId;
 	        }
-	        if(isset($val->externalId)) {
-		        $ext[] = $val->externalId;
-	        }
+
 	        if(!is_null($val->shopHasProduct) && !is_null($val->shopHasProduct->dirtyProduct)) {
 		        if(!empty($val->shopHasProduct->dirtyProduct->extId)) {
 			        $ext[] = $val->shopHasProduct->dirtyProduct->extId;
@@ -130,24 +138,30 @@ class CProductListAjaxController extends AAjaxController
 			        }
 		        }
 
-	        }
+	        }*/
 	        $ext = implode('<br>',array_unique($ext));
 
 	        $tags = [];
 	        foreach ($val->tag as $tag) $tags[] = $tag->tagTranslation->getFirst()->name;
 
-            $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
-            $response['data'][$i]['cpf'] = $val->itemno.' # '.$val->productVariant->name;
+            $response['data'][$i]['externalId'] = '<span class="small">';
+            $response['data'][$i]['externalId'] .= empty($ext) ? "" : $ext;
+            $response['data'][$i]['externalId'] .= '</span>';
+
+            $response['data'][$i]['cpf'] = '<span class="small">';
+            $response['data'][$i]['cpf'] .= $val->itemno.' # '.$val->productVariant->name;
+            $response['data'][$i]['cpf'] .= '</span>';
 
             $colorGroup = $val->productColorGroup->getFirst();
             $response['data'][$i]['colorGroup'] = ($colorGroup) ? $colorGroup->name : "[Non assegnato]";
-            $img = strpos($val->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $this->urls['dummy']."/".$val->dummyPicture;
-	        if($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
-	        else $imgs = "";
-            $response['data'][$i]['dummyPicture'] = '<img width="80" src="'.$img.'" />'.$imgs;
+
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $response['data'][$i]['slug'] = implode(',<br/>',$cats); //category
-            $response['data'][$i]['tag'] = implode(',',$tags);
+            $response['data'][$i]['slug'] = '<span class="small">';
+            $response['data'][$i]['slug'] .= implode(',<br/>',$cats); //category
+            $response['data'][$i]['slug'] .= '</span>';
+            $response['data'][$i]['tag'] = '<span class="small">';
+            $response['data'][$i]['tag'] .= implode(',<br />',$tags);
+            $response['data'][$i]['tag'] .= '</span>';
             $response['data'][$i]['status'] = $val->productStatus->name;
 
             $qty=0;
@@ -161,7 +175,7 @@ class CProductListAjaxController extends AAjaxController
                 if (!in_array($iShop, $shopz)) {
                     $shopz[] = $iShop;
 
-                    $price = ($isOnSale) ? $sku->price : $sku->salePrice;
+                    $price = ($isOnSale) ? $sku->salePrice : $sku->price;
                     
                     if ((float)$price) {
                         $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
