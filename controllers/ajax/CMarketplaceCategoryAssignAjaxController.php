@@ -53,12 +53,12 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 	        } else {
 		        //data-init-plugin="selectize"
 		        $html = '<select class="full-width selectpicker" 
-		                         placeholder="Seleziona la categoria" 
+		                         placeholder="Seleziona la categoria"
+		                        
 		                         data-name="categorySelect"
 		                         data-selected="'.$val->productCategoryId.'"
 		                         data-id="' . $val->marketplaceId.'-'.$val->marketplaceCategoryId . '" 
 		                         tabindex="-1" >';
-		        $html .= '<option value=""></option>';
 		        /*foreach ($productCategories as $productCategory) {
 			        $html .= '<option value="' . $productCategory->id . '" required ';
 			        if ($val->productCategoryId == $productCategory->id) {

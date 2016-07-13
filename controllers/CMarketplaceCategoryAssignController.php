@@ -34,4 +34,9 @@ class CMarketplaceCategoryAssignController extends ARestrictedAccessRootControll
             'sidebar' => $this->sidebar->build()
         ]);
     }
+
+	public function put()
+	{
+		
+	}
 }
