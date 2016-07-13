@@ -40,15 +40,34 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
         $response ['data'] = [];
 
         $i = 0;
+		$productCategories = $this->app->repoFactory->create('ProductCategory')->findAll();
 
-        foreach($marketplaceCategories as $val){
-
-            $response['data'][$i]["DT_RowId"] = 'row__'.$val->marketplaceId.'-'.$val->marketplaceCategoryId;
+        foreach($marketplaceCategories as $val) {
+	        $response['data'][$i]["DT_RowId"] = 'row__'.$val->marketplaceId.'-'.$val->marketplaceCategoryId;
             $response['data'][$i]['marketplace'] = $val->marketplace->name;
-            $response['data'][$i]['marketplaceCategory'] = $val->name;
-            $response['data'][$i]['marketplaceCategoryDescription'] = $val->path;
-            $response['data'][$i]['internalCategory'] = $okManage ? $val->productCategoryId : 'ciccia';//'<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'">'.$val->name.'</a>' : $val->name;
+            $response['data'][$i]['marketplaceCategory'] = $val->marketplaceCategoryName;
+            $response['data'][$i]['marketplaceCategoryDescription'] = $val->marketplaceCategoryPath;
 
+	        if(!$okManage) {
+				$html = 'Non si può';
+	        } else {
+		        $html = '<select class="full-width selectpicker" 
+		                         placeholder="Seleziona la categoria" 
+		                         data-init-plugin="selectize" 
+		                         data-id="' . $val->marketplaceId.'-'.$val->marketplaceCategoryId . '" 
+		                         tabindex="-1" >';
+		        $html .= '<option value=""></option>';
+		        foreach ($productCategories as $productCategory) {
+			        $html .= '<option value="' . $productCategory->id . '" required ';
+			        if ($val->productCategoryId == $productCategory->id) {
+				        $html .= 'selected="selected"';
+			        }
+			        $html .= '>' . $productCategory->slug. '</option>';
+		        }
+		        $html .= '</select>';
+	        }
+
+            $response['data'][$i]['internalCategory'] = $html;
             $i++;
         }
 

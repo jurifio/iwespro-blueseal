@@ -24,14 +24,15 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_category_assign"
+                               data-column-filter="true"
                                data-controller="MarketplaceCategoryAssignAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
                                 <th class="center sorting">Marketplace</th>
-                                <th class="center sorting">Categoria Interna</th>
                                 <th class="center sorting">Categoria Marketplace</th>
                                 <th class="center sorting">Descrizione Marketplace</th>
+                                <th class="center sorting">Categoria Interna</th>
                             </tr>
                             </thead>
                             <tbody>
