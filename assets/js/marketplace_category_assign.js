@@ -9,3 +9,29 @@ $(document).on('change', $('name[brandId]').val, function(event) {
         }
     });
 });
+
+$('table[data-datatable-name]')[0].on('draw', function() {
+	if(window.categories.lenght = 0) {
+		$.ajax({
+			url: "/blueseal/cagegories/getlist"
+		}).done(function(res) {
+			window.categories = JSON.parse(res);
+		})
+	}
+	$('select[data-name=\"categorySelect\"]').each(function(k,v){
+		$(window.categories).each(function(kk,vv){
+			if($(v).data('selected') == vv.id) {
+				$(v).append($('<option selected="selected">', {
+					value: vv.id,
+					text: vv.path
+				}));
+			} else {
+				$(v).append($('<option>', {
+					value: vv.id,
+					text: vv.path
+				}));
+			}
+		});
+
+	});
+});

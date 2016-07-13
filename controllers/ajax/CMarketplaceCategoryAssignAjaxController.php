@@ -51,19 +51,21 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 	        if(!$okManage) {
 				$html = 'Non si può';
 	        } else {
+		        //data-init-plugin="selectize"
 		        $html = '<select class="full-width selectpicker" 
 		                         placeholder="Seleziona la categoria" 
-		                         data-init-plugin="selectize" 
+		                         data-name="categorySelect"
+		                         data-selected="'.$val->productCateogryId.'"
 		                         data-id="' . $val->marketplaceId.'-'.$val->marketplaceCategoryId . '" 
 		                         tabindex="-1" >';
 		        $html .= '<option value=""></option>';
-		        foreach ($productCategories as $productCategory) {
+		        /*foreach ($productCategories as $productCategory) {
 			        $html .= '<option value="' . $productCategory->id . '" required ';
 			        if ($val->productCategoryId == $productCategory->id) {
 				        $html .= 'selected="selected"';
 			        }
 			        $html .= '>' . $productCategory->slug. '</option>';
-		        }
+		        }*/
 		        $html .= '</select>';
 	        }
 
