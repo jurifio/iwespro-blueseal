@@ -184,7 +184,8 @@ class CProductListAjaxController extends AAjaxController
                     
                     if ((float)$price) {
                         $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
-                        $friendRevenue = $price + $price * $multiplier / 100;
+                        $value = $sku->value;
+                        $friendRevenue = $value + $value * $multiplier / 100;
                         $priceNoVat = $price / 1.22;
                         $mup[] = number_format(($priceNoVat - $friendRevenue) / $priceNoVat * 100, 2, ",", ".");
                     } else {
