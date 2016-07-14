@@ -37,6 +37,24 @@ class CMarketplaceCategoryAssignController extends ARestrictedAccessRootControll
 
 	public function put()
 	{
-		
+		$data = explode('-',$this->app->router->request()->getRequestData("id"));
+		$one = $this->app->repoFactory->create('MarketplaceCategoryLookup')->findOneBy(['marketplaceId'=>$data[0],'marketplaceCategoryId'=>$data[1]]);
+		$one->productCategoryId = $this->app->router->request()->getRequestData("value");
+		$one->update();
+	}
+
+	/**
+	 * @return int
+	 */
+	public function delete() {
+		$i = 0;
+		foreach($this->app->router->request()->getRequestData('ids') as $id) {
+			$data = explode('-',$id);
+			$one = $this->app->repoFactory->create('MarketplaceCategoryLookup')->findOneBy(['marketplaceId'=>$data[0],'marketplaceCategoryId'=>$data[1]]);
+			\BlueSeal::dump($one);
+			$one->isRelevant = 0;
+			if($one->update()>0) $i++;
+		}
+		return $i;
 	}
 }

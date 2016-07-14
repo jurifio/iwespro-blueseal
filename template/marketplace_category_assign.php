@@ -53,7 +53,7 @@
             data-tag="a"
             data-icon="fa-eye-slash"
             data-permission="/admin/product/edit"
-            data-event="bs.category.hide"
+            data-event="bs.marketplaceCategory.hide"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Nascondi Categorie"

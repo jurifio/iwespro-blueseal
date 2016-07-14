@@ -26,7 +26,7 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
     public function get()
     {
         $datatable = new CDataTables('vBluesealMarketplaceCategory',['marketplaceId','marketplaceCategoryId'],$_GET);
-
+		$datatable->addCondition('isRelevant',[1]);
         $marketplaceCategories = $this->app->repoFactory->create('MarketplaceCategoryLookup')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->app->repoFactory->create('MarketplaceCategoryLookup')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('MarketplaceCategoryLookup')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());

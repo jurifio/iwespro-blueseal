@@ -12,13 +12,16 @@ $('table[data-datatable-name]').on('draw.dt', function () {
 				url: "/blueseal/xhr/ProductCategoryPathList"
 			}).done(function (res) {
 				window.categories = JSON.parse(res);
+			}).always(function() {
 				deferred.resolve();
 			});
-		}else {
+		} else {
 			deferred.resolve();
 		}
 
 	},  300);
+
+	//deferred.promise();
 
 	deferred.done(function () {
 		$('select[data-name=\"categorySelect\"]').each(function (k, v) {
@@ -57,5 +60,47 @@ $(document).on('change','select[data-name=\"categorySelect\"]', function() {
 			type: "danger",
 			message: "Errore nel'assegnare la categoria"
 		}).open();
+	});
+});
+
+$(document).on('bs.marketplaceCategory.hide', function() {
+	var getVarsArray = [];
+	var table = $('.table').DataTable();
+	var selectedRows = table.rows('.selected').data();
+	var selectedRowsCount = selectedRows.length;
+
+	if (selectedRowsCount < 1) {
+		new Alert({
+			type: "warning",
+			message: "Devi selezionare uno o Categorie da nascondere"
+		}).open();
+		return false;
+	}
+
+	var i = 0;
+	console.log(selectedRows);
+	$.each(selectedRows, function (k, v) {
+		var rowId = v.DT_RowId.split('__');
+		getVarsArray[i] = rowId[1];
+		i++;
+	});
+
+	$.ajax({
+		method: "DELETE",
+		data: {
+			ids: getVarsArray
+		}
+	}).done(function () {
+		new Alert({
+			type: "success",
+			message: "Categorie Nascoste"
+		}).open();
+	}).fail(function () {
+		new Alert({
+			type: "warning",
+			message: "Errore nel nascondere le categorie"
+		}).open();
+	}).always(function() {
+		table.ajax.reload();
 	});
 });
