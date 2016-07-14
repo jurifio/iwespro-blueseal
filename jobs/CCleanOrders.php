@@ -58,14 +58,15 @@ class CCleanOrders extends ACronJob
                   where o.`status` like 'CRT%' and ( lastUpdate < ? or ( lastUpdate is null and creationDate < ?)) LIMIT 1000";
         $timestamp = date('Y-m-d H:i:s',( time() - $time));
         $i=0;
+	    $k=0;
         while(count($res = $this->app->dbAdapter->query($query,[$timestamp,$timestamp])->fetchAll()) != 0){
             $this->log('REPORT','Delete Start', "To do: ".count($res));
 
-
             foreach($res as $order){
-                if($i%100) $this->app->dbAdapter->beginTransaction();
+                if($k%100 == 0) $this->app->dbAdapter->beginTransaction();
+	            $k++;
                 $resp = $this->deleteOrder($order);
-                if($i%100) $this->app->dbAdapter->commit();
+                if($k%100 == 0) $this->app->dbAdapter->commit();
                 if($resp) $i++;
             }
             $this->log('REPORT','Delete End', "Deleted: ".$i);
