@@ -59,7 +59,7 @@ class CCleanOrders extends ACronJob
         $timestamp = date('Y-m-d H:i:s',( time() - $time));
         $i=0;
 	    $k=0;
-        while(count($res = $this->app->dbAdapter->query($query,[$timestamp,$timestamp])->fetchAll()) != 0){
+        while(count($res = $this->app->dbAdapter->query($query,[$timestamp,$timestamp])->fetchAll()) > 100){
             $this->log('REPORT','Delete Start', "To do: ".count($res));
 
             foreach($res as $order){
