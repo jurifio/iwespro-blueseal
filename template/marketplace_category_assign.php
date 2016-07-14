@@ -51,12 +51,12 @@
     <bs-toolbar-group data-group-label="Traduzione nomi prodotti">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-language"
+            data-icon="fa-eye-slash"
             data-permission="/admin/product/edit"
-            data-event="bs.translate.name"
+            data-event="bs.category.hide"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Traduci nomi"
+            data-title="Nascondi Categorie"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
