@@ -52,14 +52,14 @@ class CCleanOrders extends ACronJob
 
     public function deleteCarts()
     {
-        $time = 2592000; //seconds to 1 month
+        $time = 1728000; //seconds to 20 days
         $query = "SELECT id
                   FROM `Order` o
                   where o.`status` like 'CRT%' and ( lastUpdate < ? or ( lastUpdate is null and creationDate < ?)) LIMIT 1000";
         $timestamp = date('Y-m-d H:i:s',( time() - $time));
         $i=0;
 	    $k=0;
-        while(count($res = $this->app->dbAdapter->query($query,[$timestamp,$timestamp])->fetchAll()) != 0){
+        while(count($res = $this->app->dbAdapter->query($query,[$timestamp,$timestamp])->fetchAll()) > 100){
             $this->log('REPORT','Delete Start', "To do: ".count($res));
 
             foreach($res as $order){
