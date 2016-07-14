@@ -388,6 +388,7 @@ var Alert = function(config)
         selfClose: true,
         loader: false,
         closeTimerMs: 5000,
+	    silent: true,
         audio: {
             warning: '/assets/audio/alert.mp3',
             danger: '/assets/audio/alert.mp3',
@@ -452,19 +453,19 @@ Alert.prototype.draw = function()
 Alert.prototype.open = function()
 {
     var that = this;
+	if(!that.data.silent) {
+		var sfx = new Audio(that.data.audio[that.data.type]);
+		sfx.play();
+	}
+	that.alertBox.off();
+	that.wrapper.css('height','8%');
+	that.alertBox.addClass('opened');
 
-    var sfx = new Audio(that.data.audio[that.data.type]);
-    sfx.play();
-
-    that.alertBox.off();
-    that.wrapper.css('height','8%');
-    that.alertBox.addClass('opened');
-
-    if (that.data.selfClose == true) {
-        setTimeout(function() {
-            that.close();
-        },that.data.closeTimerMs);
-    }
+	if (that.data.selfClose == true) {
+		setTimeout(function() {
+			that.close();
+		},that.data.closeTimerMs);
+	}
 };
 
 Alert.prototype.close = function()
