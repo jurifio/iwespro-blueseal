@@ -40,39 +40,25 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
         $response ['data'] = [];
 
         $i = 0;
-		$productCategories = $this->app->repoFactory->create('ProductCategory')->findAll();
-
         foreach($marketplaceCategories as $val) {
 	        $response['data'][$i]["DT_RowId"] = 'row__'.$val->marketplaceId.'-'.$val->marketplaceCategoryId;
             $response['data'][$i]['marketplace'] = $val->marketplace->name;
             $response['data'][$i]['marketplaceCategory'] = $val->marketplaceCategoryName;
-            $response['data'][$i]['marketplaceCategoryDescription'] = $val->marketplaceCategoryPath;
-
+            $response['data'][$i]['marketplaceCategoryDescription'] = str_replace('_','<br>',$val->marketplaceCategoryPath);
 	        if(!$okManage) {
 				$html = 'Non si può';
 	        } else {
-		        //data-init-plugin="selectize"
 		        $html = '<select class="full-width selectpicker" 
 		                         placeholder="Seleziona la categoria"
 		                        
 		                         data-name="categorySelect"
 		                         data-selected="'.$val->productCategoryId.'"
 		                         data-id="' . $val->marketplaceId.'-'.$val->marketplaceCategoryId . '" 
-		                         tabindex="-1" >';
-		        /*foreach ($productCategories as $productCategory) {
-			        $html .= '<option value="' . $productCategory->id . '" required ';
-			        if ($val->productCategoryId == $productCategory->id) {
-				        $html .= 'selected="selected"';
-			        }
-			        $html .= '>' . $productCategory->slug. '</option>';
-		        }*/
-		        $html .= '</select>';
+		                         tabindex="-1" ></select>';
 	        }
-
             $response['data'][$i]['internalCategory'] = $html;
             $i++;
         }
-
         return json_encode($response);
     }
 }
