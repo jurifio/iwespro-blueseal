@@ -127,18 +127,18 @@ class CProductListAjaxController extends AAjaxController
                 if (!empty($shp->extId)) {
                     $ext[] = $shp->extId;
                 }
+	            if(!is_null($shp->dirtyProduct)) {
+		            if(!empty($shp->dirtyProduct->extId)) {
+			            $ext[] = $shp->dirtyProduct->extId;
+		            }
 
-                if(!empty($shp->dirtyProduct->extId)) {
-                    $ext[] = $shp->dirtyProduct->extId;
-                }
-
-                foreach ($shp->dirtyProduct->dirtySku as $sku) {
-                    if (!empty($sku->extSkuId)) {
-                        $ext[] = $sku->extSkuId;
-                    }
-                }
+		            foreach ($shp->dirtyProduct->dirtySku as $sku) {
+			            if (!empty($sku->extSkuId)) {
+				            $ext[] = $sku->extSkuId;
+			            }
+		            }
+	            }
             }
-
             
 	        $ext = implode('<br>',array_unique($ext));
 
