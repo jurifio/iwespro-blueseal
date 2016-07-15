@@ -288,7 +288,7 @@ $(document).on('bs.det.add', function (e) {
 });
 
 
-$(document).on('bs.detailModel.add', function (e) {
+$(document).on('bs.details.model.add', function (e) {
     e.preventDefault();
 
     var bsModal = $('#bsModal');
@@ -323,20 +323,62 @@ $(document).on('bs.detailModel.add', function (e) {
     okButton.html('Aggiungi').off().on('click', function () {
         var modelName = $('#modelName').val();
         var productPrototypeId = $('#Product_dataSheet option:selected').val();
+        var productDetails = [];
+        var idLabel = 0;
+        var id = '';
+        var data = {
+            'modelName': modelName,
+            'productPrototypeId' : productPrototypeId,
+        };
+        $("#productDetails").find('select').each(function(){
+            id = $(this).attr('id');
+            idLabel = id.split('_')[2];
+            data['productDetails_' + idLabel] = $('#' + id + ' option:selected').val();
+        });
 
-        if (modelName) {
+
+
+        if (!modelName) {
+            $(".modal-alert").css("display", "none");
+            $(".no-name").css("display", "block");
+        } else {
             $.ajax({
                 url: "/blueseal/xhr/DetailModelSave",
                 method: "POST",
-                data: {
-                    modelName: modelName
-                }
+                data: data
             }).done(function (res) {
-                if (0 == res) {
-                    $(".modal-alert").css("display", "none");
-                    $(".name-exists").css("display", "block");
-                } else {
-                    // display category
+                res = JSON.parse(res);
+                if ('new' == res['status']) {
+                    body.html("Nuovo Modello Inserito Correttamente!");
+                    //todo trigger category change
+                } else if ('fail' == res['status']) {
+                    body.html("OOPS! non sono riuscito a salvare il Modello.<br />" + res['error']);
+                    okButton.html('Chiudi').off().on('click', function(){
+                        bsModal.modal('hide');
+                    });
+                } else if ('exists' == res['status']) {
+                    body.html("Un Modello con questo nome esiste già. Sovrascriverlo?");
+                    okButton.html('Sì').off().on('click', function(){
+                        $.ajax({
+                            url: "/blueseal/xhr/DetailModelSave",
+                            method: "PUT",
+                            data: {
+                                modelName: modelName,
+                                productPrototypeId: productPrototypeId,
+                                productDetails: productDetails
+                            }
+                        }).done(function(res) {
+                            if ("ok" == res) {
+                                body.html("Il modello " + modelName - " è stato aggiornato");
+                                //todo trigger category change
+                            } else {
+                                body.html("OOPS! C'è stato un problema nel salvataggio della categoria associata<br />" + res);
+                                okButton.html('Chiudi').off().on('click', function(){
+                                    bsModal.modal('hide');
+                                });
+                            }
+                        });
+                    });
                 }
             });
         }

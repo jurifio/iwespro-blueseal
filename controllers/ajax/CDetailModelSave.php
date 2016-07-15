@@ -22,16 +22,43 @@ class CDetailModelSave extends AAjaxController
 
     public function post() {
         $get = $this->app->router->request()->getRequestData();
+        \BlueSeal::dump($get);
         $name = (array_key_exists('modelName', $get)) ? $get['modelName'] : false;
-        $return = 0;
+        $productPrototypeId = $get['productPrototypeId'];
+        $productDetails = [];
+        foreach($get as $k => $v) {
+            if (false !== strpos($k, 'productDetails')) {
+                $productDetails[explode('_', $k)[1]] = $v;
+            }
+        }
         if ($name) {
             $prot = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
             if ($prot) {
-                return 0;
+                return json_encode(['status' => 'exists']);
             } else {
-                $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
-                $newProt->pro
-                return $newProt->id;
+                try {
+                    $this->app->dbAdapter->beginTransaction();
+                    $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
+                    $newProt->productSheetPrototypeId = $productPrototypeId;
+                    $newProt->name = $name;
+                    $newProt->insert();
+
+
+                    foreach ($productDetails as $k => $v) {
+                        if (!$v) continue;
+                        $newSheet = $this->app->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+                        $newSheet->productSheetModelPrototypeId = $productPrototypeId;
+                        $newSheet->productDetailLabelId = $k;
+                        $newSheet->productDetailId = $v;
+                    }
+                    $this->app->dbAdapter->commit();
+
+                    $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
+                    return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newProt->id]);
+                } catch (\Exception $e) {
+                    $this->app->dbAdapter->rollBack();
+                    return json_encode(['status' => 'fail']);
+                }
             }
         } else {
             throw new \Exception("OOPS! Nessun nome fornito");
@@ -41,5 +68,8 @@ class CDetailModelSave extends AAjaxController
     public function put() {
         //todo
     }
+
+
+
 
 }

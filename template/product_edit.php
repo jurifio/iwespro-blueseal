@@ -419,8 +419,7 @@
             data-event="bs.details.model.add"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Crea Modello di dettagli"
-            data-json='<?php echo json_encode($sortingOptions); ?>'
+            data-title="Aggiungi un nuovo dettaglio"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
