@@ -122,7 +122,7 @@ class CProductListAjaxController extends AAjaxController
                 $ext[] = $val->externalId;
             }
             //foreach ($val->shopHasProduct as $shopHasProduct)
-	        if (iterator_count($val->shopHasProduct)) {
+	        //if (iterator_count($val->shopHasProduct)) {
                 foreach($val->shopHasProduct as $shp) {
                     if (!empty($shp->extId)) {
                         $ext[] = $shp->extId;
@@ -142,7 +142,7 @@ class CProductListAjaxController extends AAjaxController
                     }
 
                 }
-	        }
+	        //}
             
 	        $ext = implode('<br>',array_unique($ext));
 

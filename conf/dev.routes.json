@@ -1319,6 +1319,19 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/marketplace/categorie(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

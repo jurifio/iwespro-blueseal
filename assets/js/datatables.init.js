@@ -1045,6 +1045,28 @@
 			}
 		]
 	});
+	tableSetup.marketplace_category_assign = $.extend({}, tableSetup.common, {
+		order: [[0, 'asc']],
+		columns: [
+			{
+				data: "marketplace",
+				orderable: true,
+				searchable: true
+			},{
+				data: "marketplaceCategory",
+				orderable: true,
+				searchable: true
+			},{
+				data: "marketplaceCategoryDescription",
+				orderable: false,
+				searchable: false
+			},{
+				data: "internalCategory",
+				orderable: true,
+				searchable: true
+			}
+		]
+	});
 
 	$.each($('table[data-datatable-name]'), function () {
 
