@@ -118,31 +118,27 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['season'] .= $val->productSeason->name . " " . $val->productSeason->year;
             $response['data'][$i]['season'] .= '</span>';
 	        $ext = [];
-            if(isset($val->externalId)) {
+
+	        if(isset($val->externalId) && !empty($val->externalId)) {
                 $ext[] = $val->externalId;
             }
-            //foreach ($val->shopHasProduct as $shopHasProduct)
-	        //if (iterator_count($val->shopHasProduct)) {
-                foreach($val->shopHasProduct as $shp) {
-                    if (!empty($shp->extId)) {
-                        $ext[] = $shp->extId;
-                    }
 
-                    if(!empty($shp->dirtyProduct->extId)) {
-                        $ext[] = $shp->dirtyProduct->extId;
-                    }
-                    if(!empty($shp->dirtyProduct->dirtySku)) {
-                        if (iterator_count($shp->dirtyProduct->dirtySku)) {
-                            foreach ($shp->dirtyProduct->dirtySku as $sku) {
-                                if (!empty($sku->extSkuId)) {
-                                    $ext[] = $sku->extSkuId;
-                                }
-                            }
-                        }
-                    }
-
+            foreach($val->shopHasProduct as $shp) {
+                if (!empty($shp->extId)) {
+                    $ext[] = $shp->extId;
                 }
-	        //}
+	            if(!is_null($shp->dirtyProduct)) {
+		            if(!empty($shp->dirtyProduct->extId)) {
+			            $ext[] = $shp->dirtyProduct->extId;
+		            }
+
+		            foreach ($shp->dirtyProduct->dirtySku as $sku) {
+			            if (!empty($sku->extSkuId)) {
+				            $ext[] = $sku->extSkuId;
+			            }
+		            }
+	            }
+            }
             
 	        $ext = implode('<br>',array_unique($ext));
 
