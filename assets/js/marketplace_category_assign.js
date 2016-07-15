@@ -34,9 +34,9 @@ $('table[data-datatable-name]').on('draw.dt', function () {
 				});
 				var initVal = $(v).data('selected');
 				if(initVal != 'undefined' && initVal.lenght != 0) {
-					sel[0].selectize.setValue(initVal, true);
+					sel[0].selectize.setValue(initVal.split('__'), true);
 				} else {
-					sel[0].selectize.setValue(0, true);
+					//sel[0].selectize.setValue(0, true);
 				}
 			});
 		});
