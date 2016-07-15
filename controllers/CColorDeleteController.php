@@ -1,8 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
-use Aws\CloudFront\Exception\Exception;
-
 /**
  * Class CColorManageController
  * @package bamboo\blueseal\controllers

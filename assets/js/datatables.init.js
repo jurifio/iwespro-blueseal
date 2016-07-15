@@ -1053,7 +1053,11 @@
 				orderable: true,
 				searchable: true
 			},{
-				data: "marketplaceCategory",
+				data: "marketplaceAccount",
+				orderable: true,
+				searchable: true
+			},{
+				data: "marketplaceAccountCategory",
 				orderable: true,
 				searchable: true
 			},{

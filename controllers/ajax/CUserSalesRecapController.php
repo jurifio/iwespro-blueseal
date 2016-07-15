@@ -1,7 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use Aws\CloudFront\Exception\Exception;
 use bamboo\core\intl\CLang;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\widget\VBase;

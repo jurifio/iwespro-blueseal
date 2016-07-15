@@ -30,6 +30,7 @@
                             <thead>
                             <tr>
                                 <th class="center sorting">Marketplace</th>
+                                <th class="center sorting">Account</th>
                                 <th class="center sorting">Categoria Marketplace</th>
                                 <th class="center sorting">Descrizione Marketplace</th>
                                 <th class="center sorting">Categoria Interna</th>

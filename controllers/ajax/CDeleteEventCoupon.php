@@ -1,8 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use Aws\CloudFront\Exception\Exception;
-
 /**
  * Class CDeleteEventCoupon
  * @package bamboo\blueseal\controllers\ajax

@@ -2,13 +2,10 @@
 
 namespace bamboo\blueseal\controllers;
 
-use Aws\CloudFront\Exception\Exception;
 use bamboo\core\intl\CLang;
 use bamboo\core\io\CJsonAdapter;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 
 /**
  * Class CLandingPageAddController
