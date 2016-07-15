@@ -39,12 +39,17 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
+
+
         $i = 0;
         foreach($marketplaceCategories as $val) {
 	        $response['data'][$i]["DT_RowId"] = 'row__'.$val->marketplaceId.'-'.$val->marketplaceCategoryId;
             $response['data'][$i]['marketplace'] = $val->marketplace->name;
             $response['data'][$i]['marketplaceCategory'] = $val->marketplaceCategoryName;
-            $response['data'][$i]['marketplaceCategoryDescription'] = str_replace('_','<br>',$val->marketplaceCategoryPath);
+
+	        $appoggio = explode('_',$val->marketplaceCategoryPath);
+	        $appoggio = array_reverse($appoggio);
+            $response['data'][$i]['marketplaceCategoryDescription'] = implode('<br>',$appoggio);
 	        if(!$okManage) {
 				$html = 'Non si può';
 	        } else {

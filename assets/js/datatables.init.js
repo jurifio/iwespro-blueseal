@@ -1046,7 +1046,7 @@
 		]
 	});
 	tableSetup.marketplace_category_assign = $.extend({}, tableSetup.common, {
-		order: [[0, 'asc']],
+		order: [[1, 'asc']],
 		columns: [
 			{
 				data: "marketplace",
@@ -1065,7 +1065,8 @@
 				orderable: true,
 				searchable: true
 			}
-		]
+		],
+		lengthMenu: [10, 25, 50, 75, 100, 200, 500, 1000]
 	});
 
 	$.each($('table[data-datatable-name]'), function () {
