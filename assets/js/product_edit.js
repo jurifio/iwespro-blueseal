@@ -288,6 +288,62 @@ $(document).on('bs.det.add', function (e) {
 });
 
 
+$(document).on('bs.detailModel.add', function (e) {
+    e.preventDefault();
+
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+    //new Cslugify
+    header.html('Aggiungi un nuovo modello per i dettagli');
+    body.html(
+        '<div class="alert alert-danger modal-alert name-exists" style="display: none">Il nome scelto esiste già.</div>' +
+        '<div class="alert alert-danger modal-alert no-name" style="display: none">Devi specificare un nome.</div>' +
+        '<form id="detailAdd"><div class="form-group">' +
+        '<label>Inserisci il nome:</label><br />' +
+        '<input type="text" name="modelName" id="modelName" class="form-control" />' +
+        '<!--<select type="text" class="form-control new-dett-ita" name="modelCats" id="newDetModel" ></select>-->' +
+        '</div></form>'
+    );
+    cancelButton.html("Annulla").off().on('click', function () {
+        bsModal.hide();
+    });
+    bsModal.modal('show');
+
+    /* $('#newDetModel').selectize({
+        valueField: 'id',
+        labelField: 'item',
+        searchField: ['item'],
+        options: window.detailsStorage
+    }); */
+
+    okButton.html('Aggiungi').off().on('click', function () {
+        var modelName = $('#modelName').val();
+        var productPrototypeId = $('#Product_dataSheet option:selected').val();
+
+        if (modelName) {
+            $.ajax({
+                url: "/blueseal/xhr/DetailModelSave",
+                method: "POST",
+                data: {
+                    modelName: modelName
+                }
+            }).done(function (res) {
+                if (0 == res) {
+                    $(".modal-alert").css("display", "none");
+                    $(".name-exists").css("display", "block");
+                } else {
+                    // display category
+                }
+            });
+        }
+    });
+});
+
+
 $(document).ready(function() {
 
     autocompleteDetail();

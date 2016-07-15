@@ -412,6 +412,17 @@
             data-title="Aggiungi un nuovo dettaglio"
             data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-files-o"
+            data-permission="/admin/product/edit"
+            data-event="bs.details.model.add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Crea Modello di dettagli"
+            data-json='<?php echo json_encode($sortingOptions); ?>'
+            data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Stato del prodotto">
         <bs-toolbar-select
