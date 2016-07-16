@@ -1332,6 +1332,19 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/friend/prodotti/modifica(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendProductEditController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }
