@@ -290,14 +290,13 @@ $(document).on('bs.det.add', function (e) {
 
 $(document).on('bs.details.model.add', function (e) {
     e.preventDefault();
-
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');
     var body = $('#bsModal .modal-body');
     var cancelButton = $('#bsModal .modal-footer .btn-default');
     var okButton = $('#bsModal .modal-footer .btn-success');
 
-    //new Cslugify
+
     header.html('Aggiungi un nuovo modello per i dettagli');
     body.html(
         '<div class="alert alert-danger modal-alert name-exists" style="display: none">Il nome scelto esiste già.</div>' +
@@ -350,7 +349,12 @@ $(document).on('bs.details.model.add', function (e) {
                 res = JSON.parse(res);
                 if ('new' == res['status']) {
                     body.html("Nuovo Modello Inserito Correttamente!");
-                    //todo trigger category change
+                    productSheetModelPrototypeId = res['productSheetModelPrototypeId'];
+                    cancelButton.hide();
+                    okButton.html('Ok').off().on('change', function(){
+                        bsModal.modal('hide');
+                        $(document).trigger('bs.details.model.category');
+                    });
                 } else if ('fail' == res['status']) {
                     body.html("OOPS! non sono riuscito a salvare il Modello.<br />" + res['error']);
                     okButton.html('Chiudi').off().on('click', function(){
@@ -362,15 +366,16 @@ $(document).on('bs.details.model.add', function (e) {
                         $.ajax({
                             url: "/blueseal/xhr/DetailModelSave",
                             method: "PUT",
-                            data: {
-                                modelName: modelName,
-                                productPrototypeId: productPrototypeId,
-                                productDetails: productDetails
-                            }
+                            data: data
                         }).done(function(res) {
                             if ("ok" == res) {
-                                body.html("Il modello " + modelName - " è stato aggiornato");
-                                //todo trigger category change
+                                body.html("Il modello " + modelName + " è stato aggiornato");
+                                productSheetModelPrototypeId = res['productSheetModelPrototypeId'];
+                                cancelButton.hide();
+                                okButton.html('Ok').off().on('change', function() {
+                                    bsModal.modal('hide');
+                                    $(document).trigger('bs.details.model.category');
+                                });
                             } else {
                                 body.html("OOPS! C'è stato un problema nel salvataggio della categoria associata<br />" + res);
                                 okButton.html('Chiudi').off().on('click', function(){
@@ -385,6 +390,45 @@ $(document).on('bs.details.model.add', function (e) {
     });
 });
 
+$(document).on('bs.details.model.category', function(){
+    e.preventDefault();
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+
+    header.html('Assegna una categoria al modello');
+    $.ajax({
+        url: '/blueseal/xhr/DetailModelAssocToCat',
+        type: 'GET',
+        data: {productSheetModelPrototypeId: productSheetModelPrototypeId}
+    });
+    body.html(
+        '<div class="alert alert-danger modal-alert name-exists" style="display: none">Il nome scelto esiste già.</div>' +
+        '<div class="alert alert-danger modal-alert no-name" style="display: none">Devi specificare un nome.</div>' +
+        '<form id="detailAdd"><div class="form-group">' +
+        '<label>Inserisci il nome:</label><br />' +
+        '<select type="text" class="form-control new-dett-ita" name="modelCat" id="modelCat" ></select>-->' +
+        '</div></form>'
+    );
+    cancelButton.html("Annulla").off().on('click', function () {
+        bsModal.hide();
+    });
+    okButton.html('Aggiorna').off().on('click', function() {
+        $.ajax({
+            url: '/blueseal/xhr/DetailModelAssocToCat',
+            type: 'POST',
+            data: {
+                productSheetModelPrototypeId: productSheetModelPrototypeId,
+                categoryId: $('#modelCat option:selected').val()
+            }
+        });
+    });
+    bsModal.modal('show');
+
+});
 
 $(document).ready(function() {
 

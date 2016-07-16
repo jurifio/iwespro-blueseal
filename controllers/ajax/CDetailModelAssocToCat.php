@@ -17,7 +17,7 @@ class CDetailModelAssocToCat extends AAjaxController
 {
     public function get()
     {
-
+        $this->
     }
 
     public function post() {

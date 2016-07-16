@@ -20,13 +20,13 @@ class CDetailModelSave extends AAjaxController
 
     }
 
-    public function post() {
+    public function post()
+    {
         $get = $this->app->router->request()->getRequestData();
-        \BlueSeal::dump($get);
         $name = (array_key_exists('modelName', $get)) ? $get['modelName'] : false;
         $productPrototypeId = $get['productPrototypeId'];
         $productDetails = [];
-        foreach($get as $k => $v) {
+        foreach ($get as $k => $v) {
             if (false !== strpos($k, 'productDetails')) {
                 $productDetails[explode('_', $k)[1]] = $v;
             }
@@ -43,17 +43,12 @@ class CDetailModelSave extends AAjaxController
                     $newProt->name = $name;
                     $newProt->insert();
 
+                    $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
 
-                    foreach ($productDetails as $k => $v) {
-                        if (!$v) continue;
-                        $newSheet = $this->app->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
-                        $newSheet->productSheetModelPrototypeId = $productPrototypeId;
-                        $newSheet->productDetailLabelId = $k;
-                        $newSheet->productDetailId = $v;
-                    }
+                    $this->insertDetails($productDetails, $newProt->id);
                     $this->app->dbAdapter->commit();
 
-                    $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
+
                     return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newProt->id]);
                 } catch (\Exception $e) {
                     $this->app->dbAdapter->rollBack();
@@ -65,11 +60,47 @@ class CDetailModelSave extends AAjaxController
         }
     }
 
-    public function put() {
-        //todo
+    public function put()
+    {
+        $get = $this->app->router->request()->getRequestData();
+        $name = (array_key_exists('modelName', $get)) ? $get['modelName'] : false;
+        $productDetails = [];
+        foreach ($get as $k => $v) {
+            if (false !== strpos($k, 'productDetails')) {
+                $productDetails[explode('_', $k)[1]] = $v;
+            }
+        }
+
+        $prot = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
+
+        try {
+            $this->app->dbAdapter->beginTransaction();
+            //delete all details associated to this model
+            $psma = $prot->productSheetModelActual;
+            foreach ($psma as $v) {
+                $v->delete();
+            }
+            //insert new details
+            $this->insertDetails($productDetails, $prot->id);
+            $this->app->dbAdapter->commit();
+            return 'ok';
+        } catch (\Exception $e) {
+            $this->app->dbAdapter->rollBack();
+            return "ko";
+        }
     }
 
-
+    private function insertDetails($productDetails, $productPrototypeId)
+    {
+        foreach ($productDetails as $k => $v) {
+            if (!$v) continue;
+            $newSheet = $this->app->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+            $newSheet->productSheetModelPrototypeId = $productPrototypeId;
+            $newSheet->productDetailLabelId = $k;
+            $newSheet->productDetailId = $v;
+            $newSheet->insert();
+        }
+    }
 
 
 }
