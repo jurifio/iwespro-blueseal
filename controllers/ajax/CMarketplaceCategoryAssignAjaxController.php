@@ -56,7 +56,7 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 			} catch (\Exception $e) {
 				$appoggio = $val->marketplaceCategoryPath;
 			}
-	        $response['data'][$i]['marketplaceCategoryDescription'] = $appoggio;
+	        $response['data'][$i]['marketplaceAccountPath'] = $appoggio;
 	        if(!$okManage) {
 				$html = 'Non si può';
 	        } else {

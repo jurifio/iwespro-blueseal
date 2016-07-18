@@ -1061,9 +1061,9 @@
 				orderable: true,
 				searchable: true
 			},{
-				data: "marketplaceCategoryDescription",
-				orderable: false,
-				searchable: false
+				data: "marketplaceAccountPath",
+				orderable: true,
+				searchable: true
 			},{
 				data: "internalCategory",
 				orderable: true,
