@@ -58,7 +58,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default required">
                                                         <label for="user_password">Password</label>
-                                                        <input id="user_password" autocomplete="off" type="text" class="form-control" name="user_password" value="" required="required" />
+                                                        <input id="user_password" autocomplete="off" type="text" class="form-control" name="user_password" value="<?php echo bin2hex(mcrypt_create_iv(12, MCRYPT_DEV_URANDOM)); ?>" required="required" />
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
