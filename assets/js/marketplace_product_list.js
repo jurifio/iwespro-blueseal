@@ -1,57 +1,88 @@
 $(document).on('bs.product.publish', function (e, element, button) {
 
-    var result = {
-        status: "ko",
-        bodyMessage: "Errore di caricamento, controlla la rete",
-        okButtonLabel: "Ok",
-        cancelButtonLabel: null
-    };
+	var bsModal = $('#bsModal');
+	var header = $('.modal-header h4');
+	var body = $('.modal-body');
+	var cancelButton = $('.modal-footer .btn-default');
+	var okButton = $('.modal-footer .btn-success');
 
-    var bsModal = $('#bsModal');
-    var loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
-    var header = $('.modal-header h4');
-    var body = $('.modal-body');
-    var cancelButton = $('.modal-footer .btn-default');
-    var okButton = $('.modal-footer .btn-success');
+	header.html('Pubblica Prodotti');
 
-    header.html(button.getTitle());
+	var getVarsArray = [];
+	var selectedRows = $('.table').DataTable().rows('.selected').data();
+	var selectedRowsCount = selectedRows.length;
 
-    $.ajax({
-        url: "/blueseal/xhr/CheckProductsToBePublished",
-        type: "GET"
-    }).done(function (response) {
-        result = JSON.parse(response);
-        body.html(result.bodyMessage);
+	if (selectedRowsCount < 1) {
+		new Alert({
+			type: "warning",
+			message: "Devi selezionare uno o più Prodotti per poterli taggare"
+		}).open();
+		return false;
+	}
 
-        if (result.cancelButtonLabel == null) {
-            cancelButton.hide();
-        } else {
-            cancelButton.html(result.cancelButtonLabel);
-        }
+	$.each(selectedRows, function (k, v) {
+		var rowId = v.DT_RowId.split('__');
+		getVarsArray.push(rowId[1] + '__' + rowId[2]);
+	});
 
-        if (result.status == 'ok') {
-            okButton.html(result.okButtonLabel).off().on('click', function (e) {
-                body.html(loaderHtml);
-                $.ajax({
-                    url: "/blueseal/xhr/CheckProductsToBePublished",
-                    type: "PUT"
-                }).done(function (response) {
-                    result = JSON.parse(response);
-                    body.html(result.bodyMessage);
-                    if (result.cancelButtonLabel == null) {
-                        cancelButton.hide();
-                    }
-                    okButton.html(result.okButtonLabel).off().on('click', function () {
-                        bsModal.modal('hide');
-                        okButton.off();
-                    });
-                });
-            });
-        } else if (result.status == 'ko') {
-            okButton.html(result.okButtonLabel).off().on('click', function () {
-                bsModal.modal('hide');
-                okButton.off();
-            });
-        }
-    });
+
+	body.html('<img src="/assets/img/ajax-loader.gif" />');
+
+	Pace.ignore(function () {
+		$.ajax({
+			url: '/blueseal/xhr/MarketplaceProductManageController',
+			type: "get",
+			data: {
+				rows: getVarsArray
+			}
+		}).done(function (response) {
+			var accounts = JSON.parse(response);
+			var html = '<div class="form-group form-group-default selectize-enabled full-width">';
+			html += '<select class="full-width" placeholder="Seleziona l\'account" data-init-plugin="selectize" title="" name="accountId" id="accountId" required><option value=""></option>';
+			for(let account of accounts) {
+				console.log(account);
+				html+='<option value="'+account.id+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
+			}
+			html+='</select>';
+			html+='</div>';
+
+			html+='<div><input id="modifier" type="text" value="0" aria-label="modifier"/>';
+
+			body.html(html);
+			Pace.ignore(function () {
+				okButton.off().on('click',function () {
+					$.ajax({
+						url: '/blueseal/xhr/MarketplaceProductManageController',
+						type: "POST",
+						data: {
+							rows: getVarsArray,
+							account: $('#accountId').val(),
+							modifier: $('#modifier').val()
+						}
+					}).done(function () {
+
+					}).always(function () {
+						bsModal.modal('hide');
+						$('.table').DataTable().ajax.reload();
+					});
+				});
+			});
+		});
+	});
+
+	bsModal.modal();
+});
+
+$(document).on('change','#accountId',function() {
+	console.log($(this));
+	window.x = $(this);
+	$('#modifier').val($(this).find(':selected').data('modifier'));
+});
+
+$(document).on('click', ".tag-list > li", function (a, b, c) {
+	if ($(this).hasClass('tree-selected')) {
+		$(this).removeClass('tree-selected');
+	} else {
+		$(this).addClass('tree-selected');
+	}
 });

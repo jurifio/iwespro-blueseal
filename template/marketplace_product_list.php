@@ -26,10 +26,8 @@
                                 <tr>
                                     <th class="center">Codice</th>
                                     <th class="center">Shop</th>
-                                    <th class="center">Stagione</th>
                                     <th class="center">CPF</th>
-                                    <th class="center">Immagine </th>
-                                    <th class="center">Brand</th>
+                                    <th class="center">Immagine</th>
                                     <th class="center">Marketplaces</th>
                                 </tr>
                             </thead>
@@ -49,9 +47,9 @@
     <bs-toolbar-group data-group-label="Pubblica Prodotto">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-tasks"
+            data-icon="fa-share"
             data-permission="/admin/product/edit"
-            data-event="bs.product.publis"
+            data-event="bs.product.publish"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Pubblica prodotto sui marketplace"

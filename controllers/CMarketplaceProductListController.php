@@ -23,7 +23,7 @@ use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 class CMarketplaceProductListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "product_list";
+    protected $pageSlug = "marketplace_product_list";
 
     public function get()
     {

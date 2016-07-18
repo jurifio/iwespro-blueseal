@@ -155,34 +155,23 @@
 		]
 	});
 	tableSetup.marketplace_product_list = $.extend({}, tableSetup.common, {
-		order: [[1, "desc"]],
+		order: [[0, "desc"]],
 		columns: [
 			{
 				data: "code",
-				orderable: true,
-                searchable: true
-			}, {
+				searchable: true
+			},{
 				data: "shop",
-				orderable: true
-			},{
-				data: "colorGroup",
-				orderable: true,
-				searchable: true
-			},
-			{
-				data: "season",
-				orderable: true,
 				searchable: true
 			},{
-				data: "externalId",
-				orderable: true
+				data: "itemno",
+				searchable: true
 			},{
-				data: "cpf",
-				orderable: true
+				data: "dummy",
+				searchable: true
 			},{
-				data: "details",
-				orderable: false,
-				searchable: false
+				data: "marketplaceAccountName",
+				searchable: true
 			}
 		]
 	});
