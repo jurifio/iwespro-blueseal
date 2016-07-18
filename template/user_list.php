@@ -59,7 +59,7 @@
             data-rel="tooltip"
             data-title="Aggiungi un nuovo utente"
             data-placement="bottom"
-            data-href="#"
+            data-href="/blueseal/utente"
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
