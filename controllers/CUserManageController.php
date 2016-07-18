@@ -33,6 +33,6 @@ class CUserManageController extends ARestrictedAccessRootController
 
     public function post()
     {
-		var_dump('ciccia');
+		var_dump($this->app->router->request()->getRequestData());
     }
 }

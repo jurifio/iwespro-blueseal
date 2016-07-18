@@ -58,7 +58,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default required">
                                                         <label for="user_password">Password</label>
-                                                        <input id="user_password" autocomplete="off" type="text" class="form-control" name="user_password" value="<?php echo bin2hex(mcrypt_create_iv(12, MCRYPT_DEV_URANDOM)); ?>" required="required" />
+                                                        <input id="user_password" autocomplete="off" type="text" class="form-control" name="user_password" value="<?php echo bin2hex(mcrypt_create_iv(6, MCRYPT_DEV_URANDOM)); ?>" required="required" />
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
@@ -103,58 +103,12 @@
             data-tag="a"
             data-icon="fa-floppy-o"
             data-permission="/admin/product/add"
-            data-event="bs.product.add"
+            data-event="bs.user.save"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Salva"
             data-placement="bottom"
             ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-image"
-            data-permission="/admin/product/add"
-            data-event="bs.dummy.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Dummy picture"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-sitemap"
-            data-permission="/admin/product/add"
-            data-event="bs.category.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Categorie"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-tag"
-            data-permission="/admin/product/add"
-            data-event="bs.tag.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Tag"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Stato del prodotto">
-        <bs-toolbar-select
-            data-tag="select"
-            data-icon="fa-random"
-            data-permission="/admin/product/add"
-            data-rel="tooltip"
-            data-button="false"
-            data-placement="bottom"
-            data-class="btn btn-default"
-            data-name="Product_status"
-            data-title="Modifica stato"
-            data-event="bs.product.changestatus"
-            data-options='<?php echo json_encode($statuses); ?>'
-            ></bs-toolbar-select>
-    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
