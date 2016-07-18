@@ -63,6 +63,17 @@
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
+            data-icon="fa-user-times"
+            data-permission="/admin/user/delete"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-event="bs.user.delete"
+            data-title="Cancella Utenti"
+            data-placement="bottom"
+            data-href="/blueseal/utente"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
             data-icon="fa-thumbs-o-up"
             data-permission="/admin/user/add"
             data-class="btn btn-default"

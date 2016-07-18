@@ -62,4 +62,15 @@ class CUserManageController extends ARestrictedAccessRootController
 
 	    return $user->id;
     }
+
+    public function delete()
+    {
+	    $ids = $this->app->router->request()->getRequestData('users');
+	    foreach($ids as $id) {
+		    $user = $this->app->repoFactory->create('User')->findOne([$id]);
+		    $user->isDeleted = 1;
+		    $user->update();
+	    }
+
+    }
 }
