@@ -1335,7 +1335,7 @@
         },{
             "pattern": "/blueseal/utente(/:userId)?(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CUserManageController"
             },
             "filters": {
                 "userId": "[0-9]+"
