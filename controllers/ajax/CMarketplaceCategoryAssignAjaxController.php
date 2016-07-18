@@ -64,7 +64,7 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 	        	foreach($val->productCategory as $productCategory) {
 					$catIds[] = $productCategory->id;
 		        }
-		        $html = '<select class="full-width selectpicker" 
+		        $html = '<select class="full-width selectpicker selectize-streachable" 
 		                         placeholder="Seleziona la categoria"
 		                         data-name="categorySelect"
 		                         data-selected="'.implode('__',$catIds).'"

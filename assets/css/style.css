@@ -743,3 +743,7 @@ ul.roulette-importer-details li {
     width: 90%;
     display: none;
 }
+
+.selectize-streachable+.selectize-control {
+    position: relative !important;
+}
