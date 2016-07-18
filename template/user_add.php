@@ -23,7 +23,7 @@
             <div class="container-fluid">
                 <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post" autocomplete="off">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Informazioni di base</h5>
@@ -66,8 +66,8 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default required">
-                                                        <label for="user_birthdate">Data di Nascita</label>
-                                                        <input id="user_birthdate" autocomplete="off" type="date" class="form-control" name="user_birthdate" value="" />
+                                                        <label for="user_phone">Telefono</label>
+                                                        <input id="user_phone" autocomplete="off" type="text" class="form-control" name="user_phone" value="" required="required" />
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
@@ -80,6 +80,20 @@
                                                             <option value="F">Femminile</option>
                                                         </select>
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default required">
+                                                        <label for="user_birthdate">Data di Nascita</label>
+                                                        <input id="user_birthdate" autocomplete="off" type="date" class="form-control" name="user_birthdate" value="" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default required">
+                                                        <label for="user_fiscal_code">Codice Fiscale</label>
+                                                        <input id="user_fiscal_code" autocomplete="off" type="text" class="form-control" name="user_fiscal_code" value="" />
                                                     </div>
                                                 </div>
                                             </div>

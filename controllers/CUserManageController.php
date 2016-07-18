@@ -49,7 +49,7 @@ class CUserManageController extends ARestrictedAccessRootController
 	    $userD->birthDate = $this->app->router->request()->getRequestData('user_birthdate');
 	    $userD->gender = $this->app->router->request()->getRequestData('user_gender');
 	    $userD->phone = $this->app->router->request()->getRequestData('user_phone');
-	    $userD->fiscalCode = $this->app->router->request()->getRequestData('user_fiscalCode');
+	    $userD->fiscalCode = $this->app->router->request()->getRequestData('user_fiscal_code');
 		$userD->insert();
 
 	    $userEmail = $this->app->repoFactory->create('UserEmail')->getEmptyEntity();
