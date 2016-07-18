@@ -154,6 +154,38 @@
 			}
 		]
 	});
+	tableSetup.marketplace_product_list = $.extend({}, tableSetup.common, {
+		order: [[1, "desc"]],
+		columns: [
+			{
+				data: "code",
+				orderable: true,
+                searchable: true
+			}, {
+				data: "shop",
+				orderable: true
+			},{
+				data: "colorGroup",
+				orderable: true,
+				searchable: true
+			},
+			{
+				data: "season",
+				orderable: true,
+				searchable: true
+			},{
+				data: "externalId",
+				orderable: true
+			},{
+				data: "cpf",
+				orderable: true
+			},{
+				data: "details",
+				orderable: false,
+				searchable: false
+			}
+		]
+	});
 	tableSetup.product_picky = $.extend({}, tableSetup.common, {
 		order: [[9, "desc"]],
 		columns: [
