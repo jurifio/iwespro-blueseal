@@ -17,20 +17,96 @@ class CDetailModelAssocToCat extends AAjaxController
 {
     public function get()
     {
-        $this->
+        $get = $this->app->router->request()->getRequestData();
+        $productSheetModelPrototypeId = $get['productSheetModelPrototypeId'];
+        $code = $get['code'];
+        list($id, $variantId) = explode('-', $code);
+        $search = (array_key_exists('search', $get)) ? $get['search'] : false;
+        unset($get);
+        $cats = [];
+        $countCats = 0;
+        $resByCode = $this->app->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
+
+        foreach($resByCode as $k => $v) {
+            $cats[$countCats] = [];
+            $cats[$countCats]['id'] = $v->id;
+            $cats[$countCats]['slug'] = $v->slug;
+            $cats[$countCats]['name'] = $this->app->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1, 'productCategoryId' => $v->id])->name;
+            $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->id));
+            $cats[$countCats]['origin'] = 'code';
+            $countCats++;
+        }
+        unset($resByCode);
+
+        $resByModelName = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $productSheetModelPrototypeId]);
+        foreach ($resByModelName as $v) {
+            if (!in_array($v->productCategory->id, array_column($cats, 'id'))) {
+                $cats[$countCats] = [];
+                $cats[$countCats]['id'] = $v->productCategory->id;
+                $cats[$countCats]['slug'] = $v->productCategory->slug;
+                $cats[$countCats]['name'] = $this->app->repoFactory->create('productCategoryTranslation')->findOneBy(
+                    ['langId' => 1, 'productCategoryId' => $v->productCategory->id]
+                );
+                $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->productCategory->id));
+                $cats[$countCats]['origin'] = 'model';
+                $countCats++;
+            }
+        }
+        unset($resByModelName);
+
+        if ($search) {
+            $resBySearch = $this->app->dbAdapter->query("SELECT * FROM `ProductCategoryTranslation` WHERE `langId` = 1 AND `name` LIKE ? LIMIT 30", ['%' . $search . '%'])->fetchAll();
+            foreach ($resBySearch as $v) {
+                if (!in_array($v['productCategoryId'], array_column($cats, 'id'))) {
+                    $cats[$countCats] = [];
+                    $cats[$countCats]['id'] = $v['productCategoryId'];
+                    $cats[$countCats]['name'] = $v['name'];
+                    $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v['productCategoryId']));
+                    $cats[$countCats]['slug'] = $this->app->repoFactory->create('ProductCategory')->findOneBy(['id' => $v['productCategoryId']])->slug;
+                    $cats[$countCats]['origin'] = 'search';
+                    $countCats++;
+                }
+            }
+        }
+        return json_encode($cats);
     }
 
     public function post() {
         $get = $this->app->router->request()->getRequestData();
-        $name = (array_key_exists('modelName', $get)) ? $get['modelName'] : false;
-        if ($name) {
+        $productSheetModelPrototypeId = $get['productSheetModelPrototypeId'];
+        $categoryId = $get['categoryId'];
 
+        try {
+            $ent = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productSheetModelPrototypeId' => $productSheetModelPrototypeId]);
+            if (!$ent) {
+                $ent = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->getEmptyEntity();
+                $ent->productCategoryId = $categoryId;
+                $ent->productSheetModelPrototypeId = $productSheetModelPrototypeId;
+                $ent->insert();
+            } else {
+                $ent->productCategoryId = $categoryId;
+                $ent->update();
+            }
+        } catch(\Exception $e) {
+            return "OOPS! Non sono riuscito ad aggiornare la categoria!<br />" . $e->getMessage();
         }
-        return $cache;
+        return "Categoria Aggiornata!"; // todo all
     }
 
     public function put() {
         //todo
+    }
+
+
+    public function getCategoryTree($arr) {
+        $names = [];
+        foreach($arr as $v) {
+            if (1 == $v['id']) continue;
+            \BlueSeal::dump($v);
+            $pct = $this->app->repoFactory->create('ProductCategoryTranslation')->findOneBy(['productCategoryId' => $v['id'], 'langId' => 1]);
+            $names[] = $pct->name;
+        }
+        return implode('/', $names);
     }
 
 }

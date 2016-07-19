@@ -45,7 +45,7 @@
                         <div class="col-md-6">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10"><a
+                                    <h5 class="m-t-10"><a class="product-code"
                                                 href="<?php echo $app->productUrl($productEdit); ?>"><?php echo $productEdit->id . '-' . $productEdit->productVariantId; ?></a>
                                         - Informazioni di base</h5>
                                     <?php

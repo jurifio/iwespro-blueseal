@@ -17,7 +17,7 @@ class CDetailModelSave extends AAjaxController
 {
     public function get()
     {
-
+       // nothing to do here
     }
 
     public function post()
@@ -83,11 +83,14 @@ class CDetailModelSave extends AAjaxController
             //insert new details
             $this->insertDetails($productDetails, $prot->id);
             $this->app->dbAdapter->commit();
-            return 'ok';
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
-            return "ko";
+            return json_encode(['status' => "ko"]);
         }
+
+        $res = ['status' => 'ok', 'productSheetModelPrototypeId' => $prot->id];
+
+        return json_encode($res);
     }
 
     private function insertDetails($productDetails, $productPrototypeId)
