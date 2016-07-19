@@ -38,7 +38,7 @@ class CMarketplaceCategoryAssignController extends ARestrictedAccessRootControll
 	public function put()
 	{
 		$sample = $this->app->repoFactory->create('MarketplaceAccountCategory')->getEmptyEntity();
-		$sample->readIds($this->app->router->request()->getRequestData("id"));
+		$sample->readId($this->app->router->request()->getRequestData("id"));
 		$one = $this->app->repoFactory->create('MarketplaceAccountCategory')->findOneBy($sample->getIds());
 		$this->app->dbAdapter->delete('ProductCategoryHasMarketplaceAccountCategory',
 			[   'marketplaceId'=>$one->marketplaceId,
@@ -58,7 +58,7 @@ class CMarketplaceCategoryAssignController extends ARestrictedAccessRootControll
 		$i = 0;
 		foreach($this->app->router->request()->getRequestData('ids') as $id) {
 			$sample = $this->app->repoFactory->create('MarketplaceAccountCategory')->getEmptyEntity();
-			$sample->readIds($id);
+			$sample->readId($id);
 			$one = $this->app->repoFactory->create('MarketplaceAccountCategory')->findOneBy($sample->getIds());
 			$one->isRelevant = 0;
 			if($one->update()>0) $i++;
