@@ -1333,6 +1333,19 @@
                 "PUT"
             ]
         },{
+            "pattern": "/blueseal/prodotti/marketplace(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceProductListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
             "pattern": "/blueseal/utente(/:userId)?(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CUserManageController"
