@@ -80,7 +80,7 @@ class CMarketplaceProductListController extends ARestrictedAccessRootController
     {
     	$productSample = $this->app->repoFactory->create('Product')->getEmptyEntity();
     	$marketplaceAccountSample = $this->app->repoFactory->create('MarketplaceAccount')->getEmptyEntity();
-	    $marketplaceAccountSample->readIds($this->app->router->request()->getRequestData('account'));
+	    $marketplaceAccountSample->readId($this->app->router->request()->getRequestData('account'));
 	    $marketplaceAccount = $marketplaceAccountSample->em()->findOne($marketplaceAccountSample->getIds());
 	    $marketplaceAccount->config['modifier'] = $this->app->router->request()->getRequestData('modifier');
 		foreach ($this->app->router->request()->getRequestData('rows') as $row) {
@@ -92,7 +92,7 @@ class CMarketplaceProductListController extends ARestrictedAccessRootController
 			$marketplaceAccountHasProduct->marketplaceId = $marketplaceAccount->marketplaceId;
 			$marketplaceAccountHasProduct->modifier = $marketplaceAccount->config['modifier'];
 			$marketplaceAccountHasProduct->insert();
-			$this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',[$marketplaceAccountHasProduct->printIds()])));
+			$this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',[$marketplaceAccountHasProduct->printId()])));
 		}
     }
 }
