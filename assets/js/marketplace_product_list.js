@@ -21,8 +21,7 @@ $(document).on('bs.product.publish', function (e, element, button) {
 	}
 
 	$.each(selectedRows, function (k, v) {
-		var rowId = v.DT_RowId.split('__');
-		getVarsArray.push(rowId[1] + '__' + rowId[2]);
+		getVarsArray.push(v.DT_RowId);
 	});
 
 

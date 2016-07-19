@@ -60,7 +60,7 @@ class CMarketplaceProductListAjaxController extends AAjaxController
 	        }
 
 
-	        $response['data'][$i]["DT_RowId"] = 'row__'.$val->printId();
+	        $response['data'][$i]["DT_RowId"] = $val->printId();
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $val->printId();
 	        $response['data'][$i]['shop'] = implode(', ',$shops);

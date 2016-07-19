@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\events\EGenericEvent;
 use bamboo\core\intl\CLang;
 
 /**
@@ -32,6 +33,25 @@ class CMarketplaceProductManageController extends AAjaxController
 
     public function post()
     {
-    	var_dump($this->app->router->request()->getRequestData());
+	    $productSample = $this->app->repoFactory->create('Product')->getEmptyEntity();
+	    $marketplaceAccountSample = $this->app->repoFactory->create('MarketplaceAccount')->getEmptyEntity();
+	    $marketplaceAccountSample->readId($this->app->router->request()->getRequestData('account'));
+	    $marketplaceAccount = $marketplaceAccountSample->em()->findOne($marketplaceAccountSample->getIds());
+	    $config = $marketplaceAccount->config;
+	    $config['priceModifier'] = $this->app->router->request()->getRequestData('modifier');
+	    $i = 0;
+	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
+		    $productSample->readId($row);
+		    $marketplaceAccountHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
+		    $marketplaceAccountHasProduct->productId = $productSample->id;
+		    $marketplaceAccountHasProduct->productVariantId = $productSample->productVariantId;
+		    $marketplaceAccountHasProduct->marketplaceAccountId = $marketplaceAccount->id;
+		    $marketplaceAccountHasProduct->marketplaceId = $marketplaceAccount->marketplaceId;
+		    $marketplaceAccountHasProduct->priceModifier = $config['priceModifier'];
+		    $marketplaceAccountHasProduct->insert();
+		    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
+		    $i++;
+	    }
+	    return $i;
     }
 }

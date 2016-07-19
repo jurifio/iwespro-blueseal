@@ -75,24 +75,4 @@ class CMarketplaceProductListController extends ARestrictedAccessRootController
             'sidebar' => $this->sidebar->build()
         ]);
     }
-
-    public function post()
-    {
-    	$productSample = $this->app->repoFactory->create('Product')->getEmptyEntity();
-    	$marketplaceAccountSample = $this->app->repoFactory->create('MarketplaceAccount')->getEmptyEntity();
-	    $marketplaceAccountSample->readId($this->app->router->request()->getRequestData('account'));
-	    $marketplaceAccount = $marketplaceAccountSample->em()->findOne($marketplaceAccountSample->getIds());
-	    $marketplaceAccount->config['modifier'] = $this->app->router->request()->getRequestData('modifier');
-		foreach ($this->app->router->request()->getRequestData('rows') as $row) {
-			$productSample->readId($row);
-			$marketplaceAccountHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
-			$marketplaceAccountHasProduct->productId = $productSample->id;
-			$marketplaceAccountHasProduct->productVariantId = $productSample->productVariantId;
-			$marketplaceAccountHasProduct->marketplaceAccountId = $marketplaceAccount->d;
-			$marketplaceAccountHasProduct->marketplaceId = $marketplaceAccount->marketplaceId;
-			$marketplaceAccountHasProduct->modifier = $marketplaceAccount->config['modifier'];
-			$marketplaceAccountHasProduct->insert();
-			$this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',[$marketplaceAccountHasProduct->printId()])));
-		}
-    }
 }
