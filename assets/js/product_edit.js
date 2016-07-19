@@ -415,8 +415,6 @@ $(document).on('bs.details.model.category', function (e) {
         }
     }).done(function (res) {
         body.html(
-            '<div class="alert alert-danger modal-alert name-exists" style="display: none">Il nome scelto esiste già.</div>' +
-            '<div class="alert alert-danger modal-alert no-name" style="display: none">Devi specificare un nome.</div>' +
             '<div style="height: 300px;">' +
             '<form id="detailAdd"><div class="form-group">' +
             '<label>Inserisci il nome:</label><br />' +
@@ -466,8 +464,6 @@ $(document).on('bs.details.model.category', function (e) {
                         callback();
                     },
                     success: function (res) {
-                        console.log("res");
-                        console.log(res);
                         callback(res);
                     }
                 });
@@ -527,6 +523,70 @@ $(document).on('bs.details.model.assign', function (e) {
 
 
     header.html('Assegna una categoria al modello');
+
+    $.ajax({
+        url: '/blueseal/xhr/DetailModelGetDetails',
+        type: 'GET',
+        data: {
+            code: $('.product-code').html()
+        }
+    }).done(function (res) {
+        body.html(
+            '<div style="height: 300px;">' +
+            '<form id="detailAdd"><div class="form-group">' +
+            '<label>Inserisci il nome:</label><br />' +
+            '<select type="text" class="form-control new-dett-ita" name="modelAssign" id="modelAssign" ></select>' +
+            '</form></div>'
+        );
+
+        var modelAssign = $('#modelAssign');
+        res = JSON.parse(res);
+        console.log(res);
+        modelAssign.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res,
+            create: false,
+            render: {
+                option: function (item, escape) {
+                    var origin = "";
+                    if ("code" == item.origin) origin = ' <span class="small"> (da una categoria del prodotto) </span>';
+                    //else if ("model" == item.origin) origin = ' <span class="small"> (dal prodotto) </span>';
+                    return '<div>' +
+                        escape(item.name) + origin +
+                        '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (3 > query.length) {
+                    return callback();
+                }
+                $.ajax({
+                    url: '/blueseal/xhr/DetailModelGetDetails',
+                    type: 'GET',
+                    data: {
+                        code: $('.product-code').html(),
+                        search: query,
+                    },
+                    dataType: 'json',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res);
+                    }
+                });
+            }
+        });
+    });
+    bsModal.modal();
+    cancelButton.html('Annulla').off().on('click', function() {
+        bsModal.modal('hide');
+    });
+    okButton.html('Carica dal modello').off().on('click', function(){
+        //todo
+    });
 });
 
 $(document).ready(function () {

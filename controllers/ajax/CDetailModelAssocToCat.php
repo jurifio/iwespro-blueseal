@@ -102,7 +102,6 @@ class CDetailModelAssocToCat extends AAjaxController
         $names = [];
         foreach($arr as $v) {
             if (1 == $v['id']) continue;
-            \BlueSeal::dump($v);
             $pct = $this->app->repoFactory->create('ProductCategoryTranslation')->findOneBy(['productCategoryId' => $v['id'], 'langId' => 1]);
             $names[] = $pct->name;
         }
