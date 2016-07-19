@@ -44,7 +44,7 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 
         $i = 0;
         foreach($marketplaceCategories as $val) {
-	        $response['data'][$i]["DT_RowId"] = 'row__'.$val->printIds();
+	        $response['data'][$i]["DT_RowId"] = 'row__'.$val->printId();
             $response['data'][$i]['marketplace'] = $val->marketplaceAccount->marketplace->name;
             $response['data'][$i]['marketplaceAccount'] = $val->marketplaceAccount->name;
             $response['data'][$i]['marketplaceAccountCategory'] = $val->name;
@@ -68,7 +68,7 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 		                         placeholder="Seleziona la categoria"
 		                         data-name="categorySelect"
 		                         data-selected="'.implode('__',$catIds).'"
-		                         data-id="' . $val->printIds() . '" 
+		                         data-id="' . $val->printId() . '" 
 		                         tabindex="-1" ></select>';
 	        }
             $response['data'][$i]['internalCategory'] = $html;
