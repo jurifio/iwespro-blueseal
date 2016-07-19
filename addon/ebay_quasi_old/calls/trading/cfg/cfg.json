@@ -1,8 +1,0 @@
-{
-    "xmlVersion": "1.0",
-    "encoding": "utf-8",
-    "xmlNs": "urn:ebay:apis:eBLBaseComponents",
-    "version": 951,
-    "sandbox": "https://api.sandbox.ebay.com/ws/api.dll",
-    "production": "https://api.ebay.com/ws/api.dll"
-}
