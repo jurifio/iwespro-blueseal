@@ -60,9 +60,36 @@ class CNamesManager extends AAjaxController
      */
     public function get()
     {
-       $search = $this->app->router->request()->getRequestData()['search'];
+        $get = $this->app->router->request()->getRequestData();
+        $codes = [];
+        $searchByCodes = '';
+        $searchByNames = '';
+        $concat = '';
+
+        foreach($get as $k => $v) {
+            if (false === strpos($k, 'code_')) continue;
+            $codes[] = explode('-', $v)[1];
+        }
+        if (count($codes)) {
+            $questionMarks = rtrim(str_repeat('?,', count($codes)), ',');
+            $searchByCodes = ' `productVariantId` in (' . $questionMarks . ') ';
+        }
+
+        $search = (array_key_exists('search', $get)) ? $get['search'] : '';
+        if ($search) {
+            $searchByNames =  ' `name` like ? ';
+            $codes[] = '%' . $search . '%';
+        }
+
+        if ($search && (1 < count($codes))) {
+            $concat = ' OR ';
+            $codes[] = $search;
+        }
+
+        $where = $searchByCodes . $concat . $searchByNames;
+
         //$repo = $this->app->repoFactory->create('ProductDetailTranslation',false);
-        $res = $this->app->dbAdapter->query("SELECT `name` FROM `ProductNameTranslation` WHERE `langId` = 1 AND `name` like '%" . $search . "%' ORDER BY `name` LIMIT 30", [])->fetchAll();
+        $res = $this->app->dbAdapter->query("SELECT `name` FROM `ProductNameTranslation` WHERE `langId` = 1 AND ( $where ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
 
         return json_encode($res);
     }

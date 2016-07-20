@@ -93,6 +93,13 @@ class CProductListAjaxController extends AAjaxController
             foreach($val->shop as $shop){
                 $shops[] = $shop->title;
             }*/
+            $nameInCats = '';
+            foreach($val->productNameTranslation as $v) {
+                if (1 == $v->langId) {
+                    $nameInCats = '<br /><strong>nome:</strong>' . $v->name . '<br />';
+                    break;
+                }
+            }
 
             $creationDate = new \DateTime($val->creationDate);
 
@@ -159,6 +166,7 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
             $response['data'][$i]['slug'] = '<span class="small">';
             $response['data'][$i]['slug'] .= implode(',<br/>',$cats); //category
+            $response['data'][$i]['slug'] .= $nameInCats;
             $response['data'][$i]['slug'] .= '</span>';
             $response['data'][$i]['tag'] = '<span class="small">';
             $response['data'][$i]['tag'] .= implode(',<br />',$tags);
