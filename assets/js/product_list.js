@@ -839,10 +839,10 @@ $(document).on('bs.product.mergedetails', function () {
 
     var selectedRowsCount = selectedRows.length;
 
-    if (2 > selectedRowsCount) {
+    if (!selectedRowsCount) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare almeno due prodotti"
+            message: "Devi selezionare almeno un prodotto"
         }).open();
         return false;
     }

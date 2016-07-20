@@ -200,7 +200,7 @@
             data-event="bs.product.mergedetails"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Cambia prezzi ai prodotti selezionati"
+            data-title="Copia dettagli"
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
