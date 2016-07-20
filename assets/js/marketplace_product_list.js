@@ -39,7 +39,6 @@ $(document).on('bs.product.publish', function (e, element, button) {
 			var html = '<div class="form-group form-group-default selectize-enabled full-width">';
 			html += '<select class="full-width" placeholder="Seleziona l\'account" data-init-plugin="selectize" title="" name="accountId" id="accountId" required><option value=""></option>';
 			for(let account of accounts) {
-				console.log(account);
 				html+='<option value="'+account.id+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
 			}
 			html+='</select>';
@@ -73,15 +72,6 @@ $(document).on('bs.product.publish', function (e, element, button) {
 });
 
 $(document).on('change','#accountId',function() {
-	console.log($(this));
 	window.x = $(this);
 	$('#modifier').val($(this).find(':selected').data('modifier'));
-});
-
-$(document).on('click', ".tag-list > li", function (a, b, c) {
-	if ($(this).hasClass('tree-selected')) {
-		$(this).removeClass('tree-selected');
-	} else {
-		$(this).addClass('tree-selected');
-	}
 });
