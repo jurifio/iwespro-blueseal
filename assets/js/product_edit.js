@@ -213,7 +213,6 @@ if (window.detailsStorage === undefined || window.detailsStorage === null || win
 }
 
 $("#productDetails").find('select').each(function () {
-
     var sel = $(this).selectize({
         valueField: 'id',
         labelField: 'item',
@@ -221,10 +220,8 @@ $("#productDetails").find('select').each(function () {
         options: window.detailsStorage
     });
     var initVal = $(this).data('init-selection');
-    if (initVal != 'undefined' && initVal.lenght != 0) {
+    if (initVal != 'undefined' && initVal.length != 0) {
         sel[0].selectize.setValue(initVal, true);
-    } else {
-        sel[0].selectize.setValue(0, true);
     }
 });
 
@@ -348,12 +345,14 @@ $(document).on('bs.details.model.add', function (e) {
                 if ('new' == res['status']) {
                     body.html("Nuovo Modello Inserito Correttamente!");
                     productSheetModelPrototypeId = res['productSheetModelPrototypeId'];
-                    cancelButton.html('Chiudi').off().on('click', function(){
+                    cancelButton.html('Chiudi').off().on('click', function () {
                         bsModal.modal('hide');
                     });
                     okButton.html('Assegna una categoria di prodotto').off().on('click', function () {
                         bsModal.modal('hide');
-                        $(document).trigger('bs.details.model.category');
+                        setTimeout(function () {
+                            $(document).trigger('bs.details.model.category');
+                        }, 500);
                     });
                 } else if ('fail' == res['status']) {
                     body.html("OOPS! non sono riuscito a salvare il Modello.<br />" + res['error']);
@@ -371,19 +370,18 @@ $(document).on('bs.details.model.add', function (e) {
                             res = JSON.parse(res);
                             if ("ok" == res['status']) {
                                 body.html("Il modello " + modelName + " è stato aggiornato");
-                                console.log(res);
                                 productSheetModelPrototypeId = res['productSheetModelPrototypeId'];
-                                cancelButton.html('Chiudi').off().on('click', function(){
+                                cancelButton.html('Chiudi').off().on('click', function () {
                                     bsModal.modal('hide');
                                 });
                                 okButton.html('Assegna una categoria di prodotto').off().on('click', function () {
                                     bsModal.modal('hide');
-                                    setTimeout(function() {
+                                    setTimeout(function () {
                                         $(document).trigger('bs.details.model.category');
                                     }, 500);
                                 });
                             } else {
-                                body.html("OOPS! C'è stato un problema nel salvataggio della categoria associata<br />" + res);
+                                body.html("OOPS! C'è stato un problema nel salvataggio del modello<br />");
                                 okButton.html('Chiudi').off().on('click', function () {
                                     bsModal.modal('hide');
                                 });
@@ -440,10 +438,10 @@ $(document).on('bs.details.model.category', function (e) {
             render: {
                 option: function (item, escape) {
                     var origin = "";
-                    if ("code" == item.origin) origin =  ' <span class="small"> (dal prodotto) </span>';
+                    if ("code" == item.origin) origin = ' <span class="small"> (dal prodotto) </span>';
                     else if ("model" == item.origin) origin = ' <span class="small"> (dal prodotto) </span>';
                     return '<div>' +
-                        escape(item.name) + origin +'<br /><span class="small">' + item.path + '</span>' +
+                        escape(item.name) + origin + '<br /><span class="small">' + item.path + '</span>' +
                         '</div>';
                 }
             },
@@ -470,11 +468,11 @@ $(document).on('bs.details.model.category', function (e) {
             }
         });
 
-        cancelButton.html("Annulla").off().on('click', function() {
+        cancelButton.html("Annulla").off().on('click', function () {
             bsModal.modal('hide');
         });
 
-        okButton.html('Assegna').off().on('click', function() {
+        okButton.html('Assegna').off().on('click', function () {
             $.ajax({
                 url: '/blueseal/xhr/DetailModelAssocToCat',
                 type: 'POST',
@@ -483,15 +481,15 @@ $(document).on('bs.details.model.category', function (e) {
                     productSheetModelPrototypeId: productSheetModelPrototypeId,
                     code: $('.product-code').html(),
                 }
-            }).done(function(res){
+            }).done(function (res) {
                 body.html(res);
                 cancelButton.html('Annulla').hide();
-                okButton.off().on('click', function(){
+                okButton.html('Ok').off().on('click', function () {
                     bsModal.modal('hide');
                 });
             });
         });
-    }).fail(function(){
+    }).fail(function () {
         body.html("OOPS! Non riesco a recuperare la lista delle categorie.");
     });
 
@@ -581,26 +579,28 @@ $(document).on('bs.details.model.assign', function (e) {
         });
     });
     bsModal.modal();
-    cancelButton.html('Annulla').off().on('click', function() {
+    cancelButton.html('Annulla').off().on('click', function () {
         bsModal.modal('hide');
     });
-    okButton.html('Carica dal modello').off().on('click', function(){
-        //todo
-    });
-});
-
-$(document).ready(function () {
-
-    autocompleteDetail();
-
-    $("#Product_dataSheet").on("change", function () {
+    okButton.html('Carica dal modello').off().on('click', function () {
         $.ajax({
             type: "GET",
             url: "/blueseal/xhr/GetDataSheet",
-            data: {value: this.value}
+            data: {
+                idModel: $('#modelAssign option:selected').val(),
+                type: 'model',
+                code: $('.product-code').html()
+            }
         }).done(function ($content) {
+
+
             $("#productDetails").html($content);
             autocompleteDetail();
+
+            changeProductDataSheet = false;
+            var dataSheet = $('.selectContent').data('prototype-id');
+            $('#Product_dataSheet').selectize()[0].selectize.setValue(dataSheet, true);
+            changeProductDataSheet = true;
 
             $("#productDetails").find('select').each(function () {
                 var sel = $(this).selectize({
@@ -610,13 +610,50 @@ $(document).ready(function () {
                     options: window.detailsStorage
                 });
                 var initVal = $(this).data('init-selection');
-                if (initVal != 'undefined' && initVal.lenght != 0) {
+                if (initVal != 'undefined' && initVal.length != 0) {
                     sel[0].selectize.setValue(initVal, true);
                 } else {
                     sel[0].selectize.setValue(0, true);
                 }
+
+                bsModal.modal('hide');
             });
         });
+    });
+});
+
+$(document).ready(function () {
+
+    changeProductDataSheet = true;
+
+    autocompleteDetail();
+
+    $("#Product_dataSheet").on("change", function () {
+        if (changeProductDataSheet) {
+            $.ajax({
+                type: "GET",
+                url: "/blueseal/xhr/GetDataSheet",
+                data: {value: this.value}
+            }).done(function ($content) {
+                $("#productDetails").html($content);
+                autocompleteDetail();
+
+                $("#productDetails").find('select').each(function () {
+                    var sel = $(this).selectize({
+                        valueField: 'id',
+                        labelField: 'item',
+                        searchField: ['item'],
+                        options: window.detailsStorage
+                    });
+                    var initVal = $(this).data('init-selection');
+                    if (initVal != 'undefined' && initVal.length != 0) {
+                        sel[0].selectize.setValue(initVal, true);
+                    } else {
+                        sel[0].selectize.setValue(0, true);
+                    }
+                });
+            });
+        }
     });
 
     var tagNames = $("#Tag_names");
@@ -710,7 +747,6 @@ $(document).ready(function () {
                     callback();
                 },
                 success: function (res) {
-                    console.log(res);
                     if (!res.length) {
                         var resArr = [];
                         resArr[0] = {name: query.trim()};

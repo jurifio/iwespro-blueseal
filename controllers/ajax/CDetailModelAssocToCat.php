@@ -77,15 +77,19 @@ class CDetailModelAssocToCat extends AAjaxController
         $categoryId = $get['categoryId'];
 
         try {
-            $ent = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productSheetModelPrototypeId' => $productSheetModelPrototypeId]);
-            if (!$ent) {
-                $ent = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->getEmptyEntity();
-                $ent->productCategoryId = $categoryId;
-                $ent->productSheetModelPrototypeId = $productSheetModelPrototypeId;
-                $ent->insert();
+            $cat = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productCategoryId' => $categoryId]);
+            if ($cat) {
+                $ent = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productSheetModelPrototypeId' => $productSheetModelPrototypeId]);
+                if ($ent) {
+                    $ent->delete();
+                }
+                $cat->productSheetModelPrototypeId = $productSheetModelPrototypeId;
+                $cat->update();
             } else {
-                $ent->productCategoryId = $categoryId;
-                $ent->update();
+                $cat = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->getEmptyEntity();
+                $cat->productCategoryId = $categoryId;
+                $cat->productSheetModelPrototypeId = $productSheetModelPrototypeId;
+                $cat->insert();
             }
         } catch(\Exception $e) {
             return "OOPS! Non sono riuscito ad aggiornare la categoria!<br />" . $e->getMessage();

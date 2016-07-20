@@ -45,7 +45,7 @@ class CDetailModelSave extends AAjaxController
 
                     $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
 
-                    $this->insertDetails($productDetails, $newProt->id);
+                    $this->insertDetails($productDetails, $newProt->id, $newProt->productSheetPrototypeId);
                     $this->app->dbAdapter->commit();
 
 
@@ -81,7 +81,7 @@ class CDetailModelSave extends AAjaxController
                 $v->delete();
             }
             //insert new details
-            $this->insertDetails($productDetails, $prot->id);
+            $this->insertDetails($productDetails, $prot->id, $prot->productSheetPrototypeId);
             $this->app->dbAdapter->commit();
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
@@ -93,17 +93,16 @@ class CDetailModelSave extends AAjaxController
         return json_encode($res);
     }
 
-    private function insertDetails($productDetails, $productPrototypeId)
+    private function insertDetails($productDetails, $productSheetModelPrototypeId, $productSheetPrototypeId)
     {
         foreach ($productDetails as $k => $v) {
             if (!$v) continue;
             $newSheet = $this->app->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
-            $newSheet->productSheetModelPrototypeId = $productPrototypeId;
+            $newSheet->productSheetModelPrototypeId = $productSheetModelPrototypeId;
+            $newSheet->productSheetPrototypeId = $productSheetPrototypeId;
             $newSheet->productDetailLabelId = $k;
             $newSheet->productDetailId = $v;
             $newSheet->insert();
         }
     }
-
-
 }

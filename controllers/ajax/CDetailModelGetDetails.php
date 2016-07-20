@@ -18,40 +18,56 @@ class CDetailModelGetDetails extends AAjaxController
     public function get()
     {
         $get = $this->app->router->request()->getRequestData();
-        $code = $get['code'];
+        $code = (array_key_exists('code', $get)) ? $get['code'] : false;
         $search = (array_key_exists('search', $get)) ? $get['search'] : false;
+        $modelId = (array_key_exists('modelId', $get)) ? $get['modelId'] : false;
         $names = [];
         $namesCount = 0;
 
-        list($id, $variantId) = explode('-', $code);
-        $cats = $this->app->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
+        if ($code) {
+            list($id, $variantId) = explode('-', $code);
+            $cats = $this->app->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
 
-        foreach($cats as $v) {
-            $names[$namesCount] = [];
-            $psmp = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productCategoryId' => $v->id]);
-            if ($psmp) {
-                \BlueSeal::dump($psmp);
-                $names[$namesCount]['id'] = $psmp->productSheetModelPrototypeId;
-                $names[$namesCount]['name'] = $psmp->productSheetModelPrototype->name;
-                $names[$namesCount]['origin'] = 'code';
-                $namesCount++;
-            }
-        }
-
-        if ($search) {
-            $searchRes = $this->app->dbAdapter->query("SELECT * FROM ProductSheetModelPrototype WHERE `name` LIKE ?",['%' . trim($search) . '%'])->fetchAll();
-            foreach($searchRes as $v) {
-                if (!in_array($v['name'], array_column($names, 'id'))) {
-                    $names[$namesCount] = [];
-                    $names[$namesCount]['id'] = $v['id'];
-                    $names[$namesCount]['name'] = $v['name'];
-                    $names[$namesCount]['origin'] = 'search';
+            foreach ($cats as $v) {
+                $names[$namesCount] = [];
+                $psmp = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productCategoryId' => $v->id]);
+                if ($psmp) {
+                    \BlueSeal::dump($psmp);
+                    $names[$namesCount]['id'] = $psmp->productSheetModelPrototypeId;
+                    $names[$namesCount]['name'] = $psmp->productSheetModelPrototype->name;
+                    $names[$namesCount]['origin'] = 'code';
                     $namesCount++;
                 }
             }
-        }
 
-        return json_encode($names);
+            if ($search) {
+                $searchRes = $this->app->dbAdapter->query("SELECT * FROM ProductSheetModelPrototype WHERE `name` LIKE ?", ['%' . trim($search) . '%'])->fetchAll();
+                foreach ($searchRes as $v) {
+                    if (!in_array($v['name'], array_column($names, 'id'))) {
+                        $names[$namesCount] = [];
+                        $names[$namesCount]['id'] = $v['id'];
+                        $names[$namesCount]['name'] = $v['name'];
+                        $names[$namesCount]['origin'] = 'search';
+                        $namesCount++;
+                    }
+                }
+            }
+            $res = $names;
+        } elseif ($modelId) {
+            $details = [];
+            $modelRes = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $modelId]);
+            $details['id'] = $modelRes->id;
+            $details['prototype'] = $modelRes->productSheetPrototypeId;
+            $modelDetails = $modelRes->productSheetModelActual;
+            //$modelDetails = $this->app->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $modelRes->id]);
+            foreach($modelDetails as $v) {
+                $details[$v->productDetailLabelId] = [];
+                $details[$v->productDetailLabelId]['labelName'] = $this->app->repoFactory->create('ProductDetailLabelTranslation')->findOneBy(['langId' => 1, 'productDetailLabelId' => $v->productDetailLabelId]);
+                $details[$v->productDetailLabelId]['detailId'] = $v->productDetailId;
+            }
+            $res = $details;
+        }
+        return json_encode($res);
     }
 
     public function post()
