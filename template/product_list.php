@@ -211,7 +211,7 @@
             data-event="bs.product.mergenames"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Copia dettagli"
+            data-title="Copia i nomi dei prodotti"
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
