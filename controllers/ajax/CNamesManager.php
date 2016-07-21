@@ -30,6 +30,9 @@ class CNamesManager extends AAjaxController
                 case "merge":
                     $res = $this->mergeNames($get['newName'], $get['oldNames']);
                     break;
+                case "mergeByProducts":
+                    $res = $this->mergeByProducts($get);
+                    break;
                 default:
                     return "OOPS! Non so cosa devo fare. Contatta un amministratore";
             }
@@ -50,8 +53,35 @@ class CNamesManager extends AAjaxController
         $SQLCond = str_repeat('`name` = ? OR ', count($old));
         $SQLCond = rtrim($SQLCond, 'OR ');
         $cond = array_merge([$new], $old);
+        try {
+            $this->dbAdapter->query('DELETE ProductNameTranslation WHERE langId <> 1 AND (' . $SQLCond . ')', $old);
+            $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
+        } catch(\Exception $e) {
+            return 'OOPS! C\'è stato un problema!';
+        }
+        return 'Nomi aggiornati!';
+    }
 
-        $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
+    private function mergeByProducts($get) {
+        $new = $get['newName'];
+        $oldCodes = $get['oldCodes'];
+        $old = [];
+        foreach ($oldCodes as $v) {
+            $old[] = explode('-', $v)[1];
+        }
+        $SQLCond = str_repeat('`productVariantId` = ? OR ', count($old));
+        $SQLCond = rtrim($SQLCond, 'OR ');
+        $cond = array_merge([$new], $old);
+
+        try {
+            $this->app->dbAdapter->beginTransaction();
+            $this->app->dbAdapter->query('DELETE FROM ProductNameTranslation WHERE langId <> 1 AND (' . $SQLCond . ')', $old);
+            $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
+            $this->app->dbAdapter->commit();
+        } catch(\Exception $e) {
+            $this->app->dbAdapter->rollBack();
+            return 'OOPS! C\'è stato un problema!';
+       }
         return 'Nomi aggiornati!';
     }
 
@@ -83,13 +113,12 @@ class CNamesManager extends AAjaxController
 
         if ($search && (1 < count($codes))) {
             $concat = ' OR ';
-            $codes[] = $search;
         }
 
         $where = $searchByCodes . $concat . $searchByNames;
 
         //$repo = $this->app->repoFactory->create('ProductDetailTranslation',false);
-        $res = $this->app->dbAdapter->query("SELECT `name` FROM `ProductNameTranslation` WHERE `langId` = 1 AND ( $where ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
+        $res = $this->app->dbAdapter->query("SELECT distinct `name` FROM `ProductNameTranslation` WHERE `langId` = 1 AND ( $where ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
 
         return json_encode($res);
     }

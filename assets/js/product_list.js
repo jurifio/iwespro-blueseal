@@ -873,59 +873,58 @@ $(document).on('bs.product.mergedetails', function () {
         data: {rows: row}
     }).done(function (res) {
         res = JSON.parse(res);
-
-            var bodyContent = '<div style="min-height: 250px"><p>Seleziona il prodotto da usare come modello:</p><select class="full-width" placehoder="Seleziona il dettaglio da tenere" name="productCodeSelect" id="productCodeSelect"><option value=""></option></select></div>';
-            bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
-            bodyContent += '<input id="productCodeName" autocomplete="off" type="text" class="form-control" name="productCodeName" title="productCodeName" value="">';
-            body.html(bodyContent);
-            $('#productCodeSelect').selectize({
-                valueField: 'code',
-                labelField: 'code',
-                searchField: 'code',
-                options: res,
-                create: false,
-                render: {
-                    option: function (item, escape) {
-                        return '<div>' +
-                            escape(item.code) + " - " + escape(item.variant) +
-                            '</div>';
-                    }
+        var bodyContent = '<div style="min-height: 250px"><p>Seleziona il prodotto da usare come modello:</p><select class="full-width" placehoder="Seleziona il dettaglio da tenere" name="productCodeSelect" id="productCodeSelect"><option value=""></option></select></div>';
+        bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
+        bodyContent += '<input id="productCodeName" autocomplete="off" type="text" class="form-control" name="productCodeName" title="productCodeName" value="">';
+        body.html(bodyContent);
+        $('#productCodeSelect').selectize({
+            valueField: 'code',
+            labelField: 'code',
+            searchField: 'code',
+            options: res,
+            create: false,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        escape(item.code) + " - " + escape(item.variant) +
+                        '</div>';
                 }
-            });
-            $('#productCodeSelect').selectize()[0].selectize.setValue(row[0].id);
+            }
+        });
+        $('#productCodeSelect').selectize()[0].selectize.setValue(row[0].id);
 
+        var detName = $('#productCodeSelect option:selected').text().split('(')[0];
+        $('#productCodeName').val(detName);
+
+        $(bsModal).find('table').addClass('table');
+        $('#productCodeSelect').change(function () {
             var detName = $('#productCodeSelect option:selected').text().split('(')[0];
             $('#productCodeName').val(detName);
+        });
 
-            $(bsModal).find('table').addClass('table');
-            $('#productCodeSelect').change(function () {
-                var detName = $('#productCodeSelect option:selected').text().split('(')[0];
-                $('#productCodeName').val(detName);
-            });
+        cancelButton.html("Annulla").show().on('click', function () {
+            bsModal.hide();
+        });
 
-            cancelButton.html("Annulla").show().on('click', function () {
-                bsModal.hide();
-            });
-
-            okButton.html("Copia Dettagli!").off().on('click', function () {
-                $.ajax({
-                    url: '/blueseal/xhr/ProductDetailsMerge',
-                    type: 'POST',
-                    data: {rows: row, choosen:  $('#productCodeName').val()}
-                }).done(function (res) {
-                    body.html(res);
-                    cancelButton.hide();
-                    okButton.html("Ok").off().on('click', function () {
-                        bsModal.modal("hide");
-                        dataTable.ajax.reload();
-                    });
+        okButton.html("Copia Dettagli!").off().on('click', function () {
+            $.ajax({
+                url: '/blueseal/xhr/ProductDetailsMerge',
+                type: 'POST',
+                data: {rows: row, choosen: $('#productCodeName').val()}
+            }).done(function (res) {
+                body.html(res);
+                cancelButton.hide();
+                okButton.html("Ok").off().on('click', function () {
+                    bsModal.modal("hide");
+                    dataTable.ajax.reload();
                 });
             });
+        });
     });
     bsModal.modal('show');
 });
 
-$(document).on('bs.names.merge', function () {
+$(document).on('bs.product.mergenames', function () {
 
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();
@@ -949,19 +948,11 @@ $(document).on('bs.names.merge', function () {
     }
 
     var i = 0;
-    var row = [];
-    var getVars = '';
-    var oldNames = [];
+    var codes = {};
     $.each(selectedRows, function (k, v) {
-        row[i] = {};
-        var idsVars = v.DT_RowId.split('__');
-        row[i].code = v.DT_RowId;
-        row[i].id = idsVars[1];
-        row[i].productVariantId = idsVars[2];
-        row[i].name = v.name;
-        oldNames.push(v.name);
+        var idVars = v.DT_RowId.split('__');
+        codes['code_' + i] = idVars[1] + '-' + idVars[2];
         i++;
-        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
 
     var result = {
@@ -971,107 +962,102 @@ $(document).on('bs.names.merge', function () {
         cancelButtonLabel: null
     };
 
-    header.html('Unisci i nomi dei prodotti');
-    var bodyContent = '<div style="min-height: 250px"><select class="full-width" placehoder="Seleziona il dettaglio da tenere" name="productNames" id="productNames"><option value=""></option></select></div>';
-    bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
-    bodyContent += '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
-    body.html(bodyContent);
-    var data = {};
-    $.each(row, function(k, v){
-        data['code_' + k] = v.code;
-    });
     $.ajax({
         url: '/blueseal/xhr/NamesManager',
-        type: 'GET',
-        datatype: 'json',
-        data: data
-    })
+        method: 'GET',
+        dataType: 'JSON',
+        data: codes
+    }).done(function (res) {
 
-    $('#productDetailId').selectize({
-        valueField: 'name',
-        labelField: 'name',
-        searchField: 'name',
-        options: row,
-        create: false,
-        /*score: function(search) {
-         var score = this.getScoreFunction(search);
-         return function(item) {
-         return score(item) * (1 + Math.min(item.watchers / 100, 1));
-         };
-         },*/
-        render: {
-            option: function (item, escape) {
-                return '<div>' +
-                    escape(item.name) +
-                    '</div>';
-            }
-        },
-        load: function (query, callback) {
-            if (3 >= query.length) {
-                return callback();
-            }
-            $.ajax({
-                url: '/blueseal/xhr/NamesManager',
-                type: 'GET',
-                data: "search=" + query,
-                dataType: 'json',
-                error: function () {
-                    callback();
-                },
-                success: function (res) {
-                    callback(res);
+        header.html('Unione Nomi');
+        var bodyContent = '<div style="min-height: 250px"><select class="full-width" placehoder="Seleziona il dettaglio da tenere" name="productDetailId" id="productDetailId"><option value=""></option></select></div>';
+        bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
+        bodyContent += '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
+        body.html(bodyContent);
+        $('#productDetailId').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: res,
+            create: false,
+
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        escape(item.name) +
+                        '</div>';
                 }
-            });
-        }
-    });
-    $('#productDetailId').selectize()[0].selectize.setValue(row[0].id);
+            },
+            load: function (query, callback) {
+                if (3 >= query.length) {
+                    return callback();
+                }
+                var search = codes.slice();
+                search['search'] = query;
+                $.ajax({
+                    url: '/blueseal/xhr/NamesManager',
+                    type: 'GET',
+                    data: search,
+                    dataType: 'json',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res);
+                    }
+                });
+            }
+        });
 
-    var detName = $('#productDetailId option:selected').text(); //.split('(')[0];
-    $('#productDetailName').val(detName);
+        $('#productDetailId').selectize()[0].selectize.setValue(0);
 
-    $(bsModal).find('table').addClass('table');
-    $('#productDetailId').change(function () {
         var detName = $('#productDetailId option:selected').text(); //.split('(')[0];
         $('#productDetailName').val(detName);
-    });
-    cancelButton.html("Annulla");
-    cancelButton.show();
 
-    bsModal.modal('show');
+        $(bsModal).find('table').addClass('table');
+        $('#productDetailId').change(function () {
+            var detName = $('#productDetailId option:selected').text(); //.split('(')[0];
+            $('#productDetailName').val(detName);
+        });
+        cancelButton.html("Annulla");
+        cancelButton.show();
 
-    okButton.html(result.okButtonLabel).off().on('click', function (e) {
-        var selected = $("#productDetailId").val();
-        var name = $("#productDetailName").val();
-        console.log(name);
-        body.html(loader);
-        Pace.ignore(function () {
-            $.ajax({
-                url: "/blueseal/xhr/NamesManager",
-                type: "POST",
-                data: {
-                    action: "merge",
-                    newName: name,
-                    oldNames: oldNames
-                }
-            }).done(function (content) {
-                body.html(content);
-                okButton.html('Ok');
-                okButton.off().on('click', function () {
-                    bsModal.modal('hide');
-                    dataTable.ajax.reload();
-                });
-            }).fail(function (content, a, b) {
-                console.log(content);
-                console.log(a);
-                console.log(b);
-                body.html("Modifica non eseguita");
-                okButton.html('Ok');
-                okButton.off().on('click', function () {
-                    bsModal.modal('hide');
-                    dataTable.ajax.reload();
+        bsModal.modal('show');
+
+        okButton.html(result.okButtonLabel).off().on('click', function (e) {
+            var selected = $("#productDetailId").val();
+            var name = $("#productDetailName").val();
+
+            var oldCodes = [];
+
+            body.html(loader);
+            Pace.ignore(function () {
+                body.html('');
+                $.ajax({
+                    url: "/blueseal/xhr/NamesManager",
+                    type: "POST",
+                    data: {
+                        action: "mergeByProducts",
+                        newName: name,
+                        oldCodes: codes
+                    }
+                }).done(function (content) {
+                    body.html(content);
+                    okButton.html('Ok');
+                    okButton.off().on('click', function () {
+                        bsModal.modal('hide');
+                        dataTable.ajax.reload();
+                    });
+                }).fail(function (content, a, b) {
+                    body.html("Modifica non eseguita");
+                    okButton.html('Ok');
+                    okButton.off().on('click', function () {
+                        bsModal.modal('hide');
+                        dataTable.ajax.reload();
+                    });
                 });
             });
         });
+        bsModal.modal();
     });
-    bsModal.modal();
 });
