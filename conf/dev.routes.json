@@ -228,6 +228,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/tag(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductTagListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/dettagli(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductDetailListController"
@@ -1325,6 +1339,34 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignController"
             },
             "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/marketplace(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceProductListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
+            "pattern": "/blueseal/utente(/:userId)?(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CUserManageController"
+            },
+            "filters": {
+                "userId": "[0-9]+"
+            },
             "translations": {},
             "methods": [
                 "GET",

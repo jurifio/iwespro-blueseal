@@ -200,7 +200,18 @@
             data-event="bs.product.mergedetails"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Cambia prezzi ai prodotti selezionati"
+            data-title="Copia dettagli"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-magnet"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.mergenames"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Copia i nomi dei prodotti"
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>

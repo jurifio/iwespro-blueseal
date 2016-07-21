@@ -154,6 +154,63 @@
 			}
 		]
 	});
+	tableSetup.product_tag_list = $.extend({}, tableSetup.common, {
+		order: [[6, "asc"]],
+		columns: [
+			{
+				data: "code",
+				orderable: true,
+				searchable: true
+			},{
+				data: "shop",
+				orderable: true
+			},{
+				data: "colorGroup",
+				orderable: true,
+				searchable: true
+			},
+			{
+				data: "season",
+				orderable: true,
+				searchable: true
+			},{
+				data: "details",
+				orderable: false,
+				searchable: false
+			},{
+				data: "brand",
+				orderable: true
+			},{
+				data: "tag",
+				orderable: false,
+				searchable: true
+			},{
+				data: "status",
+				orderable: true
+			}
+		]
+	});
+	tableSetup.marketplace_product_list = $.extend({}, tableSetup.common, {
+		order: [[0, "desc"]],
+		columns: [
+			{
+				data: "code",
+				searchable: true
+			},{
+				data: "shop",
+				searchable: true
+			},{
+				data: "itemno",
+				searchable: true
+			},{
+				data: "dummy",
+				searchable: true
+			},{
+				data: "marketplaceAccountName",
+				searchable: true
+			}
+		]
+	});
 	tableSetup.product_picky = $.extend({}, tableSetup.common, {
 		order: [[9, "desc"]],
 		columns: [
@@ -1053,13 +1110,17 @@
 				orderable: true,
 				searchable: true
 			},{
-				data: "marketplaceCategory",
+				data: "marketplaceAccount",
 				orderable: true,
 				searchable: true
 			},{
-				data: "marketplaceCategoryDescription",
-				orderable: false,
-				searchable: false
+				data: "marketplaceAccountCategory",
+				orderable: true,
+				searchable: true
+			},{
+				data: "marketplaceAccountPath",
+				orderable: true,
+				searchable: true
 			},{
 				data: "internalCategory",
 				orderable: true,

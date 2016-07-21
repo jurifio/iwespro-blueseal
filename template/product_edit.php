@@ -221,10 +221,6 @@
                                     <h5 class="m-t-10">Scheda prodotto e dettagli</h5>
                                 </div>
                                 <div class="panel-body clearfix">
-                                    <script type="text/javascript">
-                                        
-                                    </script>
-
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -254,7 +250,7 @@
                                                                     $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $detaillabel->id);
                                                                     $detailValueId = 0;
                                                                     if ($actual) {
-                                                                        $detailValueId = $actual->productDetail->id;                                                                        
+                                                                        $detailValueId = $actual->productDetail->id;
                                                                     }
                                                                 }
                                                                 ?>

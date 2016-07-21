@@ -16,7 +16,7 @@ use bamboo\core\intl\CLang;
  *
  * @since ${VERSION}
  */
-class CProductListAjaxController extends AAjaxController
+class CProductTagListAjaxController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
@@ -50,7 +50,7 @@ class CProductListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductList',['id','productVariantId'],$_GET);
+        $datatable = new CDataTables('vBluesealTagManagementList',['id','productVariantId'],$_GET);
         if(!empty($this->authorizedShops)){
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
@@ -152,65 +152,28 @@ class CProductListAjaxController extends AAjaxController
 	        $tags = [];
 	        foreach ($val->tag as $tag) $tags[] = $tag->tagTranslation->getFirst()->name;
 
-            $response['data'][$i]['externalId'] = '<span class="small">';
-            $response['data'][$i]['externalId'] .= empty($ext) ? "" : $ext;
-            $response['data'][$i]['externalId'] .= '</span>';
-
-            $response['data'][$i]['cpf'] = '<span class="small">';
-            $response['data'][$i]['cpf'] .= $val->itemno.' # '.$val->productVariant->name;
-            $response['data'][$i]['cpf'] .= '</span>';
 
             $colorGroup = $val->productColorGroup->getFirst();
             $response['data'][$i]['colorGroup'] = ($colorGroup) ? $colorGroup->name : "[Non assegnato]";
 
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $response['data'][$i]['slug'] = '<span class="small">';
-            $response['data'][$i]['slug'] .= implode(',<br/>',$cats); //category
-            $response['data'][$i]['slug'] .= $nameInCats;
-            $response['data'][$i]['slug'] .= '</span>';
             $response['data'][$i]['tag'] = '<span class="small">';
             $response['data'][$i]['tag'] .= implode(',<br />',$tags);
             $response['data'][$i]['tag'] .= '</span>';
             $response['data'][$i]['status'] = $val->productStatus->name;
 
-            $qty=0;
-            $isOnSale = [];
             $shopz = [];
-            $mup = [];
             foreach ($val->productSku as $sku) {
-                $qty += $sku->stockQty;
-                $isOnSale = $sku->isOnSale;
                 $iShop = $sku->shop->name;
                 if (!in_array($iShop, $shopz)) {
                     $shopz[] = $iShop;
 
-                    $price = ($isOnSale) ? $sku->salePrice : $sku->price;
-                    
-                    if ((float)$price) {
-                        $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
-                        $value = $sku->value;
-                        $friendRevenue = $value + $value * $multiplier / 100;
-                        $priceNoVat = $price / 1.22;
-                        $mup[] = number_format(($priceNoVat - $friendRevenue) / $priceNoVat * 100, 2, ",", ".");
-                    } else {
-                        $mup[] = '-';
-                    }
                 }
             }
-            $response['data'][$i]['available'] = ($qty) ? 'sì' : 'no';
-            $response['data'][$i]['available'].= ' - ' . $qty;
-            
-            
+
             $response['data'][$i]['shop'] = '<span class="small">';
             $response['data'][$i]['shop'] .= implode('<br />',$shopz);
             $response['data'][$i]['shop'] .= '</span>';
-            
-            $response['data'][$i]['mup'] = '<span class="small">';
-            $response['data'][$i]['mup'] .= implode('<br />',$mup);
-            $response['data'][$i]['mup'] .= '</span>';
-            
-            $response['data'][$i]['isOnSale'] = $isOnSale;
-            $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
 
             $i++;
         }

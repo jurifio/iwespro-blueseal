@@ -156,3 +156,31 @@ $(document).on('bs.user.activate',function() {
 		$('.table').DataTable().ajax.reload();
 	});
 });
+
+$(document).on('bs.user.delete',function() {
+	var selectedRows = $('.table').DataTable().rows('.selected').data();
+	var selection = [];
+
+	$.each(selectedRows, function(k,v) {
+		selection.push(v.DT_RowId.split('__')[1])
+	});
+	$.ajax({
+		method: "DELETE",
+		url: "/blueseal/utente",
+		data: {
+			users: selection
+		}
+	}).done(function() {
+		new Alert({
+			type: "success",
+			message: "Utenti Eliminati"
+		}).open();
+	}).fail(function() {
+		new Alert({
+			type: "danger",
+			message: "Impossibile eliminare gli utenti"
+		}).open();
+	}).always(function() {
+		$('.table').DataTable().ajax.reload();
+	});
+});

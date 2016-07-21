@@ -43,15 +43,17 @@
                                                     <?php endforeach; ?>
                                                 </div>
                                                 <?php
-                                                if(isset($productEdit->dummyPicture)){
+                                                if (isset($productEdit->dummyPicture)) {
                                                     $dummy = (strpos($productEdit->dummyPicture, 's3-eu-west-1.amazonaws.com')) ? $productEdit->dummyPicture : $dummyUrl . "/" . $productEdit->dummyPicture;
                                                 } else {
                                                     $dummy = "";
                                                 }
                                                 ?>
-                                                <img id="dummyPicture" align="center" class="img-responsive" src="<?php echo $dummy ?>">
+                                                <img id="dummyPicture" align="center" class="img-responsive"
+                                                     src="<?php echo $dummy ?>">
                                             </div>
-                                            <div style="display:none;"><input id="dummyFile" type="file" value="" name="Product_dummyPicture" /></div>
+                                            <div style="display:none;"><input id="dummyFile" type="file" value=""
+                                                                              name="Product_dummyPicture"/></div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="row">
@@ -135,8 +137,7 @@
                                                         <input id="ProductVariant_description" autocomplete="off"
                                                                type="text" class="form-control"
                                                                name="ProductVariant_description"
-                                                               value="<?php echo isset($productEdit->productVariant) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>"
-                                                               required>
+                                                               value="<?php echo isset($productEdit->productVariant) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>">
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
@@ -179,12 +180,7 @@
                                                                 id="Product_ProductSeasonId">
                                                             <option></option>
                                                             <?php foreach ($seasons as $season): ?>
-                                                                <option value="<?php echo $season->id ?>" <?php
-                                                                if (!is_null($productEdit->productSeason) && $productEdit->productSeason->id == $season->id) {
-                                                                    echo 'selected="selected"';
-                                                                } elseif (is_null($productEdit->productSeason) && $season->id == 10){
-                                                                    echo 'selected="selected"';
-                                                                } ?>><?php echo $season->name . " " . $season->year ?></option>
+                                                                <option value="<?php echo $season->id ?>" <?php if (!is_null($productEdit->productSeason) && $productEdit->productSeason->id == $season->id) echo 'selected="selected"'; ?>><?php echo $season->name . " " . $season->year ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>
@@ -196,7 +192,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-textarea">
                                                 <label for="Product_note">Note di Inserimento</label>
-                                                <textarea rows="10" class="form-control" id="Product_note" name="Product_note"><?php echo isset($productEdit->note) ? $productEdit->note : "" ?></textarea>
+                                                <textarea rows="10" class="form-control" id="Product_note"
+                                                          name="Product_note"><?php echo isset($productEdit->note) ? $productEdit->note : "" ?></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -209,7 +206,6 @@
                                     <h5 class="m-t-10">Scheda prodotto e dettagli</h5>
                                 </div>
                                 <div class="panel-body clearfix">
-
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -233,7 +229,7 @@
                                                 <div class="tab-content bg-white">
                                                     <?php foreach ($productEdit->productSheetPrototype->productDetailLabel as $detaillabel): ?>
                                                         <div class="col-md-6">
-                                                            <div class="form-group form-group-default">
+                                                            <div class="form-group form-group-default selectize-enabled">
                                                                 <label for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>
                                                                 <?php if (isset($productEdit) && !is_null($productEdit->productSheetActual)) {
                                                                     $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $detaillabel->id);
@@ -241,7 +237,6 @@
                                                                     if ($actual) {
                                                                         $detailValueId = $actual->productDetail->id;
                                                                     }
-
                                                                 }
                                                                 ?>
                                                                 <select class="full-width"
@@ -276,7 +271,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default" style="height: 50px">
                                                 <label for="ProductName_1_name">Nome del prodotto</label>
-                                                <input type="hidden" name="hidden-name" class="hidden-name" value="<?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>" />
+                                                <input type="hidden" id="hidden-name" class="hidden-name" value="<?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>" />
                                                 <select id="ProductName_1_name" name="ProductName_1_name" class="form-control" data-preset-name="<?php echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>"></select>
                                                 <!--<input autocomplete="off" type="text" class="form-control"
                                                        id="ProductName_1_name" name="ProductName_1_name"
@@ -288,9 +283,9 @@
                                         <div class="col-md-12">
                                             <div class="summernote-wrapper">
                                                 <?php
-                                                if (isset($productEdit) && isset($productEdit->productDescription)) {
-                                                    foreach ($productEdit->productDescription as $val) {
-                                                        if ($val->langId == 1) {
+                                                if (isset($productEdit) && !is_null($productEdit->productDescriptionTranslation)) {
+                                                    foreach ($productEdit->productDescriptionTranslation as $val) {
+                                                        if ($val->langId == 1 && $val->marketplaceId == 1) {
                                                             $descr = $val->description;
                                                         }
                                                     }

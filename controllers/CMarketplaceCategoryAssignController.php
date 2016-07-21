@@ -37,10 +37,18 @@ class CMarketplaceCategoryAssignController extends ARestrictedAccessRootControll
 
 	public function put()
 	{
-		$data = explode('-',$this->app->router->request()->getRequestData("id"));
-		$one = $this->app->repoFactory->create('MarketplaceCategoryLookup')->findOneBy(['marketplaceId'=>$data[0],'marketplaceCategoryId'=>$data[1]]);
-		$one->productCategoryId = $this->app->router->request()->getRequestData("value");
-		$one->update();
+		$sample = $this->app->repoFactory->create('MarketplaceAccountCategory')->getEmptyEntity();
+		$sample->readId($this->app->router->request()->getRequestData("id"));
+		$one = $this->app->repoFactory->create('MarketplaceAccountCategory')->findOneBy($sample->getIds());
+		$this->app->dbAdapter->delete('ProductCategoryHasMarketplaceAccountCategory',
+			[   'marketplaceId'=>$one->marketplaceId,
+				'marketplaceAccountId'=>$one->marketplaceAccountId,
+				'marketplaceAccountCategoryId'=>$one->marketplaceCategoryId]);
+		foreach ($this->app->router->request()->getRequestData("value") as $value) {
+			$this->app->dbAdapter->insert('ProductCategoryHasMarketplaceAccountCategory',[   'marketplaceId'=>$one->marketplaceId,
+			                                  'marketplaceAccountId'=>$one->marketplaceAccountId,
+			                                  'marketplaceAccountCategoryId'=>$one->marketplaceCategoryId,'productCategoryId'=>$value]);
+		}
 	}
 
 	/**
@@ -49,9 +57,9 @@ class CMarketplaceCategoryAssignController extends ARestrictedAccessRootControll
 	public function delete() {
 		$i = 0;
 		foreach($this->app->router->request()->getRequestData('ids') as $id) {
-			$data = explode('-',$id);
-			$one = $this->app->repoFactory->create('MarketplaceCategoryLookup')->findOneBy(['marketplaceId'=>$data[0],'marketplaceCategoryId'=>$data[1]]);
-			\BlueSeal::dump($one);
+			$sample = $this->app->repoFactory->create('MarketplaceAccountCategory')->getEmptyEntity();
+			$sample->readId($id);
+			$one = $this->app->repoFactory->create('MarketplaceAccountCategory')->findOneBy($sample->getIds());
 			$one->isRelevant = 0;
 			if($one->update()>0) $i++;
 		}

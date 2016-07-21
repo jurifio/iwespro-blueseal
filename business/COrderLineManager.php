@@ -4,11 +4,11 @@
 namespace bamboo\blueseal\business;
 
 use bamboo\core\ecommerce\IBillingLogic;
-use bamboo\ecommerce\events\EGenericEvent;
+use bamboo\core\events\EGenericEvent;
 use bamboo\domain\entities\COrderLine;
 use bamboo\domain\entities\COrderLineStatus;
 use bamboo\core\application\AApplication;
-use bamboo\ecommerce\domain\repositories\COrderLineStatusRepo;
+use bamboo\domain\repositories\COrderLineStatusRepo;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CProductSku;
 use bamboo\core\exceptions\RedPandaException;
