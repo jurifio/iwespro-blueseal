@@ -55,7 +55,8 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
 
     if (conf.formAutofill && conf.formAutofill == true) {
 	    var errors = [];
-	    $('input:not([type=file]), textarea, select').each(function() {
+	    var formSelector = conf.formSelector || 'document';
+	    $(formSelector + ' input:not([type=file]), textarea, select').each(function() {
 		    if(typeof $(this).attr('name') == 'undefined') return;
 		    if($(this).attr('required') == 'required' && $(this).val().length  === 0){
 			    errors.push($(this).attr('name'));
@@ -67,13 +68,27 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
 		    return dff.reject();
 	    }
 
-        $('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function() {
+        /*$(formSelector + ' input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function() {
+            if(typeof $(this).attr('name') == 'undefined') return;
+            formDataObject.append($(this).attr('name'), $(this).val());
+        });*/
+	    $(formSelector + ' input:not([type=file],[type=radio],[type=checkbox])').each(function() {
+            if(typeof $(this).attr('name') == 'undefined') return;
+            formDataObject.append($(this).attr('name'), $(this).val());
+        });
+
+	    $(formSelector + ' select').each(function() {
+            if(typeof $(this).attr('name') == 'undefined') return;
+            formDataObject.append($(this).attr('name'), $(this).val());
+        });
+
+	    $(formSelector + ' textarea').each(function() {
             if(typeof $(this).attr('name') == 'undefined') return;
             formDataObject.append($(this).attr('name'), $(this).val());
         });
 
         var radioNames = [];
-        $('input[type=radio]').each(function() {
+        $(formSelector + ' input[type=radio]').each(function() {
 	        if(typeof $(this).attr('name') == 'undefined') return;
             radioNames.push($(this).attr('name'));
         });
@@ -84,12 +99,12 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
             formDataObject.append(element, $('[name='+element+']:checked').val());
         });
 	    
-	    $('input[type=checkbox]:checked').each(function() {
+	    $(formSelector + ' input[type=checkbox]:checked').each(function() {
 		    if(typeof $(this).attr('name') == 'undefined') return;
 		    formDataObject.append($(this).attr('name'), $(this).val());
 	    });
 
-        $(':file').each(function() {
+        $(formSelector + ' :file').each(function() {
             if(typeof this.name == 'undefined') return;
             if(this.files.length == 0) return;
             formDataObject.append(this.name,this.files[0]);
