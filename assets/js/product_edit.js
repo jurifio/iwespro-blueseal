@@ -284,7 +284,6 @@ $(document).on('bs.det.add', function (e) {
     });
 });
 
-
 $(document).on('bs.details.model.add', function (e) {
     e.preventDefault();
     var bsModal = $('#bsModal');
@@ -302,8 +301,14 @@ $(document).on('bs.details.model.add', function (e) {
         '<label>Inserisci il nome:</label><br />' +
         '<input type="text" name="modelName" id="modelName" class="form-control" />' +
         '<!--<select type="text" class="form-control new-dett-ita" name="modelCats" id="newDetModel" ></select>-->' +
-        '</div></form>'
+        '</div></form>' +
+        '<div class="editDetailsModal">' +
+        '<select class="form-controll" id="Product_dataSheet_Modal"></select>' +
+        '<div id="productDetailsModal"></div>' +
+        '</div>' //editDetailsModal
     );
+
+    $("#productDetailsModal").html($('#productDetails').html());
     cancelButton.html("Annulla").off().on('click', function () {
         bsModal.hide();
     });
@@ -533,7 +538,7 @@ $(document).on('bs.details.model.assign', function (e) {
             '<div style="height: 300px;">' +
             '<form id="detailAdd"><div class="form-group">' +
             '<label>Inserisci il nome:</label><br />' +
-            '<select type="text" class="form-control new-dett-ita" name="modelAssign" id="modelAssign" ></select>' +
+            '<select class="form-control new-dett-ita" name="modelAssign" id="modelAssign" ></select>' +
             '</form></div>'
         );
 
@@ -593,7 +598,6 @@ $(document).on('bs.details.model.assign', function (e) {
             }
         }).done(function ($content) {
 
-
             $("#productDetails").html($content);
             autocompleteDetail();
 
@@ -623,11 +627,8 @@ $(document).on('bs.details.model.assign', function (e) {
 });
 
 $(document).ready(function () {
-
     changeProductDataSheet = true;
-
     autocompleteDetail();
-
     $("#Product_dataSheet").on("change", function () {
         if (changeProductDataSheet) {
             $.ajax({

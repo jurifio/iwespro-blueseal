@@ -747,3 +747,7 @@ ul.roulette-importer-details li {
 .selectize-streachable+.selectize-control {
     position: relative !important;
 }
+
+bs-portlet {
+    display: block;
+}

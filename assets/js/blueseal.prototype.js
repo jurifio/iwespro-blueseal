@@ -800,6 +800,9 @@ Portlet.prototype.constructor = UiElement;
 Portlet.prototype.draw = function(that) {
 	var _this = this;
 
+    if(_this.data.target == 'undefined') {
+        //crea elento id = rand
+    }
 	_this.ajaxPromise.progress(function(){
 		$(that).replaceWith(_this.loadingTemplate)
 	}).done(function(result) {

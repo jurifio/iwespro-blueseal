@@ -216,7 +216,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="panel panel-default clearfix">
+                            <div class="panel panel-default clearfix details-section">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Scheda prodotto e dettagli</h5>
                                 </div>
@@ -231,7 +231,7 @@
                                                         id="Product_dataSheet">
                                                     <option></option>
                                                     <?php foreach ($productSheets as $productSheet): ?>
-                                                        <option value="<?php echo $productSheet->id ?>" <?php if ($productSheet->id == $productEdit->productSheetPrototypeId) echo "selected"; ?>> <?php echo $productSheet->name ?></option>
+                                                        <option value="<?php echo $productSheet->id ?>"> <?php echo $productSheet->name ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -239,7 +239,7 @@
                                     </div>
                                     <div style="display:none" id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>
                                     <div class="row" id="productDetails">
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 selectContent" data-prototype-id="<?php echo $productEdit->productSheetPrototypeId; ?>">
                                             <?php if (isset($productEdit) && !is_null($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
                                                 <div class="tab-content bg-white">
                                                     <?php foreach ($productEdit->productSheetPrototype->productDetailLabel as $detaillabel): ?>
