@@ -916,7 +916,7 @@ $(document).on('bs.product.mergedetails', function () {
                 cancelButton.hide();
                 okButton.html("Ok").off().on('click', function () {
                     bsModal.modal("hide");
-                    dataTable.ajax.reload();
+                    dataTable.draw();
                 });
             });
         });
@@ -1046,14 +1046,13 @@ $(document).on('bs.product.mergenames', function () {
                     okButton.html('Ok');
                     okButton.off().on('click', function () {
                         bsModal.modal('hide');
-                        dataTable.ajax.reload();
+                        dataTable.draw();
                     });
                 }).fail(function (content, a, b) {
                     body.html("Modifica non eseguita");
                     okButton.html('Ok');
                     okButton.off().on('click', function () {
                         bsModal.modal('hide');
-                        dataTable.ajax.reload();
                     });
                 });
             });
