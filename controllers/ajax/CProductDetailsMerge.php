@@ -20,18 +20,41 @@ class CProductDetailsMerge extends AAjaxController
     public function get()
     {
         $get = $this->app->router->request()->getRequestData();
-        $prods = $get['rows'];
-
+        $prods = (array_key_exists('rows', $get)) ? $get['rows'] : [];
+        $search = (array_key_exists('search', $get)) ? $get['search'] : false;
 
         //controllo size group e se ci sono ordini relativi ai prodotti da unire
         $selected = count($prods);
         $repoPro = $this->app->repoFactory->create('Product');
         $resProds = [];
+        $resCount = 0;
         foreach ($prods as $k => $v) {
             $prod = $repoPro->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
             if (!is_null($prod->productSheetPrototypeId)) {
-                $resProds[$k]['code'] = $prod->id . "-" . $prod->productVariantId;
-                $resProds[$k]['variant'] = $prod->productVariant->name;
+                $resProds[$resCount]['code'] = $prod->id . "-" . $prod->productVariantId;
+                $resProds[$resCount]['variant'] = $prod->productVariant->name;
+                $resCount++;
+            }
+        }
+
+        if ($search) {
+            $code = explode('-', $search);
+            $code['id'] = $code[0];
+            unset($code[0]);
+            if (array_key_exists(1, $code) && ("" !== $code[1])){
+                $code['productVariantId'] = $code[1];
+                unset($code[1]);
+            }
+
+            $prod = $repoPro->findBy($code);
+
+            foreach($prod as $k => $v) {
+                //throw new \Exception();
+                if (!is_null($v->productSheetPrototypeId)) {
+                    $resProds[$resCount]['code'] = $v->id . "-" . $v->productVariantId;
+                    $resProds[$resCount]['variant'] = $v->productVariant->name;
+                    $resCount++;
+                }
             }
         }
         return json_encode($resProds);

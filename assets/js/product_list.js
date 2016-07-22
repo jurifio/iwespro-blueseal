@@ -889,6 +889,25 @@ $(document).on('bs.product.mergedetails', function () {
                         escape(item.code) + " - " + escape(item.variant) +
                         '</div>';
                 }
+            },
+            load: function (query, callback) {
+                if (3 >= query.length) {
+                    return callback();
+                }
+                $.ajax({
+                    url: '/blueseal/xhr/ProductDetailsMerge',
+                    type: 'GET',
+                    data: {
+                        search: query
+                    },
+                    dataType: 'json',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res);
+                    }
+                });
             }
         });
         $('#productCodeSelect').selectize()[0].selectize.setValue(row[0].id);
