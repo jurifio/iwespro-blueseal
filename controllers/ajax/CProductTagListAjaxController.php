@@ -163,13 +163,20 @@ class CProductTagListAjaxController extends AAjaxController
             $response['data'][$i]['status'] = $val->productStatus->name;
 
             $shopz = [];
+            $isOnSale = 0;
+            $stock = 0;
             foreach ($val->productSku as $sku) {
+                $isOnSale = $sku->isOnSale;
                 $iShop = $sku->shop->name;
                 if (!in_array($iShop, $shopz)) {
                     $shopz[] = $iShop;
-
                 }
+                $stock+= $sku->stockQty;
             }
+            $available = ($stock) ? 'sì' : 'no';
+
+            $response['data'][$i]['isOnSale'] = $isOnSale;
+            $response['data'][$i]['available'] = $available . (($stock) ? ": " . $stock : '');
 
             $response['data'][$i]['shop'] = '<span class="small">';
             $response['data'][$i]['shop'] .= implode('<br />',$shopz);

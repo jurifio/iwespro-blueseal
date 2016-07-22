@@ -33,6 +33,8 @@
                                     <!--<th class="center">Immagine </th>-->
                                     <th class="center">Brand</th>
                                     <th class="center">Tags</th>
+                                    <th class="center">Qt.</th>
+                                    <th class="center">SCA</th>
                                     <th class="center">Stato</th>
                                 </tr>
                             </thead>

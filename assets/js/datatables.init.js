@@ -163,8 +163,9 @@
 				searchable: true
 			},{
 				data: "shop",
-				orderable: true
-			},{
+				orderable: true,
+                searchable: true
+            },{
 				data: "colorGroup",
 				orderable: true,
 				searchable: true
@@ -179,14 +180,24 @@
 				searchable: false
 			},{
 				data: "brand",
-				orderable: true
+				orderable: true,
+                searchable: true
 			},{
 				data: "tag",
 				orderable: false,
 				searchable: true
 			},{
+			    data: "isOnSale",
+                orderable: true,
+                searchable: true
+            },{
+                data: "available",
+                orderable: true,
+                searchable: true
+            },{
 				data: "status",
-				orderable: true
+				orderable: true,
+                searchable: true
 			}
 		]
 	});
