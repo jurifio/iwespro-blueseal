@@ -24,9 +24,18 @@ class CUserManageController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/user_add.php');
-
+		$sources = [];
+	    foreach ($this->app->repoFactory->create('Marketplace')->findAll() as $marketplace) {
+	    	$sources[] = $marketplace->name;
+	    }
+	    foreach ($this->app->dbAdapter->query("SELECT distinct registrationEntryPoint from User where isDeleted = 1",[])->fetchAll() as $item) {
+	        $sources[] = $item['registrationEntryPoint'];
+	    }
+	    $sources = array_unique($sources);
+	    
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
+	        'sources' => $sources,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);
@@ -37,7 +46,7 @@ class CUserManageController extends ARestrictedAccessRootController
     	$user = $this->app->repoFactory->create('User')->getEmptyEntity();
 	    $user->email = $this->app->router->request()->getRequestData('user_email');
 	    $user->password = password_hash($this->app->router->request()->getRequestData('user_password'), PASSWORD_BCRYPT);
-	    $user->registrationEntryPoint = 'backoffice';
+	    $user->registrationEntryPoint =  $this->app->router->request()->getRequestData('user_entryPoint');
 	    $user->isActive = 1;
 	    $user->isDeleted = 0;
 	    $user->id = $user->insert();
