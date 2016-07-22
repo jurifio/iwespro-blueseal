@@ -261,7 +261,7 @@ $(document).on('bs.del.product', function (e, element, button) {
                         bsModal.modal('hide');
                         okButton.off();
                     });
-                    dataTable.draw();
+                    dataTable.ajax.realod(null, false);
                     bsModal.modal('show');
                 });
             });
@@ -346,7 +346,7 @@ $(document).on('bs.product.tag', function () {
                     body.html('<p>' + message + '</p>');
                     okButton.on('click', function () {
                         bsModal.modal('hide');
-                        $('.table').DataTable().ajax.reload();
+                        $('.table').DataTable().ajax.reload(null, false);
                     });
                 }).fail(function (response) {
                     body.html('<p>Errore</p>');
@@ -447,7 +447,7 @@ $(document).on('bs.manage.changeStatus', function () {
                     okButton.html('Ok');
                     okButton.off().on('click', function () {
                         bsModal.modal('hide');
-                        dataTable.ajax.reload();
+                        dataTable.ajax.reload(null, false);
                     });
                 });
             });
@@ -552,7 +552,7 @@ $(document).on('bs.manage.changeSeason', function () {
                 okButton.html('Ok');
                 okButton.off().on('click', function () {
                     bsModal.modal('hide');
-                    dataTable.ajax.reload();
+                    dataTable.ajax.reload(null, false);
                 });
             });
         });
@@ -652,7 +652,7 @@ $(document).on('bs.category.edit', function (e, element, button) {
                         body.html(res);
                         okButton.html('Ok').off().on('click', function () {
                             bsModal.modal('hide');
-                            dataTable.draw();
+                            dataTable.ajax.reload(null, false);
                         });
                         cancelButton.hide();
                     });
@@ -743,7 +743,7 @@ $(document).on('bs.sales.set', function () {
                 cancelButton.hide();
                 okButton.html('ok').off().on("click", function () {
                     bsModal.modal('hide');
-                    dataTable.ajax.reload();
+                    dataTable.ajax.reload(null, false);
                 });
             });
         }
@@ -821,7 +821,7 @@ $(document).on('bs.sales.price', function () {
             cancelButton.hide();
             okButton.html('ok').off().on("click", function () {
                 bsModal.modal('hide');
-                dataTable.ajax.reload();
+                dataTable.ajax.reload(null, false);
             });
         });
     });
@@ -916,7 +916,7 @@ $(document).on('bs.product.mergedetails', function () {
                 cancelButton.hide();
                 okButton.html("Ok").off().on('click', function () {
                     bsModal.modal("hide");
-                    dataTable.ajax.reload();
+                    dataTable.ajax.reload(null, false);
                 });
             });
         });
@@ -1046,14 +1046,13 @@ $(document).on('bs.product.mergenames', function () {
                     okButton.html('Ok');
                     okButton.off().on('click', function () {
                         bsModal.modal('hide');
-                        dataTable.ajax.reload();
+                        dataTable.ajax.reload(null, false);
                     });
                 }).fail(function (content, a, b) {
                     body.html("Modifica non eseguita");
                     okButton.html('Ok');
                     okButton.off().on('click', function () {
                         bsModal.modal('hide');
-                        dataTable.ajax.reload();
                     });
                 });
             });
