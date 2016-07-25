@@ -26,6 +26,7 @@ class CProductTagListAjaxController extends AAjaxController
      * @param $action
      * @return mixed
      */
+
     public function createAction($action)
     {
         $this->app->setLang(new CLang(1,'it'));
@@ -184,7 +185,6 @@ class CProductTagListAjaxController extends AAjaxController
 
             $i++;
         }
-
         return json_encode($response);
     }
 }
