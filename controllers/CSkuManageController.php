@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\base\CObjectCollection;
+use bamboo\core\events\EGenericEvent;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
@@ -95,6 +96,7 @@ class CSkuManageController extends ARestrictedAccessRootController
                     $productSku->salePrice = $post['ProductSku_salePrice_' . $keys[2]];
                     $productSku->isOnSale = isset($post['isOnSale']) ? 1 : 0;
 	                $productSku->update();
+	                $this->app->eventManager->trigger(new EGenericEvent('product.stock.change',[$productSku->product->printId()]));
 	                $done++;
                 } else {
                     if (!empty($val)) {
@@ -111,6 +113,7 @@ class CSkuManageController extends ARestrictedAccessRootController
                         $productSku->isOnSale = isset($post['isOnSale']) ? 1 : 0;
 	                    $productSku->insert();
 	                    $done++;
+	                    $this->app->eventManager->trigger(new EGenericEvent('product.stock.change',[$productSku->product->printId()]));
                     }
                 }
 
