@@ -94,7 +94,7 @@ class CSkuManageController extends ARestrictedAccessRootController
                     $productSku->price = $post['ProductSku_price_' . $keys[2]];
                     $productSku->salePrice = $post['ProductSku_salePrice_' . $keys[2]];
                     $productSku->isOnSale = isset($post['isOnSale']) ? 1 : 0;
-                    $this->app->repoFactory->create("ProductSku")->update($productSku);
+	                $productSku->update();
 	                $done++;
                 } else {
                     if (!empty($val)) {
@@ -109,7 +109,7 @@ class CSkuManageController extends ARestrictedAccessRootController
                         $productSku->price = $post['ProductSku_price_' . $keys[2]];
                         $productSku->salePrice = $post['ProductSku_salePrice_' . $keys[2]];
                         $productSku->isOnSale = isset($post['isOnSale']) ? 1 : 0;
-	                    $productSku->insert($productSku);
+	                    $productSku->insert();
 	                    $done++;
                     }
                 }

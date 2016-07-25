@@ -51,7 +51,7 @@ class CDispatchPreorderToFriend extends ACronJob
 
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLine->status = $this->success;
-                        $this->app->repoFactory->create("OrderLine")->update($orderLine);
+	                    $orderLine->update();
 
                     } catch (\Exception $e) {
                         $this->app->router->response()->raiseUnauthorized();
@@ -67,7 +67,7 @@ class CDispatchPreorderToFriend extends ACronJob
 
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLine->status = $this->fail;
-                        $this->app->repoFactory->create("OrderLine")->update($orderLine);
+	                    $orderLine->update();
 
                     } catch (\Exception $e) {
                         $this->app->router->response()->raiseUnauthorized();
