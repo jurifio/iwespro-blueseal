@@ -215,7 +215,8 @@
 				searchable: true
 			},{
 				data: "dummy",
-				searchable: true
+				searchable: false,
+				orderable: false
 			},{
 				data: "marketplaceAccountName",
 				searchable: true
