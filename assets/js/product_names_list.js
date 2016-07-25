@@ -78,7 +78,7 @@ $(document).on('bs.names.merge', function () {
         cancelButtonLabel: null
     };
 
-    header.html('Unione dettagli');
+    header.html('Unione Nomi');
     var bodyContent = '<div style="min-height: 250px"><select class="full-width" placehoder="Seleziona il dettaglio da tenere" name="productDetailId" id="productDetailId"><option value=""></option></select></div>';
     bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
     bodyContent += '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';

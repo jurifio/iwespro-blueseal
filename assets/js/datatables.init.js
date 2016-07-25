@@ -154,6 +154,53 @@
 			}
 		]
 	});
+	tableSetup.product_tag_list = $.extend({}, tableSetup.common, {
+		order: [[6, "asc"]],
+		columns: [
+			{
+				data: "code",
+				orderable: true,
+				searchable: true
+			},{
+				data: "shop",
+				orderable: true,
+                searchable: true
+            },{
+				data: "colorGroup",
+				orderable: true,
+				searchable: true
+			},
+			{
+				data: "season",
+				orderable: true,
+				searchable: true
+			},{
+				data: "details",
+				orderable: false,
+				searchable: false
+			},{
+				data: "brand",
+				orderable: true,
+                searchable: true
+			},{
+				data: "tag",
+				orderable: false,
+				searchable: true
+			},{
+			    data: "isOnSale",
+                orderable: true,
+                searchable: true
+            },{
+                data: "available",
+                orderable: true,
+                searchable: true
+            },{
+				data: "status",
+				orderable: true,
+                searchable: true
+			}
+		]
+	});
 	tableSetup.marketplace_product_list = $.extend({}, tableSetup.common, {
 		order: [[0, "desc"]],
 		columns: [
@@ -168,7 +215,8 @@
 				searchable: true
 			},{
 				data: "dummy",
-				searchable: true
+				searchable: false,
+				orderable: false
 			},{
 				data: "marketplaceAccountName",
 				searchable: true

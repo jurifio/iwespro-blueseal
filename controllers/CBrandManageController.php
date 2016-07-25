@@ -54,7 +54,7 @@ class CBrandManageController extends ARestrictedAccessRootController
             $productBrand = $this->app->repoFactory->create("ProductBrand")->findOneBy(['id' => $data['ProductBrand_id']]);
             $productBrand->slug = trim($slug);
             $productBrand->name = trim($data['ProductBrand_name']);
-            $this->app->repoFactory->create("ProductBrand")->update($productBrand);
+	        $productBrand->update();
 
         } catch (\Exception $e) {
             $this->app->router->response()->raiseUnauthorized();
