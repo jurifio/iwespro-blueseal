@@ -70,6 +70,12 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             $response['data'][$i]['itemno'] .= '</span>';
 
 	        $response['data'][$i]['marketplaceAccountName'] = 'tante cose';
+	        $marketplaces = [];
+	        foreach ($val->marketplaceHasProduct as $mProduct) {
+	        	$style = $mProduct->isToWork ? ($mProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
+		        $marketplaces[] = '<span '.$style.'>'.$mProduct->marketplaceAccount->marketplace->name.'-'.$mProduct->marketplaceAccount->name.'</span><br>';
+	        }
+
 
             $i++;
         }
