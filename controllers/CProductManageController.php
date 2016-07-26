@@ -45,7 +45,7 @@ class CProductManageController extends ARestrictedAccessRootController
 	        $productVariant = $productEdit->productVariant;
 	        $productVariant->name = $post['ProductVariant_name'];
 	        $productVariant->description = $post['ProductVariant_description'];
-	        $this->app->repoFactory->create('ProductVariant')->update($productVariant);
+	        $productVariant->update();
             //$variantId = $this->app->dbAdapter->update("ProductVariant", ["name" => $post['ProductVariant_name'], "description" => $post['ProductVariant_description']], array("id" => $post['Product_productVariantId']));
 
             /** UPDATE PRODUCT */
@@ -329,7 +329,7 @@ class CProductManageController extends ARestrictedAccessRootController
                     $dirtyProduct->productId = $productId;
                     $dirtyProduct->productVariantId = $variantId;
                     $dirtyProduct->dirtyStatus = 'K';
-                    $this->app->repoFactory->create("DirtyProduct")->update($dirtyProduct);
+	                $dirtyProduct->update();
 
                 } catch (\Exception $e) {
                     $this->app->router->response()->raiseUnauthorized();
@@ -425,7 +425,7 @@ class CProductManageController extends ARestrictedAccessRootController
 		        }
 	        }
 
-            $this->app->repoFactory->create("Product")->update($productNew);
+	        $productNew->update();
 
             /** INIZIO INSERIMENTO CATEGORIA PRODOTTO */
             if ($this->isValidInput('ProductCategory_id', $post)) {

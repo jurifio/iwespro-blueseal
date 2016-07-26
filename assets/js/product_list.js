@@ -260,8 +260,9 @@ $(document).on('bs.del.product', function (e, element, button) {
                     okButton.html(result.okButtonLabel).off().on('click', function () {
                         bsModal.modal('hide');
                         okButton.off();
+                        dataTable.ajax.reload(null, false);
                     });
-                    dataTable.ajax.realod(null, false);
+                    dataTable.draw();
                     bsModal.modal('show');
                 });
             });
@@ -889,6 +890,25 @@ $(document).on('bs.product.mergedetails', function () {
                         escape(item.code) + " - " + escape(item.variant) +
                         '</div>';
                 }
+            },
+            load: function (query, callback) {
+                if (3 >= query.length) {
+                    return callback();
+                }
+                $.ajax({
+                    url: '/blueseal/xhr/ProductDetailsMerge',
+                    type: 'GET',
+                    data: {
+                        search: query
+                    },
+                    dataType: 'json',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res);
+                    }
+                });
             }
         });
         $('#productCodeSelect').selectize()[0].selectize.setValue(row[0].id);

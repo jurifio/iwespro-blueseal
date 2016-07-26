@@ -55,6 +55,7 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
 
     if (conf.formAutofill && conf.formAutofill == true) {
 	    var errors = [];
+	    var formSelector = conf.formSelector || 'document';
 	    $('input:not([type=file]), textarea, select').each(function() {
 		    if(typeof $(this).attr('name') == 'undefined') return;
 		    if($(this).attr('required') == 'required' && $(this).val().length  === 0){

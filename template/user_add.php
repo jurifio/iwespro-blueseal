@@ -64,20 +64,32 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group form-group-default required">
                                                         <label for="user_phone">Telefono</label>
                                                         <input id="user_phone" autocomplete="off" type="text" class="form-control" name="user_phone" value="" required="required" />
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group form-group-default required">
                                                         <label for="user_gender">Sesso</label>
                                                         <select id="user_gender" autocomplete="off" class="form-control" name="user_gender" required="required" >
                                                             <option value=""></option>
                                                             <option value="M">Maschile</option>
                                                             <option value="F">Femminile</option>
+                                                        </select>
+                                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group form-group-default required">
+                                                        <label for="user_entryPoint">Origine</label>
+                                                        <select id="user_entryPoint" autocomplete="off" class="form-control" name="user_entryPoint" required="required" >
+                                                            <option value=""></option>
+                                                            <?php foreach ($sources as $source): ?>
+                                                                    <option><?php echo $source ?></option>
+                                                            <?php endforeach; ?>
                                                         </select>
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>

@@ -163,8 +163,9 @@
 				searchable: true
 			},{
 				data: "shop",
-				orderable: true
-			},{
+				orderable: true,
+                searchable: true
+            },{
 				data: "colorGroup",
 				orderable: true,
 				searchable: true
@@ -179,14 +180,24 @@
 				searchable: false
 			},{
 				data: "brand",
-				orderable: true
+				orderable: true,
+                searchable: true
 			},{
 				data: "tag",
 				orderable: false,
 				searchable: true
 			},{
+			    data: "isOnSale",
+                orderable: true,
+                searchable: true
+            },{
+                data: "available",
+                orderable: true,
+                searchable: true
+            },{
 				data: "status",
-				orderable: true
+				orderable: true,
+                searchable: true
 			}
 		]
 	});
@@ -200,11 +211,15 @@
 				data: "shop",
 				searchable: true
 			},{
+				data: "brand",
+				searchable: true
+			},{
 				data: "itemno",
 				searchable: true
 			},{
 				data: "dummy",
-				searchable: true
+				searchable: false,
+				orderable: false
 			},{
 				data: "marketplaceAccountName",
 				searchable: true
@@ -741,6 +756,55 @@
 				orderable: true,
 				searchable: false
 			}, {
+				data: "payment",
+				orderable: true
+			}
+		]
+	});
+	tableSetup.order_user_list = $.extend({}, tableSetup.common, {
+		order: [[1, "desc"]],
+		columns: [
+			{
+				data: "id",
+				orderable: true
+			},{
+				data: "user",
+				orderable: true,
+				searchable: true
+			},{
+				data: "email",
+				orderable: true,
+				searchable: true
+			},{
+				data: "city",
+				orderable: true,
+				searchable: true
+			},{
+				data: "country",
+				orderable: true,
+				searchable: true
+			},{
+				data: "lastUpdate",
+				orderable: true
+			},{
+				data: "status",
+				orderable: true
+			},{
+				data: "brand",
+				orderable: true
+			},{
+				data: "shop",
+				orderable: true,
+				searchable: false
+			},{
+				data: "total",
+				orderable: true,
+				searchable: true
+			},{
+				data: "margine",
+				orderable: true,
+				searchable: false
+			},{
 				data: "payment",
 				orderable: true
 			}

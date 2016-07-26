@@ -212,6 +212,30 @@
                 "POST",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/ordini/utenti(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderByUserListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT"
+            ]
+        },{
+            "pattern": "/blueseal/ordini/inserisci(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderAddController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT"
+            ]
         },
         {
             "pattern": "/blueseal/prodotti(/)?",
