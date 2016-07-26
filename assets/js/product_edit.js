@@ -515,7 +515,6 @@ $(document).on('bs.details.model.category', function (e) {
 
 });
 
-
 $(document).on('bs.details.model.assign', function (e) {
     e.preventDefault();
     var bsModal = $('#bsModal');
@@ -619,7 +618,6 @@ $(document).on('bs.details.model.assign', function (e) {
                 } else {
                     sel[0].selectize.setValue(0, true);
                 }
-
                 bsModal.modal('hide');
             });
         });
@@ -628,7 +626,7 @@ $(document).on('bs.details.model.assign', function (e) {
 
 $(document).ready(function () {
     changeProductDataSheet = true;
-    autocompleteDetail();
+    //autocompleteDetail();
     $("#Product_dataSheet").on("change", function () {
         if (changeProductDataSheet) {
             $.ajax({
@@ -636,8 +634,9 @@ $(document).ready(function () {
                 url: "/blueseal/xhr/GetDataSheet",
                 data: {value: this.value}
             }).done(function ($content) {
+                $("#Product_dataSheet").selectize()[0].selectize.setValue($(".detailContent").data('prototype-id'), true);
                 $("#productDetails").html($content);
-                autocompleteDetail();
+                //autocompleteDetail();
 
                 $("#productDetails").find('select').each(function () {
                     var sel = $(this).selectize({

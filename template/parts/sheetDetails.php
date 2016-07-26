@@ -1,4 +1,4 @@
-<div class="col-md-12 selectContent" data-prototype-id="<?php echo $productSheetPrototype->id; ?>">
+<div class="col-md-12 detailContent" data-prototype-id="<?php echo $productSheetPrototype->id; ?>">
     <div class="tab-content bg-white">
         <?php foreach ($productSheetPrototype->productDetailLabel as $detaillabel): ?>
             <div class="col-md-6">
