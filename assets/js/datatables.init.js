@@ -757,6 +757,55 @@
 			}
 		]
 	});
+	tableSetup.order_user_list = $.extend({}, tableSetup.common, {
+		order: [[1, "desc"]],
+		columns: [
+			{
+				data: "id",
+				orderable: true
+			},{
+				data: "user",
+				orderable: true,
+				searchable: true
+			},{
+				data: "email",
+				orderable: true,
+				searchable: true
+			},{
+				data: "city",
+				orderable: true,
+				searchable: true
+			},{
+				data: "country",
+				orderable: true,
+				searchable: true
+			},{
+				data: "lastUpdate",
+				orderable: true
+			},{
+				data: "status",
+				orderable: true
+			},{
+				data: "brand",
+				orderable: true
+			},{
+				data: "shop",
+				orderable: true,
+				searchable: false
+			},{
+				data: "total",
+				orderable: true,
+				searchable: true
+			},{
+				data: "margine",
+				orderable: true,
+				searchable: false
+			},{
+				data: "payment",
+				orderable: true
+			}
+		]
+	});
 	tableSetup.brand_list = $.extend({}, tableSetup.common, {
 		order: [[0, "asc"]],
 		columns: [

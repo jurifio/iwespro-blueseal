@@ -57,15 +57,14 @@ class COrderByUserListAjaxController extends AAjaxController
         $em = $this->app->entityManagerFactory->create('Shop');
         $shops = $em->findAll("limit 999", "");
 
-        $datatable = new CDataTables('vBluesealOrders',['id'],$_GET);
+        $datatable = new CDataTables('vBluesealOrdersByUsersList', ['id'], $_GET);
 	    $datatable->addCondition('statusCode',['ORD_CANCEL'],true);
 	    $datatable->addSearchColumn('orderLineStatus');
 	    $datatable->addSearchColumn('shop');
 	    $datatable->addSearchColumn('product');
 	    $datatable->addSearchColumn('productBrand');
 	    $datatable->addSearchColumn('email');
-        //var_dump($datatable->getQuery());
-        //die();
+
         $orders = $this->app->repoFactory->create('Order')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
@@ -98,9 +97,9 @@ class COrderByUserListAjaxController extends AAjaxController
 	        /** ciclo le righe */
 	        $response['aaData'][$i]["content"] = "";
 	        $alert = false;
-	        foreach ($val->orderLine as $line) {
+	        /*foreach ($val->orderLine as $line) {
 		        try {
-			        /** @var CProductSku $sku */
+
 			        $sku = unserialize($line->frozenProduct);
 			        $sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
 
@@ -109,11 +108,9 @@ class COrderByUserListAjaxController extends AAjaxController
 		        } catch (\Exception $e) {
 			        $code = 'non trovato';
 		        }
-
 		        $response['aaData'][$i]["content"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - "  . $plainLineStatuses[$line->status] ."</span>";
 		        $response['aaData'][$i]["content"] .= "<br/>";
-	        }
-
+	        }*/
 
 	        $orderDate = date("D d-m-y H:i", strtotime($val->orderDate));
             $paidAmount = isset($val->paidAmount) ? $val->paidAmount : 0;
@@ -127,15 +124,35 @@ class COrderByUserListAjaxController extends AAjaxController
             $response['aaData'][$i]["id"] = '<a href="'.$opera.$val->id.'" >'.$val->id.'</a>';
 	        if($alert) $response['aaData'][$i]["id"].=" <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
 
-            $response['aaData'][$i]["orderDate"] = $orderDate;
+            $response['aaData'][$i]['email'] = $val->user->email;
+            \BlueSeal::dump($val->shipmentAddress);
+            $response['aaData'][$i]['city'] = ($sa = $val->shipmentAddressId) ?
+                $val->shipmentAddress->city : '-';
+            $response['aaData'][$i]['country'] = ($sa = $val->shipmentAddressId) ?
+                $val->shipmentAddress->country->name : '-';
+            $response['aaData'][$i]['orderStatus'] = $val->orderStatus->title;
+
+            $brands = [];
+            $shops = [];
+            $friendsRev = 0;
+            foreach($val->orderLine as $v) {
+                $product = $v->productSku->product;
+                $brands[] = $product->productBrand->name;
+                $shops[] = $v->shop->name;
+                $friendsRev += $v->friendRevenue;
+            }
+            $response['aaData'][$i]['brand'] = implode(', ', $brands);
+            $response['aaData'][$i]['shop'] = implode(', ', $shops);
+
+            $response['aaData'][$i]['margine'] = $val->netTotal - $friendsRev;
             $response['aaData'][$i]["lastUpdate"] = isset($since) ? $since : "Mai";
-            $response['aaData'][$i]["user"] = '<span>'.$val->userDetails->name." ".$val->userDetails->surname.'</span><br /><span>'.$val->user->email.'</span>';
+            $response['aaData'][$i]["user"] = '<span>'.$val->userDetails->name . " " . $val->userDetails->surname . '</span>';
             if(isset($val->rbacRole) && count($val->rbacRole)>0){
                 $response['aaData'][$i]["user"] .= ' <i class="fa fa-diamond"></i>';
             }
 
             $response['aaData'][$i]["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
-            $response['aaData'][$i]["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . number_format($val->netTotal, 2) . ' / ' . number_format($paidAmount, 2) . "</span>" : number_format($val->netTotal, 2) . ' / ' . number_format($paidAmount, 2);
+            $response['aaData'][$i]["total"] = $val->netTotal;
             $response['aaData'][$i]["payment"] = $val->orderPaymentMethod->name;
             $i++;
         }

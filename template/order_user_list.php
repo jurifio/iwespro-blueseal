@@ -24,19 +24,23 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped" data-column-filter="true" data-datatable-name="order_list"
-                               data-controller="OrderListAjaxController"
+                        <table class="table table-striped" data-column-filter="true" data-datatable-name="order_user_list"
+                               data-controller="OrderByUserListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable">
                             <thead>
                             <tr>
-                                <th>Ordine</th>
-                                <th>Data Ordine</th>
-                                <th>Ultimo Aggiornamento</th>
+                                <th>Id</th>
                                 <th>Utente</th>
-                                <th>Contenuto</th>
-                                <th>Stato</th>
-                                <th>Dovuto/Pagato</th>
-                                <th>Metodo Pagamento</th>
+                                <th>Email</th>
+                                <th>Città</th>
+                                <th>Paese</th>
+                                <th>Data Ordine</th>
+                                <th>Stato Ordine</th>
+                                <th>Brand</th>
+                                <th>Shop</th>
+                                <th>Importo Pagato</th>
+                                <th>Margine</th>
+                                <th>Metodo pagamento</th>
                             </tr>
                             </thead>
                             <tbody>
