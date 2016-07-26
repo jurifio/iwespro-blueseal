@@ -379,7 +379,7 @@ class CProductRouletteController extends CProductManageController
 					$dirtyProduct->productId = $productId;
 					$dirtyProduct->productVariantId = $variantId;
 					$dirtyProduct->dirtyStatus = 'K';
-					$this->app->repoFactory->create("DirtyProduct")->update($dirtyProduct);
+					$dirtyProduct->update();
 				} catch (\Exception $e) {
 					$this->app->router->response()->raiseUnauthorized();
 					return json_encode($e);
@@ -470,7 +470,7 @@ class CProductRouletteController extends CProductManageController
 				}
 			}
 
-			$this->app->repoFactory->create("Product")->update($productNew);
+			$productNew->update();
 
 			/** INIZIO INSERIMENTO CATEGORIA PRODOTTO */
 			if ($this->isValidInput('ProductCategory_id', $post)) {
@@ -521,7 +521,6 @@ class CProductRouletteController extends CProductManageController
 		$asd = $this->app->router->request()->getRequestData('dirtyProductId');
         $dirtyProduct = $this->app->repoFactory->create("DirtyProduct")->findOneBy(['id' => $asd]);
         $dirtyProduct->dirtyStatus = 'N';
-        return $this->app->repoFactory->create("DirtyProduct")->update($dirtyProduct);
-		return;
+        return $dirtyProduct->update();
 	}
 }

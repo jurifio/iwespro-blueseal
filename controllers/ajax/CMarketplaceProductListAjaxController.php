@@ -63,14 +63,20 @@ class CMarketplaceProductListAjaxController extends AAjaxController
 	        $response['data'][$i]["DT_RowId"] = $val->printId();
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $val->printId();
+            $response['data'][$i]['brand'] = $val->productBrand->name;
 	        $response['data'][$i]['shop'] = implode(', ',$shops);
 	        $response['data'][$i]['dummy'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
             $response['data'][$i]['itemno'] = '<span class="small">';
             $response['data'][$i]['itemno'] .= $val->itemno.' # '.$val->productVariant->name;
             $response['data'][$i]['itemno'] .= '</span>';
 
-	        $response['data'][$i]['marketplaceAccountName'] = 'tante cose';
+	        $marketplaces = [];
+	        foreach ($val->marketplaceAccountHasProduct as $mProduct) {
+	        	$style = $mProduct->isToWork == 0 ? ($mProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
+		        $marketplaces[] = '<span '.$style.'>'.$mProduct->marketplaceAccount->marketplace->name.' - '.$mProduct->marketplaceAccount->name.' ('.$mProduct->marketplaceProductId.')</span>';
+	        }
 
+	        $response['data'][$i]['marketplaceAccountName'] = implode('<br>',$marketplaces);
             $i++;
         }
 

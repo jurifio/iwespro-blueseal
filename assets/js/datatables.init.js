@@ -211,11 +211,15 @@
 				data: "shop",
 				searchable: true
 			},{
+				data: "brand",
+				searchable: true
+			},{
 				data: "itemno",
 				searchable: true
 			},{
 				data: "dummy",
-				searchable: true
+				searchable: false,
+				orderable: false
 			},{
 				data: "marketplaceAccountName",
 				searchable: true

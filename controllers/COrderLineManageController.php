@@ -54,7 +54,7 @@ class COrderLineManageController extends ARestrictedAccessRootController
 
                     $order = $this->app->repoFactory->create("Order")->findOneBy(['id' => $id]);
                     $order->status = $code;
-                    $this->app->repoFactory->create("Order")->update($order);
+	                $order->update();
 
                 } catch (\Exception $e) {
                     $this->app->router->response()->raiseUnauthorized();

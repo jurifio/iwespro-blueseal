@@ -212,6 +212,18 @@
                 "POST",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/ordini/inserisci(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderAddController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT"
+            ]
         },
         {
             "pattern": "/blueseal/prodotti(/)?",

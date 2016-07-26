@@ -54,7 +54,7 @@ class COrderManageController extends ARestrictedAccessRootController
                 if($this->request->getRequestData('orderId')) {
                     $order = $this->app->repoFactory->create("Order")->findOneBy(['id' => $this->request->getRequestData('orderId')]);
                     $order->status = $code;
-                    $this->app->repoFactory->create("Order")->update($order);
+	                $order->update();
                 }
             } catch (\Exception $e) {
             $this->app->router->response()->raiseUnauthorized();
