@@ -68,9 +68,6 @@ class CProductEditController extends CProductManageController
 		$em = $this->app->entityManagerFactory->create('ProductColorGroup');
 		$gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", []);
 
-        $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
-        $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');
-
 	    $em = $this->app->entityManagerFactory->create('Product', false);
 	    $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));
 
@@ -135,7 +132,6 @@ class CProductEditController extends CProductManageController
             'seasons' => $seasons,
             'sizesGroups' => $sizesGroups,
             'gruppicolore' => $gruppicolore,
-            'productSheets' => $productSheets,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
             'categories' => $cats,

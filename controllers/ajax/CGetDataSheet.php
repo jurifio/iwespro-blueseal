@@ -29,20 +29,19 @@ class CGetDataSheet extends AAjaxController
         $get = $this->app->router->request()->getRequestData();
 
         $code = (array_key_exists('code', $get)) ? $get['code'] : false;
-        $id = (array_key_exists('value', $get)) ? $get['value'] : false;
-        $idModel = (array_key_exists('idModel', $get)) ? $get['idModel'] : false;
+        $value = (array_key_exists('value', $get)) ? $get['value'] : false;
         $type = (array_key_exists('type', $get)) ? $get['type'] : false;
         $actual = [];
 
-        if ($type && ('model' == $type) && $idModel) {
-            $productSheetModelPrototype = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $idModel]);
+        if ($type && ('model' == $type)) {
+            $productSheetModelPrototype = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $value]);
             $productSheetPrototype = $productSheetModelPrototype->productSheetPrototype;
             $actual = $productSheetModelPrototype->productSheetModelActual;
-        } elseif ((!$type || ('model' != $type) || ('change' == $type)) && ($id)) {
-            $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['id' => $id]);
+        } elseif (!$type || ('model' != $type) || ('change' == $type)) {
             if ($code) {
                 list($id, $variantId) = explode('-', $code);
-                $actual = $this->app->repoFactory->create('ProductSheetActual')->findBy(['id' => $id, 'variantId' => $variantId]);
+                $productSheetPrototype = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId])->productSheetPrototype;
+                $actual = $this->app->repoFactory->create('ProductSheetActual')->findBy(['productId' => $id, 'productVariantId' => $variantId]);
             }
         }
 
@@ -51,7 +50,12 @@ class CGetDataSheet extends AAjaxController
             $resActual[$v->productDetailLabelId] = $v->productDetailId;
         }
 
+        $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
+        $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');
+
+
         return $view->render([
+            'productSheets' => $productSheets,
             'productSheetPrototype' => $productSheetPrototype,
             'actual' => $resActual,
         ]);

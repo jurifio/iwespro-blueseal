@@ -169,29 +169,29 @@ $(document).on('bs.print.aztec', function (e, element, button) {
     window.open('/blueseal/print/azteccode?' + getVars, 'aztec-print');
 });
 
-var autocompleteDetail = function () {
+/*var autocompleteDetail = function () {
 
-    $.each($('select[id^="ProductDetail_"]'), function () {
-        var me = $(this);
-        me.autocomplete({
-            source: function (request, response) {
-                var asd = $(this)[0].element[0].id;
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: "/blueseal/xhr/GetAutocompleteData",
-                    data: {value: asd}
-                }).done(function (content) {
-                    var source = content.split(",");
-                    var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
-                    response($.grep(source, function (item) {
-                        return matcher.test(item);
-                    }));
-                });
-            }
-        });
-    });
-};
+ $.each($('select[id^="ProductDetail_"]'), function () {
+ var me = $(this);
+ me.autocomplete({
+ source: function (request, response) {
+ var asd = $(this)[0].element[0].id;
+ $.ajax({
+ type: "GET",
+ async: false,
+ url: "/blueseal/xhr/GetAutocompleteData",
+ data: {value: asd}
+ }).done(function (content) {
+ var source = content.split(",");
+ var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
+ response($.grep(source, function (item) {
+ return matcher.test(item);
+ }));
+ });
+ }
+ });
+ });
+ };*/
 
 if (window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
     try {
@@ -598,7 +598,6 @@ $(document).on('bs.details.model.assign', function (e) {
         }).done(function ($content) {
 
             $("#productDetails").html($content);
-            autocompleteDetail();
 
             changeProductDataSheet = false;
             var dataSheet = $('.selectContent').data('prototype-id');
@@ -624,37 +623,56 @@ $(document).on('bs.details.model.assign', function (e) {
     });
 });
 
-$(document).ready(function () {
-    changeProductDataSheet = true;
-    //autocompleteDetail();
-    $("#Product_dataSheet").on("change", function () {
-        if (changeProductDataSheet) {
-            $.ajax({
-                type: "GET",
-                url: "/blueseal/xhr/GetDataSheet",
-                data: {value: this.value}
-            }).done(function ($content) {
-                $("#Product_dataSheet").selectize()[0].selectize.setValue($(".detailContent").data('prototype-id'), true);
-                $("#productDetails").html($content);
-                //autocompleteDetail();
+(function ($) {
+    $.fn.selectDetails = function (value, type) {
+        var prototypeId = 0;
+        type = (type) ? type : '';
+        value = (value) ? value : '';
+        var self = this;
+        $.ajax({
+            type: "GET",
+            url: "/blueseal/xhr/GetDataSheet",
+            data: {
+                idModel: value,
+                type: type,
+                code: $('.product-code').html()
+            }
+        }).done(function ($content) {
+            $(self).html($content);
 
-                $("#productDetails").find('select').each(function () {
-                    var sel = $(this).selectize({
-                        valueField: 'id',
-                        labelField: 'item',
-                        searchField: ['item'],
-                        options: window.detailsStorage
-                    });
-                    var initVal = $(this).data('init-selection');
-                    if (initVal != 'undefined' && initVal.length != 0) {
-                        sel[0].selectize.setValue(initVal, true);
-                    } else {
-                        sel[0].selectize.setValue(0, true);
-                    }
+            $(self).find(".detailContent").each(function () {
+                var prototypeId = $(this).data('prototype-id');
+            });
+            $(self).find(".Product_dataSheet").each(function () {
+                $(this).selectize()[0].selectize.setValue(prototypeId, true);
+                $(this).on("change", function() {
+                    $(self).selectDetails($(this).find("option:selected").val(), 'sheet');
                 });
             });
-        }
-    });
+
+            $(self).find(".productDetails select").each(function () {
+                var sel = $(this).selectize({
+                    valueField: 'id',
+                    labelField: 'item',
+                    searchField: ['item'],
+                    options: window.detailsStorage
+                });
+                var initVal = $(this).data('init-selection');
+                if (initVal != 'undefined' && initVal.length != 0) {
+                    sel[0].selectize.setValue(initVal, true);
+                } else {
+                    sel[0].selectize.setValue(0, true);
+                }
+            });
+        });
+    }
+})(jQuery);
+
+$(document).ready(function () {
+    changeProductDataSheet = true;
+
+    $('#main-details').selectDetails();
+
 
     var tagNames = $("#Tag_names");
     if (tagNames.length) {
@@ -760,5 +778,4 @@ $(document).ready(function () {
         }
     });
     $('#ProductName_1_name').selectize()[0].selectize.setValue($("#ProductName_1_name").data('preset-name'));
-
 });
