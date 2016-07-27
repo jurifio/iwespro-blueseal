@@ -219,11 +219,11 @@ class CDataTables
                         $search['cols'][] = "`" . $column['name']."` RLIKE ?";
                         $search['params'][] = $this->search;
                     }
-                    if((!empty($column['search'])) || (0 == $column['filter'])){
+                    if($column['search']){
 	                    $search['cols'][] = "`" . $column['name']."` RLIKE ?";
 	                    $search['params'][] = $this->search;
                     }
-	                if((!empty($column['filter'])) || (0 == $column['filter'])) {
+	                if(array_key_exists('filter', $column) && ($column['filter'] || ("0" === $column['filter']))) {
                         $not = (0 === strpos($column['filter'], '-')) ? true : false;
 		                $columnsFilter['cols'][] = ($not) ? "`" . $column['name'] . "` NOT LIKE ? " : "`" . $column['name'] . "` RLIKE ? ";
 		                $columnsFilter['params'][] = ($not) ? '%' . substr($column['filter'], 1) . '%' : $this->likeSearch($column['filter']);
