@@ -25,7 +25,6 @@ class CGetDataSheet extends AAjaxController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/parts/sheetDetails.php');
 
-
         $get = $this->app->router->request()->getRequestData();
 
         $code = (array_key_exists('code', $get)) ? $get['code'] : false;
@@ -37,13 +36,15 @@ class CGetDataSheet extends AAjaxController
             $productSheetModelPrototype = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $value]);
             $productSheetPrototype = $productSheetModelPrototype->productSheetPrototype;
             $actual = $productSheetModelPrototype->productSheetModelActual;
-        } elseif (!$type || ('model' != $type) || ('change' == $type)) {
-            if ($code) {
-                list($id, $variantId) = explode('-', $code);
-                $productSheetPrototype = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId])->productSheetPrototype;
-                $actual = $this->app->repoFactory->create('ProductSheetActual')->findBy(['productId' => $id, 'productVariantId' => $variantId]);
-            }
+        } elseif ('change' == $type) {
+            $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['id' => $value]);
+            $actual = [];
+        } else {
+            list($id, $variantId) = explode('-', $code);
+            $productSheetPrototype = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId])->productSheetPrototype;
+            $actual = $this->app->repoFactory->create('ProductSheetActual')->findBy(['productId' => $id, 'productVariantId' => $variantId]);
         }
+
 
         $resActual = [];
         foreach($actual as $v) {
@@ -52,7 +53,6 @@ class CGetDataSheet extends AAjaxController
 
         $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
         $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');
-
 
         return $view->render([
             'productSheets' => $productSheets,

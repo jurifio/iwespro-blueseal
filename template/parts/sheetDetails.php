@@ -1,11 +1,10 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 detailContent" data-prototype-id="<?php echo $productSheetPrototype->id; ?>">
         <div class="form-group form-group-default selectize-enabled">
             <label for="Product_dataSheet">Tipo scheda prodotto</label>
-            <select class="full-width selectpicker"
+            <select class="full-width selectpicker Product_dataSheet"
                     placeholder="Seleziona una scheda prodotto"
                     data-init-plugin="selectize" title="" name="Product_dataSheet"
-                    class="Product_dataSheet"
             >
                 <option></option>
                 <?php foreach ($productSheets as $productSheet): ?>
@@ -15,8 +14,8 @@
         </div>
     </div>
 </div>
-<div class="row" class="productDetails">
-    <div class="col-md-12 detailContent" data-prototype-id="<?php echo $productSheetPrototype->id; ?>">
+<div class="row productDetails">
+    <div class="col-md-12">
         <div class="tab-content bg-white">
             <?php foreach ($productSheetPrototype->productDetailLabel as $detaillabel): ?>
                 <div class="col-md-6">

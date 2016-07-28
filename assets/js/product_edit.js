@@ -169,61 +169,7 @@ $(document).on('bs.print.aztec', function (e, element, button) {
     window.open('/blueseal/print/azteccode?' + getVars, 'aztec-print');
 });
 
-/*var autocompleteDetail = function () {
 
- $.each($('select[id^="ProductDetail_"]'), function () {
- var me = $(this);
- me.autocomplete({
- source: function (request, response) {
- var asd = $(this)[0].element[0].id;
- $.ajax({
- type: "GET",
- async: false,
- url: "/blueseal/xhr/GetAutocompleteData",
- data: {value: asd}
- }).done(function (content) {
- var source = content.split(",");
- var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
- response($.grep(source, function (item) {
- return matcher.test(item);
- }));
- });
- }
- });
- });
- };*/
-
-if (window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
-    try {
-        window.detailsStorage = [];
-        var temp = JSON.parse($("#productDetailsStorage").html());
-        $.each(temp, function (k, v) {
-            window.detailsStorage.push({
-                item: v,
-                id: k
-            });
-        });
-        window.detailsStorage.push({
-            item: '-',
-            id: 0
-        });
-    } catch (e) {
-
-    }
-}
-
-$("#productDetails").find('select').each(function () {
-    var sel = $(this).selectize({
-        valueField: 'id',
-        labelField: 'item',
-        searchField: ['item'],
-        options: window.detailsStorage
-    });
-    var initVal = $(this).data('init-selection');
-    if (initVal != 'undefined' && initVal.length != 0) {
-        sel[0].selectize.setValue(initVal, true);
-    }
-});
 
 //Cancellazione campi dettagli
 
@@ -302,13 +248,11 @@ $(document).on('bs.details.model.add', function (e) {
         '<input type="text" name="modelName" id="modelName" class="form-control" />' +
         '<!--<select type="text" class="form-control new-dett-ita" name="modelCats" id="newDetModel" ></select>-->' +
         '</div></form>' +
-        '<div class="editDetailsModal">' +
-        '<select class="form-controll" id="Product_dataSheet_Modal"></select>' +
-        '<div id="productDetailsModal"></div>' +
-        '</div>' //editDetailsModal
+        '<div id="addModelDetails" style="height: 400px; overflow-y: auto; overflow-x: hidden;"></div>'//editDetailsModal
     );
 
-    $("#productDetailsModal").html($('#productDetails').html());
+    $('#addModelDetails').selectDetails();
+
     cancelButton.html("Annulla").off().on('click', function () {
         bsModal.hide();
     });
@@ -331,7 +275,7 @@ $(document).on('bs.details.model.add', function (e) {
             'modelName': modelName,
             'productPrototypeId': productPrototypeId,
         };
-        $("#productDetails").find('select').each(function () {
+        $("#addModelDetails").find('select').each(function () {
             id = $(this).attr('id');
             idLabel = id.split('_')[2];
             data['productDetails_' + idLabel] = $('#' + id + ' option:selected').val();
@@ -512,7 +456,6 @@ $(document).on('bs.details.model.category', function (e) {
         });
     });
     bsModal.modal();
-
 });
 
 $(document).on('bs.details.model.assign', function (e) {
@@ -553,7 +496,7 @@ $(document).on('bs.details.model.assign', function (e) {
             render: {
                 option: function (item, escape) {
                     var origin = "";
-                    if ("code" == item.origin) origin = ' <span class="small"> (da una categoria del prodotto) </span>';
+                    if ("code" == item.origin) origin = ' <span class="small"> (da una categoria del prodotto)</span>';
                     //else if ("model" == item.origin) origin = ' <span class="small"> (dal prodotto) </span>';
                     return '<div>' +
                         escape(item.name) + origin +
@@ -633,21 +576,19 @@ $(document).on('bs.details.model.assign', function (e) {
             type: "GET",
             url: "/blueseal/xhr/GetDataSheet",
             data: {
-                idModel: value,
+                value: value,
                 type: type,
                 code: $('.product-code').html()
             }
         }).done(function ($content) {
             $(self).html($content);
+            prototypeId = $(self).find(".detailContent").data('prototype-id');
+            var productDataSheet = $(self).find(".Product_dataSheet");
+            var selPDS = $(productDataSheet).selectize();
+            selPDS[0].selectize.setValue(prototypeId, true);
 
-            $(self).find(".detailContent").each(function () {
-                var prototypeId = $(this).data('prototype-id');
-            });
-            $(self).find(".Product_dataSheet").each(function () {
-                $(this).selectize()[0].selectize.setValue(prototypeId, true);
-                $(this).on("change", function() {
-                    $(self).selectDetails($(this).find("option:selected").val(), 'sheet');
-                });
+            productDataSheet.on("change", function () {
+                $(self).selectDetails($(this).find("option:selected").val(), 'change');
             });
 
             $(self).find(".productDetails select").each(function () {
@@ -669,6 +610,26 @@ $(document).on('bs.details.model.assign', function (e) {
 })(jQuery);
 
 $(document).ready(function () {
+
+    if (window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
+        try {
+            window.detailsStorage = [];
+            var temp = JSON.parse($("#productDetailsStorage").html());
+            $.each(temp, function (k, v) {
+                window.detailsStorage.push({
+                    item: v,
+                    id: k
+                });
+            });
+            window.detailsStorage.push({
+                item: '-',
+                id: 0
+            });
+        } catch (e) {
+
+        }
+    }
+
     changeProductDataSheet = true;
 
     $('#main-details').selectDetails();
