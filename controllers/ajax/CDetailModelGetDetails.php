@@ -24,22 +24,36 @@ class CDetailModelGetDetails extends AAjaxController
         $names = [];
         $namesCount = 0;
 
-        if ($code) {
-            list($id, $variantId) = explode('-', $code);
-            $cats = $this->app->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
+        if ($modelId) {
+            $details = [];
+            $modelRes = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $modelId]);
+            $details['id'] = $modelRes->id;
+            $details['prototype'] = $modelRes->productSheetPrototypeId;
+            $modelDetails = $modelRes->productSheetModelActual;
+            //$modelDetails = $this->app->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $modelRes->id]);
+            foreach ($modelDetails as $v) {
+                $details[$v->productDetailLabelId] = [];
+                $details[$v->productDetailLabelId]['labelName'] = $this->app->repoFactory->create('ProductDetailLabelTranslation')->findOneBy(['langId' => 1, 'productDetailLabelId' => $v->productDetailLabelId]);
+                $details[$v->productDetailLabelId]['detailId'] = $v->productDetailId;
+            }
+            $res = $details;
+        } else {
 
-            foreach ($cats as $v) {
-                $names[$namesCount] = [];
-                $psmp = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productCategoryId' => $v->id]);
-                if ($psmp) {
-                    \BlueSeal::dump($psmp);
-                    $names[$namesCount]['id'] = $psmp->productSheetModelPrototypeId;
-                    $names[$namesCount]['name'] = $psmp->productSheetModelPrototype->name;
-                    $names[$namesCount]['origin'] = 'code';
-                    $namesCount++;
+            if ($code) {
+                list($id, $variantId) = explode('-', $code);
+                $cats = $this->app->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
+
+                foreach ($cats as $v) {
+                    $names[$namesCount] = [];
+                    $psmp = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productCategoryId' => $v->id]);
+                    if ($psmp) {
+                        $names[$namesCount]['id'] = $psmp->productSheetModelPrototypeId;
+                        $names[$namesCount]['name'] = $psmp->productSheetModelPrototype->name;
+                        $names[$namesCount]['origin'] = 'code';
+                        $namesCount++;
+                    }
                 }
             }
-
             if ($search) {
                 $searchRes = $this->app->dbAdapter->query("SELECT * FROM ProductSheetModelPrototype WHERE `name` LIKE ?", ['%' . trim($search) . '%'])->fetchAll();
                 foreach ($searchRes as $v) {
@@ -53,19 +67,6 @@ class CDetailModelGetDetails extends AAjaxController
                 }
             }
             $res = $names;
-        } elseif ($modelId) {
-            $details = [];
-            $modelRes = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $modelId]);
-            $details['id'] = $modelRes->id;
-            $details['prototype'] = $modelRes->productSheetPrototypeId;
-            $modelDetails = $modelRes->productSheetModelActual;
-            //$modelDetails = $this->app->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $modelRes->id]);
-            foreach($modelDetails as $v) {
-                $details[$v->productDetailLabelId] = [];
-                $details[$v->productDetailLabelId]['labelName'] = $this->app->repoFactory->create('ProductDetailLabelTranslation')->findOneBy(['langId' => 1, 'productDetailLabelId' => $v->productDetailLabelId]);
-                $details[$v->productDetailLabelId]['detailId'] = $v->productDetailId;
-            }
-            $res = $details;
         }
         return json_encode($res);
     }

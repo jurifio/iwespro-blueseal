@@ -251,62 +251,7 @@
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Scheda prodotto e dettagli</h5>
                                 </div>
-                                <div class="panel-body clearfix">
-                                    <script type="text/javascript">
-                                        
-                                    </script>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="Product_dataSheet">Tipo scheda prodotto</label>
-                                                <select class="full-width selectpicker"
-                                                        placeholder="Seleziona una scheda prodotto"
-                                                        data-init-plugin="selectize" title="" name="Product_dataSheet"
-                                                        id="Product_dataSheet">
-                                                    <option></option>
-                                                    <?php foreach ($productSheets as $productSheet): ?>
-                                                        <option value="<?php echo $productSheet->id ?>" <?php if (isset($productEdit))  {
-                                                            if ($productSheet->id == $productEdit->productSheetPrototypeId) echo "selected";
-                                                        } ?>> <?php echo $productSheet->name ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div style="display:none" id="productDetailsStorage"><?php echo (isset($productDetails)) ? json_encode($productDetails) : ''; ?></div>
-                                    <div class="row" id="productDetails">
-                                        <div class="col-md-12">
-                                            <?php if (isset($productEdit) && !is_null($productEdit->productSheetPrototype) && !empty($productEdit->productSheetActual)): ?>
-                                                <div class="tab-content bg-white">
-                                                    <?php foreach ($productEdit->productSheetPrototype->productDetailLabel as $detaillabel): ?>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group form-group-default selectize-enabled">
-                                                                <label for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>
-                                                                <?php if (isset($productEdit) && !is_null($productEdit->productSheetActual)) {
-                                                                    $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $detaillabel->id);
-                                                                    $detailValueId = 0;
-                                                                    if ($actual) {
-                                                                        $detailValueId = $actual->productDetail->id;                                                                        
-                                                                    }
-                                                                }
-                                                                ?>
-                                                                <select class="full-width"
-                                                                        data-init-plugin = "selectize"
-                                                                        data-init-selection = "<?php echo $detailValueId; ?>"
-                                                                        id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
-                                                                        name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
-                                                                >
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <?php unset($detailValue); endforeach; ?>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-
+                                <div class="panel-body clearfix" id="main-details">
                                 </div>
                             </div>
                         </div>
@@ -437,6 +382,16 @@
             data-icon="fa-plus-square"
             data-permission="/admin/product/edit"
             data-event="bs.det.add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi un nuovo dettaglio"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-files-o"
+            data-permission="/admin/product/edit"
+            data-event="bs.details.model.assign"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Aggiungi un nuovo dettaglio"

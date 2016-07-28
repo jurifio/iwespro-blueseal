@@ -40,9 +40,14 @@ class CGetDataSheet extends AAjaxController
             $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['id' => $value]);
             $actual = [];
         } else {
-            list($id, $variantId) = explode('-', $code);
-            $productSheetPrototype = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId])->productSheetPrototype;
-            $actual = $this->app->repoFactory->create('ProductSheetActual')->findBy(['productId' => $id, 'productVariantId' => $variantId]);
+            if ($code) {
+                list($id, $variantId) = explode('-', $code);
+                $productSheetPrototype = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId])->productSheetPrototype;
+                $actual = $this->app->repoFactory->create('ProductSheetActual')->findBy(['productId' => $id, 'productVariantId' => $variantId]);
+            } else {
+                $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
+                $actual = [];
+            }
         }
 
 
