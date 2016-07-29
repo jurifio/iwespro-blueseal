@@ -6,6 +6,7 @@
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
+<div style="display:none" id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>
 <?php include "parts/sidebar.php"; ?>
 <div class="page-container">
     <?php include "parts/header.php" ?>

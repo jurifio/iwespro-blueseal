@@ -108,7 +108,7 @@ class CFriendProductEditController extends CProductManageController
         //$this->app->vendorLibraries->load("aztec");
         $qrMessage = $productEdit->getAztecCode();
         $qrMessage = base64_encode($qrMessage);
-
+        */
         $productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
         $productDetails = [];
 
@@ -120,7 +120,7 @@ class CFriendProductEditController extends CProductManageController
             }
         }
         unset($productDetailsCollection);
-        */
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
@@ -135,7 +135,8 @@ class CFriendProductEditController extends CProductManageController
             'gruppicolore' => $gruppicolore,
             'productSheets' => $productSheets,
             'tags' => $tag,
-            'sortingOptions' => $sortingOptions
+            'sortingOptions' => $sortingOptions,
+            'productDetails' => $productDetails
         ]);
         /*
         'dummyUrl' => $dummyUrl,

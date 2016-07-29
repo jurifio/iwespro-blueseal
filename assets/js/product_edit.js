@@ -534,9 +534,8 @@ $(document).on('bs.details.model.assign', function (e) {
             type: "GET",
             url: "/blueseal/xhr/GetDataSheet",
             data: {
-                idModel: $('#modelAssign option:selected').val(),
-                type: 'model',
-                code: $('.product-code').html()
+                value: $('#modelAssign option:selected').val(),
+                type: 'model'
             }
         }).done(function ($content) {
 
