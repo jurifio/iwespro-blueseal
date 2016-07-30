@@ -39,7 +39,8 @@ $(document).on('bs.product.edit', function (e, element, button) {
     $.ajaxForm({
         type: "PUT",
         url: "#",
-        formAutofill: true
+        formAutofill: true,
+        parentElement: 'document'
     }, new FormData()).done(function (content) {
         body.html("Salvataggio riuscito");
         bsModal.modal();

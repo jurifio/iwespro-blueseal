@@ -29,26 +29,30 @@ $(document).on('bs.product.edit', function (e, element, button) {
     var cancelButton = $('.modal-footer .btn-default');
     var okButton = $('.modal-footer .btn-success');
 
-    header.html('Modifica Prodotto');
-    okButton.html('Fatto').off().on('click', function () {
+    header.html('Salvataggio Prodotto');
+    okButton.html('Ok').off().on('click', function () {
         bsModal.modal('hide');
         okButton.off();
     });
     cancelButton.remove();
 
-    $.ajaxForm({
-        type: "PUT",
-        url: "#",
-        formAutofill: true
-    }, new FormData()).done(function (content) {
-        body.html("Salvataggio riuscito");
-        bsModal.modal();
-        var ids = $.parseJSON(content);
-        window.location.replace("/blueseal/prodotti/modifica?id=" + ids.id + "&productVariantId=" + ids.productVariantId);
-    }).fail(function () {
-        body.html("Errore grave");
-        bsModal.modal();
-    });
+    var type = '';
+    if ($('.product-code').length) {
+        type = 'PUT';
+    } else {
+        type = 'POST';
+    }
+    $(document).ajaxForm({
+            type: type,
+            url: "#",
+            formAutofill: true
+        },
+        new FormData(),
+        function(res){
+            body.html(res);
+        }
+    );
+    bsModal.modal();
 
 });
 

@@ -53,7 +53,7 @@
                                        <?php
                                        if (isset($productEdit) && !is_null($productEdit)):
                                        ?>
-                                        <a href="<?php echo $app->productUrl($productEdit); ?>"><?php echo $productEdit->id . '-' . $productEdit->productVariantId; ?></a>
+                                        <a class="product-code" href="<?php echo $app->productUrl($productEdit); ?>"><?php echo $productEdit->id . '-' . $productEdit->productVariantId; ?></a>
                                         - Informazioni di base
                                         <?php endif; ?>
                                     </h5>
@@ -83,8 +83,8 @@
                                             <div class="row">
                                                 <div class="col-md-8">
                                                     <div class="form-group form-group-default required">
-                                                        <label for="ooo">CPF</label>
-                                                        <input autocomplete="off" type="text" id="ooo"
+                                                        <label for="Product_itemno">CPF</label>
+                                                        <input autocomplete="off" type="text" id="Product_itemno"
                                                                class="form-control" name="Product_itemno"
                                                                value="<?php echo (isset($productEdit) && isset($productEdit->itemno)) ? $productEdit->itemno : '' ?>"
                                                                required>
@@ -105,7 +105,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
-                                                        <label for="Shop">Shop</label>
+                                                        <label for="Shop_id">Shop</label>
                                                         <select class="full-width"
                                                                 placeholder="Seleziona il proprietario"
                                                                 data-init-plugin="selectize" title="" name="Shop_id"
