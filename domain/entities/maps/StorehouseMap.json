@@ -1,0 +1,16 @@
+{
+    "entity": {
+        "name": "Storehouse",
+        "keys": ["id","shopId"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name": "storehouseOperation",
+                "entity": "StorehouseOperation",
+                "parentKeys": ["id","shopId"],
+                "childKeys": ["shopId","storehouseId"],
+                "type": "OneToMany"
+            }
+        ]
+    }
+}
