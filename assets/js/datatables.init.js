@@ -215,7 +215,8 @@
 				searchable: true
 			},{
 				data: "stock",
-				searchable: false
+				searchable: false,
+				orderable: false
 			},{
 				data: "season",
 				searchable: true
