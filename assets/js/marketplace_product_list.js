@@ -71,6 +71,47 @@ $(document).on('bs.product.publish', function (e, element, button) {
 	bsModal.modal();
 });
 
+$(document).on('bs.product.response', function () {
+
+	var bsModal = $('#bsModal');
+	var header = $('.modal-header h4');
+	var body = $('.modal-body');
+	var cancelButton = $('.modal-footer .btn-default');
+	cancelButton.hide();
+	var okButton = $('.modal-footer .btn-success');
+
+	header.html('Risposta Marketplaces');
+
+	var getVarsArray = [];
+	var selectedRows = $('.table').DataTable().rows('.selected').data();
+	var selectedRowsCount = selectedRows.length;
+
+	if (selectedRowsCount != 1) {
+		new Alert({
+			type: "warning",
+			message: "Devi selezionare un Prodotto"
+		}).open();
+		return false;
+	}
+
+	$.each(selectedRows, function (k, v) {
+		getVarsArray.push(v.DT_RowId);
+	});
+
+	Pace.ignore(function () {
+		$.ajax({
+			url: '/blueseal/xhr/MarketplaceProductResponse',
+			type: "get",
+			data: {
+				rows: getVarsArray
+			}
+		}).done(function (res) {
+			body.html(res);
+			bsModal.modal();
+		});
+	});
+});
+
 $(document).on('change','#accountId',function() {
 	window.x = $(this);
 	$('#modifier').val($(this).find(':selected').data('modifier'));
