@@ -72,7 +72,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-file-code-o"
+            data-icon="fa-repeat"
             data-permission="/admin/product/edit"
             data-event="bs.product.retry"
             data-class="btn btn-default"
