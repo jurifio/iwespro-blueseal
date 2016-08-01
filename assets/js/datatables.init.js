@@ -214,6 +214,12 @@
 				data: "brand",
 				searchable: true
 			},{
+				data: "stock",
+				searchable: false
+			},{
+				data: "season",
+				searchable: true
+			},{
 				data: "itemno",
 				searchable: true
 			},{

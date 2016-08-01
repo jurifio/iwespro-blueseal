@@ -27,6 +27,8 @@
                                     <th class="center">Codice</th>
                                     <th class="center">Shop</th>
                                     <th class="center">Brand</th>
+                                    <th class="center">Stock</th>
+                                    <th class="center">Season</th>
                                     <th class="center">CPF</th>
                                     <th class="center">Immagine</th>
                                     <th class="center">Marketplaces</th>
