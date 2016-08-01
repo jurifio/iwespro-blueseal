@@ -79,7 +79,7 @@ $(document).on('bs.product.response', function () {
 	var cancelButton = $('.modal-footer .btn-default');
 	cancelButton.hide();
 	var okButton = $('.modal-footer .btn-success');
-
+	okButton.html('Ok');
 	header.html('Risposta Marketplaces');
 
 	var getVarsArray = [];

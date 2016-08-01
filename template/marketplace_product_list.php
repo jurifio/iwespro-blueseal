@@ -59,6 +59,17 @@
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-file-code-o"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.response"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Leggi Stato"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
