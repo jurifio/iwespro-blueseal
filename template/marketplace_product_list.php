@@ -70,6 +70,17 @@
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-file-code-o"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.retry"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Riprova Inserimento"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
