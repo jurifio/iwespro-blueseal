@@ -32,6 +32,7 @@
                                     <th class="center">Dettagli</th>
                                     <!--<th class="center">Immagine </th>-->
                                     <th class="center">Brand</th>
+                                    <th class="center">Priorità</th>
                                     <th class="center">Tags</th>
                                     <th class="center">Qt.</th>
                                     <th class="center">SCA</th>

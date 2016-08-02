@@ -183,6 +183,10 @@
 				orderable: true,
                 searchable: true
 			},{
+				data: "priority",
+				orderable: true,
+				searchable: true
+			},{
 				data: "tag",
 				orderable: false,
 				searchable: true
