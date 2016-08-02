@@ -63,6 +63,16 @@
             data-title="Tagga prodotti"
             data-placement="bottom"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-sort-numeric-asc"
+                data-permission="/admin/product/edit"
+                data-event="bs.priority.edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Priorità"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
