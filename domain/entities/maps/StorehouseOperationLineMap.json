@@ -1,0 +1,22 @@
+{
+    "entity": {
+        "name": "StorehouseOperationLineMap",
+        "keys": ["id","storehouseId","shopId","productId","productVariantId","productSizeId"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name": "storehouseOperation",
+                "entity": "StorehouseOperation",
+                "parentKeys": ["storehouseOperationId","shopId","storehouseId"],
+                "childKeys": ["id","shopId","storehouseId"],
+                "type": "OneToOne"
+            },{
+                "name": "productSku",
+                "entity": "ProductSku",
+                "parentKeys": ["productId","productVariantId", "productSizeId", "shopId"],
+                "childKeys": ["productId","productVariantId", "productSizeId", "shopId"],
+                "type": "OneToOne"
+            }
+        ]
+    }
+}

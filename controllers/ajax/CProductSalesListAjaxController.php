@@ -198,9 +198,9 @@ class CProductSalesListAjaxController extends AAjaxController
                 $response['aaData'][$i]["percentage"] .= ($res[0]['sale']) ? floor(100 - 100 / ($res[0]['price'] / $res[0]['sale'])) . '%' . "<br />" : '-';
                 $response['aaData'][$i]["shops"] .= $v['shop'] . "<br />";
                 $response['aaData'][$i]['isOnSale'] = '<span class="small">' . $v['isOnSale'] . '</span>';
-                $response['aaData'][$i]["friendRevenue"] .= $this->formatPrice( $friendRevenue ) . " | " . $shopRepo->currentSeasonMultiplier . $friendMargin . "<br />";
-                $response['aaData'][$i]["friendSaleRevenue"] .= $this->formatPrice( $friendSaleRevenue ) . " | " . $shopRepo->saleMultiplier. $friendSaleMargin . "<br />";
-                $response['aaData'][$i]["friendPreRevenue"] .= $this->formatPrice( $pastSeasonRevenue ) . " | " . $shopRepo->pastSeasonMultiplier . $friendPastMargin . "<br />";
+                $response['aaData'][$i]["friendRevenue"] .= (isset($friendRevenue)) ? $this->formatPrice( $friendRevenue ) . " | " . $shopRepo->currentSeasonMultiplier . $friendMargin . "<br />" : "-<br />";
+                $response['aaData'][$i]["friendSaleRevenue"] .= (isset($friendSaleRevenue)) ? $this->formatPrice( $friendSaleRevenue ) . " | " . $shopRepo->saleMultiplier. $friendSaleMargin . "<br />" : "-<br />";
+                $response['aaData'][$i]["friendPreRevenue"] .= (isset($pastSeasonRevenue)) ? $this->formatPrice( $pastSeasonRevenue ) . " | " . $shopRepo->pastSeasonMultiplier . $friendPastMargin . "<br />" : "-<br />";
             }
 
             $response['aaData'][$i]["price"] .= '</span>';
@@ -211,12 +211,6 @@ class CProductSalesListAjaxController extends AAjaxController
             $response['aaData'][$i]["friendSaleRevenue"] .= '</span>';
             $response['aaData'][$i]["friendPreRevenue"] .= '</span>';
 
-            /*
-            $response['aaData'][$i]["price"] = isset($res[0]) ? $res[0]['price'] : 0;
-            $response['aaData'][$i]["sale"] = isset($res[0]) && ($res[0]['isOnSale']) ? $res[0]['sale'] : 0;
-            $response['aaData'][$i]["percentage"] = ($response['aaData'][$i]["sale"]) ? floor($res[0]['sale'] / ($res[0]['price'] / 100)) : '-';
-            $response['aaData'][$i]["shops"] = isset($res[0]) ? $res[0]['shops'] : 0;
-            */
             $i++;
         }
         return json_encode($response);

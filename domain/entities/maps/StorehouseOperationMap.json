@@ -1,0 +1,22 @@
+{
+    "entity": {
+        "name": "StorehouseOperationMap",
+        "keys": ["id","storehouseId","shopId"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name": "storehouseOperationLine",
+                "entity": "StorehouseOperationLine",
+                "parentKeys": ["id","storehouseId","shopId"],
+                "childKeys": ["storehouseOperationId","storehouseId","shopId"],
+                "type": "OneToMany"
+            },{
+                "name": "storehouseOperationCause",
+                "entity": "StorehouseOperationCause",
+                "parentKeys": ["storehouseOperationCauseId"],
+                "childKeys": ["id"],
+                "type": "OneToOne"
+            }
+        ]
+    }
+}

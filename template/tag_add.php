@@ -52,7 +52,7 @@
                                                         required="required" >
                                                     <?php foreach ($sortingPriority as $val): ?>
                                                         <option value="<?php echo $val->id ?>" >
-                                                            <?php echo $val->priority . "" ?></option>
+                                                            <?php echo "(".$val->id.") ".$val->priority . "" ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>

@@ -51,7 +51,7 @@
                                                     <?php foreach ($sortingPriority as $val): ?>
                                                         <option value="<?php echo $val->id ?>" required
                                                                 <?php echo ($val->id == $tag->sortingPriorityId) ? 'selected="selected"' : ""; ?> >
-                                                            <?php echo $val->priority . "" ?></option>
+                                                            <?php echo "(".$val->id.") ".$val->priority . "" ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>

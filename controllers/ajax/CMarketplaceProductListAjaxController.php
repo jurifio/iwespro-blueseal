@@ -64,6 +64,23 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $val->printId();
             $response['data'][$i]['brand'] = $val->productBrand->name;
+            $response['data'][$i]['season'] = $val->productSeason->name;
+
+	        $th = "";
+	        $tr = "";
+	        $res = $this->app->dbAdapter->query("SELECT s.name, sum(ps.stockQty) stock
+                                          FROM ProductSku ps , ProductSize s
+                                          WHERE ps.productSizeId = s.id AND
+                                              ps.productId = ? AND
+                                              ps.productVariantId = ?
+                                          GROUP BY ps.productSizeId
+                                          HAVING stock > 0 ORDER BY `name`", [$val->id, $val->productVariantId])->fetchAll();
+	        foreach ($res as $sums) {
+		        $th .= "<th>" . $sums['name'] . "</th>";
+		        $tr .= "<td>" . $sums['stock'] . "</td>";
+	        }
+	        $response['data'][$i]["stock"] = '<table class="nested-table"><thead><tr>'.$th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
+
 	        $response['data'][$i]['shop'] = implode(', ',$shops);
 	        $response['data'][$i]['dummy'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
             $response['data'][$i]['itemno'] = '<span class="small">';

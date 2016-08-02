@@ -54,4 +54,23 @@ class CMarketplaceProductManageController extends AAjaxController
 	    }
 	    return $i;
     }
+
+    public function put()
+    {
+    	//RETRY
+	    $productSample = $this->app->repoFactory->create('Product')->getEmptyEntity();
+	    $i = 0;
+	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
+		    $productSample->readId($row);
+		    $product = $this->app->repoFactory->create('Product')->findOne($productSample->getIds());
+		    foreach ($product->marketplaceAccountHasProduct as $marketplaceAccountHasProduct) {
+			    if(1 == $marketplaceAccountHasProduct->hasError) {
+				    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
+				    $i++;
+			    }
+		    }
+	    }
+
+	    return $i;
+    }
 }

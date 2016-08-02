@@ -27,6 +27,8 @@
                                     <th class="center">Codice</th>
                                     <th class="center">Shop</th>
                                     <th class="center">Brand</th>
+                                    <th class="center">Stock</th>
+                                    <th class="center">Season</th>
                                     <th class="center">CPF</th>
                                     <th class="center">Immagine</th>
                                     <th class="center">Marketplaces</th>
@@ -54,6 +56,28 @@
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Pubblica prodotto sui marketplace"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-file-code-o"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.response"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Leggi Stato"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-repeat"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.retry"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Riprova Inserimento"
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
