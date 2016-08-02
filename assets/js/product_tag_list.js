@@ -148,7 +148,7 @@ $(document).on('bs.priority.edit', function () {
 						priority: priority
 					}
 				}).done(function (response) {
-					body.html('<p>' + message + '</p>');
+					body.html('<p>Produtti aggiornati: ' +  response + '</p>');
 					okButton.on('click', function () {
 						bsModal.modal('hide');
 						$('.table').DataTable().ajax.reload();

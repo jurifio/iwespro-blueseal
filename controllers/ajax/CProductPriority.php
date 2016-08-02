@@ -31,7 +31,7 @@ class CProductPriority extends AAjaxController
 	    $priorities = $this->app->repoFactory->create('SortingPriority')->findAll();
 	    $output = [];
 	    foreach ($priorities as $priority) {
-			$output[] = ['id'=>$priority->id,'priority'=>$priority->priority];
+			$output[] = ['id'=>$priority->id,'priority'=>'('.$priority->id.') '.$priority->priority];
 	    }
 		return json_encode($output);
     }
