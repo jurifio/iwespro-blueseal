@@ -129,20 +129,6 @@ class CProductManageController extends ARestrictedAccessRootController
 	                $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $inputName[2]);
                     if ($actual) $actual->delete();
                     if (0 == $input) continue;
-//	                if(!($actual instanceof IEntity)) {
-//		                /** non esiste, lo aggiungo */
-//		                $actual = $productSheetActualRepo->getEmptyEntity();
-//		                $actual->productId = $productEdit->id;
-//		                $actual->productVariantId = $productEdit->productVariantId;
-//		                $actual->productDetailLabelId = $inputName[2];
-//		                $actual->productDetailId = $input;
-//		                $actual->insert();
-//	                } else if($actual->productDetailId != $input) {
-//		                /** esiste ma è diverso, lo aggiorno */
-//	                    $actual->productDetailId = $input;
-//		                $actual->update();
-//	                }
-                    //if($actual instanceof IEntity) $actual->delete();
 
                     $actual = $productSheetActualRepo->getEmptyEntity();
                     $actual->productId = $productEdit->id;
@@ -238,6 +224,9 @@ class CProductManageController extends ARestrictedAccessRootController
         $fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
         $post = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
+        $productId = 0;
+
+        $prodRepo = $this->app->repoFactory->create('Product');
 
         if (isset($post['button']) && $post['button'] == 'hide' && isset($post['dirtyProductId'])) {
             $this->app->dbAdapter->query("UPDATE DirtyProduct SET dirtyStatus = 'N' WHERE id = ?", [$post['dirtyProductId']]);
@@ -251,7 +240,7 @@ class CProductManageController extends ARestrictedAccessRootController
             if (!$this->app->dbAdapter->beginTransaction()) throw new \Exception();
 
             /** CONTROLLO SE IL PRODOTTO ESISTE GIA' */
-            $conto = $this->app->dbAdapter->query("SELECT count(*) AS conto FROM Product, ProductVariant WHERE Product.productVariantId = ProductVariant.id AND Product.itemno LIKE ? AND Product.productBrandId = ? AND ProductVariant.name LIKE ? ", array($post['Product_itemno'], $post['Product_productBrandId'], $post['ProductVariant_name']))->fetch()['conto'];
+            /*$conto = $this->app->dbAdapter->query("SELECT count(*) AS conto FROM Product, ProductVariant WHERE Product.productVariantId = ProductVariant.id AND Product.itemno LIKE ? AND Product.productBrandId = ? AND ProductVariant.name LIKE ? ", array($post['Product_itemno'], $post['Product_productBrandId'], $post['ProductVariant_name']))->fetch()['conto'];
             if ($conto > 0) {
 	            $this->app->router->response()->raiseProcessingError();
                 return '<br>prodotto già esistente:'.
@@ -259,48 +248,37 @@ class CProductManageController extends ARestrictedAccessRootController
 		                '<br>cpf: ' . $post['Product_itemno'].
 	                    '<br>var: ' . $post['ProductVariant_name'].
 	                    '<br>altri valori:<br>';
+            }*/
+
+            // CONTROLLO SE DEVO CREARE UNA VARIANTE O UN NUOVO PRODOTTO
+            $productControl = $this->app->dbAdapter->query("SELECT * FROM Product WHERE itemno = ? AND productBrandId = ?", [$post['Product_itemno'], $post['Product_productBrandId']])->fetch();
+            if ($productControl) {
+                $productId =  $productControl['id'];
             }
+            unset($productControl);
+
 
             /** INSERISCO IL PRODOTTO DI BASE */
 	        $var = $this->app->repoFactory->create('ProductVariant')->getEmptyEntity();
 	        $var->name = $post['ProductVariant_name'];
 	        $var->description = $post['ProductVariant_description'];
-	        $var->insert();
+	        $variantId = $var->insert();
 
-            $variantId = $this->app->dbAdapter->insert("ProductVariant", ["name" => $post['ProductVariant_name'], "description" => $post['ProductVariant_description']]);
 
-            if (isset($post['Product_id'])) {
-                /** LOGICA DI DUPLICAZIONE */
-                $productId = $post['Product_id'];
-
-                if (isset($files['Product_dummyPicture']) && isset($files['Product_dummyPicture']['name']) && !empty($files['Product_dummyPicture']['name'])) {
-                    /** PRENDO E RINOMINO LA FOTO */
-                    $name = pathinfo($files['Product_dummyPicture']['name']);
-                    $uploadfile = rand(0, 9999999999) . '.' . $name['extension'];
-                    if (!rename($files['Product_dummyPicture']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
-                } else {
-                    $uploadfile = $this->app->dbAdapter->query("SELECT dummyPicture FROM Product WHERE id = ? ORDER BY id ASC LIMIT 0,1", array($productId))->fetch()['dummyPicture'];
-                }
-
-            } else {
                 /** LOGICA DI INSERIMENTO */
-                if (isset($files['Product_dummyPicture']) && isset($files['Product_dummyPicture']['name']) && !empty($files['Product_dummyPicture']['name'])) {
-                    /** PRENDO E RINOMINO LA FOTO */
-                    $name = pathinfo($files['Product_dummyPicture']['name']);
-                    $uploadfile = rand(0, 9999999999) . '.' . $name['extension'];
-                    if (!rename($files['Product_dummyPicture']['tmp_name'], $fileFolder . $uploadfile)) {
-                        throw new \Exception();
-                    }
-                } else {
-                    $uploadfile = 'bs-dummy-16-9.png';
+            if (isset($files['Product_dummyPicture']) && isset($files['Product_dummyPicture']['name']) && !empty($files['Product_dummyPicture']['name'])) {
+                /** PRENDO E RINOMINO LA FOTO */
+                $name = pathinfo($files['Product_dummyPicture']['name']);
+                $uploadfile = rand(0, 9999999999) . '.' . $name['extension'];
+                if (!rename($files['Product_dummyPicture']['tmp_name'], $fileFolder . $uploadfile)) {
+                   throw new \Exception();
                 }
-                try {
-                    $productId = $this->app->dbAdapter->query("SELECT id FROM Product WHERE itemno = ? AND productBrandId = ? ORDER BY id DESC LIMIT 0,1", array($post['Product_itemno'], $post['Product_productBrandId']))->fetch()['id'];
-                } catch (\Exception $e) {
-                }
-                if (!isset($productId) || !is_numeric($productId)) {
-                    $productId = $this->app->dbAdapter->query("SELECT id FROM Product ORDER BY id DESC LIMIT 0,1", array())->fetch()['id'] + 1;
-                }
+            } else {
+                $uploadfile = 'bs-dummy-16-9.png';
+            }
+
+            if (!$productId) {
+                $productId = $this->app->dbAdapter->query('SELECT max(id) as maxId FROM Product', [])->fetch()['maxId'] + 1;
             }
 
             $insertData = array();
@@ -322,20 +300,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 $insertData['shopId'] = $input;
                 $this->app->dbAdapter->insert("ShopHasProduct", $insertData);
             }
-            if (isset($post['dirtyProductId'])) {
-                try {
 
-                    $dirtyProduct = $this->app->repoFactory->create("DirtyProduct")->findOneBy(['id' => $post['dirtyProductId']]);
-                    $dirtyProduct->productId = $productId;
-                    $dirtyProduct->productVariantId = $variantId;
-                    $dirtyProduct->dirtyStatus = 'K';
-	                $dirtyProduct->update();
-
-                } catch (\Exception $e) {
-                    $this->app->router->response()->raiseUnauthorized();
-                }
-                //$this->app->dbAdapter->update('DirtyProduct', ['productId' => $productId, 'productVariantId' => $variantId, 'dirtyStatus' => 'K'], ['id' => $post['dirtyProductId']]);
-            }
             $this->app->dbAdapter->commit();
 
             /** INIZIO TRANSACTION PER IL CARICAMENTO DEI VALORI FACOLTATIVI DI PRODOTTO E DI DETTAGLI PRODOTTO */
@@ -390,8 +355,6 @@ class CProductManageController extends ARestrictedAccessRootController
 	        $slugify = new CSlugify();
             /** INSERIMENTO DETTAGLI PRODOTTO */
 	        if ($this->isValidInput("Product_dataSheet", $post)) {
-		        $detailRepo = $this->app->repoFactory->create('ProductDetail');
-		        $detailTranslationRepo = $this->app->repoFactory->create('ProductDetailTranslation');
 		        $productSheetActualRepo = $this->app->repoFactory->create('ProductSheetActual');
 		        /** INSERIMENTO DETTAGLI PRODOTTO */
 
@@ -400,28 +363,14 @@ class CProductManageController extends ARestrictedAccessRootController
 
 		        foreach ($post as $key => $input) {
 			        $inputName = explode('_', $key);
-			        if ($inputName[0] != 'ProductDetail') continue;
+			        if (($inputName[0] != 'ProductDetail') || ($input == '0')) continue;
 			        /** cerco il valore del dettaglio $detail */
-			        $detail = $detailRepo->findOneBy(['slug' => $slugify->slugify($input)]);
-			        if (is_null($detail)) {
-				        $detail = $detailRepo->getEmptyEntity();
-				        $detail->slug = $slugify->slugify($input);
-				        $detail->id = $detail->insert();
-				        $detailTranslation = $detailTranslationRepo->getEmptyEntity();
-				        $detailTranslation->productDetailId = $detail->id;
-				        $detailTranslation->name = $input;
-				        $detailTranslation->langId = $inputName[1];
-				        $detailTranslation->insert();
-			        }
-
-			        /** non esiste, lo aggiungo */
-			        $actual = $productSheetActualRepo->getEmptyEntity();
-			        $actual->productId = $productNew->id;
-			        $actual->productVariantId = $productNew->productVariantId;
-			        $actual->productDetailLabelId = $inputName[2];
-			        $actual->productDetailId = $detail->id;
-			        $actual->insert();
-
+			        $sheet = $productSheetActualRepo->getEmptyEntity();
+                    $sheet->productId = $productNew->id;
+                    $sheet->productVariantId = $productNew->productVariantId;
+                    $sheet->productDetailLabelId = $inputName[2];
+                    $sheet->productDetailId = $input;
+                    $sheet->insert();
 		        }
 	        }
 

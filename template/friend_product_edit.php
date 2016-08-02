@@ -46,7 +46,8 @@
 
                     <div class="row">
 
-                        <div class="col-md-4">
+                        <div class="col-md-4 inputBlocks">
+                            <div class="disableBlank halfDisableBlank"></div>
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">
@@ -102,6 +103,31 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-group-default selectize-enabled required">
+                                                        <label for="Product_productBrandId">Designer</label>
+                                                        <select class="full-width" placeholder="Seleziona il brand"
+                                                                data-init-plugin="selectize" title=""
+                                                                name="Product_productBrandId"
+                                                                id="Product_productBrandId" required>
+                                                            <option></option>
+                                                            <?php foreach ($brands as $brand): ?>
+                                                                <option value="<?php echo $brand->id ?>"
+                                                                    <?php
+                                                                        if (isset($productEdit)) {
+                                                                        if (!is_null($productEdit->productBrand) && $productEdit->productBrand->id == $brand->id) echo "selected";
+                                                                    }
+                                                                    ?>><?php echo $brand->name ?>
+                                                                </option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ciaone">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
@@ -126,29 +152,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group form-group-default selectize-enabled required">
-                                                        <label for="Product_productBrandId">Designer</label>
-                                                        <select class="full-width" placeholder="Seleziona il brand"
-                                                                data-init-plugin="selectize" title=""
-                                                                name="Product_productBrandId"
-                                                                id="Product_productBrandId" required>
-                                                            <option></option>
-                                                            <?php foreach ($brands as $brand): ?>
-                                                                <option value="<?php echo $brand->id ?>"
-                                                                    <?php
-                                                                        if (isset($productEdit)) {
-                                                                        if (!is_null($productEdit->productBrand) && $productEdit->productBrand->id == $brand->id) echo "selected";
-                                                                    }
-                                                                    ?>><?php echo $brand->name ?>
-                                                                </option>
-                                                            <?php endforeach; ?>
-                                                        </select>
-                                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
@@ -247,7 +251,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 inputBlocks">
+                            <div class="disableBlank fullDisableBlank"></div>
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Scheda prodotto e dettagli</h5>
@@ -256,7 +261,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 inputBlocks">
+                            <div class="disableBlank fullDisableBlank"></div>
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Informazioni SEO</h5>

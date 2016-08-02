@@ -748,6 +748,29 @@ ul.roulette-importer-details li {
     position: relative !important;
 }
 
-bs-portlet {
+/*bs-portlet {
     display: block;
+}*/
+
+.inputBlocks {
+    position: relative;
+}
+
+.disableBlank {
+    display: none;
+    position: absolute;
+    background-color: white;
+    opacity: 0.4;
+    left: 0;
+    width: 100%;
+}
+
+.fullDisableBlank {
+    top: 0;
+    height: 100%;
+}
+
+.halfDisableBlank {
+    top: 100px;
+    height: 60%;
 }
