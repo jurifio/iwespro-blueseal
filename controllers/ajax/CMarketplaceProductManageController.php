@@ -64,7 +64,7 @@ class CMarketplaceProductManageController extends AAjaxController
 		    $productSample->readId($row);
 		    $product = $this->app->repoFactory->create('Product')->findOne($productSample->getIds());
 		    foreach ($product->marketplaceAccountHasProduct as $marketplaceAccountHasProduct) {
-			    if(1 == $marketplaceAccountHasProduct->hasError) {
+			    if(1 == $marketplaceAccountHasProduct->hasError || 1 == $marketplaceAccountHasProduct->isToWork) {
 				    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
 				    $i++;
 			    }
