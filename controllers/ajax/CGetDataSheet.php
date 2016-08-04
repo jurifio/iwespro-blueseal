@@ -41,15 +41,16 @@ class CGetDataSheet extends AAjaxController
             $actual = [];
         } else {
             if ($code) {
-                list($id, $variantId) = explode('-', $code);
-                $productSheetPrototype = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId])->productSheetPrototype;
-                $actual = $this->app->repoFactory->create('ProductSheetActual')->findBy(['productId' => $id, 'productVariantId' => $variantId]);
+                $sample = $this->app->repoFactory->create('Product')->getEmptyEntity();
+                $sample->readId($code);
+                $product = $this->app->repoFactory->create('Product')->findOneBy($sample->getIds());
+                $productSheetPrototype = $product->productSheetPrototype;
+                $actual = $product->productSheetActual;
             } else {
                 $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
                 $actual = [];
             }
         }
-
 
         $resActual = [];
         foreach($actual as $v) {

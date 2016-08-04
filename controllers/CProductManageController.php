@@ -78,10 +78,10 @@ class CProductManageController extends ARestrictedAccessRootController
 	            $productEdit->sortingPriorityId = $post['Product_sortingPriorityId'];
                 //$this->app->dbAdapter->update("Product", array("sortingPriorityId" => $post['Product_sortingPriorityId']), $productIds);
             }
-            if ($this->isValidInput("Product_externalId", $post)) {
+            /*if ($this->isValidInput("Product_externalId", $post)) {
 	            $productEdit->externalId = $post['Product_externalId'];
                 //$this->app->dbAdapter->update("Product", array("externalId" => $post['Product_externalId']), $productIds);
-            }
+            }*/
             if ($this->isValidInput("Product_sizes", $post)) {
 	            $productEdit->productSizeGroupId = $post['Product_sizes'];
                 //$this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
@@ -212,7 +212,7 @@ class CProductManageController extends ARestrictedAccessRootController
 	            $productEdit->update();
             }
 
-            return json_encode($productIds);
+            return "Il prodotto è stato aggiornato correttamente.";
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
@@ -415,11 +415,10 @@ class CProductManageController extends ARestrictedAccessRootController
 
             $this->app->dbAdapter->commit();
         } catch (\Exception $e) {
-            var_dump($e);
             $this->app->dbAdapter->rollBack();
             throw $e;
         }
 
-        return json_encode($productIds);
+        return "Il prodotto è stato inserito. Ora puoi lavorare sulle quantità";
     }
 }

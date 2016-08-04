@@ -336,7 +336,7 @@ select.btn {
     top: 60px;
     left: 0;
     width: 100%;
-    z-index: 4;
+    z-index: 10;
     padding: 0 0 0 100px;
     background: #22bdcf;
     color: #fff;
@@ -752,25 +752,17 @@ ul.roulette-importer-details li {
     display: block;
 }*/
 
-.inputBlocks {
+.disableBlank {
     position: relative;
 }
 
-.disableBlank {
-    display: none;
+.disableBlankActive {
     position: absolute;
-    background-color: white;
-    opacity: 0.4;
-    left: 0;
-    width: 100%;
-}
-
-.fullDisableBlank {
     top: 0;
-    height: 100%;
-}
-
-.halfDisableBlank {
-    top: 100px;
-    height: 60%;
+    left: 0;
+    width: 105%;
+    height: 105%;
+    background-color: white;
+    opacity: 0.6;
+    z-index: 4;
 }

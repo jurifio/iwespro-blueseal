@@ -33,6 +33,13 @@ class CFriendProductEditController extends CProductManageController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/friend_product_edit.php');
 
+        /** @var CUserRepo */
+        $user = $this->app->getUser();
+        $get = $this->app->router->request()->getRequestData();
+
+        $product = $this->app->repoFactory->create('Product');
+
+
 
         $em = $this->app->entityManagerFactory->create('ProductBrand');
         $brands = $em->findAll(null, 'order by `name`');
@@ -47,7 +54,17 @@ class CFriendProductEditController extends CProductManageController
         $sizesGroups = $em->findAll(null, 'order by locale, macroName, `name`');
 
         $em = $this->app->entityManagerFactory->create('Shop');
-        $shops = $em->findAll(null, 'order by `name`');
+
+        if ($user->hasPermission('allShops')) {
+            $shops = $em->findAll(null, 'order by `name`');
+        } else {
+            $shopIds = [];
+            foreach($user->shop as $v) {
+                $shopIds[] = $v->id;
+            }
+            $shopIds = implode($shopIds, ',');
+            $shops = $em->findBySql("SELECT * FROM Shop WHERE id IN (" . $shopIds . ")",[]);
+        }
 
         $em = $this->app->entityManagerFactory->create('Tag');
         $tag = $em->findAll(null, 'order by `slug`');

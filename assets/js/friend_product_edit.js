@@ -22,7 +22,6 @@ $("#dummyFile").on('change', function () {
 });
 
 $(document).on('bs.product.edit', function (e, element, button) {
-
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');
     var body = $('.modal-body');
@@ -36,24 +35,31 @@ $(document).on('bs.product.edit', function (e, element, button) {
     });
     cancelButton.remove();
 
-    var type = '';
-    if ($('.product-code').length) {
-        type = 'PUT';
-    } else {
-        type = 'POST';
-    }
-    $(document).ajaxForm({
-            type: type,
-            url: "#",
-            formAutofill: true
-        },
-        new FormData(),
-        function(res){
-            body.html(res);
+    if (!$('.disableBlankActive').length) {
+        var type = '';
+        if ($('.product-code').length) {
+            type = 'PUT';
+        } else {
+            type = 'POST';
         }
-    );
-    bsModal.modal();
-
+        $(document).ajaxForm({
+                type: type,
+                url: "#",
+                formAutofill: true
+            },
+            new FormData(),
+            function (res) {
+                body.html(res);
+            }
+        );
+        bsModal.modal();
+    } else {
+        body.html("Devi aprire un prodotto o crearne uno nuovo per poterlo salvare.");
+        okButton.off().on('click', function(){
+            bsModal.modal('hide');
+        });
+        bsModal.modal();
+    }
 });
 
 $(document).on('bs.priority.edit', function (e, element, button) {
@@ -484,7 +490,7 @@ $(document).on('bs.details.model.assign', function (e) {
             '<div style="height: 300px;">' +
             '<form id="detailAdd"><div class="form-group">' +
             '<label>Inserisci il nome:</label><br />' +
-            '<select class="form-control new-dett-ita" name="modelAssign" id="modelAssign" ></select>' +
+            '<select class="form-control new-dett-ita" name="modelAssign" id="modelAssign"></select>' +
             '</form></div>'
         );
 
@@ -583,8 +589,8 @@ $(document).on('bs.details.model.assign', function (e) {
                 type: type,
                 code: $('.product-code').html()
             }
-        }).done(function ($content) {
-            $(self).html($content);
+        }).done(function (content) {
+            $(self).html(content);
             prototypeId = $(self).find(".detailContent").data('prototype-id');
             var productDataSheet = $(self).find(".Product_dataSheet");
             var selPDS = $(productDataSheet).selectize();
@@ -612,8 +618,96 @@ $(document).on('bs.details.model.assign', function (e) {
     }
 })(jQuery);
 
-$(document).ready(function () {
+$.fn.disableBlank = function(disable) {
+    var status = true;
+    if ('enable' === disable) status = false;
 
+    if (status) {
+        $(this).each(function(){
+            if (!$(this).find('.disableBlankActive').length) {
+               $(this).append('<div class="disableBlankActive"></div>');
+            }
+        });
+    } else {
+        $('.disableBlankActive').each( function(){
+            $(this).remove();
+        });
+    }
+};
+
+function searchForProduct(itemno, variantName, brandId) {
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+    $.ajax({
+        url: '/blueseal/xhr/IsProductEditable',
+        type: 'GET',
+        dataType: 'JSON',
+        data: {
+            itemno: itemno,
+            variantName: variantName,
+            brandId: brandId
+        }
+    }).done(function(res){
+        editable = res;
+        if (res['message']) {
+            body.html(res['message']);
+            bsModal.modal();
+            okButton.html('Ok').off().on('click', function(){
+                bsModal.modal('hide');
+            });
+        }
+        if (res['editable']) {
+            if (res['code']) {
+                $('.product-code').html(res['code']);
+                if (res['product']) {
+                    $('#main-details').selectDetails();
+                    fillTheFields(res['product']);
+                }
+            } else {
+                $('.product-code').html();
+            }
+            $('.disableBlank').disableBlank('enable');
+        } else {
+            $('.disableBlank').disableBlank();
+        }
+        if (res['productEdit']) {
+
+        }
+    }).fail(function(res){
+        console.log(res);
+        body.html(res);
+        okButton.html('Ok').off().on('click', function(){
+            bsModal.modal('hide');
+        });
+    });
+}
+
+function fillTheFields(product) {
+    var corrispondences = {};
+    $('#Product_id').val(product['id']);
+    $('#Product_productVariantId').val(product['productVariantId']);
+    $('#Product_itemno').val(product['itemno']);
+    $('#ProductVariant_name').val(product['variantName']);
+    $('#Product_productBrandId').selectize()[0].selectize.setValue(product['productBrandId'], true);
+    $('#ProductColorGroup_id').selectize()[0].selectize.setValue(product['productColorGroupId'], true);
+    $('#ProductVariant_description').val(product['variantDescription']);
+    if ("hidden" != $('#Shop').attr('type')) {
+        //TODO
+    }
+    $('#Product_externalId').val(product['extId']);
+    $('#Product_sizes').selectize()[0].selectize.setValue(product['productSizeGroupId'], true);
+    $('#Product_ProductSeasonId').selectize()[0].selectize.setValue(product['productSeasonId'], true);
+    var selectName = $('#ProductName_1_name').selectize()[0].selectize;
+    selectName.addOption({name: product['productName']});
+    selectName.addItem(product['productName']);
+    selectName.refreshOptions();
+    $('#Product_note').html(product['note']);
+}
+
+$(document).ready(function () {
     if (window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
         try {
             window.detailsStorage = [];
@@ -635,7 +729,7 @@ $(document).ready(function () {
 
     changeProductDataSheet = true;
 
-    $('#main-details').selectDetails();
+    //$('#main-details').selectDetails();
 
 
     var tagNames = $("#Tag_names");
@@ -742,4 +836,15 @@ $(document).ready(function () {
         }
     });
     $('#ProductName_1_name').selectize()[0].selectize.setValue($("#ProductName_1_name").data('preset-name'));
+
+    $('.disableBlank').disableBlank();
+
+    $('button.search-product').on('click', function(){
+        itemno = $('input[name="Product_itemno"]').val();
+        variantName = $('input[name="ProductVariant_name"]').val();
+        brandId = $('select[name="Product_productBrandId"]').find('option:selected').val();
+
+        searchForProduct(itemno, variantName, brandId);
+    });
+
 });
