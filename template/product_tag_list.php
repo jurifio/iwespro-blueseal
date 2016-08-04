@@ -32,6 +32,7 @@
                                     <th class="center">Dettagli</th>
                                     <!--<th class="center">Immagine </th>-->
                                     <th class="center">Brand</th>
+                                    <th class="center">Priorità</th>
                                     <th class="center">Tags</th>
                                     <th class="center">Qt.</th>
                                     <th class="center">SCA</th>
@@ -62,6 +63,16 @@
             data-title="Tagga prodotti"
             data-placement="bottom"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-sort-numeric-asc"
+                data-permission="/admin/product/edit"
+                data-event="bs.priority.edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Priorità"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

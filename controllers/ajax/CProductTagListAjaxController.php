@@ -158,6 +158,7 @@ class CProductTagListAjaxController extends AAjaxController
             $response['data'][$i]['colorGroup'] = ($colorGroup) ? $colorGroup->name : "[Non assegnato]";
 
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
+            $response['data'][$i]['priority'] = $val->sortingPriorityId;
             $response['data'][$i]['tag'] = '<span class="small">';
             $response['data'][$i]['tag'] .= implode(',<br />',$tags);
             $response['data'][$i]['tag'] .= '</span>';

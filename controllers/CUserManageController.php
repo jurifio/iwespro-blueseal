@@ -28,7 +28,7 @@ class CUserManageController extends ARestrictedAccessRootController
 	    foreach ($this->app->repoFactory->create('Marketplace')->findAll() as $marketplace) {
 	    	$sources[] = $marketplace->name;
 	    }
-	    foreach ($this->app->dbAdapter->query("SELECT distinct registrationEntryPoint from User where isDeleted = 1",[])->fetchAll() as $item) {
+	    foreach ($this->app->dbAdapter->query("SELECT distinct registrationEntryPoint from User where isDeleted != 1",[])->fetchAll() as $item) {
 	        $sources[] = $item['registrationEntryPoint'];
 	    }
 	    $sources = array_unique($sources);
