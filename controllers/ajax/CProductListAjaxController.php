@@ -130,7 +130,9 @@ class CProductListAjaxController extends AAjaxController
                 $ext[] = $val->externalId;
             }
 
+            $shops = [];
             foreach($val->shopHasProduct as $shp) {
+            	$shops[] = $shp->shop->name;
                 if (!empty($shp->extId)) {
                     $ext[] = $shp->extId;
                 }
@@ -199,10 +201,10 @@ class CProductListAjaxController extends AAjaxController
             }
             $response['data'][$i]['available'] = ($qty) ? 'sì' : 'no';
             $response['data'][$i]['available'].= ' - ' . $qty;
-            
+
             
             $response['data'][$i]['shop'] = '<span class="small">';
-            $response['data'][$i]['shop'] .= implode('<br />',$shopz);
+            $response['data'][$i]['shop'] .= implode('<br />',$shops);
             $response['data'][$i]['shop'] .= '</span>';
             
             $response['data'][$i]['mup'] = '<span class="small">';
