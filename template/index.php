@@ -5,7 +5,7 @@
     <?php echo $app->getAssets(['ui','forms'], $page); ?>
     <title>BlueSeal - Login</title>
 </head>
-<body class="fixed-header   ">
+<body class="fixed-header">
 <div class="login-wrapper ">
     <div class="bg-pic">
         <img src="/assets/img/blueseal.jpg" data-src="/assets/img/blueseal.jpg" data-src-retina="/assets/img/blueseal.jpg" alt="" class="lazy">

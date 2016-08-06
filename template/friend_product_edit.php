@@ -5,7 +5,7 @@
     <?php echo $app->getAssets(['ui', 'forms'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
-<body class="fixed-header">
+<body class="fixed-header" data-shops="">
 <div style="display:none" class="product-code">
 <?php
 if (isset($productEdit) && !is_null($productEdit)):
@@ -404,6 +404,18 @@ if (isset($productEdit) && !is_null($productEdit)):
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Carica i dettagli da modello"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Movimenti">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-files-o"
+            data-permission="/admin/product/edit"
+            data-event="bs.details.mag.move"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Quantità e movimenti"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

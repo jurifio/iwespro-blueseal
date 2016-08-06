@@ -673,9 +673,6 @@ function searchForProduct(itemno, variantName, brandId) {
         } else {
             $('.disableBlank').disableBlank();
         }
-        if (res['productEdit']) {
-
-        }
     }).fail(function(res){
         console.log(res);
         body.html(res);
@@ -707,7 +704,191 @@ function fillTheFields(product) {
     $('#Product_note').html(product['note']);
 }
 
+// MOVIMENTI MAGAZZINO
+
+$.fn.catalogMovements = function(shops, code) {
+    var self = this;
+    this.documentBody = $('body');
+    this.modal = $('#bsModal');
+    this.header = $('#bsModal .modal-header h4');
+    this.body = $('#bsModal .modal-body');
+    this.cancelButton = $('#bsModal .modal-footer .btn-default');
+    this.okButton = $('#bsModal .modal-footer .btn-success');
+    this.form = $('<form class="mag-container"></form>');
+    this.shopChooser = $('<select class="mag-shopChooser"></select>');
+    this.table = $('<table class="nested-table mag-sizesTable"></table>');
+    this.movements = $(
+        '<div class="mag-movements" data-sizes="">' +
+            '<div class="row">' +
+                '<button class="btn btn-default pull-right">Aggiungi movimento</button>' +
+                '<input type="text" name="mag-movementDate mandatory" class="form-control mag-movementDate" id="mag-movementDate" />' +
+                '<select name="mag-movementCause mandatory"></select>' +
+            '</div>' +
+        '</div>');
+
+    this.movementLine = $(
+        '<div class="row"><div class="mag-movementLine col-sm-12">' +
+            '<select class="form-control ml-size mandatory"></select>' +
+            '<input type="text" class="form-control ml-qty" disabled />' +
+            '<input type="number" class="form-control ml-qtMove mandatory" val="0">' +
+        '<button class="btn btn-danger">X</button>' +
+        '</div></div>'
+    );
+
+    this.addMovementLine = function() {
+        var mm;
+        if (mm = $('.mag-movements')) {
+            var length = mm.find('mag-movementLine').length;
+            var ml = self.movementLine.clone();
+            ml.find("mag-movementLine").addClass('mm-' + length);
+            /*
+            ml.find("ml-size").addClass('ml-size-' + length);
+            ml.find("ml-qty").addClass('ml-qty' + length);
+            ml.find("ml-qtMove").addClass('ml-qtMove' + length);
+            */
+            ml.find('button').on('click', function(){
+                $(this).parent().parent().remove();
+            });
+        }
+        return false;
+    };
+
+    this.createForm = function() {
+        if (!this.shop) {
+            self.displayError('OOPS! Non risulta selezionato nessuno shop. Se l\'errore');
+            return false;
+        }
+        var product = this.getProduct(this.code, this.shop);
+        if ('string' == typeof product) {
+            self.displayError(product);
+            return false;
+        }
+
+        //disegno la tabella
+        var tables = [];
+        var cols = 0;
+        var colsLimit = 9;
+        var tableN = 0;
+        $.each(product['sizes'], function (k, v) {
+            if ((0 === cols)) {
+                tables[tableN] = self.table.clone();
+                tables[tableN].append($('<thead></thead>'));
+                tables[tableN].append($('<tbody></tbody>'));
+                var th = tables[tableN].find('thead');
+                var tb = tables[tableN].find('tbody');
+            } else if (cols === colsLimit) {
+                tableN++;
+                cols = 0;
+                return;
+            }
+            th.append('<tr><th>' + v['name'] + '</th></tr>');
+            tb.append('<tr><td>' + product['sku'][v['id']]['stockQty'] + '</td></tr>');
+            cols++;
+        });
+
+        $.each(tables, function (k, v) {
+            self.form.append(v);
+        });
+
+        self.movements.append(self.movementLine);
+        self.form.append(self.movements);
+
+        self.okButton.off().on('click', function(){
+            var res = self.move();
+        });
+        self.okButton.prop('disabled', true);
+    };
+
+    this.displayError = function(msg) {
+        self.body.html(msg);
+        okButton.html('ok').off().on('click', function() {
+            self.modal('hide');
+        });
+        self.modal();
+    };
+
+    //elaborazione dei dati
+    this.shop = 0;
+    this.shops = null;
+    this.code = null;
+    this.formData = {};
+
+    /**
+     *
+     *
+     * @return object
+     *      tutta la tabella dei prodotti
+     *      ['sizeGroup'] array productSizegroup
+     *      ['sizes'] array multidimensionale con i dati delle taglie
+     *      ['sku'] array multidimensionale con i dati delle taglie
+     */
+
+    this.getProduct = function(code, shop) {
+        $.ajax({
+            url: '/blueseal/xhr/MagMovements',
+            method: 'GET',
+            dataType: 'JSON',
+            data: {
+                code: this.code,
+                shop: this.shop
+            }
+        }).done(function(res){
+            return res;
+        }).fail(function(res){
+            return res;
+        });
+    };
+
+    this.getMovementsCause = function(defaultCause) {
+        defaultCause = (defaultCause) ? defaultCause : 0;
+        $.ajax({
+            url: '/blueseal/xhr/MagMovements',
+            method: 'GET',
+            dataType: 'JSON',
+            data: {
+                defaultCause: defaultCause
+            }
+        }).done(function(res){
+            return res;
+        }).fail(function(res){
+            return res;
+        });
+    };
+
+    this.getFormData = function() {
+
+    };
+
+    //constructor
+    this.header.html("Movimenti Prodotto");
+    if (!shops || !code) {
+        this.displayError('OOPS! Non riesco a trovare il prodotto o il negozio associato. Perfavore contatta l\'amministratore');
+    } else {
+        if (1 < JSON.parse(this.documentBody.data('shops')).length) {
+            this.body.appendChild(this.shopChooser);
+            var options = '';
+            $.each(JSON.parse(this.documentBody.data('shops')), function(k, v){
+                options += '<option value="' + v['id'] + '">' + v['name'] + '</option>';
+            });
+            this.shopChooser.selectize();
+            this.shopChooser.off().on('click', function(){
+                self.shop = self.shopChooser.find('option:selected').val();
+                self.createForm();
+            });
+        } else {
+            this.code = code;
+            this.shop = shops[0];
+            this.createForm();
+        }
+    }
+};
+
+$(document).on('bs.details.mag.move', function() {
+    $(document).catalogMovements($('.product-code').html(), $('body').data('shops'));
+});
+
 $(document).ready(function () {
+
     if (window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
         try {
             window.detailsStorage = [];
@@ -846,5 +1027,4 @@ $(document).ready(function () {
 
         searchForProduct(itemno, variantName, brandId);
     });
-
 });

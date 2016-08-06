@@ -41,9 +41,7 @@ class CGetDataSheet extends AAjaxController
             $actual = [];
         } else {
             if ($code) {
-                $sample = $this->app->repoFactory->create('Product')->getEmptyEntity();
-                $sample->readId($code);
-                $product = $this->app->repoFactory->create('Product')->findOneBy($sample->getIds());
+                $product = $this->app->repoFactory->create('Product')->findOneByStringId($code);
                 $productSheetPrototype = $product->productSheetPrototype;
                 $actual = $product->productSheetActual;
             } else {
