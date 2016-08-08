@@ -110,6 +110,69 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
     return dff.promise();
 };
 
+$.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
+    var me = this;
+    var conf = $.extend({},{
+        contentType: 'multipart/form-data',
+        processData: false
+    },ajaxConf);
+
+    if (conf.formAutofill && conf.formAutofill == true) {
+        var errors = [];
+        var formSelector = conf.formSelector || 'document';
+        $(me).find('input:not([type=file]), textarea, select').each(function () {
+            if (typeof $(this).attr('name') == 'undefined') return;
+            if ($(this).attr('required') == 'required' && $(this).val().length === 0) {
+                errors.push($(this).attr('name'));
+            }
+        });
+
+        if (errors.length) {
+            var res = 'I seguenti campi sono ibbligatori e non sono stati compilati:<br />';
+            $.each(errors, function (k, v) {
+                res += $('label[for="' + v + '"]').html() + '<br />';
+            });
+            callback(res);
+
+        } else {
+
+            $(me).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
+                if (typeof $(this).attr('name') == 'undefined') return;
+                formDataObject.append($(this).attr('name'), $(this).val());
+            });
+
+            var radioNames = [];
+            $(me).find('input[type=radio]').each(function () {
+                if (typeof $(this).attr('name') == 'undefined') return;
+                radioNames.push($(this).attr('name'));
+            });
+            var unique = radioNames.filter(function (value, index, self) {
+                return self.indexOf(value) === index;
+            });
+            unique.forEach(function (element, index, array) {
+                formDataObject.append(element, $('[name=' + element + ']:checked').val());
+            });
+
+            $(me).find('input[type=checkbox]:checked').each(function () {
+                if (typeof $(this).attr('name') == 'undefined') return;
+                formDataObject.append($(this).attr('name'), $(this).val());
+            });
+
+            $(me).find(':file').each(function () {
+                if (typeof this.name == 'undefined') return;
+                if (this.files.length == 0) return;
+                formDataObject.append(this.name, this.files[0]);
+            });
+
+            conf.data = formDataObject;
+
+            $.ajax(conf).always(function (res) {
+                callback(res);
+            });
+        }
+    }
+};
+
 (function($) {
 
     $(document).ready(function () {

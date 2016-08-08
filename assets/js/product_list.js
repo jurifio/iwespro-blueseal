@@ -262,6 +262,7 @@ $(document).on('bs.del.product', function (e, element, button) {
                         okButton.off();
                         dataTable.ajax.reload(null, false);
                     });
+                    dataTable.draw();
                     bsModal.modal('show');
                 });
             });

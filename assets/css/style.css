@@ -336,7 +336,7 @@ select.btn {
     top: 60px;
     left: 0;
     width: 100%;
-    z-index: 4;
+    z-index: 10;
     padding: 0 0 0 100px;
     background: #22bdcf;
     color: #fff;
@@ -747,4 +747,23 @@ ul.roulette-importer-details li {
 
 .selectize-streachable+.selectize-control {
     position: relative !important;
+}
+
+/*bs-portlet {
+    display: block;
+}*/
+
+.disableBlank {
+    position: relative;
+}
+
+.disableBlankActive {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 105%;
+    height: 105%;
+    background-color: white;
+    opacity: 0.6;
+    z-index: 4;
 }

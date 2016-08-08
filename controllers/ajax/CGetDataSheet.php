@@ -25,12 +25,43 @@ class CGetDataSheet extends AAjaxController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/parts/sheetDetails.php');
 
-        $name = $this->app->router->request()->getRequestData('value');
+        $get = $this->app->router->request()->getRequestData();
 
-	    $productSheetPrototype = $this->app->entityManagerFactory->create('ProductSheetPrototype')->findOne(['id'=>$name]);
+        $code = (array_key_exists('code', $get)) ? $get['code'] : false;
+        $value = (array_key_exists('value', $get)) ? $get['value'] : false;
+        $type = (array_key_exists('type', $get)) ? $get['type'] : false;
+        $actual = [];
+
+        if ($type && ('model' == $type)) {
+            $productSheetModelPrototype = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $value]);
+            $productSheetPrototype = $productSheetModelPrototype->productSheetPrototype;
+            $actual = $productSheetModelPrototype->productSheetModelActual;
+        } elseif ('change' == $type) {
+            $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['id' => $value]);
+            $actual = [];
+        } else {
+            if ($code) {
+                $product = $this->app->repoFactory->create('Product')->findOneByStringId($code);
+                $productSheetPrototype = $product->productSheetPrototype;
+                $actual = $product->productSheetActual;
+            } else {
+                $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
+                $actual = [];
+            }
+        }
+
+        $resActual = [];
+        foreach($actual as $v) {
+            $resActual[$v->productDetailLabelId] = $v->productDetailId;
+        }
+
+        $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
+        $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');
 
         return $view->render([
-            'productSheetPrototype' =>$productSheetPrototype
+            'productSheets' => $productSheets,
+            'productSheetPrototype' => $productSheetPrototype,
+            'actual' => $resActual,
         ]);
     }
 
