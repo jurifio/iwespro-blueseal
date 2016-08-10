@@ -58,12 +58,13 @@ class CFriendProductEditController extends CProductManageController
         if ($user->hasPermission('allShops')) {
             $shops = $em->findAll(null, 'order by `name`');
         } else {
-            $shopIds = [];
+            /*$shopIds = [];
             foreach($user->shop as $v) {
                 $shopIds[] = $v->id;
             }
             $shopIds = implode($shopIds, ',');
-            $shops = $em->findBySql("SELECT * FROM Shop WHERE id IN (" . $shopIds . ")",[]);
+            $shops = $em->findBySql("SELECT * FROM Shop WHERE id IN (" . $shopIds . ")",[]);*/
+            $shops = false;
         }
 
         $em = $this->app->entityManagerFactory->create('Tag');

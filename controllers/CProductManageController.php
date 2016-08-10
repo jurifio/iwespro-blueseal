@@ -28,7 +28,6 @@ class CProductManageController extends ARestrictedAccessRootController
     public function put()
     {
         $fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
-	    $slugify = new CSlugify();
         $post = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
         /** LOGICHE DI UPDATE*/
@@ -49,7 +48,6 @@ class CProductManageController extends ARestrictedAccessRootController
             //$variantId = $this->app->dbAdapter->update("ProductVariant", ["name" => $post['ProductVariant_name'], "description" => $post['ProductVariant_description']], array("id" => $post['Product_productVariantId']));
 
             /** UPDATE PRODUCT */
-            $updateData = array();
             if (isset($files['Product_dummyPicture']) && isset($files['Product_dummyPicture']['name']) && !empty($files['Product_dummyPicture']['name'])) {
                 /** PRENDO E RINOMINO LA FOTO */
                 $name = pathinfo($files['Product_dummyPicture']['name']);
@@ -60,8 +58,44 @@ class CProductManageController extends ARestrictedAccessRootController
 	        $productEdit->lastUpdate = date("Y-m-d H:i:s");
 	        $productEdit->itemno = $post['Product_itemno'];
 
+            $hasShop = 0;
+
+
+            /** AGGIORNO I PREZZI */
+            $shp = $this->app->repoFactory->create('ShopHasProduct');
+            if (array_key_exists('Shop_id', $post)) {
+                if ($post['Shop_id']) {
+                    $shpe = $shp->findOneBy(
+                        [
+                            'productId' => $productEdit->id,
+                            'productVariantId' => $productEdit->productVariantId,
+                            'shopId' => $post['Shop_id']
+                        ]
+                    );
+                    if ($shpe) {
+                        $shpe->price = $post['Product_retail_price'];
+                        $shpe->value = $post['Product_value'];
+                        $shpe->update();
+                    }
+                }
+            } else {
+                //se non c'è il campo shop o non è selezionato uno shop, vengono assegnati tutti gli shop dell'utente
+                $user = $this->app->getUser();
+                foreach($user->shop as $shop) {
+                    $shpe = $shp->findOneBy(
+                        [
+                            'productId' => $productIdsExt['productId'],
+                            'productVariantId' => $productIdsExt['productVariantId'],
+                            'shopId' => $shop->id,
+                        ]);
+                    $shpe->price = $post['Product_retail_price'];
+                    $shpe->value = $post['Product_value'];
+                    $shpe->update();
+                }
+            }
+
             //$productId = $this->app->dbAdapter->update("Product", $updateData, $productIds);
-            $ress = $this->app->dbAdapter->commit();
+            $this->app->dbAdapter->commit();
 
             /** INIZIO TRANSACTION PER IL CARICAMENTO DEI VALORI FACOLTATIVI DI PRODOTTO E DI DETTAGLI PRODOTTO */
             if (!$this->app->dbAdapter->beginTransaction()) throw new \Exception();
@@ -211,8 +245,8 @@ class CProductManageController extends ARestrictedAccessRootController
 	            $productEdit->productStatusId = $post['Product_status'];
 	            $productEdit->update();
             }
-
-            return "Il prodotto è stato aggiornato correttamente.";
+            $ret = ['code' => $productIds, 'message' => 'Il prodotto è stato aggiornato correttamente.'];
+            return json_encode($ret);
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
@@ -240,15 +274,6 @@ class CProductManageController extends ARestrictedAccessRootController
             if (!$this->app->dbAdapter->beginTransaction()) throw new \Exception();
 
             /** CONTROLLO SE IL PRODOTTO ESISTE GIA' */
-            /*$conto = $this->app->dbAdapter->query("SELECT count(*) AS conto FROM Product, ProductVariant WHERE Product.productVariantId = ProductVariant.id AND Product.itemno LIKE ? AND Product.productBrandId = ? AND ProductVariant.name LIKE ? ", array($post['Product_itemno'], $post['Product_productBrandId'], $post['ProductVariant_name']))->fetch()['conto'];
-            if ($conto > 0) {
-	            $this->app->router->response()->raiseProcessingError();
-                return '<br>prodotto già esistente:'.
-                        '<br>brand: ' . $post['Product_productBrandId'].
-		                '<br>cpf: ' . $post['Product_itemno'].
-	                    '<br>var: ' . $post['ProductVariant_name'].
-	                    '<br>altri valori:<br>';
-            }*/
 
             // CONTROLLO SE DEVO CREARE UNA VARIANTE O UN NUOVO PRODOTTO
             $productControl = $this->app->dbAdapter->query("SELECT * FROM Product WHERE itemno = ? AND productBrandId = ?", [$post['Product_itemno'], $post['Product_productBrandId']])->fetch();
@@ -291,14 +316,36 @@ class CProductManageController extends ARestrictedAccessRootController
             $this->app->dbAdapter->insert("Product", $insertData);
             $productIds = array("id" => $productId, "productVariantId" => $variantId);
             $productIdsExt = array("productId" => $productId, "productVariantId" => $variantId);
+
             /** INSERIMENTO SHOP */
+
+            $hasShop = 0;
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
                 if ($inputName[0] != 'Shop') continue;
-                $insertData = array();
+                if (!$input) continue;
+
                 $insertData = $productIdsExt;
                 $insertData['shopId'] = $input;
+                $insertData['price'] = $post['Product_retail_price'];
+                $insertData['value'] = $post['Procuct_value'];
                 $this->app->dbAdapter->insert("ShopHasProduct", $insertData);
+                $hasShop++;
+            }
+
+            //se non c'è il campo shop o non è selezionato uno shop, vengono assegnati tutti gli shop dell'utente
+            if (!$hasShop) {
+                $user = $this->app->getUser();
+                $shp = $this->app->repoFactory->create('ShopHasProduct');
+                foreach($user->shop as $shop) {
+                    $shpe = $shp->getEmptyEntity();
+                    $shpe->productId = $productIdsExt['productId'];
+                    $shpe->productVariantId = $productIdsExt['productVariantId'];
+                    $shpe->shopId = $shop->id;
+                    $shpe->price = $post['Product_retail_price'];
+                    $shpe->value = $post['Product_value'];
+                    $shpe->insert();
+                }
             }
 
             $this->app->dbAdapter->commit();
@@ -418,7 +465,7 @@ class CProductManageController extends ARestrictedAccessRootController
             $this->app->dbAdapter->rollBack();
             throw $e;
         }
-
-        return "Il prodotto è stato inserito. Ora puoi lavorare sulle quantità";
+        $ret = ['code' => $productIds, 'message' => 'Il prodotto è stato inserito. Ora puoi lavorare sulle quantità'];
+        return json_encode($ret);
     }
 }
