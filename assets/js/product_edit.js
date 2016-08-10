@@ -278,8 +278,10 @@ $(document).on('bs.details.model.add', function (e) {
         };
         $("#addModelDetails").find('select').each(function () {
             id = $(this).attr('id');
-            idLabel = id.split('_')[2];
-            data['productDetails_' + idLabel] = $('#' + id + ' option:selected').val();
+            if (!('Product_dataSheet' == id)) {
+                idLabel = id.split('_')[2];
+                data['productDetails_' + idLabel] = $('#' + id + ' option:selected').val();
+            }
         });
 
         if (!modelName) {
