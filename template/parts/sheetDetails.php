@@ -23,10 +23,10 @@
                         <label
                             for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>
                         <select type="text"
-                                class="full-width"
                                 data-init-plugin="selectize"
                                 data-init-selection="<?php echo (array_key_exists($detaillabel->id, $actual)) ? $actual[$detaillabel->id] : '' ?>"
-                                class="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                class="full-width <?php echo "ProductDetail_1_" . $detaillabel->id ?>"
+                                id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                 name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                 value="">
                             <option></option>
