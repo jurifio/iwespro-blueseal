@@ -2,7 +2,7 @@
     <div class="col-md-12 detailContent" data-prototype-id="<?php echo $productSheetPrototype->id; ?>">
         <div class="form-group form-group-default selectize-enabled">
             <label for="Product_dataSheet">Tipo scheda prodotto</label>
-            <select class="full-width selectpicker Product_dataSheet"
+            <select class="full-width selectpicker Product_dataSheet" id="Product_dataSheet"
                     placeholder="Seleziona una scheda prodotto"
                     data-init-plugin="selectize" title="" name="Product_dataSheet"
             >
