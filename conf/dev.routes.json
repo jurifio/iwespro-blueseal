@@ -1412,7 +1412,7 @@
                 "PUT"
             ]
         },{
-            "pattern": "/blueseal/prodotti/modelli/lista(/)?",
+            "pattern": "/blueseal/prodotti/modelli(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelListController"
             },
@@ -1425,9 +1425,9 @@
                 "PUT"
             ]
         },{
-            "pattern": "/blueseal/prodotti/modelli(/)?",
+            "pattern": "/blueseal/prodotti/modelli/modifica(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelEditController"
             },
             "filters": {},
             "translations": {},

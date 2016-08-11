@@ -258,3 +258,19 @@ $(window).on('scroll',function(e) {
         f.css('margin-top',($(window).scrollTop())+'px');
     }
 });
+
+$_GET = function () {
+    var self = this;
+    var vars = {};
+    window.location.href.replace( location.hash, '' ).replace(
+        /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+        function( m, key, value ) { // callback
+            vars[key] = value !== undefined ? value : '';
+        }
+    );
+
+    this.all = vars;
+    this.get = function(param){
+        return self.all[param];
+    };
+}
