@@ -312,6 +312,7 @@ $(document).on('bs.details.model.add', function (e) {
                         bsModal.modal('hide');
                     });
                 } else if ('exists' == res['status']) {
+                    console.log(res['status']);
                     body.html("Un Modello con questo nome esiste già. Sovrascriverlo?");
                     okButton.html('Sì').off().on('click', function () {
                         $.ajax({
@@ -542,14 +543,16 @@ $(document).on('bs.details.model.assign', function (e) {
             }
         }).done(function ($content) {
 
-            $("#productDetails").html($content);
+            $("#main-details").html($content);
 
             changeProductDataSheet = false;
+
+            setTimeout(function(){
             var dataSheet = $('.selectContent').data('prototype-id');
             $('#Product_dataSheet').selectize()[0].selectize.setValue(dataSheet, true);
             changeProductDataSheet = true;
 
-            $("#productDetails").find('select').each(function () {
+            $("#main-details").find('select').each(function () {
                 var sel = $(this).selectize({
                     valueField: 'id',
                     labelField: 'item',
@@ -563,6 +566,7 @@ $(document).on('bs.details.model.assign', function (e) {
                     sel[0].selectize.setValue(0, true);
                 }
                 bsModal.modal('hide');
+            }, 200);
             });
         });
     });
