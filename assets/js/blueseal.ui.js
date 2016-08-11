@@ -128,7 +128,7 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
         });
 
         if (errors.length) {
-            var res = 'I seguenti campi sono ibbligatori e non sono stati compilati:<br />';
+            var res = 'I seguenti campi sono obbligatori e non sono stati compilati:<br />';
             $.each(errors, function (k, v) {
                 res += $('label[for="' + v + '"]').html() + '<br />';
             });

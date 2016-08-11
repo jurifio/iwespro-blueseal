@@ -4,7 +4,7 @@
             <label for="Product_dataSheet">Tipo scheda prodotto</label>
             <select class="full-width selectpicker Product_dataSheet" id="Product_dataSheet"
                     placeholder="Seleziona una scheda prodotto"
-                    data-init-plugin="selectize" title="" name="Product_dataSheet"
+                    data-init-plugin="selectize" title="" name="Product_dataSheet" id="Product_dataSheet"
             >
                 <option></option>
                 <?php foreach ($productSheets as $productSheet): ?>

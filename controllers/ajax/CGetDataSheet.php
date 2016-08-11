@@ -27,7 +27,7 @@ class CGetDataSheet extends AAjaxController
 
         $get = $this->app->router->request()->getRequestData();
 
-        $code = (array_key_exists('code', $get)) ? $get['code'] : false;
+        $code = (array_key_exists('code', $get)) ? (($get['code']) ? $get['code'] : false) : false;
         $value = (array_key_exists('value', $get)) ? $get['value'] : false;
         $type = (array_key_exists('type', $get)) ? $get['type'] : false;
         $actual = [];
