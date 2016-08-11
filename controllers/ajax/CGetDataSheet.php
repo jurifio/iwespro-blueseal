@@ -43,6 +43,7 @@ class CGetDataSheet extends AAjaxController
             if ($code) {
                 $product = $this->app->repoFactory->create('Product')->findOneByStringId($code);
                 $productSheetPrototype = $product->productSheetPrototype;
+                if (null === $productSheetPrototype) $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOne([33]);
                 $actual = $product->productSheetActual;
             } else {
                 $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
