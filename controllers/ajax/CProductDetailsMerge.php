@@ -74,7 +74,7 @@ class CProductDetailsMerge extends AAjaxController
         );
         try {
             foreach ($get['rows'] as $v) {
-                if ($choosen->id == $v['id']) continue;
+                if ($choosen->productVariantId == $v['productVariantId']) continue;
                 $prod = $this->app->repoFactory->create('Product')->findOneBy(
                     [
                         'id' => $v['id'],
@@ -83,7 +83,7 @@ class CProductDetailsMerge extends AAjaxController
                 );
                 $prod->productSheetPrototypeId = $choosen->productSheetPrototypeId;
                 $prod->update();
-
+                $deb = 1;
                 $prodName = $this->app->repoFactory->create('ProductNameTranslation')->findBy(
                     [
                         'productId' => $prod->id,
@@ -122,7 +122,6 @@ class CProductDetailsMerge extends AAjaxController
                 foreach ($psa as $psaSingle) {
                     $psaSingle->delete();
                 }
-
                 foreach ($choosenPsa as $cpsaSingle) {
                     $newPsa = $this->app->repoFactory->create('ProductSheetActual')->getEmptyEntity();
                     $newPsa->productId = $prod->id;
@@ -137,6 +136,7 @@ class CProductDetailsMerge extends AAjaxController
             return 'OOPS! Si è verificato un problema:<br /> ' . $e->getMessage();
         }
         $res = 'I dettagli dei prodotti sono stati fusi correttamente.';
+
         return $res;
     }
 
