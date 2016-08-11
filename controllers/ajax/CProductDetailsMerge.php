@@ -83,7 +83,6 @@ class CProductDetailsMerge extends AAjaxController
                 );
                 $prod->productSheetPrototypeId = $choosen->productSheetPrototypeId;
                 $prod->update();
-                $deb = 1;
                 $prodName = $this->app->repoFactory->create('ProductNameTranslation')->findBy(
                     [
                         'productId' => $prod->id,
