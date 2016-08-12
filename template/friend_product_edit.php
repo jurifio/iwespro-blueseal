@@ -5,14 +5,10 @@
     <?php echo $app->getAssets(['ui', 'forms'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
-<body class="fixed-header" data-shops="">
-<div style="display:none" class="product-code">
-<?php
+<body class="fixed-header" data-shops=""><div style="display:none" class="product-code"><?php
 if (isset($productEdit) && !is_null($productEdit)):
-    ?>
-    <?php echo $productEdit->id . '-' . $productEdit->productVariantId; ?>
-<?php endif; ?>
-</div>
+    echo $productEdit->id . '-' . $productEdit->productVariantId;
+endif; ?></div>
 <div style="display:none" id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>
 <?php include "parts/sidebar.php"; ?>
 <div class="page-container">
@@ -39,20 +35,11 @@ if (isset($productEdit) && !is_null($productEdit)):
                             $value[] = $val->id;
                         }
                     } ?>
+                    <input type="hidden" id="Product_id" name="Product_id" value="<?php echo (isset($productEdit)) ? $productEdit->id : '';?>" />
+                    <input type="hidden" id="Product_productVariantId" name="Product_productVariantId" value="<?php echo (isset($productEdit)) ? $productEdit->productVariantId : '';?>" />
                     <input type="hidden" id="ProductCategory_id" name="ProductCategory_id"
                            value="<?php echo implode(',', $value) ?>"/>
-                    <input type="hidden" id="Product_id" name="Product_id" value="<?php echo (isset($productEdit) && !is_null($productEdit)) ? $productEdit->id : '' ?>"/>
-
-                    <input type="hidden" id="Product_productVariantId" name="Product_productVariantId"
-                           value="<?php echo (isset($productEdit) && !is_null($productEdit)) ? $productEdit->productVariantId : ''; ?>"/>
-                    <?php if (isset($productRand)): ?>
-                        <input type="hidden" name="dirtyProductId" value="<?php echo $productRand['id'] ?>">
-                    <?php endif; ?>
-
-                    <input type="hidden" id="Product_sortingPriorityId" name="Product_sortingPriorityId" value="<?php echo (isset($productEdit)) ? $productEdit->sortingPriorityId : ''?>"/>
-
                     <div class="row">
-
                         <div class="col-md-4">
                             <div class="panel panel-default clearfix">
                                 <!--<div class="panel-heading clearfix">
@@ -137,30 +124,6 @@ if (isset($productEdit) && !is_null($productEdit)):
                                                 </div>
                                             </div>
                                             <div class="disableBlank">
-                                                <!--<div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group form-group-default selectize-enabled">
-                                                            <label for="Shop_id">Shop</label>
-                                                            <select class="full-width"
-                                                                    placeholder="Seleziona il proprietario"
-                                                                    data-init-plugin="selectize" title="" name="Shop_id"
-                                                                    id="Shop" required>
-                                                                <option></option>
-                                                                <?php //foreach ($shops as $shop): ?>
-                                                                    <option value="<?php //echo $shop->id ?>"
-                                                                        <?php
-                                                                        //if (isset($productEdit)) {
-                                                                        //    if (!is_null($productEdit->shop) && (bool)$productEdit->shop->findOneByKey('id', $shop->id)) {
-                                                                        //        echo "selected";
-                                                                        //    }
-                                                                        //}
-                                                                        ?>><?php // echo $shop->title ?></option>
-                                                                <?php// endforeach; ?>
-                                                            </select>
-                                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                                        </div>
-                                                    </div>
-                                                </div>-->
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group form-group-default selectize-enabled">
@@ -213,7 +176,8 @@ if (isset($productEdit) && !is_null($productEdit)):
                                                                     data-init-plugin="selectize" title="Product_sizes"
                                                                     name="Product_sizes" id="Product_sizes">
                                                                 <option></option>
-                                                                <?php foreach ($sizesGroups as $sizesGroup): ?>
+                                                                <?php foreach ($sizesGroups as $sizesGroup):
+                                                                    if ('zz' === substr($sizesGroup->locale, 0, 2)) continue; ?>
                                                                     <option value="<?php echo $sizesGroup->id ?>" <?php
                                                                     if (isset($productEdit)) {
                                                                         if (!is_null($productEdit->productSizeGroup) && $productEdit->productSizeGroup->id == $sizesGroup->id) echo "selected";
@@ -274,6 +238,54 @@ if (isset($productEdit) && !is_null($productEdit)):
                         </div>
                         <div class="col-md-4">
                             <div class="disableBlank">
+                            <?php if ($shops): ?>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="Shop_id">Shop</label>
+                                            <select class="full-width"
+                                                    placeholder="Seleziona il proprietario"
+                                                    data-init-plugin="selectize" title="" name="Shop_id"
+                                                    id="Shop" required>
+                                                <?php foreach ($shops as $shop): ?>
+                                                    <option value="<?php echo $shop->id ?>"
+                                                        <?php
+                                                        if (isset($productEdit)) {
+                                                            if (!is_null($productEdit->shop) && (bool)$productEdit->shop->findOneByKey('id', $shop->id)) {
+                                                                echo "selected";
+                                                            }
+                                                        }
+                                                        ?>><?php echo $shop->title ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group form-group-default required">
+                                            <label for="Product_retail_price">Prezzo Vendita</label>
+                                            <input autocomplete="off" type="text" id="Product_retail_price"
+                                                   class="form-control search-product" name="Product_retail_price"
+                                                   value="<?php echo (isset($productEdit) && isset($productEdit->itemno)) ? $productEdit->itemno : '' ?>"
+                                                   required>
+                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group form-group-default required">
+                                            <label for="Product_value">Prezzo Fornitore</label>
+                                            <input id="Product_value" autocomplete="off" type="text"
+                                                   class="form-control search-product" name="Product_value"
+                                                   value="<?php echo (isset($productEdit)) ? $productEdit->productVariant->name : "" ?>"
+                                                   required>
+                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="panel panel-default clearfix">
                                     <div class="panel-heading clearfix">
                                         <h5 class="m-t-10">Informazioni SEO</h5>

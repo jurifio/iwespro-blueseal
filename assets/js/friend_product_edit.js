@@ -37,7 +37,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
 
     if (!$('.disableBlankActive').length) {
         var type = '';
-        if ($('.product-code').length) {
+        if ($('.product-code').html().length) {
             type = 'PUT';
         } else {
             type = 'POST';
@@ -49,7 +49,17 @@ $(document).on('bs.product.edit', function (e, element, button) {
             },
             new FormData(),
             function (res) {
-                body.html(res);
+                try {
+                    res = JSON.parse(res);
+                } catch (e) {
+                    res = res;
+                }
+                if ('string' == typeof res) {
+                    body.html(res);
+                } else {
+                    body.html(res['message']);
+                    $('.product-code').html(res['code']['id'] + '-' + res['code']['productVariantId']);
+                }
             }
         );
         bsModal.modal();
@@ -185,7 +195,7 @@ $(document).on('bs.print.aztec', function (e, element, button) {
 
 $(document).on('bs.det.erase', function (e) {
     e.preventDefault();
-    $("#productDetails").find('select').each(function () {
+    $("#main-details").find('select').each(function () {
         $(this)[0].selectize.setValue(0);
     });
     $("#ProductName_1_name").val("");
@@ -551,45 +561,50 @@ $(document).on('bs.details.model.assign', function (e) {
             }
         }).done(function ($content) {
 
-            $("#productDetails").html($content);
+            $("#main-details").html($content);
 
             changeProductDataSheet = false;
             var dataSheet = $('.selectContent').data('prototype-id');
             $('#Product_dataSheet').selectize()[0].selectize.setValue(dataSheet, true);
             changeProductDataSheet = true;
 
-            $("#productDetails").find('select').each(function () {
-                var sel = $(this).selectize({
-                    valueField: 'id',
-                    labelField: 'item',
-                    searchField: ['item'],
-                    options: window.detailsStorage
+            //setTimeout(function(){
+                $('#main-details').find('select').each(function () {
+                    var sel = $(this).selectize({
+                        valueField: 'id',
+                        labelField: 'item',
+                        searchField: ['item'],
+                        options: window.detailsStorage
+                    });
+                    var initVal = $(this).data('init-selection');
+                    if (initVal != 'undefined' && initVal.length != 0) {
+                        sel[0].selectize.setValue(initVal, true);
+                    } else {
+                        sel[0].selectize.setValue(0, true);
+                    }
+                    bsModal.modal('hide');
                 });
-                var initVal = $(this).data('init-selection');
-                if (initVal != 'undefined' && initVal.length != 0) {
-                    sel[0].selectize.setValue(initVal, true);
-                } else {
-                    sel[0].selectize.setValue(0, true);
-                }
-                bsModal.modal('hide');
-            });
+            //}, 200);
         });
     });
 });
 
 (function ($) {
-    $.fn.selectDetails = function (value, type) {
+    $.fn.selectDetails = function (arr) {
         var prototypeId = 0;
-        type = (type) ? type : '';
-        value = (value) ? value : '';
+        if ('undefined' === typeof arr) var arr = {};
+        arr['type'] = ('type' in arr) ? arr['type'] : '';
+        arr['value'] = ('value' in arr) ? arr['value'] : '';
+        arr['code'] = ('code' in arr) ? arr['code'] : '';
+
         var self = this;
         $.ajax({
             type: "GET",
             url: "/blueseal/xhr/GetDataSheet",
             data: {
-                value: value,
-                type: type,
-                code: $('.product-code').html()
+                value: arr['value'],
+                type: arr['type'],
+                code: arr['code']
             }
         }).done(function (content) {
             $(self).html(content);
@@ -599,7 +614,10 @@ $(document).on('bs.details.model.assign', function (e) {
             selPDS[0].selectize.setValue(prototypeId, true);
 
             productDataSheet.on("change", function () {
-                $(self).selectDetails($(this).find("option:selected").val(), 'change');
+                $(self).selectDetails({
+                    value: $(this).find("option:selected").val(),
+                    type: 'change'
+                });
             });
 
             $(self).find(".productDetails select").each(function () {
@@ -664,19 +682,19 @@ function searchForProduct(itemno, variantName, brandId) {
         if (res['editable']) {
             if (res['code']) {
                 $('.product-code').html(res['code']);
+                $('#main-details').selectDetails({code: res['code']});
                 if (res['product']) {
-                    $('#main-details').selectDetails();
                     fillTheFields(res['product']);
                 }
             } else {
                 $('.product-code').html();
+                $('#main-details').selectDetails();
             }
             $('.disableBlank').disableBlank('enable');
         } else {
             $('.disableBlank').disableBlank();
         }
     }).fail(function(res){
-        console.log(res);
         body.html(res);
         okButton.html('Ok').off().on('click', function(){
             bsModal.modal('hide');
@@ -686,6 +704,8 @@ function searchForProduct(itemno, variantName, brandId) {
 
 function fillTheFields(product) {
     var corrispondences = {};
+
+    $('.product-code').html(product['id'] + '-' + product['productVariantId']);
     $('#Product_id').val(product['id']);
     $('#Product_productVariantId').val(product['productVariantId']);
     $('#Product_itemno').val(product['itemno']);
@@ -699,6 +719,8 @@ function fillTheFields(product) {
     $('#Product_externalId').val(product['extId']);
     $('#Product_sizes').selectize()[0].selectize.setValue(product['productSizeGroupId'], true);
     $('#Product_ProductSeasonId').selectize()[0].selectize.setValue(product['productSeasonId'], true);
+    $('#Product_retail_price').val(product['price']);
+    $('#Product_value').val(product['value']);
     var selectName = $('#ProductName_1_name').selectize()[0].selectize;
     selectName.addOption({name: product['productName']});
     selectName.addItem(product['productName']);
@@ -803,10 +825,10 @@ $.fn.catalogMovements = function(shops, code) {
 
     this.displayError = function(msg) {
         self.body.html(msg);
-        okButton.html('ok').off().on('click', function() {
-            self.modal('hide');
+        self.okButton.html('ok').off().on('click', function() {
+            self.modal.modal('hide');
         });
-        self.modal();
+        self.modal.modal();
     };
 
     //elaborazione dei dati
