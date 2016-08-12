@@ -50,9 +50,9 @@ $(document).on('bs.product.edit', function (e, element, button) {
             new FormData(),
             function (res) {
                 try {
-                    var res = JSON.parse(res);
+                    res = JSON.parse(res);
                 } catch (e) {
-                    var res = res;
+                    res = res;
                 }
                 if ('string' == typeof res) {
                     body.html(res);

@@ -73,8 +73,8 @@ class CProductManageController extends ARestrictedAccessRootController
                         ]
                     );
                     if ($shpe) {
-                        $shpe->price = $post['Product_retail_price'];
-                        $shpe->value = $post['Product_value'];
+                        if (array_key_exists('Product_retail_price', $post)) $shpe->price = $post['Product_retail_price'];
+                        if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];
                         $shpe->update();
                     }
                 }
@@ -329,7 +329,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 $insertData = $productIdsExt;
                 $insertData['shopId'] = $input;
                 $insertData['price'] = $post['Product_retail_price'];
-                $insertData['value'] = $post['Procuct_value'];
+                $insertData['value'] = $post['Product_value'];
                 $this->app->dbAdapter->insert("ShopHasProduct", $insertData);
                 $hasShop++;
             }
