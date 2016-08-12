@@ -342,8 +342,8 @@ class CProductManageController extends ARestrictedAccessRootController
                     $shpe->productId = $productIdsExt['productId'];
                     $shpe->productVariantId = $productIdsExt['productVariantId'];
                     $shpe->shopId = $shop->id;
-                    $shpe->price = $post['Product_retail_price'];
-                    $shpe->value = $post['Product_value'];
+                    if (array_key_exists('Product_retail_price', $post)) $shpe->price = $post['Product_retail_price'];
+                    if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];
                     $shpe->insert();
                 }
             }
