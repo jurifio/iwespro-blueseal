@@ -53,13 +53,9 @@ class CUserSalesRecapController extends AAjaxController
 		//$completed = (($current - $start) / ($end - $start)) * 100;
 
 		$shopsWhere = [];
-		if ($this->app->getUser()->hasRole('manager')) {
-			$valueToSelect = "iwes";
-		} else{
-			$valueToSelect = "friend";
-			$authorizedShops = [];
+		if (!$this->app->getUser()->hasRole('manager')) {
 			foreach($this->app->getUser()->shop as $val) {
-				$authorizedShops[] = $val->id;
+				$shopsWhere[] = $val->id;
 			}
 		}
 		

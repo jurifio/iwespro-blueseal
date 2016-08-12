@@ -800,7 +800,6 @@ Portlet.prototype.constructor = UiElement;
 Portlet.prototype.draw = function(that) {
 	var _this = this;
 
-
 	_this.ajaxPromise.progress(function(){
 		$(that).replaceWith(_this.loadingTemplate)
 	}).done(function(result) {
