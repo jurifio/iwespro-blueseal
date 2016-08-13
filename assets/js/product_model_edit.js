@@ -648,7 +648,7 @@ $(document).ready(function () {
     var nameOptions = [];
     nameOptions[0] = {name: $("#hidden-name").val()};
 
-    $("#ProductName_1_name").selectize({
+    $("#product_name").selectize({
         valueField: 'name',
         labelField: 'name',
         searchField: 'name',
@@ -687,41 +687,59 @@ $(document).ready(function () {
         }
     });
 
-    var radioTree = $(".categoriesTree");
-    if (radioTree.length) {
-        radioTree.dynatree({
-            initAjax: {
-                url: "/blueseal/xhr/GetCategoryTree"
-            },
-            autoexpand: true,
-            checkbox: true,
-            imagePath: "/assets/img/skin/icons_better.gif",
-            selectMode: 2,
-            onPostInit: function () {
-                var vars = $("#ProductCategory_id").val().trim();
-                var ids = vars.split(',');
-                for (var i = 0; i < ids.length; i++) {
-                    if (this.getNodeByKey(ids[i]) != null) {
-                        this.getNodeByKey(ids[i]).select();
-                    }
-                }
-                $.map(this.getSelectedNodes(), function (node) {
-                    node.makeVisible();
-                });
-                $('.categoriesTree').scrollbar({
-                    axis: "y"
-                });
-            },
-            onSelect: function (select, node) {
-                // Display list of selected nodes
-                var selNodes = node.tree.getSelectedNodes();
-                // convert to title/key array
-                var selKeys = $.map(selNodes, function (node) {
-                    return node.data.key;
-                });
-                //$("#ProductCategory_id").val(selKeys.join(","));
-                //TODO: output categorie
+    $("#product_name").selectize({
+        valueField: 'name',
+        labelField: 'name',
+        searchField: 'name',
+        options: nameOptions,
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    escape(item.name) +
+                    '</div>';
             }
-        });
-    }
+        },
+        load: function (query, callback) {
+            if (3 >= query.length) {
+                return callback();
+            }
+            $.ajax({
+                url: '/blueseal/xhr/NamesManager',
+                type: 'GET',
+                data: "search=" + query,
+                dataType: 'json',
+                error: function () {
+                    callback();
+                },
+                success: function (res) {
+                    if (!res.length) {
+                        var resArr = [];
+                        resArr[0] = {name: query.trim()};
+                        res = resArr;
+                    } else {
+                        res.push({name: query.trim()});
+                    }
+                    callback(res);
+                }
+            });
+        }
+    });
+
+    $("#model_categories").selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        options: JSON.parse($('.JSON-cats').html()),
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    escape(item.name) +
+                    '</div>';
+            }
+        }
+    });
+
+
 });

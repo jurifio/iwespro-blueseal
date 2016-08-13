@@ -21,7 +21,7 @@
 
             <div class="container-fluid">
                 <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post"
-                      autocomplete="off">
+                      autocomplete="off" class="form">
                     <?php
                     $value = [];
                     if (isset($productEdit) && !is_null($productEdit->productCategory)) {
@@ -31,16 +31,7 @@
                     } ?>
                     <input type="hidden" id="ProductCategory_id" name="ProductCategory_id"
                            value="<?php echo implode(',', $value) ?>"/>
-                    <input type="hidden" id="Product_id" name="Product_id" value="<?php ?>"/>
-
-                    <input type="hidden" id="Product_productVariantId" name="Product_productVariantId"
-                           value="<?php ?>"/>
-                    <?php if (isset($productRand)): ?>
-                        <input type="hidden" name="dirtyProductId" value="<?php echo $productRand['id'] ?>">
-                    <?php endif; ?>
-
-                    <input type="hidden" id="Product_sortingPriorityId" name="Product_sortingPriorityId"
-                           value="<?php ?>"/>
+                    <input type="hidden" id="model_id" name="model_id" value="<?php ?>"/>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -78,22 +69,34 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
+                                            <div class="form-group form-group-default required">
+                                                <label for="name">Nome Prodotto</label>
+                                                <select id="product_name"
+                                                        class="form-control product_name" name="product_name"
+                                                        required></select>
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
                                             <div class="form-group form-group-default">
-                                                <label>Categorie</label>
-                                                <div class="form-group form-group-default categoriesTree"></div>
+                                                <div class="JSON-cats" style="display: none"><?php echo $categories; ?></div>
+                                                <label for="model_categories">Categorie</label>
+                                                <input type="text" class="form-control model_categories" name="model_categories"
+                                                        id="model_categories" value="204" />
 
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
 
-
                         <div class="col-md-6">
                             <div style="display:none"
                                  id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>
+
                             <div class="panel panel-default clearfix details-section">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Scheda prodotto e dettagli</h5>
@@ -164,17 +167,6 @@
             data-title="Tag"
             data-placement="bottom"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-sort-numeric-asc"
-            data-permission="/admin/product/edit"
-            data-event="bs.priority.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Priorità"
-            data-json='<?php echo json_encode($sortingOptions); ?>'
-            data-placement="bottom"
-        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione dettagli">
         <bs-toolbar-button
@@ -217,21 +209,6 @@
             data-title="Aggiungi un nuovo dettaglio"
             data-placement="bottom"
         ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Stato del prodotto">
-        <bs-toolbar-select
-            data-tag="select"
-            data-icon="fa-random"
-            data-permission="/admin/product/add"
-            data-rel="tooltip"
-            data-button="false"
-            data-placement="bottom"
-            data-class="btn btn-default"
-            data-name="Product_status"
-            data-title="Modifica stato"
-            data-event="bs.product.changestatus"
-            data-options='<?php echo json_encode($statuses); ?>'
-        ></bs-toolbar-select>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

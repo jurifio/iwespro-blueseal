@@ -767,3 +767,8 @@ ul.roulette-importer-details li {
     opacity: 0.6;
     z-index: 4;
 }
+
+.form .selectize-control {
+    position: relative !important;
+    margin-top: 5px;
+}

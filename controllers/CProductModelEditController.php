@@ -32,53 +32,19 @@ class CProductModelEditController extends CProductManageController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_model_edit.php');
 
-	    /** LETTURA GET PER PREPARARE MODIFICA */
-
 		/** LOGICA */
 		$bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
 		$fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
 		$dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl') . '/';
-		$elenco = $bluesealBase . "prodotti";
-		$nuovoprodotto = $bluesealBase . "prodotti/modifica";
-		$productEdit = null;
-		$productRand = null;
-		$qrMessage = null;
 
-		$em = $this->app->entityManagerFactory->create('ProductBrand');
-		$brands = $em->findAll(null, 'order by `name`');
-
-		$em = $this->app->entityManagerFactory->create('Lang');
-		$langs = $em->findAll();
-
-		$em = $this->app->entityManagerFactory->create('ProductSeason');
-		$seasons = $em->findAll();
-
-		$em = $this->app->entityManagerFactory->create('ProductSizeGroup');
-		$sizesGroups = $em->findAll(null, 'order by locale, macroName, `name`');
-
-		$em = $this->app->entityManagerFactory->create('Shop');
-		$shops = $em->findAll(null, 'order by `name`');
-
-		$em = $this->app->entityManagerFactory->create('Tag');
-        $tag = $em->findAll(null, 'order by `slug`');
-
-        $em = $this->app->entityManagerFactory->create('ProductColorGroup');
-        $gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", []);
-
-        $em = $this->app->entityManagerFactory->create('ProductStatus');
-        $productStatuses = $em->findAll();
-        $statuses = [];
-        foreach($productStatuses as $status){
-            $statuses[$status->id] = $status->name;
-        }
-
-
-        $em = $this->app->entityManagerFactory->create('SortingPriority');
-        $sortingPriorities = $em->findAll();
-
-        $sortingOptions = [];
-        foreach($sortingPriorities as $sortingPriority){
-            $sortingOptions[$sortingPriority->id] = $sortingPriority->priority;
+        $productCategories = $this->app->repoFactory->create('ProductCategory')->findAll();
+        $categories = [];
+        $idCat = 0;
+        foreach($productCategories as $productCategory) {
+            $categories[$idCat] = [];
+            $categories[$idCat]['id'] = $productCategory->id;
+            $categories[$idCat]['name'] = trim($this->app->categoryManager->categories()->getStringPath($productCategory->id," "));
+            $idCat++;
         }
 
         $productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
@@ -93,52 +59,12 @@ class CProductModelEditController extends CProductManageController
         }
         unset($productDetailsCollection);
 
-        $productEdit = null;
-        $cats = null;
-
-        if (0) {
-            $em = $this->app->entityManagerFactory->create('Product', false);
-            $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));
-
-
-            foreach ($productEdit->productCategory as $v) {
-                $path = $this->app->categoryManager->categories()->getPath($v->id);
-                unset($path[0]);
-                $cats[] = '<span>' . implode('/', array_column($path, 'slug')) . '</span>';
-            }
-            $qrMessage = $productEdit->getAztecCode();
-            $qrMessage = base64_encode($qrMessage);
-
-            $statuses['selected'] = $productEdit->productStatusId;
-        }
-
-        //$this->app->vendorLibraries->load("aztec");
-
-
-
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'statuses' => $statuses,
-            'sortingOptions' => $sortingOptions,
-            'tags' => $tag,
-            'dummyUrl' => $dummyUrl,
-            'fileFolder' => $fileFolder,
-            'elenco' => $elenco,
-            'shops' => $shops,
-            'productRand' => $productRand,
-            'nuovoprodotto' => $nuovoprodotto,
-            'qrMessage' => $qrMessage,
-            'productEdit' => $productEdit,
-            'brands' => $brands,
-            'double' => false,
-            'langs' => $langs,
-            'seasons' => $seasons,
-            'sizesGroups' => $sizesGroups,
-            'gruppicolore' => $gruppicolore,
             'page' => $this->page,
+            'categories' => json_encode($categories),
             'sidebar' => $this->sidebar->build(),
-            'categories' => $cats,
-	        'productDetails' => $productDetails
+            'productDetails' => $productDetails
         ]);
     }
 }

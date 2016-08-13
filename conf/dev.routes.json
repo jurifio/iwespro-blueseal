@@ -854,8 +854,7 @@
                 "PUT",
                 "DELETE"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendConfirmationController"
