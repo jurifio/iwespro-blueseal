@@ -20,7 +20,7 @@
             </div>
 
             <div class="container-fluid">
-                <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post"
+                <form id="form-model" enctype="multipart/form-data" role="form" action="" method="post" data-primaryfield="#id"
                       autocomplete="off" class="form">
                     <?php
                     $value = [];
@@ -31,7 +31,7 @@
                     } ?>
                     <input type="hidden" id="ProductCategory_id" name="ProductCategory_id"
                            value="<?php echo implode(',', $value) ?>"/>
-                    <input type="hidden" id="model_id" name="model_id" value="<?php ?>"/>
+                    <input type="hidden" id="id" name="id" value="<?php ?>"/>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -71,8 +71,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default required">
                                                 <label for="name">Nome Prodotto</label>
-                                                <select id="product_name"
-                                                        class="form-control product_name" name="product_name"
+                                                <select id="productName"
+                                                        class="form-control product_name" name="productName"
                                                         required></select>
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                             </div>
@@ -83,8 +83,9 @@
                                             <div class="form-group form-group-default">
                                                 <div class="JSON-cats" style="display: none"><?php echo $categories; ?></div>
                                                 <label for="model_categories">Categorie</label>
-                                                <input type="text" class="form-control model_categories" name="model_categories"
-                                                        id="model_categories" value="204" />
+                                                <select type="text" class="form-control categories" name="categories"
+                                                        id="categories" value="" >
+                                                    </select>
 
                                             </div>
                                         </div>
@@ -125,88 +126,6 @@
             data-rel="tooltip"
             data-event="bs.product.edit"
             data-title="Salva"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-qrcode"
-            data-permission="/admin/product/add"
-            data-event="bs.print.aztec"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Codice Aztec"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-image"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-event="bs.dummy.edit"
-            data-rel="tooltip"
-            data-title="Dummy picture"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-sitemap"
-            data-permission="/admin/product/add"
-            data-event="bs.category.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Categorie"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-tag"
-            data-permission="/admin/product/add"
-            data-event="bs.tag.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Tag"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione dettagli">
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-eraser"
-            data-permission="/admin/product/edit"
-            data-event="bs.det.erase"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Vuota i dettagli"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-plus-square"
-            data-permission="/admin/product/edit"
-            data-event="bs.det.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo dettaglio"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-files-o"
-            data-permission="/admin/product/edit"
-            data-event="bs.details.model.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo dettaglio"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-files-o"
-            data-permission="/admin/product/edit"
-            data-event="bs.details.model.assign"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo dettaglio"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
