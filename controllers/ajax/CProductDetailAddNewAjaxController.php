@@ -25,17 +25,27 @@ class CProductDetailAddNewAjaxController extends AAjaxController
         $slugify = new CSlugify();
         $slug = $slugify->slugify($get);
         $get = ( ' !' == $last2) ? substr($get, 0, -2) : $get;
-        $sql = "SELECT productDetailId FROM `ProductDetailTranslation` WHERE langId = 1 AND (name LIKE '" . $get . "' OR name LIKE '" . $get . " !')";
+        $param1 = $this->app->dbAdapter->quote($get);
+        $param2 = $this->app->dbAdapter->quote($get . ' !');
+        $sql = "SELECT productDetailId FROM `ProductDetailTranslation` WHERE langId = 1 AND (name LIKE " . $param1 . " OR name LIKE " . $param2 . ")";
         $res = $this->app->dbAdapter->query($sql, [])->fetchAll();
         if (!count($res)) {
             try {
                 $get .= ' !';
                 $this->app->dbAdapter->beginTransaction();
-                $retId = $this->app->dbAdapter->insert('ProductDetail', ['slug' => $slug]);
-                $retTrad = $this->app->dbAdapter->insert('ProductDetailTranslation',['productDetailId' => $retId, 'langId' => 1, 'name' => $get]);
+                $newDett = $this->app->repoFactory->create('ProductDetail')->getEmptyEntity();
+                $newDett->slug = $slug;
+                $retId = $newDett->insert();
+
+                $newTrad = $this->app->repoFactory->create('ProductDetailTranslation')->getEmptyEntity();
+                $newTrad->productDetailId = $retId;
+                $newTrad->langId = 1;
+                $newTrad->name = $get;
+                $newTrad->insert();
                 $this->app->dbAdapter->commit();
                 return "Dettaglio inserito!-" . $retId;
             } catch (\Exception $e) {
+                $this->app->dbAdapter->rollBack();
                 return "OOPS! Errore durante l'inserimento, che non è stato eseguito.<br />" . $e->getMessage();
             }
         } else {

@@ -854,8 +854,7 @@
                 "PUT",
                 "DELETE"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendConfirmationController"
@@ -1402,6 +1401,32 @@
             "pattern": "/blueseal/friend/prodotti/modifica(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendProductEditController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/modelli(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/modelli/modifica(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelEditController"
             },
             "filters": {},
             "translations": {},
