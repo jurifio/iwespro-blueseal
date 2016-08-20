@@ -8,7 +8,29 @@ var tagList = "";
 
 
 $(document).on('bs.product.edit', function (e, element, button) {
-    $('#form-model').bsForm('save', '/blueseal/xhr/DetailModelSave');
+    $('#form-model').bsForm('save', {
+            url:'/blueseal/xhr/DetailModelSave',
+            onDone: function(res, method) {
+                var body = 'Oops! Metodo non pervenuto. Contatta l\'amministratore';
+                var location = false;
+                if ('POST' == method) {
+                    body = 'Nuovo modello inserito.';
+                    location = window.location.pathname + '?id=' + res['productSheetActualId'];
+                }
+                if ('PUT' == method) {
+                    body = 'Modello aggiornato.';
+                    location = window.location.href;
+                }
+
+                modal = new $.bsModal('Salvataggio del modello', {
+                    body: body,
+                    okButtonEvent: function(){
+                        modal.hide();
+                        if (false != location) window.location.replace(location);
+                    }
+                });
+            }
+    });
 });
 
 $(document).ready(function () {

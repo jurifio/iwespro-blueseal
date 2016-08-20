@@ -428,6 +428,10 @@ $.fn.humanized = function (method, data) {
 };
 
 $.bsModal = function (header, params) {
+    if ('undefined' != typeof modal) {
+        modal.hide();
+        delete(modal);
+    }
     //constructor
     var self = this;
     if ('undefined' == typeof header) {
@@ -494,6 +498,14 @@ $.bsModal = function (header, params) {
     this.setLabel = function (button /* ok, cancel */, string) {
         self[button + 'Button'].html(string);
     };
+
+    this.show = function() {
+        this.bsModal.modal();
+    }
+
+    this.hide = function() {
+        this.bsModal.modal('hide');
+    }
 };
 
 (function ($) {
@@ -575,45 +587,6 @@ $.bsModal = function (header, params) {
 })(jQuery);
 
 
-(function ($) {
-    /**
-     *
-     * @param primary hidden Field the input field used for checking if the edited entity is new or existent
-     * @param url
-     * @param data
-     */
-    $.fn.saveForm = function (primaryField, url, data) {
-        if ('hidden' !== $(primaryField).attr('type')) throw "'primaryField' must be an hidden";
-
-        if ($(primaryField).val()) {
-            type = 'PUT';
-        } else {
-            type = 'POST';
-        }
-        $(document).ajaxForm({
-                type: type,
-                url: "#",
-                formAutofill: true
-            },
-            new FormData(),
-            function (res) {
-                try {
-                    res = JSON.parse(res);
-                } catch (e) {
-                    res = res;
-                }
-                if ('string' == typeof res) {
-                    body.html(res);
-                } else {
-                    body.html(res['message']);
-                    $('.product-code').html(res['code']['id'] + '-' + res['code']['productVariantId']);
-                }
-            }
-        );
-    };
-})(jQuery);
-
-
 (function($){
     $.fn.bsForm = function(method, params) {
         var self = this;
@@ -661,7 +634,9 @@ $.bsModal = function (header, params) {
                 if ($(primaryField).val().length) return 'PUT';
                 else return 'POST';
             },
-            save: function(url) {
+            save: function(params) {
+                if ('string' != typeof params['url'] ) throw 'the "url" parameter is mandatory and it must to be string type';
+                if ('function' != typeof params['onDone']) throw 'the "url" parameter is mandatori and it must to be a callback';
                 methods.checkErrors();
                 if ($(self).data('errors').length) {
                     //display Errors
@@ -684,20 +659,15 @@ $.bsModal = function (header, params) {
                     };  
                     
                     opt['method'] = methods.putOrPost();
-                    opt['url'] = url;
                     opt['data'] = new FormData(document.querySelector('#' + $(self).attr('id')));
-
+                    opt['onFail'] = function(res){console.log(res)};
+                    opt['doAlways'] = function(res){};
+                    opt = $.objMerge(opt, params);
                     var formDataObject = new FormData();
 
                     $(self).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
                         if (typeof $(this).attr('name') == 'undefined') return;
-                        /*if ('select' == $(this).tagName()) {
-                            var selected = $(this).find('option:selected');
-                            if (selected.length) formDataObject.append($(this).attr('name'), selected.val());
-                            else formDataObject.append($(this).attr('name'), '');
-                        }
-                        else if ('textaera' == $(this).tagName()) formDataObject.append($(this).attr('name'), $(this).html());
-                        else*/ formDataObject.append($(this).attr('name'), $(this).val());
+                        formDataObject.append($(this).attr('name'), $(this).val());
                     });
 
                     var radioNames = [];
@@ -726,7 +696,11 @@ $.bsModal = function (header, params) {
                     opt['data'] = formDataObject;
                     
                     $.ajax(opt).done(function(res){
-                        console.log(res);
+                        opt.onDone(res);
+                    }).fail(function(res){
+                        opt.onFail(res);
+                    }).always(function(res){
+                        opt.doAlways(res);
                     });
                 }
             }
