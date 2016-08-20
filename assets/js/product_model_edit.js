@@ -101,46 +101,7 @@ $(document).ready(function () {
     var nameOptions = [];
     nameOptions[0] = {name: $("#hidden-name").val()};
 
-    $("#product_name").selectize({
-        valueField: 'name',
-        labelField: 'name',
-        searchField: 'name',
-        options: nameOptions,
-        create: false,
-        render: {
-            option: function (item, escape) {
-                return '<div>' +
-                    escape(item.name) +
-                    '</div>';
-            }
-        },
-        load: function (query, callback) {
-            if (3 >= query.length) {
-                return callback();
-            }
-            $.ajax({
-                url: '/blueseal/xhr/NamesManager',
-                type: 'GET',
-                data: "search=" + query,
-                dataType: 'json',
-                error: function () {
-                    callback();
-                },
-                success: function (res) {
-                    if (!res.length) {
-                        var resArr = [];
-                        resArr[0] = {name: query.trim()};
-                        res = resArr;
-                    } else {
-                        res.push({name: query.trim()});
-                    }
-                    callback(res);
-                }
-            });
-        }
-    });
-
-    $("#product_name").selectize({
+    $("#productName").selectize({
         valueField: 'name',
         labelField: 'name',
         searchField: 'name',
@@ -197,7 +158,7 @@ $(document).ready(function () {
 
 
     //init page
-    if ($_GET.all) {
+    if (Object.keys($_GET.all).length) {
         $.initFormByGetData({
             data: $_GET.all.id,
             ajaxUrl: '/blueseal/xhr/DetailModel',

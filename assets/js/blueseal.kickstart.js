@@ -269,10 +269,12 @@ getGet = function () {
     var params = window.location.search.substr(1);
     params = params.split('&');
 
-    params.forEach(function (v, k, arr) {
-        var paramArr = v.split('=');
-        self.all[paramArr[0]] = paramArr[1];
-    });
+    if ("" != params[0]) {
+        params.forEach(function (v, k, arr) {
+            var paramArr = v.split('=');
+            self.all[paramArr[0]] = paramArr[1];
+        });
+    }
 
     if (!Object.keys(this.all).length) {
         this.all = false;
@@ -286,8 +288,7 @@ getGet = function () {
 
 $_GET = new getGet();
 
-$.objMerge = function (...theArgs
-)
+$.objMerge = function (...theArgs)
 {
     var argsLength = theArgs.length;
     if (2 > argsLength) throw "Almost 2 objects needed";
@@ -399,8 +400,10 @@ $.fn.humanized = function (method, data) {
         addSelectizeRawItem: function (selectObj, data) {
             var isOpt = false;
             for (var opt in selectObj.options) {
-                if (data == selectObj.options[opt][selectObj.settings.valueField]) isOpt = true;
-                break;
+                if (data == selectObj.options[opt][selectObj.settings.valueField]) {
+                    isOpt = true;
+                    break;
+                }
             }
             var addOpt = {};
             addOpt[selectObj.settings.valueField] = data;
@@ -688,7 +691,13 @@ $.bsModal = function (header, params) {
 
                     $(self).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
                         if (typeof $(this).attr('name') == 'undefined') return;
-                        formDataObject.append($(this).attr('name'), $(this).val());
+                        /*if ('select' == $(this).tagName()) {
+                            var selected = $(this).find('option:selected');
+                            if (selected.length) formDataObject.append($(this).attr('name'), selected.val());
+                            else formDataObject.append($(this).attr('name'), '');
+                        }
+                        else if ('textaera' == $(this).tagName()) formDataObject.append($(this).attr('name'), $(this).html());
+                        else*/ formDataObject.append($(this).attr('name'), $(this).val());
                     });
 
                     var radioNames = [];
