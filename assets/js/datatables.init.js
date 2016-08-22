@@ -154,6 +154,34 @@
 			}
 		]
 	});
+	tableSetup.product_model_list = $.extend({}, tableSetup.common, {
+		order: [[1, "desc"]],
+		columns: [
+			{	data: "name",
+				orderable: true,
+				searchable: true
+			},{
+				data: "code",
+				orderable: true,
+				searchable: true
+			},{
+				data: "productName",
+				orderable: true,
+				searchable: true
+			},{
+				data: "prototypeName",
+				orderable: true,
+				searchable: true
+			},{
+				data: "categories",
+				orderable: true,
+				searchable: true
+			},{
+				data: "details",
+				orderable: true
+			}
+		]
+	});
 	tableSetup.product_tag_list = $.extend({}, tableSetup.common, {
 		order: [[6, "asc"]],
 		columns: [
