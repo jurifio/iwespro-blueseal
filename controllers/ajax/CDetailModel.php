@@ -32,8 +32,8 @@ class CDetailModel extends AAjaxController
         if (!$detailModel) return json_encode(false);
         $res = $detailModel->toArray();
         $res['categories'] = [];
-        foreach($detailModel->productSheetModelPrototypeHasProductCategory as $cats) {
-            $res['categories'][] = $cats->productCategoryId;
+        foreach($detailModel->productCategory as $cats) {
+            $res['categories'][] = $cats->id;
         }
 
         return json_encode($res);

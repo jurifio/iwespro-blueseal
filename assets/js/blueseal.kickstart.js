@@ -696,7 +696,7 @@ $.bsModal = function (header, params) {
                     opt['data'] = formDataObject;
                     
                     $.ajax(opt).done(function(res){
-                        opt.onDone(res);
+                        opt.onDone(res, opt['method']);
                     }).fail(function(res){
                         opt.onFail(res);
                     }).always(function(res){

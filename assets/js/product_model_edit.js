@@ -181,16 +181,28 @@ $(document).ready(function () {
 
     //init page
     if (Object.keys($_GET.all).length) {
+        if ('string' == typeof $_GET.all.id) {
+            var data = {id: $_GET.all.id};
+            var action = 'edit';
+        } else if ('string' == typeof $_GET.all.modelId) {
+            var data = {id: $_GET.all.modelId};
+            var action = 'byModel';
+        }
         $.initFormByGetData({
-            data: $_GET.all.id,
+            data: data,
             ajaxUrl: '/blueseal/xhr/DetailModel',
             done: function(res) {
                 if (res) {
                     $('#form-model').fillTheForm(res);
                     $('#actionTitle').html('Modifica il modello "' + res.name + '"');
-                    $('#main-details').selectDetails($_GET.all.id, 'model');
+                    $('#main-details').selectDetails(data.id, 'model');
                     $('#name').isFieldValue($('#name').val(), {}, '/blueseal/xhr/DetailModel');
                     $('#code').isFieldValue($('#code').val(), {}, '/blueseal/xhr/DetailModel');
+                    if ('byModel' == action) {
+                        $('input[name="id"]').val('');
+                        $('input[name="name"]').val('');
+                        $('input[name="code"]').val('');
+                    }
                 } else {
                     modal = new $.bsModal('Attenzione!', {body: 'Non ho trovato il modello che stai cercando.<br /> Se vuoi puoi inserirlo ora.'});
                 }

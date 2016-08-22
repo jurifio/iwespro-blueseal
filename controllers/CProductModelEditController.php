@@ -33,9 +33,6 @@ class CProductModelEditController extends CProductManageController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_model_edit.php');
 
 		/** LOGICA */
-		$bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
-		$fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
-		$dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl') . '/';
 
         $productCategories = $this->app->repoFactory->create('ProductCategory')->findAll();
         $categories = [];
