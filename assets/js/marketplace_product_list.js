@@ -99,7 +99,7 @@ $(document).on('bs.ean.newRange', function (e, element, button) {
 		} else {
 			Pace.ignore(function () {
 				$.ajax({
-					url: '/blueseal/xhr/CGenerateEanCodes',
+					url: '/blueseal/xhr/GenerateEanCodes',
 					type: "POST",
 					data: {
 						start: start,
