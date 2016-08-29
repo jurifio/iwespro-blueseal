@@ -81,27 +81,39 @@ $(document).on('bs.ean.newRange', function (e, element, button) {
 
 	header.html('Inserisci Range Ean');
 
-	body.html('<div class="form-group form-group-default">' +
+	body.html('<div>Immetti Codici di 12 caratteri per Inizio e Fine</div>' +
+		'<div class="form-group form-group-default">' +
 		'<label for="start">Inizio</label>' +
 		'<input type="text" minlength="12" maxlength="12" id="start">' +
 		'<label for="end">Fine</label>' +
 		'<input type="text" minlength="12" maxlength="12" id="end">' +
 		'</div>');
+	okButton.off().on('click',function() {
+		var start = $('#start').val();
+		var end = $('#end').val();
+		if(start.length != 12 || end.length != 12) {
+			new Alert({
+				type: "warning",
+				message: "Devi immettere codici di 12 caratteri"
+			}).open();
+		} else {
+			Pace.ignore(function () {
+				$.ajax({
+					url: '/blueseal/xhr/CGenerateEanCodes',
+					type: "POST",
+					data: {
+						start: start,
+						end: end
+					}
+				}).done(function (response) {
+					body.html('Inseriti '+response+' nuovi Ean');
+					cancelButton.off().hide();
+				});
 
-	Pace.ignore(function () {
-		$.ajax({
-			url: '/blueseal/xhr/CGenerateEanCodes',
-			type: "POST",
-			data: {
-				start: $('#start').val(),
-				end: $('#end').val()
-			}
-		}).done(function (response) {
-			body.html('Inseriti '+response+' nuovi Ean');
-			cancelButton.off().hide();
-		});
+				body.html('<img src="/assets/img/ajax-loader.gif" />');
+			});
+		}
 
-		body.html('<img src="/assets/img/ajax-loader.gif" />');
 	});
 
 	bsModal.modal();

@@ -85,7 +85,7 @@
     <bs-toolbar-group data-group-label="Assegnazione Ean">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-share"
+            data-icon="fa-barcode fa-plus"
             data-permission="/admin/product/edit"
             data-event="bs.ean.newRange"
             data-class="btn btn-default"
@@ -96,7 +96,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-file-code-o"
+            data-icon="fa-barcode fa-share"
             data-permission="/admin/product/edit"
             data-event="bs.product.ean"
             data-class="btn btn-default"
