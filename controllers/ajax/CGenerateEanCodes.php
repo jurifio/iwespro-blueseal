@@ -21,17 +21,17 @@ class CGenerateEanCodes extends AAjaxController
     public function post()
     {
     	$start = $this->app->router->request()->getRequestData('start');
+	    if(strlen($start) < 12) throw new \Exception('Wrong size for start');
 	    $end = $this->app->router->request()->getRequestData('end');
+	    if(strlen($end) < 12) throw new \Exception('Wrong size for end');
 	    $counter = 0;
 	    for(;$start<$end;$start++) {
 	    	$generator = new CBarCodeEan13();
-		    $generator->generate($start);
+		    $generator->generate(str_pad($start,12,STR_PAD_LEFT));
 		    try {
 			    $this->app->dbAdapter->insert('EanBucket',['ean'=>(string) $generator]);
 			    $counter++;
-		    } catch (\Exception $e) {
-
-		    }
+		    } catch (\Exception $e) {}
 	    }
 	    return $counter;
     }
