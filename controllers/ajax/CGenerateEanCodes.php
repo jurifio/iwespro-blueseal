@@ -1,6 +1,7 @@
 <?php
+
 namespace bamboo\blueseal\controllers\ajax;
-use bamboo\core\barcode\CBarCode;
+
 use bamboo\core\barcode\CBarCodeEan13;
 
 /**

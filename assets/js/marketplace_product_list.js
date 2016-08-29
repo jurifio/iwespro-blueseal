@@ -71,6 +71,42 @@ $(document).on('bs.product.publish', function (e, element, button) {
 	bsModal.modal();
 });
 
+$(document).on('bs.ean.newRange', function (e, element, button) {
+
+	var bsModal = $('#bsModal');
+	var header = $('.modal-header h4');
+	var body = $('.modal-body');
+	var cancelButton = $('.modal-footer .btn-default');
+	var okButton = $('.modal-footer .btn-success');
+
+	header.html('Inserisci Range Ean');
+
+	body.html('<div class="form-group form-group-default">' +
+		'<label for="start">Inizio</label>' +
+		'<input type="text" minlength="12" maxlength="12" id="start">' +
+		'<label for="end">Fine</label>' +
+		'<input type="text" minlength="12" maxlength="12" id="end">' +
+		'</div>');
+
+	Pace.ignore(function () {
+		$.ajax({
+			url: '/blueseal/xhr/CGenerateEanCodes',
+			type: "POST",
+			data: {
+				start: $('#start').val(),
+				end: $('#end').val()
+			}
+		}).done(function (response) {
+			body.html('Inseriti '+response+' nuovi Ean');
+			cancelButton.off().hide();
+		});
+
+		body.html('<img src="/assets/img/ajax-loader.gif" />');
+	});
+
+	bsModal.modal();
+});
+
 $(document).on('bs.product.retry', function (e, element, button) {
 
 	var bsModal = $('#bsModal');

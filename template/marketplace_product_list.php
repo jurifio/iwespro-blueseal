@@ -82,6 +82,30 @@
             data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Assegnazione Ean">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-share"
+            data-permission="/admin/product/edit"
+            data-event="bs.ean.newRange"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Inserisci nuovo Range Ean"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-file-code-o"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.ean"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Assegna nuovi Ean Prodotti"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
