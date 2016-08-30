@@ -28,16 +28,10 @@ class CAssignEanToSkus extends AAjaxController
 	    	$product = $this->app->repoFactory->create('Product')->findOneByStringId($product);
 		    foreach ($product->productSku as $productSku) {
 		    	if(empty($productSku->ean)) {
-		    		$ean = $this->app->repoFactory->create('EanBucket')->findOneBy(['isAssigned'=>0]);
-				    if(is_null($ean)) throw new BambooConfigException('Could not find an unassigned Ean');
-				    $this->app->dbAdapter->beginTransaction();
-				    $productSku->ean = $ean->ean;
-				    $productSku->update();
-				    $ean->isAssigned = 1;
-				    $ean->update();
-				    $this->app->dbAdapter->commit();
-				    $count++;
-				    $one++;
+					if($this->app->repoFactory->create('ProductSku')->assignNewEan($productSku)) {
+						$count++;
+						$one++;
+					};
 			    }
 		    }
 		    if($one > 0) $productsCount++;

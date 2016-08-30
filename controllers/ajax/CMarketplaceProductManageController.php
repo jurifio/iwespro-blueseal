@@ -34,9 +34,7 @@ class CMarketplaceProductManageController extends AAjaxController
     public function post()
     {
 	    $productSample = $this->app->repoFactory->create('Product')->getEmptyEntity();
-	    $marketplaceAccountSample = $this->app->repoFactory->create('MarketplaceAccount')->getEmptyEntity();
-	    $marketplaceAccountSample->readId($this->app->router->request()->getRequestData('account'));
-	    $marketplaceAccount = $marketplaceAccountSample->em()->findOne($marketplaceAccountSample->getIds());
+	    $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
 	    $config = $marketplaceAccount->config;
 	    $config['priceModifier'] = $this->app->router->request()->getRequestData('modifier');
 	    $i = 0;
