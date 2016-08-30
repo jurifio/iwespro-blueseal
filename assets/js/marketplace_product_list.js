@@ -145,33 +145,30 @@ $(document).on('bs.product.ean', function (e, element, button) {
 		getVarsArray.push(v.DT_RowId);
 	});
 
-	body.html('<img src="/assets/img/ajax-loader.gif" />');
+	body.html('Vuoi associare nuovi ean ai prodotti selezionati?');
 
-	Pace.ignore(function () {
-
-		$.ajax({
-			url: '/blueseal/xhr/CAssignEanToSkus',
-			type: "POST",
-			data: {
-				rows: getVarsArray
-			}
-		}).done(function (resoult) {
-			new Alert({
-				type: "success",
-				message: "Associati "+resoult+" nuovi Ean"
-			}).open();
-		}).fail(function (resoult) {
-			new Alert({
-				type: "warning",
-				message: "Errore: "+resoult
-			}).open();
-		}).always(function () {
-			bsModal.modal('hide');
-			$('.table').DataTable().ajax.reload();
+	okButton.off().on('click',function () {
+		bsModal.modal('hide');
+		Pace.ignore(function () {
+			$.ajax({
+				url: '/blueseal/xhr/AssignEanToSkus',
+				type: "POST",
+				data: {
+					rows: getVarsArray
+				}
+			}).done(function (resoult) {
+				new Alert({
+					type: "success",
+					message: "Associati "+resoult+" nuovi Ean"
+				}).open();
+			}).fail(function (resoult) {
+				new Alert({
+					type: "warning",
+					message: "Errore: "+resoult
+				}).open();
+			});
 		});
 	});
-
-
 	bsModal.modal();
 });
 
