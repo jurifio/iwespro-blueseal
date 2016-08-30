@@ -245,12 +245,14 @@
 <?php endif; ?>
         <div class="col-xs-6">
             <div class="col-xs-4" style="margin-top:10px">
-                <img src="<?php echo $barcodeFactoryEndpoint.$productSku->printId(); ?>" style="max-width: 62mm;max-height: 37mm"/>
+                <?php $generatorSVG = new Picqer\Barcode\BarcodeGeneratorSVG();
+                echo $generatorSVG->getBarcode($productSku->barcode,Picqer\Barcode\BarcodeGenerator::TYPE_CODE_128,2); ?>
             </div>
             <div class="col-xs-8 pull-left" style="border-right: 1px dotted #c0c0c0;">
                 <ul>
                     <li><strong>Code</strong> <?php echo $productSku->product->itemno.' # '.$productSku->product->productVariant->name; ?></li>
                     <li><strong>Size</strong> <?php echo $productSku->productSize->name ?></li>
+                    <li><strong>Price</strong> <?php echo $productSku->price ?> €</li>
                 </ul>
             </div>
         </div>
