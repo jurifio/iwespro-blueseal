@@ -157,9 +157,10 @@ $(document).on('bs.product.ean', function (e, element, button) {
 					rows: getVarsArray
 				}
 			}).done(function (resoult) {
+				resoult = JSON.parse(resoult);
 				new Alert({
 					type: "success",
-					message: "Associati "+resoult+" nuovi Ean"
+					message: "Associati "+resoult.skus+" nuovi Ean per "+resoult.products+" prodotti"
 				}).open();
 			}).fail(function (resoult) {
 				new Alert({

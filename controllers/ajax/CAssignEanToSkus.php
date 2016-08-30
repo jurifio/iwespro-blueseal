@@ -20,8 +20,11 @@ class CAssignEanToSkus extends AAjaxController
 {
     public function post()
     {
+    	$count = 0;
+	    $productsCount = 0;
     	$products = $this->app->router->request()->getRequestData('rows');
 	    foreach ($products as $product) {
+	    	$one = 0;
 	    	$product = $this->app->repoFactory->create('Product')->findOneByStringId($product);
 		    foreach ($product->productSku as $productSku) {
 		    	if(empty($productSku->ean)) {
@@ -33,8 +36,12 @@ class CAssignEanToSkus extends AAjaxController
 				    $ean->isAssigned = 1;
 				    $ean->update();
 				    $this->app->dbAdapter->commit();
+				    $count++;
+				    $one++;
 			    }
 		    }
+		    if($one > 0) $productsCount++;
 	    }
+	    return json_encode(['products'=>$productsCount,'skus'=>$count]);
     }
 }
