@@ -20,7 +20,7 @@ class CAssignEanToSkus extends AAjaxController
 {
     public function post()
     {
-    	$products = $this->app->router->request()->getRequestData('products');
+    	$products = $this->app->router->request()->getRequestData('rows');
 	    foreach ($products as $product) {
 	    	$product = $this->app->repoFactory->create('Product')->findOneByStringId($product);
 		    foreach ($product->productSku as $productSku) {

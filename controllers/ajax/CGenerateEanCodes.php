@@ -28,12 +28,14 @@ class CGenerateEanCodes extends AAjaxController
 	    $counter = 0;
 	    for(;$start<$end;$start++) {
 	    	$generator = new CBarCodeEan13();
-		    $generator->generate(str_pad($start,12,STR_PAD_LEFT));
+		    $generator->generate($start);
 		    try {
 			    $this->app->dbAdapter->insert('EanBucket',['ean'=>(string) $generator]);
 			    $counter++;
-		    } catch (\Exception $e) {}
+		    } catch (\Exception $e) {
+		    }
 	    }
+
 	    return $counter;
     }
 }

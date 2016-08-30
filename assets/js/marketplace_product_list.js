@@ -119,7 +119,7 @@ $(document).on('bs.ean.newRange', function (e, element, button) {
 	bsModal.modal();
 });
 
-$(document).on('bs.product.retry', function (e, element, button) {
+$(document).on('bs.product.ean', function (e, element, button) {
 
 	var bsModal = $('#bsModal');
 	var header = $('.modal-header h4');
@@ -127,7 +127,7 @@ $(document).on('bs.product.retry', function (e, element, button) {
 	var cancelButton = $('.modal-footer .btn-default');
 	var okButton = $('.modal-footer .btn-success');
 
-	header.html('Pubblica Prodotti');
+	header.html('Associa Ean Prodotti');
 
 	var getVarsArray = [];
 	var selectedRows = $('.table').DataTable().rows('.selected').data();
@@ -136,7 +136,7 @@ $(document).on('bs.product.retry', function (e, element, button) {
 	if (selectedRowsCount < 1) {
 		new Alert({
 			type: "warning",
-			message: "Devi selezionare uno o più Prodotti per poterli taggare"
+			message: "Devi selezionare uno o più Prodotti a cui associare Ean"
 		}).open();
 		return false;
 	}
@@ -145,19 +145,26 @@ $(document).on('bs.product.retry', function (e, element, button) {
 		getVarsArray.push(v.DT_RowId);
 	});
 
-
 	body.html('<img src="/assets/img/ajax-loader.gif" />');
 
 	Pace.ignore(function () {
 
 		$.ajax({
-			url: '/blueseal/xhr/MarketplaceProductManageController',
-			type: "PUT",
+			url: '/blueseal/xhr/CAssignEanToSkus',
+			type: "POST",
 			data: {
 				rows: getVarsArray
 			}
-		}).done(function () {
-
+		}).done(function (resoult) {
+			new Alert({
+				type: "success",
+				message: "Associati "+resoult+" nuovi Ean"
+			}).open();
+		}).fail(function (resoult) {
+			new Alert({
+				type: "warning",
+				message: "Errore: "+resoult
+			}).open();
 		}).always(function () {
 			bsModal.modal('hide');
 			$('.table').DataTable().ajax.reload();
