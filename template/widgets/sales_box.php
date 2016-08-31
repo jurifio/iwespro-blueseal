@@ -20,16 +20,12 @@
                 </div>
             </div>
             <?php
-         
             ?>
             <div class="row-xs-height">
                 <div class="col-xs-height col-top">
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="p-l-20 p-t-15">
-                                <?php
-                                ?>
-                                <?php //var_dump($value); ?>
                                 <p>Fatturato</p>
                                 <h4 class="no-margin p-b-5 text-<?php echo $color ?>">&euro; <?php echo round($value['current']['customer'],2); ?></h4>
                             </div>

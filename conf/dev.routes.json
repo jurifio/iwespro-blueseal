@@ -1436,6 +1436,19 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementsEditController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

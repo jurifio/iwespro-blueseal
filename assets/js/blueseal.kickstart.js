@@ -499,11 +499,11 @@ $.bsModal = function (header, params) {
         self[button + 'Button'].html(string);
     };
 
-    this.show = function() {
+    this.show = function () {
         this.bsModal.modal();
     }
 
-    this.hide = function() {
+    this.hide = function () {
         this.bsModal.modal('hide');
     }
 };
@@ -587,31 +587,35 @@ $.bsModal = function (header, params) {
 })(jQuery);
 
 
-(function($){
-    $.fn.bsForm = function(method, params) {
+(function ($) {
+    $.fn.bsForm = function (method, params) {
         var self = this;
 
         var methods = {
-            checkRequired: function() {
+            checkRequired: function () {
                 var requiredFault = false;
-                $(self).each(function(){
+                $(self).each(function () {
                     if ($(this).prop('required')) requiredFault = true;
                 });
-                if (requiredFault) {methods.addError('requiredFault')}
-                else {methods.removeError('requiredFault')}
+                if (requiredFault) {
+                    methods.addError('requiredFault')
+                }
+                else {
+                    methods.removeError('requiredFault')
+                }
             },
-            checkErrors: function() {
+            checkErrors: function () {
                 if (!Array.isArray($(self).data('errors'))) $(self).data('errors', []);
                 methods.checkRequired();
                 /*var isFieldFault = false;
-                $(self).find('input, select, textarea').each(function(){
-                    console.log($(this).attr('name'));
-                    if (1 == $(this).data('isFieldFault')) isFieldFault = true;
-                });
-                if (isFieldFault) {methods.addError('isFieldFault')}
-                else {methods.removeError('isFieldFault')}*/
+                 $(self).find('input, select, textarea').each(function(){
+                 console.log($(this).attr('name'));
+                 if (1 == $(this).data('isFieldFault')) isFieldFault = true;
+                 });
+                 if (isFieldFault) {methods.addError('isFieldFault')}
+                 else {methods.removeError('isFieldFault')}*/
             },
-            addError: function(err) {
+            addError: function (err) {
                 var arr = [];
                 if (Array.isArray($(self).data('errors'))) var arr = $(self).data('errors');
 
@@ -620,22 +624,22 @@ $.bsModal = function (header, params) {
                     $(self).data('errors', arr);
                 }
             },
-            removeError: function(err) {
+            removeError: function (err) {
                 var numb;
                 var arr = [];
                 if (Array.isArray($(self).data('errors'))) arr = $(self).data('errors');
-                if ( -1 < (numb = $.inArray(err, arr))) {
+                if (-1 < (numb = $.inArray(err, arr))) {
                     arr.splice(numb, 1);
                     $(self).data('errors', arr);
                 }
             },
-            putOrPost: function() {
+            putOrPost: function () {
                 var primaryField = $(self).data('primaryfield');
                 if ($(primaryField).val().length) return 'PUT';
                 else return 'POST';
             },
-            save: function(params) {
-                if ('string' != typeof params['url'] ) throw 'the "url" parameter is mandatory and it must to be string type';
+            save: function (params) {
+                if ('string' != typeof params['url']) throw 'the "url" parameter is mandatory and it must to be string type';
                 if ('function' != typeof params['onDone']) throw 'the "url" parameter is mandatori and it must to be a callback';
                 methods.checkErrors();
                 if ($(self).data('errors').length) {
@@ -643,7 +647,7 @@ $.bsModal = function (header, params) {
                     var errs = $(self).data('errors');
                     var errorMsg = '';
                     for (var i in errs) {
-                        if ('undefined' != messages.errors[errs[i]]) errorMsg+= messages.errors[errs[i]] + '<br />';
+                        if ('undefined' != messages.errors[errs[i]]) errorMsg += messages.errors[errs[i]] + '<br />';
                     }
                     modal = new $.bsModal(
                         'OOPS!',
@@ -656,12 +660,15 @@ $.bsModal = function (header, params) {
                     var opt = {
                         contentType: 'multipart/form-data',
                         processData: false
-                    };  
-                    
+                    };
+
                     opt['method'] = methods.putOrPost();
                     opt['data'] = new FormData(document.querySelector('#' + $(self).attr('id')));
-                    opt['onFail'] = function(res){console.log(res)};
-                    opt['doAlways'] = function(res){};
+                    opt['onFail'] = function (res) {
+                        console.log(res)
+                    };
+                    opt['doAlways'] = function (res) {
+                    };
                     opt = $.objMerge(opt, params);
                     var formDataObject = new FormData();
 
@@ -694,21 +701,19 @@ $.bsModal = function (header, params) {
                     });
 
                     opt['data'] = formDataObject;
-                    
-                    $.ajax(opt).done(function(res){
+
+                    $.ajax(opt).done(function (res) {
                         opt.onDone(res, opt['method']);
-                    }).fail(function(res){
+                    }).fail(function (res) {
                         opt.onFail(res);
-                    }).always(function(res){
+                    }).always(function (res) {
                         opt.doAlways(res);
                     });
                 }
             }
         };
 
-        var privateMethods = {
-
-        };
+        var privateMethods = {};
 
         var messages = {
             errors: {
@@ -719,4 +724,279 @@ $.bsModal = function (header, params) {
 
         return methods[method](params);
     }
+})(jQuery);
+
+(function ($) {
+    $.fn.bsCatalog = function (params) {
+        var self = this;
+        // Se non ci sono i parametri si assume che il l'interfaccia sia già esistente
+        if ('undefined' == typeof params) {
+            var initParams = $(this).data('initParams');
+            if ('undefined' == typeof initParams) throw "No params given";
+            return $.bsCatalog(this, initParams);
+
+        //inizializzazione di una nuova interfaccia
+        } else {
+            //controllo che l'interfaccia sia già stata scaricata una volta, altrimenti la riscarico
+            var catalogTemplate = $('.catalog-template');
+            if (catalogTemplate.length) {
+                return $.bsCatalog(this, params, catalogTemplate.html());
+            }
+            else {
+                $.ajax({
+                    url: '/blueseal/xhr/CatalogGetTemplateController',
+                    method: 'get'
+                }).done(function (res) {
+                    $('body').append($('<div class="catalog-template" style="display: none">' + res + '</div>'));
+                    return $.bsCatalog(self, params, $('.catalog-template').html());
+                });
+            }
+        }
+    };
+
+    $.bsCatalog = function (elem, params, template) {
+        var self = this;
+        //template parts
+        this.movementLineTemplate = false;
+        this.productTemplate = false;
+
+        //DOM elements
+        this.dom = elem;
+        this.form = false;
+        this.container = false;
+        this.submitButton = false;
+        this.searchBlock = false;
+        this.submitBlock = false;
+        this.movementDate = false;
+        this.products = {};
+        this.defaults = {
+            searchfield: true,
+            search: false,
+            mode: 'multi'
+        };
+        this.opt = {};
+
+//constructor
+
+        //preparo tutti i template separati in blocchi
+        this.movementLineTemplate = $(template).find('.mag-movementLine').clone();
+        this.productTemplate = $(template).find('.mag-product').clone();
+        this.productTemplate.find('.mag-movements').html('');
+
+        //faccio un merge dei parametri raccolti sopra i dati di default
+        this.opt = $.extend(this.defaults, params);
+
+        //scrivo e inizializzo i blocchi
+        this.form = $(template).clone();
+        this.form.data('initParams', this.opt);
+        this.container = this.form.find('.mag-product-list').html('');
+        this.searchBlock = this.form.find('.mag-searchBlock');
+        this.movementDate = this.form.find('.mag-movementDate');
+        this.movementDate.css('display', 'none');
+        this.submitBlock = this.form.find('.mag-submit');
+        this.submitBlock.css('display', 'none');
+
+        if (true != this.opt.searchField) this.searchBlock.css('display', 'none');
+
+        //creo il form se non esiste
+        if (!$(this.dom).find('form').length) $(this.dom).append($(this.form));
+
+        //faccio partire i selectize
+        $('.mag-movementCause').selectize();
+
+        //evento ricerca
+        this.form.find('.search-btn').on('click', function(e){
+            e.preventDefault();
+            var string = self.form.find('.search-item').val();
+            self.searchProduct(string, function(res){
+                if (1 == res.length) {
+                    self.addProduct(res[0]);
+                }
+            });
+        });
+        this.submitBlock.find('button').on('click', function(e){
+            e.preventDefault();
+            self.save();
+        });
+
+//end constructor
+
+        this.addProduct = function (product) {
+            if ('single' == this.opt.mode) this.container.html('');
+            if ('multi' == this.opt.mode) //TODO aggiungi pulsante per chiudere il singolo prodotto;
+            var prodTemp = self.productTemplate.clone();
+            prodTemp.attr('id', 'product-' + product.id + '-' + product.productVariantId);
+            var table = prodTemp.find('table');
+            var head = $(table).find('thead');
+            var body = $(table).find('tbody');
+            var sizes = self.writeSizesTable(product);
+            head.append(sizes.head);
+            body.append(sizes.body);
+            prodTemp.data('product', product);
+            self.form.find('.mag-product-list').append(prodTemp);
+            prodTemp.find('.btn-add-movement').on('click', function(e){
+                e.preventDefault();
+                self.addMovementLine(e);
+            });
+            self.submitBlock.css('display', 'block');
+            self.movementDate.css('display', 'block');
+            $($(prodTemp).find('.lineClose')).on('click', function(e){
+                e.preventDefault();
+                $('.prodTemp').remove();
+            });
+            return prodTemp;
+        };
+
+        this.writeSizesTable = function (product) {
+            var head = $('<tr></tr>');
+            var body = $('<tr></tr>');
+            for(var i in product.sizes) {
+                head.append($('<th>' + product.sizes[i] + '</th>'));
+                var qt = '';
+                if (('undefined' != typeof product.sku[i]) && (0 < product.sku[i])){
+                    qt = product.sku[i];
+                }
+                body.append($('<td>' + qt + '</td>'));
+            }
+            return {head: head, body: body};
+        };
+
+        this.addMovementLine = function (e) {
+            if ('undefined' != typeof e.target) var prodElem = $(e.target).parent().parent().parent().parent();
+            else var prodElem = e;
+            var movLine = self.movementLineTemplate.clone();
+            var product = prodElem.data('product');
+            //cerco le taglie già selezionate
+            var seleSize = movLine.find('.ml-size');
+            var proSizes = product.sizes;
+            seleSize.append($('<option value=""></option>'));
+            for(var size in proSizes){
+                seleSize.append($('<option value="' + size + '">' + proSizes[size] + '</option>'));
+            }
+            seleSize.selectize();
+
+            //var seleQty = $(movLine).find('ml-qtMove');
+            prodElem.find('.mag-movements').append(movLine);
+            $($(movLine).find('button')).on('click', function(e){
+                e.preventDefault();
+                movLine.remove();
+            });
+        };
+
+        this.searchProduct = function (search, callback) {
+            if (!search.length) return false;
+            var isCodeOrCPF = 'code';
+            if (0 > search.indexOf('-')) isCodeOrCPF = 'CPF';
+            var data = {};
+            data[isCodeOrCPF] = search;
+            $.ajax({
+                url: '/blueseal/xhr/CatalogController',
+                method: 'get',
+                dataType: 'json',
+                data: data
+            }).done(function(res){
+                if (false == res) {
+                    //TODO: Error Alert
+                } else {
+                    callback(res);
+                }
+            }).fail(function(res) {
+                console.error(res);
+            });
+        };
+
+        this.submitError = function(domElems, errors) {
+            var f = self.form;
+            f.find('input, select').each(function(){
+                $(this).parent().removeClass('hasError');
+            });
+            $.each(domElems, function(k, v){
+                $(v).parent().addClass('hasError');
+            });
+            var alert = f.find('.alert');
+            alert.css('visibility', 'visible');
+            alert.css('opacity', '1');
+            alert.removeClass('alert-success');
+            alert.addClass('alert-danger');
+            alert.html('');
+            for (var msg in errors) {
+                alert.append(errors[msg] + '<br />');
+            }
+            alert.css('visibility', 'visible');
+
+            setTimeout(function() {
+                alert.animate({'opacity': '0'}, 'fast', function(){
+
+                });
+            }, 8000);
+        };
+
+        this.submitSuccess = function(msg) {
+            var f = self.form;
+
+            var alert = f.find('.alert');
+            alert.css('visibility', 'visible');
+            alert.css('opacity', '1');
+            alert.removeClass('alert-danger');
+            alert.addClass('alert-success');
+            for (var msg in errors) {
+                alert.append(msg + '<br />');
+            }
+            alert.css('visibility', 'visible');
+
+            setTimeout(function() {
+                alert.animate({'opacity': '0'}, 'fast', function(){
+                });
+            }, 8000);
+        };
+
+        this.save = function() {
+            var f = self.form;
+            var post = {};
+            post['date'] = f.find('.mag-movementDateInput').val();
+            post['cause'] = f.find('.mag-movementCause').val();
+            post['products'] = [];
+            f.find('.mag-product').each(function(){
+                post['products'].push($(this).data('product'));
+                var kProd = post['products'].length-1;
+                post['products'][kProd]['movements'] = [];
+                $(this).find('.mag-movementLine').each(function(){
+                    post['products'][kProd]['movements'].push({
+                        size: $(this).find('.ml-size').val(),
+                        qtMove: $(this).find('.ml-qtMove').val()
+                    });
+                });
+            });
+
+            //controllo errori
+            var hasError = [];
+            var errorMsg = [];
+            if ("" == post['date']) {
+                hasError.push(f.find('.mag-movementDateInput'));
+                errorMsg.push('La data non è stata inserita o il formato non è corretto');
+            }
+            if ('' == post['cause']) {
+                hasError.push(f.find('.mag-movementCause'));
+                errorMsg.push('È obbligatorio specificare la causale');
+            }
+            if (0 == post['products'].length) {
+                errorMsg.push('Deve essere presente almeno un prodotto');
+            }
+
+            if ((hasError.length) || (errorMsg.length)) {
+                self.submitError(hasError, errorMsg);
+            } else {
+                $.ajax({
+                    url: '/blueseal/xhr/CatalogController',
+                    type: 'POST',
+                    data: post,
+                    dataType: 'JSON'
+                }).done(
+                    function(res){
+                        console.log(res);
+                    }
+                ).fail(function(res){console.log(res)});
+            }
+        };
+    };
 })(jQuery);

@@ -835,7 +835,6 @@ $.fn.catalogMovements = function(shops, code) {
     this.shop = 0;
     this.shops = null;
     this.code = null;
-    this.formData = {};
 
     /**
      *

@@ -772,3 +772,29 @@ ul.roulette-importer-details li {
     position: relative !important;
     margin-top: 5px;
 }
+
+/* Stili movimenti */
+#form-movement .alert{
+    margin-bottom: 5px;
+}
+
+.mag-searchBlock button {
+    margin-top: 15px; float: right; clear: both;
+}
+
+.mag-sizesTable {
+    margin-bottom: 30px; margin-left: auto; margin-right: auto; margin-top: 20px;
+}
+.mag-sizesTable td {
+    min-width: 35px;
+}
+
+.mag-add-line-control button {
+    margin-right: 10%;
+    margin-bottom: 20px;
+}
+
+.lineClose {
+    margin-top: 4px;
+    padding: 5px 10px !important;
+}

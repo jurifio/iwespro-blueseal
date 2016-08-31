@@ -20,5 +20,5 @@ use bamboo\core\db\pandaorm\entities\AEntity;
 class CStorehouseOperationCause extends AEntity
 {
     protected $entityTable = 'StorehouseOperationCause';
-    protected $primaryKeys = ['id','shopId'];
+    protected $primaryKeys = ['id'];
 }
