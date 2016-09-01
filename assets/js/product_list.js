@@ -603,15 +603,13 @@ $(document).on('bs.category.edit', function (e, element, button) {
     Pace.ignore(function () {
         var radioTree = $("#categoriesTree");
         if (radioTree.length) {
-            radioTree.fancytree({
-                source: {
-                    url: "/blueseal/xhr/GetCategoryTree",
-                    cache:false
+            radioTree.dynatree({
+                initAjax: {
+                    url: "/blueseal/xhr/GetCategoryTree"
                 },
-                selectMode: 2,
+                autoexpand: true,
                 checkbox: true,
-                focusOnSelect: true,
-                minExpandLevel: 1,
+                imagePath: "/assets/img/skin/icons_better.gif",
                 //		selectMode: ,
                 /*		onPostInit: function () {
                  var vars = $("#ProductCategory_id").val().trim();
