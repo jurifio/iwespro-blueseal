@@ -255,7 +255,7 @@ table.dataTable thead .sorting_asc:after {
 }
 **/
 .modal-body {
-    overflow: hidden;
+    overflow: auto;
     max-height: 600px;
     transition: height 0.2s;
 }
