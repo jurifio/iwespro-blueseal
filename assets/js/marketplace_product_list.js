@@ -190,7 +190,7 @@ $(document).on('bs.product.retry', function (e, element, button) {
 	if (selectedRowsCount < 1) {
 		new Alert({
 			type: "warning",
-			message: "Devi selezionare uno o più Prodotti per poterli taggare"
+			message: "Devi selezionare uno o più Prodotti per poterli inviare "
 		}).open();
 		return false;
 	}
