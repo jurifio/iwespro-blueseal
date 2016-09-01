@@ -37,6 +37,8 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             $datatable->addCondition('shopId',$authorizedShops);
         }
 
+        $datatable->addSearchColumn('marketplaceProductId');
+
         $prodotti = $sample->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $sample->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
