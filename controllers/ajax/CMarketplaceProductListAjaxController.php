@@ -64,7 +64,7 @@ class CMarketplaceProductListAjaxController extends AAjaxController
 
 	        $response['data'][$i]["DT_RowId"] = $val->printId();
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['code'] = $val->printId();
+            $response['data'][$i]['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>';
             $response['data'][$i]['brand'] = $val->productBrand->name;
             $response['data'][$i]['season'] = $val->productSeason->name;
 
