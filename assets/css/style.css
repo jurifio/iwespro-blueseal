@@ -794,7 +794,16 @@ ul.roulette-importer-details li {
     margin-bottom: 20px;
 }
 
-.lineClose {
+.product-close {
     margin-top: 4px;
     padding: 5px 10px !important;
+    float: right;
+}
+
+.mag-products-container {
+    display: none;
+}
+
+h5.product-title {
+    float: left;
 }

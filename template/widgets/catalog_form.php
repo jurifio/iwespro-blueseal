@@ -5,7 +5,6 @@
         <div class="panel-body">
             <div class="row mag-alerts" style="visibility: hidden;">
                 <div class="col-md-12 alert alert-danger">
-                    SSA SSA PROVA SSA
                 </div>
             </div>
             <div class="row">
@@ -40,13 +39,14 @@
 
             </div>
             </div>
-        <div class="panel panel-default">
-            <div class="panel-body">
-            <div class="mag-product-list">
+        <div class="panel panel-default mag-products-container">
+            <div class="panel-body mag-product-list">
                 <div class="row mag-product">
                     <div class="col-md-12">
-                        <h5>234-234234 - CPF: sdfsdf</h5>
                         <div class="form-group form-group-default">
+                            <h5 class="product-title"></h5>
+                            <button class="product-close btn btn-complete">x</button>
+                            <br class="clear" />
                             <div class="row mag-sizes-block text-center">
                                 <table class="nested-table mag-sizesTable">
                                     <thead>
@@ -55,7 +55,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row mag-add-line-control">
+                            <!--<div class="row mag-add-line-control">
                                 <button class="btn btn-default pull-right btn-add-movement">Aggiungi movimento</button>
                             </div>
 
@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                             <br style="clear: both;" />
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                     <button class="btn btn-active submit">Inserisci</button>
                 </div>
             </div>
-            </div>
+
         </div>
     </div>
 </form>

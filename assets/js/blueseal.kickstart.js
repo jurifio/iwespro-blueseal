@@ -778,17 +778,18 @@ $.bsModal = function (header, params) {
 //constructor
 
         //preparo tutti i template separati in blocchi
-        this.movementLineTemplate = $(template).find('.mag-movementLine').clone();
+        //this.movementLineTemplate = $(template).find('.mag-movementLine').clone();
         this.productTemplate = $(template).find('.mag-product').clone();
-        this.productTemplate.find('.mag-movements').html('');
+        //this.productTemplate.find('.mag-movements').html('');
 
         //faccio un merge dei parametri raccolti sopra i dati di default
         this.opt = $.extend(this.defaults, params);
 
         //scrivo e inizializzo i blocchi
         this.form = $(template).clone();
+        this.productList = this.form.find('.mag-product-list').html('');
+        this.container = this.productList.parent();
         this.form.data('initParams', this.opt);
-        this.container = this.form.find('.mag-product-list').html('');
         this.searchBlock = this.form.find('.mag-searchBlock');
         this.movementDate = this.form.find('.mag-movementDate');
         this.movementDate.css('display', 'none');
@@ -808,8 +809,11 @@ $.bsModal = function (header, params) {
             e.preventDefault();
             var string = self.form.find('.search-item').val();
             self.searchProduct(string, function(res){
+                res[0]['moves'] = [];
                 if (1 == res.length) {
-                    self.addProduct(res[0]);
+                    if (!self.productList.find('#product-' + res[0].id + '-' + res[0].productVariantId).length) {
+                        self.addProduct(res[0]);
+                    }
                 }
             });
         });
@@ -824,43 +828,60 @@ $.bsModal = function (header, params) {
             if ('single' == this.opt.mode) this.container.html('');
             if ('multi' == this.opt.mode) //TODO aggiungi pulsante per chiudere il singolo prodotto;
             var prodTemp = self.productTemplate.clone();
+            var prodId = 'product-' + product.id + '-' + product.productVariantId;
             prodTemp.attr('id', 'product-' + product.id + '-' + product.productVariantId);
+            var prodTitle = prodTemp.find('.product-title');
+            prodTitle.html(product.id + '-' + product.productVariantId + ' / ' + product.itemno + ' # ' + product.productVariantName );
             var table = prodTemp.find('table');
             var head = $(table).find('thead');
             var body = $(table).find('tbody');
             var sizes = self.writeSizesTable(product);
             head.append(sizes.head);
-            body.append(sizes.body);
+            body.append(sizes.stock);
+            body.append(sizes.moves);
             prodTemp.data('product', product);
-            self.form.find('.mag-product-list').append(prodTemp);
-            prodTemp.find('.btn-add-movement').on('click', function(e){
+            var prodList = self.form.find('.mag-product-list');
+            prodList.append(prodTemp);
+            var prod = prodList.find('#' + prodId);
+            /*prodTemp.find('.btn-add-movement').on('click', function(e){
                 e.preventDefault();
                 self.addMovementLine(e);
+            });*/
+            var closeProd = prod.find('.product-close');
+            closeProd.on('click', function(e){
+                e.preventDefault();
+                prod.remove();
+                if (!prodList.find('.mag-product').length) {
+                    self.submitBlock.css('display', 'none');
+                    self.container.css('display', 'none');
+                }
             });
+            self.container.css('display', 'block');
             self.submitBlock.css('display', 'block');
             self.movementDate.css('display', 'block');
-            $($(prodTemp).find('.lineClose')).on('click', function(e){
-                e.preventDefault();
-                $('.prodTemp').remove();
-            });
-            return prodTemp;
+            return prod;
         };
 
         this.writeSizesTable = function (product) {
             var head = $('<tr></tr>');
-            var body = $('<tr></tr>');
+            var stock = $('<tr></tr>');
+            var moves = $('<tr></tr>');
+
+            head.append($('<th>Misure</th>'));
+            stock.append($('<th>Disponibilità</th>'));
+            moves.append($('<th>Movimenti</th>'));
             for(var i in product.sizes) {
                 head.append($('<th>' + product.sizes[i] + '</th>'));
-                var qt = '';
-                if (('undefined' != typeof product.sku[i]) && (0 < product.sku[i])){
-                    qt = product.sku[i];
-                }
-                body.append($('<td>' + qt + '</td>'));
+                var qt = (('undefined' != typeof product.sku[i]) && (0 < product.sku[i])) ? product.sku[i] : '';
+                stock.append($('<td>' + qt + '</td>'));
+                var moveQt = ('undefined' != typeof product.moves[i]) ? product.moves[i] : '';
+                var fieldName = product.id + '-' + product.productVariantId + '-' + i;
+                moves.append($('<td><input type="number" class="form-control" name="move-' + fieldName + '" value="' + moveQt + '"></td>'));
             }
-            return {head: head, body: body};
+            return {head: head, stock: stock, moves: moves};
         };
 
-        this.addMovementLine = function (e) {
+        /*this.addMovementLine = function (e) {
             if ('undefined' != typeof e.target) var prodElem = $(e.target).parent().parent().parent().parent();
             else var prodElem = e;
             var movLine = self.movementLineTemplate.clone();
@@ -880,7 +901,7 @@ $.bsModal = function (header, params) {
                 e.preventDefault();
                 movLine.remove();
             });
-        };
+        };*/
 
         this.searchProduct = function (search, callback) {
             if (!search.length) return false;
