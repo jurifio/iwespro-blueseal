@@ -31,6 +31,7 @@
                                     <th class="center">Season</th>
                                     <th class="center">CPF</th>
                                     <th class="center">Immagine</th>
+                                    <th class="center">Fee</th>
                                     <th class="center">Marketplaces</th>
                                 </tr>
                             </thead>

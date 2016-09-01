@@ -89,10 +89,12 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             $response['data'][$i]['itemno'] .= $val->itemno.' # '.$val->productVariant->name;
             $response['data'][$i]['itemno'] .= '</span>';
 
+            $response['data'][$i]['fee'] = 0;
 	        $marketplaces = [];
 	        foreach ($val->marketplaceAccountHasProduct as $mProduct) {
 	        	$style = $mProduct->isToWork == 0 ? ($mProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
 		        $marketplaces[] = '<span '.$style.'>'.$mProduct->marketplaceAccount->marketplace->name.' - '.$mProduct->marketplaceAccount->name.' ('.$mProduct->marketplaceProductId.')</span>';
+                $response['data'][$i]['fee'] += $mProduct->fee;
 	        }
 
 	        $response['data'][$i]['marketplaceAccountName'] = implode('<br>',$marketplaces);

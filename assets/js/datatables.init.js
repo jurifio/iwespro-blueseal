@@ -260,6 +260,10 @@
 				searchable: false,
 				orderable: false
 			},{
+				data: "fee",
+				searchable: true,
+				orderable: true
+			},{
 				data: "marketplaceAccountName",
 				searchable: true
 			}
