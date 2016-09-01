@@ -638,6 +638,33 @@ $.bsModal = function (header, params) {
                 else return 'POST';
             },
             save: function (params) {
+                var opt = {
+                    //preferenze esecuzione metodo
+                    excludeFields: [],
+                    excludeEmptyFields: false,
+
+                    //parametri chiamata ajax
+                    url: '#',
+                    contentType: 'multipart/form-data',
+                    processData: false,
+                    method: methods.putOrPost(),
+                    data: new FormData(document.querySelector('#' + $(self).attr('id'))),
+                    onCheckError: function(errorMsg) {
+                        modal = new $.bsModal(
+                            'OOPS!',
+                            {
+                                body: errorMsg
+                            }
+                        );
+                    },
+                    onFail: function (res) {
+                        console.log(res)
+                    },
+                    doAlways: function(res) {
+                    }
+
+                };
+
                 if ('string' != typeof params['url']) throw 'the "url" parameter is mandatory and it must to be string type';
                 if ('function' != typeof params['onDone']) throw 'the "url" parameter is mandatori and it must to be a callback';
                 methods.checkErrors();
@@ -648,38 +675,35 @@ $.bsModal = function (header, params) {
                     for (var i in errs) {
                         if ('undefined' != messages.errors[errs[i]]) errorMsg += messages.errors[errs[i]] + '<br />';
                     }
-                    modal = new $.bsModal(
-                        'OOPS!',
-                        {
-                            body: errorMsg
-                        }
-                    );
-                } else {
-                    //save
-                    var opt = {
-                        contentType: 'multipart/form-data',
-                        processData: false
-                    };
+                    opt.onCheckError(errorMsg);
 
-                    opt['method'] = methods.putOrPost();
-                    opt['data'] = new FormData(document.querySelector('#' + $(self).attr('id')));
-                    opt['onFail'] = function (res) {
-                        console.log(res)
-                    };
-                    opt['doAlways'] = function (res) {
-                    };
+                } else {
+
+                    //save
                     opt = $.objMerge(opt, params);
                     var formDataObject = new FormData();
 
                     $(self).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
-                        if (typeof $(this).attr('name') == 'undefined') return;
-                        formDataObject.append($(this).attr('name'), $(this).val());
+                        if (typeof $(this).attr('name') == 'undefined') throw 'Non possono esistere campi senza l\'attributo "name"';
+
+                        //controllo le condizioni impostate nelle opzioni del metodo
+                        if ( (-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) ||
+                            ( ("" != $(this).val()) && (true === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
+                        ) {
+                            formDataObject.append($(this).attr('name'), $(this).val());
+                        }
                     });
 
                     var radioNames = [];
                     $(self).find('input[type=radio]').each(function () {
-                        if (typeof $(this).attr('name') == 'undefined') return;
-                        radioNames.push($(this).attr('name'));
+                        if (typeof $(this).attr('name') == 'undefined') throw 'Non possono esistere campi senza l\'attributo "name"';
+
+                        //controllo le condizioni impostate nelle opzioni del metodo
+                        if ( (-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) ||
+                            ( ("" != $(this).val()) && (true === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
+                        ) {
+                            radioNames.push($(this).attr('name'));
+                        }
                     });
                     var unique = radioNames.filter(function (value, index, self) {
                         return self.indexOf(value) === index;
@@ -704,9 +728,9 @@ $.bsModal = function (header, params) {
                     $.ajax(opt).done(function (res) {
                         opt.onDone(res, opt['method']);
                     }).fail(function (res) {
-                        opt.onFail(res);
+                        opt.onFail(res, opt['method']);
                     }).always(function (res) {
-                        opt.doAlways(res);
+                        opt.doAlways(res, opt['method']);
                     });
                 }
             }
@@ -804,19 +828,30 @@ $.bsModal = function (header, params) {
         //faccio partire i selectize
         $('.mag-movementCause').selectize();
 
+
+
         //evento ricerca
-        this.form.find('.search-btn').on('click', function(e){
+        var searchBtn = this.searchBlock.find('.search-btn');
+        searchBtn.on('click', function(e){
             e.preventDefault();
             var string = self.form.find('.search-item').val();
             self.searchProduct(string, function(res){
-                res[0]['moves'] = [];
-                if (1 == res.length) {
-                    if (!self.productList.find('#product-' + res[0].id + '-' + res[0].productVariantId).length) {
-                        self.addProduct(res[0]);
-                    }
-                }
+                self.addProduct(res);
             });
         });
+
+            //ricerca per barcode
+        var searchInput = this.searchBlock.find('.search-item');
+        searchInput.on('keypress', function(e){
+            if (13 == e.charCode) {
+                e.preventDefault();
+                $(this).select();
+                searchBtn.trigger('click');
+            }
+        });
+
+        //selectize search field
+
         this.submitBlock.find('button').on('click', function(e){
             e.preventDefault();
             self.save();
@@ -825,40 +860,49 @@ $.bsModal = function (header, params) {
 //end constructor
 
         this.addProduct = function (product) {
-            if ('single' == this.opt.mode) this.container.html('');
+            var productList = self.productList
+            if ('single' == this.opt.mode) productList.html('');
             if ('multi' == this.opt.mode) //TODO aggiungi pulsante per chiudere il singolo prodotto;
             var prodTemp = self.productTemplate.clone();
+            if ('single' == this.opt.mode) prodTemp.find('.product-close').remove();
             var prodId = 'product-' + product.id + '-' + product.productVariantId;
-            prodTemp.attr('id', 'product-' + product.id + '-' + product.productVariantId);
-            var prodTitle = prodTemp.find('.product-title');
-            prodTitle.html(product.id + '-' + product.productVariantId + ' / ' + product.itemno + ' # ' + product.productVariantName );
-            var table = prodTemp.find('table');
-            var head = $(table).find('thead');
-            var body = $(table).find('tbody');
-            var sizes = self.writeSizesTable(product);
-            head.append(sizes.head);
-            body.append(sizes.stock);
-            body.append(sizes.moves);
-            prodTemp.data('product', product);
-            var prodList = self.form.find('.mag-product-list');
-            prodList.append(prodTemp);
-            var prod = prodList.find('#' + prodId);
-            /*prodTemp.find('.btn-add-movement').on('click', function(e){
-                e.preventDefault();
-                self.addMovementLine(e);
-            });*/
-            var closeProd = prod.find('.product-close');
-            closeProd.on('click', function(e){
-                e.preventDefault();
-                prod.remove();
-                if (!prodList.find('.mag-product').length) {
-                    self.submitBlock.css('display', 'none');
-                    self.container.css('display', 'none');
-                }
-            });
-            self.container.css('display', 'block');
-            self.submitBlock.css('display', 'block');
-            self.movementDate.css('display', 'block');
+
+            //controllo se la scheda del prodotto è già presente
+            var actualProd = productList.find('#' + prodId);
+            if (actualProd.length) {
+                self.editMoves(product, actualProd.find('table'));
+            } else {
+                prodTemp.attr('id', 'product-' + product.id + '-' + product.productVariantId);
+                var prodTitle = prodTemp.find('.product-title');
+                prodTitle.html(product.id + '-' + product.productVariantId + ' / ' + product.itemno + ' # ' + product.productVariantName);
+                var table = prodTemp.find('table');
+                var head = $(table).find('thead');
+                var body = $(table).find('tbody');
+                var sizes = self.writeSizesTable(product);
+                head.append(sizes.head);
+                body.append(sizes.stock);
+                body.append(sizes.moves);
+                prodTemp.data('product', product);
+                var prodList = self.form.find('.mag-product-list');
+                prodList.append(prodTemp);
+                var prod = prodList.find('#' + prodId);
+                /*prodTemp.find('.btn-add-movement').on('click', function(e){
+                 e.preventDefault();
+                 self.addMovementLine(e);
+                 });*/
+                var closeProd = prod.find('.product-close');
+                closeProd.on('click', function (e) {
+                    e.preventDefault();
+                    prod.remove();
+                    if (!prodList.find('.mag-product').length) {
+                        self.submitBlock.css('display', 'none');
+                        self.container.css('display', 'none');
+                    }
+                });
+                self.container.css('display', 'block');
+                self.submitBlock.css('display', 'block');
+                self.movementDate.css('display', 'block');
+            }
             return prod;
         };
 
@@ -879,6 +923,14 @@ $.bsModal = function (header, params) {
                 moves.append($('<td><input type="number" class="form-control" name="move-' + fieldName + '" value="' + moveQt + '"></td>'));
             }
             return {head: head, stock: stock, moves: moves};
+        };
+
+        this.editMoves = function(product, table){
+            for (var i in product.moves) {
+                var fieldName = product.id + '-' + product.productVariantId + '-' + i;
+                var field = $(table).find('input[name="move-' + fieldName + '"]');
+                field.val(parseInt(field.val()) + parseInt(product.moves[i]));
+            }
         };
 
         /*this.addMovementLine = function (e) {
@@ -905,19 +957,17 @@ $.bsModal = function (header, params) {
 
         this.searchProduct = function (search, callback) {
             if (!search.length) return false;
-            var isCodeOrCPF = 'code';
-            if (0 > search.indexOf('-')) isCodeOrCPF = 'CPF';
-            var data = {};
-            data[isCodeOrCPF] = search;
             $.ajax({
                 url: '/blueseal/xhr/CatalogController',
                 method: 'get',
                 dataType: 'json',
-                data: data
+                data: {search: search}
             }).done(function(res){
+                console.log(res);
                 if (false == res) {
-                    //TODO: Error Alert
+                    self.submitwarning('il prodotto cercato non esiste.')
                 } else {
+                    self.form.find('.alert').css('opacity', '0');
                     callback(res);
                 }
             }).fail(function(res) {
@@ -970,10 +1020,50 @@ $.bsModal = function (header, params) {
             }, 8000);
         };
 
-        this.save = function() {
+        this.submitwarning = function(msg) {
             var f = self.form;
+
+            var alert = f.find('.alert');
+            alert.css('visibility', 'visible');
+            alert.css('opacity', '1');
+            alert.removeClass('alert-warning');
+            alert.addClass('alert-success');
+            for (var msg in errors) {
+                alert.append(msg + '<br />');
+            }
+            alert.css('visibility', 'visible');
+
+            setTimeout(function() {
+                alert.animate({'opacity': '0'}, 'fast', function(){
+                });
+            }, 8000);
+        };
+
+        this.save = function(successCallback, failCallback) {
+            var f = self.form;
+            $('#form-movement').bsForm('save', {
+                url: 'blueseal/xhr/CatalogController',
+                method: 'post',
+                excludeFields: 'search-item',
+                excludeEmptyFields: true,
+                onCheckError: function(msg) {
+                    self.submitError(msg);
+                },
+                onDone: function(res, method) {
+                    if (res[0].id) {
+                        self.submitSuccess('Il movimento è stato caricato correttamente');
+                        self.productList.html('');
+                        self.submitBlock.css('display', 'none');
+                    } else {
+                        self.submitError(res);
+                    }
+                },
+                onFail: function(res) {
+                    self.submitError(res);
+                }
+            });
             var post = {};
-            post['date'] = f.find('.mag-movementDateInput').val();
+            /*post['date'] = f.find('.mag-movementDateInput').val();
             post['cause'] = f.find('.mag-movementCause').val();
             post['products'] = [];
             f.find('.mag-product').each(function(){
@@ -1016,7 +1106,7 @@ $.bsModal = function (header, params) {
                         console.log(res);
                     }
                 ).fail(function(res){console.log(res)});
-            }
+            }*/
         };
     };
 

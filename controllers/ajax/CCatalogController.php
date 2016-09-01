@@ -43,28 +43,42 @@ class CCatalogController extends AAjaxController
 
 	public function get()
     {
-        $CPF = $this->app->router->request()->getRequestData('CPF');
-        $code = $this->app->router->request()->getRequestData('code');
-        $prodRepo = $this->app->repoFactory->create('Product');
-        $retArr = [];
-        $shop = $this->app->getUser()->shop->getFirst();
-        try {
-            if ($code) {
-                $prod = $prodRepo->findOneByStringId($code);
-                $retArr[0] = $this->getAllProductData($prod, $shop->id);
-            } elseif ($CPF) {
-                $prodArr = $prodRepo->findBy(['itemno' => $CPF]);
-                foreach ($prodArr as $v) {
-                    $retArr[] = $this->getAllProductData($v);
-                }
-            }
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+        $search = $this->app->router->request()->getRequestData('search');
+        if (false !== strpos($search, '-')) $type = 'code';
+        elseif (false !== strpos($search, '#')) $type = 'cpf';
+        elseif ((0 == strpos($search, '12')) && (10 == strlen($search))) $type = 'barcode';
+        $shop = $this->app->getUser()->shop;
+        foreach($shop as $v) {
+            $shopId = $v->id;
         }
-        return json_encode($retArr);
+        $skuRepo = $this->rfc('ProductSku');
+        $variantRepo = $this->rfc('productVariant');
+        $prodRepo = $this->rfc('Product');
+        $sizesToMove = [];
+
+        switch($type) {
+            case 'code':
+                $prod = $prodRepo->findOneByStringId($search);
+                break;
+            case 'cpf':
+                list($itemno, $variant) = explode('#', $search);
+                $itemno = trim($itemno);
+                $variant = trim($variant);
+                $prodVariant = $variantRepo->findOneBy(['name' => $variant]);
+                $prod = $prodRepo->findOneBy(['itemno' => $itemno, 'productVariantId' => $prodVariant->id]);
+                break;
+            case 'barcode':
+                $sku = $skuRepo->findOneBy(['barcode' => $search]);
+                $sizesToMove[$sku->productSizeId] = 1;
+                $prod = $sku->product;
+                break;
+        }
+        $ret = ($prod) ? $this->getAllProductData($prod, $shopId, $sizesToMove) : false;
+
+        return json_encode($ret);
     }
 
-    private function getAllProductData($em, $shopId){
+    private function getAllProductData($em, $shopId, $sizesToMove = []){
         $arrRet = $em->toArray();
         $arrRet['productVariant'] = $em->productVariant->name;
         $arrRet['sizes'] = [];
@@ -76,6 +90,10 @@ class CCatalogController extends AAjaxController
             if (($v->stockQty) && ($shopId == $v->shopId))  {
                 $arrRet['sku'][$v->productSizeId] = $v->stockQty;
             }
+        }
+        $arrRet['moves'] = [];
+        foreach($sizesToMove as $k => $v) {
+            $arrRet['moves'][$k] = $v;
         }
         return $arrRet;
     }
