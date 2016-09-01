@@ -136,17 +136,19 @@ class CCatalogController extends AAjaxController
             $onSale = null;
             $isUsable = null;
             $i = 0;
+
+
             foreach($allSkus as $s) {
                 $isUsable = true;
-                if (0 < $i) {
+                if (0 == $i) {
                     $value = $s->value;
                     $price = $s->price;
                     $salePrice = $s->salePrice;
-                    $onSale = $s->onSale;
+                    $onSale = $s->isOnSale;
                 } elseif (
                         ($price != $s->price) ||
                         ($salePrice != $s->salePrice) ||
-                        ($onSale != $s->onSale)
+                        ($onSale != $s->isOnSale)
                     ) {
                     $isUsable = false;
                     break;
@@ -155,7 +157,7 @@ class CCatalogController extends AAjaxController
             }
             //if (!$isUsable) throw new \Exception('Non riesco ad assegnare il prezzo di uno dei prodotti. L\'inserimento dei movimenti non è andato a buon fine');
 
-            if (null === $isUsable) {
+            if (false === $isUsable) {
                 $shp = $prod->shopHasProduct->findOneByKeys([
                     'productVariantId' => $v['productVariantId'],
                     'productId' => $v['id'],
@@ -180,6 +182,7 @@ class CCatalogController extends AAjaxController
                     'productSizeId' => $mov['size']
                 ]);
                 if (!$actualSku) {
+
                     if (0 > $mov['qtMove']) throw new \Exception(
                         'Impossibile togliere quantità di un articolo mai caricato: ' . $v['id'] . '-' . $v['productVariantId']
                     );
@@ -192,11 +195,13 @@ class CCatalogController extends AAjaxController
                     //$newSku->barcode = null; //TODO barcodes;
                     $newSku->value = $value;
                     $newSku->price = $price;
+                    $newSku->salePrice = $salePrice;
                     $newSku->isOnSale = (null === $onSale) ? 0 : $onSale;
                     $newSku->insert();
                 } else {
                     if (0 > $actualSku->stockQty + $mov['qtMove']) throw new \Exception('I movimenti non possono portare le quantità in stock in negativo');
                     $actualSku->stockQty = $actualSku->stockQty + $mov['qtMove'];
+                    $actualSku->update();
                 }
 
                 //inserisco il movimento

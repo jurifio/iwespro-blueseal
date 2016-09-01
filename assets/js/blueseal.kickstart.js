@@ -304,8 +304,7 @@ $.objMerge = function (...theArgs)
         }
     }
     return res;
-}
-;
+};
 
 /**
  *
@@ -999,4 +998,11 @@ $.bsModal = function (header, params) {
             }
         };
     };
+
+    /*
+    TODO:
+    data sempre aggiornata al giorno corrente
+    selectize con ricerca automatica sulla ricerca dei prodotti
+    ricerca cpf, comprese varianti
+    */
 })(jQuery);
