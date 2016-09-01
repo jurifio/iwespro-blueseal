@@ -57,6 +57,7 @@ class CProductHasProductCategory extends AAjaxController
                                     'productCategoryId' => $c
                                 ]
                             );
+                            if($this->app->dbAdapter->countAffectedRows() != 1) throw new \Exception('No rows Updated');
                         }
                     }
                     $this->app->dbAdapter->commit();

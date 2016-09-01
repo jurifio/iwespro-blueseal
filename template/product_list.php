@@ -13,6 +13,13 @@
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4 alert-container closed">
+
+                    </div>
+                </div>
+            </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
@@ -50,8 +57,8 @@
                 </div>
             </div>
         </div>
-        <?php include "parts/footer.php"?>
     </div>
+    <?php include "parts/footer.php"?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
@@ -216,8 +223,6 @@
             data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-
-
     <bs-toolbar-group data-group-label="Roulette">
         <bs-toolbar-select
             data-tag="select"

@@ -599,17 +599,19 @@ $(document).on('bs.category.edit', function (e, element, button) {
 
     body.css("text-align", 'left');
     body.html('<div id="categoriesTree"></div>');
-
+    bsModal.modal();
     Pace.ignore(function () {
         var radioTree = $("#categoriesTree");
         if (radioTree.length) {
-            radioTree.dynatree({
-                initAjax: {
-                    url: "/blueseal/xhr/GetCategoryTree"
+            radioTree.fancytree({
+                source: {
+                    url: "/blueseal/xhr/GetCategoryTree",
+                    cache:false
                 },
-                autoexpand: true,
+                selectMode: 2,
                 checkbox: true,
-                imagePath: "/assets/img/skin/icons_better.gif",
+                focusOnSelect: true,
+                minExpandLevel: 1,
                 //		selectMode: ,
                 /*		onPostInit: function () {
                  var vars = $("#ProductCategory_id").val().trim();
@@ -666,7 +668,7 @@ $(document).on('bs.category.edit', function (e, element, button) {
                 }
             });
         }
-        bsModal.modal();
+
     });
 });
 
