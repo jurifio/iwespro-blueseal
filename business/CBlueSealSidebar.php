@@ -30,13 +30,40 @@ class CBlueSealSidebar
     public function __construct(AApplication $app)
     {
         $this->app = $app;
-        $this->sidebar = $this->app->repoFactory->create('Sidebar')->findAll(null," ORDER BY groupOrder,pageOrder ASC ");
     }
 
     public function build()
     {
-        $sidebar = [];
+        $sidebar = $this->app->cacheService->getCache('misc')->get('BluesealSidebar:'.$this->app->getUser()->id);
+        if($sidebar == false) {
+            $groups = $this->app->repoFactory->create('SidebarGroup')->em()->findBySql("Select sidebarGroupId as id 
+                                                                                    from Sidebar 
+                                                                                    GROUP BY sidebarGroupId 
+                                                                                    ORDER BY groupOrder");
 
+            $sidebar = [];
+            foreach ($groups as $group) {
+                $sidebarPages = [];
+                foreach ($group->page as $page) {
+                    if($this->app->getUser()->hasPermissions($page->permission)) {
+                        $sidebarPages[$page->slug] = [
+                            'title' => $page->pageTranslation->getFirst()->title,
+                            'url' => $page->url,
+                            'icon' => $page->icon,
+                            'permission' => $page->permission
+                        ];
+                    }
+                }
+                if(count($sidebarPages) > 0) {
+                    $sidebar[$group->slug]['title'] = $group->sidebarGroupTranslation->getFirst()->title;
+                    $sidebar[$group->slug]['icon'] = $group->icon;
+                    $sidebar[$group->slug]['pages'] = $sidebarPages;
+                }
+            }
+            $this->app->cacheService->getCache('misc')->add('BluesealSidebar:'.$this->app->getUser()->id,$sidebar,10000);
+        }
+        return $sidebar;
+        /*
         while ($this->sidebar->valid()) {
             $group = $this->app->repoFactory->create('SidebarGroup')->findOne([$this->sidebar->current()->sidebarGroup->getFirst()->id]);
             $page = $this->app->repoFactory->create('Page')->findOne([$this->sidebar->current()->page->getFirst()->id]);
@@ -52,5 +79,6 @@ class CBlueSealSidebar
         }
 
         return $sidebar;
+        */
     }
 }
