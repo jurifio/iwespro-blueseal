@@ -288,23 +288,6 @@ getGet = function () {
 
 $_GET = new getGet();
 
-$.objMerge = function (...theArgs)
-{
-    var argsLength = theArgs.length;
-    if (2 > argsLength) throw "Almost 2 objects needed";
-    $.each(theArgs, function (k, v) {
-        if ('object' != typeof v) throw "Expected object, " + typeof v + " given";
-    });
-
-    var res = {};
-    var countLoops = 0;
-    for (var argName in theArgs) {
-        for (var arrName in theArgs[argName]) {
-            res[arrName] = theArgs[argName][arrName];
-        }
-    }
-    return res;
-};
 
 /**
  *
@@ -329,7 +312,7 @@ $.initFormByGetData = function (params) {
         },
     };
 
-    var opt = $.objMerge(def, params);
+    var opt = $.extend(def, params);
     delete def;
     if ('object' != typeof opt.data) opt.data = {id: opt.data};
 
@@ -450,7 +433,7 @@ $.bsModal = function (header, params) {
             self.bsModal.modal('hide');
         }
     };
-    this.opt = $.objMerge(opt, params);
+    this.opt = $.extend(opt, params);
     delete opt;
 
     this.bsModal = $('#bsModal');
@@ -593,8 +576,8 @@ $.bsModal = function (header, params) {
         var methods = {
             checkRequired: function () {
                 var requiredFault = false;
-                $(self).each(function () {
-                    if ($(this).prop('required')) requiredFault = true;
+                $(self).find('select, input').each(function () {
+                    if (($(this).prop('required')) && ('' == $(this).val())) requiredFault = true;
                 });
                 if (requiredFault) {
                     methods.addError('requiredFault')
@@ -606,13 +589,13 @@ $.bsModal = function (header, params) {
             checkErrors: function () {
                 if (!Array.isArray($(self).data('errors'))) $(self).data('errors', []);
                 methods.checkRequired();
-                /*var isFieldFault = false;
+                var isFieldFault = false;
                  $(self).find('input, select, textarea').each(function(){
                  console.log($(this).attr('name'));
                  if (1 == $(this).data('isFieldFault')) isFieldFault = true;
                  });
                  if (isFieldFault) {methods.addError('isFieldFault')}
-                 else {methods.removeError('isFieldFault')}*/
+                 else {methods.removeError('isFieldFault')}
             },
             addError: function (err) {
                 var arr = [];
@@ -634,21 +617,23 @@ $.bsModal = function (header, params) {
             },
             putOrPost: function () {
                 var primaryField = $(self).data('primaryfield');
-                if ($(primaryField).val().length) return 'PUT';
-                else return 'POST';
+                if ('undefined' != typeof primaryField) {
+                    if ($(primaryField).length) {
+                        if ($(primaryField).val().length) return 'PUT';
+                    }
+                }
+                return 'POST';
             },
             save: function (params) {
                 var opt = {
                     //preferenze esecuzione metodo
                     excludeFields: [],
                     excludeEmptyFields: false,
-
                     //parametri chiamata ajax
                     url: '#',
                     contentType: 'multipart/form-data',
-                    processData: false,
+                    processData: true,
                     method: methods.putOrPost(),
-                    data: new FormData(document.querySelector('#' + $(self).attr('id'))),
                     onCheckError: function(errorMsg) {
                         modal = new $.bsModal(
                             'OOPS!',
@@ -680,17 +665,19 @@ $.bsModal = function (header, params) {
                 } else {
 
                     //save
-                    opt = $.objMerge(opt, params);
-                    var formDataObject = new FormData();
+                    opt = $.extend(opt, params);
+                    var data = {};
+                    //var formDataObject = new FormData();
 
                     $(self).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
-                        if (typeof $(this).attr('name') == 'undefined') throw 'Non possono esistere campi senza l\'attributo "name"';
-
-                        //controllo le condizioni impostate nelle opzioni del metodo
-                        if ( (-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) ||
-                            ( ("" != $(this).val()) && (true === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
-                        ) {
-                            formDataObject.append($(this).attr('name'), $(this).val());
+                        if ('undefined' != typeof $(this).attr('name')) {
+                            //controllo le condizioni impostate nelle opzioni del metodo
+                            if ((-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) &&
+                                ( ("" != $(this).val()) && (true === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
+                            ) {
+                                data[$(this).attr('name')] = $(this).val();
+                                //formDataObject.append($(this).attr('name'), $(this).val());
+                            }
                         }
                     });
 
@@ -699,7 +686,7 @@ $.bsModal = function (header, params) {
                         if (typeof $(this).attr('name') == 'undefined') throw 'Non possono esistere campi senza l\'attributo "name"';
 
                         //controllo le condizioni impostate nelle opzioni del metodo
-                        if ( (-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) ||
+                        if ( (-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) &&
                             ( ("" != $(this).val()) && (true === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
                         ) {
                             radioNames.push($(this).attr('name'));
@@ -709,12 +696,14 @@ $.bsModal = function (header, params) {
                         return self.indexOf(value) === index;
                     });
                     unique.forEach(function (element, index, array) {
-                        formDataObject.append(element, $('[name=' + element + ']:checked').val());
+                        data[$(element).attr('name')] = $('[name=' + element + ']:checked').val();
+                        //formDataObject.append(element, $('[name=' + element + ']:checked').val());
                     });
 
                     $(self).find('input[type=checkbox]:checked').each(function () {
                         if (typeof $(this).attr('name') == 'undefined') return;
-                        formDataObject.append($(this).attr('name'), $(this).val());
+                        data[$(this).attr('name')] = $(this).val();
+                        //formDataObject.append($(this).attr('name'), $(this).val());
                     });
 
                     $(self).find(':file').each(function () {
@@ -723,9 +712,16 @@ $.bsModal = function (header, params) {
                         formDataObject.append(this.name, this.files[0]);
                     });
 
-                    opt['data'] = formDataObject;
+                    opt['data'] = data;
+                    //opt['data'] = formDataObject;
 
-                    $.ajax(opt).done(function (res) {
+                    $.ajax({
+                        url: opt['url'],
+                        data: opt['data'],
+                        method: opt['method'],
+                       //contentType: opt['contentType']
+//                        processData: opt['processData']
+                    }).done(function (res) {
                         opt.onDone(res, opt['method']);
                     }).fail(function (res) {
                         opt.onFail(res, opt['method']);
@@ -933,28 +929,6 @@ $.bsModal = function (header, params) {
             }
         };
 
-        /*this.addMovementLine = function (e) {
-            if ('undefined' != typeof e.target) var prodElem = $(e.target).parent().parent().parent().parent();
-            else var prodElem = e;
-            var movLine = self.movementLineTemplate.clone();
-            var product = prodElem.data('product');
-            //cerco le taglie già selezionate
-            var seleSize = movLine.find('.ml-size');
-            var proSizes = product.sizes;
-            seleSize.append($('<option value=""></option>'));
-            for(var size in proSizes){
-                seleSize.append($('<option value="' + size + '">' + proSizes[size] + '</option>'));
-            }
-            seleSize.selectize();
-
-            //var seleQty = $(movLine).find('ml-qtMove');
-            prodElem.find('.mag-movements').append(movLine);
-            $($(movLine).find('button')).on('click', function(e){
-                e.preventDefault();
-                movLine.remove();
-            });
-        };*/
-
         this.searchProduct = function (search, callback) {
             if (!search.length) return false;
             $.ajax({
@@ -980,9 +954,10 @@ $.bsModal = function (header, params) {
             f.find('input, select').each(function(){
                 $(this).parent().removeClass('hasError');
             });
+            /* dovrebbe evidenziare i campi contenenti errori ma non funziona, e non dovrebbe servire dopo l'implementazione di bsForm
             $.each(domElems, function(k, v){
                 $(v).parent().addClass('hasError');
-            });
+            });*/
             var alert = f.find('.alert');
             alert.css('visibility', 'visible');
             alert.css('opacity', '1');
@@ -1042,24 +1017,24 @@ $.bsModal = function (header, params) {
         this.save = function(successCallback, failCallback) {
             var f = self.form;
             $('#form-movement').bsForm('save', {
-                url: 'blueseal/xhr/CatalogController',
+                url: '/blueseal/xhr/CatalogController',
                 method: 'post',
-                excludeFields: 'search-item',
+                excludeFields: ['search-item'],
                 excludeEmptyFields: true,
                 onCheckError: function(msg) {
-                    self.submitError(msg);
+                    self.submitError([], [msg]);
                 },
                 onDone: function(res, method) {
                     if (res[0].id) {
-                        self.submitSuccess('Il movimento è stato caricato correttamente');
+                        self.submitSuccess(['Il movimento è stato caricato correttamente']);
                         self.productList.html('');
                         self.submitBlock.css('display', 'none');
                     } else {
-                        self.submitError(res);
+                        self.submitError([], [res]);
                     }
                 },
                 onFail: function(res) {
-                    self.submitError(res);
+                    self.submitError([], [res]);
                 }
             });
             var post = {};

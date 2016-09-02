@@ -22,9 +22,9 @@
                     <div class="mag-movementDate">
                         <div class="form-group form-group-default">
                             <label for="mag-movementDate">Data</label>
-                            <input type="date" name="mag-movementDate" class="form-control mag-movementDateInput mandatory" id="mag-movementDate" />
+                            <input type="date" name="mag-movementDate" class="form-control mag-movementDateInput" id="mag-movementDate" required />
                             <label for="mag-movementCause">Causale</label>
-                            <select class="mag-movementCause" placeholder="Seleziona una causale" name="mag-movementCause mandatory">
+                            <select class="mag-movementCause" placeholder="Seleziona una causale" name="mag-movementCause" required >
                                 <option value=""></option>
                                 <?php
                                     foreach($causes as $v){

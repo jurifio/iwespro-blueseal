@@ -20,35 +20,35 @@ use bamboo\ecommerce\views\widget\VBase;
  */
 class CCatalogController extends AAjaxController
 {
-	protected $urls = [];
-	protected $authorizedShops = [];
-	protected $em;
+    protected $urls = [];
+    protected $authorizedShops = [];
+    protected $em;
 
-	/**
-	 * @param $action
-	 * @return mixed
-	 */
-	public function createAction($action)
-	{
-		$this->app->setLang(new CLang(1, 'it'));
-		$this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
-		$this->urls['page'] = $this->urls['base'] . "prodotti/movimenti/inserisci";
-		$this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
+    /**
+     * @param $action
+     * @return mixed
+     */
+    public function createAction($action)
+    {
+        $this->app->setLang(new CLang(1, 'it'));
+        $this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
+        $this->urls['page'] = $this->urls['base'] . "prodotti/movimenti/inserisci";
+        $this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
-		$this->em = new \stdClass();
-		$this->em->products = $this->app->entityManagerFactory->create('Product');
+        $this->em = new \stdClass();
+        $this->em->products = $this->app->entityManagerFactory->create('Product');
 
-		return $this->{$action}();
-	}
+        return $this->{$action}();
+    }
 
-	public function get()
+    public function get()
     {
         $search = $this->app->router->request()->getRequestData('search');
         if (false !== strpos($search, '-')) $type = 'code';
         elseif (false !== strpos($search, '#')) $type = 'cpf';
         elseif ((0 == strpos($search, '12')) && (10 == strlen($search))) $type = 'barcode';
         $shop = $this->app->getUser()->shop;
-        foreach($shop as $v) {
+        foreach ($shop as $v) {
             $shopId = $v->id;
         }
         $skuRepo = $this->rfc('ProductSku');
@@ -56,7 +56,7 @@ class CCatalogController extends AAjaxController
         $prodRepo = $this->rfc('Product');
         $sizesToMove = [];
 
-        switch($type) {
+        switch ($type) {
             case 'code':
                 $prod = $prodRepo->findOneByStringId($search);
                 break;
@@ -78,30 +78,32 @@ class CCatalogController extends AAjaxController
         return json_encode($ret);
     }
 
-    private function getAllProductData($em, $shopId, $sizesToMove = []){
+    private function getAllProductData($em, $shopId, $sizesToMove = [])
+    {
         $arrRet = $em->toArray();
         $arrRet['productVariant'] = $em->productVariant->name;
         $arrRet['sizes'] = [];
         $arrRet['sku'] = [];
-        foreach($em->productSizeGroup->productSize as $v){
+        foreach ($em->productSizeGroup->productSize as $v) {
             $arrRet['sizes'][$v->id] = $v->name;
         }
-        foreach($em->productSku as $v) {
-            if (($v->stockQty) && ($shopId == $v->shopId))  {
+        foreach ($em->productSku as $v) {
+            if (($v->stockQty) && ($shopId == $v->shopId)) {
                 $arrRet['sku'][$v->productSizeId] = $v->stockQty;
             }
         }
         $arrRet['moves'] = [];
-        foreach($sizesToMove as $k => $v) {
+        foreach ($sizesToMove as $k => $v) {
             $arrRet['moves'][$k] = $v;
         }
         return $arrRet;
     }
 
-    public function post() {
+    public function post()
+    {
         $get = $this->app->router->request()->getRequestData();
-        try {
 
+        try {
             $prodEm = $this->rfc('Product');
             $skuEm = $this->rfc('ProductSku');
             $SOEm = $this->rfc('StorehouseOperation');
@@ -109,105 +111,116 @@ class CCatalogController extends AAjaxController
             $SOCEm = $this->rfc('StorehouseOperationCause');
             $SEm = $this->rfc('Storehouse');
 
+            $moves = [];
+            $i = 0;
+
+            //create array with all movements
+            foreach ($get as $gk => $gv) {
+                if ((0 === strpos($gk, 'move')) && ('' !== $gv)) {
+                    $tempArr = explode('-', $gk);
+                    $moves[$i]['id'] = $tempArr[1];
+                    $moves[$i]['productVariantId'] = $tempArr[2];
+                    $moves[$i]['productSizeId'] = $tempArr[3];
+                    $moves[$i]['qtMove'] = $gv;
+                    $i++;
+                }
+            }
+            unset($tempArr);
+
             $user = $this->app->getUser();
             $shop = $user->shop->getFirst();
 
-
             if (isset($get['storehouseId'])) {
                 $storehouse = $SEm->findOneBy(['id' => $get['storehouseId']]);
-            }
-            else {
+            } else {
                 $storehouse = $SEm->findOneBy(['shopId' => $shop->id]);
             }
 
             if (!$storehouse) throw new \Exception('il Magazzino impostato non esiste nel sistema');
+            if (!$SOC = $SOCEm->findOne([$get['mag-movementCause']])) throw new \Exception('La causale è obbligatoria');
 
-            if (!$SOC = $SOCEm->findOne([$get['cause']])) throw new \Exception('La causale è obbligatoria');
 
+            //fatti tutti i controlli preliminari, inizio la transazione
             $this->app->dbAdapter->beginTransaction();
 
             $newOp = $SOEm->getEmptyEntity();
             $newOp->shopId = $shop->id;
             $newOp->storehouseId = $storehouse->id;
-            $newOp->storehouseOperationCauseId = $get['cause'];
+            $newOp->storehouseOperationCauseId = $get['mag-movementCause'];
             $newOp->userId = $user->id;
-            $newOp->operationDate = date("Y-m-d H:i:s", strtotime($get['date']));
+            $newOp->operationDate = date("Y-m-d H:i:s", strtotime($get['mag-movementDate']));
             $operationId = $newOp->insert();
 
-        foreach($get['products'] as $v) {
-            $prod = $prodEm->findOneBy(['productVariantId' => $v['productVariantId']]);
-            if (!$prod) throw new \Exception('Prodotto non trovato! Codice fornito: ' . $v['id'] . '-' . $v['productVariantId']);
-            /*
-             * RECUPERI I PREZZI: controllo prima se c'è lo sku da aggiornare. Se c'è aggiorno quello.
-             * Se non c'è, cerco il prezzo sugli altri sku. Se il prezzo non è uguale per tutti gli sku parte l'eccezione.
-             * Se non ci sono altri sku, cerco il prezzo dalla tabella shopHasProduct
-             * Se non c'è neanche lì niente prezzo e altra eccezione.
-             */
-            $allSkus = $skuEm->findBy([
-                'productVariantId' => $v['productVariantId'],
-                'productId' => $v['id'],
-                'shopId' => $shop->id,
-            ]);
-            $value = 0;
-            $price = 0;
-            $salePrice = 0;
-            $onSale = null;
-            $isUsable = null;
-            $i = 0;
+            //inizio l'inserimento dei singoli movimenti
+            foreach ($moves as $v) {
+                $actualProd = $prodEm->findOneBy([
+                    'id' => $v['id'],
+                    'productVariantId' => $v['productVariantId']
+                ]);
+                if (!$actualProd) throw new \Exception("Uno o più Prodotti non sono stati trovati");
 
+                //recupero i prezzi del prodotto
+                $allSkus = $skuEm->findBy([
+                    'productVariantId' => $v['productVariantId'],
+                    'productId' => $v['id'],
+                ]);
+                $value = 0;
+                $price = 0;
+                $salePrice = 0;
+                $onSale = null;
+                $isUsable = null;
+                $i = 0;
 
-            foreach($allSkus as $s) {
-                $isUsable = true;
-                if (0 == $i) {
-                    $value = $s->value;
-                    $price = $s->price;
-                    $salePrice = $s->salePrice;
-                    $onSale = $s->isOnSale;
-                } elseif (
+                foreach ($allSkus as $s) {
+                    $isUsable = true;
+                    if (0 == $i) {
+                        $value = $s->value;
+                        $price = $s->price;
+                        $salePrice = $s->salePrice;
+                        $onSale = $s->isOnSale;
+                    } elseif (
                         ($price != $s->price) ||
                         ($salePrice != $s->salePrice) ||
                         ($onSale != $s->isOnSale)
                     ) {
-                    $isUsable = false;
-                    break;
+                        $isUsable = false;
+                        break;
+                    }
+                    $i++;
                 }
-                $i++;
-            }
-            //if (!$isUsable) throw new \Exception('Non riesco ad assegnare il prezzo di uno dei prodotti. L\'inserimento dei movimenti non è andato a buon fine');
-
-            if (false === $isUsable) {
-                $shp = $prod->shopHasProduct->findOneByKeys([
-                    'productVariantId' => $v['productVariantId'],
-                    'productId' => $v['id'],
-                    'shopId' => $shop->id,
-                ]);
-                if ($shp) {
-                    $price = $shp->price;
-                    $value = $shp->value;
-                    $salePrice = $shp->salePrice;
-                } else {
-                    throw new \Exception("Il prezzo di uno o più prodotti in elenco non è stato impostato. I movimenti non sono stati registrati");
+                if (false === $isUsable) {
+                    $shp = $actualProd->shopHasProduct->findOneByKeys([
+                        'productVariantId' => $v['productVariantId'],
+                        'productId' => $v['id'],
+                        'shopId' => $shop->id,
+                    ]);
+                    if ($shp) {
+                        $price = $shp->price;
+                        $value = $shp->value;
+                        $salePrice = $shp->salePrice;
+                    } else {
+                        throw new \Exception("Il prezzo di uno o più prodotti in elenco non è stato impostato. I movimenti non sono stati registrati");
+                    }
                 }
-            }
-
-            //per ogni movimento
-            foreach($v['movements'] as $mov) {
 
                 //modifico le quantità negli sku
                 $actualSku = $allSkus->findOneByKeys([
                     'productVariantId' => $v['productVariantId'],
                     'shopId' => $shop->id,
-                    'productSizeId' => $mov['size']
+                    'productSizeId' => $v['productSizeId']
                 ]);
-                if (!$actualSku) {
-
-                    if (0 > $mov['qtMove']) throw new \Exception(
+                if ($actualSku) {
+                    if (0 > $actualSku->stockQty + $v['qtMove']) throw new \Exception('I movimenti non possono portare le quantità in stock in negativo');
+                    $actualSku->stockQty = $actualSku->stockQty + $v['qtMove'];
+                    $actualSku->update();
+                } else {
+                    if (0 > $v['qtMove']) throw new \Exception(
                         'Impossibile togliere quantità di un articolo mai caricato: ' . $v['id'] . '-' . $v['productVariantId']
                     );
                     $newSku = $skuEm->getEmptyEntity();
                     $newSku->productId = $v['id'];
                     $newSku->productVariantId = $v['productVariantId'];
-                    $newSku->productSizeId = $mov['size'];
+                    $newSku->productSizeId = $v['productSizeId'];
                     $newSku->shopId = $shop->id;
                     $newSku->currencyId = 1;
                     //$newSku->barcode = null; //TODO barcodes;
@@ -216,10 +229,6 @@ class CCatalogController extends AAjaxController
                     $newSku->salePrice = $salePrice;
                     $newSku->isOnSale = (null === $onSale) ? 0 : $onSale;
                     $newSku->insert();
-                } else {
-                    if (0 > $actualSku->stockQty + $mov['qtMove']) throw new \Exception('I movimenti non possono portare le quantità in stock in negativo');
-                    $actualSku->stockQty = $actualSku->stockQty + $mov['qtMove'];
-                    $actualSku->update();
                 }
 
                 //inserisco il movimento
@@ -229,12 +238,12 @@ class CCatalogController extends AAjaxController
                 $SOL->storehouseId = $storehouse->id;
                 $SOL->productId = $v['id'];
                 $SOL->productVariantId = $v['productVariantId'];
-                $SOL->productSizeId = $mov['size'];
-                $SOL->qty = $mov['qtMove'];
+                $SOL->productSizeId = $v['productSizeId'];
+                $SOL->qty = $v['qtMove'];
                 $SOL->insert();
+                $this->app->dbAdapter->commit();
             }
-        }
-        $this->app->dbAdapter->commit();
+            return 'OK';
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
             return $e->getMessage();
