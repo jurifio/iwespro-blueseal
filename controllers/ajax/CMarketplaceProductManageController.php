@@ -34,9 +34,7 @@ class CMarketplaceProductManageController extends AAjaxController
     public function post()
     {
 	    $productSample = $this->app->repoFactory->create('Product')->getEmptyEntity();
-	    $marketplaceAccountSample = $this->app->repoFactory->create('MarketplaceAccount')->getEmptyEntity();
-	    $marketplaceAccountSample->readId($this->app->router->request()->getRequestData('account'));
-	    $marketplaceAccount = $marketplaceAccountSample->em()->findOne($marketplaceAccountSample->getIds());
+	    $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
 	    $config = $marketplaceAccount->config;
 	    $config['priceModifier'] = $this->app->router->request()->getRequestData('modifier');
 	    $i = 0;
@@ -58,11 +56,9 @@ class CMarketplaceProductManageController extends AAjaxController
     public function put()
     {
     	//RETRY
-	    $productSample = $this->app->repoFactory->create('Product')->getEmptyEntity();
 	    $i = 0;
 	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
-		    $productSample->readId($row);
-		    $product = $this->app->repoFactory->create('Product')->findOne($productSample->getIds());
+		    $product = $this->app->repoFactory->create('Product')->findOneByStringId($row);
 		    foreach ($product->marketplaceAccountHasProduct as $marketplaceAccountHasProduct) {
 			    if(1 == $marketplaceAccountHasProduct->hasError || 1 == $marketplaceAccountHasProduct->isToWork) {
 				    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));

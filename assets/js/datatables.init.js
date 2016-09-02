@@ -95,7 +95,7 @@
 		]
 	});
 	tableSetup.product_list = $.extend({}, tableSetup.common, {
-		order: [[11, "desc"]],
+		order: [[14, "desc"]],
 		columns: [
 			{
 				data: "code",
@@ -259,6 +259,10 @@
 				data: "dummy",
 				searchable: false,
 				orderable: false
+			},{
+				data: "fee",
+				searchable: true,
+				orderable: true
 			},{
 				data: "marketplaceAccountName",
 				searchable: true

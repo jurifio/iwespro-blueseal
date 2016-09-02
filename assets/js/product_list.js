@@ -599,7 +599,7 @@ $(document).on('bs.category.edit', function (e, element, button) {
 
     body.css("text-align", 'left');
     body.html('<div id="categoriesTree"></div>');
-
+    bsModal.modal();
     Pace.ignore(function () {
         var radioTree = $("#categoriesTree");
         if (radioTree.length) {
@@ -666,7 +666,7 @@ $(document).on('bs.category.edit', function (e, element, button) {
                 }
             });
         }
-        bsModal.modal();
+
     });
 });
 

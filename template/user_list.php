@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
@@ -107,6 +108,5 @@
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
-
 </body>
 </html>

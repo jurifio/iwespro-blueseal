@@ -239,12 +239,6 @@ table.dataTable thead .sorting_asc:after {
     display: none
 }
 
-#categoriesTree {
-    min-height: 300px;
-    height: 400px;
-    max-height: 400px;
-}
-
 .dynatree-container {
     border: 0 !important;
 }
@@ -261,7 +255,7 @@ table.dataTable thead .sorting_asc:after {
 }
 **/
 .modal-body {
-    overflow: hidden;
+    overflow: auto;
     max-height: 600px;
     transition: height 0.2s;
 }

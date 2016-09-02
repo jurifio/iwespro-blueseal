@@ -31,6 +31,7 @@
                                     <th class="center">Season</th>
                                     <th class="center">CPF</th>
                                     <th class="center">Immagine</th>
+                                    <th class="center">Fee</th>
                                     <th class="center">Marketplaces</th>
                                 </tr>
                             </thead>
@@ -78,6 +79,30 @@
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Riprova Inserimento"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Assegnazione Ean">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-barcode fa-plus"
+            data-permission="/admin/product/edit"
+            data-event="bs.ean.newRange"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Inserisci nuovo Range Ean"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-barcode fa-share"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.ean"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Assegna nuovi Ean Prodotti"
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>

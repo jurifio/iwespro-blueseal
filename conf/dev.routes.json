@@ -1449,6 +1449,16 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/prodotti/skus/stampa-barcode(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

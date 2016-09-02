@@ -29,6 +29,7 @@ class CCheckProductsToBePublished extends AAjaxController
           AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
           AND ProductStatus.code IN ('A', 'Q', 'I')", []);
 
+        $this->app->cacheService->getCache('entities')->flush();
         return json_encode(
             [
                 'bodyMessage' => $result->countAffectedRows() . ' prodotti pubblicati',
