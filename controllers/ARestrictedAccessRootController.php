@@ -102,14 +102,7 @@ abstract class ARestrictedAccessRootController extends ARootController
      */
     public function checkPermission($permissionPath)
     {
-        $hasPermission = false;
-
-        $id = $this->app->rbacManager->perms()->pathId($permissionPath);
-        if($this->app->getUser()->hasPermission($id)) {
-            $hasPermission = true;
-        }
-
-        return $hasPermission;
+        return $this->app->getUser()->hasPermissions($permissionPath);
     }
 
     public function __destruct() {}
