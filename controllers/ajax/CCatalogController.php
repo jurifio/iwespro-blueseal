@@ -44,6 +44,7 @@ class CCatalogController extends AAjaxController
     public function get()
     {
         $search = $this->app->router->request()->getRequestData('search');
+        $type = '';
         if (false !== strpos($search, '-')) $type = 'code';
         elseif (false !== strpos($search, '#')) $type = 'cpf';
         elseif ((0 == strpos($search, '12')) && (10 == strlen($search))) $type = 'barcode';
@@ -72,6 +73,8 @@ class CCatalogController extends AAjaxController
                 $sizesToMove[$sku->productSizeId] = 1;
                 $prod = $sku->product;
                 break;
+            default:
+                return json_encode(false);
         }
         $ret = ($prod) ? $this->getAllProductData($prod, $shopId, $sizesToMove) : false;
 
@@ -81,7 +84,7 @@ class CCatalogController extends AAjaxController
     private function getAllProductData($em, $shopId, $sizesToMove = [])
     {
         $arrRet = $em->toArray();
-        $arrRet['productVariant'] = $em->productVariant->name;
+        $arrRet['productVariantName'] = $em->productVariant->name;
         $arrRet['sizes'] = [];
         $arrRet['sku'] = [];
         foreach ($em->productSizeGroup->productSize as $v) {

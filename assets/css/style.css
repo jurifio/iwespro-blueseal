@@ -772,8 +772,14 @@ ul.roulette-importer-details li {
     margin-bottom: 5px;
 }
 
+#form-movement .search-item{
+    width: 80%;
+    float: left;
+    clear: none !important;
+}
+
 .mag-searchBlock button {
-    margin-top: 15px; float: right; clear: both;
+    margin-top: 10px; float: right;
 }
 
 .mag-sizesTable {
@@ -792,10 +798,6 @@ ul.roulette-importer-details li {
     margin-top: 4px;
     padding: 5px 10px !important;
     float: right;
-}
-
-.mag-products-container {
-    display: none;
 }
 
 h5.product-title {

@@ -35,7 +35,7 @@ class CDetailModelSave extends AAjaxController
             $newProt->productName = $get['productName'];
             $newId = $newProt->insert();
 
-            $this->saveCats(explode(',', $get['categories']), $newId);
+            $this->saveCats($get['categories'], $newId);
 
             $this->insertDetails($productDetails, $newId, $productPrototypeId);
             $this->app->dbAdapter->commit();

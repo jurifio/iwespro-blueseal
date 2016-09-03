@@ -15,7 +15,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                 var location = false;
                 if ('POST' == method) {
                     body = 'Nuovo modello inserito.';
-                    location = window.location.pathname + '?id=' + res['productSheetActualId'];
+                    location = window.location.pathname + '?id=' + res['productSheetModelPrototypeId'];
                 }
                 if ('PUT' == method) {
                     body = 'Modello aggiornato.';
@@ -205,6 +205,7 @@ $(document).ready(function () {
                     }
                 } else {
                     modal = new $.bsModal('Attenzione!', {body: 'Non ho trovato il modello che stai cercando.<br /> Se vuoi puoi inserirlo ora.'});
+                    $('#main-details').selectDetails();
                 }
             }
         });
