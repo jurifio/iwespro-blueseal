@@ -91,7 +91,7 @@ class CProductModelListAjaxController extends AAjaxController
             $response['data'][$i]['details'] = '<span class="small">';
             foreach ($val->productSheetModelActual as $det) {
                 $response['data'][$i]['details'] .=
-                    $det->productDetailLabel->productDetailLabelTranslation->getFirst()->name .
+                    $det->productDetailLabel->slug .
                     ":" .
                     $det->productDetail->productDetailTranslation->getFirst()->name .
                     '<br />';

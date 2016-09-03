@@ -29,6 +29,14 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         if (false != location) window.location.replace(location);
                     }
                 });
+            },
+            onFail: function(res, method) {
+                modal = new $.bsModal('Salvataggio del modello', {
+                    body: 'OOPS! Salvataggio non riuscito',
+                    okButtonEvent: function(){
+                        modal.hide();
+                    }
+                });
             }
     });
 });
