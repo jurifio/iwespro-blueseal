@@ -627,8 +627,9 @@ $.bsModal = function (header, params) {
             save: function (params) {
                 var opt = {
                     //preferenze esecuzione metodo
+                    dataType: 'JSON',
                     excludeFields: [],
-                    excludeEmptyFields: false,
+                    excludeEmptyFields: true,
                     //parametri chiamata ajax
                     url: '#',
                     contentType: 'multipart/form-data',
@@ -673,7 +674,7 @@ $.bsModal = function (header, params) {
                         if ('undefined' != typeof $(this).attr('name')) {
                             //controllo le condizioni impostate nelle opzioni del metodo
                             if ((-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) &&
-                                ( ("" != $(this).val()) && (true === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
+                                ( ("" != $(this).val()) || (false === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
                             ) {
                                 data[$(this).attr('name')] = $(this).val();
                                 //formDataObject.append($(this).attr('name'), $(this).val());
@@ -719,6 +720,7 @@ $.bsModal = function (header, params) {
                         url: opt['url'],
                         data: opt['data'],
                         method: opt['method'],
+                        dataType: opt['dataType']
                        //contentType: opt['contentType']
 //                        processData: opt['processData']
                     }).done(function (res) {
@@ -812,7 +814,7 @@ $.bsModal = function (header, params) {
         this.form.data('initParams', this.opt);
         this.searchBlock = this.form.find('.mag-searchBlock');
         this.movementDate = this.form.find('.mag-movementDate');
-        this.movementDate.css('display', 'none');
+        //this.movementDate.css('display', 'none');
         this.submitBlock = this.form.find('.mag-submit');
         this.submitBlock.css('display', 'none');
 
@@ -856,7 +858,7 @@ $.bsModal = function (header, params) {
 //end constructor
 
         this.addProduct = function (product) {
-            var productList = self.productList
+            var productList = self.productList;
             if ('single' == this.opt.mode) productList.html('');
             if ('multi' == this.opt.mode) //TODO aggiungi pulsante per chiudere il singolo prodotto;
             var prodTemp = self.productTemplate.clone();
@@ -892,10 +894,8 @@ $.bsModal = function (header, params) {
                     prod.remove();
                     if (!prodList.find('.mag-product').length) {
                         self.submitBlock.css('display', 'none');
-                        self.container.css('display', 'none');
                     }
                 });
-                self.container.css('display', 'block');
                 self.submitBlock.css('display', 'block');
                 self.movementDate.css('display', 'block');
             }
@@ -937,9 +937,8 @@ $.bsModal = function (header, params) {
                 dataType: 'json',
                 data: {search: search}
             }).done(function(res){
-                console.log(res);
                 if (false == res) {
-                    self.submitwarning('il prodotto cercato non esiste.')
+                    self.submitwarning(['Il prodotto cercato non esiste. Controlla l\'esattezza del codice inserito']);
                 } else {
                     self.form.find('.alert').css('opacity', '0');
                     callback(res);
@@ -984,8 +983,9 @@ $.bsModal = function (header, params) {
             alert.css('opacity', '1');
             alert.removeClass('alert-danger');
             alert.addClass('alert-success');
-            for (var msg in errors) {
-                alert.append(msg + '<br />');
+            alert.html('');
+            for (var i in msg) {
+                alert.append(msg[i] + '<br />');
             }
             alert.css('visibility', 'visible');
 
@@ -1003,8 +1003,9 @@ $.bsModal = function (header, params) {
             alert.css('opacity', '1');
             alert.removeClass('alert-warning');
             alert.addClass('alert-success');
-            for (var msg in errors) {
-                alert.append(msg + '<br />');
+            alert.html('');
+            for (var i in msg) {
+                alert.append(msg[i] + '<br />');
             }
             alert.css('visibility', 'visible');
 
@@ -1025,7 +1026,8 @@ $.bsModal = function (header, params) {
                     self.submitError([], [msg]);
                 },
                 onDone: function(res, method) {
-                    if (res[0].id) {
+                    console.log(res);
+                    if ('OK' == res) {
                         self.submitSuccess(['Il movimento è stato caricato correttamente']);
                         self.productList.html('');
                         self.submitBlock.css('display', 'none');
@@ -1034,54 +1036,11 @@ $.bsModal = function (header, params) {
                     }
                 },
                 onFail: function(res) {
+                    console.error(res);
                     self.submitError([], [res]);
                 }
             });
             var post = {};
-            /*post['date'] = f.find('.mag-movementDateInput').val();
-            post['cause'] = f.find('.mag-movementCause').val();
-            post['products'] = [];
-            f.find('.mag-product').each(function(){
-                post['products'].push($(this).data('product'));
-                var kProd = post['products'].length-1;
-                post['products'][kProd]['movements'] = [];
-                $(this).find('.mag-movementLine').each(function(){
-                    post['products'][kProd]['movements'].push({
-                        size: $(this).find('.ml-size').val(),
-                        qtMove: $(this).find('.ml-qtMove').val()
-                    });
-                });
-            });
-
-            //controllo errori
-            var hasError = [];
-            var errorMsg = [];
-            if ("" == post['date']) {
-                hasError.push(f.find('.mag-movementDateInput'));
-                errorMsg.push('La data non è stata inserita o il formato non è corretto');
-            }
-            if ('' == post['cause']) {
-                hasError.push(f.find('.mag-movementCause'));
-                errorMsg.push('È obbligatorio specificare la causale');
-            }
-            if (0 == post['products'].length) {
-                errorMsg.push('Deve essere presente almeno un prodotto');
-            }
-
-            if ((hasError.length) || (errorMsg.length)) {
-                self.submitError(hasError, errorMsg);
-            } else {
-                $.ajax({
-                    url: '/blueseal/xhr/CatalogController',
-                    type: 'POST',
-                    data: post,
-                    dataType: 'JSON'
-                }).done(
-                    function(res){
-                        console.log(res);
-                    }
-                ).fail(function(res){console.log(res)});
-            }*/
         };
     };
 
