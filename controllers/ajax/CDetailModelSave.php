@@ -43,7 +43,7 @@ class CDetailModelSave extends AAjaxController
             return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newId]);
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
-            return json_encode(false);
+            return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
         }
     }
 
@@ -83,7 +83,7 @@ class CDetailModelSave extends AAjaxController
             $this->app->dbAdapter->commit();
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
-            return json_encode(['status' => "ko"]);
+            return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
         }
         $res = ['status' => 'ok', 'productSheetModelPrototypeId' => $prot->id];
         return json_encode($res);
