@@ -79,7 +79,7 @@ class CDetailModelSave extends AAjaxController
             //insert new details
             $this->insertDetails($productDetails, $prot->id, $prot->productSheetPrototypeId);
 
-            $this->saveCats(explode(',', $get['categories']), $prot->id);
+            $this->saveCats($get['categories'], $prot->id);
             $this->app->dbAdapter->commit();
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();

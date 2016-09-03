@@ -6,13 +6,15 @@ var alertHtml = "" +
 
 var tagList = "";
 
-
 $(document).on('bs.product.edit', function (e, element, button) {
     $('#form-model').bsForm('save', {
             url:'/blueseal/xhr/DetailModelSave',
             onDone: function(res, method) {
                 var body = 'Oops! Metodo non pervenuto. Contatta l\'amministratore';
                 var location = false;
+                if ('ko' == res['status']) {
+                    body = 'OOPS! Modello non aggiornato!';
+                }
                 if ('POST' == method) {
                     body = 'Nuovo modello inserito.';
                     location = window.location.pathname + '?id=' + res['productSheetModelPrototypeId'];
