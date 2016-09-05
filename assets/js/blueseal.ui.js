@@ -185,7 +185,7 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
             operations.append('<div class="dt-buttons btn-group bs-toolbar-custom"><div class="btn-group-label">' + $(this).data('group-label') + '</div></div>');
 
             $.each($(this).children('bs-toolbar-button'), function () {
-                if('undefined' != typeof  $(this).data('named-id')) {
+                if('undefined' != typeof  $(this).data('remote')) {
                     //TODO prendere la cofigrazione del bottone da qualche parte e schiaffarla sotto, ugualmente il Javascript con getScript();
                 }
 
