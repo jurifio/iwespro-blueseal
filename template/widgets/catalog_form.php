@@ -3,7 +3,7 @@
         <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-8 offset-2">
+                <div class="col-md-8">
                     <div class="mag-movementDate">
                             <div class="row">
                                 <div class="col-md-6">
@@ -30,8 +30,29 @@
                             </div>
                     </div>
                 </div>
+        <?php if ($allShops) : ?>
+                <div class="col-md-4">
+                    <div class="mag-movementDate">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                    <label for="mag-shop">Shop
+                                        <select class="mag-shop form-control" placeholder="Seleziona una causale" name="mag-shop" required >
+                                            <option value="">Seleziona uno shop</option>
+                                            <?php
+                                            foreach($shops as $v){
+                                                echo '<option value="' . $v->id .'">' . $v->title . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <?php endif ?>
             </div>
-
         </div>
         </div>
         <div class="panel panel-default mag-products-container">

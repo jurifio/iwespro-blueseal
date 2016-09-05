@@ -131,7 +131,12 @@ class CCatalogController extends AAjaxController
             unset($tempArr);
 
             $user = $this->app->getUser();
-            $shop = $user->shop->getFirst();
+            if ($user->hasPermission('allShops')) {
+                if (!$get['mag-shop']) throw new \Exception('Lo shop deve essere specificato obbligatoriamente');
+                $shop = $this->rfc('Shop')->findOneBy(['id' => $get['mag-shop']]);
+            } else {
+                $shop = $user->shop->getFirst();
+            }
 
             if (isset($get['storehouseId'])) {
                 $storehouse = $SEm->findOneBy(['id' => $get['storehouseId']]);
@@ -139,7 +144,13 @@ class CCatalogController extends AAjaxController
                 $storehouse = $SEm->findOneBy(['shopId' => $shop->id]);
             }
 
-            if (!$storehouse) throw new \Exception('il Magazzino impostato non esiste nel sistema');
+            if (!$storehouse) {
+                $storehouse = $SEm->getEmptyEntity();
+                $storehouse->shopId = $shop->id;
+                $storehouse->name = 'auto-generated';
+                $storehouse->countryId = 1;
+                $storehouse->id = $storehouse->insert();
+            }
             if (!$SOC = $SOCEm->findOne([$get['mag-movementCause']])) throw new \Exception('La causale è obbligatoria');
 
 
@@ -226,7 +237,6 @@ class CCatalogController extends AAjaxController
                     $newSku->productSizeId = $v['productSizeId'];
                     $newSku->shopId = $shop->id;
                     $newSku->currencyId = 1;
-                    //$newSku->barcode = null; //TODO barcodes;
                     $newSku->value = $value;
                     $newSku->price = $price;
                     $newSku->salePrice = $salePrice;
