@@ -44,7 +44,7 @@ class CCatalogController extends AAjaxController
     public function get()
     {
         $search = $this->app->router->request()->getRequestData('search');
-        $magShop = $this->app->router->request()->getRequestData('mag-shop');
+        $magShop = $this->app->router->request()->getRequestData('shop');
         $type = '';
         if (false !== strpos($search, '-')) $type = 'code';
         elseif (false !== strpos($search, '#')) $type = 'cpf';
