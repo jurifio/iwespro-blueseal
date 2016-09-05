@@ -18,9 +18,9 @@ class CCheckPermission extends AAjaxController
     public function get()
     {
         try {
-            return (bool) $this->app->getUser()->hasPermissions($this->app->router->request()->getRequestData('permission'));
+            return $this->app->getUser()->hasPermissions($this->app->router->request()->getRequestData('permission')) ? 'true' : 'false';
         } catch (\Exception $e) {
-            return false;
+            return 'false';
         }
     }
 
