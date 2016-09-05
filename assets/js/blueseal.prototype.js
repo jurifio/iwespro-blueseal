@@ -230,6 +230,11 @@ Button.prototype.checkPermission = function () {
             theButton.prop('disabled', false).attr('disabled', false);
         }
         return;
+    } else if(window.localStorage.getItem(that.cfg.data.permission) == '0'){
+        theButton.on('click', function (e) {
+            e.preventDefault();
+        });
+        theButton.hide();
     }
 
     this.getDeferred({
@@ -238,7 +243,7 @@ Button.prototype.checkPermission = function () {
         context: this,
         type: 'GET'
     }).done(function (response) {
-        if (response == true) {
+        if (response == '1') {
             window.localStorage.setItem(that.cfg.data.permission,'1');
 
             if (theButton.is('select')) {
@@ -252,6 +257,7 @@ Button.prototype.checkPermission = function () {
             theButton.on('click', function (e) {
                 e.preventDefault();
             });
+            theButton.hide();
         }
     });
 };

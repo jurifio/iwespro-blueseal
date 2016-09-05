@@ -185,7 +185,17 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
             operations.append('<div class="dt-buttons btn-group bs-toolbar-custom"><div class="btn-group-label">' + $(this).data('group-label') + '</div></div>');
 
             $.each($(this).children('bs-toolbar-button'), function () {
-                var button = new Button($(this).data());
+                var data =  $(this).data();
+                if('undefined' != typeof  $(this).data('remote')) {
+                    $.getScript("/assets/"+$(this).data('remote')+".js").done(function(res){
+                        console.log(res);
+                        data = window.buttonSetup;
+                        delete window.buttonSetup;
+                    });
+                    //TODO prendere la cofigrazione del bottone da qualche parte e schiaffarla sotto, ugualmente il Javascript con getScript();
+                }
+
+                var button = new Button(data);
                 button.draw($("div.bs-toolbar .dt-buttons").last());
                 button.checkPermission();
             });
