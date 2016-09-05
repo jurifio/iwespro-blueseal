@@ -72,9 +72,6 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
-            data-remote="bs.sales.set"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
             data-tag="a"
             data-icon="fa-file-o fa-plus"
             data-permission="/admin/product/add"
