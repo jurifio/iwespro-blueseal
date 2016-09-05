@@ -53,7 +53,7 @@ class CCatalogController extends AAjaxController
         $allShops = $this->app->getUser()->hasPermission('allShops');
 
         if ($allShops) {
-            if (!$magShop) throw new \Exception('Non hai specificato lo shop');
+            if ('' == $magShop) throw new \Exception('Non hai specificato lo shop');
             $shopId = $magShop;
         } else {
             $shop = $this->app->getUser()->shop;
