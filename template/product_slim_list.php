@@ -84,7 +84,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-cloud-upload"
-            data-permission="/admin/product/publish"
+            data-permission="/admin/product/publish&&allShops"
             data-event="bs.pub.product"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -116,7 +116,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-tag"
-            data-permission="/admin/product/edit"
+            data-permission="/admin/product/edit&&allShops"
             data-event="bs.product.tag"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -126,7 +126,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-clone"
-            data-permission="/admin/product/add"
+            data-permission="/admin/product/add&&allShops"
             data-event="bs.dupe.product"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -146,7 +146,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-camera-retro"
-            data-permission="/admin/product/edit"
+            data-permission="/admin/product/edit&&allShops"
             data-event="bs.manage.photo"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -156,7 +156,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-trash"
-            data-permission="/admin/product/delete"
+            data-permission="/admin/product/delete&&allShops"
             data-event="bs.del.product"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -167,7 +167,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-eye"
-            data-permission="/admin/product/edit"
+            data-permission="/admin/product/edit&&allShops"
             data-event="bs.manage.changeStatus"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -178,7 +178,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-calendar"
-            data-permission="/admin/product/edit"
+            data-permission="/admin/product/edit&&allShops"
             data-event="bs.manage.changeSeason"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -189,7 +189,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-sitemap"
-            data-permission="/admin/product/edit"
+            data-permission="/admin/product/edit&&allShops"
             data-event="bs.category.edit"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -199,7 +199,7 @@
         ></bs-toolbar-button><bs-toolbar-button
             data-tag="a"
             data-icon="fa-usd"
-            data-permission="/admin/product/edit"
+            data-permission="/admin/product/edit&&allShops"
             data-event="bs.sales.set"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -209,7 +209,7 @@
         ></bs-toolbar-button><bs-toolbar-button
             data-tag="a"
             data-icon="fa-percent"
-            data-permission="/admin/product/edit"
+            data-permission="/admin/product/edit&&allShops"
             data-event="bs.sales.price"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -220,7 +220,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-tasks"
-            data-permission="/admin/product/edit"
+            data-permission="/admin/product/edit&&allShops"
             data-event="bs.product.mergedetails"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -231,7 +231,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-magnet"
-            data-permission="/admin/product/edit"
+            data-permission="/admin/product/edit&&allShops"
             data-event="bs.product.mergenames"
             data-class="btn btn-default"
             data-rel="tooltip"
