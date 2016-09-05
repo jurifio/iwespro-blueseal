@@ -1463,7 +1463,17 @@
                 "PUT"
             ]
         },{
-            "pattern": "/blueseal/prodotti/skus/stampa-barcode(/)?",
+            "pattern": "/blueseal/movimenti/barcode/print(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/barcode/print(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
             },

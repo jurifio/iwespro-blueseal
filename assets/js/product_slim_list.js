@@ -69,21 +69,42 @@ $(document).on('bs.print.aztec', function (e, element, button) {
     if (selectedRowsCount < 1) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare uno o più prodotti per avviare la stampa del codice aztec"
+            message: "Devi selezionare uno o più prodotti per avviare la stampa dei codici"
         }).open();
         return false;
     }
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = rowId[0] + i + '=' + rowId[1] + '__' + rowId[2];
+        getVarsArray[i] = prodId+ i + '=' + v;
         i++;
     });
 
     var getVars = getVarsArray.join('&');
-
     window.open('/blueseal/print/azteccode?' + getVars, 'aztec-print');
+});
+$(document).on('bs.print.barcode', function (e, element, button) {
+
+    var getVarsArray = [];
+    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRowsCount = selectedRows.length;
+
+    if (selectedRowsCount < 1) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare uno o più prodotti per avviare la stampa dei codici"
+        }).open();
+        return false;
+    }
+
+    var i = 0;
+    $.each(selectedRows, function (k, v) {
+        getVarsArray[i] = 'id'+ i + '=' + v;
+        i++;
+    });
+
+    var getVars = getVarsArray.join('&');
+    window.open('/blueseal/prodotti/barcode/print?source=productId&' + getVars, 'barcode-print');
 });
 
 $(document).on('bs.dupe.product', function () {

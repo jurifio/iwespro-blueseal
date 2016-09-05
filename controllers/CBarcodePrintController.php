@@ -33,15 +33,32 @@ class CBarcodePrintController extends ARestrictedAccessRootController
 
         $productSkus = new CObjectCollection();
         $seen = [];
-        foreach ($this->app->router->request()->getRequestData('moviments') as $storageOperationId) {
-            $storageOperation = $this->app->repoFactory->create('StorageOperation')->findOneByStringId($storageOperationId);
-            foreach ($storageOperation->storageOperationLine as $storageOperationLine) {
-                if(array_search($storageOperationLine->productSku->printId(),$seen) === false) {
-                    $productSkus->add($storageOperationLine->productSku);
-                    $seen[] = $storageOperationLine->productSku->printId();
+        switch($this->app->router->request()->getRequestData('source')) {
+            case 'movements': {
+                foreach ($this->app->router->request()->getRequestData() as $storageOperationId) {
+                    $storageOperation = $this->app->repoFactory->create('StorageOperation')->findOneByStringId($storageOperationId);
+                    foreach ($storageOperation->storageOperationLine as $storageOperationLine) {
+                        if(array_search($storageOperationLine->productSku->printId(),$seen) === false) {
+                            $productSkus->add($storageOperationLine->productSku);
+                            $seen[] = $storageOperationLine->productSku->printId();
+                        }
+                    }
+                }
+            }
+            break;
+            case 'products': {
+                foreach ($this->app->router->request()->getRequestData() as $productId) {
+                    $product = $this->app->repoFactory->create('Product')->findOneByStringId($productId);
+                    foreach($product->productSku as $sku) {
+                        if(array_search($sku->printId(),$seen) === false) {
+                            $productSkus->add($sku);
+                            $seen[] = $sku->printId();
+                        }
+                    }
                 }
             }
         }
+
 
         return $view->render([
             'barcodeGenerator' => $generatorSVG,
