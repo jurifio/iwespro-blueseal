@@ -102,6 +102,16 @@
             data-rel="tooltip"
             data-title="Stampa aztec"
             data-placement="bottom"
+            >
+        </bs-toolbar-button><bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-barcode"
+            data-permission="/admin/product/list"
+            data-event="bs.print.barcode"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Stampa barcode"
+            data-placement="bottom"
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
