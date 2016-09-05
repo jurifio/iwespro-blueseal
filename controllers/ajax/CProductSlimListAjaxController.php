@@ -18,18 +18,12 @@ use bamboo\core\intl\CLang;
  */
 class CProductSlimListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
     public function get()
     {
         $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
         $datatable = new CDataTables('vBluesealProductSlimList',['id','productVariantId'],$_GET);
-        if(!empty($this->authorizedShops)){
-            $datatable->addCondition('shopId',$shops);
-        }
+        $datatable->addCondition('shopId',$shops);
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());

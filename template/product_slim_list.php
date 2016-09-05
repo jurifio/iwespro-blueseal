@@ -30,7 +30,7 @@
                                data-controller="ProductSlimListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data->
+                               data-lenght-menu="100, 200, 500">
                             <thead>
                                 <tr>
                                     <th data-slug="code"
