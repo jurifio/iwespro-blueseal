@@ -826,6 +826,9 @@ $.bsModal = function (header, params) {
         //faccio partire i selectize
         $('.mag-movementCause').selectize();
 
+        var shopSelect = $('.mag-shop');
+        if (shopSelect.length) shopSelect.selectize();
+
 
 
         //evento ricerca
@@ -1021,6 +1024,7 @@ $.bsModal = function (header, params) {
                 url: '/blueseal/xhr/CatalogController',
                 method: 'post',
                 excludeFields: ['search-item'],
+                dataType: 'text',
                 excludeEmptyFields: true,
                 onCheckError: function(msg) {
                     self.submitError([], [msg]);

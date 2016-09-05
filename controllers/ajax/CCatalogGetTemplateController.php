@@ -44,12 +44,19 @@ class CCatalogGetTemplateController extends AAjaxController
 	public function get()
 	{
 		$view = new VBase(array());
+        $allShops = $this->app->getUser()->hasPermission('allShops');
+        $shops = false;
+        if ($allShops) {
+            $shops = $this->rfc('Shop')->findAll();
+        }
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/catalog_form.php');
 
         $causes = $this->app->repoFactory->create('StorehouseOperationCause')->findAll()->toArray();
 		return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'causes' => $causes
+            'causes' => $causes,
+            'allShops' => $allShops,
+            'shops' => $shops
         ]);
 	}
 }
