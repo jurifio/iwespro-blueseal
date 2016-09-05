@@ -244,7 +244,8 @@
 <?php endif; ?>
         <div class="col-xs-6">
             <div class="col-xs-4" style="margin-top:10px">
-                <?php echo $barcodeGenerator->getBarcode($productSku->barcode,Picqer\Barcode\BarcodeGenerator::TYPE_CODE_128,2); ?>
+                <?php echo $barcodeGenerator->getBarcode($productSku->barcode,Picqer\Barcode\BarcodeGenerator::TYPE_CODE_128,2); ?><br>
+                <?php echo $productSku->barcode; ?>
             </div>
             <div class="col-xs-8 pull-left" style="border-right: 1px dotted #c0c0c0;">
                 <ul>
