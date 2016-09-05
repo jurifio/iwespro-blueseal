@@ -1241,6 +1241,34 @@
 
 		var table = $(this);
 
+		if(table.data('innerSetup') == true) {
+			var setup = {};
+			setup.columns = [];
+
+			setup.order = [];
+			var c = 0;
+			table.find('th').each(function() {
+
+				var column = { data: $(this).data('slug') };
+				if(typeof $(this).data('orderable') != 'undefined') {
+					column.orderable = $(this).data('orderable');
+				}
+				if(typeof $(this).data('searchable') != 'undefined') {
+					column.searchable = $(this).data('searchable');
+				}
+				if(typeof $(this).data('defaultOrder') != 'undefined') {
+					setup.order.push([c,$(this).data('defaultOrder')]);
+				}
+				setup.columns.push(column);
+				c++;
+			});
+			if(typeof $(this).data('lengthMenu') != 'undefined') {
+				setup.lengthMenu = JSON.parse('['+$(this).data('lengthMenu')+']');
+			}
+
+			tableSetup[table.data('datatable-name')] = $.extend({}, tableSetup.common,setup);
+		}
+
 		var ths = table.find('th');
 
 		if (table.data('column-filter')) {

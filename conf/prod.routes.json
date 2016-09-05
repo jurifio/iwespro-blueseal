@@ -1437,9 +1437,45 @@
                 "PUT"
             ]
         },{
+            "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementsEditController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/movimenti(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementList"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
             "pattern": "/blueseal/prodotti/skus/stampa-barcode(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/slim(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSlimListController"
             },
             "filters": {},
             "translations": {},

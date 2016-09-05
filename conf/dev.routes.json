@@ -1472,6 +1472,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/prodotti/slim(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSlimListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
