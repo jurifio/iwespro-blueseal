@@ -2,8 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php"?>
-    <?php echo $app->getAssets([], $page); ?>
-    <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
+    <title></title>
     <style type="text/css">
 
         li {font-size:8pt;}
@@ -232,7 +231,7 @@
 <body class="fixed-header">
 <div class="cover"><div>Usa CTRL-P per stampare</div></div>
 
-<?php $i = 1; foreach ($productSkus as $productSku): ?>
+<?php $i = 1; $count = $productSkus->count(); foreach ($productSkus as $productSku): ?>
 <?php if ($i == 1): ?>
 <div class="container-fluid container-fixed-lg bg-white newpage">
     <div class="row">
@@ -255,7 +254,7 @@
                 </ul>
             </div>
         </div>
-<?php if (count($products) == $i): ?>
+<?php if ($count == $i): ?>
     </div>
 </div>
 <?php endif; ?>

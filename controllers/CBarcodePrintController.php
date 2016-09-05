@@ -46,8 +46,8 @@ class CBarcodePrintController extends ARestrictedAccessRootController
                 }
             }
             break;
-            case 'products': {
-                foreach ($this->app->router->request()->getRequestData() as $productId) {
+            case 'productId': {
+                foreach ($this->app->router->request()->getRequestData('id') as $productId) {
                     $product = $this->app->repoFactory->create('Product')->findOneByStringId($productId);
                     foreach($product->productSku as $sku) {
                         if(array_search($sku->printId(),$seen) === false) {

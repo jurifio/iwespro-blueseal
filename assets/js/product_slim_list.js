@@ -99,7 +99,7 @@ $(document).on('bs.print.barcode', function (e, element, button) {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        getVarsArray[i] = 'id'+ i + '=' + v;
+        getVarsArray[i] = 'id[]=' + v.DT_RowId;
         i++;
     });
 
