@@ -23,15 +23,16 @@ class CUserSalesGraphDataController extends AAjaxController
 	public function get()
 	{
 	    $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-        $date = date("Y-m-d H:i:s", strtotime('last monday midnight', time()));
+        $date = date("Y-m-d H:i:s", strtotime('begin of the year', time()));
 		$x = $this->app->repoFactory->create('Order')->statisticsPoints($shops,$date);
-        $res = [];
+        $res['key'] = "vendita per giorno";
         foreach ($x as $point) {
             $pointData = [];
-            $pointData[] = (new \DateTime($point['orderDate']))->getTimestamp();
+            $pointData[] = $point['dataOrdine'];
             $pointData[] = $point['value'];
-            $res[] = $pointData;
+            $res['values'][] = $pointData;
         }
+
         return json_encode($res);
 	}
 }
