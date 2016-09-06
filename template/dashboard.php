@@ -19,7 +19,7 @@
                         <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
                     </div>
                 </div>
-
+                <?php if($app->user()->hasPermission('allShops')): ?>
                 <div class="container-fluid padding-25 sm-padding-10">
                     <div class="row">
                         <div class="col-md-4 col-lg-3 col-xlg-2 ">
@@ -187,6 +187,15 @@
                         </div>
                     </div>
                 </div>
+                <?php else: ?>
+                <div class="container-fluid padding-25 sm-padding-10">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <img style="width: 100%" src="/assets/dashboardImage.png">
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
         <?php include "parts/footer.php"; ?>
