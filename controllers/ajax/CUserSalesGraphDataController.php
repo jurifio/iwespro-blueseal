@@ -20,15 +20,18 @@ use bamboo\ecommerce\views\widget\VBase;
  */
 class CUserSalesGraphDataController extends AAjaxController
 {
-	protected $urls = [];
-	protected $authorizedShops = [];
-	protected $em;
-
 	public function get()
 	{
-	    $sql = "os.id > 2 AND os.id < 11 AND
-                                ((ols.id > 2 AND ols.id < 11) OR ols.id = 17 ) AND
-							  	o.orderDate is not null";
-		$this->app->repoFactory->create('Order');
+	    $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $date = date("Y-m-d H:i:s", strtotime('last monday midnight', time()));
+		$x = $this->app->repoFactory->create('Order')->statisticsPoints($shops,$date);
+        $res = [];
+        foreach ($x as $point) {
+            $pointData = [];
+            $pointData[] = (new \DateTime($point['orderDate']))->getTimestamp();
+            $pointData[] = $point['value'];
+            $res[] = $pointData;
+        }
+        return json_encode($res);
 	}
 }
