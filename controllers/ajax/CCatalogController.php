@@ -242,9 +242,9 @@ class CCatalogController extends AAjaxController
                         $value = $shp->value;
                         $salePrice = $shp->salePrice;
                     }
-                    if ((!$shp) || (null == $salePrice) || (null == $value) || (null == $price)) {
+                    if ((!$shp) || (null == $value) || (null == $price)) {
                         $noPricesProduct = '';
-                        if ($shp) $noPricesProduct = '(' . $shp->productId . '-' . $shp->productVariantId . ')';
+                        if ($shp) $noPricesProduct = ' (' . $shp->productId . '-' . $shp->productVariantId . ')';
                         throw new \Exception("Il prezzo di uno o più prodotti in elenco non è stato impostato. I movimenti non sono stati registrati" . $noPricesProduct);
                     }
                 }
@@ -271,7 +271,7 @@ class CCatalogController extends AAjaxController
                     $newSku->currencyId = 1;
                     $newSku->value = $value;
                     $newSku->price = $price;
-                    $newSku->salePrice = $salePrice;
+                    $newSku->salePrice = ($salePrice) ? $salePrice : 0;
                     $newSku->stockQty = $v['qtMove'];
                     $newSku->isOnSale = (null === $onSale) ? 0 : $onSale;
                     $newSku->insert();
