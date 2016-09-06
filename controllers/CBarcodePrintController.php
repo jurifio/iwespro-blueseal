@@ -35,12 +35,12 @@ class CBarcodePrintController extends ARestrictedAccessRootController
         $seen = [];
         switch($this->app->router->request()->getRequestData('source')) {
             case 'movement': {
-                foreach ($this->app->router->request()->getRequestData('id') as $storageOperationId) {
-                    $storageOperation = $this->app->repoFactory->create('StorageOperation')->findOneByStringId($storageOperationId);
-                    foreach ($storageOperation->storageOperationLine as $storageOperationLine) {
-                        if(array_search($storageOperationLine->productSku->printId(),$seen) === false) {
-                            $productSkus->add($storageOperationLine->productSku);
-                            $seen[] = $storageOperationLine->productSku->printId();
+                foreach ($this->app->router->request()->getRequestData('id') as $storehouseOperationId) {
+                    $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->findOneByStringId($storehouseOperationId);
+                    foreach ($storehouseOperation->storehouseOperationLine as $storehouseOperationLine) {
+                        if(array_search($storehouseOperationLine->productSku->printId(),$seen) === false) {
+                            $productSkus->add($storehouseOperationLine->productSku);
+                            $seen[] = $storehouseOperationLine->productSku->printId();
                         }
                     }
                 }

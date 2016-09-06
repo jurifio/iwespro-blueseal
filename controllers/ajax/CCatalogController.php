@@ -269,7 +269,7 @@ class CCatalogController extends AAjaxController
             return 'OK';
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
-            var_dump($e);
+            throw $e;
             return $e->getMessage();
         }
     }
