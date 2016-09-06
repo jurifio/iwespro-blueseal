@@ -20,7 +20,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 class CFriendProductEditController extends CProductManageController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "friend_product_edit";
+    protected $pageSlug = "smart_product_edit";
 
     /**
      * @throws \Exception
