@@ -25,20 +25,12 @@ class CDeleteProduct extends AAjaxController
         $ids = [];
         $productVariantId = [];
 
-        $i=0;
-        foreach ($this->app->router->request()->getRequestData() as $product) {
-            $ids[$i] = explode('__', $product)[0];
-            $productVariantId[$i] = explode('__', $product)[1];
-            $i++;
-        }
         $html = "<table><thead><tr><th>Code</th><th>Immagine</th></tr></thead><tbody>";
 
         $i=0;
-        foreach($ids as $id){
-            $conditions = ['id' => $id, 'productVariantId' => $productVariantId[$i]];
-            $product = $em->findOneBy($conditions);
+        foreach ($this->app->router->request()->getRequestData() as $product) {
+            $product = $this->app->repoFactory->create('Product')->findOneByStringId($product);
             $i++;
-
             $html .= "<tr><td>" . $product->id . "-" . $product->productVariant->id . "</td><td><img width=\"100\" src=\"/assets/" . $product->dummyPicture . "\"></td></tr>";
         }
 
@@ -61,20 +53,10 @@ class CDeleteProduct extends AAjaxController
     {
         $em = $this->app->entityManagerFactory->create('Product');
 
-        $id = [];
-        $productVariantId = [];
-        foreach ($this->app->router->request()->getRequestData() as $product) {
-            $id[] = explode('__', $product)[0];
-            $productVariantId[] = explode('__', $product)[1];
-        }
-
-        $conditions = ['id' => $id, 'productVariantId' => $productVariantId];
-        $products = $em->findBy($conditions);
-
         $deletedProducts['ok'] = [];
         $deletedProducts['ko'] = [];
-
-        foreach ($products as $product) {
+        foreach ($this->app->router->request()->getRequestData() as $productIds) {
+            $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
             try {
                 $product->productStatusId = 8;//'C';
 	            $product->update();

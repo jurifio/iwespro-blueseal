@@ -76,8 +76,7 @@ $(document).on('bs.print.aztec', function (e, element, button) {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = rowId[0] + i + '=' + rowId[1] + '__' + rowId[2];
+        getVarsArray[i] = v.DT_RowId;
         i++;
     });
 
@@ -110,8 +109,7 @@ $(document).on('bs.dupe.product', function () {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = 'id=' + rowId[1] + '&productVariantId=' + rowId[2] + '&double=true';
+        getVarsArray[i] = 'id=' + rowId[0] + '&productVariantId=' + rowId[1] + '&double=true';
         i++;
     });
 
@@ -144,8 +142,8 @@ $(document).on('bs.add.sku', function () {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = 'id=' + rowId[1] + '&productVariantId=' + rowId[2];
+        var rowId = v.DT_RowId.split('-');
+        getVarsArray[i] = 'id=' + rowId[0] + '&productVariantId=' + rowId[1];
         i++;
     });
 
@@ -178,8 +176,8 @@ $(document).on('bs.manage.photo', function () {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = 'id=' + rowId[1] + '&productVariantId=' + rowId[2];
+        var rowId = v.DT_RowId.split('-');
+        getVarsArray[i] = 'id=' + rowId[0] + '&productVariantId=' + rowId[1];
         i++;
     });
 
@@ -212,8 +210,7 @@ $(document).on('bs.del.product', function (e, element, button) {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = rowId[0] + i + '=' + rowId[1] + '__' + rowId[2];
+        getVarsArray[i] = v.DT_RowId;
         i++;
     });
 
@@ -231,7 +228,7 @@ $(document).on('bs.del.product', function (e, element, button) {
     $.ajax({
         url: "/blueseal/xhr/DeleteProduct",
         type: "GET",
-        data: getVars
+        data: getVarsArray
     }).done(function (response) {
         result = JSON.parse(response);
         body.html(result.bodyMessage);
@@ -249,7 +246,7 @@ $(document).on('bs.del.product', function (e, element, button) {
                 $.ajax({
                     url: "/blueseal/xhr/DeleteProduct",
                     type: "DELETE",
-                    data: getVars
+                    data: getVarsArray
                 }).done(function (response) {
                     result = JSON.parse(response);
                     body.html(result.bodyMessage);
@@ -298,8 +295,7 @@ $(document).on('bs.product.tag', function () {
     }
 
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray.push(rowId[1] + '__' + rowId[2]);
+        getVarsArray.push(v.DT_RowId);
     });
 
 
@@ -397,13 +393,13 @@ $(document).on('bs.manage.changeStatus', function () {
     var fused = false;
     $.each(selectedRows, function (k, v) {
         row[i] = {};
-        var idsVars = v.DT_RowId.split('__');
-        row[i].id = idsVars[1];
-        row[i].productVariantId = idsVars[2];
+        var idsVars = v.DT_RowId.split('-');
+        row[i].id = idsVars[0];
+        row[i].productVariantId = idsVars[1];
         row[i].name = v.name;
         if ('Fuso' == v.status) fused = true;
         i++;
-        getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
 
     if (!fused) {
@@ -495,12 +491,12 @@ $(document).on('bs.manage.changeSeason', function () {
     var getVars = '';
     $.each(selectedRows, function (k, v) {
         row[i] = {};
-        var idsVars = v.DT_RowId.split('__');
-        row[i].id = idsVars[1];
-        row[i].productVariantId = idsVars[2];
+        var idsVars = v.DT_RowId.split('-');
+        row[i].id = idsVars[0];
+        row[i].productVariantId = idsVars[1];
         row[i].name = v.name;
         i++;
-        getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
     $.ajax({
         url: "/blueseal/xhr/ChangeProductsSeason",
@@ -587,12 +583,12 @@ $(document).on('bs.category.edit', function (e, element, button) {
     var getVars = '';
     $.each(selectedRows, function (k, v) {
         row[i] = {};
-        var idsVars = v.DT_RowId.split('__');
-        row[i].id = idsVars[1];
-        row[i].productVariantId = idsVars[2];
+        var idsVars = v.DT_RowId.split('-');
+        row[i].id = idsVars[0];
+        row[i].productVariantId = idsVars[1];
         row[i].name = v.name;
         i++;
-        getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
 
     header.html('Assegna Categorie');
@@ -696,9 +692,9 @@ $(document).on('bs.sales.set', function () {
     var getVars = '';
     $.each(selectedRows, function (k, v) {
         row[i] = {};
-        var idsVars = v.DT_RowId.split('__');
-        row[i].id = idsVars[1];
-        row[i].productVariantId = idsVars[2];
+        var idsVars = v.DT_RowId.split('-');
+        row[i].id = idsVars[0];
+        row[i].productVariantId = idsVars[1];
         row[i].name = v.brand;
         row[i].cpf = v.CPF;
         row[i].brand = v.brand;
@@ -707,7 +703,7 @@ $(document).on('bs.sales.set', function () {
         row[i].sale = v.sale;
         row[i].percentage = v.percentage;
         i++;
-        getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
     console.log(selectedRows);
     console.log(row);
@@ -776,9 +772,9 @@ $(document).on('bs.sales.price', function () {
     var getVars = '';
     $.each(selectedRows, function (k, v) {
         row[i] = {};
-        var idsVars = v.DT_RowId.split('__');
-        row[i].id = idsVars[1];
-        row[i].productVariantId = idsVars[2];
+        var idsVars = v.DT_RowId.split('-');
+        row[i].id = idsVars[0];
+        row[i].productVariantId = idsVars[1];
         row[i].name = v.brand;
         row[i].cpf = v.CPF;
         row[i].brand = v.brand;
@@ -787,7 +783,7 @@ $(document).on('bs.sales.price', function () {
         row[i].sale = v.sale;
         row[i].percentage = v.percentage;
         i++;
-        getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
     console.log(selectedRows);
     console.log(row);
@@ -853,15 +849,15 @@ $(document).on('bs.product.mergedetails', function () {
     var getVars = '';
     $.each(selectedRows, function (k, v) {
         row[i] = {};
-        var idsVars = v.DT_RowId.split('__');
-        row[i].id = idsVars[1];
-        row[i].productVariantId = idsVars[2];
+        var idsVars = v.DT_RowId.split('-');
+        row[i].id = idsVars[0];
+        row[i].productVariantId = idsVars[1];
         row[i].name = v.brand;
         row[i].cpf = v.CPF;
         row[i].brand = v.brand;
         row[i].shops = v.shops;
         i++;
-        getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
 
     header.html('Fondi i dettagli');
@@ -970,8 +966,8 @@ $(document).on('bs.product.mergenames', function () {
     var i = 0;
     var codes = {};
     $.each(selectedRows, function (k, v) {
-        var idVars = v.DT_RowId.split('__');
-        codes['code_' + i] = idVars[1] + '-' + idVars[2];
+        var idVars = v.DT_RowId.split('-');
+        codes['code_' + i] = idVars[0] + '-' + idVars[1];
         i++;
     });
 
