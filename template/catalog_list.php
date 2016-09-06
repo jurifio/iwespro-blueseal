@@ -70,6 +70,16 @@
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
             data-tag="a"
+            data-icon="fa-exchange"
+            data-permission="/admin/product/list"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi un nuovo movimento"
+            data-placement="bottom"
+            data-href="/blueseal/prodotti/movimenti/inserisci"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
             data-icon="fa-barcode"
             data-permission="/admin/product/list"
             data-event="bs.print.barcode"
