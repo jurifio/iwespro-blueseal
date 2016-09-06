@@ -934,11 +934,14 @@ $.bsModal = function (header, params) {
 
         this.searchProduct = function (search, callback) {
             if (!search.length) return false;
+            var shop = '';
+            var shopSelect = $('.mag-shop');
+            if (shopSelect.length) shop = shopSelect.val();
             $.ajax({
                 url: '/blueseal/xhr/CatalogController',
                 method: 'get',
                 dataType: 'json',
-                data: {search: search}
+                data: {search: search, shop: shop}
             }).done(function(res){
                 if (false == res) {
                     self.submitwarning(['Il prodotto cercato non esiste. Controlla l\'esattezza del codice inserito']);

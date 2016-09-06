@@ -44,14 +44,24 @@ class CCatalogController extends AAjaxController
     public function get()
     {
         $search = $this->app->router->request()->getRequestData('search');
+        $magShop = $this->app->router->request()->getRequestData('shop');
         $type = '';
         if (false !== strpos($search, '-')) $type = 'code';
         elseif (false !== strpos($search, '#')) $type = 'cpf';
         elseif ((0 == strpos($search, '12')) && (10 == strlen($search))) $type = 'barcode';
-        $shop = $this->app->getUser()->shop;
-        foreach ($shop as $v) {
-            $shopId = $v->id;
+
+        $allShops = $this->app->getUser()->hasPermission('allShops');
+
+        if ($allShops) {
+            if ('' == $magShop) throw new \Exception('Non hai specificato lo shop');
+            $shopId = $magShop;
+        } else {
+            $shop = $this->app->getUser()->shop;
+            foreach ($shop as $v) {
+                $shopId = $v->id;
+            }
         }
+
         $skuRepo = $this->rfc('ProductSku');
         $variantRepo = $this->rfc('productVariant');
         $prodRepo = $this->rfc('Product');
