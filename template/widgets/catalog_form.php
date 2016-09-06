@@ -20,7 +20,7 @@
                                             <option value=""></option>
                                             <?php
                                                 foreach($causes as $v){
-                                                    echo '<option value="' . $v->id .'">' . $v->name . '</option>';
+                                                    echo '<option value="' . $v->id .'">' . explode('(', $v->name)[0] . ' ('. (($v->sign) ? '+' : '-') .') </option>';
                                                 }
                                             ?>
                                         </select>
@@ -30,7 +30,7 @@
                             </div>
                     </div>
                 </div>
-        <?php if ($allShops) : ?>
+            <?php if ($allShops) : ?>
                 <div class="col-md-4">
                     <div class="mag-movementDate">
                         <div class="row">
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-        <?php endif ?>
+            <?php endif ?>
             </div>
         </div>
         </div>

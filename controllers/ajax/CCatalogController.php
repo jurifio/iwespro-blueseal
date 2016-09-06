@@ -43,50 +43,54 @@ class CCatalogController extends AAjaxController
 
     public function get()
     {
-        $search = $this->app->router->request()->getRequestData('search');
-        $magShop = $this->app->router->request()->getRequestData('shop');
-        $type = '';
-        if (false !== strpos($search, '-')) $type = 'code';
-        elseif (false !== strpos($search, '#')) $type = 'cpf';
-        elseif ((0 === strpos($search, '12')) && (10 == strlen($search))) $type = 'barcode';
+        try {
+            $search = $this->app->router->request()->getRequestData('search');
+            $magShop = $this->app->router->request()->getRequestData('shop');
+            $type = '';
+            if (false !== strpos($search, '-')) $type = 'code';
+            elseif (false !== strpos($search, '#')) $type = 'cpf';
+            elseif ((0 === strpos($search, '12')) && (10 == strlen($search))) $type = 'barcode';
 
-        $allShops = $this->app->getUser()->hasPermission('allShops');
+            $allShops = $this->app->getUser()->hasPermission('allShops');
 
-        if ($allShops) {
-            if ('' == $magShop) throw new \Exception('Non hai specificato lo shop');
-            $shopId = $magShop;
-        } else {
-            $shop = $this->app->getUser()->shop;
-            foreach ($shop as $v) {
-                $shopId = $v->id;
+            if ($allShops) {
+                if ('' == $magShop) throw new \Exception('Non hai specificato lo shop');
+                $shopId = $magShop;
+            } else {
+                $shop = $this->app->getUser()->shop;
+                foreach ($shop as $v) {
+                    $shopId = $v->id;
+                }
             }
-        }
 
-        $skuRepo = $this->rfc('ProductSku');
-        $variantRepo = $this->rfc('productVariant');
-        $prodRepo = $this->rfc('Product');
-        $sizesToMove = [];
+            $skuRepo = $this->rfc('ProductSku');
+            $variantRepo = $this->rfc('productVariant');
+            $prodRepo = $this->rfc('Product');
+            $sizesToMove = [];
 
-        switch ($type) {
-            case 'code':
-                $prod = $prodRepo->findOneByStringId($search);
-                break;
-            case 'cpf':
-                list($itemno, $variant) = explode('#', $search);
-                $itemno = trim($itemno);
-                $variant = trim($variant);
-                $prodVariant = $variantRepo->findOneBy(['name' => $variant]);
-                $prod = $prodRepo->findOneBy(['itemno' => $itemno, 'productVariantId' => $prodVariant->id]);
-                break;
-            case 'barcode':
-                $sku = $skuRepo->findOneBy(['barcode' => $search]);
-                $sizesToMove[$sku->productSizeId] = 1;
-                $prod = $sku->product;
-                break;
-            default:
-                return json_encode(false);
+            switch ($type) {
+                case 'code':
+                    $prod = $prodRepo->findOneByStringId($search);
+                    break;
+                case 'cpf':
+                    list($itemno, $variant) = explode('#', $search);
+                    $itemno = trim($itemno);
+                    $variant = trim($variant);
+                    $prodVariant = $variantRepo->findOneBy(['name' => $variant]);
+                    $prod = $prodRepo->findOneBy(['itemno' => $itemno, 'productVariantId' => $prodVariant->id]);
+                    break;
+                case 'barcode':
+                    $sku = $skuRepo->findOneBy(['barcode' => $search]);
+                    $sizesToMove[$sku->productSizeId] = 1;
+                    $prod = $sku->product;
+                    break;
+                default:
+                    return json_encode(false);
+            }
+            $ret = ($prod) ? $this->getAllProductData($prod, $shopId, $sizesToMove) : false;
+        } catch(\Exception $e) {
+            return json_encode($e->getMessage());
         }
-        $ret = ($prod) ? $this->getAllProductData($prod, $shopId, $sizesToMove) : false;
 
         return json_encode($ret);
     }
@@ -115,8 +119,8 @@ class CCatalogController extends AAjaxController
         } else {
             $shp = $this->rfc('ShopHasProduct')->findOneBy(['shopId' => $shopId, 'productVariantId' => $em->productVariantId]);
             if ($shp) {
-                $arrRet['value'] = $sku->value;
-                $arrRet['price'] = $sku->price;
+                $arrRet['value'] = $shp->value;
+                $arrRet['price'] = $shp->price;
             }
         }
 
@@ -281,11 +285,10 @@ class CCatalogController extends AAjaxController
                 $SOL->insert();
                 $this->app->dbAdapter->commit();
             }
-            return 'OK';
+            return json_encode('OK');
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
-            throw $e;
-            return $e->getMessage();
+            return json_encode($e->getMessage());
         }
     }
 }

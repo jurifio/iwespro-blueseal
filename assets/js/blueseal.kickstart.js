@@ -889,10 +889,6 @@ $.bsModal = function (header, params) {
                 var prodList = self.form.find('.mag-product-list');
                 prodList.append(prodTemp);
                 var prod = prodList.find('#' + prodId);
-                /*prodTemp.find('.btn-add-movement').on('click', function(e){
-                 e.preventDefault();
-                 self.addMovementLine(e);
-                 });*/
                 var closeProd = prod.find('.product-close');
                 closeProd.on('click', function (e) {
                     e.preventDefault();
@@ -921,7 +917,7 @@ $.bsModal = function (header, params) {
                 stock.append($('<td>' + qt + '</td>'));
                 var moveQt = ('undefined' != typeof product.moves[i]) ? product.moves[i] : '';
                 var fieldName = product.id + '-' + product.productVariantId + '-' + i;
-                moves.append($('<td><input type="number" class="form-control" name="move-' + fieldName + '" value="' + moveQt + '"></td>'));
+                moves.append($('<td><input type="number" class="move-qty form-control" name="move-' + fieldName + '" value="' + moveQt + '"></td>'));
             }
             return {head: head, stock: stock, moves: moves};
         };
@@ -948,8 +944,11 @@ $.bsModal = function (header, params) {
                 if (false == res) {
                     self.submitwarning(['Il prodotto cercato non esiste. Controlla l\'esattezza del codice inserito']);
                 } else {
-                    self.form.find('.alert').css('opacity', '0');
-                    callback(res);
+                    if ('string' === typeof res) self.submitError([], [res]);
+                    else {
+                        self.form.find('.alert').css('opacity', '0');
+                        callback(res);
+                    }
                 }
             }).fail(function(res) {
                 console.error(res);
@@ -1022,6 +1021,23 @@ $.bsModal = function (header, params) {
                 });
             }, 8000);
         };
+
+        this.assignMovementLimit = function(operator) {
+            self.form.find('.move-qty').each(function() {
+                self.qtyDynamicValidation(this, operator);
+                this.off().on('change keyup', function(e){
+                    self.qtyDynamicValidation(this, operator);
+                })
+            });
+        }
+
+        this.qtyDynamicValidation = function(elem, op) {
+            if (('+' == operator) && (0 > $(elem).val())) {
+                $(elem).val('0');
+            } else if (('-' == operator) && ( 0 < $(elem).val())) {
+                $(elem).val('0');
+            }
+        }
 
         this.save = function(successCallback, failCallback) {
             var f = self.form;
