@@ -6,12 +6,14 @@
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
     <style type="text/css">
 
-        li {
+        span {
             font-size: 8pt;
         }
 
-        .page-container {
-            display: none;
+        .coderow {
+            height: 39.6mm;
+            margin-top:0;
+            margin-bottom:0;
         }
 
         .cover {
@@ -37,7 +39,7 @@
 
         @page {
             size: auto;
-            margin: 14mm 0mm 0mm 14mm;
+            margin: 18mm 0mm 0mm 14mm;
         }
 
         @media print {
@@ -293,32 +295,37 @@ foreach ($productSkus as $productSku): ?>
 
     <?php if($i == 0): ?>
         <div class="container-fluid container-fixed-lg bg-white">
-        <div class="row">
+        <div class="row coderow">
     <?php elseif($i % 21 == 0): ?>
         </div>
         <div class="container-fluid container-fixed-lg bg-white newpage">
-            <div class="row">
+            <div class="row coderow">
     <?php elseif($i % 3 == 0): ?>
         </div>
-        <div class="row">
+        <div class="row coderow">
     <?php endif; ?>
     <div class="col-xs-4" style="">
         <div class="row">
             <div class="col-xs-12" style="margin-top:10px">
-                <?php echo $barcodeGenerator->getBarcode($productSku->barcode, Picqer\Barcode\BarcodeGenerator::TYPE_CODE_128, 2); ?>
-                <br>
-                <?php echo $productSku->barcode; ?>
+                <?php echo $barcodeGenerator->getBarcode($productSku->barcode, Picqer\Barcode\BarcodeGenerator::TYPE_CODE_128, 2,45); ?>
+                <span style="position:relative;top:-5px;margin-left:27%;font-size: 8pt"><?php echo $productSku->barcode; ?></span>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-12" style="border-right: 1px dotted #c0c0c0;">
-                <ul>
-                    <li>
-                        <strong>Code</strong> <?php echo $productSku->product->itemno . ' # ' . $productSku->product->productVariant->name; ?>
-                    </li>
-                    <li><strong>Size</strong> <?php echo $productSku->productSize->name ?></li>
-                    <li><strong>Price</strong> <?php echo $productSku->price ?> €</li>
-                </ul>
+                <div class="row">
+                    <div class="col-md-8">
+                        <span><?php echo $productSku->product->itemno . ' # ' . $productSku->product->productVariant->name; ?></span>
+                    </div>
+                    <div class="col-md-4">
+                        <span><?php echo $productSku->productSize->name ?></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-7">
+                        <span style="font-size: 10pt"><?php echo $productSku->price ?> €</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
