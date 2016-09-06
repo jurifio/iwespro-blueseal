@@ -52,17 +52,14 @@ class CUserSalesRecapController extends AAjaxController
 		$get = $this->app->router->request()->getRequestData();
 		//$completed = (($current - $start) / ($end - $start)) * 100;
 
-		$shopsWhere = [];
-        if ($this->app->getUser()->hasRole('manager')) {
+        if ($this->app->getUser()->hasPermission('allShops')) {
             $valueToSelect = "iwes";
         } else {
             $valueToSelect = "friend";
-            $authorizedShops = [];
-			foreach($this->app->getUser()->shop as $val) {
-				$shopsWhere[] = $val->id;
-			}
 		}
-		
+
+        $authorizedShops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $shopsWhere = $authorizedShops;
 		//recupero i dati dal db
 		$res = [];
 		$res['current'] = $orders->statisticsByDate($shopsWhere, $get['period'], $get['period']);
