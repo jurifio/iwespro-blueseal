@@ -57,6 +57,7 @@ class CBarcodePrintController extends ARestrictedAccessRootController
                     }
                 }
             }
+            break;
         }
 
 
