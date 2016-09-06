@@ -18,15 +18,15 @@ use bamboo\ecommerce\views\VBase;
  * @date 05/09/2016
  * @since 1.0
  */
-class CProductSlimListController extends ARestrictedAccessRootController
+class CCatalogListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "product_slim_list";
+    protected $pageSlug = "catalog_list";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_slim_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/catalog_list.php');
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99','');
