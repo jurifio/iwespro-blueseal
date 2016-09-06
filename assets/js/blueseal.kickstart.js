@@ -875,7 +875,9 @@ $.bsModal = function (header, params) {
             } else {
                 prodTemp.attr('id', 'product-' + product.id + '-' + product.productVariantId);
                 var prodTitle = prodTemp.find('.product-title');
-                prodTitle.html(product.id + '-' + product.productVariantId + ' / ' + product.itemno + ' # ' + product.productVariantName);
+                var title = product.id + '-' + product.productVariantId + ' / ' + product.itemno + ' # ' + product.productVariantName;
+                title += ' <span class="small">costo: ' + product.value + ' - prezzo vendita: ' + product.price + '</span>';
+                prodTitle.html(title);
                 var table = prodTemp.find('table');
                 var head = $(table).find('thead');
                 var body = $(table).find('tbody');
