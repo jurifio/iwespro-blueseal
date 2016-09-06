@@ -48,7 +48,7 @@ class CCatalogController extends AAjaxController
         $type = '';
         if (false !== strpos($search, '-')) $type = 'code';
         elseif (false !== strpos($search, '#')) $type = 'cpf';
-        elseif ((0 == strpos($search, '12')) && (10 == strlen($search))) $type = 'barcode';
+        elseif ((0 === strpos($search, '12')) && (10 == strlen($search))) $type = 'barcode';
 
         $allShops = $this->app->getUser()->hasPermission('allShops');
 

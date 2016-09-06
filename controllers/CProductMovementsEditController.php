@@ -17,7 +17,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
  *
  * @since ${VERSION}
  */
-class CProductMovementsEditController extends CProductManageController
+class CProductMovementsEditController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
     protected $pageSlug = "product_movement_edit";
