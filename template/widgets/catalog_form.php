@@ -20,7 +20,7 @@
                                             <option value=""></option>
                                             <?php
                                                 foreach($causes as $v){
-                                                    echo '<option value="' . $v->id .'">' . $v->name . '</option>';
+                                                    echo '<option value="' . $v->id .'">' . explode('(', $v->name)[0] . ' ('. (($v->sign) ? '+' : '-') .') </option>';
                                                 }
                                             ?>
                                         </select>
@@ -30,7 +30,7 @@
                             </div>
                     </div>
                 </div>
-        <?php if ($allShops) : ?>
+            <?php if ($allShops) : ?>
                 <div class="col-md-4">
                     <div class="mag-movementDate">
                         <div class="row">
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-        <?php endif ?>
+            <?php endif ?>
             </div>
         </div>
         </div>
@@ -67,7 +67,7 @@
                             <div class="form-group form-group-default">
                                 <label for="search-item">Cerca il prodotto</label>
                                 <input name="search-item" class="form-group-inline form-control search-item" />
-                                <button type="submit" class="btn btn-active search-btn">Cerca</button>
+                                <button type="submit" class="btn btn-active search-btn">Aggiungi Prodotto</button>
                                 <br class="clearfix" />
                             </div>
                         </div>
@@ -124,7 +124,7 @@
             <div class="panel-body">
             <div class="row mag-submit">
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-active submit">Inserisci</button>
+                    <button class="btn btn-active submit">Crea nuovo movimento</button>
                 </div>
             </div>
             </div>
