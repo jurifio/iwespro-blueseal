@@ -13,22 +13,45 @@
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4 alert-container closed">
+
+                    </div>
+                </div>
+            </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="product_list"
+                               data-datatable-name="catalog_list"
                                data-column-filter="true"
-                               data-controller="ProductListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-controller="StorehouseOperationAjaxListController:"
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="100, 200, 500">
                             <thead>
                                 <tr>
-                                    <th class="center">Codice</th>
-                                    <th class="center">Shop</th>
-                                    <th class="center">StoreHouse</th>
-                                    <th class="center">Qty</th>
-                                    <th class="center">Operation Date</th>
+                                    <th data-slug="id"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Id</th>
+                                    <th data-slug="creationDate"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        data-default-order="desc" class="center">Data Creazione</th>
+                                    <th data-slug="operationDate"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Data Operazione</th>
+                                    <th data-slug="friend"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Friend</th>
+                                    <th data-slug="cause"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Causale</th>
+                                    <th data-slug="movements"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Movimenti</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,8 +61,8 @@
                 </div>
             </div>
         </div>
-        <?php include "parts/footer.php"?>
     </div>
+    <?php include "parts/footer.php"?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
@@ -47,176 +70,24 @@
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo prodotto"
-            data-placement="bottom"
-            data-href="<?php echo $aggiungi; ?>"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-cloud-upload"
-            data-permission="/admin/product/publish"
-            data-event="bs.pub.product"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Pubblica prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
-            data-target="#bsModal"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-qrcode"
+            data-icon="fa-exchange"
             data-permission="/admin/product/list"
-            data-event="bs.print.aztec"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Stampa aztec"
+            data-title="Aggiungi un nuovo movimento"
             data-placement="bottom"
+            data-href="/blueseal/prodotti/movimenti/inserisci"
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-tag"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.tag"
+            data-icon="fa-barcode"
+            data-permission="/admin/product/list"
+            data-event="bs.print.barcode"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Tagga prodotti"
+            data-title="Stampa barcode"
             data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-clone"
-            data-permission="/admin/product/add"
-            data-event="bs.dupe.product"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Duplica prodotto"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-archive"
-            data-permission="/admin/product/mag"
-            data-event="bs.add.sku"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Movimenta"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-camera-retro"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.photo"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Gestisci foto"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-trash"
-            data-permission="/admin/product/delete"
-            data-event="bs.del.product"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Elimina prodotto"
-            data-placement="bottom"
-            data-toggle="modal"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-eye"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.changeStatus"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cambia Status ai prodotti selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-calendar"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.changeSeason"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cambia Stagione ai prodotti selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-sitemap"
-            data-permission="/admin/product/edit"
-            data-event="bs.category.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cambia Categoria ai prodotti selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button><bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-usd"
-            data-permission="/admin/product/edit"
-            data-event="bs.sales.set"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Metti in saldo i prodotti Selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button><bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-percent"
-            data-permission="/admin/product/edit"
-            data-event="bs.sales.price"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cambia prezzi ai prodotti selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-tasks"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.mergedetails"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Copia dettagli"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-magnet"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.mergenames"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Copia i nomi dei prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Roulette">
-        <bs-toolbar-select
-            data-tag="select"
-            data-icon="fa-random"
-            data-button="true"
-            data-permission="/admin/product/add"
-            data-rel="tooltip"
-            data-placement="bottom"
-            data-class="btn btn-default"
-            data-title="Roulette prodotti"
-            data-event="bs.roulette.add"
-            data-options='<?php echo json_encode($roulette); ?>'
-            ></bs-toolbar-select>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

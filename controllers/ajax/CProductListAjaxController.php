@@ -103,7 +103,7 @@ class CProductListAjaxController extends AAjaxController
 
             $creationDate = new \DateTime($val->creationDate);
 
-            $response['data'][$i]["DT_RowId"] = 'row__'.$val->id.'__'.$val->productVariant->id;
+            $response['data'][$i]["DT_RowId"] = $val->printId();
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
 
