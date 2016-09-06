@@ -21,7 +21,7 @@ use bamboo\core\db\pandaorm\entities\CEntityManager;
 class CBarcodePrintController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "product_category_list";
+    protected $pageSlug = "barcode_print";
 
     public function get()
     {
@@ -61,6 +61,8 @@ class CBarcodePrintController extends ARestrictedAccessRootController
 
 
         return $view->render([
+            'app' => new CRestrictedAccessWidgetHelper($this->app),
+            'page' => $this->page,
             'barcodeGenerator' => $generatorSVG,
             'productSkus' => $productSkus
         ]);
