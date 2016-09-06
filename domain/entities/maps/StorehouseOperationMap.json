@@ -16,6 +16,12 @@
                 "parentKeys": ["storehouseOperationCauseId"],
                 "childKeys": ["id"],
                 "type": "OneToOne"
+            }, {
+                "name": "shop",
+                "entity": "Shop",
+                "parentKeys": ["shopId"],
+                "childKeys": ["id"],
+                "type": "OneToOne"
             }
         ]
     }
