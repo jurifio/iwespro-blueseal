@@ -183,33 +183,54 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
         $.each($(toolbar).children('bs-toolbar-group'), function () {
 
             operations.append('<div class="dt-buttons btn-group bs-toolbar-custom"><div class="btn-group-label">' + $(this).data('group-label') + '</div></div>');
+            var group = $("div.bs-toolbar .dt-buttons");
+            $.each($(this).children('bs-toolbar-button,bs-toolbar-select,bs-toolbar-button-toggle'), function () {
+                var _this = $(this);
+                var data = $(this).data();
+                var deferred = $.Deferred();
 
-            $.each($(this).children('bs-toolbar-button'), function () {
-                var data =  $(this).data();
-                if('undefined' != typeof  $(this).data('remote')) {
-                    $.getScript("/assets/"+$(this).data('remote')+".js").done(function(res){
-                        console.log(res);
-                        data = window.buttonSetup;
-                        delete window.buttonSetup;
-                    });
-                    //TODO prendere la cofigrazione del bottone da qualche parte e schiaffarla sotto, ugualmente il Javascript con getScript();
-                }
+                timer = setInterval(function () {
+                    deferred.notify();
+                }, 100);
 
-                var button = new Button(data);
-                button.draw($("div.bs-toolbar .dt-buttons").last());
-                button.checkPermission();
-            });
+                setTimeout(function () {
+                    clearInterval(timer);
+                    if('undefined' != typeof data.remote) {
+                        $.ajax({
+                            url: "/assets/"+data.remote+".js",
+                            dataType: "script"
+                        }).done(function(res){
+                            $.extend(data,data,window.buttonSetup);
+                            delete window.buttonSetup;
+                        }).always(function() {
+                            deferred.resolve();
+                        });
+                    } else {
+                        deferred.resolve();
+                    }
+                },  300);
 
-            $.each($(this).children('bs-toolbar-select'), function () {
-                var select = new Select($(this).data());
-                select.draw($("div.bs-toolbar .dt-buttons").last());
-                select.checkPermission();
-            });
-
-            $.each($(this).children('bs-toolbar-button-toggle'), function () {
-                var buttonToggle = new ButtonToggle($(this).data());
-                buttonToggle.draw($("div.bs-toolbar .dt-buttons").last());
-                buttonToggle.checkPermission();
+                deferred.done(function() {
+                    var element;
+                    switch (_this.prop('tagName').toLowerCase()) {
+                        case 'bs-toolbar-button': {
+                            element = new Button(data);
+                            element.draw(group.last());
+                            break;
+                        }
+                        case 'bs-toolbar-select': {
+                            element = new Select(data);
+                            element.draw(group.last());
+                            break;
+                        }
+                        case 'bs-toolbar-button-toggle': {
+                            element = new ButtonToggle(data);
+                            element.draw(group.last());
+                            break;
+                        }
+                    }
+                    element.checkPermission();
+                });
             });
         });
 
