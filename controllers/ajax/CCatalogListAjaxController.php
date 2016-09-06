@@ -45,7 +45,7 @@ class CCatalogListAjaxController extends AAjaxController
 
         foreach($operazioni as $val)
         {
-            $response['data'][$i]["DT_RowId"] = $val->id;
+            $response['data'][$i]["DT_RowId"] = $val->printId();
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['id'] = $val->id;
 

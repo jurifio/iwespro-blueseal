@@ -34,7 +34,7 @@ class CBarcodePrintController extends ARestrictedAccessRootController
         $productSkus = new CObjectCollection();
         $seen = [];
         switch($this->app->router->request()->getRequestData('source')) {
-            case 'movements': {
+            case 'movement': {
                 foreach ($this->app->router->request()->getRequestData('id') as $storageOperationId) {
                     $storageOperation = $this->app->repoFactory->create('StorageOperation')->findOneByStringId($storageOperationId);
                     foreach ($storageOperation->storageOperationLine as $storageOperationLine) {

@@ -70,14 +70,14 @@
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="/admin/product/add"
+            data-icon="fa-barcode"
+            data-permission="/admin/product/list"
+            data-event="bs.print.barcode"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Aggiungi un nuovo prodotto"
+            data-title="Stampa barcode"
             data-placement="bottom"
-            data-href="/blueseal/prodotti/aggiungi"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
