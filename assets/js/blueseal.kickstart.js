@@ -989,6 +989,7 @@ $.bsModal = function (header, params) {
             alert.css('visibility', 'visible');
             alert.css('opacity', '1');
             alert.removeClass('alert-danger');
+            alert.removeClass('alert-warning');
             alert.addClass('alert-success');
             alert.html('');
             for (var i in msg) {
@@ -1008,8 +1009,9 @@ $.bsModal = function (header, params) {
             var alert = f.find('.alert');
             alert.css('visibility', 'visible');
             alert.css('opacity', '1');
-            alert.removeClass('alert-warning');
-            alert.addClass('alert-success');
+            alert.removeClass('alert-danger');
+            alert.removeClass('alert-success');
+            alert.addClass('alert-warning');
             alert.html('');
             for (var i in msg) {
                 alert.append(msg[i] + '<br />');
@@ -1052,17 +1054,13 @@ $.bsModal = function (header, params) {
                 },
                 onDone: function(res, method) {
                     console.log(res);
-                    if ('OK' == res) {
+                    if ('"OK"' == res) {
                         self.submitSuccess(['Il movimento è stato caricato correttamente']);
                         self.productList.html('');
                         self.submitBlock.css('display', 'none');
                     } else {
                         self.submitError([], [res]);
                     }
-                },
-                onFail: function(res) {
-                    console.error(res);
-                    self.submitError([], [res]);
                 }
             });
             var post = {};

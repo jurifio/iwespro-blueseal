@@ -211,7 +211,7 @@ class CCatalogController extends AAjaxController
                 $price = 0;
                 $salePrice = 0;
                 $onSale = null;
-                $isUsable = null;
+                $isUsable = false;
                 $i = 0;
 
                 foreach ($allSkus as $s) {
@@ -231,7 +231,7 @@ class CCatalogController extends AAjaxController
                     }
                     $i++;
                 }
-                if (false === $isUsable) {
+                if (!$isUsable) {
                     $shp = $actualProd->shopHasProduct->findOneByKeys([
                         'productVariantId' => $v['productVariantId'],
                         'productId' => $v['id'],
