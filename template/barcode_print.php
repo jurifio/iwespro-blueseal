@@ -11,7 +11,7 @@
         }
 
         .coderow {
-            height: 39.6mm;
+            height: 39mm;
             margin-top:0;
             margin-bottom:0;
         }
@@ -39,7 +39,7 @@
 
         @page {
             size: auto;
-            margin: 18mm 0mm 0mm 14mm;
+            margin: 20mm 0mm 0mm 14mm;
         }
 
         @media print {
