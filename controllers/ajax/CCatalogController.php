@@ -149,7 +149,7 @@ class CCatalogController extends AAjaxController
             }
 
             if (isset($get['storehouseId'])) {
-                $storehouse = $SEm->findOneBy(['id' => $get['storehouseId']]);
+                $storehouse = $SEm->findOneBy(['id' => $get['storehouseId'],'shopId' => $shop->id]);
             } else {
                 $storehouse = $SEm->findOneBy(['shopId' => $shop->id]);
             }
@@ -269,6 +269,7 @@ class CCatalogController extends AAjaxController
             return 'OK';
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
+            var_dump($e);
             return $e->getMessage();
         }
     }
