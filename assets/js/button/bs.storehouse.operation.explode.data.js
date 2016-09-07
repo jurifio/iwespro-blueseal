@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs.storehouse.operation.explode.data",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Explodi Movimenti",
+    title:"Esplodi Movimenti",
     placement:"bottom"
 };
 
@@ -14,24 +14,49 @@ window.buttonSetup = {
  */
 $(document).on('bs.storehouse.operation.explode.data', function (e, element, button) {
 
+    var bsModal = $('#bsModal');
+    var dataTable = $('.dataTable').DataTable();
+    var header = $('.modal-header h4');
+    var body = $('.modal-body');
+    var loader = body.html();
+    var cancelButton = $('.modal-footer .btn-default');
+    var okButton = $('.modal-footer .btn-success');
+
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();
+
     var selectedRowsCount = selectedRows.length;
 
-    if (selectedRowsCount < 1) {
+    if (selectedRowsCount != 1) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare uno o più movimenti per avviare la stampa dei codici"
+            message: "Devi selezionare un movimento per ottenere i dettagli"
         }).open();
         return false;
     }
 
-    var i = 0;
+    var id;
     $.each(selectedRows, function (k, v) {
-        getVarsArray[i] = 'id[]=' + v.DT_RowId;
-        i++;
+        id = v.DT_RowId;
     });
 
-    var getVars = getVarsArray.join('&');
-    window.open('/blueseal/prodotti/barcode/print?source=movement&' + getVars, 'barcode-print');
+    Pace.ignore(function () {
+        $.ajax({
+            url: "/blueseal/xhr/StorehouseOperationDetails",
+            type: "GET",
+            data: {
+                ids: id,
+            }
+        }).done(function (res) {
+            body.html(res);
+        }).fail(function () {
+            body.html("OOPS! non sono riuscito a recuperare il dettaglio del movimento!");
+        }).always(function () {
+            okButton.html('Ok');
+            okButton.off().on('click', function () {
+                bsModal.modal('hide');
+            });
+        });
+    });
+    bsModal.modal();
 });
