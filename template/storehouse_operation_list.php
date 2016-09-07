@@ -27,7 +27,7 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="catalog_list"
                                data-column-filter="true"
-                               data-controller="StorehouseOperationAjaxListController:"
+                               data-controller="StorehouseOperationAjaxListController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-lenght-menu="100, 200, 500">
