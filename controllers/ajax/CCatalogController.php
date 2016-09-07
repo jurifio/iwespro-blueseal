@@ -101,6 +101,7 @@ class CCatalogController extends AAjaxController
         $arrRet['productVariantName'] = $em->productVariant->name;
         $arrRet['sizes'] = [];
         $arrRet['sku'] = [];
+
         foreach ($em->productSizeGroup->productSize as $v) {
             $arrRet['sizes'][$v->id] = $v->name;
         }

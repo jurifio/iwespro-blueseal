@@ -49,8 +49,8 @@ class CStorehouseOperationAjaxListController extends AAjaxController
             $sign = ($val->storehouseOperationCause->sign) ? '+' : '-';
             $response['data'][$i]['cause'] = $val->storehouseOperationCause->name . ' (' . $sign . ') ';
 
-            $response['data'][$i]['operationDate'] = date('d-M-Y', strtotime($val->operationDate));
-            $response['data'][$i]['creationDate'] = date('d-M-Y', strtotime($val->creationDate));
+            $response['data'][$i]['operationDate'] = date('d-M-Y H:i', strtotime($val->operationDate));
+            $response['data'][$i]['creationDate'] = date('d-M-Y H:i', strtotime($val->creationDate));
 
             $response['data'][$i]['friend'] = $val->shop->title;
 

@@ -25,7 +25,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="catalog_list"
+                               data-datatable-name="storehouse_operation_list"
                                data-column-filter="true"
                                data-controller="StorehouseOperationAjaxListController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
@@ -78,7 +78,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione prodotti">
+    <bs-toolbar-group data-group-label="Gestione Movimenti">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-exchange"
@@ -91,6 +91,9 @@
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.storehouse.operation.skus.barcode.print"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.storehouse.operation.explode.data"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
