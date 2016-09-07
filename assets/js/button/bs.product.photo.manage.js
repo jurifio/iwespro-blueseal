@@ -9,7 +9,7 @@ window.buttonSetup = {
     placement:"bottom"
 };
 
-$(document).on('bs.add.sku', function () {
+$(document).on('bs.manage.photo', function () {
 
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();
@@ -17,16 +17,16 @@ $(document).on('bs.add.sku', function () {
 
     if (selectedRowsCount < 1) {
         new Alert({
-            type: "warning!",
-            message: "Devi selezionare un prodotto da movimentare"
+            type: "warning",
+            message: "Devi selezionare il prodotto del quale vuoi caricare le foto"
         }).open();
         return false;
     }
 
     if (selectedRowsCount > 1) {
         new Alert({
-            type: "warning!",
-            message: "Puoi movimentare un solo prodotto per volta"
+            type: "warning",
+            message: "Puoi caricare le foto di un solo prodotto per volta"
         }).open();
         return false;
     }
@@ -40,5 +40,5 @@ $(document).on('bs.add.sku', function () {
 
     var getVars = getVarsArray.join('&');
 
-    window.open('/blueseal/skus?' + getVars, 'product-sku-add-' + Math.random() * (9999999999));
+    window.open('/blueseal/prodotti/photos?' + getVars, 'product-sku-add-' + Math.random() * (9999999999));
 });

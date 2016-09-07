@@ -25,8 +25,7 @@ $(document).on('bs.print.aztec', function (e, element, button) {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
-        getVarsArray[i] = rowId[0] + i + '=' + rowId[1] + '__' + rowId[2];
+        getVarsArray[i] = 'id[]='+v.DT_RowId;
         i++;
     });
 
