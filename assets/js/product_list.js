@@ -847,7 +847,6 @@ $(document).on('bs.product.mergedetails', function () {
 
     var i = 0;
     var row = [];
-    var getVars = '';
     $.each(selectedRows, function (k, v) {
         row[i] = {};
         var idsVars = v.DT_RowId.split('-');
