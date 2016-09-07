@@ -50,9 +50,9 @@ $(document).on('bs.storehouse.operation.explode.data', function (e, element, but
         }).done(function (res) {
             var obj = JSON.parse(res);
             html='<div>' +
-                '<span>utente: '+obj.user+'</span>' +
-                '<span>causale: '+obj.cause+'</span>' +
-                '<span>note: '+obj.notes+'</span>';
+                '<span>utente: '+obj.user+'</span><br/>' +
+                '<span>causale: '+obj.cause+'</span><br/>' +
+                '<span>note: '+obj.notes+'</span><br/>';
 
             html+='</div>';
             body.html(html);
