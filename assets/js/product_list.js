@@ -214,7 +214,7 @@ $(document).on('bs.del.product', function (e, element, button) {
         i++;
     });
 
-    var getVars = getVarsArray.join('&');
+    var getVars = 'id[]='+getVarsArray.join('&id[]=');
 
     var result = {
         status: "ko",
@@ -228,7 +228,7 @@ $(document).on('bs.del.product', function (e, element, button) {
     $.ajax({
         url: "/blueseal/xhr/DeleteProduct",
         type: "GET",
-        data: getVarsArray
+        data: getVars
     }).done(function (response) {
         result = JSON.parse(response);
         body.html(result.bodyMessage);
@@ -246,7 +246,9 @@ $(document).on('bs.del.product', function (e, element, button) {
                 $.ajax({
                     url: "/blueseal/xhr/DeleteProduct",
                     type: "DELETE",
-                    data: getVarsArray
+                    data: {
+                        ids: getVarsArray
+                    }
                 }).done(function (response) {
                     result = JSON.parse(response);
                     body.html(result.bodyMessage);
