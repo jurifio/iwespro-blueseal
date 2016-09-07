@@ -770,7 +770,6 @@ $(document).on('bs.sales.price', function () {
 
     var i = 0;
     var row = [];
-    var getVars = '';
     $.each(selectedRows, function (k, v) {
         row[i] = {};
         var idsVars = v.DT_RowId.split('-');
