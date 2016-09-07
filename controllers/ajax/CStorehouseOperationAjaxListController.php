@@ -58,6 +58,7 @@ class CStorehouseOperationAjaxListController extends AAjaxController
             $k = 0;
             $response['data'][$i]['qty'] = 0;
             $response['data'][$i]['value'] = 0;
+            $response['data'][$i]['price'] = 0;
 
             foreach ($val->storehouseOperationLine as $line) {
                 $sku = $line->productSku;
@@ -71,6 +72,7 @@ class CStorehouseOperationAjaxListController extends AAjaxController
                 }
                 $response['data'][$i]['qty']  += $line->qty;
                 $response['data'][$i]['value'] += $sku->value;
+                $response['data'][$i]['price'] += $sku->price;
                 $k++;
             }
             $response['data'][$i]['movements'] .= '</span>';

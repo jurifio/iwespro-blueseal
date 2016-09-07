@@ -56,10 +56,13 @@
                                         data-orderable="true" class="center">Movimenti</th>
                                     <th data-slug="qty"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Quantità Movimentate</th>
+                                        data-orderable="true" class="center">Quantità</th>
                                     <th data-slug="value"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Valore Movimentato</th>
+                                    <th data-slug="price"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Valore Shop</th>
                                 </tr>
                             </thead>
                             <tbody>
