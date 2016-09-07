@@ -22,12 +22,9 @@ class CStorehouseOperationAjaxListController extends AAjaxController
    public function get()
     {
         $datatable = new CDataTables('vBluesealCatalogMovements', ['id', 'shopId', 'storehouseId'], $_GET);
-        $user = $this->app->getUser();
-        $allShop = $user->hasPermission('allShops');
-        if (!$allShop) {
-            $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-            $datatable->addCondition('shopId', $shops);
-        }
+
+        $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $datatable->addCondition('shopId', $shops);
 
         $operazioni = $this->app->repoFactory->create('StorehouseOperation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -61,11 +58,9 @@ class CStorehouseOperationAjaxListController extends AAjaxController
             foreach ($val->storehouseOperationLine as $line) {
                 $sku = $line->productSku;
                 $product = $sku->product;
-                $code = $product->id . '-' . $product->productVariantId;
                 $brand = $product->productBrand->name;
                 $size = $sku->productSize->name;
-                $cpf = $product->itemno . ' # ' . $product->productVariant->name;
-                $response['data'][$i]['movements'].= $code . " / " . $brand . " / " . $size . " / " . $cpf . ": " . $line->qty . '<br />';
+                $response['data'][$i]['movements'].= $product->printId() . " / " . $brand . " / " . $size . " / " . $product->printCpf() . ": " . $line->qty . '<br />';
             }
             $response['data'][$i]['movements'] .= '</span>';
             $i++;
