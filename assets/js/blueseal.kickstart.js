@@ -1053,7 +1053,6 @@ $.bsModal = function (header, params) {
                     self.submitError([], [msg]);
                 },
                 onDone: function(res, method) {
-                    console.log(res);
                     if ('OK' == res) {
                         self.submitSuccess(['Il movimento è stato caricato correttamente']);
                         self.productList.html('');
