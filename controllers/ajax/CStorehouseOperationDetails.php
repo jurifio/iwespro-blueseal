@@ -19,8 +19,11 @@ class CStorehouseOperationDetails extends AAjaxController
         $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->findOneByStringId($this->app->router->request()->getRequestData('id'));
 
         $x = [];
+        $x['notes'] = $storehouseOperation->notes;
+        $x['user'] = $storehouseOperation->user->getFullName();
+        $x['cause'] = $storehouseOperation->storehouseOperationCause->name;
         foreach ($storehouseOperation->storehouseOperationLine as $line) {
-            $x[] = $line->productSku->toArray();
+            $x['lines'][] = $line->productSku->printId();
         }
         return json_encode($x);
     }

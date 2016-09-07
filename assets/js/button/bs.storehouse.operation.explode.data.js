@@ -45,10 +45,17 @@ $(document).on('bs.storehouse.operation.explode.data', function (e, element, but
             url: "/blueseal/xhr/StorehouseOperationDetails",
             type: "GET",
             data: {
-                ids: id,
+                id: id,
             }
         }).done(function (res) {
-            body.html(res);
+            var obj = JSON.parse(res);
+            html='<div>' +
+                '<span>utente: '+obj.user+'</span>' +
+                '<span>causale: '+obj.cause+'</span>' +
+                '<span>note: '+obj.notes+'</span>';
+
+            html+='</div>';
+            body.html(html);
         }).fail(function () {
             body.html("OOPS! non sono riuscito a recuperare il dettaglio del movimento!");
         }).always(function () {
