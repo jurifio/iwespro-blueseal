@@ -1047,14 +1047,14 @@ $.bsModal = function (header, params) {
                 url: '/blueseal/xhr/CatalogController',
                 method: 'post',
                 excludeFields: ['search-item'],
-                dataType: 'text',
+                dataType: 'json',
                 excludeEmptyFields: true,
                 onCheckError: function(msg) {
                     self.submitError([], [msg]);
                 },
                 onDone: function(res, method) {
                     console.log(res);
-                    if ('"OK"' == res) {
+                    if ('OK' == res) {
                         self.submitSuccess(['Il movimento è stato caricato correttamente']);
                         self.productList.html('');
                         self.submitBlock.css('display', 'none');

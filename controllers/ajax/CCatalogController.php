@@ -243,9 +243,8 @@ class CCatalogController extends AAjaxController
                         $salePrice = $shp->salePrice;
                     }
                     if ((!$shp) || (null == $value) || (null == $price)) {
-                        $noPricesProduct = '';
-                        if ($shp) $noPricesProduct = ' (' . $shp->productId . '-' . $shp->productVariantId . ')';
-                        throw new \Exception("Il prezzo di uno o più prodotti in elenco non è stato impostato. I movimenti non sono stati registrati" . $noPricesProduct);
+                        $noPricesProduct = ' (' . $actualProd->id . '-' . $actualProd->productVariantId . ')';
+                        throw new \Exception('Il prezzo del prodotto <strong>' . $noPricesProduct . '</strong> non è stato impostato. Il movimento non è stato inserito');
                     }
                 }
 
