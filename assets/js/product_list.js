@@ -691,7 +691,7 @@ $(document).on('bs.sales.set', function () {
 
     var i = 0;
     var row = [];
-    var getVars = '';
+
     $.each(selectedRows, function (k, v) {
         row[i] = {};
         var idsVars = v.DT_RowId.split('-');
@@ -705,7 +705,6 @@ $(document).on('bs.sales.set', function () {
         row[i].sale = v.sale;
         row[i].percentage = v.percentage;
         i++;
-        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
     console.log(selectedRows);
     console.log(row);
