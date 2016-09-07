@@ -20,15 +20,10 @@ class CDeleteProduct extends AAjaxController
      */
     public function get()
     {
-        $em = $this->app->entityManagerFactory->create('Product');
-
-        $ids = [];
-        $productVariantId = [];
-
         $html = "<table><thead><tr><th>Code</th><th>Immagine</th></tr></thead><tbody>";
 
         $i=0;
-        foreach ($this->app->router->request()->getRequestData() as $product) {
+        foreach ($this->app->router->request()->getRequestData('id') as $product) {
             $product = $this->app->repoFactory->create('Product')->findOneByStringId($product);
             $i++;
             $html .= "<tr><td>" . $product->id . "-" . $product->productVariant->id . "</td><td><img width=\"100\" src=\"/assets/" . $product->dummyPicture . "\"></td></tr>";
@@ -51,11 +46,9 @@ class CDeleteProduct extends AAjaxController
      */
     public function delete()
     {
-        $em = $this->app->entityManagerFactory->create('Product');
-
         $deletedProducts['ok'] = [];
         $deletedProducts['ko'] = [];
-        foreach ($this->app->router->request()->getRequestData() as $productIds) {
+        foreach ($this->app->router->request()->getRequestData('ids') as $productIds) {
             $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
             try {
                 $product->productStatusId = 8;//'C';

@@ -76,7 +76,7 @@ $(document).on('bs.print.aztec', function (e, element, button) {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        getVarsArray[i] = v.DT_RowId;
+        getVarsArray[i] = 'id[]='+v.DT_RowId;
         i++;
     });
 
@@ -214,7 +214,7 @@ $(document).on('bs.del.product', function (e, element, button) {
         i++;
     });
 
-    var getVars = getVarsArray.join('&');
+    var getVars = 'id[]='+getVarsArray.join('&id[]=');
 
     var result = {
         status: "ko",
@@ -228,7 +228,7 @@ $(document).on('bs.del.product', function (e, element, button) {
     $.ajax({
         url: "/blueseal/xhr/DeleteProduct",
         type: "GET",
-        data: getVarsArray
+        data: getVars
     }).done(function (response) {
         result = JSON.parse(response);
         body.html(result.bodyMessage);
@@ -246,7 +246,9 @@ $(document).on('bs.del.product', function (e, element, button) {
                 $.ajax({
                     url: "/blueseal/xhr/DeleteProduct",
                     type: "DELETE",
-                    data: getVarsArray
+                    data: {
+                        ids: getVarsArray
+                    }
                 }).done(function (response) {
                     result = JSON.parse(response);
                     body.html(result.bodyMessage);
