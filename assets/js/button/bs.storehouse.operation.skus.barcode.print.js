@@ -1,3 +1,14 @@
+window.buttonSetup = {
+    tag:"a",
+    icon:"fa-barcode",
+    permission:"/admin/product/list",
+    event:"bs.print.barcode",
+    class:"btn btn-default",
+    rel:"tooltip",
+    title:"Stampa barcode",
+    placement:"bottom"
+};
+
 /**
  * Created by enrico on 05/09/16.
  */

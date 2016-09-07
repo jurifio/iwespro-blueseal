@@ -87,14 +87,7 @@
             data-href="/blueseal/prodotti/movimenti/inserisci"
             ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-barcode"
-            data-permission="/admin/product/list"
-            data-event="bs.print.barcode"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Stampa barcode"
-            data-placement="bottom"
+            data-remote="bs.storehouse.operation.skus.barcode.print"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
