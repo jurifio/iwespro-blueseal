@@ -76,7 +76,7 @@ $(document).on('bs.print.aztec', function (e, element, button) {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        getVarsArray[i] = v.DT_RowId;
+        getVarsArray[i] = 'id[]='+v.DT_RowId;
         i++;
     });
 

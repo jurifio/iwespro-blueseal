@@ -19,13 +19,13 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
     public function get()
     {
         $products =  new CArrayCollection();
-        $em = $this->app->entityManagerFactory->create('Product');
 
-        foreach ($this->app->router->request()->getRequestData() as $key => $value) {
+        foreach ($this->app->router->request()->getRequestData('id') as $key => $value) {
 
             $o = new \stdClass();
-
-            $o->product = $em->findOne(explode('__',$value));
+            \BlueSeal::dump($value);
+            $o->product = $this->app->repoFactory->create('Product')->findOneByStringId($value);
+            \BlueSeal::dump($o->product);
             $o->aztecCode = base64_encode($o->product->id.'-'.$o->product->productVariantId.'__'.$o->product->productBrand->name.' - '.$o->product->itemno.' - '.$o->product->productVariant->name);
 
             try {
