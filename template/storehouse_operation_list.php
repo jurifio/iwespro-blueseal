@@ -35,7 +35,7 @@
                                 <tr>
                                     <th data-slug="id"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Id</th>
+                                        data-orderable="true" class="center">Numero</th>
                                     <th data-slug="creationDate"
                                         data-searchable="false"
                                         data-orderable="false"
@@ -43,9 +43,11 @@
                                     <th data-slug="operationDate"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Data Operazione</th>
+                                    <?php if($app->user()->hasPermission('allShops')): ?>
                                     <th data-slug="friend"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Friend</th>
+                                    <?php endif; ?>
                                     <th data-slug="cause"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Causale</th>
