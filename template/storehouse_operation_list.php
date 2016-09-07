@@ -54,6 +54,12 @@
                                     <th data-slug="movements"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Movimenti</th>
+                                    <th data-slug="qty"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Quantità Movimentate</th>
+                                    <th data-slug="value"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Valore Movimentato</th>
                                 </tr>
                             </thead>
                             <tbody>
