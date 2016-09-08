@@ -187,11 +187,16 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
             $.each($(this).children('bs-toolbar-button,bs-toolbar-select,bs-toolbar-button-toggle'), function () {
                 var _this = $(this);
                 var data = $(this).data();
+                /** per recupero configurazioni pulzante */
                 var deferred = $.Deferred();
+
+                /** genero placeholder con id randomico */
                 var randId = 'bs'+Math.ceil(Math.random() * (100000- 1) + 1);
                 var tag = $('<'+_this.prop('tagName')+' id="'+randId+'" ></'+_this.prop('tagName')+'>');
                 group.last().append(tag);
                 var placeHolder = $('#'+randId);
+
+                /** recupero impostazioni */
                 timer = setInterval(function () {
                     deferred.notify();
                 }, 100);
@@ -213,6 +218,7 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
                     }
                 },  300);
 
+                /** quando ho finito sostituisco il placeholder con il pulzante */
                 deferred.done(function() {
                     var element;
                     switch (_this.prop('tagName').toLowerCase()) {
