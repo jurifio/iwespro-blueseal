@@ -25,17 +25,14 @@
                                 <h5 class="m-t-10">Testata Movimento</h5>
                             </div>
                             <div class="panel-body clearfix">
-                                <form id="form-project" enctype="multipart/form-data" role="form" method="post"
-                                      autocomplete="off">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default">
-                                                <label for="mag-movementDate" class="fade">Data
-                                                    <input type="date" name="mag-movementDate"
-                                                           class="form-control mag-movementDateInput"
-                                                           id="movement-date"
-                                                           value="<?php echo date('Y-m-d') ?>" required="required">
-                                                </label>
+                                                <label for="mag-movementDate">Data</label>
+                                                <input type="date"
+                                                       class="form-control mag-movementDateInput"
+                                                       id="movement-date"
+                                                       value="<?php echo date('Y-m-d') ?>" required="required" />
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -74,7 +71,6 @@
                                         <?php endif; ?>
                                         <div
                                     </div>
-                                </form>
                             </div>
                         </div>
                     </div>

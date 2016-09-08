@@ -59,8 +59,13 @@ function checkHeadFilled() {
         }
     });
     if(ok) {
-        $.each(testata,function () {
-            $(this).prop('disabled', true);
+        $.each(testata,function (k,v) {
+            if($(v).prop('tagName').toLowerCase() == 'select') {
+                $(v)[0].selectize.disable();
+            } else {
+                $(v).prop('disabled', true);
+            }
+
         });
         $('input#barcode').removeAttr('disabled');
     }
@@ -109,8 +114,8 @@ $(document).on('bs.storehouse.operation.fast.save',function() {
                 data: {
                     rows: rowsData,
                     date: $('#movement-date').val(),
-                    shop: $('#storehouseOperationCauseId').val(),
-                    cause: $('#shopId').val()
+                    shop: $('#shopId').val(),
+                    cause: $('#storehouseOperationCauseId').val()
                 }
             }).done(function (res) {
                 body.html(res);
