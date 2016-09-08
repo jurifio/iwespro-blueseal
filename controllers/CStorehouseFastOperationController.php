@@ -18,13 +18,20 @@ use bamboo\ecommerce\views\VBase;
  * @date 05/09/2016
  * @since 1.0
  */
-class CStorehouseFastOutgoController extends ARestrictedAccessRootController
+class CStorehouseFastOperationController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "storehouse_fast_outgo";
+    protected $pageSlug = "storehouse_fast_operation";
 
     public function get()
     {
+        $view = new VBase(array());
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/storehouse_fast_operation.php');
 
+        return $view->render([
+            'app' => new CRestrictedAccessWidgetHelper($this->app),
+            'page' => $this->page,
+            'sidebar' => $this->sidebar->build()
+        ]);
     }
 }
