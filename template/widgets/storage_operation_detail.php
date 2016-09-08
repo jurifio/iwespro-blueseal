@@ -36,6 +36,7 @@
 </div>
 <div class="row">
     <div class="col-xs-12">
+        Prodotti movimentati: <br />
 <?php foreach ($storehouseOperation->storehouseOperationLine as $storehouseOperationLine): ?>
     <?php echo $storehouseOperationLine->productSku->product->printId() . " / " . $storehouseOperationLine->productSku->product->productBrand->name . " / " . $storehouseOperationLine->productSku->productSize->name . " / " . $storehouseOperationLine->productSku->product->printCpf() . ": " . $storehouseOperationLine->qty . '<br />'; ?>
 <?php endforeach; ?>

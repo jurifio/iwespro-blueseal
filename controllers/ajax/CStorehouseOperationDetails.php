@@ -20,7 +20,7 @@ class CStorehouseOperationDetails extends AAjaxController
         $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->findOneByStringId($this->app->router->request()->getRequestData('id'));
 
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/blog_category.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/storage_operation_detail.php');
 
         return $view->render([
             'storehouseOperation' => $storehouseOperation,
