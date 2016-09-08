@@ -41,13 +41,13 @@ $(document).on('keypress', 'input#barcode',function(a) {
 $(document).on('focusout','#movement-date', function (e) {
     checkHeadFilled();
 });
-$(document).on('focusout click select','#storehouseOperationCauseId', function (e) {
+$(document).on('change','#storehouseOperationCauseId', function (e) {
     checkHeadFilled();
 });
-$(document).on('focusout click select','#shopId', function (e) {
+$(document).on('change','#shopId', function (e) {
     checkHeadFilled();
+});
 
-});
 function checkHeadFilled() {
     var testata = $('#movement-date,#storehouseOperationCauseId,#shopId');
     console.log(testata);
@@ -67,6 +67,7 @@ function checkHeadFilled() {
 }
 
 $(document).on('bs.storehouse.operation.fast.save',function() {
+    console.log('asd');
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');
     var body = $('.modal-body');
@@ -84,12 +85,13 @@ $(document).on('bs.storehouse.operation.fast.save',function() {
         return false;
     }
 
-    var rowsData;
+    var rowsData = [];
     var qty = 0;
     $.each(rows, function (k, v) {
         var row = {};
+        v = $(v);
         row.id = v.prop('id');
-        row.qty = v.find('td.qty').text();
+        row.qty = parseInt(v.find('td.qty').text());
         qty+=row.qty;
         rowsData.push(row);
     });
@@ -106,12 +108,13 @@ $(document).on('bs.storehouse.operation.fast.save',function() {
                 type: "POST",
                 data: {
                     rows: rowsData,
-                    data: $('#movement-date').val(),
+                    date: $('#movement-date').val(),
                     shop: $('#storehouseOperationCauseId').val(),
                     cause: $('#shopId').val()
                 }
             }).done(function (res) {
                 body.html(res);
+                okButton.html('Ok');
                 okButton.off().on('click',function() {
                    window.location.reload();
                 });

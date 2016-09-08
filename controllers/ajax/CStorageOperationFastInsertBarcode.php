@@ -47,6 +47,55 @@ class CStorageOperationFastInsertBarcode extends AAjaxController
     }
 
     public function post() {
+        $shopId = $this->app->router->request()->getRequestData('shop');
+        if(!in_array($shopId,$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser())) {
+            $this->app->router->response()->raiseProcessingError();
+            return 'Shop non autorizzato!';
+        }
+        $this->app->dbAdapter->beginTransaction();
+        try {
+            $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->getEmptyEntity();
+            $storehouseOperation->shopId = $shopId;
+            $storehouseOperation->storehouseId = $this->app->repoFactory->create('Storehouse')->findOneBy(['shopId'=>$shopId])->id;
+            $storehouseOperation->storehouseOperationCauseId = $this->app->router->request()->getRequestData('cause');
+            $storehouseOperation->userId = $this->app->getUser()->id;
+            $storehouseOperation->notes = 'Fast Movement';
+            $storehouseOperation->operationDate = $this->app->router->request()->getRequestData('date');
+            $storehouseOperation->id = $storehouseOperation->insert();
 
+            foreach ($this->app->router->request()->getRequestData('rows') as $row) {
+                $storehouseOperationLine = $this->app->repoFactory->create('StorehouseOperationLine')->getEmptyEntity();
+                $storehouseOperationLine->storehouseOperationId = $storehouseOperation->id;
+                $storehouseOperationLine->storehouseId = $storehouseOperation->storehouseId;
+                $storehouseOperationLine->shopId = $storehouseOperation->shopId;
+
+                $productSku = $this->app->repoFactory->create('ProductSku')->findOneByStringId($row['id']);
+
+                $storehouseOperationLine->productId = $productSku->productId;
+                $storehouseOperationLine->productVariantId = $productSku->productVariantId;
+                $storehouseOperationLine->shopId = $shopId;
+                $storehouseOperationLine->productSizeId = $productSku->productSizeId;
+                $qty = $row['qty'];
+
+                switch($storehouseOperation->storehouseOperationCause->sign) {
+                    case 1: $qty = abs($qty);
+                        break;
+                    case 0: $qty = (-1 * abs($qty));
+                        break;
+                }
+
+                $storehouseOperationLine->qty = $qty;
+                $productSku->stockQty += $qty;
+
+                $storehouseOperationLine->insert();
+                $productSku->update();
+
+                $this->app->dbAdapter->commit();
+            }
+        } catch (\Exception $e) {
+            $this->app->dbAdapter->rollBack();
+            throw $e;
+        }
+        return 'ok';
     }
 }
