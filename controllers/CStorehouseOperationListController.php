@@ -18,7 +18,7 @@ use bamboo\ecommerce\views\VBase;
  * @date 05/09/2016
  * @since 1.0
  */
-class CStorehouseOperationList extends ARestrictedAccessRootController
+class CStorehouseOperationListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
     protected $pageSlug = "storehouse_operation_list";
