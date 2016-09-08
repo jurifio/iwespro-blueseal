@@ -22,6 +22,8 @@ $(document).on('bs.storehouse.operation.explode.data', function (e, element, but
     var cancelButton = $('.modal-footer .btn-default');
     var okButton = $('.modal-footer .btn-success');
 
+    header.html('Dettaglio Movimento');
+
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();
 
@@ -47,14 +49,7 @@ $(document).on('bs.storehouse.operation.explode.data', function (e, element, but
             data: {
                 id: id,
             }
-        }).done(function (res) {
-            var obj = JSON.parse(res);
-            html='<div>' +
-                '<span>utente: '+obj.user+'</span><br/>' +
-                '<span>causale: '+obj.cause+'</span><br/>' +
-                '<span>note: '+obj.notes+'</span><br/>';
-
-            html+='</div>';
+        }).done(function (html) {
             body.html(html);
         }).fail(function () {
             body.html("OOPS! non sono riuscito a recuperare il dettaglio del movimento!");
