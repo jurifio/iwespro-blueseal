@@ -28,11 +28,19 @@ class CReadStorageOperationLineFromBarcode extends AAjaxController
             return 'Shop non autorizzato!';
         } else {
             $sku = $this->app->repoFactory->create('ProductSku')->findOneBy(['barcode'=>$this->app->router->request()->getRequestData('barcode')]);
-            if($sku->shopId != $shopId) {
+            if(is_null($sku)) {
+                $this->app->router->response()->raiseProcessingError();
+                return 'Barcode non trovato';
+            } elseif($sku->shopId != $shopId) {
                 $this->app->router->response()->raiseProcessingError();
                 return 'Il barcode non appartiene allo shop inserito';
             } else {
-                return $sku->printId().' ok';
+                $res = [];
+                $res['id'] = $sku->printId();
+                $res['barcode'] = $sku->barcode();
+                $res['description'] = $sku->printId();
+
+                return json_encode($res);
             }
         }
 

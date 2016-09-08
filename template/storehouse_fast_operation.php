@@ -33,8 +33,8 @@
                                                 <label for="mag-movementDate" class="fade">Data
                                                     <input type="date" name="mag-movementDate"
                                                            class="form-control mag-movementDateInput"
-                                                           id="mag-movementDate"
-                                                           value="<?php echo date('m-d-Y') ?>" required="required">
+                                                           id="movement-date"
+                                                           value="<?php echo date('Y-m-d') ?>" required="required">
                                                 </label>
                                             </div>
                                         </div>
@@ -90,7 +90,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group form-group-default">
                                             <label for="barcode" class="fade">Barcode</label>
-                                            <input id="barcode" autocomplete="off" class="form-control" type="text"
+                                            <input id="barcode" disabled="disabled" autocomplete="off" class="form-control" type="text"
                                                    maxlength="10" value="">
                                         </div>
                                     </div>
@@ -108,9 +108,18 @@
                             <div class="panel-body clearfix">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <ul id="linesList">
+                                        <table id="linesList">
+                                            <thead>
+                                            <tr>
+                                                <th>barcode</th>
+                                                <th>descrizione</th>
+                                                <th>qty</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
 
-                                        </ul>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
