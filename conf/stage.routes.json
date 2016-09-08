@@ -1452,7 +1452,7 @@
         },{
             "pattern": "/blueseal/prodotti/movimenti(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCatalogListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseOperationList"
             },
             "filters": {},
             "translations": {},
