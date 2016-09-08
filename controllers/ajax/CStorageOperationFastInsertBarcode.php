@@ -16,10 +16,11 @@ use bamboo\core\intl\CLang;
  *
  * @since ${VERSION}
  */
-class CReadStorageOperationLineFromBarcode extends AAjaxController
+class CStorageOperationFastInsertBarcode extends AAjaxController
 {
-
-
+    /**
+     * @return string
+     */
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
@@ -37,12 +38,15 @@ class CReadStorageOperationLineFromBarcode extends AAjaxController
             } else {
                 $res = [];
                 $res['id'] = $sku->printId();
-                $res['barcode'] = $sku->barcode();
+                $res['barcode'] = $sku->barcode;
                 $res['description'] = $sku->printId();
 
                 return json_encode($res);
             }
         }
+    }
+
+    public function post() {
 
     }
 }

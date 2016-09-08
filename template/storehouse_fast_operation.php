@@ -90,7 +90,8 @@
                                     <div class="col-md-12">
                                         <div class="form-group form-group-default">
                                             <label for="barcode" class="fade">Barcode</label>
-                                            <input id="barcode" disabled="disabled" autocomplete="off" class="form-control" type="text"
+                                            <input id="barcode" disabled="disabled" autocomplete="off"
+                                                   class="form-control" type="text"
                                                    maxlength="10" value="">
                                         </div>
                                     </div>
@@ -107,8 +108,8 @@
                             </div>
                             <div class="panel-body clearfix">
                                 <div class="row">
-                                    <div class="col-md-10">
-                                        <table id="linesList">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped" id="linesList">
                                             <thead>
                                             <tr>
                                                 <th>barcode</th>
@@ -136,7 +137,18 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-
+    <bs-toolbar-group data-group-label="Gestione prodotti">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-floppy-o"
+            data-permission="/admin/product/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-event="bs.storehouse.operation.fast.save"
+            data-title="Salva"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
