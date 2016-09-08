@@ -30,7 +30,6 @@ $(document).on('keypress', 'input#barcode',function(a) {
                 }).open();
                 return false;
             }).always(function (res) {
-                console.log(res);
                 target.val('');
                 target.focus();
             });
@@ -50,10 +49,8 @@ $(document).on('change','#shopId', function (e) {
 
 function checkHeadFilled() {
     var testata = $('#movement-date,#storehouseOperationCauseId,#shopId');
-    console.log(testata);
     var ok = true;
     $.each(testata,function () {
-        console.log( $(this));
         if(typeof  $(this) == 'undefined' ||  $(this).val().length == 0) {
             ok = false;
         }
@@ -68,11 +65,11 @@ function checkHeadFilled() {
 
         });
         $('input#barcode').removeAttr('disabled');
+        $('input#barcode').focus();
     }
 }
 
 $(document).on('bs.storehouse.operation.fast.save',function() {
-    console.log('asd');
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');
     var body = $('.modal-body');
