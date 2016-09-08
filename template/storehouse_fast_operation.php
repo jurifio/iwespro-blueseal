@@ -108,9 +108,9 @@
                                         <table class="table table-striped" id="linesList">
                                             <thead>
                                             <tr>
-                                                <th>barcode</th>
-                                                <th>descrizione</th>
-                                                <th>qty</th>
+                                                <th>Barcode</th>
+                                                <th>Descrizione</th>
+                                                <th>Quantità</th>
                                             </tr>
                                             </thead>
                                             <tbody>

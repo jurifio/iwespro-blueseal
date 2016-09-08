@@ -56,9 +56,7 @@ class CStorageOperationFastInsertBarcode extends AAjaxController
         try {
             $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->getEmptyEntity();
             $storehouseOperation->shopId = $shopId;
-            \BlueSeal::dump($shopId);
             $storehouse = $this->app->repoFactory->create('Storehouse')->findOneBy(['shopId'=>$shopId]);
-            \BlueSeal::dump($storehouse);
             $storehouseOperation->storehouseId = $storehouse->id;
             $storehouseOperation->storehouseOperationCauseId = $this->app->router->request()->getRequestData('cause');
             $storehouseOperation->userId = $this->app->getUser()->id;
