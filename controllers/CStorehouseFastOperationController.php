@@ -28,10 +28,15 @@ class CStorehouseFastOperationController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/storehouse_fast_operation.php');
 
+        $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $causes = $this->app->repoFactory->create('StorehouseOperationCause')->findAll();
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+            'shops' => $shops,
+            'causes' => $causes
         ]);
     }
 }
