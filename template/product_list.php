@@ -98,18 +98,20 @@
             data-remote="bs.product.category.change"
             ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.product.sales.set"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.product.sales.price.change"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
             data-remote="bs.product.details.merge"
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.names.merge"
             ></bs-toolbar-button>
-    </bs-toolbar-group>
+        </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Gestione prezzi">
+            <bs-toolbar-button
+                data-remote="bs.product.sales.set"
+                ></bs-toolbar-button>
+            <bs-toolbar-button
+                data-remote="bs.product.sales.price.change"
+                ></bs-toolbar-button>
+        </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Roulette">
         <bs-toolbar-select
             data-tag="select"
