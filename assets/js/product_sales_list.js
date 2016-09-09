@@ -1,3 +1,31 @@
+$(document).on('bs.product.prices.manage', function(){
+    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRowsCount = selectedRows.length;
+
+    if ((!selectedRowsCount) || ('' == selectedRowsCount)){
+        modal = new $.bsModal(
+            'Gestione prezzi',
+            {body: 'puoi selezionare un solo prodotto alla volta'}
+        );
+        /*new Alert({
+            type: "warning",
+            message: "Devi selezionare almeno un prodotto"
+        }).open();*/
+        return false;
+    }
+
+    $.each(selectedRows, function (k, v) {
+        var row = {};
+        var idsVars = v.DT_RowId.split('__');
+        row.id = idsVars[1];
+        row.productVariantId = idsVars[2];
+        row.name = v.brand;
+        i++;
+
+
+    });
+});
+
 $(document).on('bs.sales.set', function(){
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');

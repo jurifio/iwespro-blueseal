@@ -73,6 +73,9 @@
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.price.manage"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

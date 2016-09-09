@@ -281,7 +281,7 @@ getGet = function () {
     }
 
     this.get = function (param) {
-        if (('object' == typeof param) && (param in self.all)) return self.all[param];
+        if (('string' == typeof param) && (param in self.all)) return self.all[param];
         else return false;
     };
 };
