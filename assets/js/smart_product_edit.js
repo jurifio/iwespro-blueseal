@@ -1,4 +1,4 @@
-$(document).on('bs.product.price.edit', function(){
+$(document).on('bs.price.edit', function(){
     var id = $('#Product_id').val();
     var productVariantId = $('#Product_productVariantId').val();
     if (('' !== id) && ('' !== productVariantId)) {
@@ -72,7 +72,9 @@ $(document).on('bs.product.edit', function (e, element, button) {
                     body.html(res);
                 } else {
                     body.html(res['message']);
-                    $('.product-code').html(res['code']['id'] + '-' + res['code']['productVariantId']);
+                    $('.product-code').html(String(res['code']['id']) + '-' + String(res['code']['productVariantId']));
+                    $('#Product_id').val(res['code']['id']);
+                    $('#Product_productVariantId').val(res['code']['productVariantId']);
                 }
             }
         );

@@ -379,7 +379,7 @@ endif; ?></div>
             data-tag="a"
             data-icon="fa-dollar"
             data-permission="/admin/product/add"
-            data-event="bs.product.price.edit"
+            data-event="bs.price.edit"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Modifica prezzi"
