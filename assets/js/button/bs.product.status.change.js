@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-eye",
-    permission:"/admin/product/edit",
+    permission:"/admin/product/edit&&allShops",
     event:"bs.manage.changeStatus",
     class:"btn btn-default",
     rel:"tooltip",

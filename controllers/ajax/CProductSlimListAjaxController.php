@@ -65,9 +65,8 @@ class CProductSlimListAjaxController extends AAjaxController
             }
             $response['data'][$i]['shop'].= '</span>';
 
-            $shops = [];
             foreach($val->shopHasProduct as $shp) {
-            	if(in_array($shp->shopId,$shops)) {
+            	if(in_array($shp->shopId,$shopsIds)) {
                     if (!empty($shp->extId)) {
                         $ext[] = $shp->extId;
                     }
@@ -75,7 +74,6 @@ class CProductSlimListAjaxController extends AAjaxController
                         if(!empty($shp->dirtyProduct->extId)) {
                             $ext[] = $shp->dirtyProduct->extId;
                         }
-
                         foreach ($shp->dirtyProduct->dirtySku as $sku) {
                             if (!empty($sku->extSkuId)) {
                                 $ext[] = $sku->extSkuId;
@@ -98,7 +96,7 @@ class CProductSlimListAjaxController extends AAjaxController
             $response['data'][$i]['brand'] = $val->productBrand->name;
 
             $cats = [];
-            foreach($val->productCategoryTranslation as $cat){
+            foreach($val->productCategoryTranslation as $cat) {
                 $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                 unset($path[0]);
                 $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';

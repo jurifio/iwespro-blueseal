@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-clone",
-    permission:"/admin/product/add",
+    permission:"/admin/product/add&&allShops",
     event:"bs.dupe.product",
     class:"btn btn-default",
     rel:"tooltip",

@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-trash",
-    permission:"/admin/product/delete",
+    permission:"/admin/product/delete&&allShops",
     event:"bs.del.product",
     class:"btn btn-default",
     rel:"tooltip",

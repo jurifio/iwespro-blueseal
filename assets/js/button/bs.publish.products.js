@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-cloud-upload",
-    permission: "/admin/product/publish",
+    permission: "/admin/product/publish&&allShops",
     event: "bs.pub.product",
     class: "btn btn-default",
     rel: "tooltip",

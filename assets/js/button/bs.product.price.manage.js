@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-qrcode",
-    permission:"/admin/product/list",
+    permission:"/admin/product/list&&allShops",
     event:"bs.product.price.manage",
     class:"btn btn-dollar",
     rel:"tooltip",
