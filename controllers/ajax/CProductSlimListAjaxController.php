@@ -20,10 +20,10 @@ class CProductSlimListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $shopsIds = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
         $datatable = new CDataTables('vBluesealProductSlimList',['id','productVariantId'],$_GET);
-        $datatable->addCondition('shopId',$shops);
+        $datatable->addCondition('shopId',$shopsIds);
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -56,6 +56,14 @@ class CProductSlimListAjaxController extends AAjaxController
 	        if(isset($val->externalId) && !empty($val->externalId)) {
                 $ext[] = $val->externalId;
             }
+
+            $response['data'][$i]['shop'] = '<span>';
+            foreach ($val->shop as $shop) {
+                if(in_array($shop->id,$shopsIds)) {
+                    $response['data'][$i]['externalId'].= $shop->name.'<br />';
+                }
+            }
+            $response['data'][$i]['shop'].= '</span>';
 
             $shops = [];
             foreach($val->shopHasProduct as $shp) {

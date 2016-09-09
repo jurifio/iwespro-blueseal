@@ -38,7 +38,12 @@
                                         data-orderable="true" class="center">Codice</th>
                                     <th data-slug="image"
                                         data-searchable="false"
-                                        data-orderable="false" class="center">Immagine </th>
+                                        data-orderable="false" class="center">Immagine</th>
+                                    <?php if($app->getUser()->hasPermission('allShops')): ?>
+                                    <th data-slug="shop"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Shop</th>
+                                    <?php endif; ?>
                                     <th data-slug="brand"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Brand</th>
@@ -72,172 +77,50 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo prodotto"
-            data-placement="bottom"
-            data-href="/blueseal/prodotti/aggiungi"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-cloud-upload"
-            data-permission="/admin/product/publish&&allShops"
-            data-event="bs.pub.product"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Pubblica prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
-            data-target="#bsModal"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-qrcode"
-            data-permission="/admin/product/list"
-            data-event="bs.print.aztec"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Stampa aztec"
-            data-placement="bottom"
-            >
-        </bs-toolbar-button><bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-barcode"
-            data-permission="/admin/product/list"
-            data-event="bs.print.barcode"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Stampa barcode"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-tag"
-            data-permission="/admin/product/edit&&allShops"
-            data-event="bs.product.tag"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Tagga prodotti"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-clone"
-            data-permission="/admin/product/add&&allShops"
-            data-event="bs.dupe.product"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Duplica prodotto"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-archive"
-            data-permission="/admin/product/mag"
-            data-event="bs.add.sku"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Movimenta"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-camera-retro"
-            data-permission="/admin/product/edit&&allShops"
-            data-event="bs.manage.photo"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Gestisci foto"
-            data-placement="bottom"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-trash"
-            data-permission="/admin/product/delete&&allShops"
-            data-event="bs.del.product"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Elimina prodotto"
-            data-placement="bottom"
-            data-toggle="modal"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-eye"
-            data-permission="/admin/product/edit&&allShops"
-            data-event="bs.manage.changeStatus"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cambia Status ai prodotti selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="btn.href.add.product"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-calendar"
-            data-permission="/admin/product/edit&&allShops"
-            data-event="bs.manage.changeSeason"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cambia Stagione ai prodotti selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="bs.product.print.aztec"
+        ></bs-toolbar-button>
+            <bs-toolbar-button
+            data-remote="bs.product.skus.barcode.print"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.tag.change"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.dupe"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.sku.manage"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.photo.manage"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.delete"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.status.change"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-sitemap"
-            data-permission="/admin/product/edit&&allShops"
-            data-event="bs.category.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cambia Categoria ai prodotti selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button><bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-usd"
-            data-permission="/admin/product/edit&&allShops"
-            data-event="bs.sales.set"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Metti in saldo i prodotti Selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button><bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-percent"
-            data-permission="/admin/product/edit&&allShops"
-            data-event="bs.sales.price"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cambia prezzi ai prodotti selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="bs.product.season.change"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-tasks"
-            data-permission="/admin/product/edit&&allShops"
-            data-event="bs.product.mergedetails"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Copia dettagli"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="bs.product.category.change"
+        ><bs-toolbar-button
+            data-remote="bs.product.details.merge"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-magnet"
-            data-permission="/admin/product/edit&&allShops"
-            data-event="bs.product.mergenames"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Copia i nomi dei prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="bs.product.names.merge"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione prezzi">
+        <bs-toolbar-button
+            data-remote="bs.product.sales.set"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.sales.price.change"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
