@@ -58,12 +58,11 @@
                                 <?php if($app->user()->hasPermission('allShops')): ?>
                                     <th data-slug="incasso_picky"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Incasso</th>
-                                <?php else: ?>
-                                    <th data-slug="incasso_friend"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Incasso</th>
+                                        data-orderable="true" class="center">Margine</th>
                                 <?php endif; ?>
+                                <th data-slug="incasso_friend"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Incasso Friend</th>
                                 <th data-slug="venduto"
                                     data-searchable="false"
                                     data-orderable="true" class="center">Quantità Venduta</th>
