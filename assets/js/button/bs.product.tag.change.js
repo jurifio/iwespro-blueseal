@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-tag",
-    permission:"/admin/product/edit",
+    permission:"/admin/product/edit&&allShops",
     event:"bs.product.tag",
     class:"btn btn-default",
     rel:"tooltip",

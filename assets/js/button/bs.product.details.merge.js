@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-tasks",
-    permission:"/admin/product/edit",
+    permission:"/admin/product/edit&&allShops",
     event:"bs.product.mergedetails",
     class:"btn btn-default",
     rel:"tooltip",

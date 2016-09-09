@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-archive",
-    permission:"/admin/product/mag",
+    permission:"/admin/product/mag&&allShops",
     event:"bs.add.sku",
     class:"btn btn-default",
     rel:"tooltip",

@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-magnet",
-    permission:"/admin/product/edit",
+    permission:"/admin/product/edit&&allShops",
     event:"bs.product.mergenames",
     class:"btn btn-default",
     rel:"tooltip",
