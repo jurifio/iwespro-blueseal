@@ -20,7 +20,7 @@ $(document).on('bs.manage.sizeGroups', function() {
 
     var selectedRows = $('.table').DataTable().rows('.selected').data();
 
-    if(selectedRows < 1) {
+    if(selectedRows.length < 1) {
         new Alert({
             type: "warning",
             message: "Devi selezionare uno o più prodotti per cambiare il gruppo taglie"
@@ -34,10 +34,10 @@ $(document).on('bs.manage.sizeGroups', function() {
     });
 
     $.ajax({
-        url: "/blueseal/xhr/ProductIncompleteAjaxController",
+        url: "/blueseal/xhr/ProductChangeProductSizeController",
         type: "GET",
         data: {
-            produtcts: getVarsArray
+            products: getVarsArray
         }
     }).done(function (response) {
         body.html(response);
@@ -48,7 +48,7 @@ $(document).on('bs.manage.sizeGroups', function() {
         bsModal.modal();
         okButton.html('Assegna').off().on('click', function () {
             $.ajax({
-                url: "/blueseal/xhr/ProductIncompleteAjaxController",
+                url: "/blueseal/xhr/ProductChangeProductSizeController",
                 type: "PUT",
                 data: {
                     products: getVarsArray,

@@ -11,7 +11,7 @@ use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
  * Class CProductIncompleteListController.php
  * @package bamboo\app\controllers
  */
-class CProductIncompleteAjaxController extends AAjaxController
+class CProductChangeProductSizeController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
