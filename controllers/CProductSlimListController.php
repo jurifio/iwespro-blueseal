@@ -28,19 +28,12 @@ class CProductSlimListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_slim_list.php');
 
-        $em = $this->app->entityManagerFactory->create('ProductStatus');
-        $productStatuses = $em->findAll('limit 99','');
-
-        $statuses = [];
-        foreach($productStatuses as $status){
-            $statuses[$status->code] = $status->name;
-        }
+        $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'statuses' => $statuses,
-            'cm' => $this->app->categoryManager,
             'page' => $this->page,
+            'shops' => $shops,
             'sidebar' => $this->sidebar->build()
         ]);
     }

@@ -39,7 +39,7 @@
                                     <th data-slug="image"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Immagine</th>
-                                    <?php if($app->getUser()->hasPermission('allShops')): ?>
+                                    <?php if(count($shops) > 1): ?>
                                     <th data-slug="shop"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Shop</th>
