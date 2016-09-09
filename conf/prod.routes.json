@@ -1450,9 +1450,22 @@
                 "PUT"
             ]
         },{
+            "pattern": "/blueseal/prodotti/movimenti/inserisci/rapido(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseFastOperationController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
             "pattern": "/blueseal/prodotti/movimenti(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCatalogListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseOperationListController"
             },
             "filters": {},
             "translations": {},

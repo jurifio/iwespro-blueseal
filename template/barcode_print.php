@@ -322,7 +322,10 @@ foreach ($productSkus as $productSku): ?>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-offset-7">
+                    <div class="col-md-7">
+                        <span style="font-size: 8pt;display:inline-block"><?php echo $productSku->product->productBrand->name ?></span>
+                    </div>
+                    <div class="col-md-4">
                         <span style="font-size: 10pt"><?php echo $productSku->price ?> €</span>
                     </div>
                 </div>

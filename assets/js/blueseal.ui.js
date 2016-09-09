@@ -187,8 +187,16 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
             $.each($(this).children('bs-toolbar-button,bs-toolbar-select,bs-toolbar-button-toggle'), function () {
                 var _this = $(this);
                 var data = $(this).data();
+                /** per recupero configurazioni pulzante */
                 var deferred = $.Deferred();
 
+                /** genero placeholder con id randomico */
+                var randId = 'bs'+Math.ceil(Math.random() * (100000- 1) + 1);
+                var tag = $('<'+_this.prop('tagName')+' id="'+randId+'" ></'+_this.prop('tagName')+'>');
+                group.last().append(tag);
+                var placeHolder = $('#'+randId);
+
+                /** recupero impostazioni */
                 timer = setInterval(function () {
                     deferred.notify();
                 }, 100);
@@ -210,22 +218,23 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
                     }
                 },  300);
 
+                /** quando ho finito sostituisco il placeholder con il pulzante */
                 deferred.done(function() {
                     var element;
                     switch (_this.prop('tagName').toLowerCase()) {
                         case 'bs-toolbar-button': {
                             element = new Button(data);
-                            element.draw(group.last());
+                            element.draw(placeHolder);
                             break;
                         }
                         case 'bs-toolbar-select': {
                             element = new Select(data);
-                            element.draw(group.last());
+                            element.draw(placeHolder);
                             break;
                         }
                         case 'bs-toolbar-button-toggle': {
                             element = new ButtonToggle(data);
-                            element.draw(group.last());
+                            element.draw(placeHolder);
                             break;
                         }
                     }
@@ -253,7 +262,7 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
     });
 
     $(document).on('bs.draw.toolbar.button', function (e, container, button, html) {
-        $(container).append(html);
+        $(container).replaceWith(html);
         $(button).prop('disabled', true).attr('disabled', true);
         $('.btn-group-label').next().css('border-radius', '2px');
     });

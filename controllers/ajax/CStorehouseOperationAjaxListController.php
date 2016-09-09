@@ -49,18 +49,31 @@ class CStorehouseOperationAjaxListController extends AAjaxController
             $sign = ($val->storehouseOperationCause->sign) ? '+' : '-';
             $response['data'][$i]['cause'] = $val->storehouseOperationCause->name . ' (' . $sign . ') ';
 
-            $response['data'][$i]['operationDate'] = date('d-M-Y', strtotime($val->operationDate));
-            $response['data'][$i]['creationDate'] = date('d-M-Y', strtotime($val->creationDate));
+            $response['data'][$i]['operationDate'] = date('d-M-Y H:i', strtotime($val->operationDate));
+            $response['data'][$i]['creationDate'] = date('d-M-Y H:i', strtotime($val->creationDate));
 
             $response['data'][$i]['friend'] = $val->shop->title;
 
             $response['data'][$i]['movements'] = '<span class="small">'.$val->storehouseOperationLine->count().' Elementi movimentati <br />';
+            $k = 0;
+            $response['data'][$i]['qty'] = 0;
+            $response['data'][$i]['value'] = 0;
+            $response['data'][$i]['price'] = 0;
+
             foreach ($val->storehouseOperationLine as $line) {
                 $sku = $line->productSku;
                 $product = $sku->product;
                 $brand = $product->productBrand->name;
                 $size = $sku->productSize->name;
-                $response['data'][$i]['movements'].= $product->printId() . " / " . $brand . " / " . $size . " / " . $product->printCpf() . ": " . $line->qty . '<br />';
+                if($k < 3) {
+                    $response['data'][$i]['movements'] .= $product->printId() . " / " . $brand . " / " . $size . " / " . $product->printCpf() . ": " . $line->qty . '<br />';
+                } elseif($k == 3 && $val->storehouseOperationLine->count() > 3) {
+                    $response['data'][$i]['movements'] .= '...';
+                }
+                $response['data'][$i]['qty']  += $line->qty;
+                $response['data'][$i]['value'] += $sku->value;
+                $response['data'][$i]['price'] += $sku->price;
+                $k++;
             }
             $response['data'][$i]['movements'] .= '</span>';
             $i++;

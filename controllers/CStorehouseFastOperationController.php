@@ -18,30 +18,25 @@ use bamboo\ecommerce\views\VBase;
  * @date 05/09/2016
  * @since 1.0
  */
-class CCatalogListController extends ARestrictedAccessRootController
+class CStorehouseFastOperationController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "catalog_list";
+    protected $pageSlug = "storehouse_fast_operation";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/storehouse_operation_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/storehouse_fast_operation.php');
 
-        $em = $this->app->entityManagerFactory->create('ProductStatus');
-        $productStatuses = $em->findAll('limit 99','');
-
-        $statuses = [];
-        foreach($productStatuses as $status){
-            $statuses[$status->code] = $status->name;
-        }
+        $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsForUser();
+        $causes = $this->app->repoFactory->create('StorehouseOperationCause')->findAll();
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'statuses' => $statuses,
-            'cm' => $this->app->categoryManager,
             'page' => $this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+            'shops' => $shops,
+            'causes' => $causes
         ]);
     }
 }

@@ -90,48 +90,28 @@
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.status.change"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.season.change"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.category.change"
-        ></bs-toolbar-button><bs-toolbar-button
-            data-remote="bs.product.sales.set"
-        ></bs-toolbar-button><bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-percent"
-            data-permission="/admin/product/edit"
-            data-event="bs.sales.price"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cambia prezzi ai prodotti selezionati"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-tasks"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.mergedetails"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Copia dettagli"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
+            data-remote="bs.product.details.merge"
+            ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-magnet"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.mergenames"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Copia i nomi dei prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
+            data-remote="bs.product.names.merge"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Gestione prezzi">
+            <bs-toolbar-button
+                data-remote="bs.product.sales.set"
+                ></bs-toolbar-button>
+            <bs-toolbar-button
+                data-remote="bs.product.sales.price.change"
+                ></bs-toolbar-button>
+        </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Roulette">
         <bs-toolbar-select
             data-tag="select"

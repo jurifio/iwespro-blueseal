@@ -22,6 +22,12 @@
                 "parentKeys": ["shopId"],
                 "childKeys": ["id"],
                 "type": "OneToOne"
+            }, {
+                "name": "user",
+                "entity": "User",
+                "parentKeys": ["userId"],
+                "childKeys": ["id"],
+                "type": "OneToOne"
             }
         ]
     }

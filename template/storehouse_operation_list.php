@@ -25,7 +25,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="catalog_list"
+                               data-datatable-name="storehouse_operation_list"
                                data-column-filter="true"
                                data-controller="StorehouseOperationAjaxListController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
@@ -54,6 +54,15 @@
                                     <th data-slug="movements"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Movimenti</th>
+                                    <th data-slug="qty"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Quantità</th>
+                                    <th data-slug="value"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Valore Movimentato</th>
+                                    <th data-slug="price"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Valore Shop</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,7 +78,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione prodotti">
+    <bs-toolbar-group data-group-label="Gestione Movimenti">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-exchange"
@@ -81,14 +90,10 @@
             data-href="/blueseal/prodotti/movimenti/inserisci"
             ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-barcode"
-            data-permission="/admin/product/list"
-            data-event="bs.print.barcode"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Stampa barcode"
-            data-placement="bottom"
+            data-remote="bs.storehouse.operation.skus.barcode.print"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.storehouse.operation.explode.data"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
