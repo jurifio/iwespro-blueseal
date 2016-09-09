@@ -238,30 +238,7 @@ endif; ?></div>
                         </div>
                         <div class="col-md-4">
                             <div class="disableBlank">
-                            <?php if ($shops): ?>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="Shop_id">Shop</label>
-                                            <select class="full-width"
-                                                    placeholder="Seleziona il proprietario"
-                                                    data-init-plugin="selectize" title="" name="Shop_id"
-                                                    id="Shop" required>
-                                                <?php foreach ($shops as $shop): ?>
-                                                    <option value="<?php echo $shop->id ?>"
-                                                        <?php
-                                                        if (isset($productEdit)) {
-                                                            if (!is_null($productEdit->shop) && (bool)$productEdit->shop->findOneByKey('id', $shop->id)) {
-                                                                echo "selected";
-                                                            }
-                                                        }
-                                                        ?>><?php echo $shop->title ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
+                            <?php if (!$allShops): ?>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group form-group-default required">
@@ -286,6 +263,7 @@ endif; ?></div>
                                         </div>
                                     </div>
                                 </div>
+                            <?php endif; ?>
                                 <div class="panel panel-default clearfix">
                                     <div class="panel-heading clearfix">
                                         <h5 class="m-t-10">Informazioni SEO</h5>
@@ -396,6 +374,18 @@ endif; ?></div>
             data-json='<?php echo json_encode($sortingOptions); ?>'
             data-placement="bottom"
         ></bs-toolbar-button>
+        <?php if ($allShops): ?>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-dollar"
+            data-permission="/admin/product/add"
+            data-event="bs.product.price.edit"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Modifica prezzi"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <?php endif; ?>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione dettagli">
         <bs-toolbar-button

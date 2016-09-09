@@ -55,17 +55,8 @@ class CFriendProductEditController extends CProductManageController
 
         $em = $this->app->entityManagerFactory->create('Shop');
 
-        if ($user->hasPermission('allShops')) {
-            $shops = $em->findAll(null, 'order by `name`');
-        } else {
-            /*$shopIds = [];
-            foreach($user->shop as $v) {
-                $shopIds[] = $v->id;
-            }
-            $shopIds = implode($shopIds, ',');
-            $shops = $em->findBySql("SELECT * FROM Shop WHERE id IN (" . $shopIds . ")",[]);*/
-            $shops = false;
-        }
+        $allShops = false;
+        if ($user->hasPermission('allShops')) $allShops = true;
 
         $em = $this->app->entityManagerFactory->create('Tag');
         $tag = $em->findAll(null, 'order by `slug`');
@@ -143,7 +134,7 @@ class CFriendProductEditController extends CProductManageController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
-            'shops' => $shops,
+            'allShops' => $allShops,
             'statuses' => $statuses,
             'brands' => $brands,
             'double' => false,
