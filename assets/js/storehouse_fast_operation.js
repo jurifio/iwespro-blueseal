@@ -39,8 +39,15 @@ $(document).on('keypress', 'input#barcode',function(a) {
 });
 
 $(document).on('click','table#linesList tbody tr td.cancel',function() {
-    var qty = $(this).parentNode.find('td.qty');
-    qty.text((qty.text() -1));
+    var qty = $(this).siblings('.qty').eq(0);
+    console.log(qty);
+    var newQty = (qty.text() -1);
+    if(newQty < 1) {
+        $(this).closest('tr').remove();
+    } else {
+        qty.text(newQty);
+    }
+
 });
 
 $(document).on('focusout','#movement-date', function (e) {

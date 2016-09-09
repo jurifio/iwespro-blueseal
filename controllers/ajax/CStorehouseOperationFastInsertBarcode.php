@@ -39,7 +39,7 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
                 $res = [];
                 $res['id'] = $sku->printId();
                 $res['barcode'] = $sku->barcode;
-                $res['description'] = $sku->printId();
+                $res['description'] = $sku->product->printId() . " / " . $sku->product->productBrand->name ." / " . $sku->product->printCpf(). " / " . $sku->productSize->name;
 
                 return json_encode($res);
             }
