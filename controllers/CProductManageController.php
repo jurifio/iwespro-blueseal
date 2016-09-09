@@ -30,6 +30,12 @@ class CProductManageController extends ARestrictedAccessRootController
         $fileFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'dummyFolder') . '/';
         $post = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
+        $shops = $this->app->getUser()->shop;
+        foreach($shops as $v) {
+            $shop = $v;
+            break;
+        }
+
         /** LOGICHE DI UPDATE*/
         try {
             $productIds = array("id" => $post['Product_id'], "productVariantId" => $post['Product_productVariantId']);
@@ -57,9 +63,6 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 	        $productEdit->lastUpdate = date("Y-m-d H:i:s");
 	        $productEdit->itemno = $post['Product_itemno'];
-
-            $hasShop = 0;
-
 
             /** AGGIORNO I PREZZI */
             $shp = $this->app->repoFactory->create('ShopHasProduct');
@@ -89,8 +92,7 @@ class CProductManageController extends ARestrictedAccessRootController
                             'shopId' => $shop->id,
                         ]);
                     if (array_key_exists('Product_retail_price', $post)) $shpe->price = $post['Product_retail_price'];
-                    if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];$shpe->price = $post['Product_retail_price'];
-                    $shpe->value = $post['Product_value'];
+                    if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];
                     $shpe->update();
                 }
             }
@@ -235,6 +237,40 @@ class CProductManageController extends ARestrictedAccessRootController
                 }
             }
 
+            if ((array_key_exists('Product_retail_price',$post)) && (array_key_exists('Product_value',$post))) {
+                $shpRepo = $this->app->repoFactory->create('ShopHasProduct');
+                $shp = $shpRepo->findOneBy(
+                    [
+                        'productId' => $productIds['id'],
+                        'productVariantId' => $productIds['productVariantId'],
+                        'shopId' => $shop->id
+                    ]);
+                if ($shp) {
+                    $shp->value = ($post['Product_value']) ? $post['Product_value'] : null;
+                    $shp->price = ($post['Product_retail_price']) ? $post['Product_retail_price'] : null;
+                    $shp->update();
+                } else {
+                    $shp = $shpRepo->getEmptyEntity();
+                    $shp->productId = $productIds['id'];
+                    $shp->productVariantId = $productIds['productVariantId'];
+                    $shp->shopId = $shop->id;
+                    $shp->value = ($post['Product_value']) ? $post['Product_value'] : null;
+                    $shp->price = ($post['Product_retail_price']) ? $post['Product_retail_price'] : null;
+                    $shp->insert();
+                }
+
+                $skus = $this->app->repoFactory->create('ProductSku')->findBy([
+                    'productId' => $productIds['id'],
+                    'productVariantId' => $productIds['productVariantId'],
+                    'shopId' => $shop->id
+                ]);
+                foreach($skus as $s){
+                    $s->value = $post['Product_value'];
+                    $s->price = $post['Product_retail_price'];
+                    $s->update();
+                }
+            }
+
             $this->app->dbAdapter->commit();
 
             if ($this->isValidInput("Product_status", $post)) {
@@ -335,7 +371,8 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 
             //se non c'è il campo shop o non è selezionato uno shop, vengono assegnati tutti gli shop dell'utente
-            if (!$hasShop) {
+            // COMMENTATO perché ora gli shop si assegnano manualmente dall'apposita pagina
+            /*if (!$hasShop) {
                 $user = $this->app->getUser();
                 $shp = $this->app->repoFactory->create('ShopHasProduct');
                 foreach($user->shop as $shop) {
@@ -347,7 +384,7 @@ class CProductManageController extends ARestrictedAccessRootController
                     if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];
                     $shpe->insert();
                 }
-            }
+            }*/
 
             $this->app->dbAdapter->commit();
 
@@ -411,7 +448,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
 		        foreach ($post as $key => $input) {
 			        $inputName = explode('_', $key);
-			        if (($inputName[0] != 'ProductDetail') || ($input == '0')) continue;
+			        if (($inputName[0] != 'ProductDetail') || ($input == '0') || ($input == '')) continue;
 			        /** cerco il valore del dettaglio $detail */
 			        $sheet = $productSheetActualRepo->getEmptyEntity();
                     $sheet->productId = $productNew->id;
