@@ -1492,6 +1492,17 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/prodotti/gestione-prezzi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPriceManageController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST"
+            ]
         }
     ]
 }

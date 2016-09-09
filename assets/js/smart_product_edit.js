@@ -1,3 +1,19 @@
+$(document).on('bs.product.price', function(){
+    var inputId = $('#Product_Id').val();
+    var inputVar = $('#Product_productVariantId').val();
+    if (('' !== inputVar.val()) && ('' !== inputId.val())) {
+        var id = inputId.val();
+        var productVariantId = inputVar.val();
+        var url = '/blueseal/prodotti/gestione-prezzi/?code=' + id + productVariantId;
+        window.open(url,'_blank');
+    } else {
+        modal = new $.bsModal(
+            "Gestione Prezzi",
+            { body: 'Per utilizzare questa funzionalità devi prima salvare un prodotto o crearne uno nuovo' }
+        );
+    }
+});
+
 var alertHtml = "" +
     "<div class=\"alert alert-dismissible alert-warning fade in\" role=\"alert\">" +
     "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">" +
