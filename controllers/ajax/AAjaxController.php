@@ -22,13 +22,10 @@ class AAjaxController
     /** @var array $data */
     protected $data;
 
-    protected $rf;
-
     public function __construct(AApplication $app)
     {
         $this->app = $app;
         $this->data = $this->app->router->request()->getRequestData();
-        $this->rf = $app->repoFactory;
     }
 
     public function rfc($name) {
