@@ -3,7 +3,7 @@ $(document).on('keypress', 'input#barcode',function(a) {
     if(target.val().length > 9) {
         Pace.ignore(function () {
             $.ajax({
-                url: "/blueseal/xhr/StorageOperationFastInsertBarcode",
+                url: "/blueseal/xhr/StorehouseOperationFastInsertBarcode",
                 type: "GET",
                 data: {
                     barcode: target.val(),
@@ -21,6 +21,7 @@ $(document).on('keypress', 'input#barcode',function(a) {
                     tr+='<td class="barcodeView">'+res.barcode+'</td>';
                     tr+='<td class="description">'+res.description+'</td>';
                     tr+='<td class="qty">1</td>';
+                    tr+='<td class="cancel"><i class="fa fa-times" aria-hidden="true"></i></td>';
                     $('table#linesList tbody').append($(tr));
                 }
             }).fail(function (res) {
@@ -35,6 +36,11 @@ $(document).on('keypress', 'input#barcode',function(a) {
             });
         });
     }
+});
+
+$(document).on('click','table#linesList tbody tr td.cancel',function() {
+    var qty = $(this).parentNode.find('td.qty');
+    qty.text((qty.text() -1));
 });
 
 $(document).on('focusout','#movement-date', function (e) {
@@ -106,7 +112,7 @@ $(document).on('bs.storehouse.operation.fast.save',function() {
         cancelButton.hide();
         Pace.ignore(function () {
             $.ajax({
-                url: "/blueseal/xhr/StorageOperationFastInsertBarcode",
+                url: "/blueseal/xhr/StorehouseOperationFastInsertBarcode",
                 type: "POST",
                 data: {
                     rows: rowsData,

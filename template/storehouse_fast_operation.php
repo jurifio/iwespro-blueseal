@@ -111,6 +111,7 @@
                                                 <th>Barcode</th>
                                                 <th>Descrizione</th>
                                                 <th>Quantità</th>
+                                                <th>Elimina</th>
                                             </tr>
                                             </thead>
                                             <tbody>

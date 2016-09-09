@@ -16,7 +16,7 @@ use bamboo\core\intl\CLang;
  *
  * @since ${VERSION}
  */
-class CStorageOperationFastInsertBarcode extends AAjaxController
+class CStorehouseOperationFastInsertBarcode extends AAjaxController
 {
     /**
      * @return string
