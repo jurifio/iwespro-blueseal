@@ -52,8 +52,8 @@
                                         data-searchable="false"
                                         data-orderable="false" class="center">Causale</th>
                                     <th data-slug="movements"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Movimenti</th>
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Movimenti</th>
                                     <th data-slug="qty"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Quantità</th>
