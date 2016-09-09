@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-magic",
-    permission:"/admin/product/edit",
+    permission:"/admin/product/edit&&allShops",
     event:"bs.manage.sizeGroups",
     class:"btn btn-default",
     rel:"tooltip",
