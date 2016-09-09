@@ -60,7 +60,7 @@ class CProductSlimListAjaxController extends AAjaxController
             $response['data'][$i]['shop'] = '<span>';
             foreach ($val->shop as $shop) {
                 if(in_array($shop->id,$shopsIds)) {
-                    $response['data'][$i]['externalId'].= $shop->name.'<br />';
+                    $response['data'][$i]['shop'].= $shop->name.'<br />';
                 }
             }
             $response['data'][$i]['shop'].= '</span>';

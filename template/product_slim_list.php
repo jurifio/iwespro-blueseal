@@ -41,8 +41,8 @@
                                         data-orderable="false" class="center">Immagine</th>
                                     <?php if(count($shops) > 1): ?>
                                     <th data-slug="shop"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Shop</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Shop</th>
                                     <?php endif; ?>
                                     <th data-slug="brand"
                                         data-searchable="true"
