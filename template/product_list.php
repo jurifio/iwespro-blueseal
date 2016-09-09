@@ -103,6 +103,9 @@
         <bs-toolbar-button
             data-remote="bs.product.names.merge"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.sizeGroup.change"
+        ></bs-toolbar-button>
         </bs-toolbar-group>
         <bs-toolbar-group data-group-label="Gestione prezzi">
             <bs-toolbar-button

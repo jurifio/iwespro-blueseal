@@ -56,6 +56,9 @@
                                     <th data-slug="categories"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Categorie</th>
+                                    <th data-slug="stock"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stock</th>
                                     <th data-slug="season"
                                         data-searchable="true"
                                         data-orderable="true"
@@ -113,6 +116,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.names.merge"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.sizeGroup.change"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione prezzi">
