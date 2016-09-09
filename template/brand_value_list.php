@@ -64,6 +64,12 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">Incasso</th>
                                 <?php endif; ?>
+                                <th data-slug="venduto"
+                                    data-searchable="false"
+                                    data-orderable="true" class="center">Quantità Venduta</th>
+                                <th data-slug="cancellato"
+                                    data-searchable="false"
+                                    data-orderable="true" class="center">Quantità Cancellata</th>
                             </tr>
                             </thead>
                             <tbody>

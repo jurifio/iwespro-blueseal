@@ -26,8 +26,8 @@ class CBrandValueListAjaxController extends AAjaxController
         $datatable->addSearchColumn('shop',$shopIds);
 
         $orribilità = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
-        $count = $this->app->dbAdapter->query($datatable->getQuery(true,true),$datatable->getParams())->fetch()[0];
-        $totalCount = $this->app->dbAdapter->query($datatable->getQuery('full',true),$datatable->getParams())->fetch()[0];
+        $count = $this->app->dbAdapter->query($datatable->getQuery(true,true),$datatable->getParams())->fetch();
+        $totalCount = $this->app->dbAdapter->query($datatable->getQuery('full',true),$datatable->getParams())->fetch();
 
         /*$brands = $this->app->repoFactory->create('ProductBrand')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
