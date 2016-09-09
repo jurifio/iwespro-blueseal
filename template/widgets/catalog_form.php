@@ -89,33 +89,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!--<div class="row mag-add-line-control">
-                                <button class="btn btn-default pull-right btn-add-movement">Aggiungi movimento</button>
-                            </div>
-
-                            <div class="mag-movements" data-sizes="">
-                                <div class="row mag-movementLine">
-                                    <div class="form-group form-group-default">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="col-sm-5 ml-size-block">
-                                                    <label>Taglia
-                                                    <select class="form-control ml-size mandatory" placeholder="Seleziona una taglia"></select>
-                                                    </label>
-                                                </div>
-                                                <div class="col-sm-5 ml-qtMove-block">
-                                                    <label>Quantità
-                                                    <input type="number" class="form-control ml-qtMove mandatory" val="0">
-                                                    </label>
-                                                </div>
-                                                <div class="col-sm-2 lineClose-block">
-                                                    <button class="btn btn-complete lineClose">X</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
                             <br style="clear: both;" />
                         </div>
                     </div>

@@ -6,7 +6,7 @@
                     placeholder="Seleziona una scheda prodotto"
                     data-init-plugin="selectize" title="" name="Product_dataSheet" id="Product_dataSheet"
             >
-                <option></option>
+                <option value=""></option>
                 <?php foreach ($productSheets as $productSheet): ?>
                     <option value="<?php echo $productSheet->id ?>"><?php echo $productSheet->name ?></option>
                 <?php endforeach; ?>
