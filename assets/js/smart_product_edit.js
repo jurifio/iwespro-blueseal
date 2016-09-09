@@ -1,8 +1,8 @@
 $(document).on('bs.product.price.edit', function(){
-    var id = $('#Product_Id').val();
+    var id = $('#Product_id').val();
     var productVariantId = $('#Product_productVariantId').val();
     if (('' !== id) && ('' !== productVariantId)) {
-        var url = '/blueseal/prodotti/gestione-prezzi/?code=' + id + productVariantId;
+        var url = '/blueseal/prodotti/gestione-prezzi/?code=' + id + '-' + productVariantId;
         window.open(url,'_blank');
     } else {
         modal = new $.bsModal(
@@ -578,7 +578,7 @@ $(document).on('bs.details.model.assign', function (e) {
             $("#main-details").html($content);
 
             changeProductDataSheet = false;
-            var dataSheet = $('.selectContent').data('prototype-id');
+            var dataSheet = $('.detailContent').data('prototype-id');
             $('#Product_dataSheet').selectize()[0].selectize.setValue(dataSheet, true);
             changeProductDataSheet = true;
 
@@ -591,7 +591,7 @@ $(document).on('bs.details.model.assign', function (e) {
                         options: window.detailsStorage
                     });
                     var initVal = $(this).data('init-selection');
-                    if (initVal != 'undefined' && initVal.length != 0) {
+                    if (initVal != 'undefined') {
                         sel[0].selectize.setValue(initVal, true);
                     } else {
                         sel[0].selectize.setValue(0, true);
@@ -642,7 +642,7 @@ $(document).on('bs.details.model.assign', function (e) {
                     options: window.detailsStorage
                 });
                 var initVal = $(this).data('init-selection');
-                if (initVal != 'undefined' && initVal.length != 0) {
+                if (initVal != 'undefined') {
                     sel[0].selectize.setValue(initVal, true);
                 } else {
                     sel[0].selectize.setValue(0, true);

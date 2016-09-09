@@ -801,5 +801,6 @@ ul.roulette-importer-details li {
 }
 
 h5.product-title {
+    width-min: 70%;
     float: left;
 }
