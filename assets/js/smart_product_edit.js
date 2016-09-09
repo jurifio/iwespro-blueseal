@@ -1,9 +1,7 @@
-$(document).on('bs.product.price', function(){
-    var inputId = $('#Product_Id').val();
-    var inputVar = $('#Product_productVariantId').val();
-    if (('' !== inputVar.val()) && ('' !== inputId.val())) {
-        var id = inputId.val();
-        var productVariantId = inputVar.val();
+$(document).on('bs.product.price.edit', function(){
+    var id = $('#Product_Id').val();
+    var productVariantId = $('#Product_productVariantId').val();
+    if (('' !== id) && ('' !== productVariantId)) {
         var url = '/blueseal/prodotti/gestione-prezzi/?code=' + id + productVariantId;
         window.open(url,'_blank');
     } else {
