@@ -25,7 +25,9 @@ class CStorehouseOperationAjaxListController extends AAjaxController
 
         $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $datatable->addCondition('shopId', $shops);
-
+        $datatable->addSearchColumn('code');
+        $datatable->addSearchColumn('cpf');
+        
         $operazioni = $this->app->repoFactory->create('StorehouseOperation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
