@@ -83,14 +83,7 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Operazioni sui prodotti">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-magic"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.sizeGroups"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Assegna Gruppi taglie"
-            data-placement="bottom"
+            data-remote="bs.product.sizeGroup.change"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -17,34 +17,18 @@ class CProductIncompleteAjaxController extends AAjaxController
     protected $authorizedShops = [];
     protected $em;
 
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1, 'it'));
-        $this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
-        $this->urls['page'] = $this->urls['base'] . "prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
-
-        if ($this->app->getUser()->hasPermission('allShops')) {
-
-        } else {
-            $res = $this->app->dbAdapter->select('UserHasShop', ['userId' => $this->app->getUser()->getId()])->fetchAll();
-            foreach ($res as $val) {
-                $this->authorizedShops[] = $val['shopId'];
-            }
-        }
-
-        $this->em = new \stdClass();
-        $this->em->products = $this->app->entityManagerFactory->create('Product');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
+        foreach($this->app->router->request()->getRequestData('products') as $productIds) {
+            $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
+            foreach ($product->productSku as $productSku) {
+                if($productSku->stockQty > 0) {
+                    $this->app->router->response()->raiseProcessingError();
+                    return "Impossibile cambiare gruppo taglia per prodotto: ".$product->printId();
+                }
+            }
+
+        }
         $psg = $this->app->repoFactory->create('ProductSizeGroup')->findAll(null, 'order by locale, macroName, `name`');
 
         $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo taglie</option>';
@@ -55,28 +39,16 @@ class CProductIncompleteAjaxController extends AAjaxController
         return $ret;
     }
 
-    public function put() {
-        $id = $this->app->router->request()->getRequestData();
-        $whereAnds = [];
-        $groupId = null;
-        foreach($id as $k => $v){
-            if (false !== strpos($k, "row")) {
-                list($id, $productVariantId) = explode("-", $v);
-                $whereAnds[] = "( id = " . $id . " AND productVariantId = " . $productVariantId . ")";
-            } elseif (false !== strpos($k, "groupId")) {
-                $groupId = $v;
-            }
-
-        }
+    public function put()
+    {
+        $groupId = $this->app->router->request()->getRequestData('groupId');
         if(!$groupId){
             return "Errore: nessun gruppo taglie selezionato.";
         } else {
-            $where = implode(" OR ", $whereAnds);
-            $sql = "UPDATE Product SET productSizegroupId = " . $groupId . " WHERE " .  $where;
-            try {
-                $res = $this->app->dbAdapter->query($sql, [])->countAffectedRows();
-            } catch(\PDOException $e) {
-                return $e->getMessage();
+            foreach($this->app->router->request()->getRequestData('products') as $productIds) {
+                $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
+                $product->productSizegroupId = $groupId;
+                $product->update();
             }
             return "Il gruppo colore è stato assegnato alle righe selezionate.";
         }
