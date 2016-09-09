@@ -25,33 +25,25 @@ class CBrandValueListAjaxController extends AAjaxController
         $datatable = new CDataTables('vBluesealProductBrandValueList',['id'],$_GET);
         $datatable->addSearchColumn('shop',$shopIds);
 
-        $brands = $this->app->repoFactory->create('ProductBrand')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $orribilità = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
+        $count = $this->app->dbAdapter->query($datatable->getQuery(true,true),$datatable->getParams())->fetch()[0];
+        $totalCount = $this->app->dbAdapter->query($datatable->getQuery('full',true),$datatable->getParams())->fetch()[0];
 
+        /*$brands = $this->app->repoFactory->create('ProductBrand')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        */
         $response = [];
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
-        $response ['data'] = [];
+        $response ['data'] = $orribilità;
 
-        foreach($brands as $val){
+        /*foreach($orribilità as $line) {
             $row = [];
 
-            $row["DT_RowId"] = $val->printId();
-            $row["DT_RowClass"] = 'colore';
-            $row['brand'] =  $val->name;
-            $row['season'] =  $val->name;
-            $row['shop'] =  $val->name;
-            $row['prodotti'] =  $val->name;
-            $row['quantita'] =  $val->name;
-            $row['valore_al_costo'] =  $val->name;
-            $row['valore_al_prezzo'] =  $val->name;
-            $row['incasso_friend'] =  $val->name;
-            $row['incasso_picky'] =  $val->name;
+        }*/
 
-            $response['data'][] = $row;
-        }
 
         return json_encode($response);
     }

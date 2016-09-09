@@ -23,10 +23,10 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-datatable-name="brand_list"
-                               data-datatable-name="product_slim_list"
+                        <table class="table table-striped responsive" width="100%"
+                               data-datatable-name="brand_value_list"
                                data-column-filter="true"
-                               data-controller="BrandListAjaxController"
+                               data-controller="BrandValueListAjaxController"
                                data-inner-setup="true"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                >
@@ -45,7 +45,7 @@
                                 <?php endif; ?>
                                 <th data-slug="prodotti"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">N° Prodotti</th>
+                                    data-orderable="true" class="center"  data-default-order="desc" >N° Prodotti</th>
                                 <th data-slug="quantita"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Quantità</th>
@@ -55,12 +55,12 @@
                                 <th data-slug="valore_al_prezzo"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Valore al Prezzo</th>
-                                <?php if($app->getUser()->hasPermission('allShops')): ?>
-                                    <th data-slug="incasso_friend"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Stagione</th>
-                                <?php else: ?>
+                                <?php if($app->user()->hasPermission('allShops')): ?>
                                     <th data-slug="incasso_picky"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Incasso</th>
+                                <?php else: ?>
+                                    <th data-slug="incasso_friend"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Incasso</th>
                                 <?php endif; ?>
@@ -80,27 +80,7 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo prodotto"
-            data-placement="bottom"
-            data-href="<?php echo $addUrl; ?>"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-trash"
-            data-permission="/admin/product/delete"
-            data-event="bs.brand.delete"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Elimina prodotto"
-            data-placement="bottom"
-            data-target="#bsModal"
-        ></bs-toolbar-button>
+
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

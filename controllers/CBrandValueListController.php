@@ -27,9 +27,12 @@ class CBrandValueListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/brand_value_list.php');
 
+
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
+            'shops'=>$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser(),
             'sidebar' => $this->sidebar->build()
         ]);
     }

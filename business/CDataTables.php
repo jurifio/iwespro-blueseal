@@ -119,13 +119,15 @@ class CDataTables
     public function getSearch($raw = true){
         return $raw ? $this->rawSearch : $this->search;
     }
+
     /**
-     * @param bool|false $count
+     * @param bool $count
+     * @param bool $star
      * @return string
      */
-    public function getQuery($count = false)
+    public function getQuery($count = false,$star = false)
     {
-        $sqlSelect = $this->select($count).$this->from();
+        $sqlSelect = $this->select($count,$star).$this->from();
         if($count){
             $sqlSelect.= $this->where($count);
         } else{
@@ -153,12 +155,18 @@ class CDataTables
 
     /**
      * @param bool $count
+     * @param bool $star
      * @return string
      */
-    protected function select($count = false)
+    protected function select($count = false,$star = false)
     {
-        $keys = implode(',',$this->keys);
-        return $count ? "SELECT COUNT( DISTINCT {$keys} ) " : "SELECT DISTINCT {$keys} ";
+        if($star) {
+            $keys = '*';
+        } else {
+            $keys = "DISTINCT ". implode(',',$this->keys);
+        }
+
+        return $count ? "SELECT COUNT( {$keys} ) " : "SELECT {$keys} ";
 
     }
 
