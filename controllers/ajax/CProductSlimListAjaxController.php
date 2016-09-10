@@ -39,7 +39,7 @@ class CProductSlimListAjaxController extends AAjaxController
 
         $i = 0;
 
-        $modifica = '/blueseal/prodotti/modifica';
+        $modifica = '/blueseal/friend/prodotti/modifica';
 
         foreach($prodotti as $val)
         {
