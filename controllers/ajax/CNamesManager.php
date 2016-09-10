@@ -97,7 +97,7 @@ class CNamesManager extends AAjaxController
         $concat = '';
 
         foreach($get as $k => $v) {
-            if (false === strpos($k, 'code_')) continue;
+            if (false === strpos($k, 'codes_')) continue;
             $codes[] = explode('-', $v)[1];
         }
         if (count($codes)) {

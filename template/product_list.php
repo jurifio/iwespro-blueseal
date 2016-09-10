@@ -101,8 +101,16 @@
             data-remote="bs.product.details.merge"
             ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.product.names.merge"
-            ></bs-toolbar-button>
+            data-tag="a"
+            data-icon="fa-magnet"
+            data-permission="/admin/product/edit"
+            data-event="bs.product.mergenames"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Copia i nomi dei prodotti"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.sizeGroup.change"
         ></bs-toolbar-button>

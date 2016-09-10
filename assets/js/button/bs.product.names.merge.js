@@ -33,12 +33,9 @@ $(document).on('bs.product.mergenames', function () {
         return false;
     }
 
-    var i = 0;
     var codes = {};
     $.each(selectedRows, function (k, v) {
-        var idVars = v.DT_RowId.split('-');
-        codes['code_' + i] = idVars[0] + '-' + idVars[1];
-        i++;
+        codes.push(v.DT_RowId)
     });
 
     var result = {
@@ -52,7 +49,9 @@ $(document).on('bs.product.mergenames', function () {
         url: '/blueseal/xhr/NamesManager',
         method: 'GET',
         dataType: 'JSON',
-        data: codes
+        data: {
+            codes: codes
+        }
     }).done(function (res) {
 
         header.html('Unione Nomi');
@@ -78,7 +77,8 @@ $(document).on('bs.product.mergenames', function () {
                 if (3 >= query.length) {
                     return callback();
                 }
-                var search = codes.slice();
+                var search = [];
+                search['codes'] = codes;//codes.slice();
                 search['search'] = query;
                 $.ajax({
                     url: '/blueseal/xhr/NamesManager',
