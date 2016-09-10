@@ -38,10 +38,13 @@ class CBarcodePrintController extends ARestrictedAccessRootController
                 foreach ($this->app->router->request()->getRequestData('id') as $storehouseOperationId) {
                     $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->findOneByStringId($storehouseOperationId);
                     foreach ($storehouseOperation->storehouseOperationLine as $storehouseOperationLine) {
-                        if(array_search($storehouseOperationLine->productSku->printId(),$seen) === false) {
-                            $productSkus->add($storehouseOperationLine->productSku);
-                            $seen[] = $storehouseOperationLine->productSku->printId();
+                        for($x = 0;$x<abs($storehouseOperationLine->qty);$x++) {
+                            $productSkus->add(clone $storehouseOperationLine->productSku);
                         }
+                        /*if(array_search($storehouseOperationLine->productSku->printId(),$seen) === false) {
+
+                            $seen[] = $storehouseOperationLine->productSku->printId();
+                        }*/
                     }
                 }
             }
@@ -59,7 +62,7 @@ class CBarcodePrintController extends ARestrictedAccessRootController
             }
             break;
         }
-
+        $productSkus->reorder('barcode');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

@@ -1450,6 +1450,19 @@
                 "PUT"
             ]
         },{
+            "pattern": "/blueseal/prodotti/movimenti/inserisci/rapido(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseFastOperationController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
             "pattern": "/blueseal/prodotti/movimenti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseOperationListController"
@@ -1486,6 +1499,16 @@
             "pattern": "/blueseal/prodotti/slim(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSlimListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/brand/valori(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandValueListController"
             },
             "filters": {},
             "translations": {},

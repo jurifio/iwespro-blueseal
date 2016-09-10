@@ -20,26 +20,6 @@ use bamboo\ecommerce\views\widget\VBase;
  */
 class CCatalogGetTemplateController extends AAjaxController
 {
-	protected $urls = [];
-	protected $authorizedShops = [];
-	protected $em;
-
-	/**
-	 * @param $action
-	 * @return mixed
-	 */
-	public function createAction($action)
-	{
-		$this->app->setLang(new CLang(1, 'it'));
-		$this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
-		$this->urls['page'] = $this->urls['base'] . "prodotti/movimenti/inserisci";
-		$this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
-
-		$this->em = new \stdClass();
-		$this->em->products = $this->app->entityManagerFactory->create('Product');
-
-		return $this->{$action}();
-	}
 
 	public function get()
 	{

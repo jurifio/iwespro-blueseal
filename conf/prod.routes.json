@@ -1505,6 +1505,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/brand/valori(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandValueListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
