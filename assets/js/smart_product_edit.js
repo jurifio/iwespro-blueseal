@@ -718,6 +718,52 @@ function searchForProduct(itemno, variantName, brandId) {
     });
 }
 
+function searchForProductByCode(id, productVariantId) {
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+    $.ajax({
+        url: '/blueseal/xhr/IsProductEditable',
+        type: 'GET',
+        dataType: 'JSON',
+        data: {
+            id: id,
+            productVariantId: productVariantId
+        }
+    }).done(function(res){
+        editable = res;
+        if (res['message']) {
+            body.html(res['message']);
+            bsModal.modal();
+            okButton.html('Ok').off().on('click', function(){
+                bsModal.modal('hide');
+            });
+        }
+        if (res['editable']) {
+            if (res['code']) {
+                $('.product-code').html(res['code']);
+                $('#main-details').selectDetails({code: res['code']});
+                if (res['product']) {
+                    fillTheFields(res['product']);
+                }
+            } else {
+                $('.product-code').html();
+                $('#main-details').selectDetails();
+            }
+            $('.disableBlank').disableBlank('enable');
+        } else {
+            $('.disableBlank').disableBlank();
+        }
+    }).fail(function(res){
+        body.html(res);
+        okButton.html('Ok').off().on('click', function(){
+            bsModal.modal('hide');
+        });
+    });
+}
+
 function fillTheFields(product) {
     var corrispondences = {};
 
@@ -1066,4 +1112,8 @@ $(document).ready(function () {
 
         searchForProduct(itemno, variantName, brandId);
     });
+
+    if (($_GET.get('id') && ($_GET.get('productVariantId'))) ) {
+        searchForProductByCode($_GET.get('id'), $_GET.get('productVariantId'));
+    }
 });

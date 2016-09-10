@@ -23,52 +23,57 @@ class CisProductEditable extends AAjaxController
         $get = $this->app->router->request()->getRequestData();
         $ret = [];
         $product = $this->app->repoFactory->create('Product');
-        if (array_key_exists('itemno',$get) && array_key_exists('variantName', $get) && array_key_exists('brandId', $get)) {
+        if (array_key_exists('itemno', $get) && array_key_exists('variantName', $get) && array_key_exists('brandId', $get)) {
             if (!$get['itemno'] || !$get['variantName'] || !$get['brandId']) throw new \Exception("All parameters are needed");
             $res = $this->app->dbAdapter->query(
-                'SELECT p.id as id, p.productVariantId as productVariantId FROM Product p JOIN ProductVariant pv on p.productVariantId = pv.id WHERE p.itemno = ? AND pv.name LIKE ? AND p.productBrandId = ?',
+                'SELECT p.id AS id, p.productVariantId AS productVariantId FROM Product p JOIN ProductVariant pv ON p.productVariantId = pv.id WHERE p.itemno = ? AND pv.name LIKE ? AND p.productBrandId = ?',
                 [$get['itemno'], $get['variantName'], $get['brandId']]
             )->fetch();
-            if ($res) {
-
-                $productEdit = $product->findOne($res);
-                //controllo lo stato
-                $productStatus = $productEdit->productStatusId;
-
-                $userShops = [];
-                foreach($user->shop as $v) {
-                    $userShops[] = $v->id;
-                }
-                $productShops = [];
-                foreach($productEdit->shop as $v) {
-                    $productShops[] = $v->id;
-                }
-
-                if ((count($intersect = array_intersect($userShops, $productShops))) && ($productStatus == 2)) {
-                    $productArr = $productEdit->fullTreeToArray();
-                    $productArr['variantName'] = $productEdit->productVariant->name;
-                    $productArr['variantDescription'] = $productEdit->productVariant->description;
-                    $productArr['productColorGroupId'] = $productEdit->productColorGroup->getFirst()->id;
-                    $productArr['productName'] = ($name = $productEdit->productNameTranslation->getFirst()->name) ? $name : '';
-
-                    foreach($productEdit->shopHasProduct as $shp) {
-                        if (in_array($shp->shopId, $intersect)) {
-                            $productArr['price'] = $shp->price;
-                            $productArr['value'] = $shp->value;
-                            break;
-                        }
-                    }
-                    //TODO: lettura con gestione di più shop
-                    $ret = ['code' => $productArr['id'] . '-' . $productArr['productVariantId'], 'product' => $productArr, 'editable' => true, 'repo' => true];
-                } else  {
-                    $ret = ['code' => $productEdit->id . '-' . $productEdit->productVariantId, 'editable' => false, 'repo' => true, 'message' => 'Il prodotto è già presente nel nostro cataolgo. Puoi Modificarne le quantità'];
-                }
+        } elseif (array_key_exists('id', $get) && array_key_exists('productVariantId', $get)) {
+            $prod = $this->rfc('Product')->findOneBy(['id' => $get['id'], 'productVariantid' => $get['productVariantId']]);
+            if ($prod) {
+                $res = [];
+                $res['id'] = $prod->id;
+                $res['productVariantId'] = $prod->productVariantId;
             } else {
-                $ret = ['editable' => true, 'repo' => true, 'message' => 'Il prodotto non esiste, puoi inserirlo ora.'];
+                $res = false;
             }
-        } elseif (array_key_exists('id', $get) && (array_key_exists('productVariantId', $get))) {
-            $productEdit = $product->findOneBy(['id' => $get['id'], 'productVariantId' => $get['productVariantId']]);
-            //TODO
+        }
+        if ($res) {
+
+            $productEdit = $product->findOne($res);
+            //controllo lo stato
+            $productStatus = $productEdit->productStatusId;
+
+            $userShops = [];
+            foreach ($user->shop as $v) {
+                $userShops[] = $v->id;
+            }
+            $productShops = [];
+            foreach ($productEdit->shop as $v) {
+                $productShops[] = $v->id;
+            }
+
+            if ((count($intersect = array_intersect($userShops, $productShops))) && ($productStatus == 2)) {
+                $productArr = $productEdit->fullTreeToArray();
+                $productArr['variantName'] = $productEdit->productVariant->name;
+                $productArr['variantDescription'] = $productEdit->productVariant->description;
+                $productArr['productColorGroupId'] = $productEdit->productColorGroup->getFirst()->id;
+                $productArr['productName'] = ($name = $productEdit->productNameTranslation->getFirst()->name) ? $name : '';
+
+                foreach ($productEdit->shopHasProduct as $shp) {
+                    if (in_array($shp->shopId, $intersect)) {
+                        $productArr['price'] = $shp->price;
+                        $productArr['value'] = $shp->value;
+                        break;
+                    }
+                }
+                $ret = ['code' => $productArr['id'] . '-' . $productArr['productVariantId'], 'product' => $productArr, 'editable' => true, 'repo' => true];
+            } else {
+                $ret = ['code' => $productEdit->id . '-' . $productEdit->productVariantId, 'editable' => false, 'repo' => true, 'message' => 'Il prodotto è già presente nel nostro cataolgo. Puoi Modificarne le quantità'];
+            }
+        } else {
+            $ret = ['editable' => true, 'repo' => true, 'message' => 'Il prodotto non esiste, puoi inserirlo ora.'];
         }
         $this->app->router->response()->setContentType('application/json');
         return json_encode($ret);
