@@ -755,6 +755,11 @@ function searchForProductByCode(id, productVariantId) {
             $('.disableBlank').disableBlank('enable');
         } else {
             $('.disableBlank').disableBlank();
+            $('#Product_id').val(res['product']['id']);
+            $('#Product_productVariantId').val(res['product']['productVariantId']);
+            $('#Product_itemno').val(res['product']['itemno']);
+            $('#ProductVariant_name').val(res['product']['variantName']);
+            $('#Product_productBrandId').selectize()[0].selectize.setValue(product['productBrandId'], true);
         }
     }).fail(function(res){
         body.html(res);
