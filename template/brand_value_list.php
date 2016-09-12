@@ -46,6 +46,9 @@
                                 <th data-slug="prodotti"
                                     data-searchable="true"
                                     data-orderable="true" class="center"  data-default-order="desc" >N° Prodotti</th>
+                                <th data-slug="pubblicati"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Prod. Pub.</th>
                                 <th data-slug="quantita"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Quantità</th>
