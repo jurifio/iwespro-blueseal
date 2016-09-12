@@ -16,8 +16,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group form-group-default">
                                     <label for="mag-movementCause">Causale
-                                        <select class="mag-movementCause" placeholder="Seleziona una causale" name="mag-movementCause" required >
-                                            <option value=""></option>
+                                        <select class="mag-movementCause form-control" placeholder="Seleziona una causale" name="mag-movementCause" required >
+                                            <option value="">Seleziona una causale</option>
                                             <?php
                                                 foreach($causes as $v){
                                                     echo '<option value="' . $v->id .'">' . explode('(', $v->name)[0] . ' ('. (($v->sign) ? '+' : '-') .') </option>';
@@ -37,7 +37,7 @@
                             <div class="col-md-12">
                                 <div class="form-group form-group-default">
                                     <label for="mag-shop">Shop
-                                        <select class="mag-shop form-control" placeholder="Seleziona una causale" name="mag-shop" required >
+                                        <select class="mag-shop form-control" placeholder="Seleziona uno shop" name="mag-shop" required >
                                             <option value="">Seleziona uno shop</option>
                                             <?php
                                             foreach($shops as $v){
