@@ -21,6 +21,7 @@ class CDetailModelGetDetails extends AAjaxController
         $code = (array_key_exists('code', $get)) ? $get['code'] : false;
         $search = (array_key_exists('search', $get)) ? $get['search'] : false;
         $modelId = (array_key_exists('modelId', $get)) ? $get['modelId'] : false;
+        $categories = $this->app->router->request()->getRequestData('categories');
         $names = [];
         $namesCount = 0;
 
@@ -52,6 +53,19 @@ class CDetailModelGetDetails extends AAjaxController
                         $names[$namesCount]['origin'] = 'code';
                         $namesCount++;
                     }
+                }
+            }
+            if ($categories) {
+                //$catIds = explode(',', $categories);
+                $res = $this->app->dbAdapter->query(
+                    'SELECT `ps`.* FROM `ProductSheetModelPrototype` as `ps` JOIN `ProductSheetModelPrototypeHasProductCategory` as `pc`  ON `ps`.id = `pc`.productSheetModelPrototypeId WHERE `pc`.productCategoryId IN (' . $categories .') group by `ps`.`id`',
+                    []
+                )->fetchAll();
+                foreach($res as $k => $v) {
+                    $names[$namesCount]['id'] = $v['id'];
+                    $names[$namesCount]['name'] = $v['name'];
+                    $names[$namesCount]['origin'] = 'code';
+                    $namesCount++;
                 }
             }
             if ($search) {
