@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+
 use bamboo\core\utils\slugify\CSlugify;
 
 /**
@@ -23,7 +24,7 @@ class CNamesManager extends AAjaxController
         $get = $this->app->router->request()->getRequestData();
 
         if (isset($get['action'])) {
-            switch($get['action']) {
+            switch ($get['action']) {
                 case "clean":
                     $res = $this->cleanNames();
                     break;
@@ -36,39 +37,76 @@ class CNamesManager extends AAjaxController
                 default:
                     return "OOPS! Non so cosa devo fare. Contatta un amministratore";
             }
+
             return $res;
         }
     }
 
-    private function cleanNames() {
+    private function cleanNames()
+    {
         $res = $this->app->dbAdapter->query(
             "UPDATE ProductNameTranslation SET `name` = TRIM(CONCAT(UCASE(LEFT(`name`, 1)),  SUBSTRING(LCASE(`name`), 2)))",
             []
         )->countAffectedRows();
 
+        $this->app->cacheService->getCache('entities')->flush();
         return $res . " dei prodotti sono stati normalizzati";
     }
 
-    private function mergeNames($new, $old){
+    private function mergeNames($new, $old)
+    {
+        foreach ($old as $old1) {
+            $productNameTranslation = $this->app->repoFactory->create('ProductNameTranslation')->findBy(['name' => $old1]);
+            if ($productNameTranslation->langId != 1) {
+                $productNameTranslation->delete();
+            } else {
+                $productNameTranslation->name = trim($new);
+                $productNameTranslation->update();
+            }
+        }
+        return "Nomi aggiornati!";
+        /* vecchia logica
         $SQLCond = str_repeat('`name` = ? OR ', count($old));
         $SQLCond = rtrim($SQLCond, 'OR ');
         $cond = array_merge([$new], $old);
         try {
             $this->dbAdapter->query('DELETE ProductNameTranslation WHERE langId <> 1 AND (' . $SQLCond . ')', $old);
             $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return 'OOPS! C\'è stato un problema!';
         }
         return 'Nomi aggiornati!';
+        */
     }
 
-    private function mergeByProducts($get) {
+    private function mergeByProducts($get)
+    {
         $new = $get['newName'];
         $oldCodes = $get['oldCodes'];
         $old = [];
-        foreach ($oldCodes as $v) {
-            $old[] = explode('-', $v)[1];
+        try {
+            $this->app->dbAdapter->beginTransaction();
+            foreach ($oldCodes as $v) {
+                $product = $this->app->repoFactory->create('Product', false)->findOneByStringId($v);
+                foreach ($product->productNameTranslation as $productNameTranslation) {
+                    if ($productNameTranslation->langId = 1) {
+                        $productNameTranslation->name = ucfirst(trim($new));
+                        $productNameTranslation->update();
+                    } else {
+                        $productNameTranslation->delete();
+                    }
+                }
+                $old[] = explode('-', $v)[1];
+            }
+            $this->app->dbAdapter->commit();
+            return 'Nomi aggiornati!';
+        } catch (\Exception $e) {
+            $this->app->dbAdapter->rollBack();
+            return 'OOPS! C\'è stato un problema!';
         }
+        /*
+        vecchia logica
+
         $SQLCond = str_repeat('`productVariantId` = ? OR ', count($old));
         $SQLCond = rtrim($SQLCond, 'OR ');
         $cond = array_merge([$new], $old);
@@ -78,11 +116,12 @@ class CNamesManager extends AAjaxController
             $this->app->dbAdapter->query('DELETE FROM ProductNameTranslation WHERE langId <> 1 AND (' . $SQLCond . ')', $old);
             $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
             $this->app->dbAdapter->commit();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
             return 'OOPS! C\'è stato un problema!';
-       }
+        }
         return 'Nomi aggiornati!';
+         */
     }
 
     /**
@@ -96,7 +135,7 @@ class CNamesManager extends AAjaxController
         $searchByNames = '';
         $concat = '';
 
-        foreach($get as $k => $v) {
+        foreach ($get as $k => $v) {
             if (false === strpos($k, 'codes_')) continue;
             $codes[] = explode('-', $v)[1];
         }
@@ -107,7 +146,7 @@ class CNamesManager extends AAjaxController
 
         $search = (array_key_exists('search', $get)) ? $get['search'] : '';
         if ($search) {
-            $searchByNames =  ' `name` like ? ';
+            $searchByNames = ' `name` like ? ';
             $codes[] = '%' . $search . '%';
         }
 
@@ -129,52 +168,52 @@ class CNamesManager extends AAjaxController
      */
     public function put()
     {
-     /*   $data = $this->app->router->request()->getRequestData();
+        /*   $data = $this->app->router->request()->getRequestData();
 
-	    $productDetailId = $data['productDetailId'];
-	    $productDetailName = $data['productDetailName'];
+           $productDetailId = $data['productDetailId'];
+           $productDetailName = $data['productDetailName'];
 
-	    unset($data['productDetailId']);
-	    unset($data['productDetailName']);
+           unset($data['productDetailId']);
+           unset($data['productDetailName']);
 
-        $ids = [];
-        $this->app->dbAdapter->beginTransaction();
+           $ids = [];
+           $this->app->dbAdapter->beginTransaction();
 
-        foreach ($data as $key => $val) {
-	        if($val == $productDetailId) continue;
-            if($val == $productDetailName) continue;
-            $ids[] = $val;
-        }
+           foreach ($data as $key => $val) {
+               if($val == $productDetailId) continue;
+               if($val == $productDetailName) continue;
+               $ids[] = $val;
+           }
 
-	    $productDetailPrimary = $this->app->repoFactory->create("ProductDetail")->findOneBy(['id' => $productDetailId]);
-	    $productDetailPrimary->productDetailTranslation->getFirst()->name = $productDetailName;
-        $slug = new CSlugify();
-        $productDetailPrimary->slug = $slug->slugify($productDetailName);
-	    $productDetailPrimary->productDetailTranslation->getFirst()->update();
+           $productDetailPrimary = $this->app->repoFactory->create("ProductDetail")->findOneBy(['id' => $productDetailId]);
+           $productDetailPrimary->productDetailTranslation->getFirst()->name = $productDetailName;
+           $slug = new CSlugify();
+           $productDetailPrimary->slug = $slug->slugify($productDetailName);
+           $productDetailPrimary->productDetailTranslation->getFirst()->update();
 
-        $em = $this->app->entityManagerFactory->create('ProductSheetActual');
-        try {
-            foreach ($ids as $id) {
-                $productSheets = $em->findBy(['productDetailId' => $id]);
+           $em = $this->app->entityManagerFactory->create('ProductSheetActual');
+           try {
+               foreach ($ids as $id) {
+                   $productSheets = $em->findBy(['productDetailId' => $id]);
 
-                foreach ($productSheets as $productSheet) {
-                    $productSheet->delete();
-                    $productSheet->productDetailId = $productDetailId;
-                    $productSheet->insert();
-                }
-	            $productDetail = $this->app->repoFactory->create("ProductDetail",false)->findOneBy(['id' => $id]);
+                   foreach ($productSheets as $productSheet) {
+                       $productSheet->delete();
+                       $productSheet->productDetailId = $productDetailId;
+                       $productSheet->insert();
+                   }
+                   $productDetail = $this->app->repoFactory->create("ProductDetail",false)->findOneBy(['id' => $id]);
 
-	            foreach ($productDetail->productDetailTranslation as $detailTranslation) {
-					$detailTranslation->delete();
-	            }
-	            $productDetail->delete();
-            }
-            $this->app->dbAdapter->commit();
-            return true;
-        } catch (\Exception $e){
-            $this->app->dbAdapter->rollBack();
-	        throw $e;
-        }*/
+                   foreach ($productDetail->productDetailTranslation as $detailTranslation) {
+                       $detailTranslation->delete();
+                   }
+                   $productDetail->delete();
+               }
+               $this->app->dbAdapter->commit();
+               return true;
+           } catch (\Exception $e){
+               $this->app->dbAdapter->rollBack();
+               throw $e;
+           }*/
     }
 
 
