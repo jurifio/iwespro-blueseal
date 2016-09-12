@@ -47,8 +47,13 @@ $(document).on('bs.product.photo.download', function () {
                 rows: ids
             }
         }).done(function (res) {
+            res = JSON.parse(res);
             console.log(res);
             body.html('cazzo');
+            ids = [];
+            $.each(res.productList,function(k,v){
+                ids.push(k);
+            });
 
             okButton.html("Scarica Foto").off().on('click', function () {
                 $.ajax({
