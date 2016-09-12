@@ -62,6 +62,8 @@ $(document).on('bs.product.photo.download', function () {
                 '<th>Costo</th>' +
                 '</thead>' +
                 '<tbody>';
+
+            ids = [];
             $.each(res.productList, function (k, v) {
                 html+='<tr>' +
                     '<td>'+v.shop+'</td>' +
@@ -73,7 +75,7 @@ $(document).on('bs.product.photo.download', function () {
             html+='</tbody></table></row>';
 
             body.html(html);
-            ids = [];
+
 
             okButton.html("Scarica Foto").off().on('click', function () {
                 $.ajax({
@@ -83,7 +85,13 @@ $(document).on('bs.product.photo.download', function () {
                         rows: ids
                     }
                 }).done(function (res) {
-                    html = '<a href="/assets/'+res+'" type="download">Scarica (Dimensione: '+res.size+')</a>';
+                    res = JSON.parse(res);
+                    html = '<a id="downloadPhotos" data-name="'+res.file+'" href="/assets/'+res.file+'" type="download">Scarica (Dimensione: '+res.size+')</a>';
+                    /*$('#downloadPhotos').on('click',function () {
+                        $.ajax({
+                            type:'DELETE',
+                        });
+                    });*/
                     body.html(html);
                     cancelButton.hide();
                     okButton.html("Ok").off().on('click', function () {

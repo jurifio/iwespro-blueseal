@@ -64,32 +64,30 @@ class CProductPhotoDownload extends AAjaxController
 
         $local = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'image-temp-folder');
         $remote = $this->app->cfg()->fetch("general", "product-photo-host");
-        $pharName = $local.'/'.time().'.tar';
-        $phar = new \PharData($pharName);
+        $zipName = time().'.zip';
+
+        $zip = new \ZipArchive();
+        if ($zip->open($local.'/'.$zipName, \ZipArchive::CREATE)!==TRUE)
+        {
+            throw  new \Exception('aaaaaa');
+        }
         $files = [];
         foreach ($toDownload as $product) {
             foreach ($product->productPhoto as $productPhoto) {
                 if ($productPhoto->size != CProductPhoto::SIZE_BIG) continue;
-                $b = file_put_contents($local . '/' . $productPhoto->name,
-                    fopen($remote.$product->productBrand->slug . '/' . $productPhoto->name, 'r'));
-                if($b>0) {
-                    $files[] = $local . '/' . $productPhoto->name;
-                    $phar->addFile($local . '/' . $productPhoto->name, $productPhoto->name);
-                }
+                $localName = $local . '/' . $productPhoto->name;
+                if (in_array($localName,$files)) continue;
+                $zip->addFromString($productPhoto->name, file_get_contents($remote.$product->productBrand->slug . '/' . $productPhoto->name, 'r'));
+                continue;
             }
         }
-        if ($phar->count() > 0) {
+        ;
+        if ($zip->close()) {
             /** @var \PharData $compressed */
-            $compressed = $phar->compress(\Phar::GZ);
-            if (file_exists($compressed->getPath())) {
-                unlink($pharName);
-            }
-        }
-        foreach ($files as $file) {
-            unlink($file);
+            //var_dump($zip);
         }
 
-        return pathinfo($compressed->getFilename());
+        return json_encode(['file'=>$zipName,'size'=>filesize($local.'/'.$zipName)]);
     }
 
     /**
