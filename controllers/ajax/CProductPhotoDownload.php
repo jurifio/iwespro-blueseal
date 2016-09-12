@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+
 use bamboo\core\base\CObjectCollection;
 use bamboo\domain\entities\CProductPhoto;
 
@@ -25,47 +26,79 @@ class CProductPhotoDownload extends AAjaxController
         $listaProdotti = [];
         foreach ($this->app->router->request()->getRequestData('rows') as $productId) {
             $product = $this->app->repoFactory->create('Product')->findOneByStringId($productId);
-            if($product->productPhoto->count()<1) continue;
+            if ($product->productPhoto->count() < 1) continue;
             foreach ($product->shopHasProduct as $shopHasProduct) {
-                if(!in_array($shopHasProduct->shopId,$shopsId)) continue;
-                if(is_null($shopHasProduct->photoDownloadDate)) {
-                    $contoSoldi += $shopHasProduct->shop->config['photoCost'];
+                if (!in_array($shopHasProduct->shopId, $shopsId)) continue;
+                if (is_null($shopHasProduct->productPhotoDownloadTime)) {
+                    try {
+                        $singleCost = $shopHasProduct->shop->config['photoCost'];
+                    } catch (\Exception $e) {
+                        $singleCost = 0.3;
+                    }
+                    $contoSoldi += $singleCost;
                     $contoProdotti++;
-                    $listaProdotti[$shopHasProduct->printId()] = ['id'=>$product->printId(),'shopHasProductId'>=$shopHasProduct->printId(),'shop'=>$shopHasProduct->shop->title,'cost'=>$shopHasProduct->shop->config['photoCost']];
+                    $listaProdotti[$shopHasProduct->printId()] = ['id' => $product->printId(), 'shopHasProductId' >= $shopHasProduct->printId(), 'shop' => $shopHasProduct->shop->title, 'cost' => $singleCost];
                 } else {
-                    $listaProdotti[$shopHasProduct->printId()] = ['id'=>$product->printId(),'shopHasProductId'>=$shopHasProduct->printId(),'shop'=>$shopHasProduct->shop->title,'cost'=>0];
+                    $listaProdotti[$shopHasProduct->printId()] = ['id' => $product->printId(), 'shopHasProductId' >= $shopHasProduct->printId(), 'shop' => $shopHasProduct->shop->title, 'cost' => 0];
                     $contoProdotti++;
                 }
             }
         }
-        return json_encode(['costo'=>$contoSoldi,'productList'=>$listaProdotti,'conto'=>$contoProdotti]);
+        return json_encode(['costo' => $contoSoldi, 'productList' => $listaProdotti, 'conto' => $contoProdotti]);
     }
 
 
     public function post()
     {
         $toDownload = [];
+        $allShop = $this->app->getUser()->hasPermission('allShops');
         foreach ($this->app->router->request()->getRequestData('rows') as $productId) {
             $shopHasProduct = $this->app->repoFactory->create('ShopHasProduct')->findOneByStringId($productId);
-            $shopHasProduct->photoDownloadDate = (new \DateTime())->format('');
-            $shopHasProduct->update();
+            if(!$allShop) {
+                $shopHasProduct->productPhotoDownloadTime = (new \DateTime())->format('');
+                $shopHasProduct->update();
 
+            }
             $toDownload[$shopHasProduct->product->printId()] = $shopHasProduct->product;
         }
 
+        $local = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'image-temp-folder');
+        $remote = $this->app->cfg()->fetch("general", "product-photo-host");
+        $pharName = time().'tar';
+        $phar = new \PharData($local.'/'.$pharName);
+        $files = [];
         foreach ($toDownload as $product) {
             foreach ($product->productPhoto as $productPhoto) {
-                if($productPhoto->size != CProductPhoto::SIZE_BIG) continue;
-
+                if ($productPhoto->size != CProductPhoto::SIZE_BIG) continue;
+                $b = file_put_contents($local . '/' . $productPhoto->name,
+                    fopen($this->app->cfg()->fetch("general", "product-photo-host") . $remote.'/'.$product->productBrand->slug . '/' . $productPhoto->name, 'r'));
+                if($b>0) {
+                    $files[] = $local . '/' . $productPhoto->name;
+                    $phar->addFile($local . '/' . $productPhoto->name, $productPhoto->name);
+                }
             }
         }
+        if ($phar->count() > 0) {
+            /** @var \PharData $compressed */
+            $compressed = $phar->compress(\Phar::GZ);
+            if (file_exists($compressed->getPath())) {
+                unlink($pharName);
+            }
+        }
+
+        foreach ($files as $file) {
+            unlink($file);
+        }
+
+        return pathinfo($compressed->getFilename());
     }
 
     /**
      * @param $url
      * @return string
      */
-    public function downloadUrl($url) {
+    public function downloadUrl($url)
+    {
         return "data/www";
     }
 }
