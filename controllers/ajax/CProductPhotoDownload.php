@@ -54,24 +54,24 @@ class CProductPhotoDownload extends AAjaxController
         $allShop = $this->app->getUser()->hasPermission('allShops');
         foreach ($this->app->router->request()->getRequestData('rows') as $productId) {
             $shopHasProduct = $this->app->repoFactory->create('ShopHasProduct')->findOneByStringId($productId);
+            $toDownload[$shopHasProduct->product->printId()] = $shopHasProduct->product;
+
             if(!$allShop) {
                 $shopHasProduct->productPhotoDownloadTime = (new \DateTime())->format('');
                 $shopHasProduct->update();
-
             }
-            $toDownload[$shopHasProduct->product->printId()] = $shopHasProduct->product;
         }
 
         $local = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'image-temp-folder');
         $remote = $this->app->cfg()->fetch("general", "product-photo-host");
-        $pharName = time().'tar';
-        $phar = new \PharData($local.'/'.$pharName);
+        $pharName = $local.'/'.time().'.tar';
+        $phar = new \PharData($pharName);
         $files = [];
         foreach ($toDownload as $product) {
             foreach ($product->productPhoto as $productPhoto) {
                 if ($productPhoto->size != CProductPhoto::SIZE_BIG) continue;
                 $b = file_put_contents($local . '/' . $productPhoto->name,
-                    fopen($this->app->cfg()->fetch("general", "product-photo-host") . $remote.'/'.$product->productBrand->slug . '/' . $productPhoto->name, 'r'));
+                    fopen($remote.$product->productBrand->slug . '/' . $productPhoto->name, 'r'));
                 if($b>0) {
                     $files[] = $local . '/' . $productPhoto->name;
                     $phar->addFile($local . '/' . $productPhoto->name, $productPhoto->name);
@@ -85,7 +85,6 @@ class CProductPhotoDownload extends AAjaxController
                 unlink($pharName);
             }
         }
-
         foreach ($files as $file) {
             unlink($file);
         }
