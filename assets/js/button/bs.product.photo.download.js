@@ -34,7 +34,7 @@ $(document).on('bs.product.photo.download', function () {
     });
 
     var ids = [];
-    $.each(selectedRows,function(k,v){
+    $.each(selectedRows, function (k, v) {
         ids.push(v.DT_RowId);
     });
     header.html('Scarica le foto');
@@ -48,12 +48,32 @@ $(document).on('bs.product.photo.download', function () {
             }
         }).done(function (res) {
             res = JSON.parse(res);
-            console.log(res);
-            body.html('cazzo');
-            ids = [];
-            $.each(res.productList,function(k,v){
+
+            var html = '<div class="row">' +
+                '<span>Vuoi scaricare le foto di ' + res.conto + ' prodotti</span><br>' +
+                '<span>Per scaricare queste foto, secondo gli accordi presi ' +
+                'ti verranno addebitati: ' + res.costo + ' euro; ' +
+                'potrai riscaricare le foto già addebitate quante volte vuoi, ' +
+                'di seguito il dettaglio del costo per prodotto<br></span>' +
+                '<table class="table table-striped">' +
+                '<thead>' +
+                '<th>Shop</th>' +
+                '<th>Prodotto</th>' +
+                '<th>Costo</th>' +
+                '</thead>' +
+                '<tbody>';
+            $.each(res.productList, function (k, v) {
+                html+='<tr>' +
+                    '<td>'+v.shop+'</td>' +
+                    '<td>'+v.id+'</td>' +
+                    '<td>'+v.cost+'</td>' +
+                    '</tr>';
                 ids.push(k);
             });
+            html+='</tbody></table></row>';
+
+            body.html(html);
+            ids = [];
 
             okButton.html("Scarica Foto").off().on('click', function () {
                 $.ajax({
@@ -63,7 +83,8 @@ $(document).on('bs.product.photo.download', function () {
                         rows: ids
                     }
                 }).done(function (res) {
-                    body.html(res);
+                    html = '<a href="/assets/'+res+'" type="download">Scarica (Dimensione: '+res.size+')</a>';
+                    body.html(html);
                     cancelButton.hide();
                     okButton.html("Ok").off().on('click', function () {
                         bsModal.modal("hide");
