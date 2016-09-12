@@ -1506,6 +1506,18 @@
                 "GET"
             ]
         },{
+            "pattern": "/blueseal/prodotti/gestione-prezzi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPriceManageController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST"
+            ]
+        },
+        {
             "pattern": "/blueseal/brand/valori(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandValueListController"
