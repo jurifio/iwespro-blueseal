@@ -410,6 +410,7 @@ $.fn.humanized = function (method, data) {
 };
 
 $.bsModal = function (header, params) {
+    var self = this;
     if ('undefined' != typeof modal) {
         modal.hide();
         delete(modal);
@@ -427,10 +428,10 @@ $.bsModal = function (header, params) {
         okLabel: 'Ok',
         cancelLabel: 'Cancel',
         cancelButtonEvent: function () {
-            self.bsModal.modal('hide');
+            self.hide();
         },
         okButtonEvent: function () {
-            self.bsModal.modal('hide');
+            self.hide();
         }
     };
     this.opt = $.extend(opt, params);
@@ -482,12 +483,13 @@ $.bsModal = function (header, params) {
     };
 
     this.show = function () {
-        this.bsModal.modal();
-    }
+        self.bsModal.modal();
+    };
 
     this.hide = function () {
-        this.bsModal.modal('hide');
-    }
+        self.body.html('');
+        self.bsModal.modal('hide');
+    };
 };
 
 (function ($) {
@@ -776,6 +778,7 @@ $.bsModal = function (header, params) {
     };
 
     $.bsCatalog = function (elem, params, template) {
+
         var self = this;
         //template parts
         this.movementLineTemplate = false;
@@ -797,68 +800,32 @@ $.bsModal = function (header, params) {
         };
         this.opt = {};
 
-//constructor
-
-        //preparo tutti i template separati in blocchi
-        //this.movementLineTemplate = $(template).find('.mag-movementLine').clone();
-        this.productTemplate = $(template).find('.mag-product').clone();
-        //this.productTemplate.find('.mag-movements').html('');
-
-        //faccio un merge dei parametri raccolti sopra i dati di default
-        this.opt = $.extend(this.defaults, params);
-
-        //scrivo e inizializzo i blocchi
-        this.form = $(template).clone();
-        this.productList = this.form.find('.mag-product-list').html('');
-        this.container = this.productList.parent();
-        this.form.data('initParams', this.opt);
-        this.searchBlock = this.form.find('.mag-searchBlock');
-        this.movementDate = this.form.find('.mag-movementDate');
-        //this.movementDate.css('display', 'none');
-        this.submitBlock = this.form.find('.mag-submit');
-        this.submitBlock.css('display', 'none');
-
-        if (true != this.opt.searchField) this.searchBlock.css('display', 'none');
-
-        //creo il form se non esiste
-        if (!$(this.dom).find('form').length) $(this.dom).append($(this.form));
-
-        //faccio partire i selectize
-        $('.mag-movementCause').selectize();
-
-        var shopSelect = $('.mag-shop');
-        if (shopSelect.length) shopSelect.selectize();
 
 
-
-        //evento ricerca
-        var searchBtn = this.searchBlock.find('.search-btn');
-        searchBtn.on('click', function(e){
-            e.preventDefault();
-            var string = self.form.find('.search-item').val();
-            self.searchProduct(string, function(res){
-                self.addProduct(res);
+        this.searchProduct = function (search, callback) {
+            if (!search.length) return false;
+            var shop = '';
+            var shopSelect = $('.mag-shop');
+            if (shopSelect.length) shop = shopSelect.val();
+            $.ajax({
+                url: '/blueseal/xhr/CatalogController',
+                method: 'get',
+                dataType: 'json',
+                data: {search: search, shop: shop}
+            }).done(function(res){
+                if (false == res) {
+                    self.submitwarning(['Il prodotto cercato non esiste. Controlla l\'esattezza del codice inserito']);
+                } else {
+                    if ('string' === typeof res) self.submitError([], [res]);
+                    else {
+                        self.form.find('.alert').css('opacity', '0');
+                        callback(res);
+                    }
+                }
+            }).fail(function(res) {
+                console.error(res);
             });
-        });
-
-            //ricerca per barcode
-        var searchInput = this.searchBlock.find('.search-item');
-        searchInput.on('keypress', function(e){
-            if (13 == e.charCode) {
-                e.preventDefault();
-                $(this).select();
-                searchBtn.trigger('click');
-            }
-        });
-
-        //selectize search field
-
-        this.submitBlock.find('button').on('click', function(e){
-            e.preventDefault();
-            self.save();
-        });
-
-//end constructor
+        };
 
         this.addProduct = function (product) {
             var productList = self.productList;
@@ -930,30 +897,7 @@ $.bsModal = function (header, params) {
             }
         };
 
-        this.searchProduct = function (search, callback) {
-            if (!search.length) return false;
-            var shop = '';
-            var shopSelect = $('.mag-shop');
-            if (shopSelect.length) shop = shopSelect.val();
-            $.ajax({
-                url: '/blueseal/xhr/CatalogController',
-                method: 'get',
-                dataType: 'json',
-                data: {search: search, shop: shop}
-            }).done(function(res){
-                if (false == res) {
-                    self.submitwarning(['Il prodotto cercato non esiste. Controlla l\'esattezza del codice inserito']);
-                } else {
-                    if ('string' === typeof res) self.submitError([], [res]);
-                    else {
-                        self.form.find('.alert').css('opacity', '0');
-                        callback(res);
-                    }
-                }
-            }).fail(function(res) {
-                console.error(res);
-            });
-        };
+
 
         this.submitError = function(domElems, errors) {
             var f = self.form;
@@ -1064,6 +1008,83 @@ $.bsModal = function (header, params) {
             });
             var post = {};
         };
+
+        //constructor
+
+        //preparo tutti i template separati in blocchi
+        //this.movementLineTemplate = $(template).find('.mag-movementLine').clone();
+        this.productTemplate = $(template).find('.mag-product').clone();
+        //this.productTemplate.find('.mag-movements').html('');
+
+        //faccio un merge dei parametri raccolti sopra i dati di default
+        this.opt = $.extend(this.defaults, params);
+
+        //scrivo e inizializzo i blocchi
+        this.form = $(template).clone();
+        this.productList = this.form.find('.mag-product-list').html('');
+        this.container = this.productList.parent();
+        this.form.data('initParams', this.opt);
+        this.searchBlock = this.form.find('.mag-searchBlock');
+        this.movementDate = this.form.find('.mag-movementDate');
+        //this.movementDate.css('display', 'none');
+        this.submitBlock = this.form.find('.mag-submit');
+        this.submitBlock.css('display', 'none');
+
+        if (true != this.opt.searchField) this.searchBlock.css('display', 'none');
+
+        //creo il form se non esiste
+        if (!$(this.dom).find('form').length) $(this.dom).append($(this.form));
+
+        //faccio partire i selectize
+
+        var shopSelect = $('.mag-shop');
+
+        if ('undefined' != typeof this.opt.product) {
+            if ('string' == typeof this.opt.product)
+            {
+                var string = this.opt.product;
+                this.searchProduct(string, function (res) {
+                    this.addProduct(res);
+                });
+            } else if ($.isArray(this.opt.product)) {
+                for(var i in this.opt.product) {
+                    var string = this.opt.product[i];
+                    this.searchProduct(string, function (res) {
+                        this.addProduct(res);
+                    });
+                }
+            }
+        }
+
+
+        //evento ricerca
+        var searchBtn = this.searchBlock.find('.search-btn');
+        searchBtn.on('click', function(e){
+            e.preventDefault();
+            var string = self.form.find('.search-item').val();
+            self.searchProduct(string, function(res){
+                self.addProduct(res);
+            });
+        });
+
+        //ricerca per barcode
+        var searchInput = this.searchBlock.find('.search-item');
+        searchInput.on('keypress', function(e){
+            if (13 == e.charCode) {
+                e.preventDefault();
+                $(this).select();
+                searchBtn.trigger('click');
+            }
+        });
+
+        //selectize search field
+
+        this.submitBlock.find('button').on('click', function(e){
+            e.preventDefault();
+            self.save();
+        });
+
+//end constructor
     };
 
     /*
