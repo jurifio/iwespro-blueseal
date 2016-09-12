@@ -58,14 +58,14 @@ if (false === code) {
             );
         } else {
             $('h3').html(code);
+            var ids = code.split('-');
+            $('input[name="id"]').val(ids[0]);
+            $('input[name="productVariantId"]').val(ids[1]);
             var len = res.length;
             if (0 === len) {
                 addRow();
             }
             for (var i in res) {
-                var ids = code.split('-');
-                $('input[name="id"]').val(ids[0]);
-                $('input[name="productVariantId"]').val(ids[1]);
                 addRow(i, res[i]);
             }
         }
