@@ -36,6 +36,7 @@ class CNamesManager extends AAjaxController
                 default:
                     return "OOPS! Non so cosa devo fare. Contatta un amministratore";
             }
+            $this->app->cacheService->getCache('entities')->flush();
             return $res;
         }
     }
