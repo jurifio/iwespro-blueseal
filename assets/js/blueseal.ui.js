@@ -204,15 +204,11 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
                 setTimeout(function () {
                     clearInterval(timer);
                     if('undefined' != typeof data.remote) {
-                        $.ajax({
-                            url: "/assets/"+data.remote+".js",
-                            dataType: "script"
-                        }).done(function(res){
-                            $.extend(data,data,window.buttonSetup);
-                            delete window.buttonSetup;
-                        }).always(function() {
-                            deferred.resolve();
-                        });
+                        $.getScript("/assets/"+data.remote+".js",function(res){
+                                $.extend(data,data,window.buttonSetup);
+                                delete window.buttonSetup;
+                                deferred.resolve()}
+                            );
                     } else {
                         deferred.resolve();
                     }
