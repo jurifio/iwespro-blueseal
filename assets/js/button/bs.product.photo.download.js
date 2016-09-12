@@ -86,13 +86,13 @@ $(document).on('bs.product.photo.download', function () {
                     }
                 }).done(function (res) {
                     res = JSON.parse(res);
-                    html = '<a id="downloadPhotos" data-name="'+res.file+'" href="/assets/'+res.file+'" type="download">Scarica (Dimensione: '+res.size+')</a>';
+                    html = '<a id="downloadPhotos" data-name="'+res.file+'" href="/assets/'+res.file+'" download="Le tue foto.zip">Scarica (Dimensione: '+res.size+')</a>';
                     /*$('#downloadPhotos').on('click',function () {
                         $.ajax({
                             type:'DELETE',
                         });
                     });*/
-                    body.html(html);
+                    body.html($(html));
                     cancelButton.hide();
                     okButton.html("Ok").off().on('click', function () {
                         bsModal.modal("hide");
