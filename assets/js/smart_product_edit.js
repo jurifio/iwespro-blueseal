@@ -283,102 +283,82 @@ $(document).on('bs.details.model.assign', function (e) {
 
     if (true === editable) {
 
-        $.ajax({
-            url: '/blueseal/xhr/DetailModelGetDetails',
-            type: 'GET',
-            data: {
-                categories: $('#ProductCategory_id').val()
-            }
-        }).done(function (res) {
-            body.html(
-                '<div style="height: 300px;">' +
-                '<form id="detailAdd"><div class="form-group">' +
-                '<label>Inserisci il nome:</label><br />' +
-                '<select class="form-control new-dett-ita" name="modelAssign" id="modelAssign"></select>' +
-                '</form></div>'
-            );
+        if ($('#productCategory_Id').length) {
 
-            var modelAssign = $('#modelAssign');
-            res = JSON.parse(res);
-            console.log(res);
-            modelAssign.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
-                options: res,
-                create: false,
-                render: {
-                    option: function (item, escape) {
-                        var origin = "";
-                        if ("code" == item.origin) origin = ' <span class="small"> (da una categoria del prodotto)</span>';
-                        //else if ("model" == item.origin) origin = ' <span class="small"> (dal prodotto) </span>';
-                        return '<div>' +
-                            escape(item.name) + origin +
-                            '</div>';
-                    }
-                },
-                load: function (query, callback) {
-                    if (3 > query.length) {
-                        return callback();
-                    }
-                    $.ajax({
-                        url: '/blueseal/xhr/DetailModelGetDetails',
-                        type: 'GET',
-                        data: {
-                            code: $('.product-code').html(),
-                            search: query,
-                        },
-                        dataType: 'json',
-                        error: function () {
-                            callback();
-                        },
-                        success: function (res) {
-                            callback(res);
-                        }
-                    });
-                }
-            });
-        });
-        bsModal.modal();
-        cancelButton.html('Annulla').off().on('click', function () {
-            bsModal.modal('hide');
-        });
-        okButton.html('Carica dal modello').off().on('click', function () {
             $.ajax({
-                type: "GET",
-                url: "/blueseal/xhr/GetDataSheet",
+                url: '/blueseal/xhr/DetailModelGetDetails',
+                type: 'GET',
                 data: {
-                    value: $('#modelAssign option:selected').val(),
-                    type: 'model',
+                    categories: $('#ProductCategory_id').val()
                 }
-            }).done(function ($content) {
+            }).done(function (res) {
+                body.html(
+                    '<div style="height: 300px;">' +
+                    '<form id="detailAdd"><div class="form-group">' +
+                    '<label>Inserisci il nome:</label><br />' +
+                    '<select class="form-control new-dett-ita" name="modelAssign" id="modelAssign"></select>' +
+                    '</form></div>'
+                );
 
-                $("#main-details").html($content);
-
-                changeProductDataSheet = false;
-                var dataSheet = $('.detailContent').data('prototype-id');
-                $('#Product_dataSheet').selectize()[0].selectize.setValue(dataSheet, true);
-                changeProductDataSheet = true;
-
-                //setTimeout(function(){
-                $('#main-details').find('select').each(function () {
-                    var sel = $(this).selectize({
-                        valueField: 'id',
-                        labelField: 'item',
-                        searchField: ['item'],
-                        options: window.detailsStorage
-                    });
-                    var initVal = $(this).data('init-selection');
-                    if (initVal != 'undefined') {
-                        sel[0].selectize.setValue(initVal, true);
-                    } else {
-                        sel[0].selectize.setValue(0, true);
+                var modelAssign = $('#modelAssign');
+                res = JSON.parse(res);
+                console.log(res);
+                modelAssign.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: res,
+                    create: false,
+                    render: {
+                        option: function (item, escape) {
+                            var origin = "";
+                            if ("code" == item.origin) origin = ' <span class="small"> (da una categoria del prodotto)</span>';
+                            //else if ("model" == item.origin) origin = ' <span class="small"> (dal prodotto) </span>';
+                            return '<div>' +
+                                escape(item.name) + origin +
+                                '</div>';
+                        }
+                    },
+                    load: function (query, callback) {
+                        if (3 > query.length) {
+                            return callback();
+                        }
+                        $.ajax({
+                            url: '/blueseal/xhr/DetailModelGetDetails',
+                            type: 'GET',
+                            data: {
+                                code: $('.product-code').html(),
+                                search: query,
+                            },
+                            dataType: 'json',
+                            error: function () {
+                                callback();
+                            },
+                            success: function (res) {
+                                callback(res);
+                            }
+                        });
                     }
-                    bsModal.modal('hide');
                 });
-                //}, 200);
             });
-        });
+            bsModal.modal();
+            cancelButton.html('Annulla').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            okButton.html('Carica dal modello').off().on('click', function () {
+                $('#main-details').selectDetails({
+                    type: 'model',
+                    value: $('#modelAssign').val()
+                });
+                bsModal.modal('hide');
+            });
+        } else {
+            body.html('Prima di caricare un modello devi selezionare le categorie del prodotto');
+            okButton.html('Carica dal modello').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            bsModal.modal();
+        }
     } else {
         body.html('Prima di caricare un modello devi inizializzare l\'inserimento o la modifica di un prodotto');
         okButton.html('Carica dal modello').off().on('click', function () {
@@ -488,7 +468,8 @@ function searchForProduct(itemno, variantName, brandId) {
                     fillTheFields(res['product']);
                 }
             } else {
-                $('.product-code').html();
+                $('.product-code').html('');
+                eraseForm();
                 //$('#main-details').selectDetails();
             }
             $('.disableBlank').disableBlank('enable');
@@ -501,6 +482,22 @@ function searchForProduct(itemno, variantName, brandId) {
             bsModal.modal('hide');
         });
     });
+}
+
+function eraseForm() {
+    $('input, select').each(function(){
+        if (('Product_itemno' != $(this).attr('id')) && ('ProductVariant_name' != $(this).attr('id'))) {
+            $(this).val('');
+        }
+    });
+    $('select').each(function(){
+        if('Product_productBrandId' != $(this).attr('id')) {
+            $(this).selectize()[0].selectize.setValue('', false);
+        }
+    });
+    $('textarea').html('');
+    $('#main-details').html('');
+    $('#main-details').createCategoryBtn();
 }
 
 function searchForProductByCode(id, productVariantId) {
@@ -533,8 +530,14 @@ function searchForProductByCode(id, productVariantId) {
                 if (res['product']) {
                     fillTheFields(res['product']);
                 }
+                if (!$('#ProductCategory_id').val().length) {
+                    $('#main-details').createCategoryBtn();
+                }
             } else {
                 $('.product-code').html();
+                if (!$('#ProductCategory_id').val().length) {
+                    $('#main-details').createCategoryBtn();
+                }
                 //$('#main-details').selectDetails();
             }
             $('.disableBlank').disableBlank('enable');
@@ -609,6 +612,13 @@ $(document).on('bs.details.mag.move', function() {
         );
     }
 });
+
+$.fn.createCategoryBtn = function() {
+    $(this).append('<button class="btn btn-default catButton">Seleziona prima le categorie</button>');
+    $('.catButton').off().on('click', function(){
+        $(document).trigger('bs.category.edit');
+    });
+};
 
 $(document).ready(function () {
 
@@ -754,4 +764,9 @@ $(document).ready(function () {
     if (($_GET.get('id') && ($_GET.get('productVariantId'))) ) {
         searchForProductByCode($_GET.get('id'), $_GET.get('productVariantId'));
     }
+    console.log('sdfhaskdjfh');
+    if (!$('#ProductCategory_id').val().length) {
+        $('#main-details').createCategoryBtn();
+    }
+
 });
