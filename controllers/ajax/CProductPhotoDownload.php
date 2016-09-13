@@ -65,7 +65,6 @@ class CProductPhotoDownload extends AAjaxController
         $local = $this->app->rootPath() . "/temp";
         $remote = $this->app->cfg()->fetch("general", "product-photo-host");
         $zipName = time() . '.zip';
-
         $zip = new \ZipArchive();
         if ($zip->open($local . '/' . $zipName, \ZipArchive::CREATE) !== TRUE) {
             throw  new \Exception('aaaaaa');
@@ -75,20 +74,16 @@ class CProductPhotoDownload extends AAjaxController
             foreach ($product->productPhoto as $productPhoto) {
                 if ($productPhoto->size != CProductPhoto::SIZE_BIG) continue;
                 $localName = $local . '/' . $productPhoto->name;
-                $files[] = $localName;
                 if (in_array($localName, $files)) continue;
+                $files[] = $localName;
                 $zip->addFromString($productPhoto->name, file_get_contents($remote . $product->productBrand->slug . '/' . $productPhoto->name, 'r'));
-                continue;
             }
         }
-
         if ($zip->close()) {
             /** @var \PharData $compressed */
             return json_encode(['file' => $zipName, 'size' => number_format(filesize($local . '/' . $zipName) / 1048576, 2) . ' MB']);
         } else {
             return ' cazzo';
         }
-
-
     }
 }
