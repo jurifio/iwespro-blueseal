@@ -20,37 +20,13 @@ use bamboo\core\intl\CLang;
  */
 class CProductNamesListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        $this->em = new \stdClass();
-        $this->em->productsDetail = $this->app->entityManagerFactory->create('ProductDetail');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductNameList', ['productId', 'productVariantId', 'name', 'langId'], $_GET);
+        $datatable = new CDataTables('vBluesealProductNameList', ['productId', 'productVariantId', 'langId'], $_GET);
 
         $productNames = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-
-        $modifica = $this->urls['base'] . "prodotti/modifica";
-        $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
+        $count = $this->app->repoFactory->create('ProductNameTranslation')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('ProductNameTranslation')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -68,7 +44,8 @@ class CProductNamesListAjaxController extends AAjaxController
                 $res = $this->app->dbAdapter->query("SELECT * FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P','I')",
                     [$val->name])->fetchAll();
                 $response['data'][$i]['count'] = count($res); //$products->count();
-             
+                $response['data'][$i]['isVisible'] = 'fidati'; //$products->count();
+
                 $iterator = 0;
                 $cats = [];
                 foreach($res as $v) {

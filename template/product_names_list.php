@@ -25,12 +25,24 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_names_list"
                                data-controller="ProductNamesListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-column-filter="true"
+                               data-inner-setup="true"
+                               data-lenght-menu="100, 200, 500, 1000, 2000, 3000, 5000">
                             <thead>
                             <tr>
-                                <th class="center">Name</th>
-                                <th class="center">Categorie</th>
-                                <th class="center">N. Prodotti Associati</th>
+                                <th data-slug="name"
+                                    data-searchable="false"
+                                    data-orderable="true" class="center" data-default-order="asc">Name</th>
+                                <th data-slug="slug"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Categorie</th>
+                                <th data-slug="count"
+                                    data-searchable="false"
+                                    data-orderable="true" class="center">N. Prodotti Associati</th>
+                                <th data-slug="isVisible"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Visibile</th>
                             </tr>
                             </thead>
                             <tbody>
