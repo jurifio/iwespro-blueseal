@@ -1245,6 +1245,9 @@
 			if(typeof $(this).data('lengthMenu') != 'undefined') {
 				setup.lengthMenu = JSON.parse('['+$(this).data('lengthMenu')+']');
 			}
+			if(typeof $(this).data('displayLength') != 'undefined') {
+				setup.displayLength = $(this).data('displayLength');
+			}
 
 			tableSetup[table.data('datatable-name')] = $.extend({}, tableSetup.common,setup);
 		}
