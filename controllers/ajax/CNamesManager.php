@@ -55,13 +55,16 @@ class CNamesManager extends AAjaxController
 
     private function mergeNames($new, $old)
     {
+        $pntRepo = $this->app->repoFactory->create('ProductNameTranslation');
         foreach ($old as $old1) {
-            $productNameTranslation = $this->app->repoFactory->create('ProductNameTranslation')->findBy(['name' => $old1]);
-            if ($productNameTranslation->langId != 1) {
-                $productNameTranslation->delete();
-            } else {
-                $productNameTranslation->name = trim($new);
-                $productNameTranslation->update();
+            $productNameTranslation = $pntRepo->findBy(['name' => $old1]);
+            foreach($productNameTranslation as $pntRow) {
+                if ($pntRow->langId != 1) {
+                    $pntRow->delete();
+                } else {
+                    $pntRow->name = trim($new);
+                    $pntRow->update();
+                }
             }
         }
         return "Nomi aggiornati!";
