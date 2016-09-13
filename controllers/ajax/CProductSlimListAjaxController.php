@@ -147,6 +147,8 @@ class CProductSlimListAjaxController extends AAjaxController
             $response['data'][$i]['season'] .= $val->productSeason->name . " " . $val->productSeason->year;
             $response['data'][$i]['season'] .= '</span>';
 
+            $response['data'][$i]['status'] = $val->productStatus->name;
+
             $i++;
         }
 

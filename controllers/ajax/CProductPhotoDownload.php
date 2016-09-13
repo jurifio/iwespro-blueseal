@@ -33,7 +33,7 @@ class CProductPhotoDownload extends AAjaxController
                     try {
                         $singleCost = $shopHasProduct->shop->config['photoCost'];
                     } catch (\Exception $e) {
-                        $singleCost = 0.3;
+                        $singleCost = 3;
                     }
                     $contoSoldi += $singleCost;
                     $contoProdotti++;
@@ -56,46 +56,34 @@ class CProductPhotoDownload extends AAjaxController
             $shopHasProduct = $this->app->repoFactory->create('ShopHasProduct')->findOneByStringId($productId);
             $toDownload[$shopHasProduct->product->printId()] = $shopHasProduct->product;
 
-            if(!$allShop) {
-                $shopHasProduct->productPhotoDownloadTime = (new \DateTime())->format('');
+            if (!$allShop) {
+                $shopHasProduct->productPhotoDownloadTime = $this->app->dbAdapter->time();;
                 $shopHasProduct->update();
             }
         }
 
-        $local = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'image-temp-folder');
+        $local = $this->app->rootPath() . "/temp";
         $remote = $this->app->cfg()->fetch("general", "product-photo-host");
-        $zipName = time().'.zip';
-
+        $zipName = time() . '.zip';
         $zip = new \ZipArchive();
-        if ($zip->open($local.'/'.$zipName, \ZipArchive::CREATE)!==TRUE)
-        {
-            throw  new \Exception('aaaaaa');
+        if ($zip->open($local . '/' . $zipName, \ZipArchive::CREATE) !== TRUE) {
+            throw  new \Exception('Ops. problemi');
         }
         $files = [];
         foreach ($toDownload as $product) {
             foreach ($product->productPhoto as $productPhoto) {
                 if ($productPhoto->size != CProductPhoto::SIZE_BIG) continue;
                 $localName = $local . '/' . $productPhoto->name;
-                if (in_array($localName,$files)) continue;
-                $zip->addFromString($productPhoto->name, file_get_contents($remote.$product->productBrand->slug . '/' . $productPhoto->name, 'r'));
-                continue;
+                if (in_array($localName, $files)) continue;
+                $files[] = $localName;
+                $zip->addFromString($productPhoto->name, file_get_contents($remote . $product->productBrand->slug . '/' . $productPhoto->name, 'r'));
             }
         }
-        ;
         if ($zip->close()) {
             /** @var \PharData $compressed */
-            //var_dump($zip);
+            return json_encode(['file' => $zipName, 'size' => number_format(filesize($local . '/' . $zipName) / 1048576, 2) . ' MB']);
+        } else {
+            return ' cazzo';
         }
-
-        return json_encode(['file'=>$zipName,'size'=>filesize($local.'/'.$zipName)]);
-    }
-
-    /**
-     * @param $url
-     * @return string
-     */
-    public function downloadUrl($url)
-    {
-        return "data/www";
     }
 }
