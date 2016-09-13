@@ -344,41 +344,13 @@ $(document).on('bs.details.model.assign', function (e) {
             bsModal.modal('hide');
         });
         okButton.html('Carica dal modello').off().on('click', function () {
-            $.ajax({
-                type: "GET",
-                url: "/blueseal/xhr/GetDataSheet",
-                data: {
-                    value: $('#modelAssign option:selected').val(),
-                    type: 'model',
-                }
-            }).done(function ($content) {
-
-                $("#main-details").html($content);
-
-                changeProductDataSheet = false;
-                var dataSheet = $('.detailContent').data('prototype-id');
-                $('#Product_dataSheet').selectize()[0].selectize.setValue(dataSheet, true);
-                changeProductDataSheet = true;
-
-                //setTimeout(function(){
-                $('#main-details').find('select').each(function () {
-                    var sel = $(this).selectize({
-                        valueField: 'id',
-                        labelField: 'item',
-                        searchField: ['item'],
-                        options: window.detailsStorage
-                    });
-                    var initVal = $(this).data('init-selection');
-                    if (initVal != 'undefined') {
-                        sel[0].selectize.setValue(initVal, true);
-                    } else {
-                        sel[0].selectize.setValue(0, true);
-                    }
-                    bsModal.modal('hide');
-                });
-                //}, 200);
+            $('#main-details').selectDetails({
+                type: 'model',
+                value: $('#modelAssign').val()
             });
+            bsModal.modal('hide');
         });
+
     } else {
         body.html('Prima di caricare un modello devi inizializzare l\'inserimento o la modifica di un prodotto');
         okButton.html('Carica dal modello').off().on('click', function () {
