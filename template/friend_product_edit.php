@@ -42,20 +42,13 @@ endif; ?></div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="panel panel-default clearfix">
-                                <!--<div class="panel-heading clearfix">
+                                <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">
-                                        <?php
-                                        if (isset($productEdit) && !is_null($productEdit)):
-                                            ?>
-                                            <a class="product-code" href="<?php echo $app->productUrl($productEdit); ?>"><?php echo $productEdit->id . '-' . $productEdit->productVariantId; ?></a>
-                                            - Informazioni di base
-                                        <?php endif; ?>
+                                     Codice: <span class="code-title">-</span>
                                     </h5>
-                                    <?php
-                                    $cats = (isset($categories) && (count($categories))) ? implode("<br />", $categories) : "''";
-                                    ?>
-                                    <p><strong>Categorie:</strong> <?php echo $cats; ?></p>
-                                </div>-->
+
+                                    <!--<p><strong>Categorie:</strong></p>-->
+                                </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <!--<div class="col-md-7">

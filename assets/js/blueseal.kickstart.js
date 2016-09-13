@@ -1056,7 +1056,7 @@ $.bsModal = function (header, params) {
                 for(var i in this.opt.product) {
                     var string = this.opt.product[i];
                     this.searchProduct(string, function (res) {
-                        this.addProduct(res);
+                        self.addProduct(res);
                     });
                 }
             }
