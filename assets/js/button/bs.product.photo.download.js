@@ -51,12 +51,12 @@ $(document).on('bs.product.photo.download', function () {
 
             var html = '<div class="row">' +
                 '<span>ATTENZIONE PROCEDURA A PAGAMENTO!</span><br>' +
-                '<span>Vuoi scaricare le foto di ' + res.conto + ' prodotti</span><br>' +
                 '<span>Ti informiamo che questa procedura consentirà di ' +
-                'scaricare le foto al costo di : ' + res.costo + ' euro; ' +
-                'potrai riscaricare le foto già addebitate quante volte vuoi, ' +
+                'scaricare le foto al costo di: ' + res.costo + ' euro; ' +
+                'Potrai riscaricarle quante volte vuoi, ' +
                 'di seguito il dettaglio del costo per prodotto<br>' +
                 'L’avvio della procedura vale quale accettazione per l’addebito.<br></span>' +
+                '<span>Stai scaricando le foto di ' + res.conto + ' prodotti</span><br>' +
                 '<table class="table table-striped">' +
                 '<thead>' +
                 '<th>Shop</th>' +
