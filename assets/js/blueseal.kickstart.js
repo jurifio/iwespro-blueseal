@@ -658,7 +658,7 @@ $.bsModal = function (header, params) {
                     }
 
                 };
-
+                var opt = $.extend(opt, params);
                 if ('string' != typeof params['url']) throw 'the "url" parameter is mandatory and it must to be string type';
                 if ('function' != typeof params['onDone']) throw 'the "url" parameter is mandatori and it must to be a callback';
                 methods.checkErrors();
@@ -1050,7 +1050,7 @@ $.bsModal = function (header, params) {
             {
                 var string = this.opt.product;
                 this.searchProduct(string, function (res) {
-                    this.addProduct(res);
+                    self.addProduct(res);
                 });
             } else if ($.isArray(this.opt.product)) {
                 for(var i in this.opt.product) {

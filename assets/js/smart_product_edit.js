@@ -452,7 +452,6 @@ function searchForProduct(itemno, variantName, brandId) {
             brandId: brandId
         }
     }).done(function(res){
-        editable = res;
         if (res['message']) {
             body.html(res['message']);
             bsModal.modal();
@@ -461,6 +460,7 @@ function searchForProduct(itemno, variantName, brandId) {
             });
         }
         if (res['editable']) {
+            editable = true;
             if (res['code']) {
                 $('.product-code').html(res['code']);
                 $('#main-details').selectDetails({code: res['code']});
@@ -515,7 +515,6 @@ function searchForProductByCode(id, productVariantId) {
             productVariantId: productVariantId
         }
     }).done(function(res){
-        editable = res;
         if (res['message']) {
             body.html(res['message']);
             bsModal.modal();
@@ -524,7 +523,9 @@ function searchForProductByCode(id, productVariantId) {
             });
         }
         if (res['editable']) {
+            editable = true;
             if (res['code']) {
+                movable = true;
                 $('.product-code').html(res['code']);
                 $('#main-details').selectDetails({code: res['code']});
                 if (res['product']) {
@@ -534,6 +535,7 @@ function searchForProductByCode(id, productVariantId) {
                     $('#main-details').createCategoryBtn();
                 }
             } else {
+                movable = false;
                 $('.product-code').html();
                 if (!$('#ProductCategory_id').val().length) {
                     $('#main-details').createCategoryBtn();
@@ -542,12 +544,14 @@ function searchForProductByCode(id, productVariantId) {
             }
             $('.disableBlank').disableBlank('enable');
         } else {
+            movable = true;
+            editable = false;
             $('.disableBlank').disableBlank();
             $('#Product_id').val(res['product']['id']);
             $('#Product_productVariantId').val(res['product']['productVariantId']);
             $('#Product_itemno').val(res['product']['itemno']);
             $('#ProductVariant_name').val(res['product']['variantName']);
-            $('#Product_productBrandId').selectize()[0].selectize.setValue(product['productBrandId'], true);
+            $('#Product_productBrandId').selectize()[0].selectize.setValue(res['product']['productBrandId'], true);
         }
     }).fail(function(res){
         body.html(res);
@@ -586,17 +590,20 @@ function fillTheFields(product) {
 // MOVIMENTI MAGAZZINO
 
 $(document).on('bs.details.mag.move', function() {
-    if (editable) {
+    if (true == movable) {
         modal = new $.bsModal(
             'Crea un movimento per questo articolo',
             {
                 body: '<div class="moveMan"></div>',
                 okButtonEvent: function(){
                     modal.hide();
+                    $('.modal-dialog').css('min-width', '');
+                    $('.modal-dialog').css('min-heigth', '');
                 }
             }
         );
-
+        $('.modal-dialog').css('min-width', '1300px');
+        $('.modal-dialog').css('min-heigth', '900px');
         var searchField = false;
         if ($('#Product_retail_price').length) searchField = true;
         $(".moveMan").bsCatalog({
@@ -642,37 +649,6 @@ $(document).ready(function () {
     }
 
     changeProductDataSheet = true;
-
-    //$('#main-details').selectDetails();
-
-
-    var tagNames = $("#Tag_names");
-    if (tagNames.length) {
-        tagNames.autocomplete({
-            source: function (request, response) {
-                if (tagList != "") {
-                    var source = tagList.split(",");
-                    var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
-                    response($.grep(source, function (item) {
-                        return matcher.test(item);
-                    }));
-                } else {
-                    $.ajax({
-                        type: "POST",
-                        async: false,
-                        url: "/blueseal/xhr/GetAutocompleteTags"
-                    }).done(function (content) {
-                        tagList = content;
-                        var source = content.split(",");
-                        var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
-                        response($.grep(source, function (item) {
-                            return matcher.test(item);
-                        }));
-                    });
-                }
-            }
-        });
-    }
 
     var textProductDescription = $('textarea[name^="ProductDescription"]');
     textProductDescription.each(function () {
