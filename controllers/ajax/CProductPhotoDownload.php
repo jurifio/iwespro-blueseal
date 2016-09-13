@@ -57,7 +57,7 @@ class CProductPhotoDownload extends AAjaxController
             $toDownload[$shopHasProduct->product->printId()] = $shopHasProduct->product;
 
             if (!$allShop) {
-                $shopHasProduct->productPhotoDownloadTime = (new \DateTime())->format('');
+                $shopHasProduct->productPhotoDownloadTime = $this->app->dbAdapter->time();;
                 $shopHasProduct->update();
             }
         }
@@ -67,7 +67,7 @@ class CProductPhotoDownload extends AAjaxController
         $zipName = time() . '.zip';
         $zip = new \ZipArchive();
         if ($zip->open($local . '/' . $zipName, \ZipArchive::CREATE) !== TRUE) {
-            throw  new \Exception('aaaaaa');
+            throw  new \Exception('Ops. problemi');
         }
         $files = [];
         foreach ($toDownload as $product) {
