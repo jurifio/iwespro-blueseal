@@ -350,7 +350,6 @@ $(document).on('bs.details.model.assign', function (e) {
             });
             bsModal.modal('hide');
         });
-
     } else {
         body.html('Prima di caricare un modello devi inizializzare l\'inserimento o la modifica di un prodotto');
         okButton.html('Carica dal modello').off().on('click', function () {
