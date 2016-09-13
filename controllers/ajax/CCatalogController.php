@@ -76,8 +76,12 @@ class CCatalogController extends AAjaxController
                     list($itemno, $variant) = explode('#', $search);
                     $itemno = trim($itemno);
                     $variant = trim($variant);
-                    $prodVariant = $variantRepo->findOneBy(['name' => $variant]);
-                    $prod = $prodRepo->findOneBy(['itemno' => $itemno, 'productVariantId' => $prodVariant->id]);
+                    $prodVariant = $variantRepo->findBy(['name' => $variant]);
+                    $prodVar = [];
+                    foreach ($prodVariant as $pv) {
+                        $prod = $prodRepo->findOneBy(['itemno' => $itemno, 'productVariantId' => $pv->id]);
+                        if ($prod) break;
+                    }
                     break;
                 case 'barcode':
                     $sku = $skuRepo->findOneBy(['barcode' => $search]);
