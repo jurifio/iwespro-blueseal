@@ -82,7 +82,7 @@ var addRow = function (shopId, data) {
     shopSelect.attr('name', 'shopId-' + rowCount);
     var value = row.find('.value');
     value.addClass('value-' + rowCount);
-    value.attr('name', 'value-' + rowCount)
+    value.attr('name', 'value-' + rowCount);
     var price = row.find('.price');
     price.addClass('price-' + rowCount);
     price.attr('name', 'price-' + rowCount);
@@ -91,7 +91,7 @@ var addRow = function (shopId, data) {
     salePrice.attr('name', 'salePrice-' + rowCount);
     form.find('.panel-body').append(row);
 
-    var removeBtn = row.find('.removeRow')
+    var removeBtn = row.find('.removeRow');
     removeBtn.on('click', function (e) {
         e.preventDefault();
         if (1 < $('.row-price').length) {
