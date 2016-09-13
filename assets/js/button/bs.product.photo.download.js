@@ -78,7 +78,7 @@ $(document).on('bs.product.photo.download', function () {
 
             body.html(html);
             okButton.html("Scarica Foto").off().on('click', function () {
-                body.html('<span>Attendi alcuni momenti per scaricare il file</span>' +
+                body.html('<span>Attendi alcuni momenti per scaricare il file</span><br>' +
                             '<img src="/assets/img/ajax-loader.gif" />');
                 $.ajax({
                     url: '/blueseal/xhr/ProductPhotoDownload',
