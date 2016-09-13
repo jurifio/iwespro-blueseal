@@ -152,7 +152,7 @@ $(document).on('bs.category.edit', function (e, element, button) {
     });
     cancelButton.remove();
 
-    if (true === editable) {
+    if (true === category) {
         body.css("text-align", 'left');
         body.html('<div id="categoriesTree"></div>');
         Pace.ignore(function () {
@@ -522,7 +522,9 @@ function searchForProductByCode(id, productVariantId) {
                 bsModal.modal('hide');
             });
         }
+        category = false;
         if (res['editable']) {
+            category = true;
             editable = true;
             if (res['code']) {
                 movable = true;
@@ -544,6 +546,7 @@ function searchForProductByCode(id, productVariantId) {
             }
             $('.disableBlank').disableBlank('enable');
         } else {
+            category = true;
             movable = true;
             editable = false;
             $('.disableBlank').disableBlank();
