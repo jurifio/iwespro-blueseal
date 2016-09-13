@@ -50,11 +50,13 @@ $(document).on('bs.product.photo.download', function () {
             res = JSON.parse(res);
 
             var html = '<div class="row">' +
+                '<span>ATTENZIONE PROCEDURA A PAGAMENTO!</span><br>' +
                 '<span>Vuoi scaricare le foto di ' + res.conto + ' prodotti</span><br>' +
-                '<span>Per scaricare queste foto, secondo gli accordi presi ' +
-                'ti verranno addebitati: ' + res.costo + ' euro; ' +
+                '<span>Ti informiamo che questa procedura consentirà di ' +
+                'scaricare le foto al costo di : ' + res.costo + ' euro; ' +
                 'potrai riscaricare le foto già addebitate quante volte vuoi, ' +
-                'di seguito il dettaglio del costo per prodotto<br></span>' +
+                'di seguito il dettaglio del costo per prodotto<br>' +
+                'L’avvio della procedura vale quale accettazione per l’addebito.<br></span>' +
                 '<table class="table table-striped">' +
                 '<thead>' +
                 '<th>Shop</th>' +
@@ -75,9 +77,9 @@ $(document).on('bs.product.photo.download', function () {
             html+='</tbody></table></row>';
 
             body.html(html);
-
-
             okButton.html("Scarica Foto").off().on('click', function () {
+                body.html('<span>Attendi alcuni momenti per scaricare il file</span>' +
+                            '<img src="/assets/img/ajax-loader.gif" />');
                 $.ajax({
                     url: '/blueseal/xhr/ProductPhotoDownload',
                     type: 'POST',
