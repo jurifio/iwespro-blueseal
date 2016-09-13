@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-camera",
-    permission: "/admin/product/edit&&allShops",
+    permission: "/admin/product/edit",
     event: "bs.product.photo.download",
     class: "btn btn-default",
     rel: "tooltip",
