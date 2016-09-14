@@ -4,6 +4,7 @@ $(document).on('bs.roulette.add', function (e, element, button) {
     window.location = '/blueseal/prodotti/roulette?roulette=' + $(element).val();
 });
 
+/*
 $(document).on('bs.pub.product', function (e, element, button) {
 
     var result = {
@@ -61,7 +62,6 @@ $(document).on('bs.pub.product', function (e, element, button) {
         }
     });
 });
-
 $(document).on('bs.print.aztec', function (e, element, button) {
 
     var getVarsArray = [];
@@ -108,7 +108,6 @@ $(document).on('bs.print.barcode', function (e, element, button) {
     var getVars = getVarsArray.join('&');
     window.open('/blueseal/prodotti/barcode/print?source=productId&' + getVars, 'barcode-print');
 });
-
 $(document).on('bs.dupe.product', function () {
 
     var getVarsArray = [];
@@ -142,7 +141,6 @@ $(document).on('bs.dupe.product', function () {
 
     window.open('/blueseal/prodotti/modifica?' + getVars, 'product-dupe-' + Math.random() * (9999999999));
 });
-
 $(document).on('bs.add.sku', function () {
 
     var getVarsArray = [];
@@ -176,7 +174,6 @@ $(document).on('bs.add.sku', function () {
 
     window.open('/blueseal/skus?' + getVars, 'product-sku-add-' + Math.random() * (9999999999));
 });
-
 $(document).on('bs.manage.photo', function () {
 
     var getVarsArray = [];
@@ -210,7 +207,6 @@ $(document).on('bs.manage.photo', function () {
 
     window.open('/blueseal/prodotti/photos?' + getVars, 'product-sku-add-' + Math.random() * (9999999999));
 });
-
 $(document).on('bs.del.product', function (e, element, button) {
 
     var dataTable = $('.dataTable').DataTable();
@@ -297,7 +293,6 @@ $(document).on('bs.del.product', function (e, element, button) {
         }
     });
 });
-
 $(document).on('bs.product.tag', function () {
 
     var bsModal = $('#bsModal');
@@ -382,7 +377,6 @@ $(document).on('bs.product.tag', function () {
 
     bsModal.modal();
 });
-
 $(document).on('click', ".tag-list > li", function (a, b, c) {
     if ($(this).hasClass('tree-selected')) {
         $(this).removeClass('tree-selected');
@@ -390,7 +384,6 @@ $(document).on('click', ".tag-list > li", function (a, b, c) {
         $(this).addClass('tree-selected');
     }
 });
-
 $(document).on('bs.manage.changeStatus', function () {
 
     var bsModal = $('#bsModal');
@@ -488,8 +481,6 @@ $(document).on('bs.manage.changeStatus', function () {
     }
     bsModal.modal();
 });
-
-
 $(document).on('bs.manage.changeSeason', function () {
 
     var bsModal = $('#bsModal');
@@ -583,7 +574,6 @@ $(document).on('bs.manage.changeSeason', function () {
     });
     bsModal.modal();
 });
-
 $(document).on('bs.category.edit', function (e, element, button) {
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();
@@ -633,30 +623,11 @@ $(document).on('bs.category.edit', function (e, element, button) {
                 autoexpand: true,
                 checkbox: true,
                 imagePath: "/assets/img/skin/icons_better.gif",
-                //		selectMode: ,
-                /*		onPostInit: function () {
-                 var vars = $("#ProductCategory_id").val().trim();
-                 var ids = vars.split(',');
-                 for (var i = 0; i < ids.length; i++) {
-                 if (this.getNodeByKey(ids[i]) != null) {
-                 this.getNodeByKey(ids[i]).select();
-                 }
-                 }
-                 $.map(this.getSelectedNodes(), function (node) {
-                 node.makeVisible();
-                 });
-                 $('#categoriesTree').scrollbar({
-                 axis: "y"
-                 });
-                 },*/
                 onSelect: function (select, node) {
-                    // Display list of selected nodes
                     var selNodes = node.tree.getSelectedNodes();
-                    // convert to title/key array
                     selKeys = $.map(selNodes, function (node) {
                         return node.data.key;
                     });
-                    //$("#ProductCategoryId").val(JSON.stringify(selKeys));
                 }
             });
 
@@ -692,8 +663,6 @@ $(document).on('bs.category.edit', function (e, element, button) {
 
     });
 });
-
-
 $(document).on('bs.sales.set', function () {
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
@@ -773,7 +742,6 @@ $(document).on('bs.sales.set', function () {
         }
     });
 });
-
 $(document).on('bs.sales.price', function () {
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
@@ -850,7 +818,6 @@ $(document).on('bs.sales.price', function () {
         });
     });
 });
-
 $(document).on('bs.product.mergedetails', function () {
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
@@ -966,7 +933,6 @@ $(document).on('bs.product.mergedetails', function () {
     });
     bsModal.modal('show');
 });
-
 $(document).on('bs.product.mergenames', function () {
 
     var bsModal = $('#bsModal');
@@ -1103,3 +1069,4 @@ $(document).on('bs.product.mergenames', function () {
         bsModal.modal();
     });
 });
+*/
