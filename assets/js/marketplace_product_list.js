@@ -36,17 +36,21 @@ $(document).on('bs.product.publish', function (e, element, button) {
 			}
 		}).done(function (response) {
 			var accounts = JSON.parse(response);
-			var html = '<div class="form-group form-group-default selectize-enabled full-width">';
-			html += '<select class="full-width" placeholder="Seleziona l\'account" data-init-plugin="selectize" title="" name="accountId" id="accountId" required><option value=""></option>';
+			var html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
+						'<label for="accountId">Marketplace Account</label>' +
+						'<select class="full-width" placeholder="Seleziona l\'account" ' +
+								'data-init-plugin="selectize" title="" name="accountId" id="accountId" required>' +
+							'<option value=""></option>';
 			for(let account of accounts) {
-				html+='<option value="'+account.id+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
+				html+='<option value="'+account.id+'" data-has-cpc="'+account.cpc+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
 			}
 			html+='</select>';
 			html+='</div>';
+			html+='<div class="form-group form-group-default"><label for="modifier">Modificatore</label><input id="modifier" type="text" value="0" aria-label="modifier"/></div>';
+			html+='<div style="display:none" class="form-group form-group-default"><label for="cpc">CPC</label><input id="cpc" type="text" value="0" aria-label="modifier"/></div>';
 
-			html+='<div><input id="modifier" type="text" value="0" aria-label="modifier"/>';
+			body.html($(html));
 
-			body.html(html);
 			Pace.ignore(function () {
 				okButton.off().on('click',function () {
 					$.ajax({
@@ -55,7 +59,8 @@ $(document).on('bs.product.publish', function (e, element, button) {
 						data: {
 							rows: getVarsArray,
 							account: $('#accountId').val(),
-							modifier: $('#modifier').val()
+							modifier: $('#modifier').val(),
+							cpc: $('#cpc').val()
 						}
 					}).done(function () {
 
@@ -265,6 +270,11 @@ $(document).on('bs.product.response', function () {
 });
 
 $(document).on('change','#accountId',function() {
-	window.x = $(this);
+	//window.x = $(this);
 	$('#modifier').val($(this).find(':selected').data('modifier'));
+	if($(this).find(':selected').data('hasCpc')) {
+        $("#cpc").parent().show();
+    } else {
+		$("#cpc").parent().hide();
+	}
 });
