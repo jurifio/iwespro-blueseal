@@ -42,12 +42,12 @@ $(document).on('bs.product.publish', function (e, element, button) {
 								'data-init-plugin="selectize" title="" name="accountId" id="accountId" required>' +
 							'<option value=""></option>';
 			for(let account of accounts) {
-				html+='<option value="'+account.id+'" data-hasCpc="'+account.cpc+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
+				html+='<option value="'+account.id+'" data-has-cpc="'+account.cpc+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
 			}
 			html+='</select>';
 			html+='</div>';
-			html+='<div><div class="form-group form-group-default"><label for="modifier">Modificatore</label><input id="modifier" type="text" value="0" aria-label="modifier"/></div>';
-			html+='<div><div class="form-group form-group-default"><label for="cpc">CPC</label><input id="cpc" style="display:none" type="text" value="0" aria-label="modifier"/></div>';
+			html+='<div class="form-group form-group-default"><label for="modifier">Modificatore</label><input id="modifier" type="text" value="0" aria-label="modifier"/></div>';
+			html+='<div style="display:none" class="form-group form-group-default"><label for="cpc">CPC</label><input id="cpc" type="text" value="0" aria-label="modifier"/></div>';
 
 			body.html($(html));
 
@@ -272,7 +272,9 @@ $(document).on('bs.product.response', function () {
 $(document).on('change','#accountId',function() {
 	//window.x = $(this);
 	$('#modifier').val($(this).find(':selected').data('modifier'));
-	if($(this).find(':selected').data('hasCpc') == 1) {
-        $("#cpc").show();
-    }
+	if($(this).find(':selected').data('hasCpc')) {
+        $("#cpc").parent().show();
+    } else {
+		$("#cpc").parent().hide();
+	}
 });
