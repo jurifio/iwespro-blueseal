@@ -378,7 +378,7 @@
             data-event="bs.details.model.assign"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Aggiungi un nuovo dettaglio"
+            data-title="Carica da modello"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

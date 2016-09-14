@@ -393,6 +393,16 @@ endif; ?></div>
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
+            data-icon="fa-plus-square"
+            data-permission="/admin/product/edit"
+            data-event="bs.det.add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi un nuovo dettaglio"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
             data-icon="fa-files-o"
             data-permission="/admin/product/edit"
             data-event="bs.details.model.assign"
@@ -405,7 +415,7 @@ endif; ?></div>
     <bs-toolbar-group data-group-label="Movimenti">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-files-o"
+            data-icon="fa-exchange"
             data-permission="/admin/product/edit"
             data-event="bs.details.mag.move"
             data-class="btn btn-default"
