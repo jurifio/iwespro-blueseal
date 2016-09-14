@@ -680,6 +680,7 @@ function fillTheFields(product) {
     selectName.addItem(product['productName']);
     selectName.refreshOptions();
     $('#Product_note').html(product['note']);
+    $('#summernote1').code(product['productDescription']);
 }
 
 $(document).on('bs.det.add', function (e) {
