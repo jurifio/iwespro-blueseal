@@ -2,15 +2,15 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-arrow",
     permission:"/admin/product/edit",
-    event:"bs.move.open",
+    event:"bs.product.storage.movement.open",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Cambia Categoria ai prodotti selezionati",
+    title:"Crea movimenti per i prodotti selezionati",
     placement:"bottom",
     toggle:"modal"
 };
 
-$(document).on('bs.move.open', function(){
+$(document).on('bs.product.storage.movement.open', function(){
     var selectedRows = $('.table').DataTable().rows('.selected').data();
     var selectedRowsCount = selectedRows.length;
     if (selectedRowsCount < 1) {

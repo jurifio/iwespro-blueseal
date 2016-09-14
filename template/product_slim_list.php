@@ -127,7 +127,7 @@
             data-remote="bs.product.sizeGroup.change"
         ></bs-toolbar-button>
         <bs-toolbar-button
-           data-remote="bs.move.open"
+           data-remote="bs.product.storage.movement.open"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione prezzi">
