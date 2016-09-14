@@ -125,7 +125,7 @@ endif; ?></div>
                                                                     placeholder="Seleziona il gruppo colore"
                                                                     data-init-plugin="selectize"
                                                                     title="ProductColorGroup_id" name="ProductColorGroup_id"
-                                                                    id="ProductColorGroup_id">
+                                                                    id="ProductColorGroup_id" required>
                                                                 <option></option>
                                                                 <?php foreach ($gruppicolore as $color): ?>
                                                                     <option value="<?php echo $color->id ?>" <?php
@@ -134,6 +134,7 @@ endif; ?></div>
                                                                     } ?>> <?php echo $color->name; ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>
+                                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                         </div>
                                                     </div>
                                                 </div>

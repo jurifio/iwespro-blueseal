@@ -75,6 +75,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                     $('.product-code').html(String(res['code']['id']) + '-' + String(res['code']['productVariantId']));
                     $('#Product_id').val(res['code']['id']);
                     $('#Product_productVariantId').val(res['code']['productVariantId']);
+                    window.location='/blueseal/friend/prodotti/modifica?id=' + res['code']['id'] + '&productVariantId=' + res['code']['productVariantId'];
                 }
             }
         );
@@ -497,7 +498,7 @@ $(document).on('bs.details.model.assign', function (e) {
                     type: 'change'
                 });
             });
-            var initVal = $(this).data('init-selection');
+
             $(self).find(".productDetails select").each(function () {
                 var sel = $(this).selectize({
                     valueField: 'id',
@@ -512,12 +513,14 @@ $(document).on('bs.details.model.assign', function (e) {
                     sel[0].selectize.setValue(0, true);
                 }
             });
-
-            var selectName = $('#ProductName_1_name').selectize()[0].selectize;
-            selectName.addOption({name: product['productName']});
-            selectName.addItem(product['productName']);
-            selectName.refreshOptions();
-            selectName.setValue(df, true);
+            var pname = $('.detailContent').data('product-name');
+            if ("" != pname) {
+                var selectName = $('#ProductName_1_name').selectize()[0].selectize;
+                selectName.addOption({name: pname});
+                selectName.addItem(pname);
+                selectName.refreshOptions();
+                selectName.setValue(pname, true);
+            }
         });
     }
 })(jQuery);
@@ -763,7 +766,8 @@ $(document).on('bs.details.mag.move', function() {
 
 $.fn.createCategoryBtn = function() {
     $(this).append('<button class="btn btn-default catButton">Seleziona prima le categorie</button>');
-    $('.catButton').off().on('click', function(){
+    $('.catButton').off().on('click', function(e){
+        e.preventDefault();
         $(document).trigger('bs.category.edit');
     });
 };
@@ -882,7 +886,6 @@ $(document).ready(function () {
     if (($_GET.get('id') && ($_GET.get('productVariantId'))) ) {
         searchForProductByCode($_GET.get('id'), $_GET.get('productVariantId'));
     }
-    console.log('sdfhaskdjfh');
     if (!$('#ProductCategory_id').val().length) {
         $('#main-details').createCategoryBtn();
     }
