@@ -125,7 +125,7 @@ endif; ?></div>
                                                                     placeholder="Seleziona il gruppo colore"
                                                                     data-init-plugin="selectize"
                                                                     title="ProductColorGroup_id" name="ProductColorGroup_id"
-                                                                    id="ProductColorGroup_id">
+                                                                    id="ProductColorGroup_id" required>
                                                                 <option></option>
                                                                 <?php foreach ($gruppicolore as $color): ?>
                                                                     <option value="<?php echo $color->id ?>" <?php
@@ -134,6 +134,7 @@ endif; ?></div>
                                                                     } ?>> <?php echo $color->name; ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>
+                                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -393,6 +394,16 @@ endif; ?></div>
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
+            data-icon="fa-plus-square"
+            data-permission="/admin/product/edit"
+            data-event="bs.det.add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi un nuovo dettaglio"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
             data-icon="fa-files-o"
             data-permission="/admin/product/edit"
             data-event="bs.details.model.assign"
@@ -405,7 +416,7 @@ endif; ?></div>
     <bs-toolbar-group data-group-label="Movimenti">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-files-o"
+            data-icon="fa-exchange"
             data-permission="/admin/product/edit"
             data-event="bs.details.mag.move"
             data-class="btn btn-default"

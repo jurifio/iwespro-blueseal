@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-arrow",
+    icon:"fa-exchange",
     permission:"/admin/product/edit",
     event:"bs.product.storage.movement.open",
     class:"btn btn-default",

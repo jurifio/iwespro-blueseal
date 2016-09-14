@@ -537,6 +537,8 @@ $.bsModal = function (header, params) {
                     sel[0].selectize.setValue(0, true);
                 }
             });
+            var selectName = $('#ProductName_1_name').selectize();
+            selectName[0].selectize.setValue(0, true);
         });
     }
 })(jQuery);

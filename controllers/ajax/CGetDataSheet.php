@@ -31,10 +31,12 @@ class CGetDataSheet extends AAjaxController
         $value = (array_key_exists('value', $get)) ? $get['value'] : false;
         $type = (array_key_exists('type', $get)) ? $get['type'] : false;
         $actual = [];
+        $Pname = '';
 
         if ($type && ('model' == $type)) {
             $productSheetModelPrototype = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $value]);
             $productSheetPrototype = $productSheetModelPrototype->productSheetPrototype;
+            $Pname= ($productSheetModelPrototype->productName) ? $productSheetModelPrototype->productName : '';
             $actual = $productSheetModelPrototype->productSheetModelActual;
         } elseif ('change' == $type) {
             $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['id' => $value]);
@@ -60,6 +62,7 @@ class CGetDataSheet extends AAjaxController
         $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');
 
         return $view->render([
+            'productName' => $Pname,
             'productSheets' => $productSheets,
             'productSheetPrototype' => $productSheetPrototype,
             'actual' => $resActual,

@@ -75,6 +75,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                     $('.product-code').html(String(res['code']['id']) + '-' + String(res['code']['productVariantId']));
                     $('#Product_id').val(res['code']['id']);
                     $('#Product_productVariantId').val(res['code']['productVariantId']);
+                    window.location='/blueseal/friend/prodotti/modifica?id=' + res['code']['id'] + '&productVariantId=' + res['code']['productVariantId'];
                 }
             }
         );
@@ -283,7 +284,7 @@ $(document).on('bs.details.model.assign', function (e) {
 
     if (true === editable) {
 
-        if ($('#productCategory_Id').length) {
+        if ($('#ProductCategory_id').val().length) {
 
             $.ajax({
                 url: '/blueseal/xhr/DetailModelGetDetails',
@@ -368,6 +369,105 @@ $(document).on('bs.details.model.assign', function (e) {
     }
 });
 
+$(document).on('bs.details.model.assign', function (e) {
+    e.preventDefault();
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+    header.html('Carica i dettagli da un modello');
+
+    if (true === editable) {
+
+        if (0 < $('#ProductCategory_id').val().length) {
+
+            $.ajax({
+                url: '/blueseal/xhr/DetailModelGetDetails',
+                type: 'GET',
+                data: {
+                    categories: $('#ProductCategory_id').val()
+                }
+            }).done(function (res) {
+                body.html(
+                    '<div style="height: 300px;">' +
+                    '<form id="detailAdd"><div class="form-group">' +
+                    '<label>Inserisci il nome:</label><br />' +
+                    '<select class="form-control new-dett-ita" name="modelAssign" id="modelAssign"></select>' +
+                    '</form></div>'
+                );
+
+                var modelAssign = $('#modelAssign');
+                res = JSON.parse(res);
+                console.log(res);
+                modelAssign.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: res,
+                    create: false,
+                    render: {
+                        option: function (item, escape) {
+                            var origin = "";
+                            if ("code" == item.origin) origin = ' <span class="small"> (da una categoria del prodotto)</span>';
+                            //else if ("model" == item.origin) origin = ' <span class="small"> (dal prodotto) </span>';
+                            return '<div>' +
+                                escape(item.name) + origin +
+                                '</div>';
+                        }
+                    },
+                    load: function (query, callback) {
+                        if (3 > query.length) {
+                            return callback();
+                        }
+                        $.ajax({
+                            url: '/blueseal/xhr/DetailModelGetDetails',
+                            type: 'GET',
+                            data: {
+                                code: $('.product-code').html(),
+                                search: query,
+                            },
+                            dataType: 'json',
+                            error: function () {
+                                callback();
+                            },
+                            success: function (res) {
+                                callback(res);
+                            }
+                        });
+                    }
+                });
+            });
+            bsModal.modal();
+            cancelButton.html('Annulla').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            okButton.html('Carica dal modello').off().on('click', function () {
+                $('#main-details').selectDetails({
+                    type: 'model',
+                    value: $('#modelAssign').val()
+                });
+                bsModal.modal('hide');
+            });
+        } else {
+            body.html('Prima di caricare un modello devi selezionare le categorie del prodotto');
+            cancelButton.hide();
+            okButton.html('Ok').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            bsModal.modal();
+        }
+    } else {
+        body.html('Prima di caricare un modello devi inizializzare l\'inserimento o la modifica di un prodotto');
+        cancelButton.hide();
+        okButton.html('Ok').off().on('click', function () {
+            bsModal.modal('hide');
+        });
+        bsModal.modal();
+    }
+});
+
 (function ($) {
     $.fn.selectDetails = function (arr) {
         var prototypeId = 0;
@@ -413,6 +513,14 @@ $(document).on('bs.details.model.assign', function (e) {
                     sel[0].selectize.setValue(0, true);
                 }
             });
+            var pname = $('.detailContent').data('product-name');
+            if ("" != pname) {
+                var selectName = $('#ProductName_1_name').selectize()[0].selectize;
+                selectName.addOption({name: pname});
+                selectName.addItem(pname);
+                selectName.refreshOptions();
+                selectName.setValue(pname, true);
+            }
         });
     }
 })(jQuery);
@@ -463,7 +571,7 @@ function searchForProduct(itemno, variantName, brandId) {
 
 function eraseForm() {
     $('input, select').each(function(){
-        if (('Product_itemno' != $(this).attr('id')) && ('ProductVariant_name' != $(this).attr('id'))) {
+        if (('Product_itemno' != $(this).attr('id')) && ('ProductVariant_name' != $(this).attr('id')) && ('Product_productBrandId' != $(this).attr('id'))) {
             $(this).val('');
         }
     });
@@ -574,6 +682,55 @@ function fillTheFields(product) {
     $('#Product_note').html(product['note']);
 }
 
+$(document).on('bs.det.add', function (e) {
+    e.preventDefault();
+
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+    //new Cslugify
+    header.html('Aggiungi dettaglio');
+    body.html(
+        '<div><span class="small">L\'aggiunta di un dettaglio comporta il ricaricamento della pagina.<br />Salvare il prodotto prima di effettuare questa operazione</span></div>' +
+        '<div class="alert alert-danger modal-alert" style="display: none">Il campo <strong>Italiano</strong> è obbligatorio</div>' +
+        '<form id="detailAdd"><div class="form-group">' +
+        '<label>Italiano*</label>' +
+        '<input type="text" class="form-control new-dett-ita" name="newDettIta" />' +
+        '</div></form>'
+    );
+    cancelButton.html("Annulla").off().on('click', function () {
+        bsModal.hide();
+    });
+    bsModal.modal('show');
+    okButton.html('Inserisci').off().on('click', function () {
+        if ('' === $('.new-dett-ita').val()) {
+            $('.modal-alert').css('display', 'block');
+        } else {
+            $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "/blueseal/xhr/ProductDetailAddNewAjaxController",
+                    data: {
+                        name: $('.new-dett-ita').val()
+                    }
+                }
+            ).done(function (result) {
+                var res = result.split("-");
+                body.html(res[0]);
+                cancelButton.hide();
+                okButton.html('Ok').off().on('click', function () {
+                    bsModal.modal('hide');
+                    window.location.reload();
+                });
+            });
+            return false;
+        }
+    });
+});
+
 // MOVIMENTI MAGAZZINO
 
 $(document).on('bs.details.mag.move', function() {
@@ -609,7 +766,8 @@ $(document).on('bs.details.mag.move', function() {
 
 $.fn.createCategoryBtn = function() {
     $(this).append('<button class="btn btn-default catButton">Seleziona prima le categorie</button>');
-    $('.catButton').off().on('click', function(){
+    $('.catButton').off().on('click', function(e){
+        e.preventDefault();
         $(document).trigger('bs.category.edit');
     });
 };
@@ -728,7 +886,6 @@ $(document).ready(function () {
     if (($_GET.get('id') && ($_GET.get('productVariantId'))) ) {
         searchForProductByCode($_GET.get('id'), $_GET.get('productVariantId'));
     }
-    console.log('sdfhaskdjfh');
     if (!$('#ProductCategory_id').val().length) {
         $('#main-details').createCategoryBtn();
     }

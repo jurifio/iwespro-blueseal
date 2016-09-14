@@ -356,18 +356,17 @@ class CProductManageController extends ARestrictedAccessRootController
 
             /** INSERIMENTO SHOP */
 
-            $hasShop = 0;
-            foreach ($post as $key => $input) {
-                $inputName = explode('_', $key);
-                if ($inputName[0] != 'Shop') continue;
-                if (!$input) continue;
 
+            $user = $this->app->getUser();
+            if (!$user->hasPermission('allShops')) {
+                foreach ($user->shop as $s) {
+                    $shopId = $s->id;
+                }
                 $insertData = $productIdsExt;
-                $insertData['shopId'] = $input;
+                $insertData['shopId'] = $shopId;
                 $insertData['price'] = $post['Product_retail_price'];
                 $insertData['value'] = $post['Product_value'];
                 $this->app->dbAdapter->insert("ShopHasProduct", $insertData);
-                $hasShop++;
             }
 
             //se non c'è il campo shop o non è selezionato uno shop, vengono assegnati tutti gli shop dell'utente
