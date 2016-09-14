@@ -368,6 +368,200 @@ $(document).on('bs.details.model.assign', function (e) {
     }
 });
 
+$(document).on('bs.details.model.assign', function (e) {
+    e.preventDefault();
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+    header.html('Carica i dettagli da un prodotto');
+
+    if (true === editable) {
+
+        if ($('#ProductCategory_Id').length) {
+
+            $.ajax({
+                url: '/blueseal/xhr/DetailModelGetDetails',
+                type: 'GET',
+                data: {
+                    categories: $('#ProductCategory_id').val()
+                }
+            }).done(function (res) {
+                body.html(
+                    '<div style="height: 300px;">' +
+                    '<form id="detailAdd"><div class="form-group">' +
+                    '<label>Inserisci il nome:</label><br />' +
+                    '<select class="form-control new-dett-ita" name="modelAssign" id="modelAssign"></select>' +
+                    '</form></div>'
+                );
+
+                var modelAssign = $('#modelAssign');
+                res = JSON.parse(res);
+                console.log(res);
+                modelAssign.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: res,
+                    create: false,
+                    render: {
+                        option: function (item, escape) {
+                            var origin = "";
+                            if ("code" == item.origin) origin = ' <span class="small"> (da una categoria del prodotto)</span>';
+                            //else if ("model" == item.origin) origin = ' <span class="small"> (dal prodotto) </span>';
+                            return '<div>' +
+                                escape(item.name) + origin +
+                                '</div>';
+                        }
+                    },
+                    load: function (query, callback) {
+                        if (3 > query.length) {
+                            return callback();
+                        }
+                        $.ajax({
+                            url: '/blueseal/xhr/DetailModelGetDetails',
+                            type: 'GET',
+                            data: {
+                                code: $('.product-code').html(),
+                                search: query,
+                            },
+                            dataType: 'json',
+                            error: function () {
+                                callback();
+                            },
+                            success: function (res) {
+                                callback(res);
+                            }
+                        });
+                    }
+                });
+            });
+            bsModal.modal();
+            cancelButton.html('Annulla').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            okButton.html('Carica dal modello').off().on('click', function () {
+                $('#main-details').selectDetails({
+                    type: 'model',
+                    value: $('#modelAssign').val()
+                });
+                bsModal.modal('hide');
+            });
+        } else {
+            body.html('Prima di caricare un modello devi selezionare le categorie del prodotto');
+            okButton.html('Carica dal modello').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            bsModal.modal();
+        }
+    } else {
+        body.html('Prima di caricare un modello devi inizializzare l\'inserimento o la modifica di un prodotto');
+        okButton.html('Carica dal modello').off().on('click', function () {
+            bsModal.modal('hide');
+        });
+        bsModal.modal();
+    }
+});
+
+$(document).on('bs.details.model.assign', function (e) {
+    e.preventDefault();
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+    header.html('Carica i dettagli da un modello');
+
+    if (true === editable) {
+
+        if ($('#productCategory_Id').length) {
+
+            $.ajax({
+                url: '/blueseal/xhr/DetailModelGetDetails',
+                type: 'GET',
+                data: {
+                    categories: $('#ProductCategory_id').val()
+                }
+            }).done(function (res) {
+                body.html(
+                    '<div style="height: 300px;">' +
+                    '<form id="detailAdd"><div class="form-group">' +
+                    '<label>Inserisci il nome:</label><br />' +
+                    '<select class="form-control new-dett-ita" name="modelAssign" id="modelAssign"></select>' +
+                    '</form></div>'
+                );
+
+                var modelAssign = $('#modelAssign');
+                res = JSON.parse(res);
+                console.log(res);
+                modelAssign.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: res,
+                    create: false,
+                    render: {
+                        option: function (item, escape) {
+                            var origin = "";
+                            if ("code" == item.origin) origin = ' <span class="small"> (da una categoria del prodotto)</span>';
+                            //else if ("model" == item.origin) origin = ' <span class="small"> (dal prodotto) </span>';
+                            return '<div>' +
+                                escape(item.name) + origin +
+                                '</div>';
+                        }
+                    },
+                    load: function (query, callback) {
+                        if (3 > query.length) {
+                            return callback();
+                        }
+                        $.ajax({
+                            url: '/blueseal/xhr/DetailModelGetDetails',
+                            type: 'GET',
+                            data: {
+                                code: $('.product-code').html(),
+                                search: query,
+                            },
+                            dataType: 'json',
+                            error: function () {
+                                callback();
+                            },
+                            success: function (res) {
+                                callback(res);
+                            }
+                        });
+                    }
+                });
+            });
+            bsModal.modal();
+            cancelButton.html('Annulla').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            okButton.html('Carica dal modello').off().on('click', function () {
+                $('#main-details').selectDetails({
+                    type: 'model',
+                    value: $('#modelAssign').val()
+                });
+                bsModal.modal('hide');
+            });
+        } else {
+            body.html('Prima di caricare un modello devi selezionare le categorie del prodotto');
+            okButton.html('Carica dal modello').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            bsModal.modal();
+        }
+    } else {
+        body.html('Prima di caricare un modello devi inizializzare l\'inserimento o la modifica di un prodotto');
+        okButton.html('Carica dal modello').off().on('click', function () {
+            bsModal.modal('hide');
+        });
+        bsModal.modal();
+    }
+});
+
 (function ($) {
     $.fn.selectDetails = function (arr) {
         var prototypeId = 0;
