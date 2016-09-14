@@ -84,11 +84,11 @@
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
             data-remote="btn.href.add.product"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.print.aztec"
-        ></bs-toolbar-button>
-            <bs-toolbar-button
+            ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.product.skus.barcode.print"
             ></bs-toolbar-button>
         <bs-toolbar-button
@@ -105,38 +105,39 @@
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.photo.download"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.delete"
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.status.change"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.season.change"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.category.change"
-        ><bs-toolbar-button
+            ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.product.details.merge"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.names.merge"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.sizeGroup.change"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
-           data-remote="bs.product.storage.movement.open"
-        ></bs-toolbar-button>
+            data-remote="bs.product.storage.movement.open"
+            ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione prezzi">
         <bs-toolbar-button
             data-remote="bs.product.sales.set"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.sales.price.change"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
