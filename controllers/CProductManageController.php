@@ -363,6 +363,7 @@ class CProductManageController extends ARestrictedAccessRootController
                     $shopId = $s->id;
                 }
                 $insertData = $productIdsExt;
+                $insertData['extId'] = $post['Product_extId'];
                 $insertData['shopId'] = $shopId;
                 $insertData['price'] = $post['Product_retail_price'];
                 $insertData['value'] = $post['Product_value'];

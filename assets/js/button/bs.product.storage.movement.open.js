@@ -22,12 +22,13 @@ $(document).on('bs.product.storage.movement.open', function(){
     }
 
     var i = 0;
+    var getVarsArray = [];
     $.each(selectedRows, function (k, v) {
-        getVarsArray[i] = prodId+ i + '=' + v;
+        getVarsArray[i] = v['DT_RowId'];
         i++;
     });
 
     var getVars = getVarsArray.join(',');
 
-    window.open('/blueseal/prodotti/movimenti/inserisci?code=098-234,234-234,234-234,', '_blank');
+    window.open('/blueseal/prodotti/movimenti/inserisci?code=' + getVars, '_blank');
 });

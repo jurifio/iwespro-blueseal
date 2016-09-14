@@ -670,7 +670,7 @@ function fillTheFields(product) {
     if ("hidden" != $('#Shop').attr('type')) {
         //TODO
     }
-    $('#Product_externalId').val(product['extId']);
+    $('#Product_extId').val(product['extId']);
     $('#Product_sizes').selectize()[0].selectize.setValue(product['productSizeGroupId'], true);
     $('#Product_ProductSeasonId').selectize()[0].selectize.setValue(product['productSeasonId'], true);
     $('#Product_retail_price').val(product['price']);
