@@ -122,8 +122,10 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
         var formSelector = conf.formSelector || 'document';
         $(me).find('input:not([type=file]), textarea, select').each(function () {
             if (typeof $(this).attr('name') == 'undefined') return;
-            if ($(this).attr('required') == 'required' && $(this).val().length === 0) {
-                errors.push($(this).attr('name'));
+            if ($(this).attr('required') == 'required') {
+                if ($(this).val().length === 0) {
+                    errors.push($(this).attr('name'));
+                }
             }
         });
 

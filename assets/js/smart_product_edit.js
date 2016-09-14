@@ -497,7 +497,7 @@ $(document).on('bs.details.model.assign', function (e) {
                     type: 'change'
                 });
             });
-
+            var initVal = $(this).data('init-selection');
             $(self).find(".productDetails select").each(function () {
                 var sel = $(this).selectize({
                     valueField: 'id',
@@ -512,6 +512,12 @@ $(document).on('bs.details.model.assign', function (e) {
                     sel[0].selectize.setValue(0, true);
                 }
             });
+
+            var selectName = $('#ProductName_1_name').selectize()[0].selectize;
+            selectName.addOption({name: product['productName']});
+            selectName.addItem(product['productName']);
+            selectName.refreshOptions();
+            selectName.setValue(df, true);
         });
     }
 })(jQuery);
@@ -562,7 +568,7 @@ function searchForProduct(itemno, variantName, brandId) {
 
 function eraseForm() {
     $('input, select').each(function(){
-        if (('Product_itemno' != $(this).attr('id')) && ('ProductVariant_name' != $(this).attr('id'))) {
+        if (('Product_itemno' != $(this).attr('id')) && ('ProductVariant_name' != $(this).attr('id')) && ('Product_productBrandId' != $(this).attr('id'))) {
             $(this).val('');
         }
     });
