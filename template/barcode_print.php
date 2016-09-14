@@ -11,7 +11,7 @@
         }
 
         .coderow {
-            height: 39mm;
+            height: 38.8mm;
             margin-top:0;
             margin-bottom:0;
         }
@@ -304,15 +304,24 @@ foreach ($productSkus as $productSku): ?>
         </div>
         <div class="row coderow">
     <?php endif; ?>
-    <div class="col-xs-4" style="">
+    <div class="col-xs-4" style="border-right: 1px dotted #c0c0c0;">
         <div class="row">
-            <div class="col-xs-12" style="margin-top:10px">
-                <?php echo $barcodeGenerator->getBarcode($productSku->barcode, Picqer\Barcode\BarcodeGenerator::TYPE_CODE_128, 2,45); ?>
-                <span style="position:relative;top:-5px;margin-left:27%;font-size: 8pt"><?php echo $productSku->barcode; ?></span>
+            <div class="col-xs-12" style="margin-top:0px">
+                <span style="position:relative;margin-left:27%;font-size: 8pt"><?php echo $productSku->product->printId(); ?></span>
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12" style="border-right: 1px dotted #c0c0c0;">
+            <div class="col-xs-12" style="margin-top:0px">
+                <?php echo $barcodeGenerator->getBarcode($productSku->barcode, \Picqer\Barcode\BarcodeGenerator::TYPE_CODE_128, 2,45); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" style="margin-top:-7px">
+                <span style="position:relative;margin-left:27%;font-size: 8pt"><?php echo $productSku->barcode; ?></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" style="">
                 <div class="row">
                     <div class="col-md-8">
                         <span><?php echo $productSku->product->itemno . ' # ' . $productSku->product->productVariant->name; ?></span>
