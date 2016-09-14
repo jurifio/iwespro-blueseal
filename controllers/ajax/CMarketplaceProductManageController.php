@@ -37,6 +37,7 @@ class CMarketplaceProductManageController extends AAjaxController
 	    $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
 	    $config = $marketplaceAccount->config;
 	    $config['priceModifier'] = $this->app->router->request()->getRequestData('modifier');
+	    $config['cpc'] = $this->app->router->request()->getRequestData('cpc');
 	    $i = 0;
 	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
 		    $productSample->readId($row);
@@ -46,6 +47,9 @@ class CMarketplaceProductManageController extends AAjaxController
 		    $marketplaceAccountHasProduct->marketplaceAccountId = $marketplaceAccount->id;
 		    $marketplaceAccountHasProduct->marketplaceId = $marketplaceAccount->marketplaceId;
 		    $marketplaceAccountHasProduct->priceModifier = $config['priceModifier'];
+            if($marketplaceAccount->marketplace->type == 'cpc') {
+                $marketplaceAccountHasProduct->fee = $config['cpc'];
+            }
 		    $marketplaceAccountHasProduct->insert();
 		    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
 		    $i++;
