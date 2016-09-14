@@ -716,6 +716,7 @@ $(document).ready(function () {
 
     $('.disableBlank').disableBlank();
 
+    category = false;
     $('button.search-product').on('click', function(){
         itemno = $('input[name="Product_itemno"]').val();
         variantName = $('input[name="ProductVariant_name"]').val();
