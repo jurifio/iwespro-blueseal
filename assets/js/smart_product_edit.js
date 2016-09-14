@@ -380,7 +380,7 @@ $(document).on('bs.details.model.assign', function (e) {
 
     if (true === editable) {
 
-        if (0 < $('#ProductCategory_id').length) {
+        if (0 < $('#ProductCategory_id').val().length) {
 
             $.ajax({
                 url: '/blueseal/xhr/DetailModelGetDetails',
