@@ -283,7 +283,7 @@ $(document).on('bs.details.model.assign', function (e) {
 
     if (true === editable) {
 
-        if ($('#productCategory_Id').length) {
+        if ($('#productCategory_Id').val().length) {
 
             $.ajax({
                 url: '/blueseal/xhr/DetailModelGetDetails',
@@ -380,7 +380,7 @@ $(document).on('bs.details.model.assign', function (e) {
 
     if (true === editable) {
 
-        if ($('#ProductCategory_Id').length) {
+        if ($('#ProductCategory_Id').val().length) {
 
             $.ajax({
                 url: '/blueseal/xhr/DetailModelGetDetails',
@@ -477,7 +477,7 @@ $(document).on('bs.details.model.assign', function (e) {
 
     if (true === editable) {
 
-        if ($('#ProductCategory_Id').length) {
+        if (0 < $('#ProductCategory_Id').length) {
 
             $.ajax({
                 url: '/blueseal/xhr/DetailModelGetDetails',
