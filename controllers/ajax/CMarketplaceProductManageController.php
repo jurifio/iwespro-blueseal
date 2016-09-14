@@ -25,7 +25,7 @@ class CMarketplaceProductManageController extends AAjaxController
 		$response = [];
 		foreach ($this->app->repoFactory->create('MarketplaceAccount')->findAll() as $account) {
 			$modifier = isset($account->config['priceModifier']) ? $account->config['priceModificer'] : 0;
-			$response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier];
+			$response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc'=>$account->marketplace->type != 'marketplace'];
 		}
 
 		return json_encode($response);
