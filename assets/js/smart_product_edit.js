@@ -667,9 +667,7 @@ function fillTheFields(product) {
     $('#Product_productBrandId').selectize()[0].selectize.setValue(product['productBrandId'], true);
     $('#ProductColorGroup_id').selectize()[0].selectize.setValue(product['productColorGroupId'], true);
     $('#ProductVariant_description').val(product['variantDescription']);
-    if ("hidden" != $('#Shop').attr('type')) {
-        //TODO
-    }
+    $('#ProductCategory_id').val(product['productCategories']);
     $('#Product_extId').val(product['extId']);
     $('#Product_sizes').selectize()[0].selectize.setValue(product['productSizeGroupId'], true);
     $('#Product_ProductSeasonId').selectize()[0].selectize.setValue(product['productSeasonId'], true);
