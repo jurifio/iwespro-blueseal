@@ -39,22 +39,19 @@ class CDetailModelGetDetails extends AAjaxController
             }
             $res = $details;
         } else {
-
             if ($code) {
-                list($id, $variantId) = explode('-', $code);
-                $cats = $this->app->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
-
-                foreach ($cats as $v) {
+                //list($id, $variantId) = explode('-', $code);
+                $product = $this->app->repoFactory->create('Product')->findByAnyString($code);
+                foreach($product as $v) {
                     $names[$namesCount] = [];
-                    $psmp = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productCategoryId' => $v->id]);
-                    if ($psmp) {
-                        $names[$namesCount]['id'] = $psmp->productSheetModelPrototypeId;
-                        $names[$namesCount]['name'] = $psmp->productSheetModelPrototype->name;
-                        $names[$namesCount]['origin'] = 'code';
-                        $namesCount++;
-                    }
+                    $names[$namesCount]['id'] = $v->productSheetPrototypeId;
+                    $names[$namesCount]['name'] = '';
+                    $names[$namesCount]['origin'] = 'code';
+                    $namesCount++;
+                    break;
                 }
             }
+
             if ($categories) {
                 //$catIds = explode(',', $categories);
                 $res = $this->app->dbAdapter->query(
