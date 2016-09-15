@@ -58,6 +58,11 @@ class CisProductEditable extends AAjaxController
             $productArr['variantName'] = $productEdit->productVariant->name;
             $productArr['variantDescription'] = $productEdit->productVariant->description;
             $productArr['productColorGroupId'] = $productEdit->productColorGroup->getFirst()->id;
+            $catIds = [];
+            foreach($productEdit->productCategory as $c) {
+                $catIds[] = $c->id;
+            }
+            $productArr['productCategories'] = implode(',', $catIds);
             $name = $productEdit->productNameTranslation->getFirst()->name;
             $productArr['productName'] = ($name) ? $name : '' ;
 

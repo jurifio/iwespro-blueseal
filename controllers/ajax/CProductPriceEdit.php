@@ -34,11 +34,11 @@ class CProductPriceEdit extends AAjaxController
 
             $ret = [];
             foreach($prod->productSku as $s) {
-                if (!array_key_exists($s['shopId'], $ret)) {
-                    $ret[$s['shopId']] = [];
-                    $ret[$s['shopId']]['value'] = $s->value;
-                    $ret[$s['shopId']]['price'] = $s->price;
-                    $ret[$s['shopId']]['salePrice'] = $s->salePrice;
+                if (!array_key_exists($s->shopId, $ret)) {
+                    $ret[$s->shopId] = [];
+                    $ret[$s->shopId]['value'] = $s->value;
+                    $ret[$s->shopId]['price'] = $s->price;
+                    $ret[$s->shopId]['salePrice'] = $s->salePrice;
                 }
             }
 
