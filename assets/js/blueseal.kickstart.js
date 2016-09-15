@@ -1076,16 +1076,49 @@ $.bsModal = function (header, params) {
         });
 
         //ricerca per barcode
-        var searchInput = this.searchBlock.find('.search-item');
+/*        var searchInput = this.searchBlock.find('.search-item');
         searchInput.on('keypress', function(e){
             if (13 == e.charCode) {
                 e.preventDefault();
                 $(this).select();
                 searchBtn.trigger('click');
             }
-        });
+        });*/
 
         //selectize search field
+        var searchInput = this.searchBlock.find('.search-item');
+        searchInput.selectize({
+            valueField: 'code',
+            labelField: 'code',
+            searchField: 'code',
+            options: [],
+            create: false,
+            render: {
+                option: function (item, escape) {
+                    return '<div><span class="small">codice: </span><strong>' + escape(item.code) + '</strong><br /><span class="small">CPF e Variante: </span><strong>' + escape(item.cpfVar) + '</strong></span></div>';
+                }
+            },
+            load: function (query, callback) {
+                if (2 > query.length) {
+                    return callback();
+                }
+                $.ajax({
+                    url: '/blueseal/xhr/GetProductByAnyString',
+                    type: 'GET',
+                    data: {
+                        search: query
+                    },
+                    dataType: 'json',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res);
+                    }
+                });
+            }
+        });
+
 
         this.submitBlock.find('button').on('click', function(e){
             e.preventDefault();

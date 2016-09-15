@@ -370,21 +370,16 @@ $(document).on('bs.details.model.assign', function (e) {
 });
 
 $(document).on('bs.details.product.assign', function (e) {
-    e.preventDefault();
-    var bsModal = $('#bsModal');
-    var header = $('#bsModal .modal-header h4');
-    var body = $('#bsModal .modal-body');
-    var cancelButton = $('#bsModal .modal-footer .btn-default');
-    var okButton = $('#bsModal .modal-footer .btn-success');
-
-    header.html('Carica i dettagli da un modello');
 
     if (true === editable) {
-        modal = new $.bsModal('Caricamento dettagli da prodotto',
+        modal = new $.bsModal(
+            'Carica i dettagli da prodotto',
                 {
-                    body: '<div class="form-group">' +
-                    '<label for="detCode">Codice o CPF # Variante</label><br />' +
-                    '<input type="text" name="detCode" class="detCode form-group" id="detCode" />' +
+                    body: '<div class="form-group" style="display: block; height: 250px; text-align: center;">' +
+                    '<label for="detCode">Codice o CPF#Variante</label><br />' +
+                    '<select name="detCode" class="detCode form-group" placeholder="Inserisci i dati di ricerca" id="detCode">' +
+                    '<option value="">Inserisci i dati di ricerca</option>' +
+                    '</select>' +
                     '</div>',
                     okLabel: "Carica i dettagli",
                     cancelLabel: "Annulla",
@@ -398,18 +393,37 @@ $(document).on('bs.details.product.assign', function (e) {
                 }
             );
 
-     /*   $('#main-details').selectDetails({
-                    type: 'model',
-                    value: $('#modelAssign').val()
+            $('.detCode').selectize({
+            valueField: 'code',
+            labelField: 'code',
+            searchField: 'code',
+            options: [],
+            create: false,
+            render: {
+                option: function (item, escape) {
+                    return '<div><span class="small">codice: </span><strong>' + escape(item.code) + '</strong><br /><span class="small">CPF e Variante: </span><strong>' + escape(item.cpfVar) + '</strong></span></div>';
+                }
+            },
+            load: function (query, callback) {
+                if (2 > query.length) {
+                    return callback();
+                }
+                $.ajax({
+                    url: '/blueseal/xhr/GetProductByAnyString',
+                    type: 'GET',
+                    data: {
+                        search: query
+                    },
+                    dataType: 'json',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res);
+                    }
                 });
-                bsModal.modal('hide');
             }
-    } else {
-        body.html('Prima di caricare un modello devi inizializzare l\'inserimento o la modifica di un prodotto');
-        okButton.html('Carica dal modello').off().on('click', function () {
-            bsModal.modal('hide');
         });
-        bsModal.modal();*/
     }
 });
 

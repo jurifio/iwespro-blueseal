@@ -66,7 +66,7 @@
                         <div class="form-group-inline mag-searchBlock">
                             <div class="form-group form-group-default">
                                 <label for="search-item">Cerca il prodotto</label>
-                                <input name="search-item" class="form-group-inline form-control search-item" />
+                                <select name="search-item" class="form-group-inline form-control search-item" placeholder="Inserisci il codice o il CPF"><option value=""></option></select>
                                 <button type="submit" class="btn btn-active search-btn">Aggiungi Prodotto</button>
                                 <br class="clearfix" />
                             </div>
