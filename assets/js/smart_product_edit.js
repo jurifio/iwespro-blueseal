@@ -667,10 +667,8 @@ function fillTheFields(product) {
     $('#Product_productBrandId').selectize()[0].selectize.setValue(product['productBrandId'], true);
     $('#ProductColorGroup_id').selectize()[0].selectize.setValue(product['productColorGroupId'], true);
     $('#ProductVariant_description').val(product['variantDescription']);
-    if ("hidden" != $('#Shop').attr('type')) {
-        //TODO
-    }
-    $('#Product_externalId').val(product['extId']);
+    $('#ProductCategory_id').val(product['productCategories']);
+    $('#Product_extId').val(product['extId']);
     $('#Product_sizes').selectize()[0].selectize.setValue(product['productSizeGroupId'], true);
     $('#Product_ProductSeasonId').selectize()[0].selectize.setValue(product['productSeasonId'], true);
     $('#Product_retail_price').val(product['price']);
@@ -680,6 +678,7 @@ function fillTheFields(product) {
     selectName.addItem(product['productName']);
     selectName.refreshOptions();
     $('#Product_note').html(product['note']);
+    $('#summernote1').code(product['productDescription']);
 }
 
 $(document).on('bs.det.add', function (e) {

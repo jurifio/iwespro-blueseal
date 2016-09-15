@@ -84,16 +84,18 @@ class CProductManageController extends ARestrictedAccessRootController
             } else {
                 //se non c'è il campo shop o non è selezionato uno shop, vengono assegnati tutti gli shop dell'utente
                 $user = $this->app->getUser();
-                foreach($user->shop as $shop) {
-                    $shpe = $shp->findOneBy(
-                        [
-                            'productId' => $productIdsExt['productId'],
-                            'productVariantId' => $productIdsExt['productVariantId'],
-                            'shopId' => $shop->id,
-                        ]);
-                    if (array_key_exists('Product_retail_price', $post)) $shpe->price = $post['Product_retail_price'];
-                    if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];
-                    $shpe->update();
+                if (!$user->hasPermission('allShops')) {
+                    foreach ($user->shop as $shop) {
+                        $shpe = $shp->findOneBy(
+                            [
+                                'productId' => $productIdsExt['productId'],
+                                'productVariantId' => $productIdsExt['productVariantId'],
+                                'shopId' => $shop->id,
+                            ]);
+                        if (array_key_exists('Product_retail_price', $post)) $shpe->price = $post['Product_retail_price'];
+                        if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];
+                        $shpe->update();
+                    }
                 }
             }
 
@@ -363,6 +365,7 @@ class CProductManageController extends ARestrictedAccessRootController
                     $shopId = $s->id;
                 }
                 $insertData = $productIdsExt;
+                $insertData['extId'] = $post['Product_extId'];
                 $insertData['shopId'] = $shopId;
                 $insertData['price'] = $post['Product_retail_price'];
                 $insertData['value'] = $post['Product_value'];

@@ -117,6 +117,20 @@ endif; ?></div>
                                                 </div>
                                             </div>
                                             <div class="disableBlank">
+                                                <?php if (!$allShops): ?>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group form-group-default">
+                                                            <label for="ProductVariant_description">ID Origine</label>
+                                                            <input id="Product_extId" autocomplete="off"
+                                                                   type="text" class="form-control"
+                                                                   name="Product_extId"
+                                                                   value="<?php echo isset($productEdit) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>">
+                                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php endif; ?>
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group form-group-default selectize-enabled">

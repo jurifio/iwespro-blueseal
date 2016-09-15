@@ -58,9 +58,27 @@ class CisProductEditable extends AAjaxController
             $productArr['variantName'] = $productEdit->productVariant->name;
             $productArr['variantDescription'] = $productEdit->productVariant->description;
             $productArr['productColorGroupId'] = $productEdit->productColorGroup->getFirst()->id;
-            if ($productEdit->productNameTranslation->getFirst()) {
-                $productArr['productName'] = ($name = $productEdit->productNameTranslation->getFirst()->name) ? $name : '';
+            $catIds = [];
+            foreach($productEdit->productCategory as $c) {
+                $catIds[] = $c->id;
             }
+            $productArr['productCategories'] = implode(',', $catIds);
+            $name = $productEdit->productNameTranslation->getFirst()->name;
+            $productArr['productName'] = ($name) ? $name : '' ;
+
+            if (!$user->hasPermission('allShops')) {
+                foreach ($user->shop as $s) {
+                    $shopId = $s->id;
+                    break;
+                }
+                if ($shp = $productEdit->shopHasProduct->findOneByKey('shopId', $shopId)) {
+                    $productArr['extId'] = $shp->extId;
+                }
+            }
+
+            $desc = $productEdit->productDescriptionTranslation->findOneByKey('langId', 1);
+            $productArr['productDescription'] = ($desc) ? $desc->description : '';
+
 
             $shop = $this->app->getUser()->shop;
             $shopId = 0;
