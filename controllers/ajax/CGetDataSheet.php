@@ -43,8 +43,8 @@ class CGetDataSheet extends AAjaxController
             $actual = [];
         } else {
             if ($code) {
-                $prodCollection = $this->app->repoFactory->create('Product')->findOneByAnyString($code);
-                $prod =
+                $prodCollection = $this->app->repoFactory->create('Product')->findByAnyString($code);
+                $product = $prodCollection->getFirst();
                 $productSheetPrototype = $product->productSheetPrototype;
                 if (null === $productSheetPrototype) $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOne([33]);
                 $actual = $product->productSheetActual;
