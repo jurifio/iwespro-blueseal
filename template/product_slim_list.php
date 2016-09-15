@@ -66,6 +66,9 @@
                                     <th data-slug="stock"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stock</th>
+                                    <th data-slug="creationData"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Data</th>
                                 </tr>
                             </thead>
                             <tbody>

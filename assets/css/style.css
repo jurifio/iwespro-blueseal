@@ -737,6 +737,7 @@ ul.roulette-importer-details li {
 .search-col {
     width: 90%;
     display: none;
+    color:black;
 }
 
 .selectize-streachable+.selectize-control {
