@@ -47,7 +47,7 @@
                                     <th data-slug="season"
                                         data-searchable="true"
                                         data-orderable="true"
-                                        data-default-order="desc" class="center">Stagione</th>
+                                        class="center">Stagione</th>
                                     <th data-slug="cpf"
                                         data-searchable="true"
                                         data-orderable="true" class="center">CPF</th>
@@ -66,9 +66,10 @@
                                     <th data-slug="stock"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stock</th>
-                                    <th data-slug="creationData"
+                                    <th data-slug="creationDate"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Data</th>
+                                        data-orderable="true"
+                                        data-default-order="desc" class="center">Data</th>
                                 </tr>
                             </thead>
                             <tbody>
