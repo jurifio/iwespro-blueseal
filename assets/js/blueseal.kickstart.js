@@ -432,7 +432,7 @@ $.bsModal = function (header, params) {
         body: '',
         isCancelButton: false,
         okLabel: 'Ok',
-        cancelLabel: 'Cancel',
+        cancelLabel: 'Annulla',
         cancelButtonEvent: function () {
             self.hide();
         },

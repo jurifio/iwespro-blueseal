@@ -382,6 +382,17 @@ endif; ?></div>
             data-json='<?php echo json_encode($sortingOptions); ?>'
             data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-sort-numeric-asc"
+            data-permission="/admin/product/edit"
+            data-event="bs.priority.edit"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Priorità"
+            data-json='<?php echo json_encode($sortingOptions); ?>'
+            data-placement="bottom"
+        ></bs-toolbar-button>
         <?php if ($allShops): ?>
         <bs-toolbar-button
             data-tag="a"
@@ -421,6 +432,16 @@ endif; ?></div>
             data-icon="fa-files-o"
             data-permission="/admin/product/edit"
             data-event="bs.details.model.assign"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Carica i dettagli da modello"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-files-o"
+            data-permission="/admin/product/edit"
+            data-event="bs.details.product.assign"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Carica i dettagli da modello"
