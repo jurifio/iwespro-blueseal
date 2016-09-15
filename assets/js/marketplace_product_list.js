@@ -76,6 +76,10 @@ $(document).on('bs.product.publish', function (e, element, button) {
 	bsModal.modal();
 });
 
+$(document).on('bs.marketplace.filter',function() {
+
+});
+
 $(document).on('bs.ean.newRange', function (e, element, button) {
 
 	var bsModal = $('#bsModal');

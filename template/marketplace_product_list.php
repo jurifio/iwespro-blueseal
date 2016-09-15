@@ -20,7 +20,7 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_list"
                                data-column-filter="true"
-                               data-controller="MarketplaceProductListAjaxController"
+                               data-controller="MarketplaceProductListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                                 <tr>

@@ -31,47 +31,18 @@ class CMarketplaceProductListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/marketplace_product_list.php');
 
-        /** LOGICA */
-        $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
-        $pageURL = $bluesealBase . "prodotti";
-        $aggiungi = $bluesealBase . "prodotti/aggiungi";
-        $carica = $bluesealBase . "skus";
-        $foto = $bluesealBase . "carica_foto.php";
-        $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
-
-        $shops = [];
-        if ($this->app->getUser()->hasPermission('allShops')) {
-
-        } else {
-            $res = $this->app->dbAdapter->select('UserHasShop', ['userId' => $this->app->getUser()->getId()])->fetchAll();
-            foreach ($res as $val) {
-                $shops[] = $val['shopId'];
+        $q = "";
+        if($this->app->router->request()->getRequestData('marketplaceId')) {
+            $q.= "?marketplaceId=".$this->app->router->request()->getRequestData('marketplaceId');
+            if($this->app->router->request()->getRequestData('marketplaceAccountId')) {
+                $q.= "&marketplaceAccountId=".$this->app->router->request()->getRequestData('marketplaceAccountId');
             }
+
         }
-        $prodotti = null;
-
-        if (count($shops) == 0) {
-            $res = $this->app->dbAdapter->select('Shop')->fetchAll();
-            foreach ($res as $val) {
-                $shops[] = $val['id'];
-            }
-        }
-
-        $roulette = [];
-
-
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'dummyUrl' => $dummyUrl,
-            'roulette' => $roulette,
-            'aggiungi' => $aggiungi,
-            'carica' => $carica,
-            'foto' => $foto,
-            'bluesealBase' => $bluesealBase,
-            'cm' => $this->app->categoryManager,
-            'pageURL' => $pageURL,
-            'prodotti' => $prodotti,
             'page' => $this->page,
+            'queryString' => $q,
             'sidebar' => $this->sidebar->build()
         ]);
     }
