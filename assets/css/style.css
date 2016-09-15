@@ -397,8 +397,12 @@ body.sidebar-visible .sidebar-logo {
 }
 
 .selectize-control {
-    position: absolute !important;
-    left: 0 !important;
+    position: absolute;
+    left: 0 ;
+}
+.modal-body .selectize-control {
+    position: relative;
+    left: 0 ;
 }
 
 .selectize-input {
