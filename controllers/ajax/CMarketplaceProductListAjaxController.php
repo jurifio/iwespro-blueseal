@@ -25,18 +25,13 @@ class CMarketplaceProductListAjaxController extends AAjaxController
 
         $datatable = new CDataTables('vBluesealMarketplaceProductList',$sample->getPrimaryKeys(),$_GET);
 
-        if($this->app->router->request()->getRequestData('marketplaceId')) {
-            $marketplaceId = $this->app->router->request()->getRequestData('marketplaceId');
-            $datatable->addCondition('marketplaceId',[$marketplaceId]);
-        } else {
-            $marketplaceId = false;
-        }
-
         if($this->app->router->request()->getRequestData('marketplaceAccountId')) {
             $marketplaceAccountId = $this->app->router->request()->getRequestData('marketplaceAccountId');
-            $datatable->addCondition('marketplaceAccountId',[$marketplaceAccountId]);
+            $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
+            $datatable->addCondition('marketplaceId',[$marketplaceAccount->marketplaceId]);
+            $datatable->addCondition('marketplaceAccountId',[$marketplaceAccount->id]);
         }else {
-            $marketplaceAccountId = false;
+            $marketplaceAccount = false;
         }
 
 

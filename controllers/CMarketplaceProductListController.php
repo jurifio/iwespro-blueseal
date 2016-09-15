@@ -32,12 +32,8 @@ class CMarketplaceProductListController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/marketplace_product_list.php');
 
         $q = "";
-        if($this->app->router->request()->getRequestData('marketplaceId')) {
-            $q.= "?marketplaceId=".$this->app->router->request()->getRequestData('marketplaceId');
-            if($this->app->router->request()->getRequestData('marketplaceAccountId')) {
-                $q.= "&marketplaceAccountId=".$this->app->router->request()->getRequestData('marketplaceAccountId');
-            }
-
+        if($this->app->router->request()->getRequestData('accountId')) {
+            $q.= "?accountId=".$this->app->router->request()->getRequestData('accountId');
         }
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
