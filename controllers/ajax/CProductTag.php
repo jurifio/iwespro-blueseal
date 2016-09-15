@@ -75,7 +75,7 @@ class CProductTag extends AAjaxController
 	{
 		if($this->app->router->request()->getRequestData('rows')) {
 			foreach ($this->app->router->request()->getRequestData('rows') as $row) {
-				$pKeys = explode('__',$row);
+				$pKeys = explode('-',$row);
 				if($this->app->router->request()->getRequestData('tags')) {
 					foreach ($this->app->router->request()->getRequestData('tags') as $tags) {
 						$this->app->dbAdapter->delete('ProductHasTag',['productId'=>$pKeys[0],'productVariantId'=>$pKeys[1],'tagId'=>$tags],'AND',true);
