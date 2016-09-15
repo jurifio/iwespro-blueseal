@@ -107,6 +107,19 @@
             data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Filtra">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-filter"
+            data-permission="/admin/product/edit"
+            data-event="bs.marketplace.filter"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Filtra Tabella"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

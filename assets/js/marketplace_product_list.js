@@ -30,10 +30,7 @@ $(document).on('bs.product.publish', function (e, element, button) {
 	Pace.ignore(function () {
 		$.ajax({
 			url: '/blueseal/xhr/MarketplaceProductManageController',
-			type: "get",
-			data: {
-				rows: getVarsArray
-			}
+			type: "get"
 		}).done(function (response) {
 			var accounts = JSON.parse(response);
 			var html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
@@ -77,7 +74,42 @@ $(document).on('bs.product.publish', function (e, element, button) {
 });
 
 $(document).on('bs.marketplace.filter',function() {
+    var bsModal = $('#bsModal');
+    var header = $('.modal-header h4');
+    var body = $('.modal-body');
+    var cancelButton = $('.modal-footer .btn-default');
+    var okButton = $('.modal-footer .btn-success');
 
+    header.html('Filtra Tabella');
+
+    body.html('<img src="/assets/img/ajax-loader.gif" />');
+
+    Pace.ignore(function () {
+        $.ajax({
+            url: '/blueseal/xhr/MarketplaceProductManageController',
+            type: "get",
+        }).done(function (response) {
+            var accounts = JSON.parse(response);
+            var html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
+                '<label for="accountFilterId">Marketplace Account</label>' +
+                '<select class="full-width" placeholder="Seleziona l\'account" ' +
+                'data-init-plugin="selectize" title="" name="accountId" id="accountFilterId" required>' +
+                '<option value=""></option>';
+            for(let account of accounts) {
+                html+='<option value="'+account.id+'" data-has-cpc="'+account.cpc+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
+            }
+            html+='</select>';
+            html+='</div>';
+
+            body.html($(html));
+
+            okButton.off().on('click',function () {
+                window.location.href('/blueseal/prodotti/marketplace?accountId='.$('#accountFilterId').val());
+            });
+        });
+    });
+
+    bsModal.modal();
 });
 
 $(document).on('bs.ean.newRange', function (e, element, button) {
