@@ -25,7 +25,6 @@ class CNamesProductAssociated extends AAjaxController
     {
        $search = $this->app->router->request()->getRequestData()['search'];
 
-       //$repo = $this->app->repoFactory->create('ProductDetailTranslation',false);
         $res = $this->app->dbAdapter->query(
             "SELECT `p`.`id`, `p`.`productVariantId`, concat(`p`.`id`, '-', `p`.`productVariantId`) as `code`, `pb`.`name` as brand, concat(`pse`.`name`, ' ', `pse`.`year`) as season, `p`.`dummyPicture` as `pic` FROM
                 (((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`)

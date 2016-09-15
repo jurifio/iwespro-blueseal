@@ -159,7 +159,6 @@ class CNamesManager extends AAjaxController
 
         $where = $searchByCodes . $concat . $searchByNames;
 
-        //$repo = $this->app->repoFactory->create('ProductDetailTranslation',false);
         $res = $this->app->dbAdapter->query("SELECT distinct `name` FROM `ProductNameTranslation` WHERE `langId` = 1 AND ( $where ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
 
         return json_encode($res);

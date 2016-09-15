@@ -20,7 +20,7 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_list"
                                data-column-filter="true"
-                               data-controller="MarketplaceProductListAjaxController"
+                               data-controller="MarketplaceProductListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                                 <tr>
@@ -103,6 +103,19 @@
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Assegna nuovi Ean Prodotti"
+            data-placement="bottom"
+            data-toggle="modal"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Filtra">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-filter"
+            data-permission="/admin/product/edit"
+            data-event="bs.marketplace.filter"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Filtra Tabella"
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>

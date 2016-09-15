@@ -23,7 +23,6 @@ class CDetailManager extends AAjaxController
     public function get()
     {
         $search = $this->app->router->request()->getRequestData()['search'];
-        //$repo = $this->app->repoFactory->create('ProductDetailTranslation',false);
         $res = $this->app->dbAdapter->query("SELECT `productDetailId` as `id`, `name` FROM `ProductDetailTranslation` WHERE `langId` = 1 AND `name` like '%" . $search . "%' ORDER BY `name` LIMIT 30", [])->fetchAll();
 
 

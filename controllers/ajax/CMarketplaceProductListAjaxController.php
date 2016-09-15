@@ -21,22 +21,26 @@ class CMarketplaceProductListAjaxController extends AAjaxController
 {
     public function get()
     {
-	    if ($this->app->getUser()->hasPermission('allShops')) {
-
-	    } else{
-		    $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
-		    foreach($res as $val) {
-			    $authorizedShops[] = $val['shopId'];
-		    }
-	    }
-
 	    $sample = $this->app->repoFactory->create('Product')->getEmptyEntity();
 
         $datatable = new CDataTables('vBluesealMarketplaceProductList',$sample->getPrimaryKeys(),$_GET);
-        if(!empty($authorizedShops)){
-            $datatable->addCondition('shopId',$authorizedShops);
+
+        if($this->app->router->request()->getRequestData('marketplaceId')) {
+            $marketplaceId = $this->app->router->request()->getRequestData('marketplaceId');
+            $datatable->addCondition('marketplaceId',[$marketplaceId]);
+        } else {
+            $marketplaceId = false;
         }
 
+        if($this->app->router->request()->getRequestData('marketplaceAccountId')) {
+            $marketplaceAccountId = $this->app->router->request()->getRequestData('marketplaceAccountId');
+            $datatable->addCondition('marketplaceAccountId',[$marketplaceAccountId]);
+        }else {
+            $marketplaceAccountId = false;
+        }
+
+
+        $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
         $prodotti = $sample->em()->findBySql($datatable->getQuery(),$datatable->getParams());
