@@ -45,6 +45,7 @@ $(document).on('bs.product.marketplace.publish.all', function (e, element, butto
 
             Pace.ignore(function () {
                 okButton.off().on('click', function () {
+                    body.html('<img src="/assets/img/ajax-loader.gif" />');
                     $.ajax({
                         url: '/blueseal/xhr/MarketplaceProductManageController',
                         type: "POST",
@@ -55,7 +56,7 @@ $(document).on('bs.product.marketplace.publish.all', function (e, element, butto
                             cpc: $('#cpc').val()
                         }
                     }).done(function () {
-
+                        body.html('Fatto');
                     }).always(function () {
                         bsModal.modal('hide');
                         $('.table').DataTable().ajax.reload();
