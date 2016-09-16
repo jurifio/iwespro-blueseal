@@ -814,6 +814,10 @@ h5.product-title {
     margin-bottom: 10px;
 }
 
+.removeRow {
+    margin-top: 25px;
+}
+
 .launcher__button {
     background: url("")
 }
