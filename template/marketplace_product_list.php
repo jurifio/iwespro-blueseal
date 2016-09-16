@@ -82,6 +82,9 @@
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.marketplace.publish.all"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Assegnazione Ean">
         <bs-toolbar-button

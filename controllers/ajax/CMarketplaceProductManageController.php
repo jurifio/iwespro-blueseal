@@ -39,7 +39,17 @@ class CMarketplaceProductManageController extends AAjaxController
 	    $config['priceModifier'] = $this->app->router->request()->getRequestData('modifier');
 	    $config['cpc'] = $this->app->router->request()->getRequestData('cpc');
 	    $i = 0;
-	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
+        $rows = $this->app->router->request()->getRequestData('rows');
+        if($rows == 'all') {
+            $query = "select distinct concat(product,'-', variant)
+                      from vProductSortingView v 
+                      where (product, variant) not in (
+                        select distinct m.productId, m.productVariantId 
+                        from MarketplaceAccountHasProduct m 
+                        where m.marketplaceId = ? and m.marketplaceAccountId = ? )";
+            $rows = $this->app->dbAdapter->query($query,$marketplaceAccount->getIds());
+        }
+	    foreach ($rows as $row) {
 		    $productSample->readId($row);
 		    $marketplaceAccountHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
 		    $marketplaceAccountHasProduct->productId = $productSample->id;
