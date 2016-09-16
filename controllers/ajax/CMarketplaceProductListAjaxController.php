@@ -100,6 +100,9 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             }
 
             $response['data'][$i]['marketplaceAccountName'] = implode('<br>', $marketplaces);
+
+            $response['data'][$i]['categories'] = $val->productCategory->getFirst()->getLocalizedName();
+
             $i++;
         }
 
