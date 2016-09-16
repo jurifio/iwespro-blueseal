@@ -97,7 +97,8 @@
             <div class="panel-body">
             <div class="row mag-submit">
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-active submit">Crea nuovo movimento</button>
+                    <button class="btn btn-active mag-return-on-top">Cerca un altro prodotto</button>
+                    <button class="btn btn-complete submit mag-submit-btn">Crea nuovo movimento</button>
                 </div>
             </div>
             </div>

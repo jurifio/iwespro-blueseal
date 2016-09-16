@@ -1071,7 +1071,7 @@ $.bsModal = function (header, params) {
             self.searchProduct(string, function(res){
                 self.addProduct(res);
             });
-            $('.search-item').selectize()[0].selectize.setValue('', true);
+            //$('.search-item').selectize()[0].selectize.setValue('', true);
         });
 
         //ricerca per barcode
@@ -1118,9 +1118,14 @@ $.bsModal = function (header, params) {
             }
         });
 
-        this.submitBlock.find('button').on('click', function(e){
+        this.submitBlock.find('.mag-submit-btn').on('click', function(e){
             e.preventDefault();
             self.save();
+        });
+        this.submitBlock.find('.mag-return-on-top').on('click', function(e){
+            e.preventDefault();
+            $("html, body").animate({ scrollTop: 0 }, "fast");
+            //$('.search-item').focus();
         });
 
 //end constructor
