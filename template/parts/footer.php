@@ -13,4 +13,3 @@
         <div class="clearfix"></div>
     </div>
 </div>
-<script src="https://cdn.chatkwik.com/cdn/widget/245781814bd365d20ba2d81b174c0ed68dde268f0027709d43b8599dcfac052b" type="text/javascript"> </script>
