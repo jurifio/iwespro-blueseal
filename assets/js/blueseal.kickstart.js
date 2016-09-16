@@ -808,8 +808,6 @@ $.bsModal = function (header, params) {
         };
         this.opt = {};
 
-
-
         this.searchProduct = function (search, callback) {
             if (!search.length) return false;
             var shop = '';
@@ -983,7 +981,7 @@ $.bsModal = function (header, params) {
                     self.qtyDynamicValidation(this, operator);
                 })
             });
-        }
+        };
 
         this.qtyDynamicValidation = function(elem, op) {
             if (('+' == operator) && (0 > $(elem).val())) {
@@ -991,7 +989,7 @@ $.bsModal = function (header, params) {
             } else if (('-' == operator) && ( 0 < $(elem).val())) {
                 $(elem).val('0');
             }
-        }
+        };
 
         this.save = function(successCallback, failCallback) {
             var f = self.form;
@@ -1073,6 +1071,7 @@ $.bsModal = function (header, params) {
             self.searchProduct(string, function(res){
                 self.addProduct(res);
             });
+            $('.search-item').selectize()[0].selectize.setValue('', true);
         });
 
         //ricerca per barcode
@@ -1118,7 +1117,6 @@ $.bsModal = function (header, params) {
                 });
             }
         });
-
 
         this.submitBlock.find('button').on('click', function(e){
             e.preventDefault();

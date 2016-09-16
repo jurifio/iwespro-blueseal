@@ -33,7 +33,7 @@
             data-permission="/admin/product/add"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-event="bs.product.edit"
+            data-event="bs.movement.edit"
             data-title="Salva"
             data-placement="bottom"
         ></bs-toolbar-button>

@@ -1,3 +1,10 @@
+$(document).on('bs.movement.edit', function() {
+    var submitBtn = $('.mag-submit button');
+    if (submitBtn.length) {
+        submitBtn.trigger('click');
+    }
+});
+
 $(document).ready(function(){
     var code = $_GET.get('code');
     if (false != code) {
