@@ -33,10 +33,7 @@
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <div class="row row-price">
-                                                <div class="row">
-                                                    <button class="btn btn-success removeRow" style="float: right;">x</button>
-                                                </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-2">
                                                     <label for="">Shop</label>
                                                     <select class="form-control select-shop" type="text" name="" value="" required />
                                                         <option default value="">-Seleziona uno shop-</option>
@@ -45,17 +42,24 @@
                                                     <?php endforeach; ?>
                                                     </select>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-2">
+                                                    <label for="">Id Origine</label>
+                                                    <input class="form-control extId" type="text" name="extId" value="" />
+                                                </div>
+                                                <div class="form-group col-md-2">
                                                     <label for="">Costo</label>
-                                                    <input class="form-control value" type="text" name="" value="" required/>
+                                                    <input class="form-control value" type="text" name="value" value="" required/>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-2">
                                                     <label for="">Prezzo</label>
-                                                    <input class="form-control price" type="text" name="" value="" required/>
+                                                    <input class="form-control price" type="text" name="price" value="" required/>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-2">
                                                     <label for="">Prezzo in saldo</label>
-                                                    <input class="form-control salePrice" type="text" name="" value="" required/>
+                                                    <input class="form-control salePrice" type="text" name="salePrice" value="" required/>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button class="btn btn-success removeRow" style="float: right;">x</button>
                                                 </div>
                                             </div>
                                         </div>

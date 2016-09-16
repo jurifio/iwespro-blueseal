@@ -33,9 +33,13 @@ class CProductPriceEdit extends AAjaxController
             $shp = $prod->shopHasProduct->toArray();
 
             $ret = [];
+            $shopChange = 1; //flag per capire se lo shop può essere modificato o no
             foreach($prod->productSku as $s) {
                 if (!array_key_exists($s->shopId, $ret)) {
+                    $shopChange = 0;
                     $ret[$s->shopId] = [];
+                    $ret[$s->shopId]['shopChange'] = $shopChange;
+                    $ret[$s->shopId]['extId'] = $s->product->externalId;
                     $ret[$s->shopId]['value'] = $s->value;
                     $ret[$s->shopId]['price'] = $s->price;
                     $ret[$s->shopId]['salePrice'] = $s->salePrice;
@@ -45,6 +49,8 @@ class CProductPriceEdit extends AAjaxController
             foreach($shp as $v) {
                 if (!array_key_exists($v->shopId, $ret)) {
                     $ret[$v->shopId] = [];
+                    $ret[$v->shopId]['shopChange'] = $shopChange;
+                    $ret[$v->shopId]['extId'] = ($v->extId) ? $v->extId : '';
                     $ret[$v->shopId]['value'] = ($v->value) ? $v->value : 0;
                     $ret[$v->shopId]['price'] = ($v->price) ? $v->price : 0;
                     $ret[$v->shopId]['salePrice'] = ($v->salePrice) ? $v->salePrice : 0;
@@ -59,15 +65,7 @@ class CProductPriceEdit extends AAjaxController
     public function post() {
         $get = $this->app->router->request()->getRequestData();
 
-        $prices = [];
-        //organizzo i dati
-        foreach($get as $k => $v) {
-            if (("id" !== $k) && ("productVariantId" !== $k)) {
-                list($field, $count) = explode('-', $k);
-                if (!array_key_exists($count, $prices)) $prices[$count] = [];
-                $prices[$count][$field] = $v;
-            }
-        }
+        $prices = $this->parseRequest($get);
 
         try {
             $this->app->dbAdapter->beginTransaction();
@@ -79,20 +77,22 @@ class CProductPriceEdit extends AAjaxController
 
             foreach($prices as $v) {
                 if ($shp = $shpRepo->findOneBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']])) {
+                    $shp->extId = $v['extId'];
                     $shp->price = $v['price'];
                     $shp->value = $v['value'];
                     $shp->salePrice = $v['salePrice'];
                     $shp->update();
-                } else {
-                    $shp = $shpRepo->getEmptyEntity();
-                    $shp->productId = $get['id'];
-                    $shp->productVariantId = $get['productVariantId'];
-                    $shp->shopId = $v['shopId'];
-                    $shp->price = $v['price'];
-                    $shp->value = $v['value'];
-                    $shp->salePrice = $v['salePrice'];
-                    $shp->insert();
                 }
+                $shp = $shpRepo->getEmptyEntity();
+                $shp->productId = $get['id'];
+                $shp->productVariantId = $get['productVariantId'];
+                $shp->shopId = $v['shopId'];
+                $shp->extId = $v['extId'];
+                $shp->price = $v['price'];
+                $shp->value = $v['value'];
+                $shp->salePrice = $v['salePrice'];
+                $shp->insert();
+
                 $sku = $skuRepo->findBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']]);
                 foreach($sku as $s){
                     $s->value = $v['shopId'];
@@ -107,5 +107,36 @@ class CProductPriceEdit extends AAjaxController
             return json_encode($e->getMessage());
         }
         return json_encode(true);
+    }
+
+    function parseRequest($get) {
+        $prices = [];
+        //organizzo i dati
+        foreach($get as $k => $v) {
+            if (("id" !== $k) && ("productVariantId" !== $k)) {
+                list($field, $count) = explode('-', $k);
+                if (!array_key_exists($count, $prices)) $prices[$count] = [];
+                $prices[$count][$field] = $v;
+            }
+        }
+        return $prices;
+    }
+
+    function delete() {
+
+        $id = $this->app->router->request()->getRequestData('id');
+        $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
+        $shopId = $this->app->router->request()->getRequestData('shopId');
+
+        $skuRepo = $this->rfc('ProductSku');
+        $skuCol = $skuRepo->findBy(['productId' => $id, 'productVariantId' => $productVariantId, 'shopId' => $shopId]);
+        if (!$skuCol->count()) {
+            $shpRepo = $this->rfc('ShopHasProduct');
+            $shp = $shpRepo->findOneBy(['productId' => $id, 'productVariantId' => $productVariantId, 'shopId' => $shopId]);
+            if ($shp) $shp->delete();
+            return 'ok';
+        } else {
+            return 'ko';
+        }
     }
 }

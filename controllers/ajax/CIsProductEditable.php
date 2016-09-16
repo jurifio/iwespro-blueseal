@@ -63,8 +63,8 @@ class CisProductEditable extends AAjaxController
                 $catIds[] = $c->id;
             }
             $productArr['productCategories'] = implode(',', $catIds);
-            $name = $productEdit->productNameTranslation->getFirst()->name;
-            $productArr['productName'] = ($name) ? $name : '' ;
+            $name = $productEdit->productNameTranslation->getFirst();
+            $productArr['productName'] = ($name) ? $name->name : '' ;
 
             if (!$user->hasPermission('allShops')) {
                 foreach ($user->shop as $s) {

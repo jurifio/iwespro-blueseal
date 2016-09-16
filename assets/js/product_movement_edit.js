@@ -1,5 +1,5 @@
 $(document).on('bs.movement.edit', function() {
-    var submitBtn = $('.mag-submit button');
+    var submitBtn = $('.mag-submit-btn');
     if (submitBtn.length) {
         submitBtn.trigger('click');
     }
