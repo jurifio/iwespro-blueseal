@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-angle-double-right",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.marketplace.publish.alls",
+    event:"bs.product.marketplace.publish.all",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Pubblica tutto!",

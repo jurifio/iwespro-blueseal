@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\events\EGenericEvent;
+use bamboo\core\exceptions\BambooApplicationException;
 use bamboo\core\intl\CLang;
 
 /**
@@ -41,29 +42,36 @@ class CMarketplaceProductManageController extends AAjaxController
 	    $i = 0;
         $rows = $this->app->router->request()->getRequestData('rows');
         if($rows == 'all') {
-            $query = "select distinct concat(product,'-', variant)
+            $query = "select distinct concat(product,'-', variant) as code
                       from vProductSortingView v 
                       where (product, variant) not in (
                         select distinct m.productId, m.productVariantId 
                         from MarketplaceAccountHasProduct m 
                         where m.marketplaceId = ? and m.marketplaceAccountId = ? )";
-            $rows = $this->app->dbAdapter->query($query,$marketplaceAccount->getIds());
+            $rows = $this->app->dbAdapter->query($query,[$marketplaceAccount->marketplaceId,$marketplaceAccount->id])->fetchAll(\PDO::FETCH_COLUMN,0);
         }
-	    foreach ($rows as $row) {
-		    $productSample->readId($row);
-		    $marketplaceAccountHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
-		    $marketplaceAccountHasProduct->productId = $productSample->id;
-		    $marketplaceAccountHasProduct->productVariantId = $productSample->productVariantId;
-		    $marketplaceAccountHasProduct->marketplaceAccountId = $marketplaceAccount->id;
-		    $marketplaceAccountHasProduct->marketplaceId = $marketplaceAccount->marketplaceId;
-		    $marketplaceAccountHasProduct->priceModifier = $config['priceModifier'];
-            if($marketplaceAccount->marketplace->type == 'cpc') {
-                $marketplaceAccountHasProduct->fee = $config['cpc'];
+        $this->app->dbAdapter->beginTransaction();
+	    try {
+	        foreach ($rows as $row) {
+                $productSample->readId($row);
+                $marketplaceAccountHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
+                $marketplaceAccountHasProduct->productId = $productSample->id;
+                $marketplaceAccountHasProduct->productVariantId = $productSample->productVariantId;
+                $marketplaceAccountHasProduct->marketplaceAccountId = $marketplaceAccount->id;
+                $marketplaceAccountHasProduct->marketplaceId = $marketplaceAccount->marketplaceId;
+                $marketplaceAccountHasProduct->priceModifier = $config['priceModifier'];
+                if($marketplaceAccount->marketplace->type == 'cpc') {
+                    $marketplaceAccountHasProduct->fee = $config['cpc'];
+                }
+                $marketplaceAccountHasProduct->insert();
+                $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
+                $i++;
             }
-		    $marketplaceAccountHasProduct->insert();
-		    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
-		    $i++;
-	    }
+        } catch (\Exception $e) {
+            $this->app->dbAdapter->rollBack();
+            throw $e;
+        }
+	    $this->app->dbAdapter->commit();
 	    return $i;
     }
 
