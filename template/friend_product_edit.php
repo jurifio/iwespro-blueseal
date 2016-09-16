@@ -460,6 +460,11 @@ endif; ?></div>
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Aiuto">
+        <bs-toolbar-button
+            data-remote="btn.href.smart_product.guide"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
