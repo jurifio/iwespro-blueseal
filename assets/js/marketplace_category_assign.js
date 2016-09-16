@@ -28,7 +28,7 @@ $('table[data-datatable-name]').on('draw.dt', function () {
 				var sel = $(v).selectize({
 					valueField: 'id',
 					labelField: 'value',
-					maxItems: 100,
+					maxItems: 250,
 					searchField: ['value'],
 					options: window.categories
 				});
