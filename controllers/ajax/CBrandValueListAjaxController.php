@@ -23,8 +23,7 @@ class CBrandValueListAjaxController extends AAjaxController
         $shopIds = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
         $datatable = new CDataTables('vBluesealProductBrandValueList',['id'],$_GET);
-        $datatable->addCondition('shop',$shopIds);
-
+        $datatable->addCondition('shopId',$shopIds);
         $orribilità = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
         $count = $this->app->dbAdapter->query($datatable->getQuery(true,true),$datatable->getParams())->fetch();
         $totalCount = $this->app->dbAdapter->query($datatable->getQuery('full',true),$datatable->getParams())->fetch();
