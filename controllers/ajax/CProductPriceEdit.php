@@ -93,13 +93,13 @@ class CProductPriceEdit extends AAjaxController
                 $shp->salePrice = $v['salePrice'];
                 $shp->insert();
 
-                $sku = $skuRepo->findBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']]);
+/*              $sku = $skuRepo->findBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']]);
                 foreach($sku as $s){
                     $s->value = $v['shopId'];
                     $s->price = $v['price'];
                     $s->salePrice = $v['salePrice'];
                     $s->update();
-                }
+                }*/
             }
             $this->app->dbAdapter->commit();
         } catch(\Exception $e) {
