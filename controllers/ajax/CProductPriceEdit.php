@@ -81,7 +81,7 @@ class CProductPriceEdit extends AAjaxController
                     $shp->price = $v['price'];
                     $shp->value = $v['value'];
                     $shp->salePrice = $v['salePrice'];
-                    $shp->delete();
+                    $shp->update();
                 }
                 $shp = $shpRepo->getEmptyEntity();
                 $shp->productId = $get['id'];
