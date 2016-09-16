@@ -204,7 +204,7 @@ $(document).on('bs.category.edit', function (e, element, button) {
 $(document).on('bs.print.aztec', function (e, element, button) {
 
     var getVarsArray = [];
-    getVarsArray[0] = 'row0=' + $('#Product_id').val() + '__' + $('#Product_productVariantId').val();
+    getVarsArray[0] = 'id[]=' + $('#Product_id').val() + '-' + $('#Product_productVariantId').val();
 
     var getVars = getVarsArray.join('&');
 
