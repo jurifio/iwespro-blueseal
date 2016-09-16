@@ -211,7 +211,7 @@ $(document).on('submit', 'form[data-ajax="true"]', function (e) {
 $(function () {
     var target, scroll;
 
-    $("a[href*=#]:not([href=#])").on("click", function (e) {
+    /*$('a[href*=#]:not([href=#])').on("click", function (e) {
         if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
             target = $(this.hash);
             target = target.length ? target : $("[id=" + this.hash.slice(1) + "]");
@@ -240,7 +240,7 @@ $(function () {
                 }
             }
         }
-    });
+    });*/
 
     $("html").on("transitionend webkitTransitionEnd msTransitionEnd oTransitionEnd", function (e) {
         if (e.target == e.currentTarget && $(this).data("transitioning") === true) {

@@ -95,7 +95,7 @@
                 "path": "scheme://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/",
                 "options": []
             },
-            "jquery-2.1.4.min.js": {
+            "jquery-2.2.4.min.js": {
                 "path": "scheme://code.jquery.com/",
                 "options": []
             },
