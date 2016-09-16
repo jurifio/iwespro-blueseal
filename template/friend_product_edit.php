@@ -53,13 +53,13 @@ endif; ?></div>
                                     <div class="row">
                                         <!--<div class="col-md-7">
                                             <div class="form-group form-group-default form-group-photo">
-                                                <?php
+                                     <?php
                                         if (isset($productEdit->dummyPicture)) {
                                             $dummy = (strpos($productEdit->dummyPicture, 's3-eu-west-1.amazonaws.com')) ? $productEdit->dummyPicture : $dummyUrl . "/" . $productEdit->dummyPicture;
                                         } else {
                                             $dummy = "";
                                         }
-                                        ?>
+                                     ?>
                                                 <img id="dummyPicture" align="center" class="img-responsive"
                                                      src="<?php echo $dummy ?>">
                                             </div>
@@ -281,7 +281,7 @@ endif; ?></div>
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default" style="height: 50px">
                                                     <label for="ProductName_1_name">Nome del prodotto</label>
-                                                    <select id="ProductName_1_name" name="ProductName_1_name" class="form-control" required data-preset-name="<?php echo ((isset($productEdit)) && !is_null($productEdit->productNameTranslation->getFirst())) ? $productEdit->productNameTranslation->getFirst()->name : '' ?>"></select>
+                                                    <select id="ProductName_1_name" name="ProductName_1_name" class="form-control" data-preset-name="<?php echo ((isset($productEdit)) && !is_null($productEdit->productNameTranslation->getFirst())) ? $productEdit->productNameTranslation->getFirst()->name : '' ?>"></select>
                                                     <!--<input autocomplete="off" type="text" class="form-control"
                                                            id="ProductName_1_name" name="ProductName_1_name"
                                                            value="<?php // echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>">-->
