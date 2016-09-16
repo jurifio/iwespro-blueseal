@@ -1527,6 +1527,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/friends(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendsListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
