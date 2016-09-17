@@ -5,6 +5,7 @@ $(document).on('bs.prices.edit', function () {
             url: '/blueseal/xhr/ProductPriceEdit',
             method: 'post',
             dataType: 'JSON',
+            excludeEmptyFields: false,
             onDone: function (res) {
                 if (true == res) {
                     modal = new $.bsModal(
