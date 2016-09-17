@@ -21,18 +21,42 @@
                                data-datatable-name="marketplace_product_list"
                                data-column-filter="true"
                                data-controller="MarketplaceProductListAjaxController<?php echo $queryString ?>"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="25,100, 200, 500">
                             <thead>
                                 <tr>
-                                    <th class="center">Codice</th>
-                                    <th class="center">Shop</th>
-                                    <th class="center">Brand</th>
-                                    <th class="center">Stock</th>
-                                    <th class="center">Season</th>
-                                    <th class="center">CPF</th>
-                                    <th class="center">Immagine</th>
-                                    <th class="center">Fee</th>
-                                    <th class="center">Marketplaces</th>
+                                    <th data-slug="code"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center"
+                                        data-default-order="desc">Codice</th>
+                                    <th data-slug="shop"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Shop</th>
+                                    <th data-slug="brand"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Brand</th>
+                                    <th data-slug="categories"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Categorie</th>
+                                    <th data-slug="stock"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stock</th>
+                                    <th data-slug="season"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Season</th>
+                                    <th data-slug="itemno"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">CPF</th>
+                                    <th data-slug="dummy"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Immagine</th>
+                                    <th data-slug="fee"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Fee</th>
+                                    <th data-slug="marketplaceAccountName"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Marketplaces</th>
                                 </tr>
                             </thead>
                             <tbody>
