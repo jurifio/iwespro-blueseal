@@ -146,6 +146,16 @@ $(document).ready(function () {
                     );
                 });
 
+            } else {
+                if (1 < $('.row-price').length) {
+                    row.remove();
+                } else {
+                    row.find('select').val('');
+                    row.find('.extId').val('');
+                    row.find('.value').val('');
+                    row.find('.price').val('');
+                    row.find('.salePrice').val('');
+                }
             }
         });
 
