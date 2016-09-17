@@ -70,7 +70,6 @@ class CProductPriceEdit extends AAjaxController
         try {
             $this->app->dbAdapter->beginTransaction();
             $prodRepo = $this->rfc('Product');
-            $skuRepo = $this->rfc('ProductSku');
             $shpRepo = $this->rfc('ShopHasProduct');
 
             if (!$prod = $prodRepo->findOne([$get['id'], $get['productVariantId']])) throw new \Exception('Prodotto non trovato');
