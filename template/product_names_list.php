@@ -32,7 +32,7 @@
                             <thead>
                             <tr>
                                 <th data-slug="name"
-                                    data-searchable="false"
+                                    data-searchable="true"
                                     data-orderable="true" class="center" data-default-order="asc">Name</th>
                                 <th data-slug="slug"
                                     data-searchable="true"
