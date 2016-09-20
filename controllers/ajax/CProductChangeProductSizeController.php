@@ -44,13 +44,15 @@ class CProductChangeProductSizeController extends AAjaxController
         $groupId = $this->app->router->request()->getRequestData('groupId');
         if(!$groupId){
             return "Errore: nessun gruppo taglie selezionato.";
+        } elseif(empty($this->app->router->request()->getRequestData('products'))) {
+            return "Nessun prodotto selezionato";
         } else {
             foreach($this->app->router->request()->getRequestData('products') as $productIds) {
                 $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
-                $product->productSizegroupId = $groupId;
+                $product->productSizeGroupId = $groupId;
                 $product->update();
             }
-            return "Il gruppo colore è stato assegnato alle righe selezionate.";
+            return "Il gruppo taglie è stato assegnato alle righe selezionate.";
         }
     }
 
