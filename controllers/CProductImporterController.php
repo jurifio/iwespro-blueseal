@@ -19,7 +19,7 @@ use bamboo\ecommerce\views\VBase;
 class CProductImporterController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "product_importer_bug_list";
+    protected $pageSlug = "product_incomplete_import";
 
     public function get()
     {
