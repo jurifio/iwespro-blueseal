@@ -713,6 +713,7 @@ Modal.prototype.prependContent = function(content) {
 };
 
 Modal.prototype.hide = function() {
+    this.okButton.off();
     this.modal.modal('hide');
 };
 

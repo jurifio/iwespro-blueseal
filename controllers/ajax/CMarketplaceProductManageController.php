@@ -55,17 +55,27 @@ class CMarketplaceProductManageController extends AAjaxController
             $ids = [];
 	        foreach ($rows as $row) {
 	            set_time_limit(6);
+                $update = false;
                 $productSample->readId($row);
                 $marketplaceAccountHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
                 $marketplaceAccountHasProduct->productId = $productSample->id;
                 $marketplaceAccountHasProduct->productVariantId = $productSample->productVariantId;
                 $marketplaceAccountHasProduct->marketplaceAccountId = $marketplaceAccount->id;
                 $marketplaceAccountHasProduct->marketplaceId = $marketplaceAccount->marketplaceId;
+                if($marketplaceAccountHasProduct2 = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy($marketplaceAccountHasProduct->getIds())) {
+                    $marketplaceAccountHasProduct = $marketplaceAccountHasProduct2;
+                    $update = true;
+                }
+
                 $marketplaceAccountHasProduct->priceModifier = $config['priceModifier'];
                 if($marketplaceAccount->marketplace->type == 'cpc') {
                     $marketplaceAccountHasProduct->fee = $config['cpc'];
                 }
-                $marketplaceAccountHasProduct->insert();
+                if($update) {
+                    $marketplaceAccountHasProduct->update();
+                } else {
+                    $marketplaceAccountHasProduct->insert();
+                }
                 $i++;
                 $ids[] = $marketplaceAccountHasProduct->printId();
                 if($i%50) {
