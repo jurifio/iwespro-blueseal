@@ -56,6 +56,16 @@
             data-placement="bottom"
             data-href="/blueseal/prodotti/modelli/modifica"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-file-o fa-plus"
+            data-permission="/admin/product/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Lista delle Categorie per numero di modelli assegnati"
+            data-placement="bottom"
+            data-href="/blueseal/prodotti/modelli/modifica"
+        ></bs-toolbar-button>
 
     </bs-toolbar-group>
 
