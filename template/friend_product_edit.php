@@ -116,8 +116,7 @@ endif; ?></div>
                                                     <button type="button" class="search-product btn btn-success pull-right">Cerca</button>
                                                 </div>
                                             </div>
-                                            <div class="disableBlank">
-                                                <?php if (!$allShops): ?>
+                                            <?php if (!$allShops): ?>
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group form-group-default">
@@ -130,7 +129,8 @@ endif; ?></div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                            <div class="disableBlank">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group form-group-default selectize-enabled">
@@ -241,11 +241,11 @@ endif; ?></div>
                                     </div>
                                     <div class="panel-body clearfix" id="main-details">
                                     </div>
-                            </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="disableBlank">
+                            <div class="disableBlank disablePrice">
                             <?php if (!$allShops): ?>
                                 <div class="row">
                                     <div class="col-md-12">
@@ -272,6 +272,8 @@ endif; ?></div>
                                     </div>
                                 </div>
                             <?php endif; ?>
+                            </div>
+                            <div class="disableBlank">
                                 <div class="panel panel-default clearfix">
                                     <div class="panel-heading clearfix">
                                         <h5 class="m-t-10">Informazioni SEO</h5>
@@ -438,12 +440,12 @@ endif; ?></div>
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-files-o"
+            data-icon="fa-file"
             data-permission="/admin/product/edit"
             data-event="bs.details.product.assign"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Carica i dettagli da modello"
+            data-title="Carica i dettagli da prodotto"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
