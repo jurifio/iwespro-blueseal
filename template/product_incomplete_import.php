@@ -50,8 +50,8 @@
                                     data-orderable="true"
                                     class="center">CPF</th>
                                 <th data-slug="sizeGroup"
-                                    data-searchable="false"
-                                    data-orderable="false"
+                                    data-searchable="true"
+                                    data-orderable="true"
                                     class="center">Gr. Taglie</th>
                                 <th data-slug="dummyPicture"
                                     data-searchable="false"
