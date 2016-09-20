@@ -113,7 +113,7 @@ $(document).on('bs.manage.detail', function () {
                 okButton.html('Ok');
                 okButton.off().on('click', function () {
                     bsModal.modal('hide');
-                    dataTable.ajax.reload();
+                    dataTable.ajax.reload(null,false);
                 });
             });
         });

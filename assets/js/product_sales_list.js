@@ -99,7 +99,7 @@ $(document).on('bs.sales.set', function(){
                 cancelButton.hide();
                 okButton.html('ok').off().on("click", function () {
                     bsModal.modal('hide');
-                    dataTable.ajax.reload();
+                    dataTable.ajax.reload(null,false);
                 });
             });
         }
@@ -177,7 +177,7 @@ $(document).on('bs.sales.price', function(){
             cancelButton.hide();
             okButton.html('ok').off().on("click", function(){
                 bsModal.modal('hide');
-                dataTable.ajax.reload();
+                dataTable.ajax.reload(null,false);
             });
         });
     });
