@@ -515,7 +515,7 @@ $(document).on('bs.details.model.assign', function (e) {
                     type: 'GET',
                     data: {
                         code: $('.product-code').html(),
-                        search: query,
+                        search: query
                     },
                     dataType: 'json',
                     error: function () {
@@ -533,41 +533,8 @@ $(document).on('bs.details.model.assign', function (e) {
         bsModal.modal('hide');
     });
     okButton.html('Carica dal modello').off().on('click', function () {
-        $.ajax({
-            type: "GET",
-            url: "/blueseal/xhr/GetDataSheet",
-            data: {
-                value: $('#modelAssign option:selected').val(),
-                type: 'model'
-            }
-        }).done(function ($content) {
-
-            $("#main-details").html($content);
-
-            changeProductDataSheet = false;
-
-            setTimeout(function(){
-            var dataSheet = $('.selectContent').data('prototype-id');
-            $('#Product_dataSheet').selectize()[0].selectize.setValue(dataSheet, true);
-            changeProductDataSheet = true;
-
-            $("#main-details").find('select').each(function () {
-                var sel = $(this).selectize({
-                    valueField: 'id',
-                    labelField: 'item',
-                    searchField: ['item'],
-                    options: window.detailsStorage
-                });
-                var initVal = $(this).data('init-selection');
-                if (initVal != 'undefined' && initVal.length != 0) {
-                    sel[0].selectize.setValue(initVal, true);
-                } else {
-                    sel[0].selectize.setValue(0, true);
-                }
-                bsModal.modal('hide');
-            }, 200);
-            });
-        });
+        $("#main-details").selectDetails($('#modelAssign option:selected').val(), 'model');
+        bsModal.modal('hide');
     });
 });
 
@@ -587,7 +554,7 @@ $(document).on('bs.details.model.assign', function (e) {
             }
         }).done(function ($content) {
             $(self).html($content);
-            prototypeId = $(self).find(".detailContent").data('prototype-id');
+            prototypeId = $(self).find(".detailContent").data('prototypeId');
             var productDataSheet = $(self).find(".Product_dataSheet");
             var selPDS = $(productDataSheet).selectize();
             selPDS[0].selectize.setValue(prototypeId, true);
