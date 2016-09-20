@@ -74,26 +74,10 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Pubblica Prodotto">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-share"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.publish"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Pubblica prodotto sui marketplace"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="bs.product.marketplace.publish"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-code-o"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.response"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Leggi Stato"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="bs.product.marketplace.response"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
