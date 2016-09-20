@@ -141,10 +141,8 @@ class CCatalogController extends AAjaxController
         $get = $this->app->router->request()->getRequestData();
 
         try {
-            $prodEm = $this->rfc('Product');
-            $skuEm = $this->rfc('ProductSku');
             $SOEm = $this->rfc('StorehouseOperation');
-            $SOLEm = $this->rfc('StorehouseOperationLine');
+            $SOLRepo = $this->rfc('StorehouseOperationLine');
             $SOCEm = $this->rfc('StorehouseOperationCause');
             $SEm = $this->rfc('Storehouse');
 
@@ -178,6 +176,8 @@ class CCatalogController extends AAjaxController
                 $storehouse = $SEm->findOneBy(['shopId' => $shop->id]);
             }
 
+            $this->app->dbAdapter->beginTransaction();
+
             if (!$storehouse) {
                 $storehouse = $SEm->getEmptyEntity();
                 $storehouse->shopId = $shop->id;
@@ -185,11 +185,11 @@ class CCatalogController extends AAjaxController
                 $storehouse->countryId = 1;
                 $storehouse->id = $storehouse->insert();
             }
+
             if (!$SOC = $SOCEm->findOne([$get['mag-movementCause']])) throw new \Exception('La causale è obbligatoria');
 
-
             //fatti tutti i controlli preliminari, inizio la transazione
-            $this->app->dbAdapter->beginTransaction();
+
 
             $newOp = $SOEm->getEmptyEntity();
             $newOp->shopId = $shop->id;
@@ -197,102 +197,14 @@ class CCatalogController extends AAjaxController
             $newOp->storehouseOperationCauseId = $get['mag-movementCause'];
             $newOp->userId = $user->id;
             $newOp->operationDate = date("Y-m-d H:i:s", strtotime($get['mag-movementDate']));
-            $operationId = $newOp->insert();
+            $newOp->id = $newOp->insert();
 
             //inizio l'inserimento dei singoli movimenti
             foreach ($moves as $v) {
-                $actualProd = $prodEm->findOneBy([
-                    'id' => $v['id'],
-                    'productVariantId' => $v['productVariantId']
-                ]);
-                if (!$actualProd) throw new \Exception("Uno o più Prodotti non sono stati trovati");
-
-                //recupero i prezzi del prodotto
-                $allSkus = $skuEm->findBy([
-                    'productVariantId' => $v['productVariantId'],
-                    'productId' => $v['id'],
-                ]);
-                $value = 0;
-                $price = 0;
-                $salePrice = 0;
-                $onSale = null;
-                $isUsable = false;
-                $i = 0;
-
-                foreach ($allSkus as $s) {
-                    $isUsable = true;
-                    if (0 == $i) {
-                        $value = $s->value;
-                        $price = $s->price;
-                        $salePrice = $s->salePrice;
-                        $onSale = $s->isOnSale;
-                    } elseif (
-                        ($price != $s->price) ||
-                        ($salePrice != $s->salePrice) ||
-                        ($onSale != $s->isOnSale)
-                    ) {
-                        $isUsable = false;
-                        break;
-                    }
-                    $i++;
-                }
-                if (!$isUsable) {
-                    $shp = $actualProd->shopHasProduct->findOneByKeys([
-                        'productVariantId' => $v['productVariantId'],
-                        'productId' => $v['id'],
-                        'shopId' => $shop->id,
-                    ]);
-                    if ($shp) {
-                        $price = $shp->price;
-                        $value = $shp->value;
-                        $salePrice = $shp->salePrice;
-                    }
-                    if ((!$shp) || (null == $value) || (null == $price)) {
-                        $noPricesProduct = ' (' . $actualProd->id . '-' . $actualProd->productVariantId . ')';
-                        throw new \Exception('Il prezzo del prodotto <strong>' . $noPricesProduct . '</strong> non è stato impostato. Il movimento non è stato inserito');
-                    }
-                }
-
-                //modifico le quantità negli sku
-                $actualSku = $allSkus->findOneByKeys([
-                    'productVariantId' => $v['productVariantId'],
-                    'shopId' => $shop->id,
-                    'productSizeId' => $v['productSizeId']
-                ]);
-                if ($actualSku) {
-                    if (0 > $actualSku->stockQty + $v['qtMove']) throw new \Exception('I movimenti non possono portare le quantità in stock in negativo');
-                    $actualSku->stockQty = $actualSku->stockQty + $v['qtMove'];
-                    $actualSku->update();
-                } else {
-                    if (0 > $v['qtMove']) throw new \Exception(
-                        'Impossibile togliere quantità di un articolo mai caricato: ' . $v['id'] . '-' . $v['productVariantId']
-                    );
-                    $newSku = $skuEm->getEmptyEntity();
-                    $newSku->productId = $v['id'];
-                    $newSku->productVariantId = $v['productVariantId'];
-                    $newSku->productSizeId = $v['productSizeId'];
-                    $newSku->shopId = $shop->id;
-                    $newSku->currencyId = 1;
-                    $newSku->value = $value;
-                    $newSku->price = $price;
-                    $newSku->salePrice = ($salePrice) ? $salePrice : 0;
-                    $newSku->stockQty = $v['qtMove'];
-                    $newSku->isOnSale = (null === $onSale) ? 0 : $onSale;
-                    $newSku->insert();
-                }
-
-                //inserisco il movimento
-                $SOL = $SOLEm->getEmptyEntity();
-                $SOL->storehouseOperationId = $operationId;
-                $SOL->shopId = $shop->id;
-                $SOL->storehouseId = $storehouse->id;
-                $SOL->productId = $v['id'];
-                $SOL->productVariantId = $v['productVariantId'];
-                $SOL->productSizeId = $v['productSizeId'];
-                $SOL->qty = $v['qtMove'];
-                $SOL->insert();
-                $this->app->dbAdapter->commit();
+                $SOLRepo->createMovementLine($v['id'], $v['productVariantId'], $v['productSizeId'], $shop->id, $v['qtMove'], $newOp->id, $storehouse->id);
             }
+
+            $this->app->dbAdapter->commit();
             return json_encode('OK');
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
