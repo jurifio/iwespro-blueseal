@@ -52,7 +52,9 @@ class CMarketplaceProductManageController extends AAjaxController
         }
         $this->app->dbAdapter->beginTransaction();
 	    try {
+            $ids = [];
 	        foreach ($rows as $row) {
+	            set_time_limit(6);
                 $productSample->readId($row);
                 $marketplaceAccountHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
                 $marketplaceAccountHasProduct->productId = $productSample->id;
@@ -64,8 +66,15 @@ class CMarketplaceProductManageController extends AAjaxController
                     $marketplaceAccountHasProduct->fee = $config['cpc'];
                 }
                 $marketplaceAccountHasProduct->insert();
-                $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
                 $i++;
+                $ids[] = $marketplaceAccountHasProduct->printId();
+                if($i%50) {
+                    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$ids])));
+                    $ids = [];
+                }
+            }
+            if(count($ids) > 0) {
+                $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$ids])));
             }
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
