@@ -309,42 +309,6 @@
 			}
 		]
 	});
-	tableSetup.product_importer_list = $.extend({}, tableSetup.common, {
-		order: [[6, "desc"]],
-		columns: [
-			{
-				data: "id",
-				orderable: true
-			}, {
-				data: "shop",
-				orderable: true
-			},{
-				data: "code",
-				orderable: true
-			},{
-				data: "sizeGroup",
-				orderable: false,
-				searchable: false
-			}, {
-				data: "dummyPicture",
-				orderable: false,
-				searchable: false
-			}, {
-				data: "brand",
-				orderable: true
-			}, {
-				data: "status",
-				orderable: true
-			}, {
-				data: "creationDate",
-				orderable: true
-			}, {
-				data: "problems",
-				orderable: false,
-				searchable: false
-			}
-		]
-	});
 	tableSetup.product_detail_list = $.extend({}, tableSetup.common, {
 		order: [[1, "asc"]],
 		columns: [
