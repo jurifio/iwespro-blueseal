@@ -77,28 +77,21 @@ class CProductPriceEdit extends AAjaxController
             foreach($prices as $v) {
                 if ($shp = $shpRepo->findOneBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']])) {
                     $shp->extId = $v['extId'];
+                    $shp->update();
+                } else {
+                    $shp = $shpRepo->getEmptyEntity();
+                    $shp->productId = $get['id'];
+                    $shp->productVariantId = $get['productVariantId'];
+                    $shp->shopId = $v['shopId'];
+                    $shp->extId = $v['extId'];
                     $shp->price = $v['price'];
                     $shp->value = $v['value'];
                     $shp->salePrice = $v['salePrice'];
-                    $shp->update();
-                }
-                $shp = $shpRepo->getEmptyEntity();
-                $shp->productId = $get['id'];
-                $shp->productVariantId = $get['productVariantId'];
-                $shp->shopId = $v['shopId'];
-                $shp->extId = $v['extId'];
-                $shp->price = $v['price'];
-                $shp->value = $v['value'];
-                $shp->salePrice = $v['salePrice'];
-                $shp->insert();
+                    $shp->insert();
 
-/*              $sku = $skuRepo->findBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']]);
-                foreach($sku as $s){
-                    $s->value = $v['shopId'];
-                    $s->price = $v['price'];
-                    $s->salePrice = $v['salePrice'];
-                    $s->update();
-                }*/
+                    $shp = $shpRepo->findOneBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']]);
+                }
+                $shp->updatePrices($v['value'], $v['price'], (array_key_exists('salePrice', $v) ? $v['salePrice'] : 0));
             }
             $this->app->dbAdapter->commit();
         } catch(\Exception $e) {
