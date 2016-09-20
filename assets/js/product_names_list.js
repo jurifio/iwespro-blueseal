@@ -154,7 +154,7 @@ $(document).on('bs.names.merge', function () {
                 okButton.html('Ok');
                 okButton.off().on('click', function () {
                     bsModal.modal('hide');
-                    dataTable.ajax.reload();
+                    dataTable.ajax.reload(null,false);
                 });
             }).fail(function (content, a, b) {
                 console.log(content);
@@ -164,7 +164,7 @@ $(document).on('bs.names.merge', function () {
                 okButton.html('Ok');
                 okButton.off().on('click', function () {
                     bsModal.modal('hide');
-                    dataTable.ajax.reload();
+                    dataTable.ajax.reload(null,false);
                 });
             });
         });

@@ -102,6 +102,6 @@ $(document).on('bs.marketplaceCategory.hide', function() {
 			message: "Errore nel nascondere le categorie"
 		}).open();
 	}).always(function() {
-		table.ajax.reload();
+		table.ajax.reload(null,false);
 	});
 });

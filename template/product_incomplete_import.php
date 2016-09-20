@@ -26,27 +26,54 @@
                     <div class="panel-heading">
                         <div class="panel-title">Elenco prodotti</div>
                         <div class="export-options-container pull-right"></div>
-                        <div class="pull-right"><?php if ($app->user()->hasPermission('/admin/product/add')): ?><a
-                                href="<?php echo $modifica; ?>">
-                                    <button class="btn btn-complete btn-cons">Aggiungi <i class="fa fa-plus"></i>
-                                    </button></a><?php endif; ?></div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body">
                         <table class="table table-striped" data-column-filter="true" data-datatable-name="product_importer_list"
                                data-controller="ProductImporterProblemsListController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="productWithImporterProblems">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="100, 200, 500"
+                               id="productWithImporterProblems">
                             <thead>
                             <tr>
-                                <th class="center">Codice</th>
-                                <th class="center">Shop</th>
-                                <th class="center">CPF</th>
-                                <th class="center">Gr. Taglie</th>
-                                <th class="center">Immagine</th>
-                                <th class="center">Brand</th>
-                                <th class="center">Stato</th>
-                                <th class="center">Creazione</th>
-                                <th class="center">Problemi</th>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Codice</th>
+                                <th data-slug="shop"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shop</th>
+                                <th data-slug="code"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">CPF</th>
+                                <th data-slug="sizeGroup"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Gr. Taglie</th>
+                                <th data-slug="dummyPicture"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Immagine</th>
+                                <th data-slug="brand"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Brand</th>
+                                <th data-slug="status"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Stato</th>
+                                <th data-slug="creationDate"
+                                    data-searchable="false"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Creazione</th>
+                                <th data-slug="problems"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Problemi</th>
                             </tr>
                             </thead>
                             <tbody>
