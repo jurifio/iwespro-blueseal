@@ -220,9 +220,9 @@ $(document).on('bs.det.add', function (e) {
     //new Cslugify
     header.html('Aggiungi dettaglio');
     body.html(
-        '<div class="alert alert-danger modal-alert" style="display: none">Il campo <strong>Italiano</strong> è obbligatorio</div>' +
+        '<div class="alert alert-danger modal-alert" style="display: none">L\'inserimento del dettaglio comporta la perdita dei dati non salvati</div>' +
         '<form id="detailAdd"><div class="form-group">' +
-        '<label>Italiano*</label>' +
+        '<label>Inserisci il dettaglio*</label>' +
         '<input type="text" class="form-control new-dett-ita" name="newDettIta" />' +
         '</div></form>'
     );
