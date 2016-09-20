@@ -81,54 +81,38 @@ $(document).on('bs.product.edit', function (e, element, button) {
         );
         bsModal.modal();
     } else {
-        body.html("Devi aprire un prodotto o crearne uno nuovo per poterlo salvare.");
-        okButton.off().on('click', function(){
-            bsModal.modal('hide');
-        });
-        bsModal.modal();
-    }
-});
 
-$(document).on('bs.priority.edit', function (e, element, button) {
-    var bsModal = $('#bsModal');
-    var header = $('#bsModal .modal-header h4');
-    var body = $('#bsModal .modal-body');
-    var cancelButton = $('#bsModal .modal-footer .btn-default');
-    var okButton = $('#bsModal .modal-footer .btn-success');
-
-    header.html('Seleziona Categoria');
-    okButton.html('Fatto').off().on('click', function () {
-        bsModal.modal('hide');
-        okButton.off();
-    });
-    cancelButton.remove();
-    body.css("text-align", 'left');
-    var html = '<div class="radioMimic"><ul>';
-
-    var priority = button.dataAttr.data.json;
-    var productSorting = $('#Product_sortingPriorityId').val();
-    for (var key in priority) {
-        // skip loop if the property is from prototype
-        if (!priority.hasOwnProperty(key)) continue;
-
-        var obj = priority[key];
-        if (key == productSorting) {
-            html += '<li class="item-selected" id="' + key + '">(' + key + ') ' + obj + '</li>';
+        var price = $('#Product_retail_price').val();
+        var value = $('#Product_value').val();
+        var id = $('#Product_id').val();
+        var productVariantId = $('#Product_productVariantId').val();
+        var extId = $('#Product_extId').val();
+        if (('' != price) && ('' != value) && ('' != extId)) {
+            $.ajax({
+                url: '/blueseal/xhr/ProductSinglePriceEdit',
+                method: 'post',
+                data: {id: id, productVariantId: productVariantId, extId: extId, price: price, value: value}
+            }).done(
+                function (res) {
+                    modal = new $.bsModal(
+                        'Aggiornamento dei prezzi',
+                        {body: 'I Prezzi sono stati aggiornati correttamente'}
+                    );
+                }
+            ).fail(function () {
+                modal = new $.bsModal(
+                    'Aggiornamento dei prezzi',
+                    {body: 'OOPS! Errore di sistema. Contatta un amministratore'}
+                );
+                //console.log(res);
+            });
         } else {
-            html += '<li id="' + key + '">(' + key + ') ' + obj + '</li>';
+            modal = new $.bsModal(
+                'Aggiornamento dei prezzi',
+                {body: 'I campi dei prezzi e dell\'ID di origine sono obbligatori'}
+            );
         }
-
     }
-
-    html += '</ul></div>';
-
-    okButton.off().on('click', function () {
-        $('#Product_sortingPriorityId').val($('.radioMimic ul li.item-selected').prop('id'));
-        bsModal.modal('hide');
-    });
-    body.html(html);
-    bsModal.modal();
-
 });
 
 $(document).on('click', '.radioMimic ul li', function () {
@@ -491,15 +475,35 @@ $(document).on('bs.details.product.assign', function (e) {
     }
 })(jQuery);
 
-$.fn.disableBlank = function(disable) {
-    var status = true;
-    if ('enable' === disable) status = false;
+$.fn.disableBlank = function(formStatus) {
+    //var status = true;
+    //if ('enable' === disable) status = false;
+    if ('undefined' == typeof formStatus) formStatus = '';
+    if ('enable' == formStatus) {
+        editable = true;
+        $(this).each( function(){
+            var active = $(this).find('.disableBlankActive');
+            if (active.length) {
+                $(active).remove();
+            }
+        });
+    } else {
+        editable = false;
+        $(this).each(function(){
+            if (!$(this).find('.disableBlankActive').length) {
+                $(this).append('<div class="disableBlankActive"></div>');
+            }
+        });
+    }
 
+    /*
     if (status) {
         editable = false;
         $(this).each(function(){
             if (!$(this).find('.disableBlankActive').length) {
-               $(this).append('<div class="disableBlankActive"></div>');
+                if (!((disable == 'priceEnabled') && ($(this).hasClass('disablePrice')))) {
+                    $(this).append('<div class="disableBlankActive"></div>');
+                }
             }
         });
     } else {
@@ -507,7 +511,7 @@ $.fn.disableBlank = function(disable) {
         $('.disableBlankActive').each( function(){
             $(this).remove();
         });
-    }
+    }*/
 };
 
 function searchForProduct(itemno, variantName, brandId) {
@@ -528,6 +532,7 @@ function searchForProduct(itemno, variantName, brandId) {
     }).done(function(res){
         populatePage(res);
     }).fail(function(res){
+        prisable = true;
         body.html(res);
         okButton.html('Ok').off().on('click', function(){
             bsModal.modal('hide');
@@ -588,13 +593,21 @@ function populatePage(res) {
     } else {
         category = true;
         movable = true;
+        prisable = true;
         editable = false;
         $('.disableBlank').disableBlank();
+        $('.disablePrice').disableBlank('enable');
         $('#Product_id').val(res['product']['id']);
         $('#Product_productVariantId').val(res['product']['productVariantId']);
         $('#Product_itemno').val(res['product']['itemno']);
         $('#ProductVariant_name').val(res['product']['variantName']);
         $('#Product_productBrandId').selectize()[0].selectize.setValue(res['product']['productBrandId'], true);
+        if (res['code']) {
+            $('.code-title').html(res['code']);
+            $('#Product_retail_price').val(res['product']['price']);
+            $('#Product_value').val(res['product']['value']);
+            $('#Product_extId').val(res['product']['extId']);
+        }
     }
 }
 
@@ -615,6 +628,7 @@ function searchForProductByCode(id, productVariantId) {
     }).done(function(res){
         populatePage(res);
     }).fail(function(res){
+        prisable = true;
         body.html(res);
         okButton.html('Ok').off().on('click', function(){
             bsModal.modal('hide');
@@ -739,6 +753,11 @@ $.fn.createCategoryBtn = function() {
 
 $(document).ready(function () {
 
+    $('.disableBlank').disableBlank();
+
+    editable = false;
+    prisable = false;
+
     if (window.detailsStorage === undefined || window.detailsStorage === null || window.detailsStorage.length == 0) {
         try {
             window.detailsStorage = [];
@@ -837,9 +856,8 @@ $(document).ready(function () {
     });
     $('#ProductName_1_name').selectize()[0].selectize.setValue($("#ProductName_1_name").data('preset-name'));
 
-    $('.disableBlank').disableBlank();
-
     category = false;
+
     $('button.search-product').on('click', function(){
         itemno = $('input[name="Product_itemno"]').val();
         variantName = $('input[name="ProductVariant_name"]').val();
@@ -854,5 +872,4 @@ $(document).ready(function () {
     if (!$('#ProductCategory_id').val().length) {
         $('#main-details').createCategoryBtn();
     }
-
 });

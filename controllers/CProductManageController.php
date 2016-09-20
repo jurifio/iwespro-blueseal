@@ -239,6 +239,29 @@ class CProductManageController extends ARestrictedAccessRootController
                 }
             }
 
+
+            $user = $this->app->getUser();
+            if (!$user->hasPermission('allShops')) {
+                foreach ($user->shop as $s) {
+                    $shopId = $s->id;
+                }
+                $shpRepo = $this->app->repoFactory->create('ShopHasProduct');
+                $shp = $shpRepo->findOneBy(['productId' => $productEdit->id, 'productVariantId' => $productEdit->productVariantId, 'shopId' => $shopId]);
+                if ($shp) {
+                    $shp->extId = $post['Product_extId'];
+                    $shp->update();
+                } else {
+                    $shp = $shp->getEmptyEntity();
+                    $shp = $shp->productId = $productEdit->id;
+                    $shp = $shp->productVariantId = $productEdit->productVariantId;
+                    $shp = $shp->shopId = $shopId;
+                    $shp->extId = $post['Product_extId'];
+                    $shp->insert();
+                }
+                $shp->updatePrices($post['Product_value'], $post['Product_retail_price']);
+            }
+
+
             if ((array_key_exists('Product_retail_price',$post)) && (array_key_exists('Product_value',$post))) {
                 $shpRepo = $this->app->repoFactory->create('ShopHasProduct');
                 $shp = $shpRepo->findOneBy(
@@ -363,13 +386,18 @@ class CProductManageController extends ARestrictedAccessRootController
             if (!$user->hasPermission('allShops')) {
                 foreach ($user->shop as $s) {
                     $shopId = $s->id;
+                    break;
                 }
-                $insertData = $productIdsExt;
-                $insertData['extId'] = $post['Product_extId'];
-                $insertData['shopId'] = $shopId;
-                $insertData['price'] = $post['Product_retail_price'];
-                $insertData['value'] = $post['Product_value'];
-                $this->app->dbAdapter->insert("ShopHasProduct", $insertData);
+                $shpRepo = $this->app->repoFactory->create('ShopHasProduct');
+                $shp = $shpRepo->getEmptyEntity();
+                $shp->productId = $productId;
+                $shp->productVariantId = $variantId;
+                $shp->shopId = $shopId;
+                $shp->extId = $post['Product_extId'];
+                $shp->insert();
+
+                $shp = $shpRepo->findOneBy(['productId' => $productId, 'productVariantId' => $variantId, 'shopId' => $shopId]);
+                $shp->updatePrices($post['Product_value'], $post['Product_retail_price']);
             }
 
             //se non c'è il campo shop o non è selezionato uno shop, vengono assegnati tutti gli shop dell'utente

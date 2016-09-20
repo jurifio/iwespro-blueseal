@@ -79,19 +79,25 @@ class CisProductEditable extends AAjaxController
             $desc = $productEdit->productDescriptionTranslation->findOneByKey('langId', 1);
             $productArr['productDescription'] = ($desc) ? $desc->description : '';
 
+            $productArr['price'] = "";
+            $productArr['value'] = "";
 
-            $shop = $this->app->getUser()->shop;
-            $shopId = 0;
-            foreach($shop as $k => $v) {
-                $shopId = $v->id;
+            if (!$user->hasPermission('allShops')) {
+                $shop = $user->shop;
+                $shopId = 0;
+                foreach ($shop as $k => $v) {
+                    $shopId = $v->id;
+                }
+
+                $shp = $this->rfc('ShopHasProduct')->findOneBy(['productId' => $productEdit->id, 'productVariantId' => $productEdit->productVariantId, 'shopId' => $shopId]);
+                if ($shp) {
+                    $productArr['price'] = ($shp->price) ? $shp->price : '';
+                    $productArr['value'] = ($shp->value) ? $shp->value : '';
+                    $productArr['extId'] = ($shp->extId) ? $shp->extId : '';
+                }
             }
-
-            $shp = $this->rfc('ShopHasProduct')->findOneBy(['productId' => $productEdit->id, 'productVariantId' => $productEdit->productVariantId, 'shopId' => $shopId]);
-            $productArr['price'] = ($shp) ? $shp->price : '';
-            $productArr['value'] = ($shp) ? $shp->value : '';
-
             $editable = false;
-            $message = 'Il prodotto è già presente nel nostro cataolgo. Puoi Modificarne le quantità';
+            $message = 'Il prodotto è già presente nel nostro cataolgo. Puoi modificarne il prezzo e le quantità';
             if (((count($intersect = array_intersect($userShops, $productShops))) && ($productStatus == 2)) || ($this->app->getUser()->hasPermission('allShops'))) {
                 $editable = true;
                 $message = false;
