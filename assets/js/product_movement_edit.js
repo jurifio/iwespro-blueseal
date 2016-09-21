@@ -12,7 +12,6 @@ $(document).ready(function(){
         prods = code.split(',');
     }
 
-
     $('.form-container').bsCatalog({
         searchField: true,
         product: prods
