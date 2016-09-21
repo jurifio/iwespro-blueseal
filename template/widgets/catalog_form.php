@@ -63,10 +63,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group-inline mag-searchBlock">
+                        <div class="mag-searchBlock">
                             <div class="form-group form-group-default">
                                 <label for="search-item">Cerca il prodotto</label>
-                                <select name="search-item" class="form-group-inline form-control search-item" placeholder="Inserisci il codice o il CPF"><option value=""></option></select>
+                                <select name="search-item" class="form-control search-item" placeholder="Inserisci il codice o il CPF"><option value=""></option></select>
                                 <button type="submit" class="btn btn-active search-btn">Aggiungi Prodotto</button>
                                 <br class="clearfix" />
                             </div>

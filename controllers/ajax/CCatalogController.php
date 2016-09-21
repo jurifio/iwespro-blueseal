@@ -191,7 +191,6 @@ class CCatalogController extends AAjaxController
 
             //fatti tutti i controlli preliminari, inizio la transazione
 
-
             $newOp = $SOEm->getEmptyEntity();
             $newOp->shopId = $shop->id;
             $newOp->storehouseId = $storehouse->id;

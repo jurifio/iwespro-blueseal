@@ -34,7 +34,7 @@ class CProductPriceEdit extends AAjaxController
 
             $ret = [];
             $shopChange = 1; //flag per capire se lo shop può essere modificato o no
-            foreach($prod->productSku as $s) {
+            /*foreach($prod->productSku as $s) {
                 if (!array_key_exists($s->shopId, $ret)) {
                     $shopChange = 0;
                     $ret[$s->shopId] = [];
@@ -44,7 +44,7 @@ class CProductPriceEdit extends AAjaxController
                     $ret[$s->shopId]['price'] = $s->price;
                     $ret[$s->shopId]['salePrice'] = $s->salePrice;
                 }
-            }
+            }*/
 
             foreach($shp as $v) {
                 if (!array_key_exists($v->shopId, $ret)) {
@@ -71,12 +71,16 @@ class CProductPriceEdit extends AAjaxController
             $this->app->dbAdapter->beginTransaction();
             $prodRepo = $this->rfc('Product');
             $shpRepo = $this->rfc('ShopHasProduct');
+            $skuRepo = $this->rfc('ProductSku');
 
             if (!$prod = $prodRepo->findOne([$get['id'], $get['productVariantId']])) throw new \Exception('Prodotto non trovato');
 
             foreach($prices as $v) {
                 if ($shp = $shpRepo->findOneBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']])) {
                     $shp->extId = $v['extId'];
+                    $shp->price = $v['price'];
+                    $shp->value = $v['value'];
+                    $shp->salePrice = $v['salePrice'];
                     $shp->update();
                 } else {
                     $shp = $shpRepo->getEmptyEntity();
@@ -91,7 +95,8 @@ class CProductPriceEdit extends AAjaxController
 
                     $shp = $shpRepo->findOneBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']]);
                 }
-                $shp->updatePrices($v['value'], $v['price'], (array_key_exists('salePrice', $v) ? $v['salePrice'] : 0));
+                //$shp->updatePrices($v['value'], $v['price'], (array_key_exists('salePrice', $v) ? $v['salePrice'] : 0));
+                $skuRepo = $skuRepo->updateSkusPrices($shp->productId, $shp->productVariantId, $shp->shopId, $shp->value, $shp->price, $shp->salePrice);
             }
             $this->app->dbAdapter->commit();
         } catch(\Exception $e) {
