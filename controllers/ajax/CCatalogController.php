@@ -145,6 +145,7 @@ class CCatalogController extends AAjaxController
             $SOLRepo = $this->rfc('StorehouseOperationLine');
             $SOCEm = $this->rfc('StorehouseOperationCause');
             $SEm = $this->rfc('Storehouse');
+            $skuRepo = $this->rfc('ProductSku');
 
             $moves = [];
             $i = 0;
@@ -202,6 +203,7 @@ class CCatalogController extends AAjaxController
             //inizio l'inserimento dei singoli movimenti
             foreach ($moves as $v) {
                 $SOLRepo->createMovementLine($v['id'], $v['productVariantId'], $v['productSizeId'], $shop->id, $v['qtMove'], $newOp->id, $storehouse->id);
+                $skuRepo->levelPrice($v['id'], $v['productVariantId']);
             }
 
             $this->app->dbAdapter->commit();
