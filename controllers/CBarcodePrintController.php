@@ -4,7 +4,6 @@ namespace bamboo\blueseal\controllers;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
 
 /**
  * Class CCategoryListController
@@ -53,9 +52,8 @@ class CBarcodePrintController extends ARestrictedAccessRootController
                 foreach ($this->app->router->request()->getRequestData('id') as $productId) {
                     $product = $this->app->repoFactory->create('Product')->findOneByStringId($productId);
                     foreach($product->productSku as $sku) {
-                        if(array_search($sku->printId(),$seen) === false) {
-                            $productSkus->add($sku);
-                            $seen[] = $sku->printId();
+                        for($x = 0;$x<abs($sku->stockQty);$x++) {
+                            $productSkus->add(clone $sku);
                         }
                     }
                 }

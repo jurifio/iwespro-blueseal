@@ -335,7 +335,7 @@ foreach ($productSkus as $productSku): ?>
                         <span style="font-size: 8pt;display:inline-block"><?php echo $productSku->product->productBrand->name ?></span>
                     </div>
                     <div class="col-md-4">
-                        <span style="font-size: 10pt"><?php echo $productSku->price ?> €</span>
+                        <span style="font-size: 10pt"><?php echo $productSku->shopHasProduct->price ?> €</span>
                     </div>
                 </div>
             </div>
