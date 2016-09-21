@@ -52,6 +52,9 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
             $this->app->router->response()->raiseProcessingError();
             return 'Shop non autorizzato!';
         }
+
+        $skuRepo = $this->app->repoFactory->create('ProductSku');
+        $solRepo = $this->app->repoFactory->create('StorehouseOperationLine');
         $this->app->dbAdapter->beginTransaction();
         try {
             $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->getEmptyEntity();
@@ -65,34 +68,10 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
             $storehouseOperation->id = $storehouseOperation->insert();
 
             foreach ($this->app->router->request()->getRequestData('rows') as $row) {
-                $storehouseOperationLine = $this->app->repoFactory->create('StorehouseOperationLine')->getEmptyEntity();
-                $storehouseOperationLine->storehouseOperationId = $storehouseOperation->id;
-                $storehouseOperationLine->storehouseId = $storehouseOperation->storehouseId;
-                $storehouseOperationLine->shopId = $storehouseOperation->shopId;
-
-                $productSku = $this->app->repoFactory->create('ProductSku')->findOneByStringId($row['id']);
-
-                $storehouseOperationLine->productId = $productSku->productId;
-                $storehouseOperationLine->productVariantId = $productSku->productVariantId;
-                $storehouseOperationLine->shopId = $shopId;
-                $storehouseOperationLine->productSizeId = $productSku->productSizeId;
-                $qty = $row['qty'];
-
-                switch($storehouseOperation->storehouseOperationCause->sign) {
-                    case 1: $qty = abs($qty);
-                        break;
-                    case 0: $qty = (-1 * abs($qty));
-                        break;
-                }
-
-                $storehouseOperationLine->qty = $qty;
-                $productSku->stockQty += $qty;
-
-                $storehouseOperationLine->insert();
-                $productSku->update();
-
-                $this->app->dbAdapter->commit();
+                list($id, $productVariantId, $productSizeId) = explode('-', $row['id']);
+                $solRepo->createMovementLine($id, $productVariantId, $productSizeId, $shopId, $row['qty'], $storehouseOperation->id, $storehouse->id);
             }
+            $this->app->dbAdapter->commit();
         } catch (\Exception $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
