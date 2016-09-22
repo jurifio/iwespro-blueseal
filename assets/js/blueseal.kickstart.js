@@ -580,9 +580,12 @@ $.bsModal = function (header, params) {
 
 
 (function ($) {
+
     $.fn.bsForm = function (method, params) {
         var self = this;
 
+        //impedisco la sovrapposizione di chiamate ajax
+        if ('undefined' == typeof bsformSaving) bsformSaving = 0;
         var methods = {
             checkRequired: function () {
                 var requiredFault = false;
@@ -635,111 +638,115 @@ $.bsModal = function (header, params) {
                 return 'POST';
             },
             save: function (params) {
-                var opt = {
-                    //preferenze esecuzione metodo
-                    dataType: 'JSON',
-                    excludeFields: [],
-                    excludeEmptyFields: true,
-                    //parametri chiamata ajax
-                    url: '#',
-                    contentType: 'multipart/form-data',
-                    processData: true,
-                    method: methods.putOrPost(),
-                    onCheckError: function(errorMsg) {
-                        modal = new $.bsModal(
-                            'OOPS!',
-                            {
-                                body: errorMsg
-                            }
-                        );
-                    },
-                    onFail: function (res) {
-                        console.log(res)
-                    },
-                    doAlways: function(res) {
-                    }
+                if (0 == bsformSaving) {
+                    bsformSaving = 1;
+                    var opt = {
+                        //preferenze esecuzione metodo
+                        dataType: 'JSON',
+                        excludeFields: [],
+                        excludeEmptyFields: true,
+                        //parametri chiamata ajax
+                        url: '#',
+                        contentType: 'multipart/form-data',
+                        processData: true,
+                        method: methods.putOrPost(),
+                        onCheckError: function (errorMsg) {
+                            modal = new $.bsModal(
+                                'OOPS!',
+                                {
+                                    body: errorMsg
+                                }
+                            );
+                        },
+                        onFail: function (res) {
+                            console.log(res)
+                        },
+                        doAlways: function (res) {
+                        }
 
-                };
-                var opt = $.extend(opt, params);
-                if ('string' != typeof params['url']) throw 'the "url" parameter is mandatory and it must to be string type';
-                if ('function' != typeof params['onDone']) throw 'the "url" parameter is mandatori and it must to be a callback';
-                methods.checkErrors();
-                if ($(self).data('errors').length) {
-                    //display Errors
-                    var errs = $(self).data('errors');
-                    var errorMsg = '';
-                    for (var i in errs) {
-                        if ('undefined' != messages.errors[errs[i]]) errorMsg += messages.errors[errs[i]] + '<br />';
-                    }
-                    opt.onCheckError(errorMsg);
-
-                } else {
-
-                    //save
+                    };
                     opt = $.extend(opt, params);
-                    var data = {};
-                    //var formDataObject = new FormData();
+                    if ('string' != typeof params['url']) throw 'the "url" parameter is mandatory and it must to be string type';
+                    if ('function' != typeof params['onDone']) throw 'the "url" parameter is mandatori and it must to be a callback';
+                    methods.checkErrors();
+                    if ($(self).data('errors').length) {
+                        //display Errors
+                        var errs = $(self).data('errors');
+                        var errorMsg = '';
+                        for (var i in errs) {
+                            if ('undefined' != messages.errors[errs[i]]) errorMsg += messages.errors[errs[i]] + '<br />';
+                        }
+                        opt.onCheckError(errorMsg);
+                        bsformSaving = 0;
+                    } else {
 
-                    $(self).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
-                        if ('undefined' != typeof $(this).attr('name')) {
+                        //save
+                        opt = $.extend(opt, params);
+                        var data = {};
+                        //var formDataObject = new FormData();
+
+                        $(self).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
+                            if ('undefined' != typeof $(this).attr('name')) {
+                                //controllo le condizioni impostate nelle opzioni del metodo
+                                if ((-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) &&
+                                    ( ("" != $(this).val()) || (false === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
+                                ) {
+                                    data[$(this).attr('name')] = $(this).val();
+                                    //formDataObject.append($(this).attr('name'), $(this).val());
+                                }
+                            }
+                        });
+
+                        var radioNames = [];
+                        $(self).find('input[type=radio]').each(function () {
+                            if (typeof $(this).attr('name') == 'undefined') throw 'Non possono esistere campi senza l\'attributo "name"';
+
                             //controllo le condizioni impostate nelle opzioni del metodo
                             if ((-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) &&
-                                ( ("" != $(this).val()) || (false === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
+                                ( ("" != $(this).val()) && (true === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
                             ) {
-                                data[$(this).attr('name')] = $(this).val();
-                                //formDataObject.append($(this).attr('name'), $(this).val());
+                                radioNames.push($(this).attr('name'));
                             }
-                        }
-                    });
+                        });
+                        var unique = radioNames.filter(function (value, index, self) {
+                            return self.indexOf(value) === index;
+                        });
+                        unique.forEach(function (element, index, array) {
+                            data[$(element).attr('name')] = $('[name=' + element + ']:checked').val();
+                            //formDataObject.append(element, $('[name=' + element + ']:checked').val());
+                        });
 
-                    var radioNames = [];
-                    $(self).find('input[type=radio]').each(function () {
-                        if (typeof $(this).attr('name') == 'undefined') throw 'Non possono esistere campi senza l\'attributo "name"';
+                        $(self).find('input[type=checkbox]:checked').each(function () {
+                            if (typeof $(this).attr('name') == 'undefined') return;
+                            data[$(this).attr('name')] = $(this).val();
+                            //formDataObject.append($(this).attr('name'), $(this).val());
+                        });
 
-                        //controllo le condizioni impostate nelle opzioni del metodo
-                        if ( (-1 == $.inArray($(this).attr('name'), opt['excludeFields'])) &&
-                            ( ("" != $(this).val()) && (true === opt['excludeEmptyFields']) ) //if is required, empty values don't will be used
-                        ) {
-                            radioNames.push($(this).attr('name'));
-                        }
-                    });
-                    var unique = radioNames.filter(function (value, index, self) {
-                        return self.indexOf(value) === index;
-                    });
-                    unique.forEach(function (element, index, array) {
-                        data[$(element).attr('name')] = $('[name=' + element + ']:checked').val();
-                        //formDataObject.append(element, $('[name=' + element + ']:checked').val());
-                    });
+                        $(self).find(':file').each(function () {
+                            if (typeof this.name == 'undefined') return;
+                            if (this.files.length == 0) return;
+                            formDataObject.append(this.name, this.files[0]);
+                        });
 
-                    $(self).find('input[type=checkbox]:checked').each(function () {
-                        if (typeof $(this).attr('name') == 'undefined') return;
-                        data[$(this).attr('name')] = $(this).val();
-                        //formDataObject.append($(this).attr('name'), $(this).val());
-                    });
+                        opt['data'] = data;
+                        //opt['data'] = formDataObject;
 
-                    $(self).find(':file').each(function () {
-                        if (typeof this.name == 'undefined') return;
-                        if (this.files.length == 0) return;
-                        formDataObject.append(this.name, this.files[0]);
-                    });
-
-                    opt['data'] = data;
-                    //opt['data'] = formDataObject;
-
-                    $.ajax({
-                        url: opt['url'],
-                        data: opt['data'],
-                        method: opt['method'],
-                        dataType: opt['dataType']
-                       //contentType: opt['contentType']
+                        $.ajax({
+                            url: opt['url'],
+                            data: opt['data'],
+                            method: opt['method'],
+                            dataType: opt['dataType']
+                            //contentType: opt['contentType']
 //                        processData: opt['processData']
-                    }).done(function (res) {
-                        opt.onDone(res, opt['method']);
-                    }).fail(function (res) {
-                        opt.onFail(res, opt['method']);
-                    }).always(function (res) {
-                        opt.doAlways(res, opt['method']);
-                    });
+                        }).done(function (res) {
+                            opt.onDone(res, opt['method']);
+                        }).fail(function (res) {
+                            opt.onFail(res, opt['method']);
+                        }).always(function (res) {
+                            opt.doAlways(res, opt['method']);
+                            bsformSaving = 0;
+                        });
+                    }
                 }
             }
         };
@@ -1010,7 +1017,7 @@ $.bsModal = function (header, params) {
                     } else {
                         self.submitError([], [res]);
                     }
-                }
+                },
             });
             var post = {};
         };
