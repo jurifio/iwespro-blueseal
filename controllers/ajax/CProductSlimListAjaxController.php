@@ -51,11 +51,6 @@ class CProductSlimListAjaxController extends AAjaxController
             else $imgs = "";
             $response['data'][$i]['image'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
 
-            $ext = [];
-            if (isset($val->externalId) && !empty($val->externalId)) {
-                $ext[] = $val->externalId;
-            }
-
             $response['data'][$i]['shop'] = '<span>';
             foreach ($val->shop as $shop) {
                 if (in_array($shop->id, $shopsIds)) {
@@ -64,6 +59,7 @@ class CProductSlimListAjaxController extends AAjaxController
             }
             $response['data'][$i]['shop'] .= '</span>';
 
+            $ext = [];
             foreach ($val->shopHasProduct as $shp) {
                 if (in_array($shp->shopId, $shopsIds)) {
                     if (!empty($shp->extId)) {
@@ -82,7 +78,8 @@ class CProductSlimListAjaxController extends AAjaxController
                 }
             }
 
-            $ext = implode('<br>', array_unique($ext));
+            $ext = array_unique($ext);
+            $ext = implode('<br>', $ext);
 
             $response['data'][$i]['externalId'] = '<span class="small">';
             $response['data'][$i]['externalId'] .= empty($ext) ? "" : $ext;
@@ -107,21 +104,6 @@ class CProductSlimListAjaxController extends AAjaxController
 
             $sizes = [];
             $qty = [];
-            if (false && $this->app->getUser()->id == 2) {
-                var_dump($shopsIds);
-                foreach ($val->productSku as $productSku) {
-                    var_dump($productSku->printId());
-
-                    var_dump(in_array($productSku->shopId, $shopsIds));
-
-                    var_dump($productSku->stockQty);
-
-                    var_dump($productSku->stockQty > 0);
-                }
-                var_dump($qty);
-                var_dump($sizes);
-                die();
-            }
 
             foreach ($val->productSku as $productSku) {
                 if (in_array($productSku->shopId, $shopsIds) && $productSku->stockQty > 0) {
@@ -166,7 +148,6 @@ class CProductSlimListAjaxController extends AAjaxController
 
             $i++;
         }
-
         return json_encode($response);
     }
 }
