@@ -575,9 +575,11 @@ function populatePage(res) {
         if (res['code']) {
             movable = true;
             $('.code-title').html(res['code']);
-            $('#main-details').selectDetails({code: res['code']});
             if (res['product']) {
                 fillTheFields(res['product']);
+                if ( false == res['skuEditable']) $('#Product_sizes').prop('readonly', true);
+                else $('#Product_sizes').prop('readonly', false);
+                $('#main-details').selectDetails({code: res['code']});
             }
             if (!$('#ProductCategory_id').val().length) {
                 $('#main-details').createCategoryBtn();

@@ -102,7 +102,11 @@ class CisProductEditable extends AAjaxController
                 $editable = true;
                 $message = false;
             }
-            $ret = ['code' => $productEdit->id . '-' . $productEdit->productVariantId, 'product' => $productArr, 'editable' => $editable, 'repo' => true, 'message' => $message];
+
+            $skuEditable = true;
+            if ($productEdit->productSku->count()) $skuEditable = false;
+
+            $ret = ['code' => $productEdit->id . '-' . $productEdit->productVariantId, 'product' => $productArr, 'skuEditable' => $skuEditable, 'editable' => $editable, 'repo' => true, 'message' => $message];
         } else {
             $ret = ['editable' => true, 'repo' => true, 'message' => 'Il prodotto non esiste, puoi inserirlo ora.'];
         }

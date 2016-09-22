@@ -125,7 +125,6 @@ endif; ?></div>
                                                                    type="text" class="form-control"
                                                                    name="Product_extId"
                                                                    value="<?php echo isset($productEdit) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>">
-                                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -182,7 +181,7 @@ endif; ?></div>
                                                             <select class="full-width selectpicker"
                                                                     placeholder="Seleziona la schiera delle taglie"
                                                                     data-init-plugin="selectize" title="Product_sizes"
-                                                                    name="Product_sizes" id="Product_sizes">
+                                                                    name="Product_sizes" id="Product_sizes" required>
                                                                 <option></option>
                                                                 <?php foreach ($sizesGroups as $sizesGroup):
                                                                     if ('zz' === substr($sizesGroup->locale, 0, 2)) continue; ?>
@@ -192,6 +191,7 @@ endif; ?></div>
                                                                     } ?>> <?php echo $sizesGroup->locale . " " . $sizesGroup->macroName . " " . $sizesGroup->name . "" ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>
+                                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                         </div>
                                                     </div>
                                                 </div>
