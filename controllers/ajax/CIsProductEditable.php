@@ -98,7 +98,7 @@ class CisProductEditable extends AAjaxController
             }
             $editable = false;
             $message = 'Il prodotto è già presente nel nostro cataolgo. Puoi modificarne il prezzo e le quantità';
-            if (((count($intersect = array_intersect($userShops, $productShops))) && ($productStatus == 2)) || ($this->app->getUser()->hasPermission('allShops'))) {
+            if (((count($intersect = array_intersect($userShops, $productShops))) && (($productStatus == 2) || ($productStatus == 11))) || ($this->app->getUser()->hasPermission('allShops'))) {
                 $editable = true;
                 $message = false;
             }
