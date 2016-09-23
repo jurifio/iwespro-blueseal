@@ -480,6 +480,14 @@ $.bsModal = function (header, params) {
         self.okButton.off().on('click', callback);
     };
 
+    this.showCancelBtn = function() {
+        self.cancelButton.show();
+    };
+
+    this.hideCancelBtn = function() {
+        self.cancelButton.hide();
+    };
+
     this.setCancelEvent = function (callback) {
         self.cancelButton.off().on('click', callback);
     };

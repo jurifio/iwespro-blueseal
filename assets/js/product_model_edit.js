@@ -198,27 +198,72 @@ $(document).ready(function () {
             var data = {id: $_GET.all.modelId};
             var action = 'byModel';
         }
-        $.initFormByGetData({
-            data: data,
-            ajaxUrl: '/blueseal/xhr/DetailModel',
-            done: function(res) {
-                if (res) {
-                    $('#form-model').fillTheForm(res);
-                    $('#actionTitle').html('Modifica il modello "' + res.name + '"');
-                    $('#main-details').selectDetails(data.id, 'model');
-                    $('#name').isFieldValue($('#name').val(), {}, '/blueseal/xhr/DetailModel');
-                    $('#code').isFieldValue($('#code').val(), {}, '/blueseal/xhr/DetailModel');
-                    if ('byModel' == action) {
-                        $('input[name="id"]').val('');
-                        $('input[name="name"]').val('');
-                        $('input[name="code"]').val('');
+
+        if ('undefined' != typeof data) {
+            $.initFormByGetData({
+                data: data,
+                ajaxUrl: '/blueseal/xhr/DetailModel',
+                done: function (res) {
+                    if (res) {
+                        $('#form-model').fillTheForm(res);
+                        $('#actionTitle').html('Modifica il modello "' + res.name + '"');
+                        $('#main-details').selectDetails(data.id, 'model');
+                        $('#name').isFieldValue($('#name').val(), {}, '/blueseal/xhr/DetailModel');
+                        $('#code').isFieldValue($('#code').val(), {}, '/blueseal/xhr/DetailModel');
+                        if ('byModel' == action) {
+                            $('input[name="id"]').val('');
+                            $('input[name="name"]').val('');
+                            $('input[name="code"]').val('');
+                        }
+                    } else {
+                        modal = new $.bsModal('Attenzione!', {body: 'Non ho trovato il modello che stai cercando.<br /> Se vuoi puoi inserirlo ora.'});
+                        $('#main-details').selectDetails();
                     }
-                } else {
-                    modal = new $.bsModal('Attenzione!', {body: 'Non ho trovato il modello che stai cercando.<br /> Se vuoi puoi inserirlo ora.'});
-                    $('#main-details').selectDetails();
                 }
-            }
-        });
+            });
+        } else if ('string' == typeof $_GET.all.code) {
+            var code = $_GET.all.code;
+            var prototypeId = 0;
+            var self = this;
+            $.ajax({
+                type: "GET",
+                url: "/blueseal/xhr/GetDataSheet",
+                data: {
+                    code: code
+                }
+            }).done(function ($content) {
+                $('#main-details').html($content);
+                prototypeId = $('#main-details').find(".detailContent").data('prototype-id');
+                var productDataSheet = $(self).find(".Product_dataSheet");
+                var selPDS = $(productDataSheet).selectize();
+                selPDS[0].selectize.setValue(prototypeId, true);
+
+                productDataSheet.on("change", function () {
+                    $(self).selectDetails($(this).find("option:selected").val(), 'change');
+                });
+
+                $(self).find(".productDetails select").each(function () {
+                    var sel = $(this).selectize({
+                        valueField: 'id',
+                        labelField: 'item',
+                        searchField: ['item'],
+                        options: window.detailsStorage
+                    });
+                    var initVal = $(this).data('init-selection');
+                    if (initVal != 'undefined' && initVal.length != 0) {
+                        sel[0].selectize.setValue(initVal, true);
+                    } else {
+                        sel[0].selectize.setValue(0, true);
+                    }
+                });
+                var prodName = ($('.detailContent').data('product-name')) ? $('.detailContent').data('productName') : 0;
+                var selectName = $('#productName').selectize();
+                var selectElem = selectName[0].selectize;
+                selectElem.addOption({name: prodName});
+                selectElem.refreshOptions();
+                selectElem.setValue(prodName, false);
+            });
+        }
     } else {
         $('#main-details').selectDetails();
     }
