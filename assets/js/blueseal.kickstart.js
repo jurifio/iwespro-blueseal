@@ -1140,9 +1140,9 @@ $.bsModal = function (header, params) {
         this.submitBlock.find('.mag-return-on-top').on('click', function(e){
             e.preventDefault();
             $("html, body").animate({ scrollTop: 0 }, "fast");
-            //$('.search-item').focus();
+            $('.search-item').selectize()[0].selectize.focus();
+            $('.mag-searchBlock input').focus();
         });
-
 //end constructor
     };
 
