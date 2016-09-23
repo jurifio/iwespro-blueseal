@@ -51,9 +51,9 @@ $(document).on('bs.sales.set', function(){
     var getVars = '';
     $.each(selectedRows, function (k, v) {
         row[i] = {};
-        var idsVars = v.DT_RowId.split('__');
-        row[i].id = idsVars[1];
-        row[i].productVariantId = idsVars[2];
+        var idsVars = v.DT_RowId.split('-');
+        row[i].id = idsVars[0];
+        row[i].productVariantId = idsVars[1];
         row[i].name = v.brand;
         row[i].cpf = v.CPF;
         row[i].brand = v.brand;
@@ -62,7 +62,7 @@ $(document).on('bs.sales.set', function(){
         row[i].sale = v.sale;
         row[i].percentage = v.percentage;
         i++;
-        getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+        getVars += 'row_' + i + '=' + v.DT_RowId.split('-')[1] + '&';
     });
     console.log(selectedRows);
     console.log(row);
