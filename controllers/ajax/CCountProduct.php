@@ -39,8 +39,12 @@ class CCountProduct extends AAjaxController
             $query .= " AND ";
             $query .= implode(' AND ', $fields);
         }
-        $res = $this->app->dbAdapter->query($query, $params)->fetch();
+        $countAll = $this->app->dbAdapter->query($query, $params)->fetch()['count'];
 
-        return (string)$res['count'];
+        $query .= ' AND `p`.`productStatusId` = 6';
+        $countPublished = $this->app->dbAdapter->query($query, $params)->fetch()['count'];
+
+        $ret = ['all' => $countAll, 'published' => $countPublished];
+        return json_encode($ret);
     }
 }

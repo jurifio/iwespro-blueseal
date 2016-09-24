@@ -69,10 +69,11 @@ $(document).on('bs.product.showTotalBySeason', function (e, element, button) {
         $.ajax({
             url: '/blueseal/xhr/CountProduct',
             method: 'get',
+            dataType: 'json',
             data: {season: 0, friend: 0}
         }).done(function(res){
             console.log(res);
-            $('.tot-res').html(res);
+            $('.tot-res').html(res['all'] + ' (pubblicati: ' + res['published'] + ')');
         });
 
         $('.tot-search select').each(function(){
@@ -82,10 +83,10 @@ $(document).on('bs.product.showTotalBySeason', function (e, element, button) {
                 $.ajax({
                     url: '/blueseal/xhr/CountProduct',
                     method: 'get',
+                    dataType: 'json',
                     data: {season: seasonId, friend: friendId}
                 }).done(function(res){
-                    console.log(res);
-                    $('.tot-res').html(res);
+                    $('.tot-res').html(res['all'] + ' (pubblicati: ' + res['published'] + ')');
                 });
             });
         });
