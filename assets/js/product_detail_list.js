@@ -195,7 +195,7 @@ $(document).on('bs.manage.deletedetails', function () {
 
     var i = 0;
     $.each(selectedRows, function (k, v) {
-        var rowId = v.DT_RowId.split('__');
+        var rowId = v.DT_RowId.split('-');
         getVarsArray[i] = rowId[0] + i + '=' + rowId[1];
         i++;
     });
