@@ -39,11 +39,11 @@ class CFriendsListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = $orribilità;
 
-        /*foreach($orribilità as $line) {
-            $row = [];
-
-        }*/
-
+        foreach($response['data'] as $k => $v) {
+            if ((0 == $v['pubblicati']) || (0 == $v['pubblicati'])) $percentPublished = '-';
+            else $percentPublished  = round($v['pubblicati'] / $v['prodotti'] * 100, 2) . '%';
+            $response['data'][$k]['pubblicati'] .= ' <span class="small">(' . $percentPublished . ')</span>';
+        }
 
         return json_encode($response);
     }

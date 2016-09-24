@@ -54,7 +54,7 @@ $(document).on('bs.product.showTotalBySeason', function (e, element, button) {
                     '</select>' +
                 '</div>' +
             '</div>' +
-            '<div style="font-size: 1.3em;">Prodotti trovati: <strong class="tot-res"></strong></div>';
+            '<div style="font-size: 1.3em;">Prodotti trovati: <strong class="tot-res"></strong>, pubblicati: <strong class="pub-res"></strong> <span class="small">(<span class="percent-res"></span>)</span></div>';
 
         modal = new $.bsModal(
             'Trova il totale dei prodotti',
@@ -72,8 +72,7 @@ $(document).on('bs.product.showTotalBySeason', function (e, element, button) {
             dataType: 'json',
             data: {season: 0, friend: 0}
         }).done(function(res){
-            console.log(res);
-            $('.tot-res').html(res['all'] + ' (pubblicati: ' + res['published'] + ')');
+            populateTotRes(res['all'], res['published']);
         });
 
         $('.tot-search select').each(function(){
@@ -86,9 +85,20 @@ $(document).on('bs.product.showTotalBySeason', function (e, element, button) {
                     dataType: 'json',
                     data: {season: seasonId, friend: friendId}
                 }).done(function(res){
-                    $('.tot-res').html(res['all'] + ' (pubblicati: ' + res['published'] + ')');
+                    populateTotRes(res['all'], res['published']);
                 });
             });
         });
     });
 });
+
+function populateTotRes(all, published){
+    $('.tot-res').html(all);
+    $('.pub-res').html(published);
+    var percent = '';
+    if (0 == all || 0 == published) percent = '-';
+    else {
+        percent = (published / all * 100).toFixed(2);
+    }
+    $('.percent-res').html(percent + '%');
+}
