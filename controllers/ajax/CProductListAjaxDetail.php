@@ -65,7 +65,7 @@ class CProductListAjaxDetail extends AAjaxController
         $idDetailCond .= ")";
         
         
-        $where = $idDetailCond . " AND ps.code in ('A', 'P', 'I')";
+        $where = $idDetailCond ;//. " AND ps.code in ('A', 'P', 'I')";
 
         $pId = $this->app->dbAdapter->query(
             "SELECT 
@@ -144,11 +144,9 @@ class CProductListAjaxDetail extends AAjaxController
                 $resPDA = $this->app->dbAdapter->query("DELETE pda FROM ProductSheetActual pda, (SELECT pd.id as id
                     FROM (((`ProductDetail` `pd`
                       JOIN `ProductSheetActual` `psa`)
-                      JOIN `ProductSku` `ps`)
+                      JOIN `ProductSku` `ps` ON (`psa`.`productId` = `ps`.`productId`) AND (`psa`.`productVariantId` = `ps`.`productVariantId`))
                       LEFT JOIN `ProductSheetModelActual` `psma` ON `psma`.`productDetailId` = `pd`.`id`)
                     WHERE ((`pd`.`id` = `psa`.`productDetailId`) AND
-                           (`psa`.`productId` = `ps`.`productId`) AND
-                           (`psa`.`productVariantId` = `ps`.`productVariantId`) AND
                            (`pd`.`slug` <> ''))
                           AND `psma`.`productDetailId` is NULL
                     GROUP BY `psa`.`productDetailId` HAVING sum(`ps`.`stockQty`) = 0) q1
