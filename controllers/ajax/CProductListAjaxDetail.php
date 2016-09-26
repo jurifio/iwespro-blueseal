@@ -164,7 +164,7 @@ class CProductListAjaxDetail extends AAjaxController
                     "DELETE pd FROM `ProductDetail` `pd` 
                       LEFT JOIN `ProductSheetActual` `psa` ON (pd.id = psa.productDetailId)
                       LEFT JOIN `ProductSheetModelActual` `psma` ON (pd.id = psma.productDetailId)
-                      WHERE psa.productDetailId IS NULL",
+                      WHERE psa.productDetailId IS NULL AND psma.productDetailId IS NULL",
                     [])->countAffectedRows();
             } catch (\PDOException $e) {
                 $this->app->dbAdapter->rollBack();
