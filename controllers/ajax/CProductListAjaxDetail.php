@@ -117,6 +117,13 @@ class CProductListAjaxDetail extends AAjaxController
                 $pdoErr = $e->errorInfo;
             }
             try {
+                $resPDA = $this->app->dbAdapter->query("DELETE FROM ProductSheetModelActual WHERE productDetailId IN (" . $in . ")", [])->countAffectedRows();
+            } catch (\PDOException $e) {
+                $this->app->dbAdapter->rollBack();
+                $error = true;
+                $pdoErr = $e->errorInfo;
+            }
+            try {
                 $resDT = $this->app->dbAdapter->query("DELETE FROM ProductDetailTranslation WHERE productDetailId IN (" . $in . ")", [])->countAffectedRows();
             } catch (\PDOException $e) {
                 $this->app->dbAdapter->rollBack();
@@ -134,25 +141,31 @@ class CProductListAjaxDetail extends AAjaxController
         } else {
 
             try {
-                $resPDA = $this->app->dbAdapter->query("DELETE pda FROM ProductSheetActual pda, (SELECT pd.id
-                                         FROM `ProductDetail` `pd`
-                                           JOIN `ProductSheetActual` `psa`
-                                           JOIN `ProductSku` `ps`
-                                         WHERE ((`pd`.`id` = `psa`.`productDetailId`) AND
-                                                (`psa`.`productId` = `ps`.`productId`) AND
-                                                (`psa`.`productVariantId` = `ps`.`productVariantId`) AND
-                                                (`pd`.`slug` <> ''))
-                                         GROUP BY `psa`.`productDetailId`
-                                         HAVING (sum(`ps`.`stockQty`) = 0)) q1
-              WHERE pda.productDetailId = q1.id", [])->countAffectedRows();
+                $resPDA = $this->app->dbAdapter->query("DELETE pda FROM ProductSheetActual pda, (SELECT pd.id as id
+                    FROM (((`ProductDetail` `pd`
+                      JOIN `ProductSheetActual` `psa`)
+                      JOIN `ProductSku` `ps`)
+                      LEFT JOIN `ProductSheetModelActual` `psma` ON `psma`.`productDetailId` = `pd`.`id`)
+                    WHERE ((`pd`.`id` = `psa`.`productDetailId`) AND
+                           (`psa`.`productId` = `ps`.`productId`) AND
+                           (`psa`.`productVariantId` = `ps`.`productVariantId`) AND
+                           (`pd`.`slug` <> ''))
+                          AND `psma`.`productDetailId` is NULL
+                    GROUP BY `psa`.`productDetailId` HAVING sum(`ps`.`stockQty`) = 0) q1
+                WHERE pda.productDetailId = q1.id", [])->countAffectedRows();
 
                 $resDT = $this->app->dbAdapter->query("DELETE pdt
                       FROM ProductDetailTranslation pdt JOIN `ProductDetail` `pd` ON (pdt.productDetailId = pd.id) LEFT JOIN
-                      `ProductSheetActual` `psa` ON (pd.id = psa.productDetailId)
-                      WHERE psa.productDetailId IS NULL", [])->countAffectedRows();
+                      `ProductSheetActual` `psa` ON (pd.id = psa.productDetailId) LEFT JOIN 
+                      `ProductSheetModelActual` `psma` ON (pd.id = psma.productDetailId)
+                      WHERE psa.productDetailId IS NULL AND psma.productDetailId IS NULL", [])->countAffectedRows();
 
-                $resD = $this->app->dbAdapter->query("DELETE pd FROM `ProductDetail` `pd` LEFT JOIN `ProductSheetActual` `psa` ON (pd.id = psa.productDetailId) WHERE psa.productDetailId IS NULL", [])->countAffectedRows();
-
+                $resD = $this->app->dbAdapter->query(
+                    "DELETE pd FROM `ProductDetail` `pd` 
+                      LEFT JOIN `ProductSheetActual` `psa` ON (pd.id = psa.productDetailId)
+                      LEFT JOIN `ProductSheetModelActual` `psma` ON (pd.id = psma.productDetailId)
+                      WHERE psa.productDetailId IS NULL",
+                    [])->countAffectedRows();
             } catch (\PDOException $e) {
                 $this->app->dbAdapter->rollBack();
                 $error = true;
