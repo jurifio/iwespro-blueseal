@@ -1181,11 +1181,13 @@ $.bsModal = function (header, params) {
         });
 
         //azzero le quantità che non rispettano i criteri
-        this.form.find('.mag-movementCause').on('click', function(){
+       var selectCause = this.form.find('.mag-movementCause');
+       selectCause.on('change', function(){
             var moves = self.form.find('.move-qty');
             var sign = self.getCauseSign();
             if (false == sign){
                 moves.each(function(){
+                    if ('' != $(this).val())
                     $(this).val(0);
                 });
             } else if ('+' == sign) {
@@ -1195,9 +1197,11 @@ $.bsModal = function (header, params) {
                     }
                 });
             } else if ('-' == sign) {
-                if (0 < $(this).val()) {
-                    $(this).val(0);
-                }
+                moves.each(function(){
+                    if (0 < $(this).val()) {
+                        $(this).val(0);
+                    }
+                });
             }
         });
         //end constructor
