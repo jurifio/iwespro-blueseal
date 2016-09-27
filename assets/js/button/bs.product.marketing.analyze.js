@@ -39,7 +39,7 @@ $(document).on('bs.product.marketing-analyze', function (e, element, button) {
     header.html('Analisi Prodotto');
 
     Pace.ignore(function () {
-
+        body.html('<img src="/assets/img/ajax-loader.gif">');
         $.ajax({
             url: '/blueseal/xhr/ProductMarketingAnalyze',
             type: 'GET',
