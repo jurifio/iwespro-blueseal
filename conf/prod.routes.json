@@ -1,6 +1,7 @@
 {
     "routes": [
         {
+            "name": "Backoffice Login",
             "pattern": "/blueseal/?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLoginController"
@@ -13,6 +14,7 @@
             ]
         },
         {
+            "name": "Backoffice Contenuti",
             "pattern": "/blueseal/contenuti(/?)",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTranslationController"
