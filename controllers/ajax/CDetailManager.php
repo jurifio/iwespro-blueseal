@@ -77,7 +77,7 @@ class CDetailManager extends AAjaxController
                 $model = $modelRepo->findOneBy(['productDetailId' => $id]);
                 if ($model) {
                     $slug = $model->productDetail->slug;
-                    throw new \Exception('Il dettagio avente lo slug "' . $slug . '" è presente in un modello e non può essere eliminato.<br />L\'unione dei dettagli non è andata a buon fine');
+                    return 'Il dettagio avente lo slug "' . $slug . '" è presente in un modello e non può essere eliminato.<br />L\'unione dei dettagli non è andata a buon fine';
                 }
             }
 

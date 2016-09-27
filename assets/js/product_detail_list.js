@@ -105,11 +105,11 @@ $(document).on('bs.manage.detail', function () {
                 url: "/blueseal/xhr/DetailManager",
                 type: "PUT",
                 data: getVars + "productDetailId=" + selected + "&productDetailName=" + name
-            }).done(function (content) {
+            }).done(function (res) {
+                if ('string' == typeof res) body.html(res);
                 body.html("Modifica eseguita con successo");
             }).fail(function (res) {
-                if (-1 < res.indexOf('modello')) body.html(res);
-                else body.html("Modifica non eseguita");
+                body.html("Modifica non eseguita");
             }).always(function () {
                 okButton.html('Ok');
                 okButton.off().on('click', function () {
