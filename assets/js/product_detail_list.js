@@ -107,8 +107,9 @@ $(document).on('bs.manage.detail', function () {
                 data: getVars + "productDetailId=" + selected + "&productDetailName=" + name
             }).done(function (content) {
                 body.html("Modifica eseguita con successo");
-            }).fail(function () {
-                body.html("Modifica non eseguita");
+            }).fail(function (res) {
+                if (-1 < res.indexOf('modello')) body.html(res);
+                else body.html("Modifica non eseguita");
             }).always(function () {
                 okButton.html('Ok');
                 okButton.off().on('click', function () {

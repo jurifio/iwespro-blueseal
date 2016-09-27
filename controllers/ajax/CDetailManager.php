@@ -71,6 +71,16 @@ class CDetailManager extends AAjaxController
 
         $em = $this->app->entityManagerFactory->create('ProductSheetActual');
         try {
+
+            $modelRepo = $this->app->repoFactory->create('ProductSheetModelActual');
+            foreach($ids as $id) {
+                $model = $modelRepo->findOneBy(['productDetailId' => $id]);
+                if ($model) {
+                    $slug = $model->productDetail->slug;
+                    throw new \Exception('Il dettagio avente lo slug "' . $slug . '" è presente in un modello e non può essere eliminato.<br />L\'unione dei dettagli non è andata a buon fine');
+                }
+            }
+
             foreach ($ids as $id) {
                 $productSheets = $em->findBy(['productDetailId' => $id]);
 
@@ -93,6 +103,4 @@ class CDetailManager extends AAjaxController
 	        throw $e;
         }
     }
-
-
 }
