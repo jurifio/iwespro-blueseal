@@ -32,8 +32,8 @@ class CProductMarketingAnalyze extends AAjaxController
                               ifnull(campaignData, 'nessuna') as campaignData
                             FROM ActivityLog
                             WHERE routeName = 'Pagina Prodotto'
-                              AND actionArgs LIKE concat('%',?,'%',?,'%') GROUP BY campaignData";
-        $res = $this->app->dbAdapter->query($queryStronza,[$product->id,$product->productVariantId])->fetchAll();
+                              AND actionArgs LIKE ? GROUP BY campaignData";
+        $res = $this->app->dbAdapter->query($queryStronza,['%'.$product->id.'%'.$product->productVariantId.'%'])->fetchAll();
         return json_encode($res);
     }
 }

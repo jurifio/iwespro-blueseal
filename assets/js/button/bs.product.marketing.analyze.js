@@ -55,9 +55,7 @@ $(document).on('bs.product.marketing-analyze', function (e, element, button) {
                 '<th>Prima Visita</th>' +
                 '<th>Ultima Visita</th>' +
                 '</thead>' +
-                '<tbody>' +
-                '</tbody>' +
-                '</table>');
+                '<tbody>');
             $.each(res,function(k,v) {
                 table.find("tbody > last-child").append(
                     '<tr>' +
@@ -67,6 +65,8 @@ $(document).on('bs.product.marketing-analyze', function (e, element, button) {
                         '<td>'+v.lastSeen+'</td>' +
                     '</tr>');
             });
+            table += '</tbody>' +
+                '</table>';
             body.html(table);
         });
 
