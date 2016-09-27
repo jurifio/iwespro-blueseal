@@ -53,7 +53,10 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
             return 'Shop non autorizzato!';
         }
 
-        $skuRepo = $this->app->repoFactory->create('ProductSku');
+        $causeId = $this->app->router->request()->getRequestData('cause');
+        $causeE = $this->app->repoFactory->create('StorehouseOperationCause')->findOneBy(['id' => $causeId]);
+        $signMultiplier = ($causeE->sign) ? 1 : -1;
+
         $solRepo = $this->app->repoFactory->create('StorehouseOperationLine');
         $this->app->dbAdapter->beginTransaction();
         try {
@@ -67,9 +70,11 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
             $storehouseOperation->operationDate = $this->app->router->request()->getRequestData('date');
             $storehouseOperation->id = $storehouseOperation->insert();
 
+
+
             foreach ($this->app->router->request()->getRequestData('rows') as $row) {
-                list($id, $productVariantId, $productSizeId) = explode('-', $row['id']);
-                $solRepo->createMovementLine($id, $productVariantId, $productSizeId, $shopId, $row['qty'], $storehouseOperation->id, $storehouse->id);
+                list($id, $productVariantId, $productSizeId, $shopfromBarcode) = explode('-', $row['id']);
+                $solRepo->createMovementLine($id, $productVariantId, $productSizeId, $shopfromBarcode, $row['qty'] * $signMultiplier, $storehouseOperation->id, $storehouse->id);
             }
             $this->app->dbAdapter->commit();
         } catch (\Exception $e) {

@@ -885,6 +885,32 @@ $.bsModal = function (header, params) {
                         self.submitBlock.css('display', 'none');
                     }
                 });
+
+                body.find('.move-qty').each(function(){
+                    //controllo sui movimenti, mai minori della disponibilità
+                    $(this).off().on('keypress change', function(){
+                        var qty = $(this).data('stock');
+                        var move = parseInt($(this).val());
+                        if (0 > qty + move) $(this).val(qty * -1);
+                        //controllo il segno dei movimenti
+                        var sign = self.getCauseSign();
+                        if ('+' == sign) {
+                                if (-1 < $(this).val().indexOf('-')) {
+                                    var value = $(this).val();
+                                    //$(this).val(value.substr(1, 1));
+                                    $(this).val('0');
+                                }
+                        } else if ('-' == sign) {
+                                if (-1 == $(this).val().indexOf('-')) {
+                                    //$(this).val('-' + $(this).val());
+                                    $(this).val('0');
+                                }
+                        } else if (false == sign) {
+                            $(this).val('0');
+                        }
+                    });
+                });
+
                 self.submitBlock.css('display', 'block');
                 self.movementDate.css('display', 'block');
             }
@@ -892,9 +918,9 @@ $.bsModal = function (header, params) {
         };
 
         this.writeSizesTable = function (product) {
-            var head = $('<tr></tr>');
-            var stock = $('<tr></tr>');
-            var moves = $('<tr></tr>');
+            var head = $('<tr class="sizes"></tr>');
+            var stock = $('<tr class="stocks"></tr>');
+            var moves = $('<tr class="moves"></tr>');
 
             head.append($('<th>Misure</th>'));
             stock.append($('<th>Disponibilità</th>'));
@@ -905,7 +931,7 @@ $.bsModal = function (header, params) {
                 stock.append($('<td>' + qt + '</td>'));
                 var moveQt = ('undefined' != typeof product.moves[i]) ? product.moves[i] : '';
                 var fieldName = product.id + '-' + product.productVariantId + '-' + i;
-                moves.append($('<td><input type="number" class="move-qty form-control" name="move-' + fieldName + '" value="' + moveQt + '"></td>'));
+                moves.append($('<td><input type="number" data-stock="' + (('' != qt) ? qt : 0) + '" class="move-qty form-control" name="move-' + fieldName + '" value="' + moveQt + '"></td>'));
             }
             return {head: head, stock: stock, moves: moves};
         };
@@ -916,6 +942,16 @@ $.bsModal = function (header, params) {
                 var field = $(table).find('input[name="move-' + fieldName + '"]');
                 field.val(parseInt(field.val()) + parseInt(product.moves[i]));
             }
+        };
+
+        this.getCauseSign = function() {
+            var causeElem = $('.mag-movementCause option:selected');
+            var sign = false;
+            if ( -1 < causeElem.html().indexOf('(+)') || -1 < causeElem.html().indexOf('(-)')) {
+                var pos = causeElem.html().indexOf('(') + 1;
+                sign = causeElem.html().substr(pos, 1);
+            }
+            return sign;
         };
 
 
@@ -1143,7 +1179,32 @@ $.bsModal = function (header, params) {
             $('.search-item').selectize()[0].selectize.focus();
             $('.mag-searchBlock input').focus();
         });
-//end constructor
+
+        //azzero le quantità che non rispettano i criteri
+       var selectCause = this.form.find('.mag-movementCause');
+       selectCause.on('change', function(){
+            var moves = self.form.find('.move-qty');
+            var sign = self.getCauseSign();
+            if (false == sign){
+                moves.each(function(){
+                    if ('' != $(this).val())
+                    $(this).val(0);
+                });
+            } else if ('+' == sign) {
+                moves.each(function(){
+                    if (0 > $(this).val()) {
+                        $(this).val(0);
+                    }
+                });
+            } else if ('-' == sign) {
+                moves.each(function(){
+                    if (0 < $(this).val()) {
+                        $(this).val(0);
+                    }
+                });
+            }
+        });
+        //end constructor
     };
 
 })(jQuery);
