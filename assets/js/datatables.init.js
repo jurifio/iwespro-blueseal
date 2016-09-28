@@ -52,8 +52,8 @@
         },
         buttons: []
     };
-    table.buttonBackup =
-        [
+    tableSetup.buttonBackup = {
+        buttons: [
             {
                 extend: 'csv',
                 text: '<i class="fa fa-file-text-o"></i>'
@@ -72,7 +72,8 @@
                 extend: 'print',
                 text: '<i class="fa fa-print"></i>'
             }
-        ];
+        ]
+    };
 
     tableSetup.blog_list = $.extend({}, tableSetup.common, {
         order: [[4, "desc"]],
@@ -1306,7 +1307,7 @@
 
         }).DataTable(tableSetup[table.data('datatable-name')]);
 
-        $('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
+       //$('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
     });
 
 })(jQuery);
