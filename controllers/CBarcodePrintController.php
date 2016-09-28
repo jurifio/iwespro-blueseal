@@ -49,11 +49,15 @@ class CBarcodePrintController extends ARestrictedAccessRootController
             }
             break;
             case 'productId': {
+                $shopRepo = $this->app->repoFactory->create('Shop');
+                $shopIds = $shopRepo->getgetAutorizedShopsIdForUser();
                 foreach ($this->app->router->request()->getRequestData('id') as $productId) {
                     $product = $this->app->repoFactory->create('Product')->findOneByStringId($productId);
                     foreach($product->productSku as $sku) {
-                        for($x = 0;$x<abs($sku->stockQty);$x++) {
-                            $productSkus->add(clone $sku);
+                        if (in_array($sku->shopId, $shopIds)) {
+                            for ($x = 0; $x < abs($sku->stockQty); $x++) {
+                                $productSkus->add(clone $sku);
+                            }
                         }
                     }
                 }
