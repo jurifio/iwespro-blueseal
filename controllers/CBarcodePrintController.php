@@ -50,7 +50,7 @@ class CBarcodePrintController extends ARestrictedAccessRootController
             break;
             case 'productId': {
                 $shopRepo = $this->app->repoFactory->create('Shop');
-                $shopIds = $shopRepo->getgetAutorizedShopsIdForUser();
+                $shopIds = $shopRepo->getAutorizedShopsIdForUser();
                 foreach ($this->app->router->request()->getRequestData('id') as $productId) {
                     $product = $this->app->repoFactory->create('Product')->findOneByStringId($productId);
                     foreach($product->productSku as $sku) {
