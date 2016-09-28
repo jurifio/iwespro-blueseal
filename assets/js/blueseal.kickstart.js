@@ -1206,5 +1206,51 @@ $.bsModal = function (header, params) {
         });
         //end constructor
     };
-
 })(jQuery);
+
+$(document).on('keypress', '.inputPrice', function(e){
+    console.log(e);
+    var target = e.target;
+    e.preventDefault();
+    var permitted = "1234567890,.";
+    var char = String.fromCharCode(e.which);
+    var val = $(this).val();
+    if (-1 < permitted.indexOf(char)) {
+        if ((-1 == val.indexOf(',')) || (2 >= val.length - val.indexOf(',')) || ((2 < val.length - val.indexOf(',')) && (target.selectionStart <= val.indexOf(',')))) {
+            char = ('.' == char) ? ',' : char;
+            if (char == ',') {
+                if (-1 == val.indexOf(',')) {
+                    if (0 == val.length) $(this).val('0,');
+                    else if (target.selectionStart >= val.length - 2){
+                        var pos = target.selectionStart;
+                        var before = val.substring(0, target.selectionStart);
+                        var after = val.substring(target.selectionStart);
+                        $(this).val(before + char + after);
+                        $(this).setCursorPosition(pos + 1);
+                    }
+                }
+            } else {
+                var pos = target.selectionStart;
+                var before = val.substring(0, target.selectionStart);
+                var after = val.substring(target.selectionStart);
+                $(this).val(before + char + after);
+                $(this).setCursorPosition(pos + 1);
+            }
+        }
+    }
+});
+
+$.fn.setCursorPosition = function(pos) {
+    this.each(function(index, elem) {
+        if (elem.setSelectionRange) {
+            elem.setSelectionRange(pos, pos);
+        } else if (elem.createTextRange) {
+            var range = elem.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', pos);
+            range.moveStart('character', pos);
+            range.select();
+        }
+    });
+    return this;
+};

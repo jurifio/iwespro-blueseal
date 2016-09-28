@@ -48,15 +48,15 @@
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label for="">Costo</label>
-                                                    <input class="form-control value" type="text" name="value" value="" required/>
+                                                    <input class="form-control value inputPrice" type="text" name="value" value="" required/>
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label for="">Prezzo</label>
-                                                    <input class="form-control price" type="text" name="price" value="" required/>
+                                                    <input class="form-control price inputPrice" type="text" name="price" value="" required/>
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label for="">Prezzo in saldo</label>
-                                                    <input class="form-control salePrice" type="text" name="salePrice" value="" required/>
+                                                    <input class="form-control salePrice inputPrice" type="text" name="salePrice" value="" required/>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <button class="btn btn-success removeRow" style="float: right;">x</button>

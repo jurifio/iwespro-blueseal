@@ -856,6 +856,7 @@ $(document).ready(function () {
             });
         }
     });
+
     $('#ProductName_1_name').selectize()[0].selectize.setValue($("#ProductName_1_name").data('preset-name'));
 
     category = false;
