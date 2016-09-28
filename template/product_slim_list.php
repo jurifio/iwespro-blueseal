@@ -57,10 +57,10 @@
                                     <th data-slug="image"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Immagine</th>
-                                    <th data-slug="status"
+                                    <th data-slug="details"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Dettagli</th>
-                                    <th data-slug="details"
+                                    <th data-slug="status"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>
                                     <th data-slug="categories"
