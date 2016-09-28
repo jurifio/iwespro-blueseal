@@ -63,6 +63,9 @@
                                     <th data-slug="status"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>
+                                    <th data-slug="details"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Dettagli</th>
                                     <th data-slug="categories"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Categorie</th>
