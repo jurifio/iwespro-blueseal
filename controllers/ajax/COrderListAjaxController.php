@@ -52,9 +52,6 @@ class COrderListAjaxController extends AAjaxController
 
     public function get()
     {
-        /** @var $em CEntityManager * */
-        $em = $this->app->entityManagerFactory->create('Shop');
-        $shops = $em->findAll("limit 999", "");
 
         $datatable = new CDataTables('vBluesealOrders',['id'],$_GET);
 	    $datatable->addCondition('statusCode',['ORD_CANCEL'],true);
