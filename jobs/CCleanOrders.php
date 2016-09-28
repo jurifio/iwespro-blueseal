@@ -5,14 +5,17 @@ use bamboo\domain\entities\COrder;
 use bamboo\core\jobs\ACronJob;
 
 /**
- * Class CDispatchPreorderToFriend
+ * Class CCleanOrders
  * @package bamboo\blueseal\jobs
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
- * @copyright (c) Bambooshoot snc - All rights reserved
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @since ${VERSION}
+ * @date $date
+ * @since 1.0
  */
 class CCleanOrders extends ACronJob
 {
@@ -71,5 +74,6 @@ class CCleanOrders extends ACronJob
             }
             $this->log('REPORT','Delete End', "Deleted: ".$i);
         }
+        if($this->app->dbAdapter->hasTransaction()) $this->app->dbAdapter->commit();
     }
 }
