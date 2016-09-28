@@ -18,7 +18,7 @@ use bamboo\domain\entities\CProductSku;
  *
  * @since ${VERSION}
  */
-class COrderListAjaxController extends AAjaxController
+class CFriendOrderListAjaxController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
@@ -52,15 +52,16 @@ class COrderListAjaxController extends AAjaxController
 
     public function get()
     {
+        //$user
+        // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
         /** @var $em CEntityManager * */
+        $em = $this->app->entityManagerFactory->create('Shop');
+        $shops = $em->findAll("limit 999", "");
 
-        $datatable = new CDataTables('vBluesealOrders',['id'],$_GET);
+
+        $datatable = new CDataTables('vBluesealFriendOrderList',['id'],$_GET);
 	    $datatable->addCondition('statusCode',['ORD_CANCEL'],true);
-	    $datatable->addSearchColumn('code');
-	    $datatable->addSearchColumn('shop');
-	    $datatable->addSearchColumn('product');
-	    $datatable->addSearchColumn('productBrand');
-	    $datatable->addSearchColumn('email');
+
         //var_dump($datatable->getQuery());
         //die();
         $orders = $this->app->repoFactory->create('Order')->em()->findBySql($datatable->getQuery(),$datatable->getParams());

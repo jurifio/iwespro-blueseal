@@ -1538,6 +1538,18 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "name": "Gestione Ordini Con i friend",
+            "pattern": "/blueseal/friend/ordini(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
