@@ -148,6 +148,9 @@
         <bs-toolbar-button
             data-remote="bs.product.sales.price.change"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.marketing.analyze"
+            ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
