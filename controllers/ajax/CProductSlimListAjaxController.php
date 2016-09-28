@@ -59,6 +59,8 @@ class CProductSlimListAjaxController extends AAjaxController
             }
             $response['data'][$i]['shop'] .= '</span>';
 
+            $response['data'][$i]['details'] = $val->productSheetActual->count() ? 'Sì' : 'No';
+
             $ext = [];
             foreach ($val->shopHasProduct as $shp) {
                 if (in_array($shp->shopId, $shopsIds)) {

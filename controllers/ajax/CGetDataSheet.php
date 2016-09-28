@@ -26,6 +26,7 @@ class CGetDataSheet extends AAjaxController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/parts/sheetDetails.php');
 
         $get = $this->app->router->request()->getRequestData();
+        $emptyDetails = (false !== $this->app->router->request()->getRequestData('emptyDetails')) ? $this->app->router->request()->getRequestData('emptyDetails') : 1;
 
         $code = (array_key_exists('code', $get)) ? (($get['code']) ? $get['code'] : false) : false;
         $value = (array_key_exists('value', $get)) ? $get['value'] : false;
@@ -66,10 +67,12 @@ class CGetDataSheet extends AAjaxController
         $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');
 
         return $view->render([
+            'emptyDetails' => $emptyDetails,
             'productName' => $Pname,
             'productSheets' => $productSheets,
             'productSheetPrototype' => $productSheetPrototype,
             'actual' => $resActual,
+            'actualCount' => count($resActual)
         ]);
     }
 
