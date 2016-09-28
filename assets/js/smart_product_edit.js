@@ -426,43 +426,48 @@ $(document).on('bs.details.product.assign', function (e) {
             data: {
                 value: arr['value'],
                 type: arr['type'],
-                code: arr['code']
+                code: arr['code'],
+                emptyDetails: 0
             }
         }).done(function (content) {
-            $(self).html(content);
-            prototypeId = $(self).find(".detailContent").data('prototype-id');
-            var productDataSheet = $(self).find(".Product_dataSheet");
-            var selPDS = $(productDataSheet).selectize();
-            selPDS[0].selectize.setValue(prototypeId, true);
+            if ("" !== content) {
+                $(self).html(content);
+                prototypeId = $(self).find(".detailContent").data('prototype-id');
+                var productDataSheet = $(self).find(".Product_dataSheet");
+                var selPDS = $(productDataSheet).selectize();
+                selPDS[0].selectize.setValue(prototypeId, true);
 
-            productDataSheet.on("change", function () {
-                $(self).selectDetails({
-                    value: $(this).find("option:selected").val(),
-                    type: 'change'
+                productDataSheet.on("change", function () {
+                    $(self).selectDetails({
+                        value: $(this).find("option:selected").val(),
+                        type: 'change'
+                    });
                 });
-            });
 
-            $(self).find(".productDetails select").each(function () {
-                var sel = $(this).selectize({
-                    valueField: 'id',
-                    labelField: 'item',
-                    searchField: ['item'],
-                    options: window.detailsStorage
+                $(self).find(".productDetails select").each(function () {
+                    var sel = $(this).selectize({
+                        valueField: 'id',
+                        labelField: 'item',
+                        searchField: ['item'],
+                        options: window.detailsStorage
+                    });
+                    var initVal = $(this).data('init-selection');
+                    if (initVal != 'undefined') {
+                        sel[0].selectize.setValue(initVal, true);
+                    } else {
+                        sel[0].selectize.setValue(0, true);
+                    }
                 });
-                var initVal = $(this).data('init-selection');
-                if (initVal != 'undefined') {
-                    sel[0].selectize.setValue(initVal, true);
-                } else {
-                    sel[0].selectize.setValue(0, true);
+                var pname = $('.detailContent').data('product-name');
+                if ("" != pname) {
+                    var selectName = $('#ProductName_1_name').selectize()[0].selectize;
+                    selectName.addOption({name: pname});
+                    selectName.addItem(pname);
+                    selectName.refreshOptions();
+                    selectName.setValue(pname, true);
                 }
-            });
-            var pname = $('.detailContent').data('product-name');
-            if ("" != pname) {
-                var selectName = $('#ProductName_1_name').selectize()[0].selectize;
-                selectName.addOption({name: pname});
-                selectName.addItem(pname);
-                selectName.refreshOptions();
-                selectName.setValue(pname, true);
+            } else {
+                $(self).html('<button class="btn btn-default catButton">Seleziona prima le categorie</button>');
             }
         }).fail(function(){
             setTimeout(function() {
