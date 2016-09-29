@@ -61,8 +61,8 @@ class CProductPhotoAjaxManage extends AAjaxController
         }
 
 
-        $fileName['name'] = $product->id . '-' . $product->productVariantId;
-        $fileName['number'] = str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
+        $fileName['name'] = $product->printId();
+        $fileName['number'] = (string) str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
         $fileName['extension'] = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
 
         try{
