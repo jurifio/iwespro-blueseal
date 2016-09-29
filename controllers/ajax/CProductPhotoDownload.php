@@ -79,7 +79,7 @@ class CProductPhotoDownload extends AAjaxController
                 $localName = $local . '/' . $productPhoto->name;
                 if (in_array($localName, $files)) continue;
                 $files[] = $localName;
-                $zip->addFromString($productPhoto->name, file_get_contents($remote . $product->productBrand->slug . '/' . $productPhoto->name, 'r'));
+                $zip->addFromString($productPhoto->name, file_get_contents($remote . $product->productBrand->slug . '/' . urlencode($productPhoto->name), 'r'));
             }
         }
         if ($zip->close()) {
