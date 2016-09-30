@@ -18,7 +18,7 @@
                 <div class="col-md-12">
                     <ul class="tag-list">
                         <?php foreach ($allTags as $tag) {
-                            echo '<li id="' . $tag->id . '"><span>' . $tag->tagTranslation->getFirst()->name . '</span></li>';
+                            echo '<li id="' . $tag->id . '"><span>' . $tag->getLocalizedName() . '</span></li>';
                         } ?>
                     </ul>
                 </div>
@@ -34,7 +34,7 @@
                 <div class="col-md-12">
                     <ul class="tag-list">
                         <?php foreach ($deleteTags as $tag) {
-                            echo '<li id="' . $tag->id . '"><span>' . $tag->tagTranslation->getFirst()->name . '</span></li>';
+                            echo '<li id="' . $tag->id . '"><span>' . $tag->getLocalizedName() . '</span></li>';
                         } ?>
                     </ul>
                 </div>

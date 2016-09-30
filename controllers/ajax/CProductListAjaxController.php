@@ -152,7 +152,7 @@ class CProductListAjaxController extends AAjaxController
 	        $ext = implode('<br>',array_unique($ext));
 
 	        $tags = [];
-	        foreach ($val->tag as $tag) $tags[] = $tag->tagTranslation->getFirst()->name;
+	        foreach ($val->tag as $tag) $tags[] = $tag->getLocalizedName();
 
             $response['data'][$i]['externalId'] = '<span class="small">';
             $response['data'][$i]['externalId'] .= empty($ext) ? "" : $ext;
