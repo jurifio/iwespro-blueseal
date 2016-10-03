@@ -373,6 +373,14 @@ $(document).on('bs.details.product.assign', function (e) {
                         $('#main-details').selectDetails({
                             code: code
                         });
+                        // assegno la categoria
+                        $.ajax({
+                            url: '/blueseal/xhr/getProductCategory',
+                            method: 'GET',
+                            data: {code: code, format: 'string'}
+                        }).done(function(res){
+                            $('#ProductCategory_id').val(res);
+                        });
                     }
                 }
             );
@@ -500,23 +508,6 @@ $.fn.disableBlank = function(formStatus) {
             }
         });
     }
-
-    /*
-    if (status) {
-        editable = false;
-        $(this).each(function(){
-            if (!$(this).find('.disableBlankActive').length) {
-                if (!((disable == 'priceEnabled') && ($(this).hasClass('disablePrice')))) {
-                    $(this).append('<div class="disableBlankActive"></div>');
-                }
-            }
-        });
-    } else {
-        editable = true;
-        $('.disableBlankActive').each( function(){
-            $(this).remove();
-        });
-    }*/
 };
 
 function searchForProduct(itemno, variantName, brandId) {
