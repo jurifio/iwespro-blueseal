@@ -69,7 +69,7 @@ class CProductDetailListAjaxController extends AAjaxController
             $psaCount = $psaRepo->findBy(['productDetailId' => $val->id])->count();
             $red = false;
 
-            if ($psaCount) {
+            if (!$psaCount) {
                 $psmaCount = $psmaRepo->findBy(['productDetailId' => $val->id])->count();
                 if ($psmaCount) $red = true;
             }
