@@ -24,19 +24,36 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped" data-column-filter="true" data-datatable-name="order_list"
-                               data-controller="OrderListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable">
+                        <table class="table table-striped responsive" width="100%"
+                               data-column-filter="true"
+                               data-datatable-name="friend_order_list"
+                               data-controller="FriendOrderListAjaxController"
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-
+                               data-length-menu="50, 100, 200"
+                               id="orderTable">
                             <thead>
                             <tr>
-                                <th>Ordine</th>
-                                <th>Data Ordine</th>
-                                <th>Ultimo Aggiornamento</th>
-                                <th>Utente</th>
-                                <th>Contenuto</th>
-                                <th>Stato</th>
-                                <th>Dovuto/Pagato</th>
-                                <th>Metodo Pagamento</th>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center">ID</th>
+                                <th data-slug="code"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Codice Prodotto</th>
+                                <th data-slug="size"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Taglia</th>
+                                <th data-slug="dummyPicture"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Immagine</th>
+                                <th data-slug="orderLineStatusTitle"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato Linea Ordine</th>
+                                <th data-slug="FriendPaymentName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato pagamento</th>
                             </tr>
                             </thead>
                             <tbody>

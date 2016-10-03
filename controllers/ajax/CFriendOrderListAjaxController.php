@@ -52,19 +52,26 @@ class CFriendOrderListAjaxController extends AAjaxController
 
     public function get()
     {
-        //$user
+        $user = $this->app->getUser();
+        $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
-        /** @var $em CEntityManager * */
-        $em = $this->app->entityManagerFactory->create('Shop');
-        $shops = $em->findAll("limit 999", "");
 
-
-        $datatable = new CDataTables('vBluesealFriendOrderList',['id'],$_GET);
-	    $datatable->addCondition('statusCode',['ORD_CANCEL'],true);
-
+        $datatable = new CDataTables('vBluesealFriendOrderList',['id', 'orderId'],$_GET);
+	    $datatable->addCondition(
+	        'orderLineStatusCode',
+            ['ORD_CANCEL', 'ORD_ARCH', 'CRT', 'CRT_MRG'],
+            true
+        );
+        if (!$allShops)
+            $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser($user);
+            $datatable->addCondition('shopId', $shops);
+            $datatable->addCondition('orderLineStatusCode',
+                ['ORD_PENDING', 'ORD_WAIT', 'ORD_LAB', 'ORD_FRND_SNDING', 'ORD_ERR_SEND'],
+                true
+            );
         //var_dump($datatable->getQuery());
         //die();
-        $orders = $this->app->repoFactory->create('Order')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $orderLines = $this->app->repoFactory->create('OrderLine')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -91,52 +98,21 @@ class CFriendOrderListAjaxController extends AAjaxController
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $opera = $blueseal."ordini/aggiungi?order=";
         $i = 0;
-        foreach ($orders as $val) {
 
+        foreach ($orderLines as $v) {
 	        /** ciclo le righe */
-	        $response['aaData'][$i]["content"] = "";
-	        $alert = false;
-	        foreach ($val->orderLine as $line) {
-		        try {
-			        /** @var CProductSku $sku */
-			        $sku = unserialize($line->frozenProduct);
-			        $sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
-
-			        $code = $sku->shop->name . ' ' . $sku->printPublicSku(). " (".$sku->product->productBrand->name.")";
-			        if($line->orderLineStatus->notify === 1) $alert = true;
-		        } catch (\Exception $e) {
-			        $code = 'non trovato';
-		        }
-
-		        $response['aaData'][$i]["content"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - "  . $plainLineStatuses[$line->status] ."</span>";
-		        $response['aaData'][$i]["content"] .= "<br/>";
-	        }
-
-
-	        $orderDate = date("D d-m-y H:i", strtotime($val->orderDate));
-            $paidAmount = isset($val->paidAmount) ? $val->paidAmount : 0;
-            if ($val->lastUpdate != null) {
-                $timestamp = time() - strtotime($val->lastUpdate);
-                $day = date("z", $timestamp);
-                $h = date("H", $timestamp);
-                $m = date("i", $timestamp);
-                $since = $day . ' giorni ' . $h . ":" . $m . " fa";
-            }
-            $response['aaData'][$i]["id"] = '<a href="'.$opera.$val->id.'" >'.$val->id.'</a>';
-	        if($alert) $response['aaData'][$i]["id"].=" <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
-
-            $response['aaData'][$i]["orderDate"] = $orderDate;
-            $response['aaData'][$i]["lastUpdate"] = isset($since) ? $since : "Mai";
-            $response['aaData'][$i]["user"] = '<span>'.$val->userDetails->name." ".$val->userDetails->surname.'</span><br /><span>'.$val->user->email.'</span>';
-            if(isset($val->rbacRole) && count($val->rbacRole)>0){
-                $response['aaData'][$i]["user"] .= ' <i class="fa fa-diamond"></i>';
-            }
-
-            $response['aaData'][$i]["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
-            $response['aaData'][$i]["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . number_format($val->netTotal, 2) . ' / ' . number_format($paidAmount, 2) . "</span>" : number_format($val->netTotal, 2) . ' / ' . number_format($paidAmount, 2);
-            $response['aaData'][$i]["payment"] = $val->orderPaymentMethod->name;
+            $response['data'][$i]['id'] = $v->id;
+            $response['data'][$i]['line_id'] = $v->printId();
+            $response['data'][$i]['orderId'] = $v->orderId;
+            $response['data'][$i]['code'] = $v->product->id . "-" . $v->product->productVariantId;
+            $response['data'][$i]['size'] = $v->productSize->name;
+            $img = strpos($v->product->dummyPicture, 'amazonaws') ? $v->product->dummyPicture : $this->urls['dummy']."/".$v->product->dummyPicture;
+            if($v->product->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
+            else $imgs = "";
+            $response['data'][$i]['dummyPicture'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
+            $response['data'][$i]['orderLineStatusTitle'] = $v->orderLineStatus->title;
             $i++;
-        }
+	    }
         return json_encode($response);
     }
 
