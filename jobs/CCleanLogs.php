@@ -35,11 +35,11 @@ class CCleanLogs extends ACronJob
                                                 [$days])->fetchAll()[0]['conto']
                         > 0) {
             $limit = 10000;
-            $this->log('REPORT', 'Working', 'res: '.$res.' limit: '.$limit);
+            $this->report( 'Working', 'res: '.$res.' limit: '.$limit);
             $rows += $this->app->dbAdapter->query("DELETE FROM JobLog WHERE timestamp < (NOW() - INTERVAL ? DAY) LIMIT ?", [$days,$limit], true)->countAffectedRows();
-            $this->log('REPORT', 'Working', 'rows: '.$rows);
+            $this->report('Working', 'rows: '.$rows);
         }
 		$this->app->cacheService->getCache('entities')->flush();
-        $this->log('REPORT', 'deleted Job Logs', 'deleted ' . $rows . ' rows');
+        $this->report('deleted Job Logs', 'deleted ' . $rows . ' rows');
     }
 }

@@ -22,10 +22,10 @@ class CCleanUserSessions extends ACronJob
     public function run($args = null)
     {
         if(!is_null($args) && !empty($args)){
-            $this->log('REPORT','Deleting Manual Session', "Id ".$args);
+            $this->report('Deleting Manual Session', "Id ".$args);
             $this->deleteSession($args);
         }
-        $this->log('REPORT','Deleting Sessions', "Starting to delete Sessions");
+        $this->report('Deleting Sessions', "Starting to delete Sessions");
         $this->deleteSessions();
     }
 
@@ -53,16 +53,16 @@ class CCleanUserSessions extends ACronJob
                   FROM `UserSession` us
                   where us.expire < current_timestamp and userId is null";
 	    $res = $this->app->dbAdapter->query($query,[])->fetchAll();
-        $this->log('REPORT','Delete Start', "To do: ".count($res));
+        $this->report('Delete Start', "To do: ".count($res));
 		$i = 0;
         foreach($res as $us){
             if($i%100 == 0) $this->app->dbAdapter->beginTransaction();
             $resp = $this->deleteSession($us);
-            if($i%200 == 0) $this->log('REPORT','Delete Running', "Deleted: ".$i);
+            if($i%200 == 0) $this->report('Delete Running', "Deleted: ".$i);
 	        if($i%100 == 0) $this->app->dbAdapter->commit();
             if($resp) $i++;
         }
 	    $this->app->dbAdapter->commit();
-        $this->log('REPORT','Delete End', "Deleted: ".$i);
+        $this->report('Delete End', "Deleted: ".$i);
     }
 }
