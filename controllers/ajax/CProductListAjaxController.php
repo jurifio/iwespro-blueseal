@@ -69,7 +69,7 @@ class CProductListAjaxController extends AAjaxController
             $statuses[$status->code] = $status->name;
         }
 
-        $modifica = $this->urls['base']."prodotti/modifica";
+        $modifica = $this->urls['base']."friend/prodotti/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
