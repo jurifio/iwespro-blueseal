@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\core\base\CObjectCollection;
+use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\CProductPhoto;
 
 /**
@@ -18,6 +19,8 @@ use bamboo\domain\entities\CProductPhoto;
  */
 class CProductPhotoDownload extends AAjaxController
 {
+    use TMySQLTimestamp;
+
     public function get()
     {
         $shopsId = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
@@ -57,7 +60,7 @@ class CProductPhotoDownload extends AAjaxController
             $toDownload[$shopHasProduct->product->printId()] = $shopHasProduct->product;
 
             if (!$allShop) {
-                $shopHasProduct->productPhotoDownloadTime = $this->app->dbAdapter->time();;
+                $shopHasProduct->productPhotoDownloadTime = $this->time();
                 $shopHasProduct->update();
             }
         }
@@ -76,7 +79,7 @@ class CProductPhotoDownload extends AAjaxController
                 $localName = $local . '/' . $productPhoto->name;
                 if (in_array($localName, $files)) continue;
                 $files[] = $localName;
-                $zip->addFromString($productPhoto->name, file_get_contents($remote . $product->productBrand->slug . '/' . $productPhoto->name, 'r'));
+                $zip->addFromString($productPhoto->name, file_get_contents($remote . $product->productBrand->slug . '/' . urlencode($productPhoto->name), 'r'));
             }
         }
         if ($zip->close()) {

@@ -117,7 +117,7 @@ class CProductImporterProblemsListController extends AAjaxController
     private function parseProblem(CProduct $product)
     {
         $message = "[500] Size Mismatch";
-        $sizes = $this->app->dbAdapter->query('SELECT size FROM DirtyProduct dp, DirtySku ds where dp.id = ds.dirtyProductId and dp.productId = ? and dp.productVariantId = ? and ds.qty > 0 ',[$product->id,$product->productVariantId])->fetchAll();
+        $sizes = $this->app->dbAdapter->query('SELECT size FROM DirtyProduct dp, DirtySku ds where dp.id = ds.dirtyProductId and dp.productId = ? and dp.productVariantId = ?',[$product->id,$product->productVariantId])->fetchAll();
         $newSize = [];
         foreach($sizes as $size){
             $newSize[] = $size['size'];

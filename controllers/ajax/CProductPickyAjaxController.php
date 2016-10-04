@@ -124,7 +124,7 @@ class CProductPickyAjaxController extends AAjaxController
             $ext = implode('<br>',array_unique($ext));
 
             $tags = [];
-            foreach ($val->tag as $tag) $tags[] = $tag->tagTranslation->getFirst()->name;
+            foreach ($val->tag as $tag) $tags[] = $tag->getLocalizedName();
 
             $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
             $response['data'][$i]['cpf'] = $val->itemno.' # '.$val->productVariant->name;

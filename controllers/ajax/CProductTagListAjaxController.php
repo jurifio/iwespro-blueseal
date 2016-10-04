@@ -151,7 +151,7 @@ class CProductTagListAjaxController extends AAjaxController
 	        $ext = implode('<br>',array_unique($ext));
 
 	        $tags = [];
-	        foreach ($val->tag as $tag) $tags[] = $tag->tagTranslation->getFirst()->name;
+	        foreach ($val->tag as $tag) $tags[] = $tag->getLocalizedName();
 
 
             $colorGroup = $val->productColorGroup->getFirst();

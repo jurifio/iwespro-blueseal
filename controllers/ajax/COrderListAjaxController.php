@@ -52,11 +52,10 @@ class COrderListAjaxController extends AAjaxController
 
     public function get()
     {
-        /** @var $em CEntityManager * */
 
         $datatable = new CDataTables('vBluesealOrders',['id'],$_GET);
 	    $datatable->addCondition('statusCode',['ORD_CANCEL'],true);
-	    $datatable->addSearchColumn('code');
+	    $datatable->addSearchColumn('orderLineStatus');
 	    $datatable->addSearchColumn('shop');
 	    $datatable->addSearchColumn('product');
 	    $datatable->addSearchColumn('productBrand');

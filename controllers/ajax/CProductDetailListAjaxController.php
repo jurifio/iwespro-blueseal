@@ -58,12 +58,26 @@ class CProductDetailListAjaxController extends AAjaxController
 
         $i = 0;
 
+        $psaRepo = $this->app->repoFactory->create('ProductSheetModelActual');
+        $psmaRepo = $this->app->repoFactory->create('ProductSheetModelActual');
+
+        $colorTemp = '<span style="color: #880611;">{string}</span>';
         foreach($productsDetail as $val){
+
+            //verifico se un dettaglio che non ha prodotti è associato ad un modello
+
+            $psaCount = $psaRepo->findBy(['productDetailId' => $val->id])->count();
+            $red = false;
+
+            if (!$psaCount) {
+                $psmaCount = $psmaRepo->findBy(['productDetailId' => $val->id])->count();
+                if ($psmaCount) $red = true;
+            }
 			try {
 				$response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
-				$response['data'][$i]['slug'] = $val->slug;
-				$response['data'][$i]['name'] = $val->productDetailTranslation->getFirst()->name;
+				$response['data'][$i]['slug'] = ($red) ? str_replace('{string}', $val->slug, $colorTemp) : $val->slug;
+				$response['data'][$i]['name'] = ($red) ? str_replace('{string}', $val->productDetailTranslation->getFirst()->name, $colorTemp) : $val->productDetailTranslation->getFirst()->name;
                 $response['data'][$i]['name'] .= " (";
                 $dt = $this->app->repoFactory->create('productDetailTranslation')->findBy(['productDetailId' => $val->id]);
                 $lang = [];

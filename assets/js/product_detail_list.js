@@ -221,6 +221,7 @@ $(document).on('bs.manage.deletedetails', function () {
                 cancelButton.hide();
                 okButton.html("Fatto").off().show().on("click", function () {
                     bsModal.modal("hide");
+                    $('table[data-datatable-name="product_detail_list"]').DataTable().draw();
                 });
             });
         });
