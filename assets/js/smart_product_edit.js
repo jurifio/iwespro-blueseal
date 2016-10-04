@@ -476,6 +476,10 @@ $(document).on('bs.details.product.assign', function (e) {
                 }
             } else {
                 $(self).html('<button class="btn btn-default catButton">Seleziona prima le categorie</button>');
+                $('.catButton').off().on('click', function(e){
+                    e.preventDefault();
+                    $(document).trigger('bs.category.edit');
+                });
             }
         }).fail(function(){
             setTimeout(function() {
