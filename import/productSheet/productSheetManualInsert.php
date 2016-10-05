@@ -5,8 +5,8 @@ error_reporting(~0);
 //require "/data/www/redpanda/htdocs/pickyshop/BlueSeal.php";
 
 use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
-//$BlueSeal = new BlueSeal('BlueSeal','pickyshop','/data/www/redpanda');
-$BlueSeal->enableDebugging();
+//$ninetyNineMonkey = new BlueSeal('BlueSeal','pickyshop','/data/www/redpanda');
+$ninetyNineMonkey->enableDebugging();
 
 /* nome scheda prodotto (al singolare non piu lunga di 45 caratteri)*/
 $sheetName = 'Generica';
@@ -28,7 +28,7 @@ $attrArr[] = 'det13';
 $attrArr[] = 'det14';
 $attrArr[] = 'det15';
 
-$db = $BlueSeal->dbAdapter;
+$db = $ninetyNineMonkey->dbAdapter;
 $order = 1;
 //FIXME quando dobbiamo inserire qualche nuova scheda prodotto
 /** singola voce per 3 lingue */

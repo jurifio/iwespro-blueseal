@@ -7,11 +7,11 @@ use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\import\photosToAmazon\CProductPhotoExport;
 
-//$BlueSeal = new BlueSeal('BlueSeal','cartechinishop','/data/www/redpanda');
-//$BlueSeal->enableDebugging();
+//$ninetyNineMonkey = new BlueSeal('BlueSeal','cartechinishop','/data/www/redpanda');
+//$ninetyNineMonkey->enableDebugging();
 
 
-$em = $BlueSeal->entityManagerFactory->create('Product');
+$em = $ninetyNineMonkey->entityManagerFactory->create('Product');
 /** @var CEntityManager $em */
 $products = $em->findBySql("SELECT DISTINCT ProductSku.productId as id,
                                             ProductSku.productVariantId as productVariantId
@@ -21,15 +21,15 @@ $products = $em->findBySql("SELECT DISTINCT ProductSku.productId as id,
                             AND Product.externalId != 0;",array());
 
 
-$mysql = $BlueSeal->dbAdapter;
-$BlueSeal->vendorLibraries->load("amazon2723");
+$mysql = $ninetyNineMonkey->dbAdapter;
+$ninetyNineMonkey->vendorLibraries->load("amazon2723");
 $photoDir = "import/cartechiniphoto";
 
 $credential = array(
     'key'   => 'AKIAJAT27PGJ6XWXBY6A',
     'secret'=> '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'
 );
-$export = new CProductPhotoExport($BlueSeal, $credential);
+$export = new CProductPhotoExport($ninetyNineMonkey, $credential);
 
 foreach($products as $product){
     /** @var CMySQLAdapter $mysql */

@@ -164,7 +164,7 @@
                                                 <label for="Product_dataSheet">Tipo scheda prodotto</label>
                                                 <select class="full-width selectpicker" placeholder="Seleziona un dettaglio" data-init-plugin="selectize"  title="" name="Product_dataSheet" id="Product_dataSheet">
                                                     <option></option>
-                                                    <?php \BlueSeal::dump($productSheets); ?>
+                                                    <?php \Monkey::dump($productSheets); ?>
                                                     <?php foreach ($productSheets as $productSheet): ?>
                                                     <option value="<?php echo $productSheet['id'] ?>"> <?php echo $productSheet['name'] ?></option>
                                                     <?php endforeach; ?>

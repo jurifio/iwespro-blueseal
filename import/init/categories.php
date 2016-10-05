@@ -4,16 +4,16 @@ error_reporting(~0);
 
 require "../../../BlueSeal.php";
 
-//$BlueSeal = new BlueSeal('BlueSeal','ilsalvagente','/data/www/redpanda');
-$BlueSeal->enableDebugging();
-$BlueSeal->setDefaultLanguage('it');
+//$ninetyNineMonkey = new BlueSeal('BlueSeal','ilsalvagente','/data/www/redpanda');
+$ninetyNineMonkey->enableDebugging();
+$ninetyNineMonkey->setDefaultLanguage('it');
 
 use bamboo\core\theming\nestedCategory\CCategoryManager;
 
 /** @var CCategoryManager $cm */
-$cm = $BlueSeal->categoryManager;
+$cm = $ninetyNineMonkey->categoryManager;
 
-$BlueSeal->dbAdapter->beginTransaction();
+$ninetyNineMonkey->dbAdapter->beginTransaction();
 /** livello 1 */
 $uomo = $cm->categories()->add('uomo','Uomo');
 $donna = $cm->categories()->add('donna','Donna');
@@ -172,4 +172,4 @@ $JeansU= $cm->categories()->add('jeans','Jeans', $denimU);
 $CamicieU= $cm->categories()->add('camicie','Camicie', $denimU);
 $GiaccheU= $cm->categories()->add('giacche','Giacche', $denimU);
 
-//$BlueSeal->dbAdapter->commit();
+//$ninetyNineMonkey->dbAdapter->commit();
