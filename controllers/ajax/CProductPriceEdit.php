@@ -51,9 +51,9 @@ class CProductPriceEdit extends AAjaxController
                     $ret[$v->shopId] = [];
                     $ret[$v->shopId]['shopChange'] = $shopChange;
                     $ret[$v->shopId]['extId'] = ($v->extId) ? $v->extId : '';
-                    $ret[$v->shopId]['value'] = ($v->value) ? $v->value : 0;
-                    $ret[$v->shopId]['price'] = ($v->price) ? $v->price : 0;
-                    $ret[$v->shopId]['salePrice'] = ($v->salePrice) ? $v->salePrice : 0;
+                    $ret[$v->shopId]['value'] = ($v->value) ? str_replace('.', ',', $v->value) : 0;
+                    $ret[$v->shopId]['price'] = ($v->price) ? str_replace('.', ',', $v->price) : 0;
+                    $ret[$v->shopId]['salePrice'] = ($v->salePrice) ? str_replace('.', ',', $v->salePrice) : 0;
                 }
             }
         } catch(\Exception $e) {
