@@ -103,6 +103,7 @@ class CFriendOrderListAjaxController extends AAjaxController
         foreach ($orderLines as $v) {
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
+            $response['data'][$i]['orderCode'] = $v->orderId . '-' . $v->id;
             $response['data'][$i]['line_id'] = $v->printId();
             $response['data'][$i]['orderId'] = $v->orderId;
             $response['data'][$i]['code'] = $v->product->id . "-" . $v->product->productVariantId;

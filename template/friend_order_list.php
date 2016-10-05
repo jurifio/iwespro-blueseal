@@ -35,7 +35,7 @@
                                id="orderTable">
                             <thead>
                             <tr>
-                                <th data-slug="code"
+                                <th data-slug="orderCode"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc" class="center">Codice Ordine</th>
@@ -78,13 +78,13 @@
     <bs-toolbar-group data-group-label="Gestione ordini">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-file-o fa-plus"
+            data-icon="fa-paper-plane"
             data-permission="/admin/order/add"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Aggiungi un nuovo ordine manuale"
+            data-title="Invia i prodotti"
             data-placement="bottom"
-            data-href="#"
+            data-event="bs.accept.order.lines"
             ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
