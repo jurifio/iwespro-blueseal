@@ -35,10 +35,10 @@
                                id="orderTable">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+                                <th data-slug="code"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="desc" class="center">ID</th>
+                                    data-default-order="desc" class="center">Codice Ordine</th>
                                 <th data-slug="code"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice Prodotto</th>
