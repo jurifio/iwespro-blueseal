@@ -86,7 +86,7 @@
             data-event="bs.names.products"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Unisci i nomi prodotto"
+            data-title="Visualizza i prodotti associati ai nomi"
             data-placement="bottom"
         ></bs-toolbar-button>
 </bs-toolbar>
