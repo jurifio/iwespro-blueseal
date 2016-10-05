@@ -113,6 +113,9 @@ class CProductPriceEdit extends AAjaxController
             if (("id" !== $k) && ("productVariantId" !== $k)) {
                 list($field, $count) = explode('-', $k);
                 if (!array_key_exists($count, $prices)) $prices[$count] = [];
+                if (('price' == $field) || ('value' == $field) || ('salePrice' == $field)) {
+                    $v = str_replace(',', '.', $v);
+                }
                 $prices[$count][$field] = $v;
             }
         }
