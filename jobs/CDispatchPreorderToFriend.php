@@ -37,14 +37,14 @@ class CDispatchPreorderToFriend extends ACronJob
             $lines = new CObjectCollection();
             try {
                 $lines = $orderLineRepo->em()->findBySql($query, [$shop->id]);
-                $this->log('REPORT', 'Working Shop ' . $shop->name . ' Start', 'Found ' . count($lines) . ' to send');
+                $this->report( 'Working Shop ' . $shop->name . ' Start', 'Found ' . count($lines) . ' to send');
                 if ($shop->preOrderExport == 1 && count($lines) >0 ) {
                     $orderExport->exportPrefileForFriend($shop, $lines);
                 }
                 if (isset($shop->referrerEmails) && count($lines) >0 ) {
                     $orderExport->sendMailForFriendConfirmation($shop, $lines);
                 }
-                $this->log('REPORT', 'Working Shop ' . $shop->name . ' End', 'Export ended');
+                $this->report( 'Working Shop ' . $shop->name . ' End', 'Export ended');
                 $this->app->dbAdapter->beginTransaction();
                 foreach($lines as $line){
                     try {
@@ -60,7 +60,7 @@ class CDispatchPreorderToFriend extends ACronJob
                 }
                 $this->app->dbAdapter->commit();
             } catch(\Exception $e){
-                $this->log('ERROR', 'Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
+                $this->error('Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
                 $this->app->dbAdapter->beginTransaction();
                 foreach($lines as $line){
                     try {

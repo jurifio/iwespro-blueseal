@@ -25,10 +25,10 @@ class CCleanOrders extends ACronJob
     public function run($args = null)
     {
         if(!is_null($args) && !empty($args)){
-            $this->log('REPORT','Deleting Manual', "Id ".$args);
+            $this->report('Deleting Manual', "Id ".$args);
             $this->deleteOrder($args);
         }
-        $this->log('REPORT','Deleting carts', "Starting to delete carts");
+        $this->report('Deleting carts', "Starting to delete carts");
         $this->deleteCarts();
     }
 
@@ -63,7 +63,7 @@ class CCleanOrders extends ACronJob
         $i=0;
 	    $k=0;
         while(count($res = $this->app->dbAdapter->query($query,[$timestamp,$timestamp])->fetchAll()) > 100){
-            $this->log('REPORT','Delete Start', "To do: ".count($res));
+            $this->report('Delete Start', "To do: ".count($res));
 
             foreach($res as $order){
                 if($k%100 == 0) $this->app->dbAdapter->beginTransaction();
@@ -72,7 +72,7 @@ class CCleanOrders extends ACronJob
                 if($k%100 == 0) $this->app->dbAdapter->commit();
                 if($resp) $i++;
             }
-            $this->log('REPORT','Delete End', "Deleted: ".$i);
+            $this->report('Delete End', "Deleted: ".$i);
         }
         if($this->app->dbAdapter->hasTransaction()) $this->app->dbAdapter->commit();
     }
