@@ -29,6 +29,7 @@ class CProductDetailAddNewAjaxController extends AAjaxController
         $param2 = $this->app->dbAdapter->quote($get . ' !');
         $sql = "SELECT productDetailId FROM `ProductDetailTranslation` WHERE langId = 1 AND (name LIKE " . $param1 . " OR name LIKE " . $param2 . ")";
         $res = $this->app->dbAdapter->query($sql, [])->fetchAll();
+        $slug = $this->makeSlugUnique($slug);
         if (!count($res)) {
             try {
                 $get .= ' !';
@@ -50,6 +51,17 @@ class CProductDetailAddNewAjaxController extends AAjaxController
             }
         } else {
             return "Il dettaglio inserito esiste già ed è disponibile";
+        }
+    }
+
+    public function makeSlugUnique($slug, $recursive = 0) {
+        $defSlug = $slug;
+        if ($recursive) $defSlug = $slug . '-' . $recursive;
+        $det = $this->app->repoFactory->create('ProductDetail')->findOneBy(['slug' => $defSlug]);
+        if ($det) {
+            return $this->makeSlugUnique($slug, $recursive + 1);
+        } else {
+            return $defSlug;
         }
     }
 }

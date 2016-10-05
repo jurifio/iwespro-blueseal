@@ -35,7 +35,7 @@ class CNamesProductAssociated extends AAjaxController
             [$search]
         )->fetchAll();
 
-        $modifica = $this->app->baseUrl(false)."/blueseal/prodotti/modifica";
+        $modifica = $this->app->baseUrl(false)."/blueseal/friend/prodotti/modifica";
 
         $urlDummy = $this->app->cfg()->fetch('paths','dummyUrl');
         if ($this->app->getUser()->hasPermission('/admin/product/edit')) {
