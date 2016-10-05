@@ -63,8 +63,8 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 				}
 				${$tableField[0]}->{$tableField[1]} = $v;
 			} catch (\Exception $e) {
-				\BlueSeal::dump($k);
-				\BlueSeal::dump($v);
+				\Monkey::dump($k);
+				\Monkey::dump($v);
 				throw $e;
 			}
 		}

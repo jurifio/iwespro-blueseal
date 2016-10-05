@@ -60,9 +60,9 @@ class CNewsletterEmailListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($newsletter as $val){
-            \BlueSeal::dump($val);
+            \Monkey::dump($val);
             $user = $users->findOneBy(["email" => $val->email]);
-            \BlueSeal::dump($user);
+            \Monkey::dump($user);
 			try {
 				$response['data'][$i]["DT_RowId"] = 'row__' . $val->email;
 				$response['data'][$i]["DT_RowClass"] = 'colore';

@@ -69,7 +69,7 @@ class CConnectorController extends ARestrictedAccessRootController
             }
 
         }
-        \BlueSeal::dump($section);
+        \Monkey::dump($section);
         throw new \Exception();
 
     }

@@ -43,7 +43,7 @@
                         <form id="form-project" role="form" action="" method="PUT" autocomplete="on">
 
                             <?php
-                            \BlueSeal::dump($productEdit);
+                            \Monkey::dump($productEdit);
                             foreach ($langs as $lang):
                                 $name = ($productEdit[$lang->id]) ? $productEdit[$lang->id]->name : '';
                                 ?>
