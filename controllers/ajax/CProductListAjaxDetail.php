@@ -51,7 +51,7 @@ class CProductListAjaxDetail extends AAjaxController
     public function get()
     {
 
-        $modifica = $this->urls['base']."prodotti/modifica";
+        $modifica = $this->urls['base']."friend/prodotti/modifica";
         
         $idDetail = $this->app->router->request()->getRequestData();
         foreach ($idDetail as $k => $idD) {
