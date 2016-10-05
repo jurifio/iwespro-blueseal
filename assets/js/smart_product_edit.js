@@ -49,68 +49,74 @@ $(document).on('bs.product.edit', function (e, element, button) {
     });
     cancelButton.remove();
 
-    if (!$('.disableBlankActive').length) {
-        var type = '';
-        if ($('.product-code').html().length) {
-            type = 'PUT';
-        } else {
-            type = 'POST';
-        }
-        $(document).ajaxForm({
-                type: type,
-                url: "#",
-                formAutofill: true
-            },
-            new FormData(),
-            function (res) {
-                try {
-                    res = JSON.parse(res);
-                } catch (e) {
-                    res = res;
-                }
-                if ('string' == typeof res) {
-                    body.html(res);
-                } else {
-                    body.html(res['message']);
-                    $('.product-code').html(String(res['code']['id']) + '-' + String(res['code']['productVariantId']));
-                    $('#Product_id').val(res['code']['id']);
-                    $('#Product_productVariantId').val(res['code']['productVariantId']);
-                    window.location='/blueseal/friend/prodotti/modifica?id=' + res['code']['id'] + '&productVariantId=' + res['code']['productVariantId'];
-                }
-            }
-        );
+    if ("1" == $('#ProductCategory_id').val()) {
+        body.html('Nessuna categoria è stata selezionata. Salvataggio non eseguito');
         bsModal.modal();
     } else {
 
-        var price = $('#Product_retail_price').val();
-        var value = $('#Product_value').val();
-        var id = $('#Product_id').val();
-        var productVariantId = $('#Product_productVariantId').val();
-        var extId = $('#Product_extId').val();
-        if (('' != price) && ('' != value) && ('' != extId)) {
-            $.ajax({
-                url: '/blueseal/xhr/ProductSinglePriceEdit',
-                method: 'post',
-                data: {id: id, productVariantId: productVariantId, extId: extId, price: price, value: value}
-            }).done(
+        if (!$('.disableBlankActive').length) {
+            var type = '';
+            if ($('.product-code').html().length) {
+                type = 'PUT';
+            } else {
+                type = 'POST';
+            }
+            $(document).ajaxForm({
+                    type: type,
+                    url: "#",
+                    formAutofill: true
+                },
+                new FormData(),
                 function (res) {
+                    try {
+                        res = JSON.parse(res);
+                    } catch (e) {
+                        res = res;
+                    }
+                    if ('string' == typeof res) {
+                        body.html(res);
+                    } else {
+                        body.html(res['message']);
+                        $('.product-code').html(String(res['code']['id']) + '-' + String(res['code']['productVariantId']));
+                        $('#Product_id').val(res['code']['id']);
+                        $('#Product_productVariantId').val(res['code']['productVariantId']);
+                        window.location = '/blueseal/friend/prodotti/modifica?id=' + res['code']['id'] + '&productVariantId=' + res['code']['productVariantId'];
+                    }
+                }
+            );
+            bsModal.modal();
+        } else {
+
+            var price = $('#Product_retail_price').val();
+            var value = $('#Product_value').val();
+            var id = $('#Product_id').val();
+            var productVariantId = $('#Product_productVariantId').val();
+            var extId = $('#Product_extId').val();
+            if (('' != price) && ('' != value) && ('' != extId)) {
+                $.ajax({
+                    url: '/blueseal/xhr/ProductSinglePriceEdit',
+                    method: 'post',
+                    data: {id: id, productVariantId: productVariantId, extId: extId, price: price, value: value}
+                }).done(
+                    function (res) {
+                        modal = new $.bsModal(
+                            'Aggiornamento dei prezzi',
+                            {body: 'I Prezzi sono stati aggiornati correttamente'}
+                        );
+                    }
+                ).fail(function () {
                     modal = new $.bsModal(
                         'Aggiornamento dei prezzi',
-                        {body: 'I Prezzi sono stati aggiornati correttamente'}
+                        {body: 'OOPS! Errore di sistema. Contatta un amministratore'}
                     );
-                }
-            ).fail(function () {
+                    //console.log(res);
+                });
+            } else {
                 modal = new $.bsModal(
                     'Aggiornamento dei prezzi',
-                    {body: 'OOPS! Errore di sistema. Contatta un amministratore'}
+                    {body: 'I campi dei prezzi e dell\'ID di origine sono obbligatori'}
                 );
-                //console.log(res);
-            });
-        } else {
-            modal = new $.bsModal(
-                'Aggiornamento dei prezzi',
-                {body: 'I campi dei prezzi e dell\'ID di origine sono obbligatori'}
-            );
+            }
         }
     }
 });
