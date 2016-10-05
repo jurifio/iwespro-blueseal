@@ -62,9 +62,10 @@ class CFriendOrderListAjaxController extends AAjaxController
             ['ORD_CANCEL', 'ORD_ARCH', 'CRT', 'CRT_MRG'],
             true
         );
-        if (!$allShops)
+        if (!$allShops) {
             $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser($user);
             $datatable->addCondition('shopId', $shops);
+        }
             $datatable->addCondition('orderLineStatusCode',
                 ['ORD_PENDING', 'ORD_WAIT', 'ORD_LAB', 'ORD_FRND_SNDING', 'ORD_ERR_SEND'],
                 true
@@ -83,10 +84,10 @@ class CFriendOrderListAjaxController extends AAjaxController
 
         $orderLineStatuses = $this->app->repoFactory->create('OrderLineStatus')->findAll();
 	    $plainLineStatuses = [];
-        $colorLineStatus = [];
+        $colorLineStatuses = [];
 	    foreach($orderLineStatuses as $orderLineStatus){
 			$plainLineStatuses[$orderLineStatus->code] = $orderLineStatus->title;
-            $colorLineStatus[$orderLineStatus->code] = $orderLineStatus->colore;
+            $colorLineStatuses[$orderLineStatus->code] = $orderLineStatus->colore;
 	    }
 
         $response = [];
@@ -110,7 +111,18 @@ class CFriendOrderListAjaxController extends AAjaxController
             if($v->product->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
             $response['data'][$i]['dummyPicture'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
-            $response['data'][$i]['orderLineStatusTitle'] = $v->orderLineStatus->title;
+            $statusCode = $v->orderLineStatus->code;
+            $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
+                $plainLineStatuses[$statusCode] .
+                '</span>';
+            $statusSelect = '<div class="selectOlStatus">{line}</div>';
+
+            $response['data'][$i]['orderLineStatusTitle'] = $lineStatus;
+
+            $invoiceLine = $v->invoiceLine->getFirst();
+            $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoice->number : '-';
+            $response['data'][$i]['invoicePaymentDate'] = ($invoiceLine) ? $invoiceLine->invoice->paymentDate : '-';
+            $response['data'][$i]['invoiceExpectedPaymentDate'] = ($invoiceLine) ? $invoiceLine->invoice->expectedPaymentDate : '-';
             $i++;
 	    }
         return json_encode($response);

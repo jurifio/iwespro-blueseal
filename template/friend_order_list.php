@@ -51,9 +51,15 @@
                                 <th data-slug="orderLineStatusTitle"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stato Linea Ordine</th>
-                                <th data-slug="FriendPaymentName"
+                                <th data-slug="invoiceNumber"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Stato pagamento</th>
+                                    data-orderable="true" class="center">Numero Fattura</th>
+                                <th data-slug="invoiceExpectedPaymentDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data Previsto Pagamento</th>
+                                <th data-slug="invoicePaymentDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data Pagamento</th>
                             </tr>
                             </thead>
                             <tbody>
