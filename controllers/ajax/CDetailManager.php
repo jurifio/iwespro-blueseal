@@ -75,10 +75,9 @@ class CDetailManager extends AAjaxController
             $modelRepo = $this->app->repoFactory->create('ProductSheetModelActual');
             foreach($ids as $id) {
                 if ($id != $productDetailId) {
-                    $model = $modelRepo->findOneBy(['productDetailId' => $id]);
-                    if ($model) {
-                        $slug = $model->productDetail->slug;
-                        return 'Il dettagio avente lo slug "' . $slug . '" è presente in un modello e non può essere eliminato.<br />L\'unione dei dettagli non è andata a buon fine';
+                    $models = $modelRepo->findBy(['productDetailId' => $id]);
+                    foreach($models as $m) {
+                        $m->delete();
                     }
                 }
             }
