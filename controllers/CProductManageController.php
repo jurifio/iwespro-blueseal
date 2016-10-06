@@ -299,11 +299,6 @@ class CProductManageController extends ARestrictedAccessRootController
             $this->app->dbAdapter->commit();
 
             if ($this->isValidInput("Product_status", $post)) {
-                if($post['Product_status'] == 6 &&
-	                (is_null($productEdit->productPhoto) || $productEdit->productPhoto->isEmpty() ||
-                   is_null($productEdit->productSku) || $productEdit->productSku->isEmpty())) {
-	                throw new RedPandaException('Impossibile pubblicare un prodotto incompleto');
-                }
 	            $productEdit->productStatusId = $post['Product_status'];
 	            $productEdit->update();
             }

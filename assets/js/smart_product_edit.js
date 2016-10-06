@@ -574,6 +574,9 @@ function populatePage(res) {
             bsModal.modal('hide');
         });
     }
+
+    var selectStatusElem = $('.selectStatus');
+
     category = false;
     if (res['editable']) {
         category = true;
@@ -590,11 +593,16 @@ function populatePage(res) {
             if (!$('#ProductCategory_id').val().length) {
                 $('#main-details').createCategoryBtn();
             }
+            if (selectStatusElem.length) {
+                selectStatusElem.prop('disabled', false);
+                selectStatusElem.val(res['product']['productStatusId']);
+            }
         } else {
             $('.code-title').html('-');
             movable = false;
             $('.product-code').html();
             eraseForm();
+            selectStatusElem.prop('disabled', true);
             //$('#main-details').selectDetails();
         }
         $('.disableBlank').disableBlank('enable');
@@ -615,6 +623,14 @@ function populatePage(res) {
             $('#Product_retail_price').val(res['product']['price']);
             $('#Product_value').val(res['product']['value']);
             $('#Product_extId').val(res['product']['extId']);
+            if (selectStatusElem.length) {
+                selectStatusElem.prop('disabled', false);
+                selectStatusElem.val(res['product']['productStatusId']);
+            }
+        } else {
+            if (selectStatusElem.length) {
+                selectStatusElem.prop('disabled', true);
+            }
         }
     }
 }
@@ -881,4 +897,37 @@ $(document).ready(function () {
     if (!$('#ProductCategory_id').val().length) {
         $('#main-details').createCategoryBtn();
     }
+
+    // change product status
+    (function () {
+        $(document).on('focus', '.selectStatus', function () {
+            previous = $(this).val();
+        });
+        $(document).on('change', '.selectStatus', function() {
+            var elem = $(this);
+            var productId = $('#Product_id').val();
+            var productVariantId = $('#Product_productVariantId').val();
+            var val = $(this).val();
+            $.ajax({
+                url: '/blueseal/xhr/ProductStatusManage',
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    code: productId + '-' + productVariantId,
+                    status: val
+                }
+            }).done(function(res){
+                if ('ko' == res.status) elem.val(previous);
+                modalResponse(res.message);
+                previous = elem.val();
+            });
+        });
+
+        function modalResponse(response) {
+            modal = new $.bsModal(
+                'Aggiornamento stato',
+                { body: response }
+            );
+        }
+    })();
 });

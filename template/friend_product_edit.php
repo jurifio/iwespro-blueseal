@@ -466,6 +466,23 @@ endif; ?></div>
             data-remote="btn.href.smart_product.guide"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php  if ($allShops): ?>
+    <bs-toolbar-group data-group-label="Stato del prodotto">
+        <bs-toolbar-select
+            data-tag="select"
+            data-icon="fa-random"
+            data-permission="/admin/product/add"
+            data-rel="tooltip"
+            data-button="false"
+            data-placement="bottom"
+            data-class="btn btn-default selectStatus"
+            data-name="Product_status"
+            data-title="Modifica stato"
+            data-event="bs.product.changestatus"
+            data-options='<?php echo json_encode($statuses); ?>'
+        ></bs-toolbar-select>
+    </bs-toolbar-group>
+    <?php endif; ?>
 </bs-toolbar>
 </body>
 </html>
