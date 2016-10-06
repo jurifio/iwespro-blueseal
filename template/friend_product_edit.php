@@ -311,6 +311,19 @@ endif; ?></div>
                                     </div>
                                 </div>
                             </div>
+                            <?php if ($allShops) : ?>
+                                <div class="panel panel-default clearfix">
+                                    <div class="panel-heading clearfix">
+                                        <h5 class="m-t-10">Friend</h5>
+                                    </div>
+                                    <div class="panel-body clearfix">
+                                        <div class="row">
+                                            <div class="col-md-12 friendList">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </form>
