@@ -97,7 +97,7 @@ class COrderListAjaxController extends AAjaxController
 	        foreach ($val->orderLine as $line) {
 		        try {
 			        /** @var CProductSku $sku */
-			        $sku = unserialize($line->frozenProduct);
+			        $sku = igbinary_unserialize($line->frozenProduct);
 			        $sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
 
 			        $code = $sku->shop->name . ' ' . $sku->printPublicSku(). " (".$sku->product->productBrand->name.")";

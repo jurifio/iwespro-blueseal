@@ -185,13 +185,13 @@ class COrderLineManager
 
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->shopId = $sku->shopId;
-            $orderLine->frozenProduct = serialize($sku);
+            $orderLine->frozenProduct = igbinary_serialize($sku);
             $this->app->repoFactory->create("OrderLine")->update($orderLine);
         } catch (\Exception $e) {
             $this->app->router->response()->raiseUnauthorized();
         }
 
-       // $this->app->dbAdapter->update('OrderLine', ['shopId'=>$sku->shopId,'frozenProduct'=>serialize($sku)],['id'=>$this->orderLine->id,'orderId'=>$this->orderLine->orderId]);
+       // $this->app->dbAdapter->update('OrderLine', ['shopId'=>$sku->shopId,'frozenProduct'=>igbinary_serialize($sku)],['id'=>$this->orderLine->id,'orderId'=>$this->orderLine->orderId]);
         $this->orderLine = $this->app->repoFactory->create('OrderLine')->findOne(['id'=>$this->orderLine->id,'orderId'=>$this->orderLine->orderId]);
         if(!$this->orderLine instanceof COrderLine || $this->orderLine->shopId != $sku->shopId){
             throw new RedPandaException('Order Line Change Failed');

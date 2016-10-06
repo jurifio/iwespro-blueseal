@@ -152,7 +152,7 @@
                             $i++;
                             ?>
                         <tr><td class="text-center"><?php echo $orderLine->id; ?></td>
-                                 <?php $productSku = unserialize($orderLine->frozenProduct);
+                                 <?php $productSku = igbinary_unserialize($orderLine->frozenProduct);
                                  $productSku->setEntityManager($app->application()->entityManagerFactory->create('ProductSku'));
 
                                  $productNameTranslation = $productSku->product->getName(); ?>

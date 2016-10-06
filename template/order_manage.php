@@ -106,8 +106,8 @@
                                     <div class="panel-body">
                                         <address class="margin-bottom-20 margin-top-10">
                                             <?php
-                                            $address = unserialize($order->frozenShippingAddress);
-                                            $address = $address != false ? $address : unserialize($order->frozenBillingAddress);
+                                            $address = igbinary_unserialize($order->frozenShippingAddress);
+                                            $address = $address != false ? $address : igbinary_unserialize($order->frozenBillingAddress);
                                             $address->setEntityManager($app->application()->entityManagerFactory->create('UserAddress'));
                                             $tableAddress = $order->user->userAddress->findOneByKey('id', $address->id);
                                             if (!$tableAddress): ?>

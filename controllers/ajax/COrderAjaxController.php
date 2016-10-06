@@ -43,9 +43,9 @@ class COrderAjaxController extends AAjaxController
         $repoStatusLine = $this->app->repoFactory->create('OrderLineStatus');
         $statusesLine = $repoStatusLine->findAll();
 
-        $userAddress = unserialize($order->frozenBillingAddress);
+        $userAddress = igbinary_unserialize($order->frozenBillingAddress);
         $userAddress->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
-        $userShipping = unserialize($order->frozenShippingAddress);
+        $userShipping = igbinary_unserialize($order->frozenShippingAddress);
         $userShipping->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
 
         $productRepo = $this->app->repoFactory->create('ProductNameTranslation');
