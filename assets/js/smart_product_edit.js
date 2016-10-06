@@ -520,6 +520,35 @@ $.fn.disableBlank = function(formStatus) {
     }
 };
 
+$.fn.writeCategoryList = function(){
+    var self = $(this);
+    var id = $('#Product_id').val();
+    var variantId = $('#Product_productVariantId').val();
+    if (this.length) {
+        if (("" == id) || ("" == variantId)) {
+            $(this).html('');
+        } else {
+            $.ajax({
+                url: '/blueseal/xhr/GetProductCategoryPathList',
+                method: 'GET',
+                dataType: 'json',
+                data: {code: id + '-' + variantId}
+            }).done(function (res) {
+                if ('undefined' != typeof res.cats) {
+                    var content = '<span class="small"><h6 style="font-weight: bold; margin-bottom: 2px;">Categorie:</h6>';
+                    for (var i in res.cats) {
+                        content += res.cats[i] + '<br />';
+                    }
+                    content += '</span>';
+                    self.html(content);
+                } else {
+                    self.html('');
+                }
+            });
+        }
+    }
+};
+
 function searchForProduct(itemno, variantName, brandId) {
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');
@@ -633,6 +662,7 @@ function populatePage(res) {
             }
         }
     }
+    $('.categoryPath').writeCategoryList();
 }
 
 function searchForProductByCode(id, productVariantId) {
