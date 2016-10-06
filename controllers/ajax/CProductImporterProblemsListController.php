@@ -93,7 +93,7 @@ class CProductImporterProblemsListController extends AAjaxController
 
             $response['aaData'][$i]["DT_RowId"] = $val->printId();
             $response['aaData'][$i]["DT_RowClass"] = 'colore';
-            $response['aaData'][$i]["id"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a></span>' : $val->id.'-'.$val->productVariantId;
+            $response['aaData'][$i]["productCode"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a></span>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["shop"] = implode(',',$shops);
             $response['aaData'][$i]["code"] = $val->itemno.' # '.$val->productVariant->name;
             $macroname = explode("_", explode("-", $val->productSizeGroup->macroName)[0])[0];

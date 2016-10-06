@@ -37,7 +37,7 @@
                                id="productWithImporterProblems">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+                                <th data-slug="productCode"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Codice</th>
