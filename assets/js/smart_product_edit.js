@@ -549,6 +549,36 @@ $.fn.writeCategoryList = function(){
     }
 };
 
+$.fn.writeShopList = function(){
+    var self = $(this);
+    var id = $('#Product_id').val();
+    var variantId = $('#Product_productVariantId').val();
+    if (this.length) {
+        if (("" == id) || ("" == variantId)) {
+            $(this).html('');
+        } else {
+            $.ajax({
+                url: '/blueseal/xhr/GetProductShopsList',
+                method: 'GET',
+                dataType: 'json',
+                data: {code: id + '-' + variantId}
+            }).done(function (res) {
+                if ('undefined' != typeof res.friends) {
+                    var content = '<span class="small">';
+                    for (var i in res.friends) {
+                        content += '<strong>' + res.friends[i]["title"] + '</strong>:<p style="padding-left: 5px;">prezzo: ' + res.friends[i]["price"] +
+                            ' - valore: ' + res.friends[i]["value"] + ' - scontato: ' + res.friends[i]["salePrice"] + ' - stock: ' + res.friends[i]["salePrice"] + '</p>';
+                    }
+                    content += '</span>';
+                    self.html(content);
+                } else {
+                    self.html('');
+                }
+            });
+        }
+    }
+};
+
 function searchForProduct(itemno, variantName, brandId) {
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');
@@ -663,6 +693,7 @@ function populatePage(res) {
         }
     }
     $('.categoryPath').writeCategoryList();
+    $('.friendList').writeShopList();
 }
 
 function searchForProductByCode(id, productVariantId) {
