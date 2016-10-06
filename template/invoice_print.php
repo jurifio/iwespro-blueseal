@@ -124,7 +124,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                         <tr>
                             <td class="">
 
-                                 <?php $productSku = igbinary_unserialize($orderLine->frozenProduct);
+                                 <?php $productSku = unserialize($orderLine->frozenProduct);
                                  $productSku->setEntityManager($app->application()->entityManagerFactory->create('ProductSku'));
 
                                  $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);

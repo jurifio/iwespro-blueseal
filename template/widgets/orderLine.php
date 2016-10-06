@@ -3,7 +3,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\blueseal\business\COrderLineManager;
 /** @var COrderLineManager $lineManager */
 /** @var CRestrictedAccessWidgetHelper $app*/
-$sku = igbinary_unserialize($line->frozenProduct);
+$sku = unserialize($line->frozenProduct);
 $sku->setEntityManager($app->application()->entityManagerFactory->create('ProductSku'));
 ?>
 <td class="center"><?php echo $line->id;?></td>

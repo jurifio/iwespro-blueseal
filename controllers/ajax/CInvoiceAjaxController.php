@@ -65,10 +65,10 @@ class CInvoiceAjaxController extends AAjaxController
 
             foreach ($order->invoice as $invoice) {
                 if (is_null($invoice->invoiceText)) {
-                    $userAddress = igbinary_unserialize($order->frozenBillingAddress);
+                    $userAddress = unserialize($order->frozenBillingAddress);
                     $userAddress->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
 	                if(!is_null($order->frozenShippingAddress)) {
-		                $userShipping = igbinary_unserialize($order->frozenShippingAddress);
+		                $userShipping = unserialize($order->frozenShippingAddress);
 		                $userShipping->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
 	                } else {
 		                $userShipping = $userAddress;
