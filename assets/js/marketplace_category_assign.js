@@ -33,7 +33,7 @@ $('table[data-datatable-name]').on('draw.dt', function () {
 					options: window.categories
 				});
 				var initVal = $(v).data('selected');
-				if(initVal != 'undefined' && initVal.lenght != 0) {
+				if(initVal != 'undefined' && initVal.length != 0) {
 					sel[0].selectize.setValue(initVal.split('__'), true);
 				} else {
 					//sel[0].selectize.setValue(0, true);
