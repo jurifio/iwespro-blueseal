@@ -46,8 +46,9 @@ endif; ?></div>
                                     <h5 class="m-t-10">
                                      Codice: <span class="code-title">-</span>
                                     </h5>
-
-                                    <!--<p><strong>Categorie:</strong></p>-->
+                                    <?php if ($allShops) : ?>
+                                    <p class="categoryPath"></p>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
