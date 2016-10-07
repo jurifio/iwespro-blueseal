@@ -3,8 +3,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\blueseal\business\COrderLineManager;
 /** @var COrderLineManager $lineManager */
 /** @var CRestrictedAccessWidgetHelper $app*/
-$sku = unserialize($line->frozenProduct);
-$sku->setEntityManager($app->application()->entityManagerFactory->create('ProductSku'));
+$sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
 ?>
 <td class="center"><?php echo $line->id;?></td>
 <td class="center"><a href="<?php echo $app->productBackofficeUrl($line->productId,$line->productVariantId) ?>" target="_blank" ><?php echo $sku->printPublicSku(); ?></a></td>

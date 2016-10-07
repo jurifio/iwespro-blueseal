@@ -43,10 +43,8 @@ class COrderAjaxController extends AAjaxController
         $repoStatusLine = $this->app->repoFactory->create('OrderLineStatus');
         $statusesLine = $repoStatusLine->findAll();
 
-        $userAddress = unserialize($order->frozenBillingAddress);
-        $userAddress->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
-        $userShipping = unserialize($order->frozenShippingAddress);
-        $userShipping->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
+        $userAddress = \bamboo\domain\entities\CUserAddress::defrost($order->frozenBillingAddress);
+        $userShipping = \bamboo\domain\entities\CUserAddress::defrost($order->frozenShippingAddress);
 
         $productRepo = $this->app->repoFactory->create('ProductNameTranslation');
 

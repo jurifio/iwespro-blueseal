@@ -106,9 +106,8 @@
                                     <div class="panel-body">
                                         <address class="margin-bottom-20 margin-top-10">
                                             <?php
-                                            $address = unserialize($order->frozenShippingAddress);
-                                            $address = $address != false ? $address : unserialize($order->frozenBillingAddress);
-                                            $address->setEntityManager($app->application()->entityManagerFactory->create('UserAddress'));
+                                            $address =\bamboo\domain\entities\CUserAddress::defrost($order->frozenShippingAddress);
+                                            $address = $address != false ? $address : \bamboo\domain\entities\CUserAddress::defrost($order->frozenBillingAddress);
                                             $tableAddress = $order->user->userAddress->findOneByKey('id', $address->id);
                                             if (!$tableAddress): ?>
                                                 <span><strong>Attenzione, l'utente ha eliminato l'indirizzo in

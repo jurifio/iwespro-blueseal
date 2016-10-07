@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
+use bamboo\domain\entities\CUserAddress;
 use bamboo\ecommerce\views\VBase;
 use bamboo\blueseal\business\CBlueSealPage;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
@@ -65,11 +66,9 @@ class CInvoiceAjaxController extends AAjaxController
 
             foreach ($order->invoice as $invoice) {
                 if (is_null($invoice->invoiceText)) {
-                    $userAddress = unserialize($order->frozenBillingAddress);
-                    $userAddress->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
+                    $userAddress = CUserAddress::defrost($order->frozenBillingAddress);
 	                if(!is_null($order->frozenShippingAddress)) {
-		                $userShipping = unserialize($order->frozenShippingAddress);
-		                $userShipping->setEntityManager($this->app->entityManagerFactory->create('UserAddress'));
+		                $userShipping = CUserAddress::defrost($order->frozenShippingAddress);
 	                } else {
 		                $userShipping = $userAddress;
 	                }

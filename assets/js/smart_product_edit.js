@@ -128,7 +128,6 @@ $(document).on('click', '.radioMimic ul li', function () {
     $(this).addClass('item-selected');
 });
 
-
 $(document).on('bs.category.edit', function (e, element, button) {
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');
@@ -255,6 +254,69 @@ $(document).on('bs.det.add', function (e) {
                 okButton.html('Ok').off().on('click', function () {
                     bsModal.modal('hide');
                     window.location.reload();
+                });
+            });
+            return false;
+        }
+    });
+});
+
+$(document).on('bs.product.name.add', function (e) {
+    e.preventDefault();
+
+    var bsModal = $('#bsModal');
+    var header = $('#bsModal .modal-header h4');
+    var body = $('#bsModal .modal-body');
+    var cancelButton = $('#bsModal .modal-footer .btn-default');
+    var okButton = $('#bsModal .modal-footer .btn-success');
+
+    //new Cslugify
+    header.html('Aggiungi nome dei prodotti');
+    body.html(
+        '<form id="detailAdd"><div class="form-group">' +
+        '<label>Inserisci il Nome*</label>' +
+        '<input type="text" class="form-control new-name-ita" name="newNameIta" />' +
+        '</div></form>'
+    );
+    cancelButton.html("Annulla").off().on('click', function () {
+        bsModal.hide();
+    });
+    bsModal.modal('show');
+
+    $('.new-name-ita').on('change', function(){
+        var self = $(this);
+       $.ajax({
+           url: "/blueseal/xhr/ProductNameAdd",
+           method: 'GET',
+           data: {name: $(this).val()}
+       }).done(function(res){
+           if ('ok' == res) {
+               self.prop('invalid', false);
+           } else {
+               self.prop('invalid', true);
+           }
+       });
+    });
+
+    okButton.html('Inserisci').off().on('click', function () {
+        var field = $('.new-name-ita');
+        if ('' === field.val()) {
+            $('.modal-alert').css('display', 'block');
+        } else {
+            $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "/blueseal/xhr/ProductNameAdd",
+                    data: {
+                        name: field.val()
+                    }
+                }
+            ).done(function (result) {
+                var res = result.split("-");
+                body.html(res[0]);
+                cancelButton.hide();
+                okButton.html('Ok').off().on('click', function () {
+                    bsModal.modal('hide');
                 });
             });
             return false;

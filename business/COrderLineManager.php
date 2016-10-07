@@ -185,7 +185,7 @@ class COrderLineManager
 
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->shopId = $sku->shopId;
-            $orderLine->frozenProduct = serialize($sku);
+            $orderLine->frozenProduct = $sku->froze();
             $this->app->repoFactory->create("OrderLine")->update($orderLine);
         } catch (\Exception $e) {
             $this->app->router->response()->raiseUnauthorized();

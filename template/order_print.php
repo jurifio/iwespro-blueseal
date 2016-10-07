@@ -152,8 +152,7 @@
                             $i++;
                             ?>
                         <tr><td class="text-center"><?php echo $orderLine->id; ?></td>
-                                 <?php $productSku = unserialize($orderLine->frozenProduct);
-                                 $productSku->setEntityManager($app->application()->entityManagerFactory->create('ProductSku'));
+                                 <?php $productSku = \bamboo\domain\entities\CProductSku::defrost($orderLine->frozenProduct);
 
                                  $productNameTranslation = $productSku->product->getName(); ?>
                             <td class=""><?php echo $productSku->printPublicSku(); ?></td>
