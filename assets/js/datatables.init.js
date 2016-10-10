@@ -18,7 +18,7 @@
         scrollCollapse: true,
         responsive: true,
         select: true,
-        lengthMenu: [10, 25, 50, 75, 100],
+        lengthMenu: [50,100,250,1000],
         displayLength: 25,
         language: {
             "sEmptyTable": "Nessun dato presente nella tabella",
@@ -1181,8 +1181,13 @@
                 setup.columns.push(column);
                 c++;
             });
-            if (typeof $(this).data('lengthMenu') != 'undefined') {
-                setup.lengthMenu = JSON.parse('[' + $(this).data('lengthMenu') + ']');
+            if (typeof $(this).data('lengthMenuSetup') != 'undefined') {
+                setup.lengthMenu = [];
+                $.each($(this).data('lengthMenuSetup').split(','), function(k,v){
+                    setup.lengthMenu.push(Number(v.trim()));
+                });
+
+                //JSON.parse("[" + $(this).data('lengthMenu') + "]");
             }
             if (typeof $(this).data('displayLength') != 'undefined') {
                 setup.displayLength = $(this).data('displayLength');

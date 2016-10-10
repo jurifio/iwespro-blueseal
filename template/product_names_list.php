@@ -28,7 +28,9 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-column-filter="true"
                                data-inner-setup="true"
-                               data-length-menu="100, 200, 500, 1000, 2000, 3000, 5000">
+                               data-length-menu-setup="100, 200, 500, 1000, 2000, 3000, 5000"
+                               data-display-length="25"
+                        >
                             <thead>
                             <tr>
                                 <th data-slug="name"
