@@ -1186,14 +1186,14 @@
                 $.each($(this).data('lengthMenuSetup').split(','), function(k,v){
                     setup.lengthMenu.push(Number(v.trim()));
                 });
-
                 //JSON.parse("[" + $(this).data('lengthMenu') + "]");
             }
             if (typeof $(this).data('displayLength') != 'undefined') {
                 setup.displayLength = $(this).data('displayLength');
             }
 
-            tableSetup[table.data('datatable-name')] = $.extend({}, tableSetup.common, setup);
+            tableSetup[table.data('datatableName')] = $.extend({}, tableSetup.common, setup);
+            console.log(tableSetup);
         }
 
         var ths = table.find('th');
@@ -1245,7 +1245,7 @@
             }
         };
 
-        table.on('draw.dt', function () {
+        table.on('draw.dt', function() {
 
             var bstoolbar = $('.toolbar-container .bs-toolbar');
             var dtfilters = $('.dataTables_filter input');
@@ -1310,7 +1310,9 @@
                 $('.selectize-dropdown-content').scrollbar();
             });
 
-        }).DataTable(tableSetup[table.data('datatable-name')]);
+        });
+
+        table.DataTable(tableSetup[table.data('datatableName')]);
 
        //$('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
     });

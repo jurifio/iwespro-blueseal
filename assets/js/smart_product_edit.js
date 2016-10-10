@@ -61,7 +61,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
             } else {
                 type = 'POST';
             }
-            $(document).ajaxForm({
+            $('#form-project').ajaxForm({
                     type: type,
                     url: "#",
                     formAutofill: true

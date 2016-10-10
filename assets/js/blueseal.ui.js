@@ -121,10 +121,17 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
         var errors = [];
         var formSelector = conf.formSelector || 'document';
         $(me).find('input:not([type=file]), textarea, select').each(function () {
-            if (typeof $(this).attr('name') == 'undefined') return;
-            if ($(this).attr('required') == 'required') {
-                if ($(this).val().length === 0) {
-                    errors.push($(this).attr('name'));
+            var isParsable = true;
+            if ('undefined' == typeof $(this).attr('name')) isParsable = false;
+            if ('undefined' != typeof $(this).attr('id')) {
+                if (-1 < $(this).attr('id').indexOf('-selectized')) isParsable = false;
+            }
+            if (true === isParsable) {
+                if (typeof $(this).attr('name') == 'undefined') return;
+                if (($(this).attr('required') == 'required') || ($(this).hasClass('required'))) {
+                    if ($(this).val().length === 0) {
+                        errors.push($(this).attr('name'));
+                    }
                 }
             }
         });
@@ -132,7 +139,9 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
         if (errors.length) {
             var res = 'I seguenti campi sono obbligatori e non sono stati compilati:<br />';
             $.each(errors, function (k, v) {
-                res += $('label[for="' + v + '"]').html() + '<br />';
+                var label = $('label[for="' + v + '"]');
+                if (0 == label.length) label = $('label[for="' + v + '-selectized"]');
+                res += label.html() + '<br />';
             });
             callback(res);
 

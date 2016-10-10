@@ -133,9 +133,9 @@ endif; ?></div>
                                             <div class="disableBlank">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <div class="form-group form-group-default selectize-enabled">
+                                                        <div class="form-group form-group-default">
                                                             <label for="ProductColorGroup_id">Gruppo colore</label>
-                                                            <select class="full-width selectpicker"
+                                                            <select class="full-width required selectpicker"
                                                                     placeholder="Seleziona il gruppo colore"
                                                                     data-init-plugin="selectize"
                                                                     title="ProductColorGroup_id" name="ProductColorGroup_id"
@@ -157,7 +157,7 @@ endif; ?></div>
                                                         <div class="form-group form-group-default required">
                                                             <label for="ProductVariant_description">Nome colore (produttore)</label>
                                                             <input id="ProductVariant_description" autocomplete="off"
-                                                                   type="text" class="form-control"
+                                                                   type="text" class="form-control required"
                                                                    name="ProductVariant_description"
                                                                    value="<?php echo isset($productEdit) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>">
                                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
@@ -179,7 +179,7 @@ endif; ?></div>
                                                     <div class="col-md-12">
                                                         <div class="form-group form-group-default selectize-enabled">
                                                             <label for="Product_sizes">Schiera taglie</label>
-                                                            <select class="full-width selectpicker"
+                                                            <select class="full-width required selectpicker"
                                                                     placeholder="Seleziona la schiera delle taglie"
                                                                     data-init-plugin="selectize" title="Product_sizes"
                                                                     name="Product_sizes" id="Product_sizes" required>
@@ -253,7 +253,7 @@ endif; ?></div>
                                         <div class="form-group form-group-default required">
                                             <label for="Product_retail_price">Prezzo Vendita</label>
                                             <input autocomplete="off" type="text" id="Product_retail_price"
-                                                   class="form-control search-product inputPrice" name="Product_retail_price"
+                                                   class="form-control required search-product inputPrice" name="Product_retail_price"
                                                    value="<?php echo (isset($productEdit) && isset($productEdit->itemno)) ? $productEdit->itemno : '' ?>"
                                                    required>
                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
@@ -265,7 +265,7 @@ endif; ?></div>
                                         <div class="form-group form-group-default required">
                                             <label for="Product_value">Prezzo Fornitore</label>
                                             <input id="Product_value" autocomplete="off" type="text"
-                                                   class="form-control search-product inputPrice" name="Product_value"
+                                                   class="form-control required search-product inputPrice" name="Product_value"
                                                    value="<?php echo (isset($productEdit)) ? $productEdit->productVariant->name : "" ?>"
                                                    required>
                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
