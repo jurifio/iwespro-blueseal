@@ -46,8 +46,7 @@
                                         data-orderable="true" class="center">Brand</th>
                                     <th data-slug="season"
                                         data-searchable="true"
-                                        data-orderable="true"
-                                        class="center">Stagione</th>
+                                        data-orderable="true" class="center">Stagione</th>
                                     <th data-slug="cpf"
                                         data-searchable="true"
                                         data-orderable="true" class="center">CPF</th>
@@ -58,14 +57,11 @@
                                         data-searchable="false"
                                         data-orderable="false" class="center">Immagine</th>
                                     <th data-slug="details"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Dettagli</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Dettagli</th>
                                     <th data-slug="status"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>
-                                    <th data-slug="details"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Dettagli</th>
                                     <th data-slug="categories"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Categorie</th>
