@@ -36,10 +36,9 @@ class CBlueSealSidebar
     {
         $sidebar = $this->app->cacheService->getCache('misc')->get('BluesealSidebar:'.$this->app->getUser()->id);
         if($sidebar == false) {
-            $groups = $this->app->repoFactory->create('SidebarGroup')->em()->findBySql("Select sidebarGroupId as id 
-                                                                                    from Sidebar 
-                                                                                    GROUP BY sidebarGroupId 
-                                                                                    ORDER BY groupOrder");
+            $groups = $this->app->repoFactory->create('SidebarGroup')->em()->findBySql("Select id 
+                                                                                    from SidebarGroup 
+                                                                                    ORDER BY `order` asc");
 
             $sidebar = [];
             foreach ($groups as $group) {
@@ -63,22 +62,5 @@ class CBlueSealSidebar
             $this->app->cacheService->getCache('misc')->add('BluesealSidebar:'.$this->app->getUser()->id,$sidebar,10000);
         }
         return $sidebar;
-        /*
-        while ($this->sidebar->valid()) {
-            $group = $this->app->repoFactory->create('SidebarGroup')->findOne([$this->sidebar->current()->sidebarGroup->getFirst()->id]);
-            $page = $this->app->repoFactory->create('Page')->findOne([$this->sidebar->current()->page->getFirst()->id]);
-            $sidebar[$group->slug]['title'] = $group->sidebarGroupTranslation->getFirst()->title;
-            $sidebar[$group->slug]['icon'] = $group->icon;
-            $sidebar[$group->slug]['pages'][$page->slug] = [
-                'title' => $page->pageTranslation->getFirst()->title,
-                'url' => $page->url,
-                'icon' => $page->icon,
-                'permission' => $page->permission
-             ];
-            $this->sidebar->next();
-        }
-
-        return $sidebar;
-        */
     }
 }
