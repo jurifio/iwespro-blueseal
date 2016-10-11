@@ -225,7 +225,7 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
                     }
                 },  300);
 
-                /** quando ho finito sostituisco il placeholder con il pulzante */
+                /** quando ho finito sostituisco il placeholder con il pulsante */
                 deferred.done(function() {
                     var element;
                     switch (_this.prop('tagName').toLowerCase()) {
@@ -246,6 +246,7 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
                         }
                     }
                     element.checkPermission();
+                    $(document).trigger('bs.toolbar.element.drawn',element);
                 });
             });
         });

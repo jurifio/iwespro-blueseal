@@ -34,7 +34,7 @@ $('table[data-datatable-name]').on('draw.dt', function () {
 				});
 				var initVal = $(v).data('selected');
 				if(initVal != 'undefined' && initVal.length != 0) {
-					sel[0].selectize.setValue(initVal.split('__'), true);
+					sel[0].selectize.setValue(initVal.toString().split('__'), true);
 				} else {
 					//sel[0].selectize.setValue(0, true);
 				}
