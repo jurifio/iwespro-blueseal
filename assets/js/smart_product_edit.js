@@ -702,6 +702,11 @@ function populatePage(res) {
     if (res['editable']) {
         category = true;
         editable = true;
+        var statusElem = $('.selectStatus');
+        $(document).on('bs.toolbar.element.drawn', function (elem) {
+            $(elem).prop('disabled', false);
+            $(elem).val(res['product']['productStatusId']);
+        });
         if (res['code']) {
             movable = true;
             $('.code-title').html(res['code']);
@@ -714,17 +719,23 @@ function populatePage(res) {
             if (!$('#ProductCategory_id').val().length) {
                 $('#main-details').createCategoryBtn();
             }
-            if (selectStatusElem.length) {
-                selectStatusElem.prop('disabled', false);
-                selectStatusElem.val(res['product']['productStatusId']);
+
+            if (statusElem.length) {
+                statusElem.prop('disabled', false);
+                statusElem.val(res['product']['productStatusId']);
             }
         } else {
             $('.code-title').html('-');
             movable = false;
             $('.product-code').html();
             eraseForm();
-            selectStatusElem.prop('disabled', true);
-            //$('#main-details').selectDetails();
+            if (!statusElem.length) {
+                $('.selectStatus').on('load', function () {
+                    $(this).prop('disabled', true);
+                });
+            } else {
+                statusElem.prop('disabled', true);
+            }
         }
         $('.disableBlank').disableBlank('enable');
     } else {
