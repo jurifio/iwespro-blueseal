@@ -52,9 +52,9 @@ class CProductFusionListAjaxController extends AAjaxController
         $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
         $datatable = new CDataTables('vBluesealProductFusion', ['id', 'productVariantId'], $_GET);
-        if (!empty($this->authorizedShops)) {
+        /*if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
-        }
+        }*/
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
