@@ -87,7 +87,9 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-
-</bs-toolbar>
+    <bs-toolbar-group data-group-label="Esportazione dei dati">
+        <bs-toolbar-button
+            data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
 </body>
 </html>
