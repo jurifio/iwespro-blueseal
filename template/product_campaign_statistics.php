@@ -36,11 +36,11 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice</th>
                                 <th data-slug="shops"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Shops</th>
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shops</th>
                                 <th data-slug="season"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Stagione</th>
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stagione</th>
                                 <th data-slug="brand"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Brand</th>
@@ -61,8 +61,8 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Campagna</th>
                                 <th data-slug="firstest"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Primissima Visita</th>
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Primissima Visita</th>
                             </tr>
                             </thead>
                             <tbody>
