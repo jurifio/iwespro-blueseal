@@ -1193,7 +1193,6 @@
             }
 
             tableSetup[table.data('datatableName')] = $.extend({}, tableSetup.common, setup);
-            console.log(tableSetup);
         }
 
         var ths = table.find('th');

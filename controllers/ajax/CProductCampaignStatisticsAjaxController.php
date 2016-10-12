@@ -38,17 +38,17 @@ class CProductCampaignStatisticsAjaxController extends AAjaxController
             $row = [];
             $row["DT_RowId"] = $productStatistic->printId();
             $row['code'] = $productStatistic->product->printId();
-            $row['shops'] = "shops";
-            $row['season'] = "";
-            $row['brand'] = "";
-            $row['categories'] = "";
+            $row['shops'] = $productStatistic->product->getShops('<br>');
+            $row['season'] = $productStatistic->product->productSeason->name;
+            $row['brand'] = $productStatistic->product->productBrand->name;
+            $row['categories'] = $productStatistic->product->getLocalizedProductCategories('<br>');
             $row['first'] = $val['first'];
             $row['last'] = $val['last'];
-            $row['pageViews'] = $val['pageViews'];
+            $row['pageView'] = $val['pageView'];
             $row['campaign'] = $productStatistic->campaign->name;
             $row['firstest'] = $productStatistic->creationDate;
 
-            $response[] = $row;
+            $response['data'][] = $row;
         }
 
         return json_encode($response);

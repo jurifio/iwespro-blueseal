@@ -25,8 +25,9 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="product_list"
+                               data-datatable-name="product_campaign_statistics"
                                data-column-filter="true"
+                               data-inner-setup="true"
                                data-controller="ProductCampaignStatisticsAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
@@ -51,8 +52,9 @@
                                     data-orderable="true" class="center">Prima Visita</th>
                                 <th data-slug="last"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Ultima Visita</th>
-                                <th data-slug="pageViews"
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center">Ultima Visita</th>
+                                <th data-slug="pageView"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Visite</th>
                                 <th data-slug="campaign"
