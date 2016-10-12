@@ -39,6 +39,11 @@ class CMarketplaceProductManageController extends AAjaxController
 	    $config = $marketplaceAccount->config;
 	    $config['priceModifier'] = $this->app->router->request()->getRequestData('modifier');
 	    $config['cpc'] = $this->app->router->request()->getRequestData('cpc');
+        if(!$config['cpc']) {
+            if(isset($marketplaceAccount->config['defaultCpc'])) {
+                $config['cpc'] = $marketplaceAccount->config['defaultCpc'];
+            }
+        }
 	    $i = 0;
         $rows = $this->app->router->request()->getRequestData('rows');
         if($rows == 'all') {
