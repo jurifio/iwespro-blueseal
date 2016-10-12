@@ -1,6 +1,7 @@
 {
     "routes": [
         {
+            "name": "Backoffice Login",
             "pattern": "/blueseal/?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLoginController"
@@ -13,6 +14,7 @@
             ]
         },
         {
+            "name": "Backoffice Contenuti",
             "pattern": "/blueseal/contenuti(/?)",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTranslationController"
@@ -1532,6 +1534,17 @@
             "pattern": "/blueseal/friends(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendsListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/campagne(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
             },
             "filters": {},
             "translations": {},

@@ -1529,10 +1529,22 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/friends(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendsListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/campagne(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
             },
             "filters": {},
             "translations": {},
