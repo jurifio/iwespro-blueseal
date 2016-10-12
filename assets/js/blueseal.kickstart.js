@@ -496,6 +496,14 @@ $.bsModal = function (header, params) {
         self[button + 'Button'].html(string);
     };
 
+    this.disableOkButton = function() {
+        self.okButton.prop('disabled', true);
+    };
+
+    this.enableOkButton = function() {
+        self.okButton.prop('disabled', false);
+    };
+
     this.show = function () {
         self.bsModal.modal();
     };

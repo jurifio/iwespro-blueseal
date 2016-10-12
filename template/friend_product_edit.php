@@ -463,18 +463,6 @@ endif; ?></div>
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Nomi dei Prodotti">
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-exchange"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.name.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Quantità e movimenti"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Movimenti">
         <bs-toolbar-button
             data-tag="a"
@@ -490,6 +478,11 @@ endif; ?></div>
     <bs-toolbar-group data-group-label="Aiuto">
         <bs-toolbar-button
             data-remote="btn.href.smart_product.guide"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione Nomi Prodotti">
+        <bs-toolbar-button
+            data-remote="bs.product.name.insert"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php  if ($allShops): ?>
