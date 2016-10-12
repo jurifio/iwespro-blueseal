@@ -25,8 +25,9 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="product_list"
+                               data-datatable-name="product_campaign_statistics"
                                data-column-filter="true"
+                               data-inner-setup="true"
                                data-controller="ProductCampaignStatisticsAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
@@ -35,11 +36,11 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice</th>
                                 <th data-slug="shops"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Shops</th>
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shops</th>
                                 <th data-slug="season"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Stagione</th>
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stagione</th>
                                 <th data-slug="brand"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Brand</th>
@@ -51,16 +52,17 @@
                                     data-orderable="true" class="center">Prima Visita</th>
                                 <th data-slug="last"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Ultima Visita</th>
-                                <th data-slug="pageViews"
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center">Ultima Visita</th>
+                                <th data-slug="pageView"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Visite</th>
                                 <th data-slug="campaign"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Campagna</th>
                                 <th data-slug="firstest"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Primissima Visita</th>
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Primissima Visita</th>
                             </tr>
                             </thead>
                             <tbody>
