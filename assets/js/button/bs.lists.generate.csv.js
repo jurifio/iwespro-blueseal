@@ -37,7 +37,7 @@ $(document).on('bs.lists.generate.csv', function () {
         for (var i in res.data) {
             var line = '';
             for (var index in res.data[i]) {
-                if (line != '') line += ','
+                if (line != '') line += ',';
                 line += res.data[i][index];
             }
             str += line + '%0A';
