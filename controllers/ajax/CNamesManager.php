@@ -44,42 +44,48 @@ class CNamesManager extends AAjaxController
 
     private function cleanNames()
     {
-        $res = $this->app->dbAdapter->query(
+        $resPNT = \Monkey::app()->dbAdapter->query(
             "UPDATE ProductNameTranslation SET `name` = TRIM(CONCAT(UCASE(LEFT(`name`, 1)),  SUBSTRING(LCASE(`name`), 2)))",
             []
         )->countAffectedRows();
 
+        $resPN = \Monkey::app()->dbAdapter->query(
+            "UPDATE ProductName SET `name` = TRIM(CONCAT(UCASE(LEFT(`name`, 1)),  SUBSTRING(LCASE(`name`), 2))), `translation` = TRIM(CONCAT(UCASE(LEFT(`translation`, 1)),  SUBSTRING(LCASE(`translation`), 2)))",
+            []
+        )->countAffectedRows();
+
         $this->app->cacheService->getCache('entities')->flush();
-        return $res . " dei prodotti sono stati normalizzati";
+        return $resPNT . " dei nomi assegnati ai prodotti e " . $resPN . " dei nomi sono stati normalizzati.";
     }
 
     private function mergeNames($new, $old)
     {
+        $pnRepo = \Monkey::app()->repoFactory->create('ProductName');
         $pntRepo = $this->app->repoFactory->create('ProductNameTranslation');
-        foreach ($old as $old1) {
-            $productNameTranslation = $pntRepo->findBy(['name' => $old1]);
-            foreach($productNameTranslation as $pntRow) {
-                if ($pntRow->langId != 1) {
-                    $pntRow->delete();
-                } else {
-                    $pntRow->name = trim($new);
-                    $pntRow->update();
+        try {
+            \Monkey::app()->dbAdapter->beginTransaction();
+            foreach ($old as $o) {
+
+                $productNames = $pnRepo->findBy(['name' => $o]);
+                foreach($productNames as $pnRow) {
+                    $pnRow->delete();
+                }
+
+                $productNameTranslation = $pntRepo->findBy(['name' => $o]);
+                foreach ($productNameTranslation as $pntRow) {
+                    if ($pntRow->langId != 1) {
+                        $pntRow->delete();
+                    } else {
+                        $pntRow->name = trim($new);
+                        $pntRow->update();
+                    }
                 }
             }
+        } catch (\Exception $e) {
+            \Monkey::app()->dbAdapter->rollBack();
+            throw new \Exception($e->getMessage());
         }
         return "Nomi aggiornati!";
-        /* vecchia logica
-        $SQLCond = str_repeat('`name` = ? OR ', count($old));
-        $SQLCond = rtrim($SQLCond, 'OR ');
-        $cond = array_merge([$new], $old);
-        try {
-            $this->dbAdapter->query('DELETE ProductNameTranslation WHERE langId <> 1 AND (' . $SQLCond . ')', $old);
-            $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
-        } catch (\Exception $e) {
-            return 'OOPS! C\'è stato un problema!';
-        }
-        return 'Nomi aggiornati!';
-        */
     }
 
     private function mergeByProducts($get)
@@ -107,24 +113,6 @@ class CNamesManager extends AAjaxController
             $this->app->dbAdapter->rollBack();
             return 'OOPS! C\'è stato un problema!';
         }
-        /*
-        vecchia logica
-
-        $SQLCond = str_repeat('`productVariantId` = ? OR ', count($old));
-        $SQLCond = rtrim($SQLCond, 'OR ');
-        $cond = array_merge([$new], $old);
-
-        try {
-            $this->app->dbAdapter->beginTransaction();
-            $this->app->dbAdapter->query('DELETE FROM ProductNameTranslation WHERE langId <> 1 AND (' . $SQLCond . ')', $old);
-            $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
-            $this->app->dbAdapter->commit();
-        } catch (\Exception $e) {
-            $this->app->dbAdapter->rollBack();
-            return 'OOPS! C\'è stato un problema!';
-        }
-        return 'Nomi aggiornati!';
-         */
     }
 
     /**

@@ -42,9 +42,6 @@
                                 <th data-slug="count"
                                     data-searchable="false"
                                     data-orderable="true" class="center">N. Prodotti Associati</th>
-                                <th data-slug="isVisible"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Visibile</th>
                             </tr>
                             </thead>
                             <tbody>
