@@ -119,7 +119,7 @@ class CProductMerge extends AAjaxController
                         $vshop->productVariantId = $rows[$choosen]['productVariantId'];
                         $vshop->insert();
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     throw new BambooException(
                         $this->buildErrorMsg(
                             "l'assegnazione del prodotto al nuovo shop non è andata a buon fine.",
@@ -143,7 +143,7 @@ class CProductMerge extends AAjaxController
                     $dp->productVariantId = $rows[$choosen]['productVariantId'];
                     $dp->update();
                 }
-            } catch(\Exception $e) {
+            } catch(\Throwable $e) {
                 throw new BambooException(
                     $this->buildErrorMsg(
                         "l'aggiornento dell'associazione tra catalogo e importazione non ha funzionato.",
@@ -164,7 +164,7 @@ class CProductMerge extends AAjaxController
                     $ps->productVariantId = $rows[$choosen]['productVariantId'];
                     $ps->insert();
                 }
-            } catch(\Exception $e) {
+            } catch(\Throwable $e) {
                 throw new BambooException(
                     $this->buildErrorMsg(
                         "Lo spostamento degli sku verso il prodotto scelto non ha funzionato.",
@@ -182,7 +182,7 @@ class CProductMerge extends AAjaxController
                 $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                 $p->productStatusId = 13;
                 $p->update();
-            } catch(\Exception $e) {
+            } catch(\Throwable $e) {
                 throw new BambooException(
                     $this->buildErrorMsg(
                         "Il cambio di stato di uno dei prodotti non è stato eseguito.",
@@ -195,7 +195,7 @@ class CProductMerge extends AAjaxController
             
             $this->app->dbAdapter->commit();
             return "Fusione eseguita!";
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return $e->getMessage();
         }

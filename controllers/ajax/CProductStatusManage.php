@@ -25,7 +25,7 @@ class CProductStatusManage extends AAjaxController
             $product->productStatusId = $statusId;
             $product->update();
             return json_encode(['status' => 'ok', 'message' => 'Stato aggiornato: ' . $product->productStatus->name]);
-        } catch(\Exception $e){
+        } catch(\Throwable $e){
             return json_encode(['status' => 'ko', 'message' => $e->getMessage()]);
         }
     }

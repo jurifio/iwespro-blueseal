@@ -69,7 +69,7 @@ class CBrandDelete extends AAjaxController
             try {
                 $em->delete($brand);
                 $deletedProducts['ok'][] = $brand;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $deletedProducts['ko'][] = $brand;
             }
         }

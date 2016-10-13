@@ -91,7 +91,7 @@ class CMarketplaceProductManageController extends AAjaxController
             if(count($ids) > 0) {
                 $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$ids])));
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
         }

@@ -92,7 +92,7 @@ class CCatalogController extends AAjaxController
                     return json_encode(false);
             }
             $ret = ($prod) ? $this->getAllProductData($prod, $shopId, $sizesToMove) : false;
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             return json_encode($e->getMessage());
         }
 
@@ -208,7 +208,7 @@ class CCatalogController extends AAjaxController
 
             $this->app->dbAdapter->commit();
             return json_encode('OK');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return json_encode($e->getMessage());
         }

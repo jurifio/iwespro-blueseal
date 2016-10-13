@@ -53,7 +53,7 @@ class CProductSales extends AAjaxController
 	            }
                 //$sql = "UPDATE ProductSku SET salePrice = FLOOR(price / 100 * (100 - ? )) WHERE productId = ? AND productVariantId = ? ";
                 //$res = $this->app->dbAdapter->query($sql, [$percent, $v['id'], $v['productVariantId']]);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->app->dbAdapter->rollback();
                 return "Non riesco ad avviare le promozioni le promozioni dai prodotti selezionati:<br />" . $e->getMessage();
             }
@@ -74,7 +74,7 @@ class CProductSales extends AAjaxController
                         try {
                             $productSku->isOnSale = $isSale;
                             $productSku->update();
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $e) {
                             return "OOPS! Non riesco a impostare le promozioni:<br />" . $e->getMessage();
                         }
                     }

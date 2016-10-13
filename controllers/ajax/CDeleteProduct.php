@@ -54,7 +54,7 @@ class CDeleteProduct extends AAjaxController
                 $product->productStatusId = 8;//'C';
 	            $product->update();
                 $deletedProducts['ok'][] = $product;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $deletedProducts['ko'][] = $product;
             }
         }

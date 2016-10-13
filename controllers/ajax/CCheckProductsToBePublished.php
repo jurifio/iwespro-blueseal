@@ -59,7 +59,7 @@ class CCheckProductsToBePublished extends AAjaxController
                             $count += $product->update();
                         }
                         $this->app->dbAdapter->commit();
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         return "Errore nell'aggiornamento dello stato dei prodotti:<br />" .
                             $e->getMessage();
                             "Contattare l'amministratore<br />";

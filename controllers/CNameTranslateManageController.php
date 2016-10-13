@@ -72,7 +72,7 @@ class CNameTranslateManageController extends ARestrictedAccessRootController
         }
             $this->app->dbAdapter->commit();
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             throw new \Exception($e->getMessage());
         }

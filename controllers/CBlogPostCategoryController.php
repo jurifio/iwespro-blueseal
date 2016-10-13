@@ -67,7 +67,7 @@ class CBlogPostCategoryController extends ARestrictedAccessRootController
 				$this->recursiveDelete($postCategory);
 			}
 			$this->app->dbAdapter->commit();
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			$this->app->dbAdapter->rollBack();
 			throw $e;
 		}

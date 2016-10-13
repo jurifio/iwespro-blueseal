@@ -25,7 +25,7 @@ class CJobLogDownloadController extends AAjaxController
 		try {
 			$job = $this->app->router->request()->getRequestData('job');
 			return file_get_contents($this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/log" . $job . ".csv");
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			var_dump($e);
 		}
 
@@ -69,7 +69,7 @@ class CJobLogDownloadController extends AAjaxController
 			};
 			fflush($file);
 			fclose($file);
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			var_dump($e);
 		}
 

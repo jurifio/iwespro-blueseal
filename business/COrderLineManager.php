@@ -67,7 +67,7 @@ class COrderLineManager
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->status = $newStatus->code;
             $this->app->repoFactory->create("OrderLine")->update($orderLine);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
         }
     }
@@ -187,7 +187,7 @@ class COrderLineManager
             $orderLine->shopId = $sku->shopId;
             $orderLine->frozenProduct = $sku->froze();
             $this->app->repoFactory->create("OrderLine")->update($orderLine);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
         }
 
@@ -206,7 +206,7 @@ class COrderLineManager
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->friendRevenue = $this->orderLine->friendRevenue;
             $this->app->repoFactory->create("OrderLine")->update($orderLine);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
         }
         //$this->app->dbAdapter->update('OrderLine', ['friendRevenue'=>$this->orderLine->friendRevenue],['id'=>$this->orderLine->id,'orderId'=>$this->orderLine->orderId]);
@@ -229,7 +229,7 @@ class COrderLineManager
                 $orderLine->friendRevenue = round($price,2);
                 $this->app->repoFactory->create("OrderLine")->update($orderLine);
 
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->app->router->response()->raiseUnauthorized();
             }
 

@@ -75,7 +75,7 @@ class CNamesManager extends AAjaxController
         try {
             $this->dbAdapter->query('DELETE ProductNameTranslation WHERE langId <> 1 AND (' . $SQLCond . ')', $old);
             $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return 'OOPS! C\'è stato un problema!';
         }
         return 'Nomi aggiornati!';
@@ -103,7 +103,7 @@ class CNamesManager extends AAjaxController
             }
             $this->app->dbAdapter->commit();
             return 'Nomi aggiornati!';
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return 'OOPS! C\'è stato un problema!';
         }
@@ -119,7 +119,7 @@ class CNamesManager extends AAjaxController
             $this->app->dbAdapter->query('DELETE FROM ProductNameTranslation WHERE langId <> 1 AND (' . $SQLCond . ')', $old);
             $this->app->dbAdapter->query('UPDATE ProductNameTranslation SET `name` = ? WHERE langId = 1 AND (' . $SQLCond . ')', $cond);
             $this->app->dbAdapter->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return 'OOPS! C\'è stato un problema!';
         }
@@ -217,7 +217,7 @@ class CNamesManager extends AAjaxController
                }
                $this->app->dbAdapter->commit();
                return true;
-           } catch (\Exception $e){
+           } catch (\Throwable $e){
                $this->app->dbAdapter->rollBack();
                throw $e;
            }*/

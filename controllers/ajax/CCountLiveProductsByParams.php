@@ -23,7 +23,7 @@ class CCountLiveProductsByParams extends AAjaxController
         foreach ($this->app->router->request()->getRequestData() as $key => $param) {
             try {
                 $param = json_decode($param);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $param = [$param];
             }
             if (!is_array($param)) {

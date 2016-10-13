@@ -19,7 +19,7 @@ class CCheckPermission extends AAjaxController
     {
         try {
             return $this->app->getUser()->hasPermissions($this->app->router->request()->getRequestData('permission'));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return 0;
         }
     }

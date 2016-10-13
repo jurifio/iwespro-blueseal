@@ -77,7 +77,7 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
                 $solRepo->createMovementLine($id, $productVariantId, $productSizeId, $shopfromBarcode, $row['qty'] * $signMultiplier, $storehouseOperation->id, $storehouse->id);
             }
             $this->app->dbAdapter->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
         }

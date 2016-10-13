@@ -203,7 +203,7 @@ class CProductManageController extends ARestrictedAccessRootController
 	            } else {
 		            try {
 			            $this->app->dbAdapter->insert("ProductNameTranslation", $productIdsExt+['langId'=>$inputName[1],'name'=>$input]);
-		            } catch (\Exception $e) {
+		            } catch (\Throwable $e) {
 		            }
 	            }
             }
@@ -234,7 +234,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 $insertData['shopId'] = $input;
                 try {
                     $this->app->dbAdapter->insert("ShopHasProduct", ($insertData + $productIdsExt));
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     //fixme gestisci multinegozio
                 }
             }
@@ -304,7 +304,7 @@ class CProductManageController extends ARestrictedAccessRootController
             }
             $ret = ['code' => $productIds, 'message' => 'Il prodotto è stato aggiornato correttamente.'];
             return json_encode($ret);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
         }
@@ -524,7 +524,7 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 
             $this->app->dbAdapter->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
         }

@@ -32,7 +32,7 @@ class CGenerateEanCodes extends AAjaxController
 		    try {
 			    $this->app->dbAdapter->insert('EanBucket',['ean'=>(string) $generator]);
 			    $counter++;
-		    } catch (\Exception $e) {
+		    } catch (\Throwable $e) {
 		    }
 	    }
 

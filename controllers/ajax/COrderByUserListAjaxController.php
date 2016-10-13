@@ -105,7 +105,7 @@ class COrderByUserListAjaxController extends AAjaxController
 
 			        $code = $sku->shop->name . ' ' . $sku->printPublicSku(). " (".$sku->product->productBrand->name.")";
 			        if($line->orderLineStatus->notify === 1) $alert = true;
-		        } catch (\Exception $e) {
+		        } catch (\Throwable $e) {
 			        $code = 'non trovato';
 		        }
 		        $response['aaData'][$i]["content"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - "  . $plainLineStatuses[$line->status] ."</span>";

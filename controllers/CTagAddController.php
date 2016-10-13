@@ -78,7 +78,7 @@ class CTagAddController extends ARestrictedAccessRootController
             }
 
             return $tagId;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseProcessingError();
             $this->app->router->response()->sendHeaders();
         }
