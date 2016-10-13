@@ -40,10 +40,10 @@ $(document).on('bs.lists.generate.csv', function () {
                 if (line != '') line += ','
                 line += res.data[i][index];
             }
-            str += line + '\r\n';
+            str += line + '%0A';
         }
         console.log(str);
-        modal.writeBody('<a href="data:text/plain;charset=UTF-8,' + str + '" download="download.csv">Download il file</a>');
+        modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
     });
 
     var data = table.data('params');
