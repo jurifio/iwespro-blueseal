@@ -57,6 +57,9 @@
                                 <th data-slug="pageView"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Visite</th>
+                                <th data-slug="conversion"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Conversioni</th>
                                 <th data-slug="campaign"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Campagna</th>
