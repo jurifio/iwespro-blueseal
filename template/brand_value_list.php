@@ -63,9 +63,9 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">Margine</th>
                                 <?php endif; ?>
-                                <th data-slug="prezzo_medio_vendita"
+                                <th data-slug="prezzo_medio"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Media Prezzi Venduto</th>
+                                    data-orderable="true" class="center">P. Medio</th>
                                 <th data-slug="incasso_friend"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Incasso Friend</th>
