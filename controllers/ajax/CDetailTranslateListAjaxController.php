@@ -141,7 +141,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
                 $entity->insert();
              }
         } catch (BambooDBALException $e) {
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseProcessingError()->sendHeaders();
             return;
         }

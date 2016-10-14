@@ -30,7 +30,7 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
 
             try {
                 $o->shop = $o->product->shop->getFirst()->name;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $o->shop = null;
             }
 

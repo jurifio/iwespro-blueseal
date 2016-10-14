@@ -55,7 +55,7 @@ class CSkuManageController extends ARestrictedAccessRootController
                 if ($shop instanceof CObjectCollection) {
                     $shop = $shop->getFirst();
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $shop = null;
             }
         }
@@ -118,7 +118,7 @@ class CSkuManageController extends ARestrictedAccessRootController
                 }
 
 
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->app->router->response()->raiseProcessingError();
             }
         }

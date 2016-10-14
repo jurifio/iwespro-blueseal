@@ -91,7 +91,7 @@ class CDetailModelAssocToCat extends AAjaxController
                 $cat->productSheetModelPrototypeId = $productSheetModelPrototypeId;
                 $cat->insert();
             }
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             return "OOPS! Non sono riuscito ad aggiornare la categoria!<br />" . $e->getMessage();
         }
         return "Categoria Aggiornata!"; // todo all

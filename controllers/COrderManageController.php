@@ -56,7 +56,7 @@ class COrderManageController extends ARestrictedAccessRootController
                     $order->status = $code;
 	                $order->update();
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
             }
 

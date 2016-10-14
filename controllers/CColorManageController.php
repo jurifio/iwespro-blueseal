@@ -50,7 +50,7 @@ class CColorManageController extends ARestrictedAccessRootController
                     $colorGroup->slug = $slug;
                     $colorGroup->insert();
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->app->router->response()->raiseUnauthorized();
             }
            /*if (!is_null($datas['ProductColorGrup_id'])) {
@@ -94,7 +94,7 @@ class CColorManageController extends ARestrictedAccessRootController
                     $colorGroup->slug = $slug;
                     $colorGroup->insert();
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->app->router->response()->raiseUnauthorized();
             }
            /* if (isset($colorGroup)) {

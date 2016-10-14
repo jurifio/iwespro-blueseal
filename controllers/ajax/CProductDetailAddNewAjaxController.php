@@ -45,7 +45,7 @@ class CProductDetailAddNewAjaxController extends AAjaxController
                 $newTrad->insert();
                 $this->app->dbAdapter->commit();
                 return "Dettaglio inserito!-" . $retId;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->app->dbAdapter->rollBack();
                 return "OOPS! Errore durante l'inserimento, che non è stato eseguito.<br />" . $e->getMessage();
             }

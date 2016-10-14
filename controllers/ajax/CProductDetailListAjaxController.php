@@ -88,7 +88,7 @@ class CProductDetailListAjaxController extends AAjaxController
                 $response['data'][$i]['name'] .= implode(',', $lang);
                 $response['data'][$i]['name'] .= ')';
 				$i++;
-			} catch (\Exception $e) {
+			} catch (\Throwable $e) {
 				throw $e;
 			}
 

@@ -102,7 +102,7 @@ class COrderListAjaxController extends AAjaxController
 
 			        $code = $sku->shop->name . ' ' . $sku->printPublicSku(). " (".$sku->product->productBrand->name.")";
 			        if($line->orderLineStatus->notify === 1) $alert = true;
-		        } catch (\Exception $e) {
+		        } catch (\Throwable $e) {
 			        $code = 'non trovato';
 		        }
 

@@ -111,7 +111,7 @@ class CDetailModelGetDetails extends AAjaxController
                     $this->app->dbAdapter->commit();
 
                     return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newProt->id]);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->app->dbAdapter->rollBack();
                     return json_encode(['status' => 'fail']);
                 }
@@ -144,7 +144,7 @@ class CDetailModelGetDetails extends AAjaxController
             //insert new details
             $this->insertDetails($productDetails, $prot->id);
             $this->app->dbAdapter->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return json_encode(['status' => "ko"]);
         }

@@ -131,7 +131,7 @@ class CProductDetailsMerge extends AAjaxController
                 }
 
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return 'OOPS! Si è verificato un problema:<br /> ' . $e->getMessage();
         }
         $res = 'I dettagli dei prodotti sono stati fusi correttamente.';

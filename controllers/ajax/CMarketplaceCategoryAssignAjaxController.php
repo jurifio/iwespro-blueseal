@@ -53,7 +53,7 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 				unset($appoggio[0]);
 				$appoggio = array_reverse($appoggio);
 				$appoggio = implode('<br>',$appoggio);
-			} catch (\Exception $e) {
+			} catch (\Throwable $e) {
 				$appoggio = $val->marketplaceCategoryPath;
 			}
 	        $response['data'][$i]['marketplaceAccountPath'] = $appoggio;

@@ -64,7 +64,7 @@ class CProductNamesListAjaxController extends AAjaxController
                 $response['data'][$i]['slug'] = implode('', $cats);
 
 				$i++;
-			} catch (\Exception $e) {
+			} catch (\Throwable $e) {
 				throw $e;
 			}
         }

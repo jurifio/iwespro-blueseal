@@ -56,7 +56,7 @@ class COrderLineManageController extends ARestrictedAccessRootController
                     $order->status = $code;
 	                $order->update();
 
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->app->router->response()->raiseUnauthorized();
                 }
                 //$this->app->dbAdapter->update('Order',array('status'=>$code),array("id"=>$this->request->getRequestData('orderId')));

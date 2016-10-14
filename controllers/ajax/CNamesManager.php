@@ -109,7 +109,7 @@ class CNamesManager extends AAjaxController
             }
             $this->app->dbAdapter->commit();
             return 'Nomi aggiornati!';
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return 'OOPS! C\'è stato un problema!';
         }

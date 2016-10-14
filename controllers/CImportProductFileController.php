@@ -68,7 +68,7 @@ class CImportProductFileController extends ARestrictedAccessRootController
 						}
 					}
 					if($ok == 1) break;
-				} catch(\Exception $e) {
+				} catch(\Throwable $e) {
 					$ok = -1;
 					$a = $e;
 				}

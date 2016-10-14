@@ -283,7 +283,7 @@ class CDataTables
 
     /**
      * @param array $fields
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function addGroup($fields = [])
     {

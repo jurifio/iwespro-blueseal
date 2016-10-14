@@ -107,7 +107,7 @@ class CProductEditController extends CProductManageController
 	    foreach ($productDetailsCollection as $detail) {
 		    try {
 			    $productDetails[$detail->productDetailId] = $detail->name;
-		    } catch(\Exception $e) {
+		    } catch(\Throwable $e) {
 
 		    }
 	    }

@@ -82,7 +82,7 @@ class CProductRouletteController extends CProductManageController
 		foreach ($productDetailsCollection as $detail) {
 			try {
 				$productDetails[$detail->productDetailId] = $detail->name;
-			} catch(\Exception $e) {
+			} catch(\Throwable $e) {
 
 			}
 		}
@@ -244,7 +244,7 @@ class CProductRouletteController extends CProductManageController
 		$this->app->dbAdapter->beginTransaction();
 		try {
 			$this->app->dbAdapter->insert('ShopHasProduct', ['productId'=>$dirtyProduct->productId,'productVariantId'=>$dirtyProduct->productVariantId,'shopId'=>$dirtyProduct->shopId]);
-		} catch(\Exception $e) {
+		} catch(\Throwable $e) {
 
 		}
 		$due = $dirtyProduct->update();
@@ -302,7 +302,7 @@ class CProductRouletteController extends CProductManageController
 					$this->app->router->response()->raiseProcessingError();
 					return json_encode($shopInput);
 
-				} catch(\Exception $e) {};
+				} catch(\Throwable $e) {};
 				$this->app->router->response()->raiseProcessingError();
 				return '<br>prodotto già esistente:'.
 						'<br>brand: ' . $post['Product_productBrandId'].
@@ -346,7 +346,7 @@ class CProductRouletteController extends CProductManageController
 				}
 				try {
 					$productId = $this->app->dbAdapter->query("SELECT id FROM Product WHERE itemno = ? AND productBrandId = ? ORDER BY id DESC LIMIT 0,1", [$post['Product_itemno'], $post['Product_productBrandId']])->fetch()['id'];
-				} catch (\Exception $e) {
+				} catch (\Throwable $e) {
 				}
 				if (!isset($productId) || !is_numeric($productId)) {
 					$productId = $this->app->dbAdapter->query("SELECT id FROM Product ORDER BY id DESC LIMIT 0,1", [])->fetch()['id'] + 1;
@@ -380,7 +380,7 @@ class CProductRouletteController extends CProductManageController
 					$dirtyProduct->productVariantId = $variantId;
 					$dirtyProduct->dirtyStatus = 'K';
 					$dirtyProduct->update();
-				} catch (\Exception $e) {
+				} catch (\Throwable $e) {
 					$this->app->router->response()->raiseUnauthorized();
 					return json_encode($e);
 				}
@@ -507,7 +507,7 @@ class CProductRouletteController extends CProductManageController
 			}
 
 			$this->app->dbAdapter->commit();
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			var_dump($e);
 			$this->app->dbAdapter->rollBack();
 			throw $e;

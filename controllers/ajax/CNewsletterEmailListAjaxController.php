@@ -73,7 +73,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
                 $response['data'][$i]['subscriptionDate'] = ($val->subscriptionDate) ? $val->subscriptionDate : "-";
                 $response['data'][$i]['unsubscriptionDate'] = ($val->unsubscriptionDate) ? $val->unsubscriptionDate : "-";
 				$i++;
-			} catch (\Exception $e) {
+			} catch (\Throwable $e) {
 				throw $e;
 			}
 

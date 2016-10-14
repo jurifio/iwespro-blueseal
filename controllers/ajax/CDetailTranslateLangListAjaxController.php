@@ -116,7 +116,7 @@ class CDetailTranslateLangListAjaxController extends AAjaxController
             }
             $this->app->dbAdapter->commit();
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
         }
     }

@@ -56,7 +56,7 @@ class CProductPriceEdit extends AAjaxController
                     $ret[$v->shopId]['salePrice'] = ($v->salePrice) ? str_replace('.', ',', $v->salePrice) : 0;
                 }
             }
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             return json_encode($e->getMessage());
         }
         return json_encode($ret);
@@ -99,7 +99,7 @@ class CProductPriceEdit extends AAjaxController
                 $skuRepo->updateSkusPrices($shp->productId, $shp->productVariantId, $shp->shopId, $shp->value, $shp->price, $shp->salePrice);
             }
             $this->app->dbAdapter->commit();
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return json_encode($e->getMessage());
         }

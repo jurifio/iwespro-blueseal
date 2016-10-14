@@ -57,7 +57,7 @@ class CInvoiceAjaxController extends AAjaxController
 
                 $invoiceRepo->insert($invoiceNew);
                 $order = $orderRepo->findOneBy(['id' => $orderId]);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw $e;
                 $this->app->router->response()->raiseProcessingError();
                 $this->app->router->response()->sendHeaders();
@@ -89,7 +89,7 @@ class CInvoiceAjaxController extends AAjaxController
                     ]);
                     try {
                         $invoiceRepo->update($invoice);
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         throw $e;
                         $this->app->router->response()->raiseProcessingError();
                         $this->app->router->response()->sendHeaders();

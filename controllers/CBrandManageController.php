@@ -56,7 +56,7 @@ class CBrandManageController extends ARestrictedAccessRootController
             $productBrand->name = trim($data['ProductBrand_name']);
 	        $productBrand->update();
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
         }
       //  $this->app->dbAdapter->update("ProductBrand",["slug"=>trim($slug), "name"=>trim($data['ProductBrand_name'])],["id"=>$data['ProductBrand_id']]);
@@ -94,7 +94,7 @@ class CBrandManageController extends ARestrictedAccessRootController
 
         try{
             $this->app->dbAdapter->delete('ProductBrand',array('id'=>$data['ProductBrand_id']));
-        }catch (\Exception $e) {
+        }catch (\Throwable $e) {
             header("Location: ".$blueseal."/prodotti/brand/modifica?productBrandId=".$data['ProductBrand_id']);
         }
     }
