@@ -41,18 +41,22 @@
                     </div>
                     <div class="panel-body">
                         <form id="form-project" role="form" action="" method="PUT" autocomplete="on">
+                            <?php $idIta = $name->findOneByKey('langId', 1)->id; ?>
+                            <input type="hidden" name="italianNameId" value="<?php echo $idIta; ?>" />
 
                             <?php
-                            \Monkey::dump($productEdit);
-                            foreach ($langs as $lang):
-                                $name = ($productEdit[$lang->id]) ? $productEdit[$lang->id]->name : '';
+                            foreach ($langs as $lang): ?>
+
+                                <?php
+                                    $val = $name->findOneByKey('langId', $lang->id);
+                                    $val = ($val) ? $val->translation : '';
                                 ?>
                                 <h5><?php echo strtoupper($lang->name); ?></h5>
                                 <div class="row clearfix">
                                     <div class="col-md-4">
                                         <div class="form-group form-group-default">
                                             <label>Nome Prodotto</label>
-                                            <input type="text" class="form-control" name="ProductName_<?php echo $lang->id; ?>" value="<?php echo htmlentities($name); ?>">
+                                            <input type="text" class="form-control" name="ProductName_<?php echo $lang->id; ?>" value="<?php echo htmlentities($val); ?>">
                                         </div>
                                     </div>
                                 </div>

@@ -42,7 +42,7 @@ class CNameTranslateListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductNameList',['productId','productVariantId','langId'],$_GET);
+        $datatable = new CDataTables('vBluesealProductNameList',['id'],$_GET);
         $modifica = $this->urls['base']."traduzioni/nomi/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
@@ -53,11 +53,11 @@ class CNameTranslateListAjaxController extends AAjaxController
         $datatable->addCondition('langId',[1]);
         $datatable->addCondition('name',[''],true);
 
-        $productsName = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productName = $this->app->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsName->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsName->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $transRepo = $this->app->repoFactory->create('ProductNameTranslation');
+        $PNRepo = $this->app->repoFactory->create('ProductName');
         $repo = $this->app->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 
@@ -69,19 +69,19 @@ class CNameTranslateListAjaxController extends AAjaxController
 
         $i = 0;
 
-        foreach($productsName as $val){
+        foreach($productName as $val){
             $html = '';
 
             foreach ($installedLang as $insLang) {
-                $lang = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'langId' => $insLang->id]);
-                if(!is_null($lang) && ($lang->name != '')) {
+                $translated = $PNRepo->findOneBy(['name' => $val->name, 'langId' => $insLang->id]);
+                if(!is_null($translated) && ($translated->name != '')) {
                     $html .= '<span class="badge">' . $insLang->lang . '</span>';
                 } else {
                     $html .= '<span class="badge badge-red">' . $insLang->lang . '</span>';
                 }
             }
 
-            $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId. '_' . $val->productVariantId;
+            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?name=' . urlencode($val->name) . '">' . $val->name . '</a>' : $val->name;
             $response['data'][$i]['lang'] = $html;
