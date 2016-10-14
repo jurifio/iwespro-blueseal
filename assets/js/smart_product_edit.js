@@ -21,8 +21,36 @@ var alertHtml = "" +
 var tagList = "";
 
 $(document).on('bs.dummy.edit', function (e, element, button) {
-    var input = document.getElementById("dummyFile");
-    input.click();
+    modal = new $.bsModal(
+        'Foto Prodotto',
+        {
+            body: "Sto Caricando la foto",
+            okButtonLabel: 'Chiudi'
+        }
+    );
+
+    var id = $('input[name="Product_id"]').val();
+    var variantId = $('input[name="Product_productVariantId"]').val();
+
+    if (('' == id) && ('' == variantId)) {
+        modal.writeBody('Non posso visualizzare l\'immagine se la scheda non contiene un prodotto già salvato');
+    } else {
+        var code = id + '-' + variantId;
+        $.ajax({
+            url: '/blueseal/xhr/GetDummyPicture',
+            method: 'GET',
+            dataType: 'JSON',
+            data: {code: code}
+        }).done(function (res) {
+            if ('ok' == res.status) {
+                modal.writeBody('<img style="max-height: 60vh" src="' + res.dummyPic + '" />');
+            } else {
+                modal.writeBody(res.message);
+            }
+        }).fail(function () {
+            modal.writeBody('C\'è stato un errore nel caricamento dell\'immagine');
+        });
+    }
 });
 
 $("#dummyFile").on('change', function () {
