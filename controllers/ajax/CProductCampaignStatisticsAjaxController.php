@@ -45,6 +45,7 @@ class CProductCampaignStatisticsAjaxController extends AAjaxController
             $row['first'] = $val['first'];
             $row['last'] = $val['last'];
             $row['pageView'] = $val['pageView'];
+            $row['conversions'] = $val['conversions'];
             $row['campaign'] = $productStatistic->campaign->name;
             $row['firstest'] = $productStatistic->creationDate;
 
