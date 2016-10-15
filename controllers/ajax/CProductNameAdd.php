@@ -30,7 +30,7 @@ class CProductNameAdd extends AAjaxController
         $exists = $this->isName($name);
 
         if (!$exists) {
-            $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+            $pntRepo = \Monkey::app()->repoFactory->create('ProductName');
             try {
                 $pntRepo->insertName($name);
                 return "ok";

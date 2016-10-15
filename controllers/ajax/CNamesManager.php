@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\utils\slugify\CSlugify;
 
 /**
@@ -120,40 +121,16 @@ class CNamesManager extends AAjaxController
      */
     public function get()
     {
-        $get = $this->app->router->request()->getRequestData();
+        $search = $this->app->router->request()->getRequestData('search');
         $codes = [];
-        $searchByCodes = '';
-        $searchByNames = '';
-        $concat = '';
 
-        foreach ($get as $k => $v) {
-            if (false === strpos($k, 'codes_')) continue;
-            $codes[] = explode('-', $v)[1];
-        }
-        if (count($codes)) {
-            $questionMarks = rtrim(str_repeat('?,', count($codes)), ',');
-            $searchByCodes = ' `productVariantId` in (' . $questionMarks . ') ';
-        }
+        if (false === $search) throw new BambooException('Non è stata specificata una stringa di ricerca');
+        $searchByNames = ' `name` like ? ';
+        $codes[] = '%' . $search . '%';
 
-        $search = (array_key_exists('search', $get)) ? $get['search'] : '';
-        if ($search) {
-            $searchByNames = ' `name` like ? ';
-            $codes[] = '%' . $search . '%';
-        }
 
-        if ($search && (1 < count($codes))) {
-            $concat = ' OR ';
-        }
+        $res = $this->app->dbAdapter->query("SELECT DISTINCT `name` FROM `ProductName` WHERE `langId` = 1 AND ( $searchByNames ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
 
-        $where = $searchByCodes . $concat . $searchByNames;
-
-        $res = $this->app->dbAdapter->query("SELECT distinct `name` FROM `ProductNameTranslation` WHERE `langId` = 1 AND ( $where ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
-        if ($searchByNames) {
-            $resPN = $this->app->dbAdapter->query("SELECT DISTINCT `name` FROM `ProductName` WHERE `langId` = 1 AND ( $searchByNames ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
-        }
-        if (isset($resPN)) {
-            $res = array_merge($res, $resPN);
-        }
         return json_encode($res);
     }
 
