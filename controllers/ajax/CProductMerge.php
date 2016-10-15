@@ -133,15 +133,18 @@ class CProductMerge extends AAjaxController
 
             //aggiorno la relazione tra product e dirtyProduct del prodotto da fondere
             try {
+
                 foreach($sop as $kshop => $vshop) {
                     $dp = $this->app->repoFactory->create('DirtyProduct')->findOneBy([
                         'productId' => $v['id'],
                         'productVariantId' => $v['productVariantId'],
                         'shopId' => $vshop->shopId
                     ]);
-                    $dp->productId = $rows[$choosen]['id'];
-                    $dp->productVariantId = $rows[$choosen]['productVariantId'];
-                    $dp->update();
+                    if ($dp) {
+                        $dp->productId = $rows[$choosen]['id'];
+                        $dp->productVariantId = $rows[$choosen]['productVariantId'];
+                        $dp->update();
+                    }
                 }
             } catch(\Throwable $e) {
                 throw new BambooException(
