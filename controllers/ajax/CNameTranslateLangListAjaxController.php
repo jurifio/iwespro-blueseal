@@ -44,7 +44,7 @@ class CNameTranslateLangListAjaxController extends AAjaxController
     public function get()
     {
         $langId = $this->app->router->request()->getRequestData('lang');
-        $datatable = new CDataTables('vBluesealProductNameList',['productId','productVariantId','langId'],$_GET);
+        $datatable = new CDataTables('vBluesealProductNameList',['id'],$_GET);
         
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
@@ -55,11 +55,9 @@ class CNameTranslateLangListAjaxController extends AAjaxController
         $datatable->addCondition('langId',[1]);
         $datatable->addCondition('name',[''],true);
 
-        $productsName = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productsName = $this->app->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsName->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsName->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-
-        $transRepo = $this->app->repoFactory->create('ProductNameTranslation');
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -70,9 +68,8 @@ class CNameTranslateLangListAjaxController extends AAjaxController
         $i = 0;
 
         foreach($productsName as $val){
-            $translated = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'langId' => $langId]);
-            $translation = (is_null($translated)) ? '' : $translated->name ;
-			$name = '<div class="form-group form-group-default full-width">';
+
+            $name = '<div class="form-group form-group-default full-width">';
             if ($okManage) {
                 $name .= '<input type="text" class="form-control full-width nameId" data-lang="' . $langId . '" data-action="' . $this->urls['base'] . 'xhr/NameTranslateLangListAjaxController" data-name="' . $val->name . '" title="nameId" class="nameId" value="' . htmlentities($translation) .'"/>';
             }
