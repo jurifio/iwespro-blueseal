@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\intl\CLang;
 
 
@@ -45,7 +46,7 @@ class CNameTranslateLangListAjaxController extends AAjaxController
     {
         $langId = $this->app->router->request()->getRequestData('lang');
         $datatable = new CDataTables('vBluesealProductNameList',['id'],$_GET);
-        
+
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         if (!empty($this->authorizedShops)) {
@@ -55,7 +56,9 @@ class CNameTranslateLangListAjaxController extends AAjaxController
         $datatable->addCondition('langId',[1]);
         $datatable->addCondition('name',[''],true);
 
-        $productsName = $this->app->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $pnRepo = \Monkey::app()->repoFactory->create('ProductName');
+
+        $productsName = $pnRepo->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsName->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsName->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -69,19 +72,18 @@ class CNameTranslateLangListAjaxController extends AAjaxController
 
         foreach($productsName as $val){
 
+            $pnTranslated = $pnRepo->findOneBy(['name' => $val->name, 'langId' => $langId]);
+            $translated = ($pnTranslated) ? trim($pnTranslated->translation) : '';
             $name = '<div class="form-group form-group-default full-width">';
             if ($okManage) {
-                $name .= '<input type="text" class="form-control full-width nameId" data-lang="' . $langId . '" data-action="' . $this->urls['base'] . 'xhr/NameTranslateLangListAjaxController" data-name="' . $val->name . '" title="nameId" class="nameId" value="' . htmlentities($translation) .'"/>';
+                $name .= '<input type="text" class="form-control full-width nameId" data-lang="' . $langId . '" data-action="' . $this->urls['base'] . 'xhr/NameTranslateLangListAjaxController" data-name="' . $val->name . '" title="nameId" class="nameId" value="' . htmlentities($translated) . '"/>';
             }
             $name .= '</div>';
 
-            $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '_' . $val->productVariantId;
+            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['trans'] = $name;
             $response['data'][$i]['name'] = $val->name;
-            $response['data'][$i]['productId'] = $val->productId;
-            $response['data'][$i]['productVariantId'] = $val->productVariantId;
-
             $i++;
         }
         return json_encode($response);
@@ -89,40 +91,23 @@ class CNameTranslateLangListAjaxController extends AAjaxController
 
     public function put()
     {
-
-        $name = $this->app->router->request()->getRequestData('name');
-        $translated = $this->app->router->request()->getRequestData('translated');
+        $name = trim(\Monkey::app()->router->request()->getRequestData('name'));
+        $translated = trim(\Monkey::app()->router->request()->getRequestData('translated'));
         if ("" == $translated) return false;
+        $langId = \Monkey::app()->router->request()->getRequestData('lang');
 
-        $langId = $this->app->router->request()->getRequestData('lang');
+        $pnRepo = \Monkey::app()->repoFactory->create('ProductName');
+        $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+
+        $pn = $pnRepo->findOneBy(['name' => $name, 'langId' => 1]);
+        if (!$pn) throw new BambooException('OOPS! Non si può inserire una traduzione se non esiste il nome in italiano');
 
         $this->app->dbAdapter->beginTransaction();
         try {
-            $italians = $this->app->repoFactory->create('ProductNameTranslation')->findBy(['name' => $name, 'langId' => 1]);
-            foreach($italians as $productName) {
-                $newLang = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(
-                    [
-                        'productId' => $productName->productId,
-                        'productVariantId' => $productName->productVariantId,
-                        'langId' => $langId
-                    ]
-                );
-
-                if (!is_null($newLang)) {
-                    $newLang->name = $translated;
-                    $newLang->update();
-                } else {
-                    $createName = $this->app->repoFactory->create('ProductNameTranslation')->getEmptyEntity();
-                    $createName->productId = $productName->productId;
-                    $createName->productVariantId = $productName->productVariantId;
-                    $createName->langId = $langId;
-                    $createName->name = $translated;
-                    $createName->insert();
-                }
-            }
+            $pntRepo->insertTranslation($name, $langId, $translated);
             $this->app->dbAdapter->commit();
             return true;
-        } catch (\Throwable $e) {
+        }  catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
            return $e->getMessage();
         }
