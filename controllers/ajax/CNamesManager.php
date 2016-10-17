@@ -82,6 +82,7 @@ class CNamesManager extends AAjaxController
                     }
                 }
             }
+            \Monkey::app()->dbAdapter->commit();
         } catch (\Exception $e) {
             \Monkey::app()->dbAdapter->rollBack();
             throw new \Exception($e->getMessage());
