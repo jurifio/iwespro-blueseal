@@ -643,6 +643,7 @@ function eraseForm() {
             $(this).selectize()[0].selectize.setValue('', false);
         }
     });
+    $('.product-code').html('');
     $('textarea').html('');
     $('#main-details').html('');
     $('#main-details').createCategoryBtn();
@@ -692,7 +693,6 @@ function populatePage(res) {
         } else {
             $('.code-title').html('-');
             movable = false;
-            $('.product-code').html();
             eraseForm();
             if (!statusElem.length) {
                 $('.selectStatus').on('load', function () {

@@ -192,20 +192,11 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 
             /** UPDATE NOME PRODOTTO */
+            $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
                 if ($inputName[0] != 'ProductName') continue;
-
-                $productNameTranslation = $productEdit->productNameTranslation->findOneByKey('langId',$inputName[1]);
-	            if($productNameTranslation){
-		            $productNameTranslation->name = $input;
-					$productNameTranslation->update();
-	            } else {
-		            try {
-			            $this->app->dbAdapter->insert("ProductNameTranslation", $productIdsExt+['langId'=>$inputName[1],'name'=>$input]);
-		            } catch (\Throwable $e) {
-		            }
-	            }
+                $pntRepo->updateProductName($productEdit->id, $productEdit->productVariantId, $input);
             }
             /** UPDATE DESCRIZIONE PRODOTTO */
             foreach ($post as $key => $input) {
@@ -501,14 +492,11 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 
             /** INSERIMENTO NOME PRODOTTO */
+            $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
                 if ($inputName[0] != 'ProductName') continue;
-                $insertData = array();
-                $insertData = $productIdsExt;
-                $insertData['langId'] = $inputName[1];
-                $insertData['name'] = $input;
-                $this->app->dbAdapter->insert("ProductNameTranslation", $insertData);
+                $pntRepo->saveProductName($productNew->id, $productNew->productVariantId, $input);
             }
 
             /** INSERIMENTO DESCRIZIONE PRODOTTO */

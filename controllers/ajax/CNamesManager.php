@@ -141,52 +141,7 @@ class CNamesManager extends AAjaxController
      */
     public function put()
     {
-        /*   $data = $this->app->router->request()->getRequestData();
 
-           $productDetailId = $data['productDetailId'];
-           $productDetailName = $data['productDetailName'];
-
-           unset($data['productDetailId']);
-           unset($data['productDetailName']);
-
-           $ids = [];
-           $this->app->dbAdapter->beginTransaction();
-
-           foreach ($data as $key => $val) {
-               if($val == $productDetailId) continue;
-               if($val == $productDetailName) continue;
-               $ids[] = $val;
-           }
-
-           $productDetailPrimary = $this->app->repoFactory->create("ProductDetail")->findOneBy(['id' => $productDetailId]);
-           $productDetailPrimary->productDetailTranslation->getFirst()->name = $productDetailName;
-           $slug = new CSlugify();
-           $productDetailPrimary->slug = $slug->slugify($productDetailName);
-           $productDetailPrimary->productDetailTranslation->getFirst()->update();
-
-           $em = $this->app->entityManagerFactory->create('ProductSheetActual');
-           try {
-               foreach ($ids as $id) {
-                   $productSheets = $em->findBy(['productDetailId' => $id]);
-
-                   foreach ($productSheets as $productSheet) {
-                       $productSheet->delete();
-                       $productSheet->productDetailId = $productDetailId;
-                       $productSheet->insert();
-                   }
-                   $productDetail = $this->app->repoFactory->create("ProductDetail",false)->findOneBy(['id' => $id]);
-
-                   foreach ($productDetail->productDetailTranslation as $detailTranslation) {
-                       $detailTranslation->delete();
-                   }
-                   $productDetail->delete();
-               }
-               $this->app->dbAdapter->commit();
-               return true;
-           } catch (\Exception $e){
-               $this->app->dbAdapter->rollBack();
-               throw $e;
-           }*/
     }
 
 
