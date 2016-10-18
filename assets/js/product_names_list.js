@@ -206,15 +206,15 @@ $(document).on('bs.names.products', function () {
     $.ajax({
         url: "/blueseal/xhr/NamesProductAssociated",
         type: "GET",
+        dataType: 'json',
         data: {search: row[0].name}
     }).done(function (result) {
         body.html('');
         body.css('max-height', '400px');
         body.css('overflow-y', 'auto');
-        var bodyRes = '<ul>';
-        result = JSON.parse(result);
-        console.log(result);
-        $.each(result, function(k, v){
+        var bodyRes = '<p>' + result.langs + '</p>';
+        bodyRes += '<ul>';
+        $.each(result.products, function(k, v){
             bodyRes += '<li>' + v['link'] + ': ' + v['brand'] + ' - ' + v['season'] + '  <img style="width: 40px" src="' + v['pic'] + '" /></li>';
         });
         bodyRes += '</ul>';

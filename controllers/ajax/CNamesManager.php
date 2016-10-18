@@ -45,6 +45,10 @@ class CNamesManager extends AAjaxController
 
     private function cleanNames()
     {
+        $pnRepo = \Monkey::app()->repoFactory->create('ProductName');
+        $pntRepo = \Monkey::app()->repoFactory->create('ProductName');
+
+
         $resPNT = \Monkey::app()->dbAdapter->query(
             "UPDATE ProductNameTranslation SET `name` = TRIM(CONCAT(UCASE(LEFT(`name`, 1)),  SUBSTRING(LCASE(`name`), 2)))",
             []

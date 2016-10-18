@@ -41,8 +41,8 @@ class CProductNamesListAjaxController extends AAjaxController
 				$response['data'][$i]["DT_RowId"] = 'row__' . $val->name;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
 				$response['data'][$i]['name'] = $val->name;
-                $res = $this->app->dbAdapter->query(
-                    "SELECT `p`.`id` as `productId`, `p`.`productVariantId` FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('P')",
+                $res = \Monkey::app()->dbAdapter->query(
+                    "SELECT `p`.`id` as `productId`, `p`.`productVariantId` FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P')",
                     [$val->name])->fetchAll();
                 $response['data'][$i]['count'] = count($res); //$products->count();
 
