@@ -105,10 +105,14 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         body.html(res);
                     } else {
                         body.html(res['message']);
-                        $('.product-code').html(String(res['code']['id']) + '-' + String(res['code']['productVariantId']));
-                        $('#Product_id').val(res['code']['id']);
-                        $('#Product_productVariantId').val(res['code']['productVariantId']);
-                        window.location = '/blueseal/friend/prodotti/modifica?id=' + res['code']['id'] + '&productVariantId=' + res['code']['productVariantId'];
+                        if ('undefined' != typeof res['code']) {
+                            $('.product-code').html(String(res['code']['id']) + '-' + String(res['code']['productVariantId']));
+                            $('#Product_id').val(res['code']['id']);
+                            $('#Product_productVariantId').val(res['code']['productVariantId']);
+                            setTimeout(function() {
+                                window.location = '/blueseal/friend/prodotti/modifica?id=' + res['code']['id'] + '&productVariantId=' + res['code']['productVariantId']
+                            }, 2000);
+                        }
                     }
                 }
             );
