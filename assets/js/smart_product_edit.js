@@ -969,13 +969,13 @@ $(document).ready(function () {
                     callback();
                 },
                 success: function (res) {
-                    if (!res.length) {
+                    /*if (!res.length) {
                         var resArr = [];
                         resArr[0] = {name: query.trim()};
                         res = resArr;
                     } else {
                         res.push({name: query.trim()});
-                    }
+                    }*/
                     callback(res);
                 }
             });
