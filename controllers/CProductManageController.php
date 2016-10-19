@@ -297,7 +297,11 @@ class CProductManageController extends ARestrictedAccessRootController
             return json_encode($ret);
         } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
-            throw $e;
+
+            $ret = [];
+            if ($productIds) $ret['code'] = $productIds;
+            $ret['message'] = $e->getMessage();
+            return json_encode($ret);
         }
     }
 
@@ -514,7 +518,11 @@ class CProductManageController extends ARestrictedAccessRootController
             $this->app->dbAdapter->commit();
         } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
-            throw $e;
+
+            $ret = [];
+            if ($productIds) $ret['code'] = $productIds;
+            $ret['message'] = $e->getMessage();
+            return json_encode($ret);
         }
         $ret = ['code' => $productIds, 'message' => 'Il prodotto è stato inserito. Ora puoi lavorare sulle quantità'];
         return json_encode($ret);

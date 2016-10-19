@@ -66,23 +66,25 @@ class CNamesManager extends AAjaxController
         $pntRepo = $this->app->repoFactory->create('ProductNameTranslation');
         try {
             \Monkey::app()->dbAdapter->beginTransaction();
-            foreach ($old as $o) {
 
+            $newPn = $pnRepo->findBy(['name' => $new]);
+            if (!$newPn->count()) {
+                $newPn = $pnRepo->getEmptyEntity();
+                $newPn->name = $new;
+                $newPn->langId = 1;
+                $newPn->translation = $new;
+                $newPn->insert();
+            }
+
+            foreach ($old as $o) {
                 $productNames = $pnRepo->findBy(['name' => $o]);
                 foreach($productNames as $pnRow) {
                     $pnRow->delete();
                 }
-
-                $productNameTranslation = $pntRepo->findBy(['name' => $o]);
-                foreach ($productNameTranslation as $pntRow) {
-                    if ($pntRow->langId != 1) {
-                        $pntRow->delete();
-                    } else {
-                        $pntRow->name = trim($new);
-                        $pntRow->update();
-                    }
-                }
             }
+
+            $pntRepo->updateTranslationFromName($new, $old);
+
             \Monkey::app()->dbAdapter->commit();
         } catch (\Exception $e) {
             \Monkey::app()->dbAdapter->rollBack();
