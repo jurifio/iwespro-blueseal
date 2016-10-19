@@ -11,7 +11,7 @@ var photoOrderList = Sortable.create(el, {
     }
 });
 
-$(document).on('ready',function() {
+$(document).ready(function() {
     $(this).trigger('bs.load.photo');
 });
 
