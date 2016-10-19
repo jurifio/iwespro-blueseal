@@ -34,7 +34,6 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             $marketplaceAccount = false;
         }
 
-
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
@@ -59,7 +58,6 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             foreach ($val->shop as $shop) {
                 $shops[] = $shop->name;
             }
-
 
             $response['data'][$i]["DT_RowId"] = $val->printId();
             $response['data'][$i]["DT_RowClass"] = 'colore';
