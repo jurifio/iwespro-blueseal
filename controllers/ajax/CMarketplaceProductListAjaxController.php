@@ -93,7 +93,7 @@ class CMarketplaceProductListAjaxController extends AAjaxController
                     ($marketplaceAccount->id != $mProduct->marketplaceAccountId ||
                         $marketplaceAccount->marketplaceId != $mProduct->marketplaceId)) continue;
                 $style = $mProduct->isToWork == 0 ? ($mProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
-                $marketplaces[] = '<span ' . $style . '>' . $mProduct->marketplaceAccount->marketplace->name . ' - ' . $mProduct->marketplaceAccount->name . ' (' . $mProduct->marketplaceProductId . ')</span>';
+                $marketplaces[] = '<span ' . $style . '>' . $mProduct->marketplaceAccount->marketplace->name . ' - ' . $mProduct->marketplaceAccount->name . ( empty ($mProduct->marketplaceProductId) ? "" : ' (' . $mProduct->marketplaceProductId . ')</span>' );
                 $response['data'][$i]['fee'] += $mProduct->fee;
             }
 
