@@ -34,7 +34,6 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             $marketplaceAccount = false;
         }
 
-
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
@@ -59,7 +58,6 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             foreach ($val->shop as $shop) {
                 $shops[] = $shop->name;
             }
-
 
             $response['data'][$i]["DT_RowId"] = $val->printId();
             $response['data'][$i]["DT_RowClass"] = 'colore';
@@ -95,7 +93,7 @@ class CMarketplaceProductListAjaxController extends AAjaxController
                     ($marketplaceAccount->id != $mProduct->marketplaceAccountId ||
                         $marketplaceAccount->marketplaceId != $mProduct->marketplaceId)) continue;
                 $style = $mProduct->isToWork == 0 ? ($mProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
-                $marketplaces[] = '<span ' . $style . '>' . $mProduct->marketplaceAccount->marketplace->name . ' - ' . $mProduct->marketplaceAccount->name . ' (' . $mProduct->marketplaceProductId . ')</span>';
+                $marketplaces[] = '<span ' . $style . '>' . $mProduct->marketplaceAccount->marketplace->name . ' - ' . $mProduct->marketplaceAccount->name . ( empty ($mProduct->marketplaceProductId) ? "" : ' (' . $mProduct->marketplaceProductId . ')</span>' );
                 $response['data'][$i]['fee'] += $mProduct->fee;
             }
 
