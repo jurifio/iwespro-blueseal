@@ -38,7 +38,7 @@ class CProductNamesListAjaxController extends AAjaxController
 
         foreach($productNames as $val){
 			try {
-				$response['data'][$i]["DT_RowId"] = 'row__' . $val->name;
+				$response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
 				$response['data'][$i]["DT_RowClass"] = 'colore';
 				$response['data'][$i]['name'] = $val->name;
                 $res = \Monkey::app()->dbAdapter->query(
