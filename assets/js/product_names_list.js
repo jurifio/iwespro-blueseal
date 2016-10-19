@@ -236,3 +236,80 @@ $(document).on('bs.names.products', function () {
         bsModal.modal();
     });
 });
+
+$(document).on('bs.names.compare', function () {
+    modal = new $.bsModal(
+        'Evidenzia i nomi simili',
+        {
+            body:
+            '<label class="colorizeValue" for="colorizeValue">Lunghezza Caratteri (vuoto per azzerare):</label>' +
+            '<input name="colorizeValue" type="number" value="" class="colorizeValue form-control" />',
+            isCancelButton: true,
+            okButtonEvent: function() {
+                var alertMsgElem = $('.nameAlertMsg');
+                var inputText = $('input.colorizeValue').val();
+                //var inputRadio = $('input[name="colorizeCriterion"]').val();
+                if (('' === inputText) || ('0' == inputText)) {
+                    inputText = 10000000;
+                } else {
+                    var table = $('.table').DataTable();
+                    var columnNames = table.column(0).data();
+                    var searchKeys = [];
+
+                    for (var i in columnNames) {
+                        if ('context' === i) break;
+                        var nameLen = columnNames[i].length;
+                        var lowerName = columnNames[i].toLowerCase()
+                        if (lowerName.length < parseInt(inputText)) {
+                            lowerName = lowerName + new Array(parseInt(inputText) - lowerName.length).join(' ')
+                        } else {
+                            lowerName = lowerName.slice(0, inputText);
+                        }
+                        if (-1 == searchKeys.indexOf(lowerName)) searchKeys.push(lowerName);
+                    }
+
+                    var lines = $('.table tbody').children('tr');
+
+                    for (var i in lines) {
+                        if (isNaN(parseInt(it))) continue;
+                        var nameCell = $(lines[it]).children('td')[0];
+                        if ('undefined' == typeof nameCell) continue;
+                        $(nameCell).removeClass('colorRed');
+                    }
+
+                    for (var i in searchKeys){
+                        var occurrences = [];
+                        if (isNaN(parseInt(i))) break;
+                        for (var it in lines) {
+                            if (isNaN(parseInt(it))) continue;
+                            var nameCell = $(lines[it]).children('td')[0];
+                            if ('undefined' == typeof nameCell) continue;
+
+                            lowerName = $(nameCell).html().toLowerCase();
+                            if (lowerName.length < parseInt(inputText)) {
+                                lowerName = lowerName + new Array(parseInt(inputText) - lowerName.length).join(' ');
+                            } else {
+                                lowerName = lowerName.slice(0, inputText);
+                            }
+                            if (searchKeys[i] == lowerName) {
+                                occurrences.push($(lines[it]).attr('id'));
+                            }
+
+                            if (1 < occurrences.length) {
+                                for (var id in occurrences) {
+                                    var elem = $('#' + occurrences[id]).children('td')[0];
+                                    if (!$(elem).hasClass('colorRed')) {
+                                        $(elem).addClass('colorRed');
+                                    }
+                                }
+                            }
+                            /*if (0 == lowerName.indexOf(searchKeys[i])) $(nameCell).addClass('colorRed');*/
+                        }
+                    }
+
+                    modal.hide();
+                }
+            }
+        }
+    );
+});

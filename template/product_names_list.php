@@ -57,7 +57,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Pulisci prodotti">
+    <bs-toolbar-group data-group-label="Gestisci i nomi prodotto">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-magic"
@@ -86,6 +86,16 @@
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Visualizza i prodotti associati ai nomi"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-pencil"
+            data-permission="/admin/product/edit"
+            data-event="bs.names.compare"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Evidenzia nomi simili"
             data-placement="bottom"
         ></bs-toolbar-button>
 </bs-toolbar>
