@@ -271,8 +271,8 @@ $(document).on('bs.names.compare', function () {
                     var lines = $('.table tbody').children('tr');
 
                     for (var i in lines) {
-                        if (isNaN(parseInt(it))) continue;
-                        var nameCell = $(lines[it]).children('td')[0];
+                        if (isNaN(parseInt(i))) continue;
+                        var nameCell = $(lines[i]).children('td')[0];
                         if ('undefined' == typeof nameCell) continue;
                         $(nameCell).removeClass('colorRed');
                     }
