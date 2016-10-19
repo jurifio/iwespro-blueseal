@@ -1309,11 +1309,19 @@
                 $('.selectize-dropdown-content').scrollbar();
             });
 
+            $('th.dataFilterType > input').each(function () {
+               $(this).datepicker();
+            });
+
         });
 
         table.DataTable(tableSetup[table.data('datatableName')]);
 
        //$('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
+    });
+
+    $(document).on('click',".dataFilterType",function() {
+
     });
 
 })(jQuery);

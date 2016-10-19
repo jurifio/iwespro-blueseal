@@ -222,32 +222,34 @@ class CDataTables
             }
             if($this->search){
                 foreach($this->keys as $key){
-	                $search['cols'][] = "`" . $key."` RLIKE ?";
-	                $search['params'][] = $this->search;
+                    $search[] = $this->buildCondition($key,$this->search);
                 }
             }
         }
 
-        $conditionsWhere = " 1=1 ";
+        $conditionsWhere = "( 1=1 ";
         foreach ($conditions as $condition) {
             $conditionsWhere.=  " AND " . $condition['where'];
             array_push($this->params,...$condition['params']);
         }
+        $conditionsWhere .= " ) ";
 
-        $columnsFilterWhere = " 1=1 ";
+        $columnsFilterWhere = " ( 1=1 ";
         foreach ($columnsFilter as $columnFilterElem) {
             $columnsFilterWhere .= " AND ". $columnFilterElem['where'];
             array_push($this->params,...$columnFilterElem['params']);
         }
+        $columnsFilterWhere .= " ) ";
 
         if(empty($search)) {
             $searchWhere = " 1=1 ";
         } else {
-            $searchWhere = " 0=1 ";
+            $searchWhere = " ( 0=1 ";
             foreach ($search as $searchElem) {
                 $searchWhere .= " OR ". $searchElem['where'];
                 array_push($this->params,...$searchElem['params']);
             }
+            $searchWhere .= " ) ";
         }
 
         $this->where = " WHERE ".$conditionsWhere." AND ".$columnsFilterWhere. ' AND ' . $searchWhere;

@@ -71,7 +71,7 @@
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true"
-                                        data-default-order="desc" class="center">Data</th>
+                                        data-default-order="desc" class="center dataFilterType">Data</th>
                                 </tr>
                             </thead>
                             <tbody>
