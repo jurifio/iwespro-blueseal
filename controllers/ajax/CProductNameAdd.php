@@ -18,7 +18,7 @@ class CProductNameAdd extends AAjaxController
     public function get(){
         $name = trim(\Monkey::app()->router->request()->getRequestData('name'));
         $res = $this->isName($name);
-        return ($res) ? 'ko' : 'ok';
+        return ($res->count()) ? 'ko' : 'ok';
     }
 
     /**
@@ -29,7 +29,7 @@ class CProductNameAdd extends AAjaxController
         $name = trim($this->app->router->request()->getRequestData()['name']);
         $exists = $this->isName($name);
 
-        if (!$exists) {
+        if (!$exists->count()) {
             $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
             try {
                 $pntRepo->insertName($name);
