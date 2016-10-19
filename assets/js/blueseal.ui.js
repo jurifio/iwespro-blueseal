@@ -283,4 +283,11 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
 		});
 	});
 
+   /* $(document).ready(function() {
+        $(document).on('click', '.enlarge-your-img', function(e){
+            var tagName = e.target.tagName;
+            var src = ('img' == tagName) ? $(e.target)
+        });
+    });*/
+
 })(jQuery);
