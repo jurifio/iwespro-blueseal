@@ -207,6 +207,10 @@
             "jquery-ui.multidatespicker.js": {
                 "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
+            },
+            "datatables.init.js": {
+                "path": "scheme://localdomain/assets/js/",
+                "options": ["defer"]
             }
         },
         "default": {

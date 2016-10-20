@@ -1310,7 +1310,7 @@
             });
 
             $('th.dataFilterType > input').each(function () {
-               $(this).datepicker();
+               //$(this).datepicker();
             });
 
         });
