@@ -39,7 +39,7 @@
                                     <th data-slug="creationDate"
                                         data-searchable="false"
                                         data-orderable="false"
-                                        data-default-order="desc" class="center">Data Creazione</th>
+                                        data-default-order="desc" class="center dataFilterType">Data Creazione</th>
                                     <th data-slug="operationDate"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Data Operazione</th>

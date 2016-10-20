@@ -69,7 +69,7 @@
                                     data-searchable="false"
                                     data-orderable="true"
                                     data-default-order="desc"
-                                    class="center">Creazione</th>
+                                    class="center dataFilterType">Creazione</th>
                                 <th data-slug="problems"
                                     data-searchable="true"
                                     data-orderable="true"
