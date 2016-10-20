@@ -1312,15 +1312,28 @@
             $('th.dataFilterType > input').each(function () {
                //$(this).datepicker();
                 var that = $(this);
-                $(this).daterangepicker({
+                var options = {
                     locale: {
                         format: 'YYYY-MM-DD'
                     },
-                });
+                    autoUpdateInput: false
+                };
+                if(that.val().length) {
+                    var dates = that.val().substring(2).split('|');
+                    options.startDate = dates[0];
+                    options.endDate = dates[1];
+                }
 
-                $(this).on('cancel.daterangepicker', function(ev, picker) {
+                $(this).daterangepicker(options);
+
+                $(this).on('apply.daterangepicker', function(ev, picker) {
                     //do something, like clearing an input
-                    that.val(  )
+                    that.val("><"+picker.startDate.format('YYYY-MM-DD')+"|"+picker.endDate.format('YYYY-MM-DD'));
+                    var id = $(ev.target).attr("id");
+                    id = id.substring(10);
+                    table.DataTable().columns(id).search(that.val());
+                    var e = $.Event( "keyup", { which: 13 } );
+                    that.trigger(e);
                 });
 
             });
