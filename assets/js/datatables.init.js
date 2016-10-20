@@ -1310,7 +1310,19 @@
             });
 
             $('th.dataFilterType > input').each(function () {
-               $(this).datepicker();
+               //$(this).datepicker();
+                var that = $(this);
+                $(this).daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                });
+
+                $(this).on('cancel.daterangepicker', function(ev, picker) {
+                    //do something, like clearing an input
+                    that.val(  )
+                });
+
             });
 
         });
