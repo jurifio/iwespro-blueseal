@@ -132,9 +132,17 @@ class CNamesManager extends AAjaxController
         $searchByNames = ' `name` like ? ';
         $codes[] = '%' . $search . '%';
 
-
         $res = $this->app->dbAdapter->query("SELECT DISTINCT `name` FROM `ProductName` WHERE `langId` = 1 AND ( $searchByNames ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
 
+        $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+
+        foreach($res as $k => $v) {
+            $pn = $pntRepo->findByName($v['name']);
+            $res[$k]['languages'] = [];
+            foreach($pn as $pnsingle) {
+                $res[$k]['languages'][] = $pnsingle->lang->lang;
+            }
+        }
         return json_encode($res);
     }
 
