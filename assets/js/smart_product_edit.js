@@ -679,7 +679,7 @@ function populatePage(res) {
         });
         if (res['code']) {
             movable = true;
-            $('.code-title').html(res['code']);
+            $('.code-title').html('<a href="' + res['product']['link'] + '" target="_blank">' + res['code'] + '</a>');
             if (res['product']) {
                 fillTheFields(res['product']);
                 if ( false == res['skuEditable']) $('#Product_sizes').prop('readonly', true);
@@ -720,7 +720,7 @@ function populatePage(res) {
         $('#ProductVariant_name').val(res['product']['variantName']);
         $('#Product_productBrandId').selectize()[0].selectize.setValue(res['product']['productBrandId'], true);
         if (res['code']) {
-            $('.code-title').html(res['code']);
+            $('.code-title').html('<a href="' + res['product']['link'] + '" target="_blank">' + res['code'] + '</a>');
             $('#Product_retail_price').val(res['product']['price']);
             $('#Product_value').val(res['product']['value']);
             $('#Product_extId').val(res['product']['extId']);

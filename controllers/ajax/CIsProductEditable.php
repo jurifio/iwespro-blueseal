@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+use bamboo\core\theming\CWidgetHelper;
 
 /**
  * Class CUserList
@@ -19,6 +20,9 @@ class CisProductEditable extends AAjaxController
     public function get()
     {
         /** @var CUserRepo */
+
+        $wh = new CWidgetHelper(\Monkey::app());
+
         $user = $this->app->getUser();
         $get = $this->app->router->request()->getRequestData();
         $ret = [];
@@ -102,6 +106,8 @@ class CisProductEditable extends AAjaxController
                 $editable = true;
                 $message = false;
             }
+
+            $productArr['link'] = $wh->productUrl($productEdit);
 
             $skuEditable = true;
             if ($productEdit->productSku->count()) $skuEditable = false;
