@@ -1314,8 +1314,19 @@
                 var that = $(this);
                 var options = {
                     locale: {
-                        format: 'YYYY-MM-DD'
+                        format: 'YYYY-MM-DD',
+                        cancelLabel: "Cancella",
+                        applyLabel: "Applica"
                     },
+                    ranges: {
+                        'Oggi': [moment(), moment()],
+                        'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Ultimi 7 Giorni': [moment().subtract(6, 'days'), moment()],
+                        'Ultimi 30 giorni': [moment().subtract(29, 'days'), moment()],
+                        'Questo Mese': [moment().startOf('month'), moment().endOf('month')],
+                        'Scorso Mese': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    alwaysShowCalendars: true,
                     autoUpdateInput: false
                 };
                 if(that.val().length) {
@@ -1327,13 +1338,17 @@
                 $(this).daterangepicker(options);
 
                 $(this).on('apply.daterangepicker', function(ev, picker) {
-                    //do something, like clearing an input
                     that.val("><"+picker.startDate.format('YYYY-MM-DD')+"|"+picker.endDate.format('YYYY-MM-DD'));
-                    var id = $(ev.target).attr("id");
-                    id = id.substring(10);
+                    var id = $(ev.target).attr("id").substring(10);
                     table.DataTable().columns(id).search(that.val());
-                    var e = $.Event( "keyup", { which: 13 } );
-                    that.trigger(e);
+                    table.DataTable().search("").draw();
+                });
+
+                $(this).on('cancel.daterangepicker', function(ev, picker) {
+                    that.val("");
+                    var id = $(ev.target).attr("id").substring(10);
+                    table.DataTable().columns(id).search(that.val());
+                    table.DataTable().search("").draw();
                 });
 
             });
