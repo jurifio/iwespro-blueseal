@@ -24,8 +24,8 @@
                                 <th class="center">Cover</th>
                                 <th class="center">Titolo</th>
                                 <th class="center">Estratto</th>
-                                <th class="center">Creazione</th>
-                                <th class="center">Pubblicazione</th>
+                                <th class="center dataFilterType">Creazione</th>
+                                <th class="center dataFilterType">Pubblicazione</th>
                                 <th class="center">Stato</th>
                             </tr>
                             </thead>

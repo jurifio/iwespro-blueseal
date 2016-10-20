@@ -32,7 +32,7 @@
                                     <th class="center">Immagine </th>
                                     <th class="center">Brand</th>
                                     <th class="center">Stato</th>
-                                    <th class="center">Creazione</th>
+                                    <th class="center dataFilterType">Creazione</th>
                                     <th class="center">Cosa manca</th>
                                 </tr>
                                 </thead>

@@ -25,8 +25,8 @@
                             <tr>
                                 <th class="center">Codice</th>
                                 <th class="center">Tipo</th>
-                                <th class="center">Data emissione</th>
-                                <th class="center">Data scadenza</th>
+                                <th class="center dataFilterType">Data emissione</th>
+                                <th class="center dataFilterType">Data scadenza</th>
                                 <th class="center">Valore</th>
                                 <th class="center">Minimo di spesa</th>
                                 <th class="center">Utilizzatore</th>

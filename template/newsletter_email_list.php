@@ -32,8 +32,8 @@
                                 <th class="center">Attiva?</th>
                                 <th class="center">Nome</th>
                                 <th class="center">Cognome</th>
-                                <th class="center">Data iscrizione</th>
-                                <th class="center">Data disiscrizione</th>
+                                <th class="center dataFilterType">Data iscrizione</th>
+                                <th class="center dataFilterType">Data disiscrizione</th>
                             </tr>
                             </thead>
                             <tbody>

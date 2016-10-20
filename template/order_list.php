@@ -30,8 +30,8 @@
                             <thead>
                             <tr>
                                 <th>Ordine</th>
-                                <th>Data Ordine</th>
-                                <th>Ultimo Aggiornamento</th>
+                                <th class="dataFilterType">Data Ordine</th>
+                                <th class="dataFilterType">Ultimo Aggiornamento</th>
                                 <th>Utente</th>
                                 <th>Contenuto</th>
                                 <th>Stato</th>

@@ -47,7 +47,7 @@
                                     <th class="center">M.Up</th>
                                     <th class="center">Disponibile</th>
                                     <th class="center">SCA</th>
-                                    <th class="center">Creazione</th>
+                                    <th class="center dataFilterType">Creazione</th>
                                 </tr>
                             </thead>
                             <tbody>

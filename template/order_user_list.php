@@ -34,7 +34,7 @@
                                 <th>Email</th>
                                 <th>Città</th>
                                 <th>Paese</th>
-                                <th>Data Ordine</th>
+                                <th class="dataFilterType">Data Ordine</th>
                                 <th>Stato Ordine</th>
                                 <th>Brand</th>
                                 <th>Shop</th>

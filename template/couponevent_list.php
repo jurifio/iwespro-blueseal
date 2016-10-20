@@ -26,8 +26,8 @@
                                 <th class="center">Nome</th>
                                 <th class="center">Descrizione</th>
                                 <th class="center">Tipo coupon</th>
-                                <th class="center">Valido da</th>
-                                <th class="center">Valido fino a</th>
+                                <th class="center dataFilterType">Valido da</th>
+                                <th class="center dataFilterType">Valido fino a</th>
                             </tr>
                             </thead>
                             <tbody>

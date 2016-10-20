@@ -35,7 +35,7 @@
                                 <th>Sesso</th>
                                 <th>Stato</th>
                                 <th>Metodo</th>
-                                <th>Registrazione</th>
+                                <th class="dataFilterType">Registrazione</th>
                             </tr>
                             </thead>
                             <tbody>
