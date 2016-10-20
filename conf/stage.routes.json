@@ -1,6 +1,7 @@
 {
     "routes": [
         {
+            "name": "Backoffice Login",
             "pattern": "/blueseal/?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLoginController"
@@ -13,6 +14,7 @@
             ]
         },
         {
+            "name": "Backoffice Contenuti",
             "pattern": "/blueseal/contenuti(/?)",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTranslationController"
@@ -1383,6 +1385,21 @@
                 "PUT"
             ]
         },{
+            "pattern": "/blueseal/prodotti/marketplace/account/:accountId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceProductStatisticListController"
+            },
+            "filters": {
+                "accountId": "[0-9]+-[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
             "pattern": "/blueseal/utente(/:userId)?(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CUserManageController"
@@ -1532,6 +1549,17 @@
             "pattern": "/blueseal/friends(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendsListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/campagne(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
             },
             "filters": {},
             "translations": {},
