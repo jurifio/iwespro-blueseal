@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+use bamboo\core\exceptions\BambooException;
 
 /**
  * Class CProductListAjaxController
@@ -28,9 +29,13 @@ class CDetailModelSave extends AAjaxController
         $productDetails = $this->getDetails($get);
         try {
             $this->app->dbAdapter->beginTransaction();
+
+            $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['name']));
+            if (!$pn) throw new BambooException('Non si può creare un modello con un nome prodotto inesistente');
+            $pnIt = $pn->findOneByKey('langId', 1);
             $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
             $newProt->productSheetPrototypeId = $productPrototypeId;
-            $newProt->name = $get['name'];
+            $newProt->name = str_replace(' !', '', $pnIt->name);
             $newProt->code = $get['code'];
             $newProt->productName = $get['productName'];
             $newId = $newProt->insert();
@@ -62,7 +67,11 @@ class CDetailModelSave extends AAjaxController
             $this->app->dbAdapter->beginTransaction();
 
             //update model
-            $prot->name = $get['name'];
+
+            $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['name']));
+            if (!$pn) throw new BambooException('Non si può aggiornare un modello con un nome prodotto inesistente');
+            $pnIt = $pn->findOneByKey('langId', 1);
+            $prot->name = str_replace(' !', '', $pnIt->name);
             if ($get['code']) {
                 $prot->code = $get['code'];
             }
