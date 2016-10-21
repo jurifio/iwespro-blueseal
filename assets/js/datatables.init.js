@@ -132,6 +132,10 @@
                 data: "details",
                 orderable: false,
                 searchable: false
+            },{
+                data: "detailPhoto",
+                orderable: true,
+                searchable: true
             }, {
                 data: "brand",
                 orderable: true

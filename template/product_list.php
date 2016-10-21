@@ -39,14 +39,14 @@
                                     <th class="center">CPF</th>
                                     <!--<th class="center">Gruppo Taglie</th>-->
                                     <th class="center">Dettagli</th>
-                                    <!--<th class="center">Immagine </th>-->
+                                    <th class="center">D/F</th>
                                     <th class="center">Brand</th>
                                     <th class="center">Categorie</th>
                                     <th class="center">Tags</th>
                                     <th class="center">Stato</th>
                                     <th class="center">M.Up</th>
                                     <th class="center">Disp.</th>
-                                    <th class="center">SCA</th>
+                                    <th class="center">S</th>
                                     <th class="center dataFilterType">Creazione</th>
                                 </tr>
                             </thead>
