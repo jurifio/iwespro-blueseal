@@ -18,7 +18,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="marketplace_product_list"
+                               data-datatable-name="marketplace_product_static_list"
                                data-column-filter="true"
                                data-controller="MarketplaceProductStatisticListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
@@ -138,6 +138,16 @@
             data-title="Filtra Tabella"
             data-placement="bottom"
             data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-filter"
+            data-permission="/admin/product/edit"
+            data-class="btn btn-default datePicker"
+            data-load-event="bs.dateinput.load"
+            data-rel="tooltip"
+            data-title="Seleziona Date"
+            data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
