@@ -171,7 +171,7 @@ class CProductListAjaxController extends AAjaxController
                 $val->itemno.' # '.$val->productVariant->name :
                 substr($val->itemno.' # '.$val->productVariant->name, 0, 13) . '&hellip;';
             $cpf.='</span>';
-            $response['data'][$i]['cpf'] .= $cpf;
+            $response['data'][$i]['cpf'] = $cpf;
 
             $colorGroup = $val->productColorGroup->getFirst();
             $response['data'][$i]['colorGroup'] = ($colorGroup) ? $colorGroup->name : "[Non assegnato]";
