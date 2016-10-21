@@ -121,6 +121,11 @@ class CProductListAjaxController extends AAjaxController
                 }
             }
 
+            $df = [];
+            $df['detail'] = ($val->productSheetActual->count()) ? 's' : 'n';
+            $df['photo'] = ($val->productPhoto->count()) ? 's' : 'n';
+            $response['data'][$i]['detailPhoto'] = implode('/', $df);
+
             $response['data'][$i]['season'] = '<span class="small">';
             $response['data'][$i]['season'] .= $val->productSeason->name . " " . $val->productSeason->year;
             $response['data'][$i]['season'] .= '</span>';
@@ -136,7 +141,7 @@ class CProductListAjaxController extends AAjaxController
                 if (!empty($shp->extId)) {
                     $ext[] = $shp->extId;
                 }
-	            if(!is_null($shp->dirtyProduct)) {
+	            elseif(!is_null($shp->dirtyProduct)) {
 		            if(!empty($shp->dirtyProduct->extId)) {
 			            $ext[] = $shp->dirtyProduct->extId;
 		            }
@@ -148,22 +153,32 @@ class CProductListAjaxController extends AAjaxController
 		            }
 	            }
             }
-            
-	        $ext = implode('<br>',array_unique($ext));
+
+            foreach($ext as $kext => $vext) {
+                $strExt = '<p><span class="small">';
+                $arrVext = str_split($vext, 13);
+                $strExt.= implode('<br />', $arrVext);
+                $strExt.= '</span></p>';
+                $ext[$kext] = $strExt;
+            }
+
+	        $ext = implode('',array_unique($ext));
 
 	        $tags = [];
 	        foreach ($val->tag as $tag) $tags[] = $tag->getLocalizedName();
 
-            $response['data'][$i]['externalId'] = '<span class="small">';
-            $response['data'][$i]['externalId'] .= empty($ext) ? "" : $ext;
-            $response['data'][$i]['externalId'] .= '</span>';
+            $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
 
-            $response['data'][$i]['cpf'] = '<span class="small">';
-            $response['data'][$i]['cpf'] .= $val->itemno.' # '.$val->productVariant->name;
-            $response['data'][$i]['cpf'] .= '</span>';
+            $cpf = '<span class="small">';
+            $cpf.= (14 > strlen($val->itemno.' # '.$val->productVariant->name)) ?
+                $val->itemno.' # '.$val->productVariant->name :
+                substr($val->itemno.' # '.$val->productVariant->name, 0, 13) . '&hellip;';
+            $cpf.='</span>';
+            $response['data'][$i]['cpf'] = $cpf;
 
             $colorGroup = $val->productColorGroup->getFirst();
-            $response['data'][$i]['colorGroup'] = ($colorGroup) ? $colorGroup->name : "[Non assegnato]";
+            $response['data'][$i]['colorGroup'] =
+                '<span class="small">' . (($colorGroup) ? $colorGroup->name : "[Non assegnato]") . '</span>';
 
             $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
             $response['data'][$i]['slug'] = '<span class="small">';
@@ -216,7 +231,6 @@ class CProductListAjaxController extends AAjaxController
 
             $i++;
         }
-
         return json_encode($response);
     }
 }

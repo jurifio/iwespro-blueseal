@@ -63,6 +63,8 @@ class CGetDataSheet extends AAjaxController
             $resActual[$v->productDetailLabelId] = $v->productDetailId;
         }
 
+        $cats = json_encode([]);
+
         $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
         $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');
 
@@ -72,7 +74,8 @@ class CGetDataSheet extends AAjaxController
             'productSheets' => $productSheets,
             'productSheetPrototype' => $productSheetPrototype,
             'actual' => $resActual,
-            'actualCount' => count($resActual)
+            'actualCount' => count($resActual),
+            'categories' => $cats
         ]);
     }
 
