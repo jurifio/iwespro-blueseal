@@ -101,9 +101,6 @@
             data-remote="bs.product.category.change"
             ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.product.details.merge"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
             data-tag="a"
             data-icon="fa-magnet"
             data-permission="/admin/product/edit"
@@ -122,6 +119,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.PriceEditForAllShop"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.details.merge"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.model.insertIntoProducts"
