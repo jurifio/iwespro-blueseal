@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProduct;
 
 /**
  * Class CMarketplaceProductStatisticListAjaxController
@@ -21,23 +22,60 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sample = $this->app->repoFactory->create('Product')->getEmptyEntity();
+        $sample = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
 
-        $datatable = new CDataTables('vBluesealMarketplaceProductList', $sample->getPrimaryKeys(), $_GET);
 
-        if ($this->app->router->request()->getRequestData('accountId')) {
-            $marketplaceAccountId = $this->app->router->request()->getRequestData('accountId');
-            $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
-            $datatable->addCondition('marketplaceId', [$marketplaceAccount->marketplaceId]);
-            $datatable->addCondition('marketplaceAccountId', [$marketplaceAccount->id]);
-        } else {
-            $marketplaceAccount = false;
-        }
+        $query = "SELECT
+        concat(`p`.`id`, '-', `p`.`productVariantId`)           AS `code`,
+        `p`.`id`                                                AS `productId`,
+        `p`.`productVariantId`                                  AS `productVariantId`,
+        `p`.`itemno`                                            AS `itemno`,
+        concat(`pss`.`name`, `pss`.`year`)                      AS `season`,
+        `pb`.`name`                                             AS `brand`,
+        `p`.`creationDate`                                      AS `creationDate`,
+        concat(`m`.`name`, `ma`.`name`) AS `marketplaceAccountName`,
+        `s`.`name`                       AS `shop`,
+        `s`.`id`                         AS `shopId`,
+        `mahp`.`marketplaceProductId`                           AS `marketplaceProductId`,
+        `mahp`.`marketplaceId`                                  AS `marketplaceId`,
+        `mahp`.`marketplaceAccountId`                           AS `marketplaceAccountId`,
+        `mahp`.`fee`                                       AS `fee`,
+        psd.timestamp                                           AS visitTimestamp,
+        psd.id                                                  AS visitId,
+        pst.pageView                                            AS visits,
+        pst.conversion                                          AS conversions,
+        c.code                                                  AS campaignCode
+      FROM ((((((((`Product` `p`
+        JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`)))
+        JOIN `ShopHasProduct` `shp` ON (((`p`.`id` = `shp`.`productId`) AND (`p`.`productVariantId` = `shp`.`productVariantId`))))
+        JOIN `Shop` `s` ON ((`s`.`id` = `shp`.`shopId`)))
+        JOIN `ProductSeason` `pss` ON ((`pss`.`id` = `p`.`productSeasonId`)))
+        JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`)))
+        JOIN `MarketplaceAccountHasProduct` `mahp` ON (((`mahp`.`productId` = `p`.`id`) AND (`mahp`.`productVariantId` = `p`.`productVariantId`))))
+        JOIN `MarketplaceAccount` `ma` ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`))))
+        JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`)))
+        LEFT JOIN Campaign c ON c.code = concat('MarketplaceAccount', ma.id, '-', ma.marketplaceId)
+        LEFT JOIN ProductStatistics pst ON c.id = pst.campaignId AND pst.productId = p.id AND pst.productVariantId = p.productVariantId
+        LEFT JOIN ProductStatisticsDetail psd ON c.id = psd.campaignId AND psd.productId = p.id AND psd.productVariantId = p.productVariantId
+        LEFT JOIN ProductStatisticsDetailHasOrderLine psdhol on psd.id = psdhol.productStatisticsDetailId
+      WHERE (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
+          AND timestamp >= ifnull(?, timestamp) 
+          AND timestamp <= ifnull(?, timestamp);";
+
+        $params = $_GET;
+
+        $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET);
+        $a = $this->app->router->request()->getRequestData();
+        $marketplaceAccountId = $this->app->router->request()->getRequestData('accountId');
+        $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
+        $datatable->addCondition('marketplaceId', [$marketplaceAccount->marketplaceId]);
+        $datatable->addCondition('marketplaceAccountId', [$marketplaceAccount->id]);
 
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
-        $prodotti = $sample->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+
+        $prodottiMarks = $sample->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $sample->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -48,9 +86,11 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         $response ['data'] = [];
 
         $i = 0;
-        foreach ($prodotti as $val) {
+        foreach ($prodottiMarks as $prodottiMark) {
 
-            $img = strpos($val->dummyPicture, 's3-eu-west-1.amazonaws.com') ? $val->dummyPicture : "/assets/" . $val->dummyPicture;
+            $val = $prodottiMark->product;
+            /** @var CProduct $val*/
+            $img = $val->getDummyPictureUrl();
             if ($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
 

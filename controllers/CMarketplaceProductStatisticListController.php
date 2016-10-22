@@ -31,7 +31,7 @@ class CMarketplaceProductStatisticListController extends ARestrictedAccessRootCo
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/marketplace_product_statistic_list.php');
 
-        $q = "?MarketplaceAccount".$this->app->router->getMatchedRoute()->getComputedFilter('accountId');
+        $q = "?MarketplaceAccount=".$this->app->router->getMatchedRoute()->getComputedFilter('accountId');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
