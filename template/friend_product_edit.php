@@ -431,14 +431,7 @@ endif; ?></div>
             data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-plus-square"
-            data-permission="/admin/product/edit"
-            data-event="bs.det.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo dettaglio"
-            data-placement="bottom"
+            data-remote="bs.product.details.new"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"

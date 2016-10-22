@@ -31,7 +31,7 @@ class CGetDataSheet extends AAjaxController
         $code = (array_key_exists('code', $get)) ? (($get['code']) ? $get['code'] : false) : false;
         $value = (array_key_exists('value', $get)) ? $get['value'] : false;
         $type = (array_key_exists('type', $get)) ? $get['type'] : false;
-        $actual = [];
+
         $Pname = '';
 
         if ($type && ('model' == $type)) {
@@ -63,7 +63,15 @@ class CGetDataSheet extends AAjaxController
             $resActual[$v->productDetailLabelId] = $v->productDetailId;
         }
 
-        $cats = json_encode([]);
+        $cats = [];
+
+        if(isset($product)) {
+            foreach($product->productCategory as $pc){
+                $cats[] = $pc->id;
+            };
+        }
+
+        $cats = json_encode($cats);
 
         $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
         $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');
