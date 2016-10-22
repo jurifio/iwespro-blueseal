@@ -76,6 +76,16 @@
             data-title="Cancella i dettagli"
             data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-pencil"
+            data-permission="/admin/product/edit"
+            data-event="bs.details.compare"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Evidenzia nomi simili"
+            data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 <script type="text/javascript">
