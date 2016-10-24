@@ -123,6 +123,7 @@ class CProductDetailsMerge extends AAjaxController
                 foreach ($psa as $psaSingle) {
                     $psaSingle->delete();
                 }
+
                 foreach ($choosenPsa as $cpsaSingle) {
                     $newPsa = $this->app->repoFactory->create('ProductSheetActual')->getEmptyEntity();
                     $newPsa->productId = $prod->id;
@@ -143,7 +144,6 @@ class CProductDetailsMerge extends AAjaxController
                     $ppc->productCategoryId = $pc->productCategoryId;
                     $ppc->insert();
                 }
-
             }
             \Monkey::app()->dbAdapter->commit();
         } catch (\Throwable $e) {
