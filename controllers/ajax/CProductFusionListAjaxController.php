@@ -76,13 +76,11 @@ class CProductFusionListAjaxController extends AAjaxController
             foreach ($val->shop as $shop) {
                 $shops[] = $shop->name;
             }
-
-            $img = strpos($val->dummyPicture, 's3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $dummyUrl . "/" . $val->dummyPicture;
             $response['aaData'][$i]["DT_RowId"] = 'row__'.$val->id.'__'.$val->productVariant->id;
             $response['aaData'][$i]["code"] = $val->id . '-' . $val->productVariantId;
             $response['aaData'][$i]['code'] = ($okManage) ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="' . $img . '">' : "";
+            $response['aaData'][$i]["dummyPicture"] = '<img width="80" src="' . $val->getDummyPictureUrl() . '">';
             $response['aaData'][$i]["status"] = $val->productStatus->name;
             $response['aaData'][$i]['CPF'] = $val->itemno.' # '.$val->productVariant->name;
             $response['aaData'][$i]['variant'] = $val->productVariant->name;

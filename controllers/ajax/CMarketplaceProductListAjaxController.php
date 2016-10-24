@@ -50,7 +50,6 @@ class CMarketplaceProductListAjaxController extends AAjaxController
         $i = 0;
         foreach ($prodotti as $val) {
 
-            $img = strpos($val->dummyPicture, 's3-eu-west-1.amazonaws.com') ? $val->dummyPicture : "/assets/" . $val->dummyPicture;
             if ($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
 
@@ -81,7 +80,7 @@ class CMarketplaceProductListAjaxController extends AAjaxController
             $response['data'][$i]["stock"] = '<table class="nested-table"><thead><tr>' . $th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
 
             $response['data'][$i]['shop'] = implode(', ', $shops);
-            $response['data'][$i]['dummy'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
+            $response['data'][$i]['dummy'] = '<img width="50" src="' . $val->getDummyPictureUrl() . '" />' . $imgs . '<br />';
             $response['data'][$i]['itemno'] = '<span class="small">';
             $response['data'][$i]['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;
             $response['data'][$i]['itemno'] .= '</span>';

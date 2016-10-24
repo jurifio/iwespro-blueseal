@@ -46,10 +46,9 @@ class CProductSlimListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
 
-            $img = strpos($val->dummyPicture, 's3-eu-west-1.amazonaws.com') ? $val->dummyPicture : "/assets/" . $val->dummyPicture;
             if ($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
-            $response['data'][$i]['image'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
+            $response['data'][$i]['image'] = '<img width="50" src="' . $val->getDummyPictureUrl() . '" />' . $imgs . '<br />';
 
             $response['data'][$i]['shop'] = '<span>';
             foreach ($val->shop as $shop) {

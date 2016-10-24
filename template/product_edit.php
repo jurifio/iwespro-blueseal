@@ -57,15 +57,8 @@
                                     <div class="row">
                                         <div class="col-md-7">
                                             <div class="form-group form-group-default form-group-photo">
-                                                <?php
-                                                if (isset($productEdit->dummyPicture)) {
-                                                    $dummy = (strpos($productEdit->dummyPicture, 's3-eu-west-1.amazonaws.com')) ? $productEdit->dummyPicture : $dummyUrl . "/" . $productEdit->dummyPicture;
-                                                } else {
-                                                    $dummy = "";
-                                                }
-                                                ?>
                                                 <img id="dummyPicture" align="center" class="img-responsive"
-                                                     src="<?php echo $dummy ?>">
+                                                     src="<?php echo $productEdit->getDummyPictureUrl() ?>">
                                             </div>
                                             <div style="display:none;"><input id="dummyFile" type="file" value=""
                                                                               name="Product_dummyPicture"/></div>
