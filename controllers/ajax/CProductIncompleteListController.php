@@ -89,14 +89,13 @@ class CProductIncompleteListController extends AAjaxController
             $tools .= $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'"><i class="fa fa-pencil-square-o"></i></a></span>' : '<span class="tools-spaced"><i class="fa fa-pencil-square-o"></i></span>';
 
             $creationDate = new \DateTime($val->creationDate);
-            $img = strpos($val->dummyPicture,'s3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $dummyUrl."/".$val->dummyPicture;
 
             $response['aaData'][$i]["DT_RowClass"] = 'colore';
             $response['aaData'][$i]["id"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["code"] = $val->itemno.' # '.$val->productVariant->name;
             $response['aaData'][$i]["shop"] = implode(',',$shops);
             $response['aaData'][$i]["season"] = !is_null($val->productSeason) ? $val->productSeason->name.' '.$val->productSeason->year : "Mancante";
-            $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="'.$img.'">' : "";
+            $response['aaData'][$i]["dummyPicture"] = '<img width="80" src="'.$val->getDummyPictureUrl().'">';
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
             $response['aaData'][$i]["status"] = $val->productStatus->name;
             $response['aaData'][$i]["creationDate"] = $creationDate->format('d-m-Y H:i');

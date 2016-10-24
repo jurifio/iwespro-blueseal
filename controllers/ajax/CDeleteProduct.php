@@ -26,7 +26,7 @@ class CDeleteProduct extends AAjaxController
         foreach ($this->app->router->request()->getRequestData('id') as $product) {
             $product = $this->app->repoFactory->create('Product')->findOneByStringId($product);
             $i++;
-            $html .= "<tr><td>" . $product->id . "-" . $product->productVariant->id . "</td><td><img width=\"100\" src=\"/assets/" . $product->dummyPicture . "\"></td></tr>";
+            $html .= "<tr><td>" . $product->id . "-" . $product->productVariant->id . "</td><td><img width=\"100\" src=\"". $product->getDummyPictureUrl(). "\"></td></tr>";
         }
 
         $html .= "</tbody></table>";
@@ -62,11 +62,11 @@ class CDeleteProduct extends AAjaxController
         $html = "<table><thead><tr><th>Code</th><th>Immagine</th><th>Stato</th></tr></thead><tbody>";
 
         foreach ($deletedProducts['ok'] as $deletedProduct) {
-            $html .= "<tr><td>" . $deletedProduct->id . " # " . $deletedProduct->productVariant->id . "</td><td><img width=\"100\" src=\"/assets/" . $deletedProduct->dummyPicture . "\"></td>";
+            $html .= "<tr><td>" . $deletedProduct->id . " # " . $deletedProduct->productVariant->id . "</td><td><img width=\"100\" src=\"" . $deletedProduct->getDummyPictureUrl() . "\"></td>";
             $html .= "<td>Eliminato</td></tr>";
         }
         foreach ($deletedProducts['ko'] as $deletedProduct) {
-            $html .= "<tr><td>" . $deletedProduct->id . " # " . $deletedProduct->productVariant->id . "</td><td><img width=\"100\" src=\"/assets/" . $deletedProduct->dummyPicture . "\"></td>";
+            $html .= "<tr><td>" . $deletedProduct->id . " # " . $deletedProduct->productVariant->id . "</td><td><img width=\"100\" src=\"" . $deletedProduct->getDummyPictureUrl() . "\"></td>";
             $html .= "<td>Non eliminato</td></tr>";
         }
 

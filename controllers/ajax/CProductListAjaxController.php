@@ -108,11 +108,10 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
 
             //$response['data'][$i]['sizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
-            $img = strpos($val->dummyPicture,'amazonaws') ? $val->dummyPicture : $this->urls['dummy']."/".$val->dummyPicture;
             if($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
             //$response['data'][$i]['dummyPicture'] = '<img width="60" src="'.$img.'" />'.$imgs;
-            $response['data'][$i]['details'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="'.$img.'" />' . $imgs . '</a><br />';
+            $response['data'][$i]['details'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="'.$val->getDummyPictureUrl().'" />' . $imgs . '</a><br />';
             $response['data'][$i]['details'] .= ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span><br />' : '';
             $details = $this->app->repoFactory->create('ProductSheetActual')->em()->findBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
             foreach($details as $k => $v) {
