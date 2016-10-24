@@ -137,7 +137,7 @@ class CProductDetailsMerge extends AAjaxController
                     $ppc->delete();
                 }
                 $phpcRepo = \Monkey::app()->repoFactory->create('ProductHasProductCategory');
-                foreach($choosenPsa->productHasProductCategory as $pc) {
+                foreach($choosen->productHasProductCategory as $pc) {
                     $ppc = $phpcRepo->getEmptyEntity();
                     $ppc->productId = $prod->id;
                     $ppc->productVariantId = $prod->productVariantId;
