@@ -67,8 +67,10 @@ class COrderLineManager
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->status = $newStatus->code;
             $this->app->repoFactory->create("OrderLine")->update($orderLine);
+            return true;
         } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
+            return false;
         }
     }
 
