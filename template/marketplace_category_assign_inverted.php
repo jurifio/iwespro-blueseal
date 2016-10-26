@@ -23,14 +23,18 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="marketplace_category_assign"
+                               data-datatable-name="marketplace_category_assign_inverted"
                                data-column-filter="true"
-                               data-controller="MarketplaceCategoryAssignAjaxController"
+                               data-controller="MarketplaceCategoryAssignInvertedAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-lenght-menu="50, 100, 200, 500, 1000">
                             <thead>
                             <tr>
+                                <th data-slug="productCategory"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Categoria Interna</th>
                                 <th data-slug="marketplace"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -38,19 +42,11 @@
                                 <th data-slug="marketplaceAccount"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="desc" class="center">Account</th>
+                                    class="center">Account</th>
                                 <th data-slug="marketplaceAccountCategory"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Categoria Marketplace</th>
-                                <th data-slug="marketplaceAccountPath"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Descrizione Marketplace</th>
-                                <th data-slug="internalCategory"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Categoria Interna</th>
                             </tr>
                             </thead>
                             <tbody>
