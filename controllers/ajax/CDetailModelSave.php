@@ -30,7 +30,7 @@ class CDetailModelSave extends AAjaxController
         try {
             $this->app->dbAdapter->beginTransaction();
 
-            $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['ProductName']));
+            $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
             if (!$pn) throw new BambooException('Non si può creare un modello con un nome prodotto inesistente');
             $pnIt = $pn->findOneByKey('langId', 1);
             $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
