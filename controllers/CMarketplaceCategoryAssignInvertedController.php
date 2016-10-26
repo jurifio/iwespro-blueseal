@@ -48,10 +48,10 @@ class CMarketplaceCategoryAssignInvertedController extends ARestrictedAccessRoot
             $this->app->dbAdapter->delete('ProductCategoryHasMarketplaceAccountCategory',
                 ['marketplaceId' => $marketplaceAccount->marketplaceId,
                     'marketplaceAccountId' => $marketplaceAccount->id,
-                    'productCategoryId' => $categoryId], false, true);
+                    'productCategoryId' => $categoryId]);
 
             $value = $this->app->router->request()->getRequestData("value");
-            if($value) {
+            if(!empty($value)) {
                 $key = 'marketpalceCategoryHashToId' . $value;
                 $marketplaceAccountCategoryIds = $this->app->cacheService->getCache('index')->get($key);
                 if (!$marketplaceAccountCategoryIds) {
