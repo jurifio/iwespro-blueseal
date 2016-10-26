@@ -24,9 +24,14 @@ class CDetailModel extends AAjaxController
         if ($idModel) {
             $detailModel = $modelSheetRepo->findOneBy(['id' => $idModel]);
         } elseif ($idName) {
-            $detailModel = $modelSheetRepo->findOneBy(['name' => $idName]);
+            $q = "SELECT id FROM ProductSheetModelPrototype WHERE `name` = ?";
+            $detailModel = \Monkey::app()->dbAdapter->query($q, [$idName])->fetch();
+            if ($detailModel) $detailModel = $modelSheetRepo->findOneBy(['id' => $detailModel['id']]);
         } elseif ($idCode) {
-            $detailModel = $modelSheetRepo->findOneBy(['code' => $idCode]);
+            $q = "SELECT id FROM ProductSheetModelPrototype WHERE `code` = ?";
+            $detailModel = \Monkey::app()->dbAdapter->query($q, [$idCode])->fetch();
+            if ($detailModel) $detailModel = $modelSheetRepo->findOneBy(['id' => $detailModel['id']]);
+
         }
 
         if (!$detailModel) return json_encode(false);
