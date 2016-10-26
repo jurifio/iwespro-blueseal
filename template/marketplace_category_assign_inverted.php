@@ -46,7 +46,7 @@
                                 <th data-slug="marketplaceAccountCategory"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="desc"
+                                    data-default-order="asc"
                                     class="center">Categoria Marketplace</th>
                             </tr>
                             </thead>

@@ -42,23 +42,42 @@ class CMarketplaceCategoryAssignInvertedController extends ARestrictedAccessRoot
         $categoryId = explode('_', $catId[0])[1];
         $marketplaceAccountId = explode('_', $catId[1])[1];
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);;
-        $value = $this->app->router->request()->getRequestData("value");
-        $key = 'marketpalceCategoryHashToId' . $value;
-        $marketplaceAccountCategoryIds = $this->app->cacheService->getCache('index')->get($key);
-        if (!$marketplaceAccountCategoryIds) {
-            foreach ($marketplaceAccount->marketplaceAccountCategory as $marketplaceAccountCategory) {
-                /** @var CMarketplaceAccountCategory $marketplaceAccountCategory */
-                $this->app->cacheService->getCache('index')->set('marketpalceCategoryHashToId'.$marketplaceAccountCategory->getHashKey('md5'), $marketplaceAccountCategory->printId());
-            }
-            $marketplaceAccountCategoryIds = $this->app->cacheService->getCache('index')->get($key);
-        }
-        $marketplaceAccountCategory = $this->app->repoFactory->create('MarketplaceAccountCategory')->findOneByStringId($marketplaceAccountCategoryIds);
 
-        $this->app->dbAdapter->insert('ProductCategoryHasMarketplaceAccountCategory',
-            ['marketplaceId' => $marketplaceAccount->marketplaceId,
-                'marketplaceAccountId' => $marketplaceAccount->id,
-                'marketplaceAccountCategoryId' => $marketplaceAccountCategory->marketplaceCategoryId,
-                'productCategoryId' => $categoryId], false, true);
+        try {
+            $this->app->dbAdapter->beginTransaction();
+            $this->app->dbAdapter->delete('ProductCategoryHasMarketplaceAccountCategory',
+                ['marketplaceId' => $marketplaceAccount->marketplaceId,
+                    'marketplaceAccountId' => $marketplaceAccount->id,
+                    'productCategoryId' => $categoryId], false, true);
+
+            $value = $this->app->router->request()->getRequestData("value");
+            if($value) {
+                $key = 'marketpalceCategoryHashToId' . $value;
+                $marketplaceAccountCategoryIds = $this->app->cacheService->getCache('index')->get($key);
+                if (!$marketplaceAccountCategoryIds) {
+                    foreach ($marketplaceAccount->marketplaceAccountCategory as $marketplaceAccountCategory) {
+                        /** @var CMarketplaceAccountCategory $marketplaceAccountCategory */
+                        $this->app->cacheService->getCache('index')->set('marketpalceCategoryHashToId'.$marketplaceAccountCategory->getHashKey('md5'), $marketplaceAccountCategory->printId());
+                    }
+                    $marketplaceAccountCategoryIds = $this->app->cacheService->getCache('index')->get($key);
+                }
+                $marketplaceAccountCategory = $this->app->repoFactory->create('MarketplaceAccountCategory')->findOneByStringId($marketplaceAccountCategoryIds);
+
+                $this->app->dbAdapter->insert('ProductCategoryHasMarketplaceAccountCategory',
+                    ['marketplaceId' => $marketplaceAccount->marketplaceId,
+                        'marketplaceAccountId' => $marketplaceAccount->id,
+                        'marketplaceAccountCategoryId' => $marketplaceAccountCategory->marketplaceCategoryId,
+                        'productCategoryId' => $categoryId], false, true);
+
+            }
+
+            $this->app->dbAdapter->commit();
+        } catch (\Throwable $e) {
+            $this->app->dbAdapter->rollBack();
+            throw $e;
+        }
+
+
     }
 
 }
