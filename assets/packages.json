@@ -208,10 +208,6 @@
                 "path": "scheme://cdn.datatables.net/r/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,cr-1.2.0,fc-3.1.0,fh-3.0.0,kt-2.0.0,r-1.0.7,rr-1.0.0,sc-1.3.0,se-1.0.1/",
                 "options": ["defer"]
             },
-            "jquery-ui.multidatespicker.js": {
-                "path": "scheme://localdomain/assets/js/",
-                "options": ["defer"]
-            },
             "moment.min.js": {
                 "path": "scheme://cdn.jsdelivr.net/momentjs/latest/",
                 "options": ["defer"]
