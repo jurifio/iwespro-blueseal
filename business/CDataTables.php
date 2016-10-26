@@ -265,7 +265,7 @@ class CDataTables
         //è un array indi per cui è per forza una in
         if(is_array($values)) {
             if($not) $condition.= " NOT ";
-            $condition .= " IN ( ";
+            $condition .= " IN (";
             foreach ($values as $val) {
                 $condition .= '?,';
                 $params[] = $val;
@@ -274,10 +274,10 @@ class CDataTables
         }
         //non è un array quindi sono altri cazzi, di sicuro una like
         elseif($not) {
-            $condition.= " NOT RLIKE ? ";
+            $condition.= " NOT LIKE ? ";
             $params[] = $values;
         } elseif(strpos($values,'-') === 0) {
-            $condition.= " NOT RLIKE ? ";
+            $condition.= " NOT LIKE ? ";
             $params[] = "%".substr($values, 1)."%";
         } elseif(strpos($values,'><') === 0) {
             $condition.= " BETWEEN ? AND ? ";
@@ -302,7 +302,7 @@ class CDataTables
             }
             $params[] = substr($values, 1);
         } else {
-            $condition.= " RLIKE ? ";
+            $condition.= " LIKE ? ";
             $params[] = $values;
         }
 

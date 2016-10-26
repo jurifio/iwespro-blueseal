@@ -58,7 +58,8 @@ class CDetailTranslateListAjaxController extends AAjaxController
 			    }
 		    }
 		    $langs[0] = 1;
-		    $datatable->addLikeCondition('translatedLangId',implode('|',$langs));
+            $langsCond = implode('|',$langs);
+		    $datatable->addLikeCondition('translatedLangId', $langsCond);
 	    }
 
         $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/edit');
@@ -66,8 +67,8 @@ class CDetailTranslateListAjaxController extends AAjaxController
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
-
-        $productDetails = $this->app->repoFactory->create('ProductDetailTranslationView')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $query = $datatable->getQuery();
+        $productDetails = $this->app->repoFactory->create('ProductDetailTranslationView')->em()->findBySql($query, $datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
 
