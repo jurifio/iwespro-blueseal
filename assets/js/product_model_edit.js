@@ -13,7 +13,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                 var body = 'Oops! Metodo non pervenuto. Contatta l\'amministratore';
                 var location = false;
                 if ('ko' == res['status']) {
-                    body = 'OOPS! Modello non aggiornato!';
+                    body = 'OOPS! Modello non aggiornato!<br />' + res['message'];
                 } else {
                     if ('POST' == method) {
                         body = 'Nuovo modello inserito.';
