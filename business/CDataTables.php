@@ -275,10 +275,10 @@ class CDataTables
         //non è un array quindi sono altri cazzi, di sicuro una like
         elseif($not) {
             $condition.= " NOT RLIKE ? ";
-            $params[] = $values;
+            $params[] = $values."%";
         } elseif(strpos($values,'-') === 0) {
             $condition.= " NOT RLIKE ? ";
-            $params[] = "%".substr($values, 1)."%";
+            $params[] = "".substr($values, 1)."%";
         } elseif(strpos($values,'><') === 0) {
             $condition.= " BETWEEN ? AND ? ";
             $values = substr($values, 2);
@@ -303,7 +303,7 @@ class CDataTables
             $params[] = substr($values, 1);
         } else {
             $condition.= " RLIKE ? ";
-            $params[] = $values;
+            $params[] = $values."%";
         }
 
         return ["where"=>$condition,"params"=>$params];
