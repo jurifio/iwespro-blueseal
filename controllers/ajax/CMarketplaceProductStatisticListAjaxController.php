@@ -60,11 +60,11 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         LEFT JOIN ProductStatisticsDetailHasOrderLine psdhol on psd.id = psdhol.productStatisticsDetailId
       WHERE (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
           AND timestamp >= ifnull(?, timestamp) 
-          AND timestamp <= ifnull(?, timestamp);";
+          AND timestamp <= ifnull(?, timestamp)";
 
         $params = $_GET;
 
-        $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET);
+        $datatable = new CDataTables("(".$query.")", $sample->getPrimaryKeys(), $_GET);
         $a = $this->app->router->request()->getRequestData();
         $marketplaceAccountId = $this->app->router->request()->getRequestData('accountId');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);

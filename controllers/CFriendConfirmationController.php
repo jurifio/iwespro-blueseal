@@ -31,19 +31,13 @@ class CFriendConfirmationController extends ARestrictedAccessRootController
         $orderLine = false;
 
         try{
-            $repo = $this->app->repoFactory->create('OrderLine');
-            $orderLine = $repo->findOne(['id'=>$filters['orderLineId'],'orderId'=>$filters['orderId']]);
-            $error = true;
-            $om = new COrderLineManager($this->app,$orderLine);
-            if($orderLine->status == 'ORD_FRND_SENT'){
-                $error = false;
-                if($filters['confirm'] == 'ook'){
-                    $ok = true;
-                    $om->changeStatus($om->nextOk());
-                }elseif($filters['confirm'] == 'kko'){
-                    $ok = false;
-                    $om->changeStatus($om->nextErr());
-                }
+            $orderLine = \Monkey::app()->repoFactory->create('OrderLine')->findOne(['id'=>$filters['orderLineId'],'orderId'=>$filters['orderId']]);
+            if($filters['confirm'] == 'ook') {
+                $error = \Monkey::app()->repoFactory->create('OrderLine')->friendConfirm($orderLine);
+                $ok = true;
+            } elseif ($filters['confirm'] == 'kko') {
+                $error = \Monkey::app()->repoFactory->create('OrderLine')->friendRefuse($orderLine);
+                $ok = false;
             }
 
         } catch(\Throwable $e) {
