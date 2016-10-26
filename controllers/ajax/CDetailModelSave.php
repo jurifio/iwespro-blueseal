@@ -35,7 +35,7 @@ class CDetailModelSave extends AAjaxController
             $pnIt = $pn->findOneByKey('langId', 1);
             $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
             $newProt->productSheetPrototypeId = $productPrototypeId;
-            $newProt->name = $get['productName'];
+            $newProt->name = $get['name'];
             $newProt->code = $get['code'];
             $newProt->productName = str_replace(' !', '', $pnIt->name);
             $newId = $newProt->insert();
@@ -70,7 +70,7 @@ class CDetailModelSave extends AAjaxController
             $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
             if (!$pn) throw new BambooException('Non si può aggiornare un modello con un nome prodotto inesistente');
             $pnIt = $pn->findOneByKey('langId', 1);
-            $prot->name = $get['productName'];
+            $prot->name = $get['name'];
             if ($get['code']) {
                 $prot->code = $get['code'];
             }
