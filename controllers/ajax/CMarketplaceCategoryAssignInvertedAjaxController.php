@@ -26,16 +26,13 @@ class CMarketplaceCategoryAssignInvertedAjaxController extends AAjaxController
 
     public function get()
     {
-	    $sample = $this->app->repoFactory->create('MarketplaceAccountCategory')->getEmptyEntity();
-
         $datatable = new CDataTables('vBluesealMarketplaceCategoryInverted',['marketplaceId','marketplaceAccountId','productCategoryId'],$_GET);
 
         $orribilità = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
         $count = $this->app->dbAdapter->query($datatable->getQuery(true,true),$datatable->getParams())->fetch();
         $totalCount = $this->app->dbAdapter->query($datatable->getQuery('full',true),$datatable->getParams())->fetch();
-        $c = $datatable->getQuery(false,true);
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
-
+        $c = $datatable->getQuery(false,true);
         $response = [];
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
