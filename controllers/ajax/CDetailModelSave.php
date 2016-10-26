@@ -60,7 +60,6 @@ class CDetailModelSave extends AAjaxController
 
         $productDetails = $this->getDetails($get);
 
-
         $prot = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $id]);
 
         try {
