@@ -90,8 +90,6 @@ class CCategoryManageController extends ARestrictedAccessRootController
             }
         }
 
-        if(!headers_sent()){
-            header("Location: ".$blueseal."/prodotti/categorie/aggiungi?productCategoryId=" . $productCategoryId);
-        }
+        return $this->get();
     }
 }
