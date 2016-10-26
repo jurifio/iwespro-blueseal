@@ -34,6 +34,7 @@
                                 <th data-slug="productCategory"
                                     data-searchable="true"
                                     data-orderable="true"
+                                    data-default-order="desc"
                                     class="center">Categoria Interna</th>
                                 <th data-slug="marketplace"
                                     data-searchable="true"

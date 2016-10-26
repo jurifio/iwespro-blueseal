@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\domain\entities\CMarketplaceAccountCategory;
 use bamboo\ecommerce\views\VBase;
 
 /**
@@ -25,12 +26,39 @@ class CMarketplaceCategoryAssignInvertedController extends ARestrictedAccessRoot
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/marketplace_category_assign_inverted.php');
+        $view->setTemplatePath($this->app->rootPath() . $this->app->cfg()->fetch('paths', 'blueseal') . '/template/marketplace_category_assign_inverted.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'page'=>$this->page,
+            'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);
     }
+
+    public function put()
+    {
+        $catId = $this->app->router->request()->getRequestData("id");
+        $catId = explode('__', $catId);
+        $categoryId = explode('_', $catId[0])[1];
+        $marketplaceAccountId = explode('_', $catId[1])[1];
+        $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);;
+        $value = $this->app->router->request()->getRequestData("value");
+        $key = 'marketpalceCategoryHashToId' . $value;
+        $marketplaceAccountCategoryIds = $this->app->cacheService->getCache('index')->get($key);
+        if (!$marketplaceAccountCategoryIds) {
+            foreach ($marketplaceAccount->marketplaceAccountCategory as $marketplaceAccountCategory) {
+                /** @var CMarketplaceAccountCategory $marketplaceAccountCategory */
+                $this->app->cacheService->getCache('index')->set('marketpalceCategoryHashToId'.$marketplaceAccountCategory->getHashKey('md5'), $marketplaceAccountCategory->printId());
+            }
+            $marketplaceAccountCategoryIds = $this->app->cacheService->getCache('index')->get($key);
+        }
+        $marketplaceAccountCategory = $this->app->repoFactory->create('MarketplaceAccountCategory')->findOneByStringId($marketplaceAccountCategoryIds);
+
+        $this->app->dbAdapter->insert('ProductCategoryHasMarketplaceAccountCategory',
+            ['marketplaceId' => $marketplaceAccount->marketplaceId,
+                'marketplaceAccountId' => $marketplaceAccount->id,
+                'marketplaceAccountCategoryId' => $marketplaceAccountCategory->marketplaceCategoryId,
+                'productCategoryId' => $categoryId], false, true);
+    }
+
 }
