@@ -167,9 +167,9 @@ class CProductListAjaxController extends AAjaxController
             $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
 
             $cpf = '<span class="small">';
-            $cpf.= (14 > strlen($val->itemno.' # '.$val->productVariant->name)) ?
-                $val->itemno.' # '.$val->productVariant->name :
-                substr($val->itemno.' # '.$val->productVariant->name, 0, 13) . '&hellip;';
+            $cpf.= //(14 > strlen($val->itemno.' # '.$val->productVariant->name)) ?
+                $val->itemno.' #<br />'.$val->productVariant->name;//:
+                //substr($val->itemno.' # '.$val->productVariant->name, 0, 13) . '&hellip;';
             $cpf.='</span>';
             $response['data'][$i]['cpf'] = $cpf;
 
