@@ -236,7 +236,7 @@ endif; ?></div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group form-group-default required">
-                                            <label for="Product_retail_price">Prezzo Vendita</label>
+                                            <label for="Product_retail_price">Prezzo Vendita (Retail Price)</label>
                                             <input autocomplete="off" type="text" id="Product_retail_price"
                                                    class="form-control required search-product inputPrice" name="Product_retail_price"
                                                    value="<?php echo (isset($productEdit) && isset($productEdit->itemno)) ? $productEdit->itemno : '' ?>"
@@ -248,7 +248,7 @@ endif; ?></div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group form-group-default required">
-                                            <label for="Product_value">Prezzo Fornitore</label>
+                                            <label for="Product_value">Costo Fornitore</label>
                                             <input id="Product_value" autocomplete="off" type="text"
                                                    class="form-control required search-product inputPrice" name="Product_value"
                                                    value="<?php echo (isset($productEdit)) ? $productEdit->productVariant->name : "" ?>"
