@@ -81,7 +81,8 @@
                                         data-orderable="true" class="center">S</th>
                                     <th data-slug="creationDate"
                                         data-searchable="true"
-                                        data-orderable="true" class="center dataFilterType">Creazione</th>
+                                        data-orderable="true"
+                                        data-default-order="desc" class="center dataFilterType">Creazione</th>
                                 </tr>
                             </thead>
                             <tbody>
