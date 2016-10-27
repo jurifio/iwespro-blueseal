@@ -12,13 +12,6 @@ $(document).on('bs.detailTranslation.filterByQty',function() {
     dt.draw();
 });
 
-$(document).on('bs.detailTranslation.changeTargetLanguage',function() {
-    var $t = $('table[data-datatable-name]');
-    $t.data('showOnlyUntranslated',1);
-    var dt = $t.DataTable();
-    dt.draw();
-});
-
 $(document).on('blur','.dt-input',function() {
     var $formControl = $(this).parent();
     $formControl.addClass('loading');
