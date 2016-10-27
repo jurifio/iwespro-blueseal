@@ -896,16 +896,14 @@ $.bsModal = function (header, params) {
 
                 body.find('.move-qty').each(function(){
                     //controllo sui movimenti, mai minori della disponibilità
-                    $(this).off().on('keypress change', function(){
+                    $(this).off().on('change', function(e){
                         var qty = $(this).data('stock');
                         var move = parseInt($(this).val());
                         if (0 > qty + move) $(this).val(qty * -1);
                         //controllo il segno dei movimenti
                         var sign = self.getCauseSign();
                         if ('+' == sign) {
-                                if (-1 < $(this).val().indexOf('-')) {
-                                    var value = $(this).val();
-                                    //$(this).val(value.substr(1, 1));
+                                if (0 == $(this).val().indexOf('-')) {
                                     $(this).val('0');
                                 }
                         } else if ('-' == sign) {
@@ -1044,9 +1042,9 @@ $.bsModal = function (header, params) {
 
         this.qtyDynamicValidation = function(elem, op) {
             if (('+' == operator) && (0 > $(elem).val())) {
-                $(elem).val('0');
-            } else if (('-' == operator) && ( 0 < $(elem).val())) {
-                $(elem).val('0');
+                //$(elem).val('0');
+            } else if (('-' == operator) && ( 0 < $(elem).val()) && ('-' != $(elem).val())) {
+                //$(elem).val('0');
             }
         };
 
@@ -1206,7 +1204,7 @@ $.bsModal = function (header, params) {
                 });
             } else if ('-' == sign) {
                 moves.each(function(){
-                    if (0 < $(this).val()) {
+                    if (0 < $(this).val()){
                         $(this).val(0);
                     }
                 });
