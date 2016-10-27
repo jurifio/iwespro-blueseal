@@ -265,7 +265,7 @@ class CDataTables
         //è un array indi per cui è per forza una in
         if(is_array($values)) {
             if($not) $condition.= " NOT ";
-            $condition .= " IN (";
+            $condition .= " IN ( ";
             foreach ($values as $val) {
                 $condition .= '?,';
                 $params[] = $val;
@@ -275,10 +275,10 @@ class CDataTables
         //non è un array quindi sono altri cazzi, di sicuro una like
         elseif($not) {
             $condition.= " NOT LIKE ? ";
-            $params[] = $values;
+            $params[] = $this->likeSearch($values);
         } elseif(strpos($values,'-') === 0) {
             $condition.= " NOT LIKE ? ";
-            $params[] = "%".substr($values, 1)."%";
+            $params[] = $this->likeSearch(substr($values, 1));
         } elseif(strpos($values,'><') === 0) {
             $condition.= " BETWEEN ? AND ? ";
             $values = substr($values, 2);
@@ -303,7 +303,7 @@ class CDataTables
             $params[] = substr($values, 1);
         } else {
             $condition.= " LIKE ? ";
-            $params[] = $values;
+            $params[] = $this->likeSearch($values);
         }
 
         return ["where"=>$condition,"params"=>$params];
@@ -311,14 +311,18 @@ class CDataTables
 
     /**
      * @param $string
-     * @return mixed|string
+     * @param bool $startWith
+     * @return string
      */
-    protected function likeSearch($string)
+    protected function likeSearch($string,$startWith = true)
     {
-        $string = str_replace('.','\.', $string);
-        $string = str_replace('*','.*', $string);
-        $string.='.*';
-        return $string;
+        if(!$startWith) {
+            $string = "%".$string;
+        }
+        //$string = str_replace('.','\.', $string);
+        //$string = str_replace('*','.*', $string);
+        //$string.='.*';
+        return $string."%";
 
     }
 
