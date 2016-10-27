@@ -28,26 +28,60 @@
                                data-datatable-name="product_list"
                                data-column-filter="true"
                                data-controller="ProductListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="100, 200, 500">
                             <thead>
                                 <tr>
-                                    <th class="center">Codice</th>
-                                    <th class="center">Shop</th>
-                                    <th class="center">Gruppo Colore</th>
-                                    <th class="center">Stagione</th>
-                                    <th class="center">ID Orig.</th>
-                                    <th class="center">CPF</th>
+                                    <th data-slug="code"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Codice</th>
+                                    <th data-slug="shop"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Shop</th>
+                                    <th data-slug="colorGroup"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Gruppo Colore</th>
+                                    <th data-slug="season"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stagione</th>
+                                    <th data-slug="externalId"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">ID Orig.</th>
+                                    <th data-slug="cpf"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">CPF</th>
                                     <!--<th class="center">Gruppo Taglie</th>-->
-                                    <th class="center">Dettagli</th>
-                                    <th class="center">D/F</th>
-                                    <th class="center">Brand</th>
-                                    <th class="center">Categorie</th>
-                                    <th class="center">Tags</th>
-                                    <th class="center">Stato</th>
-                                    <th class="center">M.Up</th>
-                                    <th class="center">Disp.</th>
-                                    <th class="center">S</th>
-                                    <th class="center dataFilterType">Creazione</th>
+                                    <th data-slug="details"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Dettagli</th>
+                                    <th data-slug="detailPhoto"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">D/F</th>
+                                    <th data-slug="brand"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Brand</th>
+                                    <th data-slug="slug"
+                                        data-searchable="false"
+                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
+                                    <th data-slug="tag"
+                                        data-searchable="false"
+                                        data-orderable="true" class="center">Tags</th>
+                                    <th data-slug="status"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stato</th>
+                                    <th data-slug="mup"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">M.Up</th>
+                                    <th data-slug="available"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Disp.</th>
+                                    <th data-slug="isOnSale"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">S</th>
+                                    <th data-slug="creationDate"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center dataFilterType">Creazione</th>
                                 </tr>
                             </thead>
                             <tbody>
