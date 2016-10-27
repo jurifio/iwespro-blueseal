@@ -3,9 +3,11 @@ namespace bamboo\blueseal\controllers;
 
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\core\db\pandaorm\entities\IEntity;
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\RedPandaException;
 use bamboo\core\traits\TFormInputValidate;
 use bamboo\core\utils\slugify\CSlugify;
+use bamboo\domain\entities\CShopHasProduct;
 
 /**
  * Class CProductAddController
@@ -64,40 +66,7 @@ class CProductManageController extends ARestrictedAccessRootController
 	        $productEdit->lastUpdate = date("Y-m-d H:i:s");
 	        $productEdit->itemno = $post['Product_itemno'];
 
-            /** AGGIORNO I PREZZI */
-            $shp = $this->app->repoFactory->create('ShopHasProduct');
-            if (array_key_exists('Shop_id', $post)) {
-                if ($post['Shop_id']) {
-                    $shpe = $shp->findOneBy(
-                        [
-                            'productId' => $productEdit->id,
-                            'productVariantId' => $productEdit->productVariantId,
-                            'shopId' => $post['Shop_id']
-                        ]
-                    );
-                    if ($shpe) {
-                        if (array_key_exists('Product_retail_price', $post)) $shpe->price = $post['Product_retail_price'];
-                        if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];
-                        $shpe->update();
-                    }
-                }
-            } else {
-                //se non c'è il campo shop o non è selezionato uno shop, vengono assegnati tutti gli shop dell'utente
-                $user = $this->app->getUser();
-                if (!$user->hasPermission('allShops')) {
-                    foreach ($user->shop as $shop) {
-                        $shpe = $shp->findOneBy(
-                            [
-                                'productId' => $productIdsExt['productId'],
-                                'productVariantId' => $productIdsExt['productVariantId'],
-                                'shopId' => $shop->id,
-                            ]);
-                        if (array_key_exists('Product_retail_price', $post)) $shpe->price = $post['Product_retail_price'];
-                        if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];
-                        $shpe->update();
-                    }
-                }
-            }
+
 
             //$productId = $this->app->dbAdapter->update("Product", $updateData, $productIds);
             $this->app->dbAdapter->commit();
@@ -249,32 +218,12 @@ class CProductManageController extends ARestrictedAccessRootController
                     $shp->extId = $post['Product_extId'];
                     $shp->insert();
                 }
+                /** @var CShopHasProduct $shp */
                 $shp->updatePrices($post['Product_value'], $post['Product_retail_price']);
             }
 
 
             if ((array_key_exists('Product_retail_price',$post)) && (array_key_exists('Product_value',$post))) {
-                $shpRepo = $this->app->repoFactory->create('ShopHasProduct');
-                $shp = $shpRepo->findOneBy(
-                    [
-                        'productId' => $productIds['id'],
-                        'productVariantId' => $productIds['productVariantId'],
-                        'shopId' => $shop->id
-                    ]);
-                if ($shp) {
-                    $shp->value = ($post['Product_value']) ? $post['Product_value'] : null;
-                    $shp->price = ($post['Product_retail_price']) ? $post['Product_retail_price'] : null;
-                    $shp->update();
-                } else {
-                    $shp = $shpRepo->getEmptyEntity();
-                    $shp->productId = $productIds['id'];
-                    $shp->productVariantId = $productIds['productVariantId'];
-                    $shp->shopId = $shop->id;
-                    $shp->value = ($post['Product_value']) ? $post['Product_value'] : null;
-                    $shp->price = ($post['Product_retail_price']) ? $post['Product_retail_price'] : null;
-                    $shp->insert();
-                }
-
                 $skus = $this->app->repoFactory->create('ProductSku')->findBy([
                     'productId' => $productIds['id'],
                     'productVariantId' => $productIds['productVariantId'],
@@ -371,7 +320,6 @@ class CProductManageController extends ARestrictedAccessRootController
 
             /** INSERIMENTO SHOP */
 
-
             $user = $this->app->getUser();
             if (!$user->hasPermission('allShops')) {
                 foreach ($user->shop as $s) {
@@ -389,22 +337,6 @@ class CProductManageController extends ARestrictedAccessRootController
                 $shp = $shpRepo->findOneBy(['productId' => $productId, 'productVariantId' => $variantId, 'shopId' => $shopId]);
                 $shp->updatePrices($post['Product_value'], $post['Product_retail_price']);
             }
-
-            //se non c'è il campo shop o non è selezionato uno shop, vengono assegnati tutti gli shop dell'utente
-            // COMMENTATO perché ora gli shop si assegnano manualmente dall'apposita pagina
-            /*if (!$hasShop) {
-                $user = $this->app->getUser();
-                $shp = $this->app->repoFactory->create('ShopHasProduct');
-                foreach($user->shop as $shop) {
-                    $shpe = $shp->getEmptyEntity();
-                    $shpe->productId = $productIdsExt['productId'];
-                    $shpe->productVariantId = $productIdsExt['productVariantId'];
-                    $shpe->shopId = $shop->id;
-                    if (array_key_exists('Product_retail_price', $post)) $shpe->price = $post['Product_retail_price'];
-                    if (array_key_exists('Product_value', $post)) $shpe->value = $post['Product_value'];
-                    $shpe->insert();
-                }
-            }*/
 
             $this->app->dbAdapter->commit();
 
