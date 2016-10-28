@@ -18,7 +18,7 @@
         scrollCollapse: true,
         responsive: true,
         select: true,
-        lengthMenu: [50,100,250,1000],
+        lengthMenu: [50, 100, 250, 1000],
         displayLength: 25,
         language: {
             "sEmptyTable": "Nessun dato presente nella tabella",
@@ -1097,7 +1097,7 @@
             });
             if (typeof $(this).data('lengthMenuSetup') != 'undefined') {
                 setup.lengthMenu = [];
-                $.each($(this).data('lengthMenuSetup').split(','), function(k,v){
+                $.each($(this).data('lengthMenuSetup').split(','), function (k, v) {
                     setup.lengthMenu.push(Number(v.trim()));
                 });
                 //JSON.parse("[" + $(this).data('lengthMenu') + "]");
@@ -1158,7 +1158,7 @@
             }
         };
 
-        table.on('draw.dt', function() {
+        table.on('draw.dt', function () {
 
             var bstoolbar = $('.toolbar-container .bs-toolbar');
             var dtfilters = $('.dataTables_filter input');
@@ -1224,7 +1224,7 @@
             });
 
             $('th.dataFilterType > input').each(function () {
-               //$(this).datepicker();
+                //$(this).datepicker();
                 var that = $(this);
                 var options = {
                     locale: {
@@ -1243,7 +1243,7 @@
                     alwaysShowCalendars: true,
                     autoUpdateInput: false
                 };
-                if(that.val().length) {
+                if (that.val().length) {
                     var dates = that.val().substring(2).split('|');
                     options.startDate = dates[0];
                     options.endDate = dates[1];
@@ -1251,14 +1251,14 @@
 
                 $(this).daterangepicker(options);
 
-                $(this).on('apply.daterangepicker', function(ev, picker) {
-                    that.val("><"+picker.startDate.format('YYYY-MM-DD')+"|"+picker.endDate.format('YYYY-MM-DD'));
+                $(this).on('apply.daterangepicker', function (ev, picker) {
+                    that.val("><" + picker.startDate.format('YYYY-MM-DD') + "|" + picker.endDate.format('YYYY-MM-DD'));
                     var id = $(ev.target).attr("id").substring(10);
                     table.DataTable().columns(id).search(that.val());
                     table.DataTable().search("").draw();
                 });
 
-                $(this).on('cancel.daterangepicker', function(ev, picker) {
+                $(this).on('cancel.daterangepicker', function (ev, picker) {
                     that.val("");
                     var id = $(ev.target).attr("id").substring(10);
                     table.DataTable().columns(id).search(that.val());
@@ -1267,14 +1267,116 @@
 
             });
 
+            $('th.categoryFilterType > input').each(function () {
+                $(this).on('click', function () {
+                    var that = $(this);
+                    var bsModal = $('#bsModal');
+                    var header = $('#bsModal .modal-header h4');
+                    var body = $('#bsModal .modal-body');
+                    var cancelButton = $('#bsModal .modal-footer .btn-default');
+                    var okButton = $('#bsModal .modal-footer .btn-success');
+
+                    header.html('Filtra Categorie');
+                    body.html('<div id="categoriesTree" class="panel-body fancytree-colorize-hover fancytree-fade-expander"></div>');
+                    body.css("text-align", 'left');
+                    bsModal.modal();
+                    var radioTree = $("#categoriesTree");
+                    cancelButton.html("Annulla");
+                    cancelButton.show();
+                    cancelButton.on('click', function () {
+                        //cancella cose
+                    });
+                    okButton.html('Filtra').off().on('click', function () {
+                        var ids = [];
+                        $.each(radioTree.fancytree('getTree').getSelectedNodes(), function(k,v){
+                            ids.push(v.key);
+                        });
+                        radioTree.fancytree("destroy");
+                        body.html('');
+                        bsModal.modal('hide');
+                        that.val("§in:"+ids.join(','));
+                        var id = that.attr("id").substring(10);
+                        table.DataTable().columns(id).search(that.val());
+                        table.DataTable().search("").draw();
+                    });
+                    Pace.ignore(function () {
+                        if (radioTree.length) {
+                            radioTree.fancytree({
+                                extensions: ["childcounter","glyph", "wide"],
+                                checkbox: true,
+                                childcounter: {
+                                    deep: true,
+                                    hideZeros: true,
+                                    hideExpanded: true
+                                },
+                                debugLevel: 0,
+                                selectMode: 2,
+                                source: {
+                                    url: "/blueseal/xhr/GetCategoryTree",
+                                    cache: true,
+                                    complete: function () {
+                                        $(document).trigger('bs.categoryTree.loaded');
+                                    }
+                                },
+                                glyph: {
+                                    map: {
+                                        doc: "glyphicon glyphicon-file",
+                                        docOpen: "glyphicon glyphicon-file",
+                                        checkbox: "glyphicon glyphicon-unchecked",
+                                        checkboxSelected: "glyphicon glyphicon-check",
+                                        checkboxUnknown: "glyphicon glyphicon-share",
+                                        dragHelper: "glyphicon glyphicon-play",
+                                        dropMarker: "glyphicon glyphicon-arrow-right",
+                                        error: "glyphicon glyphicon-warning-sign",
+                                        expanderClosed: "glyphicon glyphicon-menu-right",
+                                        expanderLazy: "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign
+                                        expanderOpen: "glyphicon glyphicon-menu-down",  // glyphicon-collapse-down
+                                        folder: "glyphicon glyphicon-folder-close",
+                                        folderOpen: "glyphicon glyphicon-folder-open",
+                                        loading: "glyphicon glyphicon-refresh glyphicon-spin"
+                                    }
+                                },
+                                wide: {
+                                    iconWidth: "1em",     // Adjust this if @fancy-icon-width != "16px"
+                                    iconSpacing: "0.5em", // Adjust this if @fancy-icon-spacing != "3px"
+                                    levelOfs: "1.5em"     // Adjust this if ul padding != "16px"
+                                },
+                                dblclick: function(event,data) {
+                                    cascadeSelection(data.node);
+                                    function cascadeSelection(node) {
+                                        node.setSelected(!node.isSelected());
+                                        $.each(node.children, function(k,v) {
+                                            v.setSelected(!node.isSelected());
+                                            cascadeSelection(v)
+                                        });
+                                    }
+                                },
+                                init: function(e,data) {
+                                    var search = that.val();
+                                    while(data.tree == 'undefined');
+                                    if(search.length > 0) {
+                                        search = search.substr(4);
+                                        if(search.length > 0 ) {
+                                            var nodes = search.split(',');
+                                            $.each(nodes,function(k,v){
+                                                data.tree.getNodeByKey(v).setSelected(true);
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
+            });
         });
 
         table.DataTable(tableSetup[table.data('datatableName')]);
 
-       //$('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
+        //$('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
     });
 
-    $(document).on('click',".dataFilterType",function() {
+    $(document).on('click', ".dataFilterType", function () {
 
     });
 

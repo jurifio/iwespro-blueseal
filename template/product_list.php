@@ -62,8 +62,8 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">Brand</th>
                                     <th data-slug="slug"
-                                        data-searchable="false"
-                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
+                                        data-searchable="true"
+                                        data-orderable="false" class="center categoryFilterType">Categorie</th>
                                     <th data-slug="tag"
                                         data-searchable="false"
                                         data-orderable="true" class="center">Tags</th>

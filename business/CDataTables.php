@@ -257,6 +257,12 @@ class CDataTables
         return $this->where;
     }
 
+    /**
+     * @param $field
+     * @param $values
+     * @param bool $not
+     * @return array
+     */
     protected function buildCondition($field, $values, $not = false)
     {
         $condition = " ";
@@ -301,6 +307,12 @@ class CDataTables
                 $values = $this->time($values->getTimestamp());
             }
             $params[] = substr($values, 1);
+        } elseif(strpos($values,'§in:') === 0) {
+            $values = substr($values,5);
+            return $this->buildCondition($field,explode(',',$values));
+        } elseif(strpos($values,'#in:') === 0) {
+            $values = substr($values,0,4);
+            return $this->buildCondition($field,explode($values,','));
         } else {
             $condition.= " RLIKE ? ";
             $params[] = $this->likeSearch($values);

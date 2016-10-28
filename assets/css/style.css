@@ -825,3 +825,12 @@ h5.product-title {
 .colorRed {
     color: #DD0000 !important;
 }
+
+.fancytree-ext-childcounter span.fancytree-childcounter {
+    background: #22bdcf;
+    border: 1px solid #22bdcf;
+    line-height: 0.7;
+    height: 12px;
+    padding: 1px;
+    color: black;
+}
