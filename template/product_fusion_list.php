@@ -49,15 +49,7 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label='Fusione Prodotti'>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-magnet"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.merge"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Fondi due prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="bs.product.merge"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

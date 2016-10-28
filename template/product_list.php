@@ -161,7 +161,10 @@
         <bs-toolbar-button
             data-remote="bs.product.model.insertIntoProducts"
         ></bs-toolbar-button>
-        </bs-toolbar-group>
+        <bs-toolbar-button
+            data-remote="bs.product.merge"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
         <bs-toolbar-group data-group-label="Gestione prezzi">
             <bs-toolbar-button
                 data-remote="bs.product.sales.set"
