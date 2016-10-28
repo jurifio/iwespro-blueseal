@@ -58,6 +58,10 @@
                                     <th data-slug="marketplaceAccountName"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Marketplaces</th>
+                                    <th data-slug="status"
+                                        data-searchable="true"
+                                        data-is-visible="false"
+                                        data-orderable="true" class="center">Stato</th>
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true" class="center dataFilterType">Creazione</th>
