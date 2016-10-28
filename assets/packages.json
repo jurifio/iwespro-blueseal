@@ -6,11 +6,11 @@
                 "options": ["screen"]
             },
             "bootstrap.min.css": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/",
+                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/",
                 "options": ["screen,print"]
             },
             "font-awesome.min.css": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/",
+                "path": "scheme://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/",
                 "options": ["screen,print"]
             },
             "jquery-ui.css": {
@@ -25,6 +25,14 @@
             },
             "bootstrap-colorpicker.min.css": {
                 "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-css/",
+                "options": ["screen"]
+            },
+            "ui.fancytree.min.css": {
+                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.19.0/skin-bootstrap/",
+                "options": ["screen"]
+            },
+            "skin-common.less": {
+                "path":  "scheme://github.com/mar10/fancytree/blob/master/dist/",
                 "options": ["screen"]
             }
         },
@@ -51,11 +59,7 @@
                 "path": "scheme://localdomain/assets/css/",
                 "options": ["screen"]
             },
-            "ui.fancytree.min.css": {
-                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.17.0/skin-themeroller/",
-                "options": ["screen"]
-            },
-            "summernote.min.css": {
+           "summernote.min.css": {
                 "path": "scheme://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/",
                 "options": ["screen"]
             },
@@ -108,7 +112,7 @@
                 "options": []
             },
             "bootstrap.min.js": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/",
+                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/",
                 "options": []
             },
             "pages.js": {
@@ -148,6 +152,10 @@
             "bootstrap-colorpicker.min.js": {
                 "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-js/",
                 "options": ["defer"]
+            },
+            "jquery.fancytree-all.min.js": {
+                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.19.0/",
+                "options": ["defer"]
             }
         },
         "charts": {
@@ -180,10 +188,6 @@
             },
             "jquery.dynatree.min.js": {
                 "path": "scheme://cdn.jsdelivr.net/jquery.dynatree/1.2.4/",
-                "options": ["defer"]
-            },
-            "jquery.fancytree-all.min.js": {
-                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.17.0/",
                 "options": ["defer"]
             },
             "summernote.min.js": {
