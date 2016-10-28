@@ -36,9 +36,9 @@
                                     <th data-slug="brand"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Brand</th>
-                                    <th data-slug="categories"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Categorie</th>
+                                    <th data-slug="category"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
                                     <th data-slug="stock"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Stock</th>
@@ -57,6 +57,9 @@
                                     <th data-slug="marketplaceAccountName"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Marketplaces</th>
+                                    <th data-slug="creationDate"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Creazione</th>
                                 </tr>
                             </thead>
                             <tbody>
