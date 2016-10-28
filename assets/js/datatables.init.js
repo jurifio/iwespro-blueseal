@@ -1198,6 +1198,16 @@
                 });
             }
 
+            if (table.data('inner-setup') == true) {
+                bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-filter" style="float:right"><div class="btn-group-label">Colonne</div></div>');
+                bstoolbar.children('.dt-buttons').last().append('<a class="btn btn-default buttons-html5 btn-group-label table-select-column" style="border-radius: 2px;">' +
+                    '<i class="fa fa-th" aria-hidden="true"></i>' +
+                    '</a>');
+                $(document).on('click', '.table-select-column', function () {
+                    console.log('selezionare colonne');
+                });
+            }
+
             toolbarSearch.find('input').eq(0).off().on('keyup', function (e) {
                 if (e.keyCode == 13) {
                     table.DataTable().search($(this).val()).draw();
@@ -1307,6 +1317,8 @@
                             radioTree.fancytree({
                                 extensions: ["childcounter","glyph", "wide"],
                                 checkbox: true,
+                                activeVisible: true,
+                                quicksearch: true,
                                 childcounter: {
                                     deep: true,
                                     hideZeros: true,
@@ -1363,6 +1375,7 @@
                                             var nodes = search.split(',');
                                             $.each(nodes,function(k,v){
                                                 data.tree.getNodeByKey(v).setSelected(true);
+                                                data.tree.getNodeByKey(v).setActive(true);
                                             });
                                         }
                                     }
