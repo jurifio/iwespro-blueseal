@@ -308,8 +308,8 @@ class CDataTables
             }
             $params[] = substr($values, 1);
         } elseif(strpos($values,'§in:') === 0) {
-            $values = substr($values,0,4);
-            return $this->buildCondition($field,explode($values,','));
+            $values = substr($values,5);
+            return $this->buildCondition($field,explode(',',$values));
         } elseif(strpos($values,'#in:') === 0) {
             $values = substr($values,0,4);
             return $this->buildCondition($field,explode($values,','));
