@@ -280,10 +280,10 @@ class CDataTables
         }
         //non è un array quindi sono altri cazzi, di sicuro una like
         elseif($not) {
-            $condition.= " NOT LIKE ? ";
+            $condition.= " NOT RLIKE ? ";
             $params[] = $this->likeSearch($values);
         } elseif(strpos($values,'-') === 0) {
-            $condition.= " NOT LIKE ? ";
+            $condition.= " NOT RLIKE ? ";
             $params[] = $this->likeSearch(substr($values, 1));
         } elseif(strpos($values,'><') === 0) {
             $condition.= " BETWEEN ? AND ? ";
@@ -314,7 +314,7 @@ class CDataTables
             $values = substr($values,0,4);
             return $this->buildCondition($field,explode($values,','));
         } else {
-            $condition.= " LIKE ? ";
+            $condition.= " RLIKE ? ";
             $params[] = $this->likeSearch($values);
         }
 
@@ -329,12 +329,12 @@ class CDataTables
     protected function likeSearch($string,$startWith = true)
     {
         if(!$startWith) {
-            $string = "%".$string;
+            $string = ".*".$string;
         }
         //$string = str_replace('.','\.', $string);
         //$string = str_replace('*','.*', $string);
         //$string.='.*';
-        return $string."%";
+        return $string.".*";
 
     }
 
