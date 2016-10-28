@@ -76,7 +76,7 @@ class CProductFusionListAjaxController extends AAjaxController
             foreach ($val->shop as $shop) {
                 $shops[] = $shop->name;
             }
-            $response['aaData'][$i]["DT_RowId"] = 'row__'.$val->id.'__'.$val->productVariant->id;
+            $response['aaData'][$i]["DT_RowId"] = $val->id . '-' . $val->productVariant->id;
             $response['aaData'][$i]["code"] = $val->id . '-' . $val->productVariantId;
             $response['aaData'][$i]['code'] = ($okManage) ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
             $response['aaData'][$i]["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
