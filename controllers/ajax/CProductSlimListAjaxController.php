@@ -48,7 +48,7 @@ class CProductSlimListAjaxController extends AAjaxController
 
             if ($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
-            $response['data'][$i]['image'] = '<img width="50" src="' . $val->getDummyPictureUrl() . '" />' . $imgs . '<br />';
+            $response['data'][$i]['image'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>' . $imgs . '<br />';
 
             $response['data'][$i]['shop'] = '<span>';
             foreach ($val->shop as $shop) {

@@ -60,9 +60,9 @@ class COrderListAjaxController extends AAjaxController
 	    $datatable->addSearchColumn('product');
 	    $datatable->addSearchColumn('productBrand');
 	    $datatable->addSearchColumn('email');
-        //var_dump($datatable->getQuery());
-        //die();
-        $orders = $this->app->repoFactory->create('Order')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+
+        $q = $datatable->getQuery();
+        $orders = $this->app->repoFactory->create('Order')->em()->findBySql($q,$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 

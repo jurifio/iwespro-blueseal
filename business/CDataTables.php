@@ -323,7 +323,6 @@ class CDataTables
         //$string = str_replace('*','.*', $string);
         //$string.='.*';
         return $string.".*";
-
     }
 
     /**
