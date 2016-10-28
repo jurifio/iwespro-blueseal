@@ -49,22 +49,19 @@ class CMarketplaceProductListAjaxController extends AAjaxController
 
         foreach ($righe as $val) {
             $row = [];
-            \Monkey::dump('------');
-            \Monkey::dump($val);
             $marketplaceHasProduct = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findOne($val);
-            if(is_null($marketplaceHasProduct)) {
-                $product = \Monkey::app()->repoFactory->create('Product')->findOne([$val['productId'],$val['productVariantId']]);
-                \Monkey::dump([$val['productId'],$val['productVariantId']]);
-                \Monkey::dump($product);
+            if (is_null($marketplaceHasProduct)) {
+                $product = \Monkey::app()->repoFactory->create('Product')->findOne([$val['productId'], $val['productVariantId']]);
                 $row['fee'] = 0;
                 $row['marketplaceAccountName'] = "";
             } else {
                 $product = $marketplaceHasProduct->product;
-                \Monkey::dump($product);
 
                 $style = $marketplaceHasProduct->isToWork == 0 ? ($marketplaceHasProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
-                $marketplaces[] = '<span ' . $style . '>' . $marketplaceHasProduct->marketplaceAccount->marketplace->name . ' - ' . $marketplaceHasProduct->marketplaceAccount->name . ( empty ($marketplaceHasProduct->marketplaceProductId) ? "" : ' (' . $marketplaceHasProduct->marketplaceProductId . ')</span>' );
-                $row['marketplaceAccountName'] = implode('<br>', $marketplaces);
+                $row['marketplaceAccountName'] = '<span ' . $style . '>' .
+                    $marketplaceHasProduct->marketplaceAccount->marketplace->name . ' - ' .
+                    $marketplaceHasProduct->marketplaceAccount->name .
+                    (empty ($marketplaceHasProduct->marketplaceProductId) ? "" : ' (' . $marketplaceHasProduct->marketplaceProductId . ')</span>');
 
                 $row['fee'] = $marketplaceHasProduct->fee;
             }

@@ -27,6 +27,7 @@
                             <thead>
                                 <tr>
                                     <th data-slug="code"
+                                        data-required="true"
                                         data-searchable="true"
                                         data-orderable="true" class="center"
                                         data-default-order="desc">Codice</th>
@@ -59,7 +60,7 @@
                                         data-orderable="true" class="center">Marketplaces</th>
                                     <th data-slug="creationDate"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Creazione</th>
+                                        data-orderable="true" class="center dataFilterType">Creazione</th>
                                 </tr>
                             </thead>
                             <tbody>
