@@ -40,10 +40,6 @@ class CDataTables
      */
     protected $likeConditions = [];
     /**
-     * @var array
-     */
-    protected $ignobleConditions = [];
-    /**
      * @var bool
      */
     protected $search = false;
@@ -116,9 +112,6 @@ class CDataTables
      */
     public function addLikeCondition($column, $values, $not = false){
         $this->likeConditions[] = [$column,$values,$not];
-    }
-    public function addIgnobleCondition($column, $values, $not = false){
-        $this->ignobleConditions[] = [$column,$values,$not];
     }
 
     /**
@@ -212,9 +205,6 @@ class CDataTables
         foreach ($this->likeConditions as $condition ){
             $conditions[] = $this->buildCondition($condition[0],$condition[1],$condition[2]);
         }
-        foreach ($this->ignobleConditions as $condition) {
-            $ingnobleCond = ' AND `' . $condition[0] . "` LIKE '" . $condition[1] . "'";
-        }
         $columnsFilter = [];
         if($count != 'full'){
             foreach ($this->columns as $idx => $column) {
@@ -263,7 +253,7 @@ class CDataTables
         }
 
         $this->where = " WHERE ".$conditionsWhere." AND ".$columnsFilterWhere. ' AND ' . $searchWhere;
-        if (isset($ingnobleCond)) $this->where .= $ingnobleCond;
+
         return $this->where;
     }
 
