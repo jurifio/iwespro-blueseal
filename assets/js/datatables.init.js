@@ -1198,13 +1198,41 @@
                 });
             }
 
-            if (table.data('inner-setup') == true) {
+            if (false && table.data('inner-setup') == true) {
                 bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-filter" style="float:right"><div class="btn-group-label">Colonne</div></div>');
                 bstoolbar.children('.dt-buttons').last().append('<a class="btn btn-default buttons-html5 btn-group-label table-select-column" style="border-radius: 2px;">' +
                     '<i class="fa fa-th" aria-hidden="true"></i>' +
                     '</a>');
                 $(document).on('click', '.table-select-column', function () {
                     console.log('selezionare colonne');
+                    var that = $(this);
+                    var bsModal = $('#bsModal');
+                    var header = $('#bsModal .modal-header h4');
+                    var body = $('#bsModal .modal-body');
+                    var cancelButton = $('#bsModal .modal-footer .btn-default');
+                    var okButton = $('#bsModal .modal-footer .btn-success');
+                    var table = $('.table').DataTable();
+                    header.html('Seleziona Colonne');
+                    body.css("text-align", 'left');
+                    var html = '<div id="column-selection">';
+                    var checkbox = [];
+                    $.each(table.columns(), function(k,v) {
+                        v = table.column(k);
+                        var title = v.header().eq(0).data('title');
+                        checkbox.push('<label><input type="checkbox" value="'+v.index()+'"'+(v.visible() ? ' checked="checked"' : '')+'>'+title +'</label>');
+                    });
+                    html+=checkbox.join('<br>');
+                    html+='</div>';
+                    bsModal.html(html);
+                    bsModal.modal();
+                    cancelButton.html("Annulla");
+                    cancelButton.on('click', function () {
+                        //cancella cose
+                    });
+                    cancelButton.show();
+                    okButton.html('Seleziona').off().on('click', function () {
+
+                    });
                 });
             }
 
