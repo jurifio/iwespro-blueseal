@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProduct;
 
 /**
  * Class CMarketplaceProductListAjaxController
@@ -21,23 +22,22 @@ class CMarketplaceProductListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sample = $this->app->repoFactory->create('Product')->getEmptyEntity();
-
+        $sample = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
         $datatable = new CDataTables('vBluesealMarketplaceProductList', $sample->getPrimaryKeys(), $_GET);
 
-        if ($this->app->router->request()->getRequestData('accountId')) {
+        $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
+        $datatable->addSearchColumn('marketplaceProductId');
+
+        /*if($this->app->router->request()->getRequestData('accountId')) {
             $marketplaceAccountId = $this->app->router->request()->getRequestData('accountId');
             $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
             $datatable->addCondition('marketplaceId', [$marketplaceAccount->marketplaceId]);
             $datatable->addCondition('marketplaceAccountId', [$marketplaceAccount->id]);
         } else {
             $marketplaceAccount = false;
-        }
+        }*/
 
-        $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
-        $datatable->addSearchColumn('marketplaceProductId');
-
-        $prodotti = $sample->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $righe = $this->app->dbAdapter->query($datatable->getQuery(), $datatable->getParams())->fetchAll();
         $count = $sample->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -47,22 +47,40 @@ class CMarketplaceProductListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $i = 0;
-        foreach ($prodotti as $val) {
+        foreach ($righe as $val) {
+            $row = [];
+            $marketplaceHasProduct = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findOne($val);
+            if (is_null($marketplaceHasProduct)) {
+                $product = \Monkey::app()->repoFactory->create('Product')->findOne([$val['productId'], $val['productVariantId']]);
+                $row['fee'] = 0;
+                $row['marketplaceAccountName'] = "";
+            } else {
+                $product = $marketplaceHasProduct->product;
 
-            if ($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
+                $style = $marketplaceHasProduct->isToWork == 0 ? ($marketplaceHasProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
+                $row['marketplaceAccountName'] = '<span ' . $style . '>' .
+                    $marketplaceHasProduct->marketplaceAccount->marketplace->name . ' - ' .
+                    $marketplaceHasProduct->marketplaceAccount->name .
+                    (empty ($marketplaceHasProduct->marketplaceProductId) ? "" : ' (' . $marketplaceHasProduct->marketplaceProductId . ')</span>');
+                $row['status'] = $marketplaceHasProduct->isToWork ? "lavorato" : "".",<br>".
+                                    $marketplaceHasProduct->hasError ? "errore" : "".",<br>".
+                                    $marketplaceHasProduct->isDeleted ? "cancellato" : "";
+                $row['fee'] = $marketplaceHasProduct->fee;
+            }
+            /** @var CProduct $product */
+            if ($product->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
 
             $shops = [];
-            foreach ($val->shop as $shop) {
+            foreach ($product->shop as $shop) {
                 $shops[] = $shop->name;
             }
 
-            $response['data'][$i]["DT_RowId"] = $val->printId();
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>';
-            $response['data'][$i]['brand'] = $val->productBrand->name;
-            $response['data'][$i]['season'] = $val->productSeason->name;
+            $row["DT_RowId"] = $product->printId();
+            $row["DT_RowClass"] = 'colore';
+            $row['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
+            $row['brand'] = $product->productBrand->name;
+            $row['season'] = $product->productSeason->name;
 
             $th = "";
             $tr = "";
@@ -72,35 +90,22 @@ class CMarketplaceProductListAjaxController extends AAjaxController
                                               ps.productId = ? AND
                                               ps.productVariantId = ?
                                           GROUP BY ps.productSizeId
-                                          HAVING stock > 0 ORDER BY `name`", [$val->id, $val->productVariantId])->fetchAll();
+                                          HAVING stock > 0 ORDER BY `name`", [$product->id, $product->productVariantId])->fetchAll();
             foreach ($res as $sums) {
                 $th .= "<th>" . $sums['name'] . "</th>";
                 $tr .= "<td>" . $sums['stock'] . "</td>";
             }
-            $response['data'][$i]["stock"] = '<table class="nested-table"><thead><tr>' . $th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
+            $row["stock"] = '<table class="nested-table"><thead><tr>' . $th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
 
-            $response['data'][$i]['shop'] = implode(', ', $shops);
-            $response['data'][$i]['dummy'] = '<img width="50" src="' . $val->getDummyPictureUrl() . '" />' . $imgs . '<br />';
-            $response['data'][$i]['itemno'] = '<span class="small">';
-            $response['data'][$i]['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;
-            $response['data'][$i]['itemno'] .= '</span>';
+            $row['shop'] = implode(', ', $shops);
+            $row['dummy'] = '<img width="50" src="' . $product->getDummyPictureUrl() . '" />' . $imgs . '<br />';
+            $row['itemno'] = '<span class="small">';
+            $row['itemno'] .= $product->printCpf();
+            $row['itemno'] .= '</span>';
 
-            $response['data'][$i]['fee'] = 0;
-            $marketplaces = [];
-            foreach ($val->marketplaceAccountHasProduct as $mProduct) {
-                if ($marketplaceAccount &&
-                    ($marketplaceAccount->id != $mProduct->marketplaceAccountId ||
-                        $marketplaceAccount->marketplaceId != $mProduct->marketplaceId)) continue;
-                $style = $mProduct->isToWork == 0 ? ($mProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
-                $marketplaces[] = '<span ' . $style . '>' . $mProduct->marketplaceAccount->marketplace->name . ' - ' . $mProduct->marketplaceAccount->name . ( empty ($mProduct->marketplaceProductId) ? "" : ' (' . $mProduct->marketplaceProductId . ')</span>' );
-                $response['data'][$i]['fee'] += $mProduct->fee;
-            }
-
-            $response['data'][$i]['marketplaceAccountName'] = implode('<br>', $marketplaces);
-
-            $response['data'][$i]['categories'] = $val->productCategory->getFirst()->getLocalizedName();
-
-            $i++;
+            $row['category'] = $product->getLocalizedProductCategories('<br>');
+            $row['creationDate'] = $product->creationDate;
+            $response ['data'][] = $row;
         }
 
         return json_encode($response);

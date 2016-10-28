@@ -1092,6 +1092,9 @@
                 if (typeof $(this).data('defaultOrder') != 'undefined') {
                     setup.order.push([c, $(this).data('defaultOrder')]);
                 }
+                if (typeof $(this).data('isVisible') != 'undefined') {
+                    column.visible = $(this).data('isVisible');
+                }
                 setup.columns.push(column);
                 c++;
             });
