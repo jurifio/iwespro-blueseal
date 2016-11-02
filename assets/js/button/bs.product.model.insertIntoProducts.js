@@ -46,9 +46,13 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
             '</div>',
             okButtonEvent: function() {
                 var id = $('.code-details').val();
-                $('.detail-form').prepend('' +
+                $('.detail-form').prepend('<div class="form-group">' +
                     '<label for="ProductName_1_name">Nome del prodotto</label>' +
-                    '<select id="ProductName_1_name" name="ProductName_1_name" class="form-control required"></select>'
+                    '<select id="ProductName_1_name" name="ProductName_1_name" class="form-control required"></select>' +
+                    '</div><div class="form-group">' +
+                    '<label for="productCategories">Categorie</label>' +
+                    '<select id="productCategories" name="productCategories" class="form-control required"></select>' +
+                    '</div>'
                 );
 
                 $("#ProductName_1_name").selectize({
@@ -90,7 +94,40 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
                     }
                 });
 
-                $('.detail-modal').selectDetails(id, type);
+                $.ajax({
+                    url: '/blueseal/xhr/GetAllProductCategories',
+                    method: 'GET',
+                    dataType: 'json',
+                    data: {id: id}
+                }).done(function(res){
+                    $("#productCategories").selectize({
+                        valueField: 'id',
+                        labelField: 'name',
+                        searchField: 'name',
+                        maxItems: 10,
+                        options: res,
+                        create: false,
+                        render: {
+                            option: function (item, escape) {
+                                return '<div>' +
+                                    escape(item.name) +
+                                    '</div>';
+                            }
+                        }
+                    });
+                });
+
+                $('.detail-modal').selectDetails(
+                    id,
+                    type,
+                    {
+                        after: function(detailBody){
+                            var productCategory = detailBody.find('.detailContent').data('category');
+                            $('#productCategories').humanized('addItems', productCategory);
+                        }
+                    }
+                );
+
                 modal.setOkEvent(function(){
                     var currentDets = {};
                     $(".productDetails select").each(function() {
@@ -103,7 +140,8 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
                             productName: $('#ProductName_1_name').val(),
                             details: currentDets,
                             prototypeId: $('.Product_dataSheet').val(),
-                            products: row
+                            products: row,
+                            category: $('#productCategories').val()
                         }
                     }).done(function(res) {
                         modal.body.html(res);

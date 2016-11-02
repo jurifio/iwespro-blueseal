@@ -69,6 +69,10 @@ class CGetDataSheet extends AAjaxController
             foreach($product->productCategory as $pc){
                 $cats[] = $pc->id;
             };
+        } elseif (isset($productSheetModelPrototype)) {
+            foreach($productSheetModelPrototype->productCategory as $v) {
+                $cats[] = $v->id;
+            }
         }
 
         $cats = json_encode($cats);
