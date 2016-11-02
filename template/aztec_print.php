@@ -243,11 +243,11 @@
 <div class="container-fluid container-fixed-lg bg-white newpage">
     <div class="row">
 <?php endif; ?>
-        <div class="col-xs-6">
-            <div class="col-xs-4" style="margin-top:10px">
+        <div class="col-md-6">
+            <div class="col-md-4" style="margin-top:10px">
                 <img src="<?php echo $aztecFactoryEndpoint.$productInfo->aztecCode; ?>" width="92" height="92"/>
             </div>
-            <div class="col-xs-8 pull-left" style="border-right: 1px dotted #c0c0c0;">
+            <div class="col-md-8 pull-left" style="border-right: 1px dotted #c0c0c0;">
                 <ul>
                     <li><strong>INT</strong> <?php echo $productInfo->product->id.'-'.$productInfo->product->productVariantId; ?></li>
                     <li><strong>CPF</strong> <?php echo $productInfo->product->itemno; ?> # <?php echo $productInfo->product->productVariant->name; ?></li>
