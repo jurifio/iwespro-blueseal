@@ -127,20 +127,21 @@ class CNamesManager extends AAjaxController
     {
         $search = $this->app->router->request()->getRequestData('search');
         $codes = [];
+        $res = [];
+        if (false !== $search) {
+            $searchByNames = ' `name` like ? ';
+            $codes[] = '%' . $search . '%';
 
-        if (false === $search) throw new BambooException('Non è stata specificata una stringa di ricerca');
-        $searchByNames = ' `name` like ? ';
-        $codes[] = '%' . $search . '%';
+            $res = $this->app->dbAdapter->query("SELECT DISTINCT `name` FROM `ProductName` WHERE `langId` = 1 AND ( $searchByNames ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
 
-        $res = $this->app->dbAdapter->query("SELECT DISTINCT `name` FROM `ProductName` WHERE `langId` = 1 AND ( $searchByNames ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
+            $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
 
-        $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
-
-        foreach($res as $k => $v) {
-            $pn = $pntRepo->findByName($v['name']);
-            $res[$k]['languages'] = [];
-            foreach($pn as $pnsingle) {
-                $res[$k]['languages'][] = $pnsingle->lang->lang;
+            foreach($res as $k => $v) {
+                $pn = $pntRepo->findByName($v['name']);
+                $res[$k]['languages'] = [];
+                foreach($pn as $pnsingle) {
+                    $res[$k]['languages'][] = $pnsingle->lang->lang;
+                }
             }
         }
         return json_encode($res);
@@ -152,7 +153,7 @@ class CNamesManager extends AAjaxController
      */
     public function put()
     {
-
+        $this->get();
     }
 
 
