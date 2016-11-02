@@ -212,35 +212,35 @@ $(function () {
     var target, scroll;
 
     /*$('a[href*=#]:not([href=#])').on("click", function (e) {
-        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-            target = $(this.hash);
-            target = target.length ? target : $("[id=" + this.hash.slice(1) + "]");
+     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+     target = $(this.hash);
+     target = target.length ? target : $("[id=" + this.hash.slice(1) + "]");
 
-            if (target.length) {
-                if (typeof document.body.style.transitionProperty === 'string') {
-                    e.preventDefault();
+     if (target.length) {
+     if (typeof document.body.style.transitionProperty === 'string') {
+     e.preventDefault();
 
-                    var avail = $(document).height() - $(window).height();
+     var avail = $(document).height() - $(window).height();
 
-                    scroll = target.offset().top;
+     scroll = target.offset().top;
 
-                    if (scroll > avail) {
-                        scroll = avail;
-                    }
+     if (scroll > avail) {
+     scroll = avail;
+     }
 
-                    $("html").css({
-                        "margin-top": ( $(window).scrollTop() - scroll ) + "px",
-                        "transition": "1s ease-in-out"
-                    }).data("transitioning", true);
-                } else {
-                    $("html, body").animate({
-                        scrollTop: scroll
-                    }, 1000);
-                    return;
-                }
-            }
-        }
-    });*/
+     $("html").css({
+     "margin-top": ( $(window).scrollTop() - scroll ) + "px",
+     "transition": "1s ease-in-out"
+     }).data("transitioning", true);
+     } else {
+     $("html, body").animate({
+     scrollTop: scroll
+     }, 1000);
+     return;
+     }
+     }
+     }
+     });*/
 
     $("html").on("transitionend webkitTransitionEnd msTransitionEnd oTransitionEnd", function (e) {
         if (e.target == e.currentTarget && $(this).data("transitioning") === true) {
@@ -480,11 +480,11 @@ $.bsModal = function (header, params) {
         self.okButton.off().on('click', callback);
     };
 
-    this.showCancelBtn = function() {
+    this.showCancelBtn = function () {
         self.cancelButton.show();
     };
 
-    this.hideCancelBtn = function() {
+    this.hideCancelBtn = function () {
         self.cancelButton.hide();
     };
 
@@ -496,11 +496,11 @@ $.bsModal = function (header, params) {
         self[button + 'Button'].html(string);
     };
 
-    this.disableOkButton = function() {
+    this.disableOkButton = function () {
         self.okButton.prop('disabled', true);
     };
 
-    this.enableOkButton = function() {
+    this.enableOkButton = function () {
         self.okButton.prop('disabled', false);
     };
 
@@ -515,7 +515,13 @@ $.bsModal = function (header, params) {
 };
 
 (function ($) {
-    $.fn.selectDetails = function (value, type) {
+    $.fn.selectDetails = function (value, type, opt) {
+        var def = {
+            productCode: false,
+            getDetails: false
+        };
+        var opt = $.extend({}, def, opt);
+        if ($('.product-code').html()) opt.productCode = $('.product-code').html();
         var prototypeId = 0;
         type = (type) ? type : '';
         value = (value) ? value : '';
@@ -526,10 +532,10 @@ $.bsModal = function (header, params) {
             data: {
                 value: value,
                 type: type,
-                code: $('.product-code').html()
+                code: opt.productCode
             }
-        }).done(function ($content) {
-            $(self).html($content);
+        }).done(function (content) {
+            $(self).html(content);
             prototypeId = $(self).find(".detailContent").data('prototype-id');
             var productDataSheet = $(self).find(".Product_dataSheet");
             var selPDS = $(productDataSheet).selectize();
@@ -539,22 +545,33 @@ $.bsModal = function (header, params) {
                 $(self).selectDetails($(this).find("option:selected").val(), 'change');
             });
 
-            $(self).find(".productDetails select").each(function () {
-                var sel = $(this).selectize({
-                    valueField: 'id',
-                    labelField: 'item',
-                    searchField: ['item'],
-                    options: window.detailsStorage
+            var detailsOptions = [];
+            $.ajax({
+                url: '/blueseal/xhr/DetailGetAll',
+                method: 'GET'
+            }).done(function (res) {
+                detailsOptions = JSON.parse(res);
+                $(self).find(".productDetails select").each(function () {
+                    var sel = $(this).selectize({
+                        valueField: 'id',
+                        labelField: 'item',
+                        searchField: ['item'],
+                        options: detailsOptions
+                    });
+                    var initVal = $(this).data('init-selection');
+                    if (initVal != 'undefined' && initVal.length != 0) {
+                        sel[0].selectize.setValue(initVal, true);
+                    } else {
+                        sel[0].selectize.setValue(0, true);
+                    }
                 });
-                var initVal = $(this).data('init-selection');
-                if (initVal != 'undefined' && initVal.length != 0) {
-                    sel[0].selectize.setValue(initVal, true);
-                } else {
-                    sel[0].selectize.setValue(0, true);
-                }
             });
             var selectName = $('#ProductName_1_name').selectize();
-            selectName[0].selectize.setValue(0, true);
+            var pName = $('.detailContent').data('productName');
+            selectName[0].selectize.addOption({name: pName});
+            selectName[0].selectize.addItem(pName);
+            selectName[0].selectize.refreshOptions();
+            selectName[0].selectize.setValue(pName, true);
         });
     }
 })(jQuery);
@@ -619,12 +636,16 @@ $.bsModal = function (header, params) {
                 if (!Array.isArray($(self).data('errors'))) $(self).data('errors', []);
                 methods.checkRequired();
                 var isFieldFault = false;
-                 $(self).find('input, select, textarea').each(function(){
-                 console.log($(this).attr('name'));
-                 if (1 == $(this).data('isFieldFault')) isFieldFault = true;
-                 });
-                 if (isFieldFault) {methods.addError('isFieldFault')}
-                 else {methods.removeError('isFieldFault')}
+                $(self).find('input, select, textarea').each(function () {
+                    console.log($(this).attr('name'));
+                    if (1 == $(this).data('isFieldFault')) isFieldFault = true;
+                });
+                if (isFieldFault) {
+                    methods.addError('isFieldFault')
+                }
+                else {
+                    methods.removeError('isFieldFault')
+                }
             },
             addError: function (err) {
                 var arr = [];
@@ -789,7 +810,7 @@ $.bsModal = function (header, params) {
             if ('undefined' == typeof initParams) throw "No params given";
             return $.bsCatalog(this, initParams);
 
-        //inizializzazione di una nuova interfaccia
+            //inizializzazione di una nuova interfaccia
         } else {
             //controllo che l'interfaccia sia già stata scaricata una volta, altrimenti la riscarico
             var catalogTemplate = $('.catalog-template');
@@ -841,7 +862,7 @@ $.bsModal = function (header, params) {
                 method: 'get',
                 dataType: 'json',
                 data: {search: search, shop: shop}
-            }).done(function(res){
+            }).done(function (res) {
                 if (false == res) {
                     self.submitwarning(['Il prodotto cercato non esiste. Controlla l\'esattezza del codice inserito']);
                 } else {
@@ -851,7 +872,7 @@ $.bsModal = function (header, params) {
                         callback(res);
                     }
                 }
-            }).fail(function(res) {
+            }).fail(function (res) {
                 console.error(res);
             });
         };
@@ -860,7 +881,7 @@ $.bsModal = function (header, params) {
             var productList = self.productList;
             if ('single' == this.opt.mode) productList.html('');
             if ('multi' == this.opt.mode) //TODO aggiungi pulsante per chiudere il singolo prodotto;
-            var prodTemp = self.productTemplate.clone();
+                var prodTemp = self.productTemplate.clone();
             if ('single' == this.opt.mode) prodTemp.find('.product-close').remove();
             var prodId = 'product-' + product.id + '-' + product.productVariantId;
 
@@ -894,23 +915,23 @@ $.bsModal = function (header, params) {
                     }
                 });
 
-                body.find('.move-qty').each(function(){
+                body.find('.move-qty').each(function () {
                     //controllo sui movimenti, mai minori della disponibilità
-                    $(this).off().on('change', function(e){
+                    $(this).off().on('change', function (e) {
                         var qty = $(this).data('stock');
                         var move = parseInt($(this).val());
                         if (0 > qty + move) $(this).val(qty * -1);
                         //controllo il segno dei movimenti
                         var sign = self.getCauseSign();
                         if ('+' == sign) {
-                                if (0 == $(this).val().indexOf('-')) {
-                                    $(this).val('0');
-                                }
+                            if (0 == $(this).val().indexOf('-')) {
+                                $(this).val('0');
+                            }
                         } else if ('-' == sign) {
-                                if (-1 == $(this).val().indexOf('-')) {
-                                    //$(this).val('-' + $(this).val());
-                                    $(this).val('0');
-                                }
+                            if (-1 == $(this).val().indexOf('-')) {
+                                //$(this).val('-' + $(this).val());
+                                $(this).val('0');
+                            }
                         } else if (false == sign) {
                             $(this).val('0');
                         }
@@ -931,7 +952,7 @@ $.bsModal = function (header, params) {
             head.append($('<th>Misure</th>'));
             stock.append($('<th>Disponibilità</th>'));
             moves.append($('<th>Movimenti</th>'));
-            for(var i in product.sizes) {
+            for (var i in product.sizes) {
                 head.append($('<th>' + product.sizes[i] + '</th>'));
                 var qt = (('undefined' != typeof product.sku[i]) && (0 < product.sku[i])) ? product.sku[i] : '';
                 stock.append($('<td>' + qt + '</td>'));
@@ -942,7 +963,7 @@ $.bsModal = function (header, params) {
             return {head: head, stock: stock, moves: moves};
         };
 
-        this.editMoves = function(product, table){
+        this.editMoves = function (product, table) {
             for (var i in product.moves) {
                 var fieldName = product.id + '-' + product.productVariantId + '-' + i;
                 var field = $(table).find('input[name="move-' + fieldName + '"]');
@@ -950,10 +971,10 @@ $.bsModal = function (header, params) {
             }
         };
 
-        this.getCauseSign = function() {
+        this.getCauseSign = function () {
             var causeElem = $('.mag-movementCause option:selected');
             var sign = false;
-            if ( -1 < causeElem.html().indexOf('(+)') || -1 < causeElem.html().indexOf('(-)')) {
+            if (-1 < causeElem.html().indexOf('(+)') || -1 < causeElem.html().indexOf('(-)')) {
                 var pos = causeElem.html().indexOf('(') + 1;
                 sign = causeElem.html().substr(pos, 1);
             }
@@ -961,16 +982,15 @@ $.bsModal = function (header, params) {
         };
 
 
-
-        this.submitError = function(domElems, errors) {
+        this.submitError = function (domElems, errors) {
             var f = self.form;
-            f.find('input, select').each(function(){
+            f.find('input, select').each(function () {
                 $(this).parent().removeClass('hasError');
             });
             /* dovrebbe evidenziare i campi contenenti errori ma non funziona, e non dovrebbe servire dopo l'implementazione di bsForm
-            $.each(domElems, function(k, v){
-                $(v).parent().addClass('hasError');
-            });*/
+             $.each(domElems, function(k, v){
+             $(v).parent().addClass('hasError');
+             });*/
             var alert = f.find('.alert');
             alert.css('visibility', 'visible');
             alert.css('opacity', '1');
@@ -982,14 +1002,14 @@ $.bsModal = function (header, params) {
             }
             alert.css('visibility', 'visible');
 
-            setTimeout(function() {
-                alert.animate({'opacity': '0'}, 'fast', function(){
+            setTimeout(function () {
+                alert.animate({'opacity': '0'}, 'fast', function () {
 
                 });
             }, 8000);
         };
 
-        this.submitSuccess = function(msg) {
+        this.submitSuccess = function (msg) {
             var f = self.form;
 
             var alert = f.find('.alert');
@@ -1004,13 +1024,13 @@ $.bsModal = function (header, params) {
             }
             alert.css('visibility', 'visible');
 
-            setTimeout(function() {
-                alert.animate({'opacity': '0'}, 'fast', function(){
+            setTimeout(function () {
+                alert.animate({'opacity': '0'}, 'fast', function () {
                 });
             }, 8000);
         };
 
-        this.submitwarning = function(msg) {
+        this.submitwarning = function (msg) {
             var f = self.form;
 
             var alert = f.find('.alert');
@@ -1025,22 +1045,22 @@ $.bsModal = function (header, params) {
             }
             alert.css('visibility', 'visible');
 
-            setTimeout(function() {
-                alert.animate({'opacity': '0'}, 'fast', function(){
+            setTimeout(function () {
+                alert.animate({'opacity': '0'}, 'fast', function () {
                 });
             }, 8000);
         };
 
-        this.assignMovementLimit = function(operator) {
-            self.form.find('.move-qty').each(function() {
+        this.assignMovementLimit = function (operator) {
+            self.form.find('.move-qty').each(function () {
                 self.qtyDynamicValidation(this, operator);
-                this.off().on('change keyup', function(e){
+                this.off().on('change keyup', function (e) {
                     self.qtyDynamicValidation(this, operator);
                 })
             });
         };
 
-        this.qtyDynamicValidation = function(elem, op) {
+        this.qtyDynamicValidation = function (elem, op) {
             if (('+' == operator) && (0 > $(elem).val())) {
                 //$(elem).val('0');
             } else if (('-' == operator) && ( 0 < $(elem).val()) && ('-' != $(elem).val())) {
@@ -1048,7 +1068,7 @@ $.bsModal = function (header, params) {
             }
         };
 
-        this.save = function(successCallback, failCallback) {
+        this.save = function (successCallback, failCallback) {
             var f = self.form;
             $('#form-movement').bsForm('save', {
                 url: '/blueseal/xhr/CatalogController',
@@ -1056,10 +1076,10 @@ $.bsModal = function (header, params) {
                 excludeFields: ['search-item'],
                 dataType: 'json',
                 excludeEmptyFields: true,
-                onCheckError: function(msg) {
+                onCheckError: function (msg) {
                     self.submitError([], [msg]);
                 },
-                onDone: function(res, method) {
+                onDone: function (res, method) {
                     if ('OK' == res) {
                         self.submitSuccess(['Il movimento è stato caricato correttamente']);
                         self.productList.html('');
@@ -1103,14 +1123,13 @@ $.bsModal = function (header, params) {
         var shopSelect = $('.mag-shop');
 
         if ('undefined' != typeof this.opt.product) {
-            if ('string' == typeof this.opt.product)
-            {
+            if ('string' == typeof this.opt.product) {
                 var string = this.opt.product;
                 this.searchProduct(string, function (res) {
                     self.addProduct(res);
                 });
             } else if ($.isArray(this.opt.product)) {
-                for(var i in this.opt.product) {
+                for (var i in this.opt.product) {
                     var string = this.opt.product[i];
                     this.searchProduct(string, function (res) {
                         self.addProduct(res);
@@ -1122,24 +1141,24 @@ $.bsModal = function (header, params) {
 
         //evento ricerca
         var searchBtn = this.searchBlock.find('.search-btn');
-        searchBtn.on('click', function(e){
+        searchBtn.on('click', function (e) {
             e.preventDefault();
             var string = self.form.find('.search-item').val();
-            self.searchProduct(string, function(res){
+            self.searchProduct(string, function (res) {
                 self.addProduct(res);
             });
             //$('.search-item').selectize()[0].selectize.setValue('', true);
         });
 
         //ricerca per barcode
-/*        var searchInput = this.searchBlock.find('.search-item');
-        searchInput.on('keypress', function(e){
-            if (13 == e.charCode) {
-                e.preventDefault();
-                $(this).select();
-                searchBtn.trigger('click');
-            }
-        });*/
+        /*        var searchInput = this.searchBlock.find('.search-item');
+         searchInput.on('keypress', function(e){
+         if (13 == e.charCode) {
+         e.preventDefault();
+         $(this).select();
+         searchBtn.trigger('click');
+         }
+         });*/
 
         //selectize search field
         var searchInput = this.searchBlock.find('.search-item');
@@ -1175,36 +1194,36 @@ $.bsModal = function (header, params) {
             }
         });
 
-        this.submitBlock.find('.mag-submit-btn').on('click', function(e){
+        this.submitBlock.find('.mag-submit-btn').on('click', function (e) {
             e.preventDefault();
             self.save();
         });
-        this.submitBlock.find('.mag-return-on-top').on('click', function(e){
+        this.submitBlock.find('.mag-return-on-top').on('click', function (e) {
             e.preventDefault();
-            $("html, body").animate({ scrollTop: 0 }, "fast");
+            $("html, body").animate({scrollTop: 0}, "fast");
             $('.search-item').selectize()[0].selectize.focus();
             $('.mag-searchBlock input').focus();
         });
 
         //azzero le quantità che non rispettano i criteri
-       var selectCause = this.form.find('.mag-movementCause');
-       selectCause.on('change', function(){
+        var selectCause = this.form.find('.mag-movementCause');
+        selectCause.on('change', function () {
             var moves = self.form.find('.move-qty');
             var sign = self.getCauseSign();
-            if (false == sign){
-                moves.each(function(){
+            if (false == sign) {
+                moves.each(function () {
                     if ('' != $(this).val())
-                    $(this).val(0);
+                        $(this).val(0);
                 });
             } else if ('+' == sign) {
-                moves.each(function(){
+                moves.each(function () {
                     if (0 > $(this).val()) {
                         $(this).val(0);
                     }
                 });
             } else if ('-' == sign) {
-                moves.each(function(){
-                    if (0 < $(this).val()){
+                moves.each(function () {
+                    if (0 < $(this).val()) {
                         $(this).val(0);
                     }
                 });
@@ -1214,7 +1233,7 @@ $.bsModal = function (header, params) {
     };
 })(jQuery);
 
-$(document).on('keypress', '.inputPrice', function(e){
+$(document).on('keypress', '.inputPrice', function (e) {
     console.log(e);
     var target = e.target;
     e.preventDefault();
@@ -1227,7 +1246,7 @@ $(document).on('keypress', '.inputPrice', function(e){
             if (char == ',') {
                 if (-1 == val.indexOf(',')) {
                     if (0 == val.length) $(this).val('0,');
-                    else if (target.selectionStart >= val.length - 2){
+                    else if (target.selectionStart >= val.length - 2) {
                         var pos = target.selectionStart;
                         var before = val.substring(0, target.selectionStart);
                         var after = val.substring(target.selectionStart);
@@ -1246,8 +1265,8 @@ $(document).on('keypress', '.inputPrice', function(e){
     }
 });
 
-$.fn.setCursorPosition = function(pos) {
-    this.each(function(index, elem) {
+$.fn.setCursorPosition = function (pos) {
+    this.each(function (index, elem) {
         if (elem.setSelectionRange) {
             elem.setSelectionRange(pos, pos);
         } else if (elem.createTextRange) {

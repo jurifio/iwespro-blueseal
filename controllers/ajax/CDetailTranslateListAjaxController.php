@@ -59,7 +59,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
 		    }
 		    $langs[0] = 1;
             $langsCond = implode('|',$langs);
-		    $datatable->addLikeCondition('translatedLangId', $langsCond);
+		    $datatable->addIgnobleCondition('translatedLangId', $langsCond);
 	    }
 
         $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/edit');
