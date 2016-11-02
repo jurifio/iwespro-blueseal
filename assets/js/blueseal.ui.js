@@ -130,7 +130,7 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
 
     if (requiredErr.length) {
         errorMsg+= 'I seguenti campi sono obbligatori e non sono stati compilati:<br />';
-        $.each(errors, function (k, v) {
+        $.each(requiredErr, function (k, v) {
             var label = $('label[for="' + v + '"]');
             if (0 == label.length) label = $('label[for="' + v + '-selectized"]');
             errorMsg += label.html() + '<br />';
