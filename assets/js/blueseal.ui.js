@@ -257,7 +257,9 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
             delay: {"show": 500, "hide": 100}
         });
 
-        $('.color-picker').colorpicker();
+        $('.color-picker').each(function(k,v) {
+            v.colorpicker();
+        });
 
         $('.toolbar-definition').remove();
     });
