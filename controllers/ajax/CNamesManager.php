@@ -100,23 +100,16 @@ class CNamesManager extends AAjaxController
         $old = [];
         try {
             $this->app->dbAdapter->beginTransaction();
+            $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
             foreach ($oldCodes as $v) {
-                $product = $this->app->repoFactory->create('Product', false)->findOneByStringId($v);
-                foreach ($product->productNameTranslation as $productNameTranslation) {
-                    if ($productNameTranslation->langId = 1) {
-                        $productNameTranslation->name = ucfirst(trim($new));
-                        $productNameTranslation->update();
-                    } else {
-                        $productNameTranslation->delete();
-                    }
-                }
-                $old[] = explode('-', $v)[1];
+                list($id, $productVariantId) = explode(',', $v);
+                $pntRepo->updateProductName($id, $productVariantId, $new);
             }
             $this->app->dbAdapter->commit();
             return 'Nomi aggiornati!';
         } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
-            return 'OOPS! C\'è stato un problema!';
+            return 'OOPS! C\'è stato un problema!<br />' . $e->getMessage();
         }
     }
 
