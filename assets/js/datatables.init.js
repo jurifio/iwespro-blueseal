@@ -1205,7 +1205,6 @@
                     '</a>');
                 $(document).on('click', '.table-select-column', function () {
                     console.log('selezionare colonne');
-                    var that = $(this);
                     var bsModal = $('#bsModal');
                     var header = $('#bsModal .modal-header h4');
                     var body = $('#bsModal .modal-body');
@@ -1218,7 +1217,8 @@
                     var checkbox = [];
                     $.each(table.columns(), function(k,v) {
                         v = table.column(k);
-                        var title = v.header().eq(0).data('title');
+                        console.log(k,v);
+                        var title = v.header().data('title');
                         checkbox.push('<label><input type="checkbox" value="'+v.index()+'"'+(v.visible() ? ' checked="checked"' : '')+'>'+title +'</label>');
                     });
                     html+=checkbox.join('<br>');
