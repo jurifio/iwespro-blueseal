@@ -34,7 +34,7 @@
         }
 
         @page {
-            size:auto;
+            size:A4;
             margin:5mm 0mm 0mm 0mm;
         }
 
@@ -275,7 +275,7 @@
                 window.print();
 
                 setTimeout(function() {
-                    window.close();
+                    //window.close();
                 },1);
 
             },200);
