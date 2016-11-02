@@ -22,6 +22,7 @@ class CDetailModelUpdateProducts extends AAjaxController
         $productName = $this->app->router->request()->getRequestData('productName');
         $prototypeId = $this->app->router->request()->getRequestData('prototypeId');
         $details = $this->app->router->request()->getRequestData('details');
+        $category = $this->app->router->request()->getRequestData('category');
 
         $done = 0;
         if ($idModel) {
@@ -54,6 +55,30 @@ class CDetailModelUpdateProducts extends AAjaxController
             }
 
             $done = 1;
+        }
+
+        if (isset($products) and $category) {
+            try {
+                $phpcRepo = \Monkey::app()->repoFactory->create('ProductHasProductCategory');
+                $category = explode(',', $category);
+                foreach ($product as $p) {
+                    $phpcOC = $phpcRepo->findAll();
+                    foreach ($phpcOC as $phpc) {
+                        $phpc->delete();
+                    }
+
+                    foreach ($category as $c) {
+                        $phpc = $phpcRepo->getEmptyEntity();
+                        $phpc->productId = $p->id;
+                        $phpc->productVariantId = $p->productVariantId;
+                        $phpc->productCategoryId = $c;
+                        $phpc->insert();
+                    }
+                }
+            } catch (\Throwable $e) {
+            return 'OOPS! Errore di sistema nell\'inserimento delle categorie:<br />' . $e->getMessage() . '<br />' .
+            'Contattare un Amministratore';
+        }
         }
 
         if ($done) return 'I prodotti sono stati aggiornati!';

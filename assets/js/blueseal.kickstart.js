@@ -516,16 +516,18 @@ $.bsModal = function (header, params) {
 
 (function ($) {
     $.fn.selectDetails = function (value, type, opt) {
+        var self = this;
         var def = {
             productCode: false,
-            getDetails: false
+            getDetails: false,
+            after: function(self) {}
         };
         var opt = $.extend({}, def, opt);
         if ($('.product-code').html()) opt.productCode = $('.product-code').html();
         var prototypeId = 0;
         type = (type) ? type : '';
         value = (value) ? value : '';
-        var self = this;
+
         $.ajax({
             type: "GET",
             url: "/blueseal/xhr/GetDataSheet",
@@ -572,6 +574,7 @@ $.bsModal = function (header, params) {
             selectName[0].selectize.addItem(pName);
             selectName[0].selectize.refreshOptions();
             selectName[0].selectize.setValue(pName, true);
+            opt.after(self);
         });
     }
 })(jQuery);

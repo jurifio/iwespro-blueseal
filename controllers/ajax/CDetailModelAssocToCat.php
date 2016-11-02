@@ -18,41 +18,64 @@ class CDetailModelAssocToCat extends AAjaxController
     public function get()
     {
         $get = $this->app->router->request()->getRequestData();
-        $productSheetModelPrototypeId = $get['productSheetModelPrototypeId'];
-        $code = $get['code'];
+        $productSheetModelPrototypeId = $this->app->router->request()->getRequestData('productSheetModelPrototypeId');
+        $code = $this->app->router->request()->getRequestData('code');
+        $idModel = $this->app->router->request()->getRequestData('idModel');
         list($id, $variantId) = explode('-', $code);
         $search = (array_key_exists('search', $get)) ? $get['search'] : false;
         unset($get);
         $cats = [];
         $countCats = 0;
-        $resByCode = $this->app->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
 
-        foreach($resByCode as $k => $v) {
-            $cats[$countCats] = [];
-            $cats[$countCats]['id'] = $v->id;
-            $cats[$countCats]['slug'] = $v->slug;
-            $cats[$countCats]['name'] = $this->app->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1, 'productCategoryId' => $v->id])->name;
-            $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->id));
-            $cats[$countCats]['origin'] = 'code';
-            $countCats++;
-        }
-        unset($resByCode);
-
-        $resByModelName = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $productSheetModelPrototypeId]);
-        foreach ($resByModelName as $v) {
-            if (!in_array($v->productCategory->id, array_column($cats, 'id'))) {
+        if ($code) {
+            $resByCode = $this->app->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
+            foreach ($resByCode as $k => $v) {
                 $cats[$countCats] = [];
-                $cats[$countCats]['id'] = $v->productCategory->id;
-                $cats[$countCats]['slug'] = $v->productCategory->slug;
-                $cats[$countCats]['name'] = $this->app->repoFactory->create('productCategoryTranslation')->findOneBy(
-                    ['langId' => 1, 'productCategoryId' => $v->productCategory->id]
-                );
-                $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->productCategory->id));
-                $cats[$countCats]['origin'] = 'model';
+                $cats[$countCats]['id'] = $v->id;
+                $cats[$countCats]['slug'] = $v->slug;
+                $cats[$countCats]['name'] = $this->app->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1, 'productCategoryId' => $v->id])->name;
+                $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->id));
+                $cats[$countCats]['origin'] = 'code';
                 $countCats++;
             }
+            unset($resByCode);
         }
-        unset($resByModelName);
+
+        if ($productSheetModelPrototypeId) {
+            $resByModelName = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $productSheetModelPrototypeId]);
+            foreach ($resByModelName as $v) {
+                if (!in_array($v->productCategory->id, array_column($cats, 'id'))) {
+                    $cats[$countCats] = [];
+                    $cats[$countCats]['id'] = $v->productCategory->id;
+                    $cats[$countCats]['slug'] = $v->productCategory->slug;
+                    $cats[$countCats]['name'] = $this->app->repoFactory->create('productCategoryTranslation')->findOneBy(
+                        ['langId' => 1, 'productCategoryId' => $v->productCategory->id]
+                    );
+                    $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->productCategory->id));
+                    $cats[$countCats]['origin'] = 'model';
+                    $countCats++;
+                }
+            }
+            unset($resByModelName);
+        }
+
+        if ($idModel) {
+            $resByModelName = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $productSheetModelPrototypeId]);
+            foreach ($resByModelName as $v) {
+                if (!in_array($v->productCategory->id, array_column($cats, 'id'))) {
+                    $cats[$countCats] = [];
+                    $cats[$countCats]['id'] = $v->productCategory->id;
+                    $cats[$countCats]['slug'] = $v->productCategory->slug;
+                    $cats[$countCats]['name'] = $this->app->repoFactory->create('productCategoryTranslation')->findOneBy(
+                        ['langId' => 1, 'productCategoryId' => $v->productCategory->id]
+                    );
+                    $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->productCategory->id));
+                    $cats[$countCats]['origin'] = 'model';
+                    $countCats++;
+                }
+            }
+            unset($resByModelName);
+        }
 
         if ($search) {
             $resBySearch = $this->app->dbAdapter->query("SELECT * FROM `ProductCategoryTranslation` WHERE `langId` = 1 AND `name` LIKE ? LIMIT 30", ['%' . $search . '%'])->fetchAll();
