@@ -153,7 +153,7 @@ class CNamesManager extends AAjaxController
      */
     public function put()
     {
-
+        $this->get();
     }
 
 
