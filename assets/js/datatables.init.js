@@ -11,6 +11,7 @@
         dom: "<'btn-toolbar'B><'row'<'col-sm-6'i><'col-sm-4'f><'col-sm-2'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12'p>>",
         paginationType: "full_numbers",
         destroy: true,
+        colReorder: true,
         searchDelay: 2000,
         deferRender: true,
         processing: true,
@@ -1112,19 +1113,19 @@
             tableSetup[table.data('datatableName')] = $.extend({}, tableSetup.common, setup);
         }
 
-        var ths = table.find('th');
-
         if (table.data('column-filter')) {
             var i = 0;
-            ths.each(function () {
-                var title = $(this).text();
+            var th2 = '<tr role="row search">';
+            table.find('th').each(function () {
                 if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
-                    $(this).html(title + '<br> <input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" />');
+                    th2+='<th><input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" /></th>';
                 } else {
-                    $(this).html(title + '<br> <input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/>');
+                    th2+='<th><input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/></th>';
                 }
                 i++
             });
+            th2+='</tr>';
+            table.find('thead').prepend($(th2));
         }
 
         //fermo la propagazione
@@ -1139,8 +1140,6 @@
                 e.stopPropagation();
             });
         });
-
-        var startedSearch = false;
 
         $('input.search-col').on('keyup', function (e) {
             var id = $(e.target).attr("id");
