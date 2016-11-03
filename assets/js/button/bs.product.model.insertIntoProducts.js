@@ -97,8 +97,7 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
                 $.ajax({
                     url: '/blueseal/xhr/GetAllProductCategories',
                     method: 'GET',
-                    dataType: 'json',
-                    data: {id: id}
+                    dataType: 'json'
                 }).done(function(res){
                     $("#productCategories").selectize({
                         valueField: 'id',
