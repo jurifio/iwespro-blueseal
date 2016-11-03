@@ -1295,16 +1295,16 @@
                     options.endDate = dates[1];
                 }
 
-                $(this).daterangepicker(options);
+                that.daterangepicker(options);
 
-                $(this).on('apply.daterangepicker', function (ev, picker) {
+                that.on('apply.daterangepicker', function (ev, picker) {
                     that.val("><" + picker.startDate.format('YYYY-MM-DD') + "|" + picker.endDate.format('YYYY-MM-DD'));
                     var id = $(ev.target).attr("id").substring(10);
                     dataTable.columns(id).search(that.val());
                     dataTable.search("").draw();
                 });
 
-                $(this).on('cancel.daterangepicker', function (ev, picker) {
+                that.on('cancel.daterangepicker', function (ev, picker) {
                     that.val("");
                     var id = $(ev.target).attr("id").substring(10);
                     dataTable.columns(id).search(that.val());
