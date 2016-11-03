@@ -145,7 +145,8 @@ class CProductListAjaxController extends AAjaxController
             $row['colorGroup'] = '<span class="small">' . (($colorGroup) ? $colorGroup->name : "[Non assegnato]") . '</span>';
             $row['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
             $row['categoryId'] = '<span class="small">'.$val->getLocalizedProductCategories(" ","<br>").'</span>';
-            $row['name'] = $val->productNameTranslation->getFirst()->name;
+            $tname = $val->productNameTranslation->getFirst();
+            $row['name'] = ($tname) ? $tname : '';
             $row['tags'] = '<span class="small">'.$val->getLocalizedTags('<br>',false).'</span>';
             $row['status'] = $val->productStatus->name;
 
