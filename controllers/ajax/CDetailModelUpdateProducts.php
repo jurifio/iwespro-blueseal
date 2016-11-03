@@ -34,8 +34,7 @@ class CDetailModelUpdateProducts extends AAjaxController
             $model = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $idModel]);
             try {
                 foreach ($products as $p) {
-                    $product = $pRepo->findOneByStringId($p);
-                    $product->updateFromModel($model);
+                    $pRepo->updateFromModel($model, $pRepo->findOneByStringId($p));
                 }
             } catch (\Throwable $e) {
                 return 'OOPS! Errore di sistema:<br />' . $e->getMessage() . '<br />' .
@@ -44,10 +43,10 @@ class CDetailModelUpdateProducts extends AAjaxController
             $done = 1;
         } elseif ($productName) {
             try {
+                $pRepo = \Monkey::app()->repoFactory->create('Product');
                 foreach ($products as $p) {
-                    $pRepo = \Monkey::app()->repoFactory->create('Product');
                     $product = $pRepo->findOneByStringId($p);
-                    $product->updateDetailsFromData($prototypeId, $details, $productName);
+                    $pRepo->updateDetailsFromData($product, $prototypeId, $details, $productName);
                 }
             } catch (\Throwable $e) {
                 return 'OOPS! Errore di sistema:<br />' . $e->getMessage() . '<br />' .
@@ -60,7 +59,7 @@ class CDetailModelUpdateProducts extends AAjaxController
         if (isset($products) and $category) {
             try {
                 $phpcRepo = \Monkey::app()->repoFactory->create('ProductHasProductCategory');
-                $category = explode(',', $category);
+                if (is_string($category)) $category = explode(',', $category);
                 foreach ($product as $p) {
                     $phpcOC = $phpcRepo->findAll();
                     foreach ($phpcOC as $phpc) {

@@ -518,7 +518,7 @@ $.bsModal = function (header, params) {
     $.fn.selectDetails = function (value, type, opt) {
         var self = this;
         var def = {
-            productCode: false,
+            productCode: '',
             getDetails: false,
             after: function(self) {}
         };

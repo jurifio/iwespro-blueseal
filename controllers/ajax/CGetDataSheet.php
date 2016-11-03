@@ -23,14 +23,13 @@ class CGetDataSheet extends AAjaxController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/parts/sheetDetails.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal') . '/template/parts/sheetDetails.php');
 
-        $get = $this->app->router->request()->getRequestData();
         $emptyDetails = (false !== $this->app->router->request()->getRequestData('emptyDetails')) ? $this->app->router->request()->getRequestData('emptyDetails') : 1;
 
-        $code = (array_key_exists('code', $get)) ? (($get['code']) ? $get['code'] : false) : false;
-        $value = (array_key_exists('value', $get)) ? $get['value'] : false;
-        $type = (array_key_exists('type', $get)) ? $get['type'] : false;
+        $code = \Monkey::app()->router->request()->getRequestData('code');
+        $value = \Monkey::app()->router->request()->getRequestData('value');
+        $type = \Monkey::app()->router->request()->getRequestData('type');
 
         $Pname = '';
 
@@ -39,23 +38,22 @@ class CGetDataSheet extends AAjaxController
             $productSheetPrototype = $productSheetModelPrototype->productSheetPrototype;
             $Pname= ($productSheetModelPrototype->productName) ? $productSheetModelPrototype->productName : '';
             $actual = $productSheetModelPrototype->productSheetModelActual;
-        } elseif ('change' == $type) {
+        } elseif ($type &&  ('change' == $type)) {
             $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['id' => $value]);
             $actual = [];
-        } else {
-            if ($code) {
-                $prodCollection = $this->app->repoFactory->create('Product')->findByAnyString($code);
-                $product = $prodCollection->getFirst();
-                $productSheetPrototype = $product->productSheetPrototype;
-                if (null === $productSheetPrototype) $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOne([33]);
+        } elseif (($code) || ($type && ('product' == $type))) {
+            $str = (false != $code) ? $code : $value;
+            $prodCollection = $this->app->repoFactory->create('Product')->findByAnyString($str);
+            $product = $prodCollection->getFirst();
+            $productSheetPrototype = $product->productSheetPrototype;
+            if (null === $productSheetPrototype) $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOne([33]);
 
-                $productName = $product->productNameTranslation;
-                if ($productName) $Pname = $productName->getfirst()->name;
-                $actual = $product->productSheetActual;
-            } else {
-                $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
-                $actual = [];
-            }
+            $productName = $product->productNameTranslation;
+            if ($productName) $Pname = $productName->getfirst()->name;
+            $actual = $product->productSheetActual;
+        } else {
+            $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
+            $actual = [];
         }
 
         $resActual = [];
