@@ -57,10 +57,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
 
-            if($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
-            else $imgs = "";
-
-            $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="'.$val->getDummyPictureUrl().'" />' . $imgs . '</a>';
+            $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="'.$val->getDummyPictureUrl().'" /></a>';
 
             $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
 
