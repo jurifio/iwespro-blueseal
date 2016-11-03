@@ -232,6 +232,7 @@
 <body class="fixed-header">
 <div class="cover"><div>Usa CTRL-P per stampare</div></div>
 
+<div class="container-fluid">
 <?php $i = 1; foreach ($products as $productInfo): ?>
 <?php if ($i == 1): ?>
 <div class="container-fluid container-fixed-lg bg-white newpage">
@@ -265,7 +266,7 @@
 </div>
 <?php endif; ?>
 <?php $i++; endforeach; ?>
-
+</div>
 <script type="application/javascript">
     $(document).ready(function() {
 
