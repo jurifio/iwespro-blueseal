@@ -29,7 +29,13 @@ class CProductDetailsMerge extends AAjaxController
         $resProds = [];
         $resCount = 0;
         foreach ($prods as $k => $v) {
-            $prod = $repoPro->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            if (!is_array($v)) {
+                $p = [];
+                list($p['id'], $p['productVariantId']) = explode('-', $v);
+            } else {
+                $p = $v;
+            }
+            $prod = $repoPro->findOneBy(['id' => $p['id'], 'productVariantId' => $p['productVariantId']]);
             if (!is_null($prod->productSheetPrototypeId)) {
                 $resProds[$resCount]['code'] = $prod->id . "-" . $prod->productVariantId;
                 $resProds[$resCount]['variant'] = $prod->productVariant->name;

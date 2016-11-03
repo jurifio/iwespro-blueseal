@@ -60,7 +60,7 @@ class CDetailModelUpdateProducts extends AAjaxController
         if (isset($products) and $category) {
             try {
                 $phpcRepo = \Monkey::app()->repoFactory->create('ProductHasProductCategory');
-                $category = explode(',', $category);
+                if (is_string($category)) $category = explode(',', $category);
                 foreach ($product as $p) {
                     $phpcOC = $phpcRepo->findAll();
                     foreach ($phpcOC as $phpc) {
