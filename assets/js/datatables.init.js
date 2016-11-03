@@ -1162,7 +1162,7 @@
         };
 
         table.on('draw.dt', function () {
-
+            var dataTable = $('.table').DataTable();
             var bstoolbar = $('.toolbar-container .bs-toolbar');
             var dtfilters = $('.dataTables_filter input');
             var dtlength = $('.dataTables_length select');
@@ -1183,6 +1183,7 @@
             }
 
             if (table.data('column-filter') && $('.bs-toolbar-filter').length == 0) {
+                //FILTRI COLONNE
                 bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-filter" style="float:right"><div class="btn-group-label">Filtra</div></div>');
                 bstoolbar.children('.dt-buttons').last().append('<a class="btn btn-default buttons-html5 btn-group-label table-per-column-filter" style="border-radius: 2px;">' +
                     '<i class="fa fa-filter" aria-hidden="true"></i>' +
@@ -1196,49 +1197,54 @@
                         $(this).addClass('bs-button-toggle');
                     }
                 });
-            }
-
-            if (false && table.data('inner-setup') == true) {
+                dataTable.columns().every(function(k,v) {
+                    if(false == $(dataTable.column(k).header()).data('visible')) {
+                        dataTable.column(k).visible(false);
+                    }
+                });
+                //SELEZIONE COLONNE
                 bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-filter" style="float:right"><div class="btn-group-label">Colonne</div></div>');
                 bstoolbar.children('.dt-buttons').last().append('<a class="btn btn-default buttons-html5 btn-group-label table-select-column" style="border-radius: 2px;">' +
                     '<i class="fa fa-th" aria-hidden="true"></i>' +
                     '</a>');
                 $(document).on('click', '.table-select-column', function () {
-                    console.log('selezionare colonne');
                     var bsModal = $('#bsModal');
                     var header = $('#bsModal .modal-header h4');
                     var body = $('#bsModal .modal-body');
                     var cancelButton = $('#bsModal .modal-footer .btn-default');
                     var okButton = $('#bsModal .modal-footer .btn-success');
-                    var table = $('.table').DataTable();
                     header.html('Seleziona Colonne');
-                    body.css("text-align", 'left');
                     var html = '<div id="column-selection">';
                     var checkbox = [];
-                    $.each(table.columns(), function(k,v) {
-                        v = table.column(k);
-                        console.log(k,v);
-                        var title = v.header().data('title');
-                        checkbox.push('<label><input type="checkbox" value="'+v.index()+'"'+(v.visible() ? ' checked="checked"' : '')+'>'+title +'</label>');
+                    dataTable.columns().every(function (k, v) {
+                        v = dataTable.column(k);
+                        var title = $(v.header()).attr('aria-label').split(' :')[0].trim();
+                        checkbox.push('<label><input type="checkbox" value="' + v.index() + '"' + (v.visible() ? ' checked="checked"' : '') + '> ' + title + '</label>');
                     });
-                    html+=checkbox.join('<br>');
-                    html+='</div>';
-                    bsModal.html(html);
+                    html += checkbox.join('<br>');
+                    html += '</div>';
+                    body.html(html);
                     bsModal.modal();
-                    cancelButton.html("Annulla");
-                    cancelButton.on('click', function () {
-                        //cancella cose
+                    cancelButton.html("Annulla").off().on('click', function () {
+                        bsModal.modal('hide');
                     });
                     cancelButton.show();
                     okButton.html('Seleziona').off().on('click', function () {
-
+                        $('div#column-selection input').each(function () {
+                            if ($(this).is(':checked')) {
+                                dataTable.column($(this).val()).visible(true);
+                            } else {
+                                dataTable.column($(this).val()).visible(false);
+                            }
+                        });
+                        bsModal.modal('hide');
                     });
                 });
             }
 
             toolbarSearch.find('input').eq(0).off().on('keyup', function (e) {
                 if (e.keyCode == 13) {
-                    table.DataTable().search($(this).val()).draw();
+                    dataTable.search($(this).val()).draw();
                 }
             });
 
@@ -1295,15 +1301,15 @@
                 $(this).on('apply.daterangepicker', function (ev, picker) {
                     that.val("><" + picker.startDate.format('YYYY-MM-DD') + "|" + picker.endDate.format('YYYY-MM-DD'));
                     var id = $(ev.target).attr("id").substring(10);
-                    table.DataTable().columns(id).search(that.val());
-                    table.DataTable().search("").draw();
+                    dataTable.columns(id).search(that.val());
+                    dataTable.search("").draw();
                 });
 
                 $(this).on('cancel.daterangepicker', function (ev, picker) {
                     that.val("");
                     var id = $(ev.target).attr("id").substring(10);
-                    table.DataTable().columns(id).search(that.val());
-                    table.DataTable().search("").draw();
+                    dataTable.columns(id).search(that.val());
+                    dataTable.search("").draw();
                 });
 
             });
@@ -1329,21 +1335,21 @@
                     });
                     okButton.html('Filtra').off().on('click', function () {
                         var ids = [];
-                        $.each(radioTree.fancytree('getTree').getSelectedNodes(), function(k,v){
+                        $.each(radioTree.fancytree('getTree').getSelectedNodes(), function (k, v) {
                             ids.push(v.key);
                         });
                         radioTree.fancytree("destroy");
                         body.html('');
                         bsModal.modal('hide');
-                        that.val("§in:"+ids.join(','));
+                        that.val("§in:" + ids.join(','));
                         var id = that.attr("id").substring(10);
-                        table.DataTable().columns(id).search(that.val());
-                        table.DataTable().search("").draw();
+                        dataTable.columns(id).search(that.val());
+                        dataTable.search("").draw();
                     });
                     Pace.ignore(function () {
                         if (radioTree.length) {
                             radioTree.fancytree({
-                                extensions: ["childcounter","glyph", "wide"],
+                                extensions: ["childcounter", "glyph", "wide"],
                                 checkbox: true,
                                 activeVisible: true,
                                 quicksearch: true,
@@ -1384,24 +1390,24 @@
                                     iconSpacing: "0.5em", // Adjust this if @fancy-icon-spacing != "3px"
                                     levelOfs: "1.5em"     // Adjust this if ul padding != "16px"
                                 },
-                                dblclick: function(event,data) {
+                                dblclick: function (event, data) {
                                     cascadeSelection(data.node);
                                     function cascadeSelection(node) {
                                         node.setSelected(!node.isSelected());
-                                        $.each(node.children, function(k,v) {
+                                        $.each(node.children, function (k, v) {
                                             v.setSelected(!node.isSelected());
                                             cascadeSelection(v)
                                         });
                                     }
                                 },
-                                init: function(e,data) {
+                                init: function (e, data) {
                                     var search = that.val();
-                                    while(data.tree == 'undefined');
-                                    if(search.length > 0) {
+                                    while (data.tree == 'undefined');
+                                    if (search.length > 0) {
                                         search = search.substr(4);
-                                        if(search.length > 0 ) {
+                                        if (search.length > 0) {
                                             var nodes = search.split(',');
-                                            $.each(nodes,function(k,v){
+                                            $.each(nodes, function (k, v) {
                                                 data.tree.getNodeByKey(v).setSelected(true);
                                                 data.tree.getNodeByKey(v).setActive(true);
                                             });
@@ -1418,10 +1424,6 @@
         table.DataTable(tableSetup[table.data('datatableName')]);
 
         //$('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
-    });
-
-    $(document).on('click', ".dataFilterType", function () {
-
     });
 
 })(jQuery);
