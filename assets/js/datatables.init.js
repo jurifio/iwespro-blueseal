@@ -1269,9 +1269,9 @@
                 $('.selectize-dropdown-content').scrollbar();
             });
 
-            $('th.dataFilterType > input').each(function () {
+            $('th.dataFilterType').each(function () {
                 //$(this).datepicker();
-                var that = $(this);
+                var that = $('#searchCol-'+$(this).data('columnIndex'));
                 var options = {
                     locale: {
                         format: 'YYYY-MM-DD',
@@ -1295,16 +1295,16 @@
                     options.endDate = dates[1];
                 }
 
-                $(this).daterangepicker(options);
+                that.daterangepicker(options);
 
-                $(this).on('apply.daterangepicker', function (ev, picker) {
+                that.on('apply.daterangepicker', function (ev, picker) {
                     that.val("><" + picker.startDate.format('YYYY-MM-DD') + "|" + picker.endDate.format('YYYY-MM-DD'));
                     var id = $(ev.target).attr("id").substring(10);
                     dataTable.columns(id).search(that.val());
                     dataTable.search("").draw();
                 });
 
-                $(this).on('cancel.daterangepicker', function (ev, picker) {
+                that.on('cancel.daterangepicker', function (ev, picker) {
                     that.val("");
                     var id = $(ev.target).attr("id").substring(10);
                     dataTable.columns(id).search(that.val());
@@ -1313,8 +1313,9 @@
 
             });
 
-            $('th.categoryFilterType > input').each(function () {
-                $(this).on('click', function () {
+            $('th.categoryFilterType').each(function () {
+                var thati = $('#searchCol-'+$(this).data('columnIndex'));
+                thati.on('click', function () {
                     var that = $(this);
                     var bsModal = $('#bsModal');
                     var header = $('#bsModal .modal-header h4');
