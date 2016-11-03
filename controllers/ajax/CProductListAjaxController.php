@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProduct;
 
 /**
  * Class CProductListAjaxController
@@ -77,57 +78,35 @@ class CProductListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $i = 0;
-
+        /** @var $val CProduct */
         foreach($prodotti as $val){
+            $row = [];
 
-            $cats = [];
-            foreach($val->productCategoryTranslation as $cat){
-                $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
-                unset($path[0]);
-                $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';
-            }
-            /*$shops = [];
-            foreach($val->shop as $shop){
-                $shops[] = $shop->title;
-            }*/
-            $nameInCats = '';
-            foreach($val->productNameTranslation as $v) {
-                if (1 == $v->langId) {
-                    $nameInCats = '<br /><strong>nome:</strong>' . $v->name . '<br />';
-                    break;
-                }
-            }
+            $row["DT_RowId"] = $val->printId();
+            $row["DT_RowClass"] = 'colore';
 
-            $creationDate = new \DateTime($val->creationDate);
+            $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
 
-            $response['data'][$i]["DT_RowId"] = $val->printId();
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
-
-            //$response['data'][$i]['sizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
             if($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
-            //$response['data'][$i]['dummyPicture'] = '<img width="60" src="'.$img.'" />'.$imgs;
-            $response['data'][$i]['details'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="'.$val->getDummyPictureUrl().'" />' . $imgs . '</a><br />';
-            $response['data'][$i]['details'] .= ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span><br />' : '';
-            $details = $this->app->repoFactory->create('ProductSheetActual')->em()->findBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
-            foreach($details as $k => $v) {
+
+            $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="'.$val->getDummyPictureUrl().'" />' . $imgs . '</a>';
+
+            $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
+
+            $row['details'] = "";
+            foreach($val->productSheetActual as $k => $v) {
                 if ($trans = $v->productDetail->productDetailTranslation->getFirst()) {
-                    $response['data'][$i]['details'] .= '<span class="small">' . $trans->name . "</span><br />";
+                    $row['details'] .= '<span class="small">' . $trans->name . "</span><br />";
                 }
             }
 
-            $df = [];
-            $df['detail'] = ($val->productSheetActual->count()) ? 's' : 'n';
-            $df['photo'] = ($val->productPhoto->count()) ? 's' : 'n';
-            $response['data'][$i]['detailPhoto'] = implode('/', $df);
+            $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
+            $row['hasDetails'] = ($val->productSheetActual->count()) ? 'sì' : 'no';
 
-            $response['data'][$i]['season'] = '<span class="small">';
-            $response['data'][$i]['season'] .= $val->productSeason->name . " " . $val->productSeason->year;
-            $response['data'][$i]['season'] .= '</span>';
+            $row['season'] = '<span class="small">'.$val->productSeason->name . " " . $val->productSeason->year.'</span>';
+
 	        $ext = [];
-
 	        if(isset($val->externalId) && !empty($val->externalId)) {
                 $ext[] = $val->externalId;
             }
@@ -158,34 +137,17 @@ class CProductListAjaxController extends AAjaxController
                 $strExt.= '</span></p>';
                 $ext[$kext] = $strExt;
             }
+            $row['externalId'] = implode('',array_unique($ext));
 
-	        $ext = implode('',array_unique($ext));
-
-	        $tags = [];
-	        foreach ($val->tag as $tag) $tags[] = $tag->getLocalizedName();
-
-            $response['data'][$i]['externalId'] = empty($ext) ? "" : $ext;
-
-            $cpf = '<span class="small">';
-            $cpf.= //(14 > strlen($val->itemno.' # '.$val->productVariant->name)) ?
-                $val->itemno.' #<br />'.$val->productVariant->name;//:
-                //substr($val->itemno.' # '.$val->productVariant->name, 0, 13) . '&hellip;';
-            $cpf.='</span>';
-            $response['data'][$i]['cpf'] = $cpf;
+            $row['cpf'] = $val->printCpf();
 
             $colorGroup = $val->productColorGroup->getFirst();
-            $response['data'][$i]['colorGroup'] =
-                '<span class="small">' . (($colorGroup) ? $colorGroup->name : "[Non assegnato]") . '</span>';
-
-            $response['data'][$i]['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $response['data'][$i]['slug'] = '<span class="small">';
-            $response['data'][$i]['slug'] .= implode(',<br/>',$cats); //category
-            $response['data'][$i]['slug'] .= $nameInCats;
-            $response['data'][$i]['slug'] .= '</span>';
-            $response['data'][$i]['tag'] = '<span class="small">';
-            $response['data'][$i]['tag'] .= implode(',<br />',$tags);
-            $response['data'][$i]['tag'] .= '</span>';
-            $response['data'][$i]['status'] = $val->productStatus->name;
+            $row['colorGroup'] = '<span class="small">' . (($colorGroup) ? $colorGroup->name : "[Non assegnato]") . '</span>';
+            $row['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
+            $row['categoryId'] = '<span class="small">'.$val->getLocalizedProductCategories(" ","<br>").'</span>';
+            $row['name'] = $val->productNameTranslation->getFirst()->name;
+            $row['tag'] = '<span class="small">'.$val->getLocalizedTags('<br>',false).'</span>';
+            $row['status'] = $val->productStatus->name;
 
             $qty=0;
             $isOnSale = [];
@@ -211,22 +173,22 @@ class CProductListAjaxController extends AAjaxController
                     }
                 }
             }
-            $response['data'][$i]['available'] = ($qty) ? 'sì' : 'no';
-            $response['data'][$i]['available'].= ' - ' . $qty;
+            $row['hasQty'] = ($qty) ? 'sì' : 'no';
+            $row['hasQty'].= ' - ' . $qty;
 
             
-            $response['data'][$i]['shop'] = '<span class="small">';
-            $response['data'][$i]['shop'] .= implode('<br />',$shops);
-            $response['data'][$i]['shop'] .= '</span>';
+            $row['shop'] = '<span class="small">';
+            $row['shop'] .= implode('<br />',$shops);
+            $row['shop'] .= '</span>';
             
-            $response['data'][$i]['mup'] = '<span class="small">';
-            $response['data'][$i]['mup'] .= implode('<br />',$mup);
-            $response['data'][$i]['mup'] .= '</span>';
+            $row['mup'] = '<span class="small">';
+            $row['mup'] .= implode('<br />',$mup);
+            $row['mup'] .= '</span>';
             
-            $response['data'][$i]['isOnSale'] = $isOnSale;
-            $response['data'][$i]['creationDate'] = $creationDate->format('d-m-Y H:i');
+            $row['isOnSale'] = $isOnSale;
+            $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
 
-            $i++;
+            $response ['data'][] = $row;
         }
         return json_encode($response);
     }

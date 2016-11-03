@@ -55,19 +55,25 @@
                                     <th data-slug="details"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Dettagli</th>
-                                    <th data-slug="detailPhoto"
+                                    <th data-slug="dummy"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Dummy</th>
+                                    <th data-slug="hasPhotos"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Ha Foto</th>
+                                    <th data-slug="hasDetails"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Ha Dettagli</th>
-                                    <th data-slug="detailPhoto"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">D/F</th>
                                     <th data-slug="brand"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Brand</th>
-                                    <th data-slug="slug"
+                                    <th data-slug="productSizeGroup"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Grup.Taglie</th>
+                                    <th data-slug="categoryId"
                                         data-searchable="true"
                                         data-orderable="false" class="center categoryFilterType">Categorie</th>
-                                    <th data-slug="tag"
+                                    <th data-slug="tags"
                                         data-searchable="true"
                                         data-orderable="true"
                                         data-visible="false" class="center">Tags</th>
@@ -77,7 +83,7 @@
                                     <th data-slug="mup"
                                         data-searchable="true"
                                         data-orderable="true" class="center">M.Up</th>
-                                    <th data-slug="available"
+                                    <th data-slug="hasQty"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Disp.</th>
                                     <th data-slug="isOnSale"
