@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-magnet",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.mergenames",
+    event:"bs.product.names.merge",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Copia i nomi dei prodotti",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.mergenames', function () {
+$(document).on('bs.product.names.merge', function () {
 
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();
@@ -34,8 +34,10 @@ $(document).on('bs.product.mergenames', function () {
     }
 
     var codes = {};
+    var i = 0;
     $.each(selectedRows, function (k, v) {
-        codes.push(v.DT_RowId)
+        codes['codes_' + i] = v.DT_RowId;
+        i++;
     });
 
     var result = {
@@ -49,9 +51,7 @@ $(document).on('bs.product.mergenames', function () {
         url: '/blueseal/xhr/NamesManager',
         method: 'GET',
         dataType: 'JSON',
-        data: {
-            codes: codes
-        }
+        data: codes
     }).done(function (res) {
 
         header.html('Unione Nomi');
@@ -77,8 +77,7 @@ $(document).on('bs.product.mergenames', function () {
                 if (3 >= query.length) {
                     return callback();
                 }
-                var search = [];
-                search['codes'] = codes;//codes.slice();
+                var search = codes;
                 search['search'] = query;
                 $.ajax({
                     url: '/blueseal/xhr/NamesManager',
@@ -119,6 +118,7 @@ $(document).on('bs.product.mergenames', function () {
             body.html(loader);
             Pace.ignore(function () {
                 body.html('');
+                delete codes['search'];
                 $.ajax({
                     url: "/blueseal/xhr/NamesManager",
                     type: "POST",

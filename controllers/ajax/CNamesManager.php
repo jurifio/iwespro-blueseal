@@ -102,7 +102,7 @@ class CNamesManager extends AAjaxController
             $this->app->dbAdapter->beginTransaction();
             $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
             foreach ($oldCodes as $v) {
-                list($id, $productVariantId) = explode(',', $v);
+                list($id, $productVariantId) = explode('-', $v);
                 $pntRepo->updateProductName($id, $productVariantId, $new);
             }
             $this->app->dbAdapter->commit();
