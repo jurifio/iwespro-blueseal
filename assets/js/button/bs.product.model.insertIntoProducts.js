@@ -115,18 +115,18 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
                             }
                         }
                     });
-                });
 
-                $('.detail-modal').selectDetails(
-                    id,
-                    type,
-                    {
-                        after: function(detailBody){
-                            var productCategory = detailBody.find('.detailContent').data('category');
-                            $('#productCategories').humanized('addItems', productCategory);
+                    $('.detail-modal').selectDetails(
+                        id,
+                        type,
+                        {
+                            after: function(detailBody){
+                                var productCategory = detailBody.find('.detailContent').data('category');
+                                $('#productCategories').humanized('addItems', productCategory);
+                            }
                         }
-                    }
-                );
+                    );
+                });
 
                 modal.setOkEvent(function(){
                     var currentDets = {};
