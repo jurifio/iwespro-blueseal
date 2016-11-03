@@ -57,6 +57,9 @@
                                         data-orderable="false" class="center">Dettagli</th>
                                     <th data-slug="detailPhoto"
                                         data-searchable="true"
+                                        data-orderable="true" class="center">Ha Dettagli</th>
+                                    <th data-slug="detailPhoto"
+                                        data-searchable="true"
                                         data-orderable="true" class="center">D/F</th>
                                     <th data-slug="brand"
                                         data-searchable="true"
@@ -65,8 +68,9 @@
                                         data-searchable="true"
                                         data-orderable="false" class="center categoryFilterType">Categorie</th>
                                     <th data-slug="tag"
-                                        data-searchable="false"
-                                        data-orderable="true" class="center">Tags</th>
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        data-visible="false" class="center">Tags</th>
                                     <th data-slug="status"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>
@@ -78,7 +82,7 @@
                                         data-orderable="true" class="center">Disp.</th>
                                     <th data-slug="isOnSale"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">S</th>
+                                        data-orderable="true" class="center">Saldo</th>
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true"
