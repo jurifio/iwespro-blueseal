@@ -19,46 +19,16 @@ use bamboo\domain\entities\CProduct;
  */
 class CProductListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        if ($this->app->getUser()->hasPermission('allShops')) {
-
-        } else{
-            $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
-            foreach($res as $val) {
-                $this->authorizedShops[] = $val['shopId'];
-            }
-        }
-
-        $this->em = new \stdClass();
-        $this->em->products = $this->app->entityManagerFactory->create('Product');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
         $datatable = new CDataTables('vBluesealProductList',['id','productVariantId'],$_GET);
         if(!empty($this->authorizedShops)){
-            $datatable->addCondition('shopId',$this->authorizedShops);
+            $datatable->addCondition('shopId',\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         }
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99','');
@@ -68,7 +38,7 @@ class CProductListAjaxController extends AAjaxController
             $statuses[$status->code] = $status->name;
         }
 
-        $modifica = $this->urls['base']."friend/prodotti/modifica";
+        $modifica = $this->app->baseUrl(false)."/blueseal/friend/prodotti/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
@@ -145,8 +115,8 @@ class CProductListAjaxController extends AAjaxController
             $row['colorGroup'] = '<span class="small">' . (($colorGroup) ? $colorGroup->name : "[Non assegnato]") . '</span>';
             $row['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
             $row['categoryId'] = '<span class="small">'.$val->getLocalizedProductCategories(" ","<br>").'</span>';
-            $tname = $val->productNameTranslation->getFirst();
-            $row['name'] = ($tname) ? $tname : '';
+
+            $row['productName'] = $val->productNameTranslation->getFirst();
             $row['tags'] = '<span class="small">'.$val->getLocalizedTags('<br>',false).'</span>';
             $row['status'] = $val->productStatus->name;
 

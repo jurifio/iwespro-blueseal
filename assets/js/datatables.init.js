@@ -1217,7 +1217,7 @@
                     var checkbox = [];
                     dataTable.columns().every(function (k, v) {
                         v = dataTable.column(k);
-                        var title = $(v.header()).attr('aria-label').split(' :')[0].trim();
+                        var title = $(v.header()).attr('aria-label').split(':')[0].trim();
                         checkbox.push('<label><input type="checkbox" value="' + v.index() + '"' + (v.visible() ? ' checked="checked"' : '') + '> ' + title + '</label>');
                     });
                     html += checkbox.join('<br>');
@@ -1272,6 +1272,7 @@
             $('th.dataFilterType').each(function () {
                 //$(this).datepicker();
                 var that = $('#searchCol-'+$(this).data('columnIndex'));
+                that.attr('placeholder','Seleziona');
                 var options = {
                     locale: {
                         format: 'YYYY-MM-DD',
@@ -1315,6 +1316,7 @@
 
             $('th.categoryFilterType').each(function () {
                 var thati = $('#searchCol-'+$(this).data('columnIndex'));
+                thati.attr('placeholder','Seleziona');
                 thati.on('click', function () {
                     var that = $(this);
                     var bsModal = $('#bsModal');
