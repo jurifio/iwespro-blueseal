@@ -144,15 +144,24 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
                             category: $('#productCategories').val()
                         }
                     }).done(function(res) {
-                        modal.body.html(res);
-                        modal.body.append('<p><button class="btn newModelPageBtn">Crea Nuovo Modello</button></p>');
-                        $('.newModelPageBtn').off().on('click', function(){
-                            var codes = row[0].split('-');
-                            window.open('/blueseal/prodotti/modelli/modifica?code=' + codes[0] + '-' + codes[1], '_blank');
-                        });
-                        modal.setOkEvent(function(){
-                            modal.hide();
-                            $('.table').DataTable().ajax.reload();
+                        $.ajax({
+                            url: '/blueseal/xhr/detailModel',
+                            type: 'GET',
+                            dataType: 'json',
+                            data: { id: id}
+                        }).done(function(model) {
+                            modal.body.html(res);
+                            modal.body.append('<p><button class="btn newModelPageBtn">Crea Nuovo Modello</button></p>');
+                            $('.newModelPageBtn').off().on('click', function () {
+                                var name = '&name=' + model.name;
+                                var codeName = '&codeName=' + model.code;
+                                var codes = row[0].split('-');
+                                window.open('/blueseal/prodotti/modelli/modifica?code=' + codes[0] + '-' + codes[1] + name + codeName, '_blank');
+                            });
+                            modal.setOkEvent(function () {
+                                modal.hide();
+                                $('.table').DataTable().ajax.reload();
+                            });
                         });
                     });
                 });
