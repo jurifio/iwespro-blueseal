@@ -1269,9 +1269,9 @@
                 $('.selectize-dropdown-content').scrollbar();
             });
 
-            $('th.dataFilterType > input').each(function () {
+            $('th.dataFilterType').each(function () {
                 //$(this).datepicker();
-                var that = $(this);
+                var that = $('#searchCol-'+$(this).data('columnIndex'));
                 var options = {
                     locale: {
                         format: 'YYYY-MM-DD',
@@ -1313,8 +1313,9 @@
 
             });
 
-            $('th.categoryFilterType > input').each(function () {
-                $(this).on('click', function () {
+            $('th.categoryFilterType').each(function () {
+                var thati = $('#searchCol-'+$(this).data('columnIndex'));
+                thati.on('click', function () {
                     var that = $(this);
                     var bsModal = $('#bsModal');
                     var header = $('#bsModal .modal-header h4');
