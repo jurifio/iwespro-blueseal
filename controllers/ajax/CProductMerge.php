@@ -90,10 +90,11 @@ class CProductMerge extends AAjaxController
                 $shopSku[] = $v->shopId;
             }
             $shopSku = array_unique($shopSku);
+
             if (!empty(array_intersect($shopSku, $shopControl))) {
                 return "ERRORE: i prodotti selezionati per la fusione non possono venire dallo stesso Friend";
             } else {
-                $shopControl = array_merge($shopControl, $shopSku);
+            $shopControl = array_merge($shopControl, $shopSku);
             }
         }
 
