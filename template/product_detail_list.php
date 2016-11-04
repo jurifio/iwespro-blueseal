@@ -25,11 +25,19 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_detail_list"
                                data-controller="ProductDetailListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="100, 200, 500">
                             <thead>
                             <tr>
-                                <th class="center">Termine</th>
-                                <th class="center">Italiano</th>
+                                <th  data-slug="slug"
+                                     data-searchable="true"
+                                     data-orderable="true"
+                                     class="center">Termine</th>
+                                <th  data-slug="name"
+                                     data-searchable="true"
+                                     data-orderable="true"
+                                     class="center">Italiano</th>
                             </tr>
                             </thead>
                             <tbody>

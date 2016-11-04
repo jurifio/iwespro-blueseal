@@ -76,207 +76,6 @@
         ]
     };
 
-    tableSetup.blog_list = $.extend({}, tableSetup.common, {
-        order: [[4, "desc"]],
-        columns: [
-            {
-                data: "id",
-                orderable: false
-            }, {
-                data: "coverImage",
-                orderable: false,
-                searchable: false
-            }, {
-                data: "title",
-                orderable: true
-            }, {
-                data: "content",
-                orderable: true
-            }, {
-                data: "creationDate",
-                orderable: true
-            }, {
-                data: "publishDate",
-                orderable: true
-            }, {
-                data: "stato",
-                orderable: true
-            }
-        ]
-    });
-    tableSetup.product_model_list = $.extend({}, tableSetup.common, {
-        order: [[1, "desc"]],
-        columns: [
-            {
-                data: "name",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "code",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "productName",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "prototypeName",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "categories",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "details",
-                orderable: true
-            }
-        ]
-    });
-    tableSetup.product_tag_list = $.extend({}, tableSetup.common, {
-        order: [[6, "asc"]],
-        columns: [
-            {
-                data: "code",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "shop",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "colorGroup",
-                orderable: true,
-                searchable: true
-            },
-            {
-                data: "season",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "details",
-                orderable: false,
-                searchable: false
-            }, {
-                data: "brand",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "priority",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "tag",
-                orderable: false,
-                searchable: true
-            }, {
-                data: "isOnSale",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "available",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "status",
-                orderable: true,
-                searchable: true
-            }
-        ]
-    });
-
-    tableSetup.product_picky = $.extend({}, tableSetup.common, {
-        order: [[9, "desc"]],
-        columns: [
-            {
-                data: "code",
-                orderable: true
-            }, {
-                data: "shop",
-                orderable: true
-            }, {
-                data: "externalId",
-                orderable: true
-            }, {
-                data: "cpf",
-                orderable: true
-            }, {
-                data: "dummyPicture",
-                orderable: false,
-                searchable: false
-            }, {
-                data: "brand",
-                orderable: true
-            }, {
-                data: "category",
-                orderable: false,
-                searchable: false
-            }, {
-                data: "tag",
-                orderable: false,
-                searchable: true
-            }, {
-                data: "status",
-                orderable: true
-            }, {
-                data: "creationDate",
-                orderable: true
-            }
-        ]
-    });
-    tableSetup.product_incomplete_list = $.extend({}, tableSetup.common, {
-        order: [[6, "desc"]],
-        columns: [
-            {
-                data: "id",
-                orderable: true
-            }, {
-                data: "code",
-                orderable: true
-            }, {
-                data: "shop",
-                orderable: true
-            }, {
-                data: "season",
-                orderable: true,
-                searchable: false
-            }, {
-                data: "dummyPicture",
-                orderable: false,
-                searchable: false
-            }, {
-                data: "brand",
-                orderable: true
-            }, {
-                data: "status",
-                orderable: true
-            }, {
-                data: "creationDate",
-                orderable: true
-            }, {
-                data: "problems",
-                orderable: false,
-                searchable: true
-            }
-        ]
-    });
-    tableSetup.product_detail_list = $.extend({}, tableSetup.common, {
-        order: [[1, "asc"]],
-        columns: [
-            {
-                data: "slug",
-                orderable: true,
-                searchable: false
-
-            }, {
-                data: "name",
-                orderable: true,
-                searchable: true
-            }
-        ],
-        lengthMenu: [100, 200, 500],
-        displayLength: 200
-    });
     tableSetup.product_color_list = $.extend({}, tableSetup.common, {
         order: [[2, "asc"]],
         columns: [
@@ -1074,15 +873,12 @@
     $.each($('table[data-datatable-name]'), function () {
 
         var table = $(this);
-
+        var setup = {};
         if (table.data('innerSetup') == true) {
-            var setup = {};
             setup.columns = [];
-
             setup.order = [];
             var c = 0;
             table.find('th').each(function () {
-
                 var column = {data: $(this).data('slug'), name:$(this).data('slug')};
                 if (typeof $(this).data('orderable') != 'undefined') {
                     column.orderable = $(this).data('orderable');
@@ -1099,20 +895,24 @@
                 setup.columns.push(column);
                 c++;
             });
+            if(setup.order.length == 0) {
+                setup.order.push([0,'asc']);
+            }
             if (typeof $(this).data('lengthMenuSetup') != 'undefined') {
                 setup.lengthMenu = [];
                 $.each($(this).data('lengthMenuSetup').split(','), function (k, v) {
                     setup.lengthMenu.push(Number(v.trim()));
                 });
-                //JSON.parse("[" + $(this).data('lengthMenu') + "]");
             }
             if (typeof $(this).data('displayLength') != 'undefined') {
                 setup.displayLength = $(this).data('displayLength');
+            } else {
+                setup.displayLength = setup.lengthMenu[0];
             }
 
             setup = $.extend({}, tableSetup.common, setup);
         } else {
-            var setup = tableSetup[table.data('datatableName')];
+            setup = tableSetup[table.data('datatableName')];
         }
 
         if (table.data('column-filter')) {
