@@ -100,7 +100,6 @@ $(document).on('bs.product.names.merge', function () {
         $(bsModal).find('table').addClass('table');
         $('#productDetailId').change(function () {
             var detName = $('#productDetailId option:selected').text(); //.split('(')[0];
-            $('#productDetailName').val(detName);
         });
         cancelButton.html("Annulla");
         cancelButton.show();
@@ -109,7 +108,6 @@ $(document).on('bs.product.names.merge', function () {
 
         okButton.html(result.okButtonLabel).off().on('click', function (e) {
             var selected = $("#productDetailId").val();
-            var name = $("#productDetailName").val();
 
             var oldCodes = [];
 
@@ -122,7 +120,7 @@ $(document).on('bs.product.names.merge', function () {
                     type: "POST",
                     data: {
                         action: "mergeByProducts",
-                        newName: name,
+                        newName: selected,
                         oldCodes: codes
                     }
                 }).done(function (content) {
