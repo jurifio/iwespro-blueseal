@@ -45,7 +45,7 @@ class CNameTranslateLangListAjaxController extends AAjaxController
     public function get()
     {
         $langId = $this->app->router->request()->getRequestData('lang');
-        $datatable = new CDataTables('vBluesealProductNameList',['id'],$_GET);
+        $datatable = new CDataTables('vBluesealProductNameNewList',['id'],$_GET);
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 

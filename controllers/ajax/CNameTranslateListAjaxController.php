@@ -42,7 +42,7 @@ class CNameTranslateListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductNameList',['id'],$_GET);
+        $datatable = new CDataTables('vBluesealProductNameNewList',['id'],$_GET);
         $modifica = $this->urls['base']."traduzioni/nomi/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
