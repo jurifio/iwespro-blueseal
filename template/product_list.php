@@ -99,7 +99,7 @@
                                     <th data-slug="description"
                                         data-searchable="false"
                                         data-orderable="false"
-                                        data-default-order="desc" class="center">Descr.</th>
+                                        class="center">Descr.</th>
                                 </tr>
                             </thead>
                             <tbody>
