@@ -96,6 +96,10 @@
                                         data-searchable="true"
                                         data-orderable="true"
                                         data-default-order="desc" class="center dataFilterType">Creazione</th>
+                                    <th data-slug="description"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Descr.</th>
                                 </tr>
                             </thead>
                             <tbody>
