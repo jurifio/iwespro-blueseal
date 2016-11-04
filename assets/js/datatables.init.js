@@ -11,6 +11,7 @@
         dom: "<'btn-toolbar'B><'row'<'col-sm-6'i><'col-sm-4'f><'col-sm-2'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12'p>>",
         paginationType: "full_numbers",
         destroy: true,
+        colReorder: true,
         searchDelay: 2000,
         deferRender: true,
         processing: true,
@@ -1112,19 +1113,19 @@
             tableSetup[table.data('datatableName')] = $.extend({}, tableSetup.common, setup);
         }
 
-        var ths = table.find('th');
-
         if (table.data('column-filter')) {
             var i = 0;
-            ths.each(function () {
-                var title = $(this).text();
+            var th2 = '<tr role="row search">';
+            table.find('th').each(function () {
                 if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
-                    $(this).html(title + '<br> <input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" />');
+                    th2+='<th><input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" /></th>';
                 } else {
-                    $(this).html(title + '<br> <input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/>');
+                    th2+='<th><input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/></th>';
                 }
                 i++
             });
+            th2+='</tr>';
+            table.find('thead').prepend($(th2));
         }
 
         //fermo la propagazione
@@ -1139,8 +1140,6 @@
                 e.stopPropagation();
             });
         });
-
-        var startedSearch = false;
 
         $('input.search-col').on('keyup', function (e) {
             var id = $(e.target).attr("id");
@@ -1218,7 +1217,7 @@
                     var checkbox = [];
                     dataTable.columns().every(function (k, v) {
                         v = dataTable.column(k);
-                        var title = $(v.header()).attr('aria-label').split(' :')[0].trim();
+                        var title = $(v.header()).attr('aria-label').split(':')[0].trim();
                         checkbox.push('<label><input type="checkbox" value="' + v.index() + '"' + (v.visible() ? ' checked="checked"' : '') + '> ' + title + '</label>');
                     });
                     html += checkbox.join('<br>');
@@ -1270,9 +1269,10 @@
                 $('.selectize-dropdown-content').scrollbar();
             });
 
-            $('th.dataFilterType > input').each(function () {
+            $('th.dataFilterType').each(function () {
                 //$(this).datepicker();
-                var that = $(this);
+                var that = $('#searchCol-'+$(this).data('columnIndex'));
+                that.attr('placeholder','Seleziona');
                 var options = {
                     locale: {
                         format: 'YYYY-MM-DD',
@@ -1296,16 +1296,16 @@
                     options.endDate = dates[1];
                 }
 
-                $(this).daterangepicker(options);
+                that.daterangepicker(options);
 
-                $(this).on('apply.daterangepicker', function (ev, picker) {
+                that.on('apply.daterangepicker', function (ev, picker) {
                     that.val("><" + picker.startDate.format('YYYY-MM-DD') + "|" + picker.endDate.format('YYYY-MM-DD'));
                     var id = $(ev.target).attr("id").substring(10);
                     dataTable.columns(id).search(that.val());
                     dataTable.search("").draw();
                 });
 
-                $(this).on('cancel.daterangepicker', function (ev, picker) {
+                that.on('cancel.daterangepicker', function (ev, picker) {
                     that.val("");
                     var id = $(ev.target).attr("id").substring(10);
                     dataTable.columns(id).search(that.val());
@@ -1314,8 +1314,10 @@
 
             });
 
-            $('th.categoryFilterType > input').each(function () {
-                $(this).on('click', function () {
+            $('th.categoryFilterType').each(function () {
+                var thati = $('#searchCol-'+$(this).data('columnIndex'));
+                thati.attr('placeholder','Seleziona');
+                thati.on('click', function () {
                     var that = $(this);
                     var bsModal = $('#bsModal');
                     var header = $('#bsModal .modal-header h4');

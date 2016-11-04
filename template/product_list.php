@@ -55,19 +55,28 @@
                                     <th data-slug="details"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Dettagli</th>
-                                    <th data-slug="detailPhoto"
+                                    <th data-slug="dummy"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Ha Dettagli</th>
-                                    <th data-slug="detailPhoto"
+                                        data-orderable="true" class="center">Dummy</th>
+                                    <th data-slug="hasPhotos"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">D/F</th>
+                                        data-orderable="true" class="center">Ha Foto</th>
+                                    <th data-slug="productName"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Nome</th>
+                                    <th data-slug="hasDetails"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Ha Dett.</th>
                                     <th data-slug="brand"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Brand</th>
-                                    <th data-slug="slug"
+                                    <th data-slug="productSizeGroup"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Grup.Taglie</th>
+                                    <th data-slug="categoryId"
                                         data-searchable="true"
                                         data-orderable="false" class="center categoryFilterType">Categorie</th>
-                                    <th data-slug="tag"
+                                    <th data-slug="tags"
                                         data-searchable="true"
                                         data-orderable="true"
                                         data-visible="false" class="center">Tags</th>
@@ -77,7 +86,7 @@
                                     <th data-slug="mup"
                                         data-searchable="true"
                                         data-orderable="true" class="center">M.Up</th>
-                                    <th data-slug="available"
+                                    <th data-slug="hasQty"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Disp.</th>
                                     <th data-slug="isOnSale"
@@ -103,9 +112,6 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
-        <bs-toolbar-button
-            data-remote="btn.href.add.product"
-            ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.publish.products"
             ></bs-toolbar-button>

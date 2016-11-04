@@ -146,18 +146,6 @@
             ]
         },
         {
-            "pattern": "/blueseal/contenuti/prodotti/dettagli(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductDetailContentController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
             "pattern": "/blueseal/contenuti/prodotti/schede(/?)",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetContentController"

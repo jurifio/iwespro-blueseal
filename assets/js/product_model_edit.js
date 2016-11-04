@@ -266,6 +266,9 @@ $(document).ready(function () {
 
                 var productCategory = detailContentElem.data('category');
                 $('#categories').humanized('addItems', productCategory);
+
+                if ('undefined' != typeof $_GET.all.name) $('input[name="name"]').val(decodeURI($_GET.all.name));
+                if ('undefined' != typeof $_GET.all.codeName) $('input[name="code"]').val(decodeURI($_GET.all.codeName));
             });
         }
     } else {

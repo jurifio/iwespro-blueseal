@@ -109,18 +109,18 @@ $(document).on('bs.product.details.merge', function (e, element, button) {
                             }
                         }
                     });
-                });
 
-                $('.detail-modal').selectDetails(
-                    id,
-                    'product',
-                    {
-                        after: function(detailBody){
-                            var productCategory = detailBody.find('.detailContent').data('category');
-                            $('#productCategories').humanized('addItems', productCategory);
+                    $('.detail-modal').selectDetails(
+                        id,
+                        'product',
+                        {
+                            after: function(detailBody){
+                                var productCategory = detailBody.find('.detailContent').data('category');
+                                $('#productCategories').humanized('addItems', productCategory);
+                            }
                         }
-                    }
-                );
+                    );
+                });
 
                 modal.setOkEvent(function(){
                     var currentDets = {};

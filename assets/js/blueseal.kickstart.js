@@ -567,14 +567,15 @@ $.bsModal = function (header, params) {
                         sel[0].selectize.setValue(0, true);
                     }
                 });
+
+                var selectName = $('#ProductName_1_name').selectize();
+                var pName = $('.detailContent').data('productName');
+                selectName[0].selectize.addOption({name: pName});
+                selectName[0].selectize.addItem(pName);
+                selectName[0].selectize.refreshOptions();
+                selectName[0].selectize.setValue(pName, true);
+                opt.after(self);
             });
-            var selectName = $('#ProductName_1_name').selectize();
-            var pName = $('.detailContent').data('productName');
-            selectName[0].selectize.addOption({name: pName});
-            selectName[0].selectize.addItem(pName);
-            selectName[0].selectize.refreshOptions();
-            selectName[0].selectize.setValue(pName, true);
-            opt.after(self);
         });
     }
 })(jQuery);
