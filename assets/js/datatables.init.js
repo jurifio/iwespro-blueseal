@@ -1083,7 +1083,7 @@
             var c = 0;
             table.find('th').each(function () {
 
-                var column = {data: $(this).data('slug')};
+                var column = {data: $(this).data('slug'), name:$(this).data('slug')};
                 if (typeof $(this).data('orderable') != 'undefined') {
                     column.orderable = $(this).data('orderable');
                 }
