@@ -1110,17 +1110,19 @@
                 setup.displayLength = $(this).data('displayLength');
             }
 
-            tableSetup[table.data('datatableName')] = $.extend({}, tableSetup.common, setup);
+            setup = $.extend({}, tableSetup.common, setup);
+        } else {
+            var setup = tableSetup[table.data('datatableName')];
         }
 
         if (table.data('column-filter')) {
             var i = 0;
             var th2 = '<tr role="row search">';
             table.find('th').each(function () {
-                if (false != tableSetup[table.data('datatable-name')].columns[i].searchable) {
-                    th2+='<th><input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" /></th>';
+                if (false != setup.columns[i].searchable) {
+                    th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].data+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" /></th>';
                 } else {
-                    th2+='<th><input type="text" id="searchCol-' + i + '" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/></th>';
+                    th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].data+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/></th>';
                 }
                 i++
             });
@@ -1142,18 +1144,16 @@
         });
 
         $('input.search-col').on('keyup', function (e) {
-            var id = $(e.target).attr("id");
-            id = id.substring(10);
-            var that = this;
+            var name = $(e.target).data("name");
             if (13 == e.which) {
                 table.DataTable().search("").draw();
             } else {
-                table.DataTable().columns(id).search($(this).val());
+                table.DataTable().columns(name+":name").search($(this).val());
             }
         });
 
 
-        tableSetup[table.data('datatable-name')].ajax = {
+        setup.ajax = {
             "url": table.data('url') + "/" + table.data('controller'),
             "data": function (mydata) {
                 return $.extend({}, mydata, table.data());
@@ -1300,15 +1300,15 @@
 
                 that.on('apply.daterangepicker', function (ev, picker) {
                     that.val("><" + picker.startDate.format('YYYY-MM-DD') + "|" + picker.endDate.format('YYYY-MM-DD'));
-                    var id = $(ev.target).attr("id").substring(10);
-                    dataTable.columns(id).search(that.val());
+                    var name = $(ev.target).data("name");
+                    dataTable.columns(name+":name").search(that.val());
                     dataTable.search("").draw();
                 });
 
                 that.on('cancel.daterangepicker', function (ev, picker) {
                     that.val("");
-                    var id = $(ev.target).attr("id").substring(10);
-                    dataTable.columns(id).search(that.val());
+                    var name = $(ev.target).data("name");
+                    dataTable.columns(name+":name").search(that.val());
                     dataTable.search("").draw();
                 });
 
@@ -1344,8 +1344,8 @@
                         body.html('');
                         bsModal.modal('hide');
                         that.val("§in:" + ids.join(','));
-                        var id = that.attr("id").substring(10);
-                        dataTable.columns(id).search(that.val());
+                        var name = that.data("name");
+                        dataTable.columns(name+":name").search(that.val());
                         dataTable.search("").draw();
                     });
                     Pace.ignore(function () {
@@ -1423,7 +1423,7 @@
             });
         });
 
-        table.DataTable(tableSetup[table.data('datatableName')]);
+        table.DataTable(setup);
 
         //$('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
     });
