@@ -56,6 +56,8 @@ $(document).on('bs.product.names.merge', function () {
 
         header.html('Unione Nomi');
         var bodyContent = '<div style="min-height: 250px"><select class="full-width" placehoder="Seleziona il dettaglio da tenere" name="productDetailId" id="productDetailId"><option value=""></option></select></div>';
+        bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
+        bodyContent += '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
         body.html(bodyContent);
         $('#productDetailId').selectize({
             valueField: 'name',
@@ -94,12 +96,13 @@ $(document).on('bs.product.names.merge', function () {
 
         $('#productDetailId').selectize()[0].selectize.setValue(0);
 
-        var detName = $('#productDetailId option:selected').text(); //.split('(')[0];
+        var detName = $('#productDetailId option:selected').text();
         $('#productDetailName').val(detName);
 
         $(bsModal).find('table').addClass('table');
         $('#productDetailId').change(function () {
-            var detName = $('#productDetailId option:selected').text(); //.split('(')[0];
+            var detName = $('#productDetailId option:selected').text();
+            $('#productDetailName').val(detName);
         });
         cancelButton.html("Annulla");
         cancelButton.show();
@@ -107,7 +110,7 @@ $(document).on('bs.product.names.merge', function () {
         bsModal.modal('show');
 
         okButton.html(result.okButtonLabel).off().on('click', function (e) {
-            var selected = $("#productDetailId").val();
+            var selected = $("#productDetailName").val();
 
             var oldCodes = [];
 
@@ -120,6 +123,7 @@ $(document).on('bs.product.names.merge', function () {
                     type: "POST",
                     data: {
                         action: "mergeByProducts",
+                        insertNameIfNew: "r'n'r!",
                         newName: selected,
                         oldCodes: codes
                     }

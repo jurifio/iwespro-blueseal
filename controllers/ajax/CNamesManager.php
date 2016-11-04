@@ -97,10 +97,14 @@ class CNamesManager extends AAjaxController
     {
         $new = $get['newName'];
         $oldCodes = $get['oldCodes'];
+        $insertNameIfNew = isset($get['insertNameIfNew']);
         $old = [];
+        $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+        if ($insertNameIfNew) {
+            $pntRepo->insertName($new);
+        }
         try {
             $this->app->dbAdapter->beginTransaction();
-            $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
             foreach ($oldCodes as $v) {
                 list($id, $productVariantId) = explode('-', $v);
                 $pntRepo->updateProductName($id, $productVariantId, $new);
