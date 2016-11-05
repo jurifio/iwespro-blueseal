@@ -69,7 +69,7 @@ class CProductListAjaxController extends AAjaxController
             }
 
             $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
-            $row['hasDetails'] = ($val->productSheetActual->count()) ? 'sì' : 'no';
+            $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
 
             $row['season'] = '<span class="small">'.$val->productSeason->name . " " . $val->productSeason->year.'</span>';
 
