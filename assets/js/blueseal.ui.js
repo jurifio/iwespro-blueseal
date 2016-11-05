@@ -131,9 +131,10 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
     if (requiredErr.length) {
         errorMsg+= 'I seguenti campi sono obbligatori e non sono stati compilati:<br />';
         $.each(requiredErr, function (k, v) {
-            var label = $('label[for="' + v + '"]');
-            if (0 == label.length) label = $('label[for="' + v + '-selectized"]');
-            errorMsg += label.html() + '<br />';
+            var label;
+            if ((label = $('label[for="' + v + '"]')).length) errorMsg += label.html() + '<br />';
+            else if ((label = $('label[for="' + v + '-selectized"]')).length) errorMsg += label.html() + '<br />';
+            else errorMsg += $('[name="' + v +'"]').data('formLabel') + '<br />';
         });
     }
     if ('' != errorMsg) {

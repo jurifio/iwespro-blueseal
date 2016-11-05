@@ -128,7 +128,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                 );
             }
             bsModal.modal();
-        } else {
+        } else if ("" != $('#Product_id').val()) {
 
             var price = $('#Product_retail_price').val();
             var value = $('#Product_value').val();

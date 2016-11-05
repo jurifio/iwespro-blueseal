@@ -37,7 +37,7 @@ endif; ?></div>
                     } ?>
                     <input type="hidden" id="Product_id" name="Product_id" value="<?php echo (isset($productEdit)) ? $productEdit->id : '';?>" />
                     <input type="hidden" id="Product_productVariantId" name="Product_productVariantId" value="<?php echo (isset($productEdit)) ? $productEdit->productVariantId : '';?>" />
-                    <input type="hidden" id="ProductCategory_id" name="ProductCategory_id"
+                    <input type="hidden" id="ProductCategory_id" class="required" data-form-label = "Categorie" name="ProductCategory_id"
                            value="<?php echo implode(',', $value) ?>"/>
                     <div class="row">
                         <div class="col-md-4">
