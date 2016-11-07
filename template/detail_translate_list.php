@@ -31,19 +31,23 @@
                             <thead>
                             <tr>
                                 <th data-slug="id"
+                                    data-name="id"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="asc"
                                     class="center sorting">ID</th>
-                                <th data-slug="translatedName"
-                                    data-searchable="true"
-                                    data-orderable="true"
+                                <th data-slug="source"
+                                    data-name="translatedName"
+                                    data-searchable="false"
+                                    data-orderable="false"
                                     class="center sorting">Sorgente</th>
-                                <th data-slug="translatedName"
-                                    data-searchable="true"
-                                    data-orderable="true"
+                                <th data-slug="target"
+                                    data-name="translatedName"
+                                    data-searchable="false"
+                                    data-orderable="false"
                                     class="center sorting">Destinazione</th>
-                                <th data-slug="translatedLangId"
+                                <th data-slug="status"
+                                    data-name="translatedLangId"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center sorting">Stato</th>

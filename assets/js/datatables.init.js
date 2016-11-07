@@ -75,7 +75,7 @@
             }
         ]
     };
-    tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
+    /*tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [
             {
@@ -100,7 +100,7 @@
                 searchable: false
             }
         ]
-    });
+    });*/
     tableSetup.landing_list = $.extend({}, tableSetup.common, {
         order: [
             [4, "desc"],
@@ -183,7 +183,10 @@
             setup.order = [];
             var c = 0;
             table.find('th').each(function () {
-                var column = {data: $(this).data('slug'), name:$(this).data('slug')};
+                var column = {
+                    data: $(this).data('slug'),
+                    name: $(this).data('name') ? $(this).data('name') : $(this).data('slug')
+                };
                 if (typeof $(this).data('orderable') != 'undefined') {
                     column.orderable = $(this).data('orderable');
                 }
