@@ -208,11 +208,11 @@
                     setup.lengthMenu.push(Number(v.trim()));
                 });
             }
-            /*if (typeof $(this).data('displayLength') != 'undefined') {
+            if (typeof $(this).data('displayLength') != 'undefined') {
                 setup.displayLength = $(this).data('displayLength');
             } else {
                 setup.displayLength = setup.lengthMenu[0];
-            }*/
+            }
 
             setup = $.extend({}, tableSetup.common, setup);
         } else {

@@ -22,31 +22,10 @@ use bamboo\core\intl\CLang;
  */
 class CDetailTranslateListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1, 'it'));
-        $this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
-        $this->urls['page'] = $this->urls['base'] . "prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
-
-        $this->em = new \stdClass();
-        $this->em->productsDetail = $this->app->entityManagerFactory->create('ProductDetail');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
-        $datatable = new CDataTables('ProductDetailTranslationView', ['id'], $this->app->router->request()->getRequestData());
-        $modifica = $this->urls['base'] . "traduzioni/dettagli/modifica";
+        $datatable = new CDataTables('vProductDetailTranslationView', ['id'], $this->app->router->request()->getRequestData());
+        $modifica = $this->app->baseUrl(false) . "/blueseal/traduzioni/dettagli/modifica";
 
 	    if($this->app->router->request()->getRequestData('useTargetLang')) {
 		    $langs = [];
@@ -69,8 +48,8 @@ class CDetailTranslateListAjaxController extends AAjaxController
         }
         $query = $datatable->getQuery();
         $productDetails = $this->app->repoFactory->create('ProductDetailTranslationView')->em()->findBySql($query, $datatable->getParams());
-        $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $count = $this->app->repoFactory->create('ProductDetailTranslationView')->em()->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('ProductDetailTranslationView')->em()->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
 
         $repo = $this->app->repoFactory->create('Lang');
         $activeLanguages = $repo->findBy(['isActive' => true]);
