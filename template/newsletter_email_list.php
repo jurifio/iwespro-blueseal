@@ -25,15 +25,37 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="newsletter_email_list"
                                data-controller="NewsletterEmailListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="100, 200, 500, 1000, 2000"
+                               data-display-length="200">
                             <thead>
                             <tr>
-                                <th class="center">Email</th>
-                                <th class="center">Attiva?</th>
-                                <th class="center">Nome</th>
-                                <th class="center">Cognome</th>
-                                <th class="center dataFilterType">Data iscrizione</th>
-                                <th class="center dataFilterType">Data disiscrizione</th>
+                                <th data-slug="email"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email</th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Attiva?</th>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Nome</th>
+                                <th data-slug="surname"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Cognome</th>
+                                <th data-slug="subscriptionDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center dataFilterType">Data iscrizione</th>
+                                <th data-slug="unsubscriptionDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Data disiscrizione</th>
                             </tr>
                             </thead>
                             <tbody>

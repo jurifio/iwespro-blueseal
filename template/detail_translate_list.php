@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php";?>
+<?php include "parts/sidebar.php"; ?>
 <div class="page-container">
     <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
@@ -22,14 +22,17 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-datatable-name="detail_translate_list" data-controller="DetailTranslateListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                        <table class="table table-striped responsive" width="100%"
+                               data-datatable-name="detail_translate_list"
+                               data-controller="DetailTranslateListAjaxController"
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
-                                <tr>
-                                    <th class="center sorting">ID</th>
-                                    <th class="center sorting">Sorgente</th>
-                                    <th class="center sorting">Destinazione</th>
-                                    <th class="center sorting">Stato</th>
-                                </tr>
+                            <tr>
+                                <th class="center sorting">ID</th>
+                                <th class="center sorting">Sorgente</th>
+                                <th class="center sorting">Destinazione</th>
+                                <th class="center sorting">Stato</th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>

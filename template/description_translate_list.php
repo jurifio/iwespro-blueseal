@@ -25,12 +25,25 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="description_translate_list"
                                data-controller="DescriptionTranslateListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="50, 75, 100, 200, 500, 1000"
+                               data-display-length="100">
                             <thead>
                             <tr>
-                                <th class="center sorting">Id</th>
-                                <th class="center sorting">Descrizione</th>
-                                <th class="center sorting">Lingua</th>
+                                <th data-slug="productId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">Id</th>
+                                <th data-slug="description"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Descrizione</th>
+                                <th data-slug="lang"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Lingua</th>
                             </tr>
                             </thead>
                             <tbody>

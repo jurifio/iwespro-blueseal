@@ -25,11 +25,21 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="name_translate_list"
                                data-controller="NameTranslateListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="50, 100, 200, 500, 1000"
+                               data-display-length="50">
                             <thead>
                             <tr>
-                                <th class="center sorting">Termine</th>
-                                <th class="center sorting">Lingua</th>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center sorting">Termine</th>
+                                <th data-slug="lang"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center sorting">Lingua</th>
                             </tr>
                             </thead>
                             <tbody>

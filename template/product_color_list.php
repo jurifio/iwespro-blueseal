@@ -26,16 +26,41 @@
                                data-datatable-name="product_color_list"
                                data-column-filter="true"
                                data-controller="ProductColorListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="100, 200, 500, 1000, 2000"
+                               data-display-lenght="200">
                             <thead>
                             <tr>
-                                <th class="center">Codice</th>
-                                <th class="center">Colore</th>
-                                <th class="center">Gruppo Colore</th>
-                                <th class="centar">Colore Friend</th>
-                                <th class="center">Immagine</th>
-                                <th class="center">Categorie</th>
-                                <th class="center">Stato</th>
+                                <th data-slug="code"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Codice</th>
+                                <th data-slug="colorName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">Colore</th>
+                                <th data-slug="colorGroupName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Gruppo Colore</th>
+                                <th data-slug="var"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="centar">Colore Friend</th>
+                                <th data-slug="dummyPic"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Immagine</th>
+                                <th data-slug="categorie"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center categoryFilterType">Categorie</th>
+                                <th data-slug="stato"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Stato</th>
                             </tr>
                             </thead>
                             <tbody>
