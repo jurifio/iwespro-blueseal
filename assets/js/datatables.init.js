@@ -101,62 +101,7 @@
             }
         ]
     });
-    tableSetup.detail_lang_list = $.extend({}, tableSetup.common, {
-        order: [[0, "asc"]],
-        columns: [
-            {
-                data: "slug",
-                orderable: true,
-                searchable: false
-            }, {
-                data: "name",
-                orderable: true,
-                searchable: true
-            }
-        ]
-    });
-    tableSetup.detail_langall_list = $.extend({}, tableSetup.common, {
-        order: [[0, "asc"]],
-        columns: [
-            {
-                data: "slug",
-                orderable: true,
-                searchable: false
-            }, {
-                data: "name",
-                orderable: true,
-                searchable: true
-            }
-        ]
-    });
-    tableSetup.dictionary_brand_list = $.extend({}, tableSetup.common, {
-        order: [[0, "asc"]],
-        columns: [
-            {
-                data: "shopId",
-                orderable: true
-            }, {
-                data: "count",
-                orderable: true
-            }, {
-                data: "mancanti",
-                orderable: true
-            }
-        ]
-    });
-    tableSetup.dictionary_edit = $.extend({}, tableSetup.common, {
-        order: [[1, "asc"],
-            [0, "asc"]],
-        columns: [
-            {
-                data: "term",
-                orderable: true
-            }, {
-                data: "foreign",
-                orderable: true
-            }
-        ]
-    });
+
     tableSetup.dictionary_size_list = $.extend({}, tableSetup.common, {
         order: [[0, "asc"]],
         columns: [

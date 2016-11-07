@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php";?>
+<?php include "parts/sidebar.php"; ?>
 <div class="page-container">
     <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
@@ -24,12 +24,25 @@
                     <div class="panel-heading">
                     </div>
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-datatable-name="detail_lang_list" data-controller="DetailTranslateLangListAjaxController" data-lang="<?php echo $langId; ?>" data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                        <table class="table table-striped responsive" width="100%"
+                               data-datatable-name="detail_lang_list"
+                               data-controller="DetailTranslateLangListAjaxController"
+                               data-lang="<?php echo $langId; ?>" data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
-                                <tr>
-                                    <th class="center sorting">Termine</th>
-                                    <th class="center sorting">Nome</th>
-                                </tr>
+                            <tr>
+                                <th data-slug="slug"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center sorting">Termine</th>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center sorting">Nome</th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>
@@ -70,7 +83,7 @@
     </bs-toolbar-group>
 </bs-toolbar>
 <script type="application/javascript">
-    function modifica(campo,lang){
+    function modifica(campo, lang) {
         $.ajax({
             type: "put",
             url: "/blueseal/xhr/DetailTranslateLangListAjaxController",
