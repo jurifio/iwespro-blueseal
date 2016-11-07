@@ -202,14 +202,14 @@
             if(setup.order.length == 0) {
                 setup.order.push([0,'asc']);
             }
-            if (typeof $(this).data('lengthMenu') != 'undefined') {
+            if (typeof table.data('lengthMenu') != 'undefined') {
                 setup.lengthMenu = [];
-                $.each($(this).data('lengthMenu').split(','), function (k, v) {
+                $.each(table.data('lengthMenu').split(','), function (k, v) {
                     setup.lengthMenu.push(Number(v.trim()));
                 });
             }
-            if (typeof $(this).data('displayLength') != 'undefined') {
-                setup.displayLength = $(this).data('displayLength');
+            if (typeof table.data('displayLength') != 'undefined') {
+                setup.displayLength = table.data('displayLength');
             }
 
             setup = $.extend({}, tableSetup.common, setup);
