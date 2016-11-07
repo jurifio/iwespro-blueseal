@@ -25,13 +25,28 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="detail_translate_list"
                                data-controller="DetailTranslateListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="50, 100, 200, 500">
                             <thead>
                             <tr>
-                                <th class="center sorting">ID</th>
-                                <th class="center sorting">Sorgente</th>
-                                <th class="center sorting">Destinazione</th>
-                                <th class="center sorting">Stato</th>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center sorting">ID</th>
+                                <th data-slug="translatedName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center sorting">Sorgente</th>
+                                <th data-slug="translatedName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center sorting">Destinazione</th>
+                                <th data-slug="translatedLangId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center sorting">Stato</th>
                             </tr>
                             </thead>
                             <tbody>

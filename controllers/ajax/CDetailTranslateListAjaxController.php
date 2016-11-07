@@ -24,7 +24,8 @@ class CDetailTranslateListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $datatable = new CDataTables('vProductDetailTranslationView', ['id'], $this->app->router->request()->getRequestData());
+        $productDetail = $this->app->repoFactory->create('ProductDetail')->getEmptyEntity();
+        $datatable = new CDataTables('vProductDetailTranslationView', $productDetail->getPrimaryKeys(), $this->app->router->request()->getRequestData());
         $modifica = $this->app->baseUrl(false) . "/blueseal/traduzioni/dettagli/modifica";
 
 	    if($this->app->router->request()->getRequestData('useTargetLang')) {
@@ -43,16 +44,13 @@ class CDetailTranslateListAjaxController extends AAjaxController
 
         $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/edit');
 		$datatable->addCondition('hasQuantity',[1]);
-        if (!empty($this->authorizedShops)) {
-            $datatable->addCondition('shopId', $this->authorizedShops);
-        }
-        $query = $datatable->getQuery();
-        $productDetails = $this->app->repoFactory->create('ProductDetailTranslationView')->em()->findBySql($query, $datatable->getParams());
-        $count = $this->app->repoFactory->create('ProductDetailTranslationView')->em()->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('ProductDetailTranslationView')->em()->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
 
-        $repo = $this->app->repoFactory->create('Lang');
-        $activeLanguages = $repo->findBy(['isActive' => true]);
+        $query = $datatable->getQuery(false,true);
+        $productDetails = $this->app->dbAdapter->query($query, $datatable->getParams())->fetchAll();
+        $count = $this->app->repoFactory->create('ProductDetail')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('ProductDetail')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+
+        $activeLanguages = $this->app->repoFactory->create('Lang')->findBy(['isActive' => true]);
 
         $response = [];
         $response ['draw'] = $this->app->router->request()->getRequestData('draw');
@@ -60,44 +58,40 @@ class CDetailTranslateListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $i = 0;
-
         foreach ($productDetails as $productDetail)
         {
+            $row = [];
             $html = '';
-
-            $translationStatus = array_combine(explode('|', $productDetail->translatedLangId), explode('|', $productDetail->translatedName));
+            $translationStatus = array_combine(explode('|', $productDetail['translatedLangId']), explode('|', $productDetail['translatedName']));
 
             foreach ($activeLanguages as $activeLanguage) {
-                if (in_array($activeLanguage->id, explode('|', $productDetail->translatedLangId))) {
+                if (in_array($activeLanguage->id, explode('|', $productDetail['translatedLangId']))) {
                     $html .= '<span class="badge badge-green" data-toggle="tooltip" title="' . $translationStatus[$activeLanguage->id] . '" data-placement="left">' . $activeLanguage->lang . '</span>';
                 } else {
                     $html .= '<span class="badge badge-red">' . $activeLanguage->lang . '</span>';
                 }
             }
 
-            $response['data'][$i]["DT_RowId"] = 'row__' . $productDetail->id;
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['id'] = $userHasPermission ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $productDetail->id . '">' . $productDetail->id . '</a>' : $productDetail->id;
-            $response['data'][$i]['source'] = $translationStatus[1];
+            $row["DT_RowId"] = 'row__' . $productDetail['id'];
+            $row["DT_RowClass"] = 'colore';
+            $row['id'] = $userHasPermission ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $productDetail['id'] . '">' . $productDetail['id'] . '</a>' : $productDetail['id'];
+            $row['source'] = $translationStatus[1];
 
             if ($this->app->router->request()->getRequestData('useTargetLang')) {
                 $input = '<div class="form-group form-group-default" style="width:604px">';
                 $input .= '<input type="text" class="form-control dt-input" style="width: 580px"
-                    id="detailId_' . $productDetail->id . '"
-                    name="detailId_' . $productDetail->id . '"
+                    id="detailId_' . $productDetail['id'] . '"
+                    name="detailId_' . $productDetail['id'] . '"
                     data-lang = "'.$this->app->router->request()->getRequestData('useTargetLang').'"
                     value="' . (isset($translationStatus[$this->app->router->request()->getRequestData('useTargetLang')]) ? $translationStatus[$this->app->router->request()->getRequestData('useTargetLang')] : null) . '"/>';
                 $input .= '</div>';
 
-                $response['data'][$i]['target'] = $input;
+                $row['target'] = $input;
             } else {
-                $response['data'][$i]['target'] = $translationStatus[1];
+                $row['target'] = $translationStatus[1];
             }
-
-            $response['data'][$i]['status'] = $html;
-
-            $i++;
+            $row['status'] = $html;
+            $response ['data'][] = $row;
         }
 
         return json_encode($response);

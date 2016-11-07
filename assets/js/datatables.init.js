@@ -202,9 +202,9 @@
             if(setup.order.length == 0) {
                 setup.order.push([0,'asc']);
             }
-            if (typeof $(this).data('lengthMenuSetup') != 'undefined') {
+            if (typeof $(this).data('lengthMenu') != 'undefined') {
                 setup.lengthMenu = [];
-                $.each($(this).data('lengthMenuSetup').split(','), function (k, v) {
+                $.each($(this).data('lengthMenu').split(','), function (k, v) {
                     setup.lengthMenu.push(Number(v.trim()));
                 });
             }
