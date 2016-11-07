@@ -26,16 +26,41 @@
                     <div class="panel-body">
                         <table class="table table-striped" data-column-filter="true" data-datatable-name="user_list"
                                data-controller="UserListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="userTable">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="userTable"
+                               data-inner-setup="true"
+                               data-lenght-menu="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Cognome</th>
-                                <th>Email</th>
-                                <th>Sesso</th>
-                                <th>Stato</th>
-                                <th>Metodo</th>
-                                <th class="dataFilterType">Registrazione</th>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Nome</th>
+                                <th data-slug="surname"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Cognome</th>
+                                <th data-slug="email"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email</th>
+                                <th data-slug="sex"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Sesso</th>
+                                <th data-slug="status"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Stato</th>
+                                <th data-slug="method"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Metodo</th>
+                                <th data-slug="creationDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center dataFilterType">Registrazione</th>
                             </tr>
                             </thead>
                             <tbody>

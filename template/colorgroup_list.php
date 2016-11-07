@@ -33,11 +33,21 @@
                             <div class="panel-body">
                                 <table class="table table-striped responsive" width="100%"
                                        data-datatable-name="color_list" data-controller="ColorListAjaxController"
-                                       data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                                       data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                                       data-inner-setup="true"
+                                       data-lenght-menu="50, 100, 200, 500"
+                                       data-display-length="50">
                                     <thead>
                                     <tr>
-                                        <th class="center sorting">Nome</th>
-                                        <th class="center sorting">Slug</th>
+                                        <th data-slug="name"
+                                            data-searchable="true"
+                                            data-orderable="true"
+                                            data-default-order="desc"
+                                            class="center sorting">Nome</th>
+                                        <th data-slug="slug"
+                                            data-searchable="true"
+                                            data-orderable="true"
+                                            class="center sorting">Slug</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -71,7 +81,7 @@
             data-title="Aggiungi un nuovo colore"
             data-placement="bottom"
             data-href="<?php echo $addUrl; ?>"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-trash"
@@ -82,7 +92,7 @@
             data-title="Elimina colore"
             data-placement="bottom"
             data-target="#bsModal"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

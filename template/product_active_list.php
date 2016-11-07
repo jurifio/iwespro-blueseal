@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php";?>
+<?php include "parts/sidebar.php"; ?>
 <div class="page-container">
-    <?php include "parts/header.php";?>
+    <?php include "parts/header.php"; ?>
     <?php include "parts/operations.php" ?>
 
     <div class="page-content-wrapper">
@@ -25,19 +25,62 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-column-filter="true" data-datatable-name="product_active_list" data-controller="ProductActiveListAjaxController" data-url="<?php echo $app->urlForBluesealXhr() ?>" >
+                        <table class="table table-striped responsive" width="100%" data-column-filter="true"
+                               data-datatable-name="product_active_list"
+                               data-controller="ProductActiveListAjaxController"
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
-                                <tr>
-                                    <th class="center">Codice</th>
-                                    <th class="center">Brand</th>
-                                    <th class="center">Shops</th>
-                                    <th class="center">Stato</th>
-                                    <th class="center">Immagine</th>
-                                    <th class="center">Skus</th>
-                                    <th class="center">Listino</th>
-                                    <th class="center">Valore Vendite</th>
-                                    <th class="center">Qty Venduta</th>
-                                </tr>
+                            <tr>
+                                <th data-slug="code"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Codice
+                                </th>
+                                <th data-slug="brand"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Brand
+                                </th>
+                                <th data-slug="shops"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shops
+                                </th>
+                                <th data-slug="status"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Stato
+                                </th>
+                                <th data-slug="dummyPicture"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Immagine
+                                </th>
+                                <th data-slug="skus"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Skus
+                                </th>
+                                <th data-slug="price"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Listino
+                                </th>
+                                <th data-slug="income"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Valore Vendite
+                                </th>
+                                <th data-slug="sells"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Qty Venduta
+                                </th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>
@@ -46,12 +89,12 @@
                 </div>
             </div>
         </div>
-        <?php include "parts/footer.php"?>
+        <?php include "parts/footer.php" ?>
     </div>
 </div>
 <?php //include "parts/modalSearchProducts.php"?>
-<?php include "parts/bsmodal.php"?>
-<?php include "parts/alert.php"?>
+<?php include "parts/bsmodal.php" ?>
+<?php include "parts/alert.php" ?>
 
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
@@ -64,7 +107,7 @@
             data-title="Aggiungi un nuovo prodotto"
             data-placement="bottom"
             data-href="<?php echo $aggiungi; ?>"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-cloud-upload"
@@ -76,7 +119,7 @@
             data-placement="bottom"
             data-toggle="modal"
             data-target="#bsModal"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-qrcode"
@@ -86,7 +129,7 @@
             data-rel="tooltip"
             data-title="Stampa aztec"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-clone"
@@ -96,16 +139,16 @@
             data-rel="tooltip"
             data-title="Duplica prodotto"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-archive"
-                data-permission="/admin/product/mag"
-                data-event="bs.add.sku"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Movimenta"
-                data-placement="bottom"
+            data-tag="a"
+            data-icon="fa-archive"
+            data-permission="/admin/product/mag"
+            data-event="bs.add.sku"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Movimenta"
+            data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
@@ -116,7 +159,7 @@
             data-rel="tooltip"
             data-title="Gestisci foto"
             data-placement="bottom"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-trash"
@@ -127,7 +170,7 @@
             data-title="Elimina prodotto"
             data-placement="bottom"
             data-toggle="modal"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 
     <bs-toolbar-group data-group-label="Roulette">
@@ -142,7 +185,7 @@
             data-title="Roulette prodotti"
             data-event="bs.roulette.add"
             data-options='<?php echo json_encode($roulette); ?>'
-            ></bs-toolbar-select>
+        ></bs-toolbar-select>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

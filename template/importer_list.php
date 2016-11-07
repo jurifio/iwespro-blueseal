@@ -21,14 +21,30 @@
                                data-datatable-name="importer_list"
                                data-column-filter="true"
                                data-controller="ImporterListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true">
                             <thead>
                             <tr>
-                                <th class="center">Importatore</th>
-                                <th class="center">N. Voci da Tradurre</th>
-                                <th class="center">Stato</th>
-                                <th class="center">Errori</th>
-                                <th class="center">Connettori</th>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Importatore</th>
+                                <th data-slug="trans"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">N. Voci da Tradurre</th>
+                                <th data-slug="state"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Stato</th>
+                                <th data-slug="error"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Errori</th>
+                                <th data-slug="connector"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Connettori</th>
                             </tr>
                             </thead>
                             <tbody>

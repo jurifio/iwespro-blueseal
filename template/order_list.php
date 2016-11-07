@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -26,17 +26,45 @@
                     <div class="panel-body">
                         <table class="table table-striped" data-column-filter="true" data-datatable-name="order_list"
                                data-controller="OrderListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
+                               data-inner-setup="true"
+                               data-lenght-menu="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
                             <tr>
-                                <th>Ordine</th>
-                                <th class="dataFilterType">Data Ordine</th>
-                                <th class="dataFilterType">Ultimo Aggiornamento</th>
-                                <th>Utente</th>
-                                <th>Contenuto</th>
-                                <th>Stato</th>
-                                <th>Dovuto/Pagato</th>
-                                <th>Metodo Pagamento</th>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Ordine</th>
+                                <th data-slug="orderDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center dataFilterType">Data Ordine</th>
+                                <th data-slug="lastUpdate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Ultimo Aggiornamento</th>
+                                <th data-slug="user"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Utente</th>
+                                <th data-slug="content"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Contenuto</th>
+                                <th data-slug="status"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Stato</th>
+                                <th data-slug="dareavere"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Dovuto/Pagato</th>
+                                <th data-slug="payment"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Metodo Pagamento</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -62,7 +90,7 @@
             data-title="Aggiungi un nuovo ordine manuale"
             data-placement="bottom"
             data-href="#"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 

@@ -23,9 +23,19 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
-                                <th>Slug</th>
-                                <th>Priorità Ordinamento</th>
-                                <th>Visibilità</th>
+                                <th data-slug="slug"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">Slug</th>
+                                <th data-slug="priority"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Priorità Ordinamento</th>
+                                <th data-slug="isPublic"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Visibilità</th>
                             </tr>
                             </thead>
                             <tbody>

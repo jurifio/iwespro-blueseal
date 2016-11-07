@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php";?>
+<?php include "parts/sidebar.php"; ?>
 <div class="page-container">
-    <?php include "parts/header.php";?>
+    <?php include "parts/header.php"; ?>
     <?php include "parts/operations.php" ?>
 
     <div class="page-content-wrapper">
@@ -20,18 +20,49 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="coupon_list" data-column-filter="true"
                                data-controller="CouponListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
                             <tr>
-                                <th class="center">Codice</th>
-                                <th class="center">Tipo</th>
-                                <th class="center dataFilterType">Data emissione</th>
-                                <th class="center dataFilterType">Data scadenza</th>
-                                <th class="center">Valore</th>
-                                <th class="center">Minimo di spesa</th>
-                                <th class="center">Utilizzatore</th>
-                                <th class="center">Su ordine</th>
-                                <th class="center">Valido</th>
+                                <th data-slug="code"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center">Codice</th>
+                                <th data-slug="couponType"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Tipo</th>
+                                <th data-slug="issueDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center dataFilterType">Data emissione</th>
+                                <th data-slug="validThru"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Data scadenza</th>
+                                <th data-slug="amount"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Valore</th>
+                                <th data-slug="validForCartTotal"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Minimo di spesa</th>
+                                <th data-slug="utente"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Utilizzatore</th>
+                                <th data-slug="orderId"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Su ordine</th>
+                                <th data-slug="false"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Valido</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -41,7 +72,7 @@
                 </div>
             </div>
         </div>
-        <?php include "parts/footer.php"?>
+        <?php include "parts/footer.php" ?>
     </div>
 </div>
 <?php include "parts/bsmodal.php"; ?>
