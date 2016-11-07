@@ -220,6 +220,10 @@
             setup = tableSetup[table.data('datatableName')];
         }
 
+        if($.inArray(setup.displayLength,setup.lengthMenu) == -1) {
+            setup.displayLength = setup.lengthMenu[0];
+        }
+
         if (table.data('column-filter')) {
             var i = 0;
             var th2 = '<tr role="row search">';
