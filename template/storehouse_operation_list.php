@@ -30,7 +30,7 @@
                                data-controller="StorehouseOperationAjaxListController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-lenght-menu="100, 200, 500">
+                               data-length-menu="100, 200, 500">
                             <thead>
                                 <tr>
                                     <th data-slug="id"

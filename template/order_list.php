@@ -28,7 +28,7 @@
                                data-controller="OrderListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
                                data-inner-setup="true"
-                               data-lenght-menu="50, 100, 200, 500"
+                               data-length-menu="50, 100, 200, 500"
                                data-display-length="50">
                             <thead>
                             <tr>

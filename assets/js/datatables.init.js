@@ -201,7 +201,7 @@
             });
             if(setup.order.length == 0) {
                 setup.order.push([0,'asc']);
-            }
+            }length
             if (typeof table.data('lengthMenu') != 'undefined') {
                 setup.lengthMenu = [];
                 $.each(table.data('lengthMenu').split(','), function (k, v) {

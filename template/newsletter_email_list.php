@@ -27,7 +27,7 @@
                                data-controller="NewsletterEmailListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-lenght-menu="100, 200, 500, 1000, 2000"
+                               data-length-menu="100, 200, 500, 1000, 2000"
                                data-display-length="200">
                             <thead>
                             <tr>

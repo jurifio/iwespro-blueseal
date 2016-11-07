@@ -23,7 +23,7 @@
                                data-controller="MarketplaceProductListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-lenght-menu="25,100, 200, 500">
+                               data-length-menu="25,100, 200, 500">
                             <thead>
                                 <tr>
                                     <th data-slug="code"
