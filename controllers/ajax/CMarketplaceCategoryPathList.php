@@ -24,7 +24,8 @@ class CMarketplaceCategoryPathList extends AAjaxController
 		foreach (\Monkey::app()->repoFactory->create('MarketplaceAccountCategory')->findBy(['isRelevant'=>1]) as $category) {
 			$one['id'] = $category->getHashKey('md5');
 			$one['value'] = $category->name." -- ".$category->path;
-			$all[$category->marketplaceAccount->printId()][] = $one;
+			$all[$category->marketplaceAccountId.'-'.$category->marketplaceId][] = $one;
+            unset($category);
 		}
 		return json_encode($all);
 	}
