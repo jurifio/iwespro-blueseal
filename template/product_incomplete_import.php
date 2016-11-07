@@ -33,7 +33,7 @@
                                data-controller="ProductImporterProblemsListController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu="100, 200, 500"
+                               data-length-menu-setup="100, 200, 500"
                                id="productWithImporterProblems">
                             <thead>
                             <tr>

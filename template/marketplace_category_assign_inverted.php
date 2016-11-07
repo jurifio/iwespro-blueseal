@@ -28,7 +28,7 @@
                                data-controller="MarketplaceCategoryAssignInvertedAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu="50, 100, 200, 500, 1000">
+                               data-length-menu-setup="50, 100, 200, 500, 1000">
                             <thead>
                             <tr>
                                 <th data-slug="productCategory"

@@ -205,9 +205,9 @@
             if(setup.order.length == 0) {
                 setup.order.push([0,'asc']);
             }
-            if (typeof table.data('lengthMenu') != 'undefined') {
+            if (typeof table.data('lengthMenuSetup') != 'undefined') {
                 setup.lengthMenu = [];
-                $.each(table.data('lengthMenu').split(','), function (k, v) {
+                $.each(table.data('lengthMenuSetup').split(','), function (k, v) {
                     setup.lengthMenu.push(Number(v.trim()));
                 });
             }
