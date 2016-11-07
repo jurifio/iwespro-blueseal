@@ -21,12 +21,28 @@
                                data-datatable-name="dictionary_season_list"
                                data-column-filter="true"
                                data-controller="DictionarySeasonListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-lenght-menu="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
                             <tr>
-                                <th class="center">Shop</th>
-                                <th class="center">N. Stagioni</th>
-                                <th class="center">N. Stagioni non tradotte</th>
+                                <th data-slug="shopId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">Shop
+                                </th>
+                                <th data-slug="count"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">N. Stagioni
+                                </th>
+                                <th data-slug="mancanti"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">N. Stagioni non tradotti
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
