@@ -38,13 +38,13 @@
                                     class="center sorting">ID</th>
                                 <th data-slug="source"
                                     data-name="translatedName"
-                                    data-searchable="false"
-                                    data-orderable="false"
+                                    data-searchable="true"
+                                    data-orderable="true"
                                     class="center sorting">Sorgente</th>
                                 <th data-slug="target"
                                     data-name="translatedName"
-                                    data-searchable="false"
-                                    data-orderable="false"
+                                    data-searchable="true"
+                                    data-orderable="true"
                                     class="center sorting">Destinazione</th>
                                 <th data-slug="status"
                                     data-name="translatedLangId"
