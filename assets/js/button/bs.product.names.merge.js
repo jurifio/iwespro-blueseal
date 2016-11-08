@@ -89,6 +89,8 @@ $(document).on('bs.product.names.merge', function () {
                         callback();
                     },
                     success: function (res) {
+                        console.log(res);
+                        res.push({name: search['search']});
                         callback(res);
                     }
                 });
