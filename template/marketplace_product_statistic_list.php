@@ -56,9 +56,6 @@
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true" class="center dateTypeFilter">Creazione</th>
-                                    <th data-slug="visitDate"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center dateTypeFilter">Data Visita</th>
                                     <th data-slug="visits"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Visite</th>

@@ -227,19 +227,19 @@ class CDataTables
             foreach ($this->columns as $idx => $column) {
                 if ($column['searchable'] == true) {
                     if($this->search){
-                        $search[] = $this->buildCondition($column['name'],$this->search);
+                        $search[] = $this->buildCondition($column['name'],$this->search,false,false);
                     }
                     if($column['search']){
-	                    $search[] = $this->buildCondition($column['name'],$this->search); //"`" . $column['name']."` RLIKE ?";
+	                    $search[] = $this->buildCondition($column['name'],$this->search,false,false); //"`" . $column['name']."` RLIKE ?";
                     }
 	                if(array_key_exists('filter', $column) && ($column['filter'] || ("0" === $column['filter']))) {
-	                    $columnsFilter[] = $this->buildCondition($column['name'],$column['filter']);
+	                    $columnsFilter[] = $this->buildCondition($column['name'],$column['filter'],false,false);
 	                }
                 }
             }
             if($this->search){
                 foreach($this->keys as $key){
-                    $search[] = $this->buildCondition($key,$this->search);
+                    $search[] = $this->buildCondition($key,$this->search,false);
                 }
             }
         }
@@ -278,9 +278,10 @@ class CDataTables
      * @param $field
      * @param $values
      * @param bool $not
+     * @param bool $likeStartsWith
      * @return array
      */
-    protected function buildCondition($field, $values, $not = false)
+    protected function buildCondition($field, $values, $not = false,$likeStartsWith = true)
     {
         $condition = " ";
         $condition.= "`".$field. "` ";
@@ -298,10 +299,10 @@ class CDataTables
         //non è un array quindi sono altri cazzi, di sicuro una like
         elseif($not) {
             $condition.= " NOT RLIKE ? ";
-            $params[] = $this->likeSearch($values);
+            $params[] = $this->likeSearch($values,$likeStartsWith);
         } elseif(strpos($values,'-') === 0) {
             $condition.= " NOT RLIKE ? ";
-            $params[] = $this->likeSearch(substr($values, 1));
+            $params[] = $this->likeSearch(substr($values, 1),$likeStartsWith);
         } elseif(strpos($values,'><') === 0) {
             $condition.= " BETWEEN ? AND ? ";
             $values = substr($values, 2);
@@ -332,7 +333,7 @@ class CDataTables
             return $this->buildCondition($field,explode($values,','));
         } else {
             $condition.= " RLIKE ? ";
-            $params[] = $this->likeSearch($values);
+            $params[] = $this->likeSearch($values,$likeStartsWith);
         }
 
         return ["where"=>$condition,"params"=>$params];
@@ -345,12 +346,11 @@ class CDataTables
      */
     protected function likeSearch($string,$startWith = true)
     {
+        $string = str_replace('.','\.', $string);
+        $string = str_replace('*','.*', $string);
         if(!$startWith) {
             $string = ".*".$string;
         }
-        //$string = str_replace('.','\.', $string);
-        //$string = str_replace('*','.*', $string);
-        //$string.='.*';
         return $string.".*";
     }
 
