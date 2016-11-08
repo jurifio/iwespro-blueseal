@@ -261,7 +261,6 @@
             }
         });
 
-
         setup.ajax = {
             "url": table.data('url') + "/" + table.data('controller'),
             "data": function (mydata) {
@@ -294,8 +293,7 @@
                 //FILTRI COLONNE
                 bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-filter" style="float:right"><div class="btn-group-label">Filtra</div></div>');
                 bstoolbar.children('.dt-buttons').last().append('<a class="btn btn-default buttons-html5 btn-group-label table-per-column-filter" style="border-radius: 2px;">' +
-                    '<i class="fa fa-filter" aria-hidden="true"></i>' +
-                    '</a>');
+                    '<i class="fa fa-filter" aria-hidden="true"></i></a>');
                 $(document).on('click', '.table-per-column-filter', function () {
                     if ($(this).hasClass('bs-button-toggle')) {
                         $('.search-col').hide();
@@ -349,26 +347,21 @@
                     });
                 });
             }
-
             toolbarSearch.find('input').eq(0).off().on('keyup', function (e) {
                 if (e.keyCode == 13) {
                     dataTable.search($(this).val()).draw();
                 }
             });
-
             bstoolbar.append($('.bs-toolbar-responsive'));
-
             $('.btn-toolbar').remove();
             $('.dataTables_filter label').remove();
             $('.dataTables_length label').remove();
-
             $.fn.tooltip && $('[data-toggle="tooltip"], [rel="tooltip"]').tooltip(
                 {
                     container: 'body',
                     delay: {"show": 500, "hide": 100}
                 }
             );
-
             $('[data-init-plugin=selectize]').each(function () {
                 var self = this;
                 $(this).selectize({
@@ -377,7 +370,6 @@
                 });
                 $('.selectize-dropdown-content').scrollbar();
             });
-
             $('th.dataFilterType').each(function () {
                 //$(this).datepicker();
                 var that = $('#searchCol-'+$(this).data('columnIndex'));
@@ -404,16 +396,13 @@
                     options.startDate = dates[0];
                     options.endDate = dates[1];
                 }
-
                 that.daterangepicker(options);
-
                 that.on('apply.daterangepicker', function (ev, picker) {
                     that.val("><" + picker.startDate.format('YYYY-MM-DD') + "|" + picker.endDate.format('YYYY-MM-DD'));
                     var name = $(ev.target).data("name");
                     dataTable.columns(name+":name").search(that.val());
                     dataTable.search("").draw();
                 });
-
                 that.on('cancel.daterangepicker', function (ev, picker) {
                     that.val("");
                     var name = $(ev.target).data("name");
@@ -422,7 +411,6 @@
                 });
 
             });
-
             $('th.categoryFilterType').each(function () {
                 var thati = $('#searchCol-'+$(this).data('columnIndex'));
                 thati.attr('placeholder','Seleziona');
@@ -439,10 +427,12 @@
                     body.css("text-align", 'left');
                     bsModal.modal();
                     var radioTree = $("#categoriesTree");
-                    cancelButton.html("Annulla");
+                    cancelButton.html("Pulisci");
                     cancelButton.show();
                     cancelButton.on('click', function () {
-                        //cancella cose
+                        radioTree.fancytree("getTree").visit(function(node){
+                            node.select(false);
+                        });
                     });
                     okButton.html('Filtra').off().on('click', function () {
                         var ids = [];
@@ -531,10 +521,6 @@
                 });
             });
         });
-
         table.DataTable(setup);
-
-        //$('.dt-buttons').prepend("<div class=\"btn-group-label\">Esporta dati</div>");
     });
-
 })(jQuery);
