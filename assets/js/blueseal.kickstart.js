@@ -448,6 +448,7 @@ $.bsModal = function (header, params) {
     this.body = $('#bsModal .modal-body');
     this.cancelButton = $('#bsModal .modal-footer .btn-default');
     this.okButton = $('#bsModal .modal-footer .btn-success');
+    this.cross = $ ('#bsModal button.close');
 
     this.header.html(header);
     this.body.html(this.opt.body);
@@ -465,6 +466,11 @@ $.bsModal = function (header, params) {
             self.opt.cancelButtonEvent()
         });
     }
+
+    this.cross.off ().on ('click', function(){
+        self.okButton.prop('disabled', false);
+        self.bsModal.modal('hide');
+    });
     this.bsModal.modal();
     //constructor end
 
