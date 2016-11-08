@@ -64,13 +64,21 @@ $(document).on('bs.product.name.insert', function (e, element, button) {
                 url: '/blueseal/xhr/ProductNameAdd',
                 method: 'GET',
                 data: {name: value}
-            }).done(function (res) {
+            }).done (function (res) {
                 if ('ok' == res) {
                     self.closest('.form-group').removeClass('error');
-                    modal.okButton.prop('disabled', false);
+                    modal.okButton.prop ('disabled', false);
                 } else {
                     self.closest('.form-group').addClass('error');
-                    modal.okButton.prop('disabled', true);
+                    modal.okButton.prop ('disabled', true);
+                    modal.setCancelButton (function(){
+                        modal.okButton.prop ('disabled', false);
+                        modal.hide();
+                    });
+                    $ ('button.close').off ().on ('click', function (){
+                        modal.okButton.prop ('disabled', false);
+                        modal.hide();
+                    });
                 }
             });
         } else {

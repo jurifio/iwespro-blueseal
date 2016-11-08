@@ -59,7 +59,8 @@ $(document).on('bs.product.names.merge', function () {
         bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
         bodyContent += '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
         body.html(bodyContent);
-        $('#productDetailId').selectize({
+        var prodNameId = $ ('#productDetailId');
+        prodNameId.selectize({
             valueField: 'name',
             labelField: 'name',
             searchField: 'name',
@@ -88,22 +89,27 @@ $(document).on('bs.product.names.merge', function () {
                         callback();
                     },
                     success: function (res) {
+                        console.log(res);
+                        res.push({name: search['search']});
                         callback(res);
                     }
                 });
             }
         });
 
-        $('#productDetailId').selectize()[0].selectize.setValue(0);
 
-        var detName = $('#productDetailId option:selected').text();
-        $('#productDetailName').val(detName);
+        prodNameId.selectize()[0].selectize.setValue(0);
+        var prodName = $ ('#productDetailName');
+
+        var detName = prodNameId.find ('option:selected').text();
+        prodName.val (detName);
+
+        prodNameId.on ('change', function(){
+            detName = prodNameId.find ('option:selected').text();
+            prodName.val (detName);
+        });
 
         $(bsModal).find('table').addClass('table');
-        $('#productDetailId').change(function () {
-            var detName = $('#productDetailId option:selected').text();
-            $('#productDetailName').val(detName);
-        });
         cancelButton.html("Annulla");
         cancelButton.show();
 
