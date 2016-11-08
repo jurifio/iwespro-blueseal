@@ -37,7 +37,7 @@
                                     data-orderable="true" class="center" data-default-order="asc">Name</th>
                                 <th data-slug="category"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Categorie</th>
+                                    data-orderable="true" class="center categoryFilterType">Categorie</th>
                                 <th data-slug="count"
                                     data-searchable="false"
                                     data-orderable="true" class="center">N. Prodotti Associati</th>

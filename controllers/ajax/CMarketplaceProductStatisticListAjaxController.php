@@ -26,7 +26,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 
 
         $query = "SELECT
-        concat(`p`.`id`, '-', `p`.`productVariantId`)           AS `code`,
+        concat(`p`.`id`, '-', `p`.`productVariantId`)           AS `codice`,
         `p`.`id`                                                AS `productId`,
         `p`.`productVariantId`                                  AS `productVariantId`,
         `p`.`itemno`                                            AS `itemno`,
@@ -44,7 +44,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         psd.id                                                  AS visitId,
         pst.pageView                                            AS visits,
         pst.conversion                                          AS conversions,
-        c.code                                                  AS campaignCode
+        ifnull(c.code,'')                                        AS campaignCode
       FROM ((((((((`Product` `p`
         JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`)))
         JOIN `ShopHasProduct` `shp` ON (((`p`.`id` = `shp`.`productId`) AND (`p`.`productVariantId` = `shp`.`productVariantId`))))
@@ -62,22 +62,18 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
           AND timestamp >= ifnull(?, timestamp) 
           AND timestamp <= ifnull(?, timestamp)";
 
-        $params = $_GET;
-
-        $datatable = new CDataTables("(".$query.")", $sample->getPrimaryKeys(), $_GET);
-        $a = $this->app->router->request()->getRequestData();
-        $marketplaceAccountId = $this->app->router->request()->getRequestData('accountId');
+        $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
+
+        $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET,true);
         $datatable->addCondition('marketplaceId', [$marketplaceAccount->marketplaceId]);
         $datatable->addCondition('marketplaceAccountId', [$marketplaceAccount->id]);
-
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
-
-        $prodottiMarks = $sample->em()->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $sample->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $prodottiMarks = $sample->em()->findBySql($datatable->getQuery(), array_merge([null,null],$datatable->getParams()));
+        $count = $sample->em()->findCountBySql($datatable->getQuery(true), array_merge([null,null],$datatable->getParams()));
+        $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), array_merge([null,null],$datatable->getParams()));
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -101,7 +97,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 
             $response['data'][$i]["DT_RowId"] = $val->printId();
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>';
+            $response['data'][$i]['codice'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>';
             $response['data'][$i]['brand'] = $val->productBrand->name;
             $response['data'][$i]['season'] = $val->productSeason->name;
 

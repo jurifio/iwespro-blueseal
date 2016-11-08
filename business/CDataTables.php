@@ -75,17 +75,24 @@ class CDataTables
      * @var string
      */
     protected $where;
+    /**
+     * @var bool
+     */
+    protected $isSubQuery;
 
     /**
      * CDataTables constructor.
      * @param $table
      * @param array $keys
      * @param array $dtData
+     * @param bool $isSubQuery
      */
-    public function __construct($table, array $keys, array $dtData)
+    public function __construct($table, array $keys, array $dtData,$isSubQuery = false)
     {
         $this->setUpDtData($dtData);
         $this->keys = $keys;
+        $this->isSubQuery = $isSubQuery;
+        if($isSubQuery) $table = "(".$table.") t";
         $this->table = $table;
     }
 
@@ -381,7 +388,11 @@ class CDataTables
         if(!empty($this->orders)){
             $ord = [];
             foreach($this->orders as $column){
-                $ord[] = "`".$column['column']."` ".$column['dir'];
+                if($this->isSubQuery) {
+                    $ord[] = "t.`".$column['column']."` ".$column['dir'];
+                } else {
+                    $ord[] = "`".$column['column']."` ".$column['dir'];
+                }
             }
             return "ORDER BY ".implode(',',$ord);
         } else return " ";

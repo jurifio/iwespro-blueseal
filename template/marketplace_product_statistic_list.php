@@ -19,14 +19,13 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_static_list"
-
                                data-controller="MarketplaceProductStatisticListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="25,100,200,500">
                             <thead>
                                 <tr>
-                                    <th data-slug="code"
+                                    <th data-slug="codice"
                                         data-searchable="true"
                                         data-orderable="true" class="center"
                                         data-default-order="desc">Codice</th>
