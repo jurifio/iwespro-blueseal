@@ -56,8 +56,12 @@ class CNamesManager extends AAjaxController
             []
         )->countAffectedRows();
 
+        $deleted = \Monkey::app()->repoFactory->create('ProductNameTranslation')->deleteDeadNames();
+
+
         $this->app->cacheService->getCache('entities')->flush();
-        return $resPNT . " dei nomi assegnati ai prodotti e " . $resPN . " dei nomi sono stati normalizzati.";
+        return $resPNT . " dei nomi assegnati ai prodotti e " . $resPN . " dei nomi sono stati normalizzati.<br />
+            Cancellati " . $deleted . " nomi orfani";
     }
 
     private function mergeNames($new, $old)
