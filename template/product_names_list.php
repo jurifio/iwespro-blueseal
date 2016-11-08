@@ -35,7 +35,7 @@
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true" class="center" data-default-order="asc">Name</th>
-                                <th data-slug="slug"
+                                <th data-slug="category"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Categorie</th>
                                 <th data-slug="count"
