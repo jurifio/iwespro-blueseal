@@ -17,7 +17,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-column-filter="true"
+                        <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_fusion_list"
                                data-controller="ProductFusionListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"

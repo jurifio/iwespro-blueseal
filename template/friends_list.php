@@ -24,7 +24,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="brand_value_list"
-                               data-column-filter="true"
+
                                data-controller="FriendsListAjaxController"
                                data-inner-setup="true"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"

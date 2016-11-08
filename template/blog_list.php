@@ -19,7 +19,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive"
                                width="100%"
-                               data-column-filter="true"
+
                                data-datatable-name="blog_list"
                                data-controller="BlogPostListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"

@@ -18,7 +18,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="coupon_list" data-column-filter="true"
+                               data-datatable-name="coupon_list"
                                data-controller="CouponListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"

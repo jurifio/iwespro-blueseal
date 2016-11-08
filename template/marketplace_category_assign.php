@@ -24,7 +24,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_category_assign"
-                               data-column-filter="true"
+
                                data-controller="MarketplaceCategoryAssignAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"

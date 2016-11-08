@@ -24,7 +24,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_color_list"
-                               data-column-filter="true"
+
                                data-controller="ProductColorListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"

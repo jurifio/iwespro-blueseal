@@ -75,32 +75,6 @@
             }
         ]
     };
-    /*tableSetup.detail_translate_list = $.extend({}, tableSetup.common, {
-        order: [[0, "asc"]],
-        columns: [
-            {
-                data: "id",
-                name: "id",
-                orderable: true,
-                searchable: false
-            }, {
-                data: "source",
-                name: "translatedName",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "target",
-                name: "translatedName",
-                orderable: true,
-                searchable: true
-            }, {
-                data: "status",
-                name: "translatedLangId",
-                orderable: false,
-                searchable: false
-            }
-        ]
-    });*/
     tableSetup.landing_list = $.extend({}, tableSetup.common, {
         order: [
             [4, "desc"],
@@ -178,66 +152,59 @@
 
         var table = $(this);
         var setup = {};
-        if (table.data('innerSetup') == true) {
-            setup.columns = [];
-            setup.order = [];
-            var c = 0;
-            table.find('th').each(function () {
-                var column = {
-                    data: $(this).data('slug'),
-                    name: $(this).data('name') ? $(this).data('name') : $(this).data('slug')
-                };
-                if (typeof $(this).data('orderable') != 'undefined') {
-                    column.orderable = $(this).data('orderable');
-                }
-                if (typeof $(this).data('searchable') != 'undefined') {
-                    column.searchable = $(this).data('searchable');
-                }
-                if (typeof $(this).data('defaultOrder') != 'undefined') {
-                    setup.order.push([c, $(this).data('defaultOrder')]);
-                }
-                if (typeof $(this).data('isVisible') != 'undefined') {
-                    column.visible = $(this).data('isVisible');
-                }
-                setup.columns.push(column);
-                c++;
-            });
-            if(setup.order.length == 0) {
-                setup.order.push([0,'asc']);
+        setup.columns = [];
+        setup.order = [];
+        var c = 0;
+        table.find('th').each(function () {
+            var column = {
+                data: $(this).data('slug'),
+                name: $(this).data('name') ? $(this).data('name') : $(this).data('slug')
+            };
+            if (typeof $(this).data('orderable') != 'undefined') {
+                column.orderable = $(this).data('orderable');
             }
-            if (typeof table.data('lengthMenuSetup') != 'undefined') {
-                setup.lengthMenu = [];
-                $.each(table.data('lengthMenuSetup').split(','), function (k, v) {
-                    setup.lengthMenu.push(Number(v.trim()));
-                });
+            if (typeof $(this).data('searchable') != 'undefined') {
+                column.searchable = $(this).data('searchable');
             }
-            if (typeof table.data('displayLength') != 'undefined') {
-                setup.displayLength = table.data('displayLength');
+            if (typeof $(this).data('defaultOrder') != 'undefined') {
+                setup.order.push([c, $(this).data('defaultOrder')]);
             }
-
-            setup = $.extend({}, tableSetup.common, setup);
-        } else {
-            setup = tableSetup[table.data('datatableName')];
+            if (typeof $(this).data('isVisible') != 'undefined') {
+                column.visible = $(this).data('isVisible');
+            }
+            setup.columns.push(column);
+            c++;
+        });
+        if(setup.order.length == 0) {
+            setup.order.push([0,'asc']);
         }
-
+        if (typeof table.data('lengthMenuSetup') != 'undefined') {
+            setup.lengthMenu = [];
+            $.each(table.data('lengthMenuSetup').split(','), function (k, v) {
+                setup.lengthMenu.push(Number(v.trim()));
+            });
+        }
+        if (typeof table.data('displayLength') != 'undefined') {
+            setup.displayLength = table.data('displayLength');
+        }
+        setup = $.extend({}, tableSetup.common, setup);
         if($.inArray(setup.displayLength,setup.lengthMenu) == -1) {
             setup.displayLength = setup.lengthMenu[0];
         }
 
-        if (table.data('column-filter')) {
-            var i = 0;
-            var th2 = '<tr role="row search">';
-            table.find('th').each(function () {
-                if (false != setup.columns[i].searchable) {
-                    th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].data+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" /></th>';
-                } else {
-                    th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].data+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/></th>';
-                }
-                i++
-            });
-            th2+='</tr>';
-            table.find('thead').prepend($(th2));
-        }
+        //COSTRUZIONE FILTRI
+        var i = 0;
+        var th2 = '<tr role="row search">';
+        table.find('th').each(function () {
+            if (false != setup.columns[i].searchable) {
+                th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].data+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" /></th>';
+            } else {
+                th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].data+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/></th>';
+            }
+            i++
+        });
+        th2+='</tr>';
+        table.find('thead').prepend($(th2));
 
         //fermo la propagazione
         var searchCols = $(".search-col");

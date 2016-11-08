@@ -19,7 +19,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_static_list"
-                               data-column-filter="true"
+
                                data-controller="MarketplaceProductStatisticListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"

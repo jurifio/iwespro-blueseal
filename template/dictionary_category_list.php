@@ -18,7 +18,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="dictionary_category_list" data-column-filter="true"
+                               data-datatable-name="dictionary_category_list"
                                data-controller="DictionaryCategoryListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"

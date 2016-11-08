@@ -26,7 +26,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_campaign_statistics"
-                               data-column-filter="true"
+
                                data-inner-setup="true"
                                data-controller="ProductCampaignStatisticsAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">

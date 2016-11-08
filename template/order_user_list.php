@@ -24,7 +24,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped" data-column-filter="true"
+                        <table class="table table-striped"
                                data-datatable-name="order_user_list"
                                data-controller="OrderByUserListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
