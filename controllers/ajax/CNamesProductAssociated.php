@@ -44,7 +44,7 @@ class CNamesProductAssociated extends AAjaxController
                 JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`)
                 JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
                 JOIN `ProductSeason` as `pse` on `p`.`productSeasonId` = `pse`.`id`
-                WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P')",
+                WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P', 'I')",
             [$search]
         )->fetchAll();
 
