@@ -29,7 +29,10 @@ class CProductSlimListAjaxController extends AAjaxController
         $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
+        $user = \Monkey::app()->getUser();
+        $okManage = $user->hasPermission('/admin/product/edit');
+
+        $allShops = $user->hasPermission('allShops');
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -144,7 +147,21 @@ class CProductSlimListAjaxController extends AAjaxController
             $response['data'][$i]['season'] .= ($val->productSeason) ? $val->productSeason->name . " " . $val->productSeason->year : '-';
             $response['data'][$i]['season'] .= '</span>';
 
-            $response['data'][$i]['status'] = $val->productStatus->name;
+            if ($allShops) $status = $val->productStatus->name;
+            else {
+                $friendQty = 0;
+                foreach($val->productSku as $sku) {
+                    foreach($shopsIds as $sid) {
+                        if ($sku->shopId == $sid) {
+                            $friendQty = $friendQty + $sku->stockQty;
+                        }
+                    }
+                }
+                if ($friendQty) $status = $val->productStatus->name;
+                else $status = 'Esaurito';
+            }
+
+            $response['data'][$i]['status'] = $status;
             $response['data'][$i]['creationDate'] = $val->creationDate;
 
             $i++;
