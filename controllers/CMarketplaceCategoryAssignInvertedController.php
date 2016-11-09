@@ -41,6 +41,7 @@ class CMarketplaceCategoryAssignInvertedController extends ARestrictedAccessRoot
         $catId = explode('__', $catId);
         $categoryId = explode('_', $catId[0])[1];
         $marketplaceAccountId = explode('_', $catId[1])[1];
+        \Monkey::dump($catId);
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);;
 
         try {
@@ -52,14 +53,18 @@ class CMarketplaceCategoryAssignInvertedController extends ARestrictedAccessRoot
 
             $value = $this->app->router->request()->getRequestData("value");
             if(!empty($value)) {
-                $key = 'marketpalceCategoryHashToId' . $value;
+                $key = 'cmhtid' . $value;
                 $marketplaceAccountCategoryIds = $this->app->cacheService->getCache('index')->get($key);
                 if (!$marketplaceAccountCategoryIds) {
                     foreach ($marketplaceAccount->marketplaceAccountCategory as $marketplaceAccountCategory) {
                         /** @var CMarketplaceAccountCategory $marketplaceAccountCategory */
-                        $this->app->cacheService->getCache('index')->set('marketpalceCategoryHashToId'.$marketplaceAccountCategory->getHashKey('md5'), $marketplaceAccountCategory->printId());
+                        $tempKey = 'cmhtid' . $marketplaceAccountCategory->getHashKey('md5');
+                        if($tempKey == $key) {
+                            $this->app->cacheService->getCache('index')->set($tempKey, $marketplaceAccountCategory->printId());
+                            $marketplaceAccountCategoryIds = $marketplaceAccountCategory->printId();
+                            break;
+                        }
                     }
-                    $marketplaceAccountCategoryIds = $this->app->cacheService->getCache('index')->get($key);
                 }
                 $marketplaceAccountCategory = $this->app->repoFactory->create('MarketplaceAccountCategory')->findOneByStringId($marketplaceAccountCategoryIds);
 
@@ -68,9 +73,7 @@ class CMarketplaceCategoryAssignInvertedController extends ARestrictedAccessRoot
                         'marketplaceAccountId' => $marketplaceAccount->id,
                         'marketplaceAccountCategoryId' => $marketplaceAccountCategory->marketplaceCategoryId,
                         'productCategoryId' => $categoryId], false, true);
-
             }
-
             $this->app->dbAdapter->commit();
         } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();

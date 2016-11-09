@@ -42,8 +42,8 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         `mahp`.`fee`                                       AS `fee`,
         psd.timestamp                                           AS visitTimestamp,
         psd.id                                                  AS visitId,
-        pst.pageView                                            AS visits,
-        pst.conversion                                          AS conversions,
+        count(psd.id)                                            AS visits,
+        count(psdhol.orderId)                AS conversions,
         ifnull(c.code,'')                                        AS campaignCode
       FROM ((((((((`Product` `p`
         JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`)))
@@ -60,7 +60,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         LEFT JOIN ProductStatisticsDetailHasOrderLine psdhol ON psd.id = psdhol.productStatisticsDetailId
       WHERE (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
           AND timestamp >= ifnull(?, timestamp) 
-          AND timestamp <= ifnull(?, timestamp)";
+          AND timestamp <= ifnull(?, timestamp) group by productId, productVariantId, marketplaceId, marketplaceAccountId";
 
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
@@ -71,7 +71,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
-        $prodottiMarks = $sample->em()->findBySql($datatable->getQuery(), array_merge([null, null], $datatable->getParams()));
+        $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false,true), array_merge([null, null], $datatable->getParams()))->fetchAll();
         $count = $sample->em()->findCountBySql($datatable->getQuery(true), array_merge([null, null], $datatable->getParams()));
         $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), array_merge([null, null], $datatable->getParams()));
 
@@ -81,10 +81,15 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        foreach ($prodottiMarks as $prodottiMark) {
+        foreach ($prodottiMarks as $values) {
 
             $row = [];
-
+            $prodottiMark = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy([
+                'marketplaceId'=>$values['marketplaceId'],
+                'marketplaceAccountId'=>$values['marketplaceAccountId'],
+                'productId'=>$values['productId'],
+                'productVariantId'=>$values['productVariantId'],
+            ]);
             /** @var CProduct $val */
             $val = $prodottiMark->product;
 
@@ -134,6 +139,8 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['marketplaceAccountName'] = implode('<br>', $marketplaces);
             $row['creationDate'] = $val->creationDate;
             $row['categories'] = $val->getLocalizedProductCategories("<br>");
+            $row['conversions'] = $values['conversions'];
+            $row['visits'] = $values['visits'];
 
             $response['data'][] = $row;
         }
