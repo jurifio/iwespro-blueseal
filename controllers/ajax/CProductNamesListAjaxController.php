@@ -23,7 +23,6 @@ class CProductNamesListAjaxController extends AAjaxController
     public function get()
     {
         $datatable = new CDataTables('vBluesealProductNameNewList', ['id'], $_GET);
-
         $productNames = $this->app->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->app->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
@@ -34,17 +33,16 @@ class CProductNamesListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $i = 0;
-
         foreach($productNames as $val){
 			try {
-				$response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
-				$response['data'][$i]["DT_RowClass"] = 'colore';
-				$response['data'][$i]['name'] = $val->name;
+                $row = [];
+				$row["DT_RowId"] = 'row__' . $val->id;
+				$row["DT_RowClass"] = 'colore';
+				$row['name'] = $val->name;
                 $res = \Monkey::app()->dbAdapter->query(
-                    "SELECT `p`.`id` as `productId`, `p`.`productVariantId` FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P')",
+                    "SELECT `p`.`id` as `productId`, `p`.`productVariantId` FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P', 'I')",
                     [$val->name])->fetchAll();
-                $response['data'][$i]['count'] = count($res); //$products->count();
+                $row['count'] = count($res); //$products->count();
 
                 $iterator = 0;
                 $cats = [];
@@ -61,9 +59,8 @@ class CProductNamesListAjaxController extends AAjaxController
                         if (10 == $iterator) break;
                     }
                 }
-                $response['data'][$i]['slug'] = implode('', $cats);
-
-				$i++;
+                $row['category'] = implode('', $cats);
+                $response ['data'][] = $row;
 			} catch (\Throwable $e) {
 				throw $e;
 			}

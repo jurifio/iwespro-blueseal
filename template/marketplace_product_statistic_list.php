@@ -19,14 +19,13 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_static_list"
-
                                data-controller="MarketplaceProductStatisticListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="25,100,200,500">
                             <thead>
                                 <tr>
-                                    <th data-slug="code"
+                                    <th data-slug="codice"
                                         data-searchable="true"
                                         data-orderable="true" class="center"
                                         data-default-order="desc">Codice</th>
@@ -57,9 +56,6 @@
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true" class="center dateTypeFilter">Creazione</th>
-                                    <th data-slug="visitDate"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center dateTypeFilter">Data Visita</th>
                                     <th data-slug="visits"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Visite</th>

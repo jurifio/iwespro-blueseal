@@ -26,7 +26,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 
 
         $query = "SELECT
-        concat(`p`.`id`, '-', `p`.`productVariantId`)           AS `code`,
+        concat(`p`.`id`, '-', `p`.`productVariantId`)           AS `codice`,
         `p`.`id`                                                AS `productId`,
         `p`.`productVariantId`                                  AS `productVariantId`,
         `p`.`itemno`                                            AS `itemno`,
@@ -44,7 +44,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         psd.id                                                  AS visitId,
         pst.pageView                                            AS visits,
         pst.conversion                                          AS conversions,
-        c.code                                                  AS campaignCode
+        ifnull(c.code,'')                                        AS campaignCode
       FROM ((((((((`Product` `p`
         JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`)))
         JOIN `ShopHasProduct` `shp` ON (((`p`.`id` = `shp`.`productId`) AND (`p`.`productVariantId` = `shp`.`productVariantId`))))
@@ -57,27 +57,23 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         LEFT JOIN Campaign c ON c.code = concat('MarketplaceAccount', ma.id, '-', ma.marketplaceId)
         LEFT JOIN ProductStatistics pst ON c.id = pst.campaignId AND pst.productId = p.id AND pst.productVariantId = p.productVariantId
         LEFT JOIN ProductStatisticsDetail psd ON c.id = psd.campaignId AND psd.productId = p.id AND psd.productVariantId = p.productVariantId
-        LEFT JOIN ProductStatisticsDetailHasOrderLine psdhol on psd.id = psdhol.productStatisticsDetailId
+        LEFT JOIN ProductStatisticsDetailHasOrderLine psdhol ON psd.id = psdhol.productStatisticsDetailId
       WHERE (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
           AND timestamp >= ifnull(?, timestamp) 
           AND timestamp <= ifnull(?, timestamp)";
 
-        $params = $_GET;
-
-        $datatable = new CDataTables("(".$query.")", $sample->getPrimaryKeys(), $_GET);
-        $a = $this->app->router->request()->getRequestData();
-        $marketplaceAccountId = $this->app->router->request()->getRequestData('accountId');
+        $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
+
+        $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET, true);
         $datatable->addCondition('marketplaceId', [$marketplaceAccount->marketplaceId]);
         $datatable->addCondition('marketplaceAccountId', [$marketplaceAccount->id]);
-
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
-
-        $prodottiMarks = $sample->em()->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $sample->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $prodottiMarks = $sample->em()->findBySql($datatable->getQuery(), array_merge([null, null], $datatable->getParams()));
+        $count = $sample->em()->findCountBySql($datatable->getQuery(true), array_merge([null, null], $datatable->getParams()));
+        $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), array_merge([null, null], $datatable->getParams()));
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -85,25 +81,22 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $i = 0;
         foreach ($prodottiMarks as $prodottiMark) {
 
+            $row = [];
+
+            /** @var CProduct $val */
             $val = $prodottiMark->product;
-            /** @var CProduct $val*/
+
             $img = $val->getDummyPictureUrl();
             if ($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
 
-            $shops = [];
-            foreach ($val->shop as $shop) {
-                $shops[] = $shop->name;
-            }
-
-            $response['data'][$i]["DT_RowId"] = $val->printId();
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>';
-            $response['data'][$i]['brand'] = $val->productBrand->name;
-            $response['data'][$i]['season'] = $val->productSeason->name;
+            $row["DT_RowId"] = $val->printId();
+            $row["DT_RowClass"] = 'colore';
+            $row['codice'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->printId(). '</a>';
+            $row['brand'] = $val->productBrand->name;
+            $row['season'] = $val->productSeason->name;
 
             $th = "";
             $tr = "";
@@ -118,30 +111,31 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                 $th .= "<th>" . $sums['name'] . "</th>";
                 $tr .= "<td>" . $sums['stock'] . "</td>";
             }
-            $response['data'][$i]["stock"] = '<table class="nested-table"><thead><tr>' . $th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
+            $row["stock"] = '<table class="nested-table"><thead><tr>' . $th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
 
-            $response['data'][$i]['shop'] = implode(', ', $shops);
-            $response['data'][$i]['dummy'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
-            $response['data'][$i]['itemno'] = '<span class="small">';
-            $response['data'][$i]['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;
-            $response['data'][$i]['itemno'] .= '</span>';
+            $row['shop'] = $val->getShops('<br>');
+            $row['dummy'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
+            $row['itemno'] = '<span class="small">';
+            $row['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;
+            $row['itemno'] .= '</span>';
 
-            $response['data'][$i]['fee'] = 0;
+            $row['fee'] = 0;
             $marketplaces = [];
             foreach ($val->marketplaceAccountHasProduct as $mProduct) {
                 if ($marketplaceAccount &&
                     ($marketplaceAccount->id != $mProduct->marketplaceAccountId ||
-                        $marketplaceAccount->marketplaceId != $mProduct->marketplaceId)) continue;
+                        $marketplaceAccount->marketplaceId != $mProduct->marketplaceId)
+                ) continue;
                 $style = $mProduct->isToWork == 0 ? ($mProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
-                $marketplaces[] = '<span ' . $style . '>' . $mProduct->marketplaceAccount->marketplace->name . ' - ' . $mProduct->marketplaceAccount->name . ( empty ($mProduct->marketplaceProductId) ? "" : ' (' . $mProduct->marketplaceProductId . ')</span>' );
-                $response['data'][$i]['fee'] += $mProduct->fee;
+                $marketplaces[] = '<span ' . $style . '>' . $mProduct->marketplaceAccount->marketplace->name . ' - ' . $mProduct->marketplaceAccount->name . (empty ($mProduct->marketplaceProductId) ? "" : ' (' . $mProduct->marketplaceProductId . ')</span>');
+                $row['fee'] += $mProduct->fee;
             }
 
-            $response['data'][$i]['marketplaceAccountName'] = implode('<br>', $marketplaces);
+            $row['marketplaceAccountName'] = implode('<br>', $marketplaces);
+            $row['creationDate'] = $val->creationDate;
+            $row['categories'] = $val->getLocalizedProductCategories("<br>");
 
-            $response['data'][$i]['categories'] = $val->productCategory->getFirst()->getLocalizedName();
-
-            $i++;
+            $response['data'][] = $row;
         }
 
         return json_encode($response);

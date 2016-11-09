@@ -197,9 +197,9 @@
         var th2 = '<tr role="row search">';
         table.find('th').each(function () {
             if (false != setup.columns[i].searchable) {
-                th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].data+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" /></th>';
+                th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].name+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="Filtra" /></th>';
             } else {
-                th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].data+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/></th>';
+                th2+='<th><input type="text" id="searchCol-' + i + '" data-name="'+setup.columns[i].name+'" class="search-col"  tabindex="' + (i + 1) + '" placeholder="---" disabled/></th>';
             }
             i++
         });
