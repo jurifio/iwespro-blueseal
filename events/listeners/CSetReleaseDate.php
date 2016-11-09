@@ -13,6 +13,6 @@ class CSetReleaseDate extends AEventListener
 {
     public function run($eventName)
     {
-        throw new BambooException('triggerato in ' . $eventName);
+      #throw new BambooException('triggerato in ' . $eventName);
     }
 }
