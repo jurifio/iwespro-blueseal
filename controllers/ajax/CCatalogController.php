@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\intl\CLang;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\widget\VBase;
@@ -140,14 +141,16 @@ class CCatalogController extends AAjaxController
     public function post()
     {
         $get = $this->app->router->request()->getRequestData();
+        $rf = \Monkey::app()->repoFactory;
+        $SOEm = $rf->create('StorehouseOperation');
+        $SOLRepo = $rf->create('StorehouseOperationLine');
+        $SOCEm = $rf->create('StorehouseOperationCause');
+        $SEm = $rf->create('Storehouse');
+        $skuRepo = $rf->create('ProductSku');
+        $productR = $rf->create('Product');
+        $shpR = $rf->create('ShopHasProduct');
 
         try {
-            $SOEm = $this->rfc('StorehouseOperation');
-            $SOLRepo = $this->rfc('StorehouseOperationLine');
-            $SOCEm = $this->rfc('StorehouseOperationCause');
-            $SEm = $this->rfc('Storehouse');
-            $skuRepo = $this->rfc('ProductSku');
-
             $moves = [];
             $i = 0;
 
@@ -167,7 +170,7 @@ class CCatalogController extends AAjaxController
             $user = $this->app->getUser();
             if ($user->hasPermission('allShops')) {
                 if (!$get['mag-shop']) throw new \Exception('Lo shop deve essere specificato obbligatoriamente');
-                $shop = $this->rfc('Shop')->findOneBy(['id' => $get['mag-shop']]);
+                $shop = $rf->create('Shop')->findOneBy(['id' => $get['mag-shop']]);
             } else {
                 $shop = $user->shop->getFirst();
             }
@@ -201,9 +204,40 @@ class CCatalogController extends AAjaxController
             $newOp->id = $newOp->insert();
 
             //inizio l'inserimento dei singoli movimenti
+            $shpToCheck = [];
             foreach ($moves as $v) {
-                $SOLRepo->createMovementLine($v['id'], $v['productVariantId'], $v['productSizeId'], $shop->id, $v['qtMove'], $newOp->id, $storehouse->id);
+                $SOLRepo->createMovementLine(
+                    $v['id'],
+                    $v['productVariantId'],
+                    $v['productSizeId'],
+                    $shop->id,
+                    $v['qtMove'],
+                    $newOp->id,
+                    $storehouse->id
+                );
                 $skuRepo->levelPrice($v['id'], $v['productVariantId']);
+
+                if ($v['qtMove'] > 0) {
+                    $stringId = $v['id'] . '-' . $v['productVariantId'] . '-' . $shop->Id;
+                    if (!in_array($stringId, $shpToCheck, true)) {
+                        $shpToCheck[] = $stringId;
+                    }
+                }
+            }
+
+            foreach($shpToCheck as $shpStringId) {
+                $shp = $shpR->findOneByStringId($shpStringId);
+                if (!$shp) {
+                    throw new BambooException(
+                        'Non possono essere salvati i movimenti di un prodotto a cui non sono stati assegnati costo e prezzo'
+                    );
+                }
+                 if (!$shp->releaseDate) {
+                     if ($shp->product->productPhoto->count()) {
+                         $shp->releaseDate = date('Y-m-d H:i:s');
+                         $shp->update();
+                     }
+                 }
             }
 
             $this->app->dbAdapter->commit();
