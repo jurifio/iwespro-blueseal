@@ -49,9 +49,9 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Utente</th>
-                                <th data-slug="content"
-                                    data-searchable="false"
-                                    data-orderable="false"
+                                <th data-slug="product"
+                                    data-searchable="true"
+                                    data-orderable="true"
                                     class="center">Contenuto</th>
                                 <th data-slug="status"
                                     data-searchable="true"

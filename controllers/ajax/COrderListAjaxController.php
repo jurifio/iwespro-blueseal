@@ -57,14 +57,13 @@ class COrderListAjaxController extends AAjaxController
 	    $datatable->addCondition('statusCode',['ORD_CANCEL'],true);
 	    $datatable->addSearchColumn('orderLineStatus');
 	    $datatable->addSearchColumn('shop');
-	    $datatable->addSearchColumn('product');
 	    $datatable->addSearchColumn('productBrand');
 	    $datatable->addSearchColumn('email');
 
         $q = $datatable->getQuery();
         $orders = $this->app->repoFactory->create('Order')->em()->findBySql($q,$datatable->getParams());
-        $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $count = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totlalCount = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $orderStatuses = $this->app->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
@@ -92,7 +91,7 @@ class COrderListAjaxController extends AAjaxController
         foreach ($orders as $val) {
 
 	        /** ciclo le righe */
-	        $response['aaData'][$i]["content"] = "";
+	        $response['aaData'][$i]["product"] = "";
 	        $alert = false;
 	        foreach ($val->orderLine as $line) {
 		        try {
@@ -106,8 +105,8 @@ class COrderListAjaxController extends AAjaxController
 			        $code = 'non trovato';
 		        }
 
-		        $response['aaData'][$i]["content"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - "  . $plainLineStatuses[$line->status] ."</span>";
-		        $response['aaData'][$i]["content"] .= "<br/>";
+		        $response['aaData'][$i]["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - "  . $plainLineStatuses[$line->status] ."</span>";
+		        $response['aaData'][$i]["product"] .= "<br/>";
 	        }
 
 
