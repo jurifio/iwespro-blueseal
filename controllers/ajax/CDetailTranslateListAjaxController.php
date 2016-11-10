@@ -106,27 +106,27 @@ class CDetailTranslateListAjaxController extends AAjaxController
         $detailRepo = $this->app->repoFactory->create('ProductDetailTranslation');
         $entity = $detailRepo->findOneBy(['langId'=>$langId, 'productDetailId'=>$detailId]);
 
-        try {
-            if (!$entity instanceof IEntity) {
+        if (!$entity instanceof IEntity) {
+            try {
                 $entity = $detailRepo->getEmptyEntity();
                 $entity->productDetailId = $detailId;
                 $entity->langId = $langId;
                 $entity->name = $detailName;
                 $entity->insert();
-                $entity = $this->app->repoFactory->create('ProductDetailTranslation')->findOneBy($entity->getIds());
-             }
-        } catch (BambooDBALException $e) {
-        } catch (\Throwable $e) {
-            $this->app->router->response()->raiseProcessingError()->sendHeaders();
-            return;
-        }
 
-        try {
-            $entity->name = $detailName;
-            $entity->update();
-        } catch (BambooDBALException $e) {
-            $this->app->router->response()->raiseProcessingError()->sendHeaders();
-            return;
+            } catch (BambooDBALException $e) {
+            } catch (\Throwable $e) {
+                $this->app->router->response()->raiseProcessingError()->sendHeaders();
+                return;
+            }
+        } else {
+            try {
+                $entity->name = $detailName;
+                $entity->update();
+            } catch (BambooDBALException $e) {
+                $this->app->router->response()->raiseProcessingError()->sendHeaders();
+                return;
+            }
         }
     }
 }
