@@ -113,6 +113,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
                 $entity->langId = $langId;
                 $entity->name = $detailName;
                 $entity->insert();
+                $entity = $this->app->repoFactory->create('ProductDetailTranslation')->findOneBy($entity->getIds());
              }
         } catch (BambooDBALException $e) {
         } catch (\Throwable $e) {
