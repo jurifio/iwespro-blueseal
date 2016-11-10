@@ -41,8 +41,8 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center categoryFilterType">Categorie</th>
                                     <th data-slug="stock"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Stock</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stock</th>
                                     <th data-slug="season"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Season</th>

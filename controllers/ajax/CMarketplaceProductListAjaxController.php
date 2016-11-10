@@ -28,15 +28,6 @@ class CMarketplaceProductListAjaxController extends AAjaxController
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
-        /*if($this->app->router->request()->getRequestData('accountId')) {
-            $marketplaceAccountId = $this->app->router->request()->getRequestData('accountId');
-            $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
-            $datatable->addCondition('marketplaceId', [$marketplaceAccount->marketplaceId]);
-            $datatable->addCondition('marketplaceAccountId', [$marketplaceAccount->id]);
-        } else {
-            $marketplaceAccount = false;
-        }*/
-
         $righe = $this->app->dbAdapter->query($datatable->getQuery(), $datatable->getParams())->fetchAll();
         $count = $sample->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
