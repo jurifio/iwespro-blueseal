@@ -180,7 +180,7 @@ $(document).on('bs.product.retry', function (e, element, button) {
 
 		}).always(function () {
 			bsModal.modal('hide');
-			$('.table').DataTable().ajax.reload();
+			$('.table').DataTable().ajax.reload(null,false);
 		});
 	});
 
