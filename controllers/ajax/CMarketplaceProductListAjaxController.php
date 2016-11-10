@@ -62,9 +62,9 @@ class CMarketplaceProductListAjaxController extends AAjaxController
                     $marketplaceHasProduct->marketplaceAccount->marketplace->name . ' - ' .
                     $marketplaceHasProduct->marketplaceAccount->name .
                     (empty ($marketplaceHasProduct->marketplaceProductId) ? "" : ' (' . $marketplaceHasProduct->marketplaceProductId . ')</span>');
-                $row['status'] = !$marketplaceHasProduct->isToWork ? "lavorato" : "".",<br>".
-                                    $marketplaceHasProduct->hasError ? "errore" : "".",<br>".
-                                    $marketplaceHasProduct->isDeleted ? "cancellato" : "";
+                $row['status'] = $marketplaceHasProduct->isToWork == 0 ? "lavorato" : "".",<br>".
+                                    $marketplaceHasProduct->hasError == 1 ? "errore" : "".",<br>".
+                                    $marketplaceHasProduct->isDeleted == 1 ? "cancellato" : "";
                 $row['fee'] = $marketplaceHasProduct->fee;
             }
             /** @var CProduct $product */
