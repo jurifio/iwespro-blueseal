@@ -44,7 +44,7 @@
                                                 </div>
 
                                                 <img id="dummyPicture" align="center" class="img-responsive"
-                                                     src="<?php echo $productEdit->getDummyPictureUrl() ?>">
+                                                     src="">
                                             </div>
                                             <div style="display:none;"><input id="dummyFile" type="file" value=""
                                                                               name="Product_dummyPicture"/></div>
