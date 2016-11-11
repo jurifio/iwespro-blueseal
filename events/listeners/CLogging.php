@@ -33,6 +33,9 @@ class CLogging extends AEventListener
             if ($entityToControl) $run = ($entityToControl->{$fieldControl}) ? false : true ;
         }
 
+    }
+
+    protected function appendToLog($eventName, $value, $) {
         if (($value) && ($entity) && ($run)) {
             $entityName = $entity->getEntityName();
             $stringId = implode('-', $entity->getIds());
@@ -45,4 +48,6 @@ class CLogging extends AEventListener
         }
         return $this->getParam();
     }
+
+
 }
