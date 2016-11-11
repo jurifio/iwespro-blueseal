@@ -24,57 +24,61 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
     {
         $sample = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
 
-
-        $query = "SELECT
-        concat(`p`.`id`, '-', `p`.`productVariantId`)           AS `codice`,
-        `p`.`id`                                                AS `productId`,
-        `p`.`productVariantId`                                  AS `productVariantId`,
-        `p`.`itemno`                                            AS `itemno`,
-        concat(`pss`.`name`, `pss`.`year`)                      AS `season`,
-        `pb`.`name`                                             AS `brand`,
-        `p`.`creationDate`                                      AS `creationDate`,
-        concat(`m`.`name`, `ma`.`name`) AS `marketplaceAccountName`,
-        `s`.`name`                       AS `shop`,
-        `s`.`id`                         AS `shopId`,
-        `mahp`.`marketplaceProductId`                           AS `marketplaceProductId`,
-        `mahp`.`marketplaceId`                                  AS `marketplaceId`,
-        `mahp`.`marketplaceAccountId`                           AS `marketplaceAccountId`,
-        `mahp`.`fee`                                       AS `fee`,
-        cv.timestamp                                           AS visitTimestamp,
-        cv.id                                                  AS visitId,
-        count(cv.id)                                            AS visits,
-        count(cvho.orderId)                AS conversions,
-        ifnull(c.code,'')                                        AS campaignCode
-      FROM ((((((((`Product` `p`
-        JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`)))
-        JOIN `ShopHasProduct` `shp` ON (((`p`.`id` = `shp`.`productId`) AND (`p`.`productVariantId` = `shp`.`productVariantId`))))
-        JOIN `Shop` `s` ON ((`s`.`id` = `shp`.`shopId`)))
-        JOIN `ProductSeason` `pss` ON ((`pss`.`id` = `p`.`productSeasonId`)))
-        JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`)))
-        JOIN `MarketplaceAccountHasProduct` `mahp` ON (((`mahp`.`productId` = `p`.`id`) AND (`mahp`.`productVariantId` = `p`.`productVariantId`))))
-        JOIN `MarketplaceAccount` `ma` ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`))))
-        JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`)))
-        LEFT JOIN Campaign c ON c.code = concat('MarketplaceAccount', ma.id, '-', ma.marketplaceId)
-        LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
-        LEFT JOIN CampaignVisitHasProduct cvhp ON cv.campaignId = cvhp.campaignId AND cv.id = cvhp.campaignVisitId AND cvhp.productId = p.id AND cvhp.productVariantId = p.productVariantId
-        LEFT JOIN CampaignVisitHasOrder cvho  ON cv.campaignId = cvho.campaignId and cvhp.campaignVisitId = cvho.campaignVisitId
-              LEFT JOIN OrderLine ol ON cvho.orderId = ol.orderId AND ol.productId = p.id AND ol.productVariantId = p.productVariantId
-      WHERE (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
-          AND timestamp >= ifnull(?, timestamp) 
-          AND timestamp <= ifnull(?, timestamp) GROUP BY productId, productVariantId, marketplaceId, marketplaceAccountId";
-
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
+        $campaign = \Monkey::app()->repoFactory->create('Campaign')->readCampaignData($marketplaceAccount->getCampaignCode());
 
+        $query = "SELECT
+                      concat(`p`.`id`, '-', `p`.`productVariantId`)           AS `codice`,
+                      `p`.`id`                                                AS `productId`,
+                      `p`.`productVariantId`                                  AS `productVariantId`,
+                      `p`.`itemno`                                            AS `itemno`,
+                      concat(`pss`.`name`, `pss`.`year`)                      AS `season`,
+                      `pb`.`name`                                             AS `brand`,
+                      `p`.`creationDate`                                      AS `creationDate`,
+                      concat(`m`.`name`,' - ', `ma`.`name`)                         AS `marketplaceAccountName`,
+                      `s`.`name`                                              AS `shop`,
+                      `s`.`id`                                                AS `shopId`,
+                      `mahp`.`marketplaceProductId`                           AS `marketplaceProductId`,
+                      `mahp`.`marketplaceId`                                  AS `marketplaceId`,
+                      `mahp`.`marketplaceAccountId`                           AS `marketplaceAccountId`,
+                      `mahp`.`fee`                                            AS `fee`,
+                      cv.timestamp                                            AS visitTimestamp,
+                      cv.id                                                   AS visitId,
+                      count(cv.id)                                            AS visits,
+                      count(cvho.orderId)                                     AS conversions,
+                      ifnull(c.code,'')                                       AS campaignCode
+                    FROM ((((((((`Product` `p`
+                      JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`)))
+                      JOIN `ShopHasProduct` `shp` ON (((`p`.`id` = `shp`.`productId`) AND (`p`.`productVariantId` = `shp`.`productVariantId`))))
+                      JOIN `Shop` `s` ON ((`s`.`id` = `shp`.`shopId`)))
+                      JOIN `ProductSeason` `pss` ON ((`pss`.`id` = `p`.`productSeasonId`)))
+                      JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`)))
+                      JOIN `MarketplaceAccountHasProduct` `mahp` ON (((`mahp`.`productId` = `p`.`id`) AND (`mahp`.`productVariantId` = `p`.`productVariantId`))))
+                      JOIN `MarketplaceAccount` `ma` ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`))))
+                      JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`)))
+                      LEFT JOIN (Campaign c JOIN
+                                CampaignVisit cv ON c.id = cv.campaignId JOIN
+                                CampaignVisitHasProduct cvhp ON cv.campaignId = cvhp.campaignId AND cv.id = cvhp.campaignVisitId)
+                      ON cvhp.productId = p.id AND cvhp.productVariantId = p.productVariantId
+                      LEFT JOIN CampaignVisitHasOrder cvho  ON cv.campaignId = cvho.campaignId AND cvhp.campaignVisitId = cvho.campaignVisitId
+                      LEFT JOIN OrderLine ol ON cvho.orderId = ol.orderId AND ol.productId = p.id AND ol.productVariantId = p.productVariantId
+                    WHERE ma.id = ? AND ma.marketplaceId = ? AND c.id = ? AND
+                        (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
+                          AND timestamp >= ifnull(?, timestamp)
+                          AND timestamp <= ifnull(?, timestamp) 
+                    GROUP BY productId, productVariantId, marketplaceId, marketplaceAccountId";
+
+        $timeFrom = null;
+        $timeTo = null;
+        $queryParameters = [$marketplaceAccount->id,$marketplaceAccount->marketplaceId,$campaign->id,$timeFrom,$timeTo];
         $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET, true);
-        $datatable->addCondition('marketplaceId', [$marketplaceAccount->marketplaceId]);
-        $datatable->addCondition('marketplaceAccountId', [$marketplaceAccount->id]);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
-        $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge([null, null], $datatable->getParams()))->fetchAll();
-        $count = $sample->em()->findCountBySql($datatable->getQuery(true), array_merge([null, null], $datatable->getParams()));
-        $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), array_merge([null, null], $datatable->getParams()));
+        $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge($queryParameters, $datatable->getParams()))->fetchAll();
+        $count = $sample->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
+        $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), array_merge($queryParameters, $datatable->getParams()));
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
