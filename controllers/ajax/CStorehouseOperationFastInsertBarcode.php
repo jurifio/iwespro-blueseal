@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\intl\CLang;
 
 /**
@@ -47,19 +48,31 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
     }
 
     public function post() {
-        $shopId = $this->app->router->request()->getRequestData('shop');
-        if(!in_array($shopId,$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser())) {
-            $this->app->router->response()->raiseProcessingError();
+        $shopId = \Monkey::app()->router->request()->getRequestData('shop');
+        if(!in_array($shopId, \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser())) {
+            \Monkey::app()->router->response()->raiseProcessingError();
             return 'Shop non autorizzato!';
         }
 
-        $causeId = $this->app->router->request()->getRequestData('cause');
-        $causeE = $this->app->repoFactory->create('StorehouseOperationCause')->findOneBy(['id' => $causeId]);
-        $signMultiplier = ($causeE->sign) ? 1 : -1;
+        $movementCauseId = \Monkey::app()->router->request()->getRequestData('cause');
+        $socE = \Monkey::app()->repoFactory->create('StorehouseOperationCause')->findOne([$movementCauseId]);
+        $multiplier = ($socE->getMultiplier());
 
-        $solRepo = $this->app->repoFactory->create('StorehouseOperationLine');
-        $this->app->dbAdapter->beginTransaction();
-        try {
+        $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
+
+        $skusToMove = [];
+        foreach (\Monkey::app()->router->request()->getRequestData('rows') as $row) {
+            $single = [];
+            list($single['id'], $single['productVariantId'], $single['productSizeId'], $shopId) = explode('-', $row['id']);
+            $single['qtMove'] = $row['qty'] * $multiplier;
+            $skusToMove[] = $single;
+        }
+
+        $shop = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
+
+        $soR->registerOperation($skusToMove, $shop, $movementCauseId, $storehouse = null, $notes = null);
+
+        /*try {
             $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->getEmptyEntity();
             $storehouseOperation->shopId = $shopId;
             $storehouse = $this->app->repoFactory->create('Storehouse')->findOneBy(['shopId'=>$shopId]);
@@ -80,7 +93,7 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
         } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
-        }
+        }*/
         return 'ok';
     }
 }
