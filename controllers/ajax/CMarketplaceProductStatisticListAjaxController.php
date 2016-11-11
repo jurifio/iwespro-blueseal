@@ -40,10 +40,10 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         `mahp`.`marketplaceId`                                  AS `marketplaceId`,
         `mahp`.`marketplaceAccountId`                           AS `marketplaceAccountId`,
         `mahp`.`fee`                                       AS `fee`,
-        psd.timestamp                                           AS visitTimestamp,
-        psd.id                                                  AS visitId,
-        count(psd.id)                                            AS visits,
-        count(psdhol.orderId)                AS conversions,
+        cv.timestamp                                           AS visitTimestamp,
+        cv.id                                                  AS visitId,
+        count(cv.id)                                            AS visits,
+        count(cvho.orderId)                AS conversions,
         ifnull(c.code,'')                                        AS campaignCode
       FROM ((((((((`Product` `p`
         JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`)))
@@ -55,12 +55,13 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         JOIN `MarketplaceAccount` `ma` ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`))))
         JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`)))
         LEFT JOIN Campaign c ON c.code = concat('MarketplaceAccount', ma.id, '-', ma.marketplaceId)
-        LEFT JOIN ProductStatistics pst ON c.id = pst.campaignId AND pst.productId = p.id AND pst.productVariantId = p.productVariantId
-        LEFT JOIN ProductStatisticsDetail psd ON c.id = psd.campaignId AND psd.productId = p.id AND psd.productVariantId = p.productVariantId
-        LEFT JOIN ProductStatisticsDetailHasOrderLine psdhol ON psd.id = psdhol.productStatisticsDetailId
+        LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
+        LEFT JOIN CampaignVisitHasProduct cvhp ON cv.campaignId = cvhp.campaignId AND cv.id = cvhp.campaignVisitId AND cvhp.productId = p.id AND cvhp.productVariantId = p.productVariantId
+        LEFT JOIN CampaignVisitHasOrder cvho  ON cv.campaignId = cvho.campaignId and cvhp.campaignVisitId = cvho.campaignVisitId
+              LEFT JOIN OrderLine ol ON cvho.orderId = ol.orderId AND ol.productId = p.id AND ol.productVariantId = p.productVariantId
       WHERE (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
           AND timestamp >= ifnull(?, timestamp) 
-          AND timestamp <= ifnull(?, timestamp) group by productId, productVariantId, marketplaceId, marketplaceAccountId";
+          AND timestamp <= ifnull(?, timestamp) GROUP BY productId, productVariantId, marketplaceId, marketplaceAccountId";
 
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
@@ -71,7 +72,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
-        $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false,true), array_merge([null, null], $datatable->getParams()))->fetchAll();
+        $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge([null, null], $datatable->getParams()))->fetchAll();
         $count = $sample->em()->findCountBySql($datatable->getQuery(true), array_merge([null, null], $datatable->getParams()));
         $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), array_merge([null, null], $datatable->getParams()));
 
@@ -85,10 +86,10 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 
             $row = [];
             $prodottiMark = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy([
-                'marketplaceId'=>$values['marketplaceId'],
-                'marketplaceAccountId'=>$values['marketplaceAccountId'],
-                'productId'=>$values['productId'],
-                'productVariantId'=>$values['productVariantId'],
+                'marketplaceId' => $values['marketplaceId'],
+                'marketplaceAccountId' => $values['marketplaceAccountId'],
+                'productId' => $values['productId'],
+                'productVariantId' => $values['productVariantId'],
             ]);
             /** @var CProduct $val */
             $val = $prodottiMark->product;
@@ -99,7 +100,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 
             $row["DT_RowId"] = $val->printId();
             $row["DT_RowClass"] = 'colore';
-            $row['codice'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->printId(). '</a>';
+            $row['codice'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->printId() . '</a>';
             $row['brand'] = $val->productBrand->name;
             $row['season'] = $val->productSeason->name;
 
