@@ -2,7 +2,6 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
 
 /**
  * Class CProductListAjaxController
@@ -24,8 +23,8 @@ class CProductCampaignStatisticsAjaxController extends AAjaxController
         $datatable = new CDataTables('vProductStatisticsCampaing',['productId','productVariantId','campaignId'],$_GET);
 
         $prodottiCampaing = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
-        $count = $this->app->repoFactory->create('ProductStatistics')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('ProductStatistics')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $count = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -34,7 +33,7 @@ class CProductCampaignStatisticsAjaxController extends AAjaxController
         $response ['data'] = [];
 
         foreach($prodottiCampaing as $val){
-            $productStatistic = $this->app->repoFactory->create('ProductStatistics')->findOneBy($val);
+            $productStatistic = $this->app->repoFactory->create('CampaingVisitHasProduct')->findOneBy($val);
             $row = [];
             $row["DT_RowId"] = $productStatistic->printId();
             $row['code'] = $productStatistic->product->printId();
