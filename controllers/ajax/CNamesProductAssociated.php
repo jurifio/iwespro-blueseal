@@ -45,7 +45,7 @@ class CNamesProductAssociated extends AAjaxController
                 JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
                 JOIN `ProductSeason` as `pse` on `p`.`productSeasonId` = `pse`.`id`
                 WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P', 'I') AND `p`.`qty` > 0 AND `p`.`dummyPicture` NOT LIKE '%bs-dummy%'",
-            [$search]
+            str_replace(' !', '', [$search])
         )->fetchAll();
 
         $ret['products'] = [];
