@@ -16,38 +16,25 @@ class CLogging extends AEventListener
         $logR = \Monkey::app()->repoFactory->create('Log');
 
         $value = $this->getParam('value');
-        $entity = $this->getParam('entity');
+        $entityName = $this->getParam('entityName');
+        $stringId = $this->getParam('stringId');
+        $time = $this->getParam('time');
 
-        $run = true;
-        $fieldControl = null;
-
-        switch($eventName) {
-            case "setReleaseDate":
-                $fieldControl = 'releaseDate';
-                break;
-        }
-
-        if ($fieldControl) {
-            $entityToControl = \Monkey::app()->repoFactory->create($entity->getEntityName())->findOneByStringId($entity->getIds());
-            $run = false;
-            if ($entityToControl) $run = ($entityToControl->{$fieldControl}) ? false : true ;
-        }
-
+        $this->insertLogRow($eventName, $value, $entityName, $stringId, $time);
     }
 
-    protected function appendToLog($eventName, $value, $) {
-        if (($value) && ($entity) && ($run)) {
-            $entityName = $entity->getEntityName();
-            $stringId = implode('-', $entity->getIds());
+    protected function insertLogRow($eventName, $value, $entityName = null, $stringId = null, $time = null ) {
+        if (!$eventName) throw new BambooException('Il nome dell\'evento è obbligatorio per l\'inserimento del record nei log');
+        if (!$value) throw new BambooException('Il nome dell\'evento è obbligatorio per l\'inserimento del record nei log');
+
+            $logR = \Monkey::app()->repoFactory->create('Log');
             $newLog = $logR->getEmptyEntity();
             $newLog->entityName = $entityName;
             $newLog->stringId = $stringId;
             $newLog->eventName = $eventName;
             $newLog->eventValue = $value;
+            if ($time) $newLog->time = $time;
             $newLog->insert();
-        }
         return $this->getParam();
     }
-
-
 }
