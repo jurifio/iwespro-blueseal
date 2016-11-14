@@ -100,6 +100,10 @@
                                         data-searchable="false"
                                         data-orderable="false"
                                         class="center">Descr.</th>
+                                    <th data-slug="marketplaces"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Marketplaces</th>
                                 </tr>
                             </thead>
                             <tbody>
