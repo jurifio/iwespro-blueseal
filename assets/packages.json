@@ -6,11 +6,11 @@
                 "options": ["screen"]
             },
             "bootstrap.min.css": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/",
+                "path": "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/",
                 "options": ["screen,print"]
             },
             "font-awesome.min.css": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/",
+                "path": "http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/",
                 "options": ["screen,print"]
             },
             "jquery-ui.css": {
@@ -112,7 +112,7 @@
                 "options": []
             },
             "bootstrap.min.js": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/",
+                "path": "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/",
                 "options": []
             },
             "pages.js": {
