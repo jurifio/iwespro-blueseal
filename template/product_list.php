@@ -175,18 +175,20 @@
             data-remote="bs.product.name.insert"
         ></bs-toolbar-button>
         <bs.toolbar-button
-            data-remote="bs.product.details.new"
-        >
+            data-remote="bs.product.details.new">
         </bs.toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.marketplace.publish"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
-        <bs-toolbar-group data-group-label="Gestione prezzi">
-            <bs-toolbar-button
-                data-remote="bs.product.sales.set"
-                ></bs-toolbar-button>
-            <bs-toolbar-button
-                data-remote="bs.product.sales.price.change"
-                ></bs-toolbar-button>
-        </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione prezzi">
+        <bs-toolbar-button
+            data-remote="bs.product.sales.set"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.sales.price.change"
+            ></bs-toolbar-button>
+    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Roulette">
         <bs-toolbar-select
             data-tag="select"
