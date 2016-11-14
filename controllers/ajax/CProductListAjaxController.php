@@ -60,7 +60,7 @@ class CProductListAjaxController extends AAjaxController
                          ma.id = mahp.marketplaceAccountId AND
                          ma.marketplaceId = mahp.marketplaceId AND
                          mahp.productId = p.id AND
-                         mahp.productVariantId = p.productVariantId)                                                    AS marketplace
+                         mahp.productVariantId = p.productVariantId)                                                    AS marketplaces
                 FROM (((((((((((((`Product` `p`
                   JOIN `ProductSeason` `pse` ON ((`p`.`productSeasonId` = `pse`.`id`)))
                   JOIN `ProductVariant` `pv` ON ((`p`.`productVariantId` = `pv`.`id`)))
