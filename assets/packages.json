@@ -112,7 +112,7 @@
                 "options": []
             },
             "bootstrap.min.js": {
-                "path": "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/",
+                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/",
                 "options": []
             },
             "pages.js": {
