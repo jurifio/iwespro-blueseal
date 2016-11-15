@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-share",
+    icon: "fa-eraser",
     permission: "/admin/product/edit&&allShops",
     event: "bs.productHasMarketplace.marketplace.delete",
     class: "btn btn-default",
@@ -50,8 +50,9 @@ $(document).on('bs.productHasMarketplace.marketplace.delete', function (e, eleme
                     ids: getVarsArray
                 }
             }).done(function (response) {
-                okButton.html('fatto');
-                okButton.hide(false)
+                body.html('Eliminati '+response+' prodotti');
+                okButton.html('Ok');
+                okButton.show(false);
                 okButton.on('click',function () {
                     modal.hide();
                 });
