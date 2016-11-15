@@ -116,7 +116,28 @@ class CMarketplaceProductManageController extends AAjaxController
 	    return $i;
     }
 
+    /**
+     * @return int
+     */
     public function delete() {
-        var_dump($this->app->router->request()->getRequestData());
+        $count = 0;
+        foreach ($this->app->router->request()->getRequestData('ids') as $mId) {
+            try {
+                $marketplaceHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->findOneByStringId($mId);
+                if(null == $marketplaceHasProduct) {
+                    $marketplaceHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
+                    $marketplaceHasProduct->readId($mId);
+                    $marketplaceHasProduct->isDeleted = 1;
+                    $marketplaceHasProduct->insert();
+                } else {
+                    $marketplaceHasProduct->isDeleted = 1;
+                    $marketplaceHasProduct->update();
+                }
+                $count++;
+            } catch (\Throwable $e) {
+
+            }
+        }
+        return $count;
     }
 }

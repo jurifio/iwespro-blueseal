@@ -53,6 +53,15 @@
                                     <th data-slug="fee"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Fee</th>
+                                    <th data-slug="isDeleted"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Cancellato</th>
+                                    <th data-slug="isToWork"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Lavorato</th>
+                                    <th data-slug="hasError"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Errore</th>
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true" class="center dateTypeFilter">Creazione</th>

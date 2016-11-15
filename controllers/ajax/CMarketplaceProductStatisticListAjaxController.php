@@ -43,6 +43,9 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceId`                        AS `marketplaceId`,
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
+                      mahp.isToWork,
+                      mahp.hasError,
+                      mahp.isDeleted,
                       cv.timestamp                                  AS visitTimestamp,                  
                       cv.id                                         AS visitId,
                       count(distinct cv.id)                          AS visits,
@@ -136,19 +139,12 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;
             $row['itemno'] .= '</span>';
 
-            $row['fee'] = 0;
-            $marketplaces = [];
-            foreach ($val->marketplaceAccountHasProduct as $mProduct) {
-                if ($marketplaceAccount &&
-                    ($marketplaceAccount->id != $mProduct->marketplaceAccountId ||
-                        $marketplaceAccount->marketplaceId != $mProduct->marketplaceId)
-                ) continue;
-                $style = $mProduct->isToWork == 0 ? ($mProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
-                $marketplaces[] = '<span ' . $style . '>' . $mProduct->marketplaceAccount->marketplace->name . ' - ' . $mProduct->marketplaceAccount->name . (empty ($mProduct->marketplaceProductId) ? "" : ' (' . $mProduct->marketplaceProductId . ')</span>');
-                $row['fee'] += $mProduct->fee;
-            }
 
-            $row['marketplaceAccountName'] = implode('<br>', $marketplaces);
+            $row['fee'] = $prodottiMark->fee;
+            $row['isToWork'] = $prodottiMark->isToWork ? 'sì' : 'no';
+            $row['hasError'] = $prodottiMark->hasError ? 'sì' : 'no';
+            $row['isDeleted'] = $prodottiMark->isDeleted ? 'sì' : 'no';
+            $row['marketplaceAccountName'] = $prodottiMark->marketplaceAccount->marketplace->name;
             $row['creationDate'] = $val->creationDate;
             $row['categories'] = $val->getLocalizedProductCategories("<br>");
             $row['conversions'] = $values['conversions'];
