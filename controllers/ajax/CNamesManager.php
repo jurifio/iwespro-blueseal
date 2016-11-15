@@ -156,6 +156,4 @@ class CNamesManager extends AAjaxController
     {
         $this->get();
     }
-
-
 }

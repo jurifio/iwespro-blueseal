@@ -1,4 +1,7 @@
 {
+    "events": {
+
+    },
     "paths": {
         "admin-theme": "/back",
         "blueseal": "/back",
