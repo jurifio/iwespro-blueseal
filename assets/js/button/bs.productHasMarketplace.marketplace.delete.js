@@ -46,7 +46,9 @@ $(document).on('bs.productHasMarketplace.marketplace.delete', function (e, eleme
             $.ajax({
                 url: '/blueseal/xhr/MarketplaceProductManageController',
                 type: "DELETE",
-                data: getVarsArray
+                data: {
+                    ids: getVarsArray
+                }
             }).done(function (response) {
                 okButton.html('fatto');
                 okButton.hide(false)
