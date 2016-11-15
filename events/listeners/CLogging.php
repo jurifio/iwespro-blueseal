@@ -23,18 +23,20 @@ class CLogging extends AEventListener
         $this->insertLogRow($eventName, $value, $entityName, $stringId, $time);
     }
 
-    protected function insertLogRow($eventName, $value, $entityName = null, $stringId = null, $time = null ) {
-        if (!$eventName) throw new BambooException('Il nome dell\'evento è obbligatorio per l\'inserimento del record nei log');
-        if (!$value) throw new BambooException('Il nome dell\'evento è obbligatorio per l\'inserimento del record nei log');
+    protected function insertLogRow($eventName, $value = null, $entityName = null, $stringId = null, $time = null) {
 
-            $logR = \Monkey::app()->repoFactory->create('Log');
-            $newLog = $logR->getEmptyEntity();
-            $newLog->entityName = $entityName;
-            $newLog->stringId = $stringId;
-            $newLog->eventName = $eventName;
-            $newLog->eventValue = $value;
-            if ($time) $newLog->time = $time;
-            $newLog->insert();
+        $actionName = substr(get_class($this), 2);
+        if (!$eventName) throw new BambooException('Il nome dell\'evento è obbligatorio per l\'inserimento del record nei log');
+
+        $logR = \Monkey::app()->repoFactory->create('Log');
+        $newLog = $logR->getEmptyEntity();
+        $newLog->entityName = $entityName;
+        $newLog->stringId = $stringId;
+        $newLog->eventName = $eventName;
+        $newLog->actionName = explode('\C', $actionName)[1];
+        $newLog->value = $value;
+        if ($time) $newLog->time = $time;
+        $newLog->insert();
         return $this->getParam();
     }
 }
