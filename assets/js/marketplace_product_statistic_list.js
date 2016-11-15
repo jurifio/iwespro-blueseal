@@ -1,3 +1,8 @@
+$(document).on('load',function() {
+    "use strict";
+    $('ul.breadcrumb').append($('<li>test</li>'))
+});
+
 $(document).on('bs.marketplace.filter', function () {
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');
@@ -189,7 +194,6 @@ $(document).on('bs.product.retry', function (e, element, button) {
 
 
 $(document).on('bs.dateinput.load', function () {
-
     var table = $('table.table');
     var that = $('a.datePicker');
     that.on('click',function() {

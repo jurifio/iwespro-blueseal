@@ -149,7 +149,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-filter"
+            data-icon="fa-calendar"
             data-permission="/admin/product/edit"
             data-class="btn btn-default datePicker"
             data-load-event="bs.dateinput.load"
