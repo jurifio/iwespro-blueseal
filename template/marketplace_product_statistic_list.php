@@ -85,6 +85,9 @@
             data-remote="bs.product.marketplace.response"
         ></bs-toolbar-button>
         <bs-toolbar-button
+            data-remote="bs.productHasMarketplace.marketplace.delete"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-tag="a"
             data-icon="fa-repeat"
             data-permission="/admin/product/edit"

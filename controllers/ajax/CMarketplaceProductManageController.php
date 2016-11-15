@@ -115,4 +115,8 @@ class CMarketplaceProductManageController extends AAjaxController
 
 	    return $i;
     }
+
+    public function delete() {
+        var_dump($this->app->router->request()->getRequestData());
+    }
 }
