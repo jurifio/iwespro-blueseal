@@ -1,4 +1,4 @@
-$(document).on('load',function() {
+$(document).on('',function() {
     "use strict";
     $('ul.breadcrumb').append($('<li>test</li>'))
 });
@@ -193,7 +193,8 @@ $(document).on('bs.product.retry', function (e, element, button) {
 });
 
 
-$(document).on('bs.dateinput.load', function () {
+$(document).on('bs.dateinput.load', function (a,b,c,d) {
+    console.log(a,b,c,d);
     var table = $('table.table');
     var that = $('a.datePicker');
     that.on('click',function() {
