@@ -24,7 +24,6 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_category_assign"
-
                                data-controller="MarketplaceAccountListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
@@ -47,7 +46,11 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Prodotti inseriti</th>
-                                <th data-slug="conversionCount"
+                                <th data-slug="visits"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Visite</th>
+                                <th data-slug="orders"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Conversioni</th>
@@ -66,18 +69,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Traduzione nomi prodotti">
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-eye-slash"
-            data-permission="/admin/product/edit"
-            data-event="bs.marketplaceCategory.hide"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Nascondi Categorie"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
+
 </bs-toolbar>
 </body>
 </html>

@@ -78,9 +78,9 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                           AND timestamp <= ifnull(?, timestamp) 
                     GROUP BY productId, productVariantId";
 
-        $timeFrom = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
-        $timeTo = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
-        $queryParameters = [$marketplaceAccount->id, $marketplaceAccount->marketplaceId, $campaign->id, $timeFrom->format('Y-m-d'), $timeTo->format('Y-m-d')];
+        $timeFrom = $this->app->router->request()->getRequestData('startDate') ?? null;
+        $timeTo = $this->app->router->request()->getRequestData('endDate') ?? null;
+        $queryParameters = [$marketplaceAccount->id, $marketplaceAccount->marketplaceId, $campaign->id, $timeFrom, $timeTo];
         $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET, true);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
