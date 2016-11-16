@@ -25,7 +25,7 @@ class CMarketplaceAccountListController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/marketing_account_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/marketplace_account_list.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
