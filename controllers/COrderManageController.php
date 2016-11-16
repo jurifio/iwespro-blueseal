@@ -55,6 +55,12 @@ class COrderManageController extends ARestrictedAccessRootController
                     $order = $this->app->repoFactory->create("Order")->findOneBy(['id' => $this->request->getRequestData('orderId')]);
                     $order->status = $code;
 	                $order->update();
+
+                    \Monkey::app()->eventManager->newTrigger('changeOrderStatus',
+                        [
+                            'order' => $orderLine,
+                            'status' => $this->success
+                        ]);
                 }
             } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();

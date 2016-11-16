@@ -4,6 +4,7 @@ namespace bamboo\events\listeners;
 
 use bamboo\core\events\AEventListener;
 use bamboo\core\exceptions\BambooException;
+use bamboo\core\application\AApplication;
 
 /**
  * Class COtherTest
@@ -11,32 +12,72 @@ use bamboo\core\exceptions\BambooException;
  */
 class CLogging extends AEventListener
 {
+    /**
+     * @var CUser
+     */
+    protected $user;
+
+    private $backtrace = null;
+
+    public function __construct(AApplication $app, $params = [], $backtrace = [])
+    {
+        parent::__construct($app, $params);
+        $this->user = $this->getUser();
+    }
+
+    /**
+     * @param $eventName
+     */
     public function run($eventName)
     {
-        $logR = \Monkey::app()->repoFactory->create('Log');
-
         $value = $this->getParam('value');
         $entityName = $this->getParam('entityName');
         $stringId = $this->getParam('stringId');
         $time = $this->getParam('time');
+        $actionName = $this->getParam('actionName');
 
-        $this->insertLogRow($eventName, $value, $entityName, $stringId, $time);
+        $this->insertLogRow($eventName, $value, $entityName, $stringId, $time, $actionName);
     }
 
-    protected function insertLogRow($eventName, $value = null, $entityName = null, $stringId = null, $time = null) {
+    protected function insertLogRow($eventName, $userId = null, $value = null, $entityName = null, $stringId = null, $time = null, $actionName = null) {
 
-        $actionName = substr(get_class($this), 2);
+        if (!$actionName) $actionName = substr(get_class($this), 2);
         if (!$eventName) throw new BambooException('Il nome dell\'evento è obbligatorio per l\'inserimento del record nei log');
+        if (!$userId) {
+            $user = $this->user;
+            if (!$user) throw new BambooException('Non è stato possibile trovare l\'id utente per il logging');
+            $userId = $user->id;
+        }
+
+        $backtrace = $this->getBacktrace();
 
         $logR = \Monkey::app()->repoFactory->create('Log');
         $newLog = $logR->getEmptyEntity();
         $newLog->entityName = $entityName;
         $newLog->stringId = $stringId;
         $newLog->eventName = $eventName;
+        $newLog->userId = $userId;
         $newLog->actionName = explode('\C', $actionName)[1];
         $newLog->value = $value;
+        $newLog->backtrace = $this->getBacktraceLog();
         if ($time) $newLog->time = $time;
         $newLog->insert();
-        return $this->getParam();
+    }
+
+    protected function getBacktrace($type = 'array') {
+        if ('array' == $type) return $this->backtrace[0];
+        if ('string' == $type) {
+            $bt = $this->backtrace[0];
+            $obj = ('->' === $bt['type']) ? $bt['object'] : $bt['class'];
+            return $obj . $bt['type'] . $bt['method'];
+        }
+    }
+
+    protected function getBacktraceLog() {
+        return $this->getBacktrace('string');
+    }
+
+    protected function getActionByClass(){
+        return substr((new \ReflectionClass($this))->getShortName(), 1);
     }
 }
