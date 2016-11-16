@@ -79,10 +79,11 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                     GROUP BY productId, productVariantId";
 
         $timeFrom = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
-        $timeTo = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
-        $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d h:i:s') : null;
-        $timeTo = $timeTo ? $timeTo->format('Y-m-d h:i:s') : null;
+        $timeTo = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('endDate'));
+        $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
+        $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
         $queryParameters = [$marketplaceAccount->id, $marketplaceAccount->marketplaceId, $campaign->id, $timeFrom, $timeTo];
+
         $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET, true);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');

@@ -40,7 +40,7 @@ $(document).on('bs.dateinput.load', function (a, b) {
         that.on('apply.daterangepicker', function (ev, picker) {
             var controller = dataTable.ajax.url();
             controller = $.addGetParam(controller, 'startDate', picker.startDate.format('YYYY-MM-DD'));
-            controller = $.addGetParam(controller, 'endDate', picker.startDate.format('YYYY-MM-DD'));
+            controller = $.addGetParam(controller, 'endDate', picker.endDate.format('YYYY-MM-DD'));
             table.DataTable().ajax.url(controller);
             table.data('controller', controller);
             table.DataTable().search("").draw();
