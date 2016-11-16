@@ -35,6 +35,8 @@ $(document).on('bs.dateinput.load', function (a, b) {
             parentEl: "div.panel-body"
         };
 
+        that.daterangepicker(options);
+
         that.on('apply.daterangepicker', function (ev, picker) {
             var controller = dataTable.ajax.url();
             controller = $.addGetParam(controller, 'startDate', picker.startDate.format('YYYY-MM-DD'));
@@ -53,6 +55,6 @@ $(document).on('bs.dateinput.load', function (a, b) {
             table.data('controller', controller);
             table.DataTable().search("").draw();
         });
-        that.daterangepicker(options);
+
     });
 });
