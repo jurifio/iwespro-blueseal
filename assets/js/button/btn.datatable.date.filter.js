@@ -52,7 +52,7 @@ $(document).on('bs.dateinput.load', function (a, b) {
             delete cicc.startDate;
             delete cicc.endDate;
             controller = $.encodeGetString(cicc);
-            table.data('controller', controller);
+            table.DataTable().ajax.url(controller);
             table.DataTable().search("").draw();
         });
 
