@@ -194,7 +194,6 @@ $(document).on('bs.product.retry', function (e, element, button) {
 
 
 $(document).on('bs.dateinput.load', function (a, b) {
-    console.log('init');
     var table = $('table.table');
     var dataTable = table.DataTable();
     var that = $('#bsButton_'+b.id);
@@ -237,5 +236,4 @@ $(document).on('bs.dateinput.load', function (a, b) {
         parentEl: "div.panel-body"
     };
     that.daterangepicker(options);
-
 });
