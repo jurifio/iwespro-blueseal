@@ -891,9 +891,9 @@ $.encodeGetString = function(o) {
     "use strict";
     var a = [];
     var r;
-    if(typeof o.url != 'undefined' && o.url != 'undefined') {
-        r = o.url;
-        delete o.url;
+    if(typeof o.baseUrl != 'undefined' && o.baseUrl != 'undefined') {
+        r = o.baseUrl;
+        delete o.baseUrl;
     }
     $.each(o,function(k,v) {
         if(k == 'baseUrl') return;

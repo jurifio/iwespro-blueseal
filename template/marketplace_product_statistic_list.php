@@ -151,9 +151,9 @@
             data-tag="a"
             data-icon="fa-calendar"
             data-permission="/admin/product/edit"
-            data-class="btn btn-default datePicker"
+            data-class="btn btn-default"
             data-load-event="bs.dateinput.load"
-            data-rel="tooltip"
+            data-rel=""
             data-title="Seleziona Date"
             data-placement="bottom"
         ></bs-toolbar-button>
