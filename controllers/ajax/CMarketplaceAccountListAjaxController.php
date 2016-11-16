@@ -28,8 +28,8 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
                         c.name as campaign,
                         m.type as marketplaceType,
                         count(distinct mahp.productVariantId) AS productCount,
-                        (SELECT count(*) FROM CampaignVisit cv WHERE cv.campaignId = c.id) AS visits,
-                        (SELECT count(*) FROM CampaignVisitHasOrder cvho WHERE cvho.campaignId = c.id) as orders
+                        (SELECT count(DISTINCT cv.id) FROM CampaignVisit cv WHERE cv.campaignId = c.id) AS visits,
+                        (SELECT count(distinct cvho.orderId) FROM CampaignVisitHasOrder cvho WHERE cvho.campaignId = c.id) as orders
                 FROM Marketplace m
                   JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
                   LEFT JOIN MarketplaceAccountHasProduct mahp ON ma.id = mahp.marketplaceAccountId AND ma.marketplaceId = mahp.marketplaceId and mahp.isDeleted = 0 and mahp.isToWork = 0 and mahp.hasError = 0
