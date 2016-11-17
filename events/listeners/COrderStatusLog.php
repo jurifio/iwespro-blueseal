@@ -17,10 +17,11 @@ class COrderStatusLog extends CLogging
         if (!$time) $time = date('Y-m-d H:i:s');
         $order = $this->getParam('order');
         if (!$order) $order = $this->getParam('orderLine');
+        $userId = $this->getParam('UserId');
         if ($order) {
             $value = $this->getParam('status');
             if (!$value) $order->status;
-            $this->insertLogRow($eventName, null, $order->getEntityName(), $order->printId(), $time);
+            $this->insertLogRow($eventName, $userId, $value, $order->getEntityName(), $order->printId(), $time);
         }
     }
 }

@@ -22,7 +22,8 @@ class CLogging extends AEventListener
     public function __construct(AApplication $app, $params = [], $backtrace = [])
     {
         parent::__construct($app, $params);
-        $this->user = $this->getUser();
+        $this->user = \Monkey::app()->getUser();
+        $this->backtrace = $backtrace;
     }
 
     /**
@@ -35,21 +36,21 @@ class CLogging extends AEventListener
         $stringId = $this->getParam('stringId');
         $time = $this->getParam('time');
         $actionName = $this->getParam('actionName');
+        $user = $this->
+        $userId =
 
-        $this->insertLogRow($eventName, $value, $entityName, $stringId, $time, $actionName);
+        $this->insertLogRow($eventName, $actionName, $value, $entityName, $stringId, $time, $actionName);
     }
 
     protected function insertLogRow($eventName, $userId = null, $value = null, $entityName = null, $stringId = null, $time = null, $actionName = null) {
 
         if (!$actionName) $actionName = substr(get_class($this), 2);
         if (!$eventName) throw new BambooException('Il nome dell\'evento è obbligatorio per l\'inserimento del record nei log');
-        if (!$userId) {
+        if (!is_numeric($userId)) {
             $user = $this->user;
             if (!$user) throw new BambooException('Non è stato possibile trovare l\'id utente per il logging');
             $userId = $user->id;
         }
-
-        $backtrace = $this->getBacktrace();
 
         $logR = \Monkey::app()->repoFactory->create('Log');
         $newLog = $logR->getEmptyEntity();
@@ -57,19 +58,20 @@ class CLogging extends AEventListener
         $newLog->stringId = $stringId;
         $newLog->eventName = $eventName;
         $newLog->userId = $userId;
-        $newLog->actionName = explode('\C', $actionName)[1];
-        $newLog->value = $value;
+        $newLog->actionName = $actionName;
+        $newLog->eventValue = $value;
         $newLog->backtrace = $this->getBacktraceLog();
         if ($time) $newLog->time = $time;
         $newLog->insert();
     }
 
     protected function getBacktrace($type = 'array') {
-        if ('array' == $type) return $this->backtrace[0];
+        if ('array' == $type) return $this->backtrace;
         if ('string' == $type) {
-            $bt = $this->backtrace[0];
-            $obj = ('->' === $bt['type']) ? $bt['object'] : $bt['class'];
-            return $obj . $bt['type'] . $bt['method'];
+            $bt = $this->backtrace;
+            $class = explode("\\", $bt['class']);
+            $class = $class[count($class)-1];
+            return $class . $bt['type'] . $bt['function'];
         }
     }
 
