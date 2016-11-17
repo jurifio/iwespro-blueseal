@@ -90,7 +90,7 @@ class CProductPhotoAjaxManage extends AAjaxController
             }
             if ($count) {
                 \Monkey::app()->eventManager->newTrigger(
-                    'assignPhotosToProductManually',
+                    'assignPhotosToProduct',
                     [
                         'product' => $product,
                         'photoIds' => $ids

@@ -66,7 +66,13 @@ class COrderLineManager
         try {
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->status = $newStatus->code;
-            $this->app->repoFactory->create("OrderLine")->update($orderLine);
+            $orderLine->update($orderLine);
+
+            \Monkey::app()->eventManager->newTrigger('changeOrderStatus',
+                [
+                    'order' => $orderLine,
+                    'status' => $orderLine->status
+                ]);
             return true;
         } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
