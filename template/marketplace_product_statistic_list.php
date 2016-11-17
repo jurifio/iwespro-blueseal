@@ -58,7 +58,7 @@
                                         data-orderable="true" class="center">Cancellato</th>
                                     <th data-slug="isToWork"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Lavorato</th>
+                                        data-orderable="true" class="center">Da Lavorare</th>
                                     <th data-slug="hasError"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Errore</th>
@@ -137,25 +137,7 @@
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Filtra">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-filter"
-            data-permission="/admin/product/edit"
-            data-event="bs.marketplace.filter"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Filtra Tabella"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-calendar"
-            data-permission="/admin/product/edit"
-            data-class="btn btn-default datePicker"
-            data-load-event="bs.dateinput.load"
-            data-rel="tooltip"
-            data-title="Seleziona Date"
-            data-placement="bottom"
+            data-remote="btn.datatable.date.filter"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
