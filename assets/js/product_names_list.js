@@ -263,7 +263,7 @@ $(document).on('bs.names.removeExMark', function() {
         {
             body: "Cosa facciamo?" +
             "<p class='form-group form-group-default'>" +
-            "<input type='radio' name='operation' value='0' checked/> Toglili" +
+            "<input type='radio' name='operation' value='0' checked/> Toglili<br />" +
             "<input type='radio' name='operation' value='1'/> Aggiungili" +
             "</p>",
             isCancelButton: true,
