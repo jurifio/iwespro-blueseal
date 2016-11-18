@@ -156,8 +156,10 @@ class CStatisticsManager
     private function retrieveFilterValue($obj, $filter) {
         foreach($filter as $k => $f) {
 
-            if (false !== strpos()) {
-
+            if (false !== strpos(get_class($obj), 'CObjectCollection')) {
+                foreach($obj as $v) {
+                    $v = $this->retrieveFilterValue($v, $filter);
+                }
             }
         }
     }
