@@ -76,7 +76,7 @@ class CNameTranslateLangListAjaxController extends AAjaxController
             $translated = ($pnTranslated) ? trim($pnTranslated->translation) : '';
             $name = '<div class="form-group form-group-default full-width">';
             if ($okManage) {
-                $name .= '<input type="text" class="form-control full-width nameId" data-lang="' . $langId . '" data-action="' . $this->urls['base'] . 'xhr/NameTranslateLangListAjaxController" data-name="' . $val->name . '" title="nameId" class="nameId" value="' . htmlentities($translated) . '"/>';
+                $name .= '<input type="text" style="width: 100%" class="form-control full-width nameId" data-lang="' . $langId . '" data-action="' . $this->urls['base'] . 'xhr/NameTranslateLangListAjaxController" data-name="' . $val->name . '" title="nameId" class="nameId" value="' . htmlentities($translated) . '"/>';
             }
             $name .= '</div>';
 
