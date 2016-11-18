@@ -104,7 +104,7 @@
             data-event="bs.names.removeExMark"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Evidenzia nomi simili"
+            data-title="Rimuovi i punti esclamativi dai nomi selezionati"
             data-placement="bottom"
         ></bs-toolbar-button>
 </bs-toolbar>
