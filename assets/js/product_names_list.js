@@ -245,6 +245,50 @@ $(document).on('bs.names.products', function () {
     });
 });
 
+$(document).on('bs.names.removeExMark', function() {
+    var dataTable = $('.dataTable').DataTable();
+
+    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRowsCount = selectedRows.length;
+
+    if (0 == selectedRowsCount) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare almeno un prodotto"
+        }).open();
+        return false;
+    }
+
+    modal = new $.bsModal('Rimuovi punti esclamativi',
+        {
+            body: "Rimuovere i punti esclamativi dai prodotti?",
+            isCancelButton: true,
+            okLabel: 'Ok',
+            cancelLabel: 'Annulla',
+            okButtonEvent: function () {
+                var i = 0;
+                var name = [];
+                $.each(selectedRows, function (k, v) {
+                    name[i] = v.name;
+                    i++;
+                });
+
+                $.ajax({
+                    url: '/blueseal/xhr/NamesManager',
+                    method: 'post',
+                    data: {action: 'removeExMark', names: name}
+                }).done(function(res){
+                    modal.writeBody(res);
+                    modal.setOkEvent(function(){
+                        modal.hide();
+                        dataTable.ajax.reload(null, false);
+                    });
+                });
+            }
+        });
+
+});
+
 $(document).on('bs.names.compare', function () {
     modal = new $.bsModal(
         'Evidenzia i nomi simili',

@@ -35,12 +35,35 @@ class CNamesManager extends AAjaxController
                 case "mergeByProducts":
                     $res = $this->mergeByProducts($get);
                     break;
+                case "removeExMark":
+                    $res = $this->removeExMark($get['names']);
+                    break;
                 default:
                     return "OOPS! Non so cosa devo fare. Contatta un amministratore";
             }
 
             return $res;
         }
+    }
+
+    /**
+     * @param array $names
+     */
+    private function removeExMark(array $names) {
+        $pnR = \Monkey::app()->repoFactory->create('ProductName');
+        foreach($names as $n) {
+            $pn = $pnR->findOneBy(['name' => $n]);
+            if ($pn) {
+                if (strpos($pn->name, ' !') == strlen($pn->name) - 2) {
+                    $nn = str_replace(' !', '', $pn->name);
+                    $pn->name = $nn;
+                    if (1 == $pn->langId) $pn->translation = $nn;
+                    $pn->update();
+                }
+            }
+        }
+
+        return "I punti esclamativi sono stati rimossi!";
     }
 
     private function cleanNames()

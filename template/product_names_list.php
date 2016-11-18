@@ -97,6 +97,16 @@
             data-title="Evidenzia nomi simili"
             data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-exclamation"
+            data-permission="/admin/product/edit"
+            data-event="bs.names.removeExMark"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Rimuovi i punti esclamativi dai nomi selezionati"
+            data-placement="bottom"
+        ></bs-toolbar-button>
 </bs-toolbar>
 <script type="text/javascript">
     $(document).ready(function(){
