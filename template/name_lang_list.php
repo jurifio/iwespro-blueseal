@@ -39,6 +39,10 @@
                                     data-orderable="true"
                                     data-default-order="desc"
                                     class="center sorting">Italiano</th>
+                                <th data-slug="category"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center sorting">Categorie</th>
                                 <th data-slug="trans"
                                     data-searchable="false"
                                     data-orderable="false"
