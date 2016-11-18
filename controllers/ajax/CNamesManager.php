@@ -36,7 +36,7 @@ class CNamesManager extends AAjaxController
                     $res = $this->mergeByProducts($get);
                     break;
                 case "removeExMark":
-                    $res = $this->removeExMark($get['names']);
+                    $res = $this->removeExMark($get['names'], $get['operation']);
                     break;
                 default:
                     return "OOPS! Non so cosa devo fare. Contatta un amministratore";
@@ -49,21 +49,31 @@ class CNamesManager extends AAjaxController
     /**
      * @param array $names
      */
-    private function removeExMark(array $names) {
+    private function removeExMark(array $names, $operation) {
         $pnR = \Monkey::app()->repoFactory->create('ProductName');
         foreach($names as $n) {
             $pn = $pnR->findOneBy(['name' => $n]);
             if ($pn) {
-                if (strpos($pn->name, ' !') == strlen($pn->name) - 2) {
-                    $nn = str_replace(' !', '', $pn->name);
-                    $pn->name = $nn;
-                    if (1 == $pn->langId) $pn->translation = $nn;
-                    $pn->update();
+                if (0 == $operation) {
+                    if (strpos($pn->name, ' !') == strlen($pn->name) - 2) {
+                        $nn = str_replace(' !', '', $pn->name);
+                        $pn->name = $nn;
+                        if (1 == $pn->langId) $pn->translation = $nn;
+                        $pn->update();
+                        $ret = 'aggiunti';
+                    }
+                } elseif ( 1 == $operation ) {
+                    if (strpos($pn->name, ' !') !== strlen($pn->name) - 2) {
+                        $nn = $pn->name . ' !';
+                        $pn->name = $nn;
+                        $pn->update();
+                        $ret = 'rimossi';
+                    }
                 }
             }
         }
 
-        return "I punti esclamativi sono stati rimossi!";
+        return "I punti esclamativi sono stati $ret!";
     }
 
     private function cleanNames()
