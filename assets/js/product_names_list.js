@@ -259,9 +259,13 @@ $(document).on('bs.names.removeExMark', function() {
         return false;
     }
 
-    modal = new $.bsModal('Rimuovi punti esclamativi',
+    modal = new $.bsModal('Gestisci i punti esclamativi',
         {
-            body: "Rimuovere i punti esclamativi dai prodotti?",
+            body: "Cosa facciamo?" +
+            "<p class='form-group form-group-default'>" +
+            "<input type='radio' name='operation' value='0' checked/> Toglili<br />" +
+            "<input type='radio' name='operation' value='1'/> Aggiungili" +
+            "</p>",
             isCancelButton: true,
             okLabel: 'Ok',
             cancelLabel: 'Annulla',
@@ -276,7 +280,11 @@ $(document).on('bs.names.removeExMark', function() {
                 $.ajax({
                     url: '/blueseal/xhr/NamesManager',
                     method: 'post',
-                    data: {action: 'removeExMark', names: name}
+                    data: {
+                        action: 'removeExMark',
+                        names: name,
+                        operation: $('input[name="operation"]:checked').val()
+                    }
                 }).done(function(res){
                     modal.writeBody(res);
                     modal.setOkEvent(function(){
