@@ -60,14 +60,14 @@ class CNamesManager extends AAjaxController
                         $pn->name = $nn;
                         if (1 == $pn->langId) $pn->translation = $nn;
                         $pn->update();
-                        $ret = 'aggiunti';
+                        $ret = 'rimossi';
                     }
                 } elseif ( 1 == $operation ) {
                     if (strpos($pn->name, ' !') !== strlen($pn->name) - 2) {
                         $nn = $pn->name . ' !';
                         $pn->name = $nn;
                         $pn->update();
-                        $ret = 'rimossi';
+                        $ret = 'aggiunti';
                     }
                 }
             }
