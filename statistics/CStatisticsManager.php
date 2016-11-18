@@ -9,10 +9,15 @@
 namespace bamboo\statistics;
 
 
+use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CStatisticsHeader;
 
 class CStatisticsManager
 {
+    /**
+     * @var string
+     */
+    private $filterOnLogValue;
     /**
      * @var array
      * Ogni elemento dell'array ha come chiave il campo da usare come condizione e come valore un array avente
@@ -30,9 +35,9 @@ class CStatisticsManager
      */
     private $outputField = null;
     /**
-     * @var string DAY|HOUR|WEEK|MONTH|YEAR
+     * @var array
      */
-    private $timeUnit = null;
+    private $timeUnits = ['DAY' => 'd', 'HOUR' => 'h', 'WEEK' => 'm', 'MONTH' => 'm', 'YEAR' => 'Y'];
     /**
      * @var array
      */
@@ -44,12 +49,27 @@ class CStatisticsManager
     /**
      * @var array
      */
-    private $groupDataType = ['SUM', 'MEDIUM', 'SUM-PREVIOUS'];
+    private $groupDataType = ['countRows', 'sumValues', 'mediumValues', 'sumPrevious', 'countPrevious'];
 
     /**
      * @var CStatisticsHeader
      */
     private $computedStatistics;
+
+    /**
+     * @var array last extracted logs from Log table;
+     */
+    private $logs = [];
+
+    /**
+     * @var
+     */
+    private $filteredLogs = [];
+
+    /**
+     * @var array
+     */
+    private $entityFilters;
 
     protected function getComputedStatistics($tableName, $groupDataType, $dateGroup, $keyField) {
         $shR = \Monkey::app()->repoFactory->create('StatisticsHeader');
@@ -69,33 +89,135 @@ class CStatisticsManager
         return $sh;
     }
 
-    protected function createNewStatisticsData($tableName, $keyField, $selectedFilters, $groupDataType, $dateGroup, $fromDate = null, $toDate = null) {
-        $fromDate = (false !== date_parse($fromDate)) ? $fromDate : $this->firstDate();
-        $toDate = (false !== date_parse($fromDate) or ())
-        if ($this->isDbTable($tableName)) {
-            foreach()
-            $repo = \Monkey::app()->repoFactory->create($tableName);
-            $oc = $repo->findBy($selectedFilters);
+    protected function createNewStatisticsData(
+        $filters = [
+            ['userId'] => null,
+            ['entityName'] => null,
+            ['stringId'] => null,
+            ['eventName'] => null,
+            ['eventValue'] => null,
+            ['actionName'] => null,
+            ['backtrace'] => null,
+            ['entityFilters'] => [],
+        ],
+        $dateStart = null,
+        $dateEnd = null)
+    {
+        $this->entityFilters = $filters['entityFilters'];
+        $filters = array_filter($filters, function ($val) {
+            return (null !== $val);
+        });
+        $dba = \Monkey::app()->dbAdapter;
 
+        //$where = ['AND' => $filters];
+        //$where = $dba->where($where);
 
-            } else {
+        $whereArr = [];
+        $bind = [];
+        foreach ($filters as $k => $f) {
+            $whereArr[] = $k . ' = :' . $k;
+            $bind[] = $f;
+        }
 
+        if ($dateStart) {
+            $dateStart = $this->dateControl($dateStart);
+            $whereArr[] = '`time` >= :dateStart';
+            $bind[] = $dateStart;
+        }
+
+        if ($dateEnd) {
+            $dateEnd = $this->dateControl($dateEnd);
+            $whereArr[] = '`time` >= :dateEnd';
+            $bind[] = $dateEnd;
+        }
+
+        $where = implode(' AND ', $whereArr[]);
+
+        $query = "SELECT * FROM Log WHERE " . $where . " ORDER BY `time`";
+        $logs = $dba->query($query, $bind)->fetchAll();
+        $this->logs;
+        //if (count($filters['entityFilters'])) return $this->filterLogs();
+        return $this;
+    }
+
+    private function filterLogs($groupDataType) {
+        foreach($this->logs as $v) {
+            if ($this->compareFilter($v['entityName'], $v['stringId'])) {
+                $this->filteredLogs = $v;
+            }
         }
     }
 
-    protected function firstDate() {
-        return \Monkey::app()->dbAdapter->query('SELECT min(time) FROM _Dates WHERE 1')->fetch();
+    private function compareEntityWithFilter($entityName, $stringId) {
+        $ent = \Monkey::app()->repoFactory->create($entityName)->findOneByStringId($stringId);
+
+    }
+
+    private function retrieveFilterValue($obj, $filter) {
+        foreach($filter as $k => $f) {
+
+            if (false !== strpos()) {
+
+            }
+        }
+    }
+
+    private function dateControl($date) {
+        if (is_string($date)) {
+            $ret = strtotime($date);
+            if ( false === $ret) throw new BambooException('Can\'t read as date and time the given string');
+            return $date;
+        } elseif (is_numeric($date)) {
+            $ret = date('Y-m-d H:i:s', $date);
+            if (false === $ret) throw new BambooException('invalid timestamp');
+            return $ret;
+        } else {
+           return false;
+        }
+    }
+
+    private function explodeDates($time, $timeUnit = null) {
+        $time = new DateTime($time);
+        if (!$timeUnit) $timeUnit = 'Y-m-d H:i:s';
+        return $time->format($timeUnit);
     }
 
     /**
-     * @param $tableName
-     * @return bool
+     * @param array|string $entityName
+     * @param bool|integer $directFilter
      */
-    public function isDbTable($tableName) {
-        $query = "SHOW TABLES LIKE '" . htmlentities($tableName) . "'";
-        $res = \Monkey::app()->dbAdapter->query($query, [])->fetchAll();
-        if (count($res)) return true;
-        return false;
+    public function addFilters($repoName, $directFilter = false)
+    {
+        if (is_array($repoName)) {
+            foreach ($repoName as $v) {
+                $this->isRepo($repoName);
+                $this->filters[] = $v;
+            }
+            if (is_numeric($directFilter)) {
+                if (array_key_exists($directFilter, $repoName)) $this->filterOnLogValue = $repoName[$directFilter];
+                else throw new BambooException('given directFilter key doesn\'t exists in the $repoName');
+            }
+        }
+
+        if (is_string($repoName)) {
+            if ($this->isRepo($repoName)) {
+                $this->filters[] = $repoName;
+                if (true == $directFilter) $this->filterOnLogValue = $repoName;
+            }
+        }
+    }
+
+    /**
+     * @param $repoName
+     * @param bool $throwable
+     * @return \bamboo\core\db\pandaorm\repositories\ARepo|bool
+     * @throws BambooException
+     */
+    private function isRepo($repoName, $throwable = true) {
+        $repo = \Monkey::app()->repoFactory->create($repoName);
+        if (false !== strpos(get_class($repo), 'CRepo')) return $repo;
+        if ($throwable) throw new BambooException('the Entity doesn\'t exists');
+        else return false;
     }
 }
 ?>
