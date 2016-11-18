@@ -59,7 +59,7 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Su ordine</th>
-                                <th data-slug="false"
+                                <th data-slug="valid"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Valido</th>
