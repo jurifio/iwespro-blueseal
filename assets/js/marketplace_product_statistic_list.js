@@ -1,6 +1,6 @@
-$(document).on('', function () {
+$(document).ready(function () {
     "use strict";
-    $('ul.breadcrumb').append($('<li>test</li>'))
+    $('ul.breadcrumb').append($('<li><p style="display: inline-block">'+$('table.table').data('specialName')+'</p></li>'));
 });
 
 $(document).on('bs.marketplace.filter', function () {

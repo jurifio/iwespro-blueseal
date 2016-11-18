@@ -20,6 +20,7 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_static_list"
                                data-controller="MarketplaceProductStatisticListAjaxController<?php echo $queryString ?>"
+                               data-special-name="<?php echo $marketplaceName ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="25,100,200,500">
@@ -36,11 +37,11 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">Brand</th>
                                     <th data-slug="categories"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Categorie</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
                                     <th data-slug="stock"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Stock</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stock</th>
                                     <th data-slug="season"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Season</th>

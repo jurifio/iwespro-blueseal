@@ -43,13 +43,15 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceId`                        AS `marketplaceId`,
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
+                      if(p.qty >0 , 'sì','no') as stock,
                       mahp.isToWork,
                       mahp.hasError,
                       mahp.isDeleted,
-                      cv.timestamp                                  AS visitTimestamp,                  
+                      cv.timestamp                                  AS visitTimestamp,
                       cv.id                                         AS visitId,
                       count(distinct cv.id)                          AS visits,
                       count(distinct cvho.orderId)                   AS conversions,
+                      phpc.productCategoryId as categories,
                       ifnull(c.code, '')                            AS campaignCode
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
@@ -58,6 +60,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       JOIN `Shop` `s` ON ((`s`.`id` = `shp`.`shopId`))
                       JOIN `ProductSeason` `pss` ON ((`pss`.`id` = `p`.`productSeasonId`))
                       JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`))
+                      JOIN ProductHasProductCategory phpc on (p.id = phpc.productId and p.productVariantId = phpc.productVariantId)
                       JOIN `MarketplaceAccountHasProduct` `mahp`
                         ON (((`mahp`.`productId` = `p`.`id`) AND (`mahp`.`productVariantId` = `p`.`productVariantId`)))
                       JOIN `MarketplaceAccount` `ma`
