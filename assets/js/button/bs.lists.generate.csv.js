@@ -33,7 +33,7 @@ $(document).on('bs.lists.generate.csv', function () {
     }).done(function (res) {
         var csv = '';
         var str = '';
-        console.log(res.data);
+
         for (var i in res.data) {
             var line = '';
             for (var index in res.data[i]) {
@@ -42,10 +42,8 @@ $(document).on('bs.lists.generate.csv', function () {
             }
             str += line + '%0A';
         }
-        console.log(str);
         modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
     });
 
     var data = table.data('params');
-    console.log(data);
 });
