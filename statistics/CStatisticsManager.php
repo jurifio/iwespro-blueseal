@@ -71,7 +71,8 @@ class CStatisticsManager
      */
     private $entityFilters;
 
-    protected function getComputedStatistics($tableName, $groupDataType, $dateGroup, $keyField) {
+    protected function getComputedStatistics($tableName, $groupDataType, $dateGroup, $keyField)
+    {
         $shR = \Monkey::app()->repoFactory->create('StatisticsHeader');
         $conditions = [
             'tableName' => $tableName,
@@ -140,29 +141,53 @@ class CStatisticsManager
         return $this;
     }
 
-    private function filterLogs($groupDataType) {
-        foreach($this->logs as $v) {
+    private function filterLogs($groupDataType)
+    {
+        foreach ($this->logs as $v) {
             if ($this->compareFilter($v['entityName'], $v['stringId'])) {
                 $this->filteredLogs = $v;
             }
         }
     }
 
-    private function compareEntityWithFilter($entityName, $stringId, $comparisonType) {
+    private function compareEntityWithFilters($entityName, $stringId)
+    {
         $ent = \Monkey::app()->repoFactory->create($entityName)->findOneByStringId($stringId);
+        $return = true;
+        foreach ($this->selectedFilters as $name => $val) {
+            if ($entityName === $this->filterOnLogValue) continue;
+            $gotElementValue = $this->getElementValueToCompare($ent->{$name}, $val);
+
+        }
 
     }
 
-    private function retrieveFilterValue($obj, $filter) {
-
-        foreach($filter as $k => $f) {
-
-            if (false !== strpos(get_class($obj), 'CObjectCollection')) {
-                foreach($obj as $v) {
-                    $v = $this->retrieveFilterValue($v, $filter);
-                }
-            }
+    /**
+     * @param $filter
+     */
+    private function getFilterValueToCompare($filter) {
+        if (is_array($filter)) {
+            return $this->getFilterValueToCompare($filter);
         }
+    }
+
+    /**
+     * @param $obj
+     * @param $filter
+     * @return array
+     * @throws BambooException
+     */
+    private function getElementValueToCompare($obj, $filter)
+    {
+            if (is_array($filter)) {
+                if (1 !== count($filter)) {
+                    throw new BambooException ('selectedFilters \' trees\' elements can\'t have multiple ' );
+                }
+                return $this->getElementValueToCompare($obj->{key($filter)}, $filter[0]);
+            }
+            if (is_string($filter) || is_numeric($filter)) {
+                return $filter;
+            }
     }
 
     private function dateControl($date) {
@@ -201,7 +226,6 @@ class CStatisticsManager
                 else throw new BambooException('given directFilter key doesn\'t exists in the $repoName');
             }
         }
-
         if (is_string($repoName)) {
             if ($this->isRepo($repoName)) {
                 $this->filters[] = $repoName;
