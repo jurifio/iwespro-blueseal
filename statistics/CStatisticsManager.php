@@ -157,6 +157,7 @@ class CStatisticsManager
         foreach ($this->selectedFilters as $name => $val) {
             if ($entityName === $this->filterOnLogValue) continue;
             $gotElementValue = $this->getElementValueToCompare($ent->{$name}, $val);
+            $filterValue = $this->getFilterValueToCompare($val);
 
         }
 
@@ -166,8 +167,11 @@ class CStatisticsManager
      * @param $filter
      */
     private function getFilterValueToCompare($filter) {
-        if (is_array($filter)) {
-            return $this->getFilterValueToCompare($filter);
+        $arrValue = array_values($filter)[0];
+        if (is_array($arrValue)) {
+            return $this->getFilterValueToCompare($arrValue);
+        } else {
+            return $arrValue;
         }
     }
 
@@ -179,14 +183,15 @@ class CStatisticsManager
      */
     private function getElementValueToCompare($obj, $filter)
     {
-            if (is_array($filter)) {
+        $arrValue = array_values($filter)[0];
+        if (is_array($arrValue)) {
                 if (1 !== count($filter)) {
                     throw new BambooException ('selectedFilters \' trees\' elements can\'t have multiple ' );
                 }
-                return $this->getElementValueToCompare($obj->{key($filter)}, $filter[0]);
+                return $this->getElementValueToCompare($obj->{key($filter)}, $arrValue);
             }
-            if (is_string($filter) || is_numeric($filter)) {
-                return $filter;
+            if (is_string($arrValue) || is_numeric($arrValue)) {
+                return $arrValue;
             }
     }
 
