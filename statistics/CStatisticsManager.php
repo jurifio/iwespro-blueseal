@@ -49,7 +49,7 @@ class CStatisticsManager
     /**
      * @var array
      */
-    private $groupDataType = ['countRows', 'sumValues', 'mediumValues', 'sumPrevious', 'countPrevious'];
+    private $groupDataType = ['countRows', 'countDistinct', 'sumValues', 'mediumValues', 'sumPrevious', 'countPrevious'];
 
     /**
      * @var CStatisticsHeader
@@ -148,12 +148,13 @@ class CStatisticsManager
         }
     }
 
-    private function compareEntityWithFilter($entityName, $stringId) {
+    private function compareEntityWithFilter($entityName, $stringId, $comparisonType) {
         $ent = \Monkey::app()->repoFactory->create($entityName)->findOneByStringId($stringId);
 
     }
 
     private function retrieveFilterValue($obj, $filter) {
+
         foreach($filter as $k => $f) {
 
             if (false !== strpos(get_class($obj), 'CObjectCollection')) {
