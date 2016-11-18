@@ -103,15 +103,21 @@ class CMarketplaceProductManageController extends AAjaxController
     {
     	//RETRY
 	    $i = 0;
+        $revise = [];
 	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
 		    $product = $this->app->repoFactory->create('Product')->findOneByStringId($row);
 		    foreach ($product->marketplaceAccountHasProduct as $marketplaceAccountHasProduct) {
 			    if(1 == $marketplaceAccountHasProduct->hasError || 1 == $marketplaceAccountHasProduct->isToWork) {
 				    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
 				    $i++;
-			    }
+			    } else {
+                    $revise[] = $product;
+                }
 		    }
 	    }
+	    foreach ($revise as $product) {
+            $this->app->eventManager->trigger((new EGenericEvent('product.stock.change',['productKeys'=>$product->printId()])));
+        }
 
 	    return $i;
     }
