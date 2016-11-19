@@ -80,7 +80,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                           AND timestamp >= ifnull(?, timestamp)
                           AND timestamp <= ifnull(?, timestamp) 
                     GROUP BY productId, productVariantId";
-
+        //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
         $timeFrom = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
         $timeTo = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('endDate'));
         $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
