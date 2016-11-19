@@ -8,31 +8,38 @@ $(document).on('bs.manage.names', function () {
     var cancelButton = $('.modal-footer .btn-default');
     var okButton = $('.modal-footer .btn-success');
 
-
     header.html('Riordina nomi');
-    body.html('Riordino dei nomi. Eliminazione dei duplicati');
-    $.ajax({
-        url: "/blueseal/xhr/NamesManager",
-        type: "POST",
-        data: {action: "clean"}
-    }).done(function (result) {
-        body.html(result);
-        okButton.html('Ok').off().on('click', function () {
-            bsModal.modal('hide');
-        });
+    body.html('Riordino dei nomi. Eliminazione dei duplicati<br />' +
+        "L'operazione potrebbe richiedere qualche minuto. Procedere?");
+
+    okButton.html('Vai!').on('click', function(){
         cancelButton.hide();
-        bsModal.modal();
-    }).fail(function (res, a, b) {
-        console.log(res);
-        console.log(a);
-        console.log(b);
-        body.html("OOPS! C'è stato un problemino");
-        okButton.html('Ok').off().on('click', function () {
-            bsModal.modal('hide');
+        okButton.html('Ok');
+        okButton.prop('disabled', true);
+        body.html('Sto lavorando...');
+        $.ajax({
+            url: "/blueseal/xhr/NamesManager",
+            type: "POST",
+            data: {action: "clean"}
+        }).done(function (result) {
+            body.html(result);
+            okButton.html('Ok').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            okButton.prop('disabled', false);
+        }).fail(function (res, a, b) {
+            console.log(res);
+            console.log(a);
+            console.log(b);
+            body.html("OOPS! C'è stato un problemino");
+            okButton.prop('disabled', false);
+            okButton.html('Ok').off().on('click', function () {
+                bsModal.modal('hide');
+            });
         });
-        cancelButton.hide();
-        bsModal.modal();
     });
+
+    bsModal.modal();
 });
 
 $(document).on('bs.names.merge', function () {
