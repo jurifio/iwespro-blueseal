@@ -183,6 +183,9 @@
         <bs-toolbar-button
             data-remote="bs.product.marketplace.publish"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.editVariantDescription"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione prezzi">
         <bs-toolbar-button
