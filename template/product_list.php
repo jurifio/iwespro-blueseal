@@ -42,6 +42,9 @@
                                     <th data-slug="colorGroup"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Gruppo Colore</th>
+                                    <th data-slug="colorNameManufacturer"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Colore Produttore</th>
                                     <th data-slug="season"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stagione</th>
