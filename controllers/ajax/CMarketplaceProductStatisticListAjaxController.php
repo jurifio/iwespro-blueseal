@@ -66,19 +66,22 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       JOIN `MarketplaceAccount` `ma`
                         ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`)))
                       JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`))
-                      LEFT JOIN (Campaign c
-                        JOIN CampaignVisit cv ON c.id = cv.campaignId
-                        JOIN CampaignVisitHasProduct cvhp ON cv.campaignId = cvhp.campaignId AND cv.id = cvhp.campaignVisitId)
-                        ON cvhp.productId = `p`.id AND cvhp.productVariantId = `p`.productVariantId
+                      LEFT JOIN Campaign c ON c.id = ?
+                      LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
+                      LEFT JOIN CampaignVisitHasProduct cvhp ON 
+                          cv.campaignId = cvhp.campaignId AND 
+                          cv.id = cvhp.campaignVisitId AND 
+                          cvhp.productId = `p`.id AND 
+                          cvhp.productVariantId = `p`.productVariantId
                       LEFT JOIN (CampaignVisitHasOrder cvho
                         JOIN OrderLine ol
                           ON cvho.orderId = ol.orderId)
                         ON ol.productId = p.id AND ol.productVariantId = p.productVariantId AND cv.campaignId = cvho.campaignId AND
                            cvhp.campaignVisitId = cvho.campaignVisitId
-                    WHERE ma.id = ? AND ma.marketplaceId = ? AND c.id = ? AND
+                    WHERE ma.id = ? AND ma.marketplaceId = ? AND 
                         (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
-                          AND timestamp >= ifnull(?, timestamp)
-                          AND timestamp <= ifnull(?, timestamp) 
+                          AND ifnull(timestamp,1) >= ifnull(?, ifnull(timestamp,1))
+                          AND ifnull(timestamp,1) <= ifnull(?, ifnull(timestamp,1))
                     GROUP BY productId, productVariantId";
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
         $timeFrom = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
