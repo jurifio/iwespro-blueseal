@@ -1553,6 +1553,17 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/blueseal/marketplace/accounts(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

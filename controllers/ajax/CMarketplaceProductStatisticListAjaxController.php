@@ -43,10 +43,15 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceId`                        AS `marketplaceId`,
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
-                      cv.timestamp                                  AS visitTimestamp,                  
+                      if(p.qty >0 , 'sì','no') as stock,
+                      mahp.isToWork,
+                      mahp.hasError,
+                      mahp.isDeleted,
+                      cv.timestamp                                  AS visitTimestamp,
                       cv.id                                         AS visitId,
                       count(distinct cv.id)                          AS visits,
                       count(distinct cvho.orderId)                   AS conversions,
+                      phpc.productCategoryId as categories,
                       ifnull(c.code, '')                            AS campaignCode
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
@@ -55,29 +60,36 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       JOIN `Shop` `s` ON ((`s`.`id` = `shp`.`shopId`))
                       JOIN `ProductSeason` `pss` ON ((`pss`.`id` = `p`.`productSeasonId`))
                       JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`))
+                      JOIN ProductHasProductCategory phpc on (p.id = phpc.productId and p.productVariantId = phpc.productVariantId)
                       JOIN `MarketplaceAccountHasProduct` `mahp`
                         ON (((`mahp`.`productId` = `p`.`id`) AND (`mahp`.`productVariantId` = `p`.`productVariantId`)))
                       JOIN `MarketplaceAccount` `ma`
                         ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`)))
                       JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`))
-                      LEFT JOIN (Campaign c
-                        JOIN CampaignVisit cv ON c.id = cv.campaignId
-                        JOIN CampaignVisitHasProduct cvhp ON cv.campaignId = cvhp.campaignId AND cv.id = cvhp.campaignVisitId)
-                        ON cvhp.productId = `p`.id AND cvhp.productVariantId = `p`.productVariantId
+                      LEFT JOIN Campaign c ON c.id = ?
+                      LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
+                      LEFT JOIN CampaignVisitHasProduct cvhp ON 
+                          cv.campaignId = cvhp.campaignId AND 
+                          cv.id = cvhp.campaignVisitId AND 
+                          cvhp.productId = `p`.id AND 
+                          cvhp.productVariantId = `p`.productVariantId
                       LEFT JOIN (CampaignVisitHasOrder cvho
                         JOIN OrderLine ol
                           ON cvho.orderId = ol.orderId)
                         ON ol.productId = p.id AND ol.productVariantId = p.productVariantId AND cv.campaignId = cvho.campaignId AND
                            cvhp.campaignVisitId = cvho.campaignVisitId
-                    WHERE ma.id = ? AND ma.marketplaceId = ? AND c.id = ? AND
+                    WHERE ma.id = ? AND ma.marketplaceId = ? AND 
                         (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
-                          AND timestamp >= ifnull(?, timestamp)
-                          AND timestamp <= ifnull(?, timestamp) 
-                    GROUP BY productId, productVariantId";
+                          AND ifnull(timestamp,1) >= ifnull(?, ifnull(timestamp,1))
+                          AND ifnull(timestamp,1) <= ifnull(?, ifnull(timestamp,1))
+                    GROUP BY productId, productVariantId,productCategoryId";
+        //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
+        $timeFrom = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
+        $timeTo = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('endDate'));
+        $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
+        $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
+        $queryParameters = [$campaign->id,$marketplaceAccount->id, $marketplaceAccount->marketplaceId,  $timeFrom, $timeTo];
 
-        $timeFrom = null;
-        $timeTo = null;
-        $queryParameters = [$marketplaceAccount->id, $marketplaceAccount->marketplaceId, $campaign->id, $timeFrom, $timeTo];
         $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET, true);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
@@ -111,6 +123,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row["DT_RowId"] = $val->printId();
             $row["DT_RowClass"] = 'colore';
             $row['codice'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->printId() . '</a>';
+            $row['marketCode'] = $prodottiMark->printId();
             $row['brand'] = $val->productBrand->name;
             $row['season'] = $val->productSeason->name;
 
@@ -135,19 +148,12 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;
             $row['itemno'] .= '</span>';
 
-            $row['fee'] = 0;
-            $marketplaces = [];
-            foreach ($val->marketplaceAccountHasProduct as $mProduct) {
-                if ($marketplaceAccount &&
-                    ($marketplaceAccount->id != $mProduct->marketplaceAccountId ||
-                        $marketplaceAccount->marketplaceId != $mProduct->marketplaceId)
-                ) continue;
-                $style = $mProduct->isToWork == 0 ? ($mProduct->hasError ? 'style="color:red"' : 'style="color:green"') : "";
-                $marketplaces[] = '<span ' . $style . '>' . $mProduct->marketplaceAccount->marketplace->name . ' - ' . $mProduct->marketplaceAccount->name . (empty ($mProduct->marketplaceProductId) ? "" : ' (' . $mProduct->marketplaceProductId . ')</span>');
-                $row['fee'] += $mProduct->fee;
-            }
 
-            $row['marketplaceAccountName'] = implode('<br>', $marketplaces);
+            $row['fee'] = $prodottiMark->fee;
+            $row['isToWork'] = $prodottiMark->isToWork ? 'sì' : 'no';
+            $row['hasError'] = $prodottiMark->hasError ? 'sì' : 'no';
+            $row['isDeleted'] = $prodottiMark->isDeleted ? 'sì' : 'no';
+            $row['marketplaceAccountName'] = $prodottiMark->marketplaceAccount->marketplace->name;
             $row['creationDate'] = $val->creationDate;
             $row['categories'] = $val->getLocalizedProductCategories("<br>");
             $row['conversions'] = $values['conversions'];

@@ -1,3 +1,8 @@
+$(document).ready(function () {
+    "use strict";
+    $('ul.breadcrumb').append($('<li><p style="display: inline-block">'+$('table.table').data('specialName')+'</p></li>'));
+});
+
 $(document).on('bs.marketplace.filter', function () {
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');
@@ -185,53 +190,4 @@ $(document).on('bs.product.retry', function (e, element, button) {
 
 
     bsModal.modal();
-});
-
-
-$(document).on('bs.dateinput.load', function () {
-
-    var table = $('table.table');
-    var that = $('a.datePicker');
-    that.on('click',function() {
-        "use strict";
-        var options = {
-            locale: {
-                format: 'YYYY-MM-DD',
-                cancelLabel: "Cancella",
-                applyLabel: "Applica"
-            },
-            ranges: {
-                'Oggi': [moment(), moment()],
-                'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Ultimi 7 Giorni': [moment().subtract(6, 'days'), moment()],
-                'Ultimi 30 giorni': [moment().subtract(29, 'days'), moment()],
-                'Questo Mese': [moment().startOf('month'), moment().endOf('month')],
-                'Scorso Mese': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            },
-            alwaysShowCalendars: true,
-            autoUpdateInput: false,
-            drops: "down"
-        };
-
-        that.daterangepicker(options);
-
-        that.on('apply.daterangepicker', function (ev, picker) {
-            var controller = table.data('controller');
-            controller = $.addGetParam(controller, 'startDate', picker.startDate.format('YYYY-MM-DD'));
-            controller = $.addGetParam(controller, 'endDate', picker.startDate.format('YYYY-MM-DD'));
-            table.data('controller', controller);
-            table.DataTable().search("").draw();
-        });
-
-        that.on('cancel.daterangepicker', function (ev, picker) {
-            var controller = table.data('controller');
-            var cicc = $.decodeGetStringFromUrl(controller);
-            delete cicc.startDate;
-            delete cicc.endDate;
-            controller = $.encodeGetString(cicc);
-            table.data('controller', controller);
-            table.DataTable().search("").draw();
-        });
-    });
-
 });

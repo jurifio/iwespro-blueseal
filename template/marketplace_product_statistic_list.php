@@ -20,6 +20,7 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_static_list"
                                data-controller="MarketplaceProductStatisticListAjaxController<?php echo $queryString ?>"
+                               data-special-name="<?php echo $marketplaceName ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="25,100,200,500">
@@ -36,11 +37,11 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">Brand</th>
                                     <th data-slug="categories"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Categorie</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
                                     <th data-slug="stock"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Stock</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stock</th>
                                     <th data-slug="season"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Season</th>
@@ -53,6 +54,15 @@
                                     <th data-slug="fee"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Fee</th>
+                                    <th data-slug="isDeleted"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Cancellato</th>
+                                    <th data-slug="isToWork"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Da Lavorare</th>
+                                    <th data-slug="hasError"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Errore</th>
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true" class="center dateTypeFilter">Creazione</th>
@@ -83,6 +93,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.marketplace.response"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.productHasMarketplace.marketplace.delete"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
@@ -125,25 +138,12 @@
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Filtra">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-filter"
-            data-permission="/admin/product/edit"
-            data-event="bs.marketplace.filter"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Filtra Tabella"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="btn.datatable.date.filter"
         ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Esportazione">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-filter"
-            data-permission="/admin/product/edit"
-            data-class="btn btn-default datePicker"
-            data-load-event="bs.dateinput.load"
-            data-rel="tooltip"
-            data-title="Seleziona Date"
-            data-placement="bottom"
+            data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

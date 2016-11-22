@@ -35,12 +35,45 @@ class CNamesManager extends AAjaxController
                 case "mergeByProducts":
                     $res = $this->mergeByProducts($get);
                     break;
+                case "removeExMark":
+                    $res = $this->removeExMark($get['names'], $get['operation']);
+                    break;
                 default:
                     return "OOPS! Non so cosa devo fare. Contatta un amministratore";
             }
 
             return $res;
         }
+    }
+
+    /**
+     * @param array $names
+     */
+    private function removeExMark(array $names, $operation) {
+        $pnR = \Monkey::app()->repoFactory->create('ProductName');
+        foreach($names as $n) {
+            $pn = $pnR->findOneBy(['name' => $n]);
+            if ($pn) {
+                if (0 == $operation) {
+                    if (strpos($pn->name, ' !') == strlen($pn->name) - 2) {
+                        $nn = str_replace(' !', '', $pn->name);
+                        $pn->name = $nn;
+                        if (1 == $pn->langId) $pn->translation = $nn;
+                        $pn->update();
+                        $ret = 'rimossi';
+                    }
+                } elseif ( 1 == $operation ) {
+                    if (strpos($pn->name, ' !') !== strlen($pn->name) - 2) {
+                        $nn = $pn->name . ' !';
+                        $pn->name = $nn;
+                        $pn->update();
+                        $ret = 'aggiunti';
+                    }
+                }
+            }
+        }
+
+        return "I punti esclamativi sono stati $ret!";
     }
 
     private function cleanNames()
@@ -134,7 +167,6 @@ class CNamesManager extends AAjaxController
             $codes[] = '%' . $search . '%';
 
             $res = $this->app->dbAdapter->query("SELECT DISTINCT `name` FROM `ProductName` WHERE `langId` = 1 AND ( $searchByNames ) ORDER BY `name` LIMIT 30", $codes)->fetchAll();
-
             $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
 
             foreach($res as $k => $v) {

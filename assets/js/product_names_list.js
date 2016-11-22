@@ -8,31 +8,38 @@ $(document).on('bs.manage.names', function () {
     var cancelButton = $('.modal-footer .btn-default');
     var okButton = $('.modal-footer .btn-success');
 
-
     header.html('Riordina nomi');
-    body.html('Riordino dei nomi. Eliminazione dei duplicati');
-    $.ajax({
-        url: "/blueseal/xhr/NamesManager",
-        type: "POST",
-        data: {action: "clean"}
-    }).done(function (result) {
-        body.html(result);
-        okButton.html('Ok').off().on('click', function () {
-            bsModal.modal('hide');
-        });
+    body.html('Riordino dei nomi. Eliminazione dei duplicati<br />' +
+        "L'operazione potrebbe richiedere qualche minuto. Procedere?");
+
+    okButton.html('Vai!').on('click', function(){
         cancelButton.hide();
-        bsModal.modal();
-    }).fail(function (res, a, b) {
-        console.log(res);
-        console.log(a);
-        console.log(b);
-        body.html("OOPS! C'è stato un problemino");
-        okButton.html('Ok').off().on('click', function () {
-            bsModal.modal('hide');
+        okButton.html('Ok');
+        okButton.prop('disabled', true);
+        body.html('Sto lavorando...');
+        $.ajax({
+            url: "/blueseal/xhr/NamesManager",
+            type: "POST",
+            data: {action: "clean"}
+        }).done(function (result) {
+            body.html(result);
+            okButton.html('Ok').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            okButton.prop('disabled', false);
+        }).fail(function (res, a, b) {
+            console.log(res);
+            console.log(a);
+            console.log(b);
+            body.html("OOPS! C'è stato un problemino");
+            okButton.prop('disabled', false);
+            okButton.html('Ok').off().on('click', function () {
+                bsModal.modal('hide');
+            });
         });
-        cancelButton.hide();
-        bsModal.modal();
     });
+
+    bsModal.modal();
 });
 
 $(document).on('bs.names.merge', function () {
@@ -243,6 +250,58 @@ $(document).on('bs.names.products', function () {
         cancelButton.hide();
         bsModal.modal();
     });
+});
+
+$(document).on('bs.names.removeExMark', function() {
+    var dataTable = $('.dataTable').DataTable();
+
+    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRowsCount = selectedRows.length;
+
+    if (0 == selectedRowsCount) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare almeno un prodotto"
+        }).open();
+        return false;
+    }
+
+    modal = new $.bsModal('Gestisci i punti esclamativi',
+        {
+            body: "Cosa facciamo?" +
+            "<p class='form-group form-group-default'>" +
+            "<input type='radio' name='operation' value='0' checked/> Toglili<br />" +
+            "<input type='radio' name='operation' value='1'/> Aggiungili" +
+            "</p>",
+            isCancelButton: true,
+            okLabel: 'Ok',
+            cancelLabel: 'Annulla',
+            okButtonEvent: function () {
+                var i = 0;
+                var name = [];
+                $.each(selectedRows, function (k, v) {
+                    name[i] = v.name;
+                    i++;
+                });
+
+                $.ajax({
+                    url: '/blueseal/xhr/NamesManager',
+                    method: 'post',
+                    data: {
+                        action: 'removeExMark',
+                        names: name,
+                        operation: $('input[name="operation"]:checked').val()
+                    }
+                }).done(function(res){
+                    modal.writeBody(res);
+                    modal.setOkEvent(function(){
+                        modal.hide();
+                        dataTable.ajax.reload(null, false);
+                    });
+                });
+            }
+        });
+
 });
 
 $(document).on('bs.names.compare', function () {

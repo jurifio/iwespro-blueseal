@@ -127,6 +127,8 @@ $(document).on('bs.product.details.merge', function (e, element, button) {
                     $(".productDetails select").each(function() {
                         if ("" != $(this).val()) currentDets[$(this).attr('name').split('_')[2]] = $(this).val();
                     });
+                    if ($('#productCategories').length) var categories = $('#productCategories').val();
+                    else var categories = $('#productCategories-selectized').val();
                     $.ajax({
                         url: '/blueseal/xhr/DetailModelUpdateProducts',
                         method: 'POST',
@@ -135,7 +137,7 @@ $(document).on('bs.product.details.merge', function (e, element, button) {
                             details: currentDets,
                             prototypeId: $('.Product_dataSheet').val(),
                             products: row,
-                            category: $('#productCategories').val()
+                            category: categories
                         }
                     }).done(function(res) {
                         modal.body.html(res);

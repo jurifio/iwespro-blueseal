@@ -60,16 +60,17 @@ class CDetailModelUpdateProducts extends AAjaxController
             try {
                 $phpcRepo = \Monkey::app()->repoFactory->create('ProductHasProductCategory');
                 if (is_string($category)) $category = explode(',', $category);
-                foreach ($product as $p) {
-                    $phpcOC = $phpcRepo->findAll();
+                foreach ($products as $p) {
+                    $product = $pRepo->findOneByStringId($p);
+                    $phpcOC = $phpcRepo->findBy(['productVariantId' => $product->productVariantId]);
                     foreach ($phpcOC as $phpc) {
                         $phpc->delete();
                     }
 
                     foreach ($category as $c) {
                         $phpc = $phpcRepo->getEmptyEntity();
-                        $phpc->productId = $p->id;
-                        $phpc->productVariantId = $p->productVariantId;
+                        $phpc->productId = $product->id;
+                        $phpc->productVariantId = $product->productVariantId;
                         $phpc->productCategoryId = $c;
                         $phpc->insert();
                     }

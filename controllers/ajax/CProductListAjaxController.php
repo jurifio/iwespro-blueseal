@@ -28,6 +28,7 @@ class CProductListAjaxController extends AAjaxController
                   concat(`pse`.`name`, ' ', `pse`.`year`)                                                               AS `season`,
                   `pse`.`isActive`                                                                                      AS `isActive`,
                   concat(`p`.`itemno`, ' # ', `pv`.`name`)                                                              AS `cpf`,
+                  `pv`.`description`                                                                                    AS `colorNameManufacturer`,
                   `s`.`name`                                                                                            AS `shop`,
                   concat(ifnull(`p`.`externalId`, ''), '-', ifnull(`dp`.`extId`, ''), '-', ifnull(`ds`.`extSkuId`, '')) AS `externalId`,
                   `pb`.`name`                                                                                           AS `brand`,
@@ -219,6 +220,8 @@ class CProductListAjaxController extends AAjaxController
             $row['mup'] = '<span class="small">';
             $row['mup'] .= implode('<br />', $mup);
             $row['mup'] .= '</span>';
+
+            $row['colorNameManufacturer'] = $val->productVariant->description;
 
             $row['isOnSale'] = $isOnSale;
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
