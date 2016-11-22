@@ -43,15 +43,15 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceId`                        AS `marketplaceId`,
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
-                      if(p.qty >0 , 'sì','no') as stock,
+                      if(p.qty >0 , 'sì','no')                      as stock,
                       mahp.isToWork,
                       mahp.hasError,
                       mahp.isDeleted,
                       cv.timestamp                                  AS visitTimestamp,
                       cv.id                                         AS visitId,
-                      count(distinct cv.id)                          AS visits,
-                      count(distinct cvho.orderId)                   AS conversions,
-                      phpc.productCategoryId as categories,
+                      count(distinct cv.id)                         AS visits,
+                      count(distinct cvho.orderId)                  AS conversions,
+                      phpc.productCategoryId                        as categories,
                       ifnull(c.code, '')                            AS campaignCode
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
@@ -66,13 +66,13 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       JOIN `MarketplaceAccount` `ma`
                         ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`)))
                       JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`))
-                      LEFT JOIN Campaign c ON c.id = ?
-                      LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
-                      LEFT JOIN CampaignVisitHasProduct cvhp ON 
-                          cv.campaignId = cvhp.campaignId AND 
-                          cv.id = cvhp.campaignVisitId AND 
-                          cvhp.productId = `p`.id AND 
-                          cvhp.productVariantId = `p`.productVariantId
+                      LEFT JOIN ( Campaign c
+                        LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
+                        LEFT JOIN CampaignVisitHasProduct cvhp ON 
+                              cv.campaignId = cvhp.campaignId AND 
+                              cv.id = cvhp.campaignVisitId) ON c.id = ? AND 
+                                cvhp.productId = `p`.id AND 
+                                cvhp.productVariantId = `p`.productVariantId
                       LEFT JOIN (CampaignVisitHasOrder cvho
                         JOIN OrderLine ol
                           ON cvho.orderId = ol.orderId)
