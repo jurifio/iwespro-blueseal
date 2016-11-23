@@ -43,15 +43,15 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceId`                        AS `marketplaceId`,
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
-                      if(p.qty >0 , 'sì','no') as stock,
+                      if(p.qty >0 , 'sì','no')                      as stock,
                       mahp.isToWork,
                       mahp.hasError,
                       mahp.isDeleted,
                       cv.timestamp                                  AS visitTimestamp,
                       cv.id                                         AS visitId,
-                      count(distinct cv.id)                          AS visits,
-                      count(distinct cvho.orderId)                   AS conversions,
-                      phpc.productCategoryId as categories,
+                      count(distinct cv.id)                         AS visits,
+                      count(distinct cvho.orderId)                  AS conversions,
+                      phpc.productCategoryId                        as categories,
                       ifnull(c.code, '')                            AS campaignCode
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
@@ -76,11 +76,12 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                               p.productVariantId = ol.productVariantId AND 
                               cvho.campaignId = cv.campaignId AND 
                               cvho.campaignVisitId = cv.id  
-                    WHERE 
-                      
+                    WHERE
+                      ifnull(timestamp,1) >= ifnull(?, ifnull(timestamp,1))
+                      AND ifnull(timestamp,1) <= ifnull(?, ifnull(timestamp,1)) AND 
                       ma.id = ? AND 
                       ma.marketplaceId = ? AND 
-                      `ps`.`isReady` = 1 AND `p`.`qty` > 0
+                      `ps`.`isReady` = 1 AND `p`.`qty` > 0 
                     GROUP BY productId, productVariantId,productCategoryId";
 
 
