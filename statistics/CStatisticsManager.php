@@ -33,6 +33,10 @@ class CStatisticsManager
     /**
      * @var null
      */
+    private $subEntity = null;
+    /**
+     * @var null
+     */
     private $outputField = null;
     /**
      * @var array
@@ -136,31 +140,39 @@ class CStatisticsManager
 
         $query = "SELECT * FROM Log WHERE " . $where . " ORDER BY `time`";
         $logs = $dba->query($query, $bind)->fetchAll();
-        $this->logs;
+        $this->logs = $logs;
         //if (count($filters['entityFilters'])) return $this->filterLogs();
         return $this;
     }
 
-    private function filterLogs($groupDataType)
+    /**
+     * @param $groupDataType
+     */
+    private function filterLogs()
     {
         foreach ($this->logs as $v) {
-            if ($this->compareFilter($v['entityName'], $v['stringId'])) {
+            if ($this->compareEntityWithFilters($v['entityName'], $v['stringId'], $v['eventValue'])) {
                 $this->filteredLogs = $v;
             }
         }
     }
 
-    private function compareEntityWithFilters($entityName, $stringId)
+    /**
+     * @param $entityName
+     * @param $stringId
+     */
+    private function compareEntityWithFilters($entityName, $stringId, $eventValue = null)
     {
         $ent = \Monkey::app()->repoFactory->create($entityName)->findOneByStringId($stringId);
         $return = true;
         foreach ($this->selectedFilters as $name => $val) {
-            if ($entityName === $this->filterOnLogValue) continue;
-            $gotElementValue = $this->getElementValueToCompare($ent->{$name}, $val);
+            if ($name === $this->filterOnLogValue) {
+                $gotElementValue = $eventValue;
+            } else {
+                $gotElementValue = $this->getElementValueToCompare($ent->{$name}, $val);
+            }
             $filterValue = $this->getFilterValueToCompare($val);
-
         }
-
     }
 
     /**
