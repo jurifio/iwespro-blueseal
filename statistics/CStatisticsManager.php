@@ -71,9 +71,9 @@ class CStatisticsManager
 
     protected function createNewStatisticsData($tableName, $keyField, $selectedFilters, $groupDataType, $dateGroup, $fromDate = null, $toDate = null) {
         $fromDate = (false !== date_parse($fromDate)) ? $fromDate : $this->firstDate();
-        $toDate = (false !== date_parse($fromDate) or ())
+        //$toDate = (false !== date_parse($fromDate) or ())
         if ($this->isDbTable($tableName)) {
-            foreach()
+            //foreach($){}
             $repo = \Monkey::app()->repoFactory->create($tableName);
             $oc = $repo->findBy($selectedFilters);
 
