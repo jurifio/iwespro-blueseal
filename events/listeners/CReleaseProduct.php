@@ -13,12 +13,12 @@ class CReleaseProduct extends CLogging
 {
     public function run($eventName)
     {
-        $releaseDate = $this->getParam('releaseDate');
-        $userId = $this->getParam('userId');
-        $user = $this->getParam('user');
+        $releaseDate = $this->getParameter('releaseDate');
+        $userId = $this->getParameter('userId');
+        $user = $this->getParameter('user');
         if ($user) $userId = $user->id;
         if (!$releaseDate) $releaseDate = date('Y-m-d H:i:s');
-        $shp = $this->getParam('ShopHasProductE');
+        $shp = $this->getParameter('ShopHasProductE');
 
         if ($shp) {
             if (!$shp->releaseDate) {
@@ -27,7 +27,7 @@ class CReleaseProduct extends CLogging
                 $this->insertLogRow($eventName, $userId, null, $shp->getEntityName(), $shp->printId(), $releaseDate);
             }
         } else {
-            $product = $this->getParam('Product');
+            $product = $this->getParameter('Product');
             if (($product) && ($product->productPhoto->count())) {
                 foreach ($product->shopHasProduct as $shp) {
                     $qty = 0;

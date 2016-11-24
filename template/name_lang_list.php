@@ -26,7 +26,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="name_lang_list"
-                               data-controller="NameTranslateLangListAjaxController"
+                               data-controller="NameTranslateLangListAjaxController?nomarks=1"
                                data-lang="<?php echo $langId; ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"

@@ -5,6 +5,7 @@ namespace bamboo\events\listeners;
 use bamboo\core\events\AEventListener;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\application\AApplication;
+use bamboo\core\db\pandaorm\entities\AEntity;
 
 /**
  * Class COtherTest
@@ -19,10 +20,10 @@ class CLogging extends AEventListener
 
     private $backtrace = null;
 
-    public function __construct(AApplication $app, $params = [], $backtrace = [])
+    public function __construct(AApplication $app, $params = [], $backtrace = [], $userId = null)
     {
         parent::__construct($app, $params);
-        $this->user = \Monkey::app()->getUser();
+        $this->user = (!$userId) ? \Monkey::app()->getUser() : \Monkey::app()->repoFactory->create('User')->findOneBy(['id' => $userId]);
         $this->backtrace = $backtrace;
     }
 
@@ -31,15 +32,14 @@ class CLogging extends AEventListener
      */
     public function run($eventName)
     {
-        $value = $this->getParam('value');
-        $entityName = $this->getParam('entityName');
-        $stringId = $this->getParam('stringId');
-        $time = $this->getParam('time');
-        $actionName = $this->getParam('actionName');
-        $user = $this->
-        $userId =
+        $value = $this->getParameter('value');
+        $entityName = $this->getParameter('entityName');
+        $stringId = $this->getParameter('stringId');
+        $time = $this->getParameter('time');
+        $actionName = $this->getParameter('actionName');
+        $userId = $this->getParameter('userId');
 
-        $this->insertLogRow($eventName, $actionName, $value, $entityName, $stringId, $time, $actionName);
+        $this->insertLogRow($eventName, $userId, $value, $entityName, $stringId, $time, $actionName);
     }
 
     protected function insertLogRow($eventName, $userId = null, $value = null, $entityName = null, $stringId = null, $time = null, $actionName = null) {
@@ -81,5 +81,48 @@ class CLogging extends AEventListener
 
     protected function getActionByClass(){
         return substr((new \ReflectionClass($this))->getShortName(), 1);
+    }
+
+    /**
+     * Se una entity viene eseguita in asincrono vengono passati in un array la sua classe e le sue chiavi
+     * @param $obj
+     */
+
+    protected function parseEntities($obj) {
+          if ($obj instanceof AEntity) {
+             $EntityName = $obj->getEntityName();
+             $keys = $obj->printId();
+          } else {
+              $className = explode('\\', $obj['className']);
+             $EntityName = substr($className[count($className)-1], 1);
+             $keys = $obj['stringId'];
+          }
+          return ['entityName' => $EntityName, 'stringId' => $keys];
+    }
+
+    protected function getEntity($var) {
+        if ($var instanceof AEntity) return $var;
+        elseif (is_array($var) && 2 == count($var)){
+                if (array_key_exists('entityName', $var)) {
+                    $entity = $var['entityName'];
+                    $stringId = $var['stringId'];
+                } else if (array_key_exists('className', $var)) {
+                    $parsed = $this->parseEntities($var);
+                    $entity = $parsed['entityName'];
+                    $stringId = $parsed['stringId'];
+                }
+            return \Monkey::app()->repoFactory->create($entity)->findOneByStringId($stringId);
+        } else {
+            return null;
+        }
+    }
+
+    protected function getParameter($name = null) {
+        $param = $this->getParam($name);
+        $res = $this->getEntity($param);
+        if (null === $res) {
+            return $param;
+        }
+        return $res;
     }
 }
