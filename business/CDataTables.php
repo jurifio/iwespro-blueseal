@@ -346,12 +346,12 @@ class CDataTables
      */
     protected function likeSearch($string,$startWith = true)
     {
-        $string = str_replace('.','\.', $string);
-        $string = str_replace('*','.*', $string);
         if(!$startWith) {
             $string = ".*".$string;
         }
-        return $string.".*";
+        //$string = str_replace('.','\.', $string);
+        //$string = str_replace('*','.*', $string);
+        return $string;//$string.".*";
     }
 
     /**
