@@ -24,26 +24,31 @@ $(document).on('bs.lists.generate.csv', function () {
     var url = table.DataTable().ajax.url();
     var data = table.DataTable().ajax.params();
     //console.log(data);
+    Pace.ignore(function() {
+        "use strict";
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: data,
+            dataType: 'JSON'
+        }).done(function (res) {
+            var csv = '';
+            var str = '';
 
-    $.ajax({
-        url: url,
-        method: 'GET',
-        data: data,
-        dataType: 'JSON'
-    }).done(function (res) {
-        var csv = '';
-        var str = '';
-
-        for (var i in res.data) {
-            var line = '';
-            for (var index in res.data[i]) {
-                if (line != '') line += ',';
-                line += res.data[i][index];
+            for (var i in res.data) {
+                var line = '';
+                for (var index in res.data[i]) {
+                    if (line != '') line += ',';
+                    var val = res.data[i][index];
+                    //OriginalString.replace(/(<([^>]+)>)/ig,"");
+                    //if($(val).find('table').length) val = 'escluso';
+                    line += encodeURIComponent(val);
+                }
+                str += line + '%0A';
             }
-            str += line + '%0A';
-        }
-        modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
-    });
+            modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
+        });
 
+    });
     var data = table.data('params');
 });
