@@ -42,7 +42,7 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">code</th>
-                                <th data-slug="firstAccess"
+                                <th data-slug="firstVisit"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc" class="center">Primo Accesso</th>
@@ -54,7 +54,7 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Visite Prodotti</th>
-                                <th data-slug="converions"
+                                <th data-slug="conversions"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Conversioni</th>
