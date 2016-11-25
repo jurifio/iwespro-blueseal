@@ -38,6 +38,14 @@
                                      data-searchable="true"
                                      data-orderable="true"
                                      class="center">Italiano</th>
+                                <th  data-slug="category"
+                                     data-searchable="false"
+                                     data-orderable="false"
+                                     class="center">Categorie</th>
+                                <th  data-slug="count"
+                                     data-searchable="false"
+                                     data-orderable="false"
+                                     class="center">N. Prodotti</th>
                             </tr>
                             </thead>
                             <tbody>

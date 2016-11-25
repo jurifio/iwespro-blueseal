@@ -98,8 +98,7 @@
         data-rel="tooltip"
         data-title="Filtra per punti esclamativi"
         data-placement="bottom"
-        ></bs-toolbar-button
-        data-tag="a">
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

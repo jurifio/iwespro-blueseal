@@ -24,7 +24,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_names_list"
-                               data-controller="ProductNamesListAjaxController"
+                               data-controller="ProductNamesListAjaxController?marks=none"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000, 3000, 5000"
@@ -105,6 +105,16 @@
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Rimuovi i punti esclamativi dai nomi selezionati"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-exclamation-circle"
+            data-permission="/admin/product/edit"
+            data-event="bs.filterByMark"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Filtra per punti esclamativi"
             data-placement="bottom"
         ></bs-toolbar-button>
 </bs-toolbar>
