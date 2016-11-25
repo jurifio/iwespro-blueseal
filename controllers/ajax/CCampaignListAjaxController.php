@@ -25,16 +25,16 @@ class CCampaignListAjaxController extends AAjaxController
         $sample = $this->app->repoFactory->create('Campaign')->getEmptyEntity();
 
         $query = "SELECT
-                      c.id as campaignId,
+                      c.id as id,
                       c.code as campaignCode,
                       c.name as campaignName,
                       c.type as campaignType,
-                      (select min(timestamp) from CampaignVisit where CampaignVisit.campaignId = c.id) as firstVisit,
+                      ifnull((select min(timestamp) from CampaignVisit where CampaignVisit.campaignId = c.id),'Mai') as firstVisit,
                       count(distinct cv.id) as visits,
                       count(distinct cvhp.campaignVisitId) as productVisits,
                       count(o.id) as conversions,
-                      sum(o.netTotal) as totConversion,
-                      avg(o.netTotal) as scontrinoMedio
+                      ifnull(round(sum(o.netTotal)),0) as totConversion,
+                      ifnull(round(avg(o.netTotal)),0) as scontrinoMedio
                     FROM
                       Campaign c  
                       LEFT JOIN CampaignVisit cv on cv.campaignId = c.id  
@@ -72,7 +72,16 @@ class CCampaignListAjaxController extends AAjaxController
 
         foreach ($campaigns as $campaignData) {
 
-            $row = $campaignData;
+            $row['id'] = $campaignData['id'];
+            $row['campaignCode'] = $campaignData['campaignCode'];
+            $row['campaignName'] = $campaignData['campaignName'];
+            $row['campaignType'] = $campaignData['campaignType'];
+            $row['firstVisit'] = $campaignData['firstVisit'];
+            $row['visits'] = $campaignData['visits'];
+            $row['productVisits'] = $campaignData['productVisits'];
+            $row['conversions'] = $campaignData['conversions'];
+            $row['totConversion'] = $campaignData['totConversion'];
+            $row['scontrinoMedio'] = $campaignData['scontrinoMedio'];
 
             $response['data'][] = $row;
         }
