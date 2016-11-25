@@ -55,8 +55,12 @@ class CNameTranslateLangListAjaxController extends AAjaxController
 
         $datatable->addCondition('langId',[1]);
         $datatable->addCondition('name',[''],true);
-        if (\Monkey::app()->router->request()->getRequestData('nomarks')) {
-            $datatable->addIgnobleCondition('`pn`.`name`', '% !', true);
+
+        $mark = \Monkey::app()->router->request()->getRequestData('marks');
+        if ('con' == $mark) {
+            $datatable->addIgnobleCondition('name', '% !', false);
+        } elseif ('senza' == $mark) {
+            $datatable->addIgnobleCondition('name', '% !', true);
         }
 
         $pnRepo = \Monkey::app()->repoFactory->create('ProductName');

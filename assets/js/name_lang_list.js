@@ -1,4 +1,4 @@
-$(document).on('focusout', $('.nameId').val(), function(event) {
+$(document).on('focusout', '.nameId', function(event) {
     var changed =  $(event.target);
     var translate = changed.val();
     if ("" !== translate) {
@@ -25,4 +25,41 @@ $(document).on('focusout', $('.nameId').val(), function(event) {
             });
         });
     }
+});
+
+$(document).on('bs.filterByMark', function(e){
+    e.preventDefault();
+    var dataTable = $('.dataTable').DataTable();
+    var url = dataTable.ajax.url();
+    var split = url.split('marks=');
+    var marksValue = split[1];
+    var address = split[0];
+
+    modal = new $.bsModal(
+        'Filtra i punti esclamativi',
+        {
+            body: '<div class="filterMarks"><p>' +
+                '<input type="radio" name="exclamation" value="tutto" /> Tutto' +
+            '</p>' +
+            '<p>' +
+                '<input type="radio" name="exclamation" value="senza" /> Senza punti esclamativi' +
+            '</p>' +
+            '<p>' +
+                '<input type="radio" name="exclamation" value="con" /> Solo con i punti esclamativi ' +
+            '</p>' +
+            '</div>',
+            okButtonEvent: function() {
+                dataTable.ajax.url(address + 'marks=' + $('[name="exclamation"]:checked').val());
+                dataTable.ajax.reload();
+                modal.hide();
+            },
+            okLabel: 'Filtra',
+            isCancelButton: false,
+        }
+    );
+
+    $('[name="exclamation"]').each(function(){
+        var val = $(this).val();
+        if (val == marksValue) $(this).prop('checked', true);
+    });
 });

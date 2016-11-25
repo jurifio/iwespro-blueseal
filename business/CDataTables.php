@@ -220,7 +220,9 @@ class CDataTables
             $conditions[] = $this->buildCondition($condition[0],$condition[1],$condition[2]);
         }
         foreach ($this->ignobleConditions as $condition) {
-            $ingnobleCond = ' AND `' . $condition[0] . "` LIKE '" . $condition[1] . "'";
+            $not = '';
+            if ($condition[2]) $not = 'NOT';
+            $ingnobleCond = ' AND `' . $condition[0] . "` " . $not . " LIKE '" . $condition[1] . "'";
         }
         $columnsFilter = [];
         if($count != 'full'){
