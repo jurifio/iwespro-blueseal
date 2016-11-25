@@ -43,15 +43,15 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceId`                        AS `marketplaceId`,
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
-                      if(p.qty >0 , 'sì','no')                      as stock,
+                      if(p.qty >0 , 'sì','no')                      AS stock,
                       mahp.isToWork,
                       mahp.hasError,
                       mahp.isDeleted,
                       cv.timestamp                                  AS visitTimestamp,
                       cv.id                                         AS visitId,
-                      count(distinct cv.id)                         AS visits,
+                      count(DISTINCT cv.id)                         AS visits,
                       count(distinct cvho.orderId)                  AS conversions,
-                      phpc.productCategoryId                        as categories,
+                      phpc.productCategoryId                        AS categories,
                       ifnull(c.code, '')                            AS campaignCode
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
@@ -66,16 +66,17 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       JOIN `MarketplaceAccount` `ma`
                         ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`)))
                       JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`))
-                      LEFT JOIN Campaign c ON c.id = ?
-                      LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId 
-                      LEFT JOIN CampaignVisitHasProduct cvhp ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id
+                      JOIN Campaign c on c.id = ? 
+                      LEFT JOIN (CampaignVisit cv  
+                          JOIN CampaignVisitHasProduct cvhp ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id )
+                      ON c.id = cv.campaignId AND cvhp.productId = p.id AND cvhp.productVariantId = p.productVariantId
                       LEFT JOIN (
-                        CampaignVisitHasOrder cvho JOIN OrderLine ol 
-                          ON cvho.orderId = ol.orderId ) 
-                            ON p.id = ol.productId AND 
-                              p.productVariantId = ol.productVariantId AND 
-                              cvho.campaignId = cv.campaignId AND 
-                              cvho.campaignVisitId = cv.id  
+                            CampaignVisitHasOrder cvho JOIN 
+                            OrderLine ol ON cvho.orderId = ol.orderId )
+                                ON cvho.campaignVisitId = cv.id and 
+                                   cvho.campaignId = cv.campaignId and 
+                                   p.id = ol.productId AND
+                                   p.productVariantId = ol.productVariantId 
                     WHERE
                       ifnull(timestamp,1) >= ifnull(?, ifnull(timestamp,1))
                       AND ifnull(timestamp,1) <= ifnull(?, ifnull(timestamp,1)) AND 
@@ -84,10 +85,13 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `ps`.`isReady` = 1 AND `p`.`qty` > 0 
                     GROUP BY productId, productVariantId,productCategoryId";
 
+        /**
+         *
+         */
 
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
-        $timeFrom = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
-        $timeTo = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('endDate'));
+        $timeFrom = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('startDate'));
+        $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
         $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
         $queryParameters = [$campaign->id, $timeFrom, $timeTo, $marketplaceAccount->id, $marketplaceAccount->marketplaceId];
