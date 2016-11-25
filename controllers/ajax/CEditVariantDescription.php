@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\exceptions\BambooException;
+use bamboo\core\utils\slugify\CSlugify;
 use bamboo\ecommerce\views\VBase;
 
 /**
@@ -22,27 +23,58 @@ class CEditVariantDescription extends AAjaxController
     {
         $codes = \Monkey::app()->router->request()->getRequestData('codes');
         $colorNameManufacturer = \Monkey::app()->router->request()->getRequestData('colorNameManufacturer');
+        $groupId = \Monkey::app()->router->request()->getRequestData('groupId');
         $pvR = \Monkey::app()->repoFactory->create('ProductVariant');
         $dba = \Monkey::app()->dbAdapter;
         $dba->beginTransaction();
 
-        if (!$colorNameManufacturer || !count($codes)) {
+        if (!count($codes)) {
             \Monkey::app()->router->response()->raiseProcessingError();
             return 'uno o più dati necessari per procedere non sono stati recapitati';
         }
         try {
-            foreach($codes as $c) {
-                $exploded = explode('-', $c);
-                $pvE = $pvR->findOne([$exploded[1]]);
-                $pvE->description = $colorNameManufacturer;
-                $pvE->update();
+            if ($colorNameManufacturer) {
+                foreach ($codes as $c) {
+                    $exploded = explode('-', $c);
+                    $pvE = $pvR->findOne([$exploded[1]]);
+                    $pvE->description = $colorNameManufacturer;
+                    $pvE->update();
+                }
+            }
+
+            if ($groupId) {
+
+                foreach ($codes as $c) {
+                    $exploded = explode('-', $c);
+                    $phpcgR = \Monkey::app()->repoFactory->create('ProductHasProductColorGroup');
+                    $phpcgO = $phpcgR->findBy(
+                        [
+                            'productId' => $exploded[0],
+                            'productVariantId' => $exploded[1]
+                        ]
+                    );
+
+                    $pcgR = \Monkey::app()->repoFactory->create('ProductColorGroup');
+                    $pcgE = $pcgR->findOneBy(['id' => $groupId]);
+                    if (!$pcgE) throw new BambooException('OOPS! Il gruppo colore non esiste');
+
+                    foreach ($phpcgO as $O) {
+                        $O->delete();
+                    }
+
+                    $phpcgE = $phpcgR->getEmptyEntity();
+                    $phpcgE->productId = $exploded[0];
+                    $phpcgE->productVariantId = $exploded[1];
+                    $phpcgE->productColorGroupId = $groupId;
+                    $phpcgE->insert();
+                }
             }
             $dba->commit();
             return 'I prodotti sono stati aggiornati correttamente';
         } catch (BambooException $e) {
             $dba->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();
-            return 'uno o più dati necessari per procedere non sono stati recapitati';
+            return 'C\'è stato un problema:<br />' . $e->getMessage();
         }
     }
 }
