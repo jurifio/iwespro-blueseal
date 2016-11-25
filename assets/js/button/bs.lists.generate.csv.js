@@ -22,14 +22,15 @@ $(document).on('bs.lists.generate.csv', function () {
     );
 
     var url = table.DataTable().ajax.url();
-    var data = table.DataTable().ajax.params();
+    var tempData = table.DataTable().ajax.params();
+    tempData.length = 0;
     //console.log(data);
     Pace.ignore(function() {
         "use strict";
         $.ajax({
             url: url,
             method: 'GET',
-            data: data,
+            data: tempData,
             dataType: 'JSON'
         }).done(function (res) {
             var csv = '';
@@ -50,5 +51,5 @@ $(document).on('bs.lists.generate.csv', function () {
         });
 
     });
-    var data = table.data('params');
+    //var data = table.data('params');
 });
