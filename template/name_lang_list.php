@@ -43,6 +43,10 @@
                                     data-searchable="true"
                                     data-orderable="false"
                                     class="center sorting categoryFilterType">Categorie</th>
+                                <th data-slug="count"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">N. Prodotti</th>
                                 <th data-slug="trans"
                                     data-searchable="false"
                                     data-orderable="false"
