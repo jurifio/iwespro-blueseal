@@ -869,7 +869,7 @@ $.decodeGetStringFromUrl = function(url) {
     "use strict";
     var getString = url.split('\?',2);
     if(getString.length == 0) return false;
-    if(getString.length == 1) return "";
+    if(getString.length == 1) return url;
     if(getString.length == 2) return $.extend({baseUrl:getString[0]},$.decodeGetString(getString[1]));
 };
 
