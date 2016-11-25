@@ -83,8 +83,32 @@ class CNameTranslateListAjaxController extends AAjaxController
 
             $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?name=' . urlencode($val->name) . '">' . $val->name . '</a>' : $val->name;
+            //$response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?name=' . urlencode($val->name) . '">' . $val->name . '</a>' : $val->name;
+            $response['data'][$i]['name'] = $val->name;
             $response['data'][$i]['lang'] = $html;
+
+            $res = \Monkey::app()->dbAdapter->query(
+                "SELECT `p`.`id` as `productId`, `p`.`productVariantId` FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P', 'I') AND (`p`.`qty` > 0) AND (`p`.`dummyPicture` NOT LIKE '%bs-dummy%')",
+                str_replace(' !', '', [$val->name]))->fetchAll();
+            $response['data'][$i]['count'] = count($res); //$products->count();
+
+            $iterator = 0;
+            $cats = [];
+            foreach($res as $v) {
+                if (10 == $iterator) break;
+                $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                foreach($p->productCategoryTranslation as $cat) {
+                    $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
+                    unset($path[0]);
+                    $newCat = '<span class="small">'.implode('/',array_column($path, 'slug')).'</span><br />';
+                    if (in_array($newCat, $cats)) continue;
+                    $cats[] = $newCat;
+                    $iterator++;
+                    if (10 == $iterator) break;
+                }
+            }
+
+            $response['data'][$i]['category'] = implode('', $cats);
 
             $i++;
         }
