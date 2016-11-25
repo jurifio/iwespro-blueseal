@@ -405,7 +405,7 @@ class CDataTables
      */
     protected function limit()
     {
-        if($this->limit === 0) {
+        if($this->limit === "0") {
             return " ";
         }elseif($this->limit){
             return " LIMIT ".$this->offset.",".$this->limit;

@@ -48,6 +48,8 @@ $(document).on('bs.lists.generate.csv', function () {
                 str += line + '%0A';
             }
             modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
+        }).fail(function(res) {
+            modal.writeBody('Si è verificato un errore :/ riprova con meno elementi')
         });
 
     });
