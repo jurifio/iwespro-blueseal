@@ -905,6 +905,9 @@ $.encodeGetString = function(o) {
 $.addGetParam = function(s,k,v) {
     "use strict";
     var c = $.decodeGetStringFromUrl(s);
+    if(c.length == 0) {
+        c = [];
+    }
     c[k] = v;
     return $.encodeGetString(c);
 };
