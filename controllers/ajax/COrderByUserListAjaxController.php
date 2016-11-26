@@ -57,7 +57,39 @@ class COrderByUserListAjaxController extends AAjaxController
         $em = $this->app->entityManagerFactory->create('Shop');
         $shops = $em->findAll("limit 999", "");
 
-        $datatable = new CDataTables('vBluesealOrdersByUsersList', ['id'], $_GET);
+        $sql =
+'select 
+  concat(`o`.`id`) AS `id`,
+  concat(`ud`.`name`,\' \',`ud`.`surname`) AS `user`,
+  `ud`.`name` AS `name`,`ud`.`surname` AS `surname`,
+  `u`.`email` AS `email`,
+  `ua`.`city` AS `city`,
+  `c`.`name` AS `country`,
+  `o`.`status` AS `statusCode`,
+  concat(`o`.`orderDate`) AS `orderDate`,
+  group_concat(`ol`.`productId`,\'-\',`ol`.`productVariantId` separator \',\') AS `product`,
+  group_concat(`s`.`title` separator \',\') AS `shop`,
+  `os`.`title` AS `orderStatus`,
+  group_concat(`pb`.`name` separator \',\') AS `productBrand`,
+  `opm`.`name` AS `paymentMethod`,
+  `o`.`lastUpdate` as `lastUpdate`
+  from
+  ((((((((((((`Order` `o` 
+  join `User` `u`)
+  join `UserAddress` `ua` on(((`ua`.`id` = `o`.`billingAddressId`) or (`ua`.`id` = `o`.`shipmentAddressId`)))) 
+  join `Country` `c` on((`ua`.`countryId` = `c`.`id`))) 
+  join `UserDetails` `ud`)
+  join `OrderPaymentMethod` `opm`) 
+  join `OrderStatus` `os`)
+  join `OrderStatusTranslation` `oshl`) 
+  join `OrderLine` `ol`)
+  join `Shop` `s`)
+  join `OrderLineStatus` `ols`) 
+  join `Product` `p`)
+  join `ProductBrand` `pb`) 
+  where ((`o`.`userId` = `u`.`id`) and (`ud`.`userId` = `u`.`id`) and (`o`.`orderPaymentMethodId` = `opm`.`id`) and (`o`.`status` = `os`.`code`) and (`o`.`status` like \'ORD%\') and (`oshl`.`orderStatusId` = `os`.`id`) and (`ol`.`orderId` = `o`.`id`) and (`s`.`id` = `ol`.`shopId`) and (`ol`.`productId` = `p`.`id`) and (`ol`.`productVariantId` = `p`.`productVariantId`) and (`p`.`productBrandId` = `pb`.`id`) and (`ol`.`status` = convert(`ols`.`code` using utf8)) and (`o`.`shipmentAddressId` is not null)) group by `o`.`id`';
+
+        $datatable = new CDataTables($sql, ['id'], $_GET, true);
 	    $datatable->addCondition('statusCode',['ORD_CANCEL'],true);
 	    $datatable->addSearchColumn('orderLineStatus');
 	    $datatable->addSearchColumn('shop');
