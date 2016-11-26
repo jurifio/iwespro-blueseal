@@ -178,6 +178,7 @@ class COrderByUserListAjaxController extends AAjaxController
 
             $response['data'][$i]['margine'] = $val->netTotal - $friendsRev;
             $response['data'][$i]["lastUpdate"] = isset($since) ? $since : "Mai";
+            $response['data'][$i]["data"] = $val->lastUpdate;
             $response['data'][$i]["user"] = '<span>'.$val->userDetails->name . " " . $val->userDetails->surname . '</span>';
             if(isset($val->rbacRole) && count($val->rbacRole)>0){
                 $response['data'][$i]["user"] .= ' <i class="fa fa-diamond"></i>';

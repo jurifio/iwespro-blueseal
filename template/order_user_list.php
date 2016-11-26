@@ -82,6 +82,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Metodo pagamento</th>
+                                <th data-slug="data"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Data ordine</th>
                             </tr>
                             </thead>
                             <tbody>
