@@ -41,9 +41,11 @@ $(document).on('bs.lists.generate.csv', function () {
                 for (var index in res.data[i]) {
                     if (line != '') line += ',';
                     var val = res.data[i][index];
+                    var div = document.createElement("div");
+                    div.innerHTML = val;
                     //OriginalString.replace(/(<([^>]+)>)/ig,"");
                     //if($(val).find('table').length) val = 'escluso';
-                    line += encodeURIComponent(val);
+                    line += encodeURIComponent(div.innerText);
                 }
                 str += line + '%0A';
             }
