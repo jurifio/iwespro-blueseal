@@ -869,7 +869,7 @@ $.decodeGetStringFromUrl = function(url) {
     "use strict";
     var getString = url.split('\?',2);
     if(getString.length == 0) return false;
-    if(getString.length == 1) return "";
+    if(getString.length == 1) return {baseUrl:url};
     if(getString.length == 2) return $.extend({baseUrl:getString[0]},$.decodeGetString(getString[1]));
 };
 
@@ -902,9 +902,9 @@ $.encodeGetString = function(o) {
     return r+'?'+a.join('&');
 };
 
-$.addGetParam = function(s,k,v) {
+$.addGetParam = function(url,field,val) {
     "use strict";
-    var c = $.decodeGetStringFromUrl(s);
-    c[k] = v;
+    var c = $.decodeGetStringFromUrl(url);
+    c[field] = val;
     return $.encodeGetString(c);
 };

@@ -220,7 +220,9 @@ class CDataTables
             $conditions[] = $this->buildCondition($condition[0],$condition[1],$condition[2]);
         }
         foreach ($this->ignobleConditions as $condition) {
-            $ingnobleCond = ' AND `' . $condition[0] . "` LIKE '" . $condition[1] . "'";
+            $not = '';
+            if ($condition[2]) $not = 'NOT';
+            $ingnobleCond = ' AND `' . $condition[0] . "` " . $not . " LIKE '" . $condition[1] . "'";
         }
         $columnsFilter = [];
         if($count != 'full'){
@@ -297,7 +299,7 @@ class CDataTables
             $condition = rtrim($condition,', ').') ';
         }
         //non è un array quindi sono altri cazzi, di sicuro una like
-        elseif($not) {
+        elseif($not && $values !== null) {
             $condition.= " NOT RLIKE ? ";
             $params[] = $this->likeSearch($values,$likeStartsWith);
         } elseif(strpos($values,'-') === 0) {
@@ -329,8 +331,11 @@ class CDataTables
             $values = substr($values,5);
             return $this->buildCondition($field,explode(',',$values));
         } elseif(strpos($values,'#in:') === 0) {
-            $values = substr($values,0,4);
-            return $this->buildCondition($field,explode($values,','));
+            $values = substr($values, 0, 4);
+            return $this->buildCondition($field, explode($values, ','));
+        } elseif ($values === null) {
+            $condition.= ' IS ' . (($not) ? 'NOT ': '') . '?';
+            $params[] = $values;
         } else {
             $condition.= " RLIKE ? ";
             $params[] = $this->likeSearch($values,$likeStartsWith);
@@ -346,12 +351,12 @@ class CDataTables
      */
     protected function likeSearch($string,$startWith = true)
     {
-        $string = str_replace('.','\.', $string);
-        $string = str_replace('*','.*', $string);
         if(!$startWith) {
             $string = ".*".$string;
         }
-        return $string.".*";
+        //$string = str_replace('.','\.', $string);
+        //$string = str_replace('*','.*', $string);
+        return $string;//$string.".*";
     }
 
     /**
@@ -403,7 +408,9 @@ class CDataTables
      */
     protected function limit()
     {
-        if($this->limit){
+        if($this->limit === "0") {
+            return " ";
+        }elseif($this->limit){
             return " LIMIT ".$this->offset.",".$this->limit;
         }else{
             return " OFFSET ".$this->offset;

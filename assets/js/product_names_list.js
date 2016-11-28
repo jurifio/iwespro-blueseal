@@ -379,3 +379,40 @@ $(document).on('bs.names.compare', function () {
         }
     );
 });
+
+$(document).on('bs.filterByMark', function(e){
+    e.preventDefault();
+    var dataTable = $('.dataTable').DataTable();
+    var url = dataTable.ajax.url();
+    var decodedUrl = $.decodeGetStringFromUrl(url);
+    var marksValue = decodedUrl['marks'];
+
+    modal = new $.bsModal(
+        'Filtra i punti esclamativi',
+        {
+            body: '<div class="filterMarks"><p>' +
+            '<input type="radio" name="exclamation" value="tutto" /> Tutto' +
+            '</p>' +
+            '<p>' +
+            '<input type="radio" name="exclamation" value="senza" /> Senza punti esclamativi' +
+            '</p>' +
+            '<p>' +
+            '<input type="radio" name="exclamation" value="con" /> Solo con i punti esclamativi ' +
+            '</p>' +
+            '</div>',
+            okButtonEvent: function() {
+                var newUrl = $.addGetParam(url, 'marks', $('[name="exclamation"]:checked').val());
+                dataTable.ajax.url(newUrl);
+                dataTable.ajax.reload();
+                modal.hide();
+            },
+            okLabel: 'Filtra',
+            isCancelButton: false,
+        }
+    );
+
+    $('[name="exclamation"]').each(function(){
+        var val = $(this).val();
+        if (val == marksValue) $(this).prop('checked', true);
+    });
+});

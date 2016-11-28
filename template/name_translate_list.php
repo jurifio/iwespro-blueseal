@@ -36,6 +36,14 @@
                                     data-orderable="true"
                                     data-default-order="desc"
                                     class="center sorting">Termine</th>
+                                <th data-slug="category"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center sorting">Categorie</th>
+                                <th data-slug="count"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center sorting">N. Prodotti</th>
                                 <th data-slug="lang"
                                     data-searchable="false"
                                     data-orderable="false"

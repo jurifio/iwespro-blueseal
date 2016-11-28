@@ -2,6 +2,7 @@
 
 namespace bamboo\events\listeners;
 
+use bamboo\core\db\pandaorm\entities\AEntity;
 use bamboo\core\events\AEventListener;
 use bamboo\core\exceptions\BambooException;
 
@@ -13,15 +14,15 @@ class COrderStatusLog extends CLogging
 {
     public function run($eventName)
     {
-        $time = $this->getParam('time');
+        $userId = $this->getParameter('userId');
+        $time = $this->getParameter('time');
         if (!$time) $time = date('Y-m-d H:i:s');
-        $order = $this->getParam('order');
-        if (!$order) $order = $this->getParam('orderLine');
-        $userId = $this->getParam('UserId');
-        if ($order) {
-            $value = $this->getParam('status');
-            if (!$value) $order->status;
-            $this->insertLogRow($eventName, $userId, $value, $order->getEntityName(), $order->printId(), $time);
+        $order = $this->getParameter('order');
+        if (!$order) $order = $this->getParameter('orderLine');
+        $value = $this->getParameter('status');
+        if (!$value) {
+            $value = $order->status;
         }
+        $this->insertLogRow($eventName, $userId, $value, $order->getEntityName(), $order->printId(), $time);
     }
 }

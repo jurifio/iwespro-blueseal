@@ -1564,6 +1564,17 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/blueseal/marketing/campaigns(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

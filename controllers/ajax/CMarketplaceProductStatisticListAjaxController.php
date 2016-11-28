@@ -43,15 +43,15 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceId`                        AS `marketplaceId`,
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
-                      if(p.qty >0 , 'sì','no') as stock,
+                      if(p.qty >0 , 'sì','no')                      AS stock,
                       mahp.isToWork,
                       mahp.hasError,
                       mahp.isDeleted,
                       cv.timestamp                                  AS visitTimestamp,
                       cv.id                                         AS visitId,
-                      count(distinct cv.id)                          AS visits,
-                      count(distinct cvho.orderId)                   AS conversions,
-                      phpc.productCategoryId as categories,
+                      count(DISTINCT cv.id)                         AS visits,
+                      count(distinct cvho.orderId)                  AS conversions,
+                      phpc.productCategoryId                        AS categories,
                       ifnull(c.code, '')                            AS campaignCode
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
@@ -60,35 +60,41 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       JOIN `Shop` `s` ON ((`s`.`id` = `shp`.`shopId`))
                       JOIN `ProductSeason` `pss` ON ((`pss`.`id` = `p`.`productSeasonId`))
                       JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`))
-                      JOIN ProductHasProductCategory phpc on (p.id = phpc.productId and p.productVariantId = phpc.productVariantId)
+                      JOIN ProductHasProductCategory phpc ON (p.id = phpc.productId AND p.productVariantId = phpc.productVariantId)
                       JOIN `MarketplaceAccountHasProduct` `mahp`
                         ON (((`mahp`.`productId` = `p`.`id`) AND (`mahp`.`productVariantId` = `p`.`productVariantId`)))
                       JOIN `MarketplaceAccount` `ma`
                         ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`)))
                       JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`))
-                      LEFT JOIN Campaign c ON c.id = ?
-                      LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
-                      LEFT JOIN CampaignVisitHasProduct cvhp ON 
-                          cv.campaignId = cvhp.campaignId AND 
-                          cv.id = cvhp.campaignVisitId AND 
-                          cvhp.productId = `p`.id AND 
-                          cvhp.productVariantId = `p`.productVariantId
-                      LEFT JOIN (CampaignVisitHasOrder cvho
-                        JOIN OrderLine ol
-                          ON cvho.orderId = ol.orderId)
-                        ON ol.productId = p.id AND ol.productVariantId = p.productVariantId AND cv.campaignId = cvho.campaignId AND
-                           cvhp.campaignVisitId = cvho.campaignVisitId
-                    WHERE ma.id = ? AND ma.marketplaceId = ? AND 
-                        (((`ps`.`isReady` = 1) AND (`p`.`qty` > 0)) OR (`m`.`id` IS NOT NULL))
-                          AND ifnull(timestamp,1) >= ifnull(?, ifnull(timestamp,1))
-                          AND ifnull(timestamp,1) <= ifnull(?, ifnull(timestamp,1))
+                      JOIN Campaign c on c.id = ? 
+                      LEFT JOIN (CampaignVisit cv  
+                          JOIN CampaignVisitHasProduct cvhp ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id )
+                      ON c.id = cv.campaignId AND cvhp.productId = p.id AND cvhp.productVariantId = p.productVariantId
+                      LEFT JOIN (
+                            CampaignVisitHasOrder cvho JOIN 
+                            OrderLine ol ON cvho.orderId = ol.orderId )
+                                ON cvho.campaignVisitId = cv.id and 
+                                   cvho.campaignId = cv.campaignId and 
+                                   p.id = ol.productId AND
+                                   p.productVariantId = ol.productVariantId 
+                    WHERE
+                      ifnull(timestamp,1) >= ifnull(?, ifnull(timestamp,1))
+                      AND ifnull(timestamp,1) <= ifnull(?, ifnull(timestamp,1)) AND 
+                      ma.id = ? AND 
+                      ma.marketplaceId = ? AND 
+                      `ps`.`isReady` = 1 AND `p`.`qty` > 0 
                     GROUP BY productId, productVariantId,productCategoryId";
+
+        /**
+         *
+         */
+
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
-        $timeFrom = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
-        $timeTo = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('endDate'));
+        $timeFrom = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('startDate'));
+        $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
         $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
-        $queryParameters = [$campaign->id,$marketplaceAccount->id, $marketplaceAccount->marketplaceId,  $timeFrom, $timeTo];
+        $queryParameters = [$campaign->id, $timeFrom, $timeTo, $marketplaceAccount->id, $marketplaceAccount->marketplaceId];
 
         $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET, true);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
@@ -127,20 +133,41 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['brand'] = $val->productBrand->name;
             $row['season'] = $val->productSeason->name;
 
-            $th = "";
-            $tr = "";
-            $res = $this->app->dbAdapter->query("SELECT s.name, sum(ps.stockQty) stock
-                                          FROM ProductSku ps , ProductSize s
-                                          WHERE ps.productSizeId = s.id AND
-                                              ps.productId = ? AND
-                                              ps.productVariantId = ?
-                                          GROUP BY ps.productSizeId
-                                          HAVING stock > 0 ORDER BY `name`", [$val->id, $val->productVariantId])->fetchAll();
-            foreach ($res as $sums) {
-                $th .= "<th>" . $sums['name'] . "</th>";
-                $tr .= "<td>" . $sums['stock'] . "</td>";
+            $sizes = [];
+            $qty = [];
+            foreach ($val->productSku as $productSku) {
+                if ($productSku->stockQty > 0) {
+                    $sizes[$productSku->productSizeId] = $productSku->productSize->name;
+                    $qty[$productSku->shopId][$productSku->productSizeId] = $productSku->stockQty;
+                }
             }
-            $row["stock"] = '<table class="nested-table"><thead><tr>' . $th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
+            if (count($sizes) > 0) {
+                $table = '<table class="nested-table">';
+                $table .= '<thead><tr>';
+                if (count($qty) > 1) {
+                    $table .= '<th>Shop</th>';
+                }
+                foreach ($sizes as $sizeId => $name) {
+                    $table .= '<th>' . $name . '</th>';
+                }
+                $table .= '</tr></thead>';
+                $table .= '<tbody>';
+                foreach ($qty as $shopId => $size) {
+                    $table .= '<tr>';
+                    if (count($qty) > 1) {
+                        $shop = $this->app->repoFactory->create('Shop')->findOne([$shopId]);
+                        $table .= '<td>' . $shop->name . '</td>';
+                    }
+                    foreach ($sizes as $sizeId => $name) {
+                        $table .= '<td>' . (isset($size[$sizeId]) ? $size[$sizeId] : 0) . '</td>';
+                    }
+                    $table .= '</tr>';
+                }
+                $table .= '</tbody></table>';
+            } else {
+                $table = 'Quantità non inserite';
+            }
+            $row['stock'] = $table;
 
             $row['shop'] = $val->getShops('<br>');
             $row['dummy'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
@@ -156,7 +183,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['marketplaceAccountName'] = $prodottiMark->marketplaceAccount->marketplace->name;
             $row['creationDate'] = $val->creationDate;
             $row['categories'] = $val->getLocalizedProductCategories("<br>");
-            $row['conversions'] = $values['conversions'];
+            $row['conversions'] = 0;//$values['conversions'];
             $row['visits'] = $values['visits'];
 
             $response['data'][] = $row;

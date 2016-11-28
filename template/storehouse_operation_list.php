@@ -36,32 +36,35 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">Numero</th>
                                     <th data-slug="creationDate"
-                                        data-searchable="false"
-                                        data-orderable="false"
+                                        data-searchable="true"
+                                        data-orderable="true"
                                         data-default-order="desc" class="center dataFilterType">Data Creazione</th>
                                     <th data-slug="operationDate"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Data Operazione</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center dataFilterType">Data Operazione</th>
                                     <?php if($app->user()->hasPermission('allShops')): ?>
                                     <th data-slug="friend"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Friend</th>
                                     <?php endif; ?>
                                     <th data-slug="cause"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Causale</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Causale</th>
                                     <th data-slug="movements"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Movimenti</th>
                                     <th data-slug="qty"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Quantità</th>
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Quantità</th>
                                     <th data-slug="value"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Valore Movimentato</th>
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Valore Movimentato</th>
                                     <th data-slug="price"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Valore Shop</th>
+                                    <th data-slug="user"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Valore Shop</th>
+                                        data-orderable="true" class="center">Utente</th>
                                 </tr>
                             </thead>
                             <tbody>

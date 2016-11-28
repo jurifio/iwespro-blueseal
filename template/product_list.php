@@ -141,9 +141,9 @@
         <bs-toolbar-button
             data-remote="bs.product.photo.download"
             ></bs-toolbar-button>
-        <bs-toolbar-button
+        <!--<bs-toolbar-button
             data-remote="bs.product.delete"
-            ></bs-toolbar-button>
+            ></bs-toolbar-button>-->
         <bs-toolbar-button
             data-remote="bs.product.status.change"
             ></bs-toolbar-button>

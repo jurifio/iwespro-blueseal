@@ -26,7 +26,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="name_lang_list"
-                               data-controller="NameTranslateLangListAjaxController"
+                               data-controller="NameTranslateLangListAjaxController?marks=tutto&translated=tutto"
                                data-lang="<?php echo $langId; ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
@@ -43,6 +43,10 @@
                                     data-searchable="true"
                                     data-orderable="false"
                                     class="center sorting categoryFilterType">Categorie</th>
+                                <th data-slug="count"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">N. Prodotti</th>
                                 <th data-slug="trans"
                                     data-searchable="false"
                                     data-orderable="false"
@@ -84,6 +88,26 @@
             data-title="Solo non tradotti"
             data-placement="bottom"
             data-href="<?php echo $urlTrans; ?>"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+        data-tag="a"
+        data-icon="fa-exclamation-circle"
+        data-permission="/admin/product/edit"
+        data-event="bs.filterByMark"
+        data-class="btn btn-default"
+        data-rel="tooltip"
+        data-title="Filtra per punti esclamativi"
+        data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-exclamation-circle"
+            data-permission="/admin/product/edit"
+            data-event="bs.filterByTranslation"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Filtra per punti esclamativi"
+            data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

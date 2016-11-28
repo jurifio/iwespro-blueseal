@@ -23,6 +23,14 @@ class CProductNamesListAjaxController extends AAjaxController
     public function get()
     {
         $datatable = new CDataTables('vBluesealProductNameNewList', ['id'], $_GET);
+
+        $mark = \Monkey::app()->router->request()->getRequestData('marks');
+        if ('con' === $mark) {
+            $datatable->addIgnobleCondition('name', '% !', false);
+        } elseif ('senza' === $mark) {
+            $datatable->addIgnobleCondition('name', '% !', true);
+        }
+
         $productNames = $this->app->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->app->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());

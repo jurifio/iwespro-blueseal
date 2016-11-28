@@ -20,30 +20,50 @@ $(document).on('bs.lists.generate.csv', function () {
             okButtonLabel: 'Chiudi'
         }
     );
-
+    $(modal.okButton).prop('disabled', true);
     var url = table.DataTable().ajax.url();
-    var data = table.DataTable().ajax.params();
+    var tempData = table.DataTable().ajax.params();
+    tempData.length = 0;
     //console.log(data);
+    Pace.ignore(function() {
+        "use strict";
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: tempData,
+            dataType: 'JSON'
+        }).done(function (res) {
+            var csv = '';
+            var str = '';
 
-    $.ajax({
-        url: url,
-        method: 'GET',
-        data: data,
-        dataType: 'JSON'
-    }).done(function (res) {
-        var csv = '';
-        var str = '';
-
-        for (var i in res.data) {
             var line = '';
-            for (var index in res.data[i]) {
-                if (line != '') line += ',';
-                line += res.data[i][index];
-            }
+            var datatable = $('.table').DataTable();
+            datatable.columns().every(function(k,v) {
+                v = datatable.column(k);
+                var title = $(v.header()).attr('aria-label').split(':')[0].trim();
+                line += title + ','
+            });
             str += line + '%0A';
-        }
-        modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
-    });
 
-    var data = table.data('params');
+            for (var i in res.data) {
+                line = '';
+                for (var index in res.data[i]) {
+                    if (line != '') line += ',';
+                    var val = res.data[i][index];
+                    var div = document.createElement("div");
+                    div.innerHTML = val;
+                    //OriginalString.replace(/(<([^>]+)>)/ig,"");
+                    //if($(val).find('table').length) val = 'escluso';
+                    line += encodeURIComponent(div.innerText);
+                }
+                str += line + '%0A';
+            }
+            modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
+            $(modal.okButton).prop('disabled', false);
+        }).fail(function(res) {
+            modal.writeBody('Si è verificato un errore :/ riprova con meno elementi')
+        });
+
+    });
+    //var data = table.data('params');
 });

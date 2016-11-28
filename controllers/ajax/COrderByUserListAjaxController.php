@@ -57,7 +57,39 @@ class COrderByUserListAjaxController extends AAjaxController
         $em = $this->app->entityManagerFactory->create('Shop');
         $shops = $em->findAll("limit 999", "");
 
-        $datatable = new CDataTables('vBluesealOrdersByUsersList', ['id'], $_GET);
+        $sql =
+'select 
+  concat(`o`.`id`) AS `id`,
+  concat(`ud`.`name`,\' \',`ud`.`surname`) AS `user`,
+  `ud`.`name` AS `name`,`ud`.`surname` AS `surname`,
+  `u`.`email` AS `email`,
+  `ua`.`city` AS `city`,
+  `c`.`name` AS `country`,
+  `o`.`status` AS `statusCode`,
+  concat(`o`.`orderDate`) AS `orderDate`,
+  group_concat(`ol`.`productId`,\'-\',`ol`.`productVariantId` separator \',\') AS `product`,
+  group_concat(`s`.`title` separator \',\') AS `shop`,
+  `os`.`title` AS `orderStatus`,
+  group_concat(`pb`.`name` separator \',\') AS `productBrand`,
+  `opm`.`name` AS `paymentMethod`,
+  `o`.`lastUpdate` as `lastUpdate`
+  from
+  ((((((((((((`Order` `o` 
+  join `User` `u`)
+  join `UserAddress` `ua` on(((`ua`.`id` = `o`.`billingAddressId`) or (`ua`.`id` = `o`.`shipmentAddressId`)))) 
+  join `Country` `c` on((`ua`.`countryId` = `c`.`id`))) 
+  join `UserDetails` `ud`)
+  join `OrderPaymentMethod` `opm`) 
+  join `OrderStatus` `os`)
+  join `OrderStatusTranslation` `oshl`) 
+  join `OrderLine` `ol`)
+  join `Shop` `s`)
+  join `OrderLineStatus` `ols`) 
+  join `Product` `p`)
+  join `ProductBrand` `pb`) 
+  where ((`o`.`userId` = `u`.`id`) and (`ud`.`userId` = `u`.`id`) and (`o`.`orderPaymentMethodId` = `opm`.`id`) and (`o`.`status` = `os`.`code`) and (`o`.`status` like \'ORD%\') and (`oshl`.`orderStatusId` = `os`.`id`) and (`ol`.`orderId` = `o`.`id`) and (`s`.`id` = `ol`.`shopId`) and (`ol`.`productId` = `p`.`id`) and (`ol`.`productVariantId` = `p`.`productVariantId`) and (`p`.`productBrandId` = `pb`.`id`) and (`ol`.`status` = convert(`ols`.`code` using utf8)) and (`o`.`shipmentAddressId` is not null)) group by `o`.`id`';
+
+        $datatable = new CDataTables($sql, ['id'], $_GET, true);
 	    $datatable->addCondition('statusCode',['ORD_CANCEL'],true);
 	    $datatable->addSearchColumn('orderLineStatus');
 	    $datatable->addSearchColumn('shop');
@@ -95,7 +127,7 @@ class COrderByUserListAjaxController extends AAjaxController
         foreach ($orders as $val) {
 
 	        /** ciclo le righe */
-	        $response['aaData'][$i]["content"] = "";
+	        $response['data'][$i]["content"] = "";
 	        $alert = false;
 	        /*foreach ($val->orderLine as $line) {
 		        try {
@@ -121,16 +153,16 @@ class COrderByUserListAjaxController extends AAjaxController
                 $m = date("i", $timestamp);
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
-            $response['aaData'][$i]["id"] = '<a href="'.$opera.$val->id.'" >'.$val->id.'</a>';
+            $response['data'][$i]["id"] = '<a href="'.$opera.$val->id.'" >'.$val->id.'</a>';
 	        if($alert) $response['aaData'][$i]["id"].=" <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
 
-            $response['aaData'][$i]['email'] = $val->user->email;
+            $response['data'][$i]['email'] = $val->user->email;
             \Monkey::dump($val->shipmentAddress);
-            $response['aaData'][$i]['city'] = ($sa = $val->shipmentAddressId) ?
+            $response['data'][$i]['city'] = ($sa = $val->shipmentAddressId) ?
                 $val->shipmentAddress->city : '-';
-            $response['aaData'][$i]['country'] = ($sa = $val->shipmentAddressId) ?
+            $response['data'][$i]['country'] = ($sa = $val->shipmentAddressId) ?
                 $val->shipmentAddress->country->name : '-';
-            $response['aaData'][$i]['orderStatus'] = $val->orderStatus->title;
+            $response['data'][$i]['orderStatus'] = $val->orderStatus->title;
 
             $brands = [];
             $shops = [];
@@ -141,19 +173,20 @@ class COrderByUserListAjaxController extends AAjaxController
                 $shops[] = $v->shop->name;
                 $friendsRev += $v->friendRevenue;
             }
-            $response['aaData'][$i]['brand'] = implode(', ', $brands);
-            $response['aaData'][$i]['shop'] = implode(', ', $shops);
+            $response['data'][$i]['brand'] = implode(', ', $brands);
+            $response['data'][$i]['shop'] = implode(', ', $shops);
 
-            $response['aaData'][$i]['margine'] = $val->netTotal - $friendsRev;
-            $response['aaData'][$i]["lastUpdate"] = isset($since) ? $since : "Mai";
-            $response['aaData'][$i]["user"] = '<span>'.$val->userDetails->name . " " . $val->userDetails->surname . '</span>';
+            $response['data'][$i]['margine'] = $val->netTotal - $friendsRev;
+            $response['data'][$i]["lastUpdate"] = isset($since) ? $since : "Mai";
+            $response['data'][$i]["data"] = $val->lastUpdate;
+            $response['data'][$i]["user"] = '<span>'.$val->userDetails->name . " " . $val->userDetails->surname . '</span>';
             if(isset($val->rbacRole) && count($val->rbacRole)>0){
-                $response['aaData'][$i]["user"] .= ' <i class="fa fa-diamond"></i>';
+                $response['data'][$i]["user"] .= ' <i class="fa fa-diamond"></i>';
             }
 
-            $response['aaData'][$i]["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
-            $response['aaData'][$i]["total"] = $val->netTotal;
-            $response['aaData'][$i]["payment"] = $val->orderPaymentMethod->name;
+            $response['data'][$i]["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
+            $response['data'][$i]["total"] = $val->netTotal;
+            $response['data'][$i]["payment"] = $val->orderPaymentMethod->name;
             $i++;
         }
         return json_encode($response);
