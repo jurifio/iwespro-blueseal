@@ -21,6 +21,8 @@ class CProductListAjaxController extends AAjaxController
 {
     public function get()
     {
+        $response = [];
+
         $sql = "SELECT
                   concat(`p`.`id`, '-', `pv`.`id`)                                                                      AS `code`,
                   `p`.`id`                                                                                              AS `id`,
@@ -91,13 +93,21 @@ class CProductListAjaxController extends AAjaxController
                   (`pnt`.`langId` = 1))))";
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
-        if (!empty($this->authorizedShops)) {
-            $datatable->addCondition('shopId', \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
-        }
+        $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $datatable->addCondition('shopId', $shopIds);
 
+
+        $time = microtime(true);
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $response['queryTime'] = microtime(true) - $time;
+
+        $time = microtime(true);
         $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $response['countTime'] = microtime(true) - $time;
+
+        $time = microtime(true);
         $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $response['fullCountTime'] = microtime(true) - $time;
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99', '');
@@ -111,7 +121,7 @@ class CProductListAjaxController extends AAjaxController
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
-        $response = [];
+
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
@@ -144,6 +154,42 @@ class CProductListAjaxController extends AAjaxController
             if (isset($val->externalId) && !empty($val->externalId)) {
                 $ext[] = $val->externalId;
             }
+
+            $sizes = [];
+            $qty = [];
+            foreach ($val->productSku as $productSku) {
+                if (in_array($productSku->shopId, $shopIds) && $productSku->stockQty > 0) {
+                    $sizes[$productSku->productSizeId] = $productSku->productSize->name;
+                    $qty[$productSku->shopId][$productSku->productSizeId] = $productSku->stockQty;
+                }
+            }
+            if (count($sizes) > 0) {
+                $table = '<table class="nested-table">';
+                $table .= '<thead><tr>';
+                if (count($qty) > 1) {
+                    $table .= '<th>Shop</th>';
+                }
+                foreach ($sizes as $sizeId => $name) {
+                    $table .= '<th>' . $name . '</th>';
+                }
+                $table .= '</tr></thead>';
+                $table .= '<tbody>';
+                foreach ($qty as $shopId => $size) {
+                    $table .= '<tr>';
+                    if (count($qty) > 1) {
+                        $shop = $this->app->repoFactory->create('Shop')->findOne([$shopId]);
+                        $table .= '<td>' . $shop->name . '</td>';
+                    }
+                    foreach ($sizes as $sizeId => $name) {
+                        $table .= '<td>' . (isset($size[$sizeId]) ? $size[$sizeId] : 0) . '</td>';
+                    }
+                    $table .= '</tr>';
+                }
+                $table .= '</tbody></table>';
+            } else {
+                $table = 'Quantità non inserite';
+            }
+            $row['stock'] = $table;
 
             $shops = [];
             foreach ($val->shopHasProduct as $shp) {
