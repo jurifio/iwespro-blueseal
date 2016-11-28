@@ -26,7 +26,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="name_lang_list"
-                               data-controller="NameTranslateLangListAjaxController?marks=tutto"
+                               data-controller="NameTranslateLangListAjaxController?marks=tutto&translated=tutto"
                                data-lang="<?php echo $langId; ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
@@ -98,6 +98,16 @@
         data-rel="tooltip"
         data-title="Filtra per punti esclamativi"
         data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-exclamation-circle"
+            data-permission="/admin/product/edit"
+            data-event="bs.filterByTranslation"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Filtra per punti esclamativi"
+            data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

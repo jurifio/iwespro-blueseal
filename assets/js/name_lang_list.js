@@ -31,25 +31,25 @@ $(document).on('bs.filterByMark', function(e){
     e.preventDefault();
     var dataTable = $('.dataTable').DataTable();
     var url = dataTable.ajax.url();
-    var split = url.split('marks=');
-    var marksValue = split[1];
-    var address = split[0];
+    var decodedUrl = $.decodeGetStringFromUrl(url);
+    var marksValue = decodedUrl['marks'];
 
     modal = new $.bsModal(
         'Filtra i punti esclamativi',
         {
             body: '<div class="filterMarks"><p>' +
-                '<input type="radio" name="exclamation" value="tutto" /> Tutto' +
+            '<input type="radio" name="exclamation" value="tutto" /> Tutto' +
             '</p>' +
             '<p>' +
-                '<input type="radio" name="exclamation" value="senza" /> Senza punti esclamativi' +
+            '<input type="radio" name="exclamation" value="senza" /> Senza punti esclamativi' +
             '</p>' +
             '<p>' +
-                '<input type="radio" name="exclamation" value="con" /> Solo con i punti esclamativi ' +
+            '<input type="radio" name="exclamation" value="con" /> Solo con i punti esclamativi ' +
             '</p>' +
             '</div>',
             okButtonEvent: function() {
-                dataTable.ajax.url(address + 'marks=' + $('[name="exclamation"]:checked').val());
+                var newUrl = $.addGetParam(url, 'marks', $('[name="exclamation"]:checked').val());
+                dataTable.ajax.url(newUrl);
                 dataTable.ajax.reload();
                 modal.hide();
             },
@@ -59,6 +59,43 @@ $(document).on('bs.filterByMark', function(e){
     );
 
     $('[name="exclamation"]').each(function(){
+        var val = $(this).val();
+        if (val == marksValue) $(this).prop('checked', true);
+    });
+});
+
+$(document).on('bs.filterByTranslation', function(e){
+    e.preventDefault();
+    var dataTable = $('.dataTable').DataTable();
+    var url = dataTable.ajax.url();
+    var decodedUrl = $.decodeGetStringFromUrl(url);
+    var marksValue = decodedUrl['translated'];
+
+    modal = new $.bsModal(
+        'Filtra Traduzioni',
+        {
+            body: '<div class="filterMarks"><p>' +
+            '<input type="radio" name="isTranslated" value="tutto" /> Tutto' +
+            '</p>' +
+            '<p>' +
+            '<input type="radio" name="isTranslated" value="senza" /> Senza traduzioni' +
+            '</p>' +
+            '<p>' +
+            '<input type="radio" name="isTranslated" value="con" /> Solo nomi tradotti' +
+            '</p>' +
+            '</div>',
+            okButtonEvent: function() {
+                var newUrl = $.addGetParam(url, 'translated', $('[name="isTranslated"]:checked').val());
+                dataTable.ajax.url(newUrl);
+                dataTable.ajax.reload();
+                modal.hide();
+            },
+            okLabel: 'Filtra',
+            isCancelButton: false,
+        }
+    );
+
+    $('[name="isTranslated"]').each(function(){
         var val = $(this).val();
         if (val == marksValue) $(this).prop('checked', true);
     });

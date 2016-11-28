@@ -299,7 +299,7 @@ class CDataTables
             $condition = rtrim($condition,', ').') ';
         }
         //non è un array quindi sono altri cazzi, di sicuro una like
-        elseif($not) {
+        elseif($not && $values !== null) {
             $condition.= " NOT RLIKE ? ";
             $params[] = $this->likeSearch($values,$likeStartsWith);
         } elseif(strpos($values,'-') === 0) {
@@ -331,8 +331,11 @@ class CDataTables
             $values = substr($values,5);
             return $this->buildCondition($field,explode(',',$values));
         } elseif(strpos($values,'#in:') === 0) {
-            $values = substr($values,0,4);
-            return $this->buildCondition($field,explode($values,','));
+            $values = substr($values, 0, 4);
+            return $this->buildCondition($field, explode($values, ','));
+        } elseif ($values === null) {
+            $condition.= ' IS ' . (($not) ? 'NOT ': '') . '?';
+            $params[] = $values;
         } else {
             $condition.= " RLIKE ? ";
             $params[] = $this->likeSearch($values,$likeStartsWith);

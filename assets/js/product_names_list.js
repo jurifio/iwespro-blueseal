@@ -384,9 +384,8 @@ $(document).on('bs.filterByMark', function(e){
     e.preventDefault();
     var dataTable = $('.dataTable').DataTable();
     var url = dataTable.ajax.url();
-    var split = url.split('marks=');
-    var marksValue = split[1];
-    var address = split[0];
+    var decodedUrl = $.decodeGetStringFromUrl(url);
+    var marksValue = decodedUrl['marks'];
 
     modal = new $.bsModal(
         'Filtra i punti esclamativi',
@@ -402,7 +401,8 @@ $(document).on('bs.filterByMark', function(e){
             '</p>' +
             '</div>',
             okButtonEvent: function() {
-                dataTable.ajax.url(address + 'marks=' + $('[name="exclamation"]:checked').val());
+                var newUrl = $.addGetParam(url, 'marks', $('[name="exclamation"]:checked').val());
+                dataTable.ajax.url(newUrl);
                 dataTable.ajax.reload();
                 modal.hide();
             },

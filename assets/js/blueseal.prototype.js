@@ -902,9 +902,9 @@ $.encodeGetString = function(o) {
     return r+'?'+a.join('&');
 };
 
-$.addGetParam = function(s,k,v) {
+$.addGetParam = function(url,field,val) {
     "use strict";
-    var c = $.decodeGetStringFromUrl(s);
-    c[k] = v;
+    var c = $.decodeGetStringFromUrl(url);
+    c[field] = val;
     return $.encodeGetString(c);
 };
