@@ -182,7 +182,7 @@ class CDataTables
             $keys = "DISTINCT ". implode(',',$this->keys);
         }
 
-        return $count ? "SELECT COUNT( DISTINCT {$keys} ) " : "SELECT {$keys} ";
+        return $count ? "SELECT COUNT( {$keys} ) " : "SELECT {$keys} ";
 
     }
 
