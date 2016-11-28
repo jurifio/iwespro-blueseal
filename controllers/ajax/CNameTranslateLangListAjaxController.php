@@ -53,7 +53,7 @@ class CNameTranslateLangListAjaxController extends AAjaxController
   `pn`.`name` as `name`,
   `pn`.`langId` as langId,
   group_concat(`translated`.`langId`) as `langIdTranslated`,
-  group_concat(`pc`.`id`) as category,
+  `pc`.`id` as category,
   0 as count,
   count( DISTINCT p.productVariantId) as countProds
 FROM (((((`ProductName` as `pn`
@@ -67,7 +67,7 @@ FROM (((((`ProductName` as `pn`
   LEFT JOIN (SELECT translation, name, langId FROM ProductName) as translated on translated.name = pn.name )
 WHERE `p`.`qty` > 0 AND `p`.`dummyPicture` NOT LIKE '%bs-dummy%'
       AND `p`.`productStatusId` in (5,6,11)
-group by pn.id";
+group by pn.id, `pc`.`id`";
         $datatable = new CDataTables($sql,['id'],$_GET, true);
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
