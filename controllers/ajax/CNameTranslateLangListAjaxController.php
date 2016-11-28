@@ -52,7 +52,8 @@ class CNameTranslateLangListAjaxController extends AAjaxController
   `pnt`.`productVariantId` as `productVariantId`,
   `pn`.`name` as `name`,
   `pn`.`langId` as langId,
-  group_concat(`ciao`.`langId`) as `langIdTranslated`,
+  group_concat(`translated`.`langId`) as `langIdTranslated`,
+  group_concat(`pc`.`id`) as category,
   0 as count,
   count( DISTINCT p.productVariantId) as countProds
 FROM (((((`ProductName` as `pn`
@@ -63,7 +64,7 @@ FROM (((((`ProductName` as `pn`
     JOIN `ProductCategory` `pc` ON `phpc`.`productCategoryId` = `pc`.`id`)
     ON (`p`.`id` = `phpc`.`productId`) AND (`p`.`productVariantId` = `phpc`.`productVariantId`)
   JOIN `ProductStatus` ON `ProductStatus`.`id` = `p`.`productStatusId`)
-  LEFT JOIN (SELECT translation, name, langId FROM ProductName) as ciao on ciao.name = pn.name )
+  LEFT JOIN (SELECT translation, name, langId FROM ProductName) as translated on translated.name = pn.name )
 WHERE `p`.`qty` > 0 AND `p`.`dummyPicture` NOT LIKE '%bs-dummy%'
       AND `p`.`productStatusId` in (5,6,11)
 group by pn.id";
