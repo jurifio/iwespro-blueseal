@@ -45,7 +45,30 @@ class CNameTranslateLangListAjaxController extends AAjaxController
     public function get()
     {
         $langId = $this->app->router->request()->getRequestData('lang');
-        $datatable = new CDataTables('vBluesealProductNameNewList',['id'],$_GET);
+        $sql =
+"SELECT
+  `pn`.`id` as `id`,
+  `pnt`.`productId` as `productId`,
+  `pnt`.`productVariantId` as `productVariantId`,
+  `pn`.`name` as `name`,
+  `pn`.`langId` as langId,
+  group_concat(`translated`.`langId`) as `langIdTranslated`,
+  `pc`.`id` as category,
+  0 as count,
+  count( DISTINCT p.productVariantId) as countProds
+FROM (((((`ProductName` as `pn`
+  JOIN `ProductNameTranslation` as `pnt` on `pn`.`name` = `pnt`.`name` AND `pn`.`langId` = `pnt`.`langId`)
+  JOIN `Product` `p` ON (`pnt`.`productId` = `p`.`id` AND `pnt`.`productVariantId` = `p`.`productVariantId`))
+  JOIN `ProductSku` as `ps` ON `ps`.`productId` = `p`.`id` AND `ps`.`productVariantId` = `p`.`productVariantId`)
+  LEFT JOIN (`ProductHasProductCategory` `phpc`
+    JOIN `ProductCategory` `pc` ON `phpc`.`productCategoryId` = `pc`.`id`)
+    ON (`p`.`id` = `phpc`.`productId`) AND (`p`.`productVariantId` = `phpc`.`productVariantId`)
+  JOIN `ProductStatus` ON `ProductStatus`.`id` = `p`.`productStatusId`)
+  LEFT JOIN (SELECT translation, name, langId FROM ProductName) as translated on translated.name = pn.name )
+WHERE `p`.`qty` > 0 AND `p`.`dummyPicture` NOT LIKE '%bs-dummy%'
+      AND `p`.`productStatusId` in (5,6,11)
+group by pn.id, `pc`.`id`";
+        $datatable = new CDataTables($sql,['id'],$_GET, true);
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
@@ -63,11 +86,22 @@ class CNameTranslateLangListAjaxController extends AAjaxController
             $datatable->addIgnobleCondition('name', '% !', true);
         }
 
+        $translated = \Monkey::app()->router->request()->getRequestData('translated');
+        if ('con' == $translated) {
+            $datatable->addIgnobleCondition('langIdTranslated', '%' . $langId . '%', false);
+        } elseif ('senza' == $translated) {
+            $datatable->addIgnobleCondition('langIdTranslated', '%' . $langId . '%', true);
+        }
+
         $pnRepo = \Monkey::app()->repoFactory->create('ProductName');
 
-        $productsName = $pnRepo->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->productsName->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->productsName->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $query = $datatable->getQuery();
+        $params = $datatable->getParams();
+
+
+        $productsName = $pnRepo->em()->findBySql($query,$params);
+        $count = $this->em->productsName->findCountBySql($query, $params);
+        $totalCount = $this->em->productsName->findCountBySql($datatable->getQuery('full'), $params);
 
         $response = [];
         $response ['draw'] = $_GET['draw'];

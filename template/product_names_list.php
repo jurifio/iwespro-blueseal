@@ -24,7 +24,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_names_list"
-                               data-controller="ProductNamesListAjaxController?marks=none"
+                               data-controller="ProductNamesListAjaxController?marks=tutto"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000, 3000, 5000"
@@ -109,7 +109,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-exclamation-circle"
+            data-icon="fa-map"
             data-permission="/admin/product/edit"
             data-event="bs.filterByMark"
             data-class="btn btn-default"

@@ -82,6 +82,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Metodo pagamento</th>
+                                <th data-slug="data"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Data ordine</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -107,6 +111,11 @@
             data-title="Aggiungi un nuovo ordine manuale"
             data-placement="bottom"
             data-href="#"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Esportazione">
+        <bs-toolbar-button
+            data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

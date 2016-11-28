@@ -20,7 +20,7 @@ $(document).on('bs.lists.generate.csv', function () {
             okButtonLabel: 'Chiudi'
         }
     );
-
+    $(modal.okButton).prop('disabled', true);
     var url = table.DataTable().ajax.url();
     var tempData = table.DataTable().ajax.params();
     tempData.length = 0;
@@ -36,18 +36,30 @@ $(document).on('bs.lists.generate.csv', function () {
             var csv = '';
             var str = '';
 
+            var line = '';
+            var datatable = $('.table').DataTable();
+            datatable.columns().every(function(k,v) {
+                v = datatable.column(k);
+                var title = $(v.header()).attr('aria-label').split(':')[0].trim();
+                line += title + ','
+            });
+            str += line + '%0A';
+
             for (var i in res.data) {
-                var line = '';
+                line = '';
                 for (var index in res.data[i]) {
                     if (line != '') line += ',';
                     var val = res.data[i][index];
+                    var div = document.createElement("div");
+                    div.innerHTML = val;
                     //OriginalString.replace(/(<([^>]+)>)/ig,"");
                     //if($(val).find('table').length) val = 'escluso';
-                    line += encodeURIComponent(val);
+                    line += encodeURIComponent(div.innerText);
                 }
                 str += line + '%0A';
             }
             modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
+            $(modal.okButton).prop('disabled', false);
         }).fail(function(res) {
             modal.writeBody('Si è verificato un errore :/ riprova con meno elementi')
         });
