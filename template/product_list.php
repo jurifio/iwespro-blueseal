@@ -110,7 +110,7 @@
                                     <th data-slug="stock"
                                         data-searchable="false"
                                         data-orderable="false"
-                                        class="center">Marketplaces</th>
+                                        class="center">Taglie</th>
                                 </tr>
                             </thead>
                             <tbody>
