@@ -68,7 +68,7 @@ class COrderLineManager
             $orderLine->status = $newStatus->code;
             $orderLine->update($orderLine);
 
-            \Monkey::app()->eventManager->newTrigger('changeOrderStatus',
+            \Monkey::app()->eventManager->newTrigger('changeOrderLineStatus',
                 [
                     'order' => $orderLine,
                     'status' => $orderLine->status

@@ -53,7 +53,7 @@ class CDispatchOrderToFriend extends ACronJob
                         $orderLine->status = $this->success;
 	                    $orderLine->update();
 
-                        \Monkey::app()->eventManager->newTrigger('changeOrderStatus',
+                        \Monkey::app()->eventManager->newTrigger('friendOrderShipped',
                             [
                                 'order' => $orderLine,
                                 'status' => $this->success
@@ -75,7 +75,7 @@ class CDispatchOrderToFriend extends ACronJob
                         $orderLine->status = $this->fail;
 	                    $orderLine->update();
 
-                        \Monkey::app()->eventManager->newTrigger('changeOrderStatus',
+                        \Monkey::app()->eventManager->newTrigger('friendOrderPayd',
                             [
                                 'order' => $orderLine,
                                 'status' => $this->fail
