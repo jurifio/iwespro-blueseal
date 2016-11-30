@@ -31,6 +31,7 @@ class CStatisticsExportFile extends ARestrictedAccessRootController
         $fullPath = $path . $fileName;
 
         if (file_exists($fullPath)) {
+            header('Content-Type: text/csv');
             readfile($fullPath);
         } else {
             \Monkey::app()->router->response()->raiseRoutingError();
