@@ -56,7 +56,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
   JOIN `ProductSize` as `ps` ON ol.`productSizeId` = `ps`.`id`
   LEFT JOIN `ShopHasProduct` as `shp` ON `ol`.`shopId` = `shp`.`shopId` AND `ol`.`productVariantId` = `shp`.`productVariantId` AND `ol`.`productId` = `shp`.`productId`
   JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId`
-  WHERE `l`.`entityName` = 'Order' AND (`l`.`eventValue` = 'ORD_PENDING' OR `l`.`eventValue` = 'ORD_WAIT')";
+  WHERE `l`.`entityName` = 'Order'";
 
 
 
@@ -129,6 +129,12 @@ GROUP BY `s`.`id`, `sl`.`productVariantId`";
             $res = $dba->query($v, [])->fetchAll();
             $file = fopen($path . $k . '.csv', 'x');
             if (!$file) throw new BambooException('Can\'t create the file');
+            $fieldNames = [];
+            foreach($res[0] as $fk => $fv) {
+                $fieldNames[] = $k;
+            }
+            array_unshift($res, $fieldNames);
+            reset($res);
             foreach($res as $fields) {
                 fputcsv($file, $fields, ',', '"', "\\");
             }
