@@ -1293,20 +1293,6 @@
             ]
         },
         {
-            "pattern": "/blueseal/picky/prodotti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPickyController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
             "pattern": "/blueseal/newsletter(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEmailListController"
@@ -1350,6 +1336,19 @@
             "pattern": "/blueseal/marketplace/categorie(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
+            "pattern": "/blueseal/marketplace/categorie/invertite(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignInvertedController"
             },
             "filters": {},
             "translations": {},
@@ -1550,6 +1549,51 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
             },
             "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/marketplace/accounts(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/marketing/campaigns(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/statistiche/esporta(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExport"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/statistiche/file/:fileName(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExportFile"
+            },
+            "filters": {
+                "fileName": "[a-zA-Z0-9\\.]+"
+            },
             "translations": {},
             "methods": [
                 "GET"

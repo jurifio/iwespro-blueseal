@@ -1,13 +1,11 @@
 {
-    "events": {
-
-    },
     "paths": {
         "admin-theme": "/back",
         "blueseal": "/back",
         "packed-assets": "/client/public/themes/flatize/assets/",
-        "blueseal-addon": "/back/addon",
-        "friend-logo": "/back/assets/img/clientLogo/"
+        "blueseal-addin": "/back/addon",
+        "friend-logo": "/back/assets/img/clientLogo/",
+        "exportedStatistics": "/client/public/media/exportedstatistics/"
     },
     "miscellaneous": {
         "orderStatus": {
