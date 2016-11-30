@@ -53,10 +53,13 @@ class CDispatchPreorderToFriend extends ACronJob
                         $orderLine->status = $this->success;
 	                    $orderLine->update();
 
+                        $userId = $orderLine->shop->user->id;
+
                         \Monkey::app()->eventManager->newTrigger('friendSendRequestSuccess',
                             [
                                 'order' => $orderLine,
-                                'status' => $this->success
+                                'status' => $this->success,
+                                'userId' => $userId
                             ]);
 
                     } catch (\Throwable $e) {
@@ -75,10 +78,12 @@ class CDispatchPreorderToFriend extends ACronJob
                         $orderLine->status = $this->fail;
 	                    $orderLine->update();
 
+                        $userId = $orderLine->shop->user->id;
                         \Monkey::app()->eventManager->newTrigger('friendSendRequestFail',
                             [
                                 'order' => $orderLine,
-                                'status' => $this->fail
+                                'status' => $this->fail,
+                                'userId' => $userId
                             ]);
 
                     } catch (\Throwable $e) {
