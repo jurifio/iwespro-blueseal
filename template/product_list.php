@@ -107,6 +107,10 @@
                                         data-searchable="true"
                                         data-orderable="true"
                                         class="center">Marketplaces</th>
+                                    <th data-slug="stock"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Taglie</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -4,7 +4,8 @@
         "blueseal": "/back",
         "packed-assets": "/client/public/themes/flatize/assets/",
         "blueseal-addin": "/back/addon",
-        "friend-logo": "/back/assets/img/clientLogo/"
+        "friend-logo": "/back/assets/img/clientLogo/",
+        "exportedStatistics": "/client/public/media/exportedstatistics/"
     },
     "miscellaneous": {
         "orderStatus": {

@@ -101,7 +101,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-exclamation-circle"
+            data-icon="fa-map"
             data-permission="/admin/product/edit"
             data-event="bs.filterByTranslation"
             data-class="btn btn-default"
