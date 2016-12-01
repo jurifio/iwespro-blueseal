@@ -151,7 +151,7 @@ class CProductPhotoAjaxManage extends AAjaxController
         foreach($res as $photo){
             $del = $s3->delImage($product->productBrand->slug."/".$photo['name'],$config['bucket']);
             if(!$del) {
-                $this->app->dbADapter->rollback();
+                $this->app->dbAdapter->rollback();
                 throw new RedPandaException('Could not Delete all the photos');
             }
             $this->app->dbAdapter->delete('ProductSkuHasProductPhoto',["productId"=>$id,"productVariantId"=>$productVariantId,"productPhotoId"=>$photo['id']]);
