@@ -1575,6 +1575,39 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/blueseal/statistiche/esporta(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExport"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/statistiche/file/:fileName(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExportFile"
+            },
+            "filters": {
+                "fileName": "[a-zA-Z0-9\\.]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/job/manager(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobManagerController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
