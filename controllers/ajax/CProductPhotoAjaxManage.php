@@ -93,7 +93,8 @@ class CProductPhotoAjaxManage extends AAjaxController
                     'assignPhotosToProduct',
                     [
                         'product' => $product,
-                        'photoIds' => $ids
+                        'photoIds' => $ids,
+                        'release' => 'release'
                     ]
                 );
             }
