@@ -13,31 +13,35 @@ class CReleaseProduct extends CLogging
 {
     public function run($eventName)
     {
-        $releaseDate = $this->getParameter('releaseDate');
-        $userId = $this->getParameter('userId');
-        $user = $this->getParameter('user');
-        if ($user) $userId = $user->id;
-        if (!$releaseDate) $releaseDate = date('Y-m-d H:i:s');
-        $shp = $this->getParameter('ShopHasProductE');
-
-        if ($shp) {
-            if (!$shp->releaseDate) {
-                $shp->releaseDate = $releaseDate;
-                $shp->update();
-                $this->insertLogRow($eventName, $userId, null, $shp->getEntityName(), $shp->printId(), $releaseDate);
-            }
-        } else {
-            $product = $this->getParameter('Product');
-            if (($product) && ($product->productPhoto->count())) {
-                foreach ($product->shopHasProduct as $shp) {
-                    $qty = 0;
-                    foreach($shp->productSku as $sku) {
-                        $qty += $sku->stockQty;
-                    }
-                    if (($qty) && (!$shp->releaseDate)) {
-                        $shp->releaseDate = $releaseDate;
-                        $shp->update();
-                        $this->insertLogRow($eventName, $userId, null, $shp->getEntityName(), $shp->printId(), $releaseDate);
+        $release = $this->getParameter('release');
+        if ($release) {
+            $releaseDate = $this->getParameter('releaseDate');
+            if ($this->user) $userId = $this->user->id;
+            elseif ($user = $this->getParameter('user')) $userId = $user->id;
+            else $userId = $this->getParameter('userId');
+            if (!$releaseDate) $releaseDate = date('Y-m-d H:i:s');
+            $shp = $this->getParameter('ShopHasProductE');
+            if ($shp) {
+                if (!$shp->releaseDate) {
+                    $shp->releaseDate = $releaseDate;
+                    $shp->update();
+                    $this->insertLogRow($eventName, $userId, $release, $shp->getEntityName(), $shp->printId(), $releaseDate);
+                }
+            } else {
+                $product = $this->getParameter('Product');
+                if (($product) && ($product->productPhoto->count())) {
+                    if ('release' === $release) {
+                        foreach ($product->shopHasProduct as $shp) {
+                            $qty = 0;
+                            foreach ($shp->productSku as $sku) {
+                                $qty += $sku->stockQty;
+                            }
+                            if (($qty) && (!$shp->releaseDate)) {
+                                $shp->releaseDate = $releaseDate;
+                                $shp->update();
+                            }
+                            $this->insertLogRow($eventName, $userId, $release, $shp->getEntityName(), $shp->printId(), $releaseDate);
+                        }
                     }
                 }
             }
