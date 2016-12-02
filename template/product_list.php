@@ -194,6 +194,9 @@
         <bs-toolbar-button
             data-remote="bs.product.editVariantDescription"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.priority.change"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione prezzi">
         <bs-toolbar-button
