@@ -230,7 +230,7 @@ class CProductListAjaxController extends AAjaxController
             $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
             $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>', false) . '</span>';
             $row['status'] = $val->productStatus->name;
-            $row['productPriority'] = $val->productPriorityId;
+            $row['productPriority'] = $val->sortingPriorityId;
 
             $qty = 0;
             $isOnSale = [];
