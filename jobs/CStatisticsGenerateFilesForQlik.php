@@ -36,7 +36,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
         $sql['ordini'] =
             "SELECT 
  `o`.`id` as `numOrd`,
- DATE_FORMAT(`l`.`time` , '%Y-%m-%D') as `DataOrd`,
+ DATE_FORMAT(`l`.`time` , '%Y-%m-%d') as `DataOrd`,
  DATE_FORMAT(`l`.`time` , '%H:%i:%s') as `OraOrd`,
  `o`.`userId` as `CodUtente`,
  `ol`.`status` as `StatoRiga`,
@@ -48,8 +48,10 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  REPLACE(CAST(IFNULL(`ol`.`friendRevenue`, 0)as CHAR),'.', ',') as `CostoFriend`,
  REPLACE(CAST(IFNULL(`o`.`shippingPrice`, 0 )as CHAR),'.', ',') as `RealTrasp`,
  REPLACE(CAST(IFNULL(`ol`.`activePrice`, 0 )as CHAR),'.', ',') as `PrezzoAtt`,
- REPLACE(CAST(IFNULL(`ol`.`netPrice`, 0 )as CHAR),'.', ',') as `realizzo`,
- REPLACE(CAST(IFNULL((`ol`.`fullPrice` - `ol`.`activePrice`) / (`ol`.`fullPrice` / 100), 0 )as CHAR),'.', ',') as `sconti`
+ REPLACE(CAST(IFNULL(
+    IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice`, 0, `ol`.`netPrice`)
+    , 0 )as CHAR),'.', ',') as `realizzo`,
+ REPLACE(CAST(IFNULL((`ol`.`fullPrice` - `ol`.`activePrice`), 0 )as CHAR),'.', ',') as `sconti`
   FROM
   `Order` as `o`
   JOIN `OrderLine` as `ol` ON `o`.`id` = `ol`.`orderId`
@@ -104,7 +106,7 @@ JOIN `Country` as `c` ON `c`.`id` = `ua`.`countryId`
         $sql['movimenti'] = "
 SELECT 
   CONCAT(`sl`.`productId`, '-', `sl`.`productVariantId`) as `CodProd`,
-  `s`.`operationDate` as `DataMov`,
+  DDATE_FORMAT(`s`.`operationDate`, '%Y-%m-%d') as `DataMov`,
   `sc`.`name`         as `Causale`,
   sum(`sl`.qty)       as `Qty`,
   `psz`.`name`        as `Taglia`,
