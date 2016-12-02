@@ -14,65 +14,33 @@ use bamboo\core\intl\CLang;
 
 class CTagListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1, 'it'));
-        $this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
-        $this->urls['page'] = $this->urls['base'] . "prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
-
-        if ($this->app->getUser()->hasPermission('allShops')) {
-
-        } else {
-            $res = $this->app->dbAdapter->select('UserHasShop', ['userId' => $this->app->getUser()->getId()])->fetchAll();
-            foreach ($res as $val) {
-                $this->authorizedShops[] = $val['shopId'];
-            }
-        }
-
-        $this->em = new \stdClass();
-        $this->em->tags = $this->app->entityManagerFactory->create('Tag');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
         $datatable = new CDataTables('Tag', ['id'], $_GET);
 
-        $tags = $this->em->tags->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $this->em->tags->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->tags->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-
-        $editTagLink = $this->urls['base'] . "tag/modifica";
+        $tags = $this->app->repoFactory->create('Tag')->findBySql($datatable->getQuery(), $datatable->getParams());
+        $count = $this->app->repoFactory->create('Tag')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('Tag')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
-
+        $editTagLink = "/blueseal/tag/modifica";
         $response = [];
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $i = 0;
-
         foreach ($tags as $val) {
-
-            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['slug'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editTagLink . '/'.$val->id.'" style="font-family:consolas">' . $val->slug . '</a>' : $val->slug;
-            $response['data'][$i]['priority'] = $val->sortingPriority->priority;
-            $response['data'][$i]['isPublic'] = $val->isPublic == 1 ? 'Visibile' : 'Nascosto';
-
-            $i++;
+            $row = [];
+            $row["DT_RowId"] = 'row__' . $val->id;
+            $row["DT_RowClass"] = 'colore';
+            $row['slug'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editTagLink . '/'.$val->id.'" style="font-family:consolas">' . $val->slug . '</a>' : $val->slug;
+            $row['sortingPriorityId'] = $val->sortingPriorityId;
+            $row['isPublic'] = $val->isPublic == 1 ? 'Visibile' : 'Nascosto';
+            $translations = [];
+            foreach ($this->app->repoFactory->create('TagTranslation')->findBy(['tagId'=>$val->id]) as $translation) $translations[] = $translation->name;
+            $row['translations'] = implode('<br>',$translations) ?? " ";
+            $response['data'][] = $row;
         }
 
         return json_encode($response);
