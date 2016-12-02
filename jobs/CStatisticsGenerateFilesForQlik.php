@@ -51,6 +51,9 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  REPLACE(CAST(IFNULL(
     IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice`, 0, `ol`.`netPrice`)
     , 0 )as CHAR),'.', ',') as `realizzo`,
+ REPLACE(CAST(IFNULL(
+    IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice` - `ol`.`vat`, 0, `ol`.`netPrice` - `ol`.`vat`)
+    , 0 )as CHAR),'.', ',') as `realizzoNetto`,
  REPLACE(CAST(IFNULL((`ol`.`fullPrice` - `ol`.`activePrice`), 0 )as CHAR),'.', ',') as `sconti`
   FROM
   `Order` as `o`
@@ -112,8 +115,6 @@ FROM ProductCategory as pc
   JOIN ProductHasProductCategory as phpc on phpc.productCategoryId = pc.id
   JOIN Product as p on phpc.productId = p.id AND phpc.productVariantId = p.productVariantId
 WHERE pc.id > 1";
-
-
 
         $sql['prodotti'] = "SELECT
   concat(`p`.`id`, '-', `p`.`productVariantId`) as `CodProd`,
