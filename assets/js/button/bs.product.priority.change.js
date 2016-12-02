@@ -67,7 +67,7 @@ $(document).on('bs.product.priority.change', function () {
 
                 $.ajax({
                     url: '/blueseal/xhr/ProductPriorityChangeController',
-                    type: "get",
+                    type: "put",
                     data: {
                         priority: select.val(),
                         products: getVarsArray

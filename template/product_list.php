@@ -185,9 +185,9 @@
         <bs-toolbar-button
             data-remote="bs.product.name.insert"
         ></bs-toolbar-button>
-        <bs.toolbar-button
+        <bs-toolbar-button
             data-remote="bs.product.details.new">
-        </bs.toolbar-button>
+        </bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.marketplace.publish"
         ></bs-toolbar-button>
