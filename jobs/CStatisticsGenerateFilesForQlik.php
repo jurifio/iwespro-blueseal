@@ -51,6 +51,9 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  REPLACE(CAST(IFNULL(
     IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice`, 0, `ol`.`netPrice`)
     , 0 )as CHAR),'.', ',') as `realizzo`,
+ REPLACE(CAST(IFNULL(
+    IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice` - `ol`.`vat`, 0, `ol`.`netPrice` - `ol`.`vat`)
+    , 0 )as CHAR),'.', ',') as `realizzoNetto`,
  REPLACE(CAST(IFNULL((`ol`.`fullPrice` - `ol`.`activePrice`), 0 )as CHAR),'.', ',') as `sconti`
   FROM
   `Order` as `o`
@@ -60,11 +63,61 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
   JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId`
   WHERE `l`.`entityName` = 'Order'";
 
+        $sql['campagne-prodotti'] =
+            "SELECT 
+c.name as CodAggr,
+ date(cv.timestamp) as Data,
+  concat(mahp.productId,'-',mahp.productVariantId) as CodProd,
+   count(distinct cv.id) as NumVisite,
+    count(distinct ol.orderId) as NumConv,
+     ifnull(sum(ol.netPrice), 0) as ValVisite
+FROM
+  MarketplaceAccount ma
+  JOIN MarketplaceAccountHasProduct mahp ON ma.id = mahp.marketplaceAccountId AND ma.marketplaceId = mahp.marketplaceId
+  JOIN Campaign c ON c.code = concat('MarketplaceAccount', ma.id, '-', ma.marketplaceId)
+  JOIN CampaignVisit cv ON c.id = cv.campaignId
+  JOIN CampaignVisitHasProduct cvhp
+    ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id AND cvhp.productId = mahp.productId AND
+    cvhp.productVariantId = mahp.productVariantId
+  LEFT JOIN (
+        CampaignVisitHasOrder cvho
+    JOIN OrderLine ol ON cvho.orderId = ol.orderId)
+    ON cvho.campaignId = cv.campaignId AND cvho.campaignVisitId = cv.id AND ol.productId = mahp.productId AND
+    ol.productVariantId = mahp.productVariantId
+GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";
 
+        $sql['category'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId), pc.id as id,
+  (SELECT
+     max(CASE WHEN c.depth = 1 THEN pct.name end) AS slug1
+   FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
+   WHERE pct.langId = 1 AND c.lft <= c2.lft AND c.rght >= c2.rght AND c2.id = pc.id) as livello1,
+  (SELECT
+     max(CASE WHEN c.depth = 2 THEN pct.name end) AS slug1
+   FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
+   WHERE pct.langId = 1 AND c.lft <= c2.lft AND c.rght >= c2.rght AND c2.id = pc.id) as livello2,
+  (SELECT
+     max(CASE WHEN c.depth = 3 THEN pct.name end) AS slug1
+   FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
+   WHERE pct.langId = 1 AND c.lft <= c2.lft AND c.rght >= c2.rght AND c2.id = pc.id) as livello3,
+  (SELECT
+     max(CASE WHEN c.depth = 4 THEN pct.name end) AS slug1
+   FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
+   WHERE pct.langId = 1 AND c.lft <= c2.lft AND c.rght >= c2.rght AND c2.id = pc.id) as livello4,
+  (SELECT
+     max(CASE WHEN c.depth = 5 THEN pct.name end) AS slug1
+   FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
+   WHERE pct.langId = 1 AND c.lft <= c2.lft AND c.rght >= c2.rght AND c2.id = pc.id) as livello5,
+  (SELECT
+     max(CASE WHEN c.depth = 6 THEN pct.name end) AS slug1
+   FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
+   WHERE pct.langId = 1 AND c.lft <= c2.lft AND c.rght >= c2.rght AND c2.id = pc.id) as livello6
+FROM ProductCategory as pc
+  JOIN ProductHasProductCategory as phpc on phpc.productCategoryId = pc.id
+  JOIN Product as p on phpc.productId = p.id AND phpc.productVariantId = p.productVariantId
+WHERE pc.id > 1";
 
         $sql['prodotti'] = "SELECT
   concat(`p`.`id`, '-', `p`.`productVariantId`) as `CodProd`,
-  `pct`.`name` as `Categoria`,
   `shp`.`shopId` as `CodShop`,
   REPLACE(CAST(IFNULL(`shp`.`value`, 0)as CHAR),'.',',') as `CostoForn`,
   REPLACE(CAST(IFNULL(IF(`psk`.`isOnSale` = 0,
