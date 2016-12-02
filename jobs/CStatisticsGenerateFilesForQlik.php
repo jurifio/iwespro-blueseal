@@ -36,7 +36,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
         $sql['ordini'] =
             "SELECT 
  `o`.`id` as `numOrd`,
- DATE_FORMAT(`l`.`time` , '%Y-%m-%D') as `DataOrd`,
+ DATE_FORMAT(`l`.`time` , '%Y-%m-%d') as `DataOrd`,
  DATE_FORMAT(`l`.`time` , '%H:%i:%s') as `OraOrd`,
  `o`.`userId` as `CodUtente`,
  `ol`.`status` as `StatoRiga`,
@@ -44,12 +44,14 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  concat(`ol`.`productId`, '-', `ol`.`productVariantId`) as `CodProd`,
  `ps`.`name` as `Taglia`,
  `shp`.`shopId` as `CodShop`,
- `ol`.`cost` as `CostoForn`,
- `ol`.`friendRevenue` as `CostoFriend`,
- `o`.`shippingPrice` as `RealTrasp`,
- `ol`.`activePrice` as `PrezzoAtt`,
- `ol`.`netPrice` as `realizzo`,
- (`ol`.`fullPrice` - `ol`.`activePrice`) / (`ol`.`fullPrice` / 100) as `sconti`
+ REPLACE(CAST(IFNULL(`ol`.`cost`, 0) as CHAR),'.', ',') as `CostoForn`,
+ REPLACE(CAST(IFNULL(`ol`.`friendRevenue`, 0)as CHAR),'.', ',') as `CostoFriend`,
+ REPLACE(CAST(IFNULL(`o`.`shippingPrice`, 0 )as CHAR),'.', ',') as `RealTrasp`,
+ REPLACE(CAST(IFNULL(`ol`.`activePrice`, 0 )as CHAR),'.', ',') as `PrezzoAtt`,
+ REPLACE(CAST(IFNULL(
+    IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice`, 0, `ol`.`netPrice`)
+    , 0 )as CHAR),'.', ',') as `realizzo`,
+ REPLACE(CAST(IFNULL((`ol`.`fullPrice` - `ol`.`activePrice`), 0 )as CHAR),'.', ',') as `sconti`
   FROM
   `Order` as `o`
   JOIN `OrderLine` as `ol` ON `o`.`id` = `ol`.`orderId`
@@ -104,7 +106,7 @@ JOIN `Country` as `c` ON `c`.`id` = `ua`.`countryId`
         $sql['movimenti'] = "
 SELECT 
   CONCAT(`sl`.`productId`, '-', `sl`.`productVariantId`) as `CodProd`,
-  `s`.`operationDate` as `DataMov`,
+  DDATE_FORMAT(`s`.`operationDate`, '%Y-%m-%d') as `DataMov`,
   `sc`.`name`         as `Causale`,
   sum(`sl`.qty)       as `Qty`,
   `psz`.`name`        as `Taglia`,
@@ -144,12 +146,12 @@ JOIN `C`";
             if (!$file) throw new BambooException('Can\'t create the file');
             $fieldNames = [];
             foreach($res[0] as $fk => $fv) {
-                $fieldNames[] = $k;
+                $fieldNames[] = $fk;
             }
             array_unshift($res, $fieldNames);
             reset($res);
             foreach($res as $fields) {
-                fputcsv($file, $fields, ',', '"', "\\");
+                fputcsv($file, $fields, ';', '"', "\\");
             }
             $this->report('file statistiche', 'file ' . $k .'.csv creato');
             fclose($file);
