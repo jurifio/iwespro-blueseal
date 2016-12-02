@@ -34,28 +34,44 @@
                                 <th data-slug="email"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Email</th>
+                                    class="center">Email
+                                </th>
                                 <th data-slug="isActive"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Attiva?</th>
+                                    class="center">Attiva?
+                                </th>
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Nome</th>
+                                    class="center">Nome
+                                </th>
                                 <th data-slug="surname"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Cognome</th>
+                                    class="center">Cognome
+                                </th>
+                                <th data-slug="lang"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Lingua
+                                </th>
                                 <th data-slug="subscriptionDate"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc"
-                                    class="center dataFilterType">Data iscrizione</th>
+                                    class="center dataFilterType">Data iscrizione
+                                </th>
                                 <th data-slug="unsubscriptionDate"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center dataFilterType">Data disiscrizione</th>
+                                    class="center dataFilterType">Data disiscrizione
+                                </th>
+                                <th data-slug="lang"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Lingua
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -72,49 +88,8 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione dettagli prodotto">
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-magic"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.detail"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Unisci dettagli"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-question-circle"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.detailproducts"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Visualizza Prodotti"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-exclamation-triangle"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.deletedetails"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cancella i dettagli"
-            data-placement="bottom"
-        ></bs-toolbar-button>
+
     </bs-toolbar-group>
 </bs-toolbar>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".visualizzaButton").click(
-            function(){
-                var id = "dettCollaps-" + $(this).data("rowCollapse");
-                var state = ($(id).css("display") == "hidden") ? "block" : "hidden";
-                $(id).css("display", state);
-            }
-        );
-    });
-
-</script>
 </body>
 </html>
