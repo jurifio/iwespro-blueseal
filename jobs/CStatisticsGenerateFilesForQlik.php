@@ -64,12 +64,12 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
   concat(`p`.`id`, '-', `p`.`productVariantId`) as `CodProd`,
   `pct`.`name` as `Categoria`,
   `shp`.`shopId` as `CodShop`,
-  `shp`.`value` as `CostoForn`,
-  IF(`psk`.`isOnSale` = 0,
+  REPLACE(CAST(IFNULL(`shp`.`value`, 0)as CHAR),'.',',') as `CostoForn`,
+  REPLACE(CAST(IFNULL(IF(`psk`.`isOnSale` = 0,
      IF (`pse`.`isActive` = 1, `shp`.`value` / 100 * `s`.`currentSeasonMultiplier` + `shp`.`value`, `shp`.`value` / 100 * `s`.`pastSeasonMultiplier` + `shp`.`value` ),
      `shp`.`value` / 100 * `s`.`saleMultiplier` + `shp`.`value`
-  ) as `CostoFriend`,
-  IF(`psk`.`isOnSale` = 0, `psk`.`price`, `psk`.`salePrice`) as `PrezzoAtt`,
+  ), 0) as CHAR), '.',',') as `CostoFriend`,
+  REPLACE(CAST(IFNULL(IF(`psk`.`isOnSale` = 0, `psk`.`price`, `psk`.`salePrice`), 0)as CHAR),'.',',') as `PrezzoAtt`,
   `pcg`.`name` as `GruColore`,
   `psg`.`name` as `codTaglia`,
   `pse`.`name` as `Stagione`
@@ -107,10 +107,12 @@ SELECT
   `s`.`operationDate` as `DataMov`,
   `sc`.`name`         as `Causale`,
   sum(`sl`.qty)       as `Qty`,
-  IF(`ps`.`isOnSale` = 0,
+  `psz`.`name`        as `Taglia`,
+  sum(`sl`.qty)       as `Qta`,
+  REPLACE(CAST(IFNULL(IF(`ps`.`isOnSale` = 0,
      IF (`pse`.`isActive` = 1, `shp`.`value` / 100 * `sh`.`currentSeasonMultiplier` + `shp`.`value`, `shp`.`value` / 100 * `sh`.`pastSeasonMultiplier` + `shp`.`value` ),
      `shp`.`value` / 100 * `sh`.`saleMultiplier` + `shp`.`value`
-  ) * sum(`sl`.qty) as `ValCosFri`,
+  ) * sum(`sl`.qty), 0) as CHAR),'.',',') as `ValCosFri`,
   IF(`ps`.`isOnSale` = 0, `ps`.`price`, `ps`.`salePrice`) as `ValPreAtt`
 FROM 
 `StorehouseOperation` as `s`
@@ -121,8 +123,19 @@ JOIN `Shop` as `sh` on `sl`.`shopId` = `sh`.`id`
 JOIN `ProductSku` as `ps` ON `sl`.`productId` = `ps`.`productId` AND `sl`.`productVariantId` = `ps`.`productVariantId` AND `sl`.`productSizeId` = `ps`.`productSizeId` AND `sl`.`shopId` = `ps`.`shopId`
 JOIN `Product` as `p` on `sl`.`productVariantId` = `p`.`productVariantId` AND `sl`.`productId` = `p`.`id`
 JOIN `ProductSeason` as `pse` on `pse`.`id` = `p`.`productSeasonId`
+JOIN `ProductSize` as `psz` on `psz`.`id` = `sl`.`productSizeId`
 WHERE 1 
 GROUP BY `s`.`id`, `sl`.`productVariantId`";
+
+        $sql['pubblicazioni'] = "
+SELECT 
+concat(`shp`.`productId`, '-', `shp`.`productVariantId`) as `CodProd`,
+`l`.`time` as `DataMov`,
+`l`.`eventValue` as `Causale`,
+1 as `qty`,
+FROM `Log` as `l` 
+JOIN `ShopHasProduct` as `shp` ON concat(`shp`.`productId`, '-', `shp`.`productVariantId`, '-', `shp`.`shopId`) = `l`.`stringId`
+JOIN `C`";
 
         $dba = \Monkey::app()->dbAdapter;
         foreach($sql as $k => $v) {
