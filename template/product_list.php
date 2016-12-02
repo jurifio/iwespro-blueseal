@@ -99,6 +99,10 @@
                                         data-searchable="true"
                                         data-orderable="true"
                                         data-default-order="desc" class="center dataFilterType">Creazione</th>
+                                    <th data-slug="productPriority"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        data-default-order="desc" class="center">Priorità Prodotto</th>
                                     <th data-slug="description"
                                         data-searchable="false"
                                         data-orderable="false"
