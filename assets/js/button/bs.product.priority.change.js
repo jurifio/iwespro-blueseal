@@ -37,7 +37,7 @@ $(document).on('bs.product.priority.change', function () {
 
 
     body.html('<img src="/assets/img/ajax-loader.gif" />');
-
+    body.css("");
     Pace.ignore(function () {
         $.ajax({
             url: '/blueseal/xhr/ProductPriorityChangeController',
@@ -76,7 +76,7 @@ $(document).on('bs.product.priority.change', function () {
                     body.html('Modificati '+res+'prodotti');
                     cancelButton.hide();
                     okButton.off().html('chiudi').on('click',function () {
-                        modal.hide();
+                        bsModal.hide();
                     });
                 });
 
