@@ -49,7 +49,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  `o`.`shippingPrice` as `RealTrasp`,
  `ol`.`activePrice` as `PrezzoAtt`,
  `ol`.`netPrice` as `realizzo`,
- REPLACE(CAST(ifnull((`ol`.`fullPrice` - `ol`.`activePrice`) / (`ol`.`fullPrice` / 100),0), CHAR), '.',',') as `sconti`
+ (`ol`.`fullPrice` - `ol`.`activePrice`) / (`ol`.`fullPrice` / 100) as `sconti`
   FROM
   `Order` as `o`
   JOIN `OrderLine` as `ol` ON `o`.`id` = `ol`.`orderId`
@@ -107,14 +107,13 @@ SELECT
   `s`.`operationDate` as `DataMov`,
   `sc`.`name`         as `Causale`,
   sum(`sl`.qty)       as `Qty`,
-  IF(`ps`.`isOnSale` = 0,
   `psz`.`name`        as `Taglia`,
   sum(`sl`.qty)       as `Qta`,
   REPLACE(CAST(IFNULL(IF(`ps`.`isOnSale` = 0,
      IF (`pse`.`isActive` = 1, `shp`.`value` / 100 * `sh`.`currentSeasonMultiplier` + `shp`.`value`, `shp`.`value` / 100 * `sh`.`pastSeasonMultiplier` + `shp`.`value` ),
      `shp`.`value` / 100 * `sh`.`saleMultiplier` + `shp`.`value`
-  ) * sum(`sl`.qty), 0) as CHAR), '.', ',') as `ValCosFri`,
-  IFNULL(IF(`ps`.`isOnSale` = 0, `ps`.`price`, `ps`.`salePrice`), 0) as `ValPreAtt`
+  ) * sum(`sl`.qty), 0) as CHAR),'.',',') as `ValCosFri`,
+  IF(`ps`.`isOnSale` = 0, `ps`.`price`, `ps`.`salePrice`) as `ValPreAtt`
 FROM 
 `StorehouseOperation` as `s`
 JOIN `StorehouseOperationLine` as `sl` ON `s`.`id` = `sl`.`storehouseOperationId`
