@@ -84,7 +84,7 @@ FROM
     JOIN OrderLine ol ON cvho.orderId = ol.orderId)
     ON cvho.campaignId = cv.campaignId AND cvho.campaignVisitId = cv.id AND ol.productId = mahp.productId AND
     ol.productVariantId = mahp.productVariantId
-GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";
+GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";*/
 
         $sql['categorie'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId), pc.id as id,
   (SELECT
@@ -114,7 +114,7 @@ GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";
 FROM ProductCategory as pc
   JOIN ProductHasProductCategory as phpc on phpc.productCategoryId = pc.id
   JOIN Product as p on phpc.productId = p.id AND phpc.productVariantId = p.productVariantId
-WHERE pc.id > 1";*/
+WHERE pc.id > 1";
 
         $sql['prodotti'] = "SELECT
   concat(`p`.`id`, '-', `p`.`productVariantId`) as `CodProd`,
