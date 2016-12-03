@@ -161,7 +161,7 @@ SELECT
   CONCAT(`sl`.`productId`, '-', `sl`.`productVariantId`) as `CodProd`,
   DATE_FORMAT(`s`.`operationDate`, '%Y-%m-%d') as `DataMov`,
   `sc`.`name`         as `Causale`,
-  `s`.`userId`        as `Friend`,
+  `uhs`.`shopId`        as `ShopId`,
   sum(`sl`.qty)       as `Qty`,
   `psz`.`name`        as `Taglia`,
   sum(`sl`.qty)       as `Qta`,
@@ -174,6 +174,7 @@ FROM
 `StorehouseOperation` as `s`
 JOIN `StorehouseOperationLine` as `sl` ON `s`.`id` = `sl`.`storehouseOperationId`
 JOIN `StorehouseOperationCause` as `sc` ON `sc`.`id` = `s`.`storehouseOperationCauseId`
+JOIN `UserHasShop` as `uhs` on `s`.`userId` = `uhs`.`userId`
 JOIN `ShopHasProduct` as `shp` ON `shp`.`productVariantId` = `sl`.`productVariantId` AND `shp`.`shopId` = `sl`.`shopId`
 JOIN `Shop` as `sh` on `sl`.`shopId` = `sh`.`id`
 JOIN `ProductSku` as `ps` ON `sl`.`productId` = `ps`.`productId` AND `sl`.`productVariantId` = `ps`.`productVariantId` AND `sl`.`productSizeId` = `ps`.`productSizeId` AND `sl`.`shopId` = `ps`.`shopId`
@@ -182,6 +183,8 @@ JOIN `ProductSeason` as `pse` on `pse`.`id` = `p`.`productSeasonId`
 JOIN `ProductSize` as `psz` on `psz`.`id` = `sl`.`productSizeId`
 WHERE 1 
 GROUP BY `s`.`id`, `sl`.`productVariantId`";
+
+        $sql['shop'] = "SELECT * FROM `Shop` WHERE 1";
 
        /** $sql['pubblicazioni'] = "
 SELECT 
