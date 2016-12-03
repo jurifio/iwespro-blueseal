@@ -161,6 +161,7 @@ SELECT
   CONCAT(`sl`.`productId`, '-', `sl`.`productVariantId`) as `CodProd`,
   DATE_FORMAT(`s`.`operationDate`, '%Y-%m-%d') as `DataMov`,
   `sc`.`name`         as `Causale`,
+  `s`.`userId`        as `Friend`,
   sum(`sl`.qty)       as `Qty`,
   `psz`.`name`        as `Taglia`,
   sum(`sl`.qty)       as `Qta`,
@@ -168,7 +169,7 @@ SELECT
      IF (`pse`.`isActive` = 1, `shp`.`value` / 100 * `sh`.`currentSeasonMultiplier` + `shp`.`value`, `shp`.`value` / 100 * `sh`.`pastSeasonMultiplier` + `shp`.`value` ),
      `shp`.`value` / 100 * `sh`.`saleMultiplier` + `shp`.`value`
   ) * sum(`sl`.qty), 0) as CHAR),'.',',') as `ValCosFri`,
-  IF(`ps`.`isOnSale` = 0, `ps`.`price`, `ps`.`salePrice`) as `ValPreAtt`
+  IF(`ps`.`isOnSale` = 0, `ps`.`price`, `ps`.`salePrice`) * sum(`sl`.qty) as `ValPreAtt`
 FROM 
 `StorehouseOperation` as `s`
 JOIN `StorehouseOperationLine` as `sl` ON `s`.`id` = `sl`.`storehouseOperationId`
