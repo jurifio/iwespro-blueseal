@@ -63,7 +63,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
   JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId`
   WHERE `l`.`entityName` = 'Order'";
 
-        $sql['campagne-prodotti'] =
+ /**       $sql['campagne-prodotti'] =
             "SELECT 
 c.name as CodAggr,
  date(cv.timestamp) as Data,
@@ -114,7 +114,7 @@ GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";
 FROM ProductCategory as pc
   JOIN ProductHasProductCategory as phpc on phpc.productCategoryId = pc.id
   JOIN Product as p on phpc.productId = p.id AND phpc.productVariantId = p.productVariantId
-WHERE pc.id > 1";
+WHERE pc.id > 1";*/
 
         $sql['prodotti'] = "SELECT
   concat(`p`.`id`, '-', `p`.`productVariantId`) as `CodProd`,
