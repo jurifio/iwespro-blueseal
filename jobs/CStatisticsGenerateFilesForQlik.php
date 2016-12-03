@@ -86,7 +86,7 @@ FROM
     ol.productVariantId = mahp.productVariantId
 GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";*/
 
-        $sql['categorie'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId), pc.id as id,
+        $sql['categorie'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId) CodProd, pc.id as id,
   (SELECT
      max(CASE WHEN c.depth = 1 THEN pct.name end) AS slug1
    FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
