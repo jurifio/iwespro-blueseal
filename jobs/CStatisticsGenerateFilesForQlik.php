@@ -86,7 +86,7 @@ FROM
     ol.productVariantId = mahp.productVariantId
 GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";
 
-        $sql['category'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId), pc.id as id,
+        $sql['categorie'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId), pc.id as id,
   (SELECT
      max(CASE WHEN c.depth = 1 THEN pct.name end) AS slug1
    FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
@@ -159,7 +159,7 @@ JOIN `Country` as `c` ON `c`.`id` = `ua`.`countryId`
         $sql['movimenti'] = "
 SELECT 
   CONCAT(`sl`.`productId`, '-', `sl`.`productVariantId`) as `CodProd`,
-  DDATE_FORMAT(`s`.`operationDate`, '%Y-%m-%d') as `DataMov`,
+  DATE_FORMAT(`s`.`operationDate`, '%Y-%m-%d') as `DataMov`,
   `sc`.`name`         as `Causale`,
   sum(`sl`.qty)       as `Qty`,
   `psz`.`name`        as `Taglia`,
@@ -182,7 +182,7 @@ JOIN `ProductSize` as `psz` on `psz`.`id` = `sl`.`productSizeId`
 WHERE 1 
 GROUP BY `s`.`id`, `sl`.`productVariantId`";
 
-        $sql['pubblicazioni'] = "
+       /** $sql['pubblicazioni'] = "
 SELECT 
 concat(`shp`.`productId`, '-', `shp`.`productVariantId`) as `CodProd`,
 `l`.`time` as `DataMov`,
@@ -190,7 +190,7 @@ concat(`shp`.`productId`, '-', `shp`.`productVariantId`) as `CodProd`,
 1 as `qty`,
 FROM `Log` as `l` 
 JOIN `ShopHasProduct` as `shp` ON concat(`shp`.`productId`, '-', `shp`.`productVariantId`, '-', `shp`.`shopId`) = `l`.`stringId`
-JOIN `C`";
+JOIN `C`";*/
 
         $dba = \Monkey::app()->dbAdapter;
         foreach($sql as $k => $v) {
