@@ -47,8 +47,12 @@ class CNewsletterEmailListAjaxController extends AAjaxController
             $row["DT_RowId"] = $val->id;
             $row["DT_RowClass"] = 'colore';
             $row['email'] = $val->email;
-            $row['name'] = ($user) ? $user->name : '-';
-            $row['surname'] = ($user) ? $user->surname : '-';
+            try {
+                $row['name'] = ($user) ? $user->name : '-';
+                $row['surname'] = ($user) ? $user->surname : '-';
+            }catch (\Throwable $e) {
+                echo $user->id;
+            }
             $row['isActive'] = ($val->isActive) ? "Attiva" : "Non Attiva";
             $row['subscriptionDate'] = ($val->subscriptionDate) ? $val->subscriptionDate : "-";
             $row['unsubscriptionDate'] = ($val->unsubscriptionDate) ? $val->unsubscriptionDate : "-";

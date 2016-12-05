@@ -38,8 +38,10 @@ $(document).on('bs.lists.generate.csv', function () {
 
             var line = '';
             var datatable = $('.table').DataTable();
+            var columns = [];
             datatable.columns().every(function(k,v) {
                 v = datatable.column(k);
+                columns.push(v.name);
                 var title = $(v.header()).attr('aria-label').split(':')[0].trim();
                 line += title + ','
             });
@@ -47,7 +49,7 @@ $(document).on('bs.lists.generate.csv', function () {
 
             for (var i in res.data) {
                 line = '';
-                for (var index in res.data[i]) {
+                for (var index in columns) {
                     if (line != '') line += ',';
                     var val = res.data[i][index];
                     var div = document.createElement("div");
