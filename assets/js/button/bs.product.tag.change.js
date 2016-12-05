@@ -50,7 +50,7 @@ window.buttonSetup = {
             }).done(function (response) {
                 body.html(response);
 
-                $(".tag-list > li").on('click', function (a, b, c) {
+                $(".tag-list > li").on('click', function () {
                     if ($(this).hasClass('tree-selected')) {
                         $(this).removeClass('tree-selected');
                     } else {
