@@ -63,7 +63,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
   JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId`
   WHERE `l`.`entityName` = 'Order'";
 
-        $sql['campagne-prodotti'] =
+ /**       $sql['campagne-prodotti'] =
             "SELECT 
 c.name as CodAggr,
  date(cv.timestamp) as Data,
@@ -84,9 +84,9 @@ FROM
     JOIN OrderLine ol ON cvho.orderId = ol.orderId)
     ON cvho.campaignId = cv.campaignId AND cvho.campaignVisitId = cv.id AND ol.productId = mahp.productId AND
     ol.productVariantId = mahp.productVariantId
-GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";
+GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";*/
 
-        $sql['category'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId), pc.id as id,
+        $sql['categorie'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId) CodProd, pc.id as id,
   (SELECT
      max(CASE WHEN c.depth = 1 THEN pct.name end) AS slug1
    FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
@@ -159,8 +159,9 @@ JOIN `Country` as `c` ON `c`.`id` = `ua`.`countryId`
         $sql['movimenti'] = "
 SELECT 
   CONCAT(`sl`.`productId`, '-', `sl`.`productVariantId`) as `CodProd`,
-  DDATE_FORMAT(`s`.`operationDate`, '%Y-%m-%d') as `DataMov`,
+  DATE_FORMAT(`s`.`operationDate`, '%Y-%m-%d') as `DataMov`,
   `sc`.`name`         as `Causale`,
+  `uhs`.`shopId`        as `ShopId`,
   sum(`sl`.qty)       as `Qty`,
   `psz`.`name`        as `Taglia`,
   sum(`sl`.qty)       as `Qta`,
@@ -168,11 +169,12 @@ SELECT
      IF (`pse`.`isActive` = 1, `shp`.`value` / 100 * `sh`.`currentSeasonMultiplier` + `shp`.`value`, `shp`.`value` / 100 * `sh`.`pastSeasonMultiplier` + `shp`.`value` ),
      `shp`.`value` / 100 * `sh`.`saleMultiplier` + `shp`.`value`
   ) * sum(`sl`.qty), 0) as CHAR),'.',',') as `ValCosFri`,
-  IF(`ps`.`isOnSale` = 0, `ps`.`price`, `ps`.`salePrice`) as `ValPreAtt`
+  IF(`ps`.`isOnSale` = 0, `ps`.`price`, `ps`.`salePrice`) * sum(`sl`.qty) as `ValPreAtt`
 FROM 
 `StorehouseOperation` as `s`
 JOIN `StorehouseOperationLine` as `sl` ON `s`.`id` = `sl`.`storehouseOperationId`
 JOIN `StorehouseOperationCause` as `sc` ON `sc`.`id` = `s`.`storehouseOperationCauseId`
+JOIN `UserHasShop` as `uhs` on `s`.`userId` = `uhs`.`userId`
 JOIN `ShopHasProduct` as `shp` ON `shp`.`productVariantId` = `sl`.`productVariantId` AND `shp`.`shopId` = `sl`.`shopId`
 JOIN `Shop` as `sh` on `sl`.`shopId` = `sh`.`id`
 JOIN `ProductSku` as `ps` ON `sl`.`productId` = `ps`.`productId` AND `sl`.`productVariantId` = `ps`.`productVariantId` AND `sl`.`productSizeId` = `ps`.`productSizeId` AND `sl`.`shopId` = `ps`.`shopId`
@@ -182,7 +184,9 @@ JOIN `ProductSize` as `psz` on `psz`.`id` = `sl`.`productSizeId`
 WHERE 1 
 GROUP BY `s`.`id`, `sl`.`productVariantId`";
 
-        $sql['pubblicazioni'] = "
+        $sql['shop'] = "SELECT * FROM `Shop` WHERE 1";
+
+       /** $sql['pubblicazioni'] = "
 SELECT 
 concat(`shp`.`productId`, '-', `shp`.`productVariantId`) as `CodProd`,
 `l`.`time` as `DataMov`,
@@ -190,7 +194,7 @@ concat(`shp`.`productId`, '-', `shp`.`productVariantId`) as `CodProd`,
 1 as `qty`,
 FROM `Log` as `l` 
 JOIN `ShopHasProduct` as `shp` ON concat(`shp`.`productId`, '-', `shp`.`productVariantId`, '-', `shp`.`shopId`) = `l`.`stringId`
-JOIN `C`";
+JOIN `C`";*/
 
         $dba = \Monkey::app()->dbAdapter;
         foreach($sql as $k => $v) {
