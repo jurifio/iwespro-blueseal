@@ -36,29 +36,28 @@ $(document).on('bs.lists.generate.csv', function () {
             var csv = '';
             var str = '';
 
-            var line = '';
             var datatable = $('.table').DataTable();
             var columns = [];
+            var title = [];
             datatable.columns().every(function(k,v) {
                 v = datatable.column(k);
-                columns.push(v.name);
-                var title = $(v.header()).attr('aria-label').split(':')[0].trim();
-                line += title + ','
-            });
-            str += line + '%0A';
+                columns.push(v.dataSrc());
+                title.push($(v.header()).attr('aria-label').split(':')[0].trim());
 
+            });
+            str += title.join(',') + '%0A';
+            var line;
             for (var i in res.data) {
-                line = '';
+                line = [];
                 for (var index in columns) {
-                    if (line != '') line += ',';
-                    var val = res.data[i][index];
+                    var val = res.data[i][columns[index]];
                     var div = document.createElement("div");
                     div.innerHTML = val;
                     //OriginalString.replace(/(<([^>]+)>)/ig,"");
                     //if($(val).find('table').length) val = 'escluso';
-                    line += encodeURIComponent(div.innerText);
+                    line.push(encodeURIComponent(div.innerText));
                 }
-                str += line + '%0A';
+                str += line.join(',') + '%0A';
             }
             modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
             $(modal.okButton).prop('disabled', false);
