@@ -45,6 +45,8 @@ class CReleaseProduct extends CLogging
                     }
                 }
             }
+        } else {
+            //TODO: log errors
         }
     }
 }
