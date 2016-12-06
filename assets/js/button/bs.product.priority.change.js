@@ -85,11 +85,3 @@ $(document).on('bs.product.priority.change', function () {
 
     bsModal.modal();
 });
-
-$(document).on('click', ".tag-list > li", function (a, b, c) {
-    if ($(this).hasClass('tree-selected')) {
-        $(this).removeClass('tree-selected');
-    } else {
-        $(this).addClass('tree-selected');
-    }
-});
