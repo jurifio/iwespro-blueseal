@@ -67,6 +67,11 @@
             data-href="/blueseal/tag/aggiungi">
         </bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Esportazione">
+        <bs-toolbar-button
+            data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

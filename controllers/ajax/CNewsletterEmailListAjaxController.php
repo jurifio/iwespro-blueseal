@@ -22,7 +22,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "SELECT n.id, if(n.isActive = 1,'Attiva','Non Attiva') , l.name, ud.name, ud.surname FROM 
+        $sql = "SELECT n.id, if(n.isActive = 1,'Attiva','Non Attiva') , l.name as lang, ud.name, ud.surname, n.subscriptionDate FROM 
                         Newsletter n 
                         JOIN Lang l ON n.langId = l.id 
                         LEFT JOIN (User u 
@@ -32,7 +32,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
 
         $newsletter = $this->app->repoFactory->create('Newsletter')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->app->repoFactory->create('Newsletter')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('Newsletter')->em()->newsletter->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('Newsletter')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
 
         $response = [];
@@ -47,8 +47,12 @@ class CNewsletterEmailListAjaxController extends AAjaxController
             $row["DT_RowId"] = $val->id;
             $row["DT_RowClass"] = 'colore';
             $row['email'] = $val->email;
-            $row['name'] = ($user) ? $user->name : '-';
-            $row['surname'] = ($user) ? $user->surname : '-';
+            try {
+                $row['name'] = ($user) ? $user->name : '-';
+                $row['surname'] = ($user) ? $user->surname : '-';
+            }catch (\Throwable $e) {
+                echo $user->id;
+            }
             $row['isActive'] = ($val->isActive) ? "Attiva" : "Non Attiva";
             $row['subscriptionDate'] = ($val->subscriptionDate) ? $val->subscriptionDate : "-";
             $row['unsubscriptionDate'] = ($val->unsubscriptionDate) ? $val->unsubscriptionDate : "-";

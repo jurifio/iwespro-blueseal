@@ -97,6 +97,10 @@
         <bs-toolbar-button
             data-remote="bs.storehouse.operation.explode.data"
         ></bs-toolbar-button>
+        <bs-toolbar-group data-group-label="Esportazione">
+            <bs-toolbar-button
+                data-remote="bs.lists.generate.csv"
+            ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
