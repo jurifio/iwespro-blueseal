@@ -13,14 +13,15 @@ class CChangeProductseason extends CLogging
 {
     public function run($eventName)
     {
-        $season = $this->getParameter('newSeasonId');
+        $season = $this->getParameter('seasonId');
         if ($season) {
             $p = $this->getParamters('Product');
             $user = $this->getParamters('user');
             if ($user) $userId = $user->id;
             else $userId = $this->getParamters('userId');
+            $time = $this->getParamter('time');
 
-            $this->insertLogRow($eventName, $userId, $season, $p->getEntityName(), $p->printId());
+            $this->insertLogRow($eventName, $userId, $season, $p->getEntityName(), $p->printId(), $time);
         }
     }
 }
