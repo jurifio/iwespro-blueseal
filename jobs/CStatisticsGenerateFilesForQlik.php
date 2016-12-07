@@ -36,6 +36,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
         $sql['ordini'] =
             "SELECT 
  `o`.`id` as `numOrd`,
+ DATE_FORMAT(`o`.`orderDate` , '%Y-%m-%d') as `OrderCreation`,
  DATE_FORMAT(`l`.`time` , '%Y-%m-%d') as `DataOrd`,
  DATE_FORMAT(`l`.`time` , '%H:%i:%s') as `OraOrd`,
  `o`.`userId` as `CodUtente`,
@@ -61,7 +62,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
   JOIN `OrderLine` as `ol` ON `o`.`id` = `ol`.`orderId`
   JOIN `ProductSize` as `ps` ON ol.`productSizeId` = `ps`.`id`
   LEFT JOIN `ShopHasProduct` as `shp` ON `ol`.`shopId` = `shp`.`shopId` AND `ol`.`productVariantId` = `shp`.`productVariantId` AND `ol`.`productId` = `shp`.`productId`
-  JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId` OR `l`.`stringId` = `ol`.`id`
+  LEFT JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId` OR `l`.`stringId` = `ol`.`id`
   WHERE `l`.`entityName` = 'Order'";
 
  $sql['campagne-prodotti'] =
