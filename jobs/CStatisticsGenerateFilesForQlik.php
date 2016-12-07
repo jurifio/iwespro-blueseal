@@ -64,7 +64,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
   JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId` OR `l`.`stringId` = `ol`.`id`
   WHERE `l`.`entityName` = 'Order'";
 
-/** $sql['campagne-prodotti'] =
+ $sql['campagne-prodotti'] =
             "SELECT
 c.name as CodAggr,
  date(cv.timestamp) as Data,
@@ -86,9 +86,9 @@ FROM
     JOIN OrderLine ol ON cvho.orderId = ol.orderId)
     ON cvho.campaignId = cv.campaignId AND cvho.campaignVisitId = cv.id AND ol.productId = mahp.productId AND
     ol.productVariantId = mahp.productVariantId
-GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";*/
+GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";
 
-        $sql['categorie'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId) CodProd, pc.id as id,
+        /**$sql['categorie'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId) CodProd, pc.id as id,
   (SELECT
      max(CASE WHEN c.depth = 1 THEN pct.name end) AS slug1
    FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
@@ -116,7 +116,7 @@ GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";*/
 FROM ProductCategory as pc
   JOIN ProductHasProductCategory as phpc on phpc.productCategoryId = pc.id
   JOIN Product as p on phpc.productId = p.id AND phpc.productVariantId = p.productVariantId
-WHERE pc.id > 1";
+WHERE pc.id > 1";*/
 
         $sql['prodotti'] = "SELECT
   concat(`p`.`id`, '-', `p`.`productVariantId`) as `CodProd`,
