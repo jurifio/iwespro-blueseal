@@ -28,7 +28,7 @@
                                     data-orderable="true"
                                     data-default-order="asc"
                                     class="center">Slug</th>
-                                <th data-slug="priority"
+                                <th data-slug="sortingPriorityId"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Priorità Ordinamento</th>
@@ -36,6 +36,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Visibilità</th>
+                                <th data-slug="translations"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Traduzioni</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -62,6 +66,11 @@
             data-placement="bottom"
             data-href="/blueseal/tag/aggiungi">
         </bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Esportazione">
+        <bs-toolbar-button
+            data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

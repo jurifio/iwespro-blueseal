@@ -314,6 +314,13 @@ $(document).on('bs.product.tag', function () {
             }
         }).done(function (response) {
             body.html(response);
+            $(".tag-list > li").off().on('click', function (a, b, c) {
+                if ($(this).hasClass('tree-selected')) {
+                    $(this).removeClass('tree-selected');
+                } else {
+                    $(this).addClass('tree-selected');
+                }
+            });
             okButton.html('Ok').off().on('click', function () {
                 okButton.on('click', function () {
                     bsModal.modal('hide')
@@ -358,14 +365,6 @@ $(document).on('bs.product.tag', function () {
     });
 
     bsModal.modal();
-});
-
-$(document).on('click', ".tag-list > li", function (a, b, c) {
-    if ($(this).hasClass('tree-selected')) {
-        $(this).removeClass('tree-selected');
-    } else {
-        $(this).addClass('tree-selected');
-    }
 });
 
 $(document).on('bs.manage.changeStatus', function () {

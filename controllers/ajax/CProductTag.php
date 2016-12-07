@@ -33,15 +33,19 @@ class CProductTag extends AAjaxController
 	    $deleteTags = [];
 	    foreach ($this->app->router->request()->getRequestData('rows') as $key => $val ) {
 			$pro = $this->app->repoFactory->create('Product')->findOneByStringId($val);
-		    if(empty($deleteTags)) {
+            foreach ($pro->tag as $tag) {
+                if (!array_key_exists($tag->id, $deleteTags)) $deleteTags[$tag->id] = $tag;
+            }
+		    /*if(empty($deleteTags)) {
 				foreach ($pro->tag as $tag) {
 					$deleteTags[$tag->id] = $tag;
 				}
 			} else {
-			    foreach ($deleteTags as $id=>$tag) {
-				    if(!$pro->tag->findOneByKey('id',$tag->id)) unset($deleteTags[$id]);
+			    foreach ($deleteTags as $id => $tag) {
+                    if (!array_key_exists($id))
+				    //if(!$pro->tag->findOneByKey('id',$tag->id)) unset($deleteTags[$id]);
 			    }
-		    }
+		    }*/
 	    }
 
 	    return $view->render([

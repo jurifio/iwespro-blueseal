@@ -53,11 +53,11 @@ class CDispatchOrderToFriend extends ACronJob
                         $orderLine->status = $this->success;
 	                    $orderLine->update();
 
-                        \Monkey::app()->eventManager->newTrigger('friendOrderShipped',
+                        /**\Monkey::app()->eventManager->newTrigger('friendOrderShipped',
                             [
                                 'order' => $orderLine,
                                 'status' => $this->success
-                            ]);
+                            ]);*/
 
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
@@ -75,11 +75,11 @@ class CDispatchOrderToFriend extends ACronJob
                         $orderLine->status = $this->fail;
 	                    $orderLine->update();
 
-                        \Monkey::app()->eventManager->newTrigger('friendOrderPayd',
+                        /**\Monkey::app()->eventManager->newTrigger('friendOrderPayd',
                             [
                                 'order' => $orderLine,
                                 'status' => $this->fail
-                            ]);
+                            ]);*/
 
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();

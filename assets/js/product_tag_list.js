@@ -132,6 +132,13 @@ $(document).on('bs.priority.edit', function () {
 				searchField: ['priority'],
 				options: priorities
 			});
+            $(".tag-list > li").off().on('click', function (a, b, c) {
+                if ($(this).hasClass('tree-selected')) {
+                    $(this).removeClass('tree-selected');
+                } else {
+                    $(this).addClass('tree-selected');
+                }
+            });
 			okButton.html('Ok').off().on('click', function () {
 				var priority = $('#priorityId').eq(0).val();
 				if('undefined' == priority) return;

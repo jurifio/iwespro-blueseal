@@ -86,9 +86,18 @@ $('#photoOrderForm').on('submit',function(e){
         url: '/blueseal/xhr/ProductPhotoAjaxManage',
         data: serialized+'&'+ids
     }).done(function (content) {
-
-    })
-
+        modal = new $.bsModal('Salvataggio Foto',
+            {
+                body: 'Salvataggio riuscito',
+                isCancelButton: false
+            });
+    }).fail(function (content) {
+        modal = new $.bsModal('Salvataggio Foto',
+            {
+                body: 'OOPS! Si è verificato un problema.<br /> Se il problema persiste contattare un amministratore',
+                isCancelButton: false
+            });
+    });
 });
 
 $(document).on('bs.photo.delete', function (e, element) {

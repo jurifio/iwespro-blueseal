@@ -96,16 +96,32 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <div class="form-group form-group-default required">
                                                         <label for="user_birthdate">Data di Nascita</label>
                                                         <input id="user_birthdate" autocomplete="off" type="date" class="form-control" name="user_birthdate" value="" />
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <div class="form-group form-group-default required">
                                                         <label for="user_fiscal_code">Codice Fiscale</label>
                                                         <input id="user_fiscal_code" autocomplete="off" type="text" class="form-control" name="user_fiscal_code" value="" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group form-group-default required">
+                                                        <label for="user_lang">Lingua</label>
+                                                        <select id="user_lang" autocomplete="off" class="form-control" name="user_lang" required="required" >
+                                                            <?php foreach ($langs as $lang): ?>
+                                                                <option value="<?php echo $lang->id ?>"><?php echo $lang->name ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group form-group-default required">
+                                                        <label for="user_newsletter">Newsletter?</label>
+                                                        <input id="user_newsletter" autocomplete="off" type="checkbox" class="form-control" name="user_newsletter" checked="checked" value="true" />
                                                     </div>
                                                 </div>
                                             </div>

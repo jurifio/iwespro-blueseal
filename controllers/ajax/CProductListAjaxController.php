@@ -38,6 +38,7 @@ class CProductListAjaxController extends AAjaxController
                   concat(`psg`.`locale`, ' - ',
                          `psg`.`macroName`)                                                                             AS `productSizeGroup`,
                   `p`.`creationDate`                                                                                    AS `creationDate`,
+                  `p`.`sortingPriorityId`                                                                               AS `productPriority`,
                   `s`.`id`                                                                                              AS `shopId`,
                   if(((SELECT count(0)
                        FROM `ProductSheetActual`
@@ -229,6 +230,7 @@ class CProductListAjaxController extends AAjaxController
             $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
             $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>', false) . '</span>';
             $row['status'] = $val->productStatus->name;
+            $row['productPriority'] = $val->sortingPriorityId;
 
             $qty = 0;
             $isOnSale = [];
