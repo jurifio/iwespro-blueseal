@@ -97,7 +97,6 @@ window.buttonSetup = {
                         body.html('<p>Errore</p>');
                     });
                 });
-
             });
         });
 
