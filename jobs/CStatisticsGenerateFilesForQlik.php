@@ -40,7 +40,7 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  DATE_FORMAT(`l`.`time` , '%H:%i:%s') as `OraOrd`,
  `o`.`userId` as `CodUtente`,
  `l`.`eventValue` as `StatoRiga`,
- `l`.`status` as `StatoOrdine`,
+ `l`.`eventValue` as `StatoOrdine`,
  concat(`ol`.`productId`, '-', `ol`.`productVariantId`) as `CodProd`,
  `ps`.`name` as `Taglia`,
  `shp`.`shopId` as `CodShop`,
@@ -54,7 +54,8 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  REPLACE(CAST(IFNULL(
     IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice` - `ol`.`vat`, 0, `ol`.`netPrice` - `ol`.`vat`)
     , 0 )as CHAR),'.', ',') as `realizzoNetto`,
- REPLACE(CAST(IFNULL((`ol`.`fullPrice` - `ol`.`activePrice`), 0 )as CHAR),'.', ',') as `sconti`
+ REPLACE(CAST(IFNULL((`ol`.`fullPrice` - `ol`.`activePrice`), 0 )as CHAR),'.', ',') as `sconti`,
+ 1 as `Qta`
   FROM
   `Order` as `o`
   JOIN `OrderLine` as `ol` ON `o`.`id` = `ol`.`orderId`
@@ -63,8 +64,8 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
   JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId` OR `l`.`stringId` = `ol`.`id`
   WHERE `l`.`entityName` = 'Order'";
 
- /**       $sql['campagne-prodotti'] =
-            "SELECT 
+/** $sql['campagne-prodotti'] =
+            "SELECT
 c.name as CodAggr,
  date(cv.timestamp) as Data,
   concat(mahp.productId,'-',mahp.productVariantId) as CodProd,
@@ -80,6 +81,7 @@ FROM
     ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id AND cvhp.productId = mahp.productId AND
     cvhp.productVariantId = mahp.productVariantId
   LEFT JOIN (
+
         CampaignVisitHasOrder cvho
     JOIN OrderLine ol ON cvho.orderId = ol.orderId)
     ON cvho.campaignId = cv.campaignId AND cvho.campaignVisitId = cv.id AND ol.productId = mahp.productId AND
@@ -144,7 +146,7 @@ WHERE (`pct`.`langId` = 1 OR `pct`.`langId` IS NULL) AND productStatusId in (5,6
         $sql['utenti'] = "
 SELECT 
  `u`.`id` as `CodUtente`,
- `u`.`creationDate` as `DataIscrizione`,
+ DATE_FORMAT(`u`.`creationDate`, '%Y-%m-%d') as `DataIscrizione`,
  `ua`.`address` as `address`,
  `ua`.`postcode` as `Cap`,
  `ua`.`city` as `Citta`,
