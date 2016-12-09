@@ -32,7 +32,7 @@ $(document).on('bs.user.password.change', function () {
 
     var userId;
     $.each(selectedRows, function (k, v) {
-        userId = v.DT_RowId;
+        userId = v.DT_RowId.split('__')[1];
     });
 
     body.html('<img src="/assets/img/ajax-loader.gif" />');
@@ -45,20 +45,21 @@ $(document).on('bs.user.password.change', function () {
             body.html('<input id="changePwdUser" value="'+response+'" label="Nuova Password" aria-label="Nuova Password">');
 
             okButton.html('Ok').off().on('click', function () {
-                okButton.on('click', function () {
+                okButton.off().on('click', function () {
                     bsModal.modal('hide')
                 });
+
+                var putData = {};
+                putData.userId = userId;
+                putData.password = $('#changePwdUser').val();
 
                 body.html('<img src="/assets/img/ajax-loader.gif" />');
                 $.ajax({
                     url: '/blueseal/xhr/ChangeUserPassword',
                     type: 'put',
-                    data: {
-                        userId: userId,
-                        password: $('#changePwdUser').val()
-                    }
+                    data: putData
                 }).done(function (response) {
-                    body.html('<p>Password Cambiata: '+$('#changePwdUser').val()+'</p>');
+                    body.html('<p>Password Cambiata: '+response+'</p>');
                 }).fail(function (response) {
                     body.html('<p>Errore</p>');
                 });

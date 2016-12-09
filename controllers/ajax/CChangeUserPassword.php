@@ -30,6 +30,6 @@ class CChangeUserPassword extends AAjaxController
         $pwd = $this->app->router->request()->getRequestData('password');
         $user->password  = password_hash($pwd,PASSWORD_BCRYPT);
         $user->update();
-        return true;
+        return $pwd;
     }
 }
