@@ -39,8 +39,8 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  DATE_FORMAT(`l`.`time` , '%Y-%m-%d') as `DataOrd`,
  DATE_FORMAT(`l`.`time` , '%H:%i:%s') as `OraOrd`,
  `o`.`userId` as `CodUtente`,
- `l`.`eventValue` as `StatoRiga`,
- `l`.`eventValue` as `StatoOrdine`,
+  (SELECT eventValue FROM Log WHERE entityName LIKE 'OrderLine' AND eventName LIKE 'changeOrderStatus' AND stringId = CONCAT(ol.id, '-', ol.orderId) ORDER BY Log.Id DESC LIMIT 1) as `StatoRiga`,
+  IF((SELECT eventValue FROM Log WHERE entityName LIKE 'OrderLine' AND eventName LIKE 'changeOrderStatus' AND stringId = CONCAT(ol.id, '-', ol.orderId) ORDER BY Log.Id DESC LIMIT 1) LIKE '%CANC%', 'ORD_CANCEL', `l`.`eventValue`) as `StatoOrdine`,
  concat(`ol`.`productId`, '-', `ol`.`productVariantId`) as `CodProd`,
  `ps`.`name` as `Taglia`,
  `shp`.`shopId` as `CodShop`,
@@ -48,18 +48,23 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  REPLACE(CAST(IFNULL(`ol`.`friendRevenue`, 0)as CHAR),'.', ',') as `CostoFriend`,
  REPLACE(CAST(IFNULL(`o`.`shippingPrice`, 0 )as CHAR),'.', ',') as `RealTrasp`,
  REPLACE(CAST(IFNULL(`ol`.`activePrice`, 0 )as CHAR),'.', ',') as `PrezzoAtt`,
+ `ol`.`netPrice` as `netPrice`,
  REPLACE(CAST(IFNULL(
-    IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice`, 0, `ol`.`netPrice`)
+    IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice` + `ol`.`couponCharge` < 0, 0, `ol`.`netPrice`)
     , 0 )as CHAR),'.', ',') as `realizzo`,
  REPLACE(CAST(IFNULL(
-    IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice` - `ol`.`vat`, 0, `ol`.`netPrice` - `ol`.`vat`)
+    IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice` + `ol`.`couponCharge` < 0, 0, `ol`.`netPrice` - `ol`.`vat`)
     , 0 )as CHAR),'.', ',') as `realizzoNetto`,
  REPLACE(CAST(IFNULL((`ol`.`fullPrice` - `ol`.`activePrice`), 0 )as CHAR),'.', ',') as `sconti`,
- 1 as `Qta`
+ 1 as `Qta`,
+ CONCAT(ol.id, '-', ol.orderId) AS  prova
   FROM
   `Order` as `o`
   JOIN `OrderLine` as `ol` ON `o`.`id` = `ol`.`orderId`
   JOIN `ProductSize` as `ps` ON ol.`productSizeId` = `ps`.`id`
+  LEFT JOIN (
+    `ProductHasProductColorGroup` as `phpcg` JOIN `ProductColorGroup` as `pcg` ON `phpcg`.`productColorGroupId` = `pcg`.`id`
+    ) ON `phpcg`.`productId` = `ol`.`productId` AND `phpcg`.`productVariantId` = `ol`.`productVariantId`
   LEFT JOIN `ShopHasProduct` as `shp` ON `ol`.`shopId` = `shp`.`shopId` AND `ol`.`productVariantId` = `shp`.`productVariantId` AND `ol`.`productId` = `shp`.`productId`
   JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId` OR `l`.`stringId` = `ol`.`id`
   WHERE `l`.`entityName` = 'Order'";
@@ -81,14 +86,13 @@ FROM
     ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id AND cvhp.productId = mahp.productId AND
     cvhp.productVariantId = mahp.productVariantId
   LEFT JOIN (
-
         CampaignVisitHasOrder cvho
     JOIN OrderLine ol ON cvho.orderId = ol.orderId)
     ON cvho.campaignId = cv.campaignId AND cvho.campaignVisitId = cv.id AND ol.productId = mahp.productId AND
     ol.productVariantId = mahp.productVariantId
 GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";
 
-        /**$sql['categorie'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId) CodProd, pc.id as id,
+        $sql['categorie'] = "SELECT DISTINCT concat(p.id, '-', p.productVariantId) CodProd, pc.id as id,
   (SELECT
      max(CASE WHEN c.depth = 1 THEN pct.name end) AS slug1
    FROM ProductCategory AS c JOIN ProductCategoryTranslation as pct on pct.productCategoryId = c.id, ProductCategory as c2
@@ -116,7 +120,7 @@ GROUP BY mahp.productId, mahp.productVariantId, c.id, date(cv.timestamp)";
 FROM ProductCategory as pc
   JOIN ProductHasProductCategory as phpc on phpc.productCategoryId = pc.id
   JOIN Product as p on phpc.productId = p.id AND phpc.productVariantId = p.productVariantId
-WHERE pc.id > 1";*/
+WHERE pc.id > 1";
 
         $sql['prodotti'] = "SELECT
   concat(`p`.`id`, '-', `p`.`productVariantId`) as `CodProd`,
