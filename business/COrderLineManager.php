@@ -124,7 +124,7 @@ class COrderLineManager
      */
     public function isFriendChangable()
     {
-        if ($this->orderLine->orderLineStatus->phase <= 3) {
+        if ($this->orderLine->orderLineStatus->phase <= 4) {
             $conto = $this->app->dbAdapter->query("SELECT count(DISTINCT productId, productVariantId, productSizeId, shopId) AS conto
                                           FROM ProductSku
                                           WHERE productId = ? AND
