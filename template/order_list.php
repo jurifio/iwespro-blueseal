@@ -65,6 +65,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Metodo Pagamento</th>
+                                <th data-slug="notes"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Note</th>
                             </tr>
                             </thead>
                             <tbody>
