@@ -77,14 +77,7 @@ class CMarketplaceProductManageController extends AAjaxController
                     $marketplaceAccountHasProduct->insert();
                 }
                 $i++;
-                $ids[] = $marketplaceAccountHasProduct->printId();
-                if($i%50) {
-                    $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>$ids]);
-                    $ids = [];
-                }
-            }
-            if(count($ids) > 0) {
-                $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>$ids]);
+                $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>[$marketplaceAccountHasProduct->printId()]]);
             }
         } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
