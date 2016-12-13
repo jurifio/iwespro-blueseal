@@ -3,6 +3,7 @@
 namespace bamboo\events\listeners;
 
 use bamboo\core\events\AEventListener;
+use bamboo\core\events\CEventEmitted;
 use bamboo\core\exceptions\BambooException;
 
 /**
@@ -11,21 +12,26 @@ use bamboo\core\exceptions\BambooException;
  */
 class CReleaseProduct extends CLogging
 {
-    public function run($eventName)
+    public function work($eventName)
     {
+        if(!$eventName instanceof CEventEmitted) throw new BambooException('Event is not an event');
+        $this->backtrace = $eventName->getBacktrace();
+        $this->params = $eventName->getEventData();
+        $userId = $eventName->getUserId();
+
         $release = $this->getParameter('release');
         if ($release) {
             $releaseDate = $this->getParameter('releaseDate');
             if ($this->user) $userId = $this->user->id;
             elseif ($user = $this->getParameter('user')) $userId = $user->id;
-            else $userId = $this->getParameter('userId');
+
             if (!$releaseDate) $releaseDate = date('Y-m-d H:i:s');
             $shp = $this->getParameter('ShopHasProductE');
             if ($shp) {
                 if (!$shp->releaseDate) {
                     $shp->releaseDate = $releaseDate;
                     $shp->update();
-                    $this->insertLogRow($eventName, $userId, $release, $shp->getEntityName(), $shp->printId(), $releaseDate);
+                    $this->insertLogRow($eventName->getEventName(), $userId, $release, $shp->getEntityName(), $shp->printId(), $releaseDate);
                 }
             } else {
                 $product = $this->getParameter('Product');
@@ -40,7 +46,7 @@ class CReleaseProduct extends CLogging
                                 $shp->releaseDate = $releaseDate;
                                 $shp->update();
                             }
-                            $this->insertLogRow($eventName, $userId, $release, $shp->getEntityName(), $shp->printId(), $releaseDate);
+                            $this->insertLogRow($eventName->getEventName(), $userId, $release, $shp->getEntityName(), $shp->printId(), $releaseDate);
                         }
                     }
                 }

@@ -4,6 +4,7 @@ namespace bamboo\events\listeners;
 
 use bamboo\core\db\pandaorm\entities\AEntity;
 use bamboo\core\events\AEventListener;
+use bamboo\core\events\CEventEmitted;
 use bamboo\core\exceptions\BambooException;
 
 /**
@@ -12,9 +13,12 @@ use bamboo\core\exceptions\BambooException;
  */
 class COrderStatusLog extends CLogging
 {
-    public function run($eventName)
+    public function work($eventName)
     {
-        $userId = $this->getParameter('userId');
+        if(!$eventName instanceof CEventEmitted) throw new BambooException('Event is not an event');
+        $this->backtrace = $eventName->getBacktrace();
+        $this->params = $eventName->getEventData();
+        $userId = $eventName->getUserId();
         $time = $this->getParameter('time');
         if (!$time) $time = date('Y-m-d H:i:s');
         $order = $this->getParameter('order');
@@ -23,6 +27,6 @@ class COrderStatusLog extends CLogging
         if (!$value) {
             $value = $order->status;
         }
-        $this->insertLogRow($eventName, $userId, $value, $order->getEntityName(), $order->printId(), $time);
+        $this->insertLogRow($eventName->getEventName(), $userId, $value, $order->getEntityName(), $order->printId(), $time);
     }
 }

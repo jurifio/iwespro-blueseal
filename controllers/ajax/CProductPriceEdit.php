@@ -1,11 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\core\events\EGenericEvent;
-use bamboo\core\intl\CLang;
-use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use bamboo\ecommerce\views\widget\VBase;
-
 /**
  * Class CUserSellRecapController
  * @package bamboo\blueseal\controllers\ajax
@@ -100,7 +95,7 @@ class CProductPriceEdit extends AAjaxController
                 $skuRepo->updateSkusPrices($shp->productId, $shp->productVariantId, $shp->shopId, $shp->value, $shp->price, $shp->salePrice);
             }
             $this->app->dbAdapter->commit();
-            $this->app->eventManager->trigger(new EGenericEvent('product.stock.change',['productKeys'=>$prod->printId()]));
+            $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$prod->printId()]);
         } catch(\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return json_encode($e->getMessage());

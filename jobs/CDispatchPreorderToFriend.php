@@ -55,7 +55,7 @@ class CDispatchPreorderToFriend extends ACronJob
 
                         /**$userId = $orderLine->shop->user->id;
 
-                        \Monkey::app()->eventManager->newTrigger('friendSendRequestSuccess',
+                        \Monkey::app()->eventManager->triggerEvent('friendSendRequestSuccess',
                             [
                                 'order' => $orderLine,
                                 'status' => $this->success,
@@ -79,7 +79,7 @@ class CDispatchPreorderToFriend extends ACronJob
 	                    $orderLine->update();
 
                         /**$userId = $orderLine->shop->user->id;
-                        \Monkey::app()->eventManager->newTrigger('friendSendRequestFail',
+                        \Monkey::app()->eventManager->triggerEvent('friendSendRequestFail',
                             [
                                 'order' => $orderLine,
                                 'status' => $this->fail,

@@ -1,9 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\blueseal\business\CDataTables;
-use bamboo\core\events\EGenericEvent;
-use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CProduct;
 
 /**

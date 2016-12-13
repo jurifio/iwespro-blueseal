@@ -2,11 +2,8 @@
 
 namespace bamboo\blueseal\controllers;
 
-use bamboo\core\events\EGenericEvent;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 
 /**
  * Class CProductListController

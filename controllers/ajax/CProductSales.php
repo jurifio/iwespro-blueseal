@@ -1,9 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\core\events\EGenericEvent;
-use bamboo\core\exceptions\BambooException;
-
 /**
  * Class CProductListAjaxController
  * @package bamboo\blueseal\controllers\ajax
@@ -52,7 +49,7 @@ class CProductSales extends AAjaxController
                     $productSku->salePrice = floor($productSku->price / 100 * (100 - $percent ));
                     $productSku->update();
 	            }
-                $this->app->eventManager->trigger(new EGenericEvent('product.stock.change',['productKeys'=>$product->printId()]));
+                $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$product->printId()]);
                 //$sql = "UPDATE ProductSku SET salePrice = FLOOR(price / 100 * (100 - ? )) WHERE productId = ? AND productVariantId = ? ";
                 //$res = $this->app->dbAdapter->query($sql, [$percent, $v['id'], $v['productVariantId']]);
             } catch (\Throwable $e) {
@@ -82,7 +79,7 @@ class CProductSales extends AAjaxController
                     }
                 }
             }
-            $this->app->eventManager->trigger(new EGenericEvent('product.stock.change',['productKeys'=>$product->printId()]));
+            $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$product->printId()]);
         }
 	    //$this->app->cacheService->getCache('entities')->flush();
         return "Le promozioni sono state impostate correttamente.";
