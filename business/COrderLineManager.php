@@ -4,7 +4,6 @@
 namespace bamboo\blueseal\business;
 
 use bamboo\core\ecommerce\IBillingLogic;
-use bamboo\core\events\EGenericEvent;
 use bamboo\domain\entities\COrderLine;
 use bamboo\domain\entities\COrderLineStatus;
 use bamboo\core\application\AApplication;
@@ -61,7 +60,7 @@ class COrderLineManager
 
         /** @var  $this ->app->dbAdapter CMySQLAdapter */
         $this->log("Change Line", "Changing Status to ".$newStatus->code);
-        $res = $this->app->eventManager->trigger(new EGenericEvent("orderLineStatusChange", ['orderLine' => $this->orderLine, 'newStatus' => $newStatus]));
+        $this->app->eventManager->triggerEvent("orderLineStatusChange", ['orderLine' => $this->orderLine, 'newStatus' => $newStatus]);
 
         try {
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);

@@ -84,12 +84,12 @@ class CMarketplaceProductManageController extends AAjaxController
                 $i++;
                 $ids[] = $marketplaceAccountHasProduct->printId();
                 if($i%50) {
-                    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$ids])));
+                    $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>$ids]);
                     $ids = [];
                 }
             }
             if(count($ids) > 0) {
-                $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$ids])));
+                $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>$ids]);
             }
         } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
@@ -108,7 +108,7 @@ class CMarketplaceProductManageController extends AAjaxController
 		    $product = $this->app->repoFactory->create('Product')->findOneByStringId($row);
 		    foreach ($product->marketplaceAccountHasProduct as $marketplaceAccountHasProduct) {
 			    if(1 == $marketplaceAccountHasProduct->hasError || 1 == $marketplaceAccountHasProduct->isToWork) {
-				    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
+				    $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()]);
 				    $i++;
 			    } else {
                     $revise[] = $product;
@@ -116,7 +116,7 @@ class CMarketplaceProductManageController extends AAjaxController
 		    }
 	    }
 	    foreach ($revise as $product) {
-            $this->app->eventManager->trigger((new EGenericEvent('product.stock.change',['productKeys'=>$product->printId()])));
+            $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$product->printId()]);
         }
 
 	    return $i;
