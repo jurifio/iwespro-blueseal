@@ -19,8 +19,8 @@ class CLogging extends AEventListener
      */
     protected $user;
 
-    private $backtrace = null;
-    private $params = null;
+    protected $backtrace = null;
+    protected $params = null;
 
     /**
      * @param $e
