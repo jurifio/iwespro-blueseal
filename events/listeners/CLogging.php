@@ -3,9 +3,10 @@
 namespace bamboo\events\listeners;
 
 use bamboo\core\events\AEventListener;
+use bamboo\core\events\CEventEmitted;
 use bamboo\core\exceptions\BambooException;
-use bamboo\core\application\AApplication;
 use bamboo\core\db\pandaorm\entities\AEntity;
+use bamboo\domain\entities\CUser;
 
 /**
  * Class COtherTest
@@ -18,20 +19,21 @@ class CLogging extends AEventListener
      */
     protected $user;
 
-    private $backtrace = null;
-
-    public function __construct(AApplication $app, $params = [], $backtrace = [], $userId = null)
-    {
-        parent::__construct($app, $params);
-        $this->user = (!$userId) ? \Monkey::app()->getUser() : \Monkey::app()->repoFactory->create('User')->findOneBy(['id' => $userId]);
-        $this->backtrace = $backtrace;
-    }
+    protected $backtrace = null;
+    protected $params = null;
 
     /**
-     * @param $eventName
+     * @param $e
+     * @throws BambooException
      */
-    public function run($eventName)
+    public function work($e)
     {
+        if(!$e instanceof CEventEmitted) throw new BambooException('Event is not an event');
+        $this->backtrace = $e->getBacktrace();
+        $this->params = $e->getEventData();
+        $eventName = $e->getEventName();
+        $this->user = (!$e->getUserId()) ? \Monkey::app()->getUser() : \Monkey::app()->repoFactory->create('User')->findOneBy(['id' => $e->getUserId()]);
+
         $value = $this->getParameter('value');
         $entityName = $this->getParameter('entityName');
         $stringId = $this->getParameter('stringId');
@@ -124,5 +126,15 @@ class CLogging extends AEventListener
             return $param;
         }
         return $res;
+    }
+
+
+    protected function getParam($name = null) {
+        if (null == $name) return $this->params;
+        if (array_key_exists($name, $this->params)) {
+            return $this->params[$name];
+        } else {
+            return null;
+        }
     }
 }

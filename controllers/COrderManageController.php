@@ -56,7 +56,7 @@ class COrderManageController extends ARestrictedAccessRootController
                     $order->status = $code;
 	                $order->update();
 
-                    \Monkey::app()->eventManager->newTrigger('changeOrderNonPrevista',
+                    \Monkey::app()->eventManager->triggerEvent('changeOrderNonPrevista',
                         [
                             'order' => $orderLine,
                             'status' => $this->success

@@ -89,7 +89,7 @@ class CProductPhotoAjaxManage extends AAjaxController
                 $count++;
             }
             if ($count) {
-                \Monkey::app()->eventManager->newTrigger(
+                \Monkey::app()->eventManager->triggerEvent(
                     'assignPhotosToProduct',
                     [
                         'product' => $product,
