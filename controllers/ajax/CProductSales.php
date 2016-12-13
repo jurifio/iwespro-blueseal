@@ -1,9 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\core\events\EGenericEvent;
-use bamboo\core\exceptions\BambooException;
-
 /**
  * Class CProductListAjaxController
  * @package bamboo\blueseal\controllers\ajax
