@@ -43,17 +43,18 @@
                     }
                 },
                 "files": {
+                "href": {
+                    "label": "Link immagine",
+                    "tag": "input",
+                    "type": "text",
+                    "css": "form-control",
+                    "required": true
+                },
+
                     "image": {
                         "label": "Immagine",
                         "tag": "input",
                         "type": "file",
-                        "css": "form-control",
-                        "required": true
-                    },
-                    "href": {
-                        "label": "Link immagine",
-                        "tag": "input",
-                        "type": "text",
                         "css": "form-control",
                         "required": true
                     },
