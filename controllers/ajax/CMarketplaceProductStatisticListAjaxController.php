@@ -22,8 +22,6 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sample = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
-
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
         $campaign = \Monkey::app()->repoFactory->create('Campaign')->readCampaignCode($marketplaceAccount->getCampaignCode());
@@ -96,13 +94,13 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
         $queryParameters = [$campaign->id, $timeFrom, $timeTo, $marketplaceAccount->id, $marketplaceAccount->marketplaceId];
 
-        $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET, true);
+        $datatable = new CDataTables($query, ['productId','productVariantId'], $_GET, true);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
         $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge($queryParameters, $datatable->getParams()))->fetchAll();
-        $count = $sample->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
-        $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), array_merge($queryParameters, $datatable->getParams()));
+        $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
+        $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), array_merge($queryParameters, $datatable->getParams()));
 
         $response = [];
         $response ['draw'] = $_GET['draw'];

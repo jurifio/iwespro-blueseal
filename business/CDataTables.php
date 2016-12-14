@@ -178,6 +178,7 @@ class CDataTables
     {
         if($star) {
             $keys = '*';
+            $this->addGroup($this->keys);
         } else {
             $keys = "DISTINCT ". implode(',',$this->keys);
         }
@@ -377,7 +378,7 @@ class CDataTables
     protected function groupBy()
     {
         if(!empty($this->group)){
-            $ord = [];
+            $grp = [];
             foreach($this->group as $column){
                 $grp[] = "`" . $column . "`";
             }
