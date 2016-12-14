@@ -39,8 +39,8 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
  DATE_FORMAT(`l`.`time` , '%Y-%m-%d') as `DataOrd`,
  DATE_FORMAT(`l`.`time` , '%H:%i:%s') as `OraOrd`,
  `o`.`userId` as `CodUtente`,
-  (SELECT eventValue FROM Log WHERE entityName LIKE 'OrderLine' AND (eventName LIKE 'changeOrderStatus' OR l.eventName LIKE 'orderStatusLogByHands') AND stringId = CONCAT(ol.id, '-', ol.orderId) ORDER BY Log.Id DESC LIMIT 1) as `StatoRiga`,
-  IF((SELECT eventValue FROM Log WHERE entityName LIKE 'OrderLine' AND (eventName LIKE 'changeOrderStatus' OR l.eventName LIKE 'orderStatusLogByHands') AND stringId = CONCAT(ol.id, '-', ol.orderId) ORDER BY Log.Id DESC LIMIT 1) LIKE '%CANC%', 'ORD_CANCEL', `l`.`eventValue`) as `StatoOrdine`,
+  (SELECT eventValue FROM Log WHERE entityName LIKE 'OrderLine' AND eventName LIKE 'changeOrderStatus' AND stringId = CONCAT(ol.id, '-', ol.orderId) ORDER BY Log.Id DESC LIMIT 1) as `StatoRiga`,
+  IF((SELECT eventValue FROM Log WHERE entityName LIKE 'OrderLine' AND eventName LIKE 'changeOrderStatus' AND stringId = CONCAT(ol.id, '-', ol.orderId) ORDER BY Log.Id DESC LIMIT 1) LIKE '%CANC%', 'ORD_CANCEL', `l`.`eventValue`) as `StatoOrdine`,
  concat(`ol`.`productId`, '-', `ol`.`productVariantId`) as `CodProd`,
  `ps`.`name` as `Taglia`,
  `shp`.`shopId` as `CodShop`,
@@ -56,7 +56,8 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
     IF(`ol`.`couponCharge` < 0 && `ol`.`netPrice` + `ol`.`couponCharge` < 0, 0, `ol`.`netPrice` - `ol`.`vat`)
     , 0 )as CHAR),'.', ',') as `realizzoNetto`,
  REPLACE(CAST(IFNULL((`ol`.`fullPrice` - `ol`.`activePrice`), 0 )as CHAR),'.', ',') as `sconti`,
- 1 as `Qta`
+ 1 as `Qta`,
+ CONCAT(ol.id, '-', ol.orderId) AS  prova
   FROM
   `Order` as `o`
   JOIN `OrderLine` as `ol` ON `o`.`id` = `ol`.`orderId`
@@ -66,9 +67,9 @@ class CStatisticsGenerateFilesForQlik extends ACronJob
     ) ON `phpcg`.`productId` = `ol`.`productId` AND `phpcg`.`productVariantId` = `ol`.`productVariantId`
   LEFT JOIN `ShopHasProduct` as `shp` ON `ol`.`shopId` = `shp`.`shopId` AND `ol`.`productVariantId` = `shp`.`productVariantId` AND `ol`.`productId` = `shp`.`productId`
   JOIN `Log` as `l` on `l`.stringId = `ol`.`orderId` OR `l`.`stringId` = `ol`.`id`
-  WHERE `l`.`entityName` = 'Order' AND o.id = 948002";
+  WHERE `l`.`entityName` = 'Order'";
 
-        $sql['campagne-prodotti'] =
+ $sql['campagne-prodotti'] =
             "SELECT
 c.name as CodAggr,
  date(cv.timestamp) as Data,
@@ -149,8 +150,6 @@ WHERE (`pct`.`langId` = 1 OR `pct`.`langId` IS NULL) AND productStatusId in (5,6
         $sql['utenti'] = "
 SELECT 
  `u`.`id` as `CodUtente`,
- `ud`.`name` as `Nome`,
- `ud`.`surname` as `Cognome`,
  DATE_FORMAT(`u`.`creationDate`, '%Y-%m-%d') as `DataIscrizione`,
  `ua`.`address` as `address`,
  `ua`.`postcode` as `Cap`,
@@ -160,7 +159,6 @@ SELECT
  `ua`.`phone` as `Telefono`
  FROM
 `User` as `u`
-JOIN `UserDetails` as `ud` ON `ud`.userId = `u`.`id`
 JOIN `UserAddress` as `ua` ON `u`.`id` = `ua`.`userId`
 JOIN `Country` as `c` ON `c`.`id` = `ua`.`countryId`
 ";
@@ -194,15 +192,15 @@ GROUP BY `s`.`id`, `sl`.`productVariantId`";
 
         $sql['shop'] = "SELECT * FROM `Shop` WHERE 1";
 
-        /** $sql['pubblicazioni'] = "
-        SELECT
-        concat(`shp`.`productId`, '-', `shp`.`productVariantId`) as `CodProd`,
-        `l`.`time` as `DataMov`,
-        `l`.`eventValue` as `Causale`,
-        1 as `qty`,
-        FROM `Log` as `l`
-        JOIN `ShopHasProduct` as `shp` ON concat(`shp`.`productId`, '-', `shp`.`productVariantId`, '-', `shp`.`shopId`) = `l`.`stringId`
-        JOIN `C`";*/
+       /** $sql['pubblicazioni'] = "
+SELECT
+concat(`shp`.`productId`, '-', `shp`.`productVariantId`) as `CodProd`,
+`l`.`time` as `DataMov`,
+`l`.`eventValue` as `Causale`,
+1 as `qty`,
+FROM `Log` as `l`
+JOIN `ShopHasProduct` as `shp` ON concat(`shp`.`productId`, '-', `shp`.`productVariantId`, '-', `shp`.`shopId`) = `l`.`stringId`
+JOIN `C`";*/
 
         $dba = \Monkey::app()->dbAdapter;
         foreach($sql as $k => $v) {

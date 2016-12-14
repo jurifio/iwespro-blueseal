@@ -41,7 +41,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceId`                        AS `marketplaceId`,
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
-                      if(p.qty >0 , 'sì','no')                      AS stock,
+                      p.qty                                         AS stock,
                       mahp.isToWork,
                       mahp.hasError,
                       mahp.isDeleted,
@@ -49,6 +49,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       cv.id                                         AS visitId,
                       count(DISTINCT cv.id)                         AS visits,
                       count(distinct cvho.orderId)                  AS conversions,
+                      group_concat(distinct ol.orderId SEPARATOR ',') AS ordersIds,
                       phpc.productCategoryId                        AS categories,
                       ifnull(c.code, '')                            AS campaignCode
                     FROM `Product` `p`
@@ -80,7 +81,8 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       AND ifnull(timestamp,1) <= ifnull(?, ifnull(timestamp,1)) AND 
                       ma.id = ? AND 
                       ma.marketplaceId = ? AND 
-                      `ps`.`isReady` = 1 AND `p`.`qty` > 0 
+                      `ps`.`isReady` = 1 AND 
+                      `p`.`qty` > 0 
                     GROUP BY productId, productVariantId,productCategoryId";
 
         /**
@@ -173,7 +175,6 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;
             $row['itemno'] .= '</span>';
 
-
             $row['fee'] = $prodottiMark->fee;
             $row['isToWork'] = $prodottiMark->isToWork ? 'sì' : 'no';
             $row['hasError'] = $prodottiMark->hasError ? 'sì' : 'no';
@@ -181,8 +182,15 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['marketplaceAccountName'] = $prodottiMark->marketplaceAccount->marketplace->name;
             $row['creationDate'] = $val->creationDate;
             $row['categories'] = $val->getLocalizedProductCategories("<br>");
-            $row['conversions'] = 0;//$values['conversions'];
+            $row['conversions'] = $values['conversions'];
             $row['visits'] = $values['visits'];
+            $row['visitsCost'] = $values['visits'] * ($prodottiMark->fee == 0 ? ($marketplaceAccount->config['defaultCpc'] ?? 0) : $prodottiMark->fee);
+            $row['conversionValue'] = 0;
+            foreach(explode(',',$values['ordersIds']) as $ordersId) {
+                if(empty($ordersId)) continue;
+                $order = $this->app->repoFactory->create('Order')->findOne([$ordersId]);
+                $row['conversionValue'] += $order->netTotal;
+            }
 
             $response['data'][] = $row;
         }
