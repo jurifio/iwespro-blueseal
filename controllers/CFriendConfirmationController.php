@@ -33,13 +33,13 @@ class CFriendConfirmationController extends ARestrictedAccessRootController
         try{
             $orderLine = \Monkey::app()->repoFactory->create('OrderLine')->findOne(['id'=>$filters['orderLineId'],'orderId'=>$filters['orderId']]);
             if($filters['confirm'] == 'ook') {
-                $error = \Monkey::app()->repoFactory->create('OrderLine')->friendConfirm($orderLine);
+                $success = \Monkey::app()->repoFactory->create('OrderLine')->friendConfirm($orderLine);
                 $ok = true;
             } elseif ($filters['confirm'] == 'kko') {
-                $error = \Monkey::app()->repoFactory->create('OrderLine')->friendRefuse($orderLine);
+                $success = \Monkey::app()->repoFactory->create('OrderLine')->friendRefuse($orderLine);
                 $ok = false;
             }
-
+            $error = !$success; //Just don't ask
         } catch(\Throwable $e) {
 	        $this->app->applicationError("CFriendConfirmationController",'Error confirming',$e->getMessage(),$e);
             $error = true;
