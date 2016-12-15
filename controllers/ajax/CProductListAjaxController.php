@@ -56,7 +56,7 @@ class CProductListAjaxController extends AAjaxController
                       (`pse`.`isActive` = 0), `s`.`pastSeasonMultiplier`,
                       if((`psk`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
                     (if((`psk`.`isOnSale` = 1), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100)                       AS `mup`,
-                  if((`p`.`qty` > 0), 'sì', 'no')                                                                       AS `hasQty`,
+                  `p`.`qty`                                                                                             AS `hasQty`,
                   `t`.`name`                                                                                            AS `tags`,
                   (SELECT group_concat(concat(m.name, ' - ', ma.name))
                    FROM Marketplace m, MarketplaceAccount ma, MarketplaceAccountHasProduct mahp
@@ -256,8 +256,7 @@ class CProductListAjaxController extends AAjaxController
                     }
                 }
             }
-            $row['hasQty'] = ($qty) ? 'sì' : 'no';
-            $row['hasQty'] .= ' - ' . $qty;
+            $row['hasQty'] = $qty;
 
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>');
 
