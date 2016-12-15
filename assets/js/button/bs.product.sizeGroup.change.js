@@ -43,9 +43,6 @@ $(document).on('bs.manage.sizeGroups', function () {
                 products: getVarsArray
             }
         }).done(function (response) {
-            response = '<p><strong>Attenzione!</strong>' +
-                ' La modifica del gruppo taglie potrebbe comportare la cancellazione di tutti gli sku!<p>'
-                + response;
             body.html(response);
             $('#size-group-select').selectize({
                 sortField: "text"
