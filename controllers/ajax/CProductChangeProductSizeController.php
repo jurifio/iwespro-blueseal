@@ -19,6 +19,16 @@ class CProductChangeProductSizeController extends AAjaxController
 
     public function get()
     {
+        foreach($this->app->router->request()->getRequestData('products') as $productIds) {
+            $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
+            foreach ($product->productSku as $productSku) {
+                if($productSku->stockQty > 0) {
+                    $this->app->router->response()->raiseProcessingError();
+                    return "Impossibile cambiare gruppo taglia per prodotto: ".$product->printId();
+                }
+            }
+
+        }
         $psg = $this->app->repoFactory->create('ProductSizeGroup')->findAll(null, 'order by locale, macroName, `name`');
 
         $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo taglie</option>';
@@ -31,7 +41,6 @@ class CProductChangeProductSizeController extends AAjaxController
 
     public function put()
     {
-        $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
         $groupId = $this->app->router->request()->getRequestData('groupId');
         if(!$groupId){
             return "Errore: nessun gruppo taglie selezionato.";
@@ -42,16 +51,7 @@ class CProductChangeProductSizeController extends AAjaxController
                 $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
                 $product->productSizeGroupId = $groupId;
                 $product->update();
-
-                $soR->allSkusToZero($product, 16);
-
-                \Monkey::app()->eventManager->triggerEvent('changeGroupSize',
-                    [
-                        'groupSizeId' => $groupId,
-                        'product' => $product
-                    ]);
             }
-
             return "Il gruppo taglie è stato assegnato alle righe selezionate.";
         }
     }
