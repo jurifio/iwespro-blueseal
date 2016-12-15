@@ -91,7 +91,7 @@
                                         data-orderable="true" class="center">M.Up</th>
                                     <th data-slug="hasQty"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Disp.</th>
+                                        data-orderable="true" class="center">Quantità disp.</th>
                                     <th data-slug="isOnSale"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Saldo</th>
