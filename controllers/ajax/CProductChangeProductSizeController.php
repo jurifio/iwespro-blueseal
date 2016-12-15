@@ -19,16 +19,6 @@ class CProductChangeProductSizeController extends AAjaxController
 
     public function get()
     {
-        foreach($this->app->router->request()->getRequestData('products') as $productIds) {
-            $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
-            foreach ($product->productSku as $productSku) {
-                if($productSku->stockQty > 0) {
-                    $this->app->router->response()->raiseProcessingError();
-                    return "Impossibile cambiare gruppo taglia per prodotto: ".$product->printId();
-                }
-            }
-
-        }
         $psg = $this->app->repoFactory->create('ProductSizeGroup')->findAll(null, 'order by locale, macroName, `name`');
 
         $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo taglie</option>';
@@ -41,12 +31,30 @@ class CProductChangeProductSizeController extends AAjaxController
 
     public function put()
     {
+
+        $pR = \Monkey::app()->repoFactory->create('Product');
+        $psgR = \Monkey::app()->repoFactory->create('ProductSizeGroup');
+        $pseccR = \Monkey::app()->repoFactory->create('ProdcutSizeGroupHasProductSize');
         $groupId = $this->app->router->request()->getRequestData('groupId');
+        $sizeGroup = $psgR->findOne($groupId);
         if(!$groupId){
             return "Errore: nessun gruppo taglie selezionato.";
         } elseif(empty($this->app->router->request()->getRequestData('products'))) {
             return "Nessun prodotto selezionato";
         } else {
+            $psgR->findOne($groupId);
+            $psgR->findOne($groupId);
+
+            foreach($this->app->router->request()->getRequestData('products') as $productIds) {
+                $product = $pR->findOneByStringId($productIds);
+                $sizes = [];
+                foreach ($product->productSku as $ps) {
+                    if (!$pseccR->findOneBy(['productSizeGroupId' => $groupId, 'productSizeId' => $ps->productSizeId]));
+                    $this->app->router->response()->raiseProcessingError();
+                    return "Impossibile cambiare gruppo taglia per prodotto: ".$product->printId();
+                }
+            }
+
             foreach($this->app->router->request()->getRequestData('products') as $productIds) {
                 $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
                 $product->productSizeGroupId = $groupId;
