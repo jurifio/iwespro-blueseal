@@ -58,6 +58,7 @@ class CProductListAjaxController extends AAjaxController
                     (if((`psk`.`isOnSale` = 1), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100)                       AS `mup`,
                   `p`.`qty`                                                                                             AS `hasQty`,
                   `t`.`name`                                                                                            AS `tags`,
+                  (select min(if(ProductSku.stockQty > 0, if(ProductSku.isOnSale = 0, ProductSku.price, ProductSku.salePrice), null)) from ProductSku where ProductSku.productId = p.id and ProductSku.productVariantId = p.productVariantId) as activePrice,
                   (SELECT group_concat(concat(m.name, ' - ', ma.name))
                    FROM Marketplace m, MarketplaceAccount ma, MarketplaceAccountHasProduct mahp
                    WHERE m.id = ma.marketplaceId AND
