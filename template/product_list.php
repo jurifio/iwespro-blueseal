@@ -118,7 +118,7 @@
                                     <th data-slug="activePrice"
                                         data-searchable="true"
                                         data-orderable="true"
-                                        class="center">Prezzo Attivo (approssimativo)</th>
+                                        class="center">Prezzo Attivo</th>
                                 </tr>
                             </thead>
                             <tbody>
