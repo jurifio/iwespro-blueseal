@@ -257,6 +257,7 @@ class CProductListAjaxController extends AAjaxController
                 }
             }
             $row['hasQty'] = $qty;
+            $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
 
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>');
 

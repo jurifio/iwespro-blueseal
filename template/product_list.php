@@ -115,6 +115,10 @@
                                         data-searchable="false"
                                         data-orderable="false"
                                         class="center">Taglie</th>
+                                    <th data-slug="activePrice"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Prezzo Attivo (approssimativo)</th>
                                 </tr>
                             </thead>
                             <tbody>
