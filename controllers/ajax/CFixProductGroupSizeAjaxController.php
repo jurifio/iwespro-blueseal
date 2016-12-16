@@ -56,14 +56,14 @@ class CFixProductGroupSizeAjaxController extends AAjaxController
 
         $bluesealBase = $this->app->baseUrl(false)."/blueseal/";
         $query =
-            "SELECT DISTINCT 
+            "SELECT  
 p.id as id, p.productVariantId as productVariantId,
 creationDate,
 group_concat(`psi`.`name` order by `psi`.`name` ASC separator '-') AS `problems` 
 FROM Product as p
   JOIN ProductSku as ps On p.id = ps.productId AND p.productVariantId = ps.productVariantId
   join Shop ON ps.shopId = Shop.id
-  JOIN ProductSize as psi ON ps.productSizeId = psi.id
+ JOIN ProductSize as psi ON ps.productSizeId = psi.id
 where p.productSizeGroupId NOT IN (SELECT productSizeGroupId FROM ProductSizeGroupHasProductSize WHERE ProductSizeGroupHasProductSize.productSizeId = ps.productSizeId)
       AND p.productStatusId in (5,6,11) group by p.productVariantId";
 
@@ -72,13 +72,13 @@ where p.productSizeGroupId NOT IN (SELECT productSizeGroupId FROM ProductSizeGro
         $getParams = $datatable->getParams();
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($getQuery, $getParams);
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $modifica = $bluesealBase."prodotti/modifica";
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
-        $response ['recordsTotal'] = $totlalCount;
+        $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
         $i = 0;
@@ -94,10 +94,6 @@ where p.productSizeGroupId NOT IN (SELECT productSizeGroupId FROM ProductSizeGro
             foreach($val->shop as $shop){
                 $shops[] = $shop->name;
             }
-
-            $tools = "";
-            $tools .= $this->app->getUser()->hasPermission("/admin/product/list") ? '<span class="tools-spaced"><a href="'.$bluesealBase.'printAztecCode.php?src='.base64_encode($val->id.'-'.$val->productVariantId.'__'.$val->productBrand->name.' - '.$val->itemno.' - '.$val->productVariant->name).'" target="_blank"><i class="fa fa-barcode"></i></a></span>' : '<span class="tools-spaced"><i class="fa fa-barcode"></i></span>';
-            $tools .= $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'"><i class="fa fa-pencil-square-o"></i></a></span>' : '<span class="tools-spaced"><i class="fa fa-pencil-square-o"></i></span>';
 
             /** @var CProduct $val */
 
