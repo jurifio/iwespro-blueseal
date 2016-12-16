@@ -53,7 +53,37 @@ class CProductImporterProblemsListController extends AAjaxController
         $dummyUrl = $this->app->cfg()->fetch('paths','dummyUrl');
         $shops = [];
 
-        $datatable = new CDataTables('vBluesealProductImporter',['id','productVariantId'],$_GET);
+
+        $query =
+"select 
+`p`.`id` AS `id`,`p`.`productVariantId` AS `productVariantId`,
+concat(`p`.`id`,'-',`p`.`productVariantId`) AS `productCode`,
+concat(`p`.`itemno`,' # ',`pv`.`name`) AS `code`,
+`s`.`name` AS `shop`,
+`s`.`id` AS `shopId`,
+`pb`.`name` AS `brand`,
+`p`.`externalId` AS `externalId`,
+`ps`.`name` AS `status`,concat_ws(' ',`psg`.`name`,`psg`.`macroName`,`psg`.`locale`) AS `sizeGroup`,
+`p`.`creationDate` AS `creationDate`,
+group_concat(`ds`.`size` order by `ds`.`size` ASC separator '-') AS `problems` 
+from ((((((((`Product` `p` 
+join `ProductVariant` `pv` on((`pv`.`id` = `p`.`productVariantId`))) 
+join `ProductBrand` `pb` on((`p`.`productBrandId` = `pb`.`id`))) 
+join `ProductStatus` `ps` on((`p`.`productStatusId` = `ps`.`id`))) 
+join `ProductSizeGroup` `psg` on((`p`.`productSizeGroupId` = `psg`.`id`))) 
+join `DirtyProduct` `dp` on(((`p`.`id` = `dp`.`productId`) and (`p`.`productVariantId` = `dp`.`productVariantId`)))) 
+join `DirtySku` `ds` on((`dp`.`id` = `ds`.`dirtyProductId`))) 
+left join `ShopHasProduct` `sp` on(((`dp`.`productId` = `sp`.`productId`) 
+and (`dp`.`productVariantId` = `sp`.`productVariantId`) 
+and (`dp`.`shopId` = `sp`.`shopId`)))) 
+join `Shop` `s` on `sp`.`shopId` = `s`.`id`) 
+where 
+((`ps`.`id` not in (7,8,12,13)) 
+and (`s`.`importer` is not null) 
+and (`ds`.`status` <> 'ok')) 
+group by `dp`.`productId`,`dp`.`productVariantId`,`dp`.`shopId` having (sum(`ds`.`qty`) > 0)";
+
+        $datatable = new CDataTables($query,['id','productVariantId'],$_GET, true);
         if(!empty($this->authorizedShops)){
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
