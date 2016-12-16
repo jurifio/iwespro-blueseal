@@ -1,6 +1,7 @@
 <?php
 
 namespace bamboo\blueseal\business;
+use bamboo\core\traits\TMySQLTimestamp;
 
 /**
  * Class CDataTables
@@ -17,6 +18,7 @@ namespace bamboo\blueseal\business;
  */
 class CDataTables
 {
+    use TMySQLTimestamp;
     /**
      * @var string
      */
@@ -37,6 +39,10 @@ class CDataTables
      * @var array
      */
     protected $likeConditions = [];
+    /**
+     * @var array
+     */
+    protected $ignobleConditions = [];
     /**
      * @var bool
      */
@@ -69,17 +75,24 @@ class CDataTables
      * @var string
      */
     protected $where;
+    /**
+     * @var bool
+     */
+    protected $isSubQuery;
 
     /**
      * CDataTables constructor.
      * @param $table
      * @param array $keys
      * @param array $dtData
+     * @param bool $isSubQuery
      */
-    public function __construct($table, array $keys, array $dtData)
+    public function __construct($table, array $keys, array $dtData,$isSubQuery = false)
     {
         $this->setUpDtData($dtData);
         $this->keys = $keys;
+        $this->isSubQuery = $isSubQuery;
+        if($isSubQuery) $table = "(".$table.") t";
         $this->table = $table;
     }
 
@@ -110,6 +123,9 @@ class CDataTables
      */
     public function addLikeCondition($column, $values, $not = false){
         $this->likeConditions[] = [$column,$values,$not];
+    }
+    public function addIgnobleCondition($column, $values, $not = false){
+        $this->ignobleConditions[] = [$column,$values,$not];
     }
 
     /**
@@ -162,6 +178,7 @@ class CDataTables
     {
         if($star) {
             $keys = '*';
+            $this->addGroup($this->keys);
         } else {
             $keys = "DISTINCT ". implode(',',$this->keys);
         }
@@ -198,92 +215,154 @@ class CDataTables
         $conditions = [];
         $search = [];
         foreach ($this->conditions as $condition ){
-            $single = $condition[0];
-            if($condition[2] == true){
-                $single.=" NOT ";
-            }
-            $single.=" IN (";
-            for($i=0;$i<count($condition[1]);$i++){
-                $single .= '?,';
-                $this->params[] = $condition[1][$i];
-            }
-            $conditions[] = rtrim($single,', ').') ';
+            $conditions[] = $this->buildCondition($condition[0],$condition[1],$condition[2]);
         }
         foreach ($this->likeConditions as $condition ){
-            $single = $condition[0];
-            if($condition[2] == true){
-                $single.=" NOT ";
-            }
-            $single.=" like ?";
-            $conditions[] = $single;
-            $this->params[] = $condition[1];
+            $conditions[] = $this->buildCondition($condition[0],$condition[1],$condition[2]);
         }
-
+        foreach ($this->ignobleConditions as $condition) {
+            $not = '';
+            if ($condition[2]) $not = 'NOT';
+            $ingnobleCond = ' AND `' . $condition[0] . "` " . $not . " LIKE '" . $condition[1] . "'";
+        }
+        $columnsFilter = [];
         if($count != 'full'){
-            $columnsFilter = [];
             foreach ($this->columns as $idx => $column) {
                 if ($column['searchable'] == true) {
                     if($this->search){
-                        $search['cols'][] = "`" . $column['name']."` RLIKE ?";
-                        $search['params'][] = $this->search;
+                        $search[] = $this->buildCondition($column['name'],$this->search,false,false);
                     }
                     if($column['search']){
-	                    $search['cols'][] = "`" . $column['name']."` RLIKE ?";
-	                    $search['params'][] = $this->search;
+	                    $search[] = $this->buildCondition($column['name'],$this->search,false,false); //"`" . $column['name']."` RLIKE ?";
                     }
 	                if(array_key_exists('filter', $column) && ($column['filter'] || ("0" === $column['filter']))) {
-                        $not = (0 === strpos($column['filter'], '-')) ? true : false;
-		                $columnsFilter['cols'][] = ($not) ? "`" . $column['name'] . "` NOT LIKE ? " : "`" . $column['name'] . "` RLIKE ? ";
-		                $columnsFilter['params'][] = ($not) ? '%' . substr($column['filter'], 1) . '%' : $this->likeSearch($column['filter']);
+	                    $columnsFilter[] = $this->buildCondition($column['name'],$column['filter'],false,false);
 	                }
                 }
             }
             if($this->search){
                 foreach($this->keys as $key){
-	                $search['cols'][] = "`" . $key."` RLIKE ?";
-	                $search['params'][] = $this->search;
+                    $search[] = $this->buildCondition($key,$this->search,false);
                 }
             }
         }
 
-        $conditionsWhere = empty($conditions) ? " 1=1 " : implode(' AND ' , $conditions );
+        $conditionsWhere = "( 1=1 ";
+        foreach ($conditions as $condition) {
+            $conditionsWhere.=  " AND " . $condition['where'];
+            array_push($this->params,...$condition['params']);
+        }
+        $conditionsWhere .= " ) ";
 
-	    if(!empty($search['cols'])) {
-		    $searchWhere = ' ( '.implode(' OR ',($search['cols'])).' ) ';
-		    //MISTERO DELLA FEDE
-		    array_push($this->params,...$search['params']);
-	    } else {
-		    $searchWhere = " 1=1 ";
-	    }
+        $columnsFilterWhere = " ( 1=1 ";
+        foreach ($columnsFilter as $columnFilterElem) {
+            $columnsFilterWhere .= " AND ". $columnFilterElem['where'];
+            array_push($this->params,...$columnFilterElem['params']);
+        }
+        $columnsFilterWhere .= " ) ";
 
-	    if(!empty($columnsFilter['cols'])) {
-		    $columnsFilterWhere = ' ( ' . implode(' AND ' , $columnsFilter['cols']) . ' ) ';
-		    //MISTERO DELLA FEDE
-		    array_push($this->params,...$columnsFilter['params']);
-	    } else {
-		    $columnsFilterWhere = " 1=1 ";
-	    }
-        $this->where = " WHERE ".$conditionsWhere." AND ".$searchWhere . ' AND ' . $columnsFilterWhere;
+        if(empty($search)) {
+            $searchWhere = " 1=1 ";
+        } else {
+            $searchWhere = " ( 0=1 ";
+            foreach ($search as $searchElem) {
+                $searchWhere .= " OR ". $searchElem['where'];
+                array_push($this->params,...$searchElem['params']);
+            }
+            $searchWhere .= " ) ";
+        }
 
+        $this->where = " WHERE ".$conditionsWhere." AND ".$columnsFilterWhere. ' AND ' . $searchWhere;
+        if (isset($ingnobleCond)) $this->where .= $ingnobleCond;
         return $this->where;
     }
 
     /**
-     * @param $string
-     * @return mixed|string
+     * @param $field
+     * @param $values
+     * @param bool $not
+     * @param bool $likeStartsWith
+     * @return array
      */
-    protected function likeSearch($string)
+    protected function buildCondition($field, $values, $not = false,$likeStartsWith = true)
     {
-        $string = str_replace('.','\.', $string);
-        $string = str_replace('*','.*', $string);
-        $string.='.*';
-        return $string;
+        $condition = " ";
+        $condition.= "`".$field. "` ";
+        $params = [];
+        //è un array indi per cui è per forza una in
+        if(is_array($values)) {
+            if($not) $condition.= " NOT ";
+            $condition .= " IN ( ";
+            foreach ($values as $val) {
+                $condition .= '?,';
+                $params[] = $val;
+            }
+            $condition = rtrim($condition,', ').') ';
+        }
+        //non è un array quindi sono altri cazzi, di sicuro una like
+        elseif($not && $values !== null) {
+            $condition.= " NOT RLIKE ? ";
+            $params[] = $this->likeSearch($values,$likeStartsWith);
+        } elseif(strpos($values,'-') === 0) {
+            $condition.= " NOT RLIKE ? ";
+            $params[] = $this->likeSearch(substr($values, 1),$likeStartsWith);
+        } elseif(strpos($values,'><') === 0) {
+            $condition.= " BETWEEN ? AND ? ";
+            $values = substr($values, 2);
+            $values = explode("|",$values);
+            $params[] = $values[0];
+            if(isset($values[1])) {
+                $params[] = $values[1];
+            } else {
+                $params[] = $this->time();
+            }
+        } elseif(strpos($values,'>') === 0) {
+            $condition.= " > ?";
+            if($values instanceof \DateTime) {
+                $values = $this->time($values->getTimestamp());
+            }
+            $params[] = substr($values, 1);
+        } elseif(strpos($values,'<') === 0) {
+            $condition.= " < ?";
+            if($values instanceof \DateTime) {
+                $values = $this->time($values->getTimestamp());
+            }
+            $params[] = substr($values, 1);
+        } elseif(strpos($values,'§in:') === 0) {
+            $values = substr($values,5);
+            return $this->buildCondition($field,explode(',',$values));
+        } elseif(strpos($values,'#in:') === 0) {
+            $values = substr($values, 0, 4);
+            return $this->buildCondition($field, explode($values, ','));
+        } elseif ($values === null) {
+            $condition.= ' IS ' . (($not) ? 'NOT ': '') . '?';
+            $params[] = $values;
+        } else {
+            $condition.= " RLIKE ? ";
+            $params[] = $this->likeSearch($values,$likeStartsWith);
+        }
 
+        return ["where"=>$condition,"params"=>$params];
+    }
+
+    /**
+     * @param $string
+     * @param bool $startWith
+     * @return string
+     */
+    protected function likeSearch($string,$startWith = true)
+    {
+        if(!$startWith) {
+            $string = ".*".$string;
+        }
+        //$string = str_replace('.','\.', $string);
+        //$string = str_replace('*','.*', $string);
+        return $string;//$string.".*";
     }
 
     /**
      * @param array $fields
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function addGroup($fields = [])
     {
@@ -299,7 +378,7 @@ class CDataTables
     protected function groupBy()
     {
         if(!empty($this->group)){
-            $ord = [];
+            $grp = [];
             foreach($this->group as $column){
                 $grp[] = "`" . $column . "`";
             }
@@ -315,7 +394,11 @@ class CDataTables
         if(!empty($this->orders)){
             $ord = [];
             foreach($this->orders as $column){
-                $ord[] = "`".$column['column']."` ".$column['dir'];
+                if($this->isSubQuery) {
+                    $ord[] = "t.`".$column['column']."` ".$column['dir'];
+                } else {
+                    $ord[] = "`".$column['column']."` ".$column['dir'];
+                }
             }
             return "ORDER BY ".implode(',',$ord);
         } else return " ";
@@ -326,7 +409,9 @@ class CDataTables
      */
     protected function limit()
     {
-        if($this->limit){
+        if($this->limit === "0") {
+            return " ";
+        }elseif($this->limit){
             return " LIMIT ".$this->offset.",".$this->limit;
         }else{
             return " OFFSET ".$this->offset;

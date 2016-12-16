@@ -29,15 +29,15 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-striped" data-column-filter="true" data-datatable-name="product_importer_list"
+                        <table class="table table-striped" data-datatable-name="product_importer_list"
                                data-controller="ProductImporterProblemsListController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-lenght-menu="100, 200, 500"
+                               data-length-menu-setup="100, 200, 500"
                                id="productWithImporterProblems">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+                                <th data-slug="productCode"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Codice</th>
@@ -69,7 +69,7 @@
                                     data-searchable="false"
                                     data-orderable="true"
                                     data-default-order="desc"
-                                    class="center">Creazione</th>
+                                    class="center dataFilterType">Creazione</th>
                                 <th data-slug="problems"
                                     data-searchable="true"
                                     data-orderable="true"

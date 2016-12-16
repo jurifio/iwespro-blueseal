@@ -25,15 +25,53 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="newsletter_email_list"
                                data-controller="NewsletterEmailListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-length-menu-setup="100, 200, 500, 1000, 2000"
+                               data-display-length="200">
                             <thead>
                             <tr>
-                                <th class="center">Email</th>
-                                <th class="center">Attiva?</th>
-                                <th class="center">Nome</th>
-                                <th class="center">Cognome</th>
-                                <th class="center">Data iscrizione</th>
-                                <th class="center">Data disiscrizione</th>
+                                <th data-slug="email"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email
+                                </th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Attiva?
+                                </th>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Nome
+                                </th>
+                                <th data-slug="surname"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Cognome
+                                </th>
+                                <th data-slug="lang"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Lingua
+                                </th>
+                                <th data-slug="subscriptionDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center dataFilterType">Data iscrizione
+                                </th>
+                                <th data-slug="unsubscriptionDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Data disiscrizione
+                                </th>
+                                <th data-slug="lang"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Lingua
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -49,50 +87,11 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione dettagli prodotto">
+    <bs-toolbar-group data-group-label="Esportazione">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-magic"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.detail"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Unisci dettagli"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-question-circle"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.detailproducts"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Visualizza Prodotti"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-exclamation-triangle"
-            data-permission="/admin/product/edit"
-            data-event="bs.manage.deletedetails"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cancella i dettagli"
-            data-placement="bottom"
+            data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".visualizzaButton").click(
-            function(){
-                var id = "dettCollaps-" + $(this).data("rowCollapse");
-                var state = ($(id).css("display") == "hidden") ? "block" : "hidden";
-                $(id).css("display", state);
-            }
-        );
-    });
-
-</script>
 </body>
 </html>

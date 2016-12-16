@@ -20,35 +20,19 @@ use bamboo\core\intl\CLang;
  */
 class CNewsletterEmailListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        $this->em = new \stdClass();
-        $this->em->newsletter = $this->app->entityManagerFactory->create('newsletter');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
-        $datatable = new CDataTables('vBluesealNewsletterEmailList',['id'],$_GET);
-        $users = $this->app->repoFactory->create('User');
+        $sql = "SELECT n.id, if(n.isActive = 1,'Attiva','Non Attiva') , l.name as lang, ud.name, ud.surname, n.subscriptionDate FROM 
+                        Newsletter n 
+                        JOIN Lang l ON n.langId = l.id 
+                        LEFT JOIN (User u 
+                          JOIN UserDetails ud ON u.id = ud.userId) 
+                        ON n.userId = u.id ";
+        $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        $newsletter = $this->app->repoFactory->create('Newsletter')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->newsletter->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->newsletter->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $newsletter = $this->app->repoFactory->create('Newsletter')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $count = $this->app->repoFactory->create('Newsletter')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('Newsletter')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
 
         $response = [];
@@ -57,26 +41,23 @@ class CNewsletterEmailListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $i = 0;
-
-        foreach($newsletter as $val){
-            \Monkey::dump($val);
-            $user = $users->findOneBy(["email" => $val->email]);
-            \Monkey::dump($user);
-			try {
-				$response['data'][$i]["DT_RowId"] = 'row__' . $val->email;
-				$response['data'][$i]["DT_RowClass"] = 'colore';
-				$response['data'][$i]['email'] = $val->email;
-				$response['data'][$i]['name'] = ($user) ? $user->name : '-';
-                $response['data'][$i]['surname'] = ($user) ? $user->surname : `-`;
-                $response['data'][$i]['isActive'] = ($val->isActive) ? "Attiva" : "Non Attiva";
-                $response['data'][$i]['subscriptionDate'] = ($val->subscriptionDate) ? $val->subscriptionDate : "-";
-                $response['data'][$i]['unsubscriptionDate'] = ($val->unsubscriptionDate) ? $val->unsubscriptionDate : "-";
-				$i++;
-			} catch (\Exception $e) {
-				throw $e;
-			}
-
+        foreach ($newsletter as $val) {
+            $row = [];
+            $user = $val->user;
+            $row["DT_RowId"] = $val->id;
+            $row["DT_RowClass"] = 'colore';
+            $row['email'] = $val->email;
+            try {
+                $row['name'] = ($user) ? $user->name : '-';
+                $row['surname'] = ($user) ? $user->surname : '-';
+            }catch (\Throwable $e) {
+                echo $user->id;
+            }
+            $row['isActive'] = ($val->isActive) ? "Attiva" : "Non Attiva";
+            $row['subscriptionDate'] = ($val->subscriptionDate) ? $val->subscriptionDate : "-";
+            $row['unsubscriptionDate'] = ($val->unsubscriptionDate) ? $val->unsubscriptionDate : "-";
+            $row['lang'] = $val->lang->lang;
+            $response['data'][] = $row;
         }
 
         return json_encode($response);

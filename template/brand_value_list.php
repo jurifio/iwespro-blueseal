@@ -25,7 +25,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="brand_value_list"
-                               data-column-filter="true"
+
                                data-controller="BrandValueListAjaxController"
                                data-inner-setup="true"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
@@ -63,6 +63,9 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">Margine</th>
                                 <?php endif; ?>
+                                <th data-slug="prezzo_medio"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">P. Medio</th>
                                 <th data-slug="incasso_friend"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Incasso Friend</th>
@@ -87,7 +90,9 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-
-</bs-toolbar>
+    <bs-toolbar-group data-group-label="Esportazione dei dati">
+        <bs-toolbar-button
+            data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
 </body>
 </html>

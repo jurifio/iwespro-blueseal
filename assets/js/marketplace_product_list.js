@@ -29,7 +29,7 @@ $(document).on('bs.marketplace.filter',function() {
             body.html($(html));
 
             okButton.off().on('click',function () {
-                window.location.href = '/blueseal/prodotti/marketplace?accountId='+$('#accountFilterId').val();
+                window.location.href = '/blueseal/prodotti/marketplace/account/'+$('#accountFilterId').val();
             });
         });
     });
@@ -180,7 +180,7 @@ $(document).on('bs.product.retry', function (e, element, button) {
 
 		}).always(function () {
 			bsModal.modal('hide');
-			$('.table').DataTable().ajax.reload();
+			$('.table').DataTable().ajax.reload(null,false);
 		});
 	});
 

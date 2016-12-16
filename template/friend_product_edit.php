@@ -37,7 +37,7 @@ endif; ?></div>
                     } ?>
                     <input type="hidden" id="Product_id" name="Product_id" value="<?php echo (isset($productEdit)) ? $productEdit->id : '';?>" />
                     <input type="hidden" id="Product_productVariantId" name="Product_productVariantId" value="<?php echo (isset($productEdit)) ? $productEdit->productVariantId : '';?>" />
-                    <input type="hidden" id="ProductCategory_id" name="ProductCategory_id"
+                    <input type="hidden" id="ProductCategory_id" class="required" data-form-label = "Categorie" name="ProductCategory_id"
                            value="<?php echo implode(',', $value) ?>"/>
                     <div class="row">
                         <div class="col-md-4">
@@ -46,26 +46,12 @@ endif; ?></div>
                                     <h5 class="m-t-10">
                                      Codice: <span class="code-title">-</span>
                                     </h5>
-
-                                    <!--<p><strong>Categorie:</strong></p>-->
+                                    <?php if ($allShops) : ?>
+                                    <p class="categoryPath"></p>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
-                                        <!--<div class="col-md-7">
-                                            <div class="form-group form-group-default form-group-photo">
-                                     <?php
-                                        if (isset($productEdit->dummyPicture)) {
-                                            $dummy = (strpos($productEdit->dummyPicture, 's3-eu-west-1.amazonaws.com')) ? $productEdit->dummyPicture : $dummyUrl . "/" . $productEdit->dummyPicture;
-                                        } else {
-                                            $dummy = "";
-                                        }
-                                     ?>
-                                                <img id="dummyPicture" align="center" class="img-responsive"
-                                                     src="<?php echo $dummy ?>">
-                                            </div>
-                                            <div style="display:none;"><input id="dummyFile" type="file" value=""
-                                                                              name="Product_dummyPicture"/></div>
-                                        </div>-->
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-8">
@@ -132,9 +118,9 @@ endif; ?></div>
                                             <div class="disableBlank">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <div class="form-group form-group-default selectize-enabled">
+                                                        <div class="form-group form-group-default">
                                                             <label for="ProductColorGroup_id">Gruppo colore</label>
-                                                            <select class="full-width selectpicker"
+                                                            <select class="full-width required selectpicker"
                                                                     placeholder="Seleziona il gruppo colore"
                                                                     data-init-plugin="selectize"
                                                                     title="ProductColorGroup_id" name="ProductColorGroup_id"
@@ -156,7 +142,7 @@ endif; ?></div>
                                                         <div class="form-group form-group-default required">
                                                             <label for="ProductVariant_description">Nome colore (produttore)</label>
                                                             <input id="ProductVariant_description" autocomplete="off"
-                                                                   type="text" class="form-control"
+                                                                   type="text" class="form-control required"
                                                                    name="ProductVariant_description"
                                                                    value="<?php echo isset($productEdit) && isset($productEdit->productVariant->description) ? $productEdit->productVariant->description : "" ?>">
                                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
@@ -178,7 +164,7 @@ endif; ?></div>
                                                     <div class="col-md-12">
                                                         <div class="form-group form-group-default selectize-enabled">
                                                             <label for="Product_sizes">Schiera taglie</label>
-                                                            <select class="full-width selectpicker"
+                                                            <select class="full-width required selectpicker"
                                                                     placeholder="Seleziona la schiera delle taglie"
                                                                     data-init-plugin="selectize" title="Product_sizes"
                                                                     name="Product_sizes" id="Product_sizes" required>
@@ -250,9 +236,9 @@ endif; ?></div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group form-group-default required">
-                                            <label for="Product_retail_price">Prezzo Vendita</label>
+                                            <label for="Product_retail_price">Prezzo Vendita (Retail Price)</label>
                                             <input autocomplete="off" type="text" id="Product_retail_price"
-                                                   class="form-control search-product inputPrice" name="Product_retail_price"
+                                                   class="form-control required search-product inputPrice" name="Product_retail_price"
                                                    value="<?php echo (isset($productEdit) && isset($productEdit->itemno)) ? $productEdit->itemno : '' ?>"
                                                    required>
                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
@@ -262,9 +248,9 @@ endif; ?></div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group form-group-default required">
-                                            <label for="Product_value">Prezzo Fornitore</label>
+                                            <label for="Product_value">Costo Fornitore</label>
                                             <input id="Product_value" autocomplete="off" type="text"
-                                                   class="form-control search-product inputPrice" name="Product_value"
+                                                   class="form-control required search-product inputPrice" name="Product_value"
                                                    value="<?php echo (isset($productEdit)) ? $productEdit->productVariant->name : "" ?>"
                                                    required>
                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
@@ -283,10 +269,8 @@ endif; ?></div>
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default" style="height: 50px">
                                                     <label for="ProductName_1_name">Nome del prodotto</label>
-                                                    <select id="ProductName_1_name" name="ProductName_1_name" class="form-control" data-preset-name="<?php echo ((isset($productEdit)) && !is_null($productEdit->productNameTranslation->getFirst())) ? $productEdit->productNameTranslation->getFirst()->name : '' ?>"></select>
-                                                    <!--<input autocomplete="off" type="text" class="form-control"
-                                                           id="ProductName_1_name" name="ProductName_1_name"
-                                                           value="<?php // echo !is_null($productEdit->productNameTranslation->getFirst()) ? $productEdit->productNameTranslation->getFirst()->name : "" ?>">-->
+                                                    <select id="ProductName_1_name" name="ProductName_1_name" class="form-control required" data-preset-name="<?php echo ((isset($productEdit)) && !is_null($productEdit->productNameTranslation->getFirst())) ? $productEdit->productNameTranslation->getFirst()->name : '' ?>"></select>
+                                                    <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -310,6 +294,19 @@ endif; ?></div>
                                     </div>
                                 </div>
                             </div>
+                            <?php if ($allShops) : ?>
+                                <div class="panel panel-default clearfix">
+                                    <div class="panel-heading clearfix">
+                                        <h5 class="m-t-10">Friend</h5>
+                                    </div>
+                                    <div class="panel-body clearfix">
+                                        <div class="row">
+                                            <div class="col-md-12 friendList">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </form>
@@ -419,14 +416,7 @@ endif; ?></div>
             data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-plus-square"
-            data-permission="/admin/product/edit"
-            data-event="bs.det.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo dettaglio"
-            data-placement="bottom"
+            data-remote="bs.product.details.new"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
@@ -461,11 +451,33 @@ endif; ?></div>
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione Nomi Prodotti">
+        <bs-toolbar-button
+            data-remote="bs.product.name.insert"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Aiuto">
         <bs-toolbar-button
             data-remote="btn.href.smart_product.guide"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php  if ($allShops): ?>
+    <bs-toolbar-group data-group-label="Stato del prodotto">
+        <bs-toolbar-select
+            data-tag="select"
+            data-icon="fa-random"
+            data-permission="/admin/product/add"
+            data-rel="tooltip"
+            data-button="false"
+            data-placement="bottom"
+            data-class="btn btn-default selectStatus"
+            data-name="Product_status"
+            data-title="Modifica stato"
+            data-event="bs.product.changestatus"
+            data-options='<?php echo json_encode($statuses); ?>'
+        ></bs-toolbar-select>
+    </bs-toolbar-group>
+    <?php endif; ?>
 </bs-toolbar>
 </body>
 </html>

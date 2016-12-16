@@ -83,7 +83,7 @@ class CProductColorAjaxController extends AAjaxController
                 }
                 $affected = $affected + $this->app->dbAdapter->query($sql, [])->countAffectedRows();
             }
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             $ret = "OOPS! Qualcosa è andato storto. $affected prodotti aggiornati. Contatta l'amministratore<br />";
             //$ret .= $sql . "<br />";
             //$ret.= $e->getMessage();

@@ -152,7 +152,7 @@ var Button = function (data) {
     this.id = window.bsToolbarLastButtonId;
     this.template = "<{tag} {attributes} {id}>{icon}</{tag}>";
 
-    this.cfg = new ButtonCfg(data, ['tag', 'icon', 'permission', 'event', 'button']);
+    this.cfg = new ButtonCfg(data, ['tag', 'icon', 'loadEvent', 'permission', 'event', 'button']);
     this.tagAttr = new ButtonCfg(data, ['class', 'rel', 'href', 'title', 'name', 'download']);
     this.dataAttr = new ButtonCfg(data, ['placement', 'toggle', 'target', 'json']);
 
@@ -848,3 +848,63 @@ Portlet.prototype.draw = function(that) {
 	});
 };
 
+$.MatchMedia = function(a) {
+    return window.styleMedia.matchMedium(a);
+};
+
+$.QueryString = (function(a) {
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+        var p=a[i].split('=');
+        if (p.length != 2) continue;
+        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+})(window.location.search.substr(1).split('&'));
+
+
+$.decodeGetStringFromUrl = function(url) {
+    "use strict";
+    var getString = url.split('\?',2);
+    if(getString.length == 0) return false;
+    if(getString.length == 1) return {baseUrl:url};
+    if(getString.length == 2) return $.extend({baseUrl:getString[0]},$.decodeGetString(getString[1]));
+};
+
+$.decodeGetString = function(a) {
+    "use strict";
+    if (a == "") return {};
+    a = a.split('&');
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+        var p=a[i].split('=');
+        if (p.length != 2) continue;
+        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+};
+
+$.encodeGetString = function(o) {
+    "use strict";
+    var a = [];
+    var r;
+    if(typeof o.baseUrl != 'undefined' && o.baseUrl != 'undefined') {
+        r = o.baseUrl;
+        delete o.baseUrl;
+    }
+    $.each(o,function(k,v) {
+        if(k == 'baseUrl') return;
+        a.push(k+"="+v);
+    });
+    return r+'?'+a.join('&');
+};
+
+$.addGetParam = function(url,field,val) {
+    "use strict";
+    var c = $.decodeGetStringFromUrl(url);
+    c[field] = val;
+    return $.encodeGetString(c);
+};

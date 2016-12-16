@@ -111,7 +111,7 @@ class CHomepageContentEditController extends ARestrictedAccessRootController
         try {
             $json->save();
             return json_encode(['widget' => $widgetType,'key' => $widgetId,'lang' => $widgetLang,'status'=>'ok','message'=>'Widget aggiornato']);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return json_encode(['widget' => $widgetType,'key' => $widgetId,'lang' => $widgetLang,'status'=>'ko','message'=>$e->getMessage()]);
         }
     }

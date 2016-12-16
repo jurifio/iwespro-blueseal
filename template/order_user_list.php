@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -24,23 +24,68 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped" data-column-filter="true" data-datatable-name="order_user_list"
+                        <table class="table table-striped"
+                               data-datatable-name="order_user_list"
                                data-controller="OrderByUserListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
+                               data-inner-setup="true"
+                               data-length-menu-setup="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
                             <tr>
-                                <th>Id</th>
-                                <th>Utente</th>
-                                <th>Email</th>
-                                <th>Città</th>
-                                <th>Paese</th>
-                                <th>Data Ordine</th>
-                                <th>Stato Ordine</th>
-                                <th>Brand</th>
-                                <th>Shop</th>
-                                <th>Importo Pagato</th>
-                                <th>Margine</th>
-                                <th>Metodo pagamento</th>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Id</th>
+                                <th data-slug="user"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Utente</th>
+                                <th data-slug="email"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email</th>
+                                <th data-slug="city"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Città</th>
+                                <th data-slug="country"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Paese</th>
+                                <th data-slug="lastUpdate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center dataFilterType">Data Ordine</th>
+                                <th data-slug="status"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Stato Ordine</th>
+                                <th data-slug="brand"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Brand</th>
+                                <th data-slug="shop"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shop</th>
+                                <th data-slug="total"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Importo Pagato</th>
+                                <th data-slug="margine"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Margine</th>
+                                <th data-slug="payment"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Metodo pagamento</th>
+                                <th data-slug="data"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Data ordine</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -66,7 +111,12 @@
             data-title="Aggiungi un nuovo ordine manuale"
             data-placement="bottom"
             data-href="#"
-            ></bs-toolbar-button>
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Esportazione">
+        <bs-toolbar-button
+            data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 

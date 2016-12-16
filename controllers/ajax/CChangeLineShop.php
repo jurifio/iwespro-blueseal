@@ -22,7 +22,12 @@ class CChangeLineShop extends AAjaxController
     {
         $datas = $this->data;
         $orderLine = $this->app->repoFactory->create('OrderLine')->findOne(['id'=>$datas['orderLineId'],'orderId'=>$datas['orderId']]);
+        $orderLine->productSku->stockQty += 1;
+        $orderLine->productSku->padding += 1;
+        $orderLine->productSku->update();
         $altSku = $this->app->repoFactory->create('ProductSku')->findOne(['productId'=>$orderLine->productId,'productVariantId'=>$orderLine->productVariantId,'productSizeId'=>$orderLine->productSizeId,'shopId'=>$datas['selectShop']]);
+        $altSku->stockQty -= 1;
+        $altSku->padding -= 1;
         $olm = new COrderLineManager($this->app,$orderLine);
         if(!$olm->setNewSku($altSku)){
             $this->app->router->response()->raiseProcessingError();

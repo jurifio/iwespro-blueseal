@@ -58,7 +58,7 @@ class CProductSinglePriceEdit extends AAjaxController
             $shp->updatePrices($value, $price);
 
             $this->app->dbAdapter->commit();
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return json_encode($e->getMessage());
         }

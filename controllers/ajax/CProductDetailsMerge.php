@@ -29,7 +29,13 @@ class CProductDetailsMerge extends AAjaxController
         $resProds = [];
         $resCount = 0;
         foreach ($prods as $k => $v) {
-            $prod = $repoPro->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            if (!is_array($v)) {
+                $p = [];
+                list($p['id'], $p['productVariantId']) = explode('-', $v);
+            } else {
+                $p = $v;
+            }
+            $prod = $repoPro->findOneBy(['id' => $p['id'], 'productVariantId' => $p['productVariantId']]);
             if (!is_null($prod->productSheetPrototypeId)) {
                 $resProds[$resCount]['code'] = $prod->id . "-" . $prod->productVariantId;
                 $resProds[$resCount]['variant'] = $prod->productVariant->name;
@@ -73,8 +79,10 @@ class CProductDetailsMerge extends AAjaxController
             ]
         );
         try {
+            \Monkey::app()->dbAdapter->beginTransaction();
             foreach ($get['rows'] as $v) {
                 if ($choosen->productVariantId == $v['productVariantId']) continue;
+
                 $prod = $this->app->repoFactory->create('Product')->findOneBy(
                     [
                         'id' => $v['id'],
@@ -121,6 +129,7 @@ class CProductDetailsMerge extends AAjaxController
                 foreach ($psa as $psaSingle) {
                     $psaSingle->delete();
                 }
+
                 foreach ($choosenPsa as $cpsaSingle) {
                     $newPsa = $this->app->repoFactory->create('ProductSheetActual')->getEmptyEntity();
                     $newPsa->productId = $prod->id;
@@ -130,8 +139,21 @@ class CProductDetailsMerge extends AAjaxController
                     $newPsa->insert();
                 }
 
+                foreach($prod->productHasProductCategory as $ppc) {
+                    $ppc->delete();
+                }
+                $phpcRepo = \Monkey::app()->repoFactory->create('ProductHasProductCategory');
+                foreach($choosen->productHasProductCategory as $pc) {
+                    $ppc = $phpcRepo->getEmptyEntity();
+                    $ppc->productId = $prod->id;
+                    $ppc->productVariantId = $prod->productVariantId;
+                    $ppc->productCategoryId = $pc->productCategoryId;
+                    $ppc->insert();
+                }
             }
-        } catch (\Exception $e) {
+            \Monkey::app()->dbAdapter->commit();
+        } catch (\Throwable $e) {
+            \Monkey::app()->dbAdapter->rollBack();
             return 'OOPS! Si è verificato un problema:<br /> ' . $e->getMessage();
         }
         $res = 'I dettagli dei prodotti sono stati fusi correttamente.';

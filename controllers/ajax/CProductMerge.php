@@ -90,10 +90,11 @@ class CProductMerge extends AAjaxController
                 $shopSku[] = $v->shopId;
             }
             $shopSku = array_unique($shopSku);
+
             if (!empty(array_intersect($shopSku, $shopControl))) {
                 return "ERRORE: i prodotti selezionati per la fusione non possono venire dallo stesso Friend";
             } else {
-                $shopControl = array_merge($shopControl, $shopSku);
+            $shopControl = array_merge($shopControl, $shopSku);
             }
         }
 
@@ -119,7 +120,7 @@ class CProductMerge extends AAjaxController
                         $vshop->productVariantId = $rows[$choosen]['productVariantId'];
                         $vshop->insert();
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     throw new BambooException(
                         $this->buildErrorMsg(
                             "l'assegnazione del prodotto al nuovo shop non è andata a buon fine.",
@@ -133,17 +134,20 @@ class CProductMerge extends AAjaxController
 
             //aggiorno la relazione tra product e dirtyProduct del prodotto da fondere
             try {
+
                 foreach($sop as $kshop => $vshop) {
                     $dp = $this->app->repoFactory->create('DirtyProduct')->findOneBy([
                         'productId' => $v['id'],
                         'productVariantId' => $v['productVariantId'],
                         'shopId' => $vshop->shopId
                     ]);
-                    $dp->productId = $rows[$choosen]['id'];
-                    $dp->productVariantId = $rows[$choosen]['productVariantId'];
-                    $dp->update();
+                    if ($dp) {
+                        $dp->productId = $rows[$choosen]['id'];
+                        $dp->productVariantId = $rows[$choosen]['productVariantId'];
+                        $dp->update();
+                    }
                 }
-            } catch(\Exception $e) {
+            } catch(\Throwable $e) {
                 throw new BambooException(
                     $this->buildErrorMsg(
                         "l'aggiornento dell'associazione tra catalogo e importazione non ha funzionato.",
@@ -164,7 +168,7 @@ class CProductMerge extends AAjaxController
                     $ps->productVariantId = $rows[$choosen]['productVariantId'];
                     $ps->insert();
                 }
-            } catch(\Exception $e) {
+            } catch(\Throwable $e) {
                 throw new BambooException(
                     $this->buildErrorMsg(
                         "Lo spostamento degli sku verso il prodotto scelto non ha funzionato.",
@@ -182,7 +186,7 @@ class CProductMerge extends AAjaxController
                 $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                 $p->productStatusId = 13;
                 $p->update();
-            } catch(\Exception $e) {
+            } catch(\Throwable $e) {
                 throw new BambooException(
                     $this->buildErrorMsg(
                         "Il cambio di stato di uno dei prodotti non è stato eseguito.",
@@ -195,7 +199,7 @@ class CProductMerge extends AAjaxController
             
             $this->app->dbAdapter->commit();
             return "Fusione eseguita!";
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return $e->getMessage();
         }

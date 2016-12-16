@@ -19,14 +19,30 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="dictionary_tag_list"
-                               data-column-filter="true"
+
                                data-controller="DictionaryTagListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-length-menu-setup="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
                             <tr>
-                                <th class="center">Shop</th>
-                                <th class="center">N. Tag</th>
-                                <th class="center">N. Tag non tradotti</th>
+                                <th data-slug="shopId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">Shop
+                                </th>
+                                <th data-slug="count"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">N. Tag
+                                </th>
+                                <th data-slug="mancanti"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">N. Tag non tradotti
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

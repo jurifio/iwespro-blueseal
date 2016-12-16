@@ -54,7 +54,7 @@ class CFillOrderLine extends AAjaxController
                 'lineManager' => $lineManager
             ]);
 
-        }catch (\Exception $e){
+        }catch (\Throwable $e){
             var_dump($e);
             return 'error';
         }

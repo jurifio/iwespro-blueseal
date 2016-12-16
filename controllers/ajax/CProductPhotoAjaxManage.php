@@ -83,8 +83,20 @@ class CProductPhotoAjaxManage extends AAjaxController
                 $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $fileName['number'], 'size' => $key));
             }
             unlink($tempFolder . $_FILES['file']['name']);
+            $count = 0;
             foreach ($ids as $key => $val) {
                 $this->app->dbAdapter->insert("ProductHasProductPhoto", ["productId" => $product->id, "productVariantId" => $product->productVariantId, "productPhotoId" => $val]);
+                $count++;
+            }
+            if ($count) {
+                \Monkey::app()->eventManager->triggerEvent(
+                    'assignPhotosToProduct',
+                    [
+                        'product' => $product,
+                        'photoIds' => $ids,
+                        'release' => 'release'
+                    ]
+                );
             }
         }
 
@@ -139,7 +151,7 @@ class CProductPhotoAjaxManage extends AAjaxController
         foreach($res as $photo){
             $del = $s3->delImage($product->productBrand->slug."/".$photo['name'],$config['bucket']);
             if(!$del) {
-                $this->app->dbADapter->rollback();
+                $this->app->dbAdapter->rollback();
                 throw new RedPandaException('Could not Delete all the photos');
             }
             $this->app->dbAdapter->delete('ProductSkuHasProductPhoto',["productId"=>$id,"productVariantId"=>$productVariantId,"productPhotoId"=>$photo['id']]);

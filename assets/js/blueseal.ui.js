@@ -11,7 +11,7 @@ Number.prototype.between = function (a, b, inclusive) {
     return inclusive ? this >= min && this <= max : this > min && this < max;
 };
 
-$.fn.selectText = function(){
+$.fn.selectText = function () {
     var doc = document
         , element = this[0]
         , range, selection
@@ -29,71 +29,55 @@ $.fn.selectText = function(){
     }
 };
 
-$.MatchMedia = function(a) {
-    return window.styleMedia.matchMedium(a);
-};
-
-$.QueryString = (function(a) {
-    if (a == "") return {};
-    var b = {};
-    for (var i = 0; i < a.length; ++i)
-    {
-        var p=a[i].split('=');
-        if (p.length != 2) continue;
-        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-    }
-    return b;
-})(window.location.search.substr(1).split('&'));
-
-$.ajaxForm = function(ajaxConf, formDataObject) {
+$.ajaxForm = function (ajaxConf, formDataObject) {
 
     var dff = $.Deferred();
-    var conf = $.extend({},{
+    var conf = $.extend({}, {
         contentType: 'multipart/form-data',
         processData: false
-    },ajaxConf);
+    }, ajaxConf);
 
     if (conf.formAutofill && conf.formAutofill == true) {
-	    var errors = [];
-	    var formSelector = conf.formSelector || 'document';
-	    $('input:not([type=file]), textarea, select').each(function() {
-		    if(typeof $(this).attr('name') == 'undefined') return;
-		    if($(this).attr('required') == 'required' && $(this).val().length  === 0){
-			    errors.push($(this).attr('name'));
-		    }
-	    });
+        var errors = [];
+        var formSelector = conf.formSelector || 'document';
+        $('input:not([type=file]), textarea, select').each(function () {
+            if (typeof $(this).attr('name') == 'undefined') return;
+            if ($(this).attr('required') == 'required' && $(this).val().length === 0) {
+                errors.push($(this).attr('name'));
+            }
+        });
 
-	    if(errors.length) {
-		    //TODO GESTIRE MEGLIO QUESTA COSA
-		    return dff.reject();
-	    }
+        if (errors.length) {
+            //TODO GESTIRE MEGLIO QUESTA COSA
+            return dff.reject();
+        }
 
-        $('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function() {
-            if(typeof $(this).attr('name') == 'undefined') return;
+        $('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
+            if (typeof $(this).attr('name') == 'undefined') return;
             formDataObject.append($(this).attr('name'), $(this).val());
         });
 
         var radioNames = [];
-        $('input[type=radio]').each(function() {
-	        if(typeof $(this).attr('name') == 'undefined') return;
+        $('input[type=radio]').each(function () {
+            if (typeof $(this).attr('name') == 'undefined') return;
             radioNames.push($(this).attr('name'));
         });
-        var unique = radioNames.filter(function(value,index,self) {
+        var unique = radioNames.filter(function (value, index, self) {
             return self.indexOf(value) === index;
         });
-        unique.forEach(function(element,index,array) {
-            formDataObject.append(element, $('[name='+element+']:checked').val());
+        unique.forEach(function (element, index, array) {
+            formDataObject.append(element, $('[name=' + element + ']:checked').val());
         });
-	    
-	    $('input[type=checkbox]:checked').each(function() {
-		    if(typeof $(this).attr('name') == 'undefined') return;
-		    formDataObject.append($(this).attr('name'), $(this).val());
-	    });
 
-        $(':file').each(function() {
-            if(typeof this.name == 'undefined') return;
-            if(this.files.length == 0) return;
-            formDataObject.append(this.name,this.files[0]);
+        $('input[type=checkbox]:checked').each(function () {
+            if (typeof $(this).attr('name') == 'undefined') return;
+            formDataObject.append($(this).attr('name'), $(this).val());
+        });
+
+        $(':file').each(function () {
+            if (typeof this.name == 'undefined') return;
+            if (this.files.length == 0) return;
+            formDataObject.append(this.name, this.files[0]);
         });
     }
 
@@ -101,81 +85,100 @@ $.ajaxForm = function(ajaxConf, formDataObject) {
 
     var promise = $.ajax(conf);
 
-    promise.then(function(data) {
+    promise.then(function (data) {
         dff.resolve(data);
-    }, function(data) {
+    }, function (data) {
         dff.reject(data.responseText);
     });
 
     return dff.promise();
 };
 
-$.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
+$.fn.ajaxForm = function (ajaxConf, callback) {
     var me = this;
-    var conf = $.extend({},{
+    var conf = $.extend({}, {
         contentType: 'multipart/form-data',
         processData: false
-    },ajaxConf);
+    }, ajaxConf);
 
-    if (conf.formAutofill && conf.formAutofill == true) {
-        var errors = [];
-        var formSelector = conf.formSelector || 'document';
-        $(me).find('input:not([type=file]), textarea, select').each(function () {
+    var errorMsg = '';
+    var formSelector = conf.formSelector || 'document';
+
+    if ('undefined' != typeof conf.customParsingForm) {
+        var customErr = conf.customParsingForm(me);
+        if ('string' == typeof customErr) {
+            errorMsg+= customErr + '<br />';
+        }
+    }
+
+    var requiredErr = [];
+    $(me).find('input:not([type=file]), textarea, select').each(function () {
+        var isParsable = true;
+        if ('undefined' == typeof $(this).attr('name')) isParsable = false;
+        if ('undefined' != typeof $(this).attr('id')) {
+            if (-1 < $(this).attr('id').indexOf('-selectized')) isParsable = false;
+        }
+        if (true === isParsable) {
             if (typeof $(this).attr('name') == 'undefined') return;
-            if ($(this).attr('required') == 'required') {
+            if (($(this).attr('required') == 'required') || ($(this).hasClass('required'))) {
                 if ($(this).val().length === 0) {
-                    errors.push($(this).attr('name'));
+                    requiredErr.push($(this).attr('name'));
                 }
             }
+        }
+    });
+
+    if (requiredErr.length) {
+        errorMsg+= 'I seguenti campi sono obbligatori e non sono stati compilati:<br />';
+        $.each(requiredErr, function (k, v) {
+            var label;
+            if ((label = $('label[for="' + v + '"]')).length) errorMsg += label.html() + '<br />';
+            else if ((label = $('label[for="' + v + '-selectized"]')).length) errorMsg += label.html() + '<br />';
+            else errorMsg += $('[name="' + v +'"]').data('formLabel') + '<br />';
+        });
+    }
+    if ('' != errorMsg) {
+        callback(errorMsg);
+    } else {
+        var formDataObject = new FormData();
+
+        $(me).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
+            if (typeof $(this).attr('name') == 'undefined') return;
+            formDataObject.append($(this).attr('name'), $(this).val());
         });
 
-        if (errors.length) {
-            var res = 'I seguenti campi sono obbligatori e non sono stati compilati:<br />';
-            $.each(errors, function (k, v) {
-                res += $('label[for="' + v + '"]').html() + '<br />';
-            });
+        var radioNames = [];
+        $(me).find('input[type=radio]').each(function () {
+            if (typeof $(this).attr('name') == 'undefined') return;
+            radioNames.push($(this).attr('name'));
+        });
+        var unique = radioNames.filter(function (value, index, self) {
+            return self.indexOf(value) === index;
+        });
+        unique.forEach(function (element, index, array) {
+            formDataObject.append(element, $('[name=' + element + ']:checked').val());
+        });
+
+        $(me).find('input[type=checkbox]:checked').each(function () {
+            if (typeof $(this).attr('name') == 'undefined') return;
+            formDataObject.append($(this).attr('name'), $(this).val());
+        });
+
+        $(me).find(':file').each(function () {
+            if (typeof this.name == 'undefined') return;
+            if (this.files.length == 0) return;
+            formDataObject.append(this.name, this.files[0]);
+        });
+
+        conf.data = formDataObject;
+
+        $.ajax(conf).always(function (res) {
             callback(res);
-
-        } else {
-
-            $(me).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
-                if (typeof $(this).attr('name') == 'undefined') return;
-                formDataObject.append($(this).attr('name'), $(this).val());
-            });
-
-            var radioNames = [];
-            $(me).find('input[type=radio]').each(function () {
-                if (typeof $(this).attr('name') == 'undefined') return;
-                radioNames.push($(this).attr('name'));
-            });
-            var unique = radioNames.filter(function (value, index, self) {
-                return self.indexOf(value) === index;
-            });
-            unique.forEach(function (element, index, array) {
-                formDataObject.append(element, $('[name=' + element + ']:checked').val());
-            });
-
-            $(me).find('input[type=checkbox]:checked').each(function () {
-                if (typeof $(this).attr('name') == 'undefined') return;
-                formDataObject.append($(this).attr('name'), $(this).val());
-            });
-
-            $(me).find(':file').each(function () {
-                if (typeof this.name == 'undefined') return;
-                if (this.files.length == 0) return;
-                formDataObject.append(this.name, this.files[0]);
-            });
-
-            conf.data = formDataObject;
-
-            $.ajax(conf).always(function (res) {
-                callback(res);
-            });
-        }
+        });
     }
 };
 
-(function($) {
+(function ($) {
 
     $(document).ready(function () {
 
@@ -193,10 +196,10 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
                 var deferred = $.Deferred();
 
                 /** genero placeholder con id randomico */
-                var randId = 'bs'+Math.ceil(Math.random() * (100000- 1) + 1);
-                var tag = $('<'+_this.prop('tagName')+' id="'+randId+'" ></'+_this.prop('tagName')+'>');
+                var randId = 'bs' + Math.ceil(Math.random() * (100000 - 1) + 1);
+                var tag = $('<' + _this.prop('tagName') + ' id="' + randId + '" ></' + _this.prop('tagName') + '>');
                 group.last().append(tag);
-                var placeHolder = $('#'+randId);
+                var placeHolder = $('#' + randId);
 
                 /** recupero impostazioni */
                 timer = setInterval(function () {
@@ -205,19 +208,20 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
 
                 setTimeout(function () {
                     clearInterval(timer);
-                    if('undefined' != typeof data.remote) {
-                        $.getScript("/assets/"+data.remote+".js",function(res){
-                                $.extend(data,data,window.buttonSetup);
+                    if ('undefined' != typeof data.remote) {
+                        $.getScript("/assets/" + data.remote + ".js", function (res) {
+                                $.extend(data, data, window.buttonSetup);
                                 delete window.buttonSetup;
-                                deferred.resolve()}
-                            );
+                                deferred.resolve()
+                            }
+                        );
                     } else {
                         deferred.resolve();
                     }
-                },  300);
+                }, 300);
 
-                /** quando ho finito sostituisco il placeholder con il pulzante */
-                deferred.done(function() {
+                /** quando ho finito sostituisco il placeholder con il pulsante */
+                deferred.done(function () {
                     var element;
                     switch (_this.prop('tagName').toLowerCase()) {
                         case 'bs-toolbar-button': {
@@ -237,6 +241,10 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
                         }
                     }
                     element.checkPermission();
+                    $(document).trigger('bs.toolbar.element.drawn', element);
+                    if (typeof element.cfg.data.loadEvent != 'undefined') {
+                        $(document).trigger(element.cfg.data.loadEvent, element);
+                    }
                 });
             });
         });
@@ -250,7 +258,9 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
             delay: {"show": 500, "hide": 100}
         });
 
-        $('.color-picker').colorpicker();
+        $('.color-picker').each(function(k,v) {
+            v.colorpicker();
+        });
 
         $('.toolbar-definition').remove();
     });
@@ -265,12 +275,27 @@ $.fn.ajaxForm = function(ajaxConf, formDataObject, callback) {
         $('.btn-group-label').next().css('border-radius', '2px');
     });
 
-	$(document).ready(function () {
-		var portlet = $('bs-portlet');
-		$.each($(portlet), function() {
-			var port = new Portlet($(this).data());
-			port.draw(this);
-		});
-	});
+    $(document).ready(function () {
+        var portlet = $('bs-portlet');
+        $.each($(portlet), function () {
+            var port = new Portlet($(this).data());
+            port.draw(this);
+        });
+    });
+
+     $(document).ready(function() {
+        $(document).on('click', '.enlarge-your-img', function(e){
+            var tagName = $(e.target).prop('tagName');
+            var src = ('IMG' == tagName) ? $(e.target).attr('src') : $(e.target).children('img').attr('src');
+            modal = new $.bsModal(
+                'Immagine Prodotto',
+                {
+                    body: '<img style="max-width: 100%" src="' + src + '" />',
+                    okButtonLabel: 'Chiudi'
+                }
+            );
+
+        });
+     });
 
 })(jQuery);

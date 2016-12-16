@@ -72,7 +72,7 @@ abstract class ARestrictedAccessRootController extends ARootController
             if (!$this->checkPermission($this->page->getPermissionPath())) {
                 try{
                     $url = $this->app->cfg()->fetch('urls',$this->fallBack);
-                } catch(\Exception $e) {
+                } catch(\Throwable $e) {
                     if(empty($url)) throw new RedPandaConfigException('Fallback Url not found');
                 }
                 $this->response->setBody("uh-uh, you can't come here you rascal");

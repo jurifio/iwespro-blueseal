@@ -18,14 +18,30 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="dictionary_category_list" data-column-filter="true"
+                               data-datatable-name="dictionary_category_list"
                                data-controller="DictionaryCategoryListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-length-menu-setup="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
                             <tr>
-                                <th class="center">Shop</th>
-                                <th class="center">N. Categorie</th>
-                                <th class="center">N. Categorie non tradotte</th>
+                                <th data-slug="shopId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">Shop
+                                </th>
+                                <th data-slug="count"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">N. Categorie
+                                </th>
+                                <th data-slug="mancanti"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">N. Categorie non tradotti
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

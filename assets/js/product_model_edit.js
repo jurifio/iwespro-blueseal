@@ -13,7 +13,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                 var body = 'Oops! Metodo non pervenuto. Contatta l\'amministratore';
                 var location = false;
                 if ('ko' == res['status']) {
-                    body = 'OOPS! Modello non aggiornato!';
+                    body = 'OOPS! Modello non aggiornato!<br />' + res['message'];
                 } else {
                     if ('POST' == method) {
                         body = 'Nuovo modello inserito.';
@@ -34,7 +34,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
             },
             onFail: function(res, method) {
                 modal = new $.bsModal('Salvataggio del modello', {
-                    body: 'OOPS! Salvataggio non riuscito',
+                    body: res['message'],
                     okButtonEvent: function(){
                         modal.hide();
                     }
@@ -256,12 +256,19 @@ $(document).ready(function () {
                         sel[0].selectize.setValue(0, true);
                     }
                 });
-                var prodName = ($('.detailContent').data('product-name')) ? $('.detailContent').data('productName') : 0;
+                var detailContentElem = $('.detailContent');
+                var prodName = (detailContentElem.data('product-name')) ? detailContentElem.data('productName') : 0;
                 var selectName = $('#productName').selectize();
                 var selectElem = selectName[0].selectize;
                 selectElem.addOption({name: prodName});
                 selectElem.refreshOptions();
                 selectElem.setValue(prodName, false);
+
+                var productCategory = detailContentElem.data('category');
+                $('#categories').humanized('addItems', productCategory);
+
+                if ('undefined' != typeof $_GET.all.name) $('input[name="name"]').val(decodeURI($_GET.all.name));
+                if ('undefined' != typeof $_GET.all.codeName) $('input[name="code"]').val(decodeURI($_GET.all.codeName));
             });
         }
     } else {

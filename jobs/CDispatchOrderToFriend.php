@@ -53,13 +53,19 @@ class CDispatchOrderToFriend extends ACronJob
                         $orderLine->status = $this->success;
 	                    $orderLine->update();
 
-                    } catch (\Exception $e) {
+                        /**\Monkey::app()->eventManager->triggerEvent('friendOrderShipped',
+                            [
+                                'order' => $orderLine,
+                                'status' => $this->success
+                            ]);*/
+
+                    } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
                     //$this->app->dbAdapter->update('OrderLine',['status'=>$this->success],["id"=>$line->id,"orderId"=>$line->orderId]);
                 }
                 $this->app->dbAdapter->commit();
-            } catch(\Exception $e){
+            } catch(\Throwable $e){
                 $this->error( 'Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
                 $this->app->dbAdapter->beginTransaction();
                 foreach($lines as $line){
@@ -69,7 +75,13 @@ class CDispatchOrderToFriend extends ACronJob
                         $orderLine->status = $this->fail;
 	                    $orderLine->update();
 
-                    } catch (\Exception $e) {
+                        /**\Monkey::app()->eventManager->triggerEvent('friendOrderPayd',
+                            [
+                                'order' => $orderLine,
+                                'status' => $this->fail
+                            ]);*/
+
+                    } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
                     //$this->app->dbAdapter->update('OrderLine',['status'=>$this->fail],["id"=>$line->id,"orderId"=>$line->orderId]);

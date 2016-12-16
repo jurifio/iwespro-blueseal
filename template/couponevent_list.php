@@ -20,14 +20,31 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="couponevent_list"
                                data-controller="CouponEventListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true">
                             <thead>
                             <tr>
-                                <th class="center">Nome</th>
-                                <th class="center">Descrizione</th>
-                                <th class="center">Tipo coupon</th>
-                                <th class="center">Valido da</th>
-                                <th class="center">Valido fino a</th>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">Nome</th>
+                                <th data-slug="description"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Descrizione</th>
+                                <th data-slug="couponType"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Tipo coupon</th>
+                                <th data-slug="startDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Valido da</th>
+                                <th data-slug="endDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Valido fino a</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -1,10 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\core\intl\CLang;
-use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use bamboo\ecommerce\views\widget\VBase;
-
 /**
  * Class CUserSellRecapController
  * @package bamboo\blueseal\controllers\ajax
@@ -51,12 +47,12 @@ class CProductPriceEdit extends AAjaxController
                     $ret[$v->shopId] = [];
                     $ret[$v->shopId]['shopChange'] = $shopChange;
                     $ret[$v->shopId]['extId'] = ($v->extId) ? $v->extId : '';
-                    $ret[$v->shopId]['value'] = ($v->value) ? $v->value : 0;
-                    $ret[$v->shopId]['price'] = ($v->price) ? $v->price : 0;
-                    $ret[$v->shopId]['salePrice'] = ($v->salePrice) ? $v->salePrice : 0;
+                    $ret[$v->shopId]['value'] = ($v->value) ? str_replace('.', ',', $v->value) : 0;
+                    $ret[$v->shopId]['price'] = ($v->price) ? str_replace('.', ',', $v->price) : 0;
+                    $ret[$v->shopId]['salePrice'] = ($v->salePrice) ? str_replace('.', ',', $v->salePrice) : 0;
                 }
             }
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             return json_encode($e->getMessage());
         }
         return json_encode($ret);
@@ -99,7 +95,8 @@ class CProductPriceEdit extends AAjaxController
                 $skuRepo->updateSkusPrices($shp->productId, $shp->productVariantId, $shp->shopId, $shp->value, $shp->price, $shp->salePrice);
             }
             $this->app->dbAdapter->commit();
-        } catch(\Exception $e) {
+            $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$prod->printId()]);
+        } catch(\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return json_encode($e->getMessage());
         }
@@ -113,6 +110,9 @@ class CProductPriceEdit extends AAjaxController
             if (("id" !== $k) && ("productVariantId" !== $k)) {
                 list($field, $count) = explode('-', $k);
                 if (!array_key_exists($count, $prices)) $prices[$count] = [];
+                if (('price' == $field) || ('value' == $field) || ('salePrice' == $field)) {
+                    $v = str_replace(',', '.', $v);
+                }
                 $prices[$count][$field] = $v;
             }
         }

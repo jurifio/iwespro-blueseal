@@ -22,11 +22,18 @@ class CProductNamesListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductNameList', ['productId', 'productVariantId', 'langId'], $_GET);
+        $datatable = new CDataTables('vBluesealProductNameNewList', ['id'], $_GET);
 
-        $productNames = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('ProductNameTranslation')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('ProductNameTranslation')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $mark = \Monkey::app()->router->request()->getRequestData('marks');
+        if ('con' === $mark) {
+            $datatable->addIgnobleCondition('name', '% !', false);
+        } elseif ('senza' === $mark) {
+            $datatable->addIgnobleCondition('name', '% !', true);
+        }
+
+        $productNames = $this->app->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = $this->app->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -34,17 +41,16 @@ class CProductNamesListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $i = 0;
-
         foreach($productNames as $val){
 			try {
-				$response['data'][$i]["DT_RowId"] = 'row__' . $val->productId . '__' . $val->productVariantId;
-				$response['data'][$i]["DT_RowClass"] = 'colore';
-				$response['data'][$i]['name'] = $val->name;
-                $res = $this->app->dbAdapter->query("SELECT * FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('P')",
-                    [$val->name])->fetchAll();
-                $response['data'][$i]['count'] = count($res); //$products->count();
-                $response['data'][$i]['isVisible'] = 'fidati'; //$products->count();
+                $row = [];
+				$row["DT_RowId"] = 'row__' . $val->id;
+				$row["DT_RowClass"] = 'colore';
+				$row['name'] = $val->name;
+                $res = \Monkey::app()->dbAdapter->query(
+                    "SELECT `p`.`id` as `productId`, `p`.`productVariantId` FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P', 'I') AND (`p`.`qty` > 0) AND (`p`.`dummyPicture` NOT LIKE '%bs-dummy%')",
+                    str_replace(' !', '', [$val->name]))->fetchAll();
+                $row['count'] = count($res); //$products->count();
 
                 $iterator = 0;
                 $cats = [];
@@ -61,15 +67,12 @@ class CProductNamesListAjaxController extends AAjaxController
                         if (10 == $iterator) break;
                     }
                 }
-                $response['data'][$i]['slug'] = implode('', $cats);
-
-				$i++;
-			} catch (\Exception $e) {
+                $row['category'] = implode('', $cats);
+                $response ['data'][] = $row;
+			} catch (\Throwable $e) {
 				throw $e;
 			}
-
         }
         return json_encode($response);
     }
-   
 }

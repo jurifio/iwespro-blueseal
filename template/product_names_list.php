@@ -24,25 +24,23 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_names_list"
-                               data-controller="ProductNamesListAjaxController"
+                               data-controller="ProductNamesListAjaxController?marks=tutto"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
-                               data-column-filter="true"
                                data-inner-setup="true"
-                               data-lenght-menu="100, 200, 500, 1000, 2000, 3000, 5000">
+                               data-length-menu-setup="100, 200, 500, 1000, 2000, 3000, 5000"
+                               data-display-length="25"
+                        >
                             <thead>
                             <tr>
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true" class="center" data-default-order="asc">Name</th>
-                                <th data-slug="slug"
+                                <th data-slug="category"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Categorie</th>
+                                    data-orderable="true" class="center categoryFilterType">Categorie</th>
                                 <th data-slug="count"
                                     data-searchable="false"
                                     data-orderable="true" class="center">N. Prodotti Associati</th>
-                                <th data-slug="isVisible"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Visibile</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -58,7 +56,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Pulisci prodotti">
+    <bs-toolbar-group data-group-label="Gestisci i nomi prodotto">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-magic"
@@ -87,6 +85,36 @@
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Visualizza i prodotti associati ai nomi"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-pencil"
+            data-permission="/admin/product/edit"
+            data-event="bs.names.compare"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Evidenzia nomi simili"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-exclamation"
+            data-permission="/admin/product/edit"
+            data-event="bs.names.removeExMark"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Rimuovi i punti esclamativi dai nomi selezionati"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-map"
+            data-permission="/admin/product/edit"
+            data-event="bs.filterByMark"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Filtra per punti esclamativi"
             data-placement="bottom"
         ></bs-toolbar-button>
 </bs-toolbar>

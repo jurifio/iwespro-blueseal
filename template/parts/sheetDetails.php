@@ -1,6 +1,6 @@
 <?php if (!("0" === $emptyDetails && 0 == $actualCount)) : ?>
 <div class="row">
-    <div class="col-md-12 detailContent" data-prototype-id="<?php if (isset($productSheetPrototype)) echo $productSheetPrototype->id; ?>" data-product-name="<?php echo $productName ?>">
+    <div class="col-md-12 detailContent" data-category="<?php echo $categories; ?>" data-prototype-id="<?php if (isset($productSheetPrototype)) echo $productSheetPrototype->id; ?>" data-product-name="<?php echo $productName ?>">
         <div class="form-group form-group-default selectize-enabled">
             <label for="Product_dataSheet">Tipo scheda prodotto</label>
             <select class="full-width selectpicker Product_dataSheet" id="Product_dataSheet"

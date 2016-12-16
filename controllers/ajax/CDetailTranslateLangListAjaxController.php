@@ -46,7 +46,7 @@ class CDetailTranslateLangListAjaxController extends AAjaxController
         $langId = $this->app->router->request()->getRequestData('lang');
         $datatable = new CDataTables('vBluesealProductDetailTranslation',['id'],$_GET);
         $datatable->addCondition('langId', [$langId]);
-
+        $datatable->addCondition('name', NULL);
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         if (!empty($this->authorizedShops)) {
@@ -116,7 +116,7 @@ class CDetailTranslateLangListAjaxController extends AAjaxController
             }
             $this->app->dbAdapter->commit();
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
         }
     }

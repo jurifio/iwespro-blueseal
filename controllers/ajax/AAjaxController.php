@@ -29,7 +29,7 @@ class AAjaxController
     }
 
     public function rfc($name) {
-        return $this->app->repoFactory->create($name);
+        return \Monkey::app()->repoFactory->create($name);
     }
 
     /**

@@ -26,11 +26,10 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_slim_list"
-                               data-column-filter="true"
                                data-controller="ProductSlimListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-lenght-menu="100, 200, 500">
+                               data-length-menu-setup="100, 200, 500">
                             <thead>
                                 <tr>
                                     <th data-slug="code"
@@ -46,8 +45,7 @@
                                         data-orderable="true" class="center">Brand</th>
                                     <th data-slug="season"
                                         data-searchable="true"
-                                        data-orderable="true"
-                                        class="center">Stagione</th>
+                                        data-orderable="true" class="center">Stagione</th>
                                     <th data-slug="cpf"
                                         data-searchable="true"
                                         data-orderable="true" class="center">CPF</th>
@@ -58,14 +56,11 @@
                                         data-searchable="false"
                                         data-orderable="false" class="center">Immagine</th>
                                     <th data-slug="details"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Dettagli</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Dettagli</th>
                                     <th data-slug="status"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>
-                                    <th data-slug="details"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Dettagli</th>
                                     <th data-slug="categories"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Categorie</th>
@@ -75,7 +70,7 @@
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true"
-                                        data-default-order="desc" class="center">Data</th>
+                                        data-default-order="desc" class="center dataFilterType">Data</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -106,9 +101,6 @@
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.dupe"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.product.sku.manage"
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.photo.manage"
@@ -145,6 +137,15 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.PriceEditForAllShop"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.model.insertIntoProducts"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.name.insert"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.details.new"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione prezzi">

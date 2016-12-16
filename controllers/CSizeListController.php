@@ -41,7 +41,7 @@ class CSizeListController extends ARestrictedAccessRootController
                     if (!headers_sent()) {
                         header("Location: ".$pageURL."?delete=ok");
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     if (!headers_sent()) {
                         header("Location: ".$pageURL."?delete=ko");
                     }

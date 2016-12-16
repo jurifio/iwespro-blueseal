@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\intl\CLang;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\widget\VBase;
@@ -92,7 +93,7 @@ class CCatalogController extends AAjaxController
                     return json_encode(false);
             }
             $ret = ($prod) ? $this->getAllProductData($prod, $shopId, $sizesToMove) : false;
-        } catch(\Exception $e) {
+        } catch (\Throwable $e) {
             return json_encode($e->getMessage());
         }
 
@@ -140,77 +141,40 @@ class CCatalogController extends AAjaxController
     public function post()
     {
         $get = $this->app->router->request()->getRequestData();
+        $rf = \Monkey::app()->repoFactory;
+        $soR = $rf->create('StorehouseOperation');
 
+        $moves = [];
+        //create array with all movements
+        foreach ($get as $gk => $gv) {
+            $single = [];
+            if ((0 === strpos($gk, 'move')) && ('' !== $gv)) {
+                $tempArr = explode('-', $gk);
+                $single['id'] = $tempArr[1];
+                $single['productVariantId'] = $tempArr[2];
+                $single['productSizeId'] = $tempArr[3];
+                $single['qtMove'] = $gv;
+                $moves[] = $single;
+            }
+        }
+
+        unset($tempArr);
+        unset($single);
+
+        $user = $this->app->getUser();
+        if ($user->hasPermission('allShops')) {
+            if (!$get['mag-shop']) throw new \Exception('Lo shop deve essere specificato obbligatoriamente');
+            $shop = $rf->create('Shop')->findOneBy(['id' => $get['mag-shop']]);
+        } else {
+            $shop = $user->shop->getFirst();
+        }
+
+        /** var CStorehouseOperationRepo */
         try {
-            $SOEm = $this->rfc('StorehouseOperation');
-            $SOLRepo = $this->rfc('StorehouseOperationLine');
-            $SOCEm = $this->rfc('StorehouseOperationCause');
-            $SEm = $this->rfc('Storehouse');
-            $skuRepo = $this->rfc('ProductSku');
-
-            $moves = [];
-            $i = 0;
-
-            //create array with all movements
-            foreach ($get as $gk => $gv) {
-                if ((0 === strpos($gk, 'move')) && ('' !== $gv)) {
-                    $tempArr = explode('-', $gk);
-                    $moves[$i]['id'] = $tempArr[1];
-                    $moves[$i]['productVariantId'] = $tempArr[2];
-                    $moves[$i]['productSizeId'] = $tempArr[3];
-                    $moves[$i]['qtMove'] = $gv;
-                    $i++;
-                }
-            }
-            unset($tempArr);
-
-            $user = $this->app->getUser();
-            if ($user->hasPermission('allShops')) {
-                if (!$get['mag-shop']) throw new \Exception('Lo shop deve essere specificato obbligatoriamente');
-                $shop = $this->rfc('Shop')->findOneBy(['id' => $get['mag-shop']]);
-            } else {
-                $shop = $user->shop->getFirst();
-            }
-
-            if (isset($get['storehouseId'])) {
-                $storehouse = $SEm->findOneBy(['id' => $get['storehouseId'],'shopId' => $shop->id]);
-            } else {
-                $storehouse = $SEm->findOneBy(['shopId' => $shop->id]);
-            }
-
-            $this->app->dbAdapter->beginTransaction();
-
-            if (!$storehouse) {
-                $storehouse = $SEm->getEmptyEntity();
-                $storehouse->shopId = $shop->id;
-                $storehouse->name = 'auto-generated';
-                $storehouse->countryId = 1;
-                $storehouse->id = $storehouse->insert();
-            }
-
-            if (!$SOC = $SOCEm->findOne([$get['mag-movementCause']])) throw new \Exception('La causale è obbligatoria');
-
-            //fatti tutti i controlli preliminari, inizio la transazione
-
-            $newOp = $SOEm->getEmptyEntity();
-            $newOp->shopId = $shop->id;
-            $newOp->storehouseId = $storehouse->id;
-            $newOp->storehouseOperationCauseId = $get['mag-movementCause'];
-            $newOp->userId = $user->id;
-            $newOp->operationDate = date("Y-m-d H:i:s", strtotime($get['mag-movementDate']));
-            $newOp->id = $newOp->insert();
-
-            //inizio l'inserimento dei singoli movimenti
-            foreach ($moves as $v) {
-                $SOLRepo->createMovementLine($v['id'], $v['productVariantId'], $v['productSizeId'], $shop->id, $v['qtMove'], $newOp->id, $storehouse->id);
-                $skuRepo->levelPrice($v['id'], $v['productVariantId']);
-            }
-
-            $this->app->dbAdapter->commit();
-            return json_encode('OK');
-        } catch (\Exception $e) {
-            $this->app->dbAdapter->rollBack();
-            return json_encode($e->getMessage());
+            $soR->registerOperation($moves, $shop, $get['mag-movementCause']);
+            return true;
+        } catch(BambooException $e) {
+            return 'OOPS! Movimento non eseguito:<br /> ' . $e->getMessage();
         }
     }
 }

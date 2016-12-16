@@ -36,6 +36,7 @@ class CUserManageController extends ARestrictedAccessRootController
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
 	        'sources' => $sources,
+            'langs' => $this->app->repoFactory->create('Lang')->findAll(),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);
@@ -49,6 +50,7 @@ class CUserManageController extends ARestrictedAccessRootController
 	    $user->registrationEntryPoint =  $this->app->router->request()->getRequestData('user_entryPoint');
 	    $user->isActive = 1;
 	    $user->isDeleted = 0;
+        $user->langId = $this->app->router->request()->getRequestData('user_lang') ?? 1;
 	    $user->id = $user->insert();
 
 	    $userD = $this->app->repoFactory->create('UserDetails')->getEmptyEntity();
@@ -68,6 +70,10 @@ class CUserManageController extends ARestrictedAccessRootController
 	    $userEmail->insert();
 
 	    $this->app->repoFactory->create('User')->persistRegistrationToken($user->id,(new CToken(64))->getToken(),time() + $this->app->cfg()->fetch('miscellaneous', 'confirmExpiration'));
+
+        if($this->app->router->request()->getRequestData('user_newsletter')) {
+            $this->app->repoFactory->create('Newsletter')->insertNewEmail($user->email,$user->id,$user->langId);
+        }
 
 	    return $user->id;
     }

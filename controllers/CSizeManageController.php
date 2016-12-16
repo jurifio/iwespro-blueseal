@@ -95,7 +95,7 @@ class CSizeManageController extends ARestrictedAccessRootController
                     $productSizeGroup->update();
                     //$mysql->update ("ProductSizeGroup",$productSizeGroupIn,array("id"=>$productSizeGroupId));
                 }
-            }catch(\Exception $e){
+            }catch(\Throwable $e){
                 $mysql->rollback();
                 /** @noinspection PhpVoidFunctionResultUsedInspection */
                 die(var_dump($e));
@@ -113,7 +113,7 @@ class CSizeManageController extends ARestrictedAccessRootController
                     }
                     $res = $mysql->insert("ProductSizeGroupHasProductSize", ["productSizeGroupId"=>$productSizeGroupId,"productSizeId"=>$sizeId,"position"=>$key]);
                 }
-            }catch(\Exception $e){
+            }catch(\Throwable $e){
                 $this->app->dbAdapter->rollback();
                 /** @noinspection PhpVoidFunctionResultUsedInspection */
                 die(var_dump($e));

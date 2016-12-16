@@ -1,0 +1,9 @@
+{
+    "rbacManager": {
+        "class": "\\bamboo\\core\\auth\\rbac\\CRbacManager",
+        "executeMethod": false,
+        "options": {
+            "rootId": 1
+        }
+    }
+}

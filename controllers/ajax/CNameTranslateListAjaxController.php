@@ -42,7 +42,7 @@ class CNameTranslateListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductNameList',['productId','productVariantId','langId'],$_GET);
+        $datatable = new CDataTables('vBluesealProductNameNewList',['id'],$_GET);
         $modifica = $this->urls['base']."traduzioni/nomi/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
@@ -53,11 +53,11 @@ class CNameTranslateListAjaxController extends AAjaxController
         $datatable->addCondition('langId',[1]);
         $datatable->addCondition('name',[''],true);
 
-        $productsName = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productName = $this->app->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsName->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsName->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $transRepo = $this->app->repoFactory->create('ProductNameTranslation');
+        $PNRepo = $this->app->repoFactory->create('ProductName');
         $repo = $this->app->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 
@@ -69,22 +69,46 @@ class CNameTranslateListAjaxController extends AAjaxController
 
         $i = 0;
 
-        foreach($productsName as $val){
+        foreach($productName as $val){
             $html = '';
 
             foreach ($installedLang as $insLang) {
-                $lang = $transRepo->findOneBy(['productId' => $val->productId, 'productVariantId' => $val->productVariantId, 'langId' => $insLang->id]);
-                if(!is_null($lang) && ($lang->name != '')) {
+                $translated = $PNRepo->findOneBy(['name' => $val->name, 'langId' => $insLang->id]);
+                if(!is_null($translated) && ($translated->name != '')) {
                     $html .= '<span class="badge">' . $insLang->lang . '</span>';
                 } else {
                     $html .= '<span class="badge badge-red">' . $insLang->lang . '</span>';
                 }
             }
 
-            $response['data'][$i]["DT_RowId"] = 'row__' . $val->productId. '_' . $val->productVariantId;
+            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?name=' . urlencode($val->name) . '">' . $val->name . '</a>' : $val->name;
+            //$response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'. $modifica . '?name=' . urlencode($val->name) . '">' . $val->name . '</a>' : $val->name;
+            $response['data'][$i]['name'] = $val->name;
             $response['data'][$i]['lang'] = $html;
+
+            $res = \Monkey::app()->dbAdapter->query(
+                "SELECT `p`.`id` as `productId`, `p`.`productVariantId` FROM ((ProductNameTranslation as `pn` JOIN Product as `p` ON `p`.`productVariantId` = `pn`.`productVariantId`) JOIN `ProductStatus` as `ps` ON `p`.`productStatusId` = `ps`.`id`) WHERE `langId` = 1 AND `pn`.`name` = ? AND `ps`.`code` in ('A', 'P', 'I') AND (`p`.`qty` > 0) AND (`p`.`dummyPicture` NOT LIKE '%bs-dummy%')",
+                str_replace(' !', '', [$val->name]))->fetchAll();
+            $response['data'][$i]['count'] = count($res); //$products->count();
+
+            $iterator = 0;
+            $cats = [];
+            foreach($res as $v) {
+                if (10 == $iterator) break;
+                $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                foreach($p->productCategoryTranslation as $cat) {
+                    $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
+                    unset($path[0]);
+                    $newCat = '<span class="small">'.implode('/',array_column($path, 'slug')).'</span><br />';
+                    if (in_array($newCat, $cats)) continue;
+                    $cats[] = $newCat;
+                    $iterator++;
+                    if (10 == $iterator) break;
+                }
+            }
+
+            $response['data'][$i]['category'] = implode('', $cats);
 
             $i++;
         }

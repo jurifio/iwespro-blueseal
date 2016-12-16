@@ -129,6 +129,16 @@
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione Nomi Prodotti">
+        <bs-toolbar-button
+            data-remote="bs.product.name.insert"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione Dettagli">
+        <bs-toolbar-button
+            data-remote="bs.product.details.new"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

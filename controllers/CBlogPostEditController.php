@@ -62,7 +62,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 					continue;
 				}
 				${$tableField[0]}->{$tableField[1]} = $v;
-			} catch (\Exception $e) {
+			} catch (\Throwable $e) {
 				\Monkey::dump($k);
 				\Monkey::dump($v);
 				throw $e;
@@ -88,7 +88,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 			$postRepo->setCategories($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
 			$postRepo->setTags($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
 			$this->app->dbAdapter->commit();
-		} catch(\Exception $e) {
+		} catch(\Throwable $e) {
 			$this->app->dbAdapter->rollBack();
 			throw $e;
 		}

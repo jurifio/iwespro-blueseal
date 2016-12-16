@@ -75,19 +75,19 @@ class CCouponListAjaxController extends AAjaxController
             $valid = new \DateTime($coupon->validThru);
             $user = (!is_null ($coupon->user) && !is_null($coupon->user->userDetails)) ? $coupon->user->userDetails->name.' '.$coupon->user->userDetails->surname : null;
             $order = (!is_null ($coupon->order) && !is_null ($coupon->order->couponId)) ? $coupon->order->couponId : null;
-
-            $response['data'][$i]["DT_RowId"] = 'row__'.$coupon->id;
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editCouponLink.'/'.$coupon->id.'" style="font-family:consolas">'.$coupon->code.'</a>';
-            $response['data'][$i]['couponType'] = $coupon->couponType->name;
-            $response['data'][$i]['issueDate'] = $issued->format('d-m-Y');
-            $response['data'][$i]['validThru'] = $valid->format('d-m-Y');
-            $response['data'][$i]['amount'] = ($coupon->amountType == 'P') ? $coupon->amount.'%' : $coupon->amount.' &euro;';
-            $response['data'][$i]['validForCartTotal'] = $coupon->couponType->validForCartTotal.' &euro;';
-            $response['data'][$i]['utente'] = $user;
-            $response['data'][$i]['orderId'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editOrderLink.'?order='.$order.'">'.$order.'</a>';
-            $response['data'][$i]['valid'] = ($coupon->valid == 1) ? 'valido' : 'non valido';
-            $i++;
+            $row = [];
+            $row["DT_RowId"] = 'row__'.$coupon->id;
+            $row["DT_RowClass"] = 'colore';
+            $row['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editCouponLink.'/'.$coupon->id.'" style="font-family:consolas">'.$coupon->code.'</a>';
+            $row['couponType'] = $coupon->couponType->name;
+            $row['issueDate'] = $issued->format('d-m-Y');
+            $row['validThru'] = $valid->format('d-m-Y');
+            $row['amount'] = ($coupon->amountType == 'P') ? $coupon->amount.'%' : $coupon->amount.' &euro;';
+            $row['validForCartTotal'] = $coupon->couponType->validForCartTotal.' &euro;';
+            $row['utente'] = $user ?? "";
+            $row['orderId'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editOrderLink.'?order='.$order.'">'.$order.'</a>';
+            $row['valid'] = ($coupon->valid == 1) ? 'valido' : 'non valido';
+            $response['data'][] = $row;
         }
 
         return json_encode($response);

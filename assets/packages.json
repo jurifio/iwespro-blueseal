@@ -6,15 +6,15 @@
                 "options": ["screen"]
             },
             "bootstrap.min.css": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/",
+                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/",
                 "options": ["screen,print"]
             },
             "font-awesome.min.css": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/",
+                "path": "scheme://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/",
                 "options": ["screen,print"]
             },
-            "jqueryUi.css": {
-                "path": "scheme://localdomain/assets/css/",
+            "jquery-ui.css": {
+                "path": "scheme://code.jquery.com/ui/1.11.4/themes/flick/",
                 "options": ["screen"]
             }
         },
@@ -25,6 +25,14 @@
             },
             "bootstrap-colorpicker.min.css": {
                 "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-css/",
+                "options": ["screen"]
+            },
+            "ui.fancytree.min.css": {
+                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.19.0/skin-bootstrap/",
+                "options": ["screen"]
+            },
+            "skin-common.less": {
+                "path":  "scheme://github.com/mar10/fancytree/blob/master/dist/",
                 "options": ["screen"]
             }
         },
@@ -51,11 +59,7 @@
                 "path": "scheme://localdomain/assets/css/",
                 "options": ["screen"]
             },
-            "ui.fancytree.min.css": {
-                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.17.0/skin-themeroller/",
-                "options": ["screen"]
-            },
-            "summernote.min.css": {
+           "summernote.min.css": {
                 "path": "scheme://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/",
                 "options": ["screen"]
             },
@@ -71,6 +75,10 @@
         "tables": {
             "datatables.min.css": {
                 "path": "scheme://cdn.datatables.net/r/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,cr-1.2.0,fc-3.1.0,fh-3.0.0,kt-2.0.0,r-1.0.7,rr-1.0.0,sc-1.3.0,se-1.0.1/",
+                "options": ["screen"]
+            },
+            "daterangepicker.css": {
+                "path": "scheme://cdn.jsdelivr.net/bootstrap.daterangepicker/2/",
                 "options": ["screen"]
             }
         },
@@ -104,7 +112,7 @@
                 "options": []
             },
             "bootstrap.min.js": {
-                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/",
+                "path": "scheme://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/",
                 "options": []
             },
             "pages.js": {
@@ -144,6 +152,10 @@
             "bootstrap-colorpicker.min.js": {
                 "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-js/",
                 "options": ["defer"]
+            },
+            "jquery.fancytree-all.min.js": {
+                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.19.0/",
+                "options": ["defer"]
             }
         },
         "charts": {
@@ -178,10 +190,6 @@
                 "path": "scheme://cdn.jsdelivr.net/jquery.dynatree/1.2.4/",
                 "options": ["defer"]
             },
-            "jquery.fancytree-all.min.js": {
-                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.17.0/",
-                "options": ["defer"]
-            },
             "summernote.min.js": {
                 "path": "scheme://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/",
                 "options": ["defer"]
@@ -202,6 +210,14 @@
         "tables": {
             "datatables.min.js": {
                 "path": "scheme://cdn.datatables.net/r/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,cr-1.2.0,fc-3.1.0,fh-3.0.0,kt-2.0.0,r-1.0.7,rr-1.0.0,sc-1.3.0,se-1.0.1/",
+                "options": ["defer"]
+            },
+            "moment.min.js": {
+                "path": "scheme://cdn.jsdelivr.net/momentjs/latest/",
+                "options": ["defer"]
+            },
+            "daterangepicker.js": {
+                "path": "scheme://cdn.jsdelivr.net/bootstrap.daterangepicker/2/",
                 "options": ["defer"]
             },
             "datatables.init.js": {

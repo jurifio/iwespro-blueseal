@@ -85,7 +85,6 @@ class CProductSalesListAjaxController extends AAjaxController
             }
 
 
-            $img = strpos($val->dummyPicture, 's3-eu-west-1.amazonaws.com') ? $val->dummyPicture : $dummyUrl . "/" . $val->dummyPicture;
             $response['aaData'][$i]["DT_RowId"] = $val->printId();
             //$response['aaData'][$i]["code"] = $val->id . '-' . $val->productVariantId;
             $response['aaData'][$i]['code'] = ($okManage) ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
@@ -106,7 +105,7 @@ class CProductSalesListAjaxController extends AAjaxController
             }
             $response['aaData'][$i]["slug"] .= '<table class="nested-table"><thead><tr>'.$th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
             $response['aaData'][$i]['season'] = $val->productSeason->name . " " . $val->productSeason->year;
-            $response['aaData'][$i]["dummyPicture"] = isset($val->dummyPicture) && !empty($val->dummyPicture) ? '<img width="80" src="' . $img . '">' : "";
+            $response['aaData'][$i]["dummyPicture"] = '<img width="80" src="' . $val->getDummyPictureUrl() . '">';
             $response['aaData'][$i]['CPF'] = $val->itemno.' # '.$val->productVariant->name;
             $response['aaData'][$i]['variant'] = $val->productVariant->name;
 

@@ -39,7 +39,7 @@ class CChangeProductsSeason extends AAjaxController
                         }
                         $this->app->dbAdapter->commit();
                         return "Aggiornato lo stato di " . $count . " prodotti";
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         return "Errore nell'aggiornamento dello stato dei prodotti:<br />" .
                             $e->getMessage();
                             "Contattare l'amministratore<br />";

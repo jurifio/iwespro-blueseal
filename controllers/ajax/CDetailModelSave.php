@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+use bamboo\core\exceptions\BambooException;
 
 /**
  * Class CProductListAjaxController
@@ -28,11 +29,15 @@ class CDetailModelSave extends AAjaxController
         $productDetails = $this->getDetails($get);
         try {
             $this->app->dbAdapter->beginTransaction();
+
+            $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
+            if (!$pn) throw new BambooException('Non si può creare un modello con un nome prodotto inesistente');
+            $pnIt = $pn->findOneByKey('langId', 1);
             $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
             $newProt->productSheetPrototypeId = $productPrototypeId;
             $newProt->name = $get['name'];
             $newProt->code = $get['code'];
-            $newProt->productName = $get['productName'];
+            $newProt->productName = str_replace(' !', '', $pnIt->name);
             $newId = $newProt->insert();
 
             $this->saveCats($get['categories'], $newId);
@@ -41,7 +46,7 @@ class CDetailModelSave extends AAjaxController
             $this->app->dbAdapter->commit();
 
             return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newId]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
         }
@@ -55,19 +60,22 @@ class CDetailModelSave extends AAjaxController
 
         $productDetails = $this->getDetails($get);
 
-
         $prot = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $id]);
 
         try {
             $this->app->dbAdapter->beginTransaction();
 
             //update model
+
+            $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
+            if (!$pn) throw new BambooException('Non si può aggiornare un modello con un nome prodotto inesistente');
+            $pnIt = $pn->findOneByKey('langId', 1);
             $prot->name = $get['name'];
             if ($get['code']) {
                 $prot->code = $get['code'];
             }
             if ($get['productName']) {
-                $prot->productName = $get['productName'];
+                $prot->productName = str_replace(' !', '', $pnIt->name);
             }
             $prot->productSheetPrototypeId = $pspid;
             $prot->update();
@@ -81,7 +89,7 @@ class CDetailModelSave extends AAjaxController
 
             $this->saveCats($get['categories'], $prot->id);
             $this->app->dbAdapter->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
         }

@@ -35,7 +35,7 @@ class CProductPhotoDownload extends AAjaxController
                 if (is_null($shopHasProduct->productPhotoDownloadTime)) {
                     try {
                         $singleCost = $shopHasProduct->shop->config['photoCost'];
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         $singleCost = 3;
                     }
                     $contoSoldi += $singleCost;

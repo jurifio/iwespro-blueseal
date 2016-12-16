@@ -61,7 +61,7 @@ class CBlogPostTagController extends ARestrictedAccessRootController
 				}
 				$postTag->delete();
 				$this->app->dbAdapter->commit();
-			} catch (\Exception $e) {
+			} catch (\Throwable $e) {
 				$this->app->dbAdapter->rollBack();
 				throw $e;
 			}

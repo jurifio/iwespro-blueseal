@@ -4,7 +4,6 @@
 namespace bamboo\blueseal\business;
 
 use bamboo\core\ecommerce\IBillingLogic;
-use bamboo\core\events\EGenericEvent;
 use bamboo\domain\entities\COrderLine;
 use bamboo\domain\entities\COrderLineStatus;
 use bamboo\core\application\AApplication;
@@ -61,14 +60,22 @@ class COrderLineManager
 
         /** @var  $this ->app->dbAdapter CMySQLAdapter */
         $this->log("Change Line", "Changing Status to ".$newStatus->code);
-        $res = $this->app->eventManager->trigger(new EGenericEvent("orderLineStatusChange", ['orderLine' => $this->orderLine, 'newStatus' => $newStatus]));
+        $this->app->eventManager->triggerEvent("orderLineStatusChange", ['orderLine' => $this->orderLine, 'newStatus' => $newStatus]);
 
         try {
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->status = $newStatus->code;
-            $this->app->repoFactory->create("OrderLine")->update($orderLine);
-        } catch (\Exception $e) {
+            $orderLine->update($orderLine);
+
+            \Monkey::app()->eventManager->triggerEvent('changeOrderLineStatus',
+                [
+                    'order' => $orderLine,
+                    'status' => $orderLine->status
+                ]);
+            return true;
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
+            return false;
         }
     }
 
@@ -116,7 +123,7 @@ class COrderLineManager
      */
     public function isFriendChangable()
     {
-        if ($this->orderLine->orderLineStatus->phase <= 3) {
+        if ($this->orderLine->orderLineStatus->phase <= 4) {
             $conto = $this->app->dbAdapter->query("SELECT count(DISTINCT productId, productVariantId, productSizeId, shopId) AS conto
                                           FROM ProductSku
                                           WHERE productId = ? AND
@@ -185,13 +192,13 @@ class COrderLineManager
 
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->shopId = $sku->shopId;
-            $orderLine->frozenProduct = serialize($sku);
+            $orderLine->frozenProduct = $sku->froze();
             $this->app->repoFactory->create("OrderLine")->update($orderLine);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
         }
 
-       // $this->app->dbAdapter->update('OrderLine', ['shopId'=>$sku->shopId,'frozenProduct'=>serialize($sku)],['id'=>$this->orderLine->id,'orderId'=>$this->orderLine->orderId]);
+       // $this->app->dbAdapter->update('OrderLine', ['shopId'=>$sku->shopId,'frozenProduct'=>igbinary_serialize($sku)],['id'=>$this->orderLine->id,'orderId'=>$this->orderLine->orderId]);
         $this->orderLine = $this->app->repoFactory->create('OrderLine')->findOne(['id'=>$this->orderLine->id,'orderId'=>$this->orderLine->orderId]);
         if(!$this->orderLine instanceof COrderLine || $this->orderLine->shopId != $sku->shopId){
             throw new RedPandaException('Order Line Change Failed');
@@ -206,7 +213,7 @@ class COrderLineManager
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->friendRevenue = $this->orderLine->friendRevenue;
             $this->app->repoFactory->create("OrderLine")->update($orderLine);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
         }
         //$this->app->dbAdapter->update('OrderLine', ['friendRevenue'=>$this->orderLine->friendRevenue],['id'=>$this->orderLine->id,'orderId'=>$this->orderLine->orderId]);
@@ -229,7 +236,7 @@ class COrderLineManager
                 $orderLine->friendRevenue = round($price,2);
                 $this->app->repoFactory->create("OrderLine")->update($orderLine);
 
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->app->router->response()->raiseUnauthorized();
             }
 

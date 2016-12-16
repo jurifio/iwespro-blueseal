@@ -61,7 +61,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
             }
             $id = $couponRepo->insert($coupon);
             return $id;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseProcessingError();
             $this->app->router->response()->sendHeaders();
         }

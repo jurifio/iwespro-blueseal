@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\core\utils\slugify\CSlugify;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
@@ -71,27 +72,37 @@ class CCategoryManageController extends ARestrictedAccessRootController
         $mysql = $this->app->dbAdapter;
 
         $id = 0;
+
+        $pcRepo = \Monkey::app()->repoFactory->create('ProductCategory');
+        $pctRepo = \Monkey::app()->repoFactory->create('ProductCategoryTranslation');
+        $slugy = new CSlugify();
+
         foreach($post as $key => $input){
             if ($key == 'productCategoryId') continue;
             $temp = explode('_' ,$key);
             if($temp[0] != 'cat') continue;
             if($temp[2] == 'slug') {
-                $mysql->update("ProductCategory",array('slug'=>trim($input)), array("id"=>$temp[1]));
+                $pc = $pcRepo->findOneBy(['id' => $temp[1]]);
+                $pc->slug = $slugy->slugify(trim($input));
+                $pc->update();
                 continue;
             }
             $id = $temp[1];
-            $dbver = $mysql->select('ProductCategoryTranslation',array("productCategoryId"=>$temp[1],"langId"=>$temp[2]))->fetch();
-            if(isset($dbver['name'])) {
-                if($dbver['name'] != $input){
-                    $mysql->update("ProductCategoryTranslation",array('name'=>trim($input)), array("productCategoryId"=>$temp[1],"langId"=>$temp[2]));
+            $pct = $pctRepo->findOneBy(["productCategoryId"=>$temp[1],"langId"=>$temp[2]]);
+            if($pct) {
+                if($pct->name != $input){
+                    $pct->name = $input;
+                    $pct->update();
                 }
             } else if(!empty($input)){
+                $pct = $pctRepo->getEmptyEntity();
+                $pct->productCategoryId = $temp[1];
+                $pct->langId = $temp[2];
+                $pct->slug = $slugy->slugify(trim($input));
                 $mysql->insert("ProductCategoryTranslation", array("productCategoryId"=>$temp[1],"langId"=>$temp[2],'name'=>$input));
             }
         }
 
-        if(!headers_sent()){
-            header("Location: ".$blueseal."/prodotti/categorie/aggiungi?productCategoryId=" . $productCategoryId);
-        }
+        return $this->get();
     }
 }

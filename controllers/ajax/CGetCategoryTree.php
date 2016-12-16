@@ -20,7 +20,7 @@ class CGetCategoryTree extends AAjaxController
         $cache = $this->app->cacheService->getCache("misc")->get("FullCategoryTreeAsJSON");
         if (!$cache) {
             $cache = $this->app->categoryManager->categories()->treeToJson(1);
-            $this->app->cacheService->getCache("misc")->add("FullCategoryTreeAsJSON",$cache,13000);
+            $this->app->cacheService->getCache("misc")->set("FullCategoryTreeAsJSON",$cache,13000);
         }
         return $cache;
     }

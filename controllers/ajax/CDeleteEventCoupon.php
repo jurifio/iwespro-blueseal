@@ -74,7 +74,7 @@ class CDeleteEventCoupon extends AAjaxController
                 try {
                     $couponRepo->delete($coupon);
                     $deletedCoupons['ok'][] = $coupon;
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $deletedCoupons['ko'][] = $coupon;
                 }
             }

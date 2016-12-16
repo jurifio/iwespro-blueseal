@@ -25,11 +25,27 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_detail_list"
                                data-controller="ProductDetailListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
-                                <th class="center">Termine</th>
-                                <th class="center">Italiano</th>
+                                <th  data-slug="slug"
+                                     data-searchable="true"
+                                     data-orderable="true"
+                                     class="center">Termine</th>
+                                <th  data-slug="name"
+                                     data-searchable="true"
+                                     data-orderable="true"
+                                     class="center">Italiano</th>
+                                <th  data-slug="category"
+                                     data-searchable="false"
+                                     data-orderable="false"
+                                     class="center">Categorie</th>
+                                <th  data-slug="count"
+                                     data-searchable="false"
+                                     data-orderable="false"
+                                     class="center">N. Prodotti</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -74,6 +90,16 @@
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Cancella i dettagli"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-pencil"
+            data-permission="/admin/product/edit"
+            data-event="bs.details.compare"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Evidenzia nomi simili"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

@@ -37,25 +37,12 @@ class CNameTranslateEditController extends CNameTranslateManageController
         $name = $this->app->router->request()->getRequestData('name');
 
         $langs = $this->app->repoFactory->create('Lang')->findAll();
-        $productsEdit = [];
-             $product= $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['name' => $name, 'langId' => 1]);
-        foreach($langs as $lang) {
-            $productsEdit[$lang->id] = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(
-                [
-                    'productId' => $product->productId,
-                    'productVariantId' => $product->productVariantId,
-                    'langId' => $lang->id
-                ]
-            );
-        }
 
-        $em = $this->app->entityManagerFactory->create('Lang');
-        $langs = $em->findAll("limit 99999", "");
+        $name = \Monkey::app()->repoFactory->create('ProductName')->findBy(['name' => $name]);
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'name' => $name,
-            'productEdit' => $productsEdit,
             'langs' => $langs,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()

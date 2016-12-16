@@ -337,7 +337,7 @@ select.btn {
 }
 
 .page-container .page-content-wrapper .content {
-    padding-top: 200px;
+    padding-top: 180px;
 }
 
 .sidebar-logo {
@@ -820,4 +820,17 @@ h5.product-title {
 
 .launcher__button {
     background: url("")
+}
+
+.colorRed {
+    color: #DD0000 !important;
+}
+
+.fancytree-ext-childcounter span.fancytree-childcounter {
+    background: #22bdcf;
+    border: 1px solid #22bdcf;
+    line-height: 0.7;
+    height: 12px;
+    padding: 1px;
+    color: black;
 }

@@ -61,7 +61,7 @@ class CProductHasProductCategory extends AAjaxController
                         }
                     }
                     $this->app->dbAdapter->commit();
-                } catch(\Exception $e) {
+                } catch(\Throwable $e) {
                     $this->app->dbAdapter->rollBack();
                     return "OOPS! Errore nell'assegnazione delle categorie<br />" . $e->getMessage();
                 }

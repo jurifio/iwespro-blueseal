@@ -23,14 +23,12 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
         foreach ($this->app->router->request()->getRequestData('id') as $key => $value) {
 
             $o = new \stdClass();
-            \Monkey::dump($value);
             $o->product = $this->app->repoFactory->create('Product')->findOneByStringId($value);
-            \Monkey::dump($o->product);
             $o->aztecCode = base64_encode($o->product->id.'-'.$o->product->productVariantId.'__'.$o->product->productBrand->name.' - '.$o->product->itemno.' - '.$o->product->productVariant->name);
 
             try {
                 $o->shop = $o->product->shop->getFirst()->name;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $o->shop = null;
             }
 
@@ -39,7 +37,6 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/aztec_print.php');
-
         $aztecFactoryEndpoint = $this->app->baseUrl(false).'/blueseal/xhr/GetAztecCode?src=';
 
         return $view->render([

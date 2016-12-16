@@ -21,4 +21,8 @@ class CStorehouseOperationCause extends AEntity
 {
     protected $entityTable = 'StorehouseOperationCause';
     protected $primaryKeys = ['id'];
+
+    public function getMultiplier() {
+        return ($this->sign) ? 1 : -1;
+    }
 }

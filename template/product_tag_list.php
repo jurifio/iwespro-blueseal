@@ -19,24 +19,55 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_tag_list"
-                               data-column-filter="true"
                                data-controller="ProductTagListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                                 <tr>
-                                    <th class="center">Codice</th>
-                                    <th class="center">Shop</th>
-                                    <th class="center">Gruppo Colore</th>
-                                    <th class="center">Stagione</th>
-                                    <!--<th class="center">Gruppo Taglie</th>-->
-                                    <th class="center">Dettagli</th>
-                                    <!--<th class="center">Immagine </th>-->
-                                    <th class="center">Brand</th>
-                                    <th class="center">Priorità</th>
-                                    <th class="center">Tags</th>
-                                    <th class="center">Qt.</th>
-                                    <th class="center">SCA</th>
-                                    <th class="center">Stato</th>
+                                    <th data-slug="code"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Codice</th>
+                                    <th data-slug="shop"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Shop</th>
+                                    <th data-slug="colorGroup"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Gruppo Colore</th>
+                                    <th data-slug="season"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Stagione</th>
+                                    <th data-slug="details"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Dettagli</th>
+                                    <th data-slug="brand"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Brand</th>
+                                    <th data-slug="priority"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        data-default-order="desc"
+                                        class="center">Priorità</th>
+                                    <th data-slug="tag"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Tags</th>
+                                    <th data-slug="isOnSale"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Sale</th>
+                                    <th data-slug="available"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Disp</th>
+                                    <th data-slug="status"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Stato</th>
                                 </tr>
                             </thead>
                             <tbody>

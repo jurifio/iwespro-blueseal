@@ -5,27 +5,27 @@ use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
- * Class CProductDetailContentController
+ * Class CProductStatisticsController
  * @package bamboo\blueseal\controllers
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ * @author Iwes Team <it@iwes.it>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 18/11/2015
+ * @date $date
  * @since 1.0
  */
-class CProductDetailContentController extends ARestrictedAccessRootController
+class CProductCampaignStatisticsController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "content_productdetail_list";
-    
+    protected $pageSlug = "product_campaign_statistics";
+
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/content_productdetail_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_campaign_statistics.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

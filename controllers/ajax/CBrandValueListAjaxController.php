@@ -32,6 +32,16 @@ class CBrandValueListAjaxController extends AAjaxController
         $count = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
         */
+
+        foreach ($orribilità as $hellDoorKey => $horror) {
+            foreach($horror as $k => $v) {
+                if (null === $v) {
+                    $orribilità[$hellDoorKey][$k] = 0;
+                }
+            }
+        }
+
+        
         $response = [];
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;

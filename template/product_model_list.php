@@ -19,17 +19,30 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_model_list"
-                               data-column-filter="true"
                                data-controller="ProductModelListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true">
                             <thead>
                                 <tr>
-                                    <th class="center">Codice</th>
-                                    <th class="center">Nome Modello</th>
-                                    <th class="center">Nome Prodotto</th>
-                                    <th class="center">Nome Prototipo</th>
-                                    <th class="center">Categorie</th>
-                                    <th class="center">Dettagli</th>
+                                    <th data-slug="code"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        data-default-order="desc" class="center">Codice</th>
+                                    <th data-slug="name"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Nome Modello</th>
+                                    <th data-slug="productName"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Nome Prodotto</th>
+                                    <th data-slug="prototypeName"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Nome Prototipo</th>
+                                    <th data-slug="categories"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
+                                    <th data-slug="details"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Dettagli</th>
                                 </tr>
                             </thead>
                             <tbody>

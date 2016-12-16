@@ -29,7 +29,10 @@ class CProductSlimListAjaxController extends AAjaxController
         $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
+        $user = \Monkey::app()->getUser();
+        $okManage = $user->hasPermission('/admin/product/edit');
+
+        $allShops = $user->hasPermission('allShops');
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -46,10 +49,9 @@ class CProductSlimListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
 
-            $img = strpos($val->dummyPicture, 's3-eu-west-1.amazonaws.com') ? $val->dummyPicture : "/assets/" . $val->dummyPicture;
             if ($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
-            $response['data'][$i]['image'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
+            $response['data'][$i]['image'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>' . $imgs . '<br />';
 
             $response['data'][$i]['shop'] = '<span>';
             foreach ($val->shop as $shop) {
@@ -142,10 +144,24 @@ class CProductSlimListAjaxController extends AAjaxController
             $response['data'][$i]['stock'] = $table;
 
             $response['data'][$i]['season'] = '<span class="small">';
-            $response['data'][$i]['season'] .= $val->productSeason->name . " " . $val->productSeason->year;
+            $response['data'][$i]['season'] .= ($val->productSeason) ? $val->productSeason->name . " " . $val->productSeason->year : '-';
             $response['data'][$i]['season'] .= '</span>';
 
-            $response['data'][$i]['status'] = $val->productStatus->name;
+            if ($allShops) $status = $val->productStatus->name;
+            else {
+                $friendQty = 0;
+                foreach($val->productSku as $sku) {
+                    foreach($shopsIds as $sid) {
+                        if ($sku->shopId == $sid) {
+                            $friendQty = $friendQty + $sku->stockQty;
+                        }
+                    }
+                }
+                if ($friendQty) $status = $val->productStatus->name;
+                else $status = 'Esaurito';
+            }
+
+            $response['data'][$i]['status'] = $status;
             $response['data'][$i]['creationDate'] = $val->creationDate;
 
             $i++;

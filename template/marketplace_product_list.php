@@ -19,14 +19,15 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_list"
-                               data-column-filter="true"
+
                                data-controller="MarketplaceProductListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-lenght-menu="25,100, 200, 500">
+                               data-length-menu-setup="25,100, 200, 500">
                             <thead>
                                 <tr>
                                     <th data-slug="code"
+                                        data-required="true"
                                         data-searchable="true"
                                         data-orderable="true" class="center"
                                         data-default-order="desc">Codice</th>
@@ -36,9 +37,9 @@
                                     <th data-slug="brand"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Brand</th>
-                                    <th data-slug="categories"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Categorie</th>
+                                    <th data-slug="category"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
                                     <th data-slug="stock"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stock</th>
@@ -57,6 +58,13 @@
                                     <th data-slug="marketplaceAccountName"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Marketplaces</th>
+                                    <th data-slug="status"
+                                        data-searchable="true"
+                                        data-is-visible="false"
+                                        data-orderable="true" class="center">Stato</th>
+                                    <th data-slug="creationDate"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center dataFilterType">Creazione</th>
                                 </tr>
                             </thead>
                             <tbody>

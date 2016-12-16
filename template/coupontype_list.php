@@ -20,13 +20,27 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="coupontype_list"
                                data-controller="CouponTypeListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true">
                             <thead>
                             <tr>
-                                <th class="center">Nome</th>
-                                <th class="center">Valore</th>
-                                <th class="center">Validità</th>
-                                <th class="center">Minimo spesa</th>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">Nome</th>
+                                <th data-slug="amount"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Valore</th>
+                                <th data-slug="validity"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Validità</th>
+                                <th data-slug="validForCartTotal"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Minimo spesa</th>
                             </tr>
                             </thead>
                             <tbody>

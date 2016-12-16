@@ -21,8 +21,36 @@ var alertHtml = "" +
 var tagList = "";
 
 $(document).on('bs.dummy.edit', function (e, element, button) {
-    var input = document.getElementById("dummyFile");
-    input.click();
+    modal = new $.bsModal(
+        'Foto Prodotto',
+        {
+            body: "Sto Caricando la foto",
+            okButtonLabel: 'Chiudi'
+        }
+    );
+
+    var id = $('input[name="Product_id"]').val();
+    var variantId = $('input[name="Product_productVariantId"]').val();
+
+    if (('' == id) && ('' == variantId)) {
+        modal.writeBody('Non posso visualizzare l\'immagine se la scheda non contiene un prodotto già salvato');
+    } else {
+        var code = id + '-' + variantId;
+        $.ajax({
+            url: '/blueseal/xhr/GetDummyPicture',
+            method: 'GET',
+            dataType: 'JSON',
+            data: {code: code}
+        }).done(function (res) {
+            if ('ok' == res.status) {
+                modal.writeBody('<img style="max-height: 60vh" src="' + res.dummyPic + '" />');
+            } else {
+                modal.writeBody(res.message);
+            }
+        }).fail(function () {
+            modal.writeBody('C\'è stato un errore nel caricamento dell\'immagine');
+        });
+    }
 });
 
 $("#dummyFile").on('change', function () {
@@ -61,31 +89,46 @@ $(document).on('bs.product.edit', function (e, element, button) {
             } else {
                 type = 'POST';
             }
-            $(document).ajaxForm({
-                    type: type,
-                    url: "#",
-                    formAutofill: true
-                },
-                new FormData(),
-                function (res) {
-                    try {
-                        res = JSON.parse(res);
-                    } catch (e) {
-                        res = res;
+
+            var savethePrice = 1;
+            /*var retail_price = $(form).find('#Product_retail_price').val();
+            var value = $(form).find('#Product_value').val();
+            if (value >= retail_price) {
+                body.html('Il prezzo di vendita è inferiore al costo. Salvare Comunque?');
+                okButton.off().on('click', function(){
+
+                });
+            }*/
+
+            if (1 == savethePrice) {
+                $('#form-project').ajaxForm({
+                        type: type,
+                        url: "#"
+                    },
+                    function (res) {
+                        try {
+                            res = JSON.parse(res);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                        if ('string' == typeof res) {
+                            body.html(res);
+                        } else {
+                            body.html(res['message']);
+                            if ('undefined' != typeof res['code']) {
+                                $('.product-code').html(String(res['code']['id']) + '-' + String(res['code']['productVariantId']));
+                                $('#Product_id').val(res['code']['id']);
+                                $('#Product_productVariantId').val(res['code']['productVariantId']);
+                                setTimeout(function () {
+                                    window.location = '/blueseal/friend/prodotti/modifica?id=' + res['code']['id'] + '&productVariantId=' + res['code']['productVariantId']
+                                }, 2000);
+                            }
+                        }
                     }
-                    if ('string' == typeof res) {
-                        body.html(res);
-                    } else {
-                        body.html(res['message']);
-                        $('.product-code').html(String(res['code']['id']) + '-' + String(res['code']['productVariantId']));
-                        $('#Product_id').val(res['code']['id']);
-                        $('#Product_productVariantId').val(res['code']['productVariantId']);
-                        window.location = '/blueseal/friend/prodotti/modifica?id=' + res['code']['id'] + '&productVariantId=' + res['code']['productVariantId'];
-                    }
-                }
-            );
+                );
+            }
             bsModal.modal();
-        } else {
+        } else if ("" != $('#Product_id').val()) {
 
             var price = $('#Product_retail_price').val();
             var value = $('#Product_value').val();
@@ -127,7 +170,6 @@ $(document).on('click', '.radioMimic ul li', function () {
     });
     $(this).addClass('item-selected');
 });
-
 
 $(document).on('bs.category.edit', function (e, element, button) {
     var bsModal = $('#bsModal');
@@ -520,6 +562,65 @@ $.fn.disableBlank = function(formStatus) {
     }
 };
 
+$.fn.writeCategoryList = function(){
+    var self = $(this);
+    var id = $('#Product_id').val();
+    var variantId = $('#Product_productVariantId').val();
+    if (this.length) {
+        if (("" == id) || ("" == variantId)) {
+            $(this).html('');
+        } else {
+            $.ajax({
+                url: '/blueseal/xhr/GetProductCategoryPathList',
+                method: 'GET',
+                dataType: 'json',
+                data: {code: id + '-' + variantId}
+            }).done(function (res) {
+                if ('undefined' != typeof res.cats) {
+                    var content = '<span class="small"><h6 style="font-weight: bold; margin-bottom: 2px;">Categorie:</h6>';
+                    for (var i in res.cats) {
+                        content += res.cats[i] + '<br />';
+                    }
+                    content += '</span>';
+                    self.html(content);
+                } else {
+                    self.html('');
+                }
+            });
+        }
+    }
+};
+
+$.fn.writeShopList = function(){
+    var self = $(this);
+    var id = $('#Product_id').val();
+    var variantId = $('#Product_productVariantId').val();
+    if (this.length) {
+        if (("" == id) || ("" == variantId)) {
+            $(this).html('');
+        } else {
+            $.ajax({
+                url: '/blueseal/xhr/GetProductShopsList',
+                method: 'GET',
+                dataType: 'json',
+                data: {code: id + '-' + variantId}
+            }).done(function (res) {
+                if ('undefined' != typeof res.friends) {
+                    var content = '<span class="small">';
+                    for (var i in res.friends) {
+                        content += '<strong>' + res.friends[i]["title"] + '</strong>:<p style="padding-left: 5px;">prezzo: ' + res.friends[i]["price"] +
+                            ' - valore: ' + res.friends[i]["value"] + ' - scontato: ' + res.friends[i]["salePrice"] + ' - stock: ' + res.friends[i]["salePrice"] + '</p>';
+                    }
+                    content += '</span>';
+                    self.html(content);
+                } else {
+                    self.html('');
+                }
+            });
+        }
+    }
+};
+
 function searchForProduct(itemno, variantName, brandId) {
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');
@@ -557,6 +658,7 @@ function eraseForm() {
             $(this).selectize()[0].selectize.setValue('', false);
         }
     });
+    $('.product-code').html('');
     $('textarea').html('');
     $('#main-details').html('');
     $('#main-details').createCategoryBtn();
@@ -574,13 +676,21 @@ function populatePage(res) {
             bsModal.modal('hide');
         });
     }
+
+    var selectStatusElem = $('.selectStatus');
+
     category = false;
     if (res['editable']) {
         category = true;
         editable = true;
+        var statusElem = $('.selectStatus');
+        $(document).on('bs.toolbar.element.drawn', function (elem) {
+            $(elem).prop('disabled', false);
+            $(elem).val(res['product']['productStatusId']);
+        });
         if (res['code']) {
             movable = true;
-            $('.code-title').html(res['code']);
+            $('.code-title').html('<a href="' + res['product']['link'] + '" target="_blank">' + res['code'] + '</a>');
             if (res['product']) {
                 fillTheFields(res['product']);
                 if ( false == res['skuEditable']) $('#Product_sizes').prop('readonly', true);
@@ -590,12 +700,22 @@ function populatePage(res) {
             if (!$('#ProductCategory_id').val().length) {
                 $('#main-details').createCategoryBtn();
             }
+
+            if (statusElem.length) {
+                statusElem.prop('disabled', false);
+                statusElem.val(res['product']['productStatusId']);
+            }
         } else {
             $('.code-title').html('-');
             movable = false;
-            $('.product-code').html();
             eraseForm();
-            //$('#main-details').selectDetails();
+            if (!statusElem.length) {
+                $('.selectStatus').on('load', function () {
+                    $(this).prop('disabled', true);
+                });
+            } else {
+                statusElem.prop('disabled', true);
+            }
         }
         $('.disableBlank').disableBlank('enable');
     } else {
@@ -611,12 +731,22 @@ function populatePage(res) {
         $('#ProductVariant_name').val(res['product']['variantName']);
         $('#Product_productBrandId').selectize()[0].selectize.setValue(res['product']['productBrandId'], true);
         if (res['code']) {
-            $('.code-title').html(res['code']);
+            $('.code-title').html('<a href="' + res['product']['link'] + '" target="_blank">' + res['code'] + '</a>');
             $('#Product_retail_price').val(res['product']['price']);
             $('#Product_value').val(res['product']['value']);
             $('#Product_extId').val(res['product']['extId']);
+            if (selectStatusElem.length) {
+                selectStatusElem.prop('disabled', false);
+                selectStatusElem.val(res['product']['productStatusId']);
+            }
+        } else {
+            if (selectStatusElem.length) {
+                selectStatusElem.prop('disabled', true);
+            }
         }
     }
+    $('.categoryPath').writeCategoryList();
+    $('.friendList').writeShopList();
 }
 
 function searchForProductByCode(id, productVariantId) {
@@ -668,55 +798,6 @@ function fillTheFields(product) {
     $('#Product_note').html(product['note']);
     $('#summernote1').code(product['productDescription']);
 }
-
-$(document).on('bs.det.add', function (e) {
-    e.preventDefault();
-
-    var bsModal = $('#bsModal');
-    var header = $('#bsModal .modal-header h4');
-    var body = $('#bsModal .modal-body');
-    var cancelButton = $('#bsModal .modal-footer .btn-default');
-    var okButton = $('#bsModal .modal-footer .btn-success');
-
-    //new Cslugify
-    header.html('Aggiungi dettaglio');
-    body.html(
-        '<div><span class="small">L\'aggiunta di un dettaglio comporta il ricaricamento della pagina.<br />Salvare il prodotto prima di effettuare questa operazione</span></div>' +
-        '<div class="alert alert-danger modal-alert" style="display: none">Il campo <strong>Italiano</strong> è obbligatorio</div>' +
-        '<form id="detailAdd"><div class="form-group">' +
-        '<label>Italiano*</label>' +
-        '<input type="text" class="form-control new-dett-ita" name="newDettIta" />' +
-        '</div></form>'
-    );
-    cancelButton.html("Annulla").off().on('click', function () {
-        bsModal.hide();
-    });
-    bsModal.modal('show');
-    okButton.html('Inserisci').off().on('click', function () {
-        if ('' === $('.new-dett-ita').val()) {
-            $('.modal-alert').css('display', 'block');
-        } else {
-            $.ajax({
-                    type: "POST",
-                    async: false,
-                    url: "/blueseal/xhr/ProductDetailAddNewAjaxController",
-                    data: {
-                        name: $('.new-dett-ita').val()
-                    }
-                }
-            ).done(function (result) {
-                var res = result.split("-");
-                body.html(res[0]);
-                cancelButton.hide();
-                okButton.html('Ok').off().on('click', function () {
-                    bsModal.modal('hide');
-                    window.location.reload();
-                });
-            });
-            return false;
-        }
-    });
-});
 
 // MOVIMENTI MAGAZZINO
 
@@ -850,13 +931,13 @@ $(document).ready(function () {
                     callback();
                 },
                 success: function (res) {
-                    if (!res.length) {
+                    /*if (!res.length) {
                         var resArr = [];
                         resArr[0] = {name: query.trim()};
                         res = resArr;
                     } else {
                         res.push({name: query.trim()});
-                    }
+                    }*/
                     callback(res);
                 }
             });
@@ -881,4 +962,37 @@ $(document).ready(function () {
     if (!$('#ProductCategory_id').val().length) {
         $('#main-details').createCategoryBtn();
     }
+
+    // change product status
+    (function () {
+        $(document).on('focus', '.selectStatus', function () {
+            previous = $(this).val();
+        });
+        $(document).on('change', '.selectStatus', function() {
+            var elem = $(this);
+            var productId = $('#Product_id').val();
+            var productVariantId = $('#Product_productVariantId').val();
+            var val = $(this).val();
+            $.ajax({
+                url: '/blueseal/xhr/ProductStatusManage',
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    code: productId + '-' + productVariantId,
+                    status: val
+                }
+            }).done(function(res){
+                if ('ko' == res.status) elem.val(previous);
+                modalResponse(res.message);
+                previous = elem.val();
+            });
+        });
+
+        function modalResponse(response) {
+            modal = new $.bsModal(
+                'Aggiornamento stato',
+                { body: response }
+            );
+        }
+    })();
 });

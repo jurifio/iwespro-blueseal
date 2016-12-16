@@ -42,7 +42,7 @@ class CBlueSealLoginController extends ARestrictedAccessRootController
         try{
             $id = $this->app->rbacManager->perms()->pathId($permissionPath);
             if($this->app->getUser()->hasPermission($id)) $hasPermission = true;
-        }catch (\Exception $e){
+        }catch (\Throwable $e){
 
         }
         return $hasPermission;

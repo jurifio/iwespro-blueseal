@@ -77,7 +77,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
 	        $postRepo->setTags($postId,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
 	        $postTranslationRepo->insert($PostTranslation);
 	        $this->app->dbAdapter->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
 			$this->app->dbAdapter->rollBack();
 	        throw $e;
         }

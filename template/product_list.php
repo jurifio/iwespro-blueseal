@@ -26,28 +26,99 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_list"
-                               data-column-filter="true"
                                data-controller="ProductListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-length-menu-setup="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
                                 <tr>
-                                    <th class="center">Codice</th>
-                                    <th class="center">Shop</th>
-                                    <th class="center">Gruppo Colore</th>
-                                    <th class="center">Stagione</th>
-                                    <th class="center">ID Orig.</th>
-                                    <th class="center">CPF</th>
+                                    <th data-slug="code"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Codice</th>
+                                    <th data-slug="shop"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Shop</th>
+                                    <th data-slug="colorGroup"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Gruppo Colore</th>
+                                    <th data-slug="colorNameManufacturer"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Colore Produttore</th>
+                                    <th data-slug="season"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stagione</th>
+                                    <th data-slug="externalId"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">ID Orig.</th>
+                                    <th data-slug="cpf"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">CPF</th>
                                     <!--<th class="center">Gruppo Taglie</th>-->
-                                    <th class="center">Dettagli</th>
-                                    <!--<th class="center">Immagine </th>-->
-                                    <th class="center">Brand</th>
-                                    <th class="center">Categorie</th>
-                                    <th class="center">Tags</th>
-                                    <th class="center">Stato</th>
-                                    <th class="center">M.Up</th>
-                                    <th class="center">Disponibile</th>
-                                    <th class="center">SCA</th>
-                                    <th class="center">Creazione</th>
+                                    <th data-slug="details"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Dettagli</th>
+                                    <th data-slug="dummy"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Dummy</th>
+                                    <th data-slug="hasPhotos"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Ha Foto</th>
+                                    <th data-slug="productName"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Nome</th>
+                                    <th data-slug="hasDetails"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Ha Dett.</th>
+                                    <th data-slug="brand"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Brand</th>
+                                    <th data-slug="productSizeGroup"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Grup.Taglie</th>
+                                    <th data-slug="categoryId"
+                                        data-searchable="true"
+                                        data-orderable="false" class="center categoryFilterType">Categorie</th>
+                                    <th data-slug="tags"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        data-visible="false" class="center">Tags</th>
+                                    <th data-slug="status"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stato</th>
+                                    <th data-slug="mup"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">M.Up</th>
+                                    <th data-slug="hasQty"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Quantità disp.</th>
+                                    <th data-slug="isOnSale"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Saldo</th>
+                                    <th data-slug="creationDate"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        data-default-order="desc" class="center dataFilterType">Creazione</th>
+                                    <th data-slug="productPriority"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        data-default-order="desc" class="center">Priorità Prodotto</th>
+                                    <th data-slug="description"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Descr.</th>
+                                    <th data-slug="marketplaces"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Marketplaces</th>
+                                    <th data-slug="stock"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Taglie</th>
+                                    <th data-slug="activePrice"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Prezzo Attivo</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,9 +136,6 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
-            data-remote="btn.href.add.product"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
             data-remote="bs.publish.products"
             ></bs-toolbar-button>
         <bs-toolbar-button
@@ -80,17 +148,14 @@
             data-remote="bs.product.dupe"
             ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.product.sku.manage"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
             data-remote="bs.product.photo.manage"
             ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.photo.download"
             ></bs-toolbar-button>
-        <bs-toolbar-button
+        <!--<bs-toolbar-button
             data-remote="bs.product.delete"
-            ></bs-toolbar-button>
+            ></bs-toolbar-button>-->
         <bs-toolbar-button
             data-remote="bs.product.status.change"
             ></bs-toolbar-button>
@@ -101,18 +166,7 @@
             data-remote="bs.product.category.change"
             ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.product.details.merge"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-magnet"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.mergenames"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Copia i nomi dei prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
+            data-remote="bs.product.names.merge"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.sizeGroup.change"
@@ -123,15 +177,39 @@
         <bs-toolbar-button
             data-remote="bs.product.PriceEditForAllShop"
         ></bs-toolbar-button>
-        </bs-toolbar-group>
-        <bs-toolbar-group data-group-label="Gestione prezzi">
-            <bs-toolbar-button
-                data-remote="bs.product.sales.set"
-                ></bs-toolbar-button>
-            <bs-toolbar-button
-                data-remote="bs.product.sales.price.change"
-                ></bs-toolbar-button>
-        </bs-toolbar-group>
+        <bs-toolbar-button
+            data-remote="bs.product.details.merge"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.model.insertIntoProducts"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.merge"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.name.insert"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.details.new">
+        </bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.marketplace.publish"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.editVariantDescription"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.priority.change"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione prezzi">
+        <bs-toolbar-button
+            data-remote="bs.product.sales.set"
+            ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.product.sales.price.change"
+            ></bs-toolbar-button>
+    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Roulette">
         <bs-toolbar-select
             data-tag="select"

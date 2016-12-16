@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php";?>
+<?php include "parts/sidebar.php"; ?>
 <div class="page-container">
     <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
@@ -24,12 +24,34 @@
                     <div class="panel-heading">
                     </div>
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-datatable-name="name_lang_list" data-controller="NameTranslateLangListAjaxController" data-lang="<?php echo $langId; ?>" data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                        <table class="table table-striped responsive" width="100%"
+                               data-datatable-name="name_lang_list"
+                               data-controller="NameTranslateLangListAjaxController?marks=tutto&translated=tutto"
+                               data-lang="<?php echo $langId; ?>"
+                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-length-menu-setup="50, 100, 200, 500, 1000"
+                               data-display-length="50">
                             <thead>
-                                <tr>
-                                    <th class="center sorting">Italiano</th>
-                                    <th class="center sorting">Traduzione</th>
-                                </tr>
+                            <tr>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center sorting">Italiano</th>
+                                <th data-slug="category"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center sorting categoryFilterType">Categorie</th>
+                                <th data-slug="count"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">N. Prodotti</th>
+                                <th data-slug="trans"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center sorting">Traduzione</th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>
@@ -66,6 +88,26 @@
             data-title="Solo non tradotti"
             data-placement="bottom"
             data-href="<?php echo $urlTrans; ?>"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+        data-tag="a"
+        data-icon="fa-exclamation-circle"
+        data-permission="/admin/product/edit"
+        data-event="bs.filterByMark"
+        data-class="btn btn-default"
+        data-rel="tooltip"
+        data-title="Filtra per punti esclamativi"
+        data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-map"
+            data-permission="/admin/product/edit"
+            data-event="bs.filterByTranslation"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Filtra per punti esclamativi"
+            data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -1,11 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\blueseal\business\CDataTables;
-use bamboo\core\events\EGenericEvent;
-use bamboo\core\exceptions\BambooApplicationException;
-use bamboo\core\intl\CLang;
-
 /**
  * Class CMarketplaceProductManageController
  * @package bamboo\blueseal\controllers\ajax
@@ -39,6 +34,11 @@ class CMarketplaceProductManageController extends AAjaxController
 	    $config = $marketplaceAccount->config;
 	    $config['priceModifier'] = $this->app->router->request()->getRequestData('modifier');
 	    $config['cpc'] = $this->app->router->request()->getRequestData('cpc');
+        if(!$config['cpc']) {
+            if(isset($marketplaceAccount->config['defaultCpc'])) {
+                $config['cpc'] = $marketplaceAccount->config['defaultCpc'];
+            }
+        }
 	    $i = 0;
         $rows = $this->app->router->request()->getRequestData('rows');
         if($rows == 'all') {
@@ -77,16 +77,9 @@ class CMarketplaceProductManageController extends AAjaxController
                     $marketplaceAccountHasProduct->insert();
                 }
                 $i++;
-                $ids[] = $marketplaceAccountHasProduct->printId();
-                if($i%50) {
-                    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$ids])));
-                    $ids = [];
-                }
+                $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>[$marketplaceAccountHasProduct->printId()]]);
             }
-            if(count($ids) > 0) {
-                $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$ids])));
-            }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             throw $e;
         }
@@ -98,16 +91,47 @@ class CMarketplaceProductManageController extends AAjaxController
     {
     	//RETRY
 	    $i = 0;
+        $revise = [];
 	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
 		    $product = $this->app->repoFactory->create('Product')->findOneByStringId($row);
 		    foreach ($product->marketplaceAccountHasProduct as $marketplaceAccountHasProduct) {
 			    if(1 == $marketplaceAccountHasProduct->hasError || 1 == $marketplaceAccountHasProduct->isToWork) {
-				    $this->app->eventManager->trigger((new EGenericEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()])));
+				    $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()]);
 				    $i++;
-			    }
+			    } else {
+                    $revise[] = $product;
+                }
 		    }
 	    }
+	    foreach ($revise as $product) {
+            $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$product->printId()]);
+        }
 
 	    return $i;
+    }
+
+    /**
+     * @return int
+     */
+    public function delete() {
+        $count = 0;
+        foreach ($this->app->router->request()->getRequestData('ids') as $mId) {
+            try {
+                $marketplaceHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->findOneByStringId($mId);
+                if(null == $marketplaceHasProduct) {
+                    $marketplaceHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
+                    $marketplaceHasProduct->readId($mId);
+                    $marketplaceHasProduct->isDeleted = 1;
+                    $marketplaceHasProduct->insert();
+                } else {
+                    $marketplaceHasProduct->isDeleted = 1;
+                    $marketplaceHasProduct->update();
+                }
+                $count++;
+            } catch (\Throwable $e) {
+
+            }
+        }
+        return $count;
     }
 }

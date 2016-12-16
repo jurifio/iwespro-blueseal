@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-magnet",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.mergenames",
+    event:"bs.product.names.merge",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Copia i nomi dei prodotti",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.mergenames', function () {
+$(document).on('bs.product.names.merge', function () {
 
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();
@@ -34,8 +34,10 @@ $(document).on('bs.product.mergenames', function () {
     }
 
     var codes = {};
+    var i = 0;
     $.each(selectedRows, function (k, v) {
-        codes.push(v.DT_RowId)
+        codes['codes_' + i] = v.DT_RowId;
+        i++;
     });
 
     var result = {
@@ -49,9 +51,7 @@ $(document).on('bs.product.mergenames', function () {
         url: '/blueseal/xhr/NamesManager',
         method: 'GET',
         dataType: 'JSON',
-        data: {
-            codes: codes
-        }
+        data: codes
     }).done(function (res) {
 
         header.html('Unione Nomi');
@@ -59,7 +59,8 @@ $(document).on('bs.product.mergenames', function () {
         bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
         bodyContent += '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
         body.html(bodyContent);
-        $('#productDetailId').selectize({
+        var prodNameId = $ ('#productDetailId');
+        prodNameId.selectize({
             valueField: 'name',
             labelField: 'name',
             searchField: 'name',
@@ -77,8 +78,7 @@ $(document).on('bs.product.mergenames', function () {
                 if (3 >= query.length) {
                     return callback();
                 }
-                var search = [];
-                search['codes'] = codes;//codes.slice();
+                var search = codes;
                 search['search'] = query;
                 $.ajax({
                     url: '/blueseal/xhr/NamesManager',
@@ -89,42 +89,48 @@ $(document).on('bs.product.mergenames', function () {
                         callback();
                     },
                     success: function (res) {
+                        console.log(res);
+                        res.push({name: search['search']});
                         callback(res);
                     }
                 });
             }
         });
 
-        $('#productDetailId').selectize()[0].selectize.setValue(0);
 
-        var detName = $('#productDetailId option:selected').text(); //.split('(')[0];
-        $('#productDetailName').val(detName);
+        prodNameId.selectize()[0].selectize.setValue(0);
+        var prodName = $ ('#productDetailName');
+
+        var detName = prodNameId.find ('option:selected').text();
+        prodName.val (detName);
+
+        prodNameId.on ('change', function(){
+            detName = prodNameId.find ('option:selected').text();
+            prodName.val (detName);
+        });
 
         $(bsModal).find('table').addClass('table');
-        $('#productDetailId').change(function () {
-            var detName = $('#productDetailId option:selected').text(); //.split('(')[0];
-            $('#productDetailName').val(detName);
-        });
         cancelButton.html("Annulla");
         cancelButton.show();
 
         bsModal.modal('show');
 
         okButton.html(result.okButtonLabel).off().on('click', function (e) {
-            var selected = $("#productDetailId").val();
-            var name = $("#productDetailName").val();
+            var selected = $("#productDetailName").val();
 
             var oldCodes = [];
 
             body.html(loader);
             Pace.ignore(function () {
                 body.html('');
+                delete codes['search'];
                 $.ajax({
                     url: "/blueseal/xhr/NamesManager",
                     type: "POST",
                     data: {
                         action: "mergeByProducts",
-                        newName: name,
+                        insertNameIfNew: "r'n'r!",
+                        newName: selected,
                         oldCodes: codes
                     }
                 }).done(function (content) {

@@ -64,7 +64,7 @@ class CCouponAddController extends ARestrictedAccessRootController
             $coupon->issueDate = $date->format('Y-m-d H:i:s');
             $id = $couponRepo->insert($coupon);
             return $id;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->app->router->response()->raiseProcessingError();
             $this->app->router->response()->sendHeaders();
         }

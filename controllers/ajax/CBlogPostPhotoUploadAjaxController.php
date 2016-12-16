@@ -44,7 +44,7 @@ class CBlogPostPhotoUploadAjaxController extends AAjaxController
 
 		try{
 			$res = $image->putImage($config['bucket'], $tempFolder . $fileName, $this->app->getName()."-blog", $fileName);
-		}catch(\Exception $e){
+		}catch(\Throwable $e){
 			$this->app->router->response()->raiseProcessingError();
 			return 'Errore nell\'upload del file';
 		}

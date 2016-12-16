@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php";?>
+<?php include "parts/sidebar.php"; ?>
 <div class="page-container">
     <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
@@ -25,13 +25,26 @@
                         <h5>Traduzione Tag <?php echo $shopName; ?></h5>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%" data-column-filter="true"
-                               data-datatable-name="dictionary_edit" data-controller="DictionaryTagEditAjaxController" data-shop="<?php echo $shopId; ?>" data-url="<?php echo $app->urlForBluesealXhr() ?>">
+                        <table class="table table-striped responsive" width="100%"
+                               data-datatable-name="dictionary_edit" data-controller="DictionaryTagEditAjaxController"
+                               data-shop="<?php echo $shopId; ?>" data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-inner-setup="true"
+                               data-length-menu-setup="50, 100, 200, 500"
+                               data-display-length="50">
                             <thead>
-                                <tr>
-                                    <th class="center sorting">Termine</th>
-                                    <th class="center sorting">Traduzione</th>
-                                </tr>
+                            <tr>
+                                <th data-slug="term"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center sorting">Termine
+                                </th>
+                                <th data-slug="foreign"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center sorting">Traduzione
+                                </th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>
