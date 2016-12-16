@@ -55,23 +55,17 @@ class CFixProductGroupSizeAjaxController extends AAjaxController
         /** @var $em CEntityManager **/
 
         $bluesealBase = $this->app->baseUrl(false)."/blueseal/";
-        $dummyUrl = $this->app->cfg()->fetch('paths','dummyUrl');
-        $shops = [];
-
-
         $query =
-            "SELECT DISTINCT p.id as id, p.productVariantId as productVariantId FROM Product as p
-JOIN ProductSku as ps On p.id = ps.productId AND p.productVariantId = ps.productVariantId
+            "SELECT DISTINCT p.id as id, p.productVariantId as productVariantId, creationDate FROM Product as p
+  JOIN ProductSku as ps On p.id = ps.productId AND p.productVariantId = ps.productVariantId
   join Shop ON ps.shopId = Shop.id
 where p.productSizeGroupId NOT IN (SELECT productSizeGroupId FROM ProductSizeGroupHasProductSize WHERE ProductSizeGroupHasProductSize.productSizeId = ps.productSizeId)
-AND p.productStatusId in (5,6,11) group by p.productVariantId";
+      AND p.productStatusId in (5,6,11) group by p.productVariantId";
 
         $datatable = new CDataTables($query,['id','productVariantId'],$_GET, true);
-        if(!empty($this->authorizedShops)){
-            $datatable->addCondition('shopId',$this->authorizedShops);
-        }
-
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $getQuery = $datatable->getQuery();
+        $getParams = $datatable->getParams();
+        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($getQuery, $getParams);
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 

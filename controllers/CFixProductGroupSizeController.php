@@ -20,7 +20,7 @@ use bamboo\ecommerce\views\VBase;
 class CFixProductGroupSizeController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "product_incomplete_import";
+    protected $pageSlug = "fix_group_size";
 
     public function get()
     {
