@@ -56,9 +56,14 @@ class CFixProductGroupSizeAjaxController extends AAjaxController
 
         $bluesealBase = $this->app->baseUrl(false)."/blueseal/";
         $query =
-            "SELECT DISTINCT p.id as id, p.productVariantId as productVariantId, creationDate FROM Product as p
+            "SELECT DISTINCT 
+p.id as id, p.productVariantId as productVariantId,
+creationDate,
+group_concat(`psi`.`name` order by `psi`.`name` ASC separator '-') AS `problems` 
+FROM Product as p
   JOIN ProductSku as ps On p.id = ps.productId AND p.productVariantId = ps.productVariantId
   join Shop ON ps.shopId = Shop.id
+  JOIN ProductSize as psi ON ps.productSizeId = psi.id
 where p.productSizeGroupId NOT IN (SELECT productSizeGroupId FROM ProductSizeGroupHasProductSize WHERE ProductSizeGroupHasProductSize.productSizeId = ps.productSizeId)
       AND p.productStatusId in (5,6,11) group by p.productVariantId";
 

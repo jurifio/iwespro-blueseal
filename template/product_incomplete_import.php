@@ -30,7 +30,7 @@
                     </div>
                     <div class="panel-body">
                         <table class="table table-striped" data-datatable-name="product_importer_list"
-                               data-controller="FixProductGroupSizeAjaxController"
+                               data-controller="ProductImporterProblemsListController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500"
