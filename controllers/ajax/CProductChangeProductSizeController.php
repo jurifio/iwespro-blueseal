@@ -45,9 +45,10 @@ class CProductChangeProductSizeController extends AAjaxController
                 $product = $pR->findOneByStringId($productIds);
 
                 foreach ($product->productSku as $ps) {
-                    if (!($pseccR->findOneBy(['productSizeGroupId' => $groupId, 'productSizeId' => $ps->productSizeId])));
-                    $this->app->router->response()->raiseProcessingError();
-                    return "Impossibile cambiare gruppo taglia per prodotto: ".$product->printId();
+                    if (!($pseccR->findOneBy(['productSizeGroupId' => $groupId, 'productSizeId' => $ps->productSizeId]))) {
+                        $this->app->router->response()->raiseProcessingError();
+                        return "Impossibile cambiare gruppo taglia per prodotto: " . $product->printId();
+                    }
                 }
             }
 

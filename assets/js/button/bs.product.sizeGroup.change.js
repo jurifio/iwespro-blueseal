@@ -63,6 +63,8 @@ $(document).on('bs.manage.sizeGroups', function () {
                     okButton.html('Ok').off().on('click', function () {
                         bsModal.modal('hide');
                     });
+                }).fail(function (res){
+                    body.html(res);
                 }).always(function() {
                     dataTable.ajax.reload(null, false);
                 });
