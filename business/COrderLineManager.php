@@ -65,8 +65,7 @@ class COrderLineManager
         try {
             $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $this->orderLine->id, 'orderId' => $this->orderLine->orderId]);
             $orderLine->status = $newStatus->code;
-            $orderLine->update($orderLine);
-
+            $orderLine->update();
             \Monkey::app()->eventManager->triggerEvent('changeOrderLineStatus',
                 [
                     'order' => $orderLine,

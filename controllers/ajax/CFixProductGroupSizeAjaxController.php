@@ -1,19 +1,24 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\domain\entities\CProduct;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
+use bamboo\domain\entities\CProduct;
 
 /**
- * Class CTestAjax.php
- * @package bamboo\app\controllers
+ * Class CProductListAjaxController
+ * @package bamboo\blueseal\controllers\ajax
+ *
+ * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
+ *
+ * @copyright (c) Bambooshoot snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @since ${VERSION}
  */
-class CProductImporterProblemsListController extends AAjaxController
-{
-    protected $urls = [];
+class CFixProductGroupSizeAjaxController extends AAjaxController
+{protected $urls = [];
     protected $authorizedShops = [];
     protected $em;
 
@@ -50,53 +55,30 @@ class CProductImporterProblemsListController extends AAjaxController
         /** @var $em CEntityManager **/
 
         $bluesealBase = $this->app->baseUrl(false)."/blueseal/";
-        $dummyUrl = $this->app->cfg()->fetch('paths','dummyUrl');
-        $shops = [];
-
-
         $query =
-"select 
-`p`.`id` AS `id`,`p`.`productVariantId` AS `productVariantId`,
-concat(`p`.`id`,'-',`p`.`productVariantId`) AS `productCode`,
-concat(`p`.`itemno`,' # ',`pv`.`name`) AS `code`,
-`s`.`name` AS `shop`,
-`s`.`id` AS `shopId`,
-`pb`.`name` AS `brand`,
-`p`.`externalId` AS `externalId`,
-`ps`.`name` AS `status`,concat_ws(' ',`psg`.`name`,`psg`.`macroName`,`psg`.`locale`) AS `sizeGroup`,
-`p`.`creationDate` AS `creationDate`,
-group_concat(`ds`.`size` order by `ds`.`size` ASC separator '-') AS `problems` 
-from ((((((((`Product` `p` 
-join `ProductVariant` `pv` on((`pv`.`id` = `p`.`productVariantId`))) 
-join `ProductBrand` `pb` on((`p`.`productBrandId` = `pb`.`id`))) 
-join `ProductStatus` `ps` on((`p`.`productStatusId` = `ps`.`id`))) 
-join `ProductSizeGroup` `psg` on((`p`.`productSizeGroupId` = `psg`.`id`))) 
-join `DirtyProduct` `dp` on(((`p`.`id` = `dp`.`productId`) and (`p`.`productVariantId` = `dp`.`productVariantId`)))) 
-join `DirtySku` `ds` on((`dp`.`id` = `ds`.`dirtyProductId`))) 
-left join `ShopHasProduct` `sp` on(((`dp`.`productId` = `sp`.`productId`) 
-and (`dp`.`productVariantId` = `sp`.`productVariantId`) 
-and (`dp`.`shopId` = `sp`.`shopId`)))) 
-join `Shop` `s` on `sp`.`shopId` = `s`.`id`) 
-where 
-((`ps`.`id` not in (7,8,12,13)) 
-and (`s`.`importer` is not null) 
-and (`ds`.`status` <> 'ok')) 
-group by `dp`.`productId`,`dp`.`productVariantId`,`dp`.`shopId` having (sum(`ds`.`qty`) > 0)";
+            "SELECT  
+p.id as id, p.productVariantId as productVariantId,
+creationDate,
+group_concat(`psi`.`name` order by `psi`.`name` ASC separator '-') AS `problems` 
+FROM Product as p
+  JOIN ProductSku as ps On p.id = ps.productId AND p.productVariantId = ps.productVariantId
+  join Shop ON ps.shopId = Shop.id
+ JOIN ProductSize as psi ON ps.productSizeId = psi.id
+where p.productSizeGroupId NOT IN (SELECT productSizeGroupId FROM ProductSizeGroupHasProductSize WHERE ProductSizeGroupHasProductSize.productSizeId = ps.productSizeId)
+      AND p.productStatusId in (5,6,11) group by p.productVariantId";
 
         $datatable = new CDataTables($query,['id','productVariantId'],$_GET, true);
-        if(!empty($this->authorizedShops)){
-            $datatable->addCondition('shopId',$this->authorizedShops);
-        }
-
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $getQuery = $datatable->getQuery();
+        $getParams = $datatable->getParams();
+        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($getQuery, $getParams);
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $modifica = $bluesealBase."prodotti/modifica";
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
-        $response ['recordsTotal'] = $totlalCount;
+        $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
         $i = 0;
@@ -113,11 +95,7 @@ group by `dp`.`productId`,`dp`.`productVariantId`,`dp`.`shopId` having (sum(`ds`
                 $shops[] = $shop->name;
             }
 
-            $tools = "";
-            $tools .= $this->app->getUser()->hasPermission("/admin/product/list") ? '<span class="tools-spaced"><a href="'.$bluesealBase.'printAztecCode.php?src='.base64_encode($val->id.'-'.$val->productVariantId.'__'.$val->productBrand->name.' - '.$val->itemno.' - '.$val->productVariant->name).'" target="_blank"><i class="fa fa-barcode"></i></a></span>' : '<span class="tools-spaced"><i class="fa fa-barcode"></i></span>';
-            $tools .= $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'"><i class="fa fa-pencil-square-o"></i></a></span>' : '<span class="tools-spaced"><i class="fa fa-pencil-square-o"></i></span>';
-
-	        /** @var CProduct $val */
+            /** @var CProduct $val */
 
             $creationDate = new \DateTime($val->creationDate);
 
@@ -155,11 +133,11 @@ group by `dp`.`productId`,`dp`.`productVariantId`,`dp`.`shopId` having (sum(`ds`
         $message .= " ".implode('-',$newSize);
         return '<span>'.$message.'</span>';
     }
-    
+
     public function post(){
         throw new \Exception();
     }
-    
+
     public function delete(){
         throw new \Exception();
     }

@@ -1686,6 +1686,17 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/blueseal/fixGruppiTaglia(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFixProductGroupSizeController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
