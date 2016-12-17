@@ -30,7 +30,7 @@ class COrderListAjaxController extends AAjaxController
                   `u`.`email`                                            AS `email`,
                   `o`.`orderDate`                                        AS `orderDate`,
                   `o`.`lastUpdate`                                       AS `lastUpdate`,
-                  concat(`ol`.`productId`, '-', `ol`.`productVariantId`,' ', s.title, ' ', p.itemno) AS `product`,
+                  concat(`ol`.`productId`, '-', `ol`.`productVariantId`,' ', s.title, ' ', p.itemno, ' ', `pb`.`name`, ' ', `ols`.`title` ) AS `product`,
                   `s`.`title`                                            AS `shop`,
                   `os`.`title`                                           AS `status`,
                   `o`.`status`                                           AS `statusCode`,
