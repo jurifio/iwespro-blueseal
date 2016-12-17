@@ -56,7 +56,33 @@ class CFriendOrderListAjaxController extends AAjaxController
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
 
-        $datatable = new CDataTables('vBluesealFriendOrderList',['id', 'orderId'],$_GET);
+        $query = "
+  SELECT
+  `ol`.`id` as `id`,
+  `ol`.`orderId` as `orderId`,
+  concat(`ol`.`orderId`, '-', `ol`.`id`) as `orderCode`,
+  concat(`p`.`id`, '-', `p`.`productVariantId`) as `code`,
+  `ps`.`name` as `size`,
+  `s`.`id` as `shopId`,
+  `s`.`title` as `shopName`,
+  `os`.`title` as `orderStatusTitle`,
+  `o`.`status` as `orderStatusCode`,
+    `ol`.status as `orderLineStatusCode`/*,
+    `in`.`number` as `invoiceNumber`,
+    `in`.`creationDate` as `invoiceCreationDate`,
+    `in`.`paymentDate`  as `invoicePaymentDate`,
+    `in`.`paymentExpectedDate` as `invoicePaymentExpectedDate`*/
+FROM
+  ((((((((`Order` as `o` JOIN `OrderLine` as `ol` on `o`.`id` = `ol`.`orderId`)
+    JOIN `Shop` as `s` ON `ol`.`shopId` = `s`.`id`)
+    JOIN `OrderStatus` as `os` ON `o`.`status` = `os`.`code`)
+    JOIN `OrderLineStatus` AS `ols` on `ol`.`status` = `ols`.`code`)
+    JOIN `Product` as `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`)
+    JOIN `ProductSize` as `ps` on `ol`.`productSizeId` = `ps`.`id`)
+    JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
+    JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
+
+        $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
 	    $datatable->addCondition(
 	        'orderLineStatusCode',
             ['ORD_CANCEL', 'ORD_ARCH', 'CRT', 'CRT_MRG'],
@@ -120,10 +146,10 @@ class CFriendOrderListAjaxController extends AAjaxController
 
             $response['data'][$i]['orderLineStatusTitle'] = $lineStatus;
 
-            $invoiceLine = $v->invoiceLine->getFirst();
+            /*$invoiceLine = $v->invoiceLine->getFirst();
             $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoice->number : '-';
             $response['data'][$i]['invoicePaymentDate'] = ($invoiceLine) ? $invoiceLine->invoice->paymentDate : '-';
-            $response['data'][$i]['invoiceExpectedPaymentDate'] = ($invoiceLine) ? $invoiceLine->invoice->expectedPaymentDate : '-';
+            $response['data'][$i]['invoiceExpectedPaymentDate'] = ($invoiceLine) ? $invoiceLine->invoice->expectedPaymentDate : '-';*/
             $i++;
 	    }
         return json_encode($response);
