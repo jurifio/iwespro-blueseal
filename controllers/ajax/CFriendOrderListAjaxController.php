@@ -52,6 +52,7 @@ class CFriendOrderListAjaxController extends AAjaxController
 
     public function get()
     {
+        $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
         $user = $this->app->getUser();
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
@@ -61,13 +62,19 @@ class CFriendOrderListAjaxController extends AAjaxController
   `ol`.`id` as `id`,
   `ol`.`orderId` as `orderId`,
   concat(`ol`.`orderId`, '-', `ol`.`id`) as `orderCode`,
-  concat(`p`.`id`, '-', `p`.`productVariantId`) as `code`,
+  concat(`p`.`id`, '-', `p`.`productVariantId`, '-', `ps`.`id`) as `code`,
+  concat(`p`.`itemno`, ' # ', `pv`.`name`)   AS `cpf`,
+  `pb`.`name` as `brand`,
+  `pse`.`name` as `season`,
   `ps`.`name` as `size`,
   `s`.`id` as `shopId`,
   `s`.`title` as `shopName`,
   `os`.`title` as `orderStatusTitle`,
   `o`.`status` as `orderStatusCode`,
-    `ol`.status as `orderLineStatusCode`/*,
+  `ol`.status as `orderLineStatusCode`,
+  `olfps`.`name` as `paymentStatus`,
+  `ol`.`orderLineFriendPaymentDate` as `paymentDate`
+  /*,
     `in`.`number` as `invoiceNumber`,
     `in`.`creationDate` as `invoiceCreationDate`,
     `in`.`paymentDate`  as `invoicePaymentDate`,
@@ -77,9 +84,12 @@ FROM
     JOIN `Shop` as `s` ON `ol`.`shopId` = `s`.`id`)
     JOIN `OrderStatus` as `os` ON `o`.`status` = `os`.`code`)
     JOIN `OrderLineStatus` AS `ols` on `ol`.`status` = `ols`.`code`)
+    LEFT JOIN `OrderLineFriendPaymentStatus` as `olfps` on `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
     JOIN `Product` as `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`)
+    JOIN `ProductVariant` as `pv` On `p`.`productVariantId` = `pv`.`id`
     JOIN `ProductSize` as `ps` on `ol`.`productSizeId` = `ps`.`id`)
     JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
+    JOIN `ProductSeason` as `pse` on `p`.`productSeasonId` = `pse`.`id`
     JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
@@ -116,6 +126,14 @@ FROM
             $colorLineStatuses[$orderLineStatus->code] = $orderLineStatus->colore;
 	    }
 
+        $orderLineStatuses = $this->app->repoFactory->create('OrderLineStatus')->findAll();
+        $plainLineStatuses = [];
+        $colorLineStatuses = [];
+        foreach($orderLineStatuses as $orderLineStatus){
+            $plainLineStatuses[$orderLineStatus->code] = $orderLineStatus->title;
+            $colorLineStatuses[$orderLineStatus->code] = $orderLineStatus->colore;
+        }
+
         $response = [];
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totlalCount;
@@ -142,9 +160,26 @@ FROM
             $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
                 $plainLineStatuses[$statusCode] .
                 '</span>';
-            $statusSelect = '<div class="selectOlStatus">{line}</div>';
 
             $response['data'][$i]['orderLineStatusTitle'] = $lineStatus;
+            $response['data'][$i]['brand'] = $v->product->productBrand->name;
+            $response['data'][$i]['season'] = $v->product->productSeason->name;
+            $response['data'][$i]['cpf'] = $v->product->itemno . ' # ' . $v->product->productVariant->name;
+            $response['data'][$i]['shopName'] = $v->shop->title;
+            $response['data'][$i]['orderLineFriendPaymentStatus'] = $v->orderLineFriendPaymentStatus;
+            $response['data'][$i]['orderLineFriendPaymentDate'] = $v->orderLineFriendPaymentDate;
+            $response['data'][$i]['fullPrice'] = $v->fullPrice;
+            $response['data'][$i]['activePrice'] = $v->activePrice;
+            $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
+
+            if ($v->orderLineFriendPaymentStatusId) {
+                $fpsColor = $olfpsR->getColor($v->orderLineFriendPaymentStatusId);
+                $fps = '<span style="color: ' . $fpsColor . ';">' . $v->orderLineFriendPaymentStatus->name . '</span>';
+            } else {
+                $fps = '-';
+            }
+            $response['data'][$i]['paymentStatus'] = $fps;
+            $response['data'][$i]['paymentDate'] = $v->orderLineFriendPaymentDate;
 
             /*$invoiceLine = $v->invoiceLine->getFirst();
             $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoice->number : '-';
