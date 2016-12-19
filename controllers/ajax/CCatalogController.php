@@ -119,16 +119,11 @@ class CCatalogController extends AAjaxController
 
         $arrRet['value'] = '';
         $arrRet['price'] = '';
-        $sku = $this->rfc('ProductSku')->findOneBy(['shopId' => $shopId, 'productVariantId' => $em->productVariantId]);
-        if ($sku) {
-            $arrRet['value'] = $sku->value;
-            $arrRet['price'] = $sku->price;
-        } else {
-            $shp = $this->rfc('ShopHasProduct')->findOneBy(['shopId' => $shopId, 'productVariantId' => $em->productVariantId]);
-            if ($shp) {
-                $arrRet['value'] = $shp->value;
-                $arrRet['price'] = $shp->price;
-            }
+        $shp = $this->rfc('ShopHasProduct')->findOneBy(['shopId' => $shopId, 'productVariantId' => $em->productVariantId]);
+        
+        if ($shp) {
+            $arrRet['value'] = $shp->value;
+            $arrRet['price'] = $shp->price;
         }
 
         $arrRet['moves'] = [];
