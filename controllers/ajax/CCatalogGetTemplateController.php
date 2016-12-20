@@ -31,7 +31,7 @@ class CCatalogGetTemplateController extends AAjaxController
         }
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/catalog_form.php');
 
-        $causes = $this->app->repoFactory->create('StorehouseOperationCause')->findAll()->toArray();
+        $causes = $this->app->repoFactory->create('StorehouseOperationCause')->findBy(['available' => 1])->toArray();
 		return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'causes' => $causes,
