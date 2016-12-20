@@ -963,9 +963,14 @@ $.bsModal = function (header, params) {
             stock.append($('<th>Disponibilità</th>'));
             moves.append($('<th>Movimenti</th>'));
             for (var i in product.sizes) {
+                var qt = '';
+                var paddingStyle = '';
                 head.append($('<th>' + product.sizes[i] + '</th>'));
-                var qt = (('undefined' != typeof product.sku[i]) && (0 < product.sku[i])) ? product.sku[i] : '';
-                stock.append($('<td>' + qt + '</td>'));
+                if ('undefined' != typeof product.sku[i]) {
+                    qt = (('undefined' != typeof product.sku[i]) && (0 < product.sku[i]['qty'])) ? product.sku[i]['qty'] : '';
+                    paddingStyle = (product.sku[i]['padding']) ? 'style="color: red"' : '';
+                }
+                stock.append($('<td ' + paddingStyle + '>' + qt + '</td>'));
                 var moveQt = ('undefined' != typeof product.moves[i]) ? product.moves[i] : '';
                 var fieldName = product.id + '-' + product.productVariantId + '-' + i;
                 moves.append($('<td><input type="number" data-stock="' + (('' != qt) ? qt : 0) + '" class="move-qty form-control" name="move-' + fieldName + '" value="' + moveQt + '"></td>'));

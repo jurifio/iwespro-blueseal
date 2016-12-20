@@ -78,7 +78,7 @@ class CCatalogController extends AAjaxController
                     $itemno = trim($itemno);
                     $variant = trim($variant);
                     $prodVariant = $variantRepo->findBy(['name' => $variant]);
-                    $prodVar = [];
+
                     foreach ($prodVariant as $pv) {
                         $prod = $prodRepo->findOneBy(['itemno' => $itemno, 'productVariantId' => $pv->id]);
                         if ($prod) break;
@@ -112,15 +112,19 @@ class CCatalogController extends AAjaxController
             }
         }
         foreach ($em->productSku as $v) {
-            if (($v->stockQty) && ($shopId == $v->shopId)) {
-                $arrRet['sku'][$v->productSizeId] = $v->stockQty;
+            $qty = $v->stockQty + $v->padding * -1;
+            if (($qty) && ($shopId == $v->shopId)) {
+                $single = [];
+                $single['qty'] = $qty;
+                $single['padding'] = ($v->padding < 0) ? true : false;
+                $arrRet['sku'][$v->productSizeId] = $single;
             }
         }
 
         $arrRet['value'] = '';
         $arrRet['price'] = '';
         $shp = $this->rfc('ShopHasProduct')->findOneBy(['shopId' => $shopId, 'productVariantId' => $em->productVariantId]);
-        
+
         if ($shp) {
             $arrRet['value'] = $shp->value;
             $arrRet['price'] = $shp->price;
