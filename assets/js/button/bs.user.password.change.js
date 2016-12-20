@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs.user.password.change",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Tagga prodotti",
+    title: "Cambia Password",
     placement: "bottom"
 };
 
