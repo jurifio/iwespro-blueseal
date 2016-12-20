@@ -65,15 +65,14 @@ class CBlogPostListAjaxController extends AAjaxController
             $row["DT_RowClass"] = 'colore';
             $row['id'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$post->id.'&blogId='.$post->blogId.'">'.$post->id.'</a>' : $post->id;
             $row['coverImage'] = '<img width="80" src="/assets/'.$coverImage.'" />';
-            $row['title'] = $post->postTranslation->getFirst()->title;
-            $row['content'] = substr(strip_tags($post->postTranslation->getFirst()->content),0,50)."&hellip;";
+            $row['title'] = utf8_encode($post->postTranslation->getFirst()->title);
+            $row['content'] = utf8_encode(substr(strip_tags($post->postTranslation->getFirst()->content),0,50)."&hellip;");
             $row['creationDate'] = (new \DateTime($post->creationDate))->format('d-m-Y H:i');
             $row['publishDate'] = is_null($post->publishDate) ? 'Non definita' : (new \DateTime($post->publishDate))->format('d-m-Y H:i');
             $row['stato'] = $post->postStatus->name;
 
             $response ['data'][] = $row;
         }
-
         return json_encode($response);
     }
 }
