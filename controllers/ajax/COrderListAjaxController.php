@@ -55,7 +55,7 @@ class COrderListAjaxController extends AAjaxController
                        (`ol`.`productVariantId` = `p`.`productVariantId`) AND (`p`.`productBrandId` = `pb`.`id`) AND
                        (`ol`.`status` = `ols`.`code` ))";
         $datatable = new CDataTables($sql, ['id'], $_GET,true);
-        $datatable->addCondition('statusCode', ['ORD_CANCEL'], true);
+        //$datatable->addCondition('statusCode', ['ORD_CANCEL'], true);
         $datatable->addSearchColumn('orderLineStatus');
         $datatable->addSearchColumn('shop');
         $datatable->addSearchColumn('productBrand');
