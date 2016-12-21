@@ -235,6 +235,7 @@ class COrderListAjaxController extends AAjaxController
                         ]);
                         $soDel->delete();
                     }
+
                 }
             }
 
@@ -251,9 +252,17 @@ class COrderListAjaxController extends AAjaxController
             }
 
             foreach($order->orderLine as $ol) {
+                $logolz = $logR->findBy(['stringId' => $ol->printId, 'entityName' => 'OrderLine']);
+                foreach($logolz as $logol) {
+                    $logol->delete();
+                }
                 $ol->delete();
             }
 
+            $logOrderz = $logR->findBy(['stringId' => $orderId, 'entityName' => 'Order']);
+            foreach($logOrderz as $logOrd) {
+                $logOrd->delete();
+            }
             $order->delete();
 
             $dba->commit();
