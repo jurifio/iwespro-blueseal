@@ -107,7 +107,7 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
     if ('undefined' != typeof conf.customParsingForm) {
         var customErr = conf.customParsingForm(me);
         if ('string' == typeof customErr) {
-            errorMsg+= customErr + '<br />';
+            errorMsg += customErr + '<br />';
         }
     }
 
@@ -129,12 +129,12 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
     });
 
     if (requiredErr.length) {
-        errorMsg+= 'I seguenti campi sono obbligatori e non sono stati compilati:<br />';
+        errorMsg += 'I seguenti campi sono obbligatori e non sono stati compilati:<br />';
         $.each(requiredErr, function (k, v) {
             var label;
             if ((label = $('label[for="' + v + '"]')).length) errorMsg += label.html() + '<br />';
             else if ((label = $('label[for="' + v + '-selectized"]')).length) errorMsg += label.html() + '<br />';
-            else errorMsg += $('[name="' + v +'"]').data('formLabel') + '<br />';
+            else errorMsg += $('[name="' + v + '"]').data('formLabel') + '<br />';
         });
     }
     if ('' != errorMsg) {
@@ -258,7 +258,7 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
             delay: {"show": 500, "hide": 100}
         });
 
-        $('.color-picker').each(function(k,v) {
+        $('.color-picker').each(function (k, v) {
             v.colorpicker();
         });
 
@@ -283,8 +283,8 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
         });
     });
 
-     $(document).ready(function() {
-        $(document).on('click', '.enlarge-your-img', function(e){
+    $(document).ready(function () {
+        $(document).on('click', '.enlarge-your-img', function (e) {
             var tagName = $(e.target).prop('tagName');
             var src = ('IMG' == tagName) ? $(e.target).attr('src') : $(e.target).children('img').attr('src');
             modal = new $.bsModal(
@@ -296,6 +296,10 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
             );
 
         });
-     });
+    });
+
+    $(document).on("ondasuonda", function (e) {
+
+    });
 
 })(jQuery);

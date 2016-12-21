@@ -152,73 +152,8 @@ class CProductListAjaxController extends AAjaxController
             $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
 
-            $ext = [];
-            if (isset($val->externalId) && !empty($val->externalId)) {
-                $ext[] = $val->externalId;
-            }
-
-            $sizes = [];
-            $qty = [];
-            foreach ($val->productSku as $productSku) {
-                if (in_array($productSku->shopId, $shopIds) && $productSku->stockQty > 0) {
-                    $sizes[$productSku->productSizeId] = $productSku->productSize->name;
-                    $qty[$productSku->shopId][$productSku->productSizeId] = $productSku->stockQty;
-                }
-            }
-            if (count($sizes) > 0) {
-                $table = '<table class="nested-table">';
-                $table .= '<thead><tr>';
-                if (count($qty) > 1) {
-                    $table .= '<th>Shop</th>';
-                }
-                foreach ($sizes as $sizeId => $name) {
-                    $table .= '<th>' . $name . '</th>';
-                }
-                $table .= '</tr></thead>';
-                $table .= '<tbody>';
-                foreach ($qty as $shopId => $size) {
-                    $table .= '<tr>';
-                    if (count($qty) > 1) {
-                        $shop = $this->app->repoFactory->create('Shop')->findOne([$shopId]);
-                        $table .= '<td>' . $shop->name . '</td>';
-                    }
-                    foreach ($sizes as $sizeId => $name) {
-                        $table .= '<td>' . (isset($size[$sizeId]) ? $size[$sizeId] : 0) . '</td>';
-                    }
-                    $table .= '</tr>';
-                }
-                $table .= '</tbody></table>';
-            } else {
-                $table = 'Quantità non inserite';
-            }
-            $row['stock'] = $table;
-
-            $shops = [];
-            foreach ($val->shopHasProduct as $shp) {
-                $shops[] = $shp->shop->name;
-                if (!empty($shp->extId)) {
-                    $ext[] = $shp->extId;
-                } elseif (!is_null($shp->dirtyProduct)) {
-                    if (!empty($shp->dirtyProduct->extId)) {
-                        $ext[] = $shp->dirtyProduct->extId;
-                    }
-
-                    foreach ($shp->dirtyProduct->dirtySku as $sku) {
-                        if (!empty($sku->extSkuId)) {
-                            $ext[] = $sku->extSkuId;
-                        }
-                    }
-                }
-            }
-
-            foreach ($ext as $kext => $vext) {
-                $strExt = '<p><span class="small">';
-                $arrVext = str_split($vext, 13);
-                $strExt .= implode('<br />', $arrVext);
-                $strExt .= '</span></p>';
-                $ext[$kext] = $strExt;
-            }
-            $row['externalId'] = implode('', array_unique($ext));
+            $row['stock'] = '<table class="nested-table inner-size-table" data-productId="'.$val->printId().'"></table>';
+            $row['externalId'] = '<span class="small">'.$val->getShopExtenalIds('<br />').'</span>';
 
             $row['cpf'] = $val->printCpf();
 
@@ -262,9 +197,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>');
 
-            $row['shop'] = '<span class="small">';
-            $row['shop'] .= implode('<br />', $shops);
-            $row['shop'] .= '</span>';
+            $row['shop'] = '<span class="small">'.$val->getShops('<br />').'</span>';
 
             $row['mup'] = '<span class="small">';
             $row['mup'] .= implode('<br />', $mup);
