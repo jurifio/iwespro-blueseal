@@ -63,7 +63,8 @@ class COrderListAjaxController extends AAjaxController
         $datatable->addSearchColumn('email');
 
         $q = $datatable->getQuery();
-        $orders = $this->app->repoFactory->create('Order')->em()->findBySql($q, $datatable->getParams());
+        $p = $datatable->getParams();
+        $orders = $this->app->repoFactory->create('Order')->em()->findBySql($q, $p);
         $count = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -123,7 +124,7 @@ class COrderListAjaxController extends AAjaxController
             }
             $row["DT_RowId"] = $val->id;
             $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
-            if ($alert) $row["number"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
+            if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
 
             $row["orderDate"] = $orderDate;
             $row["lastUpdate"] = isset($since) ? $since : "Mai";
