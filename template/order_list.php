@@ -32,7 +32,7 @@
                                data-display-length="50">
                             <thead>
                             <tr>
-                                <th data-slug="number"
+                                <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Ordine</th>
