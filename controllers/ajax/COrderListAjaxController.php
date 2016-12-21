@@ -122,7 +122,7 @@ class COrderListAjaxController extends AAjaxController
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
             $row["DT_RowId"] = $val->id;
-            $row["number"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
+            $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
             if ($alert) $row["number"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
 
             $row["orderDate"] = $orderDate;
