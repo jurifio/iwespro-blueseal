@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\intl\CLang;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\domain\entities\CProductSku;
@@ -120,8 +121,9 @@ class COrderListAjaxController extends AAjaxController
                 $m = date("i", $timestamp);
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
-            $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
-            if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
+            $row["DT_RowId"] = $val->id;
+            $row["number"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
+            if ($alert) $row["number"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
 
             $row["orderDate"] = $orderDate;
             $row["lastUpdate"] = isset($since) ? $since : "Mai";
@@ -147,7 +149,119 @@ class COrderListAjaxController extends AAjaxController
 
     public function delete()
     {
-        throw new \Exception();
+        $orderId = \Monkey::app()->router->request()->getRequestData('orderId');
+        if (!$orderId) throw new \Exception('Id ordine non pervenuto. Non posso cancellarlo');
+
+        $oR = \Monkey::app()->repoFactory->create('Order');
+        $psR = \Monkey::app()->repoFactory->create('ProductSku');
+        $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
+        $logR = \Monkey::app()->repoFactory->create('Log');
+        $solR = \Monkey::app()->repoFactory->create('StorehouseOperationLine');
+        $ushoR = \Monkey::app()->repoFactory->create('UserSessionHasOrder');
+
+        $dba = \Monkey::app()->dbAdapter;
+
+        $order = $oR->findOne([$orderId]);
+        if (!$order) throw new BambooException('L\'id ordine fornito non corrisponde a nessun ordine');
+
+        $dba->beginTransaction();
+        try
+        {
+            $uso = $ushoR->findOneBy(['orderId' => $orderId]);
+            if ($uso) $uso->delete();
+
+            $qtyToRestore = [];
+            foreach($order->orderLine as $ol){
+                if (!array_key_exists($ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId, $qtyToRestore)) {
+                    $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] = 0;
+                }
+                $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] += 1;
+
+                $log = $logR->findOneBy([
+                    'entityName' => 'OrderLine',
+                    'stringId' => $ol->id . '-' . $ol->orderId,
+                    'eventValue' => 'ORD_FRND_Ok'
+                ]);
+
+                if ($log) {
+                    $utime = strtotime($log->time);
+                    $endTime = $utime + 3;
+
+                    $query = "SELECT 
+                              s.id as storehouseOperationId,
+                              sl.shopId as shopId,
+                              sl.storehouseId as storehouseId,
+                              sl.productId as productId,
+                              sl.productVariantId as productVariantId,
+                              sl.productSizeId as productSizeId
+                              FROM `StorehouseOperation` as `s` JOIN `StorehouseOperationLine` as `sl` 
+                              on `s`.`id` = `sl`.`storehouseOperationId` 
+                              WHERE `s`.`shopId` = ?  AND `sl`.`productId` = ? AND `sl`.`productVariantId` = ? 
+                              AND `sl`.`productSizeId` = ? AND `s`.`creationDate` >= ? AND `s`.`creationDate` < ?";
+                    $res = $dba->query($query,[
+                        $ol->shopId,
+                        $ol->productId,
+                        $ol->productVariantId,
+                        $ol->productSizeId,
+                        $utime,
+                        $endTime
+                    ])->fetch();
+
+                    if($res) {
+                        $solC = $solR->findBy(
+                            [
+                                'storehouseOperationId' => $res['storehouseOperationId'],
+                                'shopId' => $res['shopId'],
+                                'storehouseId' => $res['storehouseId'],
+                                'productId' => $res['productId'],
+                                'productVariantId' => $res['productVariantId'],
+                                'productSizeId' => $res['productSizeId']
+                            ]);
+                        foreach($solC as $sol) {
+                            $sol->delete();
+                        }
+                    }
+
+                    $solC = $solR->findBy([
+                        'storehouseOperationId' => $res['storehouseOperationId'],
+                        'shopId' => $res['shopId'],
+                        'storehouseId' => $res['storehouseId']
+                    ]);
+                    if (!$solC->count()) {
+                        $soDel = $soR->findBy([
+                            'storehouseOperationId' => $res['storehouseOperationId'],
+                            'shopId' => $res['shopId'],
+                            'storehouseId' => $res['storehouseId']
+                        ]);
+                        $soDel->delete();
+                    }
+                }
+            }
+
+            if('ORD_CANCEL' !== $order->status) {
+                foreach($qtyToRestore as $qtyK => $qtyV) {
+                    $ps = $psR->findOneByStringId($qtyK);
+                    $ps->stockQty += $qtyV;
+                    $ps->update();
+                }
+            }
+
+            foreach($order->orderHistory as $oh) {
+                $oh->delete();
+            }
+
+            foreach($order->orderLine as $ol) {
+                $ol->delete();
+            }
+
+            $order->delete();
+
+            $dba->commit();
+            return "Ordine eliminato!";
+        } catch(BambooException $e) {
+            $dba->rollback();
+            return 'CI ABBIAMO UN PROBLEMINO! ' + $e->getMessage();
+        }
     }
 
     public function orderBy()

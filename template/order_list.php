@@ -32,7 +32,7 @@
                                data-display-length="50">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+                                <th data-slug="number"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Ordine</th>
@@ -95,7 +95,18 @@
             data-placement="bottom"
             data-href="#"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-fighter-jet"
+            data-permission="/admin/order/edit"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Cancella ordine (!!!)"
+            data-placement="bottom"
+            data-event="bs.order.delete.panic"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
+
 </bs-toolbar>
 
 </body>
