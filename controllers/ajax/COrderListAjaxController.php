@@ -165,114 +165,107 @@ class COrderListAjaxController extends AAjaxController
         $order = $oR->findOne([$orderId]);
         if (!$order) throw new BambooException('L\'id ordine fornito non corrisponde a nessun ordine');
 
-        $dba->beginTransaction();
-        try
-        {
-            $uso = $ushoR->findOneBy(['orderId' => $orderId]);
-            if ($uso) $uso->delete();
+        if ('ORD_CANCEL' === $order->status) {
+            $dba->beginTransaction();
+            try {
+                $uso = $ushoR->findOneBy(['orderId' => $orderId]);
+                if ($uso) $uso->delete();
 
-            $qtyToRestore = [];
-            foreach($order->orderLine as $ol){
-                if (!array_key_exists($ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId, $qtyToRestore)) {
-                    $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] = 0;
-                }
-                $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] += 1;
+                $qtyToRestore = [];
+                foreach ($order->orderLine as $ol) {
 
-                $log = $logR->findOneBy([
-                    'entityName' => 'OrderLine',
-                    'stringId' => $ol->id . '-' . $ol->orderId,
-                    'eventValue' => 'ORD_FRND_Ok'
-                ]);
+                    if (!array_key_exists($ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId, $qtyToRestore)) {
+                        $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] = 0;
+                    }
+                    $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] += 1;
 
-                if ($log) {
-                    $utime = strtotime($log->time);
-                    $endTime = $utime + 3;
+                    $log = $logR->findOneBy([
+                        'entityName' => 'OrderLine',
+                        'stringId' => $ol->id . '-' . $ol->orderId,
+                        'eventValue' => 'ORD_FRND_Ok'
+                    ]);
 
-                    $query = "SELECT 
-                              s.id as storehouseOperationId,
-                              sl.shopId as shopId,
-                              sl.storehouseId as storehouseId,
-                              sl.productId as productId,
-                              sl.productVariantId as productVariantId,
-                              sl.productSizeId as productSizeId
-                              FROM `StorehouseOperation` as `s` JOIN `StorehouseOperationLine` as `sl` 
-                              on `s`.`id` = `sl`.`storehouseOperationId` 
+                    if ($log) {
+                        $utime = strtotime($log->time);
+                        $endTime = $utime + 3;
+
+                        $query = "SELECT 
+                              s.id AS storehouseOperationId,
+                              sl.shopId AS shopId,
+                              sl.storehouseId AS storehouseId,
+                              sl.productId AS productId,
+                              sl.productVariantId AS productVariantId,
+                              sl.productSizeId AS productSizeId
+                              FROM `StorehouseOperation` AS `s` JOIN `StorehouseOperationLine` AS `sl` 
+                              ON `s`.`id` = `sl`.`storehouseOperationId` 
                               WHERE `s`.`shopId` = ?  AND `sl`.`productId` = ? AND `sl`.`productVariantId` = ? 
                               AND `sl`.`productSizeId` = ? AND `s`.`creationDate` >= ? AND `s`.`creationDate` < ?";
-                    $res = $dba->query($query,[
-                        $ol->shopId,
-                        $ol->productId,
-                        $ol->productVariantId,
-                        $ol->productSizeId,
-                        $utime,
-                        $endTime
-                    ])->fetch();
+                        $res = $dba->query($query, [
+                            $ol->shopId,
+                            $ol->productId,
+                            $ol->productVariantId,
+                            $ol->productSizeId,
+                            $utime,
+                            $endTime
+                        ])->fetch();
 
-                    if($res) {
-                        $solC = $solR->findBy(
-                            [
-                                'storehouseOperationId' => $res['storehouseOperationId'],
-                                'shopId' => $res['shopId'],
-                                'storehouseId' => $res['storehouseId'],
-                                'productId' => $res['productId'],
-                                'productVariantId' => $res['productVariantId'],
-                                'productSizeId' => $res['productSizeId']
-                            ]);
-                        foreach($solC as $sol) {
-                            $sol->delete();
+                        if ($res) {
+                            $solC = $solR->findBy(
+                                [
+                                    'storehouseOperationId' => $res['storehouseOperationId'],
+                                    'shopId' => $res['shopId'],
+                                    'storehouseId' => $res['storehouseId'],
+                                    'productId' => $res['productId'],
+                                    'productVariantId' => $res['productVariantId'],
+                                    'productSizeId' => $res['productSizeId']
+                                ]);
+                            foreach ($solC as $sol) {
+                                $sol->delete();
+                            }
                         }
-                    }
 
-                    $solC = $solR->findBy([
-                        'storehouseOperationId' => $res['storehouseOperationId'],
-                        'shopId' => $res['shopId'],
-                        'storehouseId' => $res['storehouseId']
-                    ]);
-                    if (!$solC->count()) {
-                        $soDel = $soR->findBy([
+                        $solC = $solR->findBy([
                             'storehouseOperationId' => $res['storehouseOperationId'],
                             'shopId' => $res['shopId'],
                             'storehouseId' => $res['storehouseId']
                         ]);
-                        $soDel->delete();
+                        if (!$solC->count()) {
+                            $soDel = $soR->findBy([
+                                'storehouseOperationId' => $res['storehouseOperationId'],
+                                'shopId' => $res['shopId'],
+                                'storehouseId' => $res['storehouseId']
+                            ]);
+                            $soDel->delete();
+                        }
+
                     }
-
                 }
-            }
 
-            if('ORD_CANCEL' !== $order->status) {
-                foreach($qtyToRestore as $qtyK => $qtyV) {
-                    $ps = $psR->findOneByStringId($qtyK);
-                    $ps->stockQty += $qtyV;
-                    if (0 > $ps->padding) $ps->padding += 1;
-                    $ps->update();
+                foreach ($order->orderHistory as $oh) {
+                    $oh->delete();
                 }
-            }
 
-            foreach($order->orderHistory as $oh) {
-                $oh->delete();
-            }
-
-            foreach($order->orderLine as $ol) {
-                $logolz = $logR->findBy(['stringId' => $ol->printId, 'entityName' => 'OrderLine']);
-                foreach($logolz as $logol) {
-                    $logol->delete();
+                foreach ($order->orderLine as $ol) {
+                    $logolz = $logR->findBy(['stringId' => $ol->printId, 'entityName' => 'OrderLine']);
+                    foreach ($logolz as $logol) {
+                        $logol->delete();
+                    }
+                    $ol->delete();
                 }
-                $ol->delete();
-            }
 
-            $logOrderz = $logR->findBy(['stringId' => $orderId, 'entityName' => 'Order']);
-            foreach($logOrderz as $logOrd) {
-                $logOrd->delete();
-            }
-            $order->delete();
+                $logOrderz = $logR->findBy(['stringId' => $orderId, 'entityName' => 'Order']);
+                foreach ($logOrderz as $logOrd) {
+                    $logOrd->delete();
+                }
+                $order->delete();
 
-            $dba->commit();
-            return "Ordine eliminato!";
-        } catch(BambooException $e) {
-            $dba->rollback();
-            return 'CI ABBIAMO UN PROBLEMINO! ' + $e->getMessage();
-        }
+                $dba->commit();
+                return "Ordine eliminato!";
+            } catch (BambooException $e) {
+                $dba->rollback();
+                return 'CI ABBIAMO UN PROBLEMINO! ' + $e->getMessage();
+            }
+        } return "L'ordine deve essere nello stato \"Cancellato\" per poter procedere!";
     }
 
     public function orderBy()
