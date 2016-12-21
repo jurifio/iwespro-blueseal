@@ -243,6 +243,7 @@ class COrderListAjaxController extends AAjaxController
                 foreach($qtyToRestore as $qtyK => $qtyV) {
                     $ps = $psR->findOneByStringId($qtyK);
                     $ps->stockQty += $qtyV;
+                    if (0 > $ps->padding) $ps->padding += 1;
                     $ps->update();
                 }
             }
