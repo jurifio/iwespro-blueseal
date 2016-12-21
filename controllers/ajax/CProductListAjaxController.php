@@ -152,7 +152,7 @@ class CProductListAjaxController extends AAjaxController
             $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
 
-            $row['stock'] = '<table class="nested-table inner-size-table" data-productId="'.$val->printId().'"></table>';
+            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';
             $row['externalId'] = '<span class="small">'.$val->getShopExtenalIds('<br />').'</span>';
 
             $row['cpf'] = $val->printCpf();

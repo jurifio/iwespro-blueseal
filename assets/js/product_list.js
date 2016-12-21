@@ -16,14 +16,18 @@ function disegnaLaTabellaDiMerda(table) {
     "use strict";
     if(table.data('loaded') == 'true') return;
     var container = table.closest('td');
-    var data = table.data('productId');
+    var productId = table.data('productId');
+    if(typeof productId == 'undefined') {
+        container.html('Error');
+        return;
+    }
     container.html('Loading...');
     Pace.ignore(function () {
         "use strict";
 
         $.ajax({
             "url": "/blueseal/xhr/ProductSizeTable",
-            "data": {"productId": data},
+            "data": {"productId": productId },
             "dataType": "json"
         }).done(function (data) {
             if (data.rows.length == 0) {
