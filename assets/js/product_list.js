@@ -34,13 +34,13 @@ function disegnaLaTabellaDiMerda(table) {
                 container.html('Quantità non inserite');
                 return;
             }
-            var head = $('<thead></thead>');
+            var thead = '<thead><tr>';
             for (var i in data.head) {
                 var thd = data.head[i];
-                var hhead = $('<th>' + thd + '</th>');
-                head.append(hhead);
+                thead+='<th>' + thd + '</th>';
             }
-            table.append(head);
+            thead += '</tr></thead>';
+            table.append($(thead));
             var td;
             var row;
             var body = $('<tbody></tbody>');
@@ -54,7 +54,7 @@ function disegnaLaTabellaDiMerda(table) {
                         row += '<td>0</td>';
                     } else {
                         td = rowD[i];
-                        row += '<td class="' + (td.padding ? 'red' : '' ) + '">' + (td.qty - td.padding) + '</td>';
+                        row += '<td class="' + (td.padding ? 'text-red' : '' ) + '">' + (td.qty - td.padding) + '</td>';
                     }
                 }
                 row += '</tr>';
