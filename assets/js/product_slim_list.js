@@ -4,7 +4,7 @@ $(document).on('bs.roulette.add', function (e, element, button) {
 
 
 $(document).on('column-visibility.dt draw.dt',function (e, settings, column, state) {
-    if(state) {
+    if(typeof state == 'undefined' || state) {
         $('table.inner-size-table').each(function(k,v) {
             disegnaLaTabellaDiMerda($(v));
         });
