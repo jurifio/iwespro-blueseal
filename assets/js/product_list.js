@@ -3,8 +3,7 @@ $(document).on('bs.roulette.add', function (e, element, button) {
 });
 
 
-$(document).on('column-visibility.dt',function (e, settings, column, state) {
-    var dt = $('table[data-datatable-name]').DataTable();
+$(document).on('column-visibility.dt draw.dt',function (e, settings, column, state) {
     if(state) {
         $('table.inner-size-table').each(function(k,v) {
             disegnaLaTabellaDiMerda($(v));
@@ -54,7 +53,7 @@ function disegnaLaTabellaDiMerda(table) {
                         row += '<td>0</td>';
                     } else {
                         td = rowD[i];
-                        row += '<td class="' + (td.padding ? 'text-red' : '' ) + '">' + (td.qty - td.padding) + '</td>';
+                        row += '<td class="' + (td.padding ? 'colorRed' : '' ) + '">' + (td.qty - td.padding) + '</td>';
                     }
                 }
                 row += '</tr>';

@@ -109,39 +109,7 @@ class CProductSlimListAjaxController extends AAjaxController
             $sizes = [];
             $qty = [];
 
-            foreach ($val->productSku as $productSku) {
-                if (in_array($productSku->shopId, $shopsIds) && $productSku->stockQty > 0) {
-                    $sizes[$productSku->productSizeId] = $productSku->productSize->name;
-                    $qty[$productSku->shopId][$productSku->productSizeId] = $productSku->stockQty;
-                }
-            }
-            if (count($sizes) > 0) {
-                $table = '<table class="nested-table">';
-                $table .= '<thead><tr>';
-                if (count($qty) > 1) {
-                    $table .= '<th>Shop</th>';
-                }
-                foreach ($sizes as $sizeId => $name) {
-                    $table .= '<th>' . $name . '</th>';
-                }
-                $table .= '</tr></thead>';
-                $table .= '<tbody>';
-                foreach ($qty as $shopId => $size) {
-                    $table .= '<tr>';
-                    if (count($qty) > 1) {
-                        $shop = $this->app->repoFactory->create('Shop')->findOne([$shopId]);
-                        $table .= '<td>' . $shop->name . '</td>';
-                    }
-                    foreach ($sizes as $sizeId => $name) {
-                        $table .= '<td>' . (isset($size[$sizeId]) ? $size[$sizeId] : 0) . '</td>';
-                    }
-                    $table .= '</tr>';
-                }
-                $table .= '</tbody></table>';
-            } else {
-                $table = 'Quantità non inserite';
-            }
-            $response['data'][$i]['stock'] = $table;
+            $response['data'][$i]['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';
 
             $response['data'][$i]['season'] = '<span class="small">';
             $response['data'][$i]['season'] .= ($val->productSeason) ? $val->productSeason->name . " " . $val->productSeason->year : '-';
