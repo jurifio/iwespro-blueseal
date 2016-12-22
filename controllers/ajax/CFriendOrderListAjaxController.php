@@ -166,16 +166,6 @@ FROM
             $response['data'][$i]['season'] = $v->product->productSeason->name;
             $response['data'][$i]['cpf'] = $v->product->itemno . ' # ' . $v->product->productVariant->name;
             $response['data'][$i]['shopName'] = $v->shop->title;
-            $response['data'][$i]['orderLineFriendPaymentStatus'] = $v->orderLineFriendPaymentStatus;
-            $datePay = '-';
-            if ($v->orderLineFriendPaymentDate) {
-                $datePay = implode('/', array_reverse(explode('-',explode(' ', $v->orderLineFriendPaymentDate)[0])));
-            }
-            $response['data'][$i]['orderLineFriendPaymentDate'] = $datePay;
-            $response['data'][$i]['fullPrice'] = $v->fullPrice;
-            $response['data'][$i]['activePrice'] = $v->activePrice;
-            $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
-
             if ($v->orderLineFriendPaymentStatusId) {
                 $fpsColor = $olfpsR->getColor($v->orderLineFriendPaymentStatusId);
                 $fps = '<span style="color: ' . $fpsColor . ';">' . $v->orderLineFriendPaymentStatus->name . '</span>';
@@ -183,7 +173,17 @@ FROM
                 $fps = '-';
             }
             $response['data'][$i]['paymentStatus'] = $fps;
-            $response['data'][$i]['paymentDate'] = $v->orderLineFriendPaymentDate;
+            $datePay = '-';
+            if ($v->orderLineFriendPaymentDate) {
+                $datePay = implode('/', array_reverse(explode('-',explode(' ', $v->orderLineFriendPaymentDate)[0])));
+            }
+            $response['data'][$i]['paymentDate'] = $datePay;
+            $response['data'][$i]['fullPrice'] = $v->fullPrice;
+            $response['data'][$i]['activePrice'] = $v->activePrice;
+            $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
+
+
+
 
             /*$invoiceLine = $v->invoiceLine->getFirst();
             $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoice->number : '-';
