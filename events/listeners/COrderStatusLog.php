@@ -27,6 +27,12 @@ class COrderStatusLog extends CLogging
         if (!$value) {
             $value = $order->status;
         }
-        $this->insertLogRow($eventName->getEventName(), $userId, $value, $order->getEntityName(), $order->printId(), $time);
+        $entityName = $order->getEntityName();
+        $stringId = $order->printId();
+        $logR = \Monkey::app()->repoFactory->create('Log');
+        $lC = $logR->findBy(['entityName' => $entityName, 'stringId' => $stringId], '', 'ORDER BY time desc');
+        if ($value != $lC->getFirst()->eventValue) {
+            $this->insertLogRow($eventName->getEventName(), $userId, $value, $entityName, $stringId, $time);
+        }
     }
 }
