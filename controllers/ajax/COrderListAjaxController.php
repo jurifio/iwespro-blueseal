@@ -154,7 +154,6 @@ class COrderListAjaxController extends AAjaxController
         if (!$orderId) throw new \Exception('Id ordine non pervenuto. Non posso cancellarlo');
 
         $oR = \Monkey::app()->repoFactory->create('Order');
-        $psR = \Monkey::app()->repoFactory->create('ProductSku');
         $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
         $logR = \Monkey::app()->repoFactory->create('Log');
         $solR = \Monkey::app()->repoFactory->create('StorehouseOperationLine');
@@ -246,7 +245,7 @@ class COrderListAjaxController extends AAjaxController
                 }
 
                 foreach ($order->orderLine as $ol) {
-                    $logolz = $logR->findBy(['stringId' => $ol->printId, 'entityName' => 'OrderLine']);
+                    $logolz = $logR->findBy(['stringId' => $ol->printId(), 'entityName' => 'OrderLine']);
                     foreach ($logolz as $logol) {
                         $logol->delete();
                     }
