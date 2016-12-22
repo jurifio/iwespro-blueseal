@@ -27,7 +27,7 @@ class CFriendOrderListAjaxController extends AAjaxController
     /**
      * @param $action
      * @return mixed
-*/
+    */
     public function createAction($action)
     {
         $this->app->setLang(new CLang(1,'it'));
@@ -147,7 +147,7 @@ FROM
         foreach ($orderLines as $v) {
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
-            $response['data'][$i]['orderCode'] = $v->orderId . '-' . $v->id;
+            $response['data'][$i]['orderCode'] = $v->printId();
             $response['data'][$i]['line_id'] = $v->printId();
             $response['data'][$i]['orderId'] = $v->orderId;
             $response['data'][$i]['code'] = $v->product->id . "-" . $v->product->productVariantId;
@@ -167,7 +167,11 @@ FROM
             $response['data'][$i]['cpf'] = $v->product->itemno . ' # ' . $v->product->productVariant->name;
             $response['data'][$i]['shopName'] = $v->shop->title;
             $response['data'][$i]['orderLineFriendPaymentStatus'] = $v->orderLineFriendPaymentStatus;
-            $response['data'][$i]['orderLineFriendPaymentDate'] = $v->orderLineFriendPaymentDate;
+            $datePay = '-';
+            if ($v->orderLineFriendPaymentDate) {
+                $datePay = implode('/', array_reverse(explode('-',explode(' ', $v->orderLineFriendPaymentDate)[0])));
+            }
+            $response['data'][$i]['orderLineFriendPaymentDate'] = $datePay;
             $response['data'][$i]['fullPrice'] = $v->fullPrice;
             $response['data'][$i]['activePrice'] = $v->activePrice;
             $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
