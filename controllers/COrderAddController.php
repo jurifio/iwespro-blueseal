@@ -38,6 +38,7 @@ class COrderAddController extends ARestrictedAccessRootController
             $cart->orderPaymentMethodId = $data['orderPaymentMethod'];
             $cart->billingAddressId = $data['billingAddress'];
             $cart->shipmentAddressId = $data['shippingAddress'] ?? $data['billingAddress'];
+            $cart->note = $data['note'];
 
             $billingAddress = $this->app->repoFactory->create('UserAddress')->findOneBy(['id'=>$cart->billingAddressId,'userId'=>$cart->userId]);
             $shippingAddress = $this->app->repoFactory->create('UserAddress')->findOneBy(['id'=>$cart->shipmentAddressId,'userId'=>$cart->userId]);

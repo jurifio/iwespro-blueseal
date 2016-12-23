@@ -284,6 +284,7 @@ $(document).on('bs.newOrder.save',function() {
     header.html('Salva Ordine');
     body.html('Sei sicuro di voler inserire l\'ordine?');
     okButton.show();
+
     okButton.off().on('click', function() {
         cancelButton.hide();
         okButton.hide();
@@ -291,6 +292,7 @@ $(document).on('bs.newOrder.save',function() {
         var data = {};
         data.user = $('#user').val();
         data.coupon = $('#coupon').val();
+        data.note = $('#note').val();
         data.orderPaymentMethod = $('#orderPaymentMethod').val();
         data.shippingAddress = $('#shippingAddress').val();
         data.billingAddress = $('#billingAddress').val();
@@ -314,5 +316,5 @@ $(document).on('bs.newOrder.save',function() {
             alert('errore');
         });
     });
-
+    bsModal.modal();
 });

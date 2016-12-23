@@ -93,7 +93,7 @@
             data-rel="tooltip"
             data-title="Aggiungi un nuovo ordine manuale"
             data-placement="bottom"
-            data-href="#"
+            data-href="/blueseal/ordini/inserisci"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
