@@ -168,8 +168,10 @@ class COrderListAjaxController extends AAjaxController
         if ('ORD_CANCEL' === $order->status) {
             $dba->beginTransaction();
             try {
-                $uso = $ushoR->findOneBy(['orderId' => $orderId]);
-                if ($uso) $uso->delete();
+                $usoC = $ushoR->findBy(['orderId' => $orderId]);
+                foreach($usoC as $uso) {
+                    $uso->delete();
+                }
 
                 $qtyToRestore = [];
                 foreach ($order->orderLine as $ol) {
