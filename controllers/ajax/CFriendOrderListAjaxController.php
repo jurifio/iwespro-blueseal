@@ -34,8 +34,8 @@ class CFriendOrderListAjaxController extends AAjaxController
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
         $this->urls['page'] = $this->urls['base']."prodotti";
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        if ($this->app->getUser()->hasPermission('allShops')) {
+        $allShops = $this->app->getUser()->hasPermission('allShops');
+        if ($allShops) {
 
         } else{
             $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
@@ -53,6 +53,7 @@ class CFriendOrderListAjaxController extends AAjaxController
     public function get()
     {
         $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
+        $olsR = \Monkey::app()->repoFactory->create('OrderLineStatus');
         $user = $this->app->getUser();
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
@@ -93,8 +94,8 @@ FROM
     JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
-	    $datatable->addCondition(
-	        'orderLineStatusCode',
+        $datatable->addCondition(
+            'orderLineStatusCode',
             ['ORD_CANCEL', 'ORD_ARCH', 'CRT', 'CRT_MRG'],
             true
         );
@@ -141,7 +142,6 @@ FROM
         $response ['data'] = [];
 
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
-        $opera = $blueseal."ordini/aggiungi?order=";
         $i = 0;
 
         foreach ($orderLines as $v) {
@@ -157,6 +157,9 @@ FROM
             else $imgs = "";
             $response['data'][$i]['dummyPicture'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
             $statusCode = $v->orderLineStatus->code;
+
+            //friend can't access all orderline statuses
+            //if (!$allShops &&  9 < $v->orderLineStatus->id) $statusCode
             $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
                 $plainLineStatuses[$statusCode] .
                 '</span>';
@@ -182,13 +185,6 @@ FROM
             $response['data'][$i]['activePrice'] = $v->activePrice;
             $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
 
-
-
-
-            /*$invoiceLine = $v->invoiceLine->getFirst();
-            $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoice->number : '-';
-            $response['data'][$i]['invoicePaymentDate'] = ($invoiceLine) ? $invoiceLine->invoice->paymentDate : '-';
-            $response['data'][$i]['invoiceExpectedPaymentDate'] = ($invoiceLine) ? $invoiceLine->invoice->expectedPaymentDate : '-';*/
             $i++;
 	    }
         return json_encode($response);
