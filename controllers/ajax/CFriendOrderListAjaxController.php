@@ -160,7 +160,8 @@ FROM
 
             //friend can't access all orderline statuses
             if (!$allShops &&  9 < $v->orderLineStatus->id) {
-                $logC =
+                $olsR->getLastStatusSuitableByFriend($v, $v->shopId);
+
             }
             $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
                 $plainLineStatuses[$statusCode] .
