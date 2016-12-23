@@ -32,7 +32,8 @@ $(document).on('bs.order.delete.panic', function(){
                 ).done(function(res){
                     modal.writeBody(res);
                 }).fail(function(res){
-                    modal.writeBody('OOPS! ' + res);
+                    modal.writeBody('OOPS! C\'è stato un problema!');
+                    console.error(res);
                 }).always(function() {
                     modal.setOkEvent(function() {
                         modal.hide();

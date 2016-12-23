@@ -27,15 +27,15 @@ class CFriendOrderListAjaxController extends AAjaxController
     /**
      * @param $action
      * @return mixed
-*/
+    */
     public function createAction($action)
     {
         $this->app->setLang(new CLang(1,'it'));
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
         $this->urls['page'] = $this->urls['base']."prodotti";
         $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        if ($this->app->getUser()->hasPermission('allShops')) {
+        $allShops = $this->app->getUser()->hasPermission('allShops');
+        if ($allShops) {
 
         } else{
             $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
@@ -53,6 +53,7 @@ class CFriendOrderListAjaxController extends AAjaxController
     public function get()
     {
         $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
+        $olsR = \Monkey::app()->repoFactory->create('OrderLineStatus');
         $user = $this->app->getUser();
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
@@ -93,8 +94,8 @@ FROM
     JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
-	    $datatable->addCondition(
-	        'orderLineStatusCode',
+        $datatable->addCondition(
+            'orderLineStatusCode',
             ['ORD_CANCEL', 'ORD_ARCH', 'CRT', 'CRT_MRG'],
             true
         );
@@ -141,13 +142,12 @@ FROM
         $response ['data'] = [];
 
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
-        $opera = $blueseal."ordini/aggiungi?order=";
         $i = 0;
 
         foreach ($orderLines as $v) {
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
-            $response['data'][$i]['orderCode'] = $v->orderId . '-' . $v->id;
+            $response['data'][$i]['orderCode'] = $v->printId();
             $response['data'][$i]['line_id'] = $v->printId();
             $response['data'][$i]['orderId'] = $v->orderId;
             $response['data'][$i]['code'] = $v->product->id . "-" . $v->product->productVariantId;
@@ -157,6 +157,9 @@ FROM
             else $imgs = "";
             $response['data'][$i]['dummyPicture'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
             $statusCode = $v->orderLineStatus->code;
+
+            //friend can't access all orderline statuses
+            //if (!$allShops &&  9 < $v->orderLineStatus->id) $statusCode
             $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
                 $plainLineStatuses[$statusCode] .
                 '</span>';
@@ -166,12 +169,6 @@ FROM
             $response['data'][$i]['season'] = $v->product->productSeason->name;
             $response['data'][$i]['cpf'] = $v->product->itemno . ' # ' . $v->product->productVariant->name;
             $response['data'][$i]['shopName'] = $v->shop->title;
-            $response['data'][$i]['orderLineFriendPaymentStatus'] = $v->orderLineFriendPaymentStatus;
-            $response['data'][$i]['orderLineFriendPaymentDate'] = $v->orderLineFriendPaymentDate;
-            $response['data'][$i]['fullPrice'] = $v->fullPrice;
-            $response['data'][$i]['activePrice'] = $v->activePrice;
-            $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
-
             if ($v->orderLineFriendPaymentStatusId) {
                 $fpsColor = $olfpsR->getColor($v->orderLineFriendPaymentStatusId);
                 $fps = '<span style="color: ' . $fpsColor . ';">' . $v->orderLineFriendPaymentStatus->name . '</span>';
@@ -179,12 +176,15 @@ FROM
                 $fps = '-';
             }
             $response['data'][$i]['paymentStatus'] = $fps;
-            $response['data'][$i]['paymentDate'] = $v->orderLineFriendPaymentDate;
+            $datePay = '-';
+            if ($v->orderLineFriendPaymentDate) {
+                $datePay = implode('/', array_reverse(explode('-',explode(' ', $v->orderLineFriendPaymentDate)[0])));
+            }
+            $response['data'][$i]['paymentDate'] = $datePay;
+            $response['data'][$i]['fullPrice'] = $v->fullPrice;
+            $response['data'][$i]['activePrice'] = $v->activePrice;
+            $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
 
-            /*$invoiceLine = $v->invoiceLine->getFirst();
-            $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoice->number : '-';
-            $response['data'][$i]['invoicePaymentDate'] = ($invoiceLine) ? $invoiceLine->invoice->paymentDate : '-';
-            $response['data'][$i]['invoiceExpectedPaymentDate'] = ($invoiceLine) ? $invoiceLine->invoice->expectedPaymentDate : '-';*/
             $i++;
 	    }
         return json_encode($response);

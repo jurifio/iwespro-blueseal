@@ -154,11 +154,11 @@ class COrderListAjaxController extends AAjaxController
         if (!$orderId) throw new \Exception('Id ordine non pervenuto. Non posso cancellarlo');
 
         $oR = \Monkey::app()->repoFactory->create('Order');
-        $psR = \Monkey::app()->repoFactory->create('ProductSku');
         $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
         $logR = \Monkey::app()->repoFactory->create('Log');
         $solR = \Monkey::app()->repoFactory->create('StorehouseOperationLine');
         $ushoR = \Monkey::app()->repoFactory->create('UserSessionHasOrder');
+        $psdR = \Monkey::app()->repoFactory->create('ProductStatisticsDetailHasOrderLine');
 
         $dba = \Monkey::app()->dbAdapter;
 
@@ -168,8 +168,14 @@ class COrderListAjaxController extends AAjaxController
         if ('ORD_CANCEL' === $order->status) {
             $dba->beginTransaction();
             try {
-                $uso = $ushoR->findOneBy(['orderId' => $orderId]);
-                if ($uso) $uso->delete();
+                $usoC = $ushoR->findBy(['orderId' => $orderId]);
+                foreach($usoC as $uso) {
+                    $uso->delete();
+                }
+
+                $iR = \Monkey::app()->create('Invoice');
+                $iC = $iR->findBy(['orderId' => $orderId]);
+                if ($iC->count()) throw new BambooException('Non possono essere cancellati ordini contenenti fatture');
 
                 $qtyToRestore = [];
                 foreach ($order->orderLine as $ol) {
@@ -245,8 +251,15 @@ class COrderListAjaxController extends AAjaxController
                     $oh->delete();
                 }
 
+
                 foreach ($order->orderLine as $ol) {
-                    $logolz = $logR->findBy(['stringId' => $ol->printId, 'entityName' => 'OrderLine']);
+
+                    $psd = $psdR->findBy(['orderLineId' => $ol->id, 'orderId' => $ol->orderId]);
+                    foreach($psd as $psdOne) {
+                        $psdOne->delete();
+                    }
+
+                    $logolz = $logR->findBy(['stringId' => $ol->printId(), 'entityName' => 'OrderLine']);
                     foreach ($logolz as $logol) {
                         $logol->delete();
                     }
@@ -263,7 +276,8 @@ class COrderListAjaxController extends AAjaxController
                 return "Ordine eliminato!";
             } catch (BambooException $e) {
                 $dba->rollback();
-                return 'CI ABBIAMO UN PROBLEMINO! ' + $e->getMessage();
+                \Monkey::app()->router->response()->raiseProcessingError();
+                return /*'CI ABBIAMO UN PROBLEMINO! ' + **/$e->getMessage();
             }
         } return "L'ordine deve essere nello stato \"Cancellato\" per poter procedere!";
     }

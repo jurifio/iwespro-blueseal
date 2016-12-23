@@ -128,6 +128,16 @@
             data-placement="bottom"
             data-event="bs.accept.order.lines"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-credit-card"
+            data-permission="/admin/order/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Invia i prodotti"
+            data-placement="bottom"
+            data-event="bs.orderline.paymentToFriend"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 
