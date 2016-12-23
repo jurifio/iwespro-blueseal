@@ -834,3 +834,16 @@ h5.product-title {
     padding: 1px;
     color: black;
 }
+
+.product-selection-box {
+    border: 1px solid black;
+    height: 320px;
+    vertical-align: bottom;
+}
+.product-selection-box p {
+    line-height: 1;
+    margin:0;
+}
+.product-selection-box.product-box-selected {
+    background-color: gold;
+}
