@@ -190,8 +190,18 @@ $(document).on('submit', 'form[data-ajax="true"]', function (e) {
                 fn.apply(null, [form]);
             }
         }
+        if ('string' === typeof content) {
+            modal = $.bsModal('Cambio dello stato dell\'ordine', {
+                body: content
+            });
+        }
         button.fadeOut();
         button.html('<i class="fa fa-times"></i>').css('background-color', 'red').fadeIn();
+        if ('object' === typeof content) {
+            modal = $.bsModal('Cambio dello stato dell\'ordine', {
+                body: content.responseText
+            });
+        }
     }).always(function (content) {
         var always = form.data('always');
         if (always != 'undefined') {
