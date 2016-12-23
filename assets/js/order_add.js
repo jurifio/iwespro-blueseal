@@ -66,6 +66,7 @@ $(document).on('keypress', '#product-search', function (e) {
             type: 'GET',
             data: {
                 search: query,
+                onlyPublic: true,
                 limit: 50
             },
             dataType: 'json'
@@ -311,6 +312,7 @@ $(document).on('bs.newOrder.save',function() {
             okButton.off().on('click',function() {
                 window.location.href = '/blueseal/ordini';
             });
+            okButton.show();
         }).fail(function(res) {
             body.html(res);
             alert('errore');
