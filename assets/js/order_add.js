@@ -308,10 +308,11 @@ $(document).on('bs.newOrder.save',function() {
             data:data
         }).done(function(res){
             res = JSON.parse(res);
-            body.html('Url di pagamento: '+res.url+'<br />'+' numero ordine: '+res.id);
+            body.html('<h4>Url di pagamento: </h4><span>'+res.url+'</span><br /><h5>'+' numero ordine: </h5><span>'+res.id+'</span>');
             okButton.off().on('click',function() {
                 window.location.href = '/blueseal/ordini';
             });
+            okButton.html('Ok');
             okButton.show();
         }).fail(function(res) {
             body.html(res);
