@@ -173,6 +173,10 @@ class COrderListAjaxController extends AAjaxController
                     $uso->delete();
                 }
 
+                $iR = \Monkey::app()->create('Invoice');
+                $iC = $iR->findBy(['orderId' => $orderId]);
+                if ($iC->count()) throw new BambooException('Non possono essere cancellati ordini contenenti fatture');
+
                 $qtyToRestore = [];
                 foreach ($order->orderLine as $ol) {
 
