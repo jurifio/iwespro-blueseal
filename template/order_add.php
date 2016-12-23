@@ -90,6 +90,32 @@
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="orderPaymentMethod">Metodo Pagametno</label>
+                                                <select id="orderPaymentMethod" name="orderPaymentMethod"
+                                                        class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Seleziona un metodo pagamento">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group form-group-default">
+                                                <label for="coupon">Coupon</label>
+                                                <input id="coupon" class="form-control"
+                                                       placeholder="Inserisci il coupon" name="coupon">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default">
+                                                <label for="mail">Mail</label>
+                                                <input id="mail" type="checkbox" class="form-control"
+                                                       name="mail" value="true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
                                                 <label for="product-search">Prodotto</label>
@@ -132,6 +158,7 @@
             data-permission="/admin/order/add"
             data-class="btn btn-default"
             data-rel="tooltip"
+            data-event="bs.newOrder.save"
             data-title="Aggiungi un nuovo ordine manuale"
             data-placement="bottom"
             data-href="#"

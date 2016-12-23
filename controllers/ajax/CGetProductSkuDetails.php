@@ -23,6 +23,7 @@ class CGetProductSkuDetails extends AAjaxController
         $product = $this->app->repoFactory->create('Product')->findOneByStringId($id);
         $res = [];
         foreach ($product->productSku as $sku) {
+            if($sku->stockQty < 1) continue;
             $one = $sku->toArray();
             $one['skuCode'] = $sku->printId();
             $one['shop'] = $sku->shop->name;
