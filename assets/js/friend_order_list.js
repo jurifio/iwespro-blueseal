@@ -35,7 +35,15 @@ $(document).on('bs.orderline.paymentToFriend', function() {
             var statusId = res.options[i].id;
             opts += '<option value="' + statusId + '" ' + ((statusId == res.selected) ? 'selected' : '') + '>' + res.options[i].name + '</option>';
         }
-        var timeVal = (res.time) ? res.time : '';
+
+        var now = new Date();
+
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+        var timeVal = (res.time) ? res.time : today;
 
         modal = new $.bsModal('Accettazione ordini',
             {
