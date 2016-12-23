@@ -54,6 +54,7 @@ class CFriendOrderListAjaxController extends AAjaxController
     {
         $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
         $olsR = \Monkey::app()->repoFactory->create('OrderLineStatus');
+        $logR = \Monkey::app()->repoFactory->create('Log');
         $user = $this->app->getUser();
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
@@ -107,8 +108,7 @@ FROM
                 ['ORD_PENDING', 'ORD_WAIT', 'ORD_LAB', 'ORD_FRND_SNDING', 'ORD_ERR_SEND'],
                 true
             );
-        //var_dump($datatable->getQuery());
-        //die();
+
         $orderLines = $this->app->repoFactory->create('OrderLine')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
@@ -159,7 +159,9 @@ FROM
             $statusCode = $v->orderLineStatus->code;
 
             //friend can't access all orderline statuses
-            //if (!$allShops &&  9 < $v->orderLineStatus->id) $statusCode
+            if (!$allShops &&  9 < $v->orderLineStatus->id) {
+                $logC =
+            }
             $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
                 $plainLineStatuses[$statusCode] .
                 '</span>';
