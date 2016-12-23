@@ -63,6 +63,7 @@ class CFriendOrderListAjaxController extends AAjaxController
   SELECT
   `ol`.`id` as `id`,
   `ol`.`orderId` as `orderId`,
+  `o`.`orderDate` as `orderDate`,
   concat(`ol`.`orderId`, '-', `ol`.`id`) as `orderCode`,
   concat(`p`.`id`, '-', `p`.`productVariantId`, '-', `ps`.`id`) as `code`,
   concat(`p`.`itemno`, ' # ', `pv`.`name`)   AS `cpf`,
@@ -168,6 +169,8 @@ FROM
                 '</span>';
 
             $response['data'][$i]['orderLineStatusTitle'] = $lineStatus;
+            $time = strtotime($v->order->orderDate);
+            $response['data'][$i]['orderDate'] = date("d/m/Y H:i:s", $time);
             $response['data'][$i]['brand'] = $v->product->productBrand->name;
             $response['data'][$i]['season'] = $v->product->productSeason->name;
             $response['data'][$i]['cpf'] = $v->product->itemno . ' # ' . $v->product->productVariant->name;

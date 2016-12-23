@@ -39,6 +39,9 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc" class="center">Codice Ordine</th>
+                                <th data-slug="orderDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Data Creazione</th>
                                 <th data-slug="code"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice Prodotto</th>
