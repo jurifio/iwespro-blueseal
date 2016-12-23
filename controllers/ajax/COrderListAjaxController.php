@@ -270,7 +270,8 @@ class COrderListAjaxController extends AAjaxController
                 return "Ordine eliminato!";
             } catch (BambooException $e) {
                 $dba->rollback();
-                return 'CI ABBIAMO UN PROBLEMINO! ' + $e->getMessage();
+                \Monkey::app()->router->response()->raiseProcessingError();
+                return /*'CI ABBIAMO UN PROBLEMINO! ' + **/$e->getMessage();
             }
         } return "L'ordine deve essere nello stato \"Cancellato\" per poter procedere!";
     }
