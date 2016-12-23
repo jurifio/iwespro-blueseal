@@ -14,20 +14,23 @@ namespace bamboo\blueseal\controllers\ajax;
  * @date 22/07/2016
  * @since 1.0
  */
-class CUserAddressList extends AAjaxController
+class CUserAddressManage extends AAjaxController
 {
 	public function get()
 	{
 		$list = [];
 		$user = $this->app->repoFactory->create('User')->findOneBy(['id'=>$this->app->router->request()->getRequestData('userId')]);
-		$useraddresses = $user->userAddress;
 		foreach ($user->userAddress as $userAddress) {
-			$list[] = ['id'=>$userAddress->id,
-			           'name'=>$userAddress->name,
-			           'surname'=>$userAddress->surname,
-			           'city'=>$userAddress->city,
-			           'address'=>$userAddress->address];
+            $address = $userAddress->toArray();
+            $address['label'] = $userAddress->name.' '.$userAddress->surname.' - '.$userAddress->address;
+            $list[] = $address;
 		}
 		return json_encode($list);
 	}
+
+	public function post()
+    {
+        $data = $this->app->router->request()->getRequestData();
+
+    }
 }

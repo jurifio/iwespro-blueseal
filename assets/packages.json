@@ -44,7 +44,7 @@
         },
         "forms": {
             "selectize.min.css": {
-                "path": "https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.3/css/",
+                "path": "https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/",
                 "options": ["screen"]
             },
             "basic.min.css": {
@@ -175,7 +175,7 @@
         },
         "forms": {
             "selectize.min.js": {
-                "path": "https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.3/js/standalone/",
+                "path": "https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/",
                 "options": ["defer"]
             },
             "dropzone.min.js": {

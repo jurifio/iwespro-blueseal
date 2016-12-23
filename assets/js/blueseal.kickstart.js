@@ -448,7 +448,7 @@ $.bsModal = function (header, params) {
     this.body = $('#bsModal .modal-body');
     this.cancelButton = $('#bsModal .modal-footer .btn-default');
     this.okButton = $('#bsModal .modal-footer .btn-success');
-    this.cross = $ ('#bsModal button.close');
+    this.cross = $('#bsModal button.close');
 
     this.header.html(header);
     this.body.html(this.opt.body);
@@ -467,7 +467,7 @@ $.bsModal = function (header, params) {
         });
     }
 
-    this.cross.off ().on ('click', function(){
+    this.cross.off().on('click', function () {
         self.okButton.prop('disabled', false);
         self.bsModal.modal('hide');
     });
@@ -526,7 +526,8 @@ $.bsModal = function (header, params) {
         var def = {
             productCode: '',
             getDetails: false,
-            after: function(self) {}
+            after: function (self) {
+            }
         };
         var opt = $.extend({}, def, opt);
         if ($('.product-code').html()) opt.productCode = $('.product-code').html();
@@ -1293,4 +1294,13 @@ $.fn.setCursorPosition = function (pos) {
         }
     });
     return this;
+};
+
+$.getTemplate = function (templateName) {
+    return $.get({
+        url: "/blueseal/xhr/TemplateFetchController",
+        data: {
+            templateName: templateName
+        }
+    })
 };

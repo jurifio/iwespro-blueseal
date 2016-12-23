@@ -21,7 +21,7 @@ class CGetTableContent extends AAjaxController
         $condition = $this->app->router->request()->getRequestData('condition');
 
         if (!$table) throw new \Exception('la variabile "table" è obbligatoria');
-        if (!is_array($fields)) throw new \Exception('la variabile "fields" è obbligatoria e deve essere un array');
+        //if (!is_array($fields)) throw new \Exception('la variabile "fields" è obbligatoria e deve essere un array');
         if ((false !== $condition) && ((!is_array($condition) || (!count($condition))))) throw new BambooException('Le condizioni devono essere passate sottoforma di array');
 
         if ($condition) $OC = $this->app->repoFactory->create($table)->findBy($condition);
@@ -30,10 +30,15 @@ class CGetTableContent extends AAjaxController
         $ret = [];
         $i = 0;
         foreach($OC as $em) {
-            $ret[$i] = [];
-            foreach($fields as $f) {
-                $ret[$i][$f] = $em->{$f};
+            if($fields) {
+                $ret[$i] = [];
+                foreach($fields as $f) {
+                    $ret[$i][$f] = $em->{$f};
+                }
+            } else {
+                $ret[$i] = $em->toArray();
             }
+
             $i++;
         }
         return json_encode($ret);
