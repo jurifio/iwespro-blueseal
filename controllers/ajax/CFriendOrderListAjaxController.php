@@ -104,6 +104,9 @@ FROM
         if (!$allShops) {
             $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser($user);
             $datatable->addCondition('shopId', $shops);
+            $datatable->addCondition('orderLineStatusCode',
+                ['ORD_MISSING', 'ORD_MISSING', 'ORD_CANCEL', 'ORD_ARCH']
+            );
         }
             $datatable->addCondition('orderLineStatusCode',
                 ['ORD_PENDING', 'ORD_WAIT', 'ORD_LAB', 'ORD_FRND_SNDING', 'ORD_ERR_SEND'],
