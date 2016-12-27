@@ -57,9 +57,14 @@
                                 <th data-slug="cpf"
                                     data-searchable="true"
                                     data-orderable="true" class="center">CPF</th>
+                                <th data-slug="extId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Id Ext.</th>
+                                <?php if ($isAllShops): ?>
                                 <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop</th>
+                                <?php endif; ?>
                                 <th data-slug="dummyPicture"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Immagine</th>
@@ -72,15 +77,17 @@
                                 <th data-slug="paymentDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Pagamento</th>
+                                <?php if ($isAllShops): ?>
                                 <th data-slug="fullPrice"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Prezzo</th>
                                 <th data-slug="activePrice"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Prezzo Att.</th>
+                                <?php endif; ?>
                                 <th data-slug="friendRevenue"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Costo Friend</th>
+                                    data-orderable="true" class="center">Prezzo Friend</th>
 
                                 <!--<th class="center sorting">Sku</th>
                                 <th class="center sorting">Stato Riga</th>

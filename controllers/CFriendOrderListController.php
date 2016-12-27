@@ -35,12 +35,15 @@ class CFriendOrderListController extends ARestrictedAccessRootController
         $opera = $blueseal . "order";
         $aggiungi = $blueseal . "order";
 
+        $isAllShop = \Monkey::app()->getUser()->hasPermission('allShops');
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'pageURL' =>$pageURL,
             'operaURL' =>$opera,
             'aggiungiURL' =>$aggiungi,
             'page' => $this->page,
+            'isAllShops' => $isAllShop,
             'sidebar' => $this->sidebar->build()
         ]);
     }

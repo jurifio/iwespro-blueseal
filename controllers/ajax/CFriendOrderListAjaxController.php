@@ -72,6 +72,7 @@ class CFriendOrderListAjaxController extends AAjaxController
   `ps`.`name` as `size`,
   `s`.`id` as `shopId`,
   `s`.`title` as `shopName`,
+  `shp`.`extId` as `extId`,
   `os`.`title` as `orderStatusTitle`,
   `o`.`status` as `orderStatusCode`,
   `ol`.status as `orderLineStatusCode`,
@@ -85,6 +86,7 @@ class CFriendOrderListAjaxController extends AAjaxController
 FROM
   ((((((((`Order` as `o` JOIN `OrderLine` as `ol` on `o`.`id` = `ol`.`orderId`)
     JOIN `Shop` as `s` ON `ol`.`shopId` = `s`.`id`)
+    JOIN `ShopHasProduct` as `shp` ON `ol`.`productId` = `shp`.`productId` AND `ol`.`productVariantId` AND `shp`.`productVariantId` AND `ol`.`shopId` = `shp`.`shopId` 
     JOIN `OrderStatus` as `os` ON `o`.`status` = `os`.`code`)
     JOIN `OrderLineStatus` AS `ols` on `ol`.`status` = `ols`.`code`)
     LEFT JOIN `OrderLineFriendPaymentStatus` as `olfps` on `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
@@ -105,7 +107,8 @@ FROM
             $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser($user);
             $datatable->addCondition('shopId', $shops);
             $datatable->addCondition('orderLineStatusCode',
-                ['ORD_MISSING', 'ORD_MISSING', 'ORD_CANCEL', 'ORD_ARCH']
+                ['ORD_MISSING', 'ORD_CANCEL', 'ORD_ARCH'],
+                true
             );
         }
             $datatable->addCondition('orderLineStatusCode',
@@ -160,12 +163,14 @@ FROM
             if($v->product->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
             $response['data'][$i]['dummyPicture'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
-            $statusCode = $v->orderLineStatus->code;
+
 
             //friend can't access all orderline statuses
             if (!$allShops &&  9 < $v->orderLineStatus->id) {
-                $olsR->getLastStatusSuitableByFriend($v, $v->shopId);
-
+                $olsE = $olsR->getLastStatusSuitableByFriend($v, $v->shopId);
+                $statusCode = $olsE->code;
+            } else {
+                $statusCode = $v->orderLineStatus->code;
             }
             $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
                 $plainLineStatuses[$statusCode] .
@@ -177,6 +182,8 @@ FROM
             $response['data'][$i]['brand'] = $v->product->productBrand->name;
             $response['data'][$i]['season'] = $v->product->productSeason->name;
             $response['data'][$i]['cpf'] = $v->product->itemno . ' # ' . $v->product->productVariant->name;
+            $shp = $v->product->shopHasProduct->findOneByKey('shopId', $v->shopId);
+            $response['data'][$i]['extId'] = $shp->extId;
             $response['data'][$i]['shopName'] = $v->shop->title;
             if ($v->orderLineFriendPaymentStatusId) {
                 $fpsColor = $olfpsR->getColor($v->orderLineFriendPaymentStatusId);
