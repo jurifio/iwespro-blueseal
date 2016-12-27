@@ -52,7 +52,7 @@ class CProductListAjaxController extends AAjaxController
                   `pc`.`id`                                                                                             AS `categoryId`,
                   `pcg`.`name`                                                                                          AS `colorGroup`,
                   `psk`.`isOnSale`                                                                                      AS `isOnSale`,
-                  ((((if((`psk`.`isOnSale` = 1), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
+                  ((((if((`psk`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
                       (`pse`.`isActive` = 0), `s`.`pastSeasonMultiplier`,
                       if((`psk`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
                     (if((`psk`.`isOnSale` = 1), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100)                       AS `mup`,
