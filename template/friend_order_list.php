@@ -38,10 +38,10 @@
                                 <th data-slug="orderCode"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="desc" class="center">Codice Ordine</th>
+                                    data-default-order="desc" class="center">N. Ordine</th>
                                 <th data-slug="orderDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center dataFilterType">Data Creazione</th>
+                                    data-orderable="true" class="center dataFilterType">Data Ordine</th>
                                 <th data-slug="code"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice Prodotto</th>
@@ -65,7 +65,7 @@
                                     data-orderable="false" class="center">Immagine</th>
                                 <th data-slug="orderLineStatusTitle"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Stato Linea Ordine</th>
+                                    data-orderable="true" class="center">Stato Riga Ordine</th>
                                 <th data-slug="paymentStatus"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stato Pagamento</th>
@@ -80,7 +80,7 @@
                                     data-orderable="false" class="center">Prezzo Att.</th>
                                 <th data-slug="friendRevenue"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Prezzo Friend</th>
+                                    data-orderable="true" class="center">Costo Friend</th>
 
                                 <!--<th class="center sorting">Sku</th>
                                 <th class="center sorting">Stato Riga</th>
