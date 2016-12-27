@@ -11,6 +11,13 @@ window.buttonSetup = {
 };
 
 $(document).on('bs.lists.generate.csv', function () {
+
+    String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.split(search).join(replacement);
+    };
+
+
     var table = $('.table');
 
     modal = new $.bsModal(
@@ -55,7 +62,7 @@ $(document).on('bs.lists.generate.csv', function () {
                     div.innerHTML = val;
                     //OriginalString.replace(/(<([^>]+)>)/ig,"");
                     //if($(val).find('table').length) val = 'escluso';
-                    line.push(encodeURIComponent(div.innerText));
+                    line.push(encodeURIComponent(div.innerText).replaceAll('%0A', ' '));
                 }
                 str += line.join(',') + '%0A';
             }
