@@ -1,4 +1,4 @@
-$(document).on('bs.orderline.paymentToFriend', function() {
+$(document).on('bs.orderline.paymentToFriend', function () {
     var dataTable = $('.table').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 
@@ -23,26 +23,23 @@ $(document).on('bs.orderline.paymentToFriend', function() {
         mode: 'GET',
         dataType: 'JSON',
         data: {orderLines: row}
-    }).fail(function(){
+    }).fail(function () {
         modal = new $.bsModal('Accettazione ordini',
             {
                 body: 'OOPS! Non posso farti selezionare il pagamento ora.<br />' +
                 'Probabilmente è un problema momentaneo. Riprova fra qualche minuto.'
             });
-    }).done(function(res){
+    }).done(function (res) {
         var opts = '';
-        for(var i in res.options) {
+        for (var i in res.options) {
             var statusId = res.options[i].id;
             opts += '<option value="' + statusId + '" ' + ((statusId == res.selected) ? 'selected' : '') + '>' + res.options[i].name + '</option>';
         }
 
         var now = new Date();
-
         var day = ("0" + now.getDate()).slice(-2);
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
-
-        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
         var timeVal = (res.time) ? res.time : today;
 
         modal = new $.bsModal('Accettazione ordini',
@@ -54,7 +51,7 @@ $(document).on('bs.orderline.paymentToFriend', function() {
                 '</select>' +
                 'Data pagamento: <input  value="' + timeVal + '" type="date" id="friendPaymentDate" class="form-control"/>' +
                 '</div>',
-                okButtonEvent: function(){
+                okButtonEvent: function () {
                     var newStatus = $('#friendPaymentStatus').val();
                     var date = $('#friendPaymentDate').val();
                     if (0 < newStatus) {
@@ -66,12 +63,12 @@ $(document).on('bs.orderline.paymentToFriend', function() {
                                 friendPaymentStatus: newStatus,
                                 friendPaymentDate: date
                             }
-                        }).done(function(res){
+                        }).done(function (res) {
                             modal.writeBody(res);
-                            modal.setOkEvent(function(){
+                            modal.setOkEvent(function () {
                                 modal.hide();
                             });
-                        }).fail(function(res){
+                        }).fail(function (res) {
                             modal.writeBody("OOPS! C'è stato un problemino, se il problema persiste concattata un amministratore");
                             console.error(res);
                         });
@@ -80,4 +77,66 @@ $(document).on('bs.orderline.paymentToFriend', function() {
             }
         );
     });
+});
+
+$(document).on('bs.orderLine.friendPaymentRequest', function () {
+    var dataTable = $('.table').DataTable();
+    var selectedRows = dataTable.rows('.selected').data();
+
+    if (0 == selectedRows.length) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare almeno una riga"
+        }).open();
+        return false;
+    }
+
+    var i = 0;
+    var row = [];
+    $.each(selectedRows, function (k, v) {
+        row[i] = v.line_id;
+        i++;
+        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+    });
+
+    var now = new Date();
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+    modal = new $.bsModal('Inserimento Fattura',
+        {
+            body: '<div class="form-group"><h3>Inserisci i dati della fattura</h3>' +
+                'Sezionale: <input type="text" class="form-control" name="invoiceSectional" id="invoiceSectional" value ="" />' +
+                'Numero: <input type="text" class="form-control" name="invoiceNumber" id="invoiceNumber" value ="" />' +
+                'Data: <input  value="' + today + '" type="date" name="invoiceDate" id="invoiceDate" class="form-control"/>' +
+                'File: <input  type="file" name="invoiceFIle" id="invoiceFile" class="form-control"/>' +
+            '</div>',
+            okButtonEvent: function () {
+
+                var sectional = $('#invoiceSectional').val();
+                var number = $('#invoiceNumber').val();
+                var date = $('#invoiceDate').val();
+                if (0 < newStatus) {
+                    $.ajax({
+                        url: '/blueseal/xhr/FriendOrderLoadFriendInvoice',
+                        method: 'POST',
+                        data: {
+                            sectional: sectional,
+                            number: number,
+                            invoiceDate: invoiceDate,
+                        }
+                    }).done(function (res) {
+                        modal.writeBody(res);
+                        modal.setOkEvent(function () {
+                            modal.hide();
+                        });
+                    }).fail(function (res) {
+                        modal.writeBody("OOPS! C'è stato un problemino, se il problema persiste concattata un amministratore");
+                        console.error(res);
+                    });
+                }
+            }
+        }
+    );
 });

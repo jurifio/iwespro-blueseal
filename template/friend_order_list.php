@@ -149,6 +149,16 @@
             data-event="bs.orderline.paymentToFriend"
         ></bs-toolbar-button>
         <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-credit-card"
+            data-permission="/admin/order/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Carica Fattura"
+            data-placement="bottom"
+            data-event="bs.orderLine.friendPaymentRequest"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
