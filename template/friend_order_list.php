@@ -137,7 +137,7 @@
             data-permission="/admin/order/add"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Invia i prodotti"
+            data-title="Gestisci pagamenti"
             data-placement="bottom"
             data-event="bs.orderline.paymentToFriend"
         ></bs-toolbar-button>
