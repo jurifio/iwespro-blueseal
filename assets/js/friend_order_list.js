@@ -2,10 +2,10 @@ $(document).on('bs.orderline.paymentToFriend', function() {
     var dataTable = $('.table').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 
-    if (1 != selectedRows.length) {
+    if ( 1 > selectedRows.length) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare un solo prodotto"
+            message: "Devi selezionare almeno un prodotto"
         }).open();
         return false;
     }
@@ -31,6 +31,7 @@ $(document).on('bs.orderline.paymentToFriend', function() {
             });
     }).done(function(res){
         var opts = '';
+        res.selected = 4;
         for(var i in res.options) {
             var statusId = res.options[i].id;
             opts += '<option value="' + statusId + '" ' + ((statusId == res.selected) ? 'selected' : '') + '>' + res.options[i].name + '</option>';
@@ -70,6 +71,7 @@ $(document).on('bs.orderline.paymentToFriend', function() {
                             modal.writeBody(res);
                             modal.setOkEvent(function(){
                                 modal.hide();
+                                dataTable.ajax.reload();
                             });
                         }).fail(function(res){
                             modal.writeBody("OOPS! C'è stato un problemino, se il problema persiste concattata un amministratore");

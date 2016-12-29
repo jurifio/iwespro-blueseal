@@ -29,8 +29,8 @@ class CFriendOrderChangePaymentStatus extends AAjaxController
             $orderLines[$k] = $olR->findOneByStringId($v);
         }
         foreach($orderLines as $v) {
-            if (NULL === $status) $status = $v->orderLineFriendPaymentStatus;
-            elseif ($status !== $v->orderLineFriendPaymentStatus) {
+            if (NULL === $status) $status = $v->orderLineFriendPaymentStatusId;
+            elseif ($status !== $v->orderLineFriendPaymentStatusId) {
                 $status = 0;
                 break;
             }
@@ -38,9 +38,13 @@ class CFriendOrderChangePaymentStatus extends AAjaxController
 
         $time = null;
         foreach($orderLines as $v) {
-            $time = date('Y-m-d', strtotime($v->orderLineFriendPaymentDate));
-            break;
+            if (NULL === $time) $time = $v->orderLineFriendPaymentDate;
+            elseif ($time !== $v->orderLineFriendPaymentDate) {
+                $time = NULL;
+                break;
+            }
         }
+        if (NULL === $time) date('Y-m-d');
 
         $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
         $options = $olfpsR->findAllToArray();
@@ -83,5 +87,9 @@ class CFriendOrderChangePaymentStatus extends AAjaxController
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessage();
         }
+    }
+
+    private function getOrderLineFriendPaymentStatus(COrderline $ol) {
+        $status = $ol->orderLineFriendPaymentStatus;
     }
 }
