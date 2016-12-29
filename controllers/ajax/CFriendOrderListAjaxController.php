@@ -75,6 +75,7 @@ class CFriendOrderListAjaxController extends AAjaxController
   `os`.`title` as `orderStatusTitle`,
   `o`.`status` as `orderStatusCode`,
   `ol`.status as `orderLineStatusCode`,
+  `ols`.title as `orderLineStatusTitle`,
   `olfps`.`name` as `paymentStatus`,
   `ol`.`orderLineFriendPaymentDate` as `paymentDate`
   /*,
