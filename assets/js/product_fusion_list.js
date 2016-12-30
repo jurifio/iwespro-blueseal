@@ -88,7 +88,7 @@ $(document).on('bs.product.merge', function(){
                 bsModal.hide();
             });
             okButton.html("Fondi").off().on('click', function () {
-                var choosen = $('input[name="choosen"]').val();
+                var choosen = $('input[name="choosen"]:checked').val();
                 body.html("Pensaci un momento. L'azione non è reversibile!");
                 cancelButton.html("Ci ho ripensato");
                 okButton.html("Fondi!").off().on('click', function () {
