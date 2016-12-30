@@ -29,11 +29,13 @@ class CProductMerge extends AAjaxController
 
         foreach ($prods as $k => $v) {
             $prod = $repoPro->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+
             if (0 == $sizeGroup) {
                 $sizeGroup = $prod->productSizeGroupId;
             } else {
-                if ($prod->productSizeGroupId !== $sizeGroup) {
+                if ($prod->productSizeGroupId != $sizeGroup) {
                     $sizeGroupCompatibility = false;
+                    break;
                 }
             };
             $prods[$k]['areOrders'] = ($repoOrd->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']])->count()) ? 1 : 0;
