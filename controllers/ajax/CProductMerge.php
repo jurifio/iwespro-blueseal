@@ -50,16 +50,9 @@ class CProductMerge extends AAjaxController
 
     public function post()
     {
-        $get = $this->app->router->request()->getRequestData();
-        $action = '';
-        if (array_key_exists('action', $get)) $action = $get['action'];
-
-        switch ($action) {
-            case 'merge': {
-                $res = $this->mergeProducts($get['rows'], $get['choosen']);
-                break;
-            }
-        }
+        $choosen = $this->app->router->request()->getRequestData('choosen');
+        $rows = $this->app->router->request()->getRequestData('rows');
+        $res = $this->mergeProducts($rows, $choosen);
         return $res;
     }
 
