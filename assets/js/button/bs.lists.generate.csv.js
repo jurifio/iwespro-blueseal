@@ -64,7 +64,9 @@ $(document).on('bs.lists.generate.csv', function () {
                         div.innerHTML = val;
                         //OriginalString.replace(/(<([^>]+)>)/ig,"");
                         //if($(val).find('table').length) val = 'escluso';
-                        line.push(encodeURIComponent(div.innerText).replaceAll('%0A', ' '));
+                        var output = div.innerText;
+                        if (!isNaN(output)) output.replace('.',',');
+                        line.push(encodeURIComponent(output).replaceAll('%0A', ' '));
                     }
                 }
                 str += line.join(',') + '%0A';
