@@ -79,8 +79,11 @@
                                     data-searchable="false"
                                     data-orderable="false" class="center">Prezzo Att.</th>
                                 <th data-slug="friendRevenue"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Prezzo Friend</th>
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Prezzo Friend</th>
+                                <th data-slug="friendRevVat"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">P. Friend con IVA</th>
 
                                 <!--<th class="center sorting">Sku</th>
                                 <th class="center sorting">Stato Riga</th>

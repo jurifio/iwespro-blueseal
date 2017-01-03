@@ -5,6 +5,7 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\domain\entities\CProductSku;
+use bamboo\utils\price\SPriceToolbox;
 
 /**
  * Class COrderListAjaxController
@@ -54,7 +55,8 @@ class CFriendOrderListAjaxController extends AAjaxController
     {
         $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
         $olsR = \Monkey::app()->repoFactory->create('OrderLineStatus');
-        $logR = \Monkey::app()->repoFactory->create('Log');
+        $cR = \Monkey::app()->repoFactory->create('Configuration');
+        $vat = $cR->findOneBy(['name' => 'main vat'])->value;
         $user = $this->app->getUser();
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
@@ -145,8 +147,6 @@ FROM
         $response ['recordsTotal'] = $totlalCount;
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
-
-        $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $i = 0;
 
         foreach ($orderLines as $v) {
@@ -194,6 +194,7 @@ FROM
             $response['data'][$i]['fullPrice'] = $v->fullPrice;
             $response['data'][$i]['activePrice'] = $v->activePrice;
             $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
+            $response['data'][$i]['friendRevVat'] = SPriceToolbox::addVatToNetPrice($v->friendRevenue, $vat);
 
             $i++;
 	    }
