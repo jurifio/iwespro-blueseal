@@ -48,21 +48,24 @@ $(document).on('bs.lists.generate.csv', function () {
             var title = [];
             datatable.columns().every(function(k,v) {
                 v = datatable.column(k);
-                columns.push(v.dataSrc());
-                title.push($(v.header()).attr('aria-label').split(':')[0].trim());
-
+                columns.push({field: v.dataSrc(), visible: v.visible()});
+                if(v.visible()) {
+                    title.push($(v.header()).attr('aria-label').split(':')[0].trim());
+                }
             });
             str += title.join(',') + '%0A';
             var line;
             for (var i in res.data) {
                 line = [];
                 for (var index in columns) {
-                    var val = res.data[i][columns[index]];
-                    var div = document.createElement("div");
-                    div.innerHTML = val;
-                    //OriginalString.replace(/(<([^>]+)>)/ig,"");
-                    //if($(val).find('table').length) val = 'escluso';
-                    line.push(encodeURIComponent(div.innerText).replaceAll('%0A', ' '));
+                    if (columns[index].visible) {
+                        var val = res.data[i][columns[index].field];
+                        var div = document.createElement("div");
+                        div.innerHTML = val;
+                        //OriginalString.replace(/(<([^>]+)>)/ig,"");
+                        //if($(val).find('table').length) val = 'escluso';
+                        line.push(encodeURIComponent(div.innerText).replaceAll('%0A', ' '));
+                    }
                 }
                 str += line.join(',') + '%0A';
             }
