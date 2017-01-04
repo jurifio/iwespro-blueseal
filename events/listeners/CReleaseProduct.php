@@ -26,7 +26,7 @@ class CReleaseProduct extends CLogging
             elseif ($user = $this->getParameter('user')) $userId = $user->id;
 
             if (!$releaseDate) $releaseDate = date('Y-m-d H:i:s');
-            $shp = $this->getParameter('ShopHasProductE');
+            $shp = $this->getParameter('shp');
             if ($shp) {
                 if (!$shp->releaseDate) {
                     $shp->releaseDate = $releaseDate;
