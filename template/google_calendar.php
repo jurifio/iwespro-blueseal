@@ -10,7 +10,7 @@
 <div class="page-container">
 
     <div class="page-content-wrapper">
-        <div class="container-fluid container-fixed-lg bg-white">
+        <div class="container-fluid container-fixed-lg bg-white" style="padding-top: 20px">
             <iframe
                 src="https://calendar.google.com/calendar/embed?height=800&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src=iwes.it_sjvraou9j255k4abaqjvsg75fc%40group.calendar.google.com&amp;color=%2329527A&amp;ctz=Europe%2FRome"
                 style="border-width:0" width="1600" height="800" frameborder="0" scrolling="no"></iframe>
