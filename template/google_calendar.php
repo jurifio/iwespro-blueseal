@@ -8,22 +8,12 @@
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
 <div class="page-container">
-    <?php include "parts/header.php" ?>
-    <?php include "parts/operations.php" ?>
 
     <div class="page-content-wrapper">
-        <div class="content sm-gutter">
-            <div class="container-fluid container-fixed-lg bg-white">
-                <div class="row">
-                    <div class="col-md-4 col-md-offset-4 alert-container closed">
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-fluid container-fixed-lg bg-white">
-                <iframe src="https://calendar.google.com/calendar/embed?src=iwes.it_sjvraou9j255k4abaqjvsg75fc%40group.calendar.google.com&ctz=Europe/Rome" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-            </div>
+        <div class="container-fluid container-fixed-lg bg-white">
+            <iframe
+                src="https://calendar.google.com/calendar/embed?height=800&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src=iwes.it_sjvraou9j255k4abaqjvsg75fc%40group.calendar.google.com&amp;color=%2329527A&amp;ctz=Europe%2FRome"
+                style="border-width:0" width="1600" height="800" frameborder="0" scrolling="no"></iframe>
         </div>
     </div>
 
