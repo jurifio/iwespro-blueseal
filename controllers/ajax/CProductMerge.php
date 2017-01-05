@@ -29,11 +29,13 @@ class CProductMerge extends AAjaxController
 
         foreach ($prods as $k => $v) {
             $prod = $repoPro->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+
             if (0 == $sizeGroup) {
                 $sizeGroup = $prod->productSizeGroupId;
             } else {
-                if ($prod->productSizeGroupId !== $sizeGroup) {
+                if ($prod->productSizeGroupId != $sizeGroup) {
                     $sizeGroupCompatibility = false;
+                    break;
                 }
             };
             $prods[$k]['areOrders'] = ($repoOrd->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']])->count()) ? 1 : 0;
@@ -48,16 +50,9 @@ class CProductMerge extends AAjaxController
 
     public function post()
     {
-        $get = $this->app->router->request()->getRequestData();
-        $action = '';
-        if (array_key_exists('action', $get)) $action = $get['action'];
-
-        switch ($action) {
-            case 'merge': {
-                $res = $this->mergeProducts($get['rows'], $get['choosen']);
-                break;
-            }
-        }
+        $choosen = $this->app->router->request()->getRequestData('choosen');
+        $rows = $this->app->router->request()->getRequestData('rows');
+        $res = $this->mergeProducts($rows, $choosen);
         return $res;
     }
 

@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-magnet",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.names.merge",
+    event:"bs.product.namesMerge",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Copia i nomi dei prodotti",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.names.merge', function () {
+$(document).on('bs.product.namesMerge', function () {
 
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();

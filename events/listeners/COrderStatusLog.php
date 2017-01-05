@@ -31,7 +31,8 @@ class COrderStatusLog extends CLogging
         $stringId = $order->printId();
         $logR = \Monkey::app()->repoFactory->create('Log');
         $lC = $logR->findBy(['entityName' => $entityName, 'stringId' => $stringId], '', 'ORDER BY time desc');
-        if ($value != $lC->getFirst()->eventValue) {
+        $check = $lC->getFirst();
+        if (!$check || $check->eventValue == $value) {
             $this->insertLogRow($eventName->getEventName(), $userId, $value, $entityName, $stringId, $time);
         }
     }

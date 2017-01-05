@@ -27,6 +27,7 @@ class CFriendOrderListController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/friend_order_list.php');
+        $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
 
         /** LOGICA */
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
@@ -34,16 +35,13 @@ class CFriendOrderListController extends ARestrictedAccessRootController
 
         $opera = $blueseal . "order";
         $aggiungi = $blueseal . "order";
-
-        $isAllShop = \Monkey::app()->getUser()->hasPermission('allShops');
-
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'pageURL' =>$pageURL,
             'operaURL' =>$opera,
             'aggiungiURL' =>$aggiungi,
             'page' => $this->page,
-            'isAllShops' => $isAllShop,
+            'allShops' => $allShops,
             'sidebar' => $this->sidebar->build()
         ]);
     }

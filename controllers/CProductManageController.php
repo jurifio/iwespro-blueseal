@@ -40,6 +40,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
         /** LOGICHE DI UPDATE*/
         try {
+            $context = 'Start';
             $productIds = array("id" => $post['Product_id'], "productVariantId" => $post['Product_productVariantId']);
             $productIdsExt = array("productId" => $post['Product_id'], "productVariantId" => $post['Product_productVariantId']);
             /** @var CEntityManager $em */
@@ -49,6 +50,7 @@ class CProductManageController extends ARestrictedAccessRootController
             if (!$this->app->dbAdapter->beginTransaction()) throw new \Exception();
 
             /** UPDATE VARIANTE */
+            $context = 'ProductVariant';
 	        $productVariant = $productEdit->productVariant;
 	        $productVariant->name = $post['ProductVariant_name'];
 	        $productVariant->description = $post['ProductVariant_description'];
@@ -56,6 +58,7 @@ class CProductManageController extends ARestrictedAccessRootController
             //$variantId = $this->app->dbAdapter->update("ProductVariant", ["name" => $post['ProductVariant_name'], "description" => $post['ProductVariant_description']], array("id" => $post['Product_productVariantId']));
 
             /** UPDATE PRODUCT */
+            $context = 'Product First Update';
             if (isset($files['Product_dummyPicture']) && isset($files['Product_dummyPicture']['name']) && !empty($files['Product_dummyPicture']['name'])) {
                 /** PRENDO E RINOMINO LA FOTO */
                 $name = pathinfo($files['Product_dummyPicture']['name']);
@@ -65,13 +68,13 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 	        $productEdit->lastUpdate = date("Y-m-d H:i:s");
 	        $productEdit->itemno = $post['Product_itemno'];
-
-
+            $productEdit->update();
 
             //$productId = $this->app->dbAdapter->update("Product", $updateData, $productIds);
             $this->app->dbAdapter->commit();
 
             /** INIZIO TRANSACTION PER IL CARICAMENTO DEI VALORI FACOLTATIVI DI PRODOTTO E DI DETTAGLI PRODOTTO */
+            $context = 'Product second update';
             if (!$this->app->dbAdapter->beginTransaction()) throw new \Exception();
             /** UPDATE PRODUCT */
             if ($this->isValidInput("Product_productBrandId", $post)) {
@@ -101,6 +104,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
 	        $productEdit->update();
 
+            $context = "Tag Insert";
             if ($this->isValidInput("Tag_names", $post)) {
                 $this->app->dbAdapter->delete("ProductHasTag", $productIdsExt,'AND', true);
                 foreach ($post['Tag_names'] as $tag) {
@@ -117,6 +121,7 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 
             /** UPDATE DEI DETTAGLI PRODOTTO */
+            $context = "detail Update";
             if ($this->isValidInput("Product_dataSheet", $post)) {
 	            $detailRepo = $this->app->repoFactory->create('ProductDetail');
 	            $detailTranslationRepo = $this->app->repoFactory->create('ProductDetailTranslation');
@@ -147,11 +152,13 @@ class CProductManageController extends ARestrictedAccessRootController
                 }
             }
 
+            $context = "Category Update";
             if ($this->isValidInput('ProductCategory_id', $post)) {
                 $cats = $post['ProductCategory_id'];
             } else {
                 $cats = 1;
             }
+
             $this->app->dbAdapter->delete("ProductHasProductCategory", $productIdsExt,'AND',true);
             $datas = explode(",", $cats);
             foreach ($datas as $cat) {
@@ -161,6 +168,7 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 
             /** UPDATE NOME PRODOTTO */
+            $context = "Product Name Update";
             $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
@@ -168,6 +176,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 $pntRepo->updateProductName($productEdit->id, $productEdit->productVariantId, $input);
             }
             /** UPDATE DESCRIZIONE PRODOTTO */
+            $context = "Description Update";
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
                 if ($inputName[0] != 'ProductDescription') continue;
@@ -186,6 +195,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 }
             }
             /** INSERIMENTO SHOP */
+            $context = "Shop Update";
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
                 if ($inputName[0] != 'Shop') continue;
@@ -238,6 +248,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
             $this->app->dbAdapter->commit();
 
+            $context = "Product Update Final";
             if ($this->isValidInput("Product_status", $post)) {
 	            $productEdit->productStatusId = $post['Product_status'];
 	            $productEdit->update();
@@ -249,7 +260,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
             $ret = [];
             if ($productIds) $ret['code'] = $productIds;
-            $ret['message'] = $e->getMessage();
+            $ret['message'] = '[' . $context .'] ' . $e->getMessage();
             return json_encode($ret);
         }
     }

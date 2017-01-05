@@ -30,7 +30,7 @@ class CGetTableContent extends AAjaxController
         $ret = [];
         $i = 0;
         foreach($OC as $em) {
-            if($fields) {
+            if(is_array($fields)) {
                 $ret[$i] = [];
                 foreach($fields as $f) {
                     $ret[$i][$f] = $em->{$f};

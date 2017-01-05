@@ -166,7 +166,7 @@
             data-remote="bs.product.category.change"
             ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.product.names.merge"
+            data-remote="bs.product.namesMerge"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.sizeGroup.change"

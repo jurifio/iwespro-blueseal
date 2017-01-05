@@ -246,14 +246,7 @@
             data-href="<?php echo  $invoicePrint .'?orderId='.$order->id ; ?>"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-money"
-            data-permission="/admin/order/list"
-            data-event="bs.manage.paid"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Gestisci pagamento"
-            data-placement="bottom"
+            data-remote="bs.order.pay"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -3,8 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\domain\entities\CProductSku;
+use bamboo\utils\price\SPriceToolbox;
 
 /**
  * Class COrderListAjaxController
@@ -54,7 +53,8 @@ class CFriendOrderListAjaxController extends AAjaxController
     {
         $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
         $olsR = \Monkey::app()->repoFactory->create('OrderLineStatus');
-        $logR = \Monkey::app()->repoFactory->create('Log');
+        $cR = \Monkey::app()->repoFactory->create('Configuration');
+        $vat = $cR->findOneBy(['name' => 'main vat'])->value;
         $user = $this->app->getUser();
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
@@ -72,10 +72,10 @@ class CFriendOrderListAjaxController extends AAjaxController
   `ps`.`name` as `size`,
   `s`.`id` as `shopId`,
   `s`.`title` as `shopName`,
-  `shp`.`extId` as `extId`,
   `os`.`title` as `orderStatusTitle`,
   `o`.`status` as `orderStatusCode`,
   `ol`.status as `orderLineStatusCode`,
+  `ols`.title as `orderLineStatusTitle`,
   `olfps`.`name` as `paymentStatus`,
   `ol`.`orderLineFriendPaymentDate` as `paymentDate`
   /*,
@@ -86,7 +86,6 @@ class CFriendOrderListAjaxController extends AAjaxController
 FROM
   ((((((((`Order` as `o` JOIN `OrderLine` as `ol` on `o`.`id` = `ol`.`orderId`)
     JOIN `Shop` as `s` ON `ol`.`shopId` = `s`.`id`)
-    JOIN `ShopHasProduct` as `shp` ON `ol`.`productId` = `shp`.`productId` AND `ol`.`productVariantId` AND `shp`.`productVariantId` AND `ol`.`shopId` = `shp`.`shopId` 
     JOIN `OrderStatus` as `os` ON `o`.`status` = `os`.`code`)
     JOIN `OrderLineStatus` AS `ols` on `ol`.`status` = `ols`.`code`)
     LEFT JOIN `OrderLineFriendPaymentStatus` as `olfps` on `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
@@ -107,14 +106,19 @@ FROM
             $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser($user);
             $datatable->addCondition('shopId', $shops);
             $datatable->addCondition('orderLineStatusCode',
-                ['ORD_MISSING', 'ORD_CANCEL', 'ORD_ARCH'],
+                [
+                    'ORD_MISSING',
+                    'ORD_CANCEL',
+                    'ORD_ARCH',
+                    'ORD_PENDING',
+                    'ORD_WAIT',
+                    'ORD_LAB',
+                    'ORD_FRND_SNDING',
+                    'ORD_ERR_SEND'
+                ],
                 true
             );
         }
-            $datatable->addCondition('orderLineStatusCode',
-                ['ORD_PENDING', 'ORD_WAIT', 'ORD_LAB', 'ORD_FRND_SNDING', 'ORD_ERR_SEND'],
-                true
-            );
 
         $orderLines = $this->app->repoFactory->create('OrderLine')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -147,8 +151,6 @@ FROM
         $response ['recordsTotal'] = $totlalCount;
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
-
-        $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $i = 0;
 
         foreach ($orderLines as $v) {
@@ -163,27 +165,23 @@ FROM
             if($v->product->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
             $response['data'][$i]['dummyPicture'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
+            $statusCode = $v->orderLineStatus->code;
 
-
-            //friend can't access all orderline statuses
             if (!$allShops &&  9 < $v->orderLineStatus->id) {
-                $olsE = $olsR->getLastStatusSuitableByFriend($v, $v->shopId);
-                $statusCode = $olsE->code;
+                //$lastSuitable = $olsR->getLastStatusSuitableByFriend($v->printId(), $v->shopId);
+                //if ($lastSuitable)
+                $lineStatus = '<span style="color: #999">Chiuso</span>';
             } else {
-                $statusCode = $v->orderLineStatus->code;
+                $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
+                    $plainLineStatuses[$statusCode] .
+                    '</span>';
             }
-            $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
-                $plainLineStatuses[$statusCode] .
-                '</span>';
-
             $response['data'][$i]['orderLineStatusTitle'] = $lineStatus;
             $time = strtotime($v->order->orderDate);
             $response['data'][$i]['orderDate'] = date("d/m/Y H:i:s", $time);
             $response['data'][$i]['brand'] = $v->product->productBrand->name;
             $response['data'][$i]['season'] = $v->product->productSeason->name;
             $response['data'][$i]['cpf'] = $v->product->itemno . ' # ' . $v->product->productVariant->name;
-            $shp = $v->product->shopHasProduct->findOneByKey('shopId', $v->shopId);
-            $response['data'][$i]['extId'] = $shp->extId;
             $response['data'][$i]['shopName'] = $v->shop->title;
             if ($v->orderLineFriendPaymentStatusId) {
                 $fpsColor = $olfpsR->getColor($v->orderLineFriendPaymentStatusId);
@@ -200,6 +198,7 @@ FROM
             $response['data'][$i]['fullPrice'] = $v->fullPrice;
             $response['data'][$i]['activePrice'] = $v->activePrice;
             $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
+            $response['data'][$i]['friendRevVat'] = SPriceToolbox::addVatToNetPrice($v->friendRevenue, $vat);
 
             $i++;
 	    }

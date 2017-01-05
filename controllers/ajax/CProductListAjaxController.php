@@ -52,10 +52,10 @@ class CProductListAjaxController extends AAjaxController
                   `pc`.`id`                                                                                             AS `categoryId`,
                   `pcg`.`name`                                                                                          AS `colorGroup`,
                   `psk`.`isOnSale`                                                                                      AS `isOnSale`,
-                  ((((if((`psk`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
+                  (((if((`psk`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
                       (`pse`.`isActive` = 0), `s`.`pastSeasonMultiplier`,
                       if((`psk`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
-                    (if((`psk`.`isOnSale` = 1), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100)                       AS `mup`,
+                    (if((`psk`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100                       AS `mup`,
                   `p`.`qty`                                                                                             AS `hasQty`,
                   `t`.`name`                                                                                            AS `tags`,
                   (select min(if(ProductSku.stockQty > 0, if(ProductSku.isOnSale = 0, ProductSku.price, ProductSku.salePrice), null)) from ProductSku where ProductSku.productId = p.id and ProductSku.productVariantId = p.productVariantId) as activePrice,
