@@ -114,6 +114,7 @@ $(document).on('bs.friend.orderline.ok', function(){
         data: {rows: row, response: 'ok'}
     }).done(function(res){
         modal.writeBody(res);
+        $('.table').DataTable().ajax.reload(null, false);
     }).fail(function(res){
         modal.writeBody(res.responseText);
     });
@@ -149,6 +150,7 @@ $(document).on('bs.friend.orderline.ko', function(){
         data: {rows: row, response: 'ko'}
     }).done(function(res){
         modal.writeBody(res);
+        $('.table').DataTable().ajax.reload(null, false);
     }).fail(function(res){
         modal.writeBody(res.responseText);
     });
