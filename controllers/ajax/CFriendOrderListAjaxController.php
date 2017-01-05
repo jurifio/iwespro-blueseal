@@ -3,8 +3,6 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\domain\entities\CProductSku;
 use bamboo\utils\price\SPriceToolbox;
 
 /**
@@ -108,13 +106,19 @@ FROM
             $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser($user);
             $datatable->addCondition('shopId', $shops);
             $datatable->addCondition('orderLineStatusCode',
-                ['ORD_MISSING', 'ORD_MISSING', 'ORD_CANCEL', 'ORD_ARCH']
-            );
-        }
-            $datatable->addCondition('orderLineStatusCode',
-                ['ORD_PENDING', 'ORD_WAIT', 'ORD_LAB', 'ORD_FRND_SNDING', 'ORD_ERR_SEND'],
+                [
+                    'ORD_MISSING',
+                    'ORD_CANCEL',
+                    'ORD_ARCH',
+                    'ORD_PENDING',
+                    'ORD_WAIT',
+                    'ORD_LAB',
+                    'ORD_FRND_SNDING',
+                    'ORD_ERR_SEND'
+                ],
                 true
             );
+        }
 
         $orderLines = $this->app->repoFactory->create('OrderLine')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -163,15 +167,15 @@ FROM
             $response['data'][$i]['dummyPicture'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
             $statusCode = $v->orderLineStatus->code;
 
-            //friend can't access all orderline statuses
             if (!$allShops &&  9 < $v->orderLineStatus->id) {
-                $olsR->getLastStatusSuitableByFriend($v, $v->shopId);
-
+                //$lastSuitable = $olsR->getLastStatusSuitableByFriend($v->printId(), $v->shopId);
+                //if ($lastSuitable)
+                $lineStatus = '<span style="color: #999">Chiuso</span>';
+            } else {
+                $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
+                    $plainLineStatuses[$statusCode] .
+                    '</span>';
             }
-            $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
-                $plainLineStatuses[$statusCode] .
-                '</span>';
-
             $response['data'][$i]['orderLineStatusTitle'] = $lineStatus;
             $time = strtotime($v->order->orderDate);
             $response['data'][$i]['orderDate'] = date("d/m/Y H:i:s", $time);

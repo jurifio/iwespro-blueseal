@@ -57,9 +57,11 @@
                                 <th data-slug="cpf"
                                     data-searchable="true"
                                     data-orderable="true" class="center">CPF</th>
+                                <?php if ($allShops) : ?>
                                 <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop</th>
+                                <?php endif; ?>
                                 <th data-slug="dummyPicture"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Immagine</th>
@@ -69,6 +71,7 @@
                                 <th data-slug="paymentStatus"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stato Pagamento</th>
+                                <?php if ($allShops) : ?>
                                 <th data-slug="paymentDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Pagamento</th>
@@ -78,13 +81,13 @@
                                 <th data-slug="activePrice"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Prezzo Att.</th>
+                                <?php endif; ?>
                                 <th data-slug="friendRevenue"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Prezzo Friend</th>
                                 <th data-slug="friendRevVat"
                                     data-searchable="false"
                                     data-orderable="false" class="center">P. Friend con IVA</th>
-
                                 <!--<th class="center sorting">Sku</th>
                                 <th class="center sorting">Stato Riga</th>
                                 <th class="center sorting">Opera Stato</th>
@@ -123,7 +126,8 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione ordini">
+    <?php if ($allShops) : ?>
+    <bs-toolbar-group data-group-label="Gestione Ordini Interna">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-paper-plane"
@@ -146,6 +150,30 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <?php endif; ?>
+
+    <bs-toolbar-group data-group-label="Approvazione Ordini">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-thumbs-up"
+            data-permission="/admin/order/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Accetta le righe d'ordine selezionate"
+            data-placement="bottom"
+            data-event="bs.friend.orderline.ok"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-thumbs-down"
+            data-permission="/admin/order/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Rifiuta le righe d'ordine selezionate"
+            data-placement="bottom"
+            data-event="bs.friend.orderline.ko"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
