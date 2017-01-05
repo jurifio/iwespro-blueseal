@@ -158,7 +158,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-thumbs-up"
-            data-permission="/admin/order/add"
+            data-permission="/admin/product/list"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Accetta le righe d'ordine selezionate"
@@ -168,7 +168,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-thumbs-down"
-            data-permission="/admin/order/add"
+            data-permission="/admin/product/list"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Rifiuta le righe d'ordine selezionate"
