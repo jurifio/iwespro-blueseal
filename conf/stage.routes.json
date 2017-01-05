@@ -1697,6 +1697,17 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/blueseal/calendario(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CGoogleCalendarController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
