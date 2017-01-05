@@ -172,10 +172,16 @@ FROM
                 //if ($lastSuitable)
                 $lineStatus = '<span style="color: #999">Chiuso</span>';
             } else {
+                if (!$allShops && false !== strpos($plainLineStatuses[$statusCode], 'friend')) {
+                    $editedStatus = str_replace('al friend', '', str_replace('dal friend', '', $plainLineStatuses[$statusCode]));
+                } else {
+                    $editedStatus = $plainLineStatuses[$statusCode];
+                }
                 $lineStatus = '<span style="color:' . $colorLineStatuses[$statusCode] . '" ">' .
-                    $plainLineStatuses[$statusCode] .
+                    $editedStatus .
                     '</span>';
             }
+
             $response['data'][$i]['orderLineStatusTitle'] = $lineStatus;
             $time = strtotime($v->order->orderDate);
             $response['data'][$i]['orderDate'] = date("d/m/Y H:i:s", $time);
