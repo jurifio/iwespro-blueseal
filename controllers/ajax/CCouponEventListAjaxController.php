@@ -51,7 +51,17 @@ class CCouponEventListAjaxController extends AAjaxController
     public function get()
     {
         $editCouponEventLink = $this->urls['base']."eventocoupon/modifica";
-        $datatable = new CDataTables('vBluesealCouponEventList',['id'],$_GET);
+        $sql = "SELECT
+  `CouponEvent`.`id`          AS `id`,
+  `CouponEvent`.`name`        AS `name`,
+  `CouponEvent`.`description` AS `description`,
+  `CouponEvent`.`click`       AS `click`,
+  `CouponEvent`.`startDate`   AS `startDate`,
+  `CouponEvent`.`endDate`     AS `endDate`,
+  `CouponType`.`name`         AS `couponType`
+FROM (`CouponEvent`
+  JOIN `CouponType` ON ((`CouponEvent`.`couponTypeId` = `CouponType`.`id`)))";
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);

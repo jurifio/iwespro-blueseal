@@ -50,7 +50,8 @@ class CUserListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealUsers',['id'],$_GET);
+        $sql = "select `u`.`id` AS `id`,`ud`.`name` AS `name`,`ud`.`surname` AS `surname`,`u`.`email` AS `email`,if((`ud`.`gender` = 'F'),'Donna','Uomo') AS `sex`,if((`u`.`isActive` = 1),'Attivato','Disattivato') AS `status`,`u`.`creationDate` AS `creationDate` from (`User` `u` join `UserDetails` `ud`) where ((`u`.`id` = `ud`.`userId`) and (`u`.`isDeleted` = 0)) order by `u`.`creationDate` desc";
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         $users = $this->app->repoFactory->create('User')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());

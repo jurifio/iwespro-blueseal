@@ -53,7 +53,8 @@ class CDictionarySizeEditAjaxController extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
-        $datatable = new CDataTables('vBluesealDictionarySizeEdit',['shopId','term'],$_GET);
+        $sql = "select `DictionarySize`.`shopId` AS `shopId`,`DictionarySize`.`term` AS `term`,`DictionarySize`.`productSizeId` AS `foreign` from `DictionarySize`";
+        $datatable = new CDataTables($sql,['shopId','term'],$_GET);
         $datatable->addCondition('shopId',[$shopId]);
 
         if (!empty($this->authorizedShops)) {

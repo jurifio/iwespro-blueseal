@@ -51,7 +51,39 @@ class CProductTagListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealTagManagementList',['id','productVariantId'],$_GET);
+        $sql = "SELECT
+  concat(`p`.`id`, '-', `pv`.`id`)                AS `code`,
+  `p`.`id`                                        AS `id`,
+  `p`.`productVariantId`                          AS `productVariantId`,
+  concat(`pse`.`name`, ' ', `pse`.`year`)         AS `season`,
+  `pse`.`isActive`                                AS `isActive`,
+  `s`.`name`                                      AS `shop`,
+  `p`.`sortingPriorityId`                         AS `priority`,
+  `pb`.`name`                                     AS `brand`,
+  `ps`.`name`                                     AS `status`,
+  `p`.`creationDate`                              AS `creationDate`,
+  group_concat(DISTINCT `t`.`slug` SEPARATOR ',') AS `tag`,
+  `pcg`.`name`                                    AS `colorGroup`,
+  `p`.`isOnSale`                                AS `isOnSale`,
+  if(((SELECT sum(`psk`.`stockQty`) AS `summ`
+       FROM `ProductSku` `psk`
+       WHERE ((`psk`.`productId` = `p`.`id`) AND (`psk`.`productVariantId` = `p`.`productVariantId`))) > 0), 'sì',
+     'no')                                        AS `available`
+FROM (((((((((((`Product` `p`
+  JOIN `ProductSeason` `pse` ON ((`p`.`productSeasonId` = `pse`.`id`))) JOIN `ProductVariant` `pv`
+    ON ((`p`.`productVariantId` = `pv`.`id`))) JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`))) JOIN
+  `ProductStatus` `ps` ON ((`ps`.`id` = `p`.`productStatusId`))) JOIN `ShopHasProduct` `sp`
+    ON (((`p`.`id` = `sp`.`productId`) AND (`p`.`productVariantId` = `sp`.`productVariantId`)))) JOIN `Shop` `s`
+    ON ((`s`.`id` = `sp`.`shopId`))) LEFT JOIN `ProductSku` `psk`
+    ON (((`p`.`id` = `psk`.`productId`) AND (`p`.`productVariantId` = `psk`.`productVariantId`)))) LEFT JOIN
+  `ProductHasTag` `pht`
+    ON (((`pht`.`productId` = `p`.`id`) AND (`pht`.`productVariantId` = `p`.`productVariantId`)))) LEFT JOIN `Tag` `t`
+    ON ((`pht`.`tagId` = `t`.`id`))) LEFT JOIN `ProductHasProductColorGroup` `phcg`
+    ON (((`phcg`.`productId` = `p`.`id`) AND (`phcg`.`productVariantId` = `p`.`productVariantId`)))) LEFT JOIN
+  `ProductColorGroup` `pcg` ON ((`phcg`.`productColorGroupId` = `pcg`.`id`)))
+WHERE ((`pcg`.`langId` = 1) AND (`ps`.`code` IN ('A', 'P', 'I')))
+GROUP BY `p`.`productVariantId`";
+        $datatable = new CDataTables($sql,['id','productVariantId'],$_GET,true);
         if(!empty($this->authorizedShops)){
             $datatable->addCondition('shopId',$this->authorizedShops);
         }

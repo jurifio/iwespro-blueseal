@@ -52,7 +52,26 @@ class CCouponListAjaxController extends AAjaxController
     {
         $editCouponLink = $this->urls['base']."coupon/modifica";
         $editOrderLink = $this->urls['base']."ordini/aggiungi";
-        $datatable = new CDataTables('vBluesealCouponList',['id'],$_GET);
+        $sql = "
+SELECT
+  `Coupon`.`id`                                              AS `id`,
+  `Coupon`.`couponTypeId`                                    AS `couponTypeId`,
+  `Coupon`.`tagId`                                           AS `tagId`,
+  `Coupon`.`code`                                            AS `code`,
+  `Coupon`.`issueDate`                                       AS `issueDate`,
+  `Coupon`.`validThru`                                       AS `validThru`,
+  `Coupon`.`amount`                                          AS `amount`,
+  `Coupon`.`amountType`                                      AS `amountType`,
+  `Coupon`.`userId`                                          AS `userId`,
+  `Coupon`.`valid`                                           AS `valid`,
+  `CouponType`.`name`                                        AS `couponType`,
+  `CouponType`.`validForCartTotal`                           AS `validForCartTotal`,
+  concat(`UserDetails`.`name`, ' ', `UserDetails`.`surname`) AS `utente`,
+  `Order`.`id`                                               AS `orderId`
+FROM (((`Coupon`
+  JOIN `CouponType` ON ((`Coupon`.`couponTypeId` = `CouponType`.`id`))) LEFT JOIN `UserDetails`
+    ON ((`UserDetails`.`userId` = `Coupon`.`userId`))) LEFT JOIN `Order` ON ((`Order`.`couponId` = `Coupon`.`id`)))";
+        $datatable = new CDataTables($sql,['id'],$_GET, true);
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);

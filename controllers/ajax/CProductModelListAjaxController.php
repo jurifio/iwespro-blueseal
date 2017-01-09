@@ -50,7 +50,8 @@ class CProductModelListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealModelList',['id'],$_GET);
+        $sql = "select `p`.`id` AS `id`,`p`.`name` AS `name`,`p`.`code` AS `code`,`p`.`productName` AS `productName`,`psp`.`name` AS `prototypeName`,group_concat(distinct `pct`.`name` separator ',') AS `categories`,group_concat(distinct `pdlt`.`name` separator ',') AS `labels`,group_concat(distinct `pdt`.`name` separator ',') AS `details` from (((((((((`ProductSheetModelPrototype` `p` join `ProductSheetPrototype` `psp` on((`p`.`productSheetPrototypeId` = `psp`.`id`))) left join `ProductSheetModelActual` `a` on((`p`.`id` = `a`.`productSheetModelPrototypeId`))) join `ProductDetailLabel` `pdl` on((`a`.`productDetailLabelId` = `pdl`.`id`))) left join `ProductDetailLabelTranslation` `pdlt` on((`pdlt`.`productDetailLabelId` = `pdl`.`id`))) join `ProductDetail` `pd` on((`pd`.`id` = `a`.`productDetailId`))) left join `ProductDetailTranslation` `pdt` on((`pdt`.`productDetailId` = `pd`.`id`))) left join `ProductSheetModelPrototypeHasProductCategory` `php` on((`php`.`productSheetModelPrototypeId` = `p`.`id`))) join `ProductCategory` `pc` on((`pc`.`id` = `php`.`productCategoryId`))) left join `ProductCategoryTranslation` `pct` on((`pct`.`productCategoryId` = `pc`.`id`))) where ((`pct`.`langId` = 1) and (`pdt`.`langId` = 1)) group by `p`.`id`";
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
 
 	    //$datatable->addSearchColumn('extId');
 	    //$datatable->addSearchColumn('extSkuId');
