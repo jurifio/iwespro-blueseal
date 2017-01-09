@@ -111,12 +111,15 @@ class CProductSalesListAjaxController extends AAjaxController
 
             //$response['aaData'][$i]["skus"] = '<table class="nested-table"><thead><tr>'.$th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
 
-            $res = $this->app->dbAdapter->query("SELECT max(ps.price) as price,  max(ps.saleprice) as sale, isOnSale, ps.value as val, /*group_concat(distinct s.title SEPARATOR ',')*/ s.name as shop
-                                          FROM ProductSku ps, Shop s
-                                          WHERE ps.shopId = s.id AND
-                                              ps.productId = ? AND
-                                              ps.productVariantId = ?
-                                          GROUP BY ps.productId, ps.productVariantId, s.title", [$val->id, $val->productVariantId])->fetchAll();
+            $res = $this->app->dbAdapter->query("SELECT max(ps.price) as price,  max(ps.saleprice) as sale, p.isOnSale, ps.value as val, /*group_concat(distinct s.title SEPARATOR ',')*/ s.name as shop
+                                          FROM Product p, ProductSku ps, Shop s
+                                          WHERE 
+                                          p.id = ps.productId and 
+                                          p.productVariantId = ps.productVariantId and 
+                                          ps.shopId = s.id AND
+                                              p.id= ? AND
+                                              p.productVariantId = ?
+                                          GROUP BY p.id, p.productVariantId, s.id", [$val->id, $val->productVariantId])->fetchAll();
 
 
             $response['aaData'][$i]["price"] = '<span class="small">';
