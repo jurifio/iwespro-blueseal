@@ -93,8 +93,7 @@ class CSkuManageController extends ARestrictedAccessRootController
                     $productSku->value = $post['ProductSku_value_' . $keys[2]];
                     $productSku->price = $post['ProductSku_price_' . $keys[2]];
                     $productSku->salePrice = $post['ProductSku_salePrice_' . $keys[2]];
-                    $productSku->isOnSale = isset($post['isOnSale']) ? 1 : 0;
-	                $productSku->update();
+                    $productSku->update();
 	                $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$productSku->product->printId()]);
 	                $done++;
                 } else {
@@ -109,7 +108,6 @@ class CSkuManageController extends ARestrictedAccessRootController
                         $productSku->value = $post['ProductSku_value_' . $keys[2]];
                         $productSku->price = $post['ProductSku_price_' . $keys[2]];
                         $productSku->salePrice = $post['ProductSku_salePrice_' . $keys[2]];
-                        $productSku->isOnSale = isset($post['isOnSale']) ? 1 : 0;
 	                    $productSku->insert();
 	                    $done++;
 	                    $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$productSku->product->printId()]);

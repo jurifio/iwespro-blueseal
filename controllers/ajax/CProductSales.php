@@ -44,12 +44,12 @@ class CProductSales extends AAjaxController
         foreach ($rows as $v) {
             $this->app->dbAdapter->beginTransaction();
             try {
-	            $product = $this->app->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-	            foreach($product->productSku as $productSku ) {
-                    $productSku->salePrice = floor($productSku->price / 100 * (100 - $percent ));
+                $product = $this->app->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+                foreach ($product->productSku as $productSku) {
+                    $productSku->salePrice = floor($productSku->price / 100 * (100 - $percent));
                     $productSku->update();
-	            }
-                $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$product->printId()]);
+                }
+                $this->app->eventManager->triggerEvent('product.stock.change', ['productKeys' => $product->printId()]);
                 //$sql = "UPDATE ProductSku SET salePrice = FLOOR(price / 100 * (100 - ? )) WHERE productId = ? AND productVariantId = ? ";
                 //$res = $this->app->dbAdapter->query($sql, [$percent, $v['id'], $v['productVariantId']]);
             } catch (\Throwable $e) {
@@ -59,7 +59,7 @@ class CProductSales extends AAjaxController
             $this->app->dbAdapter->commit();
         }
 
-	    //$this->app->cacheService->getCache('entities')->flush();
+        //$this->app->cacheService->getCache('entities')->flush();
         return "Promozioni aggiunte e aggiornate!";
     }
 
@@ -67,21 +67,14 @@ class CProductSales extends AAjaxController
     {
         foreach ($rows as $v) {
             $product = $this->app->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-            foreach ($product->productSku as $productSku) {
-                if((bool)$productSku->isOnSale != (bool)$isSale) {
-                    if (!$isSale || 0 != $productSku->salePrice) {
-                        try {
-                            $productSku->isOnSale = $isSale;
-                            $productSku->update();
-                        } catch (\Throwable $e) {
-                            return "OOPS! Non riesco a impostare le promozioni:<br />" . $e->getMessage();
-                        }
-                    }
-                }
+            try {
+                $product->isOnSale = $isSale;
+                $product->update();
+            } catch (\Throwable $e) {
+                return "OOPS! Non riesco a impostare le promozioni:<br />" . $e->getMessage();
             }
-            $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$product->printId()]);
+            $this->app->eventManager->triggerEvent('product.stock.change', ['productKeys' => $product->printId()]);
         }
-	    //$this->app->cacheService->getCache('entities')->flush();
         return "Le promozioni sono state impostate correttamente.";
     }
 }

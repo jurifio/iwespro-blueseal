@@ -66,7 +66,7 @@
                                         <div class="form-group form-group-default">
                                             <label>In Saldo</label>
                                             <input id="isOnSale" name="isOnSale" type="checkbox" class="form-control form-inline"
-                                                   data-target="salePrice" <?php echo !$productEdit->productSku->isEmpty() && $productEdit->productSku->getFirst()->isOnSale == 1 ? 'checked="checked"' : '' ;?> value="1">
+                                                   data-target="salePrice" <?php echo !$productEdit->isOnSale() ? 'checked="checked"' : '' ;?> value="1">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
