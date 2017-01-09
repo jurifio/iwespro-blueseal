@@ -77,7 +77,7 @@ class CFriendAccept extends AAjaxController
                 $ol->update();
 
                 $accepted = ('ok' === $response) ? true : false;
-                $psk = $psR->findOne([$ol->productId, $ol->productVariantId, $ol->productSizeId, $ol->productSizeId]);
+                $psk = $psR->findOne([$ol->productId, $ol->productVariantId, $ol->productSizeId, $ol->shopId]);
                 $soR->registerEcommerceSale($ol->shopId, [$psk], null, $accepted);
             }
             $dba->commit();
