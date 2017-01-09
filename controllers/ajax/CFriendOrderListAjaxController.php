@@ -64,9 +64,11 @@ class CFriendOrderListAjaxController extends AAjaxController
   `ol`.`id` as `id`,
   `ol`.`orderId` as `orderId`,
   `o`.`orderDate` as `orderDate`,
-  concat(`ol`.`orderId`, '-', `ol`.`id`) as `orderCode`,
+  concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderCode`,
   concat(`p`.`id`, '-', `p`.`productVariantId`, '-', `ps`.`id`) as `code`,
   concat(`p`.`itemno`, ' # ', `pv`.`name`)   AS `cpf`,
+  #l.eventValue as logVal,
+  #l.time as logTime,
   `pb`.`name` as `brand`,
   `pse`.`name` as `season`,
   `ps`.`name` as `size`,
@@ -90,6 +92,7 @@ FROM
     JOIN `OrderLineStatus` AS `ols` on `ol`.`status` = `ols`.`code`)
     LEFT JOIN `OrderLineFriendPaymentStatus` as `olfps` on `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
     JOIN `Product` as `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`)
+    #JOIN `Log` as l ON l.stringId = concat(ol.id, '-', o.id) 
     JOIN `ProductVariant` as `pv` On `p`.`productVariantId` = `pv`.`id`
     JOIN `ProductSize` as `ps` on `ol`.`productSizeId` = `ps`.`id`)
     JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
