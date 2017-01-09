@@ -43,7 +43,19 @@ class CDescriptionTranslateListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductDescriptionList',['productId','productVariantId','marketplaceId','langId'],$_GET);
+        $sql = "SELECT
+  `pd`.`productId`        AS `productId`,
+  `pd`.`productVariantId` AS `productVariantId`,
+  1                       AS `marketplaceId`,
+  `pd`.`langId`           AS `langId`,
+  `l`.`lang`              AS `lang`,
+  `l`.`name`              AS `langName`,
+  `pd`.`description`      AS `description`
+FROM (`ProductDescriptionTranslation` `pd`
+  JOIN `Lang` `l`)
+WHERE ((`pd`.`langId` = `l`.`id`) AND (`pd`.`description` <> '') AND (`pd`.`description` <> '<br>') AND
+       (`pd`.`description` <> '<br><br>'))";
+        $datatable = new CDataTables($sql,['productId','productVariantId','marketplaceId','langId'],$_GET,true);
         $modifica = $this->urls['base']."traduzioni/descrizioni/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');

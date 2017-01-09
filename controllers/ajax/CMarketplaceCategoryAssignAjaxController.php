@@ -27,7 +27,8 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
     {
 	    $sample = $this->app->repoFactory->create('MarketplaceAccountCategory')->getEmptyEntity();
 
-        $datatable = new CDataTables('vBluesealMarketplaceCategory',$sample->getPrimaryKeys(),$_GET);
+        $sql = "select `m`.`id` AS `marketplaceId`,`ma`.`id` AS `marketplaceAccountId`,`mac`.`marketplaceCategoryId` AS `marketplaceCategoryId`,`m`.`name` AS `marketplace`,`ma`.`name` AS `marketplaceAccount`,`mac`.`name` AS `marketplaceAccountCategory`,`mac`.`path` AS `marketplaceAccountPath`,`mac`.`isRelevant` AS `isRelevant`,`pc`.`slug` AS `internalCategory`,`mac`.`name` AS `marketplaceCategory` from ((((`Marketplace` `m` join `MarketplaceAccount` `ma` on((`m`.`id` = `ma`.`marketplaceId`))) join `MarketplaceAccountCategory` `mac` on(((`ma`.`marketplaceId` = `mac`.`marketplaceId`) and (`ma`.`id` = `mac`.`marketplaceAccountId`)))) left join `ProductCategoryHasMarketplaceAccountCategory` `pchmac` on(((`mac`.`marketplaceAccountId` = `pchmac`.`marketplaceAccountId`) and (`mac`.`marketplaceId` = `pchmac`.`marketplaceAccountId`) and (`mac`.`marketplaceCategoryId` = `pchmac`.`marketplaceAccountCategoryId`)))) left join `ProductCategory` `pc` on((`pc`.`id` = `pchmac`.`productCategoryId`)))";
+        $datatable = new CDataTables($sql,$sample->getPrimaryKeys(),$_GET,true);
 		$datatable->addCondition('isRelevant',[1]);
 
         $marketplaceCategories = $sample->em()->findBySql($datatable->getQuery(),$datatable->getParams());

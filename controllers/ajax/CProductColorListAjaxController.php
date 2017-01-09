@@ -43,7 +43,8 @@ class CProductColorListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductColorList',['id', 'productVariantId'],$_GET);
+        $sql = "select concat(`p`.`id`,'-',`p`.`productVariantId`) AS `code`,`p`.`id` AS `id`,`p`.`productVariantId` AS `productVariantId`,`pv`.`description` AS `colorName`,`pcg`.`name` AS `colorGroupName`,`p`.`dummyPicture` AS `dummyPicture`,`dp`.`var` AS `var`,group_concat(distinct `pc`.`id` separator ',') AS `catId`,group_concat(distinct `pct`.`name` separator ',') AS `categories`,sum(`ps`.`stockQty`) AS `stock` from ((((((((`Product` `p` join `ProductVariant` `pv`) left join `ProductHasProductColorGroup` `phpcg` on(((`p`.`id` = `phpcg`.`productId`) and (`p`.`productVariantId` = `phpcg`.`productVariantId`)))) left join `ProductColorGroup` `pcg` on((`phpcg`.`productColorGroupId` = `pcg`.`id`))) join `ProductHasProductCategory` `phpc`) left join `ProductCategory` `pc` on((`phpc`.`productCategoryId` = `pc`.`id`))) join `ProductCategoryTranslation` `pct`) join `DirtyProduct` `dp`) join `ProductSku` `ps`) where ((`p`.`productVariantId` = `pv`.`id`) and (`p`.`id` = `phpc`.`productId`) and (`p`.`productVariantId` = `phpc`.`productVariantId`) and (`pc`.`id` = `pct`.`productCategoryId`) and (`p`.`id` = `dp`.`productId`) and (`p`.`productVariantId` = `dp`.`productVariantId`) and (`p`.`id` = `ps`.`productId`) and (`p`.`productVariantId` = `ps`.`productVariantId`) and (`pct`.`langId` = 1)) group by `p`.`id`,`p`.`productVariantId` having (`stock` > 0)";
+        $datatable = new CDataTables($sql,['id', 'productVariantId'],$_GET);
         
         $products = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());

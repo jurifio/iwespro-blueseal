@@ -53,7 +53,8 @@ class CDictionaryBrandEditAjaxController extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
-        $datatable = new CDataTables('vBluesealDictionaryBrandEdit',['shopId','term'],$_GET);
+        $sql = "select `DictionaryBrand`.`shopId` AS `shopId`,`DictionaryBrand`.`term` AS `term`,`DictionaryBrand`.`productBrandId` AS `foreign` from `DictionaryBrand`";
+        $datatable = new CDataTables($sql,['shopId','term'],$_GET,true);
         $datatable->addCondition('shopId',[$shopId]);
 
         if (!empty($this->authorizedShops)) {
