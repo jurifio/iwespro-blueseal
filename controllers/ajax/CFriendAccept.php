@@ -4,6 +4,7 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\intl\CLang;
+use bamboo\domain\repositories\CLogRepo;
 
 /**
  * Class CProductListAjaxController
@@ -30,6 +31,8 @@ class CFriendAccept extends AAjaxController
 
         $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
         $psR = \Monkey::app()->repoFactory->create('ProductSku');
+        /** @var CLogRepo $lR */
+        $lR = \Monkey::app()->repoFactory->create('Log');
 
         $is500 = true;
         try {
@@ -69,8 +72,16 @@ class CFriendAccept extends AAjaxController
                 if ('ko' === $response && 'ORD_FRND_OK') {
                     $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
                     if (!$allShops) {
-                        $is500 = false;
-                        throw new BambooException('La riga d\'ordine <strong>' . $o . '</strong> è stata precedentemente accettata e non può essere cancellata');
+                        $last = $lR->getLastEntry(
+                            [
+                                'stringId' => $o,
+                                'eventValue' => 'ORD_FRND_OK'
+                            ]
+                        );
+                        if ($last) {
+                            $is500 = false;
+                            throw new BambooException('La riga d\'ordine <strong>' . $o . '</strong> è stata precedentemente accettata e non può essere cancellata');
+                        }
                     }
                 }
                 $ol->status = $newStatus;
