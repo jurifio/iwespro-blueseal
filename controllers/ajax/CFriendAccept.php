@@ -27,6 +27,10 @@ class CFriendAccept extends AAjaxController
         $orderLines = $request->getRequestData('rows');
         $response = $request->getRequestData('response');
 
+
+        $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
+        $psR = \Monkey::app()->repoFactory->create('ProductSku');
+
         $is500 = true;
         try {
 
@@ -72,6 +76,9 @@ class CFriendAccept extends AAjaxController
                 $ol->status = $newStatus;
                 $ol->update();
 
+                $accepted = ('ok' === $response) ? true : false;
+                $psk = $psR->findOne([$ol->productId, $ol->productVariantId, $ol->productSizeId, $ol->productSizeId]);
+                $soR->registerEcommerceSale($ol->shopId, [$psk], null, $accepted);
             }
             $dba->commit();
 
