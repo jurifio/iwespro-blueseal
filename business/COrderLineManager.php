@@ -48,23 +48,22 @@ class COrderLineManager
         /** @var \bamboo\domain\repositories\COrderLineStatusRepo $repo */
         $repo = $this->app->repoFactory->create('OrderLineStatus');
         if (!($newStatus instanceof COrderLineStatus)) {
-            $newStatus = $repo->em()->findBy(['id' => $newStatus])->getFirst();
+            $newStatusE = $repo->findOneBy(['id' => $newStatus]);
         }
-        if (!($newStatus instanceof COrderLineStatus)) {
-            $newStatus = $repo->em()->findBy(['code' => $newStatus])->getFirst();
+        if (!($newStatusE instanceof COrderLineStatus)) {
+            $newStatusE = $repo->findOneBy(['code' => $newStatus]);
         }
-        if (!($newStatus instanceof COrderLineStatus)) {
+        if (!($newStatusE instanceof COrderLineStatus)) {
             throw new RedPandaException("Can't find the status you are speaking about");
         }
-        //FIXME la ricerca è rotta perchè i puntatori definiti nella query durano per piu di una query... verificare se è possibile definirli per una singola query
 
         /** @var  $this ->app->dbAdapter CMySQLAdapter */
-        $this->log("Change Line", "Changing Status to ".$newStatus->code);
-        $this->app->eventManager->triggerEvent("orderLineStatusChange", ['orderLine' => $this->orderLine, 'newStatus' => $newStatus]);
+        $this->log("Change Line", "Changing Status to ".$newStatusE->code);
+        $this->app->eventManager->triggerEvent("orderLineStatusChange", ['orderLine' => $this->orderLine, 'newStatus' => $newStatusE]);
 
         try {
             $oldStatus = $this->orderLine->status;
-            $this->orderLine->status = $newStatus->code;
+            $this->orderLine->status = $newStatusE->code;
             $this->orderLine->update();
             \Monkey::app()->eventManager->triggerEvent('changeOrderLineStatus',
                 [
