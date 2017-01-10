@@ -19,7 +19,9 @@ class CChangeOrderStatus extends AAjaxController
 {
     public function put()
     {
+        $dba = \Monkey::app()->dbAdapter;
         try {
+            $dba->beginTransaction();
             /** @var COrder $oR */
             $oR = \Monkey::app()->repoFactory->create('Order');
             $datas = $this->data;
@@ -27,8 +29,10 @@ class CChangeOrderStatus extends AAjaxController
             $oR->updateStatus($order, $datas['order_status']);
             $order->note = $datas['order_note'];
             $order->update();
+            $dba->commit();
             return true;
         } catch (BambooException $e) {
+            $dba->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessage();
         }
