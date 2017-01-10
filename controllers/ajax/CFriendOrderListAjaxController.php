@@ -92,8 +92,8 @@ class CFriendOrderListAjaxController extends AAjaxController
         }
 
         $orderLines = $this->app->repoFactory->create('OrderLine')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('OrderLine')->em()->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = $this->app->repoFactory->create('OrderLine')->em()->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $count = $this->app->repoFactory->create('OrderLine')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totlalCount = $this->app->repoFactory->create('OrderLine')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $orderStatuses = $this->app->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
@@ -132,10 +132,7 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['orderId'] = $v->orderId;
             $response['data'][$i]['code'] = $v->product->id . "-" . $v->product->productVariantId;
             $response['data'][$i]['size'] = $v->productSize->name;
-            $img = strpos($v->product->dummyPicture, 'amazonaws') ? $v->product->dummyPicture : $this->urls['dummy']."/".$v->product->dummyPicture;
-            if($v->product->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
-            else $imgs = "";
-            $response['data'][$i]['dummyPicture'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
+            $response['data'][$i]['dummyPicture'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $v->product->getDummyPictureUrl() . '" /></a>';
             $statusCode = $v->orderLineStatus->code;
 
             if (!$allShops &&  9 < $v->orderLineStatus->id) {
