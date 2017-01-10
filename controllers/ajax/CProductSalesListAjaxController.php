@@ -51,7 +51,8 @@ class CProductSalesListAjaxController extends AAjaxController
         $bluesealBase = $this->app->baseUrl(false) . "/blueseal/";
         $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
-        $datatable = new CDataTables('vBluesealProductSales', ['id', 'productVariantId'], $_GET);
+        $sql = "select `p`.`id` AS `id`,`p`.`productVariantId` AS `productVariantId`,`pc`.`slug` AS `slug`,concat(`p`.`id`,'-',`p`.`productVariantId`) AS `code`,group_concat(distinct `Shop`.`title` separator ',') AS `shops`,concat(`p`.`itemno`,' # ',`pv`.`name`) AS `CPF`,concat(`ps`.`name`,' ',`ps`.`year`) AS `season`,`pv`.`name` AS `variant`,`ProductStatus`.`name` AS `status`,`p`.`sortingPriorityId` AS `productPriority`,min(`Tag`.`sortingPriorityId`) AS `tagPriority`,`ProductBrand`.`name` AS `brand`,sum(`ProductSku`.`stockQty`) AS `totalQty`,max(`ProductSku`.`price`) AS `price`,max(`ProductSku`.`salePrice`) AS `salePrice`,cast(max(`pickyshop`.`ProductSku`.`isOnSale`) as char charset utf8) AS `isOnsale` from ((((((((((`Product` `p` join `ProductVariant` `pv`) left join (`ProductHasProductCategory` `phpc` left join `ProductCategory` `pc` on((`phpc`.`productCategoryId` = `pc`.`id`))) on(((`p`.`id` = `phpc`.`productId`) and (`p`.`productVariantId` = `phpc`.`productVariantId`)))) left join `ProductHasTag` on((`pickyshop`.`ProductHasTag`.`productVariantId` = `p`.`productVariantId`))) left join `Tag` on((`pickyshop`.`ProductHasTag`.`tagId` = `pickyshop`.`Tag`.`id`))) join `ProductSku`) join `ProductBrand`) join `ProductStatus`) join `Shop`) left join `ProductHasProductPhoto` on(((`p`.`id` = `pickyshop`.`ProductHasProductPhoto`.`productId`) and (`p`.`productVariantId` = `pickyshop`.`ProductHasProductPhoto`.`productVariantId`)))) join `ProductSeason` `ps` on((`p`.`productSeasonId` = `ps`.`id`))) where ((`pickyshop`.`ProductHasTag`.`productId` = `p`.`id`) and (`p`.`productVariantId` = `pv`.`id`) and (`pickyshop`.`ProductSku`.`shopId` = `pickyshop`.`Shop`.`id`) and (`pickyshop`.`ProductStatus`.`id` = `p`.`productStatusId`) and (`pickyshop`.`ProductStatus`.`code` in ('A','P','I')) and (`p`.`id` = `pickyshop`.`ProductSku`.`productId`) and (`pickyshop`.`ProductSku`.`price` > 0) and (`p`.`productVariantId` = `pickyshop`.`ProductSku`.`productVariantId`) and (`pickyshop`.`ProductBrand`.`id` = `p`.`productBrandId`)) group by `p`.`id`,`p`.`productVariantId` having (`totalQty` >= 0)";
+        $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
@@ -111,12 +112,15 @@ class CProductSalesListAjaxController extends AAjaxController
 
             //$response['aaData'][$i]["skus"] = '<table class="nested-table"><thead><tr>'.$th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
 
-            $res = $this->app->dbAdapter->query("SELECT max(ps.price) as price,  max(ps.saleprice) as sale, isOnSale, ps.value as val, /*group_concat(distinct s.title SEPARATOR ',')*/ s.name as shop
-                                          FROM ProductSku ps, Shop s
-                                          WHERE ps.shopId = s.id AND
-                                              ps.productId = ? AND
-                                              ps.productVariantId = ?
-                                          GROUP BY ps.productId, ps.productVariantId, s.title", [$val->id, $val->productVariantId])->fetchAll();
+            $res = $this->app->dbAdapter->query("SELECT max(ps.price) as price,  max(ps.saleprice) as sale, p.isOnSale, ps.value as val, /*group_concat(distinct s.title SEPARATOR ',')*/ s.name as shop
+                                          FROM Product p, ProductSku ps, Shop s
+                                          WHERE 
+                                          p.id = ps.productId and 
+                                          p.productVariantId = ps.productVariantId and 
+                                          ps.shopId = s.id AND
+                                              p.id= ? AND
+                                              p.productVariantId = ?
+                                          GROUP BY p.id, p.productVariantId, s.id", [$val->id, $val->productVariantId])->fetchAll();
 
 
             $response['aaData'][$i]["price"] = '<span class="small">';

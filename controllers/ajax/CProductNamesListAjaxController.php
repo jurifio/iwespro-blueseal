@@ -22,7 +22,8 @@ class CProductNamesListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $datatable = new CDataTables('vBluesealProductNameNewList', ['id'], $_GET);
+        $sql = "select `pn`.`id` AS `id`,`pnt`.`productId` AS `productId`,`pnt`.`productVariantId` AS `productVariantId`,`pn`.`name` AS `name`,`pn`.`langId` AS `langId`,`pc`.`id` AS `category`,0 AS `count` from (((((`ProductName` `pn` join `ProductNameTranslation` `pnt` on(((`pn`.`name` = `pnt`.`name`) and (`pn`.`langId` = `pnt`.`langId`)))) join `Product` `p` on(((`pnt`.`productId` = `p`.`id`) and (`pnt`.`productVariantId` = `p`.`productVariantId`)))) join `ProductSku` `ps` on(((`ps`.`productId` = `p`.`id`) and (`ps`.`productVariantId` = `p`.`productVariantId`)))) join (`ProductHasProductCategory` `phpc` join `ProductCategory` `pc` on((`phpc`.`productCategoryId` = `pc`.`id`))) on(((`p`.`id` = `phpc`.`productId`) and (`p`.`productVariantId` = `phpc`.`productVariantId`)))) join `ProductStatus` on((`ProductStatus`.`id` = `p`.`productStatusId`))) where ((`pn`.`langId` = 1) and (`pnt`.`langId` = 1) and (`ps`.`stockQty` > 0) and (not((`p`.`dummyPicture` like '%bs-dummy%'))) and (`p`.`productStatusId` in (5,6,11)))";
+        $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $mark = \Monkey::app()->router->request()->getRequestData('marks');
         if ('con' === $mark) {

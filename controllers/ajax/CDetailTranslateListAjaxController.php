@@ -25,7 +25,19 @@ class CDetailTranslateListAjaxController extends AAjaxController
     public function get()
     {
         $productDetail = $this->app->repoFactory->create('ProductDetail')->getEmptyEntity();
-        $datatable = new CDataTables('vProductDetailTranslationView', $productDetail->getPrimaryKeys(), $this->app->router->request()->getRequestData());
+        $sql = "SELECT
+                  `view`.`id`                                     AS `id`,
+                  `view`.`slug`                                   AS `slug`,
+                  `view`.`translatedLangId`                       AS `translatedLangId`,
+                  `view`.`translatedName`                         AS `translatedName`,
+                  if((sum(`ProductSku`.`stockQty`) > 0), 1, 0)    AS `hasQuantity`,
+                  count(DISTINCT `ProductSku`.`productVariantId`) AS `timesDetailIsUsedInProduct`
+                FROM ((`vBluesealProductDetailTranslationStatus` `view`
+                  JOIN `ProductSheetActual` ON ((`ProductSheetActual`.`productDetailId` = `view`.`id`))) JOIN `ProductSku`
+                    ON (((`ProductSheetActual`.`productId` = `ProductSku`.`productId`) AND
+                         (`ProductSheetActual`.`productVariantId` = `ProductSku`.`productVariantId`))))
+                GROUP BY `view`.`id`";
+        $datatable = new CDataTables($sql, $productDetail->getPrimaryKeys(), $this->app->router->request()->getRequestData(),true);
         $modifica = $this->app->baseUrl(false) . "/blueseal/traduzioni/dettagli/modifica";
 
 	    if($this->app->router->request()->getRequestData('useTargetLang')) {

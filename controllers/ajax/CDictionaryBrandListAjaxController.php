@@ -51,7 +51,16 @@ class CDictionaryBrandListAjaxController extends AAjaxController
     public function get()
     {
         $editShopLink = $this->urls['base']."importatori/dizionari/brand/modifica";
-        $datatable = new CDataTables('vBluesealDictionaryBrandList',['id'],$_GET);
+        $sql = "SELECT
+  `d1`.`shopId`                                                               AS `id`,
+  `d1`.`shopId`                                                               AS `shopId`,
+  count(0)                                                                    AS `count`,
+  (SELECT count(0) AS `count`
+   FROM `DictionaryBrand` `d2`
+   WHERE ((`d2`.`shopId` = `d1`.`shopId`) AND isnull(`d2`.`productBrandId`))) AS `mancanti`
+FROM `DictionaryBrand` `d1`
+GROUP BY `d1`.`shopId`";
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);

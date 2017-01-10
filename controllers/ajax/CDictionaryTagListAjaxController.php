@@ -51,7 +51,16 @@ class CDictionaryTagListAjaxController extends AAjaxController
     public function get()
     {
         $editShopLink = $this->urls['base']."importatori/dizionari/tag/modifica";
-        $datatable = new CDataTables('vBluesealDictionaryTagList',['id'],$_GET);
+        $sql = "SELECT
+  `d1`.`shopId`                                                      AS `id`,
+  `d1`.`shopId`                                                      AS `shopId`,
+  count(0)                                                           AS `count`,
+  (SELECT count(0) AS `count`
+   FROM `DictionaryTag` `d2`
+   WHERE ((`d2`.`shopId` = `d1`.`shopId`) AND isnull(`d2`.`tagId`))) AS `mancanti`
+FROM `DictionaryTag` `d1`
+GROUP BY `d1`.`shopId`";
+        $datatable = new CDataTables($sql,['id'],$_GET);
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);

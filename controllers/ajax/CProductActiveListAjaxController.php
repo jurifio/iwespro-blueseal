@@ -50,8 +50,8 @@ class CProductActiveListAjaxController extends AAjaxController
 
         $bluesealBase = $this->app->baseUrl(false) . "/blueseal/";
         $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
-
-        $datatable = new CDataTables('vBluesealProductActive', ['id', 'productVariantId'], $_GET);
+        $sql = "select `Product`.`id` AS `id`,`Product`.`productVariantId` AS `productVariantId`,concat(`Product`.`id`,'-',`Product`.`productVariantId`) AS `code`,group_concat(distinct `Shop`.`title` separator ',') AS `shops`,`Tag`.`id` AS `tag`,`ProductStatus`.`name` AS `status`,`Product`.`sortingPriorityId` AS `productPriority`,min(`Tag`.`sortingPriorityId`) AS `tagPriority`,`ProductBrand`.`name` AS `brand`,sum(`ProductSku`.`stockQty`) AS `totalQty`,`Product`.`creationDate` AS `creation` from (((((((`Product` join `Tag`) join `ProductSku`) join `ProductHasTag`) join `ProductBrand`) join `ProductStatus`) join `Shop`) join `ProductHasProductPhoto`) where ((`ProductHasTag`.`productId` = `Product`.`id`) and (`ProductSku`.`shopId` = `Shop`.`id`) and (`ProductHasTag`.`productVariantId` = `Product`.`productVariantId`) and (`ProductStatus`.`id` = `Product`.`productStatusId`) and (`ProductStatus`.`code` in ('A','P','N')) and (`ProductHasTag`.`tagId` = `Tag`.`id`) and (`Product`.`id` = `ProductSku`.`productId`) and (`ProductSku`.`price` > 0) and (`Product`.`id` = `ProductHasProductPhoto`.`productId`) and (`Product`.`productVariantId` = `ProductHasProductPhoto`.`productVariantId`) and (`Product`.`productVariantId` = `ProductSku`.`productVariantId`) and (`ProductBrand`.`id` = `Product`.`productBrandId`)) group by `Product`.`id`,`Product`.`productVariantId`,`ProductSku`.`price` having (`totalQty` >= 0) order by `Product`.`creationDate` desc";
+        $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
         }

@@ -51,14 +51,14 @@ class CProductListAjaxController extends AAjaxController
                                                             FROM `ProductHasProductPhoto`), 'sì', 'no')                 AS `hasPhotos`,
                   `pc`.`id`                                                                                             AS `categoryId`,
                   `pcg`.`name`                                                                                          AS `colorGroup`,
-                  `psk`.`isOnSale`                                                                                      AS `isOnSale`,
-                  (((if((`psk`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
+                  `p`.`isOnSale`                                                                                      AS `isOnSale`,
+                  (((if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
                       (`pse`.`isActive` = 0), `s`.`pastSeasonMultiplier`,
-                      if((`psk`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
-                    (if((`psk`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100                       AS `mup`,
+                      if((`p`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
+                    (if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100                       AS `mup`,
                   `p`.`qty`                                                                                             AS `hasQty`,
                   `t`.`name`                                                                                            AS `tags`,
-                  (select min(if(ProductSku.stockQty > 0, if(ProductSku.isOnSale = 0, ProductSku.price, ProductSku.salePrice), null)) from ProductSku where ProductSku.productId = p.id and ProductSku.productVariantId = p.productVariantId) as activePrice,
+                  (select min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), null)) from ProductSku where ProductSku.productId = p.id and ProductSku.productVariantId = p.productVariantId) as activePrice,
                   (SELECT group_concat(concat(m.name, ' - ', ma.name))
                    FROM Marketplace m, MarketplaceAccount ma, MarketplaceAccountHasProduct mahp
                    WHERE m.id = ma.marketplaceId AND
@@ -169,17 +169,16 @@ class CProductListAjaxController extends AAjaxController
             $row['productPriority'] = $val->sortingPriorityId;
 
             $qty = 0;
-            $isOnSale = [];
             $shopz = [];
             $mup = [];
+            $isOnSale = $val->isOnSale();
             foreach ($val->productSku as $sku) {
                 $qty += $sku->stockQty;
-                $isOnSale = $sku->isOnSale;
                 $iShop = $sku->shop->name;
                 if (!in_array($iShop, $shopz)) {
                     $shopz[] = $iShop;
 
-                    $price = ($isOnSale) ? $sku->salePrice : $sku->price;
+                    $price = $isOnSale ? $sku->salePrice : $sku->price;
 
                     if ((float)$price) {
                         $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
@@ -205,7 +204,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['colorNameManufacturer'] = $val->productVariant->description;
 
-            $row['isOnSale'] = $isOnSale;
+            $row['isOnSale'] = $val->isOnSale();
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
 
             $response ['data'][] = $row;

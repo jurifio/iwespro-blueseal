@@ -22,7 +22,8 @@ class CProductSlimListAjaxController extends AAjaxController
     {
         $shopsIds = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
-        $datatable = new CDataTables('vBluesealProductSlimList', ['id', 'productVariantId'], $_GET);
+        $sql = "select `p`.`id` AS `id`,`p`.`productVariantId` AS `productVariantId`,concat(`p`.`id`,'-',`p`.`productVariantId`) AS `code`,`pb`.`name` AS `brand`,concat(`p`.`itemno`,' # ',`pv`.`name`) AS `cpf`,`shp`.`extId` AS `externalId`,concat(`ps`.`name`,' ',`ps`.`year`) AS `season`,`s`.`id` AS `shopId`,`s`.`title` AS `shop`,if((`p`.`qty` > 0),'disponibile','mancante') AS `stock`,`p`.`creationDate` AS `creationDate`,`pss`.`name` AS `status`,if((count(`psa`.`productDetailId`) > 0),'si','no') AS `details` from (((((((`Product` `p` join `ProductVariant` `pv`) join `ProductBrand` `pb`) join `ProductStatus` `pss`) left join `ProductSeason` `ps` on((`p`.`productSeasonId` = `ps`.`id`))) left join `ShopHasProduct` `shp` on((`p`.`productVariantId` = `shp`.`productVariantId`))) join `Shop` `s`) left join `ProductSheetActual` `psa` on(((`p`.`id` = `psa`.`productId`) and (`p`.`productVariantId` = `psa`.`productVariantId`)))) where ((`p`.`productVariantId` = `pv`.`id`) and (`p`.`productBrandId` = `pb`.`id`) and (`p`.`id` = `shp`.`productId`) and (`s`.`id` = `shp`.`shopId`) and (`pss`.`id` = `p`.`productStatusId`) and (`pss`.`id` not in (7,8))) group by `p`.`id`,`p`.`productVariantId`,`s`.`id` order by `p`.`creationDate` desc";
+        $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         $datatable->addCondition('shopId', $shopsIds);
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());

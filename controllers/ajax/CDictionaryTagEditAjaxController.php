@@ -53,7 +53,8 @@ class CDictionaryTagEditAjaxController extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
-        $datatable = new CDataTables('vBluesealDictionaryTagEdit',['shopId','term'],$_GET);
+        $sql = "select `DictionaryTag`.`shopId` AS `shopId`,`DictionaryTag`.`term` AS `term`,`DictionaryTag`.`tagId` AS `foreign` from `DictionaryTag`";
+        $datatable = new CDataTables($sql,['shopId','term'],$_GET,true);
         $datatable->addCondition('shopId',[$shopId]);
 
         if (!empty($this->authorizedShops)) {

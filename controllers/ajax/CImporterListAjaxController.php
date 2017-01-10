@@ -50,7 +50,22 @@ class CImporterListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealDirtyProductList',['id'],$_GET);
+        $sql = "SELECT
+  `s`.`id`          AS `id`,
+  `s`.`name`        AS `name`,
+  `s`.`title`       AS `title`,
+  `s`.`owner`       AS `owner`,
+  `j`.`defaultArgs` AS `args`,
+  `j`.`isActive`    AS `active`,
+  `j`.`isRunning`   AS `running`,
+  `j`.`id`          AS `jobId`,
+  `j`.`name`        AS `jobName`,
+  `j`.`command`     AS `jobCommand`
+FROM (`Shop` `s`
+  JOIN `Job` `j`)
+WHERE (`s`.`id` IN (SELECT DISTINCT `DirtyProduct`.`shopId`
+                    FROM `DirtyProduct`) AND (`s`.`id` = `j`.`defaultArgs`))";
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);

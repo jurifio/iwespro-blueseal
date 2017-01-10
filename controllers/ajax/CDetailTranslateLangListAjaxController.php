@@ -44,7 +44,19 @@ class CDetailTranslateLangListAjaxController extends AAjaxController
     public function get()
     {
         $langId = $this->app->router->request()->getRequestData('lang');
-        $datatable = new CDataTables('vBluesealProductDetailTranslation',['id'],$_GET);
+        $sql = "SELECT
+  `view`.`id`                                     AS `id`,
+  `view`.`slug`                                   AS `slug`,
+  `view`.`translatedLangId`                       AS `translatedLangId`,
+  `view`.`translatedName`                         AS `translatedName`,
+  if((sum(`ProductSku`.`stockQty`) > 0), 1, 0)    AS `hasQuantity`,
+  count(DISTINCT `ProductSku`.`productVariantId`) AS `timesDetailIsUsedInProduct`
+FROM ((`vBluesealProductDetailTranslationStatus` `view`
+  JOIN `ProductSheetActual` ON ((`ProductSheetActual`.`productDetailId` = `view`.`id`))) JOIN `ProductSku`
+    ON (((`ProductSheetActual`.`productId` = `ProductSku`.`productId`) AND
+         (`ProductSheetActual`.`productVariantId` = `ProductSku`.`productVariantId`))))
+GROUP BY `view`.`id`";
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
         $datatable->addCondition('langId', [$langId]);
         $datatable->addCondition('name', NULL);
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');

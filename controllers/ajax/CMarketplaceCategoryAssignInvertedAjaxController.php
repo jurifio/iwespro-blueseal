@@ -26,7 +26,8 @@ class CMarketplaceCategoryAssignInvertedAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('vBluesealMarketplaceCategoryInverted',['marketplaceId','marketplaceAccountId','productCategoryId'],$_GET);
+        $sql = "select `m`.`id` AS `marketplaceId`,`ma`.`id` AS `marketplaceAccountId`,`mac`.`marketplaceCategoryId` AS `marketplaceCategoryId`,`m`.`name` AS `marketplace`,`ma`.`name` AS `marketplaceAccount`,`mac`.`name` AS `marketplaceAccountCategory`,`mac`.`path` AS `marketplaceAccountPath`,`pc`.`slug` AS `internalCategory`,`pc`.`id` AS `productCategoryId`,`pc`.`slug` AS `productCategory` from ((((`ProductCategory` `pc` left join `MarketplaceAccount` `ma` on((1 = 1))) left join `Marketplace` `m` on((`m`.`id` = `ma`.`marketplaceId`))) left join `ProductCategoryHasMarketplaceAccountCategory` `pchmac` on(((`pc`.`id` = `pchmac`.`productCategoryId`) and (`ma`.`id` = `pchmac`.`marketplaceAccountId`) and (`ma`.`marketplaceId` = `pchmac`.`marketplaceId`)))) left join `MarketplaceAccountCategory` `mac` on(((`mac`.`marketplaceAccountId` = `pchmac`.`marketplaceAccountId`) and (`mac`.`marketplaceId` = `pchmac`.`marketplaceId`) and (`mac`.`marketplaceCategoryId` = `pchmac`.`marketplaceAccountCategoryId`)))) where (`pc`.`id` <> 1) group by `pc`.`id`,`ma`.`id`,`m`.`id`";
+        $datatable = new CDataTables($sql,['marketplaceId','marketplaceAccountId','productCategoryId'],$_GET,true);
 
         $orribilità = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
         $count = $this->app->dbAdapter->query($datatable->getQuery(true,true),$datatable->getParams())->fetch();
