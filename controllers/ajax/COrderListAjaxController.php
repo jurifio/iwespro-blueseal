@@ -159,6 +159,7 @@ class COrderListAjaxController extends AAjaxController
         $solR = \Monkey::app()->repoFactory->create('StorehouseOperationLine');
         $ushoR = \Monkey::app()->repoFactory->create('UserSessionHasOrder');
         $psdR = \Monkey::app()->repoFactory->create('ProductStatisticsDetailHasOrderLine');
+        $cvhoR = \Monkey::app()->repoFactory->create('CampaignVisitHasOrder');
 
         $dba = \Monkey::app()->dbAdapter;
 
@@ -265,6 +266,13 @@ class COrderListAjaxController extends AAjaxController
                     }
                     $ol->delete();
                 }
+
+                $cvho = $cvhoR->findBy(['orderId' => $order->id]);
+
+                foreach($cvho as $cvhoSingle) {
+                    $cvhoSingle->delete();
+                }
+
 
                 $logOrderz = $logR->findBy(['stringId' => $orderId, 'entityName' => 'Order']);
                 foreach ($logOrderz as $logOrd) {

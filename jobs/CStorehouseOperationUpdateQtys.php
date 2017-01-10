@@ -14,16 +14,20 @@ use bamboo\core\jobs\ACronJob;
  *
  * @since ${VERSION}
  */
-class CStatisticsGenerateFilesForQlik extends ACronJob
+class CStorehouseOperarationUpdateQtys extends ACronJob
 {
     /**
      * @param null $args
      */
     public function run($args = null)
     {
+        $dba = \Monkey::app()->dbAdapter;
+        $dba->beginTransaction();
         try {
             \Monkey::app()->repoFactory->create('StorehouseOperation')->updateStocksOnOperationTime();
+            $dba->commit();
         }catch(BambooException $e) {
+            $dba->rollBack();
             $this->error('Aggiornamento disponibilità dai movimenti', $e->getMessage());
         }
     }
