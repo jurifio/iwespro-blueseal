@@ -53,7 +53,7 @@ class COrderManageController extends ARestrictedAccessRootController
                 //controllare che code comincia per ORD
                 if($this->request->getRequestData('orderId')) {
                     $order = $this->app->repoFactory->create("Order")->findOneBy(['id' => $this->request->getRequestData('orderId')]);
-                    $order->status = $code;
+                    \Monkey::app()->repoFactory->create('Order')->updateStatus($order, $code);
 	                $order->update();
 
                     \Monkey::app()->eventManager->triggerEvent('changeOrderNonPrevista',
