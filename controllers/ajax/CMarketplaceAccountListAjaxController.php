@@ -33,11 +33,17 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
                 FROM Marketplace m
                   JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
                   LEFT JOIN MarketplaceAccountHasProduct mahp ON ma.id = mahp.marketplaceAccountId AND ma.marketplaceId = mahp.marketplaceId and mahp.isDeleted = 0 and mahp.isToWork = 0 and mahp.hasError = 0
-                  LEFT JOIN Campaign c ON c.code = concat('MarketplaceAccount',ma.id,'-',ma.marketplaceId) GROUP BY ma.id, ma.marketplaceId";
+                  LEFT JOIN Campaign c ON c.code = concat('MarketplaceAccount',ma.id,'-',ma.marketplaceId)
+                  LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
+                WHERE cv.timestamp BETWEEN ifnull(?, cv.timestamp) and ifnull(?, cv.timestamp)
+                GROUP BY ma.id, ma.marketplaceId";
 
         $datatable = new CDataTables($sql, ['marketplaceId', 'marketplaceAccountId', 'campaignId'], $_GET, true);
-
-        $marketplaceAccounts = $this->app->dbAdapter->query($datatable->getQuery(false, true), $datatable->getParams())->fetchAll();
+        $timeFrom = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('startDate'));
+        $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
+        $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
+        $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
+        $marketplaceAccounts = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge([$timeFrom,$timeTo],$datatable->getParams()))->fetchAll();
         $count = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
