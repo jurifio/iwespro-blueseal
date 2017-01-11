@@ -32,7 +32,7 @@ class CInvoiceNewRepo extends ARepo {
         $createionDate)
     {
         $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
-        $inumR = \Monkey::app()->repoFactory->create('InvoiceNew');
+        $inumR = \Monkey::app()->repoFactory->create('InvoiceSectional');
     }
 
     public function recordFriendInvoice($number, $date, $paymentDate, $shopId, array $orderLine) {
