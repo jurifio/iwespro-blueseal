@@ -52,7 +52,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       group_concat(distinct ol.orderId SEPARATOR ',') AS ordersIds,
                       phpc.productCategoryId                        AS categories,
                       ifnull(c.code, '')                            AS campaignCode,
-                      if(p.isOnSale = 0, min(shp.price),min(shp.salePrice)) as acrivePrice
+                      if(p.isOnSale = 0, min(shp.price),min(shp.salePrice)) as activePrice
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
                       JOIN `ShopHasProduct` `shp`
@@ -192,6 +192,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                 $order = $this->app->repoFactory->create('Order')->findOne([$ordersId]);
                 $row['conversionValue'] += $order->netTotal;
             }
+            $row['activePrice'] = $values['activePrice'];
 
             $response['data'][] = $row;
         }
