@@ -204,7 +204,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['colorNameManufacturer'] = $val->productVariant->description;
 
-            $row['isOnSale'] = $val->isOnSale();
+            $row['isOnSale'] = $val->isOnSale() ? 1:0;
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
 
             $response ['data'][] = $row;
