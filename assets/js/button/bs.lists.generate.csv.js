@@ -53,7 +53,7 @@ $(document).on('bs.lists.generate.csv', function () {
                     title.push($(v.header()).attr('aria-label').split(':')[0].trim());
                 }
             });
-            str += title.join(',') + '%0A';
+            str += title.join(';') + '%0A';
             var line;
             for (var i in res.data) {
                 line = [];
