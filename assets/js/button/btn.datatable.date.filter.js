@@ -44,7 +44,12 @@ $(document).on('bs.dateinput.load', function (a, b) {
             table.DataTable().ajax.url(controller);
             table.data('controller', controller);
             table.DataTable().search("").draw();
-            $('.breadcrumb').append('<li><p>'+picker.startDate.format('YYYY-MM-DD')+' - '+picker.endDate.format('YYYY-MM-DD')+'</p></li>')
+            var selectedDates = $('.breadcrumb .selected-dates');
+            if(selectedDates.length == 0) {
+                $('.breadcrumb').append('<li><p class="selected-dates" style="display: inline-block"></p></li>')
+            }
+            $('.selected-dates').html(picker.startDate.format('YYYY-MM-DD')+' - '+picker.endDate.format('YYYY-MM-DD'));
+
         });
 
         that.on('cancel.daterangepicker', function (ev, picker) {
