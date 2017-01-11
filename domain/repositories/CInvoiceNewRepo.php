@@ -18,8 +18,21 @@ use bamboo\core\db\pandaorm\repositories\ARepo;
  */
 class CInvoiceNewRepo extends ARepo {
 
-    protected function createInvoice($invoiceType, $userId) {
-
+    protected function createInvoice(
+        $invoiceType,
+        $userId,
+        $isShop,
+        $userOrShopId,
+        $number,
+        $date,
+        $invoiceTypeId,
+        $paydAmount,
+        $paymentExpectedDate,
+        $note,
+        $createionDate)
+    {
+        $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
+        $inumR = \Monkey::app()->repoFactory->create('InvoiceNew');
     }
 
     public function recordFriendInvoice($number, $date, $paymentDate, $shopId, array $orderLine) {
