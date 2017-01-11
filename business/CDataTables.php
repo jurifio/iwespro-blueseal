@@ -87,7 +87,7 @@ class CDataTables
      * @param array $dtData
      * @param bool $isSubQuery
      */
-    public function __construct($table, array $keys, array $dtData,$isSubQuery = false)
+    public function __construct($table, array $keys, array $dtData,$isSubQuery = true)
     {
         $this->setUpDtData($dtData);
         $this->keys = $keys;

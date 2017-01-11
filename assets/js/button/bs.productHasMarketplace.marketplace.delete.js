@@ -52,9 +52,8 @@ $(document).on('bs.productHasMarketplace.marketplace.delete', function (e, eleme
             }).done(function (response) {
                 body.html('Eliminati '+response+' prodotti');
                 okButton.html('Ok');
-                okButton.show(false);
-                okButton.on('click',function () {
-                    modal.hide();
+                okButton.off().on('click',function () {
+                    bsModal.hide();
                 });
             });
         });

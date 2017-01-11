@@ -169,9 +169,9 @@ class CFriendOrderListAjaxController extends AAjaxController
                 $datePay = implode('/', array_reverse(explode('-',explode(' ', $v->orderLineFriendPaymentDate)[0])));
             }
             $response['data'][$i]['paymentDate'] = $datePay;
-            $response['data'][$i]['fullPrice'] = $v->fullPrice;
-            $response['data'][$i]['activePrice'] = $v->activePrice;
-            $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
+            $response['data'][$i]['fullPrice'] = number_format($v->fullPrice, 2, ',', '');
+            $response['data'][$i]['activePrice'] = number_format($v->activePrice, 2, ',', '');
+            $response['data'][$i]['friendRevenue'] = number_format($v->friendRevenue, 2, ',', '');
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::addVatToNetPrice($v->friendRevenue, $vat);
 
             $i++;

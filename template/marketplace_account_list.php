@@ -50,14 +50,18 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Visite</th>
-                                <th data-slug="orders"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Conversioni</th>
                                 <th data-slug="cost"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Costo</th>
+                                <th data-slug="orders"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Conversioni</th>
+                                <th data-slug="orderTotal"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Totale Conversioni</th>
                             </tr>
                             </thead>
                             <tbody>
