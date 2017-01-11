@@ -54,6 +54,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Conversioni</th>
+                                <th data-slug="cost"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Costo</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -69,7 +73,11 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-
+    <bs-toolbar-group data-group-label="Filtra">
+        <bs-toolbar-button
+            data-remote="btn.datatable.date.filter"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
