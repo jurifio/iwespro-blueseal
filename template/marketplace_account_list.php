@@ -54,6 +54,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Conversioni</th>
+                                <th data-slug="cost"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Costo</th>
                             </tr>
                             </thead>
                             <tbody>

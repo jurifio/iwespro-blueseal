@@ -20,32 +20,47 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "SELECT  m.id as marketplaceId,
-                        ma.id as marketplaceAccountId,
-                        m.name as marketplace,
-                        ma.name as marketplaceAccount,
-                        c.id as campaignId,
-                        c.name as campaign,
-                        m.type as marketplaceType,
-                        count(distinct mahp.productVariantId) AS productCount,
-                        (SELECT count(DISTINCT cv.id) FROM CampaignVisit cv WHERE cv.campaignId = c.id) AS visits,
-                        (SELECT count(distinct cvho.orderId) FROM CampaignVisitHasOrder cvho WHERE cvho.campaignId = c.id) as orders
+        $sql = "SELECT
+                  m.id                                                                                                      AS marketplaceId,
+                  ma.id                                                                                                     AS marketplaceAccountId,
+                  m.name                                                                                                    AS marketplace,
+                  ma.name                                                                                                   AS marketplaceAccount,
+                  c.id                                                                                                      AS campaignId,
+                  c.name                                                                                                    AS campaign,
+                  m.type                                                                                                    AS marketplaceType,
+                  count(DISTINCT mahp.productVariantId)                                                                              AS productCount,
+                  (SELECT count(*)
+                   FROM CampaignVisit cv
+                   WHERE cv.campaignId = c.id AND cv.timestamp BETWEEN ifnull(?, cv.timestamp) AND ifnull(?, cv.timestamp)) AS visits,
+                  round((SELECT sum(mahp1.fee)
+                   FROM CampaignVisit cv
+                     JOIN CampaignVisitHasProduct cvhp ON cv.id = cvhp.campaignVisitId AND cv.campaignId = cvhp.campaignId
+                     JOIN MarketplaceAccountHasProduct mahp1
+                       ON mahp1.productId = cvhp.productId AND cvhp.productVariantId = mahp1.productVariantId
+                   WHERE cvhp.campaignId = c.id AND mahp1.marketplaceAccountId = mahp.marketplaceAccountId AND
+                         cv.timestamp BETWEEN ifnull(?, cv.timestamp) AND ifnull(?, cv.timestamp)))                          AS cost,
+                  (SELECT count(DISTINCT cvho.orderId)
+                   FROM CampaignVisitHasOrder cvho
+                     JOIN `Order` o ON o.id = cvho.orderId
+                   WHERE cvho.campaignId = c.id AND o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))  AS orders
                 FROM Marketplace m
                   JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
-                  LEFT JOIN MarketplaceAccountHasProduct mahp ON ma.id = mahp.marketplaceAccountId AND ma.marketplaceId = mahp.marketplaceId and mahp.isDeleted = 0 and mahp.isToWork = 0 and mahp.hasError = 0
-                  LEFT JOIN Campaign c ON c.code = concat('MarketplaceAccount',ma.id,'-',ma.marketplaceId)
-                  LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
-                WHERE cv.timestamp BETWEEN ifnull(?, cv.timestamp) and ifnull(?, cv.timestamp)
+                  LEFT JOIN MarketplaceAccountHasProduct mahp ON ma.id = mahp.marketplaceAccountId AND
+                                                                 ma.marketplaceId = mahp.marketplaceId AND mahp.isDeleted = 0 AND
+                                                                 mahp.isToWork = 0 AND mahp.hasError = 0
+                  LEFT JOIN Campaign c ON c.code = concat('MarketplaceAccount', ma.id, '-', ma.marketplaceId)
                 GROUP BY ma.id, ma.marketplaceId";
 
         $datatable = new CDataTables($sql, ['marketplaceId', 'marketplaceAccountId', 'campaignId'], $_GET, true);
+
         $timeFrom = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('startDate'));
         $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
         $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
-        $marketplaceAccounts = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge([$timeFrom,$timeTo],$datatable->getParams()))->fetchAll();
-        $count = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $params = array_merge([$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo],$datatable->getParams());
+        $marketplaceAccounts = $this->app->dbAdapter->query($datatable->getQuery(false, true), $params)->fetchAll();
+        $count = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery(true), $params);
+        $totalCount = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery('full'), $params);
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -64,6 +79,7 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
             $row['productCount'] = $val['productCount'];
             $row['visits'] = $val['visits'];
             $row['orders'] = $val['orders'];
+            $row['cost'] = $val['cost'];
             $response['data'][] = $row;
         }
 
