@@ -38,6 +38,13 @@ class CDispatchPreorderToFriend extends ACronJob
             try {
                 $lines = $orderLineRepo->em()->findBySql($query, [$shop->id]);
                 $this->report( 'Working Shop ' . $shop->name . ' Start', 'Found ' . count($lines) . ' to send');
+                foreach ($lines as $line) {
+                    if($line->friendRevenue == 0 || is_null($line->friendRevenue)) {
+                        $line->friendRevenue = $this->app->repoFactory->create('ProductSku')->calculateFriendRevenue($line->productSku);
+                        $line->update();
+                        $this->app->eventManager->triggerEvent('orderLine.friendRevenue.update',['orderLineId'=>$line->printId()]);
+                    }
+                }
                 if ($shop->preOrderExport == 1 && count($lines) >0 ) {
                     $orderExport->exportPrefileForFriend($shop, $lines);
                 }
