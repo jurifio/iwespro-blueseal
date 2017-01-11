@@ -1608,8 +1608,7 @@
             "methods": [
                 "GET"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/prodotti/campagne(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
@@ -1619,8 +1618,7 @@
             "methods": [
                 "GET"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/marketplace/accounts(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountListController"
@@ -1630,36 +1628,12 @@
             "methods": [
                 "GET"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/marketing/campaigns(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
             },
             "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/statistiche/esporta(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExport"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },{
-            "pattern": "/blueseal/statistiche/file/:fileName(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExportFile"
-            },
-            "filters": {
-                "fileName": "[a-zA-Z0-9\\.]+"
-            },
             "translations": {},
             "methods": [
                 "GET"
@@ -1674,8 +1648,7 @@
             "methods": [
                 "GET"
             ]
-        },
-        {
+        },{
             "name": "Gestione Ordini Con i friend",
             "pattern": "/blueseal/friend/ordini(/)?",
             "behaviour": {
@@ -1686,8 +1659,7 @@
             "methods": [
                 "GET"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/fixGruppiTaglia(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFixProductGroupSizeController"
@@ -1697,8 +1669,7 @@
             "methods": [
                 "GET"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/calendario(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CGoogleCalendarController"

@@ -2,10 +2,7 @@
 
 namespace bamboo\blueseal\controllers;
 
-use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use bamboo\ecommerce\views\VBase;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
+use bamboo\blueseal\jobs\CStatisticsGenerateFilesForQlik;
 
 /**
  * Class CProductListController
@@ -26,6 +23,7 @@ class CStatisticsExportFile extends ARestrictedAccessRootController
 
     public function get()
     {
+
         $path = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch('paths', 'exportedStatistics');
         $fileName = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('fileName');
         $fullPath = $path . $fileName;
