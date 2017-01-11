@@ -42,16 +42,17 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
                       p.qty                                         AS stock,
-                      mahp.isToWork,
-                      mahp.hasError,
-                      mahp.isDeleted,
+                      if(mahp.isToWork = 1,'sì','no') as isToWork,
+                      if(mahp.hasError = 1,'sì','no') as hasError,
+                      if(mahp.isDeleted = 1,'sì','no') as isDeleted,
                       cv.timestamp                                  AS visitTimestamp,
                       cv.id                                         AS visitId,
                       count(DISTINCT cv.id)                         AS visits,
                       count(distinct cvho.orderId)                  AS conversions,
                       group_concat(distinct ol.orderId SEPARATOR ',') AS ordersIds,
                       phpc.productCategoryId                        AS categories,
-                      ifnull(c.code, '')                            AS campaignCode
+                      ifnull(c.code, '')                            AS campaignCode,
+                      if(p.isOnSale = 0, min(shp.price),min(shp.salePrice)) as acrivePrice
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
                       JOIN `ShopHasProduct` `shp`

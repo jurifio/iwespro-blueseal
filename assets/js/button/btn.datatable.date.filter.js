@@ -44,6 +44,7 @@ $(document).on('bs.dateinput.load', function (a, b) {
             table.DataTable().ajax.url(controller);
             table.data('controller', controller);
             table.DataTable().search("").draw();
+            $('.breadcrumb').append('<li><p>'+picker.startDate.format('YYYY-MM-DD')+' - '+picker.endDate.format('YYYY-MM-DD')+'</p></li>')
         });
 
         that.on('cancel.daterangepicker', function (ev, picker) {

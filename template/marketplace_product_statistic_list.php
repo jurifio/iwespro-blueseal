@@ -78,6 +78,9 @@
                                     <th data-slug="conversionValue"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Valore Conversioni</th>
+                                    <th data-slug="activePrice"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Prezzo Attivo</th>
                                 </tr>
                             </thead>
                             <tbody>
