@@ -28,7 +28,7 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
                   c.id                                                                                                      AS campaignId,
                   c.name                                                                                                    AS campaign,
                   m.type                                                                                                    AS marketplaceType,
-                  count(DISTINCT mahp.productVariantId)                                                                              AS productCount,
+                  count(DISTINCT mahp.productVariantId)                                                                     AS productCount,
                   (SELECT count(*)
                    FROM CampaignVisit cv
                    WHERE cv.campaignId = c.id AND cv.timestamp BETWEEN ifnull(?, cv.timestamp) AND ifnull(?, cv.timestamp)) AS visits,
@@ -42,7 +42,11 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
                   (SELECT count(DISTINCT cvho.orderId)
                    FROM CampaignVisitHasOrder cvho
                      JOIN `Order` o ON o.id = cvho.orderId
-                   WHERE cvho.campaignId = c.id AND o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))  AS orders
+                   WHERE cvho.campaignId = c.id AND o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))  AS orders,
+                  (SELECT sum(o.netTotal)
+                   FROM CampaignVisitHasOrder cvho
+                     JOIN `Order` o ON o.id = cvho.orderId
+                   WHERE cvho.campaignId = c.id AND o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))  AS orderTotal
                 FROM Marketplace m
                   JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
                   LEFT JOIN MarketplaceAccountHasProduct mahp ON ma.id = mahp.marketplaceAccountId AND
@@ -57,7 +61,7 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
         $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
         $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
-        $params = array_merge([$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo],$datatable->getParams());
+        $params = array_merge([$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo],$datatable->getParams());
         $marketplaceAccounts = $this->app->dbAdapter->query($datatable->getQuery(false, true), $params)->fetchAll();
         $count = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery(true), $params);
         $totalCount = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery('full'), $params);
@@ -80,6 +84,7 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
             $row['visits'] = $val['visits'];
             $row['orders'] = $val['orders'];
             $row['cost'] = $val['cost'];
+            $row['orderTotal'] = $val['orderTotal'];
             $response['data'][] = $row;
         }
 
