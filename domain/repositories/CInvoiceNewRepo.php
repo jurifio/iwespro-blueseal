@@ -27,9 +27,9 @@ class CInvoiceNewRepo extends ARepo {
      */
     protected function createInvoice(
         $invoiceType,
-        $userId,
-        $isShop,
-        $userOrShopId,
+        int $userId,
+        bool $isShop,
+        int $recipientOrEmitterId,
         $number,
         $date,
         $invoiceTypeId,
@@ -38,19 +38,36 @@ class CInvoiceNewRepo extends ARepo {
         $note,
         $createionDate)
     {
+
+        $dba = \Monkey::app()->dbAdapter;
         $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
-        $inumR = \Monkey::app()->repoFactory->create('InvoiceSectional');
+        $inSecR = \Monkey::app()->repoFactory->create('InvoiceSectional');
+
+        //find sectional
+
+        $fieldToSearch = (false == $isShop) ? 'userId' : 'shopId';
+        $invoiceSectional = $inSecR->findOneBy(
+            [
+                $fieldToSearch => $recipientOrEmitterId,
+                'invoiceTypeId' => $invoiceTypeId,
+            ]
+        );
+        $dba->query()
+        $newInvoiceNumber = $invoiceSectional->findOneBy([]);
+
     }
+
 
     /**
      * @param CInvoiceType $invoiceType
      * @param bool $isShop
      * @param int $subjectId
      */
-    public function newInvoiceNumberForSectional(CInvoiceType $invoiceType, bool $isShop, int $subjectId) {
-        //TODO:
+    private function newInvoiceNumberForSectional(CInvoiceSectional $inSec, $year = null) {
+        if (null === $year) $year = date_format(new \DateTime(), 'Y');
+
         $dba = \Monkey::app()->dbAdapter;
-        $dba->query('SELECT MAX(invoiceNumber)')
+        $dba->query('SELECT MAX(invoiceNumber) FROM InvoiceNumber WHERE invoiceSectionalId = ? AND year = ?', [$inSec->id, $year]);
     }
 
     public function recordFriendInvoice($number, $date, $paymentDate, $shopId, array $orderLine) {
