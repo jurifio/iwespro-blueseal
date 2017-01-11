@@ -53,7 +53,7 @@ $(document).on('bs.productHasMarketplace.marketplace.delete', function (e, eleme
                 body.html('Eliminati '+response+' prodotti');
                 okButton.html('Ok');
                 okButton.off().on('click',function () {
-                    modal.hide();
+                    bsModal.hide();
                 });
             });
         });
