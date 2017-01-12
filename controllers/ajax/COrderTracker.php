@@ -46,7 +46,7 @@ class COrderTracker extends AAjaxController
             $olhs->insert();
         }
 
-        $order->note = $order->note."Tracking: ".$shipment->trackingNumber. 'Spedito: '.date('Y-m-d');
+        $order->note = $order->note." Tracking: ".$shipment->trackingNumber. ' Spedito: '.date('Y-m-d');
         $order->update();
         $this->app->orderManager->changeStatus($order,'ORD_SHIPPED');
 
