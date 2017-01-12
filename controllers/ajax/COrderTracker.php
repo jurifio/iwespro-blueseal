@@ -46,6 +46,8 @@ class COrderTracker extends AAjaxController
             $olhs->insert();
         }
 
+        $order->note = $order->note."Tracking: ".$shipment->trackingNumber;
+
         $to = [$order->user->email];
         $this->app->mailer->prepare('shipmentclient','no-reply', $to,[],[],['order'=>$order,'shipment'=>$shipment,'lang'=>$lang->lang]);
         $res = $this->app->mailer->send();
