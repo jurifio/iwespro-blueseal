@@ -45,13 +45,13 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       if(mahp.isToWork = 1,'sì','no') as isToWork,
                       if(mahp.hasError = 1,'sì','no') as hasError,
                       if(mahp.isDeleted = 1,'sì','no') as isDeleted,
-                      cv.timestamp                                  AS visitTimestamp,
-                      cv.id                                         AS visitId,
-                      count(DISTINCT cv.id)                         AS visits,
-                      count(distinct cvho.orderId)                  AS conversions,
+                      cv.timestamp                                    AS visitTimestamp,
+                      cv.id                                           AS visitId,
+                      count(DISTINCT cv.id)                           AS visits,
+                      count(distinct cvho.orderId)                    AS conversions,
                       group_concat(distinct ol.orderId SEPARATOR ',') AS ordersIds,
-                      phpc.productCategoryId                        AS categories,
-                      ifnull(c.code, '')                            AS campaignCode,
+                      phpc.productCategoryId                          AS categories,
+                      ifnull(c.code, '')                              AS campaignCode,
                       if(p.isOnSale = 0, min(shp.price),min(shp.salePrice)) as activePrice
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
@@ -71,31 +71,26 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                           JOIN CampaignVisitHasProduct cvhp ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id )
                       ON c.id = cv.campaignId AND cvhp.productId = p.id AND cvhp.productVariantId = p.productVariantId
                       LEFT JOIN (
-                            CampaignVisitHasOrder cvho JOIN 
+                            CampaignVisitHasOrder cvho JOIN
+                            `Order` o ON cvho.orderId = o.id JOIN
                             OrderLine ol ON cvho.orderId = ol.orderId )
                                 ON cvho.campaignVisitId = cv.id and 
                                    cvho.campaignId = cv.campaignId and 
                                    p.id = ol.productId AND
                                    p.productVariantId = ol.productVariantId 
                     WHERE
-                      ifnull(timestamp,1) >= ifnull(?, ifnull(timestamp,1))
-                      AND ifnull(timestamp,1) <= ifnull(?, ifnull(timestamp,1)) AND 
                       ma.id = ? AND 
-                      ma.marketplaceId = ? AND 
-                      `ps`.`isReady` = 1 AND 
-                      `p`.`qty` > 0 
+                      ma.marketplaceId = ? AND
+                      (ifnull(timestamp,1) BETWEEN ifnull(?,1) and ifnull(?,1)
+                       OR o.orderDate between ? and ?) 
                     GROUP BY productId, productVariantId,productCategoryId";
-
-        /**
-         *
-         */
 
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
         $timeFrom = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('startDate'));
         $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
         $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
-        $queryParameters = [$campaign->id, $timeFrom, $timeTo, $marketplaceAccount->id, $marketplaceAccount->marketplaceId];
+        $queryParameters = [$campaign->id,$marketplaceAccount->id, $marketplaceAccount->marketplaceId, $timeFrom, $timeTo,$timeFrom, $timeTo ];
 
         $datatable = new CDataTables($query, ['productId','productVariantId'], $_GET, true);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
