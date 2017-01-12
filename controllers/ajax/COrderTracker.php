@@ -1,5 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+use bamboo\core\traits\TMySQLTimestamp;
+use bamboo\domain\entities\CShipment;
 
 /**
  * Class CGetPermissionsForUser
@@ -16,15 +18,37 @@ namespace bamboo\blueseal\controllers\ajax;
  */
 class COrderTracker extends AAjaxController
 {
+    use TMySQLTimestamp;
+
     public function post()
     {
-	    $id = $this->app->router->request()->getRequestData('orderId');
-        $this->app->repoFactory->create('Order')->findOneByStringId($id);
+	    $orderId = $this->app->router->request()->getRequestData('orderId');
+	    $langId = $this->app->router->request()->getRequestData('langId');
+	    $carrierId = $this->app->router->request()->getRequestData('carrierId');
+	    $trackingNumber = $this->app->router->request()->getRequestData('tracking');
+        $order = $this->app->repoFactory->create('Order')->findOneByStringId($orderId);
+        $lang = $this->app->repoFactory->create('Lang')->findOneByStringId($langId);
 
-	    foreach($ids as $id) {
-			$user = $this->app->repoFactory->create('User')->findOne([$id]);
-		    $user->isActive = 1;
-		    $user->update();
-	    }
+        /** @var CShipment $shipment */
+        $shipment = $this->app->repoFactory->create('Shipment')->getEmptyEntity();
+        $shipment->carrierId = $carrierId;
+        $shipment->scope = $shipment::SCOPE_US_TO_USER;
+        $shipment->trackingNumber = $trackingNumber;
+        $shipment->shipmentDate = $this->time();
+        $shipment->declaredValue = $order->grossTotal;
+        $shipment->id = $shipment->insert();
+
+        foreach ($order->orderLine as $orderLine) {
+            $olhs = $this->app->repoFactory->create('OrderLineHasShipment')->getEmptyEntity();
+            $olhs->orderId = $orderLine->orderId;
+            $olhs->orderLineId = $orderLine->id;
+            $olhs->shipmentId = $shipment->id;
+            $olhs->insert();
+        }
+
+        $to = [$order->user->email];
+        $this->app->mailer->prepare('shipmentclient','no-reply', $to,[],[],['order'=>$order,'shipment'=>$shipment,'lang'=>$lang->lang]);
+        $res = $this->app->mailer->send();
+        if($res) return 'ok';
     }
 }
