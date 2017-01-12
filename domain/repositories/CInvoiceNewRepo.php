@@ -2,7 +2,10 @@
 namespace bamboo\domain\repositories;
 
 use bamboo\core\db\pandaorm\repositories\ARepo;
+use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CInvoiceType;
+use bamboo\domain\entities\CInvoiceSectional;
+use bamboo\utils\price\SFileToolbox;
 
 /**
  * Class CInvoiceNewRepo
@@ -11,33 +14,38 @@ use bamboo\domain\entities\CInvoiceType;
 class CInvoiceNewRepo extends ARepo {
 
     /**
-     * @param $invoiceType
-     * @param $userId
-     * @param $isShop
-     * @param $userOrShopId
-     * @param $number
-     * @param $date
      * @param $invoiceTypeId
-     * @param $paydAmount
-     * @param $paymentExpectedDate
-     * @param $note
-     * @param $createionDate
-     *
-     * @transaction
+     * @param int $userId
+     * @param bool $isShop
+     * @param int $recipientOrEmitterId
+     * @param \DateTime $date
+     * @param float $paydAmount
+     * @param array $invoiceLines
+     * @param \DateTime|null $paymentExpectedDate
+     * @param string|null $note
+     * @param \DateTime|null $creationDate
+     * @param string|null $number
+     * @param string|null $filePath
+     * @throws BambooException
      */
     protected function createInvoice(
-        $invoiceType,
+        $invoiceTypeId,
         int $userId,
         bool $isShop,
         int $recipientOrEmitterId,
-        $number,
-        $date,
-        $invoiceTypeId,
-        $paydAmount,
-        $paymentExpectedDate,
-        $note,
-        $createionDate)
-    {
+        \DateTime $date,
+        float $paydAmount = 0,
+        array $invoiceLines = [],
+        \DateTime $paymentExpectedDate = null,
+        string $note = null,
+        \DateTime $creationDate = null,
+        string $number = null,
+        string $filePath = null
+    ){
+
+        if (!count($invoiceLines)) {
+            throw new BambooException('Non posso registrare una fattura senza righe');
+        }
 
         $dba = \Monkey::app()->dbAdapter;
         $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
@@ -52,9 +60,42 @@ class CInvoiceNewRepo extends ARepo {
                 'invoiceTypeId' => $invoiceTypeId,
             ]
         );
-        $dba->query()
-        $newInvoiceNumber = $invoiceSectional->findOneBy([]);
+        if ($invoiceSectional) $number = $this->newINvoiceNumberForSectional($invoiceSectional, $date->format('Y'));
+        elseif (null === $number) throw new BambooException('The invoice number can\'t be emtpy');
 
+        try {
+            $dba->beginTransaction();
+            $in = $inR->getEmptyEntity();
+            $in->userId = $userId;
+            if ($isShop) $in->shopRecipientId = $recipientOrEmitterId;
+            else $in->userRceipientId = $recipientOrEmitterId;
+            $in->number = $number;
+            $in->date = $date->format('Y-m-d');
+            $in->invoiceTypeId = $invoiceTypeId;
+            $in->paydAmount = $paydAmount;
+            $in->paymentExpectedDate = $paymentExpectedDate;
+            $in->note = $note;
+            if (null === $creationDate) $creationDate = new \DateTime();
+            $in->creationDate = $creationDate->format('Y-m-d');
+            $insertedId = $in->insert();
+
+            if ($filePath) {
+                $ib = \Monkey::app()->repoFactory->create('InvoiceBin')->getEmptyEntity();
+                $ib->invoiceId = $insertedId;
+                $ib->fileName = SFileToolbox::getFileNameFromPathString($filePath);
+                $ib->bin = addslashes(file_get_contents($filePath));
+                $ib->insert();
+            }
+
+            foreach($invoiceLines as $v) {
+
+            }
+
+            $dba->commit();
+        } catch (BambooException $e) {
+            $dba->rollback();
+            throw $e;
+        }
     }
 
 
@@ -67,10 +108,15 @@ class CInvoiceNewRepo extends ARepo {
         if (null === $year) $year = date_format(new \DateTime(), 'Y');
 
         $dba = \Monkey::app()->dbAdapter;
-        $dba->query('SELECT MAX(invoiceNumber) FROM InvoiceNumber WHERE invoiceSectionalId = ? AND year = ?', [$inSec->id, $year]);
+        return $dba->query(
+            'SELECT (MAX(invoiceNumber) + 1) as newInvoiceNumber FROM InvoiceNumber WHERE invoiceSectionalId = ? AND year = ?',
+            [$inSec->id, $year]
+        )->fetch()['newInvoiceNumber'];
     }
 
-    public function recordFriendInvoice($number, $date, $paymentDate, $shopId, array $orderLine) {
+    public function recordFriendBinInvoice($number, $date, $paymentDate, $shopId, array $orderLine) {
 
     }
+
+    public function addRowToInvoice($description, $invoiceId, $price, $vat)
 }
