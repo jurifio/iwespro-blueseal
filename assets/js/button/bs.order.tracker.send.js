@@ -111,6 +111,8 @@ $(document).on('bs.order.tracker.send', function (e, element, button) {
                 }
             }).done(function (response) {
                 body.html('fatto');
+            }).fail(function (response) {
+                body.html(response);
             });
         });
     });
