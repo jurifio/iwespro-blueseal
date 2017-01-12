@@ -47,6 +47,7 @@ class COrderTracker extends AAjaxController
         }
 
         $order->note = $order->note."Tracking: ".$shipment->trackingNumber;
+        $this->app->orderManager->changeStatus($order,'ORD_SHIPPED');
 
         $to = [$order->user->email];
         $this->app->mailer->prepare('shipmentclient','no-reply', $to,[],[],['order'=>$order,'shipment'=>$shipment,'lang'=>$lang->lang]);
