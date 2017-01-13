@@ -81,8 +81,8 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                     WHERE
                       ma.id = ? AND 
                       ma.marketplaceId = ? AND
-                      (ifnull(timestamp,1) BETWEEN ifnull(?,1) and ifnull(?,1)
-                       OR o.orderDate between ? and ?) 
+                      (if(timestamp is null,1=1,timestamp BETWEEN ifnull(?,timestamp) and ifnull(?,timestamp)) OR
+                       if(orderDate is null,1=1,o.orderDate BETWEEN ifnull(?,o.orderDate) and ifnull(?,o.orderDate)) )  
                     GROUP BY productId, productVariantId,productCategoryId";
 
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
@@ -180,7 +180,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['categories'] = $val->getLocalizedProductCategories("<br>");
             $row['conversions'] = $values['conversions'];
             $row['visits'] = $values['visits'];
-            $row['visitsCost'] = $values['visits'] * ($prodottiMark->fee == 0 ? ($marketplaceAccount->config['defaultCpc'] ?? 0) : $prodottiMark->fee);
+            $row['visitsCost'] = $values['visits'] * (empty($prodottiMark->fee) ? ($marketplaceAccount->config['defaultCpc'] ?? 0) : $prodottiMark->fee);
             $row['conversionValue'] = 0;
             foreach(explode(',',$values['ordersIds']) as $ordersId) {
                 if(empty($ordersId)) continue;
