@@ -40,6 +40,7 @@ class CFriendOrderListAjaxController extends AAjaxController
               #l.eventValue as logVal,
               #l.time as logTime,
               `pb`.`name` as `brand`,
+              ifnull(`ilhol`.`invoiceLineInvoiceId`, 'non assegnata') as `invoiceNumber`,
               `pse`.`name` as `season`,
               `ps`.`name` as `size`,
               `s`.`id` as `shopId`,
@@ -67,6 +68,7 @@ class CFriendOrderListAjaxController extends AAjaxController
                 JOIN `ProductSize` as `ps` on `ol`.`productSizeId` = `ps`.`id`)
                 JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
                 JOIN `ProductSeason` as `pse` on `p`.`productSeasonId` = `pse`.`id`
+                LEFT JOIN `InvoiceLineHasOrderLine` as `ilhol` on `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId` 
                 JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
@@ -173,7 +175,8 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['activePrice'] = number_format($v->activePrice, 2, ',', '');
             $response['data'][$i]['friendRevenue'] = number_format($v->friendRevenue, 2, ',', '');
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::addVatToNetPrice($v->friendRevenue, $vat);
-
+            $invoiceLine = $v->invoiceLine->getFirst();
+            $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoiceId : 'non assegnata' ;
             $i++;
 	    }
         return json_encode($response);
