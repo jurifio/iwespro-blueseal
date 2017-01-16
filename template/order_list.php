@@ -105,10 +105,10 @@
             data-placement="bottom"
             data-event="bs.order.delete.panic"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.order.tracker.send"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-button
-        data-remote="bs.order.tracker.send"
-    ></bs-toolbar-button>
 </bs-toolbar>
 </body>
 </html>

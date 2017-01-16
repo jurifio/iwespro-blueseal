@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\CProduct;
 
 /**
@@ -20,6 +21,8 @@ use bamboo\domain\entities\CProduct;
  */
 class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 {
+    use TMySQLTimestamp;
+
     public function get()
     {
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
@@ -42,16 +45,16 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
                       p.qty                                         AS stock,
-                      if(mahp.isToWork = 1,'sì','no') as isToWork,
-                      if(mahp.hasError = 1,'sì','no') as hasError,
-                      if(mahp.isDeleted = 1,'sì','no') as isDeleted,
-                      cv.timestamp                                    AS visitTimestamp,
-                      cv.id                                           AS visitId,
-                      count(DISTINCT cv.id)                           AS visits,
-                      count(distinct cvho.orderId)                    AS conversions,
-                      group_concat(distinct ol.orderId SEPARATOR ',') AS ordersIds,
+                      if(mahp.isToWork = 1,'sì','no')               as isToWork,
+                      if(mahp.hasError = 1,'sì','no')               as hasError,
+                      if(mahp.isDeleted = 1,'sì','no')              as isDeleted,
+                      ifnull(visits,0)                                AS visits,
+                      ifnull(conversions,0)                           AS conversions,
+                      round(visits*fee)                               AS visitsCost,
+                      ordersIds                                       AS ordersIds,
+                      ifnull(conversionsValue,0)                      as conversionsValue,
                       phpc.productCategoryId                          AS categories,
-                      ifnull(c.code, '')                              AS campaignCode,
+                      ifnull(sql2.code, '')                                AS campaignCode,
                       if(p.isOnSale = 0, min(shp.price),min(shp.salePrice)) as activePrice
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
@@ -66,31 +69,48 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       JOIN `MarketplaceAccount` `ma`
                         ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`)))
                       JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`))
-                      JOIN Campaign c on c.id = ? 
-                      LEFT JOIN (CampaignVisit cv  
+                      LEFT JOIN (SELECT c.code, cvhp.productId, cvhp.productVariantId, sum(ol.netPrice) as conversionsValue, group_concat(distinct ol.orderId SEPARATOR ',') AS ordersIds, count(cv.id) as visits, count(o.id) as conversions
+                                    FROM Campaign c 
+                                    JOIN CampaignVisit cv on c.id = cv.campaignId 
+                                    JOIN CampaignVisitHasProduct cvhp on cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id 
+                                    LEFT JOIN (CampaignVisitHasOrder cvho 
+                                                JOIN `Order` o on cvho.orderId = o.id 
+                                                JOIN OrderLine ol on o.id = ol.orderId
+                                                ) on cvho.campaignVisitId = cv.id and 
+                                                     cvho.campaignId = cv.campaignId AND 
+                                                     ol.productId = cvhp.productId and 
+                                                     ol.productVariantId = cvhp.productVariantId
+                                    where c.id = ? AND
+                                    (timestamp BETWEEN ifnull(?,timestamp) and ifnull(?,timestamp) OR
+                                     if(orderDate is null,0=1,o.orderDate BETWEEN ifnull(?,o.orderDate) and ifnull(?,o.orderDate)))
+                                    GROUP BY cvhp.productId, cvhp.productVariantId, cvhp.campaignId) sql2 on sql2.productId = mahp.productId and sql2.productVariantId = mahp.productVariantId
+                    WHERE
+                      ma.id = ? AND 
+                      ma.marketplaceId = ?
+                    GROUP BY productId, productVariantId,productCategoryId order by visits desc";
+        $sub = "";
+
+        /*
+         * LEFT JOIN (CampaignVisit cv
                           JOIN CampaignVisitHasProduct cvhp ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id )
                       ON c.id = cv.campaignId AND cvhp.productId = p.id AND cvhp.productVariantId = p.productVariantId
                       LEFT JOIN (
                             CampaignVisitHasOrder cvho JOIN
                             `Order` o ON cvho.orderId = o.id JOIN
                             OrderLine ol ON cvho.orderId = ol.orderId )
-                                ON cvho.campaignVisitId = cv.id and 
-                                   cvho.campaignId = cv.campaignId and 
+                                ON cvho.campaignVisitId = cv.id and
+                                   cvho.campaignId = cv.campaignId and
                                    p.id = ol.productId AND
-                                   p.productVariantId = ol.productVariantId 
-                    WHERE
-                      ma.id = ? AND 
-                      ma.marketplaceId = ? AND
-                      (ifnull(timestamp,1) BETWEEN ifnull(?,1) and ifnull(?,1)
-                       OR o.orderDate between ? and ?) 
-                    GROUP BY productId, productVariantId,productCategoryId";
+                                   p.productVariantId = ol.productVariantId
+        */
 
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
-        $timeFrom = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('startDate'));
-        $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
-        $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
-        $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
-        $queryParameters = [$campaign->id,$marketplaceAccount->id, $marketplaceAccount->marketplaceId, $timeFrom, $timeTo,$timeFrom, $timeTo ];
+        $timeFrom = new \DateTime($this->app->router->request()->getRequestData('startDate').' 00:00:00');
+        $timeTo = new \DateTime($this->app->router->request()->getRequestData('endDate').' 00:00:00');
+
+        $timeFrom = $timeFrom ? $this->time($timeFrom->getTimestamp()) : null;
+        $timeTo = $timeTo ? $this->time($timeTo->getTimestamp()) : null;
+        $queryParameters = [$campaign->id,$timeFrom, $timeTo,$timeFrom, $timeTo,$marketplaceAccount->id, $marketplaceAccount->marketplaceId ];
 
         $datatable = new CDataTables($query, ['productId','productVariantId'], $_GET, true);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
@@ -104,6 +124,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
+        $response['queryParams'] = $queryParameters;
         $response ['data'] = [];
 
         foreach ($prodottiMarks as $values) {
@@ -180,13 +201,8 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['categories'] = $val->getLocalizedProductCategories("<br>");
             $row['conversions'] = $values['conversions'];
             $row['visits'] = $values['visits'];
-            $row['visitsCost'] = $values['visits'] * ($prodottiMark->fee == 0 ? ($marketplaceAccount->config['defaultCpc'] ?? 0) : $prodottiMark->fee);
-            $row['conversionValue'] = 0;
-            foreach(explode(',',$values['ordersIds']) as $ordersId) {
-                if(empty($ordersId)) continue;
-                $order = $this->app->repoFactory->create('Order')->findOne([$ordersId]);
-                $row['conversionValue'] += $order->netTotal;
-            }
+            $row['visitsCost'] = $values['visitsCost'];
+            $row['conversionValue'] = $values['conversionsValue'];
             $row['activePrice'] = $values['activePrice'];
 
             $response['data'][] = $row;

@@ -1,13 +1,13 @@
 window.buttonSetup = {
-    tag:"a",
-    icon:"fa-trash",
-    permission:"/admin/product/delete&&allShops",
-    event:"bs.order.tracker.send",
-    class:"btn btn-default",
-    rel:"tooltip",
-    title:"Invia Codice Tracker",
-    placement:"bottom",
-    toggle:"modal"
+    tag: "a",
+    icon: "fa-ship",
+    permission: "/admin/product/delete&&allShops",
+    event: "bs.order.tracker.send",
+    class: "btn btn-default",
+    rel: "tooltip",
+    title: "Invia Codice Tracker",
+    placement: "bottom",
+    toggle: "modal"
 };
 
 $(document).on('bs.order.tracker.send', function (e, element, button) {
@@ -22,9 +22,8 @@ $(document).on('bs.order.tracker.send', function (e, element, button) {
 
     var getVarsArray = [];
     var selectedRows = dataTable.rows('.selected').data();
-    var selectedRowsCount = selectedRows.length;
 
-    if (selectedRowsCount == 1) {
+    if (selectedRows.length != 1) {
         new Alert({
             type: "warning",
             message: "Devi selezionare un ordine per inserire il tracker"
@@ -32,60 +31,89 @@ $(document).on('bs.order.tracker.send', function (e, element, button) {
         return false;
     }
 
-    var orderId = selectedRows.eq(0).DT_RowId;
+    var selectedRow = dataTable.row('.selected').data();
+    var orderId = selectedRow.DT_RowId;
 
     header.html(button.getTitle());
-    body.html('');
-    okButton.html('Invia').off().on('click',function () {
-        $('tracking')
-        $.ajax({
-            url: "/blueseal/xhr/OrderTracker",
-            type: "POST",
-            data: {
-                'orderId': orderId,
-                'tracking': orderId
-            }
-        }).done(function (response) {
-            body.html(result.bodyMessage);
-            $(bsModal).find('table').addClass('table');
+    body.html(
+        '<div class="form-group form-group-default">' +
+        '<label for="carrier">Vettore</label>' +
+        '<select id="#carrier" name="carrier" class="full-width"></select>' +
+        '</div>' +
+        '<div class="form-group form-group-default">' +
+        '<label for="lang">lingua</label>' +
+        '<select id="#lang" name="lang" class="full-width"></select>' +
+        '</div>' +
+        '<div class="form-group form-group-default required">' +
+        '<label for="tracking">TrackingNumber</label>' +
+        '<input id="tracking" autocomplete="off" type="text" class="form-control" value="" required="required">' +
+        '</div>'
+    );
+    bsModal.modal();
+    Pace.ignore(function () {
 
-            if (result.cancelButtonLabel == null) {
-                cancelButton.hide();
-            } else {
-                cancelButton.html(result.cancelButtonLabel);
+        $.ajax({
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Carrier'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('select[name=\"carrier\"]');
+            if (select.length > 0 && typeof select[0].selectize != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2,
+            });
+            select[0].selectize.setValue(1);
+        });
+        $.ajax({
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Lang'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('select[name=\"lang\"]');
+            if (select.length > 0 && typeof select[0].selectize != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2,
+            });
+            select[0].selectize.setValue(1);
+        });
+
+        okButton.html('Invia').off().on('click', function () {
+            var tracking = $('#tracking').val();
+            if (tracking.length < 1) {
+                new Alert({
+                    type: "warning",
+                    message: "Devi inserire il tracker per inserire la mail"
+                }).open();
+                return false;
             }
-            bsModal.modal('show');
-            if (result.status == 'ok') {
-                okButton.html(result.okButtonLabel).off().on('click', function (e) {
-                    body.html(loaderHtml);
-                    $.ajax({
-                        url: "/blueseal/xhr/DeleteProduct",
-                        type: "DELETE",
-                        data: {
-                            ids: getVarsArray
-                        }
-                    }).done(function (response) {
-                        result = JSON.parse(response);
-                        body.html(result.bodyMessage);
-                        $(bsModal).find('table').addClass('table');
-                        if (result.cancelButtonLabel == null) {
-                            cancelButton.hide();
-                        }
-                        okButton.html(result.okButtonLabel).off().on('click', function () {
-                            bsModal.modal('hide');
-                            okButton.off();
-                            dataTable.ajax.reload(null, false);
-                        });
-                        dataTable.draw();
-                        bsModal.modal('show');
-                    });
-                });
-            } else if (result.status == 'ko') {
-                okButton.html(result.okButtonLabel).off().on('click', function () {
-                    bsModal.modal('hide');
-                    okButton.off();
-                });
-            }
+            cancelButton.off().hide();
+            okButton.html('Fatto').off().on('click', function () {
+                bsModal.modal('hide');
+            });
+            $.ajax({
+                url: "/blueseal/xhr/OrderTracker",
+                type: "POST",
+                data: {
+                    'orderId': orderId,
+                    'tracking': tracking,
+                    'carrierId': $('select[name=\"carrier\"]').val(),
+                    'langId': $('select[name=\"lang\"]').val()
+                }
+            }).done(function (response) {
+                body.html('fatto');
+            }).fail(function (response) {
+                body.html(response);
+            });
         });
     });
 
