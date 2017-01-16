@@ -154,7 +154,7 @@
     </bs-toolbar-group>
     <?php endif; ?>
 
-    <bs-toolbar-group data-group-label="Approvazione Ordini">
+    <bs-toolbar-group data-group-label="Gestione Ordini">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-thumbs-up"
@@ -174,6 +174,11 @@
             data-title="Rifiuta le righe d'ordine selezionate"
             data-placement="bottom"
             data-event="bs.friend.orderline.ko"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione Pagamenti">
+        <bs-toolbar-button
+            data-remote="bs.friend.order.registerInvoiceFromFile"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
