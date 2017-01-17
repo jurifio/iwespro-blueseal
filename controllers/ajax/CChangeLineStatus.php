@@ -1,31 +1,31 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Fabrizio Marconi
- * Date: 20/05/2015
- * Time: 13:00
- */
+
 namespace bamboo\blueseal\controllers\ajax;
-use bamboo\blueseal\business\COrderLineManager;
+use bamboo\core\exceptions\BambooException;
+use bamboo\domain\repositories\COrderLineRepo;
 
 /**
- * Class CChangeLineShop
- * @package bamboo\app\controllers
+ * Class CChangeLineStatus
+ * @package bamboo\blueseal\controllers\ajax
  */
 class CChangeLineStatus extends AAjaxController
 {
+    /**
+     * @return bool
+     */
     public function put()
     {
-        $ids = explode('-',$this->data['value']);
-        $repo = $this->app->repoFactory->create('OrderLine');
-        $line = $repo->findOne(['id'=>$ids[0],'orderId'=>$ids[1]]);
-        $om = new COrderLineManager($this->app,$line);
-        $res = $om->changeStatus($ids[2]);
-        if($res == false) {
-            $this->app->router->response()->raiseProcessingError();
+        try {
+            $ids = explode('-', $this->data['value']);
+            /** @var COrderLineRepo $repo */
+            $repo = $this->app->repoFactory->create('OrderLine');
+            $line = $repo->findOne(['id' => $ids[0], 'orderId' => $ids[1]]);
+            $repo->updateStatus($line, $ids[2]);
+            return true;
+        } catch (BambooException $e) {
+            \Monkey::app()->router->response()->raiseProcessingError();
             return false;
         }
-        return true;
     }
 
 }

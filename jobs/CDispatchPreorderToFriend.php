@@ -3,6 +3,7 @@ namespace bamboo\blueseal\jobs;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\jobs\ACronJob;
+use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\export\order\COrderExport;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 
@@ -30,7 +31,7 @@ class CDispatchPreorderToFriend extends ACronJob
         $shops = $this->app->repoFactory->create('Shop')->findAll();
         $query = "SELECT * from OrderLine where `status` in ('ORD_FRND_SNDING', 'ORD_ERR_SEND') AND shopId = ? ";
         $orderExport = new COrderExport($this->app);
-        /** @var CRepo $orderLineRepo */
+        /** @var COrderLineRepo $orderLineRepo */
         $orderLineRepo = $this->app->repoFactory->create('OrderLine');
 
         foreach($shops as $shop){
@@ -57,8 +58,7 @@ class CDispatchPreorderToFriend extends ACronJob
                     try {
 
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
-                        $orderLine->status = $this->success;
-	                    $orderLine->update();
+                        $orderLineRepo->updateStatus($orderLine, $this->success);
 
                         /**$userId = $orderLine->shop->user->id;
 
@@ -82,8 +82,7 @@ class CDispatchPreorderToFriend extends ACronJob
                     try {
 
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
-                        $orderLine->status = $this->fail;
-	                    $orderLine->update();
+                        $orderLineRepo->updateStatus($orderLine, $this->fail);
 
                         /**$userId = $orderLine->shop->user->id;
                         \Monkey::app()->eventManager->triggerEvent('friendSendRequestFail',

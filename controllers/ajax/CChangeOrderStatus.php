@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\COrder;
 
 /**
  * Class CChangeOrderStatus
@@ -18,14 +19,20 @@ class CChangeOrderStatus extends AAjaxController
 {
     public function put()
     {
+        $dba = \Monkey::app()->dbAdapter;
         try {
+            $dba->beginTransaction();
+            /** @var COrder $oR */
+            $oR = \Monkey::app()->repoFactory->create('Order');
             $datas = $this->data;
-            $order = $this->app->repoFactory->create('Order')->findOne([$datas['order_id']]);
-            $this->app->orderManager->changeStatus($order, $datas['order_status']);
+            $order = $oR->findOne([$datas['order_id']]);
+            $oR->updateStatus($order, $datas['order_status']);
             $order->note = $datas['order_note'];
             $order->update();
+            $dba->commit();
             return true;
         } catch (BambooException $e) {
+            $dba->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessage();
         }

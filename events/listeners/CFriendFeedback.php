@@ -12,7 +12,7 @@ use bamboo\domain\entities\CUser;
  * Class COtherTest
  * @package bamboo\app\evtlisteners
  */
-class CLogging extends AEventListener
+class CFriendFeedback extends AEventListener
 {
     /**
      * @var CUser

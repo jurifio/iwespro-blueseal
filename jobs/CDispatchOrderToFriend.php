@@ -3,6 +3,7 @@ namespace bamboo\blueseal\jobs;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\jobs\ACronJob;
+use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\export\order\COrderExport;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 
@@ -30,7 +31,7 @@ class CDispatchOrderToFriend extends ACronJob
         $shops = $this->app->repoFactory->create('Shop')->findAll();
         $query = "SELECT * from OrderLine where `status` in ('ORD_FRND_PYD') AND shopId = ? ";
         $orderExport = new COrderExport($this->app);
-        /** @var CRepo $orderLineRepo */
+        /** @var COrderLineRepo $orderLineRepo */
         $orderLineRepo = $this->app->repoFactory->create('OrderLine');
 
         foreach($shops as $shop){
@@ -48,21 +49,11 @@ class CDispatchOrderToFriend extends ACronJob
                 $this->app->dbAdapter->beginTransaction();
                 foreach($lines as $line){
                     try {
-
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
-                        $orderLine->status = $this->success;
-	                    $orderLine->update();
-
-                        /**\Monkey::app()->eventManager->triggerEvent('friendOrderShipped',
-                            [
-                                'order' => $orderLine,
-                                'status' => $this->success
-                            ]);*/
-
+                        $orderLineRepo->updateStatus($orderLine, $this->success);
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
-                    //$this->app->dbAdapter->update('OrderLine',['status'=>$this->success],["id"=>$line->id,"orderId"=>$line->orderId]);
                 }
                 $this->app->dbAdapter->commit();
             } catch(\Throwable $e){
@@ -72,19 +63,10 @@ class CDispatchOrderToFriend extends ACronJob
                     try {
 
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
-                        $orderLine->status = $this->fail;
-	                    $orderLine->update();
-
-                        /**\Monkey::app()->eventManager->triggerEvent('friendOrderPayd',
-                            [
-                                'order' => $orderLine,
-                                'status' => $this->fail
-                            ]);*/
-
+                        $orderLineRepo->updateStatus($orderLine, $this->fail);
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
-                    //$this->app->dbAdapter->update('OrderLine',['status'=>$this->fail],["id"=>$line->id,"orderId"=>$line->orderId]);
                 }
                 $this->app->dbAdapter->commit();
             }
