@@ -3,8 +3,10 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\exceptions\BambooException;
+use bamboo\core\exceptions\BambooOrderLineException;
 use bamboo\core\intl\CLang;
 use bamboo\domain\repositories\CLogRepo;
+use bamboo\domain\repositories\COrderLineRepo;
 
 /**
  * Class CProductListAjaxController
@@ -20,7 +22,10 @@ use bamboo\domain\repositories\CLogRepo;
  */
 class CFriendAccept extends AAjaxController
 {
-
+    /**
+     * @return BambooException|BambooOrderLineException|\Exception|string
+     * @transaction
+     */
     public function post() {
         $dba = \Monkey::app()->dbAdapter;
 
@@ -28,85 +33,46 @@ class CFriendAccept extends AAjaxController
         $orderLines = $request->getRequestData('rows');
         $response = $request->getRequestData('response');
 
-
-        $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
-        $psR = \Monkey::app()->repoFactory->create('ProductSku');
-        /** @var CLogRepo $lR */
-        $lR = \Monkey::app()->repoFactory->create('Log');
-
-        $is500 = true;
-        $sendReminderMail = false;
+        $dba->beginTransaction();
         try {
 
             if (FALSE == $response) {
-                $is500 = true;
                 throw new BambooException('"response" non pervenuto');
             }
 
             if ('ok' === $response) {
                 $newStatus = 'ORD_FRND_OK';
                 $verdict = 'Consenso';
-            }
-            elseif ('ko' === $response) {
+                $sendReminderMail = false;
+            } elseif ('ko' === $response) {
                 $newStatus = 'ORD_FRND_CANC';
                 $verdict = 'Rifiuto';
                 $sendReminderMail = true;
             }
 
-            $dba->beginTransaction();
-
+            /** @var COrderLineRepo $olR */
             $olR = \Monkey::app()->repoFactory->create('OrderLine');
 
             if (is_string($orderLines)) $orderLines = [$orderLines];
 
-            foreach($orderLines as $o) {
+            foreach ($orderLines as $o) {
                 $id = explode('-', $o);
                 $ol = $olR->findOneBy(['id' => $id[0], 'orderId' => $id[1]]);
                 if (!$ol) {
-                    $is500 = false;
                     throw new BambooException('La linea ordine ' . $o . ' non esiste');
                 }
-                $statusId = $ol->orderLineStatus->id;
-                if (4 > $statusId || 8 < $statusId) {
-                    $is500 = false;
-                    throw new BambooException('Lo stato della linea ordine ' . $o . ' non può essere aggiornato');
-                }
-                if ('ko' === $response && 'ORD_FRND_OK') {
-                    $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
-                    if (!$allShops) {
-                        $last = $lR->getLastEntry(
-                            [
-                                'stringId' => $o,
-                                'eventValue' => 'ORD_FRND_OK'
-                            ]
-                        );
-                        if ($last) {
-                            $is500 = false;
-                            throw new BambooException('La riga d\'ordine <strong>' . $o . '</strong> è stata precedentemente accettata e non può essere cancellata');
-                        }
-                    }
-                }
-                $ol->status = $newStatus;
-                $ol->update();
-                if($sendReminderMail) {
-                    mail('friends@iwes.it','Rifiuto Friend',"L'utente {$this->app->getUser()->getFullName()} ha rifiutato l'ordine: {$ol->printId()} per il friend {$ol->shop->title}");
-                }
-
-                $accepted = ('ok' === $response) ? true : false;
-                $psk = $psR->findOne([$ol->productId, $ol->productVariantId, $ol->productSizeId, $ol->shopId]);
-                $soR->registerEcommerceSale($ol->shopId, [$psk], null, $accepted);
+                $olR->setFriendVerdict($ol, $newStatus, $sendReminderMail);
             }
             $dba->commit();
-
             return $verdict . ' correttamente registrato';
+        } catch (BambooOrderLineException $e) {
+            $dba->rollback();
+            $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
+            return $message . $e->getMessage();
         } catch (BambooException $e) {
             $dba->rollBack();
-            if ($is500) {
                 \Monkey::app()->router->response()->raiseProcessingError();
-            }
-            $message = '';
-            if (!$is500) $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
-            return $message . $e->getMessage();
+                return $e;
         }
     }
 }
