@@ -32,9 +32,9 @@ $(document).on('bs.order.recall.send', function (e, element, button) {
     }
 
     var orders = [];
-    $.each(selectedRows, function() {
+    $.each(selectedRows, function(k,v) {
         "use strict";
-        orders.push($(this).DT_RowId);
+        orders.push(v.DT_RowId);
     });
 
     header.html(button.getTitle());
