@@ -31,8 +31,8 @@ class CReleaseProduct extends CLogging
                 if (!$shp->releaseDate) {
                     $shp->releaseDate = $releaseDate;
                     $shp->update();
-                    $this->insertLogRow($eventName->getEventName(), $userId, $release, $shp->getEntityName(), $shp->printId(), $releaseDate);
                 }
+                $this->insertLogRow($eventName->getEventName(), $userId, $release, $shp->getEntityName(), $shp->printId(), $releaseDate);
             } else {
                 $product = $this->getParameter('Product');
                 if (($product) && ($product->productPhoto->count())) {
