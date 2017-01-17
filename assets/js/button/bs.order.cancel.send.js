@@ -1,16 +1,16 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-ship",
+    icon: "fa-times-circle-o",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.order.tracker.send",
+    event: "bs.order.cancel.send",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Invia Codice Tracker",
+    title: "Cancella Ordine (invia mail di notifica)",
     placement: "bottom",
     toggle: "modal"
 };
 
-$(document).on('bs.order.tracker.send', function (e, element, button) {
+$(document).on('bs.order.cancel.send', function (e, element, button) {
 
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');

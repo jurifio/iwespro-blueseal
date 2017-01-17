@@ -1,11 +1,11 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-ship",
+    icon: "fa-envelope",
     permission: "/admin/product/delete&&allShops",
     event: "bs.order.tracker.send",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Invia Codice Tracker",
+    title: "Ricontatta Cliente",
     placement: "bottom",
     toggle: "modal"
 };
