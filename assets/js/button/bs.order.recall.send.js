@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-envelope",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.order.tracker.send",
+    event: "bs.order.recall.send",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Ricontatta Cliente",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.order.tracker.send', function (e, element, button) {
+$(document).on('bs.order.recall.send', function (e, element, button) {
 
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
