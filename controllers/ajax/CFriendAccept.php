@@ -1,12 +1,8 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\blueseal\business\CDataTables;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooOrderLineException;
-use bamboo\core\intl\CLang;
-use bamboo\domain\repositories\CLogRepo;
-use bamboo\domain\repositories\COrderLineRepo;
 
 /**
  * Class CProductListAjaxController
@@ -43,11 +39,9 @@ class CFriendAccept extends AAjaxController
             if ('ok' === $response) {
                 $newStatus = 'ORD_FRND_OK';
                 $verdict = 'Consenso';
-                $sendReminderMail = false;
             } elseif ('ko' === $response) {
                 $newStatus = 'ORD_FRND_CANC';
                 $verdict = 'Rifiuto';
-                $sendReminderMail = true;
             }
 
             /** @var COrderLineRepo $olR */
@@ -61,7 +55,7 @@ class CFriendAccept extends AAjaxController
                 if (!$ol) {
                     throw new BambooException('La linea ordine ' . $o . ' non esiste');
                 }
-                $olR->setFriendVerdict($ol, $newStatus, $sendReminderMail);
+                $olR->setFriendVerdict($ol, $newStatus);
             }
             $dba->commit();
             return $verdict . ' correttamente registrato';
@@ -70,9 +64,10 @@ class CFriendAccept extends AAjaxController
             $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
             return $message . $e->getMessage();
         } catch (BambooException $e) {
-            $dba->rollBack();
-                \Monkey::app()->router->response()->raiseProcessingError();
-                return $e;
+            $dba-rollback();
+            \Monkey::app()->router->response()->raiseProcessingError();
+            $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
+            return $message . $e->getMessage();
         }
     }
 }
