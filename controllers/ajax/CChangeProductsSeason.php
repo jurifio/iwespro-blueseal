@@ -53,7 +53,7 @@ class CChangeProductsSeason extends AAjaxController
 
     public function get()
     {   /** @var CObjectCollection $seasons */
-        $seasons = $this->app->repoFactory->create('ProductSeason')->findAll();
+        $seasons = $this->app->repoFactory->create('ProductSeason')->findBy(['isActive' => 1]);
 
         $expSeasons = [];
         $i = 0;
