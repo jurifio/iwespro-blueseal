@@ -19,40 +19,10 @@ use bamboo\utils\price\SPriceToolbox;
  */
 class CFriendOrderListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-    */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-        $allShops = $this->app->getUser()->hasPermission('allShops');
-        if ($allShops) {
-
-        } else{
-            $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
-            foreach($res as $val) {
-                $this->authorizedShops[] = $val['shopId'];
-            }
-        }
-
-        $this->em = new \stdClass();
-        $this->em->products = $this->app->entityManagerFactory->create('Order');
-
-        return $this->{$action}();
-    }
 
     public function get()
     {
         $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
-        $olsR = \Monkey::app()->repoFactory->create('OrderLineStatus');
         $cR = \Monkey::app()->repoFactory->create('Configuration');
         $vat = $cR->findOneBy(['name' => 'main vat'])->value;
         $user = $this->app->getUser();
@@ -60,54 +30,54 @@ class CFriendOrderListAjaxController extends AAjaxController
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
 
         $query = "
-  SELECT
-  `ol`.`id` as `id`,
-  `ol`.`orderId` as `orderId`,
-  `o`.`orderDate` as `orderDate`,
-  concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderCode`,
-  concat(`p`.`id`, '-', `p`.`productVariantId`, '-', `ps`.`id`) as `code`,
-  concat(`p`.`itemno`, ' # ', `pv`.`name`)   AS `cpf`,
-  #l.eventValue as logVal,
-  #l.time as logTime,
-  `pb`.`name` as `brand`,
-  `pse`.`name` as `season`,
-  `ps`.`name` as `size`,
-  `s`.`id` as `shopId`,
-  `s`.`title` as `shopName`,
-  `os`.`title` as `orderStatusTitle`,
-  `o`.`status` as `orderStatusCode`,
-  `ol`.status as `orderLineStatusCode`,
-  `ols`.title as `orderLineStatusTitle`,
-  `olfps`.`name` as `paymentStatus`,
-  `ol`.`orderLineFriendPaymentDate` as `paymentDate`
-  /*,
-    `in`.`number` as `invoiceNumber`,
-    `in`.`creationDate` as `invoiceCreationDate`,
-    `in`.`paymentDate`  as `invoicePaymentDate`,
-    `in`.`paymentExpectedDate` as `invoicePaymentExpectedDate`*/
-FROM
-  ((((((((`Order` as `o` JOIN `OrderLine` as `ol` on `o`.`id` = `ol`.`orderId`)
-    JOIN `Shop` as `s` ON `ol`.`shopId` = `s`.`id`)
-    JOIN `OrderStatus` as `os` ON `o`.`status` = `os`.`code`)
-    JOIN `OrderLineStatus` AS `ols` on `ol`.`status` = `ols`.`code`)
-    LEFT JOIN `OrderLineFriendPaymentStatus` as `olfps` on `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
-    JOIN `Product` as `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`)
-    #JOIN `Log` as l ON l.stringId = concat(ol.id, '-', o.id) 
-    JOIN `ProductVariant` as `pv` On `p`.`productVariantId` = `pv`.`id`
-    JOIN `ProductSize` as `ps` on `ol`.`productSizeId` = `ps`.`id`)
-    JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
-    JOIN `ProductSeason` as `pse` on `p`.`productSeasonId` = `pse`.`id`
-    JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
+              SELECT
+              `ol`.`id` as `id`,
+              `ol`.`orderId` as `orderId`,
+              `o`.`orderDate` as `orderDate`,
+              concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderCode`,
+              concat(`p`.`id`, '-', `p`.`productVariantId`, '-', `ps`.`id`) as `code`,
+              concat(`p`.`itemno`, ' # ', `pv`.`name`)   AS `cpf`,
+              #l.eventValue as logVal,
+              #l.time as logTime,
+              `pb`.`name` as `brand`,
+              ifnull(`ilhol`.`invoiceLineInvoiceId`, 'non assegnata') as `invoiceNumber`,
+              `pse`.`name` as `season`,
+              `ps`.`name` as `size`,
+              `s`.`id` as `shopId`,
+              `s`.`title` as `shopName`,
+              `os`.`title` as `orderStatusTitle`,
+              `o`.`status` as `orderStatusCode`,
+              `ol`.status as `orderLineStatusCode`,
+              `ols`.title as `orderLineStatusTitle`,
+              `olfps`.`name` as `paymentStatus`,
+              `ol`.`orderLineFriendPaymentDate` as `paymentDate`
+              /*,
+                `in`.`number` as `invoiceNumber`,
+                `in`.`creationDate` as `invoiceCreationDate`,
+                `in`.`paymentDate`  as `invoicePaymentDate`,
+                `in`.`paymentExpectedDate` as `invoicePaymentExpectedDate`*/
+            FROM
+              ((((((((`Order` as `o` JOIN `OrderLine` as `ol` on `o`.`id` = `ol`.`orderId`)
+                JOIN `Shop` as `s` ON `ol`.`shopId` = `s`.`id`)
+                JOIN `OrderStatus` as `os` ON `o`.`status` = `os`.`code`)
+                JOIN `OrderLineStatus` AS `ols` on `ol`.`status` = `ols`.`code`)
+                LEFT JOIN `OrderLineFriendPaymentStatus` as `olfps` on `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
+                JOIN `Product` as `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`)
+                #JOIN `Log` as l ON l.stringId = concat(ol.id, '-', o.id) 
+                JOIN `ProductVariant` as `pv` On `p`.`productVariantId` = `pv`.`id`
+                JOIN `ProductSize` as `ps` on `ol`.`productSizeId` = `ps`.`id`)
+                JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
+                JOIN `ProductSeason` as `pse` on `p`.`productSeasonId` = `pse`.`id`
+                LEFT JOIN `InvoiceLineHasOrderLine` as `ilhol` on `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId` 
+                JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
         $datatable->addCondition(
             'orderLineStatusCode',
             ['ORD_CANCEL', 'ORD_ARCH', 'CRT', 'CRT_MRG'],
-            true
-        );
+            true);
+        $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         if (!$allShops) {
-            $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser($user);
-            $datatable->addCondition('shopId', $shops);
             $datatable->addCondition('orderLineStatusCode',
                 [
                     'ORD_MISSING',
@@ -124,8 +94,8 @@ FROM
         }
 
         $orderLines = $this->app->repoFactory->create('OrderLine')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $count = $this->app->repoFactory->create('OrderLine')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totlalCount = $this->app->repoFactory->create('OrderLine')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $orderStatuses = $this->app->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
@@ -164,10 +134,7 @@ FROM
             $response['data'][$i]['orderId'] = $v->orderId;
             $response['data'][$i]['code'] = $v->product->id . "-" . $v->product->productVariantId;
             $response['data'][$i]['size'] = $v->productSize->name;
-            $img = strpos($v->product->dummyPicture, 'amazonaws') ? $v->product->dummyPicture : $this->urls['dummy']."/".$v->product->dummyPicture;
-            if($v->product->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
-            else $imgs = "";
-            $response['data'][$i]['dummyPicture'] = '<img width="50" src="'.$img.'" />' . $imgs . '<br />';
+            $response['data'][$i]['dummyPicture'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $v->product->getDummyPictureUrl() . '" /></a>';
             $statusCode = $v->orderLineStatus->code;
 
             if (!$allShops &&  9 < $v->orderLineStatus->id) {
@@ -204,11 +171,12 @@ FROM
                 $datePay = implode('/', array_reverse(explode('-',explode(' ', $v->orderLineFriendPaymentDate)[0])));
             }
             $response['data'][$i]['paymentDate'] = $datePay;
-            $response['data'][$i]['fullPrice'] = $v->fullPrice;
-            $response['data'][$i]['activePrice'] = $v->activePrice;
-            $response['data'][$i]['friendRevenue'] = $v->friendRevenue;
+            $response['data'][$i]['fullPrice'] = number_format($v->fullPrice, 2, ',', '');
+            $response['data'][$i]['activePrice'] = number_format($v->activePrice, 2, ',', '');
+            $response['data'][$i]['friendRevenue'] = number_format($v->friendRevenue, 2, ',', '');
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::addVatToNetPrice($v->friendRevenue, $vat);
-
+            $invoiceLine = $v->invoiceLine->getFirst();
+            $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoiceId : 'non assegnata' ;
             $i++;
 	    }
         return json_encode($response);

@@ -38,7 +38,8 @@ $(document).on('bs.productHasMarketplace.marketplace.delete', function (e, eleme
 
     body.html('<div>Sei sicuro di voler togliere dal marketplace ' + getVarsArray.lenght + ' Prodotti?</div>');
 
-    okButton.off().on('click', function () {
+    cancelButton.show();
+    okButton.html('Esegui').show().off().on('click', function () {
         cancelButton.hide();
         okButton.hide();
         body.html('<img src="/assets/img/ajax-loader.gif" />');
@@ -52,9 +53,8 @@ $(document).on('bs.productHasMarketplace.marketplace.delete', function (e, eleme
             }).done(function (response) {
                 body.html('Eliminati '+response+' prodotti');
                 okButton.html('Ok');
-                okButton.show(false);
-                okButton.on('click',function () {
-                    modal.hide();
+                okButton.off().on('click',function () {
+                    bsModal.modal('hide');
                 });
             });
         });

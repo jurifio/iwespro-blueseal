@@ -19,7 +19,6 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_list"
-
                                data-controller="MarketplaceProductListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"

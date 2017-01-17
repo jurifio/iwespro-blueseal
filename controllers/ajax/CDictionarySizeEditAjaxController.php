@@ -54,7 +54,7 @@ class CDictionarySizeEditAjaxController extends AAjaxController
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
         $sql = "select `DictionarySize`.`shopId` AS `shopId`,`DictionarySize`.`term` AS `term`,`DictionarySize`.`productSizeId` AS `foreign` from `DictionarySize`";
-        $datatable = new CDataTables($sql,['shopId','term'],$_GET);
+        $datatable = new CDataTables($sql,['shopId','term'],$_GET,true);
         $datatable->addCondition('shopId',[$shopId]);
 
         if (!empty($this->authorizedShops)) {

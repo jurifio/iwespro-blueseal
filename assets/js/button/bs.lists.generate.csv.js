@@ -53,7 +53,7 @@ $(document).on('bs.lists.generate.csv', function () {
                     title.push($(v.header()).attr('aria-label').split(':')[0].trim());
                 }
             });
-            str += title.join(',') + '%0A';
+            str += title.join(';') + '%0A';
             var line;
             for (var i in res.data) {
                 line = [];
@@ -65,11 +65,13 @@ $(document).on('bs.lists.generate.csv', function () {
                         //OriginalString.replace(/(<([^>]+)>)/ig,"");
                         //if($(val).find('table').length) val = 'escluso';
                         var output = div.innerText;
-                        if (!isNaN(output)) output.replace('.',',');
+                        if (!isNaN(output)) {
+                            output = output.toString().replace('.', ',');
+                        }
                         line.push(encodeURIComponent(output).replaceAll('%0A', ' '));
                     }
                 }
-                str += line.join(',') + '%0A';
+                str += line.join(';') + '%0A';
             }
             modal.writeBody('<a href="data:text/csv;charset=UTF-8,' + str + '" download="download.csv">Scarica il file</a>');
             $(modal.okButton).prop('disabled', false);

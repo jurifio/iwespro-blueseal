@@ -82,7 +82,7 @@ class COrderAddController extends ARestrictedAccessRootController
 
             $return = $order->toArray();
             if($url = $gateway->getUrl($order)) {
-                $return['url'] = $url;
+                $return['url'] = base64_encode($url);
             }
             if($data['mail'] == 'true') {
                 $this->app->eventManager->triggerEvent('orderBack',['orderId'=>$order->id]);

@@ -35,6 +35,7 @@ class CFriendAccept extends AAjaxController
         $lR = \Monkey::app()->repoFactory->create('Log');
 
         $is500 = true;
+        $sendReminderMail = false;
         try {
 
             if (FALSE == $response) {
@@ -49,6 +50,7 @@ class CFriendAccept extends AAjaxController
             elseif ('ko' === $response) {
                 $newStatus = 'ORD_FRND_CANC';
                 $verdict = 'Rifiuto';
+                $sendReminderMail = true;
             }
 
             $dba->beginTransaction();
@@ -86,6 +88,9 @@ class CFriendAccept extends AAjaxController
                 }
                 $ol->status = $newStatus;
                 $ol->update();
+                if($sendReminderMail) {
+                    mail('friends@iwes.it','Rifiuto Friend',"L'utente {$this->app->getUser()->getFullName()} ha rifiutato l'ordine: {$ol->printId()} per il friend {$ol->shop->title}");
+                }
 
                 $accepted = ('ok' === $response) ? true : false;
                 $psk = $psR->findOne([$ol->productId, $ol->productVariantId, $ol->productSizeId, $ol->shopId]);

@@ -60,7 +60,7 @@ class CDictionaryTagListAjaxController extends AAjaxController
    WHERE ((`d2`.`shopId` = `d1`.`shopId`) AND isnull(`d2`.`tagId`))) AS `mancanti`
 FROM `DictionaryTag` `d1`
 GROUP BY `d1`.`shopId`";
-        $datatable = new CDataTables($sql,['id'],$_GET);
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);

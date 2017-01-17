@@ -308,7 +308,10 @@ $(document).on('bs.newOrder.save',function() {
             data:data
         }).done(function(res){
             res = JSON.parse(res);
-            body.html('<h4>Url di pagamento: </h4><span>'+res.url+'</span><br /><h5>'+' numero ordine: </h5><span>'+res.id+'</span>');
+            body.html('<h4>Url di pagamento: </h4>' +
+                        '<label id="label_url_pagamento" for="url_pagamento">URL (Click per copiare)</label>' +
+                        '<input id="url_pagamento" class="form-control" value="'+atob(res.url)+'"><br />' +
+                        '<h5>'+' numero ordine: </h5><span>'+res.id+'</span>');
             okButton.off().on('click',function() {
                 window.location.href = '/blueseal/ordini';
             });
@@ -320,4 +323,10 @@ $(document).on('bs.newOrder.save',function() {
         });
     });
     bsModal.modal();
+});
+
+$(document).on('click', '#url_pagamento,#label_url_pagamento',function() {
+    "use strict";
+    $('url_pagamento').select();
+    document.execCommand("copy");
 });
