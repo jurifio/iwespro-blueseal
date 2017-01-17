@@ -69,12 +69,14 @@ $(document).on('bs.order.recall.send', function (e, element, button) {
             okButton.html('Fatto').off().on('click', function () {
                 bsModal.modal('hide');
             });
+            var lang = $('select[name=\"lang\"]').val();
+            body.html(loaderHtml)
             $.ajax({
                 url: "/blueseal/xhr/OrderRecallClient",
                 type: "POST",
                 data: {
                     'ordersId': orders,
-                    'langId': $('select[name=\"lang\"]').val()
+                    'langId':lang
                 }
             }).done(function (response) {
                 body.html('fatto');
