@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs.order.cancel.send",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Cancella Ordine (invia mail di notifica)",
+    title: "Cancella Ordine (mancante, invia mail di notifica)",
     placement: "bottom",
     toggle: "modal"
 };
@@ -41,8 +41,24 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
         '<select id="#lang" name="lang" class="full-width"></select>' +
         '</div>' +
         '<div class="form-group form-group-default required">' +
-        '<label for="reason">Motivo</label>' +
-        '<input id="reason" autocomplete="off" type="text" class="form-control" value="" required="required">' +
+        '<label for="reason1">Motivo 1</label>' +
+        '<input id="reason1" autocomplete="off" type="text" class="form-control" value="" required="required">' +
+        '</div>'+
+        '<div class="form-group form-group-default required">' +
+        '<label for="reason2">Motivo 2</label>' +
+        '<input id="reason2" autocomplete="off" type="text" class="form-control" value="" required="required">' +
+        '</div>'+
+        '<div class="form-group form-group-default required">' +
+        '<label for="reason3">Motivo 3</label>' +
+        '<input id="reason3" autocomplete="off" type="text" class="form-control" value="" required="required">' +
+        '</div>'+
+        '<div class="form-group form-group-default required">' +
+        '<label for="reason4">Motivo 4</label>' +
+        '<input id="reason4" autocomplete="off" type="text" class="form-control" value="" required="required">' +
+        '</div>'+
+        '<div class="form-group form-group-default required">' +
+        '<label for="reason5">Motivo 5</label>' +
+        '<input id="reason5" autocomplete="off" type="text" class="form-control" value="" required="required">' +
         '</div>'
     );
     bsModal.modal();
@@ -66,24 +82,22 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
         });
 
         okButton.html('Invia').off().on('click', function () {
-            var tracking = $('#reason').val();
-            if (tracking.length < 1) {
-                new Alert({
-                    type: "warning",
-                    message: "Devi inserire il motivo per inserire la mail"
-                }).open();
-                return false;
-            }
+            var reasons = [];
+            reasons.push($('#reason1').val());
+            reasons.push($('#reason2').val());
+            reasons.push($('#reason3').val());
+            reasons.push($('#reason4').val());
+            reasons.push($('#reason5').val());
             cancelButton.off().hide();
             okButton.html('Fatto').off().on('click', function () {
                 bsModal.modal('hide');
             });
             $.ajax({
-                url: "/blueseal/xhr/OrderTracker",
+                url: "/blueseal/xhr/OrderDelete",
                 type: "POST",
                 data: {
                     'orderId': orderId,
-                    'tracking': reason,
+                    'reasons': reasons,
                     'langId': $('select[name=\"lang\"]').val()
                 }
             }).done(function (response) {
