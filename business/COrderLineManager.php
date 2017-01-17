@@ -42,6 +42,7 @@ class COrderLineManager
      * @param $newStatus
      * @return bool
      * @throws RedPandaException
+     * @deprecated
      */
     public function changeStatus($newStatus)
     {
