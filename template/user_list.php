@@ -32,6 +32,10 @@
                                data-display-length="50">
                             <thead>
                             <tr>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Id</th>
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -52,6 +56,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Stato</th>
+                                <th data-slug="phone"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Tel.</th>
                                 <th data-slug="method"
                                     data-searchable="false"
                                     data-orderable="false"
