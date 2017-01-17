@@ -108,6 +108,12 @@
         <bs-toolbar-button
             data-remote="bs.order.tracker.send"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.order.cancel.send"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.order.recall.send"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
