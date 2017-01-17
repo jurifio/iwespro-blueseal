@@ -127,14 +127,13 @@ class CInvoiceNewRepo extends ARepo
         int $vat
     )
     {
+        $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $description = 'Ft. Fr.: ';
         if (is_string($orderLine)) {
-            $orderLine = \Monkey::app()->repoFactory->create('OrderLine')->findOneByStringId($orderLine);
+            $orderLine = $olR->findOneByStringId($orderLine);
         }
-        $product = $orderLine->product;
-        $description .= 'Ord: ' . $orderLine->printId() . ' - cod. p.: ' . $product->printId();
-        $description .= ' - cpf: ' . $product->itemno . ' # ' . $product->productVariant->name;
-        $description .= ' - brand: ' . $product->productBrand->name . ' - size: ' . $orderLine->productSize->name;
+
+        $description .= $olR->getOrderLineDescription($orderLine);
 
         $invoiceLineId = $this->addLineToInvoice($invoiceId, $description, $price, $countainVat, $vat);
         $ilhol = \Monkey::app()->repoFactory->create('InvoiceLineHasOrderLine')->getEmptyEntity();
