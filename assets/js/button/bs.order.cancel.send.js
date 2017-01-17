@@ -93,7 +93,7 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
                 bsModal.modal('hide');
             });
             $.ajax({
-                url: "/blueseal/xhr/OrderTracker",
+                url: "/blueseal/xhr/COrderDelete",
                 type: "POST",
                 data: {
                     'orderId': orderId,
