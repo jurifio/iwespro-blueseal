@@ -49,16 +49,8 @@ class CDispatchOrderToFriend extends ACronJob
                 $this->app->dbAdapter->beginTransaction();
                 foreach($lines as $line){
                     try {
-
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLineRepo->updateStatus($orderLine, $this->success);
-
-                        /**\Monkey::app()->eventManager->triggerEvent('friendOrderShipped',
-                            [
-                                'order' => $orderLine,
-                                'status' => $this->success
-                            ]);*/
-
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
@@ -72,13 +64,6 @@ class CDispatchOrderToFriend extends ACronJob
 
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLineRepo->updateStatus($orderLine, $this->fail);
-
-                        /**\Monkey::app()->eventManager->triggerEvent('friendOrderPayd',
-                            [
-                                'order' => $orderLine,
-                                'status' => $this->fail
-                            ]);*/
-
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
