@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\repositories\CInvoiceNewRepo;
+use bamboo\utils\price\SPriceToolbox;
 
 /**
  * Class CFriendOrderRecordInvoice
@@ -19,10 +20,13 @@ class CFriendOrderRecordInvoice extends AAjaxController
         $res = [];
         $res['error'] = false;
         $res['shop'] = 0;
+        $res['lines'] = [];
+        $res['total'] = 0;
         $res['responseText'] = '';
 
         $linesWoInvoice = [];
         $shopId = false;
+        $olArr = [];
         foreach($rows as $v) {
             $ol = $olR->findOneByStringId($v);
             $invoiceLineOC = $ol->invoiceLine;
@@ -35,8 +39,10 @@ class CFriendOrderRecordInvoice extends AAjaxController
                     $res['error'] = true;
                     $res['responseText'] =
                         '<p><strong>Attenzione!</strong> I prodotti selezionati devono appartenere tutti allo stesso negozio.</p>';
+                    return $res;
                 }
             }
+            $olArr[] = $ol;
         }
 
         $res['shop'] = $shopId;
@@ -48,6 +54,14 @@ class CFriendOrderRecordInvoice extends AAjaxController
                 '</li></ul>';
         }
 
+        foreach ($olArr as $v) {
+            $line =[];
+            $line['description'] = $olR->getOrderLineDescription($v);
+            $line['friendRevenue'] = SPriceToolbox::formatToEur($v->friendRevenue, true);
+            $res['lines'][] = $line;
+            $res['total'] +=$v->friendRevenue;
+        }
+        $res['total'] =  SPriceToolbox::formatToEur($res['total']. true);
         return json_encode($res);
     }
 

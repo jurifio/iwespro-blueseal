@@ -43,6 +43,34 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
     }).done(function(res){
         modal.writeBody(res.responseText);
         if (!res.error) {
+            var invoiceTable =
+                '<table class="table">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Descrizione</th>' +
+                '<th>Prezzo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody>';
+
+            for(var i in res.lines) {
+                var line = res.lines[i];
+
+                invoiceTable +=
+                    '<tr>' +
+                        '<td><span class="small">' + line.description + '</span></td>' +
+                        '<td style="text-align: right;">' + line.friendRevenue + '</td>' +
+                    '</tr>';
+            }
+            invoiceTable +=
+                '<tr>' +
+                '<td style="text-align: right; font-weight: bold">' +
+                'Totale che sarà corrisposto (IVA esclusa)' +
+                '</td>' +
+                '<td style="text-align: right; font-weight: bold">' + res.total + '</td>' +
+                '</tr>'
+            invoiceTable+= '</tbody>' +
+            '</table>';
 
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
@@ -62,7 +90,12 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
                 '<input type="file" class="form-control" id="invoiceFile" name="invoiceFile">'+
                 '</form>';
 
-            modal.writeBody(invoiceForm);
+            var body = '<h4>Riepilogo dei prodotti selezionati</h4>';
+            body+= invoiceTable;
+            body+= '<h5 style="padding-top: 30px;">Inserisci i dati della fattura qui di seguito.</h5>';
+            body+= invoiceForm;
+
+            modal.writeBody(body);
 
             modal.setOkEvent(function(){
                 var invoiceDate = $('#invoiceDate').val();
