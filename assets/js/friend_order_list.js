@@ -152,3 +152,55 @@ $(document).on('bs.friend.orderline.ko', function(){
         modal.writeBody(res.responseText);
     });
 });
+
+$(document).on('bs.friend.orderline.shippedByFriend', function(){
+    var dataTable = $('.table').DataTable();
+    var selectedRows = dataTable.rows('.selected').data();
+
+    if ( 1 > selectedRows.length) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare almeno un prodotto"
+        }).open();
+        return false;
+    }
+
+    var i = 0;
+    var row = [];
+    $.each(selectedRows, function (k, v) {
+        row[i] = v.line_id;
+        i++;
+        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+    });
+
+    modal = new $.bsModal('Segna le righe ordine come spedite',
+        {
+            body: 'Sto caricando le informazioni...'
+        });
+
+    $.ajax({
+        url: '/blueseal/xhr/FriendShipMent',
+        method: 'GET',
+        data: {rows: row}
+    }).done(function(res){
+        modal.writeBody(res.message);
+        if (!res.error) {
+            modal.setOkEvent(function() {
+                $.ajax({
+                    url: '/blueseal/xhr/friendShipMent',
+                    method: 'POST',
+                    data: {rows: row}
+                }).done(function (res) {
+                    modal.writeBody(res);
+                }).fail(function (res) {
+                    modal.writeBody('OOPS! C\'è stato un problema. Se il problema persiste');
+                    console.error(res);
+                }).always(function (res) {
+                });
+            });
+        }
+    }).fail(function(res) {
+        modal.writeBody('OOPS! C\'è stato un problema. Se il problema persiste');
+        console.error(res);
+    });
+});

@@ -178,6 +178,16 @@
             data-placement="bottom"
             data-event="bs.friend.orderline.ko"
         ></bs-toolbar-button>
+        <!--<bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-thumbs-down"
+            data-permission="/admin/product/list"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Segna righe d'ordine come spedite <?php echo ($allShops) ? ' dal Friend' : ''; ?>"
+            data-placement="bottom"
+            data-event="bs.friend.orderline.shippedByFriend"
+        ></bs-toolbar-button>-->
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione Pagamenti">
         <bs-toolbar-button
