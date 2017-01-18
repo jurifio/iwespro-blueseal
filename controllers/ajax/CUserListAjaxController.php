@@ -50,7 +50,7 @@ class CUserListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "select `u`.`id` AS `id`,`ud`.`name` AS `name`,`ud`.`surname` AS `surname`,`u`.`email` AS `email`,if((`ud`.`gender` = 'F'),'Donna','Uomo') AS `sex`,if((`u`.`isActive` = 1),'Attivato','Disattivato') AS `status`,`u`.`creationDate` AS `creationDate` from (`User` `u` join `UserDetails` `ud`) where ((`u`.`id` = `ud`.`userId`) and (`u`.`isDeleted` = 0)) order by `u`.`creationDate` desc";
+        $sql = "select `u`.`id` AS `id`,`ud`.`name` AS `name`,`ud`.`surname` AS `surname`,`u`.`email` AS `email`,if((`ud`.`gender` = 'F'),'Donna','Uomo') AS `sex`,if((`u`.`isActive` = 1),'Attivato','Disattivato') AS `status`,`u`.`creationDate` AS `creationDate`, ud.phone from (`User` `u` join `UserDetails` `ud`) where ((`u`.`id` = `ud`.`userId`) and (`u`.`isDeleted` = 0)) order by `u`.`creationDate` desc";
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         $users = $this->app->repoFactory->create('User')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
@@ -69,6 +69,7 @@ class CUserListAjaxController extends AAjaxController
         {
             $response['data'][$i]["DT_RowId"] = 'row__'.$val->id;
             $response['data'][$i]["DT_RowClass"] = $val->isActive == 1 ? 'active' : 'unactive' ;;
+            $response['data'][$i]['id'] = $val->id;
             $response['data'][$i]['name'] = $val->userDetails->name;
             $response['data'][$i]['surname'] = $val->userDetails->surname;
             $response['data'][$i]['email'] = $val->email;
@@ -83,6 +84,7 @@ class CUserListAjaxController extends AAjaxController
                 }
             }
             $response['data'][$i]['status'] = '<i style="color: '.$color.'" class="fa '.$icon.'"></i>';
+            $response['data'][$i]['phone'] = $val->userDetails->phone;
             $response['data'][$i]['creationDate'] = $val->creationDate;
             $i++;
         }

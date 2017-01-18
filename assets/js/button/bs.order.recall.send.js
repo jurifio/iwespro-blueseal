@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs.order.recall.send",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Ricontatta Cliente",
+    title: "Mail: Ordine non pagato",
     placement: "bottom",
     toggle: "modal"
 };
@@ -70,7 +70,7 @@ $(document).on('bs.order.recall.send', function (e, element, button) {
                 bsModal.modal('hide');
             });
             var lang = $('select[name=\"lang\"]').val();
-            body.html(loaderHtml)
+            body.html(loaderHtml);
             $.ajax({
                 url: "/blueseal/xhr/OrderRecallClient",
                 type: "POST",

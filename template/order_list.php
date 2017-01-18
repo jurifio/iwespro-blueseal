@@ -61,6 +61,10 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Dovuto/Pagato</th>
+                                <th data-slug="paymentDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center dataFilterType">Data Pagamento</th>
                                 <th data-slug="payment"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -113,6 +117,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.order.recall.send"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.order.wiretransfer.send"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

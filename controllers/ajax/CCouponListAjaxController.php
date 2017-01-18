@@ -53,24 +53,25 @@ class CCouponListAjaxController extends AAjaxController
         $editCouponLink = $this->urls['base']."coupon/modifica";
         $editOrderLink = $this->urls['base']."ordini/aggiungi";
         $sql = "
-SELECT
-  `Coupon`.`id`                                              AS `id`,
-  `Coupon`.`couponTypeId`                                    AS `couponTypeId`,
-  `Coupon`.`tagId`                                           AS `tagId`,
-  `Coupon`.`code`                                            AS `code`,
-  `Coupon`.`issueDate`                                       AS `issueDate`,
-  `Coupon`.`validThru`                                       AS `validThru`,
-  `Coupon`.`amount`                                          AS `amount`,
-  `Coupon`.`amountType`                                      AS `amountType`,
-  `Coupon`.`userId`                                          AS `userId`,
-  `Coupon`.`valid`                                           AS `valid`,
-  `CouponType`.`name`                                        AS `couponType`,
-  `CouponType`.`validForCartTotal`                           AS `validForCartTotal`,
-  concat(`UserDetails`.`name`, ' ', `UserDetails`.`surname`) AS `utente`,
-  `Order`.`id`                                               AS `orderId`
-FROM (((`Coupon`
-  JOIN `CouponType` ON ((`Coupon`.`couponTypeId` = `CouponType`.`id`))) LEFT JOIN `UserDetails`
-    ON ((`UserDetails`.`userId` = `Coupon`.`userId`))) LEFT JOIN `Order` ON ((`Order`.`couponId` = `Coupon`.`id`)))";
+                SELECT
+                  `Coupon`.`id`                                              AS `id`,
+                  `Coupon`.`couponTypeId`                                    AS `couponTypeId`,
+                  `Coupon`.`tagId`                                           AS `tagId`,
+                  `Coupon`.`code`                                            AS `code`,
+                  `Coupon`.`issueDate`                                       AS `issueDate`,
+                  `Coupon`.`validThru`                                       AS `validThru`,
+                  `Coupon`.`amount`                                          AS `amount`,
+                  `Coupon`.`amountType`                                      AS `amountType`,
+                  `Coupon`.`userId`                                          AS `userId`,
+                  `Coupon`.`valid`                                           AS `valid`,
+                  `CouponType`.`name`                                        AS `couponType`,
+                  `CouponType`.`validForCartTotal`                           AS `validForCartTotal`,
+                  concat(`UserDetails`.`name`, ' ', `UserDetails`.`surname`) AS `utente`,
+                  `Order`.`id`                                               AS `orderId`
+                FROM (((`Coupon`
+                  JOIN `CouponType` ON ((`Coupon`.`couponTypeId` = `CouponType`.`id`))) 
+                  LEFT JOIN `UserDetails` ON ((`UserDetails`.`userId` = `Coupon`.`userId`))) 
+                  LEFT JOIN `Order` ON ((`Order`.`couponId` = `Coupon`.`id`)))";
         $datatable = new CDataTables($sql,['id'],$_GET, true);
 
         if (!empty($this->authorizedShops)) {
@@ -93,7 +94,7 @@ FROM (((`Coupon`
             $issued = new \DateTime($coupon->issueDate);
             $valid = new \DateTime($coupon->validThru);
             $user = (!is_null ($coupon->user) && !is_null($coupon->user->userDetails)) ? $coupon->user->userDetails->name.' '.$coupon->user->userDetails->surname : null;
-            $order = (!is_null ($coupon->order) && !is_null ($coupon->order->couponId)) ? $coupon->order->couponId : null;
+            $order = $coupon->order;
             $row = [];
             $row["DT_RowId"] = 'row__'.$coupon->id;
             $row["DT_RowClass"] = 'colore';
@@ -104,7 +105,7 @@ FROM (((`Coupon`
             $row['amount'] = ($coupon->amountType == 'P') ? $coupon->amount.'%' : $coupon->amount.' &euro;';
             $row['validForCartTotal'] = $coupon->couponType->validForCartTotal.' &euro;';
             $row['utente'] = $user ?? "";
-            $row['orderId'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editOrderLink.'?order='.$order.'">'.$order.'</a>';
+            $row['orderId'] = $order ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editOrderLink.'?order='.$order->id.'">'.$order->id.'</a>' : '';
             $row['valid'] = ($coupon->valid == 1) ? 'valido' : 'non valido';
             $response['data'][] = $row;
         }

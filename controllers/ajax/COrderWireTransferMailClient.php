@@ -16,7 +16,7 @@ use bamboo\domain\entities\CShipment;
  * @date $date
  * @since 1.0
  */
-class COrderRecallClient extends AAjaxController
+class COrderWireTransferMailClient extends AAjaxController
 {
     use TMySQLTimestamp;
 
@@ -29,10 +29,10 @@ class COrderRecallClient extends AAjaxController
             $order = $this->app->repoFactory->create('Order')->findOneByStringId($orderId);
 
             $to = [$order->user->email];
-            $this->app->mailer->prepare('remindmailclient','no-reply', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
+            $this->app->mailer->prepare('wiretransfermailclient','no-reply', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
 
             if($this->app->mailer->send()) {
-                $order->note = $order->note." RemindMail: ".date('Y-m-d');
+                $order->note = $order->note." BonificoMail: ".date('Y-m-d');
                 $order->update();
             };
         }
