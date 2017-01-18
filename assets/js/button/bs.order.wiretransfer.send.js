@@ -1,16 +1,16 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-times-circle-o",
+    icon: "fa-university",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.order.cancel.send",
+    event: "bs.order.wiretransfer.send",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Mail: Ordine Cancellato (mancante)",
+    title: "Mail: Ordine con bonifico",
     placement: "bottom",
     toggle: "modal"
 };
 
-$(document).on('bs.order.cancel.send', function (e, element, button) {
+$(document).on('bs.order.wiretransfer.send', function (e, element, button) {
 
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
@@ -23,7 +23,7 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
     var getVarsArray = [];
     var selectedRows = dataTable.rows('.selected').data();
 
-    if (selectedRows.length != 1) {
+    if (selectedRows.length < 1) {
         new Alert({
             type: "warning",
             message: "Devi selezionare un ordine per inserire il tracker"
@@ -31,34 +31,17 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
         return false;
     }
 
-    var selectedRow = dataTable.row('.selected').data();
-    var orderId = selectedRow.DT_RowId;
+    var orders = [];
+    $.each(selectedRows, function(k,v) {
+        "use strict";
+        orders.push(v.DT_RowId);
+    });
 
     header.html(button.getTitle());
     body.html(
         '<div class="form-group form-group-default">' +
-        '<label for="lang">Lingua</label>' +
+        '<label for="lang">lingua</label>' +
         '<select id="#lang" name="lang" class="full-width"></select>' +
-        '</div>' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="reason1">Motivo 1</label>' +
-        '<input id="reason1" autocomplete="off" type="text" class="form-control" value="" required="required">' +
-        '</div>'+
-        '<div class="form-group form-group-default required">' +
-        '<label for="reason2">Motivo 2</label>' +
-        '<input id="reason2" autocomplete="off" type="text" class="form-control" value="" required="required">' +
-        '</div>'+
-        '<div class="form-group form-group-default required">' +
-        '<label for="reason3">Motivo 3</label>' +
-        '<input id="reason3" autocomplete="off" type="text" class="form-control" value="" required="required">' +
-        '</div>'+
-        '<div class="form-group form-group-default required">' +
-        '<label for="reason4">Motivo 4</label>' +
-        '<input id="reason4" autocomplete="off" type="text" class="form-control" value="" required="required">' +
-        '</div>'+
-        '<div class="form-group form-group-default required">' +
-        '<label for="reason5">Motivo 5</label>' +
-        '<input id="reason5" autocomplete="off" type="text" class="form-control" value="" required="required">' +
         '</div>'
     );
     bsModal.modal();
@@ -82,23 +65,18 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
         });
 
         okButton.html('Invia').off().on('click', function () {
-            var reasons = [];
-            reasons.push($('#reason1').val());
-            reasons.push($('#reason2').val());
-            reasons.push($('#reason3').val());
-            reasons.push($('#reason4').val());
-            reasons.push($('#reason5').val());
             cancelButton.off().hide();
             okButton.html('Fatto').off().on('click', function () {
                 bsModal.modal('hide');
             });
+            var lang = $('select[name=\"lang\"]').val();
+            body.html(loaderHtml)
             $.ajax({
-                url: "/blueseal/xhr/OrderDelete",
+                url: "/blueseal/xhr/OrderWireTransferMailClient",
                 type: "POST",
                 data: {
-                    'orderId': orderId,
-                    'reasons': reasons,
-                    'langId': $('select[name=\"lang\"]').val()
+                    'ordersId': orders,
+                    'langId':lang
                 }
             }).done(function (response) {
                 body.html('fatto');

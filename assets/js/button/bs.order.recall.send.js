@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs.order.recall.send",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Ricontatta Cliente",
+    title: "Mail: Ordine non pagato",
     placement: "bottom",
     toggle: "modal"
 };
