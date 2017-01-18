@@ -96,7 +96,7 @@
                                         <select class="full-width selectpicker" placeholder="Seleziona il colore" data-init-plugin="selectize" tabindex="-1" title="colorId" name="colorId" id="colorId">
                                             <?php foreach ($colors as $color): ?>
                                                 <option></option>
-                                                <option value="<?php echo $color->id . '_' . $color->langId?>" require >
+                                                <option value="<?php echo $color->id ?>" require >
                                                     <?php echo $color->name . ''?></option>
                                             <?php endforeach; ?>
                                         </select>

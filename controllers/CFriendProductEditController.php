@@ -62,7 +62,7 @@ class CFriendProductEditController extends CProductManageController
         $tag = $em->findAll(null, 'order by `slug`');
 
         $em = $this->app->entityManagerFactory->create('ProductColorGroup');
-        $gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", []);
+        $gruppicolore = $em->findBySql("SELECT id FROM ProductColorGroup ORDER BY `name`", []);
 
         $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
         $productSheets = $em->findBySql('SELECT id FROM ProductSheetPrototype ORDER BY `name`');

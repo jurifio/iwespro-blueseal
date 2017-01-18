@@ -66,7 +66,7 @@ class CProductListAjaxController extends AAjaxController
                          ma.marketplaceId = mahp.marketplaceId AND
                          mahp.productId = p.id AND
                          mahp.productVariantId = p.productVariantId)                                                    AS marketplaces
-                FROM (((((((((((((`Product` `p`
+                FROM ((((((((((((`Product` `p`
                   JOIN `ProductSeason` `pse` ON ((`p`.`productSeasonId` = `pse`.`id`)))
                   JOIN `ProductVariant` `pv` ON ((`p`.`productVariantId` = `pv`.`id`)))
                   JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`)))
@@ -83,9 +83,7 @@ class CProductListAjaxController extends AAjaxController
                   LEFT JOIN (`ProductHasTag` `pht`
                     JOIN `TagTranslation` `t` ON ((`pht`.`tagId` = `t`.`tagId`)))
                     ON (((`pht`.`productId` = `p`.`id`) AND (`pht`.`productVariantId` = `p`.`productVariantId`))))
-                  LEFT JOIN (`ProductHasProductColorGroup` `phcg`
-                    JOIN `ProductColorGroup` `pcg` ON (((`phcg`.`productColorGroupId` = `pcg`.`id`) AND (`pcg`.`langId` = 1))))
-                    ON (((`phcg`.`productId` = `p`.`id`) AND (`phcg`.`productVariantId` = `p`.`productVariantId`))))
+                  LEFT JOIN `ProductColorGroup` `pcg` ON (`p`.`productColorGroupId` = `pcg`.`id`)
                   LEFT JOIN (`DirtyProduct` `dp`
                     JOIN `DirtySku` `ds` ON ((`dp`.`id` = `ds`.`dirtyProductId`)))
                     ON (((`sp`.`productId` = `dp`.`productId`) AND (`sp`.`productVariantId` = `dp`.`productVariantId`) AND
@@ -157,7 +155,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['cpf'] = $val->printCpf();
 
-            $colorGroup = $val->productColorGroup->getFirst();
+            $colorGroup = $val->productColorGroup->productColorGroupTranslation->getFirst();
             $row['colorGroup'] = '<span class="small">' . (($colorGroup) ? $colorGroup->name : "[Non assegnato]") . '</span>';
             $row['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
             $row['categoryId'] = '<span class="small">' . $val->getLocalizedProductCategories(" ", "<br>") . '</span>';

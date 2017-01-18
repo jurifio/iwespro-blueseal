@@ -22,6 +22,7 @@ class CColorManageController extends ARestrictedAccessRootController
 
     public function post()
     {
+        throw new \Exception('DEBUG ME; TO CHANGE AFTER COLOR REFACTOR');
         $blueseal = $this->app->baseUrl(false) . '/blueseal';
         $slugify = new CSlugify();
         $datas = $this->app->router->request()->getRequestData();
@@ -69,6 +70,7 @@ class CColorManageController extends ARestrictedAccessRootController
 
     public function put()
     {
+        throw new \Exception('DEBUG ME; TO CHANGE AFTER COLOR REFACTOR');
         $blueseal = $this->app->baseUrl(false) . '/blueseal';
         $slugify = new CSlugify();
         $datas = $this->app->router->request()->getRequestData();

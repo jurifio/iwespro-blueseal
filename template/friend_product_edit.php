@@ -129,7 +129,7 @@ endif; ?></div>
                                                                 <?php foreach ($gruppicolore as $color): ?>
                                                                     <option value="<?php echo $color->id ?>" <?php
                                                                     if (isset($productEdit)) {
-                                                                        if (!is_null($productEdit->productColorGroup) && !$productEdit->productColorGroup->isEmpty() && $productEdit->productColorGroup->getFirst()->id == $color->id) echo 'selected="selected"';
+                                                                        if (!is_null($productEdit->productColorGroup) && $productEdit->productColorGroupId == $color->id) echo 'selected="selected"';
                                                                     } ?>> <?php echo $color->name; ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>

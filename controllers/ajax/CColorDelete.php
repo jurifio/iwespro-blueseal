@@ -12,6 +12,7 @@ namespace bamboo\blueseal\controllers\ajax;
  * Proprietary and confidential
  *
  * @since ${VERSION}
+ * @todo checkme
  */
 class CColorDelete extends AAjaxController
 {
