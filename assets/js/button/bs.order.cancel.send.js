@@ -87,7 +87,7 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
             reasons.push($('#reason2').val());
             reasons.push($('#reason3').val());
             reasons.push($('#reason4').val());
-            reaons.push($('#reason5').val());
+            reasons.push($('#reason5').val());
             var langId = $('select[name=\"lang\"]').val();
             cancelButton.off().hide();
             okButton.html('Fatto').off().on('click', function () {
