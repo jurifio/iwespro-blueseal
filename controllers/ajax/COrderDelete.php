@@ -34,7 +34,7 @@ class COrderDelete extends AAjaxController
         $this->app->orderManager->changeStatus($order,'ORD_FR_CANCEL');
 
         $to = [$order->user->email];
-        $this->app->mailer->prepare('deleteorderclient','no-reply', $to,[],[],['order'=>$order,'reasons'=>$reasons,'lang'=>$lang->lang]);
+        $this->app->mailer->prepare('deleteorderclient','no-reply', $to,[],[],['order'=>$order,'orderId'=>$orderId,'reasons'=>$reasons,'lang'=>$lang->lang]);
         $res = $this->app->mailer->send();
         if($res) return 'ok';
         return false;

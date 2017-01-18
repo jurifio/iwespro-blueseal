@@ -29,7 +29,7 @@ class COrderRecallClient extends AAjaxController
             $order = $this->app->repoFactory->create('Order')->findOneByStringId($orderId);
 
             $to = [$order->user->email];
-            $this->app->mailer->prepare('remindmailclient','no-reply', $to,[],[],['order'=>$order,'lang'=>$lang->lang]);
+            $this->app->mailer->prepare('remindmailclient','no-reply', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
 
             if($this->app->mailer->send()) {
                 $order->note = $order->note." RemindMail: ".date('Y-m-d');

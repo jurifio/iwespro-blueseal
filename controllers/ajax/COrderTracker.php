@@ -51,7 +51,7 @@ class COrderTracker extends AAjaxController
         $this->app->orderManager->changeStatus($order,'ORD_SHIPPED');
 
         $to = [$order->user->email];
-        $this->app->mailer->prepare('shipmentclient','no-reply', $to,[],[],['order'=>$order,'shipment'=>$shipment,'lang'=>$lang->lang]);
+        $this->app->mailer->prepare('shipmentclient','no-reply', $to,[],[],['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang]);
         $res = $this->app->mailer->send();
         if($res) return 'ok';
         return false;
