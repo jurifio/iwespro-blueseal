@@ -133,8 +133,9 @@ $(document).on('bs.storehouse.operation.fast.save',function() {
                 okButton.off().on('click',function() {
                    window.location.reload();
                 });
-            }).fail(function () {
-                body.html("OOPS! Non sono riuscito ad inserire!");
+            }).fail(function (res) {
+                body.html("OOPS! Non sono riuscito ad inserire! Se il problema persiste contatta gli amministratori");
+                console.error(res);
                 okButton.off().hide();
                 cancelButton.show();
             })

@@ -137,6 +137,11 @@ class CCatalogController extends AAjaxController
         return $arrRet;
     }
 
+    /**
+     * @return bool|string
+     * @throws \Exception
+     * @transaction
+     */
     public function post()
     {
         $get = $this->app->router->request()->getRequestData();
@@ -169,10 +174,14 @@ class CCatalogController extends AAjaxController
         }
 
         /** var CStorehouseOperationRepo */
+        $dba = \Monkey::app()->dbAdapter;
+        $dba->beginTransaction();
         try {
             $soR->registerOperation($moves, $shop, $get['mag-movementCause']);
+            $dba->commit();
             return true;
         } catch(BambooException $e) {
+            $dba->rollBack();
             return 'OOPS! Movimento non eseguito:<br /> ' . $e->getMessage();
         }
     }

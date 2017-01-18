@@ -1013,10 +1013,7 @@ $.bsModal = function (header, params) {
             f.find('input, select').each(function () {
                 $(this).parent().removeClass('hasError');
             });
-            /* dovrebbe evidenziare i campi contenenti errori ma non funziona, e non dovrebbe servire dopo l'implementazione di bsForm
-             $.each(domElems, function(k, v){
-             $(v).parent().addClass('hasError');
-             });*/
+
             var alert = f.find('.alert');
             alert.css('visibility', 'visible');
             alert.css('opacity', '1');
