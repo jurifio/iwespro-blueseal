@@ -87,18 +87,20 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
             reasons.push($('#reason2').val());
             reasons.push($('#reason3').val());
             reasons.push($('#reason4').val());
-            reasons.push($('#reason5').val());
+            reaons.push($('#reason5').val());
+            var langId = $('select[name=\"lang\"]').val();
             cancelButton.off().hide();
             okButton.html('Fatto').off().on('click', function () {
                 bsModal.modal('hide');
             });
+            body.html(loaderHtml);
             $.ajax({
                 url: "/blueseal/xhr/OrderDelete",
                 type: "POST",
                 data: {
                     'orderId': orderId,
                     'reasons': reasons,
-                    'langId': $('select[name=\"lang\"]').val()
+                    'langId': langId
                 }
             }).done(function (response) {
                 body.html('fatto');

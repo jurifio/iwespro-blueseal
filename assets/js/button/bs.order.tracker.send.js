@@ -100,14 +100,17 @@ $(document).on('bs.order.tracker.send', function (e, element, button) {
             okButton.html('Fatto').off().on('click', function () {
                 bsModal.modal('hide');
             });
+            var carrierId = $('select[name=\"carrier\"]').val();
+            var langId = $('select[name=\"lang\"]').val();
+            body.html(loaderHtml);
             $.ajax({
                 url: "/blueseal/xhr/OrderTracker",
                 type: "POST",
                 data: {
                     'orderId': orderId,
                     'tracking': tracking,
-                    'carrierId': $('select[name=\"carrier\"]').val(),
-                    'langId': $('select[name=\"lang\"]').val()
+                    'carrierId': carrierId,
+                    'langId': langId
                 }
             }).done(function (response) {
                 body.html('fatto');

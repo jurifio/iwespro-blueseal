@@ -70,7 +70,7 @@ $(document).on('bs.order.wiretransfer.send', function (e, element, button) {
                 bsModal.modal('hide');
             });
             var lang = $('select[name=\"lang\"]').val();
-            body.html(loaderHtml)
+            body.html(loaderHtml);
             $.ajax({
                 url: "/blueseal/xhr/OrderWireTransferMailClient",
                 type: "POST",
