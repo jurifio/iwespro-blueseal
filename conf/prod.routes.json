@@ -1530,6 +1530,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/campagne(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/marketplace/accounts(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountListController"
@@ -1624,7 +1635,7 @@
                 "GET"
             ]
         },{
-            "name": "Gestione Ordini Con i friend",
+            "name": "Gestione ordini con i friend",
             "pattern": "/blueseal/friend/ordini(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderListController"
@@ -1633,6 +1644,18 @@
             "translations": {},
             "methods": [
                 "GET"
+            ]
+        },{
+            "name": "Gestione delle fatture dei Friend",
+            "pattern": "/blueseal/friend/fatture(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderInvoiceListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST"
             ]
         },{
             "pattern": "/blueseal/fixGruppiTaglia(/)?",
