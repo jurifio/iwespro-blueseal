@@ -31,7 +31,7 @@ class CColorEditController extends CColorManageController
 
         $colorGroupEdit = [];
         foreach ($this->app->router->request()->getRequestData() as $colorId) {
-            $colorGroupEdit = $this->app->repoFactory->create('ProductColorGroup', false)->findBy(['id' => $colorId]);
+            $colorGroupEdit = $this->app->repoFactory->create('ProductColorGroupTranslation', false)->findBy(['productColorGroupId' => $colorId]);
 
         }
 
