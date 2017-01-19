@@ -72,71 +72,20 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <!--<?php if ($allShops) : ?>
-    <bs-toolbar-group data-group-label="Gestione Ordini Interna">
+    <?php if ($allShops) : ?>
+    <bs-toolbar-group data-group-label="Gestione Fatture">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-paper-plane"
             data-permission="/admin/order/add"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Invia i prodotti"
-            data-placement="bottom"
-            data-event="bs.accept.order.lines"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-credit-card"
-            data-permission="/admin/order/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Gestisci pagamenti"
+            data-title="Segna una fattura come pagata"
             data-placement="bottom"
             data-event="bs.orderline.paymentToFriend"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php endif; ?>
-
-    <bs-toolbar-group data-group-label="Gestione Ordini">
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-thumbs-up"
-            data-permission="/admin/product/list"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Accetta le righe d'ordine selezionate"
-            data-placement="bottom"
-            data-event="bs.friend.orderline.ok"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-thumbs-down"
-            data-permission="/admin/product/list"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Rifiuta le righe d'ordine selezionate"
-            data-placement="bottom"
-            data-event="bs.friend.orderline.ko"
-        ></bs-toolbar-button>
-        <!--<bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-thumbs-down"
-            data-permission="/admin/product/list"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Segna righe d'ordine come spedite <?php echo ($allShops) ? ' dal Friend' : ''; ?>"
-            data-placement="bottom"
-            data-event="bs.friend.orderline.shippedByFriend"
-        ></bs-toolbar-button>-->
-    <!--</bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione Pagamenti">
-        <bs-toolbar-button
-            data-remote="bs.friend.order.registerInvoiceFromFile"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>-->
 </bs-toolbar>
 
 </body>
