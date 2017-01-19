@@ -36,7 +36,10 @@ class CFriendFeedback extends AEventListener
             $orderLine = $e->getEventData('order');
             $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
             if ($status !== $oldStatus) {
+
+                $dba = \Monkey::app()->dbAdapter;
                 try {
+                    $dba->beginTransaction();
                     if ('ORD_FRND_OK' == $status) {
                         $accept = true;
                     } elseif ('ORD_FRND_CANC' == $status) {
@@ -44,7 +47,9 @@ class CFriendFeedback extends AEventListener
                     }
                     $soR->registerEcommerceSale($orderLine->shopId, [$orderLine->productSku], null, $accept);
                     $this->friendAcceptance($orderLine, $accept);
+                    $dba->commit();
                 } catch (BambooException $e) {
+                    $dba->rollBack();
                     \Monkey::app()->applicationError($e->getEventName(), 'FriendConfirmation', $e->getMessage());
                 }
             }

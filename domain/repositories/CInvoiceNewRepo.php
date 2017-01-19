@@ -52,10 +52,10 @@ class CInvoiceNewRepo extends ARepo
         //date control
         if (!$creationDate) $creationDate = new \DateTime();
         $diff = $creationDate->diff($date);
-        if ($diff->days && $diff->invert) throw new BambooInvoiceException('Non si possono emettere fatture con date di emissione antecedenti alla data odierna');
+        if ($diff->days && !$diff->invert) throw new BambooInvoiceException('Non si possono emettere fatture con date di emissione antecedenti alla data odierna');
         if ($paymentExpectedDate) {
             $diff = $date->diff($paymentExpectedDate);
-            if ($diff->days && $diff->invert) throw new BambooInvoiceException('Non si possono emettere fatture con date di emissione antecedenti alla data odierna');
+            if ($diff->days && $diff->invert) throw new BambooInvoiceException('La data di previsto pagamento non può essere precedente all\'emissione della fattura');
         }
 
         $year = $date->format('Y');

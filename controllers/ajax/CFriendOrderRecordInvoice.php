@@ -59,6 +59,10 @@ class CFriendOrderRecordInvoice extends AAjaxController
             $line['description'] = $olR->getOrderLineDescription($v);
             $line['friendRevenue'] = SPriceToolbox::formatToEur($v->friendRevenue, true);
             $res['lines'][] = $line;
+            if (null == $v->friendRevenue) {
+                $res['error'] = true;
+                $res['message'] = 'Uno o più prodotti selezionati non hanno il Prezzo Friend. Contattaci';
+            }
             $res['total'] +=$v->friendRevenue;
         }
         $res['total'] =  SPriceToolbox::formatToEur($res['total']. true);

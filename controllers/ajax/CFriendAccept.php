@@ -60,11 +60,11 @@ class CFriendAccept extends AAjaxController
             $dba->commit();
             return $verdict . ' correttamente registrato';
         } catch (BambooOrderLineException $e) {
-            $dba->rollback();
+            $dba->rollBack();
             $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
             return $message . $e->getMessage();
         } catch (BambooException $e) {
-            $dba-rollback();
+            $dba->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();
             $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
             return $message . $e->getMessage();

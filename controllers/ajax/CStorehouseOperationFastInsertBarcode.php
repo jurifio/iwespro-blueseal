@@ -1,10 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\blueseal\business\CDataTables;
 use bamboo\core\exceptions\BambooException;
-use bamboo\core\intl\CLang;
-
 /**
  * Class CProductListAjaxController
  * @package bamboo\blueseal\controllers\ajax
@@ -47,6 +44,10 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
         }
     }
 
+    /**
+     * @return string
+     * @transaction
+     */
     public function post() {
         $shopId = \Monkey::app()->router->request()->getRequestData('shop');
         if(!in_array($shopId, \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser())) {
@@ -70,30 +71,16 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
 
         $shop = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
 
-        $soR->registerOperation($skusToMove, $shop, $movementCauseId, $storehouse = null, $notes = null);
-
-        /*try {
-            $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->getEmptyEntity();
-            $storehouseOperation->shopId = $shopId;
-            $storehouse = $this->app->repoFactory->create('Storehouse')->findOneBy(['shopId'=>$shopId]);
-            $storehouseOperation->storehouseId = $storehouse->id;
-            $storehouseOperation->storehouseOperationCauseId = $this->app->router->request()->getRequestData('cause');
-            $storehouseOperation->userId = $this->app->getUser()->id;
-            $storehouseOperation->notes = 'Fast Movement';
-            $storehouseOperation->operationDate = $this->app->router->request()->getRequestData('date');
-            $storehouseOperation->id = $storehouseOperation->insert();
-
-
-
-            foreach ($this->app->router->request()->getRequestData('rows') as $row) {
-                list($id, $productVariantId, $productSizeId, $shopfromBarcode) = explode('-', $row['id']);
-                $solRepo->createMovementLine($id, $productVariantId, $productSizeId, $shopfromBarcode, $row['qty'] * $signMultiplier, $storehouseOperation->id, $storehouse->id);
-            }
-            $this->app->dbAdapter->commit();
-        } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
-            throw $e;
-        }*/
-        return 'ok';
+        $dba = \Monkey::app()->dbAdapter;
+        $dba->beginTransaction();
+        try {
+            $soR->registerOperation($skusToMove, $shop, $movementCauseId, $storehouse = null, $notes = null);
+            $dba->commit();
+        } catch (BambooException $e) {
+            $dba->rollBack();
+            \Monkey::app()->router->response()->raiseProcessingError();
+            return $e->getMessage();
+        }
+        return 'Movimento creato correttamente.';
     }
 }
