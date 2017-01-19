@@ -22,7 +22,6 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
 
     public function get()
     {
-        $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
         $cR = \Monkey::app()->repoFactory->create('Configuration');
         $vat = $cR->findOneBy(['name' => 'main vat'])->value;
         $user = $this->app->getUser();
@@ -30,30 +29,30 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
 
         $query = "
-              SELECT 
-                `i`.`id` as `id`,
-                `i`.`number` as `invoiceNumber`,
-                `i`.`paymentExpectedDate` as paymentExpectedDate,
-                `i`.`date` as `invoiceDate`,
-                `i`.`totalWithVat` as `invoiceTotalAmount`,
-                `i`.`paymentDate` as `paymentDate`,
-                concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
-                `i`.`creationDate` as `creationDate`
-               FROM
-              `InvoiceNew` as `i` JOIN
-              `InvoiceLine` as `il` on `il`.`invoiceId` =  `i`.`id` JOIN
-              `InvoiceType` as `it` on `it`.`id` = `i`.`invoiceTypeId` JOIN
-              `InvoiceLineHasOrderLine` as `ilhol` on `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineId` JOIN 
-              `OrderLine` as `ol` on `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
-              WHERE 
-              `it`.`code` = 'fr_invoice_orderlines_file' 
+             SELECT
+                  `i`.`id` as `id`,
+                  `i`.`number` as `invoiceNumber`,
+                  `i`.`paymentExpectedDate` as paymentExpectedDate,
+                  `i`.`date` as `invoiceDate`,
+                  `i`.`totalWithVat` as `invoiceTotalAmount`,
+                  `i`.`paymentDate` as `paymentDate`,
+                  concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
+                  `i`.`creationDate` as `creationDate`
+                FROM
+                  `InvoiceNew` as `i` JOIN
+                  `InvoiceLine` as `il` on `il`.`invoiceId` =  `i`.`id` JOIN
+                  `InvoiceType` as `it` on `it`.`id` = `i`.`invoiceTypeId` JOIN
+                  `InvoiceLineHasOrderLine` as `ilhol` on `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId` JOIN
+                  `OrderLine` as `ol` on `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
+                WHERE
+                  `it`.`code` = 'fr_invoice_orderlines_file'
               ";
 
-        $datatable = new CDataTables($query,['id'],$_GET, true);
+        $datatable = new CDataTables($query, ['id'],$_GET, true);
 
-        $invoices = $this->app->repoFactory->create('InvoiceLine')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('InvoiceLine')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('InvoiceLine')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $invoices = $this->app->repoFactory->create('InvoiceNew')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = $this->app->repoFactory->create('InvoiceNew')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('InvoiceNew')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -66,10 +65,12 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
             $response['data'][$i]['invoiceNumber'] = $v->number;
-            $response['data'][$i]['paymentExpectedDate'] = $v->paymentExcpectedDate;
+            $response['data'][$i]['paymentExpectedDate'] = $v->paymentExpectedDate;
+            $response['data'][$i]['paymentDate'] = $v->paymentDate;
             $response['data'][$i]['creationDate'] = $v->creationDate;
             $response['data'][$i]['invoiceTotalAmount'] = $v->totalWithVat;
             $response['data'][$i]['invoiceDate'] = $v->date;
+            $response['data'][$i]['orderLines'] = '<span>[da implementare]</span>';
             $i++;
 	    }
         return json_encode($response);

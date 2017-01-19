@@ -51,7 +51,7 @@
                                 <th data-slug="paymentExpectedDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Previsto Pagamento</th>
-                                <th data-slug="PaymentDate"
+                                <th data-slug="paymentDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Pagamento</th>
                                 <th data-slug="orderLines"
@@ -72,7 +72,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <?php if ($allShops) : ?>
+    <!--<?php if ($allShops) : ?>
     <bs-toolbar-group data-group-label="Gestione Ordini Interna">
         <bs-toolbar-button
             data-tag="a"
@@ -131,12 +131,12 @@
             data-placement="bottom"
             data-event="bs.friend.orderline.shippedByFriend"
         ></bs-toolbar-button>-->
-    </bs-toolbar-group>
+    <!--</bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione Pagamenti">
         <bs-toolbar-button
             data-remote="bs.friend.order.registerInvoiceFromFile"
         ></bs-toolbar-button>
-    </bs-toolbar-group>
+    </bs-toolbar-group>-->
 </bs-toolbar>
 
 </body>

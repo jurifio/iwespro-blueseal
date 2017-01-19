@@ -15,7 +15,6 @@ use bamboo\utils\price\SPriceToolbox;
  */
 class CInvoiceNewRepo extends ARepo
 {
-
     /**
      * @param $invoiceTypeId
      * @param int $userId
