@@ -54,23 +54,25 @@ class COrderAddController extends ARestrictedAccessRootController
             }
 
             $coup = trim($data['coupon']);
-            $repo = $this->app->repoFactory->create('Coupon');
-            $coupon = $repo->findOneBy(['valid'=>1,'code'=>$coup]);
-            if($coupon == false) {
-                $coupon = $this->app->repoFactory->create('CouponEvent')->getCouponFromEvent($coup);
-            }
-            if ($coupon != false) {
-                if ($coupon->couponType->validForCartTotal>0) {
-                    if($this->app->cartManager->calculateGrossTotal($cart) > $coupon->couponType->validForCartTotal) {
+            if(!empty($coup)) {
+                $repo = $this->app->repoFactory->create('Coupon');
+                $coupon = $repo->findOneBy(['valid'=>1,'code'=>$coup]);
+                if($coupon == false) {
+                    $coupon = $this->app->repoFactory->create('CouponEvent')->getCouponFromEvent($coup);
+                }
+                if ($coupon != false) {
+                    if ($coupon->couponType->validForCartTotal>0) {
+                        if($this->app->cartManager->calculateGrossTotal($cart) > $coupon->couponType->validForCartTotal) {
+                            $cart->couponId = $coupon->id;
+                        }
+                    } else {
                         $cart->couponId = $coupon->id;
                     }
-                } else {
-                    $cart->couponId = $coupon->id;
-                }
-                try {
-                    $cart->update();
-                } catch (\Throwable $e) {
-                    $this->app->router->response()->raiseUnauthorized();
+                    try {
+                        $cart->update();
+                    } catch (\Throwable $e) {
+                        $this->app->router->response()->raiseUnauthorized();
+                    }
                 }
             }
 

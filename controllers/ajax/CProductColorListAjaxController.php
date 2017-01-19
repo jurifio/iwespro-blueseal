@@ -20,27 +20,6 @@ use bamboo\core\intl\CLang;
  */
 class CProductColorListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1, 'it'));
-        $this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
-        $this->urls['page'] = $this->urls['base'] . "prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
-
-        $this->em = new \stdClass();
-        $this->em->products = $this->app->entityManagerFactory->create('Product');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
         $sql = "SELECT
@@ -66,13 +45,13 @@ class CProductColorListAjaxController extends AAjaxController
                   LEFT JOIN `ProductColorGroup` `pcg` ON `p`.`productColorGroupId` = `pcg`.`id`
                 WHERE (`pct`.`langId` = 1)
                 GROUP BY `p`.`id`, `p`.`productVariantId`
-                HAVING (`stock` > 0);";
+                HAVING (`stock` > 0)";
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET);
 
         $products = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
 
         $response = [];
@@ -89,8 +68,7 @@ class CProductColorListAjaxController extends AAjaxController
                 $response['data'][$i]["DT_RowClass"] = 'colore';
                 $response['data'][$i]['code'] = '<a href="/blueseal/prodotti/modifica?id=' . $v->id . '&productVariantId=' . $v->productVariantId . '">' . $v->id . '-' . $v->productVariantId . '</a>';
                 $response['data'][$i]['colorName'] = $v->productVariant->description;
-                $colorGroupCollection = $v->productColorGroup->productColorGroupTranslation->getFirst();
-                $response['data'][$i]['colorGroupName'] = ($colorGroupCollection) ? $colorGroupCollection->name : '-';
+                $response['data'][$i]['colorGroupName'] = ($v->productColorGroup) ? $v->productColorGroup->productColorGroupTranslation->getFirst()->name : '-';
                 $response['data'][$i]['dummyPic'] = '<img width="80" src="' . $v->getDummyPictureUrl() . '">';
                 $response['data'][$i]['categorie'] = '';
 
