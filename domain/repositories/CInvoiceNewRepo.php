@@ -168,9 +168,9 @@ class CInvoiceNewRepo extends ARepo
         $il->vat = $vat;
         if ($priceContainsVat) {
             $il->price = $price;
-            $il->priceNoVat = SPriceToolbox::netPriceFromGross($price, $vat);
+            $il->priceNoVat = SPriceToolbox::netPriceFromGross($price, $vat, true);
         } else {
-            $il->price = SPriceToolbox::netPriceFromGross($price, $vat);
+            $il->price = SPriceToolbox::netPriceFromGross($price, $vat, true);
             $il->priceNoVat = $price;
         }
         $il->vat = $vat;
@@ -212,12 +212,11 @@ class CInvoiceNewRepo extends ARepo
 
         try {
             $totalWithVat = 0;
+            $vat = $this->getInvoiceVat($invoiceType, $addressBook);
             foreach($orderLines as $k => $v) {
                 $orderLines[$k] = $olR->findOneByStringId($v);
-                $totalWithVat+= $orderLines[$k]->friendRevenue;
+                $totalWithVat+= SPriceToolbox::grossPriceFromNet($orderLines[$k]->friendRevenue, $vat);
             }
-            $vat = $this->getInvoiceVat($invoiceType, $addressBook);
-            $totalWithVat = SPriceToolbox::grossPriceFromNet($totalWithVat, $vat);
 
                 $dba->beginTransaction();
             $insertedId = $this->createInvoice(
