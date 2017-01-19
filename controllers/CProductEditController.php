@@ -66,7 +66,7 @@ class CProductEditController extends CProductManageController
 		$tag = $em->findAll(null, 'order by `slug`');
 
 		$em = $this->app->entityManagerFactory->create('ProductColorGroup');
-		$gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", []);
+		$gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup ORDER BY `name`", []);
 
 	    $em = $this->app->entityManagerFactory->create('Product', false);
 	    $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));

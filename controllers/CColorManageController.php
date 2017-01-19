@@ -22,6 +22,7 @@ class CColorManageController extends ARestrictedAccessRootController
 
     public function post()
     {
+        throw new \Exception('DEBUG ME; TO CHANGE AFTER COLOR REFACTOR');
         $blueseal = $this->app->baseUrl(false) . '/blueseal';
         $slugify = new CSlugify();
         $datas = $this->app->router->request()->getRequestData();
@@ -80,29 +81,25 @@ class CColorManageController extends ARestrictedAccessRootController
             $langId = $keys[2];
             $name = $val;
             $slug = empty($datas['ProductColorGroup_slug_' . $langId]) ? $slugify->slugify($name) : $slugify->slugify($datas['ProductColorGroup_slug_' . $langId]);
+            if(empty($slug) && empty($name)) continue; // delete
             try {
-                $colorGroup = $this->app->repoFactory->create('ProductColorGroup')->findOneBy(['id'=>$datas['ProductColorGroup_id'], 'langId'=>$langId]);
+                $colorGroup = $this->app->repoFactory->create('ProductColorGroupTranslation')->findOneBy(['productColorGroupId'=>$datas['ProductColorGroup_id'], 'langId'=>$langId]);
                 if (!is_null($colorGroup)) {
                     $colorGroup->langId = $langId;
                     $colorGroup->name = $name;
                     $colorGroup->slug = $slug;
                     $colorGroup->update();
                 } else {
-                    $colorGroup->id = $datas['ProductColorGroup_id'];
+                    $colorGroup = $this->app->repoFactory->create('ProductColorGroupTranslation')->getEmptyEntity();
+                    $colorGroup->productColorGroupId = $datas['ProductColorGroup_id'];
                     $colorGroup->langId = $langId;
                     $colorGroup->name = $name;
                     $colorGroup->slug = $slug;
                     $colorGroup->insert();
                 }
             } catch (\Throwable $e) {
-                $this->app->router->response()->raiseUnauthorized();
+                throw $e;
             }
-           /* if (isset($colorGroup)) {
-                $id = $datas['ProductColorGroup_id'];
-                $mysql->update("ProductColorGroup", array("name" => $name, "slug" => $slug), array("id" => $id, "langId" => $langId));
-            } else {
-               $mysql->insert("ProductColorGroup", array("id" => $datas['ProductColorGroup_id'], "langId" => $langId, "slug" => $slug, "name" => $name));
-            }*/
         }
     }
 

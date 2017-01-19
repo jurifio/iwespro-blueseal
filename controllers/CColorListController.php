@@ -30,7 +30,7 @@ class CColorListController extends ARestrictedAccessRootController
         $em = $this->app->entityManagerFactory->create('ProductColorGroup');
 
         /** @var $mysql CMySQLAdapter **/
-        $gruppicolore = $em->findBySql("select * from ProductColorGroup where langId = 1",array());
+        $gruppicolore = $em->findBySql("select * from ProductColorGroup",array());
 
         $modifica = $blueseal."/prodotti/gruppo-colore/modifica";
         return $view->render([

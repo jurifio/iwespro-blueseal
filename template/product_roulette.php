@@ -117,7 +117,7 @@
                                                                 id="ProductColorGroup_id">
                                                             <option></option>
                                                             <?php foreach ($gruppicolore as $color): ?>
-                                                                <option value="<?php echo $color->id ?>" <?php if (!is_null($productEdit->productColorGroup) && !$productEdit->productColorGroup->isEmpty() && $productEdit->productColorGroup->getFirst()->id == $color->id) echo 'selected="selected"'; ?>> <?php echo $color->name; ?></option>
+                                                                <option value="<?php echo $color->id ?>" <?php if (!is_null($productEdit->productColorGroup) && $productEdit->productColorGroupId == $color->id) echo 'selected="selected"'; ?>> <?php echo $color->name; ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>

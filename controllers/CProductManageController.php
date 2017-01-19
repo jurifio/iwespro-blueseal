@@ -114,10 +114,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 }
             }
             if ($this->isValidInput("ProductColorGroup_id", $post)) {
-                $this->app->dbAdapter->delete("ProductHasProductColorGroup", $productIdsExt,'AND', true);
-                $data = $productIdsExt;
-                $data['productColorGroupId'] = $post['ProductColorGroup_id'];
-                $this->app->dbAdapter->insert("ProductHasProductColorGroup", $data);
+                $productEdit->productColorGroupId = $post['ProductColorGroup_id'];
             }
 
             /** UPDATE DEI DETTAGLI PRODOTTO */
@@ -394,10 +391,7 @@ class CProductManageController extends ARestrictedAccessRootController
             }
 
             if ($this->isValidInput('ProductColorGroup_id', $post)) {
-                $insertColor = array();
-                $insertColor = $productIdsExt;
-                $insertColor['productColorGroupId'] = $post['ProductColorGroup_id'];
-                $this->app->dbAdapter->insert("ProductHasProductColorGroup", $insertColor);
+                $productNew->productColorGroupId = $post['ProductColorGroup_id'];
             }
 
 	        $slugify = new CSlugify();

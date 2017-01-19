@@ -71,7 +71,7 @@ class CDictionaryColorEditAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $productColors = $this->app->repoFactory->create('ProductColorGroup')->findBy(['langId' => 1],'limit 99999','order by name');
+        $productColors = $this->app->repoFactory->create('ProductColorGroup')->findBy([],'limit 99999','order by name');
 
         $i = 0;
         foreach($colors as $color) {

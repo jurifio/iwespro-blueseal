@@ -68,7 +68,7 @@ class CProductRouletteController extends CProductManageController
 		$tag = $em->findAll(null, 'order by `slug`');
 
 		$em = $this->app->entityManagerFactory->create('ProductColorGroup');
-		$gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", []);
+		$gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup ORDER BY `name`", []);
 
         $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
         $productSheets = $em->findAll();
@@ -428,9 +428,7 @@ class CProductRouletteController extends CProductManageController
 			}
 
 			if ($this->isValidInput('ProductColorGroup_id', $post)) {
-				$insertColor = $productIdsExt;
-				$insertColor['productColorGroupId'] = $post['ProductColorGroup_id'];
-				$this->app->dbAdapter->insert("ProductHasProductColorGroup", $insertColor);
+                $productNew->productColorGroupId = $post['ProductColorGroup_id'];
 			}
 
 			/** INSERIMENTO DETTAGLI PRODOTTO */

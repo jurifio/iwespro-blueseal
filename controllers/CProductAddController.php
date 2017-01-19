@@ -61,7 +61,7 @@ class CProductAddController extends CProductManageController
         $tag = $em->findAll(null, 'order by `slug`');
 
         $em = $this->app->entityManagerFactory->create('ProductColorGroup');
-        $gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup WHERE langId = 1 ORDER BY `name`", array());
+        $gruppicolore = $em->findBySql("SELECT * FROM ProductColorGroup  ORDER BY `name`", array());
 
         $em = $this->app->entityManagerFactory->create('ProductSheetPrototype');
         $productSheets = $em->query('SELECT id, name FROM ProductSheetPrototype ORDER BY `name`')->fetchAll();

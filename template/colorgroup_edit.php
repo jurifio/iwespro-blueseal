@@ -40,18 +40,17 @@
                             <form id="form-project" role="form" action="" method="PUT" autocomplete="on">
 
                                 <?php
-                                foreach ($langs as $lang):
-                                    if(isset($name)) unset($name);
-                                    if(isset($slug)) unset($slug);
+                                foreach ($langs as $lang): ?>
+
+                                    <?php
                                     foreach($colorGroupEdit as $val){
                                         if($val->langId == $lang->id){
-                                            $colorGroupId = $val->id;
+                                            $colorGroupId = $val->productColorGroupId;
                                             $name = $val->name;
                                             $slug = $val->slug;
                                         }
-                                    }
+                                    } ?>
 
-                                        ?>
                                     <h5><?php echo strtoupper($lang->name); ?></h5>
                                     <div class="row clearfix">
                                         <div class="col-md-4">
@@ -70,8 +69,7 @@
                                         </div>
                                     </div>
 
-                                <?php
-                                endforeach; ?>
+                                <?php endforeach; ?>
                                 <input type="hidden" id="ProductColorGroup_id" name="ProductColorGroup_id" value="<?php echo $colorGroupId; ?>" />
                             </form>
                         </div>

@@ -607,20 +607,6 @@
             ]
         },
         {
-            "pattern": "/blueseal/prodotti/incompleti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductIncompleteController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
             "pattern": "/blueseal/prodotti/attivi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductActiveListController"

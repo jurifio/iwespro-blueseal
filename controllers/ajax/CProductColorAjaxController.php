@@ -45,7 +45,7 @@ class CProductColorAjaxController extends AAjaxController
 
     public function get()
     {
-        $pcg = $this->app->repoFactory->create('ProductColorGroup')->findBy(['langId' => 1], '', 'order by name');
+        $pcg = $this->app->repoFactory->create('ProductColorGroup')->findBy([], '', 'order by name');
 
         $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo colore</option>';
         foreach($pcg as $v) {
@@ -75,13 +75,9 @@ class CProductColorAjaxController extends AAjaxController
         $affected = 0;
         try {
             foreach ($variants as $k => $v) {
-                $sql = "SELECT * FROM `ProductHasProductColorGroup` WHERE productId = " . $v['id'] . " AND productVariantId = " . $v['productVariantId'];
-                if (count($this->app->dbAdapter->query($sql, [])->fetchAll())) {
-                    $sql = "UPDATE `ProductHasProductColorGroup` SET `productColorGroupId` = " . $groupId . " WHERE productId = " . $v['id'] . " AND productVariantId = " . $v['productVariantId'];
-                } else {
-                    $sql = "INSERT INTO `ProductHasProductColorGroup` (`productId`, `productVariantId`, `productColorGroupId`) VALUES ('" . $v['id'] . "', '" . $v['productVariantId'] . "', '" . $groupId . "')";
-                }
-                $affected = $affected + $this->app->dbAdapter->query($sql, [])->countAffectedRows();
+                $product = $this->app->repoFactory->create('Product')->findOneBy($v);
+                $product->productColorGroupId = $groupId;
+                $affected += $product->update();
             }
         } catch(\Throwable $e) {
             $ret = "OOPS! Qualcosa è andato storto. $affected prodotti aggiornati. Contatta l'amministratore<br />";
@@ -90,15 +86,5 @@ class CProductColorAjaxController extends AAjaxController
             return $ret;
         }
         return "$affected prodotti sono stati correttamente aggiornati.";
-    }
-
-    public function post()
-    {
-        throw new \Exception();
-    }
-
-    public function delete()
-    {
-        throw new \Exception();
     }
 }

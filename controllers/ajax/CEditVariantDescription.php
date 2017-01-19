@@ -43,30 +43,10 @@ class CEditVariantDescription extends AAjaxController
             }
 
             if ($groupId) {
-
                 foreach ($codes as $c) {
-                    $exploded = explode('-', $c);
-                    $phpcgR = \Monkey::app()->repoFactory->create('ProductHasProductColorGroup');
-                    $phpcgO = $phpcgR->findBy(
-                        [
-                            'productId' => $exploded[0],
-                            'productVariantId' => $exploded[1]
-                        ]
-                    );
-
-                    $pcgR = \Monkey::app()->repoFactory->create('ProductColorGroup');
-                    $pcgE = $pcgR->findOneBy(['id' => $groupId]);
-                    if (!$pcgE) throw new BambooException('OOPS! Il gruppo colore non esiste');
-
-                    foreach ($phpcgO as $O) {
-                        $O->delete();
-                    }
-
-                    $phpcgE = $phpcgR->getEmptyEntity();
-                    $phpcgE->productId = $exploded[0];
-                    $phpcgE->productVariantId = $exploded[1];
-                    $phpcgE->productColorGroupId = $groupId;
-                    $phpcgE->insert();
+                    $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($c);
+                    $product->productColorGroupId = $groupId;
+                    $product->update();
                 }
             }
             $dba->commit();
