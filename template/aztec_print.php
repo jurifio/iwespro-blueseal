@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <?php include "parts/head.php"?>
-    <?php echo $app->getAssets([], $page); ?>
+    <?php echo $app->getAssets(['ui','forms'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
     <style type="text/css">
 
         li {font-size:8pt;}
 
-        .page-container {
-            display:none;
+        @page {
+            size:auto;
+            margin:5mm 0mm 0mm 0mm;
         }
 
         .cover {
@@ -31,11 +32,6 @@
             color:#000;
             z-index:9999;
             padding:100px;
-        }
-
-        @page {
-            size:auto;
-            margin:5mm 0mm 0mm 0mm;
         }
 
         @media print {
@@ -232,16 +228,15 @@
 <body class="fixed-header">
 <div class="cover"><div>Usa CTRL-P per stampare</div></div>
 
-<div class="container-fluid">
 <?php $i = 1; foreach ($products as $productInfo): ?>
 <?php if ($i == 1): ?>
-<div class="container-fluid container-fixed-lg bg-white newpage">
+<div class="container newpage">
     <div class="row">
 <?php endif; ?>
 <?php if ($i%17 == 0): ?>
     </div>
 </div>
-<div class="container-fluid container-fixed-lg bg-white newpage">
+<div class="container newpage">
     <div class="row">
 <?php endif; ?>
         <div class="col-md-6">
@@ -266,7 +261,6 @@
 </div>
 <?php endif; ?>
 <?php $i++; endforeach; ?>
-</div>
 <script type="application/javascript">
     $(document).ready(function() {
 
