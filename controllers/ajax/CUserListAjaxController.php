@@ -52,7 +52,7 @@ class CUserListAjaxController extends AAjaxController
             $row = [];
             $row["DT_RowId"] = 'row__' . $val->printId();
             $row["DT_RowClass"] = $val->isActive == 1 ? 'active' : 'unactive';;
-            $row['id'] = $val->id;// '<a href="'.$userEdit.$val->id.'">'.$val->id.'</a>';
+            $row['id'] = '<a href="'.$userEdit.$val->id.'">'.$val->id.'</a>';
             $row['name'] = $val->userDetails->name;
             $row['surname'] = $val->userDetails->surname;
             $row['email'] = $val->email;
