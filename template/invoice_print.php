@@ -92,7 +92,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                            <?php echo $userAddress->address; ?>
                             <br><?php echo $userAddress->postcode . ' ' . $userAddress->city . ' (' . $userAddress->province . ')'; ?>
                             <br><?php echo $userAddress->country->name; ?>
-                            <br><?php (!is_null ($order->userDetails->fiscalCode)) ? 'C.FISC. o P.IVA: ' . $order->userDetails->fiscalCode : null; ?></strong>
+                            <br><?php (!is_null ($order->user->userDetails->fiscalCode)) ? 'C.FISC. o P.IVA: ' . $order->user->userDetails->fiscalCode : null; ?></strong>
                         </address>
                     <div class="clearfix"></div><br>
                         <p class="small no-margin">Indirizzo di spedizione</p>
