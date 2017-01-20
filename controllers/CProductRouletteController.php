@@ -501,7 +501,7 @@ class CProductRouletteController extends CProductManageController
 				$insertData['langId'] = $inputName[1];
 				$insertData['marketplaceId'] = 1;
 				$insertData['description'] = $input;
-				$this->app->dbAdapter->insert("ProductDescription", $insertData);
+				$this->app->dbAdapter->insert("ProductDescriptionTranslation", $insertData);
 			}
 
 			$this->app->dbAdapter->commit();
