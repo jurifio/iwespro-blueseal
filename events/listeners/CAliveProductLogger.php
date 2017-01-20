@@ -2,7 +2,7 @@
 
 namespace bamboo\events\listeners;
 
-use bamboo\core\events\AEventListener;
+
 use bamboo\core\events\CEventEmitted;
 use bamboo\core\exceptions\BambooException;
 
@@ -43,7 +43,5 @@ class CAliveProductLogger extends CLogging
             'ShopHasProduct',
             $productSku->shopHasProduct->printId()
         );
-
-
     }
 }
