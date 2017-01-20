@@ -106,7 +106,7 @@
                            <?php echo $userAddress->address; ?>
                             <br><?php echo $userAddress->postcode . ' ' . $userAddress->city . ' (' . $userAddress->province . ')'; ?>
                             <br><?php echo $userAddress->country->name; ?>
-                            <br><?php (!is_null ($order->userDetails->fiscalCode)) ? 'C.FISC. o P.IVA: ' . $order->userDetails->fiscalCode : null; ?></strong>
+                            <br><?php (!is_null ($order->user->userDetails->fiscalCode)) ? 'C.FISC. o P.IVA: ' . $order->user->userDetails->fiscalCode : null; ?></strong>
                         </address>
                     <div class="clearfix"></div><br>
                         <p class="small no-margin">Indirizzo di spedizione</p>
@@ -117,7 +117,7 @@
                             <br><?php echo $userShipping->postcode . ' ' . $userShipping->city . ' (' . $userShipping->province . ')'; ?>
                             <br><?php echo $userShipping->country->name; ?>
                             <br><?php echo 'Email: ' . $order->user->email; ?>
-                            <br><?php echo (!is_null($order->userDetails->phone)) ? 'Tel: ' . $order->userDetails->phone : 'Tel: ---'; ?>
+                            <br><?php echo (!is_null($order->user->userDetails->phone)) ? 'Tel: ' . $order->user->userDetails->phone : 'Tel: ---'; ?>
                             </strong>
                         </address>
                     </div>

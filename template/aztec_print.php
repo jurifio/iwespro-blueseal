@@ -34,7 +34,7 @@
         }
 
         @page {
-            size:A4;
+            size:auto;
             margin:5mm 0mm 0mm 0mm;
         }
 
