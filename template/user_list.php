@@ -69,7 +69,7 @@
                                     data-orderable="true"
                                     data-default-order="desc"
                                     class="center dataFilterType">Registrazione</th>
-                                <th data-slug="notes"
+                                <th data-slug="note"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Note</th>
