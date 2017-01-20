@@ -91,6 +91,9 @@
                                 <th data-slug="friendRevVat"
                                     data-searchable="false"
                                     data-orderable="false" class="center">P. Friend con IVA</th>
+                                <th data-slug="friendShipmentTime"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data Spedizione del Friend</th>
                                 <!--<th class="center sorting">Sku</th>
                                 <th class="center sorting">Stato Riga</th>
                                 <th class="center sorting">Opera Stato</th>
@@ -133,16 +136,6 @@
     <bs-toolbar-group data-group-label="Gestione Ordini Interna">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-paper-plane"
-            data-permission="/admin/order/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Invia i prodotti"
-            data-placement="bottom"
-            data-event="bs.accept.order.lines"
-            ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
             data-icon="fa-credit-card"
             data-permission="/admin/order/add"
             data-class="btn btn-default"
@@ -178,16 +171,16 @@
             data-placement="bottom"
             data-event="bs.friend.orderline.ko"
         ></bs-toolbar-button>
-        <!--<bs-toolbar-button
+        <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-thumbs-down"
+            data-icon="fa-paper-plane"
             data-permission="/admin/product/list"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Segna righe d'ordine come spedite <?php echo ($allShops) ? ' dal Friend' : ''; ?>"
             data-placement="bottom"
             data-event="bs.friend.orderline.shippedByFriend"
-        ></bs-toolbar-button>-->
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione Pagamenti">
         <bs-toolbar-button

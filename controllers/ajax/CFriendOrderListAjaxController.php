@@ -4,6 +4,7 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\utils\price\SPriceToolbox;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class COrderListAjaxController
@@ -50,12 +51,8 @@ class CFriendOrderListAjaxController extends AAjaxController
               `ol`.status as `orderLineStatusCode`,
               `ols`.title as `orderLineStatusTitle`,
               `olfps`.`name` as `paymentStatus`,
-              `ol`.`orderLineFriendPaymentDate` as `paymentDate`
-              /*,
-                `in`.`number` as `invoiceNumber`,
-                `in`.`creationDate` as `invoiceCreationDate`,
-                `in`.`paymentDate`  as `invoicePaymentDate`,
-                `in`.`paymentExpectedDate` as `invoicePaymentExpectedDate`*/
+              `ol`.`orderLineFriendPaymentDate` as `paymentDate`,
+              if(l.stringId is not null AND l.actionName = 'ShippedByFriend', l.time, 'Non Spedito') as 'friendShipmentTime'
             FROM
               ((((((((`Order` as `o` JOIN `OrderLine` as `ol` on `o`.`id` = `ol`.`orderId`)
                 JOIN `Shop` as `s` ON `ol`.`shopId` = `s`.`id`)
@@ -68,7 +65,8 @@ class CFriendOrderListAjaxController extends AAjaxController
                 JOIN `ProductSize` as `ps` on `ol`.`productSizeId` = `ps`.`id`)
                 JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
                 JOIN `ProductSeason` as `pse` on `p`.`productSeasonId` = `pse`.`id`
-                LEFT JOIN `InvoiceLineHasOrderLine` as `ilhol` on `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId` 
+                LEFT JOIN `InvoiceLineHasOrderLine` as `ilhol` on `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
+                LEFT JOIN `Log` as `l` on concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId 
                 JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
@@ -126,6 +124,8 @@ class CFriendOrderListAjaxController extends AAjaxController
         $response ['data'] = [];
         $i = 0;
 
+        $lR = \Monkey::app()->repoFactory->create('Log');
+
         foreach ($orderLines as $v) {
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
@@ -177,6 +177,8 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $invoiceLine = $v->invoiceLine->getFirst();
             $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoiceId : 'non assegnata' ;
+            $l = $lR->findOneBy(['stringId' => $v->printId(), 'ActionName' => 'ShippedByFriend']);
+            $response['data'][$i]['friendShipmentTime'] = ($l) ? STimeToolbox::EurFormattedDateTime($l->time) : 'Non spedito';
             $i++;
 	    }
         return json_encode($response);
