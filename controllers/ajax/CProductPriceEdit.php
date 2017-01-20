@@ -95,7 +95,6 @@ class CProductPriceEdit extends AAjaxController
                 $skuRepo->updateSkusPrices($shp->productId, $shp->productVariantId, $shp->shopId, $shp->value, $shp->price, $shp->salePrice);
             }
             $this->app->dbAdapter->commit();
-            $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$prod->printId()]);
         } catch(\Throwable $e) {
             $this->app->dbAdapter->rollBack();
             return json_encode($e->getMessage());

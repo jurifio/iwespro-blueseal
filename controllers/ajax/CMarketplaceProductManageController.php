@@ -104,7 +104,7 @@ class CMarketplaceProductManageController extends AAjaxController
 		    }
 	    }
 	    foreach ($revise as $product) {
-            $this->app->eventManager->triggerEvent('product.stock.change',['productKeys'=>$product->printId()]);
+            $this->app->eventManager->triggerEvent('product.marketplace.change',['productIds'=>$product->printId()]);
         }
 
 	    return $i;
