@@ -8,6 +8,8 @@ use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CInvoiceSectional;
 use bamboo\domain\entities\CInvoiceType;
 use bamboo\utils\price\SPriceToolbox;
+use bamboo\domain\entities\COrderLine;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CInvoiceNewRepo
@@ -15,7 +17,6 @@ use bamboo\utils\price\SPriceToolbox;
  */
 class CInvoiceNewRepo extends ARepo
 {
-
     /**
      * @param $invoiceTypeId
      * @param int $userId
@@ -167,9 +168,9 @@ class CInvoiceNewRepo extends ARepo
         $il->vat = $vat;
         if ($priceContainsVat) {
             $il->price = $price;
-            $il->priceNoVat = SPriceToolbox::netPriceFromGross($price, $vat);
+            $il->priceNoVat = SPriceToolbox::netPriceFromGross($price, $vat, true);
         } else {
-            $il->price = SPriceToolbox::netPriceFromGross($price, $vat);
+            $il->price = SPriceToolbox::netPriceFromGross($price, $vat, true);
             $il->priceNoVat = $price;
         }
         $il->vat = $vat;
@@ -211,12 +212,11 @@ class CInvoiceNewRepo extends ARepo
 
         try {
             $totalWithVat = 0;
+            $vat = $this->getInvoiceVat($invoiceType, $addressBook);
             foreach($orderLines as $k => $v) {
                 $orderLines[$k] = $olR->findOneByStringId($v);
-                $totalWithVat+= $orderLines[$k]->friendRevenue;
+                $totalWithVat+= SPriceToolbox::grossPriceFromNet($orderLines[$k]->friendRevenue, $vat);
             }
-            $vat = $this->getInvoiceVat($invoiceType, $addressBook);
-            $totalWithVat = SPriceToolbox::grossPriceFromNet($totalWithVat, $vat);
 
                 $dba->beginTransaction();
             $insertedId = $this->createInvoice(
@@ -252,10 +252,38 @@ class CInvoiceNewRepo extends ARepo
         }
     }
 
+    /**
+     * @param CInvoiceType $invoiceType
+     * @param CAddressBook|null $addressBook
+     * @return mixed
+     */
     private function getInvoiceVat(CInvoiceType $invoiceType, CAddressBook $addressBook = null) {
         /** @var CInvoiceType $ */
         if ($invoiceType->isActive) return $addressBook->countryId->vat;
         else return $countryId = \Monkey::app()->repoFactory->create('Configuration')
             ->findOneBy(['name' => 'main vat'])->value;
+    }
+
+    /**
+     * @param $invoiceId
+     * @param null $date
+     * @return bool
+     */
+    public function payFriendInvoice($invoice, $date = null) {
+        if (!is_object($invoice)) $invoice = $this->findOne([$invoice]);
+        $date = STimeToolbox::AngloFormattedDatetime($date);
+        $invoice->paymentDate = $date;
+        $invoice->paydAmount = $invoice->totalWithVat;
+        $invoice->update();
+
+        $invoiceLines = $invoice->invoiceLine;
+        foreach($invoiceLines as $v) {
+            /** @var COrderLine $ol */
+            $ol = $v->orderLine->getFirst();
+            $ol->orderLineFriendPaymentStatusId = 4;
+            $ol->orderLineFriendPaymentDate = $date;
+            $ol->update();
+        }
+        return true;
     }
 }

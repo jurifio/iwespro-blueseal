@@ -65,7 +65,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
             }
             $res['total'] +=$v->friendRevenue;
         }
-        $res['total'] =  SPriceToolbox::formatToEur($res['total']. true);
+        $res['total'] =  SPriceToolbox::formatToEur($res['total'], true);
         return json_encode($res);
     }
 

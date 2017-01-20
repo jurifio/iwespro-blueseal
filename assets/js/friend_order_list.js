@@ -1,8 +1,8 @@
-$(document).on('bs.orderline.paymentToFriend', function() {
+$(document).on('bs.orderline.paymentToFriend', function () {
     var dataTable = $('.table').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 
-    if ( 1 > selectedRows.length) {
+    if (1 > selectedRows.length) {
         new Alert({
             type: "warning",
             message: "Devi selezionare almeno un prodotto"
@@ -15,7 +15,6 @@ $(document).on('bs.orderline.paymentToFriend', function() {
     $.each(selectedRows, function (k, v) {
         row[i] = v.line_id;
         i++;
-        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
 
     $.ajax({
@@ -23,16 +22,16 @@ $(document).on('bs.orderline.paymentToFriend', function() {
         mode: 'GET',
         dataType: 'JSON',
         data: {orderLines: row}
-    }).fail(function(){
+    }).fail(function () {
         modal = new $.bsModal('Accettazione ordini',
             {
                 body: 'OOPS! Non posso farti selezionare il pagamento ora.<br />' +
                 'Probabilmente è un problema momentaneo. Riprova fra qualche minuto.'
             });
-    }).done(function(res){
+    }).done(function (res) {
         var opts = '';
         res.selected = 4;
-        for(var i in res.options) {
+        for (var i in res.options) {
             var statusId = res.options[i].id;
             opts += '<option value="' + statusId + '" ' + ((statusId == res.selected) ? 'selected' : '') + '>' + res.options[i].name + '</option>';
         }
@@ -40,7 +39,7 @@ $(document).on('bs.orderline.paymentToFriend', function() {
         var now = new Date();
         var day = ("0" + now.getDate()).slice(-2);
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
-        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
         var timeVal = (res.time) ? res.time : today;
 
         modal = new $.bsModal('Accettazione ordini',
@@ -52,7 +51,7 @@ $(document).on('bs.orderline.paymentToFriend', function() {
                 '</select>' +
                 'Data pagamento: <input  value="' + timeVal + '" type="date" id="friendPaymentDate" class="form-control"/>' +
                 '</div>',
-                okButtonEvent: function(){
+                okButtonEvent: function () {
                     var newStatus = $('#friendPaymentStatus').val();
                     var date = $('#friendPaymentDate').val();
                     if (0 < newStatus) {
@@ -64,13 +63,13 @@ $(document).on('bs.orderline.paymentToFriend', function() {
                                 friendPaymentStatus: newStatus,
                                 friendPaymentDate: date
                             }
-                        }).done(function(res){
+                        }).done(function (res) {
                             modal.writeBody(res);
-                            modal.setOkEvent(function(){
+                            modal.setOkEvent(function () {
                                 modal.hide();
                                 dataTable.ajax.reload();
                             });
-                        }).fail(function(res){
+                        }).fail(function (res) {
                             modal.writeBody("OOPS! C'è stato un problemino, se il problema persiste concattata un amministratore");
                             console.error(res);
                         });
@@ -81,11 +80,11 @@ $(document).on('bs.orderline.paymentToFriend', function() {
     });
 });
 
-$(document).on('bs.friend.orderline.ok', function(){
+$(document).on('bs.friend.orderline.ok', function () {
     var dataTable = $('.table').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 
-    if ( 1 > selectedRows.length) {
+    if (1 > selectedRows.length) {
         new Alert({
             type: "warning",
             message: "Devi selezionare almeno un prodotto"
@@ -109,19 +108,19 @@ $(document).on('bs.friend.orderline.ok', function(){
         url: '/blueseal/xhr/FriendAccept',
         method: 'POST',
         data: {rows: row, response: 'ok'}
-    }).done(function(res){
+    }).done(function (res) {
         modal.writeBody(res);
         $('.table').DataTable().ajax.reload(null, false);
-    }).fail(function(res){
+    }).fail(function (res) {
         modal.writeBody(res.responseText);
     });
 });
 
-$(document).on('bs.friend.orderline.ko', function(){
+$(document).on('bs.friend.orderline.ko', function () {
     var dataTable = $('.table').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 
-    if ( 1 > selectedRows.length) {
+    if (1 > selectedRows.length) {
         new Alert({
             type: "warning",
             message: "Devi selezionare almeno un prodotto"
@@ -145,19 +144,19 @@ $(document).on('bs.friend.orderline.ko', function(){
         url: '/blueseal/xhr/FriendAccept',
         method: 'POST',
         data: {rows: row, response: 'ko'}
-    }).done(function(res){
+    }).done(function (res) {
         modal.writeBody(res);
         $('.table').DataTable().ajax.reload(null, false);
-    }).fail(function(res){
+    }).fail(function (res) {
         modal.writeBody(res.responseText);
     });
 });
 
-$(document).on('bs.friend.orderline.shippedByFriend', function(){
+$(document).on('bs.friend.orderline.shippedByFriend', function () {
     var dataTable = $('.table').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 
-    if ( 1 > selectedRows.length) {
+    if (1 > selectedRows.length) {
         new Alert({
             type: "warning",
             message: "Devi selezionare almeno un prodotto"
@@ -175,32 +174,17 @@ $(document).on('bs.friend.orderline.shippedByFriend', function(){
 
     modal = new $.bsModal('Segna le righe ordine come spedite',
         {
-            body: 'Sto caricando le informazioni...'
+            body: 'Sto eseguendo l\'operazione. Attendi qualche istante...'
         });
-
     $.ajax({
-        url: '/blueseal/xhr/FriendShipMent',
-        method: 'GET',
+        url: '/blueseal/xhr/FriendShipment',
+        method: 'POST',
+        dataType: 'JSON',
         data: {rows: row}
-    }).done(function(res){
+    }).done(function (res) {
         modal.writeBody(res.message);
-        if (!res.error) {
-            modal.setOkEvent(function() {
-                $.ajax({
-                    url: '/blueseal/xhr/friendShipMent',
-                    method: 'POST',
-                    data: {rows: row}
-                }).done(function (res) {
-                    modal.writeBody(res);
-                }).fail(function (res) {
-                    modal.writeBody('OOPS! C\'è stato un problema. Se il problema persiste');
-                    console.error(res);
-                }).always(function (res) {
-                });
-            });
-        }
-    }).fail(function(res) {
-        modal.writeBody('OOPS! C\'è stato un problema. Se il problema persiste');
+    }).fail(function (res) {
+        modal.writeBody('OOPS! C\'è stato un problema. Se il problema persiste contatta un amministratore');
         console.error(res);
     });
 });
