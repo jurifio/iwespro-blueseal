@@ -129,9 +129,11 @@ class COrderListAjaxController extends AAjaxController
 
             $row["orderDate"] = $orderDate;
             $row["lastUpdate"] = isset($since) ? $since : "Mai";
-            $row["user"] = '<span>' . $val->userDetails->name . " " . $val->userDetails->surname . '</span><br /><span>' . $val->user->email . '</span>';
-            if (isset($val->rbacRole) && count($val->rbacRole) > 0) {
-                $row["user"] .= ' <i class="fa fa-diamond"></i>';
+            $row["user"] = '<a href="/blueseal/utente?userId='.$val->user->printId().'"><span>' . $val->user->getFullName(). '</span><br /><span>' . $val->user->email . '</span></a>';
+            if (isset($val->user->rbacRole) && count($val->user->rbacRole) > 0) {
+                $row["user"] .= '<i class="fa fa-diamond"></i>';
+            } elseif(!empty($val->user->userDetails->note)) {
+                $row["user"] .= '<i class="fa fa-sticky-note-o" aria-hidden="true"></i>';
             }
 
             $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
@@ -139,6 +141,7 @@ class COrderListAjaxController extends AAjaxController
             $row["paymentDate"] = $val->paymentDate;
             $row["payment"] = $val->orderPaymentMethod->name;
             $row["notes"] = wordwrap($val->note,50,'</br>');
+            $row["userNote"] = wordwrap($val->user->userDetails->note,50,'</br>');
 
             $response['data'][] = $row;
         }

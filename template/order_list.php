@@ -73,6 +73,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Note</th>
+                                <th data-slug="userNote"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Note Utente</th>
                             </tr>
                             </thead>
                             <tbody>
