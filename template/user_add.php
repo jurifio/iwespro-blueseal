@@ -22,6 +22,7 @@
 
             <div class="container-fluid">
                 <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post" autocomplete="off">
+                    <input autocomplete="off" type="hidden" id="user_id" class="form-control" name="user_id" value="">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="panel panel-default clearfix">
@@ -32,18 +33,24 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group form-group-default required">
                                                         <label for="user_name">Nome</label>
                                                         <input autocomplete="off" type="text" id="user_name" class="form-control" name="user_name" value="" required="required">
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group form-group-default required">
                                                         <label for="user_surname">Cognome</label>
                                                         <input id="user_surname" autocomplete="off" type="text" class="form-control" name="user_surname" value="" required="required" />
                                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group form-group-default">
+                                                        <label for="user_note">Note</label>
+                                                        <input id="user_note" autocomplete="off" type="text" class="form-control" name="user_note" value="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -56,10 +63,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default">
                                                         <label for="user_password">Password</label>
-                                                        <input id="user_password" autocomplete="off" type="text" class="form-control" name="user_password" value="<?php echo bin2hex(mcrypt_create_iv(6, MCRYPT_DEV_URANDOM)); ?>" required="required" />
-                                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                        <input id="user_password" autocomplete="off" type="text" placeholder="*******" class="form-control" name="user_password" value="<?php echo bin2hex(mcrypt_create_iv(6, MCRYPT_DEV_URANDOM)); ?>" />
                                                     </div>
                                                 </div>
                                             </div>

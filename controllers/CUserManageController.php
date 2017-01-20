@@ -46,7 +46,9 @@ class CUserManageController extends ARestrictedAccessRootController
     {
     	$user = $this->app->repoFactory->create('User')->getEmptyEntity();
 	    $user->email = $this->app->router->request()->getRequestData('user_email');
-	    $user->password = password_hash($this->app->router->request()->getRequestData('user_password'), PASSWORD_BCRYPT);
+        if(!empty($this->app->router->request()->getRequestData('user_password'))) {
+            $user->password = password_hash($this->app->router->request()->getRequestData('user_password'), PASSWORD_BCRYPT);
+        }
 	    $user->registrationEntryPoint =  $this->app->router->request()->getRequestData('user_entryPoint');
 	    $user->isActive = 1;
 	    $user->isDeleted = 0;
@@ -61,6 +63,7 @@ class CUserManageController extends ARestrictedAccessRootController
 	    $userD->gender = $this->app->router->request()->getRequestData('user_gender');
 	    $userD->phone = $this->app->router->request()->getRequestData('user_phone');
 	    $userD->fiscalCode = $this->app->router->request()->getRequestData('user_fiscal_code');
+        $userD->note = $this->app->router->request()->getRequestData('user_note');
 		$userD->insert();
 
 	    $userEmail = $this->app->repoFactory->create('UserEmail')->getEmptyEntity();
@@ -77,6 +80,43 @@ class CUserManageController extends ARestrictedAccessRootController
 
 	    return $user->id;
     }
+
+    public function put()
+    {
+
+        $user = $this->app->repoFactory->create('User')->findOneByStringId($this->app->router->request()->getRequestData('user_id'));
+        $user->email = $this->app->router->request()->getRequestData('user_email');
+
+        if(!empty($this->app->router->request()->getRequestData('user_password'))) {
+            $user->password = password_hash($this->app->router->request()->getRequestData('user_password'), PASSWORD_BCRYPT);
+        }
+
+        $user->registrationEntryPoint =  $this->app->router->request()->getRequestData('user_entryPoint');
+        $user->isActive = 1;
+        $user->isDeleted = 0;
+        $user->langId = $this->app->router->request()->getRequestData('user_lang') ?? 1;
+        $user->update();
+
+        $userD = $user->userDetails;
+        $userD->userId = $user->id;
+        $userD->name = $this->app->router->request()->getRequestData('user_name');
+        $userD->surname = $this->app->router->request()->getRequestData('user_surname');
+        $userD->birthDate = $this->app->router->request()->getRequestData('user_birthdate');
+        $userD->gender = $this->app->router->request()->getRequestData('user_gender');
+        $userD->phone = $this->app->router->request()->getRequestData('user_phone');
+        $userD->fiscalCode = $this->app->router->request()->getRequestData('user_fiscal_code');
+        $userD->note = $this->app->router->request()->getRequestData('user_note');
+        $userD->update();
+
+        if(!$user->newsletter && $this->app->router->request()->getRequestData('user_newsletter')) {
+            $this->app->repoFactory->create('Newsletter')->insertNewEmail($user->email,$user->id,$user->langId);
+        } elseif($user->newsletter && !$this->app->router->request()->getRequestData('user_newsletter')) {
+            $this->app->repoFactory->create('Newsletter')->unsubscribe($user->email);
+        }
+
+        return $user->id;
+    }
+
 
     public function delete()
     {

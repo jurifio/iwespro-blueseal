@@ -4,7 +4,7 @@
         var content = container.html();
         container.html('<img src="/assets/img/ajax-loader.gif">');
         $.ajax({
-            url: "/blueseal/xhr/UserList",
+            url: "/blueseal/xhr/UserData",
             dataType: "json"
         }).done(function (res) {
             container.html(content);

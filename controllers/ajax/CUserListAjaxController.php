@@ -18,44 +18,27 @@ use bamboo\core\intl\CLang;
  */
 class CUserListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        if ($this->app->getUser()->hasPermission('allShops')) {
-
-        } else{
-            $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
-            foreach($res as $val) {
-                $this->authorizedShops[] = $val['shopId'];
-            }
-        }
-
-        $this->em = new \stdClass();
-        $this->em->products = $this->app->entityManagerFactory->create('Product');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
-        $sql = "select `u`.`id` AS `id`,`ud`.`name` AS `name`,`ud`.`surname` AS `surname`,`u`.`email` AS `email`,if((`ud`.`gender` = 'F'),'Donna','Uomo') AS `sex`,if((`u`.`isActive` = 1),'Attivato','Disattivato') AS `status`,`u`.`creationDate` AS `creationDate`, ud.phone from (`User` `u` join `UserDetails` `ud`) where ((`u`.`id` = `ud`.`userId`) and (`u`.`isDeleted` = 0)) order by `u`.`creationDate` desc";
+        $sql = "SELECT
+                      `u`.`id`                                            AS `id`,
+                      `ud`.`name`                                         AS `name`,
+                      `ud`.`surname`                                      AS `surname`,
+                      `u`.`email`                                         AS `email`,
+                      if((`ud`.`gender` = 'F'), 'Donna', 'Uomo')          AS `sex`,
+                      if((`u`.`isActive` = 1), 'Attivato', 'Disattivato') AS `status`,
+                      `u`.`creationDate`                                  AS `creationDate`,
+                      ud.note as notes,
+                      ud.phone
+                    FROM (`User` `u`
+                      JOIN `UserDetails` `ud`)
+                    WHERE ((`u`.`id` = `ud`.`userId`) AND (`u`.`isDeleted` = 0))
+                    ORDER BY `u`.`creationDate` DESC";
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         $users = $this->app->repoFactory->create('User')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $count = $this->app->repoFactory->create('User')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('User')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -63,18 +46,20 @@ class CUserListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $i = 0;
+        $userEdit = $this->app->baseUrl(false). "/blueseal/utente?userId=";
 
         foreach($users as $val)
         {
-            $response['data'][$i]["DT_RowId"] = 'row__'.$val->id;
-            $response['data'][$i]["DT_RowClass"] = $val->isActive == 1 ? 'active' : 'unactive' ;;
-            $response['data'][$i]['id'] = $val->id;
-            $response['data'][$i]['name'] = $val->userDetails->name;
-            $response['data'][$i]['surname'] = $val->userDetails->surname;
-            $response['data'][$i]['email'] = $val->email;
-            $response['data'][$i]['method'] = $val->registrationEntryPoint;
-            $response['data'][$i]['sex'] = $val->userDetails->gender == 'M' ? 'Uomo' : 'Donna';
+            $row = [];
+            $row["DT_RowId"] = 'row__'.$val->printId();
+            $row["DT_RowClass"] = $val->isActive == 1 ? 'active' : 'unactive' ;;
+            $row['id'] = $val->id;// '<a href="'.$userEdit.$val->id.'">'.$val->id.'</a>';
+            $row['name'] = $val->userDetails->name;
+            $row['surname'] = $val->userDetails->surname;
+            $row['email'] = $val->email;
+            $row['notes'] = $val->userDetails->note;
+            $row['method'] = $val->registrationEntryPoint;
+            $row['sex'] = $val->userDetails->gender == 'M' ? 'Uomo' : 'Donna';
             $color = $val->isActive == 1 ? '#008200' : '';
             $icon = "fa-user";
             if(isset($val->rbacRole) && !$val->rbacRole->isEmpty() ){
@@ -83,10 +68,10 @@ class CUserListAjaxController extends AAjaxController
                     $icon = "fa-user-secret";
                 }
             }
-            $response['data'][$i]['status'] = '<i style="color: '.$color.'" class="fa '.$icon.'"></i>';
-            $response['data'][$i]['phone'] = $val->userDetails->phone;
-            $response['data'][$i]['creationDate'] = $val->creationDate;
-            $i++;
+            $row['status'] = '<i style="color: '.$color.'" class="fa '.$icon.'"></i>';
+            $row['phone'] = $val->userDetails->phone;
+            $row['creationDate'] = $val->creationDate;
+            $response[] = $row;
         }
 
         return json_encode($response);

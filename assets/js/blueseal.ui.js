@@ -49,7 +49,7 @@ $.ajaxForm = function (ajaxConf, formDataObject) {
 
         if (errors.length) {
             //TODO GESTIRE MEGLIO QUESTA COSA
-            return dff.reject();
+            return dff.reject(errors);
         }
 
         $('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
