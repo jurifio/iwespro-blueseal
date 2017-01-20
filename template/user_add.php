@@ -71,10 +71,9 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-4">
-                                                    <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default">
                                                         <label for="user_phone">Telefono</label>
-                                                        <input id="user_phone" autocomplete="off" type="text" class="form-control" name="user_phone" value="" required="required" />
-                                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                        <input id="user_phone" autocomplete="off" type="text" class="form-control" name="user_phone" value="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
