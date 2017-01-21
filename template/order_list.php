@@ -58,7 +58,7 @@
                                     data-orderable="true"
                                     class="center">Stato</th>
                                 <th data-slug="dareavere"
-                                    data-searchable="false"
+                                    data-searchable="true"
                                     data-orderable="false"
                                     class="center">Dovuto/Pagato</th>
                                 <th data-slug="paymentDate"
