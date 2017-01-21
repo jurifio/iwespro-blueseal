@@ -278,7 +278,6 @@ class CInvoiceNewRepo extends ARepo
 
         $invoiceLines = $invoice->invoiceLine;
 
-        \Monkey::dump($invoice);
         foreach($invoiceLines as $v) {
             /** @var COrderLine $ol */
             $ol = $v->orderLine->getFirst();
