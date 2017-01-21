@@ -176,7 +176,7 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevenue'] = number_format($v->friendRevenue, 2, ',', '');
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $invoiceLine = $v->invoiceLine->getFirst();
-            $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoiceId : 'non assegnata' ;
+            $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoiceNew->number . ' (id:' . $invoiceLine->invoiceId . ')' : 'non assegnata' ;
             $l = $lR->findOneBy(['stringId' => $v->printId(), 'ActionName' => 'ShippedByFriend']);
             $response['data'][$i]['friendShipmentTime'] = ($l) ? STimeToolbox::EurFormattedDateTime($l->time) : 'Non spedito';
             $i++;
