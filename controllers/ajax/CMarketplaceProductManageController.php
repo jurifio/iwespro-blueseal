@@ -122,11 +122,14 @@ class CMarketplaceProductManageController extends AAjaxController
                     $marketplaceHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
                     $marketplaceHasProduct->readId($mId);
                     $marketplaceHasProduct->isDeleted = 1;
+                    $marketplaceHasProduct->isToWork = 1;
                     $marketplaceHasProduct->insert();
                 } else {
                     $marketplaceHasProduct->isDeleted = 1;
+                    $marketplaceHasProduct->isToWork = 1;
                     $marketplaceHasProduct->update();
                 }
+                $this->app->eventManager->triggerEvent('product.marketplace.change',['productIds'=>$marketplaceHasProduct->product->printId()]);
                 $count++;
             } catch (\Throwable $e) {
 
