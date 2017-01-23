@@ -33,8 +33,10 @@ $(document).on('bs.orderline.paymentToFriend', function () {
                     dataType: 'json',
                     data: {row: row, date: $('#invoicePaymentDate').val()}
                 }).done(function (res) {
-                    modal.writeBody(res.message);
-                    dataTable.ajax.reload(null, false);
+                    modal.writeBody('<strong>OOPS!</strong> ' + res.message);
+                    if (!res.error) {
+                        dataTable.ajax.reload(null, false);
+                    }
                 }).fail(function (res) {
                     modal.writeBody("OOPS! C'è stato un problemino, se il problema persiste contatta un amministratore");
                     console.error(res);
