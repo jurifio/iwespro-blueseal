@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\core\exceptions\BambooException;
+use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\repositories\CInvoiceNewRepo;
 
 /**
@@ -35,6 +36,9 @@ class CFriendOrderPayInvoices extends AAjaxController
             $dba->commit();
             $res['message'] = 'La fattura è stata registrata come pagata';
             return json_encode($res);
+        } catch(BambooInvoiceException $e) {
+            $dba->rollBack();
+            return $e->getMessage();
         } catch(BambooException $e) {
             $dba->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();

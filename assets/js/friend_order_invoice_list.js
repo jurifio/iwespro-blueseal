@@ -36,7 +36,7 @@ $(document).on('bs.orderline.paymentToFriend', function () {
                     modal.writeBody(res.message);
                     dataTable.ajax.reload(null, false);
                 }).fail(function (res) {
-                    modal.writeBody("OOPS! C'è stato un problemino, se il problema persiste concattata un amministratore");
+                    modal.writeBody("OOPS! C'è stato un problemino, se il problema persiste contatta un amministratore");
                     console.error(res);
                 }).always(function(){
                     modal.setOkEvent(function(){
