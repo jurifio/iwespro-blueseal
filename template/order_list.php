@@ -58,7 +58,7 @@
                                     data-orderable="true"
                                     class="center">Stato</th>
                                 <th data-slug="dareavere"
-                                    data-searchable="true"
+                                    data-searchable="false"
                                     data-orderable="false"
                                     class="center">Dovuto</th>
                                 <th data-slug="paid"
