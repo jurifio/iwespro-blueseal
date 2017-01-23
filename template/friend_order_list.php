@@ -72,7 +72,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stato Pagamento</th>
                                 <th data-slug="invoiceNumber"
-                                    data-searchable="false"
+                                    data-searchable="true"
                                     data-orderable="false" class="center">Numero Fattura</th>
                                 <?php if ($allShops) : ?>
                                 <th data-slug="paymentDate"
