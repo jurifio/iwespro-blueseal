@@ -39,7 +39,8 @@ class COrderListAjaxController extends AAjaxController
                   `opm`.`name`                                           AS `payment`,
                   `ols`.`title`                                          AS `orderLineStatus`,
                   `pb`.`name`                                            AS `productBrand`,
-                  concat(`o`.`netTotal`, ' / ', if(`o`.`paidAmount` > 0, 'sìsi', 'no')) as `dareavere`,
+                  concat(`o`.`netTotal`, '/' , `o`.`paidAmount`)         AS `dareavere`,
+                  if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate as paymentDate,
                   o.note as notes
                 FROM ((((((((((`Order` `o`
@@ -141,7 +142,8 @@ class COrderListAjaxController extends AAjaxController
             $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
             $paid = ($paidAmount) ? 'Sì' : 'No';
             $netTotal = SPriceToolbox::formatToEur($val->netTotal);
-            $row["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . $netTotal . ' / ' . $paid . "</span>" : $netTotal . ' / ' . $paid;
+            $row["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . $netTotal . '/' . $paidAmount ."</span>" : $netTotal . '/' . $paidAmount;
+            $row['paid'] = $paid;
             $row["paymentDate"] = $val->paymentDate;
             $row["payment"] = $val->orderPaymentMethod->name;
             $row["notes"] = wordwrap($val->note,50,'</br>');

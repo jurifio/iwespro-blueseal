@@ -60,7 +60,11 @@
                                 <th data-slug="dareavere"
                                     data-searchable="true"
                                     data-orderable="false"
-                                    class="center">Dovuto/Pagato</th>
+                                    class="center">Dovuto</th>
+                                <th data-slug="paid"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Pagato</th>
                                 <th data-slug="paymentDate"
                                     data-searchable="true"
                                     data-orderable="true"

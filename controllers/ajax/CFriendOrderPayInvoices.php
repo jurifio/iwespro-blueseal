@@ -38,7 +38,9 @@ class CFriendOrderPayInvoices extends AAjaxController
             return json_encode($res);
         } catch(BambooInvoiceException $e) {
             $dba->rollBack();
-            return $e->getMessage();
+            $res['error'] = true;
+            $res['message'] = $e->getMessage();
+            return json_encode($res);
         } catch(BambooException $e) {
             $dba->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();
