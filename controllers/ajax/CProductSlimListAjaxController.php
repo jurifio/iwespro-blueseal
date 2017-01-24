@@ -51,7 +51,7 @@ class CProductSlimListAjaxController extends AAjaxController
                 ORDER BY `p`.`creationDate` DESC";
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         $datatable->addCondition('shopId', $shopsIds);
-        if ($allShops) $datatable->addLikeCondition('status', 'Fuso', true);
+        if (!$allShops) $datatable->addLikeCondition('status', 'Fuso', true);
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
