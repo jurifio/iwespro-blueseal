@@ -2,31 +2,13 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
-use bamboo\utils\price\SPriceToolbox;
 use bamboo\utils\time\STimeToolbox;
 
-/**
- * Class COrderListAjaxController
- * @package bamboo\blueseal\controllers\ajax
- *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
- *
- * @copyright (c) Bambooshoot snc - All rights reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- *
- * @since ${VERSION}
- */
 class CFriendOrderInvoiceListAjaxController extends AAjaxController
 {
 
     public function get()
     {
-        $cR = \Monkey::app()->repoFactory->create('Configuration');
-        $vat = $cR->findOneBy(['name' => 'main vat'])->value;
-        $user = $this->app->getUser();
-        $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
 
         $query = "
@@ -69,14 +51,14 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
             $response['data'][$i]['id'] = $v->id;
             $response['data'][$i]['invoiceNumber'] = $v->number;
             $response['data'][$i]['paymentExpectedDate'] = STimeToolbox::EurFormattedDate($v->paymentExpectedDate);
-            $paymentDate = ($v->paymentDate) ? STimeToolbox::EurFormattedDate($v->paymentExpectedDate) : 'Non pagata';
+            $paymentDate = (null !== $v->paymentDate && '0000-00-00 00:00:00' == $v->paymentDate ) ? 'Non pagata' : STimeToolbox::EurFormattedDate($v->paymentDate);
             $response['data'][$i]['paymentDate'] = $paymentDate;
             $response['data'][$i]['creationDate'] = STimeToolbox::EurFormattedDate($v->creationDate);
             $response['data'][$i]['invoiceTotalAmount'] = $v->totalWithVat;
             $response['data'][$i]['invoiceDate'] = STimeToolbox::EurFormattedDate($v->date);
-            $bill = $v->paymentBill;
-            $echoBill = ($bill->count()) ? $bill->getFirst()->id : 'Non presente';
-            $response['data'][$i]['paymentBill'] = $echoBill;
+            //$bill = $v->paymentBill;
+            //$echoBill = ($bill->count()) ? $bill->getFirst()->id : 'Non presente';
+            $response['data'][$i]['paymentBill'] = '[in realizzazione]';//$echoBill;
             //$response['data'][$i]['orderLines'] = '<span>[da implementare]</span>';
             $i++;
 	    }
