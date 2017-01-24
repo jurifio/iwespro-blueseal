@@ -20,15 +20,15 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `i`.`totalWithVat` as `invoiceTotalAmount`,
                   `i`.`paymentDate` as `paymentDate`,
                   concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
-                  `i`.`creationDate` as `creationDate`,
-                  if (`pb`.`id`, `pb`.`id`, 'Non presente')  as `paymentBill`
+                  `i`.`creationDate` as `creationDate`#,
+                  #if (`pb`.`id`, `pb`.`id`, 'Non presente')  as `paymentBill`
                 FROM
                   `InvoiceNew` as `i` JOIN
                   `InvoiceLine` as `il` on `il`.`invoiceId` =  `i`.`id` JOIN
                   `InvoiceType` as `it` on `it`.`id` = `i`.`invoiceTypeId` JOIN
                   `InvoiceLineHasOrderLine` as `ilhol` on `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId` JOIN
                   `OrderLine` as `ol` on `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
-                  LEFT JOIN (`PaymentBillHasInvoiceNew` as `pbhin` JOIN `PaymentBill` as `pb` on `pb`.id = `pbhin`.`paymentBillId`) on `i`.`id` = `pbhin`.`invoiceNewId`
+                  #LEFT JOIN (`PaymentBillHasInvoiceNew` as `pbhin` JOIN `PaymentBill` as `pb` on `pb`.id = `pbhin`.`paymentBillId`) on `i`.`id` = `pbhin`.`invoiceNewId`
                 WHERE
                   `it`.`code` = 'fr_invoice_orderlines_file'
               ";
