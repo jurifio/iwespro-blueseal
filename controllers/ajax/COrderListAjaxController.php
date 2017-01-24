@@ -141,9 +141,8 @@ class COrderListAjaxController extends AAjaxController
 
             $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
             $paid = ($paidAmount) ? 'Sì' : 'No';
-            $paidAmountFormatted = SPriceToolbox::formatToEur($paidAmount);
             $netTotal = SPriceToolbox::formatToEur($val->netTotal);
-            $row["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . $netTotal . '/' . $paidAmountFormatted ."</span>" : $netTotal . '/' . $paidAmountFormatted;
+            $row["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . $netTotal . "</span>" : $netTotal;
             $row['paid'] = $paid;
             $row["paymentDate"] = $val->paymentDate;
             $row["payment"] = $val->orderPaymentMethod->name;
