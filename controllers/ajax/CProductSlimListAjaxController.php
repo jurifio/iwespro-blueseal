@@ -22,6 +22,9 @@ class CProductSlimListAjaxController extends AAjaxController
     {
         $shopsIds = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
+        $user = \Monkey::app()->getUser();
+        $allShops = $user->hasPermission('allShops');
+
         $sql = "SELECT
                   `p`.`id`                                             AS `id`,
                   `p`.`productVariantId`                               AS `productVariantId`,
@@ -48,15 +51,14 @@ class CProductSlimListAjaxController extends AAjaxController
                 ORDER BY `p`.`creationDate` DESC";
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         $datatable->addCondition('shopId', $shopsIds);
+        if ($allShops) $datatable->addLikeCondition('status', 'Fuso', true);
 
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $user = \Monkey::app()->getUser();
-        $okManage = $user->hasPermission('/admin/product/edit');
 
-        $allShops = $user->hasPermission('allShops');
+        $okManage = $user->hasPermission('/admin/product/edit');
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
