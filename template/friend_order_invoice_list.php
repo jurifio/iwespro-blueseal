@@ -54,9 +54,12 @@
                                 <th data-slug="paymentDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Pagamento</th>
-                                <th data-slug="orderLines"
+                                <th data-slug="paymentBill"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Linee Fatture</th>
+                                    data-orderable="true" class="center">Distinta Pagamento</th>
+                                <!--<th data-slug="orderLines"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Linee Fatture</th>-->
                             </tr>
                             </thead>
                             <tbody>

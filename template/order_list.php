@@ -58,9 +58,13 @@
                                     data-orderable="true"
                                     class="center">Stato</th>
                                 <th data-slug="dareavere"
-                                    data-searchable="true"
+                                    data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Dovuto/Pagato</th>
+                                    class="center">Dovuto</th>
+                                <th data-slug="paid"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Pagato</th>
                                 <th data-slug="paymentDate"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -124,6 +128,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.order.wiretransfer.send"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -271,6 +271,9 @@ class CInvoiceNewRepo extends ARepo
      */
     public function payFriendInvoice($invoice, $date = null) {
         if (!is_object($invoice)) $invoice = $this->findOne([$invoice]);
+        if (!$invoice) throw new BambooException('Fattura non trovata!');
+        if (strtotime($date) < strtotime($invoice->date))
+            throw new BambooInvoiceException('La data di pagamento non può essere più vecchia della data di emissione');
         $date = STimeToolbox::AngloFormattedDatetime($date);
         $invoice->paymentDate = $date;
         $invoice->paydAmount = $invoice->totalWithVat;

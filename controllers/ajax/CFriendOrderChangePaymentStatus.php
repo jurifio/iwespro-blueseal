@@ -82,6 +82,7 @@ class CFriendOrderChangePaymentStatus extends AAjaxController
             }
 
             $dba->commit();
+            return 'Lo stato di pagamento delle righe selezionate è stato modificato';
         } catch (BambooException $e) {
             $dba->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();

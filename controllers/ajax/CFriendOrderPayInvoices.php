@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\core\exceptions\BambooException;
+use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\repositories\CInvoiceNewRepo;
 
 /**
@@ -19,6 +20,7 @@ class CFriendOrderPayInvoices extends AAjaxController
         $res['error'] = false;
 
         $row = \Monkey::app()->router->request()->getRequestData('row');
+        $date = \Monkey::app()->router->request()->getRequestData('date');
         /** @var CInvoiceNewRepo $iR */
         $iR = \Monkey::app()->repoFactory->create('InvoiceNew');
         $invoice = $iR->findOne([$row]);
@@ -30,9 +32,14 @@ class CFriendOrderPayInvoices extends AAjaxController
         $dba = \Monkey::app()->dbAdapter;
         $dba->beginTransaction();
         try {
-            $iR->payFriendInvoice($invoice);
+            $iR->payFriendInvoice($invoice, $date);
             $dba->commit();
             $res['message'] = 'La fattura è stata registrata come pagata';
+            return json_encode($res);
+        } catch(BambooInvoiceException $e) {
+            $dba->rollBack();
+            $res['error'] = true;
+            $res['message'] = $e->getMessage();
             return json_encode($res);
         } catch(BambooException $e) {
             $dba->rollBack();

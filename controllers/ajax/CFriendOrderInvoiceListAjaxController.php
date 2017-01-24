@@ -4,6 +4,7 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\utils\price\SPriceToolbox;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class COrderListAjaxController
@@ -37,13 +38,15 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `i`.`totalWithVat` as `invoiceTotalAmount`,
                   `i`.`paymentDate` as `paymentDate`,
                   concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
-                  `i`.`creationDate` as `creationDate`
+                  `i`.`creationDate` as `creationDate`,
+                  if (`pb`.`id`, `pb`.`id`, 'Non presente')  as `paymentBill`
                 FROM
                   `InvoiceNew` as `i` JOIN
                   `InvoiceLine` as `il` on `il`.`invoiceId` =  `i`.`id` JOIN
                   `InvoiceType` as `it` on `it`.`id` = `i`.`invoiceTypeId` JOIN
                   `InvoiceLineHasOrderLine` as `ilhol` on `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId` JOIN
                   `OrderLine` as `ol` on `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
+                  LEFT JOIN (`PaymentBillHasInvoiceNew` as `pbhin` JOIN `PaymentBill` as `pb` on `pb`.id = `pbhin`.`paymentBillId`) on `i`.`id` = `pbhin`.`invoiceNewId`
                 WHERE
                   `it`.`code` = 'fr_invoice_orderlines_file'
               ";
@@ -65,12 +68,16 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
             $response['data'][$i]['invoiceNumber'] = $v->number;
-            $response['data'][$i]['paymentExpectedDate'] = $v->paymentExpectedDate;
-            $response['data'][$i]['paymentDate'] = $v->paymentDate;
-            $response['data'][$i]['creationDate'] = $v->creationDate;
+            $response['data'][$i]['paymentExpectedDate'] = STimeToolbox::EurFormattedDate($v->paymentExpectedDate);
+            $paymentDate = ($v->paymentDate) ? STimeToolbox::EurFormattedDate($v->paymentExpectedDate) : 'Non pagata';
+            $response['data'][$i]['paymentDate'] = $paymentDate;
+            $response['data'][$i]['creationDate'] = STimeToolbox::EurFormattedDate($v->creationDate);
             $response['data'][$i]['invoiceTotalAmount'] = $v->totalWithVat;
-            $response['data'][$i]['invoiceDate'] = $v->date;
-            $response['data'][$i]['orderLines'] = '<span>[da implementare]</span>';
+            $response['data'][$i]['invoiceDate'] = STimeToolbox::EurFormattedDate($v->date);
+            $bill = $v->paymentBill;
+            $echoBill = ($bill->count()) ? $bill->getFirst()->id : 'Non presente';
+            $response['data'][$i]['paymentBill'] = $echoBill;
+            //$response['data'][$i]['orderLines'] = '<span>[da implementare]</span>';
             $i++;
 	    }
         return json_encode($response);

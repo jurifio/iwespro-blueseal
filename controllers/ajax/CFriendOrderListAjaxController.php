@@ -41,7 +41,7 @@ class CFriendOrderListAjaxController extends AAjaxController
               #l.eventValue as logVal,
               #l.time as logTime,
               `pb`.`name` as `brand`,
-              ifnull(`ilhol`.`invoiceLineInvoiceId`, 'non assegnata') as `invoiceNumber`,
+              ifnull(`in`.`number`, 'non assegnata') as `invoiceNumber`,
               `pse`.`name` as `season`,
               `ps`.`name` as `size`,
               `s`.`id` as `shopId`,
@@ -65,7 +65,7 @@ class CFriendOrderListAjaxController extends AAjaxController
                 JOIN `ProductSize` as `ps` on `ol`.`productSizeId` = `ps`.`id`)
                 JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
                 JOIN `ProductSeason` as `pse` on `p`.`productSeasonId` = `pse`.`id`
-                LEFT JOIN `InvoiceLineHasOrderLine` as `ilhol` on `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
+                LEFT JOIN (`InvoiceLineHasOrderLine` as `ilhol` JOIN InvoiceNew as `in` on `in`.`id` = `ilhol`.`invoiceLineInvoiceId` )on `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
                 LEFT JOIN `Log` as `l` on concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId 
                 JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
 
