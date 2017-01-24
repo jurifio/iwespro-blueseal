@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php"?>
-    <?php echo $app->getAssets([], $page); ?>
+    <?php echo $app->getAssets(['ui','forms'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
     <style type="text/css">
 
@@ -38,7 +38,7 @@
         }
 
         @page {
-            size: auto;
+            size: A4;
             margin: 20mm 0mm 0mm 14mm;
         }
 
