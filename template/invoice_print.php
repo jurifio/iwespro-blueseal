@@ -13,7 +13,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
 
 
         @page {
-            size:landscape;
+            size:A4;
             margin:5mm 0mm 0mm 0mm;
         }
 
