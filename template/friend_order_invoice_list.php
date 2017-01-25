@@ -97,6 +97,16 @@
             data-placement="bottom"
             data-event="bs.orderline.editPaymentBillAddInvoice"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-file-excel-o"
+            data-permission="/admin/order/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Elimina una fattura dalla distinta"
+            data-placement="bottom"
+            data-event="bs.orderline.editPaymentBillRemoveInvoices"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php endif; ?>
 </bs-toolbar>

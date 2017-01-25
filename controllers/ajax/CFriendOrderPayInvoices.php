@@ -88,12 +88,35 @@ class CFriendOrderPayInvoices extends AAjaxController
         if ('add' == $act) {
             $invoices = $iR->findBySql('SELECT id FROM InvoiceNew WHERE id IN (' . implode(',', $row) . ')');
             try {
+                $dba->beginTransaction();
                 $iR->addInvoicesToPaymentBill($invoices, $idBill);
                 $dba->commit();
                 return 'Le fatture selezionate sono state inserite nella distinta specificata';
             } catch (BambooInvoiceException $e) {
                 $dba->rollBack();
                 return $e->getMessage();
+            } catch(BambooException $e) {
+                $dba->rollBack();
+                \Monkey::app()->router->response()->raiseProcessingError();
+                return $e->getMessage();
+            }
+        } elseif ('deleteInvoice' === $act) {
+
+            $res = [];
+            $res['error'] = false;
+            $res['message'] = 'La fattura è stata scorporata dalla distinta';
+
+            try {
+                $dba->beginTransaction();
+                $invoice = $iR->findOne([$row]);
+                $iR->removeInvoiceFromPaymentBill($invoice);
+                $dba->commit();
+                return json_encode($res);
+            } catch(BambooInvoiceException $e) {
+                $dba->rollBack();
+                $res['error'] = true;
+                $res['message'] = $e->getMessage();
+                return json_encode($res);
             } catch(BambooException $e) {
                 $dba->rollBack();
                 \Monkey::app()->router->response()->raiseProcessingError();
