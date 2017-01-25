@@ -3,8 +3,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
 ?>
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
-
+<html xmlns="http://www.w3.org/1999/html
 <head>
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui','forms'], $page); ?>

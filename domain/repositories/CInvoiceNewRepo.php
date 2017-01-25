@@ -1,10 +1,12 @@
 <?php
 namespace bamboo\domain\repositories;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\entities\CAddressBook;
+use bamboo\domain\entities\CInvoiceNew;
 use bamboo\domain\entities\CInvoiceSectional;
 use bamboo\domain\entities\CInvoiceType;
 use bamboo\utils\price\SPriceToolbox;
@@ -213,12 +215,12 @@ class CInvoiceNewRepo extends ARepo
         try {
             $totalWithVat = 0;
             $vat = $this->getInvoiceVat($invoiceType, $addressBook);
-            foreach($orderLines as $k => $v) {
+            foreach ($orderLines as $k => $v) {
                 $orderLines[$k] = $olR->findOneByStringId($v);
-                $totalWithVat+= SPriceToolbox::grossPriceFromNet($orderLines[$k]->friendRevenue, $vat);
+                $totalWithVat += SPriceToolbox::grossPriceFromNet($orderLines[$k]->friendRevenue, $vat);
             }
 
-                $dba->beginTransaction();
+            $dba->beginTransaction();
             $insertedId = $this->createInvoice(
                 $invoiceTypeId,
                 $userId,
@@ -231,7 +233,7 @@ class CInvoiceNewRepo extends ARepo
                 $number,
                 $note
             );
-            foreach($orderLines as $v) {
+            foreach ($orderLines as $v) {
                 $this->addOrderLineToInvoice($insertedId, $v, (float)$v->friendRevenue, false, $vat);
             }
 
@@ -257,7 +259,8 @@ class CInvoiceNewRepo extends ARepo
      * @param CAddressBook|null $addressBook
      * @return mixed
      */
-    private function getInvoiceVat(CInvoiceType $invoiceType, CAddressBook $addressBook = null) {
+    private function getInvoiceVat(CInvoiceType $invoiceType, CAddressBook $addressBook = null)
+    {
         /** @var CInvoiceType $ */
         if ($invoiceType->isActive) return $addressBook->countryId->vat;
         else return $countryId = \Monkey::app()->repoFactory->create('Configuration')
@@ -269,24 +272,108 @@ class CInvoiceNewRepo extends ARepo
      * @param null $date
      * @return bool
      */
-    public function payFriendInvoice($invoice, $date = null) {
+    public function payFriendInvoice($invoice, $amount = null, $date = null)
+    {
         if (!is_object($invoice)) $invoice = $this->findOne([$invoice]);
         if (!$invoice) throw new BambooException('Fattura non trovata!');
         if (strtotime($date) < strtotime($invoice->date))
             throw new BambooInvoiceException('La data di pagamento non può essere più vecchia della data di emissione');
         $date = STimeToolbox::AngloFormattedDatetime($date);
-        $invoice->paymentDate = $date;
+        $amount = (null === $amount) ? $invoice->totalWithVat : $amount;
+        if ($amount + $invoice->paydAmount > $amount)
+            throw new BambooInvoiceException(
+                'Fattura id:' . $invoice->id . ' num.: ' . $invoice->number . 'L\'importo complessivamente versato, non può superare il totale della fattura'
+            );
+        //if (null == $invoice->payment) $invoice->payment = 0;
+        $invoice->paydAmount += $amount;
+        if ($invoice->paydAmount == $invoice->totalWithVat) $invoice->paymentDate = $date;
         $invoice->paydAmount = $invoice->totalWithVat;
         $invoice->update();
 
         $invoiceLines = $invoice->invoiceLine;
 
-        foreach($invoiceLines as $v) {
-            /** @var COrderLine $ol */
-            $ol = $v->orderLine->getFirst();
-            $ol->orderLineFriendPaymentStatusId = 4;
-            $ol->orderLineFriendPaymentDate = $date;
-            $ol->update();
+        if ($invoice->paydAmount == $invoice->totalWithVat) {
+            foreach ($invoiceLines as $v) {
+                /** @var COrderLine $ol */
+                $ol = $v->orderLine->getFirst();
+                $ol->orderLineFriendPaymentStatusId = 4;
+                $ol->orderLineFriendPaymentDate = $date;
+                $ol->update();
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param CObjectCollection $invoices
+     * @return int
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     */
+    public function checkPaymentBillBeforeInsertAndReturnDue(CObjectCollection $invoices) {
+        $iCO = $invoices;
+        if (!$iCO->count()) throw new BambooException('Nessuna fattura fornita');
+
+        // different controls are made if is selected a single row or many
+        $isSingle = (1 < $iCO->count()) ? false : true;
+        //controllo che i dati fin'ora registrati siano corretti
+        $due = 0;
+
+        foreach ($iCO as $v) {
+            $bill = $v->paymentBill;
+            $amountBills = 0;
+            foreach ($bill as $b) {
+                $amountBills += $b->amount;
+            }
+            if ((float)$v->paydAmount != $amountBills) {
+                throw new BambooInvoiceException('Nella fattura ' . $v->number . ' i dati dei pagamenti effettuati non corrispondono al totale registrato. Ricontrollarli prima di procedere a qualsiasi altra operazione');
+            }
+
+            $due += $v->totalWithVat - (float)$v->paydAmount;
+
+            if ($isSingle) {
+                if (0 >= $due) {
+                    throw new BambooInvoiceException('La fattura selezionata risulta già pagata.');
+                }
+                break;
+            }
+            if (0 != (float)$v->paydAmount)
+                throw new BambooInvoiceException('La fattura ' . $v->number . ', o è già stata saldata o, in caso di saldo parziale, va saldata singolarmente');
+        }
+
+        return $due;
+    }
+
+    /**
+     * @param CObjectCollection $invoices
+     * @param null $amount
+     * @param null $date
+     * @return bool
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     */
+    public function insertPaymentBillAndPayInvoices(CObjectCollection $invoices, $amount = null, $date = null) {
+        $due = $this->checkPaymentBillBeforeInsertAndReturnDue($invoices);
+        if (1 < $invoices->count() && $due != $amount) {
+            throw new BambooInvoiceException('La cifra dovuta e quella specificata per il pagamento devono coincidere');
+        } elseif (1 == $invoices->count() && $due < $amount) {
+            throw new BambooException('La cifra dovuta e quella specificata per il pagamento devono coincidere');
+        }
+
+        $pbill = \Monkey::app()->repoFactory->create('PaymentBill')->getEmptyEntity();
+        $pbill->amount = $amount;
+        $pbill->date = $date;
+        $billId = $pbill->insert();
+
+        $amount = (1 < $invoices->count()) ? null : $amount;
+
+        $pbhinR = \Monkey::app()->repoFactory->create('PaymentBillHasInvoiceNew');
+        foreach($invoices as $v) {
+            $this->payFriendInvoice($v, $amount, $date);
+            $pbhin = $pbhinR->getEmptyEntity();
+            $pbhin->paymentBillId = $billId;
+            $pbhin->invoiceNewId = $v->id;
+            $pbhin->insert();
         }
         return true;
     }

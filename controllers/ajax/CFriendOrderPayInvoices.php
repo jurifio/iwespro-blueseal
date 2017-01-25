@@ -11,6 +11,35 @@ use bamboo\domain\repositories\CInvoiceNewRepo;
  */
 class CFriendOrderPayInvoices extends AAjaxController
 {
+    public function get() {
+        $row = \Monkey::app()->router->request()->getRequestData('row');
+
+        $iR = \Monkey::app()->repoFactory->create('InvoiceNew');
+
+        $invoices = $iR->findBySql('SELECT id FROM InvoiceNew WHERE id in (' . implode(',', $row) . ')');
+
+        // different controls are made if is selected a single row or many
+
+        $res = [];
+        $res['error'] = false;
+        $res['message'] = '';
+        //controllo che i dati fin'ora registrati siano corretti
+        try {
+            return $iR->checkPaymentBillBeforeInsertAndReturnDue($invoices);
+        } catch(BambooInvoiceException $e) {
+            $res['error'] = true;
+            $res['message'] = $e->getMessage();
+            return json_encode($res);
+        } catch(BambooException $e) {
+            \Monkey::app()->router->response()->raiseProcessingError();
+            return $e->getMessage();
+
+        }
+
+
+
+
+    }
     /**
      * @transaction
      */
@@ -21,18 +50,16 @@ class CFriendOrderPayInvoices extends AAjaxController
 
         $row = \Monkey::app()->router->request()->getRequestData('row');
         $date = \Monkey::app()->router->request()->getRequestData('date');
+        $amount = \Monkey::app()->router->request()->getRequestData('amount');
+
         /** @var CInvoiceNewRepo $iR */
         $iR = \Monkey::app()->repoFactory->create('InvoiceNew');
-        $invoice = $iR->findOne([$row]);
+        $invoices = $iR->findBySql('SELECT id FROM InvoiceNew WHERE id in (' . implode(',', $row) . ')');
 
-        if ($invoice->paymentDate) {
-            $res['error'] = true;
-            $res['message'] = 'Questa fattura è già stata precedentemente segnata come pagata';
-        }
         $dba = \Monkey::app()->dbAdapter;
         $dba->beginTransaction();
         try {
-            $iR->payFriendInvoice($invoice, $date);
+            $iR->insertPaymentBillAndPayInvoices($invoices, $amount, $date);
             $dba->commit();
             $res['message'] = 'La fattura è stata registrata come pagata';
             return json_encode($res);
