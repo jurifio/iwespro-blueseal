@@ -301,6 +301,7 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
     $(document).on('column-visibility.dt draw.dt',function (e, settings, column, state) {
         if(typeof state == 'undefined' || state) {
             $('table.inner-size-table').each(function(k,table) {
+                table = $(table);
                 if(table.data('loaded') == 'true') return;
                 var container = table.closest('td');
                 var productId = table.data('productId');
