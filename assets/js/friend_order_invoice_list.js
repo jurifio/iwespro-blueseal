@@ -83,6 +83,50 @@ $(document).on('bs.orderline.paymentToFriend', function () {
     })
 });
 
+$(document).on('bs.orderline.editPaymentBillAddInvoice', function () {
+    var dataTable = $('.table').DataTable();
+    var selectedRows = dataTable.rows('.selected').data();
+
+    if (1 > selectedRows.length) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare almeno una fattura da aggiungere all'invoice"
+        });
+        return false;
+    }
+
+    var row = [];
+    var i = 0;
+    $.each(selectedRows, function (k, v) {
+        row[i] = v.id;
+        i++;
+    });
+
+    modal = new $.bsModal('Aggiungi una fattura alla distinta', {
+        body: '<div class="form-group">' +
+        '<label for="idBill">id distinta:</label>' +
+        '<input type="text" name="idBill" class="idBill form-control" id="idBill" />' +
+        '</div>',
+        isCancelButton: true,
+        okButtonEvent: function(){
+            $.ajax({
+                url: '/blueseal/xhr/FriendOrderPayInvoices',
+                method: 'put',
+                data:{row: row, action: 'add', idBill: $('#idBill').val()}
+            }).done(function(res){
+                modal.writeBody(res);
+            }).fail(function(res){
+                modal.writeBody('OOPS! C\'è stato un problema. Ritenta tra qualche minuto, se persiste un amministratore');
+                console.error(res);
+            }).always(function(){
+                modal.setOkEvent(function(){
+                    modal.hide();
+                });
+            });
+        }
+    });
+});
+
 $(document).on('bs.orderline.showInvoiceRows', function () {
     $.ajax({
         url: '/blueseal/xhr/friendInvoiceGetInvoiceLines',
