@@ -50,11 +50,12 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       if(mahp.isDeleted = 1,'sìsi','no')              as isDeleted,
                       ifnull(visits,0)                                AS visits,
                       ifnull(conversions,0)                           AS conversions,
+                      ifnull(pConversions,0)                           AS pConversions,
                       round(visits*fee)                               AS visitsCost,
                       ordersIds                                       AS ordersIds,
                       ifnull(conversionsValue,0)                      as conversionsValue,
+                      ifnull(pConversionsValue,0)                      as pConversionsValue,
                       phpc.productCategoryId                          AS categories,
-                      ifnull(sql2.code, '')                                AS campaignCode,
                       if(p.isOnSale = 0, min(shp.price),min(shp.salePrice)) as activePrice
                     FROM `Product` `p`
                       JOIN `ProductStatus` `ps` ON ((`p`.`productStatusId` = `ps`.`id`))
@@ -69,46 +70,40 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       JOIN `MarketplaceAccount` `ma`
                         ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`)))
                       JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`))
-                      LEFT JOIN (SELECT c.code, 
-                                        cvhp.productId, 
-                                        cvhp.productVariantId, 
-                                        sum(ol.netPrice) as conversionsValue, 
-                                        group_concat(distinct ol.orderId SEPARATOR ',') AS ordersIds, 
-                                        count(cv.id) as visits, 
-                                        count(o.id) as conversions
-                                    FROM Campaign c 
-                                    JOIN CampaignVisit cv on c.id = cv.campaignId 
-                                    JOIN CampaignVisitHasProduct cvhp on cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id 
-                                    LEFT JOIN (CampaignVisitHasOrder cvho 
-                                                JOIN `Order` o on cvho.orderId = o.id 
-                                                JOIN OrderLine ol on o.id = ol.orderId
-                                                ) on cvho.campaignVisitId = cv.id and 
-                                                     cvho.campaignId = cv.campaignId AND 
-                                                     ol.productId = cvhp.productId and 
-                                                     ol.productVariantId = cvhp.productVariantId
-                                    where c.id = ? AND
-                                    (timestamp BETWEEN ifnull(?,timestamp) and ifnull(?,timestamp) OR
-                                     if(orderDate is null,0=1,o.orderDate BETWEEN ifnull(?,o.orderDate) and ifnull(?,o.orderDate)))
-                                    GROUP BY cvhp.productId, cvhp.productVariantId, cvhp.campaignId) sql2 on sql2.productId = mahp.productId and sql2.productVariantId = mahp.productVariantId
+                      LEFT JOIN (SELECT
+                                      cvhp.productId,
+                                      cvhp.productVariantId,
+                                      ifnull(sum(ol.netPrice),0)                                AS conversionsValue,
+                                      sum(CASE WHEN
+                                        ol.productId = cvhp.productVariantId AND
+                                        ol.productVariantId = cvhp.productVariantId
+                                        THEN ol.netPrice
+                                          ELSE 0 END)                                 AS pConversionsValue,
+                                      group_concat(DISTINCT ol.orderId SEPARATOR ',') AS ordersIds,
+                                      count(DISTINCT cv.id)                           AS visits,
+                                      count(DISTINCT o.id)                            AS conversions,
+                                      #conversioni totali di questa visita
+                                      count(CASE WHEN
+                                        ol.productId = cvhp.productVariantId AND
+                                        ol.productVariantId = cvhp.productVariantId
+                                        THEN 1
+                                            ELSE NULL END)                            AS pConversions #conversioni totali di questa visita per questo prodotto
+                                    FROM CampaignVisit cv
+                                      LEFT JOIN CampaignVisitHasProduct cvhp ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id
+                                      LEFT JOIN (CampaignVisitHasOrder cvho
+                                        JOIN `Order` o ON cvho.orderId = o.id
+                                        JOIN OrderLine ol ON o.id = ol.orderId
+                                        ) ON cvho.campaignVisitId = cv.id AND
+                                             cvho.campaignId = cv.campaignId
+                                    WHERE cv.campaignId = ? AND
+                                          (timestamp BETWEEN ifnull(?, timestamp) AND ifnull(?, timestamp) OR
+                                           o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))
+                                    GROUP BY cvhp.productId, cvhp.productVariantId, cvhp.campaignId
+                                    ) sql2 on sql2.productId = mahp.productId and sql2.productVariantId = mahp.productVariantId
                     WHERE
                       ma.id = ? AND 
                       ma.marketplaceId = ?
                     GROUP BY productId, productVariantId,productCategoryId order by visits desc";
-        $sub = "";
-
-        /*
-         * LEFT JOIN (CampaignVisit cv
-                          JOIN CampaignVisitHasProduct cvhp ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id )
-                      ON c.id = cv.campaignId AND cvhp.productId = p.id AND cvhp.productVariantId = p.productVariantId
-                      LEFT JOIN (
-                            CampaignVisitHasOrder cvho JOIN
-                            `Order` o ON cvho.orderId = o.id JOIN
-                            OrderLine ol ON cvho.orderId = ol.orderId )
-                                ON cvho.campaignVisitId = cv.id and
-                                   cvho.campaignId = cv.campaignId and
-                                   p.id = ol.productId AND
-                                   p.productVariantId = ol.productVariantId
-        */
 
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
         $timeFrom = new \DateTime($this->app->router->request()->getRequestData('startDate').' 00:00:00');
@@ -190,7 +185,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             } else {
                 $table = 'Quantità non inserite';
             }
-            $row['stock'] = $table;
+            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';;
 
             $row['shop'] = $val->getShops('<br>');
             $row['dummy'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
@@ -206,9 +201,11 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['creationDate'] = $val->creationDate;
             $row['categories'] = $val->getLocalizedProductCategories("<br>");
             $row['conversions'] = $values['conversions'];
+            $row['pConversions'] = $values['pConversions'];
             $row['visits'] = $values['visits'];
             $row['visitsCost'] = $values['visitsCost'];
             $row['conversionValue'] = $values['conversionsValue'];
+            $row['pConversionsValue'] = $values['pConversionsValue'];
             $row['activePrice'] = $values['activePrice'];
             $row['ordersIds'] = $values['ordersIds'];
 

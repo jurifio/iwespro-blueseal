@@ -43,6 +43,10 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
                    FROM CampaignVisitHasOrder cvho
                      JOIN `Order` o ON o.id = cvho.orderId
                    WHERE cvho.campaignId = c.id AND o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))  AS orders,
+                   (SELECT group_concat(DISTINCT cvho.orderId)
+                   FROM CampaignVisitHasOrder cvho
+                     JOIN `Order` o ON o.id = cvho.orderId
+                   WHERE cvho.campaignId = c.id AND o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))  AS ordersIds,
                   (SELECT sum(o.netTotal)
                    FROM CampaignVisitHasOrder cvho
                      JOIN `Order` o ON o.id = cvho.orderId
@@ -61,7 +65,7 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
         $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
         $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
-        $params = array_merge([$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo],$datatable->getParams());
+        $params = array_merge([$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo],$datatable->getParams());
         $marketplaceAccounts = $this->app->dbAdapter->query($datatable->getQuery(false, true), $params)->fetchAll();
         $count = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery(true), $params);
         $totalCount = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery('full'), $params);
@@ -70,6 +74,8 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
+        $response ['query'] = $datatable->getQuery(false, true);
+        $response ['params'] = $params;
         $response ['data'] = [];
 
         foreach ($marketplaceAccounts as $val) {
@@ -83,6 +89,7 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
             $row['productCount'] = $val['productCount'];
             $row['visits'] = $val['visits'];
             $row['orders'] = $val['orders'];
+            $row['ordersIds'] = $val['ordersIds'];
             $row['cost'] = $val['cost'];
             $row['orderTotal'] = $val['orderTotal'];
             $response['data'][] = $row;
