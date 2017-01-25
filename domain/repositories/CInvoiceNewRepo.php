@@ -377,4 +377,35 @@ class CInvoiceNewRepo extends ARepo
         }
         return true;
     }
+
+    /**
+     * @param CObjectCollection $invoices
+     * @param int $idBill
+     * @return bool
+     */
+    public function addInvoicesToPaymentBill(CObjectCollection $invoices, int $idBill) {
+        $pbhR = \Monkey::app()->repoFactory->create('PaymentBillHasInvoiceNew');
+
+        $pb = \Monkey::app()->repoFactory->create('PaymentBill')->findOne([$idBill]);
+        if (!$pb) throw new BambooInvoiceException('L\'id fornito non è associato a nessuna distinta di pagamento');
+        $newAmount = 0;
+
+        foreach($invoices as $v) {
+            if (0 < $v->paydAmount) throw new BambooInvoiceException(
+                'La fattura con id: <strong>' . $v->id . '</strong> e numero: <strong>' . $v->number . '</strong>' .
+                 'ha già una distinta associata. L\'operazione è annullata'
+            );
+        }
+        foreach($invoices as $v) {
+            $newAmount+= $v->totalWithVat;
+            $pbh = $pbhR->getEmptyEntity();
+            $pbh->paymentBillId = $idBill;
+            $pbh->invoiceNewId = $v->id;
+            $pbh->insert();
+        }
+
+        $pb->amount+= $newAmount;
+        $pb->update();
+        return true;
+    }
 }

@@ -87,6 +87,16 @@
             data-placement="bottom"
             data-event="bs.orderline.paymentToFriend"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-file-o"
+            data-permission="/admin/order/add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi una fattura"
+            data-placement="bottom"
+            data-event="bs.orderline.editPaymentBillAddInvoice"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php endif; ?>
 </bs-toolbar>
