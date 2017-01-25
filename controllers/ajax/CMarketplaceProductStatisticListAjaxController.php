@@ -45,9 +45,9 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       `mahp`.`marketplaceAccountId`                 AS `marketplaceAccountId`,
                       `mahp`.`fee`                                  AS `fee`,
                       p.qty                                         AS stock,
-                      if(mahp.isToWork = 1,'sì','no')               as isToWork,
-                      if(mahp.hasError = 1,'sì','no')               as hasError,
-                      if(mahp.isDeleted = 1,'sì','no')              as isDeleted,
+                      if(mahp.isToWork = 1,'sìsi','no')               as isToWork,
+                      if(mahp.hasError = 1,'sìsi','no')               as hasError,
+                      if(mahp.isDeleted = 1,'sìsi','no')              as isDeleted,
                       ifnull(visits,0)                                AS visits,
                       ifnull(conversions,0)                           AS conversions,
                       round(visits*fee)                               AS visitsCost,
@@ -69,7 +69,13 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       JOIN `MarketplaceAccount` `ma`
                         ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`)))
                       JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`))
-                      LEFT JOIN (SELECT c.code, cvhp.productId, cvhp.productVariantId, sum(ol.netPrice) as conversionsValue, group_concat(distinct ol.orderId SEPARATOR ',') AS ordersIds, count(cv.id) as visits, count(o.id) as conversions
+                      LEFT JOIN (SELECT c.code, 
+                                        cvhp.productId, 
+                                        cvhp.productVariantId, 
+                                        sum(ol.netPrice) as conversionsValue, 
+                                        group_concat(distinct ol.orderId SEPARATOR ',') AS ordersIds, 
+                                        count(cv.id) as visits, 
+                                        count(o.id) as conversions
                                     FROM Campaign c 
                                     JOIN CampaignVisit cv on c.id = cv.campaignId 
                                     JOIN CampaignVisitHasProduct cvhp on cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id 
@@ -204,6 +210,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['visitsCost'] = $values['visitsCost'];
             $row['conversionValue'] = $values['conversionsValue'];
             $row['activePrice'] = $values['activePrice'];
+            $row['ordersIds'] = $values['ordersIds'];
 
             $response['data'][] = $row;
         }
