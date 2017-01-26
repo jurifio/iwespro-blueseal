@@ -27,7 +27,6 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
     {
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
-        $campaign = \Monkey::app()->repoFactory->create('Campaign')->readCampaignCode($marketplaceAccount->getCampaignCode());
 
         $query = "SELECT
                       concat(`p`.`id`, '-', `p`.`productVariantId`) AS `codice`,
@@ -49,12 +48,12 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       if(mahp.hasError = 1,'sìsi','no')               as hasError,
                       if(mahp.isDeleted = 1,'sìsi','no')              as isDeleted,
                       ifnull(visits,0)                                AS visits,
+                      sum(visitsCost)                                 AS visitsCost,
                       ifnull(conversions,0)                           AS conversions,
-                      ifnull(pConversions,0)                           AS pConversions,
-                      round(visits*fee)                               AS visitsCost,
-                      ordersIds                                       AS ordersIds,
                       ifnull(conversionsValue,0)                      as conversionsValue,
+                      ifnull(pConversions,0)                           AS pConversions,
                       ifnull(pConversionsValue,0)                      as pConversionsValue,
+                      ordersIds                                       AS ordersIds,
                       phpc.productCategoryId                          AS categories,
                       if(p.isOnSale = 0, min(shp.price),min(shp.salePrice)) as activePrice
                     FROM `Product` `p`
@@ -85,7 +84,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                                       group_concat(DISTINCT ol.orderId SEPARATOR ',') AS ordersIds,
                                       count(DISTINCT cv.id)                           AS visits,
                                       count(DISTINCT o.id)                            AS conversions, #conversioni totali di questa visita
-                                      sum(cv.cost) as visitsCost,
+                                      round(sum(cv.cost),2) as visitsCost,
                                       count(CASE WHEN
                                         ol.productId = cvhp.productId AND
                                         ol.productVariantId = cvhp.productVariantId
@@ -115,7 +114,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 
         $timeFrom = $timeFrom ? $this->time($timeFrom->getTimestamp()) : null;
         $timeTo = $timeTo ? $this->time($timeTo->getTimestamp()) : null;
-        $queryParameters = [$campaign->id,$timeFrom, $timeTo,$timeFrom, $timeTo,$marketplaceAccount->id, $marketplaceAccount->marketplaceId ];
+        $queryParameters = [$timeFrom, $timeTo,$timeFrom, $timeTo,$marketplaceAccount->id, $marketplaceAccount->marketplaceId ];
 
         $datatable = new CDataTables($query, ['productId','productVariantId'], $_GET, true);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
@@ -174,7 +173,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['pConversions'] = $values['pConversions'];
             $row['visits'] = $values['visits'];
             $row['visitsCost'] = $values['visitsCost'];
-            $row['conversionValue'] = $values['conversionsValue'];
+            $row['conversionsValue'] = $values['conversionsValue'];
             $row['pConversionsValue'] = $values['pConversionsValue'];
             $row['activePrice'] = $values['activePrice'];
             $row['ordersIds'] = $values['ordersIds'];
