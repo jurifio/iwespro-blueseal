@@ -1332,6 +1332,19 @@
                 "PUT"
             ]
         },{
+            "pattern": "/blueseal/marketplace/account/aggregato(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryStatisticListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
             "pattern": "/blueseal/marketplace/categorie/invertite(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignInvertedController"
