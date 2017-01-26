@@ -62,6 +62,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Totale Conversioni</th>
+                                <th data-slug="ordersIds"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Ordini</th>
                             </tr>
                             </thead>
                             <tbody>
