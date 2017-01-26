@@ -127,15 +127,35 @@ $(document).on('bs.orderline.editPaymentBillAddInvoice', function () {
     });
 });
 
-$(document).on('bs.orderline.showInvoiceRows', function () {
+$(document).on('bs.orderline.editPaymentBillRemoveInvoices', function () {
+    var dataTable = $('.table').DataTable();
+    var selectedRows = dataTable.rows('.selected').data();
+    if (1 == selectedRows.length) {
+        var row = 0;
+        $.each(selectedRows, function (k, v) {
+            row = v.id;
+        });
+    }
+
+    modal = new $.bsModal('Rimuovi fatture da una distinta', {
+        body: 'Sto eseguendo l\'operatione',
+        isCancelButton: false
+    });
+
     $.ajax({
-        url: '/blueseal/xhr/friendInvoiceGetInvoiceLines',
-        method: 'GET',
-        dataType: 'ajax',
-        data: {row: row}
-    }).done(function () {
-
-    }).fail(function () {
-
+        url: '/blueseal/xhr/FriendOrderPayInvoices',
+        method: 'PUT',
+        dataType: 'json',
+        data: {row: row, action: 'deleteInvoice'}
+    }).done(function(res) {
+        modal.writeBody(res.message);
+        dataTable.ajax.reload(false, null);
+    }).fail(function(res) {
+        modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
+        console.error(res);
+    }).always(function(){
+        modal.setOkEvent(function(){
+            modal.hide();
+        });
     });
 });

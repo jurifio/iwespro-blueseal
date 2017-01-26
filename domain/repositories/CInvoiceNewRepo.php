@@ -408,4 +408,34 @@ class CInvoiceNewRepo extends ARepo
         $pb->update();
         return true;
     }
+
+    /**
+     * @param $invoice
+     * @return bool
+     * @throws BambooInvoiceException
+     */
+    public function removeInvoiceFromPaymentBill(CInvoiceNew $invoice) {
+        /** @var CObjectCollection $bills */
+        $bills = $invoice->paymentBill;
+        $invoicetotal = $invoice->totalWithVat;
+        if (0 == $bills->count()) throw new BambooInvoiceException('Non è associata nessuna distinta a questa fattura');
+        foreach($invoice->paymentBillHasInvoiceNew as $v) {
+            $v->delete();
+        }
+
+        if (1 < $bills->count()) {
+            foreach($bills as $v) {
+                $v->delete();
+            }
+        } else {
+            $bill = $bills->getFirst();
+            if (0 === $bill->paymentBillHasInvoiceNew->count()) {
+                $bill->delete();
+            } else {
+                $bill->amount-= $invoicetotal;
+                $bill->update();
+            }
+        }
+        return true;
+    }
 }

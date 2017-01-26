@@ -149,7 +149,6 @@
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php endif; ?>
-
     <bs-toolbar-group data-group-label="Gestione Ordini">
         <bs-toolbar-button
             data-tag="a"
