@@ -21,28 +21,23 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT
-                  m.id                                                                                                      AS marketplaceId,
-                  ma.id                                                                                                     AS marketplaceAccountId,
-                  m.name                                                                                                    AS marketplace,
-                  ma.name                                                                                                   AS marketplaceAccount,
-                  c.id                                                                                                      AS campaignId,
-                  c.name                                                                                                    AS campaign,
-                  m.type                                                                                                    AS marketplaceType,
+                  m.id                                                                                                       AS marketplaceId,
+                  ma.id                                                                                                      AS marketplaceAccountId,
+                  m.name                                                                                                     AS marketplace,
+                  ma.name                                                                                                    AS marketplaceAccount,
+                  c.id                                                                                                       AS campaignId,
+                  c.name                                                                                                     AS campaign,
+                  m.type                                                                                                     AS marketplaceType,
                   (SELECT count(DISTINCT mahp.productId,mahp.productVariantId) 
                     FROM MarketplaceAccountHasProduct mahp 
                     WHERE ma.id = mahp.marketplaceAccountId AND
                           ma.marketplaceId = mahp.marketplaceId AND mahp.isDeleted = 0 AND
                           mahp.isToWork = 0 AND mahp.hasError = 0)                                                           AS productCount,
                   count(cv.id)                                                                                               AS visits,
-                  (SELECT sum(fee) 
-                        FROM MarketplaceAccountHasProduct mahp JOIN 
-                             CampaignVisitHasProduct cvhp on mahp.productId = cvhp.productId and 
-                                                             mahp.productVariantId = cvhp.productVariantId
-                        WHERE cv.campaignId = cvhp.campaignId and 
-                              cv.id = cvhp.campaignVisitId)                                         AS cost,
-                  count(o.id)                                                                                                 AS orders,
-                  group_concat(DISTINCT o.id) AS ordersIds,
-                  sum(ifnull(o.netTotal,0))  AS orderTotal
+                  round(sum(cv.cost),2)                                                                                               AS cost,
+                  count(o.id)                                                                                                AS orders,
+                  sum(ifnull(o.netTotal,0))  AS orderTotal,
+                  group_concat(DISTINCT o.id) AS ordersIds
                 FROM Marketplace m
                   JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
                   JOIN Campaign c ON c.marketplaceId = ma.marketplaceId and c.marketplaceAccountId = ma.id
