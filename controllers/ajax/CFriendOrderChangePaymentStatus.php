@@ -1,9 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
-use bamboo\blueseal\business\CDataTables;
 use bamboo\core\exceptions\BambooException;
-use bamboo\core\intl\CLang;
 
 /**
  * Class CProductListAjaxController
@@ -88,9 +86,5 @@ class CFriendOrderChangePaymentStatus extends AAjaxController
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessage();
         }
-    }
-
-    private function getOrderLineFriendPaymentStatus(COrderline $ol) {
-        $status = $ol->orderLineFriendPaymentStatus;
     }
 }

@@ -24,50 +24,56 @@ $(document).on('bs.order.massiveUpdateStatus', function (e, element, button) {
     }
 
     var orders = [];
-    $.each(selectedRows, function(k,v) {
+    $.each(selectedRows, function (k, v) {
         "use strict";
         orders.push(v.DT_RowId);
     });
 
-    modal.
-    Pace.ignore(function () {
-        $.ajax({
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'Lang'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            var select = $('select[name=\"lang\"]');
-            if (select.length > 0 && typeof select[0].selectize != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2,
-            });
-            select[0].selectize.setValue(1);
-        });
+    modal = new $.bsModal('Cambia stato agli ordini',
+        {
+            body: 'Sto caricando gli stati d\'ordine disponibili...'
+        }
+    );
+    $.ajax({
+        url: '/blueseal/xhr/changeOrderStatus',
+        method: 'get',
+        dataType: 'json',
+    }).done(function (res) {
+        var options = '';
+        for (var i in res.statuses) {
+            options += '<option value="' + i + '">' + res.statuses[i] + '</option>';
+        }
 
-        okButton.html('Invia').off().on('click', function () {
-            cancelButton.off().hide();
-            okButton.html('Fatto').off().on('click', function () {
-                bsModal.modal('hide');
-            });
-            var lang = $('select[name=\"lang\"]').val();
-            body.html(loaderHtml);
-            $.ajax({
-                url: "/blueseal/xhr/OrderRecallClient",
-                type: "POST",
-                data: {
-                    'ordersId': orders,
-                    'langId':lang
-                }
-            }).done(function (response) {
-                body.html('fatto');
-            }).fail(function (response) {
-                body.html(response);
-            });
+        var body = '<div class="form-group form-group-default selectize-enabled">' +
+            '<select class="form-control" id="SelectStatus">' +
+            '<option value="" disabled selected>Seleziona uno stato degli ordini</option>' +
+            options +
+            '</select>' +
+            '</div>';
+
+        modal.writeBody(body);
+        modal.setOkEvent(function () {
+            var statusId = $('#SelectStatus').val();
+            if ('' !== statusId) {
+                $.ajax({
+                    url: '/blueseal/xhr/changeOrderStatus',
+                    method: 'put',
+                    data: {orders: orders, order_status: statusId}
+                }).done(function (res) {
+                    modal.writeBody('Stato aggiornato correttamente');
+                    dataTable.ajax.reload(false, null);
+                }).fail(function (res) {
+                    modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
+                    console.error(res);
+                }).always(function () {
+                    modal.setOkEvent(function () {
+                        modal.hide();
+                    });
+                });
+            }
         });
+    }).fail(function(res){
+        modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
+        console.error(res);
     });
 });
