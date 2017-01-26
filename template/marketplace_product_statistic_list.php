@@ -72,13 +72,16 @@
                                     <th data-slug="conversions"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Conversioni</th>
+                                    <th data-slug="pConversions"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Conversioni Generate</th>
                                     <th data-slug="visitsCost"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Costo Visite (Stimato)</th>
-                                    <th data-slug="conversionValue"
+                                    <th data-slug="pConversionsValue"
                                         data-searchable="false"
-                                        data-orderable="false" class="center">Valore Conversioni</th>
-                                    <th data-slug="orderIds"
+                                        data-orderable="false" class="center">Valore Conversioni Generate</th>
+                                    <th data-slug="ordersIds"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Ordini</th>
                                     <th data-slug="activePrice"

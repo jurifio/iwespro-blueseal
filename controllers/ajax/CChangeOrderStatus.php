@@ -2,7 +2,6 @@
 namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
-use bamboo\domain\entities\COrder;
 use bamboo\domain\repositories\COrderRepo;
 
 /**

@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-envelop   e",
+    icon: "fa-cogs",
     permission: "/admin/product/delete&&allShops",
     event: "bs.order.massiveUpdateStatus",
     class: "btn btn-default",
@@ -59,7 +59,7 @@ $(document).on('bs.order.massiveUpdateStatus', function (e, element, button) {
                     url: '/blueseal/xhr/changeOrderStatus',
                     method: 'put',
                     data: {orders: orders, order_status: statusId}
-                }).done(function (res) {
+                }).done(function () {
                     modal.writeBody('Stato aggiornato correttamente');
                     dataTable.ajax.reload(false, null);
                 }).fail(function (res) {
