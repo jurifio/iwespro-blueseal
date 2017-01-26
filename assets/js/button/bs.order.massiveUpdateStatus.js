@@ -5,13 +5,12 @@ window.buttonSetup = {
     event: "bs.order.massiveUpdateStatus",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Mail: Ordine non pagato",
+    title: "Modifica massiva dello stato degli ordini",
     placement: "bottom",
     toggle: "modal"
 };
 
 $(document).on('bs.order.massiveUpdateStatus', function (e, element, button) {
-
     var dataTable = $('.dataTable').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 

@@ -869,7 +869,6 @@ $.QueryString = (function(a) {
     return b;
 })(window.location.search.substr(1).split('&'));
 
-
 $.decodeGetStringFromUrl = function(url) {
     "use strict";
     var getString = url.split('\?',2);

@@ -70,6 +70,10 @@
             "Roboto+Slab:400,700,300": {
                 "path": "scheme://fonts.googleapis.com/css?family=",
                 "options": ["screen"]
+            },
+            "titatoggle-dist-min.css": {
+                "path": "https://raw.githubusercontent.com/kleinejan/titatoggle/master/dist/",
+                "options": ["screen"]
             }
         },
         "tables": {
