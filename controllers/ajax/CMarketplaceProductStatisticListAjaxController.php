@@ -49,12 +49,12 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       if(mahp.hasError = 1,'sìsi','no')               as hasError,
                       if(mahp.isDeleted = 1,'sìsi','no')              as isDeleted,
                       ifnull(visits,0)                                AS visits,
-                      ifnull(conversions,0)                           AS conversions,
-                      ifnull(pConversions,0)                           AS pConversions,
                       sum(visitsCost)                                 AS visitsCost,
-                      ordersIds                                       AS ordersIds,
+                      ifnull(conversions,0)                           AS conversions,
                       ifnull(conversionsValue,0)                      as conversionsValue,
+                      ifnull(pConversions,0)                           AS pConversions,
                       ifnull(pConversionsValue,0)                      as pConversionsValue,
+                      ordersIds                                       AS ordersIds,
                       phpc.productCategoryId                          AS categories,
                       if(p.isOnSale = 0, min(shp.price),min(shp.salePrice)) as activePrice
                     FROM `Product` `p`
@@ -115,7 +115,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
 
         $timeFrom = $timeFrom ? $this->time($timeFrom->getTimestamp()) : null;
         $timeTo = $timeTo ? $this->time($timeTo->getTimestamp()) : null;
-        $queryParameters = [$campaign->id,$timeFrom, $timeTo,$timeFrom, $timeTo,$marketplaceAccount->id, $marketplaceAccount->marketplaceId ];
+        $queryParameters = [$timeFrom, $timeTo,$timeFrom, $timeTo,$marketplaceAccount->id, $marketplaceAccount->marketplaceId ];
 
         $datatable = new CDataTables($query, ['productId','productVariantId'], $_GET, true);
         $datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());

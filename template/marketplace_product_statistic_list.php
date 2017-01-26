@@ -68,25 +68,28 @@
                                         data-orderable="true" class="center dateTypeFilter">Creazione</th>
                                     <th data-slug="visits"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Visite</th>
+                                        data-orderable="true" class="center">N° Visite</th>
                                     <th data-slug="conversions"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Conversioni</th>
+                                        data-orderable="true" class="center">N° Conversioni</th>
                                     <th data-slug="pConversions"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Conversioni Generate</th>
+                                        data-orderable="true" class="center">N° Conversioni Proprie</th>
                                     <th data-slug="visitsCost"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Costo Visite (Stimato)</th>
+                                    <th data-slug="conversionsValue"
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Valore Conversioni</th>
                                     <th data-slug="pConversionsValue"
                                         data-searchable="false"
-                                        data-orderable="false" class="center">Valore Conversioni Generate</th>
-                                    <th data-slug="ordersIds"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Ordini</th>
+                                        data-orderable="false" class="center">Valore Conversioni Proprie</th>
                                     <th data-slug="activePrice"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Prezzo Attivo</th>
+                                    <th data-slug="ordersIds"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Ordini</th>
                                 </tr>
                             </thead>
                             <tbody>
