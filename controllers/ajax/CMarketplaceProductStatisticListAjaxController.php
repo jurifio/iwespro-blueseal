@@ -71,34 +71,39 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                         ON (((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) AND (`ma`.`id` = `mahp`.`marketplaceAccountId`)))
                       JOIN `Marketplace` `m` ON ((`m`.`id` = `ma`.`marketplaceId`))
                       LEFT JOIN (SELECT
+                                      c.id as campaignId, 
+                                      c.marketplaceId,
+                                      c.marketplaceAccountId,
                                       cvhp.productId,
                                       cvhp.productVariantId,
                                       ifnull(sum(ol.netPrice),0)                      AS conversionsValue,
                                       sum(CASE WHEN
-                                        ol.productId = cvhp.productVariantId AND
+                                        ol.productId = cvhp.productId AND
                                         ol.productVariantId = cvhp.productVariantId
                                         THEN ol.netPrice
                                           ELSE 0 END)                                 AS pConversionsValue,
                                       group_concat(DISTINCT ol.orderId SEPARATOR ',') AS ordersIds,
                                       count(DISTINCT cv.id)                           AS visits,
                                       count(DISTINCT o.id)                            AS conversions, #conversioni totali di questa visita
+                                      sum(cv.cost) as visitsCost,
                                       count(CASE WHEN
                                         ol.productId = cvhp.productId AND
                                         ol.productVariantId = cvhp.productVariantId
                                         THEN o.id
                                             ELSE NULL END)                            AS pConversions #conversioni totali di questa visita per questo prodotto
-                                    FROM CampaignVisit cv
+                                    FROM 
+                                    Campaign c 
+                                      JOIN CampaignVisit cv on cv.campaignId = c.id
                                       LEFT JOIN CampaignVisitHasProduct cvhp ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id
                                       LEFT JOIN (CampaignVisitHasOrder cvho
                                         JOIN `Order` o ON cvho.orderId = o.id
                                         JOIN OrderLine ol ON o.id = ol.orderId
                                         ) ON cvho.campaignVisitId = cv.id AND
                                              cvho.campaignId = cv.campaignId
-                                    WHERE cv.campaignId = ? AND
-                                          (timestamp BETWEEN ifnull(?, timestamp) AND ifnull(?, timestamp) OR
+                                    WHERE (timestamp BETWEEN ifnull(?, timestamp) AND ifnull(?, timestamp) OR
                                            o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))
                                     GROUP BY cvhp.productId, cvhp.productVariantId, cvhp.campaignId
-                                    ) sql2 on sql2.productId = mahp.productId and sql2.productVariantId = mahp.productVariantId
+                                    ) sql2 on sql2.productId = mahp.productId and sql2.productVariantId = mahp.productVariantId and sql2.marketplaceId = mahp.marketplaceId and sql2.marketplaceAccountId = mahp.marketplaceAccountId
                     WHERE
                       ma.id = ? AND 
                       ma.marketplaceId = ?
