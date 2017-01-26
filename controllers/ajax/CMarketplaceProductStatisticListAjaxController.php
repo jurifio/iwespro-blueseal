@@ -51,7 +51,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       ifnull(visits,0)                                AS visits,
                       ifnull(conversions,0)                           AS conversions,
                       ifnull(pConversions,0)                           AS pConversions,
-                      round(visits*fee)                               AS visitsCost,
+                      sum(visitsCost)                                 AS visitsCost,
                       ordersIds                                       AS ordersIds,
                       ifnull(conversionsValue,0)                      as conversionsValue,
                       ifnull(pConversionsValue,0)                      as pConversionsValue,
