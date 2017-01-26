@@ -42,9 +42,7 @@ class COrderListAjaxController extends AAjaxController
                   #concat(`o`.`netTotal`, '/' , `o`.`paidAmount`)         AS `dareavere`,
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate as paymentDate,
-                  o.note as notes,
-                  o.paymentDate as paymentDate,
-                  o.orderPaymentMethodId as orderPaymentMethodId
+                  o.note as notes
                 FROM ((((((((((`Order` `o`
                   JOIN `User` `u`) 
                   JOIN `UserDetails` `ud`) 
