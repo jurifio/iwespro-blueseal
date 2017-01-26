@@ -1373,6 +1373,21 @@
                 "PUT"
             ]
         },{
+            "pattern": "/blueseal/marketplace/account/aggregato/:accountId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryStatisticListController"
+            },
+            "filters": {
+                "accountId": "[0-9]+-[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
             "pattern": "/blueseal/utente(/:userId)?(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CUserManageController"
