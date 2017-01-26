@@ -24,7 +24,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped"  data-datatable-name="order_list"
+                        <table class="table table-striped" data-datatable-name="order_list"
                                data-controller="OrderListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
                                data-inner-setup="true"
@@ -134,6 +134,11 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Filtra Ordini critici">
+        <bs-toolbar-button
+            data-remote="bs.order.viewCritical"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
