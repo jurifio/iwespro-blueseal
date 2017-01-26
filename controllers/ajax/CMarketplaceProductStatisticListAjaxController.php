@@ -73,7 +73,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                       LEFT JOIN (SELECT
                                       cvhp.productId,
                                       cvhp.productVariantId,
-                                      ifnull(sum(ol.netPrice),0)                                AS conversionsValue,
+                                      ifnull(sum(ol.netPrice),0)                      AS conversionsValue,
                                       sum(CASE WHEN
                                         ol.productId = cvhp.productVariantId AND
                                         ol.productVariantId = cvhp.productVariantId
@@ -81,12 +81,11 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                                           ELSE 0 END)                                 AS pConversionsValue,
                                       group_concat(DISTINCT ol.orderId SEPARATOR ',') AS ordersIds,
                                       count(DISTINCT cv.id)                           AS visits,
-                                      count(DISTINCT o.id)                            AS conversions,
-                                      #conversioni totali di questa visita
+                                      count(DISTINCT o.id)                            AS conversions, #conversioni totali di questa visita
                                       count(CASE WHEN
-                                        ol.productId = cvhp.productVariantId AND
+                                        ol.productId = cvhp.productId AND
                                         ol.productVariantId = cvhp.productVariantId
-                                        THEN 1
+                                        THEN o.id
                                             ELSE NULL END)                            AS pConversions #conversioni totali di questa visita per questo prodotto
                                     FROM CampaignVisit cv
                                       LEFT JOIN CampaignVisitHasProduct cvhp ON cvhp.campaignId = cv.campaignId AND cvhp.campaignVisitId = cv.id
@@ -151,40 +150,6 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['brand'] = $val->productBrand->name;
             $row['season'] = $val->productSeason->name;
 
-            $sizes = [];
-            $qty = [];
-            foreach ($val->productSku as $productSku) {
-                if ($productSku->stockQty > 0) {
-                    $sizes[$productSku->productSizeId] = $productSku->productSize->name;
-                    $qty[$productSku->shopId][$productSku->productSizeId] = $productSku->stockQty;
-                }
-            }
-            if (count($sizes) > 0) {
-                $table = '<table class="nested-table">';
-                $table .= '<thead><tr>';
-                if (count($qty) > 1) {
-                    $table .= '<th>Shop</th>';
-                }
-                foreach ($sizes as $sizeId => $name) {
-                    $table .= '<th>' . $name . '</th>';
-                }
-                $table .= '</tr></thead>';
-                $table .= '<tbody>';
-                foreach ($qty as $shopId => $size) {
-                    $table .= '<tr>';
-                    if (count($qty) > 1) {
-                        $shop = $this->app->repoFactory->create('Shop')->findOne([$shopId]);
-                        $table .= '<td>' . $shop->name . '</td>';
-                    }
-                    foreach ($sizes as $sizeId => $name) {
-                        $table .= '<td>' . (isset($size[$sizeId]) ? $size[$sizeId] : 0) . '</td>';
-                    }
-                    $table .= '</tr>';
-                }
-                $table .= '</tbody></table>';
-            } else {
-                $table = 'Quantità non inserite';
-            }
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';;
 
             $row['shop'] = $val->getShops('<br>');

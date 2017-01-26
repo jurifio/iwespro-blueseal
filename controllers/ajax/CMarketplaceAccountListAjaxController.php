@@ -28,35 +28,29 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
                   c.id                                                                                                      AS campaignId,
                   c.name                                                                                                    AS campaign,
                   m.type                                                                                                    AS marketplaceType,
-                  count(DISTINCT mahp.productVariantId)                                                                     AS productCount,
-                  (SELECT count(*)
-                   FROM CampaignVisit cv
-                   WHERE cv.campaignId = c.id AND cv.timestamp BETWEEN ifnull(?, cv.timestamp) AND ifnull(?, cv.timestamp)) AS visits,
-                  round((SELECT sum(mahp1.fee)
-                   FROM CampaignVisit cv
-                     JOIN CampaignVisitHasProduct cvhp ON cv.id = cvhp.campaignVisitId AND cv.campaignId = cvhp.campaignId
-                     JOIN MarketplaceAccountHasProduct mahp1
-                       ON mahp1.productId = cvhp.productId AND cvhp.productVariantId = mahp1.productVariantId
-                   WHERE cvhp.campaignId = c.id AND mahp1.marketplaceAccountId = mahp.marketplaceAccountId AND
-                         cv.timestamp BETWEEN ifnull(?, cv.timestamp) AND ifnull(?, cv.timestamp)))                          AS cost,
-                  (SELECT count(DISTINCT cvho.orderId)
-                   FROM CampaignVisitHasOrder cvho
-                     JOIN `Order` o ON o.id = cvho.orderId
-                   WHERE cvho.campaignId = c.id AND o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))  AS orders,
-                   (SELECT group_concat(DISTINCT cvho.orderId)
-                   FROM CampaignVisitHasOrder cvho
-                     JOIN `Order` o ON o.id = cvho.orderId
-                   WHERE cvho.campaignId = c.id AND o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))  AS ordersIds,
-                  (SELECT sum(o.netTotal)
-                   FROM CampaignVisitHasOrder cvho
-                     JOIN `Order` o ON o.id = cvho.orderId
-                   WHERE cvho.campaignId = c.id AND o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate))  AS orderTotal
+                  (SELECT count(DISTINCT mahp.productId,mahp.productVariantId) 
+                    FROM MarketplaceAccountHasProduct mahp 
+                    WHERE ma.id = mahp.marketplaceAccountId AND
+                          ma.marketplaceId = mahp.marketplaceId AND mahp.isDeleted = 0 AND
+                          mahp.isToWork = 0 AND mahp.hasError = 0)                                                           AS productCount,
+                  count(cv.id)                                                                                               AS visits,
+                  (SELECT sum(fee) 
+                        FROM MarketplaceAccountHasProduct mahp JOIN 
+                             CampaignVisitHasProduct cvhp on mahp.productId = cvhp.productId and 
+                                                             mahp.productVariantId = cvhp.productVariantId
+                        WHERE cv.campaignId = cvhp.campaignId and 
+                              cv.id = cvhp.campaignVisitId)                                         AS cost,
+                  count(o.id)                                                                                                 AS orders,
+                  group_concat(DISTINCT o.id) AS ordersIds,
+                  sum(ifnull(o.netTotal,0))  AS orderTotal
                 FROM Marketplace m
                   JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
-                  LEFT JOIN MarketplaceAccountHasProduct mahp ON ma.id = mahp.marketplaceAccountId AND
-                                                                 ma.marketplaceId = mahp.marketplaceId AND mahp.isDeleted = 0 AND
-                                                                 mahp.isToWork = 0 AND mahp.hasError = 0
-                  LEFT JOIN Campaign c ON c.code = concat('MarketplaceAccount', ma.id, '-', ma.marketplaceId)
+                  JOIN Campaign c ON c.marketplaceId = ma.marketplaceId and c.marketplaceAccountId = ma.id
+                  LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
+                  LEFT JOIN (CampaignVisitHasOrder cvho JOIN `Order` o ON o.id = cvho.orderId) ON cv.campaignId = cvho.campaignId AND cv.id = cvho.campaignVisitId
+                  WHERE (
+                    cv.timestamp BETWEEN ifnull(?,timestamp) AND ifnull(?,timestamp) OR 
+                    o.orderDate BETWEEN ifnull(?,o.orderDate) AND ifnull(?,o.orderDate) )
                 GROUP BY ma.id, ma.marketplaceId";
 
         $datatable = new CDataTables($sql, ['marketplaceId', 'marketplaceAccountId', 'campaignId'], $_GET, true);
@@ -65,7 +59,7 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
         $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
         $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
-        $params = array_merge([$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo,$timeFrom,$timeTo],$datatable->getParams());
+        $params = array_merge([$timeFrom, $timeTo, $timeFrom, $timeTo], $datatable->getParams());
         $marketplaceAccounts = $this->app->dbAdapter->query($datatable->getQuery(false, true), $params)->fetchAll();
         $count = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery(true), $params);
         $totalCount = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery('full'), $params);
@@ -79,12 +73,12 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
         $response ['data'] = [];
 
         foreach ($marketplaceAccounts as $val) {
-            $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneBy(['marketplaceId'=>$val['marketplaceId'],'id'=>$val['marketplaceAccountId']]);
+            $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneBy(['marketplaceId' => $val['marketplaceId'], 'id' => $val['marketplaceAccountId']]);
             $row = [];
             $row["DT_RowId"] = $marketplaceAccount->printId();
             $row['code'] = $marketplaceAccount->printId();
             $row['marketplace'] = $marketplaceAccount->marketplace->name;
-            $row['marketplaceAccount'] = '<a href="/blueseal/prodotti/marketplace/account/'.$marketplaceAccount->printId().'">'.$marketplaceAccount->name.'</a>';
+            $row['marketplaceAccount'] = '<a href="/blueseal/prodotti/marketplace/account/' . $marketplaceAccount->printId() . '">' . $marketplaceAccount->name . '</a>';
             $row['marketplaceType'] = $marketplaceAccount->marketplace->type;
             $row['productCount'] = $val['productCount'];
             $row['visits'] = $val['visits'];
