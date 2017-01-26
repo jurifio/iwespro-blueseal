@@ -21,13 +21,16 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `i`.`paymentDate` as `paymentDate`,
                   concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
                   `i`.`creationDate` as `creationDate`,
-                  if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`, ', '), 'Non presente')  as `paymentBill`
+                  if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`, ', '), 'Non presente')  as `paymentBill`,
+                  `sh`.`title` as friend
                 FROM
                   `InvoiceNew` as `i` JOIN
                   `InvoiceLine` as `il` on `il`.`invoiceId` =  `i`.`id` JOIN
                   `InvoiceType` as `it` on `it`.`id` = `i`.`invoiceTypeId` JOIN
                   `InvoiceLineHasOrderLine` as `ilhol` on `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId` JOIN
                   `OrderLine` as `ol` on `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
+                  JOIN `AddressBook` as ab on `i`.`shopRecipientId` = `ab`.`id`
+                  JOIN `Shop` as sh on `i`.`shopRecipientId` = `sh`.`id`
                   LEFT JOIN (`PaymentBillHasInvoiceNew` as `pbhin` JOIN `PaymentBill` as `pb` on `pb`.id = `pbhin`.`paymentBillId`) on `i`.`id` = `pbhin`.`invoiceNewId`
                 WHERE
                   `it`.`code` = 'fr_invoice_orderlines_file'
@@ -47,9 +50,13 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
         $response ['data'] = [];
         $i = 0;
 
+        $abR = \Monkey::app()->repoFactory->create('AddressBook');
         foreach ($invoices as $v) {
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
+            $ab = $abR->findOne([$v->shopRecipientId]);
+            $friend = ($ab && $ab->shop) ? $ab->shop->title : "Non trovo il friend";
+            $response['data'][$i]['friend'] = $friend;
             $response['data'][$i]['invoiceNumber'] = $v->number;
             $response['data'][$i]['paymentExpectedDate'] = STimeToolbox::EurFormattedDate($v->paymentExpectedDate);
             $paymentDate = (null !== $v->paymentDate && '0000-00-00 00:00:00' == $v->paymentDate ) ? 'Non pagata' : STimeToolbox::EurFormattedDate($v->paymentDate);

@@ -38,6 +38,9 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
+                                <th data-slug="friend"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Friend</th>
                                 <th data-slug="invoiceDate"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -57,9 +60,6 @@
                                 <th data-slug="paymentBill"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Distinta Pagamento</th>
-                                <!--<th data-slug="orderLines"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Linee Fatture</th>-->
                             </tr>
                             </thead>
                             <tbody>
