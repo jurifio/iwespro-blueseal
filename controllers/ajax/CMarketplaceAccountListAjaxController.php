@@ -34,7 +34,7 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
                           ma.marketplaceId = mahp.marketplaceId AND mahp.isDeleted = 0 AND
                           mahp.isToWork = 0 AND mahp.hasError = 0)                                                           AS productCount,
                   count(cv.id)                                                                                               AS visits,
-                  sum(cv.cost)                                                                                               AS cost,
+                  round(sum(cv.cost),2)                                                                                               AS cost,
                   count(o.id)                                                                                                AS orders,
                   sum(ifnull(o.netTotal,0))  AS orderTotal,
                   group_concat(DISTINCT o.id) AS ordersIds

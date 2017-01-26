@@ -27,7 +27,6 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
     {
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
-        $campaign = \Monkey::app()->repoFactory->create('Campaign')->readCampaignCode($marketplaceAccount->getCampaignCode());
 
         $query = "SELECT
                       concat(`p`.`id`, '-', `p`.`productVariantId`) AS `codice`,
@@ -85,7 +84,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
                                       group_concat(DISTINCT ol.orderId SEPARATOR ',') AS ordersIds,
                                       count(DISTINCT cv.id)                           AS visits,
                                       count(DISTINCT o.id)                            AS conversions, #conversioni totali di questa visita
-                                      sum(cv.cost) as visitsCost,
+                                      round(sum(cv.cost),2) as visitsCost,
                                       count(CASE WHEN
                                         ol.productId = cvhp.productId AND
                                         ol.productVariantId = cvhp.productVariantId
@@ -174,7 +173,7 @@ class CMarketplaceProductStatisticListAjaxController extends AAjaxController
             $row['pConversions'] = $values['pConversions'];
             $row['visits'] = $values['visits'];
             $row['visitsCost'] = $values['visitsCost'];
-            $row['conversionValue'] = $values['conversionsValue'];
+            $row['conversionsValue'] = $values['conversionsValue'];
             $row['pConversionsValue'] = $values['pConversionsValue'];
             $row['activePrice'] = $values['activePrice'];
             $row['ordersIds'] = $values['ordersIds'];
