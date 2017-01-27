@@ -6,6 +6,8 @@ $(document).ready(function () {
 $(document).on('bs.marketplace.category.delete', function(a,b,c){
     "use strict";
 
+    var table = $('.table');
+    var dt = table.DataTable();
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');
     var body = $('.modal-body');
@@ -15,7 +17,7 @@ $(document).on('bs.marketplace.category.delete', function(a,b,c){
     header.html('Cancella Categorie Prodotti');
 
     var getVarsArray = [];
-    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRows = dt.rows('.selected').data();
     var selectedRowsCount = selectedRows.length;
 
     if (selectedRowsCount < 1) {
@@ -32,6 +34,7 @@ $(document).on('bs.marketplace.category.delete', function(a,b,c){
 
     body.html('<div>Sei sicuro di voler togliere dal marketplace ' + getVarsArray.lenght + ' Categorie?</div>');
 
+    var asd = table.data('marketplaceId');
     cancelButton.show();
     okButton.html('Esegui').show().off().on('click', function () {
         cancelButton.hide();

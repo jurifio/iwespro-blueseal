@@ -20,7 +20,8 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="marketplace_product_static_list"
                                data-controller="MarketplaceCategoryStatisticListAjaxController<?php echo $queryString ?>"
-                               data-special-name="<?php echo $marketplaceName ?>"
+                               data-special-name="<?php echo $marketplaceName; ?>"
+                               data-marketplace-id="<?php echo $marketplaceAccount->printId(); ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="25,100,200,500">
@@ -76,6 +77,19 @@
     <bs-toolbar-group data-group-label="Esportazione">
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Azioni">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-eraser"
+            data-button="true"
+            data-permission="/admin/product/edit&&allShops"
+            data-rel="tooltip"
+            data-placement="bottom"
+            data-class="btn btn-default"
+            data-title="Cancella prodotti categorie"
+            data-event="bs.marketplace.category.delete"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
