@@ -32,6 +32,9 @@
                                     <th data-slug="visits"
                                         data-searchable="true"
                                         data-orderable="true" class="center">N° Visite</th>
+                                    <th data-slug="products"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">N° Prodotti</th>
                                     <th data-slug="conversions"
                                         data-searchable="true"
                                         data-orderable="true" class="center">N° Conversioni</th>
@@ -39,14 +42,17 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">N° Conversioni Proprie</th>
                                     <th data-slug="visitsCost"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Costo Visite (Stimato)</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Costo Visite (Stimato)</th>
                                     <th data-slug="conversionsValue"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Valore Conversioni</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Valore Conversioni</th>
                                     <th data-slug="pConversionsValue"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Valore Conversioni Proprie</th>
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Valore Conversioni Proprie</th>
+                                    <th data-slug="cos"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">COS</th>
                                 </tr>
                             </thead>
                             <tbody>

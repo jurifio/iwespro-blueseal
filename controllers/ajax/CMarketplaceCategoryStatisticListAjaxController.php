@@ -37,7 +37,7 @@ class CMarketplaceCategoryStatisticListAjaxController extends AAjaxController
                       sum(conversions) as conversions,
                       sum(conversionsValue) as conversionsValue,
                       sum(pConversions) as pConversions,
-                      sum(pConversionsValue) as pConversionsValues
+                      sum(pConversionsValue) as pConversionsValue
                     FROM
                       ProductCategory Child
                       JOIN
@@ -127,8 +127,18 @@ class CMarketplaceCategoryStatisticListAjaxController extends AAjaxController
                              WHERE
                                ma.id = ? AND
                                ma.marketplaceId = ?
-                             GROUP BY productId, productVariantId, productCategoryId) sel3 ON Parent.id = sel3.categories
-                    GROUP BY Parent.id";
+                             GROUP BY productId, productVariantId, productCategoryId) sel3 ON Child.id = sel3.categories
+                    GROUP BY Parent.id
+                    ORDER BY Child.lft";
+
+        $origin = "SELECT parent.name, COUNT(product.name)
+                        FROM nested_category AS node ,
+                                nested_category AS parent,
+                                product
+                        WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                                AND node.category_id = product.category_id
+                        GROUP BY parent.name
+                        ORDER BY node.lft";
 
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
         $timeFrom = new \DateTime($this->app->router->request()->getRequestData('startDate').' 00:00:00');
@@ -138,7 +148,7 @@ class CMarketplaceCategoryStatisticListAjaxController extends AAjaxController
         $timeTo = $timeTo ? $this->time($timeTo->getTimestamp()) : null;
         $queryParameters = [$timeFrom, $timeTo,$timeFrom, $timeTo,$marketplaceAccount->id, $marketplaceAccount->marketplaceId ];
 
-        $datatable = new CDataTables($query, ['productId','productVariantId'], $_GET, true);
+        $datatable = new CDataTables($query, ['category'], $_GET, true);
 
         $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge($queryParameters, $datatable->getParams()))->fetchAll();
         $count = $this->app->repoFactory->create('ProductCategory')->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
@@ -152,9 +162,12 @@ class CMarketplaceCategoryStatisticListAjaxController extends AAjaxController
 
         foreach ($prodottiMarks as $values) {
             /** @var CProductCategory $productCategory */
-            $productCategory = $this->app->repoFactory->create('ProductCategory')->findOne([$values['id']]);
+            $productCategory = $this->app->repoFactory->create('ProductCategory')->findOne([$values['category']]);
             $row = $values;
+            $row["DT_RowId"] = $productCategory->printId();
             $row['category'] = $productCategory->getLocalizedPath();
+            if($row['conversionsValue'] == 0) $row['cos'] = 'NaN';
+            else $row['cos'] = round($row['visitsCost'] / $row['conversionsValue'] * 100,2);
             $response['data'][] = $row;
         }
 

@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
 
 /**
  * Class CMarketplaceProductManageController
@@ -115,25 +116,10 @@ class CMarketplaceProductManageController extends AAjaxController
      */
     public function delete() {
         $count = 0;
+        /** @var CMarketplaceAccountHasProductRepo $repo */
+        $repo = $this->app->repoFactory->create('MarketplaceAccountHasProduct');
         foreach ($this->app->router->request()->getRequestData('ids') as $mId) {
-            try {
-                $marketplaceHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->findOneByStringId($mId);
-                if(null == $marketplaceHasProduct) {
-                    $marketplaceHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
-                    $marketplaceHasProduct->readId($mId);
-                    $marketplaceHasProduct->isDeleted = 1;
-                    $marketplaceHasProduct->isToWork = 1;
-                    $marketplaceHasProduct->insert();
-                } else {
-                    $marketplaceHasProduct->isDeleted = 1;
-                    $marketplaceHasProduct->isToWork = 1;
-                    $marketplaceHasProduct->update();
-                }
-                $this->app->eventManager->triggerEvent('product.marketplace.change',['productIds'=>$marketplaceHasProduct->product->printId()]);
-                $count++;
-            } catch (\Throwable $e) {
-
-            }
+            if($repo->deleteProductFromMarketplace($mId)) $count++;
         }
         return $count;
     }
