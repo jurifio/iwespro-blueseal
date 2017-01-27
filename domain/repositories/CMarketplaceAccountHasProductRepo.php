@@ -7,7 +7,7 @@ use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\domain\entities\CCampaignVisit;
 
 /**
- * Class CCampaignRepo
+ * Class CMarketplaceAccountHasProductRepo
  * @package bamboo\domain\repositories
  *
  * @author Iwes Team <it@iwes.it>

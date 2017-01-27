@@ -26,6 +26,7 @@ class CMarketplaceCategoryProductManageController extends AAjaxController
         $ids = $this->app->router->request()->getRequestData('categories');
         $marketplaceAccountIds = $this->app->router->request()->getRequestData('marketplaceAccountId');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountIds);
+        /** @var CMarketplaceAccountHasProductRepo $mahpRepo */
         $mahpRepo = $this->app->repoFactory->create('MarketplaceAccountHasProduct');
         $ok = 0;
         $ko = 0;
@@ -38,12 +39,14 @@ class CMarketplaceCategoryProductManageController extends AAjaxController
                                                            p.productVariantId = phpc.productVariantId
                     JOIN ProductCategory pcN on pcN.id = phpc.productCategoryId
                     JOIN ProductCategory pcF on pcN.lft BETWEEN pcF.lft and pcF.rght
-                WHERE ps.isVisible = 1 and pcf.id = ?";
+                WHERE ps.isVisible = 1 and pcF.id = ?";
             foreach ($this->app->dbAdapter->query($sql,[$id])->fetchAll() as $productIds) {
                 $mahp = $mahpRepo->getEmptyEntity();
-
-                $mahp->setIds($marketplaceAccount->getIds()+$productIds);
-                if($mahpRepo->delete($mahp->printId())) $ok ++;
+                $mahp->setIds($productIds+[
+                    'marketplaceAccountId' => $marketplaceAccount->id,
+                    'marketplaceId' => $marketplaceAccount->marketplaceId
+                    ]);
+                if($mahpRepo->deleteProductFromMarketplace($mahp->printId())) $ok ++;
                 else $ko ++;
             }
         }
