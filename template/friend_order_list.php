@@ -94,29 +94,6 @@
                                 <th data-slug="friendShipmentTime"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Spedizione del Friend</th>
-                                <!--<th class="center sorting">Sku</th>
-                                <th class="center sorting">Stato Riga</th>
-                                <th class="center sorting">Opera Stato</th>
-                                <th class="center sorting">Foto</th>
-                                <th class="center sorting">Brand</th>
-                                <th class="center sorting">Stagione</th>
-                                <th class="center sorting">CPF</th>
-                                <th class="center sorting">Shop</th>
-                                <th class="center sorting">Taglia</th>
-                                <th class="center sorting">Prezzo</th>
-                                <th class="center sorting">Prezzo Attivo</th>
-                                <th class="center sorting">Realizzo</th>
-                                <th class="center sorting">Costo</th>
-                                <th class="center sorting">Prezzo Friend</th>
-                                <!--<th data-slug="invoiceNumber"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Numero Fattura</th>
-                                <th data-slug="invoiceExpectedPaymentDate"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Data Previsto Pagamento</th>
-                                <th data-slug="invoicePaymentDate"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Data Pagamento</th>-->
                             </tr>
                             </thead>
                             <tbody>

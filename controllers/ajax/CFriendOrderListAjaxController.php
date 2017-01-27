@@ -175,6 +175,7 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['activePrice'] = number_format($v->activePrice, 2, ',', '');
             $response['data'][$i]['friendRevenue'] = number_format($v->friendRevenue, 2, ',', '');
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
+            $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $invoiceLine = $v->invoiceLine->getFirst();
             $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoiceNew->number . ' (id:' . $invoiceLine->invoiceId . ')' : 'non assegnata' ;
             $l = $lR->findOneBy(['stringId' => $v->printId(), 'ActionName' => 'ShippedByFriend']);

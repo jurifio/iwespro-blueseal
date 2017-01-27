@@ -51,7 +51,7 @@ class COrderListAjaxController extends AAjaxController
                   JOIN `OrderStatusTranslation` `oshl`) 
                   JOIN `OrderLine` `ol`) 
                   JOIN `Shop` `s`) 
-                  JOIN `OrderLineStatus` `ols`) 
+                  JOIN `OrderLineStatus` `ols`)
                   JOIN `Product` `p`) 
                   JOIN `ProductBrand` `pb`)
                 WHERE ((`o`.`userId` = `u`.`id`) AND (`ud`.`userId` = `u`.`id`) AND (`o`.`orderPaymentMethodId` = `opm`.`id`) AND
@@ -62,8 +62,8 @@ class COrderListAjaxController extends AAjaxController
 
         $critical = \Monkey::app()->router->request()->getRequestData('critical');
         if ($critical) {
-            $sql .= " AND ((`o`.`status` LIKE 'ORD_PENDING' AND `ol`.`status` NOT LIKE 'ORD_FRND_CANC' AND `o`.`status` NOT LIKE 'ORD_CANC')" .
-                " OR (`ol`.`status` LIKE 'ORD_FRND_STATUS' AND `ol`.`status` NOT LIKE 'ORD_FRND_ORDSNT' AND `ols`.`id` < 10))";
+            $sql .= " AND ((`o`.`status` LIKE 'ORD_PENDING' AND `ol`.`status` NOT LIKE 'ORD_FRND_CANC' AND `ol`.`status` NOT LIKE 'ORD_CANCEL' AND (`o`.`orderPaymentMethodId` <> 5 OR `o`.`paymentDate` is NULL) ) " .
+                " OR (`ol`.`status` LIKE 'ORD_FRND_OK' AND `os`.`id ` NOT IN (8,9,10) AND `ols`.`id` < 10))";
         }
         $datatable = new CDataTables($sql, ['id'], $_GET,true);
         //$datatable->addCondition('statusCode', ['ORD_CANCEL'], true);

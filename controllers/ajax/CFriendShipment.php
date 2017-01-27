@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\utils\time\STimeToolbox;
 
 /**
@@ -19,7 +20,7 @@ class CFriendShipment extends AAjaxController
 
         $res['error'] = false;
         $res['message'] = 'La riga o le righe d\'ordine selezionate sono state contrassegnate come spedite';
-
+        /** @var COrderLineRepo $olR */
         $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $lR = \Monkey::app()->repoFactory->create('Log');
         try {
@@ -31,6 +32,8 @@ class CFriendShipment extends AAjaxController
                 $ol = $olR->findOneByStringId($s);
                 if (!$ol) {
                     throw new BambooException('La riga d\'ordine fornita non esiste');
+                } else if ('ORD_FRND_OK' !== $ol->status) {
+                    throw new BambooException('La riga d\'ordine fornita deve avere lo stato "Accettato dal friend"');
                 }
 
                 $l =$lR->findOneBy(['actionName' => 'ShippedByFriend', 'entityName' => 'OrderLine', 'stringId' => $s]);
@@ -40,6 +43,8 @@ class CFriendShipment extends AAjaxController
                     $res['message'] = 'La riga d\'ordine <strong>$s</strong> era già contrassegnata come spedita. Operazione annullata';
                     return json_encode($res);
                 }
+
+                $olR->updateStatus($ol, 'ORD_FRND_ORDSNT');
 
                 $date = STimeToolbox::AngloFormattedDateTime();
                 $l = $lR->getEmptyEntity();
