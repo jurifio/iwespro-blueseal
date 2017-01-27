@@ -24,11 +24,12 @@ class CMarketplaceCategoryProductManageController extends AAjaxController
     public function delete()
     {
         $ids = $this->app->router->request()->getRequestData('categories');
-        $marketplaceAccountIds = $this->app->router->request()->getRequestData('marketplaceAccountIds');
+        $marketplaceAccountIds = $this->app->router->request()->getRequestData('marketplaceAccountId');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountIds);
         $mahpRepo = $this->app->repoFactory->create('MarketplaceAccountHasProduct');
         $ok = 0;
         $ko = 0;
+
         foreach ($ids as $id) {
             $sql = "SELECT distinct p.id as productId, p.productVariantId  
                 FROM Product p 
@@ -40,6 +41,7 @@ class CMarketplaceCategoryProductManageController extends AAjaxController
                 WHERE ps.isVisible = 1 and pcf.id = ?";
             foreach ($this->app->dbAdapter->query($sql,[$id])->fetchAll() as $productIds) {
                 $mahp = $mahpRepo->getEmptyEntity();
+
                 $mahp->setIds($marketplaceAccount->getIds()+$productIds);
                 if($mahpRepo->delete($mahp->printId())) $ok ++;
                 else $ko ++;

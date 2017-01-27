@@ -29,7 +29,7 @@ $(document).on('bs.marketplace.category.delete', function(a,b,c){
     }
 
     $.each(selectedRows, function (k, v) {
-        getVarsArray.push(v.marketCode);
+        getVarsArray.push(v.DT_RowId);
     });
 
     body.html('<div>Sei sicuro di voler togliere dal marketplace ' + getVarsArray.lenght + ' Categorie?</div>');
@@ -45,7 +45,7 @@ $(document).on('bs.marketplace.category.delete', function(a,b,c){
                 url: '/blueseal/xhr/MarketplaceCategoryProductManageController',
                 type: "DELETE",
                 data: {
-                    marketplaceId: asd,
+                    marketplaceAccountId: asd,
                     categories: getVarsArray
                 }
             }).done(function (response) {
