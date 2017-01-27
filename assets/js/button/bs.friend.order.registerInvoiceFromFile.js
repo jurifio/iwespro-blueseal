@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-money",
-    permission:"/admin/product/edit&&allShops",
+    permission:"/admin/product/edit",
     event:"bs.friend.order.registerInvoiceFromFile",
     class:"btn btn-default",
     rel:"tooltip",
