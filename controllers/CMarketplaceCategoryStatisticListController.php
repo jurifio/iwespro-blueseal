@@ -35,6 +35,7 @@ class CMarketplaceCategoryStatisticListController extends ARestrictedAccessRootC
             'page' => $this->page,
             'queryString' => $q,
             'marketplaceName'=> $marketplaceAccount->getCampaignName(),
+            'marketplaceAccount'=> $marketplaceAccount,
             'sidebar' => $this->sidebar->build()
         ]);
     }

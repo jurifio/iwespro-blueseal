@@ -91,6 +91,19 @@
             data-remote="btn.datatable.date.filter"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Azioni">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-default"
+            data-button="true"
+            data-permission="/admin/product/edit&&allShops"
+            data-rel="tooltip"
+            data-placement="bottom"
+            data-class="btn btn-default"
+            data-title="statistiche categorie"
+            data-event="bs.marketplace.category.href"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
