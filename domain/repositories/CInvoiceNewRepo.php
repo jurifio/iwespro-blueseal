@@ -64,16 +64,8 @@ class CInvoiceNewRepo extends ARepo
         $year = $date->format('Y');
 
         //find sectional
-
-        $fieldToSearch = (false == $isShop) ? 'userAddressRecipientId' : 'shopRecipientId';
         $fieldToSearchInvoice = (false == $isShop) ? 'userAddressRecipientId' : 'shopRecipientId';
         /** @var CInvoiceSectional $invoiceSectional */
-        $invoiceSectional = $inSecR->findOneBy(
-            [
-                $fieldToSearch => $recipientOrEmitterId,
-                'invoiceTypeId' => $invoiceTypeId,
-            ]
-        );
 
         $invoiceWithNumber =
             $inR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
