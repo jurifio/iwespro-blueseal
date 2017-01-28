@@ -94,7 +94,7 @@
     <bs-toolbar-group data-group-label="Azioni">
         <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-default"
+            data-icon="fa-sitemap"
             data-button="true"
             data-permission="/admin/product/edit&&allShops"
             data-rel="tooltip"
