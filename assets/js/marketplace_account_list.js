@@ -16,7 +16,7 @@ $(document).on('bs.marketplace.category.href', function(a,b,c){
     var i = 0;
     var row = '';
     $.each(selectedRows, function (k, v) {
-        rows(v.DT_RowId);
+        row = v.DT_RowId;
     });
-    window.location.href = "/blueseal/marketplace/account/aggregato/" + row;
+        window.location.href = "/blueseal/marketplace/account/aggregato/" + row;
 });
