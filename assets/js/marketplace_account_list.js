@@ -18,5 +18,5 @@ $(document).on('bs.marketplace.category.href', function(a,b,c){
     $.each(selectedRows, function (k, v) {
         row = v.DT_RowId;
     });
-        window.location.href = "/blueseal/marketplace/account/aggregato/" + row;
+    window.open('/blueseal/marketplace/account/aggregato/' + row ,'_blank');
 });
