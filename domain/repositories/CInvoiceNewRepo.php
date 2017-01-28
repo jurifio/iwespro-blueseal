@@ -45,12 +45,10 @@ class CInvoiceNewRepo extends ARepo
         \DateTime $paymentExpectedDate = null,
         string $number = null,
         string $note = null,
-        int $carrierId = null,
         \DateTime $creationDate = null
     )
     {
         $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
-        $inSecR = \Monkey::app()->repoFactory->create('InvoiceSectional');
 
         //date control
         if (!$creationDate) $creationDate = new \DateTime();
@@ -64,16 +62,8 @@ class CInvoiceNewRepo extends ARepo
         $year = $date->format('Y');
 
         //find sectional
-
-        $fieldToSearch = (false == $isShop) ? 'userAddressRecipientId' : 'shopRecipientId';
         $fieldToSearchInvoice = (false == $isShop) ? 'userAddressRecipientId' : 'shopRecipientId';
         /** @var CInvoiceSectional $invoiceSectional */
-        $invoiceSectional = $inSecR->findOneBy(
-            [
-                $fieldToSearch => $recipientOrEmitterId,
-                'invoiceTypeId' => $invoiceTypeId,
-            ]
-        );
 
         $invoiceWithNumber =
             $inR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
