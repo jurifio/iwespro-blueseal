@@ -22,7 +22,8 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
                   `i`.`creationDate` as `creationDate`,
                   if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`, ', '), 'Non presente')  as `paymentBill`,
-                  `sh`.`title` as friend
+                  `sh`.`title` as friend,
+                  `ab`.`id` as abid
                 FROM
                   `InvoiceNew` as `i` JOIN
                   `InvoiceLine` as `il` on `il`.`invoiceId` =  `i`.`id` JOIN
@@ -30,7 +31,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `InvoiceLineHasOrderLine` as `ilhol` on `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId` JOIN
                   `OrderLine` as `ol` on `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
                   JOIN `AddressBook` as ab on `i`.`shopRecipientId` = `ab`.`id`
-                  JOIN `Shop` as sh on `i`.`shopRecipientId` = `sh`.`id`
+                  JOIN `Shop` as sh on `i`.`shopRecipientId` = `sh`.`addressBookId`
                   LEFT JOIN (`PaymentBillHasInvoiceNew` as `pbhin` JOIN `PaymentBill` as `pb` on `pb`.id = `pbhin`.`paymentBillId`) on `i`.`id` = `pbhin`.`invoiceNewId`
                 WHERE
                   `it`.`code` = 'fr_invoice_orderlines_file'
