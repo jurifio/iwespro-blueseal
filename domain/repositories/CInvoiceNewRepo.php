@@ -160,7 +160,7 @@ class CInvoiceNewRepo extends ARepo
             $il->price = $price;
             $il->priceNoVat = SPriceToolbox::netPriceFromGross($price, $vat, true);
         } else {
-            $il->price = SPriceToolbox::netPriceFromGross($price, $vat, true);
+            $il->price = SPriceToolbox::grossPriceFromNet($price, $vat, true);
             $il->priceNoVat = $price;
         }
         $il->vat = $vat;
