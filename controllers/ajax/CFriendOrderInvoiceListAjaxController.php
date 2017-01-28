@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\utils\price\SPriceToolbox;
 use bamboo\utils\time\STimeToolbox;
 
 class CFriendOrderInvoiceListAjaxController extends AAjaxController
@@ -63,7 +64,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
             $paymentDate = (null !== $v->paymentDate && '0000-00-00 00:00:00' == $v->paymentDate ) ? 'Non pagata' : STimeToolbox::EurFormattedDate($v->paymentDate);
             $response['data'][$i]['paymentDate'] = $paymentDate;
             $response['data'][$i]['creationDate'] = STimeToolbox::EurFormattedDate($v->creationDate);
-            $response['data'][$i]['invoiceTotalAmount'] = $v->totalWithVat;
+            $response['data'][$i]['invoiceTotalAmount'] = SPriceToolbox::formatToEur($v->totalWithVat);
             $response['data'][$i]['invoiceDate'] = STimeToolbox::EurFormattedDate($v->date);
             $bill = $v->paymentBill;
             $arrBillId = [];
