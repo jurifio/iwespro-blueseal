@@ -5,10 +5,10 @@ $(document).on('bs.marketplace.category.href', function(a,b,c){
     var dt = table.DataTable();
     var selectedRows = dt.rows('.selected').data();
 
-    if (1 > selectedRows.length) {
+    if (1 != selectedRows.length) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare almeno un prodotto"
+            message: "Devi selezionare una sola riga"
         }).open();
         return false;
     }
