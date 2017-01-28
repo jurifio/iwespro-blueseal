@@ -65,7 +65,7 @@ class CInvoiceNewRepo extends ARepo
 
         //find sectional
 
-        $fieldToSearch = (false == $isShop) ? 'userId' : 'shopId';
+        $fieldToSearch = (false == $isShop) ? 'userAddressRecipientId' : 'shopRecipientId';
         $fieldToSearchInvoice = (false == $isShop) ? 'userAddressRecipientId' : 'shopRecipientId';
         /** @var CInvoiceSectional $invoiceSectional */
         $invoiceSectional = $inSecR->findOneBy(
@@ -74,14 +74,12 @@ class CInvoiceNewRepo extends ARepo
                 'invoiceTypeId' => $invoiceTypeId,
             ]
         );
-        if ($invoiceSectional) $number = $this->newInvoiceNumberForSectional($invoiceSectional, $date->format('Y'));
-        elseif (null === $number) throw new BambooException('The invoice number can\'t be emtpy');
-        else {
-            $invoiceWithNumber =
-                $inR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
-            if ($invoiceWithNumber)
-                throw new BambooInvoiceException('il numero della fattura è già presente nel nostro sistema e non può essere duplicato');
-        }
+
+        $invoiceWithNumber =
+            $inR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
+        if ($invoiceWithNumber)
+            throw new BambooInvoiceException('il numero della fattura è già presente nel nostro sistema e non può essere duplicato');
+
         $in = $inR->getEmptyEntity();
         $in->userId = $userId;
         if ($isShop) $in->shopRecipientId = $recipientOrEmitterId;
@@ -92,7 +90,7 @@ class CInvoiceNewRepo extends ARepo
         $in->paydAmount = $paidAmount;
         $in->paymentExpectedDate = ($paymentExpectedDate) ? $paymentExpectedDate->format('Y-m-d') : null;
         $in->totalWithVat = $totalWithVat;
-        $in->note = $note;
+        $in->note = ($note) ? $note : '';
         $in->year = $year;
         $in->creationDate = $creationDate->format('Y-m-d');
         return $in->insert();
@@ -252,6 +250,85 @@ class CInvoiceNewRepo extends ARepo
             $dba->rollBack();
             throw $e;
         }
+    }
+
+    public function storeFriendInvoiceInternal(
+        int $userId,
+        int $shopId,
+        \DateTime $emissionDate,
+        $paymentExpectedDate = null,
+        $paidAmount,
+        array $orderLines,
+        string $note = null
+    )
+    {
+        $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => 'fr_invoice_internal']);
+        $invoiceTypeId = $invoiceType->id;
+        $dba = \Monkey::app()->dbAdapter;
+
+        $olR = \Monkey::app()->repoFactory->create('OrderLine');
+        $shpR = \Monkey::app()->repoFactory->create('Shop');
+        $addressBook = $shpR->findOne([$shopId])->addressBook;
+        if (!$addressBook)
+            throw new BambooInvoiceException('Nel sistema non è presente un indirizzo di fatturazione associato a questo Friend');
+        $addressBookId = $shpR->findOne([$shopId])->addressBookId;
+
+        $is = \Monkey::app()->repoFactory->create('InvoiceSectional')->findOneBy(
+            ['shopRecipientId' => $addressBookId, 'invoiceTypeId' => $invoiceTypeId]
+        );
+        if (!$is) throw new BambooInvoiceException('Non ho trovato nessun sezionale per questa fattura');
+
+        $newNumber = $this->getNewNumber($is->id);
+
+        try {
+            $totalWithVat = 0;
+            $vat = $this->getInvoiceVat($invoiceType, $addressBook);
+            foreach ($orderLines as $k => $v) {
+                $orderLines[$k] = $olR->findOneByStringId($v);
+                $totalWithVat += SPriceToolbox::grossPriceFromNet($orderLines[$k]->friendRevenue, $vat);
+            }
+
+            $invoiceNumber = ('' != $is->code) ? $is->code . '/' . $newNumber : $newNumber;
+            $dba->beginTransaction();
+            $insertedId = $this->createInvoice(
+                $invoiceTypeId,
+                $userId,
+                1,
+                $addressBookId,
+                $emissionDate,
+                $totalWithVat,
+                $paidAmount,
+                $paymentExpectedDate,
+                $invoiceNumber,
+                $note
+            );
+            foreach ($orderLines as $v) {
+                $this->addOrderLineToInvoice($insertedId, $v, (float)$v->friendRevenue, false, $vat);
+            }
+            $in = \Monkey::app()->repoFactory->create('InvoiceNumber')->getEmptyEntity();
+            $in->invoiceNumber = $newNumber;
+            $in->invoiceSectionalId = $is->id;
+            $in->year = $emissionDate->format('Y');
+            $in->insert();
+
+            $dba->commit();
+        } catch (BambooInvoiceException $e) {
+            $dba->rollBack();
+            throw $e;
+        } catch (BambooException $e) {
+            $dba->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * @param int $invoiceSectionalId
+     * @return mixed
+     */
+    private function getNewNumber(int $invoiceSectionalId) {
+        $res = \Monkey::app()->dbAdapter->query('SELECT (max(invoiceNumber) + 1) as `number` FROM `InvoiceNumber` as `in` JOIN `InvoiceSectional` as `is` on `is`.id = `in`.invoiceSectionalId WHERE invoiceSectionalId = 2', [$invoiceSectionalId])->fetch();
+        if (!$res['number']) return 1;
+        return $res['number'];
     }
 
     /**

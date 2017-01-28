@@ -1,16 +1,16 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-money",
+    icon:"fa-boh",
     permission:"/admin/product/edit",
     event:"bs.friend.order.registerInvoiceFromFriend",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Invia una fattura per il pagamento delle righe d'ordine",
+    title:"Crea  una fattura",
     placement:"bottom",
     toggle:"modal"
 };
 
-$(document).on('bs.friend.order.registerInvoiceFromFile', function () {
+$(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
     var datatable = $('.table').DataTable();
     var selectedRows = datatable.rows('.selected').data();
 
@@ -95,15 +95,11 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
 
             modal.setOkEvent(function(){
                 var invoiceDate = $('#invoiceDate').val();
-                var invoiceNumber = $('#invoiceNumber').val();
                 var invoiceShop = $('#invoiceShop').val();
-                var invoiceFile = $('#invoiceFile').prop('files')[0];
                 var data = new FormData();
                 data.append('rows', rows);
                 data.append('date', invoiceDate);
-                data.append('number', invoiceNumber);
                 data.append('shopId', invoiceShop);
-                data.append('file', invoiceFile);
                 $.ajax({
                     url: '/blueseal/xhr/FriendOrderRecordInvoiceInternal',
                     cache: false,
