@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CShipment;
 
 /**
  * Class CProductListAjaxController
@@ -23,9 +24,9 @@ class CShipmentListAjaxController extends AAjaxController
         $sql = "SELECT
                     s.id,
                     c.name as carrier,
-                    s.scope as scopo,
-                    ol.shopId as shopId,
-                    sh.name as shop,
+                    s.scope as scope,
+                    shabf.shopId,
+                    shabt.shopId,
                     s.bookingNumber,
                     s.trackingNumber,
                     s.shipmentDate,
@@ -38,14 +39,21 @@ class CShipmentListAjaxController extends AAjaxController
                   join Carrier c on s.carrierId = c.id
                   left join AddressBook f on s.fromAddressId = f.id
                   left join AddressBook t on s.toAddressId = t.id
+                  left join ShopHasAddressBook shabf on f.id = shabf.addressBookId
+                  left join ShopHasAddressBook shabt on t.id = shabt.addressBookId
                   LEFT JOIN (
                      OrderLineHasShipment olhs
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
-                     Join Shop sh on ol.shopId = sh.id
-                    ) ON s.id = olhs.shipmentId
+                     ) ON s.id = olhs.shipmentId
                   GROUP BY s.id";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
+
+        if(!$this->app->getUser()->hasPermission('allShops')) {
+            $datatable->addCondition('scope',[CShipment::SCOPE_SUPPLIER_TO_US]);
+        }
+
+        $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
         $shipments = $this->app->repoFactory->create('Shipment')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->app->repoFactory->create('Shipment')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -61,7 +69,8 @@ class CShipmentListAjaxController extends AAjaxController
             $row = [];
             $row["DT_RowId"] = 'row__' . $val->printId();
             $row['id'] = $val->printId();
-            $row['shop'] = 'todo';
+
+            $row['shop'] = '---';
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
