@@ -33,7 +33,7 @@ class COrderTracker extends AAjaxController
         $shipment = $this->app->repoFactory->create('Shipment')->getEmptyEntity();
         $shipment->carrierId = $carrierId;
         $shipment->scope = $shipment::SCOPE_US_TO_USER;
-        $shipment->trackingNumber = $trackingNumber;
+        $shipment->trackingNumber = trim($trackingNumber);
         $shipment->shipmentDate = $this->time();
         $shipment->declaredValue = $order->grossTotal;
         $shipment->id = $shipment->insert();
