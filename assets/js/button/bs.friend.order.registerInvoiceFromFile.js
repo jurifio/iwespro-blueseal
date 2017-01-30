@@ -87,7 +87,9 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
                 '<label for="invoiceNumber">Numero Fattura:</label>' +
                 '<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" />' +
                 '<label for="invoiceFile">File:</label>' +
-                '<input type="file" class="form-control" id="invoiceFile" name="invoiceFile">'+
+                '<input type="file" class="form-control" id="invoiceFile" name="invoiceFile">' +
+                '<label for="invoiceTotal">Totale (con IVA):</label>' +
+                '<input type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="' + res.total + '" />' +
                 '</form>';
 
             var body = '<h4>Riepilogo dei prodotti selezionati</h4>';
@@ -102,12 +104,14 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
                 var invoiceNumber = $('#invoiceNumber').val();
                 var invoiceShop = $('#invoiceShop').val();
                 var invoiceFile = $('#invoiceFile').prop('files')[0];
+                var invoiceTotal = $('#invoiceTotal').val();
                 var data = new FormData();
                 data.append('rows', rows);
                 data.append('date', invoiceDate);
                 data.append('number', invoiceNumber);
                 data.append('shopId', invoiceShop);
                 data.append('file', invoiceFile);
+                data.append('total', invoiceTotal);
                 $.ajax({
                     url: '/blueseal/xhr/FriendOrderRecordInvoice',
                     cache: false,
