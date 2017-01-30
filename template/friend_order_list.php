@@ -111,7 +111,7 @@
 <bs-toolbar class="toolbar-definition">
     <?php if ($allShops) : ?>
     <bs-toolbar-group data-group-label="Gestione Ordini Interna">
-        <bs-toolbar-button
+        <!--<bs-toolbar-button
             data-tag="a"
             data-icon="fa-credit-card"
             data-permission="/admin/order/add"
@@ -120,7 +120,7 @@
             data-title="Gestisci pagamenti"
             data-placement="bottom"
             data-event="bs.orderline.paymentToFriend"
-        ></bs-toolbar-button>
+        ></bs-toolbar-button>-->
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
