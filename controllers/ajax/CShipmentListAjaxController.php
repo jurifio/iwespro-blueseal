@@ -33,8 +33,8 @@ class CShipmentListAjaxController extends AAjaxController
                     concat_ws(',',t.subject,t.city) as toAddress
                 FROM Shipment s 
                   join Carrier c on s.carrierId = c.id
-                  left join AddressBook f on s.from = f.id
-                  left join AddressBook t on s.to = t.id
+                  left join AddressBook f on s.fromAddressId = f.id
+                  left join AddressBook t on s.toAddressId = t.id
                   LEFT JOIN (
                      OrderLineHasShipment olhs
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
@@ -53,27 +53,17 @@ class CShipmentListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $userEdit = $this->app->baseUrl(false) . "/blueseal/utente?userId=";
-
         foreach ($shipments as $val) {
             $row = [];
             $row["DT_RowId"] = 'row__' . $val->printId();
             $row['id'] = $val->printId();
+            $row['carrier'] = $val->carrier->name;
             $row['fromAddress'] = $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->city) : '---';
             $row['toAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
-            $row['note'] = $val->userDetails->note;
-            $row['method'] = $val->registrationEntryPoint;
-            $row['sex'] = $val->userDetails->gender == 'M' ? 'Uomo' : 'Donna';
-            $color = $val->isActive == 1 ? '#008200' : '';
-            $icon = "fa-user";
-            if (isset($val->rbacRole) && !$val->rbacRole->isEmpty()) {
-                $color = "#cbac59";
-                if ($val->rbacRole->findOneByKey('title', 'sa')) {
-                    $icon = "fa-user-secret";
-                }
-            }
-            $row['status'] = '<i style="color: ' . $color . '" class="fa ' . $icon . '"></i>';
-            $row['phone'] = $val->userDetails->phone;
+            $row['note'] = $val->note;
+            $row['bookingNumber'] = $val->bookingNumber;
+            $row['trackingNumber'] = $val->trackingNumber;
+            $row['shipmentDate'] = $val->shipmentDate;
             $row['creationDate'] = $val->creationDate;
             $response['data'][] = $row;
         }
