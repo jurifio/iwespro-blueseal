@@ -61,7 +61,7 @@ class CShipmentListAjaxController extends AAjaxController
             $row = [];
             $row["DT_RowId"] = 'row__' . $val->printId();
             $row['id'] = $val->printId();
-            $row['shop'] = $val->orderLine ? $val->orderLine->shop->name : '---';
+            $row['shop'] = 'todo';
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
@@ -69,8 +69,8 @@ class CShipmentListAjaxController extends AAjaxController
             $row['toAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
             $row['shipmentDate'] = $val->shipmentDate;
             $row['creationDate'] = $val->creationDate;
-            $row['productContent'] = $val->orderLine->productSku->product->printId().'<br />'.$val->orderLine->printId();
-            $row['orderContent'] = $val->orderLine->productSku->product->printId().'<br />'.$val->orderLine->printId();
+            $row['productContent'] = 'todo';
+            $row['orderContent'] = 'todo';//$val->orderLine->productSku->product->printId().'<br />'.$val->orderLine->printId();
             $row['note'] = $val->note;
 
             $response['data'][] = $row;
