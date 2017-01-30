@@ -61,7 +61,7 @@ class CShipmentListAjaxController extends AAjaxController
             $row = [];
             $row["DT_RowId"] = 'row__' . $val->printId();
             $row['id'] = $val->printId();
-            $row['shop'] = $val->orderLine ? $val->orderLine->shop->name : '---';
+            $row['shop'] = 'todo';
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
