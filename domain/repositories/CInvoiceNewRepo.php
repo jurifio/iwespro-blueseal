@@ -197,8 +197,8 @@ class CInvoiceNewRepo extends ARepo
 
         $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $shpR = \Monkey::app()->repoFactory->create('Shop');
-        $addressBook = $shpR->findOne([$shopId])->addressBook;
-        $addressBookId = $shpR->findOne([$shopId])->addressBookId;
+        $addressBook = $shpR->findOne([$shopId])->billingAddressBook;
+        $addressBookId = $shpR->findOne([$shopId])->billingAddressBookId;
 
         try {
             $totalWithVat = 0;
@@ -258,10 +258,10 @@ class CInvoiceNewRepo extends ARepo
 
         $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $shpR = \Monkey::app()->repoFactory->create('Shop');
-        $addressBook = $shpR->findOne([$shopId])->addressBook;
+        $addressBook = $shpR->findOne([$shopId])->billingAddressBook;
         if (!$addressBook)
             throw new BambooInvoiceException('Nel sistema non è presente un indirizzo di fatturazione associato a questo Friend');
-        $addressBookId = $shpR->findOne([$shopId])->addressBookId;
+        $addressBookId = $shpR->findOne([$shopId])->billingAddressBookId;
 
         $is = \Monkey::app()->repoFactory->create('InvoiceSectional')->findOneBy(
             ['shopRecipientId' => $addressBookId, 'invoiceTypeId' => $invoiceTypeId]
