@@ -43,13 +43,16 @@
                                 <th data-slug="carrier"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Carrier</th>
-                                <th data-slug="booking"
+                                <th data-slug="bookingNumber"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Booking</th>
-                                <th data-slug="from"
+                                <th data-slug="trackingNumber"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Booking</th>
+                                <th data-slug="fromAddress"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Da</th>
-                                <th data-slug="to"
+                                <th data-slug="toAddress"
                                     data-searchable="true"
                                     data-orderable="true" class="center">A</th>
                                 <th data-slug="shipmentDate"
@@ -59,9 +62,9 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc" class="center dataFilterType">Data Creazione</th>
-                                <th data-slug="declaredValue"
+                                <th data-slug="note"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Valore Dichiarato</th>
+                                    data-orderable="true" class="center">Note</th>
                                 <th data-slug="contenuto"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Contenuto</th>

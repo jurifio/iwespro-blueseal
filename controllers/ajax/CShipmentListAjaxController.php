@@ -25,12 +25,15 @@ class CShipmentListAjaxController extends AAjaxController
                     c.name as carrier,
                     s.scope as scopo,
                     ol.shopId as shopId,
+                    sh.name as shop,
                     s.bookingNumber,
                     s.trackingNumber,
                     s.shipmentDate,
                     s.creationDate,
                     concat_ws(',',f.subject,f.city) as fromAddress,
-                    concat_ws(',',t.subject,t.city) as toAddress
+                    concat_ws(',',t.subject,t.city) as toAddress,
+                    group_concat(concat_ws('-',ol.productId,ol.productVariantId)) as productContent,
+                    group_concat(concat_ws('-',ol.id,ol.orderId)) as orderContent
                 FROM Shipment s 
                   join Carrier c on s.carrierId = c.id
                   left join AddressBook f on s.fromAddressId = f.id
@@ -38,8 +41,9 @@ class CShipmentListAjaxController extends AAjaxController
                   LEFT JOIN (
                      OrderLineHasShipment olhs
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
+                     Join Shop sh on ol.shopId = sh.id
                     ) ON s.id = olhs.shipmentId
-                  ";
+                  GROUP BY s.id";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -57,14 +61,18 @@ class CShipmentListAjaxController extends AAjaxController
             $row = [];
             $row["DT_RowId"] = 'row__' . $val->printId();
             $row['id'] = $val->printId();
+            $row['shop'] = $val->orderLine ? $val->orderLine->shop->name : '---';
             $row['carrier'] = $val->carrier->name;
-            $row['fromAddress'] = $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->city) : '---';
-            $row['toAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
-            $row['note'] = $val->note;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
+            $row['fromAddress'] = $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->city) : '---';
+            $row['toAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
             $row['shipmentDate'] = $val->shipmentDate;
             $row['creationDate'] = $val->creationDate;
+            $row['productContent'] = $val->orderLine->productSku->product->printId().'<br />'.$val->orderLine->printId();
+            $row['orderContent'] = $val->orderLine->productSku->product->printId().'<br />'.$val->orderLine->printId();
+            $row['note'] = $val->note;
+
             $response['data'][] = $row;
         }
 
