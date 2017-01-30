@@ -1692,6 +1692,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/spedizioni(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShipmentListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
