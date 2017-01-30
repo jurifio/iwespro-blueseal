@@ -70,10 +70,10 @@ class CFriendOrderRecordInvoice extends AAjaxController
     }
 
     public function post() {
-
         $rows = explode(',', \Monkey::app()->router->request()->getRequestData('rows'));
         $number = \Monkey::app()->router->request()->getRequestData('number');
         $date = \Monkey::app()->router->request()->getRequestData('date');
+        $total = \Monkey::app()->router->request()->getRequestData('total');
         $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
         $user = \Monkey::app()->getUser();
         /** @var CInvoiceNewRepo $inR */
@@ -101,7 +101,8 @@ class CFriendOrderRecordInvoice extends AAjaxController
                 0,
                 $number,
                 $rows,
-                $_FILES['file']
+                $_FILES['file'],
+                $total
             );
             return json_encode($res);
         } catch (BambooInvoiceException $e) {

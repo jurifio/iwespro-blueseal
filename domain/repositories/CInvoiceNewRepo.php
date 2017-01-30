@@ -188,6 +188,7 @@ class CInvoiceNewRepo extends ARepo
         string $number,
         array $orderLines,
         $file,
+        $totalWithVat = null,
         string $note = null
     )
     {
@@ -201,11 +202,18 @@ class CInvoiceNewRepo extends ARepo
         $addressBookId = $shpR->findOne([$shopId])->billingAddressBookId;
 
         try {
-            $totalWithVat = 0;
-            $vat = $this->getInvoiceVat($invoiceType, $addressBook);
             foreach ($orderLines as $k => $v) {
                 $orderLines[$k] = $olR->findOneByStringId($v);
-                $totalWithVat += SPriceToolbox::grossPriceFromNet($orderLines[$k]->friendRevenue, $vat);
+            }
+            $vat = $this->getInvoiceVat($invoiceType, $addressBook);
+            if (null === $totalWithVat) {
+                $totalWithVat = 0;
+                foreach($orderLines as $v) {
+                    $totalWithVat += SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat);
+                }
+            } else {
+                $totalWithVat = str_replace(',','.', $totalWithVat);
+                if (!is_numeric($totalWithVat)) throw new \Exception('Il totale della fattura fornito non è un numero valido. Controllare il campo');
             }
 
             $dba->beginTransaction();
