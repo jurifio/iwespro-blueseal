@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\CShipment;
+use bamboo\domain\repositories\CShipmentRepo;
 
 /**
  * Class CGetPermissionsForUser
@@ -29,22 +30,9 @@ class COrderTracker extends AAjaxController
         $order = $this->app->repoFactory->create('Order')->findOneByStringId($orderId);
         $lang = $this->app->repoFactory->create('Lang')->findOneByStringId($langId);
 
-        /** @var CShipment $shipment */
-        $shipment = $this->app->repoFactory->create('Shipment')->getEmptyEntity();
-        $shipment->carrierId = $carrierId;
-        $shipment->scope = $shipment::SCOPE_US_TO_USER;
-        $shipment->trackingNumber = $trackingNumber;
-        $shipment->shipmentDate = $this->time();
-        $shipment->declaredValue = $order->grossTotal;
-        $shipment->id = $shipment->insert();
-
-        foreach ($order->orderLine as $orderLine) {
-            $olhs = $this->app->repoFactory->create('OrderLineHasShipment')->getEmptyEntity();
-            $olhs->orderId = $orderLine->orderId;
-            $olhs->orderLineId = $orderLine->id;
-            $olhs->shipmentId = $shipment->id;
-            $olhs->insert();
-        }
+        /** @var CShipmentRepo $shipmentRepo */
+        $shipmentRepo = $this->app->repoFactory->create('Shipment');
+        $shipment = $shipmentRepo->newOrderShipmentToClient($carrierId,$trackingNumber,$this->time(),$order);
 
         $order->note = $order->note." Tracking ".$shipment->carrier->name.": ".$shipment->trackingNumber. ' Spedito: '.date('Y-m-d');
         $order->update();
