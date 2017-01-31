@@ -92,28 +92,139 @@ $(document).on('bs.friend.orderline.ok', function () {
         return false;
     }
 
-    var i = 0;
     var row = [];
     $.each(selectedRows, function (k, v) {
-        row[i] = v.line_id;
-        i++;
-        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
+        row.push(v.line_id);
     });
 
-    modal = new $.bsModal({
-        header: 'Conferma Ordine'
+    modal = new $.bsModal('Conferma Ordine', {
+        body:
+        '<label for="addressBook">Seleziona l\'indirizzo di provenienza</label><br />' +
+        '<select id="addressBook" name="addressBook" class="full-width selectize"></select><br />' +
+        '<label for="carrierSelect">Seleziona il vettore</label><br />' +
+        '<select id="carrierSelect" name="carrierSelect" class="full-width selectize"></select><br />'
     });
 
-    $.ajax({
-        url: '/blueseal/xhr/FriendAccept',
-        method: 'POST',
-        data: {rows: row, response: 'ok'}
-    }).done(function (res) {
-        modal.writeBody(res);
-        $('.table').DataTable().ajax.reload(null, false);
-    }).fail(function (res) {
-        modal.writeBody(res.responseText);
+    let addressSelect = $('select[name=\"addressBook\"]');
+    let carrierSelect = $('select[name=\"carrierSelect\"]');
+    let shippingDate = $('select[name=\"shippingDate\"]');
+
+
+    Pace.ignore(function () {
+        $.ajax({
+            url: '/blueseal/xhr/FriendAccept',
+            method: 'get',
+            data: {
+                rows: row
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            shippingDate.datepicker()
+        });
     });
+
+    Pace.ignore(function () {
+        $.ajax({
+            url: '/blueseal/xhr/FriendAccept',
+            method: 'get',
+            data: {
+                rows: row
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            addressSelect.selectize({
+                valueField: 'id',
+                labelField: 'subject',
+                options: res
+            });
+        });
+    });
+
+    $(document).on('change',"select[name=\"addressBook\"], select[name=\"carrierSelect\"]",function () {
+        if(!(addressSelect.val() && carrierSelect.val())) {
+            shippingDate.attr('disabled','disabled');
+            return false;
+        }
+
+        if(shippingDate.length == 0) {
+            modal.body.append(
+                '<label for="shippingDate">Seleziona Data Ritiro</label>' +
+                '<select id="shippingDate" name="shippingDate" class="full-width selectize" disabled="disabled"></select><br />' +
+                '<label for="bookingNumber">Inserisci il codice di ritiro (se presente)</label>' +
+                '<input id="bookingNumber" name="bookingNumber" class="full-width" ><br />'
+            );
+            shippingDate = $('select[name=\"shippingDate\"]');
+        }
+
+        $.ajax({
+            url: '/blueseal/xhr/FriendShipment',
+            data: {
+                fromAddressBookId: addressSelect.val(),
+                carrierId: carrierSelect.val()
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            let opt = [];
+            for(let i in res) {
+                opt.push(
+                    {
+                        "value" : res[i],
+                        "label" : res[i],
+                        "name" : res[i]
+                    });
+            }
+            shippingDate.selectize({
+                options: opt
+            });
+            shippingDate[0].selectize.enable();
+        });
+    });
+
+    Pace.ignore(function () {
+        $.ajax({
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Carrier'
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            if (carrierSelect.length > 0 && typeof carrierSelect[0].selectize != 'undefined') carrierSelect[0].selectize.destroy();
+            carrierSelect.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res,
+            });
+            carrierSelect[0].selectize.setValue(1);
+        });
+    });
+
+    modal.setOkEvent(function () {
+        if (!(addressSelect.val() && carrierSelect.val() && shippingDate.val())) {
+            new Alert({
+                type: "warning",
+                message: "Devi selezionare l'indirizzo, il corriere e la data di ritiro"
+            }).open();
+            return false;
+        }
+        $.ajax({
+            url: '/blueseal/xhr/FriendAccept',
+            method: 'POST',
+            data: {
+                rows: row,
+                response: 'ok',
+                fromAddressBookId: addressSelect.val(),
+                carrierId: carrierSelect.val(),
+                bookingNumber: $('#bookingNumber').val()
+            }
+        }).done(function (res) {
+            modal.writeBody(res);
+            $('.table').DataTable().ajax.reload(null, false);
+        }).fail(function (res) {
+            modal.writeBody(res.responseText);
+        });
+    });
+
 });
 
 $(document).on('bs.friend.orderline.ko', function () {

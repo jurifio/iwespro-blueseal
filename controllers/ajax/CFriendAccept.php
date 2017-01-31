@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooOrderLineException;
+use bamboo\domain\repositories\CShipmentRepo;
 
 /**
  * Class CProductListAjaxController
@@ -18,6 +19,18 @@ use bamboo\core\exceptions\BambooOrderLineException;
  */
 class CFriendAccept extends AAjaxController
 {
+    public function get() {
+        $addresses = [];
+        foreach ($this->app->getUser()->getAutorizedShops() as $shop) {
+            foreach ($shop->shippingAddressBook as $addressBook) {
+                $addressBook->shopId = $shop->id;
+                $addressBook->shopName = $shop->name;
+                $addresses[] = $addressBook;
+            }
+        }
+        return json_encode($addresses);
+    }
+
     /**
      * @return BambooException|BambooOrderLineException|\Exception|string
      * @transaction
@@ -57,6 +70,16 @@ class CFriendAccept extends AAjaxController
                 }
                 $olR->setFriendVerdict($ol, $newStatus);
             }
+
+            if($verdict == 'Consenso') {
+                $fromAddressBookId = $request->getRequestData('fromAddressBookId');
+                $carrierId = $request->getRequestData('carrierId');
+                /** @var CShipmentRepo $shipmentRepo */
+                $shipmentRepo = $this->app->repoFactory->create('Shipment');
+                $shipmentRepo->newFriendShipmentToUs($carrierId,$fromAddressBookId,'',$this->time(),$orderLines);
+                $request->getRequestData();
+            }
+
             $dba->commit();
             return $verdict . ' correttamente registrato';
         } catch (BambooOrderLineException $e) {
