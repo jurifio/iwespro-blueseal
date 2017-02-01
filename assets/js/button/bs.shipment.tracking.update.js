@@ -12,9 +12,9 @@ window.buttonSetup = {
 
 $(document).on('bs.shipment.tracking.update', function (e, element, button) {
 
-    var dataTable = $('.dataTable').DataTable();
+    let dataTable = $('.dataTable').DataTable();
 
-    var selectedRows = dataTable.rows('.selected').data();
+    let selectedRows = dataTable.rows('.selected').data();
 
     if (selectedRows.length != 1) {
         new Alert({
@@ -24,9 +24,9 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
         return false;
     }
 
-    var shipmentId = selectedRows[0].DT_RowId;
+    let shipmentId = selectedRows[0].DT_RowId;
 
-    var modal = new $.bsModal('Modifica Spedizione', {});
+    let modal = new $.bsModal('Modifica Spedizione', {});
 
     Pace.ignore(function () {
         $.ajax({
@@ -58,7 +58,7 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
                 });
                 $.ajax({
                     method: "put",
-                    url: "/blueseal/CShipmentManageController",
+                    url: "/blueseal/ShipmentManageController",
                     data: {
                         shipment: res
                     },
