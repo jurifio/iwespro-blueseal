@@ -48,7 +48,7 @@
                                     data-orderable="true" class="center">Booking</th>
                                 <th data-slug="trackingNumber"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Booking</th>
+                                    data-orderable="true" class="center">Tracking</th>
                                 <th data-slug="fromAddress"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Da</th>
