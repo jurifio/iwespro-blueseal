@@ -128,14 +128,7 @@
     <?php endif; ?>
     <bs-toolbar-group data-group-label="Gestione Ordini">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-thumbs-up"
-            data-permission="/admin/product/list"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Accetta le righe d'ordine selezionate"
-            data-placement="bottom"
-            data-event="bs.friend.orderline.ok"
+            data-remote="bs.orderline.friend.ok"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
