@@ -252,7 +252,7 @@ class CInvoiceNewRepo extends ARepo
         if (!$is) throw new BambooInvoiceException('Non ho trovato nessun sezionale per questa fattura');
 
         $newNumber = $this->getNewNumber($is->id);
-
+        $completeNumber = $is->code . '/' . $newNumber;
         try {
             $dba->beginTransaction();
             $this->storeFriendInvoiceBasic(
@@ -262,7 +262,7 @@ class CInvoiceNewRepo extends ARepo
                 $emissionDate,
                 $paymentExpectedDate,
                 $paidAmount,
-                $newNumber,
+                $completeNumber,
                 $orderLines,
                 $totalWithVat = null,
                 $note
