@@ -133,7 +133,7 @@ $(document).on('bs.friend.orderline.ok', function () {
         }).done(function (res) {
             addressSelect.selectize({
                 valueField: 'id',
-                labelField: 'subject',
+                labelField: 'name',
                 options: res
             });
         });
