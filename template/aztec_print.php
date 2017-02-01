@@ -35,7 +35,7 @@
         }
 
         @media print {
-
+            body{zoom: 100%}
             .newpage {
                 page-break-before: always;
                 page-break-after: always;
