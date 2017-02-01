@@ -507,7 +507,7 @@
         {
             "pattern": "/blueseal/importatori/connettori(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShopController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShopImporterController"
             },
             "filters": {},
             "translations": {},
