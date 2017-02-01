@@ -52,7 +52,7 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
                 res.bookingNumber = $('#bookingNumber').val();
                 res.trackingNumber = $('#trackingNumber').val();
                 modal.showLoader();
-                modal.okButtonEvent(function () {
+                modal.setOkEvent(function () {
                     modal.hide();
                     $('.table').DataTable().ajax.reload(null, false);
                 });
