@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-fire",
+    icon:"fa-print",
     permission:"/admin/product/edit",
     event:"bs.friend.order.invoice.download",
     class:"btn btn-default",
