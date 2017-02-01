@@ -63,8 +63,7 @@ class COrderListAjaxController extends AAjaxController
         $critical = \Monkey::app()->router->request()->getRequestData('critical');
         if ($critical) {
             $sql .= " AND ((`o`.`status` LIKE 'ORD_PENDING' AND `ol`.`status` NOT LIKE 'ORD_FRND_CANC' ) and `o`.`orderPaymentMethodId` <> 5 AND `o`.`paymentDate` is NULL)" .
-                " OR ((`ol`.`status` LIKE 'ORD_FRND_OK' AND `os`.`id` NOT IN (8,9,10) AND `ols`.`id` < 8) 
-                AND (`ol`.`status` NOT LIKE 'ORD_CANCEL' OR `o`.`status` NOT LIKE 'ORD_RETURNED'))";
+                " OR ((`ol`.`status` LIKE 'ORD_FRND_OK' AND `os`.`id` NOT IN (8,9,10,13,18) AND `ols`.`id` < 8))";
         }
         $datatable = new CDataTables($sql, ['id'], $_GET,true);
         //$datatable->addCondition('statusCode', ['ORD_CANCEL'], true);
