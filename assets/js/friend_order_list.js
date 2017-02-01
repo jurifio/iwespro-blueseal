@@ -98,8 +98,7 @@ $(document).on('bs.friend.orderline.ok', function () {
     });
 
     modal = new $.bsModal('Conferma Ordine', {
-        body:
-        '<label for="addressBook">Seleziona l\'indirizzo di provenienza</label><br />' +
+        body: '<label for="addressBook">Seleziona l\'indirizzo di ritiro</label><br />' +
         '<select id="addressBook" name="addressBook" class="full-width selectize"></select><br />' +
         '<label for="carrierSelect">Seleziona il vettore</label><br />' +
         '<select id="carrierSelect" name="carrierSelect" class="full-width selectize"></select><br />'
@@ -140,13 +139,13 @@ $(document).on('bs.friend.orderline.ok', function () {
         });
     });
 
-    $(document).on('change',"select[name=\"addressBook\"], select[name=\"carrierSelect\"]",function () {
-        if(!(addressSelect.val() && carrierSelect.val())) {
-            shippingDate.attr('disabled','disabled');
+    $(document).on('change', "select[name=\"addressBook\"], select[name=\"carrierSelect\"]", function () {
+        if (!(addressSelect.val() && carrierSelect.val())) {
+            shippingDate.attr('disabled', 'disabled');
             return false;
         }
 
-        if(shippingDate.length == 0) {
+        if (shippingDate.length == 0) {
             modal.body.append(
                 '<label for="shippingDate">Seleziona Data Ritiro</label>' +
                 '<select id="shippingDate" name="shippingDate" class="full-width selectize" disabled="disabled"></select><br />' +
@@ -155,28 +154,29 @@ $(document).on('bs.friend.orderline.ok', function () {
             );
             shippingDate = $('select[name=\"shippingDate\"]');
         }
-
-        $.ajax({
-            url: '/blueseal/xhr/FriendShipment',
-            data: {
-                fromAddressBookId: addressSelect.val(),
-                carrierId: carrierSelect.val()
-            },
-            dataType: 'json'
-        }).done(function (res) {
-            let opt = [];
-            for(let i in res) {
-                opt.push(
-                    {
-                        "value" : res[i],
-                        "label" : res[i],
-                        "name" : res[i]
-                    });
-            }
-            shippingDate.selectize({
-                options: opt
+        Pace.ignore(function () {
+            $.ajax({
+                url: '/blueseal/xhr/FriendShipment',
+                data: {
+                    fromAddressBookId: addressSelect.val(),
+                    carrierId: carrierSelect.val()
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                let opt = [];
+                for (let i in res) {
+                    opt.push(
+                        {
+                            "value": res[i]
+                        });
+                }
+                shippingDate.selectize({
+                    options: opt,
+                    labelField: 'value',
+                    valueField: 'value'
+                });
+                shippingDate[0].selectize.enable();
             });
-            shippingDate[0].selectize.enable();
         });
     });
 
@@ -207,6 +207,13 @@ $(document).on('bs.friend.orderline.ok', function () {
             }).open();
             return false;
         }
+        modal.setOkEvent(function() {
+            "use strict";
+            modal.hide();
+            $('.table').DataTable().ajax.reload(null, false);
+        });
+        let bookingNubmer = $('#bookingNumber').val();
+        modal.showLoader();
         $.ajax({
             url: '/blueseal/xhr/FriendAccept',
             method: 'POST',
@@ -215,11 +222,11 @@ $(document).on('bs.friend.orderline.ok', function () {
                 response: 'ok',
                 fromAddressBookId: addressSelect.val(),
                 carrierId: carrierSelect.val(),
-                bookingNumber: $('#bookingNumber').val()
+                shippingDate: shippingDate.val(),
+                bookingNumber: bookingNubmer
             }
         }).done(function (res) {
             modal.writeBody(res);
-            $('.table').DataTable().ajax.reload(null, false);
         }).fail(function (res) {
             modal.writeBody(res.responseText);
         });
