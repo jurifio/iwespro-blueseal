@@ -117,6 +117,7 @@ $(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
                         modal.writeBody(res.responseText);
                         modal.setOkEvent(function () {
                             modal.hide();
+                            datatable.ajax.reload(null, false);
                         });
                     }
                 }).fail(function(res) {

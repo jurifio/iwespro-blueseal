@@ -1677,6 +1677,18 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/download-invoice/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadInvoices"
+            },
+            "filters": {
+                "id": "[A-Za-z0-9_-]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
