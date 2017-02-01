@@ -5,12 +5,14 @@
     <?php echo $app->getAssets(['ui','forms'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
     <style type="text/css">
+        body {zoom: 100%;}
         @page {
             size:A4;
             margin:5mm 0mm 0mm 0mm;
         }
         @media print {
             body {zoom: 100%;}
+
             .newpage {
                 page-break-before: always;
                 page-break-after: always;
@@ -40,7 +42,9 @@
                 <div>
                     <div class="pull-left">
                         <!--logo negozio-->
+                        <?php if ($logo) : ?>
                         <img height="60" alt="" class="invoice-logo" src="<?php echo $logo ?>" />
+                        <?php endif; ?>
                         <!--indirizzo negozio-->
                         <br><br />
                         <address class="m-t-10"><strong><?php echo $addressBookEmitter->subject ?></strong>
@@ -133,11 +137,6 @@
                         </tbody>
                     </table>
                 </div>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
             <div style="text-align: center">
                 <img alt="" class="invoice-thank" data-src-retina='/assets/img/invoicethankyou.jpg' data-src='/assets/img/invoicethankyou.jpg' src='/assets/img/invoicethankyou.jpg'>
             </div>
@@ -152,7 +151,7 @@
             setTimeout(function() {
                 window.print();
                 setTimeout(function() {
-                    //window.close();
+                    window.close();
                 },1);
             },200);
         });

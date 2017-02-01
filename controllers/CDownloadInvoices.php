@@ -69,8 +69,9 @@ class CDownloadInvoices extends ARestrictedAccessRootController
             else $imponibili[$v->vat] = $calculatedVat;
         }
 
-
-
+        $absPath = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch("paths", "domain");
+        $shopId = $addressBookEmitter->shop->id;
+        $logo = (file_exists($absPath . '/' . $shopId . '.png')) ? $absPath . '/' . $shopId . '.png' : false;
         $html = $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'addressBookEmitter' => $addressBookEmitter,
@@ -79,7 +80,7 @@ class CDownloadInvoices extends ARestrictedAccessRootController
             'imponibili' => $imponibili,
             'noVatTotal' => array_sum($imponibili),
             'page' => new CBlueSealPage($this->pageSlug, $this->app),
-            'logo' => '//' //@TODO: da implementare //$this->app->cfg()->fetch("miscellaneous", "logo"),
+            'logo' =>  $logo
         ]);
         return $html;
     }
