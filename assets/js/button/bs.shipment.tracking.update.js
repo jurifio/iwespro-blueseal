@@ -58,7 +58,7 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
                 });
                 $.ajax({
                     method: "put",
-                    url: "/blueseal/ShipmentManageController",
+                    url: "/blueseal/xhr/ShipmentManageController",
                     data: {
                         shipment: res
                     },
