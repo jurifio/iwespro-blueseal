@@ -1373,6 +1373,21 @@
                 "PUT"
             ]
         },{
+            "pattern": "/blueseal/marketplace/account/aggregato/:accountId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryStatisticListController"
+            },
+            "filters": {
+                "accountId": "[0-9]+-[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
             "pattern": "/blueseal/utente(/:userId)?(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CUserManageController"
@@ -1673,6 +1688,28 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CGoogleCalendarController"
             },
             "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/spedizioni(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShipmentListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/download-invoice/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadInvoices"
+            },
+            "filters": {
+                "id": "[A-Za-z0-9_-]+"
+            },
             "translations": {},
             "methods": [
                 "GET"
