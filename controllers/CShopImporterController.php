@@ -6,7 +6,7 @@ use bamboo\ecommerce\views\VBase;
 
 
 /**
- * Class CShopController
+ * Class CShopImporterController
  * @package bamboo\blueseal\controllers
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -18,15 +18,15 @@ use bamboo\ecommerce\views\VBase;
  * @date $date
  * @since 1.0
  */
-class CShopController extends ARestrictedAccessRootController
+class CShopImporterController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "shop_list";
+    protected $pageSlug = "importer_shop_list";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/shop_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/importer_shop_list.php');
 
         $shops = $this->app->repoFactory->create('Shop')->findAll();
 
