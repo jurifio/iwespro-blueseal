@@ -107,9 +107,9 @@
             data-placement="bottom"
             data-event="bs.orderline.editPaymentBillRemoveInvoices"
         ></bs-toolbar-button>
-        <!--<bs-toolbar-button
+        <bs-toolbar-button
             data-remote="bs.friend.order.invoice.download"
-        ></bs-toolbar-button>-->
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
