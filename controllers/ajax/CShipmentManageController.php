@@ -20,6 +20,9 @@ use bamboo\domain\entities\CShipment;
  */
 class CShipmentManageController extends AAjaxController
 {
+    /**
+     * @return string
+     */
     public function get()
     {
         $shipmentId = $this->app->router->request()->getRequestData('shipmentId');
@@ -32,7 +35,16 @@ class CShipmentManageController extends AAjaxController
         return json_encode($shipment);
     }
 
-    public function put() {
-
+    /**
+     * @return string
+     */
+    public function put()
+    {
+        $shipmentData = $this->app->router->request()->getRequestData('shipment');
+        $shipment = $this->app->repoFactory->create('Shipment')->findOneByStringId($shipmentData['id']);
+        $shipment->bookingNumber = $shipmentData['bookingNumber'];
+        $shipment->trackingNumber = $shipmentData['trackingNumber'];
+        $shipment->update();
+        return 'Aggiornato';
     }
 }
