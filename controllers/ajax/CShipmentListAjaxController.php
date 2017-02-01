@@ -66,7 +66,7 @@ class CShipmentListAjaxController extends AAjaxController
 
         foreach ($shipments as $val) {
             $row = [];
-            $row["DT_RowId"] = 'row__' . $val->printId();
+            $row["DT_RowId"] = $val->printId();
             $row['id'] = $val->printId();
 
             $row['shop'] = 'todo';

@@ -14,7 +14,6 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
 
-    let getVarsArray = [];
     let selectedRows = dataTable.rows('.selected').data();
 
     if (selectedRows.length != 1) {
@@ -25,7 +24,7 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
         return false;
     }
 
-    let shipmentId = selectedRows.eq(0).DT_RowId;
+    let shipmentId = selectedRows[0].DT_RowId;
 
     let modal = new $.bsModal('Modifica Spedizione', {});
 
@@ -49,23 +48,25 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
             $('#bookingNumber').val(res.bookingNumber);
             $('#trackingNumber').val(res.trackingNumber);
 
-            modal.okButtonEvent(function () {
+            modal.setOkEvent(function () {
                 res.bookingNumber = $('#bookingNumber').val();
                 res.trackingNumber = $('#trackingNumber').val();
                 modal.showLoader();
-                modal.okButtonEvent(function () {
+                modal.setOkEvent(function () {
                     modal.hide();
                     $('.table').DataTable().ajax.reload(null, false);
                 });
                 $.ajax({
                     method: "put",
-                    url: "/blueseal/CShipmentManageController",
+                    url: "/blueseal/xhr/ShipmentManageController",
                     data: {
                         shipment: res
                     },
                     dataType: "json"
                 }).done(function () {
                     modal.writeBody('Fatto');
+                }).fail(function () {
+                    modal.writeBody('Errore');
                 });
             });
         });
