@@ -24,7 +24,7 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
         return false;
     }
 
-    var shipmentId = selectedRows.eq(0).DT_RowId;
+    var shipmentId = selectedRows[0].DT_RowId;
 
     var modal = new $.bsModal('Modifica Spedizione', {});
 
