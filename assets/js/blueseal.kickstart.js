@@ -459,6 +459,7 @@ $.bsModal = function (header, params) {
     this.cancelButton = $('#bsModal .modal-footer .btn-default');
     this.okButton = $('#bsModal .modal-footer .btn-success');
     this.cross = $('#bsModal button.close');
+    this.loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
 
     this.header.html(header);
     this.body.html(this.opt.body);
@@ -486,6 +487,10 @@ $.bsModal = function (header, params) {
 
     this.writeHeader = function (header) {
         self.header.html(header);
+    };
+
+    this.showLoader = function() {
+        self.writeBody(self.loaderHtml);
     };
 
     this.writeBody = function (body) {

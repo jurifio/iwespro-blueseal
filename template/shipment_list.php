@@ -65,9 +65,12 @@
                                 <th data-slug="note"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Note</th>
-                                <th data-slug="contenuto"
+                                <th data-slug="productContent"
                                     data-searchable="false"
-                                    data-orderable="false" class="center">Contenuto</th>
+                                    data-orderable="false" class="center">Contenuto Prodotti</th>
+                                <th data-slug="orderContent"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Contenuto Ordini</th>
                             </tr>
                             </thead>
                             <tbody>

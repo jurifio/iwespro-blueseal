@@ -26,7 +26,6 @@ class CShipmentListAjaxController extends AAjaxController
                     c.name as carrier,
                     s.scope as scope,
                     shabf.shopId,
-                    shabt.shopId,
                     s.bookingNumber,
                     s.trackingNumber,
                     s.shipmentDate,
@@ -37,8 +36,8 @@ class CShipmentListAjaxController extends AAjaxController
                     group_concat(concat_ws('-',ol.id,ol.orderId)) as orderContent
                 FROM Shipment s 
                   join Carrier c on s.carrierId = c.id
-                  left join AddressBook f on s.fromAddressId = f.id
-                  left join AddressBook t on s.toAddressId = t.id
+                  left join AddressBook f on s.fromAddressBookId = f.id
+                  left join AddressBook t on s.toAddressBookId = t.id
                   left join ShopHasAddressBook shabf on f.id = shabf.addressBookId
                   left join ShopHasAddressBook shabt on t.id = shabt.addressBookId
                   LEFT JOIN (
@@ -70,16 +69,20 @@ class CShipmentListAjaxController extends AAjaxController
             $row["DT_RowId"] = 'row__' . $val->printId();
             $row['id'] = $val->printId();
 
-            $row['shop'] = '---';
+            $row['shop'] = 'todo';
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
-            $row['fromAddress'] = $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->city) : '---';
-            $row['toAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
+            $row['toAddress'] = $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->city) : '---';
+            $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
             $row['shipmentDate'] = $val->shipmentDate;
             $row['creationDate'] = $val->creationDate;
             $row['productContent'] = 'todo';
-            $row['orderContent'] = 'todo';//$val->orderLine->productSku->product->printId().'<br />'.$val->orderLine->printId();
+            $orderlineIds = [];
+            foreach ($val->orderLine as $orderLine) {
+                $orderlineIds[] = $orderLine->printId();
+            }
+            $row['orderContent'] = implode('<br />',$orderlineIds);//$val->orderLine->productSku->product->printId().'<br />'.$val->orderLine->printId();
             $row['note'] = $val->note;
 
             $response['data'][] = $row;

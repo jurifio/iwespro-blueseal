@@ -30,30 +30,10 @@ class CFriendShipment extends AAjaxController
      */
     public function get()
     {
-        $possibleDates = [];
         $fromAddressBookId = $this->app->router->request()->getRequestData('fromAddressBookId');
         $carrierId = $this->app->router->request()->getRequestData('carrierId');
 
-        /** @var CAddressBookRepo $addressBookRepo */
-        $addressBookRepo = $this->app->repoFactory->create('AddressBook');
-        $toAddressBook = $addressBookRepo->getMainHubAddressBook();
-        $lastPrenotationTime = '11:00';
-        $existingShipment = $this->app->repoFactory->create('Shipment')->findBySql(
-                                                                   "SELECT id
-                                                                    FROM Shipment
-                                                                    WHERE current_time < TIME(?) AND
-                                                                          date(shipmentDate) = DATE(CURRENT_TIMESTAMP) AND
-                                                                          carrierId = ? AND
-                                                                          fromAddressBookId = ? AND
-                                                                          toAddressBookId = ?",
-            [$lastPrenotationTime,$carrierId,$fromAddressBookId,$toAddressBook->id]);
-
-
-        if(!$existingShipment->isEmpty()) {
-            $possibleDates[] = date('Y-m-d');
-        }
-        $next = SDateToolbox::GetNextWorkingDay(new \DateTime());
-        $possibleDates[] = $next->format('Y-m-d');
+        $possibleDates = $this->app->repoFactory->create('Shipment')->getAvailableDatesForShipmentToUs($carrierId,$fromAddressBookId);
 
         return json_encode($possibleDates);
     }
