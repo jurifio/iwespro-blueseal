@@ -62,9 +62,8 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
                     data: {
                         shipment: res
                     },
-                    dataType: "json"
-                }).done(function () {
-                    modal.writeBody('Fatto');
+                }).done(function (res2) {
+                    modal.writeBody(res2);
                 }).fail(function () {
                     modal.writeBody('Errore');
                 });
