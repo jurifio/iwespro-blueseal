@@ -12,10 +12,9 @@ window.buttonSetup = {
 
 $(document).on('bs.shipment.tracking.update', function (e, element, button) {
 
-    let dataTable = $('.dataTable').DataTable();
+    var dataTable = $('.dataTable').DataTable();
 
-    let getVarsArray = [];
-    let selectedRows = dataTable.rows('.selected').data();
+    var selectedRows = dataTable.rows('.selected').data();
 
     if (selectedRows.length != 1) {
         new Alert({
@@ -25,9 +24,9 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
         return false;
     }
 
-    let shipmentId = selectedRows.eq(0).DT_RowId;
+    var shipmentId = selectedRows.eq(0).DT_RowId;
 
-    let modal = new $.bsModal('Modifica Spedizione', {});
+    var modal = new $.bsModal('Modifica Spedizione', {});
 
     Pace.ignore(function () {
         $.ajax({
