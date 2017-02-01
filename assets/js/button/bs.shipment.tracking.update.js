@@ -32,7 +32,7 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
     Pace.ignore(function () {
         $.ajax({
             method: "GET",
-            url: "/blueseal/CShipmentManageController",
+            url: "/blueseal/xhr/CShipmentManageController",
             data: {
                 shipmentId: shipmentId
             },
