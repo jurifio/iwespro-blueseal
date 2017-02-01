@@ -27,7 +27,7 @@ $(document).on('bs.orderline.friend.ok', function () {
         row.push(v.line_id);
     });
 
-    let modal = new $.bsModal('Conferma Ordine', {
+    var modal = new $.bsModal('Conferma Ordine', {
         body: '<label for="addressBook">Seleziona l\'indirizzo di ritiro</label><br />' +
         '<select id="addressBook" name="addressBook" class="full-width selectize"></select><br />' +
         '<label for="carrierSelect">Seleziona il vettore</label><br />' +
