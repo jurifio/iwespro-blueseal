@@ -24,14 +24,14 @@ class CFriendOrderRecordInvoice extends AAjaxController
         $res['total'] = 0;
         $res['responseText'] = '';
 
-        $linesWoInvoice = [];
+        $linesWInvoice = [];
         $shopId = false;
         $olArr = [];
         foreach($rows as $v) {
             $ol = $olR->findOneByStringId($v);
             $invoiceLineOC = $ol->invoiceLine;
             if ($invoiceLineOC->count()) {
-                $linesWoInvoice[] = $ol->printId();
+                $linesWInvoice[] = $ol->printId();
             }
             if (false === $shopId) $shopId = $ol->shopId;
             else {
@@ -47,10 +47,10 @@ class CFriendOrderRecordInvoice extends AAjaxController
 
         $res['shop'] = $shopId;
 
-        if (count($linesWoInvoice)) {
+        if (count($linesWInvoice)) {
             $res['error'] = true;
             $res['responseText'] = '<p>Una o più linee ordini selezionate sono già state fatturate</p><ul><li>' .
-                implode('</li><li>', $linesWoInvoice) .
+                implode('</li><li>', $linesWInvoice) .
                 '</li></ul>';
         }
 

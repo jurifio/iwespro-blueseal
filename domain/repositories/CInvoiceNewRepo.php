@@ -41,7 +41,7 @@ class CInvoiceNewRepo extends ARepo
         int $recipientOrEmitterId,
         \DateTime $date,
         float $totalWithVat,
-        float $paidAmount = 0,
+        float $paidAmount = 0.0,
         \DateTime $paymentExpectedDate = null,
         string $number = null,
         string $note = null,
@@ -73,7 +73,7 @@ class CInvoiceNewRepo extends ARepo
         $in = $inR->getEmptyEntity();
         $in->userId = $userId;
         if ($isShop) $in->shopRecipientId = $recipientOrEmitterId;
-        else $in->userRceipientId = $recipientOrEmitterId;
+        else $in->userRecipientId = $recipientOrEmitterId;
         $in->number = $number;
         $in->date = $date->format('Y-m-d');
         $in->invoiceTypeId = $invoiceTypeId;
@@ -84,22 +84,6 @@ class CInvoiceNewRepo extends ARepo
         $in->year = $year;
         $in->creationDate = $creationDate->format('Y-m-d');
         return $in->insert();
-    }
-
-    /**
-     * @param CInvoiceSectional $inSec
-     * @param string|null $year
-     * @return mixed
-     */
-    private function newInvoiceNumberForSectional(CInvoiceSectional $inSec, string $year = null)
-    {
-        if (null === $year) $year = date_format(new \DateTime(), 'Y');
-
-        $dba = \Monkey::app()->dbAdapter;
-        return $dba->query(
-            'SELECT (MAX(invoiceNumber) + 1) AS newInvoiceNumber FROM InvoiceNumber WHERE invoiceSectionalId = ? AND year = ?',
-            [$inSec->id, $year]
-        )->fetch()['newInvoiceNumber'];
     }
 
     /**
@@ -157,11 +141,11 @@ class CInvoiceNewRepo extends ARepo
         $il->description = $description;
         $il->vat = $vat;
         if ($priceContainsVat) {
-            $il->price = $price;
-            $il->priceNoVat = SPriceToolbox::netPriceFromGross($price, $vat, true);
+            $il->price = SPriceToolbox::roundVat($price);
+            $il->priceNoVat = SPriceToolbox::netPriceFromGross($il->price, $vat, true);
         } else {
-            $il->price = SPriceToolbox::grossPriceFromNet($price, $vat, true);
-            $il->priceNoVat = $price;
+            $il->priceNoVat = SPriceToolbox::roundVat($price);
+            $il->price = SPriceToolbox::grossPriceFromNet($il->priceNoVat, $vat, true);
         }
         $il->vat = $vat;
         return $il->insert();
@@ -178,6 +162,8 @@ class CInvoiceNewRepo extends ARepo
      * @param string|null $note
      * @throws BambooException
      * @throws BambooInvoiceException
+     *
+     * @transaction
      */
     public function storeFriendInvoiceWithFile(
         int $userId,
@@ -193,45 +179,22 @@ class CInvoiceNewRepo extends ARepo
     )
     {
         $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => 'fr_invoice_orderlines_file']);
-        $invoiceTypeId = $invoiceType->id;
         $dba = \Monkey::app()->dbAdapter;
-
-        $olR = \Monkey::app()->repoFactory->create('OrderLine');
-        $shpR = \Monkey::app()->repoFactory->create('Shop');
-        $addressBook = $shpR->findOne([$shopId])->billingAddressBook;
-        $addressBookId = $shpR->findOne([$shopId])->billingAddressBookId;
-
         try {
-            foreach ($orderLines as $k => $v) {
-                $orderLines[$k] = $olR->findOneByStringId($v);
-            }
-            $vat = $this->getInvoiceVat($invoiceType, $addressBook);
-            if (null === $totalWithVat) {
-                $totalWithVat = 0;
-                foreach($orderLines as $v) {
-                    $totalWithVat += SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat);
-                }
-            } else {
-                $totalWithVat = str_replace(',','.', $totalWithVat);
-                if (!is_numeric($totalWithVat)) throw new \Exception('Il totale della fattura fornito non è un numero valido. Controllare il campo');
-            }
-
             $dba->beginTransaction();
-            $insertedId = $this->createInvoice(
-                $invoiceTypeId,
+            $insertedId = $this->storeFriendInvoiceBasic(
+                $invoiceType,
                 $userId,
-                1,
-                $addressBookId,
+                $shopId,
                 $emissionDate,
-                $totalWithVat,
-                $paidAmount,
                 $paymentExpectedDate,
+                $paidAmount,
                 $number,
+                $orderLines,
+                $totalWithVat,
                 $note
             );
-            foreach ($orderLines as $v) {
-                $this->addOrderLineToInvoice($insertedId, $v, (float)$v->friendRevenue, false, $vat);
-            }
+
 
             if ($file) {
                 $ib = \Monkey::app()->repoFactory->create('InvoiceBin')->getEmptyEntity();
@@ -250,6 +213,19 @@ class CInvoiceNewRepo extends ARepo
         }
     }
 
+    /**
+     * @param int $userId
+     * @param int $shopId
+     * @param \DateTime $emissionDate
+     * @param null $paymentExpectedDate
+     * @param $paidAmount
+     * @param array $orderLines
+     * @param string|null $note
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     *
+     * @transaction
+     */
     public function storeFriendInvoiceInternal(
         int $userId,
         int $shopId,
@@ -264,7 +240,6 @@ class CInvoiceNewRepo extends ARepo
         $invoiceTypeId = $invoiceType->id;
         $dba = \Monkey::app()->dbAdapter;
 
-        $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $shpR = \Monkey::app()->repoFactory->create('Shop');
         $addressBook = $shpR->findOne([$shopId])->billingAddressBook;
         if (!$addressBook)
@@ -279,36 +254,24 @@ class CInvoiceNewRepo extends ARepo
         $newNumber = $this->getNewNumber($is->id);
 
         try {
-            $totalWithVat = 0;
-            $vat = $this->getInvoiceVat($invoiceType, $addressBook);
-            foreach ($orderLines as $k => $v) {
-                $orderLines[$k] = $olR->findOneByStringId($v);
-                $totalWithVat += SPriceToolbox::grossPriceFromNet($orderLines[$k]->friendRevenue, $vat);
-            }
-
-            $invoiceNumber = ('' != $is->code) ? $is->code . '/' . $newNumber : $newNumber;
             $dba->beginTransaction();
-            $insertedId = $this->createInvoice(
-                $invoiceTypeId,
+            $this->storeFriendInvoiceBasic(
+                $invoiceType,
                 $userId,
-                1,
-                $addressBookId,
+                $shopId,
                 $emissionDate,
-                $totalWithVat,
-                $paidAmount,
                 $paymentExpectedDate,
-                $invoiceNumber,
+                $paidAmount,
+                $newNumber,
+                $orderLines,
+                $totalWithVat = null,
                 $note
             );
-            foreach ($orderLines as $v) {
-                $this->addOrderLineToInvoice($insertedId, $v, (float)$v->friendRevenue, false, $vat);
-            }
+
             $in = \Monkey::app()->repoFactory->create('InvoiceNumber')->getEmptyEntity();
             $in->invoiceNumber = $newNumber;
             $in->invoiceSectionalId = $is->id;
-            $in->year = $emissionDate->format('Y');
             $in->insert();
-
             $dba->commit();
         } catch (BambooInvoiceException $e) {
             $dba->rollBack();
@@ -320,11 +283,98 @@ class CInvoiceNewRepo extends ARepo
     }
 
     /**
+     * @param CInvoiceType $invoiceType
+     * @param int $userId
+     * @param int $shopId
+     * @param \DateTime $emissionDate
+     * @param null $paymentExpectedDate
+     * @param $paidAmount
+     * @param $number
+     * @param array $orderLines
+     * @param null $totalWithVat
+     * @param string|null $note
+     * @return int|mixed
+     * @throws \Exception
+     */
+    public function storeFriendInvoiceBasic(
+        CInvoiceType $invoiceType,
+        int $userId,
+        int $shopId,
+        \DateTime $emissionDate,
+        $paymentExpectedDate = null,
+        $paidAmount,
+        $number,
+        array $orderLines,
+        $totalWithVat = null,
+        string $note = null
+    )
+    {
+        $invoiceTypeId = $invoiceType->id;
+
+        $shpR = \Monkey::app()->repoFactory->create('Shop');
+        $addressBook = $shpR->findOne([$shopId])->billingAddressBook;
+        if (null == $addressBook) throw new BambooInvoiceException('Nessun indirizzo è associato a questo Friend');
+        $addressBookId = $shpR->findOne([$shopId])->billingAddressBookId;
+        $vat = $this->getInvoiceVat($invoiceType, $addressBook);
+        if (null == $totalWithVat) {
+            $orderLinesOC = new CObjectCollection();
+            $olR = \Monkey::app()->repoFactory->create('OrderLine');
+            foreach($orderLines as $v) {
+                $line = $olR->findOneByStringId($v);
+                if (!$line) throw new BambooInvoiceException('la riga d\'ordine <strong>' . $v . '</strong> non è stata trovata.');
+                $orderLinesOC->add($line);
+            }
+            $totalWithVat = $this->sumFriendRevenueFromOrders($orderLinesOC, $vat);
+        }
+
+        $vat = $this->getInvoiceVat($invoiceType, $addressBook);
+        if (null === $totalWithVat) {
+            $totalWithVat = 0;
+            foreach ($orderLines as $v) {
+                $totalWithVat += SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat);
+            }
+        } else {
+            $totalWithVat = str_replace(',', '.', $totalWithVat);
+            if (!is_numeric($totalWithVat)) throw new \Exception('Il totale della fattura fornito non è un numero valido. Controllare il campo');
+        }
+
+        $insertedId = $this->createInvoice(
+            $invoiceTypeId,
+            $userId,
+            1,
+            $addressBookId,
+            $emissionDate,
+            $totalWithVat,
+            $paidAmount,
+            $paymentExpectedDate,
+            $number,
+            $note
+        );
+        foreach ($orderLinesOC as $v) {
+            $this->addOrderLineToInvoice($insertedId, $v, (float)$v->friendRevenue, false, $vat);
+        }
+        return $insertedId;
+    }
+
+    /**
+     * @param CObjectCollection $orderLines
+     * @return mixed
+     */
+    protected function sumFriendRevenueFromOrders(CObjectCollection $orderLines, $vat) {
+        $totalWithVat = 0;
+        foreach ($orderLines as $v) {
+            $totalWithVat += SPriceToolbox::roundVat($v->friendRevenue);
+        }
+        return SPriceToolbox::grossPriceFromNet($totalWithVat, $vat);
+    }
+
+    /**
      * @param int $invoiceSectionalId
      * @return mixed
      */
-    private function getNewNumber(int $invoiceSectionalId) {
-        $res = \Monkey::app()->dbAdapter->query('SELECT (max(invoiceNumber) + 1) as `number` FROM `InvoiceNumber` as `in` JOIN `InvoiceSectional` as `is` on `is`.id = `in`.invoiceSectionalId WHERE invoiceSectionalId = 2', [$invoiceSectionalId])->fetch();
+    private function getNewNumber(int $invoiceSectionalId)
+    {
+        $res = \Monkey::app()->dbAdapter->query('SELECT (max(invoiceNumber) + 1) AS `number` FROM `InvoiceNumber` AS `in` JOIN `InvoiceSectional` AS `is` ON `is`.id = `in`.invoiceSectionalId WHERE invoiceSectionalId = ?', [$invoiceSectionalId])->fetch();
         if (!$res['number']) return 1;
         return $res['number'];
     }
@@ -385,7 +435,8 @@ class CInvoiceNewRepo extends ARepo
      * @throws BambooException
      * @throws BambooInvoiceException
      */
-    public function checkPaymentBillBeforeInsertAndReturnDue(CObjectCollection $invoices) {
+    public function checkPaymentBillBeforeInsertAndReturnDue(CObjectCollection $invoices)
+    {
         $iCO = $invoices;
         if (!$iCO->count()) throw new BambooException('Nessuna fattura fornita');
 
@@ -427,7 +478,8 @@ class CInvoiceNewRepo extends ARepo
      * @throws BambooException
      * @throws BambooInvoiceException
      */
-    public function insertPaymentBillAndPayInvoices(CObjectCollection $invoices, $amount = null, $date = null) {
+    public function insertPaymentBillAndPayInvoices(CObjectCollection $invoices, $amount = null, $date = null)
+    {
         $due = $this->checkPaymentBillBeforeInsertAndReturnDue($invoices);
         if (1 < $invoices->count() && $due != $amount) {
             throw new BambooInvoiceException('La cifra dovuta e quella specificata per il pagamento devono coincidere');
@@ -443,7 +495,7 @@ class CInvoiceNewRepo extends ARepo
         $amount = (1 < $invoices->count()) ? null : $amount;
 
         $pbhinR = \Monkey::app()->repoFactory->create('PaymentBillHasInvoiceNew');
-        foreach($invoices as $v) {
+        foreach ($invoices as $v) {
             $this->payFriendInvoice($v, $amount, $date);
             $pbhin = $pbhinR->getEmptyEntity();
             $pbhin->paymentBillId = $billId;
@@ -458,28 +510,29 @@ class CInvoiceNewRepo extends ARepo
      * @param int $idBill
      * @return bool
      */
-    public function addInvoicesToPaymentBill(CObjectCollection $invoices, int $idBill) {
+    public function addInvoicesToPaymentBill(CObjectCollection $invoices, int $idBill)
+    {
         $pbhR = \Monkey::app()->repoFactory->create('PaymentBillHasInvoiceNew');
 
         $pb = \Monkey::app()->repoFactory->create('PaymentBill')->findOne([$idBill]);
         if (!$pb) throw new BambooInvoiceException('L\'id fornito non è associato a nessuna distinta di pagamento');
         $newAmount = 0;
 
-        foreach($invoices as $v) {
+        foreach ($invoices as $v) {
             if (0 < $v->paydAmount) throw new BambooInvoiceException(
                 'La fattura con id: <strong>' . $v->id . '</strong> e numero: <strong>' . $v->number . '</strong>' .
-                 'ha già una distinta associata. L\'operazione è annullata'
+                'ha già una distinta associata. L\'operazione è annullata'
             );
         }
-        foreach($invoices as $v) {
-            $newAmount+= $v->totalWithVat;
+        foreach ($invoices as $v) {
+            $newAmount += $v->totalWithVat;
             $pbh = $pbhR->getEmptyEntity();
             $pbh->paymentBillId = $idBill;
             $pbh->invoiceNewId = $v->id;
             $pbh->insert();
         }
 
-        $pb->amount+= $newAmount;
+        $pb->amount += $newAmount;
         $pb->update();
         return true;
     }
@@ -489,17 +542,18 @@ class CInvoiceNewRepo extends ARepo
      * @return bool
      * @throws BambooInvoiceException
      */
-    public function removeInvoiceFromPaymentBill(CInvoiceNew $invoice) {
+    public function removeInvoiceFromPaymentBill(CInvoiceNew $invoice)
+    {
         /** @var CObjectCollection $bills */
         $bills = $invoice->paymentBill;
         $invoicetotal = $invoice->totalWithVat;
         if (0 == $bills->count()) throw new BambooInvoiceException('Non è associata nessuna distinta a questa fattura');
-        foreach($invoice->paymentBillHasInvoiceNew as $v) {
+        foreach ($invoice->paymentBillHasInvoiceNew as $v) {
             $v->delete();
         }
 
         if (1 < $bills->count()) {
-            foreach($bills as $v) {
+            foreach ($bills as $v) {
                 $v->delete();
             }
         } else {
@@ -507,7 +561,7 @@ class CInvoiceNewRepo extends ARepo
             if (0 === $bill->paymentBillHasInvoiceNew->count()) {
                 $bill->delete();
             } else {
-                $bill->amount-= $invoicetotal;
+                $bill->amount -= $invoicetotal;
                 $bill->update();
             }
         }
