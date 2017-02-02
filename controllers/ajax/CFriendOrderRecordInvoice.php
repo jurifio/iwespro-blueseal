@@ -110,6 +110,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
             $res['responseText'] = $e->getMessage();
             return json_encode($res);
         } catch (BambooException $e) {
+            \Monkey::app()->applicationError('FriendOrderRecordInvoice', 'errore grave inserimento fattura con file', $e->getMessage());
             return $e->getMessage();
         }
     }
