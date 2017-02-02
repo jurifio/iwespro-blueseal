@@ -44,6 +44,7 @@ class CShipmentManageController extends AAjaxController
         $shipment = $this->app->repoFactory->create('Shipment')->findOneByStringId($shipmentData['id']);
         $shipment->bookingNumber = $shipmentData['bookingNumber'];
         $shipment->trackingNumber = $shipmentData['trackingNumber'];
+        $shipment->note = $shipmentData['note'];
         $shipment->update();
         return 'Aggiornato';
     }
