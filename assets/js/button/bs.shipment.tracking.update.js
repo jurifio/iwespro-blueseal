@@ -43,14 +43,19 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
                     'class="form-control" name="bookingNumber" value="">' +
                 '<label for="trackingNumber">Tracking Number</label>' +
                 '<input autocomplete="off" type="text" id="trackingNumber" ' +
-                    'class="form-control" name="trackingNumber" value="">'
+                    'class="form-control" name="trackingNumber" value="">' +
+                '<label for="notes">Note</label>' +
+                '<input autocomplete="off" type="text" id="note" ' +
+                    'class="form-control" name="note" value="">'
             );
             $('#bookingNumber').val(res.bookingNumber);
             $('#trackingNumber').val(res.trackingNumber);
+            $('#notes').val(res.notes);
 
             modal.setOkEvent(function () {
                 res.bookingNumber = $('#bookingNumber').val();
                 res.trackingNumber = $('#trackingNumber').val();
+                res.notes = $('#notes').val();
                 modal.showLoader();
                 modal.setOkEvent(function () {
                     modal.hide();
