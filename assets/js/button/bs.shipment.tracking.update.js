@@ -55,6 +55,7 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
             modal.setOkEvent(function () {
                 res.bookingNumber = $('#bookingNumber').val();
                 res.trackingNumber = $('#trackingNumber').val();
+                res.notes = $('#notes').val();
                 modal.showLoader();
                 modal.setOkEvent(function () {
                     modal.hide();
