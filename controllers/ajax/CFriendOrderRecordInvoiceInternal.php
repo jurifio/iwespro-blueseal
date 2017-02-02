@@ -46,6 +46,7 @@ class CFriendOrderRecordInvoiceInternal extends AAjaxController
             $res['responseText'] = $e->getMessage();
             return json_encode($res);
         } catch (BambooException $e) {
+            \Monkey::app()->applicationError('FriendOrderRecordInvoiceInternal', 'errore grave inserimento fattura con fatturazione interna', $e->getMessage());
             return $e->getMessage();
         }
     }
