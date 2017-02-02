@@ -11,18 +11,18 @@ use bamboo\utils\price\SPriceToolbox;
  */
 class CFriendOrderRecordInvoiceInternal extends AAjaxController
 {
-    public function post() {
+    public function post()
+    {
 
         $rows = explode(',', \Monkey::app()->router->request()->getRequestData('rows'));
         $date = \Monkey::app()->router->request()->getRequestData('date');
-        $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
+        $shopId = \Monkey::app()->router->request()->getRequestData('shopId');
         $user = \Monkey::app()->getUser();
         /** @var CInvoiceNewRepo $inR */
         $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
 
 
-
-        $res =[];
+        $res = [];
         $res['error'] = false;
         $res['responseText'] = 'Fattura inserita correttamente. Troverai il numero della fattura assegnato alle righe ordine interessate.';
 
