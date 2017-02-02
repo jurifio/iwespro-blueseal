@@ -316,14 +316,15 @@ class CInvoiceNewRepo extends ARepo
         if (null == $addressBook) throw new BambooInvoiceException('Nessun indirizzo è associato a questo Friend');
         $addressBookId = $shpR->findOne([$shopId])->billingAddressBookId;
         $vat = $this->getInvoiceVat($invoiceType, $addressBook);
+        $orderLinesOC = new CObjectCollection();
+        $olR = \Monkey::app()->repoFactory->create('OrderLine');
+        foreach($orderLines as $v) {
+            $line = $olR->findOneByStringId($v);
+            if (!$line) throw new BambooInvoiceException('la riga d\'ordine <strong>' . $v . '</strong> non è stata trovata.');
+            $orderLinesOC->add($line);
+        }
+        unset($line);
         if (null == $totalWithVat) {
-            $orderLinesOC = new CObjectCollection();
-            $olR = \Monkey::app()->repoFactory->create('OrderLine');
-            foreach($orderLines as $v) {
-                $line = $olR->findOneByStringId($v);
-                if (!$line) throw new BambooInvoiceException('la riga d\'ordine <strong>' . $v . '</strong> non è stata trovata.');
-                $orderLinesOC->add($line);
-            }
             $totalWithVat = $this->sumFriendRevenueFromOrders($orderLinesOC, $vat);
         }
 
