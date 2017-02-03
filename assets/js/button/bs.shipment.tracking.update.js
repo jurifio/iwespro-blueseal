@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-envelope",
+    icon: "fa-compass",
     permission: "/admin/product/delete&&allShops",
     event: "bs.shipment.tracking.update",
     class: "btn btn-default",
