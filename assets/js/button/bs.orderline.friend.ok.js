@@ -124,6 +124,20 @@ $(document).on('bs.orderline.friend.ok', function () {
                 labelField: 'name',
                 searchField: ['name'],
                 options: res,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span>' +
+                            ' - <span class="caption">Limite prenotazione: ' + escape(item.prenotationTimeLimit) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span>' +
+                            ' - <span class="caption">Limite prenotazione: ' + escape(item.prenotationTimeLimit) + '</span>' +
+                            '</div>'
+                    }
+                }
             });
             carrierSelect[0].selectize.setValue(1);
         });
