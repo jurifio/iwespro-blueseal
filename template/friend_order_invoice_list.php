@@ -50,7 +50,10 @@
                                     data-orderable="true" class="center">Numero</th>
                                 <th data-slug="invoiceTotalAmount"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Dovuto (con IVA)</th>
+                                    data-orderable="true" class="center">Totale (con IVA)</th>
+                                <th data-slug="invoiceCalculatedTotal"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Totale Calcolato (con IVA)</th>
                                 <th data-slug="paymentExpectedDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Previsto Pagamento</th>
