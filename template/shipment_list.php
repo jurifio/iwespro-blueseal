@@ -57,7 +57,16 @@
                                     data-orderable="true" class="center">A</th>
                                 <th data-slug="predictedShipmentDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data Spedizione Prevista</th>
+                                    data-orderable="true" class="center dataFilterType">Data Spedizione Prevista</th>
+                                <th data-slug="shipmentDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Data Spedizione</th>
+                                <th data-slug="predictedDeliveryDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Data Consegna Prevista</th>
+                                <th data-slug="deliveryDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Data Consegna</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true"

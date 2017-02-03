@@ -76,7 +76,14 @@ class CShipmentListAjaxController extends AAjaxController
             $row['trackingNumber'] = $val->trackingNumber;
             $row['toAddress'] = $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->city) : '---';
             $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
-            $row['predictedShipmentDate'] = (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->predictedShipmentDate))->format('Y-m-d');
+            $row['predictedShipmentDate'] = $val->predictedShipmentDate ?
+                (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->predictedShipmentDate))->format('Y-m-d') : "";
+            $row['shipmentDate'] = $val->shipmentDate ?
+                (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->shipmentDate))->format('Y-m-d') : "";
+            $row['predictedDeliveryDate'] = $val->predictedDeliveryDate ?
+                (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->predictedDeliveryDate))->format('Y-m-d') : "";
+            $row['deliveryDate'] = $val->deliveryDate ?
+                (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->deliveryDate))->format('Y-m-d') : $val->deliveryDate;
             $row['creationDate'] = $val->creationDate;
             $row['productContent'] = "";
 
