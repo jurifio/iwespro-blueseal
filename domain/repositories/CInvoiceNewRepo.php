@@ -237,22 +237,12 @@ class CInvoiceNewRepo extends ARepo
     )
     {
         $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => 'fr_invoice_internal']);
-        $invoiceTypeId = $invoiceType->id;
         $dba = \Monkey::app()->dbAdapter;
 
-        $shpR = \Monkey::app()->repoFactory->create('Shop');
-        $addressBook = $shpR->findOne([$shopId])->billingAddressBook;
-        if (!$addressBook)
-            throw new BambooInvoiceException('Nel sistema non è presente un indirizzo di fatturazione associato a questo Friend');
-        $addressBookId = $shpR->findOne([$shopId])->billingAddressBookId;
+        $shp = \Monkey::app()->repoFactory->create('Shop')->findOne([$shopId]);
 
-        $is = \Monkey::app()->repoFactory->create('InvoiceSectional')->findOneBy(
-            ['shopRecipientId' => $addressBookId, 'invoiceTypeId' => $invoiceTypeId]
-        );
-        if (!$is) throw new BambooInvoiceException('Non ho trovato nessun sezionale per questa fattura');
-
-        $newNumber = $this->getNewNumber($is->id);
-        $completeNumber = $is->code . '/' . $newNumber;
+        $newIn = $this->getNewNumber($shp, $invoiceType, $emissionDate->format('Y'));
+        $completeNumber = $newIn->invoiceSectional->code . '/' . $newIn->invoiceNumber;
         try {
             $dba->beginTransaction();
             $this->storeFriendInvoiceBasic(
@@ -267,11 +257,7 @@ class CInvoiceNewRepo extends ARepo
                 $totalWithVat = null,
                 $note
             );
-
-            $in = \Monkey::app()->repoFactory->create('InvoiceNumber')->getEmptyEntity();
-            $in->invoiceNumber = $newNumber;
-            $in->invoiceSectionalId = $is->id;
-            $in->insert();
+            $newIn->insert();
             $dba->commit();
         } catch (BambooInvoiceException $e) {
             $dba->rollBack();
@@ -370,14 +356,32 @@ class CInvoiceNewRepo extends ARepo
     }
 
     /**
-     * @param int $invoiceSectionalId
-     * @return mixed
+     * @param $entity
+     * @param $invoiceType
+     * @param $year
+     * @return \bamboo\core\db\pandaorm\entities\AEntity
+     * @throws BambooInvoiceException
      */
-    private function getNewNumber(int $invoiceSectionalId)
+    public function getNewNumber($entity, $invoiceType, $year)
     {
-        $res = \Monkey::app()->dbAdapter->query('SELECT (max(invoiceNumber) + 1) AS `number` FROM `InvoiceNumber` AS `in` JOIN `InvoiceSectional` AS `is` ON `is`.id = `in`.invoiceSectionalId WHERE invoiceSectionalId = ?', [$invoiceSectionalId])->fetch();
-        if (!$res['number']) return 1;
-        return $res['number'];
+        if ('Shop' === $entity->getEntityName()) $addressBook = $entity->billingAddressBook;
+        elseif ('AddressBook' === $entity->getEntityNam()) $addressBook = $entity;
+        if (!$addressBook)
+            throw new BambooInvoiceException('Nel sistema non è presente un indirizzo di fatturazione associato a questo Friend');
+        if (is_string($invoiceType)) $invoiceType = \Monkey::app()->repoFactory->create('invoiceType')->findOne([$invoiceType]);
+        $is = \Monkey::app()->repoFactory->create('InvoiceSectional')->findOneBy(
+            ['shopRecipientId' => $addressBook->id, 'invoiceTypeId' => $invoiceType->id]
+        );
+            if (!$is) throw new BambooInvoiceException('Non ho trovato nessun sezionale per questa fattura');
+        $res = \Monkey::app()->dbAdapter->query('SELECT (max(invoiceNumber) + 1) AS `number` FROM `InvoiceNumber` AS `in` JOIN `InvoiceSectional` AS `is` ON `is`.id = `in`.invoiceSectionalId WHERE invoiceSectionalId = ? AND year = ?', [$is->id, $year])->fetch();
+        $in = \Monkey::app()->repoFactory->create('InvoiceNumber')->getEmptyEntity();
+        if (!$res['number']) {
+            $in->invoiceNumber = 1;
+        } else {
+            $in->invoiceNumber = $res['number'];
+        }
+        $in->invoiceSectionalId = $is->id;
+        return $in;
     }
 
     /**

@@ -847,4 +847,4 @@ h5.product-title {
 .product-selection-box.product-box-selected {
     background-color: gold;
 }
-#invoiceTotalPreview:read-only {color: #666;}
+#input:read-only {color: #666;}

@@ -3,7 +3,6 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\repositories\CInvoiceNewRepo;
-use bamboo\utils\price\SPriceToolbox;
 
 /**
  * Class CFriendOrderRecordInvoice
@@ -13,7 +12,6 @@ class CFriendOrderRecordInvoiceInternal extends AAjaxController
 {
     public function post()
     {
-
         $rows = explode(',', \Monkey::app()->router->request()->getRequestData('rows'));
         $date = \Monkey::app()->router->request()->getRequestData('date');
         $shopId = \Monkey::app()->router->request()->getRequestData('shopId');
