@@ -55,7 +55,7 @@
                                 <th data-slug="toAddress"
                                     data-searchable="true"
                                     data-orderable="true" class="center">A</th>
-                                <th data-slug="shipmentDate"
+                                <th data-slug="predictedShipmentDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Spedizione</th>
                                 <th data-slug="creationDate"
