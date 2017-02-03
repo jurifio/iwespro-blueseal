@@ -99,6 +99,12 @@
         <bs-toolbar-button
                 data-remote="bs.shipment.tracking.update"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.shipment.shipped.time"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.shipment.delivery.time"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

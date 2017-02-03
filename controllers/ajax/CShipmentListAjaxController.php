@@ -4,6 +4,7 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CShipment;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CProductListAjaxController
@@ -25,7 +26,7 @@ class CShipmentListAjaxController extends AAjaxController
                     s.id,
                     c.name as carrier,
                     s.scope as scope,
-                    shabf.shopId,
+                    shabf.shopId as shopId,
                     s.bookingNumber,
                     s.trackingNumber,
                     s.predictedShipmentDate,
@@ -55,7 +56,7 @@ class CShipmentListAjaxController extends AAjaxController
 
         $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
-        $shipments = $this->app->repoFactory->create('Shipment')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $res = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
         $count = $this->app->repoFactory->create('Shipment')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('Shipment')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -65,25 +66,23 @@ class CShipmentListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        foreach ($shipments as $val) {
+        foreach ($res as $raw) {
+
+            $val = $this->app->repoFactory->create('Shipment')->findOne([$raw['id']]);
             $row = [];
             $row["DT_RowId"] = $val->printId();
             $row['id'] = $val->printId();
 
-            $row['shop'] = 'todo';
+            $row['shop'] = $this->app->repoFactory->create('Shop')->findOne([$raw['shopId']])->name;
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
             $row['toAddress'] = $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->city) : '---';
             $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
-            $row['predictedShipmentDate'] = $val->predictedShipmentDate ?
-                (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->predictedShipmentDate))->format('Y-m-d') : "";
-            $row['shipmentDate'] = $val->shipmentDate ?
-                (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->shipmentDate))->format('Y-m-d') : "";
-            $row['predictedDeliveryDate'] = $val->predictedDeliveryDate ?
-                (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->predictedDeliveryDate))->format('Y-m-d') : "";
-            $row['deliveryDate'] = $val->deliveryDate ?
-                (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->deliveryDate))->format('Y-m-d') : $val->deliveryDate;
+            $row['predictedShipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedShipmentDate,'Y-m-d');
+            $row['shipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->shipmentDate,'Y-m-d');
+            $row['predictedDeliveryDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedDeliveryDate,'Y-m-d');
+            $row['deliveryDate'] = STimeToolbox::FormatDateFromDBValue($val->deliveryDate,'Y-m-d');
             $row['creationDate'] = $val->creationDate;
             $row['productContent'] = "";
 
