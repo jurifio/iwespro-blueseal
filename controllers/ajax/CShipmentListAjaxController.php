@@ -26,7 +26,7 @@ class CShipmentListAjaxController extends AAjaxController
                     s.id,
                     c.name as carrier,
                     s.scope as scope,
-                    shabf.shopId,
+                    shabf.shopId as shopId,
                     s.bookingNumber,
                     s.trackingNumber,
                     s.predictedShipmentDate,
@@ -56,7 +56,7 @@ class CShipmentListAjaxController extends AAjaxController
 
         $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
-        $shipments = $this->app->repoFactory->create('Shipment')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $res = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
         $count = $this->app->repoFactory->create('Shipment')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('Shipment')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -66,12 +66,14 @@ class CShipmentListAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        foreach ($shipments as $val) {
+        foreach ($res as $raw) {
+
+            $val = $this->app->repoFactory->create('Shipment')->findOne([$raw['id']]);
             $row = [];
             $row["DT_RowId"] = $val->printId();
             $row['id'] = $val->printId();
 
-            $row['shop'] = 'todo';
+            $row['shop'] = $this->app->repoFactory->create('Shop')->findOne([$raw['shopId']])->name;
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
