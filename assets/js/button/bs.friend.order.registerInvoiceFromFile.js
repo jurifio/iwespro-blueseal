@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs.friend.order.registerInvoiceFromFile",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Invia una fattura per il pagamento delle righe d'ordine",
+    title:"Associa fattura alle righe dell'ordine",
     placement:"bottom",
     toggle:"modal"
 };
