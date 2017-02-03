@@ -28,7 +28,7 @@ class CShipmentListAjaxController extends AAjaxController
                     shabf.shopId,
                     s.bookingNumber,
                     s.trackingNumber,
-                    s.shipmentDate,
+                    s.predictedShipmentDate,
                     s.creationDate,
                     concat_ws(',',f.subject,f.city) as fromAddress,
                     concat_ws(',',t.subject,t.city) as toAddress,
@@ -76,7 +76,7 @@ class CShipmentListAjaxController extends AAjaxController
             $row['trackingNumber'] = $val->trackingNumber;
             $row['toAddress'] = $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->city) : '---';
             $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
-            $row['shipmentDate'] = $val->shipmentDate;
+            $row['predictedShipmentDate'] = (\DateTime::createFromFormat(DATE_MYSQL_FORMAT,$val->predictedShipmentDate))->format('Y-m-d');
             $row['creationDate'] = $val->creationDate;
             $row['productContent'] = "";
 
