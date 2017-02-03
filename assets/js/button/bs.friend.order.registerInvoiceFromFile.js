@@ -88,8 +88,10 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
                 '<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" />' +
                 '<label for="invoiceFile">File</label>' +
                 '<input type="file" class="form-control" id="invoiceFile" name="invoiceFile">' +
-                '<label style="margin-top: 15px" for="invoiceTotal">Totale con IVA (Calcolato: ' + res.total +')</label>' +
-                '<input type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="" />' +
+                '<label for="invoiceTotal">Totale con IVA calcolato</label>' +
+                '<input type="text" class="form-control" id="invoiceTotalPreview" name="invoiceTotalPreview" value="' + res.total +'" readonly/>' +
+                '<label for="invoiceTotal">Totale nella fattura</label>' +
+                '<input style="" type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="' + res.total +'" />' +
                 '</form>';
 
             var body = '<h4>Riepilogo dei prodotti selezionati</h4>';
