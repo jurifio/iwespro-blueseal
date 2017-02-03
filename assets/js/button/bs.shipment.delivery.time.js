@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-arrow-down",
-    permission: "/admin/product/delete",
+    permission: "/admin/product/delete&&allShops",
     event: "bs.shipment.delivery.time",
     class: "btn btn-default",
     rel: "tooltip",
