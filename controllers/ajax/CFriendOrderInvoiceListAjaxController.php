@@ -65,6 +65,11 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
             $response['data'][$i]['paymentDate'] = $paymentDate;
             $response['data'][$i]['creationDate'] = STimeToolbox::EurFormattedDate($v->creationDate);
             $response['data'][$i]['invoiceTotalAmount'] = SPriceToolbox::formatToEur($v->totalWithVat);
+            $invoiceLinesTotal = 0;
+            foreach($v->invoiceLines as $i) {
+                $invoiceLinesTotal+= $i->price;
+            }
+            $response['data'][$i]['invoiceCalculatedTotal'] = SPriceToolbox::formatToEur($invoiceLinesTotal);
             $response['data'][$i]['invoiceDate'] = STimeToolbox::EurFormattedDate($v->date);
             $bill = $v->paymentBill;
             $arrBillId = [];

@@ -54,6 +54,8 @@ class CFriendOrderRecordInvoice extends AAjaxController
                 '</li></ul>';
         }
 
+        $vat = \Monkey::app()->repoFactory->create('Configuration')->findOneBy(['name' => 'main vat'])->value;
+
         foreach ($olArr as $v) {
             $line =[];
             $line['description'] = $olR->getOrderLineDescription($v);
@@ -63,7 +65,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
                 $res['error'] = true;
                 $res['message'] = 'Uno o più prodotti selezionati non hanno il Prezzo Friend. Contattaci';
             }
-            $res['total'] +=$v->friendRevenue;
+            $res['total'] += SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
         }
         $res['total'] =  SPriceToolbox::formatToEur($res['total'], true);
         return json_encode($res);
