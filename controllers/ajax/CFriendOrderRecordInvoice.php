@@ -69,6 +69,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
             $res['totalNoVat'] += SPriceToolbox::roundVat($v->friendRevenue);
         }
         $res['total'] =  SPriceToolbox::formatToEur(SPriceToolbox::grossPriceFromNet($res['totalNoVat'], $vat), true);
+        $res['totalNoVat'] = SPriceToolbox::formatToEur($res['totalNoVat'], true);
         return json_encode($res);
     }
 
