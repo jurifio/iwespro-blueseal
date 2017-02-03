@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-boh",
+    icon:"fa-dollar",
     permission:"/admin/product/edit",
     event:"bs.friend.order.registerInvoiceFromFriend",
     class:"btn btn-default",

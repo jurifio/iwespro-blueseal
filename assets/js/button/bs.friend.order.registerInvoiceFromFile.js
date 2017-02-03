@@ -67,7 +67,7 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
                 '<td style="text-align: right; font-weight: bold">' +
                 'Totale che sarà corrisposto (IVA esclusa)' +
                 '</td>' +
-                '<td style="text-align: right; font-weight: bold">' + res.total + '</td>' +
+                '<td style="text-align: right; font-weight: bold">' + res.totalNoVat + '</td>' +
                 '</tr>'
             invoiceTable+= '</tbody>' +
             '</table>';
@@ -82,14 +82,14 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
                 '<div class="alert"></div>' +
                 '<div class="form-group">' +
                 '<input type="hidden" id="invoiceShop" name="invoiceShop" value="' + res.shop + '" />' +
-                '<label for="invoiceDate">Data Emissione:</label>' +
+                '<label for="invoiceDate">Data Emissione</label>' +
                 '<input type="date" class="form-control" id="invoiceDate" name="invoiceDate" value="' + timeVal + '" />' +
-                '<label for="invoiceNumber">Numero Fattura:</label>' +
+                '<label for="invoiceNumber">Numero Fattura</label>' +
                 '<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" />' +
-                '<label for="invoiceFile">File:</label>' +
+                '<label for="invoiceFile">File</label>' +
                 '<input type="file" class="form-control" id="invoiceFile" name="invoiceFile">' +
-                '<label for="invoiceTotal">Totale (con IVA):</label>' +
-                '<input type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="' + res.total + '" />' +
+                '<label style="margin-top: 15px" for="invoiceTotal">Totale con IVA (Calcolato: ' + res.total +')</label>' +
+                '<input type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="" />' +
                 '</form>';
 
             var body = '<h4>Riepilogo dei prodotti selezionati</h4>';
