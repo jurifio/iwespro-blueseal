@@ -48,7 +48,8 @@ class CShipmentListAjaxController extends AAjaxController
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        if(!$this->app->getUser()->hasPermission('allShops')) {
+        $allShop = $this->app->getUser()->hasPermission('allShops');
+        if(!$allShop) {
             $datatable->addCondition('scope',[CShipment::SCOPE_SUPPLIER_TO_US]);
         }
 
@@ -77,12 +78,14 @@ class CShipmentListAjaxController extends AAjaxController
             $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->city) : '---';
             $row['shipmentDate'] = $val->shipmentDate;
             $row['creationDate'] = $val->creationDate;
-            $row['productContent'] = 'todo';
+            $row['productContent'] = "";
+
             $orderlineIds = [];
             foreach ($val->orderLine as $orderLine) {
-                $orderlineIds[] = $orderLine->printId();
+                if($allShop) $orderlineIds[] = '<a href="/blueseal/ordini/aggiungi?order='.$orderLine->orderId.'">'.$orderLine->printId().'</a>';
+                else $orderlineIds[] = $orderLine->printId();
             }
-            $row['orderContent'] = implode('<br />',$orderlineIds);//$val->orderLine->productSku->product->printId().'<br />'.$val->orderLine->printId();
+            $row['orderContent'] = implode('<br />',$orderlineIds);
             $row['note'] = $val->note;
 
             $response['data'][] = $row;
