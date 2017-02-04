@@ -73,6 +73,8 @@ class CMarketplaceProductManageController extends AAjaxController
                     $marketplaceAccountHasProduct->fee = $config['cpc'];
                 }
                 if($update) {
+                    $marketplaceAccountHasProduct->isDeleted = 0;
+                    $marketplaceAccountHasProduct->isToWork = 1;
                     $marketplaceAccountHasProduct->update();
                 } else {
                     $marketplaceAccountHasProduct->insert();
