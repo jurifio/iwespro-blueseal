@@ -268,6 +268,48 @@ class CInvoiceNewRepo extends ARepo
         }
     }
 
+    public function storeFriendCreditNoteOnReturn (
+        int $userId,
+        int $shopId,
+        \DateTime $emissionDate,
+        $paymentExpectedDate = null,
+        $paidAmount,
+        array $orderLines,
+        string $note = null
+    )
+    {
+        $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => 'fr_credit_note']);
+        $dba = \Monkey::app()->dbAdapter;
+
+        $shp = \Monkey::app()->repoFactory->create('Shop')->findOne([$shopId]);
+
+        $newIn = $this->getNewNumber($shp, $invoiceType, $emissionDate->format('Y'));
+        $completeNumber = $newIn->invoiceSectional->code . '/' . $newIn->invoiceNumber;
+        try {
+            $dba->beginTransaction();
+            $this->storeFriendInvoiceBasic(
+                $invoiceType,
+                $userId,
+                $shopId,
+                $emissionDate,
+                $paymentExpectedDate,
+                $paidAmount,
+                $completeNumber,
+                $orderLines,
+                $totalWithVat = null,
+                $note
+            );
+            $newIn->insert();
+            $dba->commit();
+        } catch (BambooInvoiceException $e) {
+            $dba->rollBack();
+            throw $e;
+        } catch (BambooException $e) {
+            $dba->rollBack();
+            throw $e;
+        }
+    }
+
     /**
      * @param CInvoiceType $invoiceType
      * @param int $userId
