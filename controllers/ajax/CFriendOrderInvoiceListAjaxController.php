@@ -16,10 +16,10 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
              SELECT
                   `i`.`id` as `id`,
                   `i`.`number` as `invoiceNumber`,
-                  `i`.`paymentExpectedDate` as paymentExpectedDate,
-                  `i`.`date` as `invoiceDate`,
+                  DATE_FORMAT(`i`.`paymentExpectedDate`, '%d-%m-%Y') as paymentExpectedDate,
+                  DATE_FORMAT(`i`.`date`, '%d-%m-%Y') as `invoiceDate`,
                   `i`.`totalWithVat` as `invoiceTotalAmount`,
-                  `i`.`paymentDate` as `paymentDate`,
+                  if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') as `paymentDate`,
                   concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
                   `i`.`creationDate` as `creationDate`,
                   if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`, ', '), 'Non presente')  as `paymentBill`,
