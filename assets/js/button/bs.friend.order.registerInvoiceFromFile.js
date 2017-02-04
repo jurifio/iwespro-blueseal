@@ -64,13 +64,28 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
             }
             invoiceTable +=
                 '<tr>' +
-                '<td style="text-align: right; font-weight: bold">' +
-                'Totale che sarà corrisposto (IVA esclusa)' +
+                '<td style="text-align: right;">' +
+                'Imponibile da ordini' +
                 '</td>' +
-                '<td style="text-align: right; font-weight: bold">' + res.totalNoVat + '</td>' +
-                '</tr>'
+                '<td style="text-align: right;">' + res.totalNoVat + '</td>' +
+                '</tr>';
+
+            invoiceTable +=
+                '<tr>' +
+                '<td style="text-align: right;">' +
+                'Totale IVA' +
+                '</td>' +
+                '<td style="text-align: right;">' + res.vat + '</td>' +
+                '</tr>';
+            invoiceTable +=
+                '<tr>' +
+                '<td style="text-align: right; font-weight: bold">' +
+                'Totale fattura da ordini' +
+                '</td>' +
+                '<td style="text-align: right; font-weight: bold">' + res.total + '</td>' +
+                '</tr>';
             invoiceTable+= '</tbody>' +
-            '</table>';
+                '</table>';
 
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
@@ -80,18 +95,39 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
 
             var invoiceForm = '<form id="sendInvoiceWithFile">' +
                 '<div class="alert"></div>' +
-                '<div class="form-group">' +
                 '<input type="hidden" id="invoiceShop" name="invoiceShop" value="' + res.shop + '" />' +
-                '<label for="invoiceDate">Data Emissione</label>' +
-                '<input type="date" class="form-control" id="invoiceDate" name="invoiceDate" value="' + timeVal + '" />' +
-                '<label for="invoiceNumber">Numero Fattura</label>' +
-                '<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" />' +
-                '<label for="invoiceFile">File</label>' +
-                '<input type="file" class="form-control" id="invoiceFile" name="invoiceFile">' +
-                '<label for="invoiceTotal">Totale con IVA calcolato</label>' +
-                '<input type="text" class="form-control" id="invoiceTotalPreview" name="invoiceTotalPreview" value="' + res.total +'" readonly/>' +
-                '<label for="invoiceTotal">Totale nella fattura</label>' +
-                '<input style="" type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="' + res.total +'" />' +
+                '<div class="row">' +
+                    '<div class="col-sm-12">' +
+                        '<div class="form-group">' +
+                        '<label for="invoiceFile">File</label>' +
+                        '<input type="file" class="form-control" id="invoiceFile" name="invoiceFile">' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="col-sm-6">'+
+                        '<div class="form-group">' +
+                        '<label for="invoiceDate">Data Emissione</label>' +
+                        '<input type="date" class="form-control" id="invoiceDate" name="invoiceDate" value="' + timeVal + '" />' +
+                        '</div>' +
+                    '<div class="col-sm-6">' +
+                        '<div class="form-group">' +
+                        '<label for="invoiceNumber">Numero Fattura</label>' +
+                        '<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" />' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                    '<div class="col-sm-6">' +
+                        '<div class="form-group">' +
+                        '<label for="invoiceTotalPreview">Totale fattura da ordine</label>' +
+                        '<input type="text" class="form-control" id="invoiceTotalPreview" name="invoiceTotalPreview" value="' + res.total +'" readonly/>' +
+                        '</div>' +
+                    '<div class="col-sm-6">' +
+                        '<div class="form-group">' +
+                        '<label for="invoiceTotal">Totale fattura da friend</label>' +
+                        '<input style="" type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="' + res.total +'" />' +
+                        '</div>' +
+                    '</div>';
+                '</div>'
                 '</form>';
 
             var body = '<h4>Riepilogo dei prodotti selezionati</h4>';

@@ -22,6 +22,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
         $res['shop'] = 0;
         $res['lines'] = [];
         $res['totalNoVat'] = 0;
+        $res['vat'] = 0;
         $res['total'] = 0;
         $res['responseText'] = '';
 
@@ -66,9 +67,10 @@ class CFriendOrderRecordInvoice extends AAjaxController
                 $res['error'] = true;
                 $res['message'] = 'Uno o più prodotti selezionati non hanno il Prezzo Friend. Contattaci';
             }
-            $res['totalNoVat'] += SPriceToolbox::roundVat($v->friendRevenue);
+            $res['totalNoVat']+= SPriceToolbox::roundVat($v->friendRevenue);
         }
         $res['total'] =  SPriceToolbox::formatToEur(SPriceToolbox::grossPriceFromNet($res['totalNoVat'], $vat), true);
+        $res['vat'] = SPriceToolbox::formatToEur(SPriceToolbox::vatFromNetPrice($res['totalNoVat'], $vat, true), true);
         $res['totalNoVat'] = SPriceToolbox::formatToEur($res['totalNoVat'], true);
         return json_encode($res);
     }

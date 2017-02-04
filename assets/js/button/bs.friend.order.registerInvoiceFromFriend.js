@@ -64,11 +64,27 @@ $(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
             }
             invoiceTable +=
                 '<tr>' +
+                '<td style="text-align: right;">' +
+                'Imponibile da ordini' +
+                '</td>' +
+                '<td style="text-align: right;">' + res.totalNoVat + '</td>' +
+                '</tr>';
+            invoiceTable +=
+                '<tr>' +
+                '<td style="text-align: right;">' +
+                'Totale IVA' +
+                '</td>' +
+                '<td style="text-align: right;">' + res.vat + '</td>' +
+                '</tr>';
+            invoiceTable +=
+                '<tr>' +
                 '<td style="text-align: right; font-weight: bold">' +
-                'Totale che sarà corrisposto (IVA esclusa)' +
+                'Totale fattura da ordini' +
                 '</td>' +
                 '<td style="text-align: right; font-weight: bold">' + res.total + '</td>' +
-                '</tr>'
+                '</tr>';
+            invoiceTable+= '</tbody>' +
+                '</table>';
             invoiceTable+= '</tbody>' +
             '</table>';
 
