@@ -85,8 +85,6 @@ $(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
                 '</tr>';
             invoiceTable+= '</tbody>' +
                 '</table>';
-            invoiceTable+= '</tbody>' +
-            '</table>';
 
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
