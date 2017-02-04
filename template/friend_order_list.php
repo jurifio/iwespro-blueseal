@@ -159,8 +159,11 @@
             data-remote="bs.friend.order.registerInvoiceFromFriend"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.friend.order.registerCreditNoteOnReturn"
+                data-remote="bs.friend.order.registerCreditNoteFromFile"
         ></bs-toolbar-button>
+        <!--<bs-toolbar-button
+                data-remote="bs.friend.order.registerCreditNoteOnReturn"
+        ></bs-toolbar-button>-->
     </bs-toolbar-group>
 </bs-toolbar>
 

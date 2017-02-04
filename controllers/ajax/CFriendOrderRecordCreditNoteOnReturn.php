@@ -49,9 +49,16 @@ class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
 
         $res['shop'] = $shopId;
 
+        foreach($invoiceLineOC as $v) {
+            if ('fr_credit_note_w_file' == $v->invoiceNew->invoiceType->code) {
+                $res['error'] = true;
+                $res['responseText'] = '<p><strong>Attenzione!</strong> Una o più righe d\'ordine è già stata registrata in una nota di credito.</p>';
+            }
+        }
+
         if (count($linesWOInvoice)) {
             $res['error'] = true;
-            $res['responseText'] = '<p>Una o più linee ordini selezionate sono senza fattura e non posso creare</p><ul><li>' .
+            $res['responseText'] = '<p>Una o più linee ordini selezionate sono senza fattura e non posso essere inseriti in una nota di credito</p><ul><li>' .
                 implode('</li><li>', $linesWOInvoice) .
                 '</li></ul>';
         }

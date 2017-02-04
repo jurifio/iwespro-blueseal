@@ -41,7 +41,8 @@ class CFriendOrderListAjaxController extends AAjaxController
                   #l.eventValue as logVal,
                   #l.time as logTime,
                   `pb`.`name`                                                   AS `brand`,
-                  ifnull(`in`.`number`, 'non assegnata')                        AS `invoiceNumber`,
+                  if(`it`.`code` like '%fr_invoice%', `in`.`number`, 'non assegnata') AS `invoiceNumber`,
+                  if(`it`.`code` like '%credito_note%', `in`.`number`, '-') AS `creditNote`,
                   `pse`.`name`                                                  AS `season`,
                   `ps`.`name`                                                   AS `size`,
                   `s`.`id`                                                      AS `shopId`,
@@ -72,6 +73,7 @@ class CFriendOrderListAjaxController extends AAjaxController
                   LEFT JOIN (`InvoiceLineHasOrderLine` AS `ilhol`
                   JOIN InvoiceNew AS `in` ON `in`.`id` = `ilhol`.`invoiceLineInvoiceId`)
                     ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
+                    JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`
                   LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);

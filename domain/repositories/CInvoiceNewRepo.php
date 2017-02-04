@@ -310,6 +310,54 @@ class CInvoiceNewRepo extends ARepo
         }
     }
 
+    public function storeFriendCreditNoteWithFile(
+        int $userId,
+        int $shopId,
+        \DateTime $emissionDate,
+        $paymentExpectedDate = null,
+        $paidAmount,
+        string $number,
+        array $orderLines,
+        $file,
+        $totalWithVat = null,
+        string $note = null
+    )
+    {
+        $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => 'fr_credit_note_w_file']);
+        $dba = \Monkey::app()->dbAdapter;
+        try {
+            $dba->beginTransaction();
+            $insertedId = $this->storeFriendInvoiceBasic(
+                $invoiceType,
+                $userId,
+                $shopId,
+                $emissionDate,
+                $paymentExpectedDate,
+                $paidAmount,
+                $number,
+                $orderLines,
+                $totalWithVat,
+                $note
+            );
+
+
+            if ($file) {
+                $ib = \Monkey::app()->repoFactory->create('InvoiceBin')->getEmptyEntity();
+                $ib->invoiceId = $insertedId;
+                $ib->fileName = $file['name'];
+                $ib->bin = file_get_contents($file['tmp_name']);
+                $ib->insert();
+            }
+            $dba->commit();
+        } catch (BambooInvoiceException $e) {
+            $dba->rollBack();
+            throw $e;
+        } catch (BambooException $e) {
+            $dba->rollBack();
+            throw $e;
+        }
+    }
+
     /**
      * @param CInvoiceType $invoiceType
      * @param int $userId
@@ -434,8 +482,8 @@ class CInvoiceNewRepo extends ARepo
     private function getInvoiceVat(CInvoiceType $invoiceType, CAddressBook $addressBook = null)
     {
         /** @var CInvoiceType $ */
-        if ($invoiceType->isActive) return $addressBook->countryId->vat;
-        else return $countryId = \Monkey::app()->repoFactory->create('Configuration')
+        if ($invoiceType->isActive) return $addressBook->country->vat;
+        else return \Monkey::app()->repoFactory->create('Configuration')
             ->findOneBy(['name' => 'main vat'])->value;
     }
 

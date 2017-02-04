@@ -2,15 +2,15 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-dollar",
     permission:"/admin/product/edit",
-    event:"bs.friend.order.registerCreditNoteOnReturn",
+    event:"bs.friend.order.registerCreditNoteFromFile",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Crea  una nota di credito per un Reso",
+    title:"Associa Nota di credito a righe d'ordine rese",
     placement:"bottom",
     toggle:"modal"
 };
 
-$(document).on('bs.friend.order.registerCreditNoteOnReturn', function () {
+$(document).on('bs.friend.order.registerCreditNoteFromFile', function () {
     var datatable = $('.table').DataTable();
     var selectedRows = datatable.rows('.selected').data();
 
@@ -69,6 +69,7 @@ $(document).on('bs.friend.order.registerCreditNoteOnReturn', function () {
                 '</td>' +
                 '<td style="text-align: right;">' + res.totalNoVat + '</td>' +
                 '</tr>';
+
             invoiceTable +=
                 '<tr>' +
                 '<td style="text-align: right;">' +
@@ -79,14 +80,12 @@ $(document).on('bs.friend.order.registerCreditNoteOnReturn', function () {
             invoiceTable +=
                 '<tr>' +
                 '<td style="text-align: right; font-weight: bold">' +
-                'Totale fattura da ordini' +
+                'Totale nota da ordini' +
                 '</td>' +
                 '<td style="text-align: right; font-weight: bold">' + res.total + '</td>' +
                 '</tr>';
             invoiceTable+= '</tbody>' +
                 '</table>';
-
-
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -95,12 +94,39 @@ $(document).on('bs.friend.order.registerCreditNoteOnReturn', function () {
 
             var invoiceForm = '<form id="sendInvoiceWithFile">' +
                 '<div class="alert"></div>' +
-                '<div class="form-group">' +
                 '<input type="hidden" id="invoiceShop" name="invoiceShop" value="' + res.shop + '" />' +
-                '<label for="invoiceNumber">Numero Fattura:</label>' +
-                '<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" value="in elaborazione..." readonly />' +
-                '<label for="invoiceDate">Data Emissione:</label>' +
-                '<input type="date" class="form-control" id="invoiceDate" name="invoiceDate" value="' + timeVal + '" />' +
+                '<div class="row">' +
+                    '<div class="col-sm-12">' +
+                        '<div class="form-group">' +
+                        '<label for="invoiceFile">File</label>' +
+                        '<input type="file" class="form-control" id="invoiceFile" name="invoiceFile">' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="col-sm-6">'+
+                        '<div class="form-group">' +
+                        '<label for="invoiceDate">Data Emissione</label>' +
+                        '<input type="date" class="form-control" id="invoiceDate" name="invoiceDate" value="' + timeVal + '" />' +
+                        '</div>' +
+                    '<div class="col-sm-6">' +
+                        '<div class="form-group">' +
+                        '<label for="invoiceNumber">Numero Nota</label>' +
+                        '<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" />' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                    '<div class="col-sm-6">' +
+                        '<div class="form-group">' +
+                        '<label for="invoiceTotalPreview">Totale Nota da Ordine</label>' +
+                        '<input type="text" class="form-control" id="invoiceTotalPreview" name="invoiceTotalPreview" value="' + res.total +'" readonly/>' +
+                        '</div>' +
+                    '<div class="col-sm-6">' +
+                        '<div class="form-group">' +
+                        '<label for="invoiceTotal">Totale Nota da friend</label>' +
+                        '<input style="" type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="' + res.total +'" />' +
+                        '</div>' +
+                    '</div>';
+                '</div>'
                 '</form>';
 
             var body = '<h4>Riepilogo dei prodotti selezionati</h4>';
@@ -110,22 +136,21 @@ $(document).on('bs.friend.order.registerCreditNoteOnReturn', function () {
 
             modal.writeBody(body);
 
-            var invoiceNumber = $('#invoiceNumber');
-            var invoiceDate = $('#invoiceDate');
-            invoiceNumber.newInvoiceGetInvoiceNumber(rows, invoiceDate.val());
-            invoiceDate.on('change', function(e){
-                invoiceNumber.newInvoiceGetInvoiceNumber(rows, $(e.target).val());
-            });
-
             modal.setOkEvent(function(){
                 var invoiceDate = $('#invoiceDate').val();
+                var invoiceNumber = $('#invoiceNumber').val();
                 var invoiceShop = $('#invoiceShop').val();
+                var invoiceFile = $('#invoiceFile').prop('files')[0];
+                var invoiceTotal = $('#invoiceTotal').val();
                 var data = new FormData();
                 data.append('rows', rows);
                 data.append('date', invoiceDate);
+                data.append('number', invoiceNumber);
                 data.append('shopId', invoiceShop);
+                data.append('file', invoiceFile);
+                data.append('total', invoiceTotal);
                 $.ajax({
-                    url: '/blueseal/xhr/FriendOrderRecordCreditNoteOnReturn',
+                    url: '/blueseal/xhr/FriendOrderRecordCreditNoteOnReturnWithFile',
                     cache: false,
                     contentType: false,
                     processData: false,
@@ -141,7 +166,6 @@ $(document).on('bs.friend.order.registerCreditNoteOnReturn', function () {
                         modal.writeBody(res.responseText);
                         modal.setOkEvent(function () {
                             modal.hide();
-                            datatable.ajax.reload(null, false);
                         });
                     }
                 }).fail(function(res) {
@@ -154,17 +178,3 @@ $(document).on('bs.friend.order.registerCreditNoteOnReturn', function () {
         }
     });
 });
-
-$.fn.newInvoiceGetInvoiceNumber = function(rows, date) {
-    if ('undefined' == typeof date) date = false;
-    var elem = this;
-    $.ajax({
-        url: '/blueseal/xhr/GetNewInvoiceNumberController',
-        method: 'GET',
-        data: {rows: rows, date: date}
-    }).done(function(res) {
-        $(elem).val(res);
-    }).fail(function(res) {
-        console.error(res);
-    });
-};

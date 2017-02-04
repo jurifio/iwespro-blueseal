@@ -67,6 +67,9 @@
                                 <th data-slug="paymentBill"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Distinta Pagamento</th>
+                                <th data-slug="credutNote"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Nota di credito Reso</th>
                             </tr>
                             </thead>
                             <tbody>
