@@ -53,10 +53,11 @@ class CFriendOrderListAjaxController extends AAjaxController
                   `ols`.title                                                   AS `orderLineStatusTitle`,
                   `olfps`.`name`                                                AS `paymentStatus`,
                   `ol`.`orderLineFriendPaymentDate`                             AS `paymentDate`,
-                  ifnull((SELECT l.time
-                   FROM Log AS l
-                   WHERE concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId and l.actionName = 'ShippedByFriend' 
-                   LIMIT 1),'Non Spedito')                                                     AS 'friendShipmentTime'
+                  'non spedito' as friendShipmentTime
+                  #ifnull((SELECT l.time
+                   #FROM Log AS l
+                   #WHERE concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId and l.actionName = 'ShippedByFriend' 
+                   #LIMIT 1),'Non Spedito')                                                     AS 'friendShipmentTime'
                 FROM
                   ((((((((`Order` AS `o`
                     JOIN `OrderLine` AS `ol` ON `o`.`id` = `ol`.`orderId`)
@@ -71,9 +72,9 @@ class CFriendOrderListAjaxController extends AAjaxController
                     JOIN `ProductBrand` AS `pb` ON `p`.`productBrandId` = `pb`.`id`)
                   JOIN `ProductSeason` AS `pse` ON `p`.`productSeasonId` = `pse`.`id`
                   LEFT JOIN (`InvoiceLineHasOrderLine` AS `ilhol`
-                  JOIN InvoiceNew AS `in` ON `in`.`id` = `ilhol`.`invoiceLineInvoiceId`)
-                    ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
-                    JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`
+                      JOIN InvoiceNew AS `in` ON `in`.`id` = `ilhol`.`invoiceLineInvoiceId`
+                      JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`)
+                          ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
                   LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
