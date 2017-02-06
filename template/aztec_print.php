@@ -9,7 +9,7 @@
         li {font-size:8pt;}
 
         @page {
-            size:auto;
+            size:A4;
             margin:5mm 0mm 0mm 0mm;
         }
 
