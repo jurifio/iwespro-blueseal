@@ -241,7 +241,7 @@
 <?php endif; ?>
         <div class="col-md-6">
             <div class="col-md-4" style="margin-top:10px">
-                <img src="<?php echo $aztecFactoryEndpoint.$productInfo->aztecCode; ?>" width="120" height="120"/>
+                <img src="<?php echo $aztecFactoryEndpoint.$productInfo->aztecCode; ?>" width="140" height="140"/>
             </div>
             <div class="col-md-8 pull-left" style="border-right: 1px dotted #c0c0c0;">
                 <ul>
