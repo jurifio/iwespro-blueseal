@@ -53,11 +53,10 @@ class CFriendOrderListAjaxController extends AAjaxController
                   `ols`.title                                                   AS `orderLineStatusTitle`,
                   `olfps`.`name`                                                AS `paymentStatus`,
                   `ol`.`orderLineFriendPaymentDate`                             AS `paymentDate`,
-                  'non spedito' as friendShipmentTime
-                  #ifnull((SELECT l.time
-                   #FROM Log AS l
-                   #WHERE concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId and l.actionName = 'ShippedByFriend' 
-                   #LIMIT 1),'Non Spedito')                                                     AS 'friendShipmentTime'
+                  ifnull((SELECT l.time
+                   FROM Log AS l
+                   WHERE concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId and l.actionName = 'ShippedByFriend' 
+                   LIMIT 1),'Non Spedito')                                                     AS 'friendShipmentTime'
                 FROM
                   ((((((((`Order` AS `o`
                     JOIN `OrderLine` AS `ol` ON `o`.`id` = `ol`.`orderId`)
