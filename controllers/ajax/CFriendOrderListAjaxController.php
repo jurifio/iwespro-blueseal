@@ -2,21 +2,13 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
+use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\utils\time\STimeToolbox;
 
 /**
- * Class COrderListAjaxController
+ * Class CFriendOrderListAjaxController
  * @package bamboo\blueseal\controllers\ajax
- *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
- *
- * @copyright (c) Bambooshoot snc - All rights reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- *
- * @since ${VERSION}
  */
 class CFriendOrderListAjaxController extends AAjaxController
 {
@@ -24,6 +16,8 @@ class CFriendOrderListAjaxController extends AAjaxController
     public function get()
     {
         $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
+        /** @var COrderLineRepo $olR */
+        $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $cR = \Monkey::app()->repoFactory->create('Configuration');
         $vat = $cR->findOneBy(['name' => 'main vat'])->value;
         $user = $this->app->getUser();
@@ -183,8 +177,10 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevenue'] = number_format($v->friendRevenue, 2, ',', '');
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
-            $invoiceLine = $v->invoiceLine->getFirst();
-            $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoiceNew->number . ' (id:' . $invoiceLine->invoiceId . ')' : 'non assegnata' ;
+            $creditNote = $olR->getFriendCreditNote($v);
+            $response['data'][$i]['creditNoteNumber'] = ($creditNote) ? $creditNote->number . ' (id:' . $creditNote->id . ')' : '-';
+            $invoiceNew = $olR->getFriendCreditNote($v);
+            $response['data'][$i]['invoiceNumber'] = ($invoiceNew) ? $invoiceNew->number . ' (id:' . $invoiceNew->id . ')' : 'non assegnata' ;
             $l = $lR->findOneBy(['stringId' => $v->printId(), 'ActionName' => 'ShippedByFriend']);
             $response['data'][$i]['friendShipmentTime'] = ($l) ? STimeToolbox::EurFormattedDateTime($l->time) : 'Non spedito';
             $i++;
