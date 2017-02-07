@@ -1714,6 +1714,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/distinte(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

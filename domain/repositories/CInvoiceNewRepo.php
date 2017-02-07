@@ -434,15 +434,17 @@ class CInvoiceNewRepo extends ARepo
     }
 
     /**
+     * Calcola il totale delle friend revenue delle righe d'ordine
      * @param CObjectCollection $orderLines
+     * @param $vat
      * @return mixed
      */
-    protected function sumFriendRevenueFromOrders(CObjectCollection $orderLines, $vat) {
+    public function sumFriendRevenueFromOrders(CObjectCollection $orderLines, $vat,$round = false) {
         $totalWithVat = 0;
         foreach ($orderLines as $v) {
             $totalWithVat += SPriceToolbox::roundVat($v->friendRevenue);
         }
-        return SPriceToolbox::grossPriceFromNet($totalWithVat, $vat);
+        return SPriceToolbox::grossPriceFromNet($totalWithVat, $vat,$round);
     }
 
     /**
@@ -479,7 +481,7 @@ class CInvoiceNewRepo extends ARepo
      * @param CAddressBook|null $addressBook
      * @return mixed
      */
-    private function getInvoiceVat(CInvoiceType $invoiceType, CAddressBook $addressBook = null)
+    public function getInvoiceVat(CInvoiceType $invoiceType, CAddressBook $addressBook = null)
     {
         /** @var CInvoiceType $ */
         if ($invoiceType->isActive) return $addressBook->country->vat;
@@ -641,7 +643,7 @@ class CInvoiceNewRepo extends ARepo
     {
         /** @var CObjectCollection $bills */
         $bills = $invoice->paymentBill;
-        $invoicetotal = $invoice->totalWithVat;
+        $invoicetotal = $invoice->getSignedValueWithVat();
         if (0 == $bills->count()) throw new BambooInvoiceException('Non è associata nessuna distinta a questa fattura');
         foreach ($invoice->paymentBillHasInvoiceNew as $v) {
             $v->delete();
