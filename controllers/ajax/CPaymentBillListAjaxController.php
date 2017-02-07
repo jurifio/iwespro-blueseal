@@ -75,7 +75,7 @@ class CPaymentBillListAjaxController extends AAjaxController
                 $name = $payment[0]->shopAddressBook->subject;
                 $total = 0;
                 foreach ($payment as $invoice) {
-                    $total+=$invoice->getSignedValueWithVat();
+                    $total+=$invoice->getSignedValueWithVat(true);
                 }
                 $rec[] = $name.': '.$total;
 
@@ -85,9 +85,9 @@ class CPaymentBillListAjaxController extends AAjaxController
 
             $inv = [];
             foreach ($paymentBill->invoiceNew as $invoice) {
-                if($invoice->totalWithVat != $invoice->calculateOurTotal()) $color = "red";
+                if($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
                 else $color = "";
-                $inv[] = '<span class="'.$color.'">'.$invoice->shopAddressBook->shop->name.' - '.$invoice->number.': '.$invoice->totalWithVat.' ('.$invoice->calculateOurTotal().')</span>';
+                $inv[] = '<span class="'.$color.'">'.$invoice->shopAddressBook->shop->name.' - '.$invoice->number.': '.$invoice->getSignedValueWithVat().' ('.$invoice->calculateOurTotal().')</span>';
             }
             $row['invoices'] = implode('<br />',$inv);
             $row['paymentDate'] = STimeToolbox::FormatDateFromDBValue($paymentBill->paymentDate,STimeToolbox::ANGLO_DATE_FORMAT);
