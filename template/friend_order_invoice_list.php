@@ -43,6 +43,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Friend</th>
                                 <?php endif; ?>
+                                <th data-slug="documentType"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center dataFilterType">Tipo Documento</th>
                                 <th data-slug="invoiceDate"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -67,9 +71,6 @@
                                 <th data-slug="paymentBill"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Distinta Pagamento</th>
-                                <th data-slug="creditNote"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Nota di credito Reso</th>
                             </tr>
                             </thead>
                             <tbody>
