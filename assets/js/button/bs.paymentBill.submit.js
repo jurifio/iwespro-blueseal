@@ -1,11 +1,11 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-ship",
+    icon: "fa-check-square-o",
     permission: "/admin/product/delete&&allShops",
     event: "bs.paymentBill.submit",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Invia Codice Tracker",
+    title: "Segna distinta come Sottomessa",
     placement: "bottom",
     toggle: "modal"
 };
@@ -42,9 +42,11 @@ $(document).on('bs.paymentBill.submit', function (e, element, button) {
                 data: {
                     paymentBillId: paymentBill
                 },
-                dataType: 'json'
+                dataType: 'json',
+                method: 'put'
             }).done(function (paymentBill) {
-                modal.writeBody('Aggiornato');
+                modal.writeBody('aggiornato')
+
             });
 
         });

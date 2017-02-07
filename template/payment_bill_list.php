@@ -79,6 +79,12 @@
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.paymentBill.submit"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.paymentBill.print"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 

@@ -1724,6 +1724,18 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/distinte/(stampa|print)/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillPrintController"
+            },
+            "filters": {
+                "id":"[0-9]{1,10}"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
