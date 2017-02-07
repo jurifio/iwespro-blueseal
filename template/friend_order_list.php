@@ -161,9 +161,9 @@
         <bs-toolbar-button
                 data-remote="bs.friend.order.registerCreditNoteFromFile"
         ></bs-toolbar-button>
-        <!--<bs-toolbar-button
+        <bs-toolbar-button
                 data-remote="bs.friend.order.registerCreditNoteOnReturn"
-        ></bs-toolbar-button>-->
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 

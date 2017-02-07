@@ -15,6 +15,7 @@ class CGetNewInvoiceNumberController extends AAjaxController
         $date = \Monkey::app()->router->request()->getRequestData('date');
         $rows = \Monkey::app()->router->request()->getRequestData('rows');
         $invoiceTypeId = \Monkey::app()->router->request()->getRequestData('invoiceTypeId');
+        $invoiceTypeCode = \Monkey::app()->router->request()->getRequestData('invoiceTypeCode');
 
         $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $shpR = \Monkey::app()->repoFactory->create('Shop');
@@ -38,9 +39,11 @@ class CGetNewInvoiceNumberController extends AAjaxController
                 elseif ($shopId != $v->shopId) throw new BambooException('Le righe d\'ordine selezionate devono essere associate ad un solo Shop');
             }
             $shp = $shpR->findOne([$shopId]);
-            if (!$invoiceTypeId)
+            if (!$invoiceTypeId && !$invoiceTypeCode)
                 $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => 'fr_invoice_internal']);
-            else $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOne([$invoiceTypeId]);
+            elseif ($invoiceTypeId) $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOne([$invoiceTypeId]);
+            elseif ($invoiceTypeCode) $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => $invoiceTypeCode]);
+
             $in = $iR->getNewNumber($shp, $invoiceType, $year);
             return $in->invoiceSectional->code . '/' . $in->invoiceNumber;
         } catch(BambooException $e) {

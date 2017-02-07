@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-dollar",
+    icon:"fa-burn",
     permission:"/admin/product/edit",
     event:"bs.friend.order.registerCreditNoteOnReturn",
     class:"btn btn-default",
@@ -161,7 +161,7 @@ $.fn.newInvoiceGetInvoiceNumber = function(rows, date) {
     $.ajax({
         url: '/blueseal/xhr/GetNewInvoiceNumberController',
         method: 'GET',
-        data: {rows: rows, date: date}
+        data: {rows: rows, date: date, invoiceTypeCode: 'fr_credit_note'}
     }).done(function(res) {
         $(elem).val(res);
     }).fail(function(res) {
