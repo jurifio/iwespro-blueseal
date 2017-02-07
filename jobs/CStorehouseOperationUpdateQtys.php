@@ -14,7 +14,7 @@ use bamboo\core\jobs\ACronJob;
  *
  * @since ${VERSION}
  */
-class CStorehouseOperarationUpdateQtys extends ACronJob
+class CStorehouseOperationUpdateQtys extends ACronJob
 {
     /**
      * @param null $args
