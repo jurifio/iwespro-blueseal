@@ -45,8 +45,10 @@ $(document).on('bs.paymentBill.submit', function (e, element, button) {
                 dataType: 'json',
                 method: 'put'
             }).done(function (paymentBill) {
-                modal.writeBody('aggiornato')
-
+                modal.writeBody('aggiornato');
+            }).fail(function (asd) {
+                "use strict";
+                modal.writeBody('errore');
             });
 
         });
