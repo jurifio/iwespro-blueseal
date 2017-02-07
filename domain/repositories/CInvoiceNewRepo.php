@@ -506,13 +506,18 @@ class CInvoiceNewRepo extends ARepo
         if (strtotime($date) < strtotime($invoice->date))
             throw new BambooInvoiceException('La data di pagamento non può essere più vecchia della data di emissione');
         $date = STimeToolbox::AngloFormattedDatetime($date);
-        $amount = $amount ?? $invoice->totalWithVat;
-        if ($amount + $invoice->paydAmount > $amount)
-            throw new BambooInvoiceException(
-                'Fattura id:' . $invoice->id . ' num.: ' . $invoice->number . 'L\'importo complessivamente versato, non può superare il totale della fattura'
-            );
+        if($amount) {
+            if ($amount + $invoice->paydAmount > $amount)
+                throw new BambooInvoiceException(
+                    'Fattura id:' . $invoice->id . ' num.: ' . $invoice->number . 'L\'importo complessivamente versato, non può superare il totale della fattura'
+                );
+            $amount = $invoice->paydAmount + $amount;
+        } else {
+            $amount = $invoice->totalWithVat;
+        }
+
         //if (null == $invoice->payment) $invoice->payment = 0;
-        $invoice->paydAmount += $amount;
+        $invoice->paydAmount = $amount;
         if ($invoice->paydAmount == $invoice->totalWithVat) $invoice->paymentDate = $date;
         $invoice->paydAmount = $invoice->totalWithVat;
         $invoice->update();
