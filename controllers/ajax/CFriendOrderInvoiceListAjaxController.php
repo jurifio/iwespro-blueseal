@@ -19,6 +19,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   DATE_FORMAT(`i`.`paymentExpectedDate`, '%d-%m-%Y') as paymentExpectedDate,
                   DATE_FORMAT(`i`.`date`, '%d-%m-%Y') as `invoiceDate`,
                   `i`.`totalWithVat` as `invoiceTotalAmount`,
+                  if (`it`.`code` LIKE '%invoice%', 'Fattura', 'Nota di credito') as `documentType`,
                   if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') as `paymentDate`,
                   concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
                   `i`.`creationDate` as `creationDate`,
@@ -69,6 +70,8 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
             foreach($v->invoiceLine as $il) {
                 $invoiceLinesTotal+= $il->price;
             }
+
+            $response['data'][$i]['documentType'] = (false !== strpos($v->invoiceType->code, 'invoice')) ? 'Fattura' : 'Nota di Credito';
             $response['data'][$i]['invoiceCalculatedTotal'] = SPriceToolbox::formatToEur($invoiceLinesTotal);
             $response['data'][$i]['invoiceDate'] = STimeToolbox::EurFormattedDate($v->date);
             $bill = $v->paymentBill;
