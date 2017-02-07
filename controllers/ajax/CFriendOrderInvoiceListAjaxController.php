@@ -35,7 +35,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   JOIN `Shop` as sh on `i`.`shopRecipientId` = `sh`.`billingAddressBookId`
                   LEFT JOIN (`PaymentBillHasInvoiceNew` as `pbhin` JOIN `PaymentBill` as `pb` on `pb`.id = `pbhin`.`paymentBillId`) on `i`.`id` = `pbhin`.`invoiceNewId`
                 WHERE
-                  `it`.`code` like 'fr_invoice%'
+                  `it`.`code` like 'fr_invoice%' OR `it`.`code` like 'fr_credit_note%'
                   group by `i`.`id`
               ";
 
