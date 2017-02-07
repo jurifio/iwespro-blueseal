@@ -912,3 +912,7 @@ $.addGetParam = function(url,field,val) {
     c[field] = val;
     return $.encodeGetString(c);
 };
+
+Date.prototype.toDateTimeString = function() {
+    return this.toISOString().slice(0, 10)+' '+this.toISOString().slice(11,19);
+};

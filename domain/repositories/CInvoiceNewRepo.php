@@ -25,14 +25,14 @@ class CInvoiceNewRepo extends ARepo
      * @param bool $isShop
      * @param int $recipientOrEmitterId
      * @param \DateTime $date
-     * @param float $paydAmount
-     * @param array $invoiceLines
+     * @param float $totalWithVat
+     * @param float $paidAmount
      * @param \DateTime|null $paymentExpectedDate
+     * @param string|null $number
      * @param string|null $note
      * @param \DateTime|null $creationDate
-     * @param string|null $number
-     * @param string|null $filePath
-     * @throws BambooException
+     * @return int|mixed
+     * @throws BambooInvoiceException
      */
     private function createInvoice(
         $invoiceTypeId,
@@ -477,6 +477,7 @@ class CInvoiceNewRepo extends ARepo
     }
 
     /**
+     * restituisce il valore dell'iva passandogli un indirizzo e il tipo fattura
      * @param CInvoiceType $invoiceType
      * @param CAddressBook|null $addressBook
      * @return mixed
@@ -490,9 +491,13 @@ class CInvoiceNewRepo extends ARepo
     }
 
     /**
-     * @param $invoiceId
+     * Paga la fattura di un Friend e tutte le righe d'ordine associate
+     * @param $invoice
+     * @param null $amount
      * @param null $date
      * @return bool
+     * @throws BambooException
+     * @throws BambooInvoiceException
      */
     public function payFriendInvoice($invoice, $amount = null, $date = null)
     {
@@ -501,7 +506,7 @@ class CInvoiceNewRepo extends ARepo
         if (strtotime($date) < strtotime($invoice->date))
             throw new BambooInvoiceException('La data di pagamento non può essere più vecchia della data di emissione');
         $date = STimeToolbox::AngloFormattedDatetime($date);
-        $amount = (null === $amount) ? $invoice->totalWithVat : $amount;
+        $amount = $amount ?? $invoice->totalWithVat;
         if ($amount + $invoice->paydAmount > $amount)
             throw new BambooInvoiceException(
                 'Fattura id:' . $invoice->id . ' num.: ' . $invoice->number . 'L\'importo complessivamente versato, non può superare il totale della fattura'
@@ -568,6 +573,7 @@ class CInvoiceNewRepo extends ARepo
     }
 
     /**
+     *
      * @param CObjectCollection $invoices
      * @param null $amount
      * @param null $date
@@ -603,9 +609,11 @@ class CInvoiceNewRepo extends ARepo
     }
 
     /**
+     * Aggiunge una fattura ad una distinta
      * @param CObjectCollection $invoices
      * @param int $idBill
      * @return bool
+     * @throws BambooInvoiceException
      */
     public function addInvoicesToPaymentBill(CObjectCollection $invoices, int $idBill)
     {
@@ -616,7 +624,7 @@ class CInvoiceNewRepo extends ARepo
         $newAmount = 0;
 
         foreach ($invoices as $v) {
-            if (0 < $v->paydAmount) throw new BambooInvoiceException(
+            if (0 < $v->paydAmount || $pb->isSubmitted()) throw new BambooInvoiceException(
                 'La fattura con id: <strong>' . $v->id . '</strong> e numero: <strong>' . $v->number . '</strong>' .
                 'ha già una distinta associata. L\'operazione è annullata'
             );
@@ -635,6 +643,7 @@ class CInvoiceNewRepo extends ARepo
     }
 
     /**
+     * Rimuove una fattura dalla distinta a cui è associata
      * @param $invoice
      * @return bool
      * @throws BambooInvoiceException
