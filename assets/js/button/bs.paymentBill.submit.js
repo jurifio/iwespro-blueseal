@@ -1,16 +1,16 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-ship",
+    icon: "fa-check-square-o",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.paymentBill.print",
+    event: "bs.paymentBill.submit",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Invia Codice Tracker",
+    title: "Segna distinta come Sottomessa",
     placement: "bottom",
     toggle: "modal"
 };
 
-$(document).on('bs.paymentBill.print', function (e, element, button) {
+$(document).on('bs.paymentBill.submit', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
@@ -18,7 +18,7 @@ $(document).on('bs.paymentBill.print', function (e, element, button) {
     if (selectedRows.length != 1) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare una distinta per Stamparla"
+            message: "Devi selezionare una o distinta per Sottometterla"
         }).open();
         return false;
     }
@@ -27,7 +27,29 @@ $(document).on('bs.paymentBill.print', function (e, element, button) {
     let paymentBill = selectedRow.DT_RowId;
 
     let modal = new $.bsModal(button.getTitle(), {
-        body: '<span><a href="/blueseal/distinte/stampa/'+paymentBill+'" download="Distinta_'+paymentBill+'.xml">Scarica File</a></span>'
+        body: '<span>Sei sicuro di voler sottomettere la distinta?</span>'
+    });
+    modal.setOkEvent(function () {
+        modal.setOkEvent(function () {
+            modal.hide();
+            $('.table').DataTable().ajax.reload(null, false);
+        });
+        modal.showLoader();
+
+        Pace.ignore(function () {
+            $.ajax({
+                url: '/blueseal/xhr/PaymentBillSubmit',
+                data: {
+                    paymentBillId: paymentBill
+                },
+                dataType: 'json',
+                method: 'put'
+            }).done(function (paymentBill) {
+                modal.writeBody('aggiornato')
+
+            });
+
+        });
     });
 
 });
