@@ -84,7 +84,6 @@ class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
 
     public function post() {
         $rows = explode(',', \Monkey::app()->router->request()->getRequestData('rows'));
-        $number = \Monkey::app()->router->request()->getRequestData('number');
         $date = \Monkey::app()->router->request()->getRequestData('date');
         $total = \Monkey::app()->router->request()->getRequestData('total');
         $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
@@ -97,9 +96,6 @@ class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
         $res['responseText'] = 'Nota di credito correttamente inserita. Troverai il numero assegnato alle righe ordine interessate.';
 
         try {
-
-            if (!array_key_exists('file', $_FILES)) throw new BambooInvoiceException('Non hai specificato il file riportante la fattura');
-            if ('' == $number) throw new BambooInvoiceException('L\'invio della fattura è obbligatorio');
             if (false !== \DateTime::createFromFormat('Y-m-d G:i:s', $date)) throw new BambooInvoiceException('La data fornita non è valida');
 
             $date = new \DateTime($date);
@@ -110,9 +106,7 @@ class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
                 $date,
                 null,
                 0,
-                $number,
                 $rows,
-                $_FILES['file'],
                 $total
             );
             return json_encode($res);
