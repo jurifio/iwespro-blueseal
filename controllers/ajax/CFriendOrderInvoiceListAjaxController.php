@@ -16,10 +16,11 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
              SELECT
                   `i`.`id` as `id`,
                   `i`.`number` as `invoiceNumber`,
-                  `i`.`paymentExpectedDate` as paymentExpectedDate,
-                  `i`.`date` as `invoiceDate`,
+                  DATE_FORMAT(`i`.`paymentExpectedDate`, '%d-%m-%Y') as paymentExpectedDate,
+                  DATE_FORMAT(`i`.`date`, '%d-%m-%Y') as `invoiceDate`,
                   `i`.`totalWithVat` as `invoiceTotalAmount`,
-                  `i`.`paymentDate` as `paymentDate`,
+                  if (`it`.`code` LIKE '%invoice%', 'Fattura', 'Nota di credito') as `documentType`,
+                  if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') as `paymentDate`,
                   concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
                   `i`.`creationDate` as `creationDate`,
                   if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`, ', '), 'Non presente')  as `paymentBill`,
@@ -32,10 +33,10 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `InvoiceLineHasOrderLine` as `ilhol` on `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId` JOIN
                   `OrderLine` as `ol` on `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
                   JOIN `AddressBook` as ab on `i`.`shopRecipientId` = `ab`.`id`
-                  JOIN `Shop` as sh on `i`.`shopRecipientId` = `sh`.`addressBookId`
+                  JOIN `Shop` as sh on `i`.`shopRecipientId` = `sh`.`billingAddressBookId`
                   LEFT JOIN (`PaymentBillHasInvoiceNew` as `pbhin` JOIN `PaymentBill` as `pb` on `pb`.id = `pbhin`.`paymentBillId`) on `i`.`id` = `pbhin`.`invoiceNewId`
                 WHERE
-                  `it`.`code` = 'fr_invoice_orderlines_file'
+                  `it`.`code` like 'fr_invoice%' OR `it`.`code` like 'fr_credit_note%'
                   group by `i`.`id`
               ";
 
@@ -65,6 +66,13 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
             $response['data'][$i]['paymentDate'] = $paymentDate;
             $response['data'][$i]['creationDate'] = STimeToolbox::EurFormattedDate($v->creationDate);
             $response['data'][$i]['invoiceTotalAmount'] = SPriceToolbox::formatToEur($v->totalWithVat);
+            $invoiceLinesTotal = 0;
+            foreach($v->invoiceLine as $il) {
+                $invoiceLinesTotal+= $il->price;
+            }
+
+            $response['data'][$i]['documentType'] = (false !== strpos($v->invoiceType->code, 'invoice')) ? 'Fattura' : 'Nota di Credito';
+            $response['data'][$i]['invoiceCalculatedTotal'] = SPriceToolbox::formatToEur($invoiceLinesTotal);
             $response['data'][$i]['invoiceDate'] = STimeToolbox::EurFormattedDate($v->date);
             $bill = $v->paymentBill;
             $arrBillId = [];

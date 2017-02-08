@@ -13,12 +13,35 @@ use bamboo\core\exceptions\BambooException;
  */
 class CGetTableContent extends AAjaxController
 {
+    protected $publicTables = [
+        'Carrier',
+        'Lang',
+        'Country',
+        'City',
+        'Currency',
+        'ProductCategory',
+        'ProductDescriptionTranslation',
+        'ProductDetail',
+        'ProductName',
+        'ProductNameTranslation',
+        'ProductSeason',
+        'ProductSize',
+        'ProductStatus',
+        'ProductColorGroup',
+        'ShippingBox',
+        'Tag',
+        'Province'
+    ];
+
     public function get()
     {
-        if (!$this->app->getUser()->hasPermission('allShops')) throw new \Exception('Solo gli eletti, appartenenti alla Gilda degli Illuminati possono effettuare questa operazione. Contatta un amministratore');
         $table = $this->app->router->request()->getRequestData('table');
         $fields = $this->app->router->request()->getRequestData('fields');
         $condition = $this->app->router->request()->getRequestData('condition');
+
+        if (!in_array($table,$this->publicTables) &&
+            !$this->app->getUser()->hasPermission('allShops'))
+            throw new \Exception('Solo gli eletti, appartenenti alla Gilda degli Illuminati possono effettuare questa operazione. Contatta un amministratore');
 
         if (!$table) throw new \Exception('la variabile "table" è obbligatoria');
         //if (!is_array($fields)) throw new \Exception('la variabile "fields" è obbligatoria e deve essere un array');

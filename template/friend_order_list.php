@@ -111,7 +111,7 @@
 <bs-toolbar class="toolbar-definition">
     <?php if ($allShops) : ?>
     <bs-toolbar-group data-group-label="Gestione Ordini Interna">
-        <!--<bs-toolbar-button
+        <bs-toolbar-button
             data-tag="a"
             data-icon="fa-credit-card"
             data-permission="/admin/order/add"
@@ -120,7 +120,7 @@
             data-title="Gestisci pagamenti"
             data-placement="bottom"
             data-event="bs.orderline.paymentToFriend"
-        ></bs-toolbar-button>-->
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
@@ -128,14 +128,7 @@
     <?php endif; ?>
     <bs-toolbar-group data-group-label="Gestione Ordini">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-thumbs-up"
-            data-permission="/admin/product/list"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Accetta le righe d'ordine selezionate"
-            data-placement="bottom"
-            data-event="bs.friend.orderline.ok"
+            data-remote="bs.orderline.friend.ok"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
@@ -164,6 +157,12 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.friend.order.registerInvoiceFromFriend"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.friend.order.registerCreditNoteFromFile"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.friend.order.registerCreditNoteOnReturn"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

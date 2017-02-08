@@ -1,38 +1,36 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
-use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
-
+use bamboo\core\asset\CAssetCollection;
+use bamboo\core\router\CInternalRequest;
+use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
- * Class CShopController
+ * Class CPaymentBillListController
  * @package bamboo\blueseal\controllers
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ * @author Iwes Team <it@iwes.it>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
  * @date $date
  * @since 1.0
  */
-class CShopController extends ARestrictedAccessRootController
+class CPaymentBillListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "shop_list";
+    protected $pageSlug = "payment_bill_list";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/shop_list.php');
-
-        $shops = $this->app->repoFactory->create('Shop')->findAll();
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/payment_bill_list.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'shops' => $shops,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);

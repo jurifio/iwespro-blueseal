@@ -1,23 +1,23 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-money",
+    icon:"fa-dollar",
     permission:"/admin/product/edit",
-    event:"bs.friend.order.registerInvoiceFromFile",
+    event:"bs.friend.order.registerCreditNoteFromFile",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Associa fattura alle righe dell'ordine",
+    title:"Associa Nota di credito a righe d'ordine rese",
     placement:"bottom",
     toggle:"modal"
 };
 
-$(document).on('bs.friend.order.registerInvoiceFromFile', function () {
+$(document).on('bs.friend.order.registerCreditNoteFromFile', function () {
     var datatable = $('.table').DataTable();
     var selectedRows = datatable.rows('.selected').data();
 
     var selectedRowsCount = selectedRows.length;
 
     modal = new $.bsModal(
-        'Registrazione fattura per i pagamenti delle righe d\'ordine',
+        'Registrazione nota di credito per i resi',
         { body: ''}
     );
 
@@ -33,7 +33,7 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
     });
 
     $.ajax({
-        url: '/blueseal/xhr/FriendOrderRecordInvoice',
+        url: '/blueseal/xhr/FriendOrderRecordCreditNoteOnReturn',
         method: 'GET',
         dataType: 'json',
         data: {rows}
@@ -80,7 +80,7 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
             invoiceTable +=
                 '<tr>' +
                 '<td style="text-align: right; font-weight: bold">' +
-                'Totale fattura da ordini' +
+                'Totale nota da ordini' +
                 '</td>' +
                 '<td style="text-align: right; font-weight: bold">' + res.total + '</td>' +
                 '</tr>';
@@ -109,7 +109,7 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
                         '</div>' +
                     '<div class="col-sm-6">' +
                         '<div class="form-group">' +
-                        '<label for="invoiceNumber">Numero Fattura</label>' +
+                        '<label for="invoiceNumber">Numero Nota</label>' +
                         '<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" />' +
                         '</div>' +
                     '</div>' +
@@ -117,12 +117,12 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
                 '<div class="row">' +
                     '<div class="col-sm-6">' +
                         '<div class="form-group">' +
-                        '<label for="invoiceTotalPreview">Totale fattura da ordine</label>' +
+                        '<label for="invoiceTotalPreview">Totale Nota da Ordine</label>' +
                         '<input type="text" class="form-control" id="invoiceTotalPreview" name="invoiceTotalPreview" value="' + res.total +'" readonly/>' +
                         '</div>' +
                     '<div class="col-sm-6">' +
                         '<div class="form-group">' +
-                        '<label for="invoiceTotal">Totale fattura da friend</label>' +
+                        '<label for="invoiceTotal">Totale Nota da friend</label>' +
                         '<input style="" type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="' + res.total +'" />' +
                         '</div>' +
                     '</div>';
@@ -150,7 +150,7 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
                 data.append('file', invoiceFile);
                 data.append('total', invoiceTotal);
                 $.ajax({
-                    url: '/blueseal/xhr/FriendOrderRecordInvoice',
+                    url: '/blueseal/xhr/FriendOrderRecordCreditNoteOnReturnWithFile',
                     cache: false,
                     contentType: false,
                     processData: false,

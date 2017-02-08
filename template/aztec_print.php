@@ -9,7 +9,7 @@
         li {font-size:8pt;}
 
         @page {
-            size:auto;
+            size:A4;
             margin:5mm 0mm 0mm 0mm;
         }
 
@@ -35,7 +35,7 @@
         }
 
         @media print {
-
+            body{zoom: 100%}
             .newpage {
                 page-break-before: always;
                 page-break-after: always;
@@ -241,7 +241,7 @@
 <?php endif; ?>
         <div class="col-md-6">
             <div class="col-md-4" style="margin-top:10px">
-                <img src="<?php echo $aztecFactoryEndpoint.$productInfo->aztecCode; ?>" width="92" height="92"/>
+                <img src="<?php echo $aztecFactoryEndpoint.$productInfo->aztecCode; ?>" width="140" height="140"/>
             </div>
             <div class="col-md-8 pull-left" style="border-right: 1px dotted #c0c0c0;">
                 <ul>

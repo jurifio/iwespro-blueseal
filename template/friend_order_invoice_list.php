@@ -38,25 +38,36 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
+                                <?php if ($allShops) : ?>
                                 <th data-slug="friend"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Friend</th>
+                                <?php endif; ?>
+                                <th data-slug="documentType"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center dataFilterType">Tipo Documento</th>
                                 <th data-slug="invoiceDate"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="desc" class="center dataFilterType">Data</th>
+                                    data-default-order="desc" class="center dataFilterType">Data Fattura</th>
                                 <th data-slug="invoiceNumber"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Numero</th>
+                                    data-orderable="true" class="center">N. Fat.</th>
                                 <th data-slug="invoiceTotalAmount"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Dovuto (con IVA)</th>
+                                    data-orderable="true" class="center">Imp. da Ord.</th>
+                                <th data-slug="invoiceCalculatedTotal"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Imp. da Friend</th>
                                 <th data-slug="paymentExpectedDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Previsto Pagamento</th>
+                                <?php if ($allShops) : ?>
                                 <th data-slug="paymentDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data Pagamento</th>
+                                <?php endif;?>
                                 <th data-slug="paymentBill"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Distinta Pagamento</th>
@@ -107,9 +118,9 @@
             data-placement="bottom"
             data-event="bs.orderline.editPaymentBillRemoveInvoices"
         ></bs-toolbar-button>
-        <!--<bs-toolbar-button
+        <bs-toolbar-button
             data-remote="bs.friend.order.invoice.download"
-        ></bs-toolbar-button>-->
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>

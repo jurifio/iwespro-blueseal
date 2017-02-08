@@ -80,42 +80,6 @@ $(document).on('bs.orderline.paymentToFriend', function () {
     });
 });
 
-$(document).on('bs.friend.orderline.ok', function () {
-    var dataTable = $('.table').DataTable();
-    var selectedRows = dataTable.rows('.selected').data();
-
-    if (1 > selectedRows.length) {
-        new Alert({
-            type: "warning",
-            message: "Devi selezionare almeno un prodotto"
-        }).open();
-        return false;
-    }
-
-    var i = 0;
-    var row = [];
-    $.each(selectedRows, function (k, v) {
-        row[i] = v.line_id;
-        i++;
-        //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
-    });
-
-    modal = new $.bsModal({
-        header: 'Conferma Ordine'
-    });
-
-    $.ajax({
-        url: '/blueseal/xhr/FriendAccept',
-        method: 'POST',
-        data: {rows: row, response: 'ok'}
-    }).done(function (res) {
-        modal.writeBody(res);
-        $('.table').DataTable().ajax.reload(null, false);
-    }).fail(function (res) {
-        modal.writeBody(res.responseText);
-    });
-});
-
 $(document).on('bs.friend.orderline.ko', function () {
     var dataTable = $('.table').DataTable();
     var selectedRows = dataTable.rows('.selected').data();

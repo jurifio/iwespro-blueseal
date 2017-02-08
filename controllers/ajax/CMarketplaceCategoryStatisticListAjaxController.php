@@ -63,7 +63,7 @@ class CMarketplaceCategoryStatisticListAjaxController extends AAjaxController
                                if(mahp.hasError = 1, 'sìsi', 'no')                    AS hasError,
                                if(mahp.isDeleted = 1, 'sìsi', 'no')                   AS isDeleted,
                                round(ifnull(visits, 0))                               AS visits,
-                               round(sum(visitsCost))                                 AS visitsCost,
+                               round(ifnull(visitsCost,0))                                 AS visitsCost,
                                round(ifnull(conversions, 0))                          AS conversions,
                                round(ifnull(conversionsValue, 0))                     AS conversionsValue,
                                round(ifnull(pConversions, 0))                         AS pConversions,
@@ -127,7 +127,7 @@ class CMarketplaceCategoryStatisticListAjaxController extends AAjaxController
                              WHERE
                                ma.id = ? AND
                                ma.marketplaceId = ?
-                             GROUP BY productId, productVariantId, productCategoryId) sel3 ON Child.id = sel3.categories
+                             GROUP BY productId, productVariantId, marketplaceId, marketplaceAccountId, productCategoryId) sel3 ON Child.id = sel3.categories
                     GROUP BY Parent.id
                     ORDER BY Child.lft";
 

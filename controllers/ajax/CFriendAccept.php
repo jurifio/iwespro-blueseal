@@ -1,8 +1,11 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooOrderLineException;
+use bamboo\domain\repositories\COrderLineRepo;
+use bamboo\domain\repositories\CShipmentRepo;
 
 /**
  * Class CProductListAjaxController
@@ -18,6 +21,18 @@ use bamboo\core\exceptions\BambooOrderLineException;
  */
 class CFriendAccept extends AAjaxController
 {
+    public function get() {
+        $addresses = [];
+        foreach ($this->app->getUser()->getAuthorizedShops() as $shop) {
+            foreach ($shop->shippingAddressBook as $addressBook) {
+                $addressBook->shopId = $shop->id;
+                $addressBook->shopName = $shop->name;
+                $addresses[] = $addressBook;
+            }
+        }
+        return json_encode($addresses);
+    }
+
     /**
      * @return BambooException|BambooOrderLineException|\Exception|string
      * @transaction
@@ -49,14 +64,28 @@ class CFriendAccept extends AAjaxController
 
             if (is_string($orderLines)) $orderLines = [$orderLines];
 
+            $orderLineCollection = new CObjectCollection();
             foreach ($orderLines as $o) {
-                $id = explode('-', $o);
-                $ol = $olR->findOneBy(['id' => $id[0], 'orderId' => $id[1]]);
+                $ol = $olR->findOneByStringId($o);
+                $orderLineCollection->add($ol);
                 if (!$ol) {
                     throw new BambooException('La linea ordine ' . $o . ' non esiste');
                 }
                 $olR->setFriendVerdict($ol, $newStatus);
             }
+
+            if($verdict == 'Consenso') {
+                $fromAddressBookId = $request->getRequestData('fromAddressBookId');
+                $carrierId = $request->getRequestData('carrierId');
+                $shippingDate = $request->getRequestData('shippingDate');
+                $bookingNumber = $request->getRequestData('bookingNumber');
+                $bookingNumber = empty($bookingNumber) ? null : $bookingNumber;
+                /** @var CShipmentRepo $shipmentRepo */
+                $shipmentRepo = $this->app->repoFactory->create('Shipment');
+                $shipmentRepo->newFriendShipmentToUs($carrierId,$fromAddressBookId,$bookingNumber,$shippingDate,$orderLineCollection);
+                $request->getRequestData();
+            }
+
             $dba->commit();
             return $verdict . ' correttamente registrato';
         } catch (BambooOrderLineException $e) {

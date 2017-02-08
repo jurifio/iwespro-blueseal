@@ -507,7 +507,7 @@
         {
             "pattern": "/blueseal/importatori/connettori(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShopController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShopImporterController"
             },
             "filters": {},
             "translations": {},
@@ -1698,6 +1698,40 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CShipmentListController"
             },
             "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/download-invoice/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadInvoices"
+            },
+            "filters": {
+                "id": "[A-Za-z0-9_-]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/distinte(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/distinte/(stampa|print)/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillPrintController"
+            },
+            "filters": {
+                "id":"[0-9]{1,10}"
+            },
             "translations": {},
             "methods": [
                 "GET"

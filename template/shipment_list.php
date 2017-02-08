@@ -48,16 +48,25 @@
                                     data-orderable="true" class="center">Booking</th>
                                 <th data-slug="trackingNumber"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Booking</th>
+                                    data-orderable="true" class="center">Tracking</th>
                                 <th data-slug="fromAddress"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Da</th>
                                 <th data-slug="toAddress"
                                     data-searchable="true"
                                     data-orderable="true" class="center">A</th>
+                                <th data-slug="predictedShipmentDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Data Spedizione Prevista</th>
                                 <th data-slug="shipmentDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data Spedizione</th>
+                                    data-orderable="true" class="center dataFilterType">Data Spedizione</th>
+                                <th data-slug="predictedDeliveryDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Data Consegna Prevista</th>
+                                <th data-slug="deliveryDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Data Consegna</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -65,9 +74,12 @@
                                 <th data-slug="note"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Note</th>
-                                <th data-slug="contenuto"
+                                <th data-slug="productContent"
                                     data-searchable="false"
-                                    data-orderable="false" class="center">Contenuto</th>
+                                    data-orderable="false" class="center">Contenuto Prodotti</th>
+                                <th data-slug="orderContent"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Contenuto Ordini</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -83,7 +95,17 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-
+    <bs-toolbar-group data-group-label="Gestione spedizioni">
+        <bs-toolbar-button
+                data-remote="bs.shipment.tracking.update"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.shipment.shipped.time"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.shipment.delivery.time"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

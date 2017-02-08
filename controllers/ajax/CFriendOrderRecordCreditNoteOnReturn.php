@@ -9,7 +9,7 @@ use bamboo\utils\price\SPriceToolbox;
  * Class CFriendOrderRecordInvoice
  * @package bamboo\blueseal\controllers\ajax
  */
-class CFriendOrderRecordInvoice extends AAjaxController
+class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
 {
     public function get()
     {
@@ -26,14 +26,14 @@ class CFriendOrderRecordInvoice extends AAjaxController
         $res['total'] = 0;
         $res['responseText'] = '';
 
-        $linesWInvoice = [];
+        $linesWOInvoice = [];
         $shopId = false;
         $olArr = [];
         foreach($rows as $v) {
             $ol = $olR->findOneByStringId($v);
             $invoiceLineOC = $ol->invoiceLine;
-            if ($invoiceLineOC->count()) {
-                $linesWInvoice[] = $ol->printId();
+            if (!$invoiceLineOC->count()) {
+                $linesWOInvoice[] = $ol->printId();
             }
             if (false === $shopId) $shopId = $ol->shopId;
             else {
@@ -49,10 +49,17 @@ class CFriendOrderRecordInvoice extends AAjaxController
 
         $res['shop'] = $shopId;
 
-        if (count($linesWInvoice)) {
+        foreach($invoiceLineOC as $v) {
+            if ('fr_credit_note_w_file' == $v->invoiceNew->invoiceType->code) {
+                $res['error'] = true;
+                $res['responseText'] = '<p><strong>Attenzione!</strong> Una o più righe d\'ordine è già stata registrata in una nota di credito.</p>';
+            }
+        }
+
+        if (count($linesWOInvoice)) {
             $res['error'] = true;
-            $res['responseText'] = '<p>Una o più linee ordini selezionate sono già state fatturate</p><ul><li>' .
-                implode('</li><li>', $linesWInvoice) .
+            $res['responseText'] = '<p>Una o più linee ordini selezionate sono senza fattura e non posso essere inseriti in una nota di credito</p><ul><li>' .
+                implode('</li><li>', $linesWOInvoice) .
                 '</li></ul>';
         }
 
@@ -77,7 +84,6 @@ class CFriendOrderRecordInvoice extends AAjaxController
 
     public function post() {
         $rows = explode(',', \Monkey::app()->router->request()->getRequestData('rows'));
-        $number = \Monkey::app()->router->request()->getRequestData('number');
         $date = \Monkey::app()->router->request()->getRequestData('date');
         $total = \Monkey::app()->router->request()->getRequestData('total');
         $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
@@ -85,29 +91,22 @@ class CFriendOrderRecordInvoice extends AAjaxController
         /** @var CInvoiceNewRepo $inR */
         $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
 
-
-
         $res =[];
         $res['error'] = false;
-        $res['responseText'] = 'Fattura inserita correttamente. Troverai il numero della fattura assegnato alle righe ordine interessate.';
+        $res['responseText'] = 'Nota di credito correttamente inserita. Troverai il numero assegnato alle righe ordine interessate.';
 
         try {
-
-            if (!array_key_exists('file', $_FILES)) throw new BambooInvoiceException('Non hai specificato il file riportante la fattura');
-            if ('' == $number) throw new BambooInvoiceException('L\'invio della fattura è obbligatorio');
             if (false !== \DateTime::createFromFormat('Y-m-d G:i:s', $date)) throw new BambooInvoiceException('La data fornita non è valida');
 
             $date = new \DateTime($date);
 
-            $inR->storeFriendInvoiceWithFile(
+            $inR->storeFriendCreditNoteOnReturn(
                 $user->id,
                 $shopId,
                 $date,
                 null,
                 0,
-                $number,
                 $rows,
-                $_FILES['file'],
                 $total
             );
             return json_encode($res);
@@ -116,7 +115,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
             $res['responseText'] = $e->getMessage();
             return json_encode($res);
         } catch (BambooException $e) {
-            \Monkey::app()->applicationError('FriendOrderRecordInvoice', 'errore grave inserimento fattura con file', $e->getMessage());
+            \Monkey::app()->applicationError('FriendOrderRecordInvoice', 'errore grave inserimento noda di credito', $e->getMessage());
             return $e->getMessage();
         }
     }

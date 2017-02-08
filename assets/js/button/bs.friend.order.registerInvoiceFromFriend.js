@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-boh",
+    icon:"fa-dollar",
     permission:"/admin/product/edit",
     event:"bs.friend.order.registerInvoiceFromFriend",
     class:"btn btn-default",
@@ -64,13 +64,28 @@ $(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
             }
             invoiceTable +=
                 '<tr>' +
+                '<td style="text-align: right;">' +
+                'Imponibile da ordini' +
+                '</td>' +
+                '<td style="text-align: right;">' + res.totalNoVat + '</td>' +
+                '</tr>';
+            invoiceTable +=
+                '<tr>' +
+                '<td style="text-align: right;">' +
+                'Totale IVA' +
+                '</td>' +
+                '<td style="text-align: right;">' + res.vat + '</td>' +
+                '</tr>';
+            invoiceTable +=
+                '<tr>' +
                 '<td style="text-align: right; font-weight: bold">' +
-                'Totale che sarà corrisposto (IVA esclusa)' +
+                'Totale fattura da ordini' +
                 '</td>' +
                 '<td style="text-align: right; font-weight: bold">' + res.total + '</td>' +
-                '</tr>'
+                '</tr>';
             invoiceTable+= '</tbody>' +
-            '</table>';
+                '</table>';
+
 
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
@@ -82,6 +97,8 @@ $(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
                 '<div class="alert"></div>' +
                 '<div class="form-group">' +
                 '<input type="hidden" id="invoiceShop" name="invoiceShop" value="' + res.shop + '" />' +
+                '<label for="invoiceNumber">Numero Fattura:</label>' +
+                '<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" value="in elaborazione..." readonly />' +
                 '<label for="invoiceDate">Data Emissione:</label>' +
                 '<input type="date" class="form-control" id="invoiceDate" name="invoiceDate" value="' + timeVal + '" />' +
                 '</form>';
@@ -92,6 +109,13 @@ $(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
             body+= invoiceForm;
 
             modal.writeBody(body);
+
+            var invoiceNumber = $('#invoiceNumber');
+            var invoiceDate = $('#invoiceDate');
+            invoiceNumber.newInvoiceGetInvoiceNumber(rows, invoiceDate.val());
+            invoiceDate.on('change', function(e){
+                invoiceNumber.newInvoiceGetInvoiceNumber(rows, $(e.target).val());
+            });
 
             modal.setOkEvent(function(){
                 var invoiceDate = $('#invoiceDate').val();
@@ -117,6 +141,7 @@ $(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
                         modal.writeBody(res.responseText);
                         modal.setOkEvent(function () {
                             modal.hide();
+                            datatable.ajax.reload(null, false);
                         });
                     }
                 }).fail(function(res) {
@@ -129,3 +154,17 @@ $(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
         }
     });
 });
+
+$.fn.newInvoiceGetInvoiceNumber = function(rows, date) {
+    if ('undefined' == typeof date) date = false;
+    var elem = this;
+    $.ajax({
+        url: '/blueseal/xhr/GetNewInvoiceNumberController',
+        method: 'GET',
+        data: {rows: rows, date: date}
+    }).done(function(res) {
+        $(elem).val(res);
+    }).fail(function(res) {
+        console.error(res);
+    });
+};

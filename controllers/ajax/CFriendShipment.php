@@ -2,15 +2,41 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\repositories\CAddressBookRepo;
 use bamboo\domain\repositories\COrderLineRepo;
+use bamboo\utils\time\SDateToolbox;
 use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CFriendShipment
  * @package bamboo\blueseal\controllers\ajax
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date $date
+ * @since 1.0
  */
 class CFriendShipment extends AAjaxController
 {
+
+    /**
+     * A partire da alcune righe d'ordine verifica la prossima data di spedizione disponibile
+     * fromAddressBookId: addressSelect.val(),
+    carrierId: carrierSelect.val()
+     */
+    public function get()
+    {
+        $fromAddressBookId = $this->app->router->request()->getRequestData('fromAddressBookId');
+        $carrierId = $this->app->router->request()->getRequestData('carrierId');
+
+        $possibleDates = $this->app->repoFactory->create('Shipment')->getAvailableDatesForShipmentToUs($carrierId,$fromAddressBookId);
+
+        return json_encode($possibleDates);
+    }
 
     public function post() {
         $dba = \Monkey::app()->dbAdapter;

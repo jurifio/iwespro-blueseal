@@ -2,21 +2,13 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
+use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\utils\time\STimeToolbox;
 
 /**
- * Class COrderListAjaxController
+ * Class CFriendOrderListAjaxController
  * @package bamboo\blueseal\controllers\ajax
- *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
- *
- * @copyright (c) Bambooshoot snc - All rights reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- *
- * @since ${VERSION}
  */
 class CFriendOrderListAjaxController extends AAjaxController
 {
@@ -24,6 +16,8 @@ class CFriendOrderListAjaxController extends AAjaxController
     public function get()
     {
         $olfpsR = \Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus');
+        /** @var COrderLineRepo $olR */
+        $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $cR = \Monkey::app()->repoFactory->create('Configuration');
         $vat = $cR->findOneBy(['name' => 'main vat'])->value;
         $user = $this->app->getUser();
@@ -32,42 +26,49 @@ class CFriendOrderListAjaxController extends AAjaxController
 
         $query = "
               SELECT
-              `ol`.`id` as `id`,
-              `ol`.`orderId` as `orderId`,
-              `o`.`orderDate` as `orderDate`,
-              concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderCode`,
-              concat(`p`.`id`, '-', `p`.`productVariantId`, '-', `ps`.`id`) as `code`,
-              concat(`p`.`itemno`, ' # ', `pv`.`name`)   AS `cpf`,
-              #l.eventValue as logVal,
-              #l.time as logTime,
-              `pb`.`name` as `brand`,
-              ifnull(`in`.`number`, 'non assegnata') as `invoiceNumber`,
-              `pse`.`name` as `season`,
-              `ps`.`name` as `size`,
-              `s`.`id` as `shopId`,
-              `s`.`title` as `shopName`,
-              `os`.`title` as `orderStatusTitle`,
-              `o`.`status` as `orderStatusCode`,
-              `ol`.status as `orderLineStatusCode`,
-              `ols`.title as `orderLineStatusTitle`,
-              `olfps`.`name` as `paymentStatus`,
-              `ol`.`orderLineFriendPaymentDate` as `paymentDate`,
-              if(l.stringId is not null AND l.actionName = 'ShippedByFriend', l.time, 'Non Spedito') as 'friendShipmentTime'
-            FROM
-              ((((((((`Order` as `o` JOIN `OrderLine` as `ol` on `o`.`id` = `ol`.`orderId`)
-                JOIN `Shop` as `s` ON `ol`.`shopId` = `s`.`id`)
-                JOIN `OrderStatus` as `os` ON `o`.`status` = `os`.`code`)
-                JOIN `OrderLineStatus` AS `ols` on `ol`.`status` = `ols`.`code`)
-                LEFT JOIN `OrderLineFriendPaymentStatus` as `olfps` on `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
-                JOIN `Product` as `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`)
-                #JOIN `Log` as l ON l.stringId = concat(ol.id, '-', o.id) 
-                JOIN `ProductVariant` as `pv` On `p`.`productVariantId` = `pv`.`id`
-                JOIN `ProductSize` as `ps` on `ol`.`productSizeId` = `ps`.`id`)
-                JOIN `ProductBrand` as `pb` on `p`.`productBrandId` = `pb`.`id`)
-                JOIN `ProductSeason` as `pse` on `p`.`productSeasonId` = `pse`.`id`
-                LEFT JOIN (`InvoiceLineHasOrderLine` as `ilhol` JOIN InvoiceNew as `in` on `in`.`id` = `ilhol`.`invoiceLineInvoiceId` )on `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
-                LEFT JOIN `Log` as `l` on concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId 
-                JOIN `User` as `u` on `u`.`id` = `o`.`userId`)";
+                  `ol`.`id`                                                     AS `id`,
+                  `ol`.`orderId`                                                AS `orderId`,
+                  `o`.`orderDate`                                               AS `orderDate`,
+                  concat(`ol`.`id`, '-', `ol`.`orderId`)                        AS `orderCode`,
+                  concat(`p`.`id`, '-', `p`.`productVariantId`, '-', `ps`.`id`) AS `code`,
+                  concat(`p`.`itemno`, ' # ', `pv`.`name`)                      AS `cpf`,
+                  #l.eventValue as logVal,
+                  #l.time as logTime,
+                  `pb`.`name`                                                   AS `brand`,
+                  if(`it`.`code` like '%fr_invoice%', `in`.`number`, 'non assegnata') AS `invoiceNumber`,
+                  if(`it`.`code` like '%credito_note%', `in`.`number`, '-') AS `creditNote`,
+                  `pse`.`name`                                                  AS `season`,
+                  `ps`.`name`                                                   AS `size`,
+                  `s`.`id`                                                      AS `shopId`,
+                  `s`.`title`                                                   AS `shopName`,
+                  `os`.`title`                                                  AS `orderStatusTitle`,
+                  `o`.`status`                                                  AS `orderStatusCode`,
+                  `ol`.status                                                   AS `orderLineStatusCode`,
+                  `ols`.title                                                   AS `orderLineStatusTitle`,
+                  `olfps`.`name`                                                AS `paymentStatus`,
+                  `ol`.`orderLineFriendPaymentDate`                             AS `paymentDate`,
+                  ifnull((SELECT l.time
+                   FROM Log AS l
+                   WHERE concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId and l.actionName = 'ShippedByFriend' 
+                   LIMIT 1),'Non Spedito')                                                     AS 'friendShipmentTime'
+                FROM
+                  ((((((((`Order` AS `o`
+                    JOIN `OrderLine` AS `ol` ON `o`.`id` = `ol`.`orderId`)
+                    JOIN `Shop` AS `s` ON `ol`.`shopId` = `s`.`id`)
+                    JOIN `OrderStatus` AS `os` ON `o`.`status` = `os`.`code`)
+                    JOIN `OrderLineStatus` AS `ols` ON `ol`.`status` = `ols`.`code`)
+                    JOIN `User` AS `u` ON `u`.`id` = `o`.`userId`)
+                    JOIN `Product` AS `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`)
+                    #JOIN `Log` as l ON l.stringId = concat(ol.id, '-', o.id)
+                    JOIN `ProductVariant` AS `pv` ON `p`.`productVariantId` = `pv`.`id`
+                    JOIN `ProductSize` AS `ps` ON `ol`.`productSizeId` = `ps`.`id`)
+                    JOIN `ProductBrand` AS `pb` ON `p`.`productBrandId` = `pb`.`id`)
+                  JOIN `ProductSeason` AS `pse` ON `p`.`productSeasonId` = `pse`.`id`
+                  LEFT JOIN (`InvoiceLineHasOrderLine` AS `ilhol`
+                      JOIN InvoiceNew AS `in` ON `in`.`id` = `ilhol`.`invoiceLineInvoiceId`
+                      JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`)
+                          ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
+                  LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
         $datatable->addCondition(
@@ -176,8 +177,10 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevenue'] = number_format($v->friendRevenue, 2, ',', '');
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
-            $invoiceLine = $v->invoiceLine->getFirst();
-            $response['data'][$i]['invoiceNumber'] = ($invoiceLine) ? $invoiceLine->invoiceNew->number . ' (id:' . $invoiceLine->invoiceId . ')' : 'non assegnata' ;
+            $creditNote = $olR->getFriendCreditNote($v);
+            $response['data'][$i]['creditNoteNumber'] = ($creditNote) ? $creditNote->number . ' (id:' . $creditNote->id . ')' : '-';
+            $invoiceNew = $olR->getFriendCreditNote($v);
+            $response['data'][$i]['invoiceNumber'] = ($invoiceNew) ? $invoiceNew->number . ' (id:' . $invoiceNew->id . ')' : 'non assegnata' ;
             $l = $lR->findOneBy(['stringId' => $v->printId(), 'ActionName' => 'ShippedByFriend']);
             $response['data'][$i]['friendShipmentTime'] = ($l) ? STimeToolbox::EurFormattedDateTime($l->time) : 'Non spedito';
             $i++;
