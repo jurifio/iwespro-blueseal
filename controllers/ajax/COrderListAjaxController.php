@@ -184,7 +184,7 @@ class COrderListAjaxController extends AAjaxController
         $order = $oR->findOne([$orderId]);
         if (!$order) throw new BambooException('L\'id ordine fornito non corrisponde a nessun ordine');
 
-        if ('ORD_CANCEL' === $order->status) {
+        if ('ORD_CANCEL' === $order->status || 'ORD_PENDING' === $order->status) {
             $dba->beginTransaction();
             try {
                 $usoC = $ushoR->findBy(['orderId' => $orderId]);
@@ -298,9 +298,9 @@ class COrderListAjaxController extends AAjaxController
             } catch (BambooException $e) {
                 $dba->rollback();
                 \Monkey::app()->router->response()->raiseProcessingError();
-                return /*'CI ABBIAMO UN PROBLEMINO! ' + **/$e->getMessage();
+                return $e->getMessage();
             }
-        } return "L'ordine deve essere nello stato \"Cancellato\" per poter procedere!";
+        } return "L'ordine deve essere nello stato \"Cancellato\" o \"In attesa di pagamento\" per poter procedere!";
     }
 
     public function orderBy()

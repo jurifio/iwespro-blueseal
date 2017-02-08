@@ -177,10 +177,11 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevenue'] = number_format($v->friendRevenue, 2, ',', '');
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
-            $creditNote = $olR->getFriendCreditNote($v);
-            $response['data'][$i]['creditNoteNumber'] = ($creditNote) ? $creditNote->number . ' (id:' . $creditNote->id . ')' : '-';
-            $invoiceNew = $olR->getFriendCreditNote($v);
+            $invoiceNew = $olR->getFriendInvoice($v);
             $response['data'][$i]['invoiceNumber'] = ($invoiceNew) ? $invoiceNew->number . ' (id:' . $invoiceNew->id . ')' : 'non assegnata' ;
+            $creditNote = $olR->getFriendCreditNote($v);
+            if ($creditNote) $response['data'][$i]['invoiceNumber'] .=
+                '<br />Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')';
             $l = $lR->findOneBy(['stringId' => $v->printId(), 'ActionName' => 'ShippedByFriend']);
             $response['data'][$i]['friendShipmentTime'] = ($l) ? STimeToolbox::EurFormattedDateTime($l->time) : 'Non spedito';
             $i++;
