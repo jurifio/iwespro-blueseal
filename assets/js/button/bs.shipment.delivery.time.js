@@ -75,8 +75,9 @@ $(document).on('bs.shipment.delivery.time', function (e, element, button) {
                         },
                     }).done(function (res2) {
                         modal.writeBody(res2);
-                    }).fail(function () {
-                        modal.writeBody('Errore');
+                    }).fail(function (res) {
+                        modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
+                        console.error(error);
                     });
                 });
             }).fail(function () {

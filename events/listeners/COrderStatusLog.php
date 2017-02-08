@@ -6,6 +6,7 @@ use bamboo\core\db\pandaorm\entities\AEntity;
 use bamboo\core\events\AEventListener;
 use bamboo\core\events\CEventEmitted;
 use bamboo\core\exceptions\BambooException;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class COtherTest
@@ -19,7 +20,7 @@ class COrderStatusLog extends CLogging
         $this->backtrace = $eventName->getBacktrace();
         $this->params = $eventName->getEventData();
         $userId = $eventName->getUserId();
-        $time = $this->getParameter('time');
+        $time = STimeToolbox::DbFormattedDateTime($this->getParameter('time'));
         if (!$time) $time = date('Y-m-d H:i:s');
         $order = $this->getParameter('order');
         if (!$order) $order = $this->getParameter('orderLine');
