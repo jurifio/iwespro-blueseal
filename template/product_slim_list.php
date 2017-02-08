@@ -67,6 +67,15 @@
                                     <th data-slug="stock"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stock</th>
+                                    <th data-slug="price"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Prezzo</th>
+                                    <th data-slug="salePrice"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Prezzo Saldo</th>
+                                    <th data-slug="value"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Costo</th>
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true"
