@@ -78,7 +78,12 @@ class CInvoiceNewRepo extends ARepo
         $in->date = $date->format('Y-m-d');
         $in->invoiceTypeId = $invoiceTypeId;
         $in->paydAmount = $paidAmount;
-        $in->paymentExpectedDate = ($paymentExpectedDate) ? $paymentExpectedDate->format('Y-m-d') : null;
+        if ($paymentExpectedDate) {
+            $ped = $paymentExpectedDate->format('Y-m-d');
+        } else {
+            $ped = $date->modify('+1 day')->format('Y-m-d');
+        }
+        $in->paymentExpectedDate = $ped;
         $in->totalWithVat = $totalWithVat;
         $in->note = ($note) ? $note : '';
         $in->year = $year;
