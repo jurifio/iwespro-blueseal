@@ -38,6 +38,9 @@ class CProductSlimListAjaxController extends AAjaxController
                   if((`p`.`qty` > 0), 'disponibile', 'mancante')       AS `stock`,
                   `p`.`creationDate`                                   AS `creationDate`,
                   `pss`.`name`                                         AS `status`,
+                  shp.price                                            as price,
+                  shp.salePrice                                        as salePrice,
+                  shp.value                                            as value,
                   if(exists (select * from ProductSheetActual psa where psa.productId = p.id and psa.productVariantId = p.productVariantId), 'si', 'no') AS `details`
                 FROM (((((((`Product` `p`
                   JOIN `ProductVariant` `pv` on `p`.`productVariantId` = `pv`.`id`)
@@ -47,7 +50,7 @@ class CProductSlimListAjaxController extends AAjaxController
                   JOIN `Shop` `s` on `s`.`id` = `shp`.`shopId`)
                   JOIN `ProductSeason` `ps` ON ((`p`.`productSeasonId` = `ps`.`id`))))
                 WHERE `pss`.`id` NOT IN (7, 8)
-                GROUP BY `p`.`id`, `p`.`productVariantId`, `s`.`id`
+                GROUP BY `shp`.`productId`, `shp`.`productVariantId`, `shp`.`shopId`
                 ORDER BY `p`.`creationDate` DESC";
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         $datatable->addCondition('shopId', $shopsIds);
@@ -117,6 +120,28 @@ class CProductSlimListAjaxController extends AAjaxController
                 if ($friendQty) $status = $val->productStatus->name;
                 else $status = 'Esaurito';
             }
+
+            if(count($shopsIds) == 1 || $val->shopHasProduct->count() == 1) {
+                foreach ($val->shopHasProduct as $shopHasProduct) {
+                    if(in_array($shopHasProduct->shopId,$shopsIds)) {
+                        $row['price'] = $shopHasProduct->price;
+                        $row['salePrice'] = $shopHasProduct->salePrice;
+                        $row['value'] = $shopHasProduct->value;
+                    }
+                }
+            } else {
+                foreach ($val->shopHasProduct as $shopHasProduct) {
+                    if(in_array($shopHasProduct->shopId,$shopsIds)) {
+                        $row['price'][] = $shopHasProduct->shop->name.': '.$shopHasProduct->price;
+                        $row['salePrice'][] = $shopHasProduct->shop->name.': '.$shopHasProduct->salePrice;
+                        $row['value'][] = $shopHasProduct->shop->name.': '.$shopHasProduct->value;
+                    }
+                    $row['price'] = implode('<br />',$row['price']);
+                    $row['salePrice'] = implode('<br />',$row['salePrice']);
+                    $row['value'] = implode('<br />',$row['value']);
+                }
+            }
+
 
             $row['status'] = $status;
             $row['creationDate'] = $val->creationDate;
