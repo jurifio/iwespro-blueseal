@@ -877,6 +877,21 @@ $.decodeGetStringFromUrl = function(url) {
     if(getString.length == 2) return $.extend({baseUrl:getString[0]},$.decodeGetString(getString[1]));
 };
 
+$.myDecodeGetStringFromUrl = function(url) {
+    "use strict";
+    let getString = url.split('\?',2);
+    let ret = {};
+    ret.url = '';
+    ret.params = {};
+    if(getString.length == 0) return false;
+    if(getString.length == 1) ret.url = getString[0];
+    if(getString.length == 2) {
+        ret.url = getString[0];
+        ret.params = $.decodeGetString(getString[1]);
+    }
+    return ret;
+};
+
 $.decodeGetString = function(a) {
     "use strict";
     if (a == "") return {};
@@ -901,6 +916,20 @@ $.encodeGetString = function(o) {
     }
     $.each(o,function(k,v) {
         if(k == 'baseUrl') return;
+        a.push(k+"="+v);
+    });
+    return r+'?'+a.join('&');
+};
+
+$.myEncodeGetString = function(o) {
+    "use strict";
+    var a = [];
+    var r;
+    if(typeof o.url != 'undefined' && o.url != 'undefined') {
+        r = o.url;
+        delete o.url;
+    }
+    $.each(o.params,function(k,v) {
         a.push(k+"="+v);
     });
     return r+'?'+a.join('&');

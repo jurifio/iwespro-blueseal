@@ -136,9 +136,12 @@
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Filtra Ordini critici">
+    <bs-toolbar-group data-group-label="Filtra Ordini">
         <bs-toolbar-button
-            data-remote="bs.order.viewCritical"
+                data-remote="bs.order.viewCritical"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.order.viewCountersign"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
