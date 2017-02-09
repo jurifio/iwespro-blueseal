@@ -25,8 +25,26 @@ class CPaymentBillSubmit extends AAjaxController
     public function put()
     {
         $paymentBillId = $this->app->router->request()->getRequestData('paymentBillId');
+        /** @var CPaymentBill $paymentBill */
         $paymentBill = $this->app->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillId);
         $this->app->repoFactory->create('PaymentBill')->submitPaymentBill($paymentBill,new \DateTime());
+
+        foreach ($paymentBill->getDistinctPayments() as $key=>$payment) {
+            $to = explode(',',$payment[0]->shopAddressBook->shop->referrerEmails);
+            $name = $payment[0]->shopAddressBook->subject;
+
+            $total = 0;
+            foreach ($payment as $invoice) {
+                $total+=$invoice->getSignedValueWithVat();
+            }
+
+            $this->app->mailer->prepare('friendpaymentmail','no-reply', $to,[],[],['paymentBill'=>$paymentBill,
+                                                                                    'name'=>$name,
+                                                                                    'total'=>$total,
+                                                                                    'payment'=>$payment]);
+        }
+
+
         return true;
     }
 }
