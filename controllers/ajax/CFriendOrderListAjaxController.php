@@ -198,7 +198,11 @@ class CFriendOrderListAjaxController extends AAjaxController
             $printActs = '';
             foreach($lOC as $l) {
                 $key = array_search($l->eventValue, array_column($orderLineStatuses, 'code'));
-                if ((4 < $orderLineStatuses[$key]['id'] && 11 > $orderLineStatuses[$key]['id'])
+                if (
+                    (4 < $orderLineStatuses[$key]['id']
+                        && 11 > $orderLineStatuses[$key]['id']
+                        && 9 != $orderLineStatuses[$key]['id']
+                    )
                     || 19 == $orderLineStatuses[$key]['id']) {
                     $printActs .= $orderLineStatuses[$key]['title']
                         . ': ' . STimeToolbox::EurFormattedDateTime($l->time) . '<br />';
