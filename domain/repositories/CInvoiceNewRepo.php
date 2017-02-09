@@ -683,4 +683,20 @@ class CInvoiceNewRepo extends ARepo
         }
         return true;
     }
+
+    /**
+     * @param null $dueDate
+     * @return CObjectCollection
+     */
+    public function fetchUnboundedExpiringInvoices($dueDate = null) {
+        $sql = "SELECT * 
+                FROM InvoiceNew i 
+                  LEFT JOIN PaymentBillHasInvoiceNew pbhin 
+                    ON i.id = pbhin.invoiceNewId 
+                WHERE pbhin.paymentBillId IS NULL 
+                    AND date(i.paymentExpectedDate) <= date(ifnull(?,current_date)) 
+                    ORDER BY i.paymentExpectedDate ASC ";
+
+        return $this->app->repoFactory->create('InvoiceNew')->findBySql($sql, [STimeToolbox::DbFormattedDate($dueDate)]);
+    }
 }
