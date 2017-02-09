@@ -68,7 +68,7 @@ class CInvoiceNewRepo extends ARepo
         $invoiceWithNumber =
             $inR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
         if ($invoiceWithNumber)
-            throw new BambooInvoiceException('il numero della fattura è già presente nel nostro sistema e non può essere duplicato');
+            throw new BambooInvoiceException('il numero della fattura è già presente nel nostro sistema e non può essere duplicato. id fattura: ' . $invoiceWithNumber->id);
 
         $in = $inR->getEmptyEntity();
         $in->userId = $userId;
