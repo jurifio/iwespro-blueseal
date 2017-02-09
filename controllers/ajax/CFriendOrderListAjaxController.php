@@ -92,9 +92,12 @@ class CFriendOrderListAjaxController extends AAjaxController
             );
         }
 
-        $orderLines = $this->app->repoFactory->create('OrderLine')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('OrderLine')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = $this->app->repoFactory->create('OrderLine')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $orderLines = $this->app->repoFactory->create('OrderLine')
+            ->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = $this->app->repoFactory->create('OrderLine')
+            ->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totlalCount = $this->app->repoFactory->create('OrderLine')
+            ->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $orderStatuses = $this->app->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
@@ -126,7 +129,10 @@ class CFriendOrderListAjaxController extends AAjaxController
         $i = 0;
 
         $lR = \Monkey::app()->repoFactory->create('Log');
-
+        $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll()->toArray();
+        foreach ($orderLineStatuses as $k => $v) {
+            $orderLineStatuses[$k] = $v->toArray();
+        }
         foreach ($orderLines as $v) {
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
@@ -135,7 +141,9 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['orderId'] = $v->orderId;
             $response['data'][$i]['code'] = $v->product->id . "-" . $v->product->productVariantId;
             $response['data'][$i]['size'] = $v->productSize->name;
-            $response['data'][$i]['dummyPicture'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $v->product->getDummyPictureUrl() . '" /></a>';
+            $response['data'][$i]['dummyPicture'] =
+                '<a href="#1" class="enlarge-your-img"><img width="50" src="' .
+                $v->product->getDummyPictureUrl() . '" /></a>';
             $statusCode = $v->orderLineStatus->code;
 
             if (!$allShops &&  9 < $v->orderLineStatus->id) {
@@ -144,7 +152,8 @@ class CFriendOrderListAjaxController extends AAjaxController
                 $lineStatus = '<span style="color: #999">Chiuso</span>';
             } else {
                 if (!$allShops && false !== strpos($plainLineStatuses[$statusCode], 'friend')) {
-                    $editedStatus = str_replace('al friend', '', str_replace('dal friend', '', $plainLineStatuses[$statusCode]));
+                    $editedStatus =
+                        str_replace('al friend', '', str_replace('dal friend', '', $plainLineStatuses[$statusCode]));
                 } else {
                     $editedStatus = $plainLineStatuses[$statusCode];
                 }
@@ -178,12 +187,25 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $invoiceNew = $olR->getFriendInvoice($v);
-            $response['data'][$i]['invoiceNumber'] = ($invoiceNew) ? $invoiceNew->number . ' (id:' . $invoiceNew->id . ')' : 'non assegnata' ;
+            $response['data'][$i]['invoiceNumber'] =
+                ($invoiceNew) ? $invoiceNew->number . ' (id:' . $invoiceNew->id . ')' : 'non assegnata' ;
             $creditNote = $olR->getFriendCreditNote($v);
             if ($creditNote) $response['data'][$i]['invoiceNumber'] .=
                 '<br />Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')';
-            $l = $lR->findOneBy(['stringId' => $v->printId(), 'ActionName' => 'ShippedByFriend']);
-            $response['data'][$i]['friendShipmentTime'] = ($l) ? STimeToolbox::EurFormattedDateTime($l->time) : 'Non spedito';
+            $lOC = $lR->findBy(
+                ['stringId' => $v->printId(), 'entityName' => 'OrderLine', 'actionName' => 'OrderStatusLog']
+            );
+            $printActs = '';
+            foreach($lOC as $l) {
+                $key = array_search($l->eventValue, array_column($orderLineStatuses, 'code'));
+                if ((4 < $orderLineStatuses[$key]['id'] && 11 > $orderLineStatuses[$key]['id'])
+                    || 19 == $orderLineStatuses[$key]['id']) {
+                    $printActs .= $orderLineStatuses[$key]['title']
+                        . ': ' . STimeToolbox::EurFormattedDateTime($l->time) . '<br />';
+                }
+            }
+            $response['data'][$i]['friendTimes'] =
+                ($printActs) ? '<span class="small">' . $printActs . '</span>' : 'Nessun record';
             $i++;
 	    }
         return json_encode($response);
@@ -212,7 +234,10 @@ class CFriendOrderListAjaxController extends AAjaxController
 
         $sqlOrder = " ORDER BY ";
         foreach ($dtOrderingColumns as $column) {
-            if (isset($dbOrderingColumns[$column['column']]) && $dbOrderingColumns[$column['column']]['column'] !== null) {
+            if (
+                isset($dbOrderingColumns[$column['column']])
+                && $dbOrderingColumns[$column['column']]['column'] !== null
+            ) {
                 $sqlOrder .= $dbOrderingColumns[$column['column']]['column']." ".$column['dir'].", ";
             }
         }

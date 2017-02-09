@@ -91,9 +91,9 @@
                                 <th data-slug="friendRevVat"
                                     data-searchable="false"
                                     data-orderable="false" class="center">P. Friend con IVA</th>
-                                <th data-slug="friendShipmentTime"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Data Spedizione del Friend</th>
+                                <th data-slug="friendTimes"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Avanzamento riga del Friend</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -166,6 +166,5 @@
         ></bs-toolbar-button>-->
     </bs-toolbar-group>
 </bs-toolbar>
-
 </body>
 </html>
