@@ -131,6 +131,9 @@ class CProductSlimListAjaxController extends AAjaxController
                 }
             } else {
                 foreach ($val->shopHasProduct as $shopHasProduct) {
+                    $row['price'] = [];
+                    $row['salePrice'] = [];
+                    $row['value'] = [];
                     if(in_array($shopHasProduct->shopId,$shopsIds)) {
                         $row['price'][] = $shopHasProduct->shop->name.': '.$shopHasProduct->price;
                         $row['salePrice'][] = $shopHasProduct->shop->name.': '.$shopHasProduct->salePrice;
