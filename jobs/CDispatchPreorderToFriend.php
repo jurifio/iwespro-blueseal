@@ -28,7 +28,7 @@ class CDispatchPreorderToFriend extends ACronJob
      */
     public function run($args = null)
     {
-        $shops = $this->app->repoFactory->create('Shop')->findAll();
+        $shops = $this->app->repoFactory->create('Shop')->findbY(['isActive' => 1]);
         $query = "SELECT * from OrderLine where `status` in ('ORD_FRND_SNDING', 'ORD_ERR_SEND') AND shopId = ? ";
         $orderExport = new COrderExport($this->app);
         /** @var COrderLineRepo $orderLineRepo */
@@ -43,7 +43,7 @@ class CDispatchPreorderToFriend extends ACronJob
                     if($line->friendRevenue == 0 || is_null($line->friendRevenue)) {
                         $line->friendRevenue = $this->app->repoFactory->create('ProductSku')->calculateFriendRevenue($line->productSku);
                         $line->update();
-                        $this->app->eventManager->triggerEvent('orderLine.friendRevenue.update',['orderLineId'=>$line->printId()]);
+                        //$this->app->eventManager->triggerEvent('friendSendRequestSuccess',['orderLineId'=>$line->printId()]);
                     }
                 }
                 if ($shop->preOrderExport == 1 && count($lines) >0 ) {
@@ -60,15 +60,6 @@ class CDispatchPreorderToFriend extends ACronJob
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLineRepo->updateStatus($orderLine, $this->success);
 
-                        /**$userId = $orderLine->shop->user->id;
-
-                        \Monkey::app()->eventManager->triggerEvent('friendSendRequestSuccess',
-                            [
-                                'order' => $orderLine,
-                                'status' => $this->success,
-                                'userId' => $userId
-                            ]);*/
-
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
@@ -84,13 +75,13 @@ class CDispatchPreorderToFriend extends ACronJob
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLineRepo->updateStatus($orderLine, $this->fail);
 
-                        /**$userId = $orderLine->shop->user->id;
+                        $userId = $orderLine->shop->user->id;
                         \Monkey::app()->eventManager->triggerEvent('friendSendRequestFail',
                             [
                                 'order' => $orderLine,
                                 'status' => $this->fail,
                                 'userId' => $userId
-                            ]);*/
+                            ]);
 
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
