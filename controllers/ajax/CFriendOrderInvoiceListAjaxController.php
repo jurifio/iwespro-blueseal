@@ -25,7 +25,8 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `i`.`creationDate` as `creationDate`,
                   if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`, ', '), 'Non presente')  as `paymentBill`,
                   `sh`.`title` as friend,
-                  `ab`.`id` as abid
+                  `ab`.`id` as abid,
+                  sh.id as shopId
                 FROM
                   `InvoiceNew` as `i` JOIN
                   `InvoiceLine` as `il` on `il`.`invoiceId` =  `i`.`id` JOIN
@@ -41,7 +42,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
               ";
 
         $datatable = new CDataTables($query, ['id'],$_GET, true);
-
+        $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $invoices = $this->app->repoFactory->create('InvoiceNew')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->app->repoFactory->create('InvoiceNew')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->app->repoFactory->create('InvoiceNew')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
