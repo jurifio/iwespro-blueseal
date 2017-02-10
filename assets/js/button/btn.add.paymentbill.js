@@ -17,7 +17,8 @@ $(document).on('btn.add.paymentbill', function (a, b, c) {
             body: '<div class="col-xs-12>">' +
             '<label for="paymentDate">Data di Pagamento</label>' +
             '<input autocomplete="off" type="date" id="paymentDate" ' +
-            'class="form-control" name="paymentDate" value="' + today + '">'
+            'class="form-control" name="paymentDate" value="' + today + '">' +
+            '</div>'
         }
     );
 
