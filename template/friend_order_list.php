@@ -124,6 +124,9 @@
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.orderline.getStatusHistory"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php endif; ?>
     <bs-toolbar-group data-group-label="Gestione Ordini">

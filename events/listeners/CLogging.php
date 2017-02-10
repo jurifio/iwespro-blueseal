@@ -45,10 +45,8 @@ class CLogging extends AEventListener
     }
 
     protected function insertLogRow($eventName, $userId = null, $value = null, $entityName = null, $stringId = null, $time = null, $actionName = null) {
-
         if (!$actionName) $actionName = $this->getActionByClass();
         if (!$eventName) throw new BambooException('Il nome dell\'evento è obbligatorio per l\'inserimento del record nei log');
-        if (null == $userId) $userId = 12853; //sci
         if (!is_numeric($userId)) {
             $user = $this->user;
             if (!$user) throw new BambooException('Non è stato possibile trovare l\'id utente per il logging');

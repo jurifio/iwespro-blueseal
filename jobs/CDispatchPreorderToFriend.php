@@ -50,7 +50,7 @@ class CDispatchPreorderToFriend extends ACronJob
                     $orderExport->exportPrefileForFriend($shop, $lines);
                 }
                 if (isset($shop->referrerEmails) && count($lines) >0 ) {
-                    $orderExport->sendMailForFriendConfirmation($shop, $lines);
+                   // $orderExport->sendMailForFriendConfirmation($shop, $lines);
                 }
                 $this->report( 'Working Shop ' . $shop->name . ' End', 'Export ended');
                 $this->app->dbAdapter->beginTransaction();
@@ -74,14 +74,6 @@ class CDispatchPreorderToFriend extends ACronJob
 
                         $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLineRepo->updateStatus($orderLine, $this->fail);
-
-                        $userId = $orderLine->shop->user->id;
-                        \Monkey::app()->eventManager->triggerEvent('friendSendRequestFail',
-                            [
-                                'order' => $orderLine,
-                                'status' => $this->fail,
-                                'userId' => $userId
-                            ]);
 
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
