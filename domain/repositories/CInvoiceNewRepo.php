@@ -632,7 +632,7 @@ class CInvoiceNewRepo extends ARepo
 
         $pb = \Monkey::app()->repoFactory->create('PaymentBill')->findOne([$idBill]);
         if (!$pb) throw new BambooInvoiceException('L\'id fornito non è associato a nessuna distinta di pagamento');
-        if ($pb->paymentBill->isSubmitted()) {
+        if ($pb->isSubmitted()) {
             throw new BambooInvoiceException('Non puoi togliere una fattura da una distinta già sottomessa');
         }
         $newAmount = 0;

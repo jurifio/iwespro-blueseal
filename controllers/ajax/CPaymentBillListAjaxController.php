@@ -85,7 +85,8 @@ class CPaymentBillListAjaxController extends AAjaxController
 
             $inv = [];
             foreach ($paymentBill->invoiceNew as $invoice) {
-                if($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
+                if($invoice->getSignedValueWithVat() < 0) $color = "text-green";
+                elseif($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
                 else $color = "";
                 $inv[] = '<span class="'.$color.'">'.$invoice->shopAddressBook->shop->name.' - '.$invoice->number.': '.$invoice->getSignedValueWithVat().' ('.$invoice->calculateOurTotal().')</span>';
             }
