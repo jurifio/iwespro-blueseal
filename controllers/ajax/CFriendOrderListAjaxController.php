@@ -35,8 +35,9 @@ class CFriendOrderListAjaxController extends AAjaxController
                   #l.eventValue as logVal,
                   #l.time as logTime,
                   `pb`.`name`                                                   AS `brand`,
-                  if(`it`.`code` like '%fr_invoice%', `in`.`number`, 'non assegnata') AS `invoiceNumber`,
-                  if(`it`.`code` like '%credito_note%', `in`.`number`, '-') AS `creditNote`,
+                  if(`it`.`code` like '%fr_invoice%', `in`.`number`, '-') AS `invoiceNumber`,
+                  if(`it`.`code` like '%credito_note%', `in`.`number`, '-') AS `creditNoteNumber`,
+                  if(`it`.`code` like '%fr_trans_doc%', `in`.`number`, '-') AS `transDocNumber`,
                   `pse`.`name`                                                  AS `season`,
                   `ps`.`name`                                                   AS `size`,
                   `s`.`id`                                                      AS `shopId`,
@@ -68,7 +69,8 @@ class CFriendOrderListAjaxController extends AAjaxController
                       JOIN InvoiceNew AS `in` ON `in`.`id` = `ilhol`.`invoiceLineInvoiceId`
                       JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`)
                           ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
-                  LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`";
+                  LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
+                  ";
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
         $datatable->addCondition(
@@ -91,6 +93,9 @@ class CFriendOrderListAjaxController extends AAjaxController
                 true
             );
         }
+
+        $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('DDTAndNoCreditNote');
+        if($DDTAndNoCreditNote) {}
 
         $orderLines = $this->app->repoFactory->create('OrderLine')
             ->em()->findBySql($datatable->getQuery(),$datatable->getParams());
@@ -187,14 +192,24 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $invoiceNew = $olR->getFriendInvoice($v);
-            $response['data'][$i]['invoiceNumber'] =
+            $response['data'][$i]['invoiceAll'] = '<span class="small">';
                 ($invoiceNew) ? $invoiceNew->number . ' (id:' . $invoiceNew->id . ')' : 'non assegnata' ;
             $creditNote = $olR->getFriendCreditNote($v);
-            if ($creditNote) $response['data'][$i]['invoiceNumber'] .=
+            if ($creditNote) $response['data'][$i]['invoiceAll'] .=
                 '<br />Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')';
+            $transDoc = $olR->getFriendTransDoc($v);
+            if ($transDoc) $response['data'][$i]['invoiceAll'] .=
+                '<br />DDT: ' . $transDoc->number . ' (id:' . $transDoc->id . ')';
+            $response['data'][$i]['invoiceAll'].= '</span>';
             $lOC = $lR->findBy(
                 ['stringId' => $v->printId(), 'entityName' => 'OrderLine', 'actionName' => 'OrderStatusLog']
             );
+            $response['data'][$i]['invoiceNumber'] =
+                ($invoiceNew) ? $invoiceNew->number . ' (id:' . $invoiceNew->id . ')' : '-' ;
+            $response['data'][$i]['creditNoteNumber'] =
+                ($creditNote) ? $creditNote->number . ' (id:' . $creditNote->id . ')' : '-';
+            $response['data'][$i]['transDocNumber'] =
+                ($transDoc) ? $transDoc->number . ' (id:' . $transDoc->id . ')': '-';
             $printActs = '';
             foreach($lOC as $l) {
                 $key = array_search($l->eventValue, array_column($orderLineStatuses, 'code'));

@@ -95,7 +95,7 @@ class CFriendTransportDocumentWithFile extends AAjaxController
 
         $res =[];
         $res['error'] = false;
-        $res['responseText'] = 'Nota di credito correttamente inserita. Troverai il numero della fattura assegnato alle righe ordine interessate.';
+        $res['responseText'] = 'Documento di trasporto "reso" correttamente inserito. Troverai il numero assegnato alle righe ordine interessate.';
 
         try {
             if (!array_key_exists('file', $_FILES)) throw new BambooInvoiceException('Non hai specificato il file riportante la fattura');

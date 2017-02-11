@@ -71,7 +71,7 @@
                                 <th data-slug="paymentStatus"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stato Pagamento</th>
-                                <th data-slug="invoiceNumber"
+                                <th data-slug="invoiceAll"
                                     data-searchable="true"
                                     data-orderable="false" class="center">Numero Fattura</th>
                                 <?php if ($allShops) : ?>
@@ -94,6 +94,15 @@
                                 <th data-slug="friendTimes"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Avanzamento riga del Friend</th>
+                                <th data-slug="invoiceNumber"
+                                    data-searchable="true"
+                                    data-orderable="false" class="center">Numero Fattura</th>
+                                <th data-slug="creditNoteNumber"
+                                    data-searchable="true"
+                                    data-orderable="false" class="center">N. Nota di Credito</th>
+                                <th data-slug="transDocNumber"
+                                    data-searchable="true"
+                                    data-orderable="false" class="center">N. DDT</th>
                             </tr>
                             </thead>
                             <tbody>

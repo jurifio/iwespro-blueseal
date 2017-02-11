@@ -83,7 +83,6 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
             $echoBill = (count($arrBillId)) ? implode(', ', $arrBillId) : 'Non presente';
 
             $response['data'][$i]['paymentBill'] = $echoBill;
-            $response['data'][$i]['orderLines'] = '<span>[da implementare]</span>';
             $i++;
 	    }
         return json_encode($response);
