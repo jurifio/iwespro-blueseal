@@ -50,7 +50,7 @@ class CInvoiceNewRepo extends ARepo
         $dba = \Monkey::app()->dbAdapter;
         try {
             $dba->beginTransaction();
-            $insertedId = $this->storeFriendInvoiceBasic(
+            $insertedId =$this->storeFriendDocumentWithFile(
                 $invoiceType,
                 $userId,
                 $shopId,
@@ -59,19 +59,12 @@ class CInvoiceNewRepo extends ARepo
                 $paidAmount,
                 $number,
                 $orderLines,
+                $file,
                 $totalWithVat,
                 $note
             );
-
-
-            if ($file) {
-                $ib = \Monkey::app()->repoFactory->create('InvoiceBin')->getEmptyEntity();
-                $ib->invoiceId = $insertedId;
-                $ib->fileName = $file['name'];
-                $ib->bin = file_get_contents($file['tmp_name']);
-                $ib->insert();
-            }
             $dba->commit();
+            return $insertedId;
         } catch (BambooInvoiceException $e) {
             $dba->rollBack();
             throw $e;
@@ -95,7 +88,7 @@ class CInvoiceNewRepo extends ARepo
      * @return int|mixed
      * @throws \Exception
      */
-    public function storeFriendInvoiceBasic(
+    public function storeFriendDocumentBasic(
         CInvoiceType $invoiceType,
         int $userId,
         int $shopId,
@@ -354,7 +347,7 @@ class CInvoiceNewRepo extends ARepo
         $completeNumber = $newIn->invoiceSectional->code . '/' . $newIn->invoiceNumber;
         try {
             $dba->beginTransaction();
-            $this->storeFriendInvoiceBasic(
+            $this->storeFriendDocumentBasic(
                 $invoiceType,
                 $userId,
                 $shopId,
@@ -406,6 +399,83 @@ class CInvoiceNewRepo extends ARepo
         return $in;
     }
 
+    public function storeFriendTransportDocWithFile(
+        int $userId,
+        int $shopId,
+        \DateTime $emissionDate,
+        $paymentExpectedDate = null,
+        $paidAmount,
+        string $number,
+        array $orderLines,
+        $file,
+        $totalWithVat = null,
+        string $note = null
+    ){
+        $dba = \Monkey::app()->dbAdapter;
+        $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => 'fr_trans_doc_w_file']);
+        try {
+            $insertedId =$this->storeFriendDocumentWithFile(
+                $invoiceType,
+                $userId,
+                $shopId,
+                $emissionDate,
+                $paymentExpectedDate,
+                $paidAmount,
+                $number,
+                $orderLines,
+                $file,
+                $totalWithVat,
+                $note
+            );
+            $dba->commit();
+            return $insertedId;
+        } catch (BambooInvoiceException $e) {
+            $dba->rollBack();
+            throw $e;
+        } catch (BambooException $e) {
+            $dba->rollBack();
+            throw $e;
+        }
+    }
+
+    public function storeFriendDocumentWithFile(
+        CInvoiceType $invoiceType,
+        int $userId,
+        int $shopId,
+        \DateTime $emissionDate,
+        $paymentExpectedDate = null,
+        $paidAmount,
+        string $number,
+        array $orderLines,
+            $file,
+            $totalWithVat = null,
+            string $note = null
+    )
+    {
+            $insertedId = $this->storeFriendDocumentBasic(
+                $invoiceType,
+                $userId,
+                $shopId,
+                $emissionDate,
+                $paymentExpectedDate,
+                $paidAmount,
+                $number,
+                $orderLines,
+                $totalWithVat,
+                $note
+            );
+
+
+            if ($file) {
+                $ib = \Monkey::app()->repoFactory->create('InvoiceBin')->getEmptyEntity();
+                $ib->invoiceId = $insertedId;
+                $ib->fileName = $file['name'];
+                $ib->bin = file_get_contents($file['tmp_name']);
+                $ib->insert();
+            }
+            return $insertedId;
+    }
+
     public function storeFriendCreditNoteOnReturn(
         int $userId,
         int $shopId,
@@ -425,7 +495,7 @@ class CInvoiceNewRepo extends ARepo
         $completeNumber = $newIn->invoiceSectional->code . '/' . $newIn->invoiceNumber;
         try {
             $dba->beginTransaction();
-            $this->storeFriendInvoiceBasic(
+            $this->storeFriendDocumentBasic(
                 $invoiceType,
                 $userId,
                 $shopId,
@@ -465,7 +535,7 @@ class CInvoiceNewRepo extends ARepo
         $dba = \Monkey::app()->dbAdapter;
         try {
             $dba->beginTransaction();
-            $insertedId = $this->storeFriendInvoiceBasic(
+            $insertedId =$this->storeFriendDocumentWithFile(
                 $invoiceType,
                 $userId,
                 $shopId,
@@ -474,19 +544,12 @@ class CInvoiceNewRepo extends ARepo
                 $paidAmount,
                 $number,
                 $orderLines,
+                $file,
                 $totalWithVat,
                 $note
             );
-
-
-            if ($file) {
-                $ib = \Monkey::app()->repoFactory->create('InvoiceBin')->getEmptyEntity();
-                $ib->invoiceId = $insertedId;
-                $ib->fileName = $file['name'];
-                $ib->bin = file_get_contents($file['tmp_name']);
-                $ib->insert();
-            }
             $dba->commit();
+            return $insertedId;
         } catch (BambooInvoiceException $e) {
             $dba->rollBack();
             throw $e;

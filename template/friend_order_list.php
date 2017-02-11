@@ -167,6 +167,9 @@
 <!--        <bs-toolbar-button
                 data-remote="bs.friend.order.registerCreditNoteOnReturn"
         ></bs-toolbar-button>-->
+        <bs-toolbar-button
+                data-remote="bs.friend.order.registerTransportDocFromFile"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
