@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-fire",
+    icon: "fa-pencil",
     permission: "/admin/product/delete&&allShops",
     event: "bs.order.viewCountersign",
     class: "btn btn-default",
