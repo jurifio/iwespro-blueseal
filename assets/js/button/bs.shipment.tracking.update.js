@@ -37,7 +37,10 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
             },
             dataType: "json"
         }).done(function (res) {
+            let dayD = res.predictedDeliveryDate ? res.predictedDeliveryDate.slice(0,10) : "";
+            let dayS = res.predictedShipmentDate ? res.predictedShipmentDate.slice(0,10) : "";
             modal.writeBody(
+                '<div class="row">' +
                 '<label for="bookingNumber">Booking Number</label>' +
                 '<input autocomplete="off" type="text" id="bookingNumber" ' +
                     'class="form-control" name="bookingNumber" value="">' +
@@ -46,7 +49,19 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
                     'class="form-control" name="trackingNumber" value="">' +
                 '<label for="note">Note</label>' +
                 '<input autocomplete="off" type="text" id="note" ' +
-                    'class="form-control" name="note" value="">'
+                    'class="form-control" name="note" value="">' +
+                '<div class="row">' +
+                '</div>' +
+                '<div class="col-xs-6>">' +
+                '<label for="predictedShipmentDate">Data Prevista di Partenza</label>' +
+                '<input autocomplete="off" type="date" id="predictedShipmentDate" ' +
+                'class="form-control" name="predictedShipmentDate" value="'+dayS+'">' +
+                '</div>'+
+                '<div class="col-xs-6>">' +
+                '<label for="predictedDeliveryDate">Data Prevista di Arrivo</label>' +
+                '<input autocomplete="off" type="date" id="predictedDeliveryDate" ' +
+                'class="form-control" name="predictedDeliveryDate" value="'+dayD+'">' +
+                '</div>'
             );
             $('#bookingNumber').val(res.bookingNumber);
             $('#trackingNumber').val(res.trackingNumber);
@@ -56,6 +71,7 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
                 res.bookingNumber = $('#bookingNumber').val();
                 res.trackingNumber = $('#trackingNumber').val();
                 res.note = $('#note').val();
+                res.predictedShipmentDate = $('#predictedShipmentDate').val();
                 modal.showLoader();
                 modal.setOkEvent(function () {
                     modal.hide();
