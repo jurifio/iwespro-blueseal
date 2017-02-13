@@ -66,7 +66,7 @@ class COrderListAjaxController extends AAjaxController
             $sql .= " AND ((`o`.`status` LIKE 'ORD_PENDING' AND `ol`.`status` NOT LIKE 'ORD_FRND_CANC' ) " .
                 " OR (`ol`.`status` LIKE 'ORD_FRND_OK' AND `os`.`id` NOT IN (8,9,10,13,18) AND `ols`.`id` < 8) AND (`ol`.`status` NOT LIKE 'ORD_CANCEL' OR `ol`.`status` NOT LIKE 'ORD_RETURNED') and (`o`.`orderPaymentMethodId` <> 5 AND `o`.`paymentDate` is NULL))";
         } elseif ($countersign) {
-            $sql .= " AND `o`.`paymentDate` is null AND `os`.`code` LIKE 'ORD_SHIPPED'";
+            $sql .= " AND `o`.`orderPaymentMethodId` = 5 AND `o`.`paymentDate` is null AND `os`.`code` LIKE 'ORD_SHIPPED'";
         }
         $datatable = new CDataTables($sql, ['id'], $_GET,true);
         //$datatable->addCondition('statusCode', ['ORD_CANCEL'], true);
