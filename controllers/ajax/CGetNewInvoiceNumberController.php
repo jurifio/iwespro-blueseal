@@ -2,7 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
-use bamboo\domain\repositories\CInvoiceNewRepo;
+use bamboo\domain\repositories\CDocumentRepo;
 
 /**
  * Class CFriendOrderRecordInvoice
@@ -19,8 +19,8 @@ class CGetNewInvoiceNumberController extends AAjaxController
 
         $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $shpR = \Monkey::app()->repoFactory->create('Shop');
-        /** @var CInvoiceNewRepo $iR */
-        $iR = \Monkey::app()->repoFactory->create('InvoiceNew');
+        /** @var CDocumentRepo $iR */
+        $iR = \Monkey::app()->repoFactory->create('Document');
         try {
             if (!$date) $date = 'now';
             $dateTime = new \DateTime($date);

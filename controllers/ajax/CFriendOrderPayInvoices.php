@@ -3,7 +3,7 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
-use bamboo\domain\repositories\CInvoiceNewRepo;
+use bamboo\domain\repositories\CDocumentRepo;
 
 /**
  * Class CFriendOrderPayInvoices
@@ -15,9 +15,9 @@ class CFriendOrderPayInvoices extends AAjaxController
     {
         $row = \Monkey::app()->router->request()->getRequestData('row');
 
-        $iR = \Monkey::app()->repoFactory->create('InvoiceNew');
+        $iR = \Monkey::app()->repoFactory->create('Document');
 
-        $invoices = $iR->findBySql('SELECT id FROM InvoiceNew WHERE id IN (' . implode(',', $row) . ')');
+        $invoices = $iR->findBySql('SELECT id FROM Document WHERE id IN (' . implode(',', $row) . ')');
 
         // different controls are made if is selected a single row or many
 
@@ -50,9 +50,9 @@ class CFriendOrderPayInvoices extends AAjaxController
         $date = \Monkey::app()->router->request()->getRequestData('date');
         $amount = \Monkey::app()->router->request()->getRequestData('amount');
 
-        /** @var CInvoiceNewRepo $iR */
-        $iR = \Monkey::app()->repoFactory->create('InvoiceNew');
-        $invoices = $iR->findBySql('SELECT id FROM InvoiceNew WHERE id IN (' . implode(',', $row) . ')');
+        /** @var CDocumentRepo $iR */
+        $iR = \Monkey::app()->repoFactory->create('Document');
+        $invoices = $iR->findBySql('SELECT id FROM Document WHERE id IN (' . implode(',', $row) . ')');
 
         $dba = \Monkey::app()->dbAdapter;
         $dba->beginTransaction();
@@ -83,10 +83,10 @@ class CFriendOrderPayInvoices extends AAjaxController
         $act = $request->getRequestData('action');
         $idBill = $request->getRequestData('idBill');
 
-        $iR = \Monkey::app()->repoFactory->create('InvoiceNew');
+        $iR = \Monkey::app()->repoFactory->create('Document');
         $dba = \Monkey::app()->dbAdapter;
         if ('add' == $act) {
-            $invoices = $iR->findBySql('SELECT id FROM InvoiceNew WHERE id IN (' . implode(',', $row) . ')');
+            $invoices = $iR->findBySql('SELECT id FROM Document WHERE id IN (' . implode(',', $row) . ')');
             try {
                 $dba->beginTransaction();
                 $iR->addInvoicesToPaymentBill($invoices, $idBill);

@@ -2,7 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
-use bamboo\domain\repositories\CInvoiceNewRepo;
+use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\utils\price\SPriceToolbox;
 
 /**
@@ -19,8 +19,8 @@ class CFriendOrderRecordCreditNoteOnReturnWithFile extends AAjaxController
         $total = \Monkey::app()->router->request()->getRequestData('total');
         $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
         $user = \Monkey::app()->getUser();
-        /** @var CInvoiceNewRepo $inR */
-        $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
+        /** @var CDocumentRepo $inR */
+        $inR = \Monkey::app()->repoFactory->create('Document');
 
 
 
