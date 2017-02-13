@@ -75,7 +75,7 @@ class CFriendOrderListAjaxController extends AAjaxController
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
         $datatable->addCondition(
             'orderLineStatusCode',
-            ['ORD_CANCEL', 'ORD_ARCH', 'CRT', 'CRT_MRG'],
+            ['ORD_ARCH', 'CRT', 'CRT_MRG'],
             true);
         $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         if (!$allShops) {
