@@ -56,12 +56,12 @@ class CFriendTransportDocumentWithFile extends AAjaxController
             }
         }
 
-        if (count($linesWOInvoice)) {
+        /*if (count($linesWOInvoice)) {
             $res['error'] = true;
             $res['responseText'] = '<p>Una o più linee ordini selezionate sono senza fattura e non posso essere inseriti in un DDT</p><ul><li>' .
                 implode('</li><li>', $linesWOInvoice) .
                 '</li></ul>';
-        }
+        }*/
 
         $vat = \Monkey::app()->repoFactory->create('Configuration')->findOneBy(['name' => 'main vat'])->value;
 
