@@ -6,6 +6,7 @@ use bamboo\core\exceptions\BambooOrderLineException;
 use bamboo\domain\entities\COrderLine;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CShipmentManageController
@@ -49,11 +50,13 @@ class CShipmentManageController extends AAjaxController
             $shipment = $this->app->repoFactory->create('Shipment')->findOneByStringId($shipmentData['id']);
             $shipment->bookingNumber = $shipmentData['bookingNumber'];
             $shipment->trackingNumber = $shipmentData['trackingNumber'];
+            $shipment->predictedShipmentDate = !empty($shipmentData['predictedShipmentDate']) ? STimeToolbox::DbFormattedDateTime( $shipmentData['predictedShipmentDate']) : null;
+            $shipment->predictedDeliveryDate = !empty($shipmentData['predictedDeliveryDate']) ? STimeToolbox::DbFormattedDateTime($shipmentData['predictedDeliveryDate']) : null;
             if (!$shipment->shipmentDate && !(empty($shipmentData['shipmentDate']))) {
-                $shipment->shipmentDate = $shipmentData['shipmentDate'];
+                $shipment->shipmentDate = STimeToolbox::DbFormattedDateTime($shipmentData['shipmentDate']);
             }
             if (!$shipment->deliveryDate && !(empty($shipmentData['deliveryDate']))) {
-                $shipment->deliveryDate = $shipmentData['deliveryDate'];
+                $shipment->deliveryDate = STimeToolbox::DbFormattedDateTime($shipmentData['deliveryDate']);
             }
             $shipment->note = $shipmentData['note'];
             $shipment->update();
