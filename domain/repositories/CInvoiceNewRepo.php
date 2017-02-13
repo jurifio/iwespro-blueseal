@@ -118,6 +118,8 @@ class CInvoiceNewRepo extends ARepo
         unset($line);
         if (null == $totalWithVat) {
             $totalWithVat = $this->sumFriendRevenueFromOrders($orderLinesOC, $vat);
+        } else {
+            $totalWithVat = SPriceToolbox::EurToFloat($totalWithVat);
         }
 
         $vat = $this->getInvoiceVat($invoiceType, $addressBook);

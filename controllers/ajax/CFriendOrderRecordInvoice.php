@@ -94,7 +94,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
         try {
 
             if (!array_key_exists('file', $_FILES)) throw new BambooInvoiceException('Non hai specificato il file riportante la fattura');
-            if ('' == $number) throw new BambooInvoiceException('L\'invio della fattura è obbligatorio');
+            if ('' == $number) throw new BambooInvoiceException('Il numero della fattura è obbligatorio');
             if (false !== \DateTime::createFromFormat('Y-m-d G:i:s', $date)) throw new BambooInvoiceException('La data fornita non è valida');
 
             $date = new \DateTime($date);
