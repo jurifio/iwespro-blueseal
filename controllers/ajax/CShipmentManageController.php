@@ -5,6 +5,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooOrderLineException;
 use bamboo\domain\entities\COrderLine;
 use bamboo\domain\repositories\COrderLineRepo;
+use bamboo\domain\repositories\CShipmentRepo;
 
 /**
  * Class CShipmentManageController
@@ -91,6 +92,20 @@ class CShipmentManageController extends AAjaxController
             return $e->getMessage();
         }
     }
+
+    public function post() {
+        $request = $this->app->router->request();
+        $fromAddressBookId = $request->getRequestData('fromAddressId');
+        $carrierId = $request->getRequestData('carrierId');
+        $shippingDate = $request->getRequestData('shipmentDate');
+        $bookingNumber = $request->getRequestData('bookingNumber');
+        $bookingNumber = empty($bookingNumber) ? null : $bookingNumber;
+        /** @var CShipmentRepo $shipmentRepo */
+        $shipmentRepo = $this->app->repoFactory->create('Shipment');
+        $shipmentRepo->newFriendShipmentToUs($carrierId,$fromAddressBookId,$bookingNumber,$shippingDate,[]);
+        return true;
+    }
+
 
     /**
      * @param COrderLine $orderLine

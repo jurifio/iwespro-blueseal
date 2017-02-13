@@ -97,6 +97,9 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione spedizioni">
         <bs-toolbar-button
+                data-remote="btn.add.shipmentToUs"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.shipment.tracking.update"
         ></bs-toolbar-button>
         <bs-toolbar-button

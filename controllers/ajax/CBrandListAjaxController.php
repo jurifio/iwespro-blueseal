@@ -41,7 +41,7 @@ class CBrandListAjaxController extends AAjaxController
 
     public function get()
     {
-        $datatable = new CDataTables('ProductBrand',['id'],$_GET);
+        $datatable = new CDataTables('ProductBrand',['id'],$_GET,false);
 
         $prodotti = $this->app->repoFactory->create('ProductBrand')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());

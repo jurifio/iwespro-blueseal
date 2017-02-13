@@ -38,33 +38,31 @@ $(document).on('bs.orderline.friend.ok', function () {
     let carrierSelect = $('select[name=\"carrierSelect\"]');
     let shippingDate = $('select[name=\"shippingDate\"]');
 
-
     Pace.ignore(function () {
         $.ajax({
             url: '/blueseal/xhr/FriendAccept',
             method: 'get',
-            data: {
-                rows: row
-            },
-            dataType: 'json'
-        }).done(function (res) {
-            shippingDate.datepicker()
-        });
-    });
-
-    Pace.ignore(function () {
-        $.ajax({
-            url: '/blueseal/xhr/FriendAccept',
-            method: 'get',
-            data: {
-                rows: row
-            },
             dataType: 'json'
         }).done(function (res) {
             addressSelect.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                options: res
+                searchField: ['name'],
+                options: res,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.shopTitle) + '</span> - ' +
+                            '<span class="caption">' + escape(item.address + ' ' + item.city) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.shopTitle) + '</span>  - ' +
+                            '<span class="caption">' + escape(item.address + ' ' + item.city) + '</span>' +
+                            '</div>'
+                    }
+                }
             });
         });
     });

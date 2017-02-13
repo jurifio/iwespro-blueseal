@@ -27,6 +27,7 @@ class CFriendAccept extends AAjaxController
             foreach ($shop->shippingAddressBook as $addressBook) {
                 $addressBook->shopId = $shop->id;
                 $addressBook->shopName = $shop->name;
+                $addressBook->shopTitle = $shop->title;
                 $addresses[] = $addressBook;
             }
         }
