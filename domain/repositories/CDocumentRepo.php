@@ -6,7 +6,7 @@ use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\entities\CAddressBook;
-use bamboo\domain\entities\CInvoiceNew;
+use bamboo\domain\entities\CDocument;
 use bamboo\domain\entities\CInvoiceSectional;
 use bamboo\domain\entities\CInvoiceType;
 use bamboo\utils\price\SPriceToolbox;
@@ -14,10 +14,10 @@ use bamboo\domain\entities\COrderLine;
 use bamboo\utils\time\STimeToolbox;
 
 /**
- * Class CInvoiceNewRepo
+ * Class CDocumentRepo
  * @package bamboo\domain\repositories
  */
-class CInvoiceNewRepo extends ARepo
+class CDocumentRepo extends ARepo
 {
     /**
      * @param int $userId
@@ -209,7 +209,7 @@ class CInvoiceNewRepo extends ARepo
         \DateTime $creationDate = null
     )
     {
-        $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
+        $inR = \Monkey::app()->repoFactory->create('Document');
 
         //date control
         if (!$creationDate) $creationDate = new \DateTime();
@@ -727,7 +727,7 @@ class CInvoiceNewRepo extends ARepo
      * @return bool
      * @throws BambooInvoiceException
      */
-    public function removeInvoiceFromPaymentBill(CInvoiceNew $invoice)
+    public function removeInvoiceFromPaymentBill(CDocument $invoice)
     {
         /** @var CObjectCollection $bills */
         $bills = $invoice->paymentBill;
@@ -764,13 +764,13 @@ class CInvoiceNewRepo extends ARepo
     public function fetchUnboundedExpiringInvoices($dueDate = null)
     {
         $sql = "SELECT * 
-                FROM InvoiceNew i 
+                FROM Document d 
                   LEFT JOIN PaymentBillHasInvoiceNew pbhin 
-                    ON i.id = pbhin.invoiceNewId 
+                    ON d.id = pbhin.invoiceNewId 
                 WHERE pbhin.paymentBillId IS NULL 
-                    AND date(i.paymentExpectedDate) <= date(ifnull(?,current_date)) 
-                    ORDER BY i.paymentExpectedDate ASC ";
+                    AND date(d.paymentExpectedDate) <= date(ifnull(?,current_date)) 
+                    ORDER BY d.paymentExpectedDate ASC ";
 
-        return $this->app->repoFactory->create('InvoiceNew')->findBySql($sql, [STimeToolbox::DbFormattedDate($dueDate)]);
+        return $this->app->repoFactory->create('Document')->findBySql($sql, [STimeToolbox::DbFormattedDate($dueDate)]);
     }
 }

@@ -28,7 +28,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `ab`.`id` as abid,
                   sh.id as shopId
                 FROM
-                  `InvoiceNew` as `i` JOIN
+                  `Document` as `i` JOIN
                   `InvoiceLine` as `il` on `il`.`invoiceId` =  `i`.`id` JOIN
                   `InvoiceType` as `it` on `it`.`id` = `i`.`invoiceTypeId` JOIN
                   `InvoiceLineHasOrderLine` as `ilhol` on `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId` JOIN
@@ -43,9 +43,9 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
 
         $datatable = new CDataTables($query, ['id'],$_GET, true);
         $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
-        $invoices = $this->app->repoFactory->create('InvoiceNew')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('InvoiceNew')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('InvoiceNew')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $invoices = $this->app->repoFactory->create('Document')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = $this->app->repoFactory->create('Document')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('Document')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];

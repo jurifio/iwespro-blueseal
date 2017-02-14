@@ -66,7 +66,7 @@ class CFriendOrderListAjaxController extends AAjaxController
                     JOIN `ProductBrand` AS `pb` ON `p`.`productBrandId` = `pb`.`id`)
                   JOIN `ProductSeason` AS `pse` ON `p`.`productSeasonId` = `pse`.`id`
                   LEFT JOIN (`InvoiceLineHasOrderLine` AS `ilhol`
-                      JOIN InvoiceNew AS `in` ON `in`.`id` = `ilhol`.`invoiceLineInvoiceId`
+                      JOIN Document AS `in` ON `in`.`id` = `ilhol`.`invoiceLineInvoiceId`
                       JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`)
                           ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
                   LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
@@ -191,9 +191,9 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevenue'] = number_format($v->friendRevenue, 2, ',', '');
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
-            $invoiceNew = $olR->getFriendInvoice($v);
+            $document = $olR->getFriendInvoice($v);
             $response['data'][$i]['invoiceAll'] = '<span class="small">';
-                ($invoiceNew) ? $invoiceNew->number . ' (id:' . $invoiceNew->id . ')' : 'non assegnata' ;
+                ($document) ? $document->number . ' (id:' . $document->id . ')' : 'non assegnata' ;
             $creditNote = $olR->getFriendCreditNote($v);
             if ($creditNote) $response['data'][$i]['invoiceAll'] .=
                 '<br />Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')';
@@ -205,7 +205,7 @@ class CFriendOrderListAjaxController extends AAjaxController
                 ['stringId' => $v->printId(), 'entityName' => 'OrderLine', 'actionName' => 'OrderStatusLog']
             );
             $response['data'][$i]['invoiceNumber'] =
-                ($invoiceNew) ? $invoiceNew->number . ' (id:' . $invoiceNew->id . ')' : '-' ;
+                ($document) ? $document->number . ' (id:' . $document->id . ')' : '-' ;
             $response['data'][$i]['creditNoteNumber'] =
                 ($creditNote) ? $creditNote->number . ' (id:' . $creditNote->id . ')' : '-';
             $response['data'][$i]['transDocNumber'] =

@@ -2,7 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
-use bamboo\domain\repositories\CInvoiceNewRepo;
+use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\utils\price\SPriceToolbox;
 
 /**
@@ -50,7 +50,7 @@ class CFriendTransportDocumentWithFile extends AAjaxController
         $res['shop'] = $shopId;
 
         foreach($invoiceLineOC as $v) {
-            if ('fr_trans_doc_w_file' == $v->invoiceNew->invoiceType->code) {
+            if ('fr_trans_doc_w_file' == $v->document->invoiceType->code) {
                 $res['error'] = true;
                 $res['responseText'] = '<p><strong>Attenzione!</strong> Una o più righe d\'ordine è già stata registrata in un DDT.</p>';
             }
@@ -90,8 +90,8 @@ class CFriendTransportDocumentWithFile extends AAjaxController
         $total = \Monkey::app()->router->request()->getRequestData('total');
         $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
         $user = \Monkey::app()->getUser();
-        /** @var CInvoiceNewRepo $inR */
-        $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
+        /** @var CDocumentRepo $inR */
+        $inR = \Monkey::app()->repoFactory->create('Document');
 
         $res =[];
         $res['error'] = false;
