@@ -227,6 +227,14 @@
             data-options='<?php echo json_encode($roulette); ?>'
             ></bs-toolbar-select>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Roulette">
+        <bs-toolbar-button
+                data-remote="bs.product.filterShootingCritical"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.filterDetailCritical"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

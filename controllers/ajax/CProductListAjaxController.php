@@ -2,7 +2,6 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CProduct;
 
 /**
@@ -90,12 +89,16 @@ class CProductListAjaxController extends AAjaxController
                          (`sp`.`shopId` = `dp`.`shopId`))))
                   LEFT JOIN `ProductNameTranslation` `pnt`
                     ON (((`p`.`id` = `pnt`.`productId`) AND (`p`.`productVariantId` = `pnt`.`productVariantId`) AND
-                  (`pnt`.`langId` = 1))))";
+                  (`pnt`.`langId` = 1)))) WHERE 1=1 ";
+
+        $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
+        if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
+        $productDetailCritical = \Monkey::app()->router->request()->getRequestData('detailsCritical');
+        if ($productDetailCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11) HAVING `hasDetails` = 'no'";
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $datatable->addCondition('shopId', $shopIds);
-
 
         $time = microtime(true);
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
