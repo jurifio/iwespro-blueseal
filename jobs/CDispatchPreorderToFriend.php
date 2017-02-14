@@ -43,14 +43,13 @@ class CDispatchPreorderToFriend extends ACronJob
                     if($line->friendRevenue == 0 || is_null($line->friendRevenue)) {
                         $line->friendRevenue = $this->app->repoFactory->create('ProductSku')->calculateFriendRevenue($line->productSku);
                         $line->update();
-                        //$this->app->eventManager->triggerEvent('friendSendRequestSuccess',['orderLineId'=>$line->printId()]);
                     }
                 }
                 if ($shop->preOrderExport == 1 && count($lines) >0 ) {
                     $orderExport->exportPrefileForFriend($shop, $lines);
                 }
                 if (isset($shop->referrerEmails) && count($lines) >0 ) {
-                   // $orderExport->sendMailForFriendConfirmation($shop, $lines);
+                    $orderExport->sendMailForFriendConfirmation($shop, $lines);
                 }
                 $this->report( 'Working Shop ' . $shop->name . ' End', 'Export ended');
                 $this->app->dbAdapter->beginTransaction();
@@ -63,7 +62,6 @@ class CDispatchPreorderToFriend extends ACronJob
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
-                    //$this->app->dbAdapter->update('OrderLine',['status'=>$this->success],["id"=>$line->id,"orderId"=>$line->orderId]);
                 }
                 $this->app->dbAdapter->commit();
             } catch(\Throwable $e){
@@ -78,7 +76,6 @@ class CDispatchPreorderToFriend extends ACronJob
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
-                    //$this->app->dbAdapter->update('OrderLine',['status'=>$this->fail],["id"=>$line->id,"orderId"=>$line->orderId]);
                 }
                 $this->app->dbAdapter->commit();
             }
