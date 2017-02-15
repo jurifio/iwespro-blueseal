@@ -25,8 +25,8 @@ class CFriendOrderRecordInvoice extends AAjaxController
         $res['vat'] = 0;
         $res['total'] = 0;
         $res['responseText'] = '';
-
         $linesWInvoice = [];
+        $linesNotReady = [];
         $shopId = false;
         $olArr = [];
         foreach($rows as $v) {
@@ -35,6 +35,8 @@ class CFriendOrderRecordInvoice extends AAjaxController
             if ($invoiceLineOC->count()) {
                 $linesWInvoice[] = $ol->printId();
             }
+            $status = $ol->orderLineStatus;
+            if (($status->id < 7 || $status->id > 14) && $status->id != 19) $linesNotReady[] = $ol->printId();
             if (false === $shopId) $shopId = $ol->shopId;
             else {
                 if ($shopId != $ol->shopId) {
@@ -54,6 +56,14 @@ class CFriendOrderRecordInvoice extends AAjaxController
             $res['responseText'] = '<p>Una o più linee ordini selezionate sono già state fatturate</p><ul><li>' .
                 implode('</li><li>', $linesWInvoice) .
                 '</li></ul>';
+        }
+
+        if (count($linesNotReady)) {
+            $res['error'] = true;
+            $res['responseText'] = '<p>Una o più linee ordini selezionate non sono ancora state accettate o sono state cancellate:</p><ul><li>' .
+                implode('</li><li>', $linesNotReady) .
+                '</li></ul>
+                Per inserire la fattura alle righe qui indicate, è prima necessario accettarle.';
         }
 
         $vat = \Monkey::app()->repoFactory->create('Configuration')->findOneBy(['name' => 'main vat'])->value;
