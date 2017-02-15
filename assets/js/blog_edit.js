@@ -47,7 +47,7 @@ $('#cover').on('click',function() {
     $('[data-json="PostTranslation.coverImage"]').click();
 });
 
-$('[data-json="PostTranslation.coverImage"]').on('change', function(){
+$('[data-json="PostTranslation.coverImage"]').on('change click', function(){
     if (this.files && this.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
