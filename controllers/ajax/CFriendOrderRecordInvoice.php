@@ -43,7 +43,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
                     $res['error'] = true;
                     $res['responseText'] =
                         '<p><strong>Attenzione!</strong> I prodotti selezionati devono appartenere tutti allo stesso negozio.</p>';
-                    return $res;
+                    return json_encode($res);
                 }
             }
             $olArr[] = $ol;
