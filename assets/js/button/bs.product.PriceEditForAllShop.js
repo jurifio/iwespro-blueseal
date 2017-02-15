@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs.product.PriceEditForAllShop",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Crea nuovo modello da prodotto",
+    title:"Modifica Prezzi",
     placement:"bottom",
     toggle:"modal"
 };

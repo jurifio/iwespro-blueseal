@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs.product.showTotalBySeason",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Crea nuovo modello da prodotto",
+    title:"Mostra prodotti per Friend",
     placement:"bottom",
     toggle:"modal"
 };
