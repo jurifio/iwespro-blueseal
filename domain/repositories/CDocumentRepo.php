@@ -205,12 +205,12 @@ class CDocumentRepo extends ARepo
         \DateTime $creationDate = null
     )
     {
-        $inR = \Monkey::app()->repoFactory->create('Document');
+        $docR = \Monkey::app()->repoFactory->create('Document');
 
         //date control
         if (!$creationDate) $creationDate = new \DateTime();
         $diff = $creationDate->diff($date);
-        if ($diff->days && !$diff->invert) throw new BambooInvoiceException('Non si possono emettere fatture con date di emissione antecedenti alla data odierna');
+        if ($diff->days && !$diff->invert) throw new BambooInvoiceException('Non si possono emettere fatture con data di emissione successiva alla data odierna');
         if ($paymentExpectedDate) {
             $diff = $date->diff($paymentExpectedDate);
             if ($diff->days && $diff->invert) throw new BambooInvoiceException('La data di previsto pagamento non può essere precedente all\'emissione della fattura');
@@ -223,11 +223,11 @@ class CDocumentRepo extends ARepo
         /** @var CInvoiceSectional $invoiceSectional */
 
         $invoiceWithNumber =
-            $inR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
+            $docR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
         if ($invoiceWithNumber)
             throw new BambooInvoiceException('il numero della fattura è già presente nel nostro sistema e non può essere duplicato. id fattura: ' . $invoiceWithNumber->id);
 
-        $in = $inR->getEmptyEntity();
+        $in = $docR->getEmptyEntity();
         $in->userId = $userId;
         if ($isShop) $in->shopRecipientId = $recipientOrEmitterId;
         else $in->userRecipientId = $recipientOrEmitterId;
@@ -244,7 +244,7 @@ class CDocumentRepo extends ARepo
         $in->totalWithVat = $totalWithVat;
         $in->note = ($note) ? $note : '';
         $in->year = $year;
-        $in->creationDate = $creationDate->format('Y-m-d');
+        $in->creationDate = $creationDate->format('Y-m-d H:m:s');
         return $in->insert();
     }
 
