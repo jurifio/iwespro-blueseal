@@ -52,7 +52,7 @@ class COrderListAjaxController extends AAjaxController
                   JOIN `OrderLine` `ol`) 
                   JOIN `Shop` `s`) 
                   JOIN `OrderLineStatus` `ols`)
-                  JOIN `Product` `p`) 
+                  JOIN `Product` `p`)
                   JOIN `ProductBrand` `pb`)
                 WHERE ((`o`.`userId` = `u`.`id`) AND (`ud`.`userId` = `u`.`id`) AND (`o`.`orderPaymentMethodId` = `opm`.`id`) AND
                        (`o`.`status` = `os`.`code`) AND (`o`.`status` LIKE 'ORD%') AND (`oshl`.`orderStatusId` = `os`.`id`) AND
@@ -68,8 +68,16 @@ class COrderListAjaxController extends AAjaxController
         } elseif ($countersign) {
             $sql .= " AND `o`.`orderPaymentMethodId` = 5 AND `o`.`paymentDate` is null AND `os`.`code` LIKE 'ORD_SHIPPED'";
         }
+        $toSend = \Monkey::app()->router->request()->getRequestData('toSend');
+        if ($toSend)
+            $sql .= "AND (
+                `ols`.`id` > 4 AND `os`.`id` NOT IN (8,13,18) 
+                AND (
+                        (`o`.`paymentDate` IS NOT NULL AND `o`.`orderPaymentMethodId` <> 5)
+                         OR 
+                        (`o`.`paymentDate` IS NULL AND `o`.`orderPaymentMethodId` = 5)
+                    ))";
         $datatable = new CDataTables($sql, ['id'], $_GET,true);
-        //$datatable->addCondition('statusCode', ['ORD_CANCEL'], true);
         $datatable->addSearchColumn('orderLineStatus');
         $datatable->addSearchColumn('shop');
         $datatable->addSearchColumn('productBrand');

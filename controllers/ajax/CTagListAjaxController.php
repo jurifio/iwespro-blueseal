@@ -16,7 +16,7 @@ class CTagListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $datatable = new CDataTables('Tag', ['id'], $_GET);
+        $datatable = new CDataTables('Tag', ['id'], $_GET, false);
 
         $tags = $this->app->repoFactory->create('Tag')->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->app->repoFactory->create('Tag')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
