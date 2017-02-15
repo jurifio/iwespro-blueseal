@@ -27,7 +27,7 @@ class CFriendTransportDocumentWithFile extends AAjaxController
         $res['responseText'] = '';
 
         $linesWOInvoice = [];
-        $shopId = false;
+        $billingAddressBookId = false;
         $olArr = [];
         foreach($rows as $v) {
             $ol = $olR->findOneByStringId($v);
@@ -35,19 +35,19 @@ class CFriendTransportDocumentWithFile extends AAjaxController
             if (!$invoiceLineOC->count()) {
                 $linesWOInvoice[] = $ol->printId();
             }
-            if (false === $shopId) $shopId = $ol->shopId;
+            if (false === $billingAddressBookId) $billingAddressBookId = $ol->shop->billingAddressBookId;
             else {
-                if ($shopId != $ol->shopId) {
+                if ($billingAddressBookId != $ol->shop->billingAddressBookId) {
                     $res['error'] = true;
                     $res['responseText'] =
-                        '<p><strong>Attenzione!</strong> I prodotti selezionati devono appartenere tutti allo stesso negozio.</p>';
-                    return $res;
+                        '<p><strong>Attenzione!</strong> I prodotti selezionati devono essere associati a negozi che hanno lo stesso indirizzo di fatturazione.</p>';
+                    return json_encode($res);
                 }
             }
             $olArr[] = $ol;
         }
 
-        $res['shop'] = $shopId;
+        $res['billingAddressBookId'] = $billingAddressBookId;
 
         foreach($invoiceLineOC as $v) {
             if ('fr_trans_doc_w_file' == $v->document->invoiceType->code) {
@@ -88,7 +88,7 @@ class CFriendTransportDocumentWithFile extends AAjaxController
         $number = \Monkey::app()->router->request()->getRequestData('number');
         $date = \Monkey::app()->router->request()->getRequestData('date');
         $total = \Monkey::app()->router->request()->getRequestData('total');
-        $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
+        $billingAddressBookId =\Monkey::app()->router->request()->getRequestData('shopId');
         $user = \Monkey::app()->getUser();
         /** @var CDocumentRepo $inR */
         $inR = \Monkey::app()->repoFactory->create('Document');
@@ -106,7 +106,7 @@ class CFriendTransportDocumentWithFile extends AAjaxController
 
             $inR->storeFriendTransportDocWithFile(
                 $user->id,
-                $shopId,
+                $billingAddressBookId,
                 $date,
                 null,
                 0,

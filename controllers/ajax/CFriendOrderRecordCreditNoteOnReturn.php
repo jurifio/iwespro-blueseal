@@ -27,7 +27,7 @@ class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
         $res['responseText'] = '';
 
         $linesWOInvoice = [];
-        $shopId = false;
+        $billingAddressBookId = false;
         $olArr = [];
         foreach($rows as $v) {
             $ol = $olR->findOneByStringId($v);
@@ -35,9 +35,9 @@ class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
             if (!$invoiceLineOC->count()) {
                 $linesWOInvoice[] = $ol->printId();
             }
-            if (false === $shopId) $shopId = $ol->shopId;
+            if (false === $billingAddressBookId) $billingAddressBookId = $ol->shop->billingAddressBookId;
             else {
-                if ($shopId != $ol->shopId) {
+                if ($billingAddressBookId != $ol->shop->billingAddressBookId) {
                     $res['error'] = true;
                     $res['responseText'] =
                         '<p><strong>Attenzione!</strong> I prodotti selezionati devono appartenere tutti allo stesso negozio.</p>';
@@ -47,7 +47,7 @@ class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
             $olArr[] = $ol;
         }
 
-        $res['shop'] = $shopId;
+        $res['billingAddressBookId'] = $billingAddressBookId;
 
         foreach($invoiceLineOC as $v) {
             if ('fr_credit_note_w_file' == $v->document->invoiceType->code) {
