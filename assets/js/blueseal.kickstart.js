@@ -1316,3 +1316,22 @@ $.getTemplate = function (templateName) {
         }
     })
 };
+
+$.fn.dataTableFilter = function (button, fieldName) {
+    let dataTable = $(this).DataTable();
+    let urlDecoded = $.myDecodeGetStringFromUrl(dataTable.ajax.url());
+    let fieldValue = ('undefined' !== typeof urlDecoded.params[fieldName]) ? urlDecoded.params[fieldName] : 0;
+    urlDecoded.params = {};
+    if (1 == fieldValue) {
+        $(button).removeClass('bs-button-toggle');
+    } else {
+        let buttons = $(document).find('.bs-button-toggle');
+        $(buttons).each(function(){
+            $(this).removeClass('bs-button-toggle');
+        });
+        urlDecoded.params[fieldName] = 1;
+        $(button).addClass('bs-button-toggle');
+    }
+    dataTable.ajax.url($.myEncodeGetString(urlDecoded));
+    dataTable.ajax.reload(false, null);
+};

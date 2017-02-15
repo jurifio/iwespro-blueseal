@@ -6,7 +6,7 @@ use bamboo\blueseal\business\CDownloadFileFromDb;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\core\exceptions\BambooRoutingException;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use bamboo\domain\entities\CInvoiceNew;
+use bamboo\domain\entities\CDocument;
 use bamboo\ecommerce\views\VBase;
 use bamboo\utils\price\SPriceToolbox;
 
@@ -22,7 +22,7 @@ class CDownloadInvoices extends ARestrictedAccessRootController
     public function get()
     {
         $filters = \Monkey::app()->router->getMatchedRoute()->getComputedFilters();
-        $i = \Monkey::app()->repoFactory->create('InvoiceNew')->findOne([$filters['id']]);
+        $i = \Monkey::app()->repoFactory->create('Document')->findOne([$filters['id']]);
         try {
             $user = \Monkey::app()->getUser();
             if (!$user->hasShop($i->shopAddressBook->shop->id)) throw new BambooRoutingException('Not Authorized');
@@ -40,7 +40,7 @@ class CDownloadInvoices extends ARestrictedAccessRootController
         }
     }
 
-    public function printOutInvoice(CInvoiceNew $i)
+    public function printOutInvoice(CDocument $i)
     {
         $templateName = $i->invoiceType->printTemplateName;
         $view = new VBase(array());

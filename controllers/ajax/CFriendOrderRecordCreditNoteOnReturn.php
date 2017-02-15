@@ -2,7 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
-use bamboo\domain\repositories\CInvoiceNewRepo;
+use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\utils\price\SPriceToolbox;
 
 /**
@@ -50,7 +50,7 @@ class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
         $res['shop'] = $shopId;
 
         foreach($invoiceLineOC as $v) {
-            if ('fr_credit_note_w_file' == $v->invoiceNew->invoiceType->code) {
+            if ('fr_credit_note_w_file' == $v->document->invoiceType->code) {
                 $res['error'] = true;
                 $res['responseText'] = '<p><strong>Attenzione!</strong> Una o più righe d\'ordine è già stata registrata in una nota di credito.</p>';
             }
@@ -88,8 +88,8 @@ class CFriendOrderRecordCreditNoteOnReturn extends AAjaxController
         $total = \Monkey::app()->router->request()->getRequestData('total');
         $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
         $user = \Monkey::app()->getUser();
-        /** @var CInvoiceNewRepo $inR */
-        $inR = \Monkey::app()->repoFactory->create('InvoiceNew');
+        /** @var CDocumentRepo $inR */
+        $inR = \Monkey::app()->repoFactory->create('Document');
 
         $res =[];
         $res['error'] = false;

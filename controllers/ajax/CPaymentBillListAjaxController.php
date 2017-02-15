@@ -37,7 +37,7 @@ class CPaymentBillListAjaxController extends AAjaxController
                        group_concat(ab.subject)
                 from PaymentBill pb 
                       JOIN PaymentBillHasInvoiceNew pbhin on pb.id = pbhin.paymentBillId 
-                      JOIN InvoiceNew inn on pbhin.invoiceNewId = inn.id
+                      JOIN Document inn on pbhin.invoiceNewId = inn.id
                       JOIN InvoiceType it on inn.invoiceTypeId = it.id
                       JOIN AddressBook ab on shopRecipientId = ab.id
                   GROUP BY pb.id";
@@ -84,7 +84,7 @@ class CPaymentBillListAjaxController extends AAjaxController
             $row['recipients'] = implode('<br />',$rec);
 
             $inv = [];
-            foreach ($paymentBill->invoiceNew as $invoice) {
+            foreach ($paymentBill->document as $invoice) {
                 if($invoice->getSignedValueWithVat() < 0) $color = "text-green";
                 elseif($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
                 else $color = "";
