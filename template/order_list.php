@@ -149,6 +149,9 @@
         <bs-toolbar-button
                 data-remote="bs.order.viewCountersign"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.order.filterToSend"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
