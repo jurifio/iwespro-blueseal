@@ -14,7 +14,7 @@ $(document).on('bs.order.massiveUpdateStatus', function (e, element, button) {
     var dataTable = $('.dataTable').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 
-    if (1 < selectedRows.length) {
+    if (1 > selectedRows.length) {
         new Alert({
             type: "warning",
             message: "Devi selezionare almeno un ordine"
