@@ -17,7 +17,7 @@ class CFriendOrderRecordCreditNoteOnReturnWithFile extends AAjaxController
         $number = \Monkey::app()->router->request()->getRequestData('number');
         $date = \Monkey::app()->router->request()->getRequestData('date');
         $total = \Monkey::app()->router->request()->getRequestData('total');
-        $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
+        $billingAddressBookId =\Monkey::app()->router->request()->getRequestData('shopId');
         $user = \Monkey::app()->getUser();
         /** @var CDocumentRepo $inR */
         $inR = \Monkey::app()->repoFactory->create('Document');
@@ -38,7 +38,7 @@ class CFriendOrderRecordCreditNoteOnReturnWithFile extends AAjaxController
 
             $inR->storeFriendCreditNoteWithFile(
                 $user->id,
-                $shopId,
+                $billingAddressBookId,
                 $date,
                 null,
                 0,

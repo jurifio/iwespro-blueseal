@@ -94,7 +94,7 @@ $(document).on('bs.friend.order.registerInvoiceFromFile', function () {
 
             var invoiceForm = '<form id="sendInvoiceWithFile">' +
                 '<div class="alert"></div>' +
-                '<input type="hidden" id="invoiceShop" name="invoiceShop" value="' + res.shop + '" />' +
+                '<input type="hidden" id="invoiceShop" name="invoiceShop" value="' + res.billingAddressBookId + '" />' +
                 '<div class="row">' +
                     '<div class="col-sm-12">' +
                         '<div class="form-group">' +

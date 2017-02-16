@@ -27,7 +27,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
         $res['responseText'] = '';
         $linesWInvoice = [];
         $linesNotReady = [];
-        $shopId = false;
+        $billingAddressBookId = false;
         $olArr = [];
         foreach($rows as $v) {
             $ol = $olR->findOneByStringId($v);
@@ -37,19 +37,20 @@ class CFriendOrderRecordInvoice extends AAjaxController
             }
             $status = $ol->orderLineStatus;
             if (($status->id < 7 || $status->id > 14) && $status->id != 19) $linesNotReady[] = $ol->printId();
-            if (false === $shopId) $shopId = $ol->shopId;
+
+            if (false === $billingAddressBookId) $billingAddressBookId = $ol->shop->billingAddressBookId;
             else {
-                if ($shopId != $ol->shopId) {
+                if ($billingAddressBookId != $ol->shop->billingAddressBookId) {
                     $res['error'] = true;
                     $res['responseText'] =
-                        '<p><strong>Attenzione!</strong> I prodotti selezionati devono appartenere tutti allo stesso negozio.</p>';
+                        '<p><strong>Attenzione!</strong> I prodotti selezionati devono essere associati allo stesso indirizzo di fatturazione.</p>';
                     return json_encode($res);
                 }
             }
             $olArr[] = $ol;
         }
 
-        $res['shop'] = $shopId;
+        $res['billingAddressBookId'] = $billingAddressBookId;
 
         if (count($linesWInvoice)) {
             $res['error'] = true;
@@ -90,7 +91,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
         $number = \Monkey::app()->router->request()->getRequestData('number');
         $date = \Monkey::app()->router->request()->getRequestData('date');
         $total = \Monkey::app()->router->request()->getRequestData('total');
-        $shopId =\Monkey::app()->router->request()->getRequestData('shopId');
+        $billingAddressBookId =\Monkey::app()->router->request()->getRequestData('shopId');
         $user = \Monkey::app()->getUser();
         /** @var CDocumentRepo $inR */
         $inR = \Monkey::app()->repoFactory->create('Document');
@@ -111,7 +112,7 @@ class CFriendOrderRecordInvoice extends AAjaxController
 
             $inR->storeFriendInvoiceWithFile(
                 $user->id,
-                $shopId,
+                $billingAddressBookId,
                 $date,
                 null,
                 0,

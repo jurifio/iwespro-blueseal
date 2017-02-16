@@ -35,7 +35,7 @@ class CDocumentRepo extends ARepo
      */
     public function storeFriendInvoiceWithFile(
         int $userId,
-        int $shopId,
+        int $billingAddressBookId,
         \DateTime $emissionDate,
         $paymentExpectedDate = null,
         $paidAmount,
@@ -53,7 +53,7 @@ class CDocumentRepo extends ARepo
             $insertedId =$this->storeFriendDocumentWithFile(
                 $invoiceType,
                 $userId,
-                $shopId,
+                $billingAddressBookId,
                 $emissionDate,
                 $paymentExpectedDate,
                 $paidAmount,
@@ -91,7 +91,7 @@ class CDocumentRepo extends ARepo
     public function storeFriendDocumentBasic(
         CInvoiceType $invoiceType,
         int $userId,
-        int $shopId,
+        int $shopAddressBookId,
         \DateTime $emissionDate,
         $paymentExpectedDate = null,
         $paidAmount,
@@ -102,11 +102,7 @@ class CDocumentRepo extends ARepo
     )
     {
         $invoiceTypeId = $invoiceType->id;
-
-        $shpR = \Monkey::app()->repoFactory->create('Shop');
-        $addressBook = $shpR->findOne([$shopId])->billingAddressBook;
-        if (null == $addressBook) throw new BambooInvoiceException('Nessun indirizzo è associato a questo Friend');
-        $addressBookId = $shpR->findOne([$shopId])->billingAddressBookId;
+        $addressBook = \Monkey::app()->repoFactory->create('AddressBook')->findOne([$shopAddressBookId]);
         $vat = $this->getInvoiceVat($invoiceType, $addressBook);
         $orderLinesOC = new CObjectCollection();
         $olR = \Monkey::app()->repoFactory->create('OrderLine');
@@ -137,7 +133,7 @@ class CDocumentRepo extends ARepo
             $invoiceTypeId,
             $userId,
             1,
-            $addressBookId,
+            $shopAddressBookId,
             $emissionDate,
             $totalWithVat,
             $paidAmount,
@@ -209,12 +205,12 @@ class CDocumentRepo extends ARepo
         \DateTime $creationDate = null
     )
     {
-        $inR = \Monkey::app()->repoFactory->create('Document');
+        $docR = \Monkey::app()->repoFactory->create('Document');
 
         //date control
         if (!$creationDate) $creationDate = new \DateTime();
         $diff = $creationDate->diff($date);
-        if ($diff->days && !$diff->invert) throw new BambooInvoiceException('Non si possono emettere fatture con date di emissione antecedenti alla data odierna');
+        if ($diff->days && !$diff->invert) throw new BambooInvoiceException('Non si possono emettere fatture con data di emissione successiva alla data odierna');
         if ($paymentExpectedDate) {
             $diff = $date->diff($paymentExpectedDate);
             if ($diff->days && $diff->invert) throw new BambooInvoiceException('La data di previsto pagamento non può essere precedente all\'emissione della fattura');
@@ -227,11 +223,11 @@ class CDocumentRepo extends ARepo
         /** @var CInvoiceSectional $invoiceSectional */
 
         $invoiceWithNumber =
-            $inR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
+            $docR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
         if ($invoiceWithNumber)
             throw new BambooInvoiceException('il numero della fattura è già presente nel nostro sistema e non può essere duplicato. id fattura: ' . $invoiceWithNumber->id);
 
-        $in = $inR->getEmptyEntity();
+        $in = $docR->getEmptyEntity();
         $in->userId = $userId;
         if ($isShop) $in->shopRecipientId = $recipientOrEmitterId;
         else $in->userRecipientId = $recipientOrEmitterId;
@@ -248,7 +244,7 @@ class CDocumentRepo extends ARepo
         $in->totalWithVat = $totalWithVat;
         $in->note = ($note) ? $note : '';
         $in->year = $year;
-        $in->creationDate = $creationDate->format('Y-m-d');
+        $in->creationDate = $creationDate->format('Y-m-d H:m:s');
         return $in->insert();
     }
 
@@ -403,7 +399,7 @@ class CDocumentRepo extends ARepo
 
     public function storeFriendTransportDocWithFile(
         int $userId,
-        int $shopId,
+        int $billingAddressBookId,
         \DateTime $emissionDate,
         $paymentExpectedDate = null,
         $paidAmount,
@@ -419,7 +415,7 @@ class CDocumentRepo extends ARepo
             $insertedId =$this->storeFriendDocumentWithFile(
                 $invoiceType,
                 $userId,
-                $shopId,
+                $billingAddressBookId,
                 $emissionDate,
                 $paymentExpectedDate,
                 $paidAmount,
@@ -443,7 +439,7 @@ class CDocumentRepo extends ARepo
     public function storeFriendDocumentWithFile(
         CInvoiceType $invoiceType,
         int $userId,
-        int $shopId,
+        int $billingAddressBookId,
         \DateTime $emissionDate,
         $paymentExpectedDate = null,
         $paidAmount,
@@ -457,7 +453,7 @@ class CDocumentRepo extends ARepo
             $insertedId = $this->storeFriendDocumentBasic(
                 $invoiceType,
                 $userId,
-                $shopId,
+                $billingAddressBookId,
                 $emissionDate,
                 $paymentExpectedDate,
                 $paidAmount,
@@ -480,7 +476,7 @@ class CDocumentRepo extends ARepo
 
     public function storeFriendCreditNoteOnReturn(
         int $userId,
-        int $shopId,
+        int $billingAddressBookId,
         \DateTime $emissionDate,
         $paymentExpectedDate = null,
         $paidAmount,
@@ -500,7 +496,7 @@ class CDocumentRepo extends ARepo
             $this->storeFriendDocumentBasic(
                 $invoiceType,
                 $userId,
-                $shopId,
+                $billingAddressBookId,
                 $emissionDate,
                 $paymentExpectedDate,
                 $paidAmount,
@@ -522,7 +518,7 @@ class CDocumentRepo extends ARepo
 
     public function storeFriendCreditNoteWithFile(
         int $userId,
-        int $shopId,
+        int $billingAddressBookId,
         \DateTime $emissionDate,
         $paymentExpectedDate = null,
         $paidAmount,
@@ -540,7 +536,7 @@ class CDocumentRepo extends ARepo
             $insertedId =$this->storeFriendDocumentWithFile(
                 $invoiceType,
                 $userId,
-                $shopId,
+                $billingAddressBookId,
                 $emissionDate,
                 $paymentExpectedDate,
                 $paidAmount,
