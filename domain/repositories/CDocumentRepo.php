@@ -608,7 +608,7 @@ class CDocumentRepo extends ARepo
         $isSingle = (1 < $iCO->count()) ? false : true;
         //controllo che i dati fin'ora registrati siano corretti
         $due = 0;
-
+        /** @var CDocument $v */
         foreach ($iCO as $v) {
             $bill = $v->paymentBill;
             $amountBills = 0;
@@ -619,7 +619,7 @@ class CDocumentRepo extends ARepo
                 throw new BambooInvoiceException('Nella fattura ' . $v->number . ' i dati dei pagamenti effettuati non corrispondono al totale registrato. Ricontrollarli prima di procedere a qualsiasi altra operazione');
             }
 
-            $due += $v->totalWithVat - (float)$v->paydAmount;
+            $due += $v->getSignedValueWithVat() - (float)$v->paydAmount;
 
             if ($isSingle) {
                 if (0 >= $due) {
@@ -705,7 +705,7 @@ class CDocumentRepo extends ARepo
             );
         }
         foreach ($invoices as $v) {
-            $newAmount += $v->totalWithVat;
+            $newAmount += $v->getSignedValueWithVat();
             $pbh = $pbhR->getEmptyEntity();
             $pbh->paymentBillId = $idBill;
             $pbh->invoiceNewId = $v->id;
@@ -759,7 +759,7 @@ class CDocumentRepo extends ARepo
      */
     public function fetchUnboundedExpiringInvoices($dueDate = null)
     {
-        $sql = "SELECT * 
+        $sql = "SELECT d.id 
                 FROM Document d 
                   JOIN InvoiceType it on d.invoiceTypeId = it.id
                   LEFT JOIN PaymentBillHasInvoiceNew pbhin 
