@@ -199,13 +199,14 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $document = $olR->getFriendInvoice($v);
             $response['data'][$i]['invoiceAll'] = '<span class="small">';
-                ($document) ? $document->number . ' (id:' . $document->id . ')' : 'non assegnata' ;
+               if ($document) $response['data'][$i]['invoiceAll'] .=
+                   $document->number . ' (id:' . $document->id . ')<br />';
             $creditNote = $olR->getFriendCreditNote($v);
             if ($creditNote) $response['data'][$i]['invoiceAll'] .=
-                '<br />Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')';
+                'Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')<br />';
             $transDoc = $olR->getFriendTransDoc($v);
             if ($transDoc) $response['data'][$i]['invoiceAll'] .=
-                '<br />DDT: ' . $transDoc->number . ' (id:' . $transDoc->id . ')';
+                'DDT: ' . $transDoc->number . ' (id:' . $transDoc->id . ')';
             $response['data'][$i]['invoiceAll'].= '</span>';
             $lOC = $lR->findBy(
                 ['stringId' => $v->printId(), 'entityName' => 'OrderLine', 'actionName' => 'OrderStatusLog']
