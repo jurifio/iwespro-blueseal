@@ -35,6 +35,12 @@ class CFriendOrderListAjaxController extends AAjaxController
                   #l.eventValue as logVal,
                   #l.time as logTime,
                   `pb`.`name`                                                   AS `brand`,
+                  concat(
+                  if(`it`.`code` like '%fr_invoice%', `in`.`number`, '-'),
+                       ',', if(`it`.`code` like '%credito_note%', `in`.`number`, '-'),
+                       ',',
+                       if(`it`.`code` like '%fr_trans_doc%', `in`.`number`, '-')
+                  ) as invoiceAll,
                   if(`it`.`code` like '%fr_invoice%', `in`.`number`, '-') AS `invoiceNumber`,
                   if(`it`.`code` like '%credito_note%', `in`.`number`, '-') AS `creditNoteNumber`,
                   if(`it`.`code` like '%fr_trans_doc%', `in`.`number`, '-') AS `transDocNumber`,
@@ -193,13 +199,14 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $document = $olR->getFriendInvoice($v);
             $response['data'][$i]['invoiceAll'] = '<span class="small">';
-                ($document) ? $document->number . ' (id:' . $document->id . ')' : 'non assegnata' ;
+               if ($document) $response['data'][$i]['invoiceAll'] .=
+                   $document->number . ' (id:' . $document->id . ')<br />';
             $creditNote = $olR->getFriendCreditNote($v);
             if ($creditNote) $response['data'][$i]['invoiceAll'] .=
-                '<br />Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')';
+                'Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')<br />';
             $transDoc = $olR->getFriendTransDoc($v);
             if ($transDoc) $response['data'][$i]['invoiceAll'] .=
-                '<br />DDT: ' . $transDoc->number . ' (id:' . $transDoc->id . ')';
+                'DDT: ' . $transDoc->number . ' (id:' . $transDoc->id . ')';
             $response['data'][$i]['invoiceAll'].= '</span>';
             $lOC = $lR->findBy(
                 ['stringId' => $v->printId(), 'entityName' => 'OrderLine', 'actionName' => 'OrderStatusLog']
