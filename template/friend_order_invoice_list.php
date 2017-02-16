@@ -46,7 +46,7 @@
                                 <th data-slug="documentType"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="desc" class="center dataFilterType">Tipo Documento</th>
+                                    class="center dataFilterType">Tipo Documento</th>
                                 <th data-slug="invoiceDate"
                                     data-searchable="true"
                                     data-orderable="true"
