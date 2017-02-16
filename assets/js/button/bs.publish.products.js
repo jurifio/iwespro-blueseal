@@ -59,6 +59,7 @@ $(document).on('bs.pub.product', function (e, element, button) {
                             okButton.html(result.okButtonLabel).off().on('click', function () {
                                 bsModal.modal('hide');
                                 okButton.off();
+                                $('.table').DataTable().ajax.reload(null, false);
                             });
                         });
                     });

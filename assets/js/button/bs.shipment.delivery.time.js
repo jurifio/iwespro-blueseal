@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs.shipment.delivery.time",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Segnala Partenza Spedizione",
+    title: "Segnala Arrivo Spedizione",
     placement: "bottom",
     toggle: "modal"
 };
