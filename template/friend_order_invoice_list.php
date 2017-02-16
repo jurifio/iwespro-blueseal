@@ -104,7 +104,7 @@
             data-permission="/admin/order/add"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Aggiungi una fattura"
+            data-title="Aggiungi una fattura as una distinta"
             data-placement="bottom"
             data-event="bs.orderline.editPaymentBillAddInvoice"
         ></bs-toolbar-button>
