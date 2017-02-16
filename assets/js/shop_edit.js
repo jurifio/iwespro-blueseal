@@ -5,6 +5,7 @@ $(document).on('bs.shop.save',function() {
 	} else {
 		method = "POST";
 	}
+
 	$.ajaxForm({
 		method: method,
 		url: "#",
@@ -55,6 +56,7 @@ $(document).on('bs.shop.save',function() {
                 $('#shippingAddresses').append('<div class="shippingAddress" id="shippingAddress_'+addressData.id+'"></div>');
                 fillShipment(addressData,'#shippingAddress_'+addressData.id);
             });
+            fillShipment({},'#shippingAddress');
 		});
 	}
 })(jQuery);
@@ -85,7 +87,7 @@ function fillShipment(data,containerSelector) {
                     element.find('#address').val(data.address);
                     element.find('#extra').val(data.extra);
                     element.find('#city').val(data.city);
-                    //select.selectize.setValue(data.countryId);
+                    select[0].selectize.setValue(data.countryId);
                     element.find('#postcode').val(data.postcode);
                     element.find('#phone').val(data.phone);
                     element.find('#cellphone').val(data.cellphone);
