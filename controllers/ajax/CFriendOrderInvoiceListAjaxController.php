@@ -16,14 +16,14 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
              SELECT
                   `i`.`id` as `id`,
                   `i`.`number` as `invoiceNumber`,
-                  DATE_FORMAT(`i`.`paymentExpectedDate`, '%d-%m-%Y') as paymentExpectedDate,
-                  DATE_FORMAT(`i`.`date`, '%d-%m-%Y') as `invoiceDate`,
+                  `i`.`paymentExpectedDate` as paymentExpectedDate,
+                  `i`.`date` as `invoiceDate`,
                   `i`.`totalWithVat` as `invoiceTotalAmount`,
                   if (`it`.`code` LIKE '%invoice%', 'Fattura', 'Nota di credito') as `documentType`,
                   if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') as `paymentDate`,
                   concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
                   `i`.`creationDate` as `creationDate`,
-                  if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`, ', '), 'Non presente')  as `paymentBill`,
+                  if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`), 'Non presente')  as `paymentBill`,
                   `sh`.`title` as friend,
                   `ab`.`id` as abid,
                   sh.id as shopId
@@ -37,7 +37,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   LEFT JOIN `OrderLine` as `ol` on `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
                   LEFT JOIN (`PaymentBillHasInvoiceNew` as `pbhin` JOIN `PaymentBill` as `pb` on `pb`.id = `pbhin`.`paymentBillId`) on `i`.`id` = `pbhin`.`invoiceNewId`
                 WHERE
-                  `it`.`code` like 'fr_invoice%' OR `it`.`code` like 'fr_credit_note%'
+                  `it`.`code` like 'fr_%'
                   group by `i`.`id`
               ";
 

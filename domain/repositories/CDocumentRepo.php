@@ -761,9 +761,12 @@ class CDocumentRepo extends ARepo
     {
         $sql = "SELECT * 
                 FROM Document d 
+                  JOIN InvoiceType it on d.invoiceTypeId = it.id
                   LEFT JOIN PaymentBillHasInvoiceNew pbhin 
                     ON d.id = pbhin.invoiceNewId 
-                WHERE pbhin.paymentBillId IS NULL 
+                WHERE
+                    it.isPayable = 1
+                    AND pbhin.paymentBillId IS NULL 
                     AND date(d.paymentExpectedDate) <= date(ifnull(?,current_date)) 
                     ORDER BY d.paymentExpectedDate ASC ";
 
