@@ -19,15 +19,16 @@ class CCheckProductsToBePublished extends AAjaxController
     public function put()
     {
         $products = $this->app->repoFactory->create('Product')->findBySql("
-          SELECT DISTINCT Product.id, Product.productVariantId
-			FROM Product,ProductHasProductPhoto,ProductPhoto,ProductSku,ProductStatus
-			WHERE Product.id = ProductHasProductPhoto.productId
-      	      AND Product.productStatusId = ProductStatus.id
-		      AND Product.productVariantId = ProductHasProductPhoto.productVariantId
-		      AND Product.id = ProductSku.productId
-		      AND Product.productVariantId = ProductSku.productVariantId
-		      AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
-		      AND ProductStatus.isReady = 1", []);
+          SELECT DISTINCT p.id, p.productVariantId
+			FROM Product p,ProductHasProductPhoto phpp,ProductPhoto pp,ProductSku ps,ProductStatus pst
+			WHERE p.id = phpp.productId
+			  AND p.productVariantId = phpp.productVariantId
+              AND p.id = ps.productId
+		      AND p.productVariantId = ps.productVariantId
+      	      AND p.productStatusId = pst.id
+		      AND phpp.productPhotoId = pp.id
+		      AND pst.isReady = 1
+		      GROUP BY p.id, p.productVariantId HAVING SUM(stockQty) > 0", []);
         $count = 0;
         foreach ($products as $product) {
             $product->productStatusId = 6;
@@ -76,17 +77,18 @@ class CCheckProductsToBePublished extends AAjaxController
     public function get()
     {
         $result = $this->app->dbAdapter->query("
-         SELECT count(DISTINCT Product.id, Product.productVariantId) as conto
-			FROM Product,ProductHasProductPhoto,ProductPhoto,ProductSku,ProductStatus
-			WHERE Product.id = ProductHasProductPhoto.productId
-      	      AND Product.productStatusId = ProductStatus.id
-		      AND Product.productVariantId = ProductHasProductPhoto.productVariantId
-		      AND Product.id = ProductSku.productId
-		      AND Product.productVariantId = ProductSku.productVariantId
-		      AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
-		      AND ProductStatus.isReady = 1", []);
+         SELECT DISTINCT p.id, p.productVariantId
+			FROM Product p,ProductHasProductPhoto phpp,ProductPhoto pp,ProductSku ps,ProductStatus pst
+			WHERE p.id = phpp.productId
+			  AND p.productVariantId = phpp.productVariantId
+              AND p.id = ps.productId
+		      AND p.productVariantId = ps.productVariantId
+      	      AND p.productStatusId = pst.id
+		      AND phpp.productPhotoId = pp.id
+		      AND pst.isReady = 1
+		      GROUP BY p.id, p.productVariantId HAVING SUM(stockQty) > 0", []);
 
-        $count = $result->fetchAll()[0]['conto'];
+        $count = count($result->fetchAll());
 
         if ($count > 0) return json_encode(
             [
