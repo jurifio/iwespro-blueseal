@@ -35,6 +35,12 @@ class CFriendOrderListAjaxController extends AAjaxController
                   #l.eventValue as logVal,
                   #l.time as logTime,
                   `pb`.`name`                                                   AS `brand`,
+                  concat(
+                  if(`it`.`code` like '%fr_invoice%', `in`.`number`, '-'),
+                       ',', if(`it`.`code` like '%credito_note%', `in`.`number`, '-'),
+                       ',',
+                       if(`it`.`code` like '%fr_trans_doc%', `in`.`number`, '-')
+                  ) as invoiceAll,
                   if(`it`.`code` like '%fr_invoice%', `in`.`number`, '-') AS `invoiceNumber`,
                   if(`it`.`code` like '%credito_note%', `in`.`number`, '-') AS `creditNoteNumber`,
                   if(`it`.`code` like '%fr_trans_doc%', `in`.`number`, '-') AS `transDocNumber`,
