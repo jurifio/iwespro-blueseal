@@ -18,21 +18,24 @@ class CCheckProductsToBePublished extends AAjaxController
 
     public function put()
     {
-        $result = $this->app->dbAdapter->query("
-          UPDATE Product, ProductHasProductPhoto, ProductPhoto, ProductSku, ProductStatus
-          SET Product.productStatusId = 6
-          WHERE Product.id = ProductHasProductPhoto.productId
-          AND Product.productStatusId = ProductStatus.id
-          AND Product.productVariantId = ProductHasProductPhoto.productVariantId
-          AND Product.id = ProductSku.productId
-          AND Product.productVariantId = ProductSku.productVariantId
-          AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
-          AND ProductStatus.code IN ('A', 'Q', 'I')", []);
-
-        $this->app->cacheService->getCache('entities')->flush();
+        $products = $this->app->repoFactory->create('Product')->findBySql("
+          SELECT DISTINCT Product.id, Product.productVariantId
+			FROM Product,ProductHasProductPhoto,ProductPhoto,ProductSku,ProductStatus
+			WHERE Product.id = ProductHasProductPhoto.productId
+      	      AND Product.productStatusId = ProductStatus.id
+		      AND Product.productVariantId = ProductHasProductPhoto.productVariantId
+		      AND Product.id = ProductSku.productId
+		      AND Product.productVariantId = ProductSku.productVariantId
+		      AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
+		      AND ProductStatus.isReady = 1", []);
+        $count = 0;
+        foreach ($products as $product) {
+            $product->productStatusId = 6;
+            $count += $product->update();
+        }
         return json_encode(
             [
-                'bodyMessage' => $result->countAffectedRows() . ' prodotti pubblicati',
+                'bodyMessage' => $count . ' prodotti pubblicati',
                 'okButtonLabel' => 'Ok',
                 'cancelButtonLabel' => null
             ]);
@@ -73,7 +76,7 @@ class CCheckProductsToBePublished extends AAjaxController
     public function get()
     {
         $result = $this->app->dbAdapter->query("
-         SELECT COUNT(DISTINCT Product.id, Product.productVariantId) AS conto
+         SELECT count(DISTINCT Product.id, Product.productVariantId) as conto
 			FROM Product,ProductHasProductPhoto,ProductPhoto,ProductSku,ProductStatus
 			WHERE Product.id = ProductHasProductPhoto.productId
       	      AND Product.productStatusId = ProductStatus.id
@@ -81,7 +84,7 @@ class CCheckProductsToBePublished extends AAjaxController
 		      AND Product.id = ProductSku.productId
 		      AND Product.productVariantId = ProductSku.productVariantId
 		      AND ProductHasProductPhoto.productPhotoId = ProductPhoto.id
-		      AND ProductStatus.code IN ('A', 'Q', 'I')", []);
+		      AND ProductStatus.isReady = 1", []);
 
         $count = $result->fetchAll()[0]['conto'];
 
