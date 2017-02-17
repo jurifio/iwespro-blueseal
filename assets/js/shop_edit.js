@@ -82,7 +82,7 @@ $(document).on('bs.shop.save', function () {
 
             checkPermission('allShops')
                 .done(function () {
-                    $.each('input[disabled]', function (k, v) {
+                    $.each($('input[disabled]'), function (k, v) {
                         $(v).prop("disabled", false)
                             .closest('div')
                             .removeClass('disabled')
