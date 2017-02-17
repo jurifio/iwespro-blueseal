@@ -1,16 +1,33 @@
 $(document).on('bs.shop.save',function() {
 	let method;
-	if($('#shop_id').val().length) {
+    let data = {};
+    data.id = $('#shop_id').val();
+    data.title = $('#shop_title').val();
+    data.owner = $('#shop_owner').val();
+    data.referrerEmails = $('#shop_referrerEmails').val();
+    data.iban = $('#shop_iban').val();
+    data.currentSeasonMultiplier = $('#shop_currentSeasonMultiplier').val();
+    data.pastSeasonMultiplier = $('#shop_pastSeasonMultiplier').val();
+    data.saleMultiplier = $('#shop_saleMultiplier').val();
+    data.billingAddressBook = readShipment('#billingAddress');
+    data.shippingAddresses = [];
+    $.each($('#shippingAddresses .shippingAddress'),function (k,v) {
+        data.shippingAddresses.push(readShipment(v));
+    });
+
+	if(data.id.length) {
 		method = "PUT";
 	} else {
 		method = "POST";
 	}
 
-	$.ajaxForm({
+	$.ajax({
 		method: method,
-		url: "#",
-		formAutofill: true
-	}, new FormData()).done(function() {
+		url: "/blueseal/xhr/ShopManage",
+        data: {
+		    shop: data
+        }
+	}).done(function() {
 		new Alert({
 			type: "success",
 			message: "Modifiche Salvate"
@@ -51,20 +68,37 @@ $(document).on('bs.shop.save',function() {
                     }
                 }
             });
-            fillShipment(res.billingAddressBook,'#billingAddress');
+            appendShipment(res.billingAddressBook,'#billingAddress');
             res.shippingAddressBook.forEach(function(addressData) {
-                $('#shippingAddresses').append('<div class="shippingAddress" id="shippingAddress_'+addressData.id+'"></div>');
-                fillShipment(addressData,'#shippingAddress_'+addressData.id);
+                appendShipment(addressData,'#shippingAddresses');
             });
-            fillShipment({},'#shippingAddress');
+            appendShipment({},'#shippingAddresses');
 		});
 	}
 })(jQuery);
 
-function fillShipment(data,containerSelector) {
+function readShipment(containerSelector) {
+    "use strict";
+    let data = {};
     let element = $(containerSelector);
+    data.id = element.find('#id').val();
+    data.name = element.find('#name').val();
+    data.subject = element.find('#subject').val();
+    data.address = element.find('#address').val();
+    data.extra = element.find('#extra').val();
+    data.city = element.find('#city').val();
+    data.countryId = element.find('#country').val();
+    data.postcode = element.find('#postcode').val();
+    data.phone = element.find('#phone').val();
+    data.cellphone = element.find('#cellphone').val();
+    data.province = element.find('#province').val();
+    return data;
+}
+
+function appendShipment(data,containerSelector) {
+    let container = $(containerSelector);
     $.getTemplate('addressBookFormMock').done(function (res) {
-        element.html($(res));
+        let element = $(res);
         Pace.ignore(function() {
             $.get({
                 url: '/blueseal/xhr/GetTableContent',
@@ -82,6 +116,7 @@ function fillShipment(data,containerSelector) {
                     options: res2,
                 });
                 if(Object.keys(data).length  > 0) {
+                    element.find('#id').val(data.id);
                     element.find('#name').val(data.name);
                     element.find('#subject').val(data.subject);
                     element.find('#address').val(data.address);
@@ -93,9 +128,9 @@ function fillShipment(data,containerSelector) {
                     element.find('#cellphone').val(data.cellphone);
                     element.find('#province').val(data.province);
                 }
+                container.append(element);
             });
         });
     });
-    element.find()
 }
 

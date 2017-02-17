@@ -29,6 +29,7 @@
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Informazioni di base</h5>
                                 </div>
+                                <input id="shop_id" type="hidden" value="" name="shop_id">
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -110,80 +111,7 @@
                                     <h5 class="m-t-10">Informazioni di Fatturazione</h5>
                                 </div>
                                 <div class="panel-body clearfix" id="billingAddress">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group form-group-default">
-                                                <label for="shop_billing_name">Denominazione Inidirzzo</label>
-                                                <input id="shop_billing_name" autocomplete="off" type="text"
-                                                       class="form-control"
-                                                       name="shop_billing_name" value=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group form-group-default">
-                                                <label for="shop_billing_subject">Destinatario</label>
-                                                <input id="shop_billing_subject" autocomplete="off" type="text"
-                                                       class="form-control"
-                                                       name="shop_billing_subject" value=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default">
-                                                <label for="shop_billing_address">Indirizzo</label>
-                                                <input id="shop_billing_address" autocomplete="off" type="text"
-                                                       class="form-control"
-                                                       name="shop_billing_address" value=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default">
-                                                <label for="shop_billing_extra">Indirizzo 2</label>
-                                                <input id="shop_billing_extra" autocomplete="off" type="text"
-                                                       class="form-control"
-                                                       name="shop_billing_extra" value=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group form-group-default">
-                                                <label for="shop_billing_city">City</label>
-                                                <input id="shop_billing_city" autocomplete="off" type="text"
-                                                       class="form-control"
-                                                       name="shop_billing_city" value=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default">
-                                                <label for="shop_billing_postcode">Postcode</label>
-                                                <input id="shop_billing_postcode" autocomplete="off" type="text"
-                                                       class="form-control"
-                                                       name="shop_billing_postcode" value=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default">
-                                                <label for="shop_billing_province">Provincia</label>
-                                                <input id="shop_billing_province" autocomplete="off" type="text"
-                                                       class="form-control" maxlength="2"
-                                                       name="shop_billing_province" value=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group form-group-default">
-                                                <label for="shop_billing_phone">Telefono</label>
-                                                <input id="shop_billing_phone" autocomplete="off" type="text"
-                                                       class="form-control"
-                                                       name="shop_billing_phone" value=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group form-group-default">
-                                                <label for="shop_billing_cellphone">Cellulare</label>
-                                                <input id="shop_billing_cellphone" autocomplete="off" type="text"
-                                                       class="form-control"
-                                                       name="shop_billing_cellphone" value=""/>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>

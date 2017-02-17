@@ -1,5 +1,9 @@
 <?php
+
 namespace bamboo\blueseal\controllers\ajax;
+
+use bamboo\domain\entities\CAddressBook;
+
 
 /**
  * Class CUserList
@@ -30,6 +34,66 @@ class CShopManage extends AAjaxController
             $this->app->router->response()->raiseUnauthorized();
             return 'Bad Request';
         }
-
 	}
+
+	public function put()
+    {
+        $shopData = $this->app->router->request()->getRequestData('shop');
+        $shopsId = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        if(in_array($shopData['id'],$shopsId)) {
+            $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopData['id']);
+            $shop->title = $shopData['title'];
+            $shop->owner = $shopData['owner'];
+            $shop->referrerEmails = $shopData['referrerEmails'];
+            $shop->iban = $shopData['iban'];
+            if($this->app->getUser()->hasPermission('allShops')) {
+                $shop->currentSeasonMultiplier = $shopData['currentSeasonMultiplier'];
+                $shop->pastSeasonMultiplier = $shopData['pastSeasonMultiplier'];
+                $shop->saleMultiplier = $shopData['saleMultiplier'];
+            }
+
+            $billingAddressBookData = $shopData['billingAddressBook'];
+            $billingAddressBook = $this->getAndFillAddressData($billingAddressBookData);
+            if(isset($billingAddressBook->id)) $billingAddressBook->update();
+            else $billingAddressBook->id = $billingAddressBook->insert();
+
+            $shop->billingAddressBookId = $billingAddressBook->id;
+
+            foreach ($shopData['shippingAddresses'] as $shippingAddressData) {
+                $shippingAddress = $this->getAndFillAddressData($shippingAddressData);
+                if(isset($shippingAddress->id)) $shippingAddress->update();
+                else $shippingAddress->insert();
+
+                new Cshophas
+            }
+
+            return $shop->update();
+        } else {
+            $this->app->router->response()->raiseUnauthorized();
+            return 'Bad Request';
+        }
+    }
+
+    private function getAndFillAddressData($addressBookData) {
+	    if(isset($addressBookData['id'])) $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
+	    else $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
+        /** @var CAddressBook $addressBook */
+        $addressBook->name = $addressBookData['name'] ?? null;
+        $addressBook->subject = $addressBookData['subject'];
+        $addressBook->address = $addressBookData['address'];
+        $addressBook->extra = $addressBookData['extra'] ?? null;
+        $addressBook->city = $addressBookData['city'];
+        $addressBook->countryId = $addressBookData['countryId'];
+        $addressBook->postcode = $addressBookData['postcode'];
+        $addressBook->phone = $addressBookData['phone'] ?? null;
+        $addressBook->cellphone = $addressBookData['cellphone'] ?? null;
+        $addressBook->province = $addressBookData['province'] ?? null;
+
+        if(!isset($addressBook->id)) {
+            $addressBookC = $this->app->repoFactory->create('AddressBook')->findOneBy(['checksum'=>$addressBook->calculateChecksum()]);
+            if(!is_null($addressBookC)) $addressBook->id = $addressBookC->id;
+        }
+
+        return $addressBook;
+    }
 }

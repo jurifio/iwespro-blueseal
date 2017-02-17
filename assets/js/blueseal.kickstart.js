@@ -1311,6 +1311,7 @@ $.fn.setCursorPosition = function (pos) {
 $.getTemplate = function (templateName) {
     return $.get({
         url: "/blueseal/xhr/TemplateFetchController",
+        cache: true,
         data: {
             templateName: templateName
         }
