@@ -14,6 +14,12 @@ $(document).on('bs.shop.save',function() {
     data.config.refusalRateLastMonth = $('#shop_config_refusalRate_lastMonth').val();
     data.config.reactionRate = $('#shop_config_reactionRate').val();
     data.config.reactionRateLastMonth = $('#shop_config_reshop_config_reactionRate_lastMonthfusalRate').val();
+    data.config.accountStatus = $('#shop_accountStatus').val();
+    data.config.accountType = $('#shop_accountType').val();
+    data.config.photoCost = $('#shop_photoCost').val();
+    data.config.shootingTransportCost = $('#shop_shootingTransportCost').val();
+    data.config.orderTransportCost = $('#shop_orderTransportCost').val();
+
     data.billingAddressBook = readShipment('#billingAddress');
     data.shippingAddresses = [];
     $.each($('#shippingAddresses .shippingAddress'),function (k,v) {
@@ -68,6 +74,11 @@ $(document).on('bs.shop.save',function() {
 			$('#shop_config_refusalRate_lastMonth').val(res.config.refusalRateLastMonth);
 			$('#shop_config_reactionRate').val(res.config.reactionRate);
 			$('#shop_config_reactionRate_lastMonth').val(res.config.reactionRateLastMonth);
+			$('#shop_accountStatus').val(res.config.accountStatus);
+			$('#shop_accountType').val(res.config.accountType);
+			$('#shop_photoCost').val(res.config.photoCost);
+			$('#shop_shootingTransportCost').val(res.config.shootingTransportCost);
+			$('#shop_orderTransportCost').val(res.config.orderTransportCost);
 
 			checkPermission('allShops').done(function() {
 			    "use strict";

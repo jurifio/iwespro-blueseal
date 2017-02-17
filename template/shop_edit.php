@@ -60,8 +60,8 @@
                                                             class="fa fa-asterisk"></i></span>
                                             </div>
                                         </div>
-                                        </div>
-                                        <div class="row">
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default">
                                                 <label for="shop_iban">IBAN</label>
@@ -136,6 +136,58 @@
                                                        autocomplete="off" type="number"
                                                        class="form-control"
                                                        name="shop_config_reactionRate_lastMonth"
+                                                       value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default disabled">
+                                                <label for="shop_config_accountStatus">Stato Account</label>
+                                                <input id="shop_config_accountStatus" disabled="disabled"
+                                                       autocomplete="off" type="text"
+                                                       class="form-control"
+                                                       name="shop_config_accountStatus"
+                                                       value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default disabled">
+                                                <label for="shop_config_accountType">Tipo Account</label>
+                                                <input id="shop_config_accountType" disabled="disabled"
+                                                       autocomplete="off" type="text"
+                                                       class="form-control"
+                                                       name="shop_config_accountType"
+                                                       value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default disabled">
+                                                <label for="shop_config_photoCost">Costo Shooting</label>
+                                                <input id="shop_config_photoCost" disabled="disabled"
+                                                       autocomplete="off" type="number"
+                                                       class="form-control"
+                                                       name="shop_config_photoCost"
+                                                       value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default disabled">
+                                                <label for="shop_config_shootingTransportCost">Costo Trasporto
+                                                    Shooting</label>
+                                                <input id="shop_config_shootingTransportCost" disabled="disabled"
+                                                       autocomplete="off" type="text"
+                                                       class="form-control"
+                                                       name="shop_config_shootingTransportCost"
+                                                       value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default disabled">
+                                                <label for="shop_config_orderTransportCost">Costo Trasporto
+                                                    Ordini</label>
+                                                <input id="shop_config_orderTransportCost" disabled="disabled"
+                                                       autocomplete="off" type="text"
+                                                       class="form-control"
+                                                       name="shop_config_orderTransportCost"
                                                        value=""/>
                                             </div>
                                         </div>

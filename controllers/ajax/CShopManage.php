@@ -55,6 +55,11 @@ class CShopManage extends AAjaxController
                 $config['refusalRateLastMonth'] = $shopData['config']['refusalRateLastMonth'] ?? null;
                 $config['reactionRate'] = $shopData['config']['reactionRate'] ?? null;
                 $config['reactionRateLastMonth'] = $shopData['config']['reactionRateLastMonth'] ?? null;
+                $config['accountStatus'] = $shopData['config']['accountStatus'] ?? null;
+                $config['accountType'] = $shopData['config']['accountType'] ?? null;
+                $config['photoCost'] = $shopData['config']['photoCost'] ?? null;
+                $config['shootingTransportCost'] = $shopData['config']['shootingTransportCost'] ?? null;
+                $config['orderTransportCost'] = $shopData['config']['orderTransportCost'] ?? null;
                 $shop->config = $config;
             }
 
