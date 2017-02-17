@@ -1,17 +1,15 @@
 window.bsToolbarLastButtonId = 0;
 
-String.prototype.replaceAll = function(search, replacement) {
+String.prototype.replaceAll = function (search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, 'g'), replacement);
 };
 
-var ui = function()
-{
+var ui = function () {
     this.registry = [];
 };
 
-ui.prototype.register = function(widget)
-{
+ui.prototype.register = function (widget) {
     if (widget instanceof Widget) {
         this.registry.push(widget)
     } else {
@@ -19,8 +17,7 @@ ui.prototype.register = function(widget)
     }
 };
 
-ui.prototype.unregister = function(widget)
-{
+ui.prototype.unregister = function (widget) {
     if (widget instanceof Widget) {
         var idx = this.registry.indexOf(widget);
         if (idx > -1) {
@@ -33,9 +30,10 @@ ui.prototype.unregister = function(widget)
     }
 };
 
-var Widget = function() {};
+var Widget = function () {
+};
 
-var UiElement = function(uiElementTagObject, allowedConfigKeyArray) {
+var UiElement = function (uiElementTagObject, allowedConfigKeyArray) {
     Widget.call(this);
     this.uiElementTagObject = uiElementTagObject;
     this.allowedConfigKeyArray = allowedConfigKeyArray;
@@ -44,13 +42,13 @@ var UiElement = function(uiElementTagObject, allowedConfigKeyArray) {
 UiElement.prototype = Object.create(Widget.prototype);
 UiElement.prototype.constructor = UiElement;
 
-UiElement.prototype.parseConfig = function() {
+UiElement.prototype.parseConfig = function () {
 
 };
 
 /** override getscript to create a debuggable script */
 jQuery.extend({
-    getScript: function(url, callback) {
+    getScript: function (url, callback) {
         var head = document.getElementsByTagName("head")[0];
         var script = document.createElement("script");
         script.src = url;
@@ -60,9 +58,9 @@ jQuery.extend({
             var done = false;
 
             // Attach handlers for all browsers
-            script.onload = script.onreadystatechange = function(){
-                if ( !done && (!this.readyState ||
-                    this.readyState == "loaded" || this.readyState == "complete") ) {
+            script.onload = script.onreadystatechange = function () {
+                if (!done && (!this.readyState ||
+                    this.readyState == "loaded" || this.readyState == "complete")) {
                     done = true;
                     if (callback)
                         callback();
@@ -83,7 +81,8 @@ jQuery.extend({
 /**
  * @constructor
  */
-var DffBooleanAjax = function () {};
+var DffBooleanAjax = function () {
+};
 
 /**
  * @param $ajaxConfig
@@ -172,21 +171,21 @@ Button.prototype = Object.create(DffBooleanAjax.prototype);
 /**
  * @returns {*}
  */
-Button.prototype.getHref = function() {
+Button.prototype.getHref = function () {
     return this.tagAttr.data.href;
 };
 
 /**
  * @returns {*}
  */
-Button.prototype.getTitle = function() {
+Button.prototype.getTitle = function () {
     return this.tagAttr.data.title;
 };
 
 /**
  * @param template
  */
-Button.prototype.setTemplate = function(template) {
+Button.prototype.setTemplate = function (template) {
     if (template.indexOf('{tag}') < 0 || template.indexOf('{attributes}') < 0 || template.indexOf('{id}') < 0) {
         throw new Error('Invalid tag template. Must contain at least {tag}, {attributes} and {id} placeholders');
     }
@@ -196,13 +195,13 @@ Button.prototype.setTemplate = function(template) {
 /**
  * @param element
  */
-Button.prototype.draw = function(element) {
+Button.prototype.draw = function (element) {
     var that = this;
     var html = this.parse();
 
     if (element.prop('tagName') == 'BS-BUTTON') {
         $(document).trigger('bs.draw.inpage.button', [element, this, html])
-    } else{
+    } else {
         $(document).trigger('bs.draw.toolbar.button', [element, this, html])
     }
 
@@ -266,7 +265,7 @@ Button.prototype.checkPermission = function () {
             theButton.prop('disabled', false).attr('disabled', false);
         }
         return;
-    } else if(window.localStorage.getItem(that.cfg.data.permission) == '0'){
+    } else if (window.localStorage.getItem(that.cfg.data.permission) == '0') {
         theButton.on('click', function (e) {
             e.preventDefault();
         });
@@ -280,7 +279,7 @@ Button.prototype.checkPermission = function () {
         type: 'GET'
     }).done(function (response) {
         if (response == '1') {
-            window.localStorage.setItem(that.cfg.data.permission,'1');
+            window.localStorage.setItem(that.cfg.data.permission, '1');
 
             if (theButton.is('select')) {
                 theButton.prop('disabled', false).attr('disabled', false);
@@ -289,7 +288,7 @@ Button.prototype.checkPermission = function () {
                 theButton.prop('disabled', false).attr('disabled', false);
             }
         } else {
-            window.localStorage.setItem(that.cfg.data.permission,'0');
+            window.localStorage.setItem(that.cfg.data.permission, '0');
             theButton.on('click', function (e) {
                 e.preventDefault();
             });
@@ -298,12 +297,41 @@ Button.prototype.checkPermission = function () {
     });
 };
 
+function checkPermission(permission, cache = true) {
+
+    let deferred = $.Deferred();
+    let timer = setInterval(function () {
+        deferred.notify();
+    }, 100);
+
+    setTimeout(function () {
+        clearInterval(timer);
+        if (cache == true && 'undefined' != typeof window.localStorage.getItem(permission)) {
+            if(window.localStorage.getItem(permission) == 1) deferred.resolve();
+            else deferred.reject();
+        } else {
+            $.ajax({
+                url: "/blueseal/xhr/CheckPermission",
+                data: {
+                    "permission": permission
+                }
+            }).done(function(res) {
+                window.localStorage.setItem(permission,res);
+            }).fail(function(res) {
+                window.localStorage.setItem(permission,0);
+            });
+        }
+    }, 300);
+
+    /** restituisco il deferred */
+    return deferred;
+}
+
 /**
  * @param data
  * @constructor
  */
-var Select = function(data)
-{
+var Select = function (data) {
     Button.call(this, data);
     this.options = data.options;
     this.template = "<{tag} {attributes} {id}>{options}</{tag}>";
@@ -316,13 +344,13 @@ Select.prototype = Object.create(Button.prototype);
 /**
  * @param element
  */
-Select.prototype.draw = function(element) {
+Select.prototype.draw = function (element) {
     var that = this;
     var html = this.parse();
 
     if (element.prop('tagName') == 'BS-BUTTON') {
         $(document).trigger('bs.draw.inpage.button', [element, this, html])
-    } else{
+    } else {
         $(document).trigger('bs.draw.toolbar.button', [element, this, html])
     }
 
@@ -346,8 +374,7 @@ Select.prototype.draw = function(element) {
 /**
  * @returns {string}
  */
-Select.prototype.parse = function()
-{
+Select.prototype.parse = function () {
     var options = "";
 
     var selectTag = Button.prototype.parse.call(this);
@@ -360,9 +387,9 @@ Select.prototype.parse = function()
 
     $.each(this.options, function (k, v) {
         if (k == selectedOption) {
-            options += '<option selected="selected" value="'+k+'">'+v+'</option>';
+            options += '<option selected="selected" value="' + k + '">' + v + '</option>';
         } else {
-            options += '<option value="'+k+'">'+v+'</option>';
+            options += '<option value="' + k + '">' + v + '</option>';
         }
     });
 
@@ -375,16 +402,15 @@ Select.prototype.parse = function()
  * @param data
  * @constructor
  */
-var ButtonToggle = function(data)
-{
+var ButtonToggle = function (data) {
     Button.call(this, data);
 
     this.on = data.on;
     this.key = data.key;
-    this.stateController = (function($,key) {
+    this.stateController = (function ($, key) {
         var dt = $('table[data-datatable-name]').DataTable();
         return dt.ajax.params()[key]
-    })(jQuery,this.key);
+    })(jQuery, this.key);
     this.template = "<{tag} {attributes} {id}>{icon}</{tag}>";
 };
 
@@ -396,8 +422,7 @@ ButtonToggle.prototype = Object.create(Button.prototype);
 /**
  * @returns {string}
  */
-ButtonToggle.prototype.parse = function()
-{
+ButtonToggle.prototype.parse = function () {
     var buttonToggleTag = Button.prototype.parse.call(this);
     var css = '';
 
@@ -405,7 +430,7 @@ ButtonToggle.prototype.parse = function()
         css = this.on;
     }
 
-    buttonToggleTag = buttonToggleTag.replace(/(class=")(btn [a-z-]+)(")/i, '$1$2 '+css+'$3');
+    buttonToggleTag = buttonToggleTag.replace(/(class=")(btn [a-z-]+)(")/i, '$1$2 ' + css + '$3');
 
     return buttonToggleTag;
 };
@@ -415,8 +440,7 @@ ButtonToggle.prototype.parse = function()
  * @returns {Alert}
  * @constructor
  */
-var Alert = function(config)
-{
+var Alert = function (config) {
     if (!(this instanceof Alert)) {
         return new Alert(config);
     }
@@ -430,7 +454,7 @@ var Alert = function(config)
         selfClose: true,
         loader: false,
         closeTimerMs: 5000,
-	    silent: true,
+        silent: true,
         audio: {
             warning: '/assets/audio/alert.mp3',
             danger: '/assets/audio/alert.mp3',
@@ -443,7 +467,7 @@ var Alert = function(config)
             info: "fa-info-circle",
             success: "fa-thumbs-o-up"
         }
-    },config);
+    }, config);
 
     return this.draw();
 };
@@ -451,11 +475,10 @@ var Alert = function(config)
 /**
  * @returns {Alert}
  */
-Alert.prototype.draw = function()
-{
+Alert.prototype.draw = function () {
     var that = this;
 
-    if ($.inArray(that.data.type,['warning','danger','info','success']) < 0) {
+    if ($.inArray(that.data.type, ['warning', 'danger', 'info', 'success']) < 0) {
         throw new Error('Invalid alert type. Allowed types are [warning;danger;info;success]')
     }
 
@@ -464,25 +487,25 @@ Alert.prototype.draw = function()
         .removeClass('alert-danger')
         .removeClass('alert-info')
         .removeClass('alert-success')
-        .addClass('alert-'+that.data.type);
+        .addClass('alert-' + that.data.type);
 
     that.alertBox.find('i').eq(0)
         .removeClass()
-        .addClass('fa '+that.data.icon[that.data.type]+' big-icon');
+        .addClass('fa ' + that.data.icon[that.data.type] + ' big-icon');
 
 
     if (that.data.loader === true) {
         that.alertBox.find('i').eq(0).hide();
 
         that.alertBox.find('p').eq(0)
-            .html('<img src="/assets/img/bsloader.svg" width="32" />&nbsp;<span>'+that.data.message+'</span>');
+            .html('<img src="/assets/img/bsloader.svg" width="32" />&nbsp;<span>' + that.data.message + '</span>');
     } else {
         that.alertBox.find('p').eq(0)
-            .html('<span>'+that.data.message+'</span>');
+            .html('<span>' + that.data.message + '</span>');
     }
 
     if (that.data.dismissable === true) {
-        that.alertBox.find('.dismiss').on('click', function() {
+        that.alertBox.find('.dismiss').on('click', function () {
             that.close();
         });
     } else {
@@ -492,30 +515,28 @@ Alert.prototype.draw = function()
     return that;
 };
 
-Alert.prototype.open = function()
-{
+Alert.prototype.open = function () {
     var that = this;
-	if(!that.data.silent) {
-		var sfx = new Audio(that.data.audio[that.data.type]);
-		sfx.play();
-	}
-	that.alertBox.off();
-	that.wrapper.css('height','8%');
-	that.alertBox.addClass('opened');
+    if (!that.data.silent) {
+        var sfx = new Audio(that.data.audio[that.data.type]);
+        sfx.play();
+    }
+    that.alertBox.off();
+    that.wrapper.css('height', '8%');
+    that.alertBox.addClass('opened');
 
-	if (that.data.selfClose == true) {
-		setTimeout(function() {
-			that.close();
-		},that.data.closeTimerMs);
-	}
+    if (that.data.selfClose == true) {
+        setTimeout(function () {
+            that.close();
+        }, that.data.closeTimerMs);
+    }
 };
 
-Alert.prototype.close = function()
-{
+Alert.prototype.close = function () {
     var that = this;
 
-    that.alertBox.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd', function() {
-        that.wrapper.css('height','0%');
+    that.alertBox.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd', function () {
+        that.wrapper.css('height', '0%');
     });
 
     that.alertBox.removeClass('opened');
@@ -527,7 +548,7 @@ Alert.prototype.close = function()
  * @returns {Replica}
  * @constructor
  */
-var Replica = function($element, counterOffset) {
+var Replica = function ($element, counterOffset) {
 
     if (!$element instanceof jQuery) {
         throw new Error('$element must be an instance of jQuery');
@@ -547,7 +568,7 @@ var Replica = function($element, counterOffset) {
  * @param $appendToThisElement
  * @param numberOfCopies
  */
-Replica.prototype.replicateInto = function($appendToThisElement, numberOfCopies) {
+Replica.prototype.replicateInto = function ($appendToThisElement, numberOfCopies) {
 
     var that = this;
 
@@ -555,14 +576,14 @@ Replica.prototype.replicateInto = function($appendToThisElement, numberOfCopies)
         numberOfCopies = 1;
     }
 
-    for (var i=0;i<numberOfCopies;i++) {
+    for (var i = 0; i < numberOfCopies; i++) {
         var $e = that.loopThrough(that.$replica.clone(true, true));
 
         $e.addClass('fade');
 
         $appendToThisElement.append($e);
 
-        setTimeout(function($e) {
+        setTimeout(function ($e) {
             $('html, body').animate({
                 scrollTop: $e.offset().top
             }, 1000);
@@ -573,7 +594,7 @@ Replica.prototype.replicateInto = function($appendToThisElement, numberOfCopies)
         that.counter++;
     }
 
-    $.each($('bs-rcounter'), function() {
+    $.each($('bs-rcounter'), function () {
         $(this).replaceWith(that.counter);
     });
 
@@ -586,18 +607,18 @@ Replica.prototype.replicateInto = function($appendToThisElement, numberOfCopies)
  * @param $element
  * @returns {*}
  */
-Replica.prototype.loopThrough = function($element) {
+Replica.prototype.loopThrough = function ($element) {
 
     var that = this;
 
-    $element.each(function() {
+    $element.each(function () {
 
         if (typeof $(this).attr('id') != 'undefined') {
-            $(this).attr('id',$(this).attr('id')+'_'+$.randomString(8));
+            $(this).attr('id', $(this).attr('id') + '_' + $.randomString(8));
         }
 
         if (typeof $(this).attr('name') != 'undefined') {
-            $(this).attr('name',$(this).attr('name')+'_'+$.randomString(8));
+            $(this).attr('name', $(this).attr('name') + '_' + $.randomString(8));
         }
 
         that.loopThrough($(this).children());
@@ -609,7 +630,7 @@ Replica.prototype.loopThrough = function($element) {
 /**
  * @returns {*}
  */
-Replica.prototype.getLastReplicaId = function() {
+Replica.prototype.getLastReplicaId = function () {
 
     var that = this;
 
@@ -620,7 +641,7 @@ Replica.prototype.getLastReplicaId = function() {
  * @returns {Echo}
  * @constructor
  */
-var Echo = function() {
+var Echo = function () {
 
     if (!this instanceof Echo) {
         return new Echo()
@@ -634,7 +655,7 @@ var Echo = function() {
  * @param $target
  * @param eventsArray
  */
-Echo.prototype.bind = function($source, $target, eventsArray) {
+Echo.prototype.bind = function ($source, $target, eventsArray) {
 
     if (!eventsArray instanceof Array) {
         throw new Error('eventsArray must be an array containing events\' names triggering echo');
@@ -650,14 +671,14 @@ Echo.prototype.bind = function($source, $target, eventsArray) {
     that.$target = $target;
     that.events = eventsArray.join(' ');
 
-    that.$source.on(that.events, function(e) {
+    that.$source.on(that.events, function (e) {
         that.$target.vv(that.$source.vv());
     });
 
     that.bound = true;
 };
 
-Echo.prototype.unbind = function() {
+Echo.prototype.unbind = function () {
 
     var that = this;
 
@@ -668,7 +689,7 @@ Echo.prototype.unbind = function() {
  * @returns {Modal}
  * @constructor
  */
-var Modal = function() {
+var Modal = function () {
 
     if (!this instanceof Modal) {
         return new Modal()
@@ -684,46 +705,46 @@ var Modal = function() {
 /**
  * @param title
  */
-Modal.prototype.setTitle = function(title) {
+Modal.prototype.setTitle = function (title) {
     this.header.html(title);
 };
 
 /**
  * @param text
  */
-Modal.prototype.setOkButton = function(text) {
+Modal.prototype.setOkButton = function (text) {
     this.okButton.html(text);
 };
 
 /**
  * @param text
  */
-Modal.prototype.setCancelButton = function(text) {
+Modal.prototype.setCancelButton = function (text) {
     this.cancelButton.html(text);
 };
 
 /**
  * @param content
  */
-Modal.prototype.setContent = function(content) {
+Modal.prototype.setContent = function (content) {
     this.body.html(content);
 };
 
-Modal.prototype.appendContent = function(content) {
+Modal.prototype.appendContent = function (content) {
     this.body.append(content);
 };
 
-Modal.prototype.prependContent = function(content) {
+Modal.prototype.prependContent = function (content) {
     this.body.prepend(content);
 };
 
-Modal.prototype.hide = function() {
+Modal.prototype.hide = function () {
     this.okButton.off();
     this.body.html('');
     this.modal.modal('hide');
 };
 
-Modal.prototype.show = function() {
+Modal.prototype.show = function () {
     this.modal.modal('show');
 };
 
@@ -731,11 +752,11 @@ Modal.prototype.show = function() {
  * @param dzConf
  * @returns {Modal}
  */
-Modal.prototype.addDropZone = function(dzConf) {
+Modal.prototype.addDropZone = function (dzConf) {
 
     this.setContent('' +
-        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
-        '<div class="fallback">'+
+        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">' +
+        '<div class="fallback">' +
         '<input name="file" type="file" multiple />' +
         '</div>' +
         '</form>');
@@ -745,11 +766,11 @@ Modal.prototype.addDropZone = function(dzConf) {
     return this;
 };
 
-Modal.prototype.attachDropZoneEvent = function(event, callback) {
-    this.dz.on(event,callback);
+Modal.prototype.attachDropZoneEvent = function (event, callback) {
+    this.dz.on(event, callback);
 };
 
-Modal.prototype.detachDropZoneEvent = function(event) {
+Modal.prototype.detachDropZoneEvent = function (event) {
     this.dz.off(event);
 };
 
@@ -757,7 +778,7 @@ Modal.prototype.detachDropZoneEvent = function(event) {
  * @param newvalue
  * @returns {*|jQuery}
  */
-$.fn.vv = function(newvalue) {
+$.fn.vv = function (newvalue) {
     if (!!newvalue === false) {
         if (typeof $(this).prop('value') !== 'undefined') {
             if ($(this).is('select')) {
@@ -781,20 +802,20 @@ $.fn.vv = function(newvalue) {
  * @param l
  * @returns {string}
  */
-$.randomString = function(l) {
+$.randomString = function (l) {
     return Math.round((Math.pow(36, l + 1) - Math.random() * Math.pow(36, l))).toString(36).slice(1);
 };
 
-$.drawUI = function() {
+$.drawUI = function () {
 
     var buttons = $('bs-button');
 
-    $.each(buttons, function() {
+    $.each(buttons, function () {
         var button = new Button($(this).data());
         button.draw($(this));
     });
 
-    $('[data-init-plugin=selectize]').each(function() {
+    $('[data-init-plugin=selectize]').each(function () {
         $(this).selectize({
             create: false,
             dropdownDirection: 'auto'
@@ -802,7 +823,9 @@ $.drawUI = function() {
         $('.selectize-dropdown-content').scrollbar();
     });
 
-    $(function(){ $('.color-picker').colorpicker(); });
+    $(function () {
+        $('.color-picker').colorpicker();
+    });
 
     $('textarea.summer').summernote({
         lang: "it-IT",
@@ -811,137 +834,135 @@ $.drawUI = function() {
 };
 
 var Portlet = function (data) {
-	if (!(this instanceof Portlet)) {
-		return new Portlet();
-	}
+    if (!(this instanceof Portlet)) {
+        return new Portlet();
+    }
 
-	this.controller = new ButtonCfg(data, ['controller','url']);
-	this.params = new ButtonCfg(data,['params']);
-	this.cfg = new ButtonCfg(data, ['tag', 'icon', 'permission', 'event', 'button']);
-	this.tagAttr = new ButtonCfg(data, ['class', 'rel', 'href', 'title', 'name', 'download']);
-	this.dataAttr = new ButtonCfg(data, ['placement', 'toggle', 'target', 'json']);
+    this.controller = new ButtonCfg(data, ['controller', 'url']);
+    this.params = new ButtonCfg(data, ['params']);
+    this.cfg = new ButtonCfg(data, ['tag', 'icon', 'permission', 'event', 'button']);
+    this.tagAttr = new ButtonCfg(data, ['class', 'rel', 'href', 'title', 'name', 'download']);
+    this.dataAttr = new ButtonCfg(data, ['placement', 'toggle', 'target', 'json']);
 
-	this.permissionCheckerEndPoint = "/blueseal/xhr/CheckPermission";
+    this.permissionCheckerEndPoint = "/blueseal/xhr/CheckPermission";
 
-	if(this.controller.data.url == 'undefined') {
-		this.controller.data.url = '/blueseal/xhr';
-	}
+    if (this.controller.data.url == 'undefined') {
+        this.controller.data.url = '/blueseal/xhr';
+    }
 
-	this.ajaxPromise = $.ajax({
-		url: this.controller.data.url+'/'+this.controller.data.controller,
-		method: "GET",
-		data: this.params.data.params
-	}).promise();
+    this.ajaxPromise = $.ajax({
+        url: this.controller.data.url + '/' + this.controller.data.controller,
+        method: "GET",
+        data: this.params.data.params
+    }).promise();
 
-	this.loadingTemplate = "Loading";
-	this.failTemplate = "Failed Loading";
+    this.loadingTemplate = "Loading";
+    this.failTemplate = "Failed Loading";
 
 };
 
 Portlet.prototype = Object.create(UiElement.prototype);
 Portlet.prototype.constructor = UiElement;
 
-Portlet.prototype.draw = function(that) {
-	var _this = this;
+Portlet.prototype.draw = function (that) {
+    var _this = this;
 
-	_this.ajaxPromise.progress(function(){
-		$(that).replaceWith(_this.loadingTemplate)
-	}).done(function(result) {
-		$(that).replaceWith(result);
-	}).fail(function() {
-		$(that).replaceWith(_this.failTemplate);
-	});
+    _this.ajaxPromise.progress(function () {
+        $(that).replaceWith(_this.loadingTemplate)
+    }).done(function (result) {
+        $(that).replaceWith(result);
+    }).fail(function () {
+        $(that).replaceWith(_this.failTemplate);
+    });
 };
 
-$.MatchMedia = function(a) {
+$.MatchMedia = function (a) {
     return window.styleMedia.matchMedium(a);
 };
 
-$.QueryString = (function(a) {
+$.QueryString = (function (a) {
     if (a == "") return {};
     var b = {};
-    for (var i = 0; i < a.length; ++i)
-    {
-        var p=a[i].split('=');
+    for (var i = 0; i < a.length; ++i) {
+        var p = a[i].split('=');
         if (p.length != 2) continue;
         b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
     }
     return b;
 })(window.location.search.substr(1).split('&'));
 
-$.decodeGetStringFromUrl = function(url) {
+$.decodeGetStringFromUrl = function (url) {
     "use strict";
-    var getString = url.split('\?',2);
-    if(getString.length == 0) return false;
-    if(getString.length == 1) return {baseUrl:url};
-    if(getString.length == 2) return $.extend({baseUrl:getString[0]},$.decodeGetString(getString[1]));
+    var getString = url.split('\?', 2);
+    if (getString.length == 0) return false;
+    if (getString.length == 1) return {baseUrl: url};
+    if (getString.length == 2) return $.extend({baseUrl: getString[0]}, $.decodeGetString(getString[1]));
 };
 
-$.myDecodeGetStringFromUrl = function(url) {
+$.myDecodeGetStringFromUrl = function (url) {
     "use strict";
-    let getString = url.split('\?',2);
+    let getString = url.split('\?', 2);
     let ret = {};
     ret.url = '';
     ret.params = {};
-    if(getString.length == 0) return false;
-    if(getString.length == 1) ret.url = getString[0];
-    if(getString.length == 2) {
+    if (getString.length == 0) return false;
+    if (getString.length == 1) ret.url = getString[0];
+    if (getString.length == 2) {
         ret.url = getString[0];
         ret.params = $.decodeGetString(getString[1]);
     }
     return ret;
 };
 
-$.decodeGetString = function(a) {
+$.decodeGetString = function (a) {
     "use strict";
     if (a == "") return {};
     a = a.split('&');
     var b = {};
-    for (var i = 0; i < a.length; ++i)
-    {
-        var p=a[i].split('=');
+    for (var i = 0; i < a.length; ++i) {
+        var p = a[i].split('=');
         if (p.length != 2) continue;
         b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
     }
     return b;
 };
 
-$.encodeGetString = function(o) {
+$.encodeGetString = function (o) {
     "use strict";
     var a = [];
     var r;
-    if(typeof o.baseUrl != 'undefined' && o.baseUrl != 'undefined') {
+    if (typeof o.baseUrl != 'undefined' && o.baseUrl != 'undefined') {
         r = o.baseUrl;
         delete o.baseUrl;
     }
-    $.each(o,function(k,v) {
-        if(k == 'baseUrl') return;
-        a.push(k+"="+v);
+    $.each(o, function (k, v) {
+        if (k == 'baseUrl') return;
+        a.push(k + "=" + v);
     });
-    return r+'?'+a.join('&');
+    return r + '?' + a.join('&');
 };
 
-$.myEncodeGetString = function(o) {
+$.myEncodeGetString = function (o) {
     "use strict";
     var a = [];
     var r;
-    if(typeof o.url != 'undefined' && o.url != 'undefined') {
+    if (typeof o.url != 'undefined' && o.url != 'undefined') {
         r = o.url;
         delete o.url;
     }
-    $.each(o.params,function(k,v) {
-        a.push(k+"="+v);
+    $.each(o.params, function (k, v) {
+        a.push(k + "=" + v);
     });
-    return r+'?'+a.join('&');
+    return r + '?' + a.join('&');
 };
 
-$.addGetParam = function(url,field,val) {
+$.addGetParam = function (url, field, val) {
     "use strict";
     var c = $.decodeGetStringFromUrl(url);
     c[field] = val;
     return $.encodeGetString(c);
 };
 
-Date.prototype.toDateTimeString = function() {
-    return this.toISOString().slice(0, 10)+' '+this.toISOString().slice(11,19);
+Date.prototype.toDateTimeString = function () {
+    return this.toISOString().slice(0, 10) + ' ' + this.toISOString().slice(11, 19);
 };

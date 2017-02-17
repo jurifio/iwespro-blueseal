@@ -396,6 +396,18 @@ body.sidebar-visible .sidebar-logo {
     margin-bottom: 30px !important;
 }
 
+.form-group-default[disabled], .form-group-default.disabled {
+    background-color: #dddddd;
+}
+
+.form-group-default[disabled] label, .form-group-default.disabled label {
+    color: black;
+}
+
+.form-group-default, .form-control[disabled] {
+    color: black;
+}
+
 .selectize-control {
     position: absolute;
     left: 0 ;

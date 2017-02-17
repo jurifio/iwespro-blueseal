@@ -9,6 +9,11 @@ $(document).on('bs.shop.save',function() {
     data.currentSeasonMultiplier = $('#shop_currentSeasonMultiplier').val();
     data.pastSeasonMultiplier = $('#shop_pastSeasonMultiplier').val();
     data.saleMultiplier = $('#shop_saleMultiplier').val();
+    data.config = {};
+    data.config.refusalRate = $('#shop_config_refusalRate').val();
+    data.config.refusalRateLastMonth = $('#shop_config_refusalRate_lastMonth').val();
+    data.config.reactionRate = $('#shop_config_reactionRate').val();
+    data.config.reactionRateLastMonth = $('#shop_config_reshop_config_reactionRate_lastMonthfusalRate').val();
     data.billingAddressBook = readShipment('#billingAddress');
     data.shippingAddresses = [];
     $.each($('#shippingAddresses .shippingAddress'),function (k,v) {
@@ -59,6 +64,53 @@ $(document).on('bs.shop.save',function() {
 			$('#shop_currentSeasonMultiplier').val(res.currentSeasonMultiplier);
 			$('#shop_pastSeasonMultiplier').val(res.pastSeasonMultiplier);
 			$('#shop_saleMultiplier').val(res.saleMultiplier);
+			$('#shop_config_refusalRate').val(res.config.refusalRate);
+			$('#shop_config_refusalRate_lastMonth').val(res.config.refusalRateLastMonth);
+			$('#shop_config_reactionRate').val(res.config.reactionRate);
+			$('#shop_config_reactionRate_lastMonth').val(res.config.reactionRateLastMonth);
+
+			checkPermission('allShops').done(function() {
+			    "use strict";
+                $('#shop_currentSeasonMultiplier')
+                    .prop("disabled", false)
+                    .closest('div')
+                    .removeClass('disabled')
+                    .prop("disabled", false);
+                $('#shop_pastSeasonMultiplier')
+                    .prop("disabled", false)
+                    .closest('div')
+                    .removeClass('disabled')
+                    .prop("disabled", false);
+                $('#shop_saleMultiplier')
+                    .prop("disabled", false)
+                    .closest('div')
+                    .removeClass('disabled')
+                    .prop("disabled", false);
+                $('#shop_config_refusalRate')
+                    .prop("disabled", false)
+                    .closest('div')
+                    .removeClass('disabled')
+                    .prop("disabled", false);
+                $('#shop_config_refusalRate_lastMonth')
+                    .prop("disabled", false)
+                    .closest('div')
+                    .removeClass('disabled')
+                    .prop("disabled", false);
+                $('#shop_config_reactionRate')
+                    .prop("disabled", false)
+                    .closest('div')
+                    .removeClass('disabled')
+                    .prop("disabled", false);
+                $('#shop_config_reactionRate_lastMonth')
+                    .prop("disabled", false)
+                    .closest('div')
+                    .removeClass('disabled')
+                    .prop("disabled", false);
+            }).fail(function() {
+                "use strict";
+
+            });
+
             $('#shop_referrerEmails').selectize({
                 delimiter: ';',
                 create: function(input) {

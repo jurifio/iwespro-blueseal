@@ -38,7 +38,7 @@ class CShopListAjaxController extends AAjaxController
         foreach($shops as $shop){
             $row = [];
             $row['DT_RowId'] = $shop->printId();
-            $row['id'] = '<a href="/blueseal/shop/'.$shop->printId().'">'.$shop->printId().'</a>';
+            $row['id'] = '<a href="/blueseal/shop?id='.$shop->printId().'">'.$shop->printId().'</a>';
             $row['title'] = $shop->title;
             $row['owner'] = $shop->owner;
             $row['currentSeasonMultiplier'] = $shop->currentSeasonMultiplier;
