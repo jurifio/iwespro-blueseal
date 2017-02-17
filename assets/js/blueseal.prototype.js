@@ -306,7 +306,7 @@ function checkPermission(permission, cache = true) {
 
     setTimeout(function () {
         clearInterval(timer);
-        if (cache == true && 'undefined' != typeof window.localStorage.getItem(permission)) {
+        if (cache == true && 'undefined' != typeof window.localStorage.getItem(permission) && window.localStorage.getItem(permission) != null) {
             if(window.localStorage.getItem(permission) == 1) deferred.resolve();
             else deferred.reject();
         } else {
