@@ -39,8 +39,8 @@ class CShipmentListAjaxController extends AAjaxController
                   join Carrier c on s.carrierId = c.id
                   left join AddressBook f on s.fromAddressBookId = f.id
                   left join AddressBook t on s.toAddressBookId = t.id
-                  left join ShopHasAddressBook shabf on f.id = shabf.addressBookId
-                  left join ShopHasAddressBook shabt on t.id = shabt.addressBookId
+                  left join ShopHasShippingAddressBook shabf on f.id = shabf.addressBookId
+                  left join ShopHasShippingAddressBook shabt on t.id = shabt.addressBookId
                   LEFT JOIN (
                      OrderLineHasShipment olhs
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
