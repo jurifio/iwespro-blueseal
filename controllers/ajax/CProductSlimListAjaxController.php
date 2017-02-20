@@ -49,7 +49,7 @@ class CProductSlimListAjaxController extends AAjaxController
                   JOIN `ShopHasProduct` `shp` ON `p`.`id` = `shp`.`productId` AND `p`.`productVariantId` = `shp`.`productVariantId`)
                   JOIN `Shop` `s` on `s`.`id` = `shp`.`shopId`)
                   JOIN `ProductSeason` `ps` ON ((`p`.`productSeasonId` = `ps`.`id`))))
-                WHERE `pss`.`id` NOT IN (7, 8)
+                WHERE `pss`.`id` NOT IN (7, 8, 13)
                 GROUP BY `shp`.`productId`, `shp`.`productVariantId`, `shp`.`shopId`
                 ORDER BY `p`.`creationDate` DESC";
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
