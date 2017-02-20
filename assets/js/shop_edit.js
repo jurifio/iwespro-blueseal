@@ -149,7 +149,7 @@ function appendShipment(data, containerSelector) {
                     searchField: ['name'],
                     options: res2,
                 });
-                if (Object.keys(data).length > 0) {
+                if (data != null && Object.keys(data).length > 0) {
                     element.find('#id').val(data.id);
                     element.find('#name').val(data.name);
                     element.find('#subject').val(data.subject);
