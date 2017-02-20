@@ -136,10 +136,10 @@ class CProductSlimListAjaxController extends AAjaxController
                         $row['salePrice'][] = $shopHasProduct->shop->name.': '.$shopHasProduct->salePrice;
                         $row['value'][] = $shopHasProduct->shop->name.': '.$shopHasProduct->value;
                     }
-                    $row['price'] = implode('<br />',$row['price']);
-                    $row['salePrice'] = implode('<br />',$row['salePrice']);
-                    $row['value'] = implode('<br />',$row['value']);
                 }
+                $row['price'] = implode('<br />',$row['price']);
+                $row['salePrice'] = implode('<br />',$row['salePrice']);
+                $row['value'] = implode('<br />',$row['value']);
             }
 
 
