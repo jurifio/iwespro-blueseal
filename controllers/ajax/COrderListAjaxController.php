@@ -149,12 +149,15 @@ class COrderListAjaxController extends AAjaxController
 
             $row["orderDate"] = $orderDate;
             $row["lastUpdate"] = isset($since) ? $since : "Mai";
-            $row["user"] = '<a href="/blueseal/utente?userId='.$val->user->printId().'"><span>' . $val->user->getFullName(). '</span><br /><span>' . $val->user->email . '</span></a>';
+            $row["user"] =
+                '<a href="/blueseal/utente?userId='.$val->user->printId().'"><span>' . $val->user->getFullName()
+                . '</span><br /><span>' . $val->user->email . '</span></a>';
             if (isset($val->user->rbacRole) && count($val->user->rbacRole) > 0) {
                 $row["user"] .= '<i class="fa fa-diamond"></i>';
             } elseif(!empty($val->user->userDetails->note)) {
                 $row["user"] .= '<i class="fa fa-sticky-note-o" aria-hidden="true"></i>';
             }
+            $row['user'].= '<br />' . $val->billingAddress->country->name;
 
             $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
             $paid = ($paidAmount) ? 'Sì' : 'No';
