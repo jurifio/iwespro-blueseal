@@ -102,7 +102,7 @@ class CMarketplaceProductManageController extends AAjaxController
 				    $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()]);
 				    $i++;
 			    } else {
-                    $revise[] = $product;
+                    $revise[$product->printId()] = $product;
                 }
 		    }
 	    }

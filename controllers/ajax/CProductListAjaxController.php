@@ -64,7 +64,7 @@ class CProductListAjaxController extends AAjaxController
                          ma.id = mahp.marketplaceAccountId AND
                          ma.marketplaceId = mahp.marketplaceId AND
                          mahp.productId = p.id AND
-                         mahp.productVariantId = p.productVariantId)                                                    AS marketplaces
+                         mahp.productVariantId = p.productVariantId and mahp.isDeleted != 1)                            AS marketplaces
                 FROM ((((((((((((`Product` `p`
                   JOIN `ProductSeason` `pse` ON ((`p`.`productSeasonId` = `pse`.`id`)))
                   JOIN `ProductVariant` `pv` ON ((`p`.`productVariantId` = `pv`.`id`)))
@@ -194,7 +194,7 @@ class CProductListAjaxController extends AAjaxController
             $row['hasQty'] = $qty;
             $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
 
-            $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>');
+            $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
 
             $row['shop'] = '<span class="small">'.$val->getShops('<br />').'</span>';
 
@@ -204,7 +204,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['colorNameManufacturer'] = $val->productVariant->description;
 
-            $row['isOnSale'] = $val->isOnSale() ? 1:0;
+            $row['isOnSale'] = $val->isOnSale();
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
 
             $response ['data'][] = $row;
