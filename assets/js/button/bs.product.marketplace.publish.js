@@ -62,21 +62,24 @@ $(document).on('bs.product.marketplace.publish', function (e, element, button) {
 
             Pace.ignore(function () {
                 okButton.off().on('click',function () {
+                    okButton.off().on('click', function () {
+                        bsModal.modal('hide');
+                        $('.table').DataTable().ajax.reload(null, false);
+                    });
+                    let data = {
+                        rows: getVarsArray,
+                        account: $('#accountId').val(),
+                        modifier: $('#modifier').val(),
+                        cpc: $('#cpc').val()
+                    };
+                    body.html('<img src="/assets/img/ajax-loader.gif" />');
                     $.ajax({
                         url: '/blueseal/xhr/MarketplaceProductManageController',
                         type: "POST",
-                        data: {
-                            rows: getVarsArray,
-                            account: $('#accountId').val(),
-                            modifier: $('#modifier').val(),
-                            cpc: $('#cpc').val()
-                        }
+                        data: data
                     }).done(function () {
-
-                    }).always(function () {
-                        bsModal.modal('hide');
-                        $('.table').DataTable().ajax.reload();
-                    });
+                        body.html('Richiesta di pubblicazione inviata');
+                    })
                 });
             });
         });
