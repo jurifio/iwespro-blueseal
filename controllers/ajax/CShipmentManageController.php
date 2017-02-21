@@ -2,8 +2,12 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\core\exceptions\BambooException;
+use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\core\exceptions\BambooOrderLineException;
+use bamboo\core\exceptions\BambooShipmentException;
 use bamboo\domain\entities\COrderLine;
+use bamboo\domain\entities\CShipment;
+use bamboo\domain\entities\CShipmentFault;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\STimeToolbox;
@@ -35,6 +39,7 @@ class CShipmentManageController extends AAjaxController
         $shipment->toAddress;
         $shipment->carrier;
         $shipment->orderLine;
+        $shipment->shipmentFaultId;
         return json_encode($shipment);
     }
 
@@ -46,6 +51,8 @@ class CShipmentManageController extends AAjaxController
         $dba = \Monkey::app()->dbAdapter;
         try {
             $dba->beginTransaction();
+            $lineStatus = null;
+            $date = '';
             $shipmentData = $this->app->router->request()->getRequestData('shipment');
             $shipment = $this->app->repoFactory->create('Shipment')->findOneByStringId($shipmentData['id']);
             $shipment->bookingNumber = $shipmentData['bookingNumber'];
@@ -54,36 +61,26 @@ class CShipmentManageController extends AAjaxController
             $shipment->predictedDeliveryDate = !empty($shipmentData['predictedDeliveryDate']) ? STimeToolbox::DbFormattedDateTime($shipmentData['predictedDeliveryDate']) : null;
             if (!$shipment->shipmentDate && !(empty($shipmentData['shipmentDate']))) {
                 $shipment->shipmentDate = STimeToolbox::DbFormattedDateTime($shipmentData['shipmentDate']);
-            }
-            if (!$shipment->deliveryDate && !(empty($shipmentData['deliveryDate']))) {
-                $shipment->deliveryDate = STimeToolbox::DbFormattedDateTime($shipmentData['deliveryDate']);
-            }
-            $shipment->note = $shipmentData['note'];
-            $shipment->update();
-
-            $lineStatus = null;
-            $date = null;
-
-            if ($shipmentData['deliveryDate']) {
-                if (!$shipment->shipmentDate)
-                    throw new BambooException('Non può essere fatto il checkin di un prodotto che non risulta spedito');
-                $lineStatus = 'ORD_CHK_IN';
-                $date = $shipmentData['deliveryDate'];
-            } elseif ($shipmentData['shipmentDate']) {
                 $lineStatus = 'ORD_FRND_ORDSNT';
                 $date = $shipmentData['shipmentDate'];
             }
+            if (!$shipment->deliveryDate && !(empty($shipmentData['deliveryDate']))) {
+                $shipment->deliveryDate = STimeToolbox::DbFormattedDateTime($shipmentData['deliveryDate']);
+                $lineStatus = 'ORD_CHK_IN';
+                $date = $shipmentData['deliveryDate'];
+            }
+            $shipment->note = $shipmentData['note'];
+            $shipment->update();
 
             if ($lineStatus) {
                 /** @var COrderLineRepo $lR */
                 $olR = \Monkey::app()->repoFactory->create('OrderLine');
                 $orderLine = $shipment->orderLine;
                 foreach ($orderLine as $v) {
-                    if (!$this->isOrderLineActionLogged($v, $lineStatus)) {
                         $olR->updateStatus($v, $lineStatus, $date);
                     }
-                }
             }
+
             $dba->commit();
             return 'Stato della spedizione aggiornato';
         } catch(BambooOrderLineException $e) {
@@ -109,6 +106,49 @@ class CShipmentManageController extends AAjaxController
         return true;
     }
 
+    /**
+     * @transaction
+     */
+    public function delete() {
+        $shipmentId = \Monkey::app()->router->request()->getRequestData('shipmentId');
+        $faultId = \Monkey::app()->router->request()->getRequestData('faultId');
+        /** @var CShipmentRepo $sR */
+        $sR = \Monkey::app()->repoFactory->create('Shipment');
+        $sfR = \Monkey::app()->repoFactory->create('ShipmentFault');
+        $dba = \Monkey::app()->dbAdapter;
+        try {
+            $dba->beginTransaction();
+            /** @var CShipment $s */
+            $s = $sR->findOne([$shipmentId]);
+            /** @var CShipmentFault $sf */
+            $sf = $sfR->findOne([$faultId]);
+            $sR->cancel($s, $sf);
+            $newShipment = STimeToolbox::GetNextWorkingDay(new \DateTime($s->predictedShipmentDate));
+            $sR->newFriendShipmentToUs(
+                $s->carrierId,
+                $s->fromAddressBookId,
+                '',
+                STimeToolbox::DbFormattedDate($newShipment),
+                $s->orderLine
+            );
+            $dba->commit();
+            return 'Spedizione annullata';
+        } catch (BambooShipmentException $e) {
+            $dba->rollBack();
+            $res = [
+                'exception' => 'shipment',
+                'message' => $e->getMessage()
+            ];
+            return json_encode($res);
+        } catch (BambooException $e) {
+            $dba->rollBack();
+            $res = [
+                'exception' => 'general',
+                'message' => $e->getMessage()
+            ];
+            return json_encode($res);
+        }
+    }
 
     /**
      * @param COrderLine $orderLine

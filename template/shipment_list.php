@@ -67,6 +67,9 @@
                                 <th data-slug="deliveryDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center dataFilterType">Data Consegna</th>
+                                <th data-slug="cancellationDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Cancellazione</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -107,6 +110,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.shipment.delivery.time"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.shipment.cancel"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -32,7 +32,6 @@ class CFriendShipment extends AAjaxController
     {
         $fromAddressBookId = $this->app->router->request()->getRequestData('fromAddressBookId');
         $carrierId = $this->app->router->request()->getRequestData('carrierId');
-
         $possibleDates = $this->app->repoFactory->create('Shipment')->getAvailableDatesForShipmentToUs($carrierId,$fromAddressBookId);
 
         return json_encode($possibleDates);

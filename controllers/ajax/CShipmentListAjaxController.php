@@ -83,6 +83,9 @@ class CShipmentListAjaxController extends AAjaxController
             $row['shipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->shipmentDate,'Y-m-d');
             $row['predictedDeliveryDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedDeliveryDate,'Y-m-d');
             $row['deliveryDate'] = STimeToolbox::FormatDateFromDBValue($val->deliveryDate,'Y-m-d');
+            $row['cancellationDate'] = ($val->cancellationDate) ? '<span style="color-red">'
+                . $val->cancellationDate . '<br />' . $val->shipmentFault->description . '</span>'
+                : '';
             $row['creationDate'] = $val->creationDate;
             $row['productContent'] = "";
 

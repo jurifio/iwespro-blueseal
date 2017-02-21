@@ -4,8 +4,11 @@ namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooOrderLineException;
+use bamboo\core\exceptions\BambooShipmentException;
+use bamboo\domain\entities\COrderLine;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CProductListAjaxController
@@ -67,12 +70,25 @@ class CFriendAccept extends AAjaxController
 
             $orderLineCollection = new CObjectCollection();
             foreach ($orderLines as $o) {
+                /** @var COrderLine $ol */
                 $ol = $olR->findOneByStringId($o);
                 $orderLineCollection->add($ol);
                 if (!$ol) {
                     throw new BambooException('La linea ordine ' . $o . ' non esiste');
                 }
                 $olR->setFriendVerdict($ol, $newStatus);
+                if ($o->shipment->count() && 'Rifiuto' == $newStatus) {
+                    $shipment = $o->shipment->getLast();
+                    if ($shipment->shipmentDate)
+                        throw new BambooOrderLineException(
+                            'La riga d\'ordine <strong>' . $ol->stringId() . '</strong> è già stata spedita e non può essere annullata'
+                    );
+                    if (!$shipment->cancellationDate) {
+                        $shipment->cancellationDate = STimeToolbox::DbFormattedDate();
+                        $shipment->shipmentFaultId = 3;
+                        $shipment->update();
+                    }
+                }
             }
 
             if($verdict == 'Consenso') {

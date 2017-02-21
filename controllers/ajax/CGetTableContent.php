@@ -30,7 +30,8 @@ class CGetTableContent extends AAjaxController
         'ProductColorGroup',
         'ShippingBox',
         'Tag',
-        'Province'
+        'Province',
+        'ShipmentFault'
     ];
 
     public function get()
