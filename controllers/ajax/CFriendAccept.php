@@ -77,8 +77,8 @@ class CFriendAccept extends AAjaxController
                     throw new BambooException('La linea ordine ' . $o . ' non esiste');
                 }
                 $olR->setFriendVerdict($ol, $newStatus);
-                if ($o->shipment->count() && 'Rifiuto' == $newStatus) {
-                    $shipment = $o->shipment->getLast();
+                if ($ol->shipment->count() && 'Rifiuto' == $newStatus) {
+                    $shipment = $ol->shipment->getLast();
                     if ($shipment->shipmentDate)
                         throw new BambooOrderLineException(
                             'La riga d\'ordine <strong>' . $ol->stringId() . '</strong> è già stata spedita e non può essere annullata'
