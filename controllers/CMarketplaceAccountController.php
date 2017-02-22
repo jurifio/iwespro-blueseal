@@ -26,7 +26,7 @@ class CMarketplaceAccountController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/marketplace_account.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/marketplace_account_edit.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
