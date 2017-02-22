@@ -49,7 +49,8 @@ $(document).on('bs.shipment.cancel', function (e, element, button) {
             options += '<option value="' + res[i].id + '">' + res[i].description + '</option>';
         }
         let body = '<div class="row form-group">' +
-            '<div class="col-xs-8 selectize-enabled">' +
+            '<p>ELimina la spedizione e creane una nuova per il giorno successivo al giorno successivo</p>' +
+            '<div class="col-xs-12 selectize-enabled">' +
             '<label for="faultId">Seleziona il motivo:</label>' +
             '<select id="faultId" class="form-control" name="faultId">' + options + '</select>' +
             '</div>';
