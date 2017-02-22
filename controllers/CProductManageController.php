@@ -115,6 +115,7 @@ class CProductManageController extends ARestrictedAccessRootController
             }
             if ($this->isValidInput("ProductColorGroup_id", $post)) {
                 $productEdit->productColorGroupId = $post['ProductColorGroup_id'];
+                $productEdit->update();
             }
 
             /** UPDATE DEI DETTAGLI PRODOTTO */
