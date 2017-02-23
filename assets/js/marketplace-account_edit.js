@@ -2,7 +2,10 @@ $(document).on('bs.marketplace-account.save', function () {
     let method;
     let data = {};
 
+    $('#config-list input').each(function(k,v) {
+        "use strict";
 
+    });
 
     data.billingAddressBook = readShipment('#billingAddress');
     data.shippingAddresses = [];
@@ -47,11 +50,13 @@ $(document).on('bs.marketplace-account.save', function () {
             dataType: "json"
         }).done(function (res) {
             let inputMock =
-                '<div class="col-md-12">' +
-                    '<div class="form-group form-group-default required">' +
-                        '<label for="{{field}}">{{label}}</label>' +
-                        '<input id="{{field}}" autocomplete="off" type="text" class="form-control" ' +
-                                'name="{{field}}" value="" required="required"/>' +
+                '<div class="row">' +
+                    '<div class="col-md-offset-{{offset}} col-md-{{colLength}}">' +
+                        '<div class="form-group form-group-default required">' +
+                            '<label for="{{field}}">{{label}}</label>' +
+                            '<input id="{{field}}" autocomplete="off" type="text" class="form-control" ' +
+                                    'name="{{field}}" value="" required="required"/>' +
+                        '</div>' +
                     '</div>' +
                 '</div>';
 
@@ -59,26 +64,29 @@ $(document).on('bs.marketplace-account.save', function () {
             $('#marketplace_account_id').val(res.title);
             $('#marketplace_account_name').val(res.name);
             let box = $('#config-list');
-            drawObject("config",res.config,inputMock,box);
+            drawObject("config",res.config,inputMock,box,0);
         });
     }
 })(jQuery);
 
-function drawObject(prefix, object,inputMock,box) {
+function drawObject(prefix, object, inputMock, box,offset) {
     "use strict";
     if(prefix != '') box.append($('<p>'+prefix+'</p>'));
     for (let prop in object) {
         if (object.hasOwnProperty(prop) && typeof object[prop] != 'function' ) {
-            if(typeof object[prop] == 'object' && prefix == '') drawObject(prop,object[prop],inputMock,box);
-            else if(typeof object[prop] == 'object') drawObject(prefix+'_'+prop,object[prop],inputMock,box);
-            else drawInput(prefix,prop,object[prop],inputMock,box);
+            if(typeof object[prop] == 'object' && prefix == '') drawObject(prop,object[prop],inputMock,box,offset);
+            else if(typeof object[prop] == 'object') drawObject(prefix+'_'+prop,object[prop],inputMock,box,offset+1);
+            else drawInput(prefix,prop,object[prop],inputMock,box,offset+1);
         }
     }
     if(prefix != '') box.append($('<p>/'+prefix+'</p>'));
 }
 
-function drawInput(prefix,key,val,inputMock,box) {
-    let newInput = $(inputMock.replaceAll('{{field}}',prefix+'_'+key).replaceAll('{{label}}',key));
+function drawInput(prefix,key,val,inputMock,box,offset) {
+    let newInput = $(inputMock.replaceAll('{{field}}',prefix+'_'+key).
+                                replaceAll('{{label}}',key).
+                                replaceAll('{{offset}}',offset).
+                                replaceAll('{{colLength}}',12-offset));
     newInput.find('input').val(val);
     box.append(newInput);
 }

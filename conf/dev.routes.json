@@ -202,8 +202,7 @@
                 "POST",
                 "PUT"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/ordini/utenti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COrderByUserListController"
@@ -215,8 +214,7 @@
                 "POST",
                 "PUT"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/ordini/inserisci(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COrderAddController"
@@ -270,8 +268,7 @@
                 "DELETE",
                 "PUT"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/prodotti/nomi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNamesListController"
@@ -833,8 +830,7 @@
                 "PUT",
                 "DELETE"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendConfirmationController"

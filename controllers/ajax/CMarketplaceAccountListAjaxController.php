@@ -40,12 +40,13 @@ class CMarketplaceAccountListAjaxController extends AAjaxController
                   group_concat(DISTINCT o.id) AS ordersIds
                 FROM Marketplace m
                   JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
-                  JOIN Campaign c ON c.marketplaceId = ma.marketplaceId and c.marketplaceAccountId = ma.id
+                  LEFT JOIN Campaign c ON c.marketplaceId = ma.marketplaceId and c.marketplaceAccountId = ma.id
                   LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
                   LEFT JOIN (CampaignVisitHasOrder cvho JOIN `Order` o ON o.id = cvho.orderId) ON cv.campaignId = cvho.campaignId AND cv.id = cvho.campaignVisitId
                   WHERE (
+                    isnull(c.id) or (
                     cv.timestamp BETWEEN ifnull(?,timestamp) AND ifnull(?,timestamp) OR 
-                    o.orderDate BETWEEN ifnull(?,o.orderDate) AND ifnull(?,o.orderDate) )
+                    o.orderDate BETWEEN ifnull(?,o.orderDate) AND ifnull(?,o.orderDate) ))
                 GROUP BY ma.id, ma.marketplaceId";
 
         $datatable = new CDataTables($sql, ['marketplaceId', 'marketplaceAccountId', 'campaignId'], $_GET, true);
