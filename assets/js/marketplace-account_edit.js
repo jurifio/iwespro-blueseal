@@ -2,10 +2,13 @@ $(document).on('bs.marketplace-account.save', function () {
     let method;
     let data = {};
 
-    $('#config-list input').each(function(k,v) {
+    let inputs = $('#config-list input');
+    for(let k in inputs){
         "use strict";
-
-    });
+        if(!inputs.hasOwnProperty(k)) continue;
+        let v = $(inputs[k]);
+        data = readFullInput(v.attr('name'),v.val(),data);
+    }
 
     data.billingAddressBook = readShipment('#billingAddress');
     data.shippingAddresses = [];
@@ -89,4 +92,18 @@ function drawInput(prefix,key,val,inputMock,box,offset) {
                                 replaceAll('{{colLength}}',12-offset));
     newInput.find('input').val(val);
     box.append(newInput);
+}
+
+function readFullInput(name,value,object) {
+    "use strict";
+    let pieces = name.split('_');
+    if(pieces.length == 1) object[name] = value;
+    else {
+        let firstPiece = pieces[0];
+        pieces.splice(0,1);
+        let newObject = {};
+        if(typeof object[firstPiece] != 'undefined') newObject = object[firstPiece];
+        object[firstPiece] = readFullInput(pieces.join('_'),value,newObject);
+    }
+    return object;
 }
