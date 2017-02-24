@@ -1,8 +1,8 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-file-code-o",
+    icon: "fa-pencil-square-o",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.paymentBill.changeDate",
+    event: "bs.paymentBill.edit",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Cambia Data",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.paymentBill.changeDate', function (e, element, button) {
+$(document).on('bs.paymentBill.edit', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
@@ -31,7 +31,7 @@ $(document).on('bs.paymentBill.changeDate', function (e, element, button) {
     });
 
 });
-$(document).on('bs.paymentBill.changeDate', function (e, element, button) {
+$(document).on('bs.paymentBill.edit', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
