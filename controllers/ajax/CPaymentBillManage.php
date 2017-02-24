@@ -29,7 +29,7 @@ class CPaymentBillManage extends AAjaxController
      */
     public function get() {
         $paymentBillId = $this->app->router->request()->getRequestData('paymentBillId');
-        $paymentBill = $this->app->repoFactory->create('PaymentBill')->findOneBy($paymentBillId);
+        $paymentBill = $this->app->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillId);
         return json_encode($paymentBill);
     }
 

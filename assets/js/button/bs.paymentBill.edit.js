@@ -86,7 +86,7 @@ $(document).on('bs.paymentBill.edit', function (e, element, button) {
                             paymentBill: paymentBill
                         },
                     }).done(function (res2) {
-                        modal.writeBody(res2);
+                        modal.writeBody('Dati Correttamente Aggiornati');
                     }).fail(function (res) {
                         modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
                         console.error(res);
