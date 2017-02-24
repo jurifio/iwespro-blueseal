@@ -865,3 +865,43 @@ h5.product-title {
     border-bottom: 1px solid grey;
     margin-bottom: 10px;
 }
+
+/**
+classi per colorare le righe delle tabelle da compilare in odd/even per il chiaroscuro
+ */
+.table.table-striped tbody tr:nth-child(2n+1).green td {
+    background: palegreen;
+}
+.table.table-striped tbody tr.green td {
+    background: darkseagreen;
+}
+.table.table-striped tbody tr:nth-child(2n+1).red td {
+    background: indianred;
+}
+.table.table-striped tbody tr.red td {
+    background: palevioletred;
+}
+.table.table-striped tbody tr:nth-child(2n+1).yellow td {
+    background: lightgoldenrodyellow;
+}
+.table.table-striped tbody tr.yellow td {
+    background: lightyellow;
+}
+.table.table-striped tbody tr:nth-child(2n+1).orange td {
+    background: coral;
+}
+.table.table-striped tbody tr.orange td {
+    background: lightcoral;
+}
+.table.table-striped tbody tr:nth-child(2n+1).purple td {
+    background: mediumpurple;
+}
+.table.table-striped tbody tr.purple td {
+    background: rebeccapurple;
+}
+.table.table-striped tbody tr:nth-child(2n+1).grey td {
+    background: lightgrey;
+}
+.table.table-striped tbody tr.grey td {
+    background: darkgrey;
+}

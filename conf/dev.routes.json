@@ -1780,6 +1780,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/jobs(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
