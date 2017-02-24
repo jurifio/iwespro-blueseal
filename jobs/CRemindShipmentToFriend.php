@@ -40,10 +40,11 @@ class CRemindShipmentToFriend extends ACronJob
         foreach($shops as $shop){
             try {
                 $to = explode(';',$shop->referrerEmails);
-                //$to = ['fabrizio@iwes.it'];
+                //$to = ['fabrizio@iwes.it','gianluca@iwes.it'];
                 $this->app->mailer->prepare('friendshipmentreminder','no-reply', $to,[],[],['shop'=>$shop]);
                 $this->app->mailer->send();
                 $this->report('Working Shop ' . $shop->name . ' End', 'Reminder Sent ended');
+                break;
             } catch(\Throwable $e){
                 $this->error( 'Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
             }
