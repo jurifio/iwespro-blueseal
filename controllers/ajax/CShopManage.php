@@ -90,8 +90,8 @@ class CShopManage extends AAjaxController
      * @return \bamboo\core\db\pandaorm\entities\AEntity|CAddressBook|null
      */
     private function getAndFillAddressData($addressBookData) {
-	    if(isset($addressBookData['id'])) $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
-	    else $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
+	    $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
+	    if(is_null($addressBook)) $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
 	    try {
             /** @var CAddressBook $addressBook */
             $addressBook->name = $addressBookData['name'] ?? null;
