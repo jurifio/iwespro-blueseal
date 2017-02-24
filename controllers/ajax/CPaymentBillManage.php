@@ -46,12 +46,13 @@ class CPaymentBillManage extends AAjaxController
 
     public function put()
     {
-        $paymentBillId = $this->app->router->request()->getRequestData('paymentBillId');
+        $paymentBillData = $this->app->router->request()->getRequestData('paymentBill');
         /** @var CPaymentBill $paymentBill */
-        $paymentBill = $this->app->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillId);
+        $paymentBill = $this->app->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillData['id']);
         if($paymentBill->isSubmitted()) throw new BambooInvoiceException('Non puoi modificare una distinta già sottomessa');
 
-
+        $paymentBill->paymentDate = $paymentBillData['paymentDate'] && !empty($paymentBillData['paymentDate']) ? STimeToolbox::DbFormattedDate($paymentBillData['paymentDate']) : $paymentBill->paymentDate;
+        $paymentBill->update();
         return true;
     }
 }
