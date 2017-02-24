@@ -27,6 +27,7 @@ class CRemindShipmentToFriend extends ACronJob
      */
     public function run($args = null)
     {
+        $this->report('ShipmentRemind', 'starting remind to friends');
         $query = "SELECT distinct Shop.id
                   from 
                     Shipment s 
@@ -40,16 +41,15 @@ class CRemindShipmentToFriend extends ACronJob
         foreach($shops as $shop){
             try {
                 $to = explode(';',$shop->referrerEmails);
-                //$to = ['fabrizio@iwes.it','gianluca@iwes.it'];
                 $this->app->mailer->prepare('friendshipmentreminder','no-reply', $to,[],[],['shop'=>$shop]);
                 $this->app->mailer->send();
                 $this->report('Working Shop ' . $shop->name . ' End', 'Reminder Sent ended');
-                break;
             } catch(\Throwable $e){
                 $this->error( 'Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
             }
         }
-
+        $this->report('ShipmentRemind', 'done remind to friends');
+        $this->report('ShipmentRemind', 'starting remind to us');
         $query = "SELECT distinct Shop.id
                   from 
                     Shipment s 
@@ -67,8 +67,11 @@ class CRemindShipmentToFriend extends ACronJob
             } catch(\Throwable $e){
             }
         }
-        mail('friends@iwes.it',
-             'Mancate Spedizioni',
-             'Attenzione, si segnala che alcune spedizioni previste per ieri non sono arrivate: '.implode(', ',$names));
+        if(count($names) > 0) {
+            mail('friends@iwes.it',
+                'Mancate Spedizioni',
+                'Attenzione, si segnala che alcune spedizioni previste per ieri non sono arrivate: '.implode(', ',$names));
+        }
+        $this->report('ShipmentRemind', 'all done');
     }
 }
