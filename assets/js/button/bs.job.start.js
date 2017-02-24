@@ -1,16 +1,16 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-pencil-square-o",
+    icon: "fa-play-circle",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.paymentBill.edit",
+    event: "bs.job.start",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Cambia Data",
+    title: "Avvia Job",
     placement: "bottom",
     toggle: "modal"
 };
 
-$(document).on('bs.paymentBill.edit', function (e, element, button) {
+$(document).on('bs.job.start', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
@@ -18,40 +18,34 @@ $(document).on('bs.paymentBill.edit', function (e, element, button) {
     if (selectedRows.length != 1) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare una distinta per Cambiare la data"
+            message: "Devi selezionare un Job per Avviarlo"
         }).open();
         return false;
     }
 
     let selectedRow = dataTable.row('.selected').data();
-    let paymentBillId = selectedRow.DT_RowId;
+    let jobId = selectedRow.DT_RowId;
 
-    let modal = new $.bsModal('Cambia Data Pagamento', {});
+    let modal = new $.bsModal('Avvia Job', {});
     modal.showLoader();
 
     Pace.ignore(function () {
         $.ajax({
             method: "get",
-            url: "/blueseal/xhr/PaymentBillManage",
+            url: "/blueseal/xhr/JobManage",
             data: {
-                paymentBillId: paymentBillId
+                jobId: jobId
             },
             dataType: "json"
-        }).done(function (paymentBill) {
-            let today;
-            if(paymentBill.paymentDate) today = paymentBill.paymentDate;
-            else today = new Date().toISOString().slice(0, 10);
+        }).done(function (job) {
             modal.writeBody('<div class="row">' +
                 '<div class="col-xs-6>">' +
-                '<label for="paymentDate">Data di Pagamento</label>' +
-                '<input autocomplete="off" type="date" id="paymentDate" ' +
-                'class="form-control" name="paymentDate" value="' + today + '">' +
-                '</div>' +
+                    '<p>Vuoi davvero avviare il job?</p>' +
                 '</div>'
             );
 
             modal.setOkEvent(function () {
-                paymentBill.paymentDate = $('#paymentDate').val();
+                job.manualStart = 1;
                 modal.showLoader();
                 modal.setOkEvent(function () {
                     modal.hide();
@@ -60,9 +54,9 @@ $(document).on('bs.paymentBill.edit', function (e, element, button) {
                 Pace.ignore(function () {
                     $.ajax({
                         method: "put",
-                        url: "/blueseal/xhr/PaymentBillManage",
+                        url: "/blueseal/xhr/JobManage",
                         data: {
-                            paymentBill: paymentBill
+                            job: job
                         },
                     }).done(function (res2) {
                         modal.writeBody('Dati Correttamente Aggiornati');

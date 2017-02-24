@@ -66,7 +66,9 @@ class CJobListAjaxController extends AAjaxController
             $row = $raw;
             $job = $this->app->repoFactory->create('Job')->findOne([$raw['id']]);
             $row["DT_RowId"] = $job->printId();
-            $row["DT_RowClass"] = $job->isActive ? "green" : "";
+            $row["DT_RowClass"] = $job->isActive ? "" : "grey";
+            $row["DT_RowClass"] = $job->manualStart ? "yellow" : $row["DT_RowClass"];
+            $row["DT_RowClass"] = $job->isRunning ? "orange" : $row["DT_RowClass"];
 
             $response['data'][] = $row;
         }
