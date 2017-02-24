@@ -1632,17 +1632,6 @@
             ]
         },
         {
-            "pattern": "/blueseal/job/manager(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobManagerController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
             "pattern": "/blueseal/prodotti/campagne(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
@@ -1668,17 +1657,6 @@
             "pattern": "/blueseal/marketing/campaigns(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/job/manager(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobManagerController"
             },
             "filters": {},
             "translations": {},
