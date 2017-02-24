@@ -30,7 +30,7 @@ class CRemindShipmentToFriend extends ACronJob
         $query = "SELECT distinct Shop.id
                   from 
                     Shipment s 
-                    join AddressBook ab on s.fromAddressBookId = ab.id
+                    JOIN AddressBook ab on s.fromAddressBookId = ab.id
                     JOIN ShopHasShippingAddressBook shsab on shsab.addressBookId = ab.id
                     JOIN Shop on Shop.id = shsab.shopId
                   where s.predictedShipmentDate = CURRENT_DATE
@@ -40,8 +40,9 @@ class CRemindShipmentToFriend extends ACronJob
         foreach($shops as $shop){
             try {
                 $to = explode(';',$shop->referrerEmails);
+                //$to = ['fabrizio@iwes.it'];
                 $this->app->mailer->prepare('friendshipmentreminder','no-reply', $to,[],[],['shop'=>$shop]);
-                //$this->app->mailer->send();
+                $this->app->mailer->send();
                 $this->report('Working Shop ' . $shop->name . ' End', 'Reminder Sent ended');
             } catch(\Throwable $e){
                 $this->error( 'Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
@@ -55,7 +56,7 @@ class CRemindShipmentToFriend extends ACronJob
                     JOIN ShopHasShippingAddressBook shsab on shsab.addressBookId = ab.id
                     JOIN Shop on Shop.id = shsab.shopId
                   where s.predictedShipmentDate = CURRENT_DATE - 1
-                  and s.cancellationDate is null";
+                  and s.cancellationDate is null and s.deliveryDate is null";
         $shops = $this->app->repoFactory->create('Shop')->findBySql($query,[]);
 
         $names = [];
@@ -65,6 +66,8 @@ class CRemindShipmentToFriend extends ACronJob
             } catch(\Throwable $e){
             }
         }
-        mail('friends@iwes.it','Mancate Spedizioni','Attenzione, si segnala che alcune spedizioni previste per ieri non sono arrivate: '.implode(', ',$names));
+        mail('friends@iwes.it',
+             'Mancate Spedizioni',
+             'Attenzione, si segnala che alcune spedizioni previste per ieri non sono arrivate: '.implode(', ',$names));
     }
 }
