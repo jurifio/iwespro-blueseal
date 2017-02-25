@@ -89,7 +89,7 @@ class CProductListAjaxController extends AAjaxController
                          (`sp`.`shopId` = `dp`.`shopId`))))
                   LEFT JOIN `ProductNameTranslation` `pnt`
                     ON (((`p`.`id` = `pnt`.`productId`) AND (`p`.`productVariantId` = `pnt`.`productVariantId`) AND
-                  (`pnt`.`langId` = 1)))) WHERE 1=1 ";
+                  (`pnt`.`langId` = 1)))) WHERE (`t`.langId = 1 OR `t`.langId is null) ";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
