@@ -157,7 +157,11 @@ class COrderListAjaxController extends AAjaxController
             } elseif(!empty($val->user->userDetails->note)) {
                 $row["user"] .= '<i class="fa fa-sticky-note-o" aria-hidden="true"></i>';
             }
-            $row['user'].= '<br />' . $val->billingAddress->country->name;
+            try {
+                //TODO CHECK THIS WROOOONG
+                $row['user'].= '<br />' . $val->billingAddress->country->name;
+            } catch (\Throwable $e) {}
+
 
             $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
             $paid = ($paidAmount) ? 'Sì' : 'No';

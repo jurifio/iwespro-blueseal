@@ -202,8 +202,7 @@
                 "POST",
                 "PUT"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/ordini/utenti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COrderByUserListController"
@@ -215,8 +214,7 @@
                 "POST",
                 "PUT"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/ordini/inserisci(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COrderAddController"
@@ -270,8 +268,7 @@
                 "DELETE",
                 "PUT"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/prodotti/nomi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNamesListController"
@@ -833,8 +830,7 @@
                 "PUT",
                 "DELETE"
             ]
-        },
-        {
+        },{
             "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendConfirmationController"
@@ -1636,17 +1632,6 @@
             ]
         },
         {
-            "pattern": "/blueseal/job/manager(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobManagerController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
             "pattern": "/blueseal/prodotti/campagne(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
@@ -1672,17 +1657,6 @@
             "pattern": "/blueseal/marketing/campaigns(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/job/manager(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobManagerController"
             },
             "filters": {},
             "translations": {},
@@ -1800,6 +1774,16 @@
             "pattern": "/blueseal/shop(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CShopEditController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/jobs(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobListController"
             },
             "filters": {},
             "translations": {},

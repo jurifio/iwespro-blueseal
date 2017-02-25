@@ -83,6 +83,9 @@
             data-remote="bs.paymentBill.submit"
         ></bs-toolbar-button>
         <bs-toolbar-button
+            data-remote="bs.paymentBill.edit"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.paymentBill.print"
         ></bs-toolbar-button>
         <bs-toolbar-button

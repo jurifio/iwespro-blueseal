@@ -46,8 +46,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row" id="config-list">
-
+                                    <div class="row">
+                                        <div class="col-md-12" id="config-list">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

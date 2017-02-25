@@ -1080,7 +1080,8 @@
                 "GET",
                 "POST"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/tag(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTagListController"
@@ -1225,7 +1226,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketing/landing(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageListController"
@@ -1305,7 +1307,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/sconti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSalesListController"
@@ -1318,7 +1321,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/categorie(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignController"
@@ -1331,7 +1335,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/categorie/invertite(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignInvertedController"
@@ -1344,7 +1349,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/marketplace(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceProductListController"
@@ -1357,7 +1363,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/marketplace/account/:accountId(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceProductStatisticListController"
@@ -1372,7 +1379,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/account/aggregato/:accountId(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryStatisticListController"
@@ -1387,7 +1395,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/utente(/:userId)?(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CUserManageController"
@@ -1402,7 +1411,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/friend/prodotti/modifica(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendProductEditController"
@@ -1415,7 +1425,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/modelli(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelListController"
@@ -1428,7 +1439,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/modelli/modifica(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelEditController"
@@ -1441,7 +1453,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementsEditController"
@@ -1454,7 +1467,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/movimenti/inserisci/rapido(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseFastOperationController"
@@ -1467,7 +1481,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/movimenti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseOperationListController"
@@ -1480,7 +1495,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/movimenti/barcode/print(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
@@ -1490,7 +1506,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/barcode/print(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
@@ -1500,7 +1517,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/slim(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSlimListController"
@@ -1510,7 +1528,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/gestione-prezzi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPriceManageController"
@@ -1567,6 +1586,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/marketplace/account(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/marketing/campaigns(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
@@ -1587,7 +1617,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/statistiche/file/:fileName(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExportFile"
@@ -1599,17 +1630,8 @@
             "methods": [
                 "GET"
             ]
-        },{
-            "pattern": "/blueseal/job/manager(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobManagerController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/campagne(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
@@ -1619,7 +1641,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/accounts(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountListController"
@@ -1629,7 +1652,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketing/campaigns(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
@@ -1639,17 +1663,8 @@
             "methods": [
                 "GET"
             ]
-        },{
-            "pattern": "/blueseal/job/manager(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobManagerController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },{
+        },
+        {
             "name": "Gestione ordini con i friend",
             "pattern": "/blueseal/friend/ordini(/)?",
             "behaviour": {
@@ -1660,7 +1675,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "name": "Gestione delle fatture dei Friend",
             "pattern": "/blueseal/friend/fatture(/)?",
             "behaviour": {
@@ -1672,7 +1688,8 @@
                 "GET",
                 "POST"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/fixGruppiTaglia(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFixProductGroupSizeController"
@@ -1682,7 +1699,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/calendario(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CGoogleCalendarController"
@@ -1692,7 +1710,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/spedizioni(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CShipmentListController"
@@ -1702,7 +1721,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/download-invoice/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadInvoices"
@@ -1714,7 +1734,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/distinte(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillListController"
@@ -1724,19 +1745,21 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/distinte/(stampa|print)/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillPrintController"
             },
             "filters": {
-                "id":"[0-9]{1,10}"
+                "id": "[0-9]{1,10}"
             },
             "translations": {},
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/shops(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CShopListController"
@@ -1746,10 +1769,21 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/shop(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CShopEditController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/jobs(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobListController"
             },
             "filters": {},
             "translations": {},
