@@ -26,7 +26,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-column-filter="true"
-                               data-datatable-name="friend_order_list"
+                               data-datatable-name="eloy_initiative_list"
                                data-controller="FriendOrderListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"

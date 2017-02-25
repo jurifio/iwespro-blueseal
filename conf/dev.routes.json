@@ -833,6 +833,21 @@
                 "PUT",
                 "DELETE"
             ]
+        },{
+            "pattern": "/blueseal/xhr/:module/:xcontroller(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBluesealXhrController"
+            },
+            "filters": {
+                "xcontroller": "[a-zA-Z]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
         },
         {
             "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
