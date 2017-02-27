@@ -10,8 +10,6 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
 
     public function get()
     {
-        // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
-
         $query = "
              SELECT
                   `i`.`id` as `id`,
@@ -19,9 +17,19 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `i`.`paymentExpectedDate` as paymentExpectedDate,
                   `i`.`date` as `invoiceDate`,
                   `i`.`totalWithVat` as `invoiceTotalAmount`,
+                  concat(`it`.`name`, 
+                    if(`it`.`id` = 6,
+                      concat(' - NdC: ', 
+                        (SELECT DISTINCT `number` FROM `Document` as subD JOIN InvoiceLineHasOrderLine as subIL on subIL.invoiceLineInvoiceId = subD.id 
+                          WHERE subIL.orderLineId = `ol`.id AND `subIL`.`orderLineOrderId` = `ol`.`orderId` AND `subD`.`invoiceTypeId` = 6
+                        )
+                      ), ''
+                    )
+                  )as `documentT`,
                   `it`.`name` as `documentType`,
+                  `it`.`id` as `dt`,
                   if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') as `paymentDate`,
-                  concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
+                  group_concat(concat(`ol`.`id`, '-', `ol`.`orderId`)) as `orderLines`,
                   `i`.`creationDate` as `creationDate`,
                   if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`), 'Non presente')  as `paymentBill`,
                   `sh`.`title` as friend,
@@ -40,6 +48,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `it`.`code` like 'fr_%'
                   group by `i`.`id`
               ";
+
 
         $datatable = new CDataTables($query, ['id'],$_GET, true);
         $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
