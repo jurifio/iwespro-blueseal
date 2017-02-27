@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\domain\entities\CInvoiceLineHasOrderLine;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\utils\time\STimeToolbox;
 
@@ -17,15 +18,15 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `i`.`paymentExpectedDate` as paymentExpectedDate,
                   `i`.`date` as `invoiceDate`,
                   `i`.`totalWithVat` as `invoiceTotalAmount`,
-                  concat(`it`.`name`, 
+                  /*concat(`it`.`name`, 
                     if(`it`.`id` = 6,
                       concat(' - NdC: ', 
                         (SELECT DISTINCT `number` FROM `Document` as subD JOIN InvoiceLineHasOrderLine as subIL on subIL.invoiceLineInvoiceId = subD.id 
-                          WHERE subIL.orderLineId = `ol`.id AND `subIL`.`orderLineOrderId` = `ol`.`orderId` AND `subD`.`invoiceTypeId` = 6
+                          WHERE subIL.orderLineId = `ol`.id AND `subIL`.`orderLineOrderId` = `ol`.`orderId` AND `subD`.`invoiceTypeId` = 4 OR `subD`.`invoiceTypeId` = 5
                         )
                       ), ''
                     )
-                  )as `documentT`,
+                  )as `documentT`,*/
                   `it`.`name` as `documentType`,
                   `it`.`id` as `dt`,
                   if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') as `paymentDate`,
@@ -64,6 +65,8 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
         $i = 0;
 
         $abR = \Monkey::app()->repoFactory->create('AddressBook');
+        /** @var CInvoiceLineHasOrderLine $ilhR */
+        $ilhR = \Monkey::app()->repoFactory->create('InvoiceLineHasOrderLine');
         foreach ($invoices as $v) {
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
@@ -82,6 +85,16 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
             }
 
             $response['data'][$i]['documentType'] = $v->invoiceType->name;
+            /*$typeId = $v->invoiceType->id;
+            if (6 == $typeId) {
+                $ol = $v->orderLine->getFirst();
+                $ils = $ilhR->findBy(['orderLineId' => $ol->id, 'orderLineOrderId' => $ol->id]);
+                foreach($ils as $il) {
+                    if (5 == $il->document->invoiceTypeId OR 4 == $il->document->invoiceTypeId) {
+                        $response['data'][$i]['documentType'].= ' NdC: ' . $il->document->number;
+                    }
+                }
+            }*/
             $response['data'][$i]['invoiceCalculatedTotal'] = SPriceToolbox::formatToEur($invoiceLinesTotal);
             $response['data'][$i]['invoiceDate'] = STimeToolbox::EurFormattedDate($v->date);
             $bill = $v->paymentBill;

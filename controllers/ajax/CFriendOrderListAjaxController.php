@@ -24,6 +24,14 @@ class CFriendOrderListAjaxController extends AAjaxController
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
 
+        $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('ddtWithoutNcd');
+        $DDfield = '';
+        $DDThaving = '';
+        if($DDTAndNoCreditNote) {
+            $DDfield = 'group_concat(`it`.`code`)                                 AS `groupDocumentType`,';
+            $DDThaving = " GROUP BY `ol`.`id`, `ol`.`orderId` HAVING groupDocumentType LIKE '%fr_trans_doc%' AND groupDocumentType NOT LIKE '%fr_credit_note%'";
+        }
+
         $query = "
               SELECT
                   `ol`.`id`                                                     AS `id`,
@@ -42,8 +50,10 @@ class CFriendOrderListAjaxController extends AAjaxController
                        if(`it`.`code` like '%fr_trans_doc%', `in`.`number`, '-')
                   ) as invoiceAll,
                   if(`it`.`code` like '%fr_invoice%', `in`.`number`, '-') AS `invoiceNumber`,
-                  if(`it`.`code` like '%credito_note%', `in`.`number`, '-') AS `creditNoteNumber`,
+                  if(`it`.`code` like '%fr_credit_note%', `in`.`number`, '-') AS `creditNoteNumber`,
                   if(`it`.`code` like '%fr_trans_doc%', `in`.`number`, '-') AS `transDocNumber`,
+                  `it`.`code` as `DocumentType`,
+                  $DDfield
                   `pse`.`name`                                                  AS `season`,
                   `ps`.`name`                                                   AS `size`,
                   `s`.`id`                                                      AS `shopId`,
@@ -76,13 +86,10 @@ class CFriendOrderListAjaxController extends AAjaxController
                       JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`)
                           ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
                   LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
-                  ";
+                  WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') $DDThaving";
+
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
-        $datatable->addCondition(
-            'orderLineStatusCode',
-            ['ORD_ARCH', 'CRT', 'CRT_MRG'],
-            true);
         $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         if (!$allShops) {
             $datatable->addCondition('orderLineStatusCode',
@@ -99,9 +106,6 @@ class CFriendOrderListAjaxController extends AAjaxController
                 true
             );
         }
-
-        $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('DDTAndNoCreditNote');
-        if($DDTAndNoCreditNote) {}
 
         $orderLines = $this->app->repoFactory->create('OrderLine')
             ->em()->findBySql($datatable->getQuery(),$datatable->getParams());
@@ -199,24 +203,27 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendRevVat'] = SPriceToolbox::grossPriceFromNet($v->friendRevenue, $vat, true);
             $document = $olR->getFriendInvoice($v);
             $response['data'][$i]['invoiceAll'] = '<span class="small">';
-               if ($document) $response['data'][$i]['invoiceAll'] .=
-                   $document->number . ' (id:' . $document->id . ')<br />';
+            $response['data'][$i]['invoiceNumber'] = '-';
+            $response['data'][$i]['creditNoteNumber'] = '-';
+            $response['data'][$i]['transDocNumber'] = '-';
+               if ($document) {
+                   $response['data'][$i]['invoiceAll'] .= $document->number . ' (id:' . $document->id . ')<br />';
+                   $response['data'][$i]['invoiceNumber'] = $document->number . ' (id:' . $document->id . ')';
+               }
             $creditNote = $olR->getFriendCreditNote($v);
-            if ($creditNote) $response['data'][$i]['invoiceAll'] .=
-                'Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')<br />';
+            if ($creditNote) {
+                $response['data'][$i]['invoiceAll'] .= 'Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')<br />';
+                $response['data'][$i]['creditNoteNumber'] = $document->number . ' (id:' . $document->id . ')';
+            }
             $transDoc = $olR->getFriendTransDoc($v);
-            if ($transDoc) $response['data'][$i]['invoiceAll'] .=
-                'DDT: ' . $transDoc->number . ' (id:' . $transDoc->id . ')';
+            if ($transDoc) {
+                $response['data'][$i]['invoiceAll'] .= 'DDT: ' . $transDoc->number . ' (id:' . $transDoc->id . ')';
+                $response['data'][$i]['transDocNumber'] = $document->number . ' (id:' . $document->id . ')';
+            }
             $response['data'][$i]['invoiceAll'].= '</span>';
             $lOC = $lR->findBy(
                 ['stringId' => $v->printId(), 'entityName' => 'OrderLine', 'actionName' => 'OrderStatusLog']
             );
-            $response['data'][$i]['invoiceNumber'] =
-                ($document) ? $document->number . ' (id:' . $document->id . ')' : '-' ;
-            $response['data'][$i]['creditNoteNumber'] =
-                ($creditNote) ? $creditNote->number . ' (id:' . $creditNote->id . ')' : '-';
-            $response['data'][$i]['transDocNumber'] =
-                ($transDoc) ? $transDoc->number . ' (id:' . $transDoc->id . ')': '-';
             $printActs = '';
             foreach($lOC as $l) {
                 $key = array_search($l->eventValue, array_column($orderLineStatuses, 'code'));

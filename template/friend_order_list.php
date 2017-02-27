@@ -180,6 +180,11 @@
                 data-remote="bs.friend.order.registerTransportDocFromFile"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Filtra righe">
+        <bs-toolbar-button
+            data-remote="bs.orderline.viewWithDDTandWithoutCreditNote"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
