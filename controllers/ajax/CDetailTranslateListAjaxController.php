@@ -32,7 +32,22 @@ class CDetailTranslateListAjaxController extends AAjaxController
                   `view`.`translatedName`                         AS `translatedName`,
                   if((sum(`ProductSku`.`stockQty`) > 0), 1, 0)    AS `hasQuantity`,
                   count(DISTINCT `ProductSku`.`productVariantId`) AS `timesDetailIsUsedInProduct`
-                FROM ((`vBluesealProductDetailTranslationStatus` `view`
+                FROM ((
+                 (
+                 SELECT
+                    pd.id,
+                    pd.slug,
+                    group_concat(l.lang ORDER BY l.id ASC SEPARATOR '|')                                                 AS translatedLangCode,
+                    group_concat(if(pdt.name IS NULL OR pdt.name = '', 'x', pdt.langId) ORDER BY l.id ASC SEPARATOR
+                                 '|')                                                                                    AS translatedLangId,
+                    group_concat(if(pdt.name IS NULL OR pdt.name = '', 'x', pdt.name) ORDER BY l.id ASC SEPARATOR
+                                 '|')                                                                                    AS translatedName
+                  FROM ProductDetail pd LEFT JOIN Lang l ON 1 = 1
+                    LEFT JOIN
+                    ProductDetailTranslation pdt ON pd.id = pdt.productDetailId AND pdt.langId = l.id
+                  GROUP BY pd.id
+                 )
+                 `view`
                   JOIN `ProductSheetActual` ON ((`ProductSheetActual`.`productDetailId` = `view`.`id`))) JOIN `ProductSku`
                     ON (((`ProductSheetActual`.`productId` = `ProductSku`.`productId`) AND
                          (`ProductSheetActual`.`productVariantId` = `ProductSku`.`productVariantId`))))
