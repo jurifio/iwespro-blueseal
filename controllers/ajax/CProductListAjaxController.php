@@ -95,8 +95,10 @@ class CProductListAjaxController extends AAjaxController
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $datatable->addCondition('shopId', $shopIds);
 
+        $dataTableQuery = $datatable->getQuery();
+        $dataTableParams = $datatable->getParams();
         $time = microtime(true);
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($dataTableQuery, $dataTableParams);
         $response['queryTime'] = microtime(true) - $time;
 
         $time = microtime(true);
