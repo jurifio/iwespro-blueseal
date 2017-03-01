@@ -213,12 +213,12 @@ class CFriendOrderListAjaxController extends AAjaxController
             $creditNote = $olR->getFriendCreditNote($v);
             if ($creditNote) {
                 $response['data'][$i]['invoiceAll'] .= 'Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')<br />';
-                $response['data'][$i]['creditNoteNumber'] = $document->number . ' (id:' . $document->id . ')';
+                $response['data'][$i]['creditNoteNumber'] = $creditNote->number . ' (id:' . $creditNote->id . ')';
             }
             $transDoc = $olR->getFriendTransDoc($v);
             if ($transDoc) {
                 $response['data'][$i]['invoiceAll'] .= 'DDT: ' . $transDoc->number . ' (id:' . $transDoc->id . ')';
-                $response['data'][$i]['transDocNumber'] = $document->number . ' (id:' . $document->id . ')';
+                $response['data'][$i]['transDocNumber'] = $transDoc->number . ' (id:' . $transDoc->id . ')';
             }
             $response['data'][$i]['invoiceAll'].= '</span>';
             $lOC = $lR->findBy(
