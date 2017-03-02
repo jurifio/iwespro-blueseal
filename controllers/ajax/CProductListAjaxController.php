@@ -30,7 +30,7 @@ class CProductListAjaxController extends AAjaxController
                   `pse`.`isActive`                                                                                      AS `isActive`,
                   concat(`p`.`itemno`, ' # ', `pv`.`name`)                                                              AS `cpf`,
                   `pv`.`description`                                                                                    AS `colorNameManufacturer`,
-                  `s`.`name`                                                                                            AS `shop`,
+                  concat(`s`.`id`, ' - ', `s`.`name`)                                                                   AS `shop`,
                   concat(ifnull(`p`.`externalId`, ''), '-', ifnull(`dp`.`extId`, ''), '-', ifnull(`ds`.`extSkuId`, '')) AS `externalId`,
                   `pb`.`name`                                                                                           AS `brand`,
                   `ps`.`name`                                                                                           AS `status`,
@@ -193,7 +193,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
 
-            $row['shop'] = '<span class="small">'.$val->getShops('<br />').'</span>';
+            $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
 
             $row['mup'] = '<span class="small">';
             $row['mup'] .= implode('<br />', $mup);
