@@ -56,6 +56,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Minimo Prodotti Online</th>
+                                <th data-slug="releasedProducts"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Prodotti Attualmente Online</th>
                                 <th data-slug="isActive"
                                     data-searchable="false"
                                     data-orderable="false"
