@@ -206,7 +206,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div id="statisticGraphics">
-                                                <svg height="300"></svg>
+                                                <svg height="400"></svg>
                                             </div>
                                         </div>
                                     </div>
