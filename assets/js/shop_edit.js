@@ -121,35 +121,53 @@ function createGraphs(shop) {
     /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
     /* Done setting the chart up? Time to render it!*/
     let productDatas = [];
+    let orderMinimumData = [];
+    let orderDatas = [];
+    let orderValueDatas = [];
+    let index = 0;
     for(let i in shop.productStatistics) {
         let point = shop.productStatistics[i];
-        productDatas.push({x: (new Date(point.date).getTime()), y:point.products });
+        let xpoint = (new Date(point.date).getTime());
+        orderDatas[index] = {x:xpoint, y:0};
+        orderMinimumData[index] = {x:xpoint, y:shop.minReleasedProducts};
+        orderValueDatas[index] = {x:xpoint, y:0};
+        for(let k in shop.orderStatistics) {
+            if(shop.orderStatistics[k].date == point.date) {
+                orderDatas[index] = { x:xpoint, y:shop.orderStatistics[k].orders};
+                orderValueDatas[index] = { x:xpoint, y:shop.orderStatistics[k].ordersValue};
+                break;
+            }
+        }
+        productDatas[index] = {x: xpoint, y:point.products };
+        index++;
     }
 
     let myData = [
         {
             values: productDatas,
-            key: 'Prodotti',
+            key: 'Prodotti Attivi',
             color: '#ff7f0e'
+        },{
+            values: orderMinimumData,
+            key: 'Minimo Prodotti',
+            color: 'red'
+        },{
+            values: orderValueDatas,
+            bar: true,
+            key: 'Incasso',
+            color: 'green'
         }
     ];   //You need data...
 
     nv.addGraph(function() {
-        let chart = nv.models.lineChart()
+        let chart = nv.models.linePlusBarChart()
                 .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
-                .useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
-                //.transitionDuration(350)  //how fast do you want the lines to transition?
                 .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
-                .showYAxis(true)        //Show the y-axis
-                .showXAxis(true)        //Show the x-axis
-                .clipEdge(true)
                 .x(function(d,k) { return k; })
+                .color(d3.scale.category10().range())
             ;
 
-
-
         chart.xAxis   //Chart x-axis settings
-            .axisLabel('Giorni')
             .showMaxMin(false)
             .tickFormat(function(d,k) {
                 let dx = myData[0].values[d] && myData[0].values[d].x || '0';
@@ -158,11 +176,15 @@ function createGraphs(shop) {
             .showMaxMin(true)
         ;
 
-        chart.yAxis     //Chart y-axis settings
-             .axisLabel('Prodotti')
-             .showMaxMin(true)
-             .tickFormat(d3.format(',f'));
-            //.tickFormat(d3.format(',.2r'));
+        chart.y1Axis     //Chart y-axis settings
+            .tickFormat(function(d) { return '€' + d3.format(',f')(d) });
+        //.tickFormat(d3.format(',.2r'));
+
+        chart.y2Axis     //Chart y-axis settings
+            .tickFormat(d3.format(',f'));
+        //.tickFormat(d3.format(',.2r'));
+
+        chart.bars.forceY([0]);
 
         d3.select('#statisticGraphics svg') //Select the <svg> element you want to render the chart in.
             .datum(myData)         //Populate the <svg> element with chart data...
@@ -170,7 +192,7 @@ function createGraphs(shop) {
             .call(chart);          //Finally, render the chart!
 
         //Update the chart when window resizes.
-        nv.utils.windowResize(function() { chart.update() });
+        nv.utils.windowResize(chart.update);
         return chart;
     });
 }
