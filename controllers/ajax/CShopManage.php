@@ -32,6 +32,7 @@ class CShopManage extends AAjaxController
 	        $shop->billingAddressBook;
 	        $shop->shippingAddressBook;
 	        $shop->productStatistics = $shop->getDailyActiveProductStatistics();
+	        $shop->orderStatistics = $shop->getDailyOrderFriendStatistics();
             return json_encode($shop);
         } else {
             $this->app->router->response()->raiseUnauthorized();
