@@ -22,9 +22,13 @@ class CChangeLineStatus extends AAjaxController
             /** @var COrderLineRepo $repo */
             $repo = $this->app->repoFactory->create('OrderLine');
             $line = $repo->findOne(['id' => $ids[0], 'orderId' => $ids[1]]);
-            $repo->updateStatus($line, $ids[2]);
+            $oldActive = $line->isActive;
+
+            $line = $repo->updateStatus($line, $ids[2]);
+            $newActive = $line->isActive();
             $dba->commit();
-            return true;
+            if ($oldActive != $newActive) return 'reload';
+            else return 'don\'t do it';
         } catch (BambooException $e) {
             $dba->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
