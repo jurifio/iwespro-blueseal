@@ -15,14 +15,18 @@ class CChangeLineStatus extends AAjaxController
      */
     public function put()
     {
+        $dba = \Monkey::app()->dbAdapter;
         try {
+            $dba->beginTransaction();
             $ids = explode('-', $this->data['value']);
             /** @var COrderLineRepo $repo */
             $repo = $this->app->repoFactory->create('OrderLine');
             $line = $repo->findOne(['id' => $ids[0], 'orderId' => $ids[1]]);
             $repo->updateStatus($line, $ids[2]);
+            $dba->commit();
             return true;
         } catch (BambooException $e) {
+            $dba->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return false;
         }

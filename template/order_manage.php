@@ -248,6 +248,9 @@
         <bs-toolbar-button
             data-remote="bs.order.pay"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.order.addOrderLine"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
