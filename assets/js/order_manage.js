@@ -97,7 +97,7 @@ $(document).on('click', 'button[data-ajax="true"]', function (e) {
         type: method,
         url: address,
         data: {value: button.val()}
-    }).done(function (content) {
+    }).done(function (res) {
         if (res == 'reload') window.location.reload();
         else {
             var done = button.data('fail');

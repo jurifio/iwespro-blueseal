@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs.order.viewCritical",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Filtra gli ordini con problemi",
+    title: "Aggiungi un prodotto all'ordine",
     placement: "bottom",
     toggle: "modal"
 };
