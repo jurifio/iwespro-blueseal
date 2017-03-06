@@ -3,6 +3,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\domain\entities\CAddressBook;
+use bamboo\domain\entities\CShop;
 
 
 /**
@@ -25,10 +26,12 @@ class CShopManage extends AAjaxController
 	    $shopId = $this->app->router->request()->getRequestData('id');
 	    $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 	    if(in_array($shopId,$shops)) {
+	        /** @var CShop $shop */
 	        $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopId);
 	        $shop->user;
 	        $shop->billingAddressBook;
 	        $shop->shippingAddressBook;
+	        $shop->productStatistics = $shop->getDailyActiveProductStatistics();
             return json_encode($shop);
         } else {
             $this->app->router->response()->raiseUnauthorized();

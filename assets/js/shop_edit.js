@@ -102,6 +102,9 @@ $(document).on('bs.shop.save', function () {
                     }
                 }
             });
+
+            createGraphs(res);
+
             appendShipment(res.billingAddressBook, '#billingAddress');
             res.shippingAddressBook.forEach(function (addressData) {
                 appendShipment(addressData, '#shippingAddresses');
@@ -110,6 +113,67 @@ $(document).on('bs.shop.save', function () {
         });
     }
 })(jQuery);
+
+function createGraphs(shop) {
+    "use strict";
+    let chartContainer = $('#statisticGraphics');
+
+    /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
+    /* Done setting the chart up? Time to render it!*/
+    let productDatas = [];
+    for(let i in shop.productStatistics) {
+        let point = shop.productStatistics[i];
+        productDatas.push({x: (new Date(point.date).getTime()), y:point.products });
+    }
+
+    let myData = [
+        {
+            values: productDatas,
+            key: 'Prodotti',
+            color: '#ff7f0e'
+        }
+    ];   //You need data...
+
+    nv.addGraph(function() {
+        let chart = nv.models.lineChart()
+                .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
+                .useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
+                //.transitionDuration(350)  //how fast do you want the lines to transition?
+                .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
+                .showYAxis(true)        //Show the y-axis
+                .showXAxis(true)        //Show the x-axis
+                .clipEdge(true)
+                .x(function(d,k) { return k; })
+            ;
+
+
+
+        chart.xAxis   //Chart x-axis settings
+            .axisLabel('Giorni')
+            .showMaxMin(false)
+            .tickFormat(function(d,k) {
+                let dx = myData[0].values[d] && myData[0].values[d].x || '0';
+                return d3.time.format('%x')(new Date(dx));
+            })
+            .showMaxMin(true)
+        ;
+
+        chart.yAxis     //Chart y-axis settings
+             .axisLabel('Prodotti')
+             .showMaxMin(true)
+             .tickFormat(d3.format(',f'));
+            //.tickFormat(d3.format(',.2r'));
+
+        d3.select('#statisticGraphics svg') //Select the <svg> element you want to render the chart in.
+            .datum(myData)         //Populate the <svg> element with chart data...
+            .transition().duration(500)
+            .call(chart);          //Finally, render the chart!
+
+        //Update the chart when window resizes.
+        nv.utils.windowResize(function() { chart.update() });
+        return chart;
+    });
+}
 
 function readShipment(containerSelector) {
     "use strict";
