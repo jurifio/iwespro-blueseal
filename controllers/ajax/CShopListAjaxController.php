@@ -46,6 +46,7 @@ class CShopListAjaxController extends AAjaxController
             $row['referrerEmails'] = implode('<br />',explode(';',$shop->referrerEmails));
             $row['saleMultiplier'] = $shop->saleMultiplier;
             $row['minReleasedProducts'] = $shop->minReleasedProducts;
+            $row['releasedProducts'] = $shop->getActiveProductCount();
             $row['isActive'] = $shop->isActive;
             $users = [];
             foreach ($shop->user as $user) {
