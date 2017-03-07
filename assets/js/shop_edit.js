@@ -163,17 +163,14 @@ function createGraphs(shop) {
                 duration: 300,
                 useInteractiveGuideline: true
             })
-            .x(function (d, k) {
-                return k;
-            })
             .color(d3.scale.category10().range())
         ;
 
     productChart.xAxis   //Chart x-axis settings
         .showMaxMin(false)
         .tickFormat(function (d, k) {
-            let dx = productGraphData[0].values[d] && productGraphData[0].values[d].x || '0';
-            return d3.time.format('%Y-%m-%d')(new Date(dx));
+            //let dx = productGraphData[0].values[d] && productGraphData[0].values[d].x || '0';
+            return d3.time.format('%Y-%m-%d')(new Date(d));
         })
         .showMaxMin(true)
     ;
@@ -209,16 +206,13 @@ function createGraphs(shop) {
     orderChart
         .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
         .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
-        .x(function (d, k) {
-            return k;
-        })
         .color(d3.scale.category10().range())
     ;
 
     orderChart.xAxis   //Chart x-axis settings
         .tickFormat(function (d, k) {
-            let dx = orderGraphData[0].values[d] && orderGraphData[0].values[d].x || '0';
-            return d3.time.format('%Y-%m-%d')(new Date(dx));
+            //let dx = orderGraphData[0].values[d] && orderGraphData[0].values[d].x || '0';
+            return d3.time.format('%Y-%m-%d')(new Date(d));
         })
     ;
 
