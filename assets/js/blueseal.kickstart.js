@@ -854,8 +854,9 @@ $.bsModal = function (header, params) {
         this.addProduct = function (product) {
             let productList = self.productList;
             if ('single' == this.opt.mode) productList.html('');
+            let prodTemp;
             if ('multi' == this.opt.mode) //TODO aggiungi pulsante per chiudere il singolo prodotto;
-                let prodTemp = self.productTemplate.clone();
+                prodTemp = self.productTemplate.clone();
             if ('single' == this.opt.mode) prodTemp.find('.product-close').remove();
             let prodId = 'product-' + product.id + '-' + product.productVariantId;
 
