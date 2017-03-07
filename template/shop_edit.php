@@ -161,6 +161,16 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default disabled">
+                                                <label for="shop_minReleasedProducts">Minimo Prodotti</label>
+                                                <input id="shop_minReleasedProducts" disabled="disabled"
+                                                       autocomplete="off" type="text"
+                                                       class="form-control"
+                                                       name="shop_minReleasedProducts"
+                                                       value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default disabled">
                                                 <label for="shop_config_photoCost">Costo Shooting</label>
                                                 <input id="shop_config_photoCost" disabled="disabled"
                                                        autocomplete="off" type="number"

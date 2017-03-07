@@ -54,6 +54,7 @@ class CShopManage extends AAjaxController
                 $shop->currentSeasonMultiplier = $shopData['currentSeasonMultiplier'];
                 $shop->pastSeasonMultiplier = $shopData['pastSeasonMultiplier'];
                 $shop->saleMultiplier = $shopData['saleMultiplier'];
+                $shop->minReleasedProducts = $shopData['minReleasedProducts'];
                 $config = $shop->config;
                 $config['refusalRate'] = $shopData['config']['refusalRate'] ?? null;
                 $config['refusalRateLastMonth'] = $shopData['config']['refusalRateLastMonth'] ?? null;
@@ -94,6 +95,14 @@ class CShopManage extends AAjaxController
      * @return \bamboo\core\db\pandaorm\entities\AEntity|CAddressBook|null
      */
     private function getAndFillAddressData($addressBookData) {
+        $ok = false;
+        foreach ($addressBookData as $field) {
+            if(!empty($field)) {
+                $ok = true;
+                break;
+            }
+        }
+        if(!$ok) return null;
 	    $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
 	    if(is_null($addressBook)) $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
 	    try {

@@ -9,6 +9,7 @@ $(document).on('bs.shop.save', function () {
     data.currentSeasonMultiplier = $('#shop_currentSeasonMultiplier').val();
     data.pastSeasonMultiplier = $('#shop_pastSeasonMultiplier').val();
     data.saleMultiplier = $('#shop_saleMultiplier').val();
+    data.minReleasedProducts = $('#shop_minReleasedProducts').val();
     data.config = {};
     data.config.refusalRate = $('#shop_config_refusalRate').val();
     data.config.refusalRateLastMonth = $('#shop_config_refusalRate_lastMonth').val();
@@ -70,6 +71,7 @@ $(document).on('bs.shop.save', function () {
             $('#shop_currentSeasonMultiplier').val(res.currentSeasonMultiplier);
             $('#shop_pastSeasonMultiplier').val(res.pastSeasonMultiplier);
             $('#shop_saleMultiplier').val(res.saleMultiplier);
+            $('#shop_minReleasedProducts').val(res.minReleasedProducts);
             $('#shop_config_refusalRate').val(res.config.refusalRate);
             $('#shop_config_refusalRate_lastMonth').val(res.config.refusalRateLastMonth);
             $('#shop_config_reactionRate').val(res.config.reactionRate);
