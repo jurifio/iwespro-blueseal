@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms'], $page); ?>
+    <?php echo $app->getAssets(['ui', 'forms','charts'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -189,6 +189,24 @@
                                                        class="form-control"
                                                        name="shop_config_orderTransportCost"
                                                        value=""/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-default clearfix">
+                                <div class="panel-heading clearfix">
+                                    <h5 class="m-t-10">Statistiche</h5>
+                                </div>
+                                <div class="panel-body clearfix">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div id="statisticGraphics">
+                                                <svg height="400"></svg>
                                             </div>
                                         </div>
                                     </div>

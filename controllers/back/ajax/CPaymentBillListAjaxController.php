@@ -27,17 +27,19 @@ class CPaymentBillListAjaxController extends AAjaxController
         $response = [];
 
         $sql = "SELECT pb.id, 
-                       pb.amount, 
+                       pb.amount as total, 
                        pb.creationDate, 
                        pb.paymentDate, 
                        pb.submissionDate, 
                        pb.note,
                        count(distinct inn.shopRecipientId) as transfers,
+                       group_concat(s.title) as recipients,
                        group_concat(inn.number) as invoices,
                        group_concat(ab.subject)
                 from PaymentBill pb 
                       JOIN PaymentBillHasInvoiceNew pbhin on pb.id = pbhin.paymentBillId 
                       JOIN Document inn on pbhin.invoiceNewId = inn.id
+                      JOIN Shop s on inn.shopRecipientId = s.id  
                       JOIN InvoiceType it on inn.invoiceTypeId = it.id
                       JOIN AddressBook ab on shopRecipientId = ab.id
                   GROUP BY pb.id";

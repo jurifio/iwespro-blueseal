@@ -3,6 +3,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\domain\entities\CAddressBook;
+use bamboo\domain\entities\CShop;
 
 
 /**
@@ -25,10 +26,13 @@ class CShopManage extends AAjaxController
 	    $shopId = $this->app->router->request()->getRequestData('id');
 	    $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 	    if(in_array($shopId,$shops)) {
+	        /** @var CShop $shop */
 	        $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopId);
 	        $shop->user;
 	        $shop->billingAddressBook;
 	        $shop->shippingAddressBook;
+	        $shop->productStatistics = $shop->getDailyActiveProductStatistics();
+	        $shop->orderStatistics = $shop->getDailyOrderFriendStatistics();
             return json_encode($shop);
         } else {
             $this->app->router->response()->raiseUnauthorized();
@@ -90,8 +94,8 @@ class CShopManage extends AAjaxController
      * @return \bamboo\core\db\pandaorm\entities\AEntity|CAddressBook|null
      */
     private function getAndFillAddressData($addressBookData) {
-	    if(isset($addressBookData['id'])) $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
-	    else $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
+	    $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
+	    if(is_null($addressBook)) $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
 	    try {
             /** @var CAddressBook $addressBook */
             $addressBook->name = $addressBookData['name'] ?? null;

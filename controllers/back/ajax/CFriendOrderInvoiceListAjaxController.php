@@ -2,6 +2,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\domain\entities\CInvoiceLineHasOrderLine;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\utils\time\STimeToolbox;
 
@@ -10,8 +11,6 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
 
     public function get()
     {
-        // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
-
         $query = "
              SELECT
                   `i`.`id` as `id`,
@@ -19,9 +18,19 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   `i`.`paymentExpectedDate` as paymentExpectedDate,
                   `i`.`date` as `invoiceDate`,
                   `i`.`totalWithVat` as `invoiceTotalAmount`,
+                  /*concat(`it`.`name`, 
+                    if(`it`.`id` = 6,
+                      concat(' - NdC: ', 
+                        (SELECT DISTINCT `number` FROM `Document` as subD JOIN InvoiceLineHasOrderLine as subIL on subIL.invoiceLineInvoiceId = subD.id 
+                          WHERE subIL.orderLineId = `ol`.id AND `subIL`.`orderLineOrderId` = `ol`.`orderId` AND `subD`.`invoiceTypeId` = 4 OR `subD`.`invoiceTypeId` = 5
+                        )
+                      ), ''
+                    )
+                  )as `documentT`,*/
                   `it`.`name` as `documentType`,
+                  `it`.`id` as `dt`,
                   if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') as `paymentDate`,
-                  concat(`ol`.`id`, '-', `ol`.`orderId`) as `orderLines`,
+                  group_concat(concat(`ol`.`id`, '-', `ol`.`orderId`)) as `orderLines`,
                   `i`.`creationDate` as `creationDate`,
                   if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`), 'Non presente')  as `paymentBill`,
                   `sh`.`title` as friend,
@@ -41,6 +50,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                   group by `i`.`id`
               ";
 
+
         $datatable = new CDataTables($query, ['id'],$_GET, true);
         $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $invoices = $this->app->repoFactory->create('Document')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
@@ -55,6 +65,8 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
         $i = 0;
 
         $abR = \Monkey::app()->repoFactory->create('AddressBook');
+        /** @var CInvoiceLineHasOrderLine $ilhR */
+        $ilhR = \Monkey::app()->repoFactory->create('InvoiceLineHasOrderLine');
         foreach ($invoices as $v) {
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
@@ -73,6 +85,16 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
             }
 
             $response['data'][$i]['documentType'] = $v->invoiceType->name;
+            /*$typeId = $v->invoiceType->id;
+            if (6 == $typeId) {
+                $ol = $v->orderLine->getFirst();
+                $ils = $ilhR->findBy(['orderLineId' => $ol->id, 'orderLineOrderId' => $ol->id]);
+                foreach($ils as $il) {
+                    if (5 == $il->document->invoiceTypeId OR 4 == $il->document->invoiceTypeId) {
+                        $response['data'][$i]['documentType'].= ' NdC: ' . $il->document->number;
+                    }
+                }
+            }*/
             $response['data'][$i]['invoiceCalculatedTotal'] = SPriceToolbox::formatToEur($invoiceLinesTotal);
             $response['data'][$i]['invoiceDate'] = STimeToolbox::EurFormattedDate($v->date);
             $bill = $v->paymentBill;

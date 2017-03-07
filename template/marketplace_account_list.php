@@ -103,6 +103,17 @@
             data-title="statistiche categorie"
             data-event="bs.marketplace.category.href"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-cog"
+            data-button="true"
+            data-permission="/admin/product/edit&&allShops"
+            data-rel="tooltip"
+            data-placement="bottom"
+            data-class="btn btn-default"
+            data-title="Configurazioni"
+            data-event="bs.marketplace-account.config.href"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

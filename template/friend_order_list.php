@@ -180,6 +180,13 @@
                 data-remote="bs.friend.order.registerTransportDocFromFile"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php if ($allShops): ?>
+    <bs-toolbar-group data-group-label="Filtra righe">
+        <bs-toolbar-button
+            data-remote="bs.orderline.viewWithDDTandWithoutCreditNote"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <?php endif; ?>
 </bs-toolbar>
 </body>
 </html>

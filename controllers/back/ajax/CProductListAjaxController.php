@@ -30,7 +30,7 @@ class CProductListAjaxController extends AAjaxController
                   `pse`.`isActive`                                                                                      AS `isActive`,
                   concat(`p`.`itemno`, ' # ', `pv`.`name`)                                                              AS `cpf`,
                   `pv`.`description`                                                                                    AS `colorNameManufacturer`,
-                  `s`.`name`                                                                                            AS `shop`,
+                  concat(`s`.`id`, '-', `s`.`name`)                                                                   AS `shop`,
                   concat(ifnull(`p`.`externalId`, ''), '-', ifnull(`dp`.`extId`, ''), '-', ifnull(`ds`.`extSkuId`, '')) AS `externalId`,
                   `pb`.`name`                                                                                           AS `brand`,
                   `ps`.`name`                                                                                           AS `status`,
@@ -54,9 +54,10 @@ class CProductListAjaxController extends AAjaxController
                   (((if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
                       (`pse`.`isActive` = 0), `s`.`pastSeasonMultiplier`,
                       if((`p`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
-                    (if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100                       AS `mup`,
+                   (if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100                       AS `mup`,
                   `p`.`qty`                                                                                             AS `hasQty`,
-                  `t`.`name`                                                                                            AS `tags`,
+                  (SELECT group_concat(DISTINCT t.name) FROM `ProductHasTag` `pht` JOIN `TagTranslation` `t` ON `pht`.`tagId` = `t`.`tagId`
+                   WHERE langId = 1 AND pht.productId = `p`.id AND `pht`.`productVariantId` = `p`.`productVariantId` GROUP BY p.productVariantId) as `tags`,
                   (select min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), null)) from ProductSku where ProductSku.productId = p.id and ProductSku.productVariantId = p.productVariantId) as activePrice,
                   (SELECT group_concat(concat(m.name, ' - ', ma.name))
                    FROM Marketplace m, MarketplaceAccount ma, MarketplaceAccountHasProduct mahp
@@ -65,7 +66,7 @@ class CProductListAjaxController extends AAjaxController
                          ma.marketplaceId = mahp.marketplaceId AND
                          mahp.productId = p.id AND
                          mahp.productVariantId = p.productVariantId and mahp.isDeleted != 1)                            AS marketplaces
-                FROM ((((((((((((`Product` `p`
+                FROM (((((((((`Product` `p`
                   JOIN `ProductSeason` `pse` ON ((`p`.`productSeasonId` = `pse`.`id`)))
                   JOIN `ProductVariant` `pv` ON ((`p`.`productVariantId` = `pv`.`id`)))
                   JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`)))
@@ -79,17 +80,11 @@ class CProductListAjaxController extends AAjaxController
                   LEFT JOIN (`ProductHasProductCategory` `ppc`
                     JOIN `ProductCategory` `pc` ON ((`ppc`.`productCategoryId` = `pc`.`id`)))
                     ON (((`p`.`id` = `ppc`.`productId`) AND (`p`.`productVariantId` = `ppc`.`productVariantId`))))
-                  LEFT JOIN (`ProductHasTag` `pht`
-                    JOIN `TagTranslation` `t` ON ((`pht`.`tagId` = `t`.`tagId`)))
-                    ON (((`pht`.`productId` = `p`.`id`) AND (`pht`.`productVariantId` = `p`.`productVariantId`))))
                   LEFT JOIN `ProductColorGroup` `pcg` ON (`p`.`productColorGroupId` = `pcg`.`id`)
                   LEFT JOIN (`DirtyProduct` `dp`
                     JOIN `DirtySku` `ds` ON ((`dp`.`id` = `ds`.`dirtyProductId`)))
                     ON (((`sp`.`productId` = `dp`.`productId`) AND (`sp`.`productVariantId` = `dp`.`productVariantId`) AND
-                         (`sp`.`shopId` = `dp`.`shopId`))))
-                  LEFT JOIN `ProductNameTranslation` `pnt`
-                    ON (((`p`.`id` = `pnt`.`productId`) AND (`p`.`productVariantId` = `pnt`.`productVariantId`) AND
-                  (`pnt`.`langId` = 1)))) WHERE (`t`.langId = 1 OR `t`.langId is null) ";
+                         (`sp`.`shopId` = `dp`.`shopId`))) ";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
@@ -100,8 +95,10 @@ class CProductListAjaxController extends AAjaxController
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $datatable->addCondition('shopId', $shopIds);
 
+        $dataTableQuery = $datatable->getQuery();
+        $dataTableParams = $datatable->getParams();
         $time = microtime(true);
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($dataTableQuery, $dataTableParams);
         $response['queryTime'] = microtime(true) - $time;
 
         $time = microtime(true);
@@ -196,7 +193,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
 
-            $row['shop'] = '<span class="small">'.$val->getShops('<br />').'</span>';
+            $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
 
             $row['mup'] = '<span class="small">';
             $row['mup'] .= implode('<br />', $mup);
