@@ -623,7 +623,7 @@ $.bsModal = function (header, params) {
             },
             addError: function (err) {
                 let arr = [];
-                if (Array.isArray($(self).data('errors'))) let arr = $(self).data('errors');
+                if (Array.isArray($(self).data('errors'))) arr = $(self).data('errors');
 
                 if (-1 == $.inArray(err, arr)) {
                     arr.push(err);
