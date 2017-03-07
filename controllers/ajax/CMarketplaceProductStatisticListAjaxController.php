@@ -28,7 +28,7 @@ class CMarketplaceProductStatisticListAjaxController extends AMarketplaceAccount
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
 
-        $query = self::SQL_SELECT_CAMPAING_PRODUCT_STATISTIC_MARKETPLACE_ACCOUNT." order by visits desc";
+        $query = self::SQL_SELECT_PRODUCT_MARKETPLACE_ACCOUNT_CATEGORY." order by visits desc";
 
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
         $timeFrom = new \DateTime($this->app->router->request()->getRequestData('startDate').' 00:00:00');

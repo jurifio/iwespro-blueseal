@@ -29,32 +29,6 @@ class CMarketplaceCategoryStatisticListAjaxController extends AMarketplaceAccoun
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
         $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
 
-        $query = "SELECT
-                      Parent.id as category,
-                      count(DISTINCT codice) as products,
-                      sum(visits) as visits,
-                      sum(visitsCost) as visitsCost,
-                      sum(conversions) as conversions,
-                      sum(conversionsValue) as conversionsValue,
-                      sum(pConversions) as pConversions,
-                      sum(pConversionsValue) as pConversionsValue
-                    FROM
-                      ProductCategory Child
-                      JOIN
-                      ProductCategory Parent ON Child.lft BETWEEN Parent.lft AND Parent.rght
-                      JOIN ( ".self::SQL_SELECT_CAMPAING_PRODUCT_STATISTIC_MARKETPLACE_ACCOUNT." ) sel3 ON Child.id = sel3.categories
-                    GROUP BY Parent.id
-                    ORDER BY Child.lft";
-
-        $origin = "SELECT parent.name, COUNT(product.name)
-                        FROM nested_category AS node ,
-                                nested_category AS parent,
-                                product
-                        WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                                AND node.category_id = product.category_id
-                        GROUP BY parent.name
-                        ORDER BY node.lft";
-
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
         $timeFrom = new \DateTime($this->app->router->request()->getRequestData('startDate').' 00:00:00');
         $timeTo = new \DateTime($this->app->router->request()->getRequestData('endDate').' 00:00:00');
@@ -63,7 +37,7 @@ class CMarketplaceCategoryStatisticListAjaxController extends AMarketplaceAccoun
         $timeTo = $timeTo ? $this->time($timeTo->getTimestamp()) : null;
         $queryParameters = [$timeFrom, $timeTo,$timeFrom, $timeTo,$marketplaceAccount->id, $marketplaceAccount->marketplaceId ];
 
-        $datatable = new CDataTables($query, ['category'], $_GET, true);
+        $datatable = new CDataTables(self::SQL_SELECT_MARKETPLACE_ACCOUNT_PRODUCT_CATEGORY_STATISTICS, ['category'], $_GET, true);
 
         $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge($queryParameters, $datatable->getParams()))->fetchAll();
         $count = $this->app->repoFactory->create('ProductCategory')->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));

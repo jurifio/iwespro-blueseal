@@ -80,6 +80,7 @@ abstract class AMarketplaceAccountAjaxController extends AAjaxController
            round(ifnull(conversionsValue, 0))                     AS conversionsValue,
            round(ifnull(pConversions, 0))                         AS pConversions,
            round(ifnull(pConversionsValue, 0))                    AS pConversionsValue,
+           ordersIds                                              AS ordersIds,
            phpc.productCategoryId                                 AS categories,
            if(p.isOnSale = 0, min(shp.price), min(shp.salePrice)) AS activePrice
          FROM `Product` `p`
@@ -120,9 +121,9 @@ abstract class AMarketplaceAccountAjaxController extends AAjaxController
            WHERE ma.id = mahp.marketplaceAccountId AND
                  ma.marketplaceId = mahp.marketplaceId AND mahp.isDeleted = 0 AND
                  mahp.isToWork = 0 AND mahp.hasError = 0) AS productCount,
-          count(cv.id)                                    AS visits,
+          count(distinct cv.id)                                    AS visits,
           round(sum(cv.cost), 2)                          AS cost,
-          count(o.id)                                     AS orders,
+          count(distinct o.id)                                     AS orders,
           sum(ifnull(o.netTotal, 0))                      AS orderTotal,
           group_concat(DISTINCT o.id)                     AS ordersIds
         FROM Marketplace m
@@ -136,4 +137,22 @@ abstract class AMarketplaceAccountAjaxController extends AAjaxController
             cv.timestamp BETWEEN ifnull(?, timestamp) AND ifnull(?, timestamp) OR
             o.orderDate BETWEEN ifnull(?, o.orderDate) AND ifnull(?, o.orderDate)))
         GROUP BY ma.id, ma.marketplaceId";
+
+    const SQL_SELECT_MARKETPLACE_ACCOUNT_PRODUCT_CATEGORY_STATISTICS =
+        "SELECT
+                      Parent.id as category,
+                      count(DISTINCT codice) as products,
+                      sum(visits) as visits,
+                      sum(visitsCost) as visitsCost,
+                      sum(conversions) as conversions,
+                      sum(conversionsValue) as conversionsValue,
+                      sum(pConversions) as pConversions,
+                      sum(pConversionsValue) as pConversionsValue
+                    FROM
+                      ProductCategory Child
+                      JOIN
+                      ProductCategory Parent ON Child.lft BETWEEN Parent.lft AND Parent.rght
+                      JOIN ( ".self::SQL_SELECT_PRODUCT_MARKETPLACE_ACCOUNT_CATEGORY." ) sel3 ON Child.id = sel3.categories
+                    GROUP BY Parent.id
+                    ORDER BY Child.lft";
 }
