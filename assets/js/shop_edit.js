@@ -185,7 +185,7 @@ function createGraphs(shop) {
         //.tickFormat(d3.format(',.2r'));
 
         chart.bars.forceY([0]);
-
+        chart.focusEnable(false);
         d3.select('#statisticGraphics svg') //Select the <svg> element you want to render the chart in.
             .datum(myData)         //Populate the <svg> element with chart data...
             .transition().duration(500)
