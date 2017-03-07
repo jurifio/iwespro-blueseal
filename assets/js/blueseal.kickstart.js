@@ -492,7 +492,7 @@ $.bsModal = function (header, params) {
             after: function (self) {
             }
         };
-        let opt = $.extend({}, def, opt);
+        opt = $.extend({}, def, opt);
         if ($('.product-code').html()) opt.productCode = $('.product-code').html();
         let prototypeId = 0;
         type = (type) ? type : '';
