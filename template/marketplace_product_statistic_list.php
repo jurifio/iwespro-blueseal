@@ -48,6 +48,9 @@
                                     <th data-slug="itemno"
                                         data-searchable="true"
                                         data-orderable="true" class="center">CPF</th>
+                                    <th data-slug="productStatus"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stato Prodotto</th>
                                     <th data-slug="dummy"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Immagine</th>

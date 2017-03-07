@@ -71,6 +71,7 @@ abstract class AMarketplaceAccountAjaxController extends AAjaxController
            `mahp`.`marketplaceAccountId`                          AS `marketplaceAccountId`,
            `mahp`.`fee`                                           AS `fee`,
            p.qty                                                  AS stock,
+           ps.name as productStatus,
            if(mahp.isToWork = 1, 'sìsi', 'no')                    AS isToWork,
            if(mahp.hasError = 1, 'sìsi', 'no')                    AS hasError,
            if(mahp.isDeleted = 1, 'sìsi', 'no')                   AS isDeleted,

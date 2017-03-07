@@ -83,6 +83,7 @@ class CMarketplaceProductStatisticListAjaxController extends AMarketplaceAccount
             $row['itemno'] = '<span class="small">';
             $row['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;
             $row['itemno'] .= '</span>';
+            $row['productStatus'] = $val->productStatus->name;
 
             $row['fee'] = $prodottiMark->fee;
             $row['isToWork'] = $prodottiMark->isToWork ? 'sì' : 'no';
