@@ -1,14 +1,14 @@
 function mq() {
-    var toolbar = $('.bs-toolbar');
-    var dropdown = $('.other-actions');
-    var customToolbars = $('.bs-toolbar-custom');
-    var toolbarCount = customToolbars.length;
+    let toolbar = $('.bs-toolbar');
+    let dropdown = $('.other-actions');
+    let customToolbars = $('.bs-toolbar-custom');
+    let toolbarCount = customToolbars.length;
 
     if ($.MatchMedia('(min-width:1276px)')) {
 
-        var c = $('.other-actions .btn-group').length - 1;
+        let c = $('.other-actions .btn-group').length - 1;
 
-        for (var i = c; i >= 0; i--) {
+        for (let i = c; i >= 0; i--) {
             toolbar.append($('.other-actions .btn-group').eq(i));
         }
 
@@ -27,14 +27,14 @@ function mq() {
 }
 
 function responsiveToolBar() {
-    /** var toolbar = $('.bs-toolbar');
-     var dropdown = $('.other-actions');
-     var customToolbars = $('.bs-toolbar > .bs-toolbar-custom');
-     var toolbarCount = customToolbars.length;
+    /** let toolbar = $('.bs-toolbar');
+     let dropdown = $('.other-actions');
+     let customToolbars = $('.bs-toolbar > .bs-toolbar-custom');
+     let toolbarCount = customToolbars.length;
 
-     var toolbarWidth = $('.bs-toolbar').width();
-     var customToolbarsWidth = (function(customToolbars) {
-        var w = 0;
+     let toolbarWidth = $('.bs-toolbar').width();
+     let customToolbarsWidth = (function(customToolbars) {
+        let w = 0;
         customToolbars.each(function(k,v) {
             w += $(v).width();
         });
@@ -87,11 +87,11 @@ $(document).ready(function () {
         },
         onKeyEnter: function (searchString) {
             console.log("Live search for: " + searchString);
-            var searchField = $('#overlay-search');
-            var searchResults = $('.search-results');
+            let searchField = $('#overlay-search');
+            let searchResults = $('.search-results');
             clearTimeout($.data(this, 'timer'));
             searchResults.fadeOut("fast");
-            var wait = setTimeout(function () {
+            let wait = setTimeout(function () {
                 searchResults.find('.result-name').each(function () {
                     if (searchField.val().length != 0) {
                         $(this).html(searchField.val());
@@ -107,12 +107,12 @@ $(document).ready(function () {
 /** TODO: sostituire **/
 $(document).on('submit', 'form[data-ajax="true"]', function (e) {
     e.preventDefault();
-    var form = $(this);
-    var controller = form.data('controller');
-    var address = form.data('address') + '/' + controller;
-    var method = form.attr('method');
-    var button = $(form).find('[type="submit"]');
-    var buttonSave = button.html();
+    let form = $(this);
+    let controller = form.data('controller');
+    let address = form.data('address') + '/' + controller;
+    let method = form.attr('method');
+    let button = $(form).find('[type="submit"]');
+    let buttonSave = button.html();
     button.attr("disabled", "disabled");
     button.html('<i class="fa fa-spinner fa-spin"></i>').fadeIn();
 
@@ -121,9 +121,9 @@ $(document).on('submit', 'form[data-ajax="true"]', function (e) {
         url: address,
         data: form.serialize()
     }).done(function (res) {
-        var done = form.data('done');
+        let done = form.data('done');
         if (done != 'undefined') {
-            var fn = window[done];
+            let fn = window[done];
             if (typeof fn === "function") {
                 fn.apply(null, [form]);
             }
@@ -131,9 +131,9 @@ $(document).on('submit', 'form[data-ajax="true"]', function (e) {
         button.fadeOut();
         button.html('<i class="fa fa-check"></i>').css('background-color', 'green').fadeIn();
     }).fail(function (content) {
-        var fail = form.data('fail');
+        let fail = form.data('fail');
         if (fail != 'undefined') {
-            var fn = window[fail];
+            let fn = window[fail];
             if (typeof fn === "function") {
                 fn.apply(null, [form]);
             }
@@ -151,9 +151,9 @@ $(document).on('submit', 'form[data-ajax="true"]', function (e) {
             });
         }
     }).always(function (content) {
-        var always = form.data('always');
+        let always = form.data('always');
         if (always != 'undefined') {
-            var fn = window[always];
+            let fn = window[always];
             if (typeof fn === "function") {
                 fn.apply(null, [form]);
             }
@@ -167,7 +167,7 @@ $(document).on('submit', 'form[data-ajax="true"]', function (e) {
 
 // Smooth scroll for in page links
 $(function () {
-    var target, scroll;
+    let target, scroll;
 
     /*$('a[href*=#]:not([href=#])').on("click", function (e) {
      if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
@@ -178,7 +178,7 @@ $(function () {
      if (typeof document.body.style.transitionProperty === 'string') {
      e.preventDefault();
 
-     var avail = $(document).height() - $(window).height();
+     let avail = $(document).height() - $(window).height();
 
      scroll = target.offset().top;
 
@@ -210,7 +210,7 @@ $(function () {
 });
 
 $(window).on('scroll', function (e) {
-    var f = $('.followme');
+    let f = $('.followme');
     if (f.length != 0) {
         f.css('margin-top', ($(window).scrollTop()) + 'px');
     }
@@ -221,15 +221,15 @@ $.fn.tagName = function () {
 };
 
 getGet = function () {
-    var self = this;
+    let self = this;
     this.all = {};
 
-    var params = window.location.search.substr(1);
+    let params = window.location.search.substr(1);
     params = params.split('&');
 
     if ("" != params[0]) {
         params.forEach(function (v, k, arr) {
-            var paramArr = v.split('=');
+            let paramArr = v.split('=');
             self.all[paramArr[0]] = paramArr[1];
         });
     }
@@ -264,7 +264,7 @@ $.initFormByGetData = function (params) {
     if ('undefined' == typeof params.ajaxUrl) throw "The 'ajaxAddress' parameter is mandatory";
     if ('undefined' == typeof params.done) throw "The 'doneCallback' parameter is mandatory";
 
-    var def = {
+    let def = {
         ajaxMethod: 'GET',
         ajaxdataType: 'json',
         ajaxExtraData: {},
@@ -276,7 +276,7 @@ $.initFormByGetData = function (params) {
         },
     };
 
-    var opt = $.extend(def, params);
+    let opt = $.extend(def, params);
     delete def;
     if ('object' != typeof opt.data) opt.data = {id: opt.data};
 
@@ -296,9 +296,9 @@ $.initFormByGetData = function (params) {
 };
 
 $.fn.fillTheForm = function (arrData) {
-    var self = this;
+    let self = this;
     $.each(arrData, function (k, v) {
-        var input = $(self).find('[name="' + k + '"]');
+        let input = $(self).find('[name="' + k + '"]');
         if (input.length) {
             switch ($(input).tagName()) {
                 case 'input':
@@ -325,11 +325,11 @@ $.fn.fillTheForm = function (arrData) {
 
 $.fn.humanized = function (method, data) {
 
-    var selectObj = $(this).selectize()[0].selectize;
-    var methods = {
+    let selectObj = $(this).selectize()[0].selectize;
+    let methods = {
         addItems: function (data) {
             if (Array.isArray(data)) {
-                for (var opt in data) {
+                for (let opt in data) {
                     privateMethods.addSelectizeAllItem(data[opt]);
                 }
             } else {
@@ -338,28 +338,28 @@ $.fn.humanized = function (method, data) {
         }
     };
 
-    var privateMethods = {
+    let privateMethods = {
         addSelectizeAllItem: function (data) {
             if ('object' == typeof data) privateMethods.addSelectizeObjectItem(data);
             else privateMethods.addSelectizeRawItem(selectObj, data);
         },
         addSelectizeRawItem: function (selectObj, data) {
-            var isOpt = false;
-            for (var opt in selectObj.options) {
+            let isOpt = false;
+            for (let opt in selectObj.options) {
                 if (data == selectObj.options[opt][selectObj.settings.valueField]) {
                     isOpt = true;
                     break;
                 }
             }
-            var addOpt = {};
+            let addOpt = {};
             addOpt[selectObj.settings.valueField] = data;
             if (!isOpt) selectObj.addOption(addOpt);
             selectObj.addItem(data, true);
         },
         addSelectizeObjectItem: function (data) {
             if (selectObj.settings.valueField in data) {
-                var isOpt = false;
-                for (var opt in selectObj.options) {
+                let isOpt = false;
+                for (let opt in selectObj.options) {
                     if (data[selectObj.settings.valueField] == selectObj.options[opt][selectObj.settings.valueField]) isOpt = true;
                     break;
                 }
@@ -374,19 +374,19 @@ $.fn.humanized = function (method, data) {
 };
 
 $.bsModal = function (header, params) {
-    var self = this;
+    let self = this;
     if ('undefined' != typeof modal) {
         modal.hide();
         delete(modal);
     }
     //constructor
-    var self = this;
+    let self = this;
     if ('undefined' == typeof header) {
         console.error("the param 'header' is mandatory");
         return false;
     }
 
-    var opt = {
+    let opt = {
         body: '',
         isCancelButton: false,
         okLabel: 'Ok',
@@ -485,16 +485,16 @@ $.bsModal = function (header, params) {
 
 (function ($) {
     $.fn.selectDetails = function (value, type, opt) {
-        var self = this;
-        var def = {
+        let self = this;
+        let def = {
             productCode: '',
             getDetails: false,
             after: function (self) {
             }
         };
-        var opt = $.extend({}, def, opt);
+        let opt = $.extend({}, def, opt);
         if ($('.product-code').html()) opt.productCode = $('.product-code').html();
-        var prototypeId = 0;
+        let prototypeId = 0;
         type = (type) ? type : '';
         value = (value) ? value : '';
 
@@ -509,28 +509,28 @@ $.bsModal = function (header, params) {
         }).done(function (content) {
             $(self).html(content);
             prototypeId = $(self).find(".detailContent").data('prototype-id');
-            var productDataSheet = $(self).find(".Product_dataSheet");
-            var selPDS = $(productDataSheet).selectize();
+            let productDataSheet = $(self).find(".Product_dataSheet");
+            let selPDS = $(productDataSheet).selectize();
             selPDS[0].selectize.setValue(prototypeId, true);
 
             productDataSheet.on("change", function () {
                 $(self).selectDetails($(this).find("option:selected").val(), 'change');
             });
 
-            var detailsOptions = [];
+            let detailsOptions = [];
             $.ajax({
                 url: '/blueseal/xhr/DetailGetAll',
                 method: 'GET'
             }).done(function (res) {
                 detailsOptions = JSON.parse(res);
                 $(self).find(".productDetails select").each(function () {
-                    var sel = $(this).selectize({
+                    let sel = $(this).selectize({
                         valueField: 'id',
                         labelField: 'item',
                         searchField: ['item'],
                         options: detailsOptions
                     });
-                    var initVal = $(this).data('init-selection');
+                    let initVal = $(this).data('init-selection');
                     if (initVal != 'undefined' && initVal.length != 0) {
                         sel[0].selectize.setValue(initVal, true);
                     } else {
@@ -538,8 +538,8 @@ $.bsModal = function (header, params) {
                     }
                 });
 
-                var selectName = $('#ProductName_1_name').selectize();
-                var pName = $('.detailContent').data('productName');
+                let selectName = $('#ProductName_1_name').selectize();
+                let pName = $('.detailContent').data('productName');
                 selectName[0].selectize.addOption({name: pName});
                 selectName[0].selectize.addItem(pName);
                 selectName[0].selectize.refreshOptions();
@@ -558,7 +558,7 @@ $.bsModal = function (header, params) {
      * @returns {boolean}
      */
     $.fn.isFieldValue = function (defaultVal, data, url) {
-        var self = this;
+        let self = this;
         if (!url) url = '/blueseal/xhr/isFieldValue';
         if ('object' != typeof data) data = {};
 
@@ -589,13 +589,13 @@ $.bsModal = function (header, params) {
 (function ($) {
 
     $.fn.bsForm = function (method, params) {
-        var self = this;
+        let self = this;
 
         //impedisco la sovrapposizione di chiamate ajax
         if ('undefined' == typeof bsformSaving) bsformSaving = 0;
-        var methods = {
+        let methods = {
             checkRequired: function () {
-                var requiredFault = false;
+                let requiredFault = false;
                 $(self).find('select, input').each(function () {
                     if (($(this).prop('required')) && ('' == $(this).val())) requiredFault = true;
                 });
@@ -609,7 +609,7 @@ $.bsModal = function (header, params) {
             checkErrors: function () {
                 if (!Array.isArray($(self).data('errors'))) $(self).data('errors', []);
                 methods.checkRequired();
-                var isFieldFault = false;
+                let isFieldFault = false;
                 $(self).find('input, select, textarea').each(function () {
                     console.log($(this).attr('name'));
                     if (1 == $(this).data('isFieldFault')) isFieldFault = true;
@@ -622,8 +622,8 @@ $.bsModal = function (header, params) {
                 }
             },
             addError: function (err) {
-                var arr = [];
-                if (Array.isArray($(self).data('errors'))) var arr = $(self).data('errors');
+                let arr = [];
+                if (Array.isArray($(self).data('errors'))) let arr = $(self).data('errors');
 
                 if (-1 == $.inArray(err, arr)) {
                     arr.push(err);
@@ -631,8 +631,8 @@ $.bsModal = function (header, params) {
                 }
             },
             removeError: function (err) {
-                var numb;
-                var arr = [];
+                let numb;
+                let arr = [];
                 if (Array.isArray($(self).data('errors'))) arr = $(self).data('errors');
                 if (-1 < (numb = $.inArray(err, arr))) {
                     arr.splice(numb, 1);
@@ -640,7 +640,7 @@ $.bsModal = function (header, params) {
                 }
             },
             putOrPost: function () {
-                var primaryField = $(self).data('primaryfield');
+                let primaryField = $(self).data('primaryfield');
                 if ('undefined' != typeof primaryField) {
                     if ($(primaryField).length) {
                         if ($(primaryField).val().length) return 'PUT';
@@ -651,7 +651,7 @@ $.bsModal = function (header, params) {
             save: function (params) {
                 if (0 == bsformSaving) {
                     bsformSaving = 1;
-                    var opt = {
+                    let opt = {
                         //preferenze esecuzione metodo
                         dataType: 'JSON',
                         excludeFields: [],
@@ -682,9 +682,9 @@ $.bsModal = function (header, params) {
                     methods.checkErrors();
                     if ($(self).data('errors').length) {
                         //display Errors
-                        var errs = $(self).data('errors');
-                        var errorMsg = '';
-                        for (var i in errs) {
+                        let errs = $(self).data('errors');
+                        let errorMsg = '';
+                        for (let i in errs) {
                             if ('undefined' != messages.errors[errs[i]]) errorMsg += messages.errors[errs[i]] + '<br />';
                         }
                         opt.onCheckError(errorMsg);
@@ -693,8 +693,8 @@ $.bsModal = function (header, params) {
 
                         //save
                         opt = $.extend(opt, params);
-                        var data = {};
-                        //var formDataObject = new FormData();
+                        let data = {};
+                        //let formDataObject = new FormData();
 
                         $(self).find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
                             if ('undefined' != typeof $(this).attr('name')) {
@@ -708,7 +708,7 @@ $.bsModal = function (header, params) {
                             }
                         });
 
-                        var radioNames = [];
+                        let radioNames = [];
                         $(self).find('input[type=radio]').each(function () {
                             if (typeof $(this).attr('name') == 'undefined') throw 'Non possono esistere campi senza l\'attributo "name"';
 
@@ -719,7 +719,7 @@ $.bsModal = function (header, params) {
                                 radioNames.push($(this).attr('name'));
                             }
                         });
-                        var unique = radioNames.filter(function (value, index, self) {
+                        let unique = radioNames.filter(function (value, index, self) {
                             return self.indexOf(value) === index;
                         });
                         unique.forEach(function (element, index, array) {
@@ -762,9 +762,9 @@ $.bsModal = function (header, params) {
             }
         };
 
-        var privateMethods = {};
+        let privateMethods = {};
 
-        var messages = {
+        let messages = {
             errors: {
                 isFieldFault: 'Uno o più valori inseriti sono già presenti nel nostro sistema e devono essere modificati',
                 requiredFault: 'Uno o più campi obbligatori sono stati omessi'
@@ -777,17 +777,17 @@ $.bsModal = function (header, params) {
 
 (function ($) {
     $.fn.bsCatalog = function (params) {
-        var self = this;
+        let self = this;
         // Se non ci sono i parametri si assume che il l'interfaccia sia già esistente
         if ('undefined' == typeof params) {
-            var initParams = $(this).data('initParams');
+            let initParams = $(this).data('initParams');
             if ('undefined' == typeof initParams) throw "No params given";
             return $.bsCatalog(this, initParams);
 
             //inizializzazione di una nuova interfaccia
         } else {
             //controllo che l'interfaccia sia già stata scaricata una volta, altrimenti la riscarico
-            var catalogTemplate = $('.catalog-template');
+            let catalogTemplate = $('.catalog-template');
             if (catalogTemplate.length) {
                 return $.bsCatalog(this, params, catalogTemplate.html());
             }
@@ -805,7 +805,7 @@ $.bsModal = function (header, params) {
 
     $.bsCatalog = function (elem, params, template) {
 
-        var self = this;
+        let self = this;
         //template parts
         this.movementLineTemplate = false;
         this.productTemplate = false;
@@ -828,8 +828,8 @@ $.bsModal = function (header, params) {
 
         this.searchProduct = function (search, callback) {
             if (!search.length) return false;
-            var shop = '';
-            var shopSelect = $('.mag-shop');
+            let shop = '';
+            let shopSelect = $('.mag-shop');
             if (shopSelect.length) shop = shopSelect.val();
             $.ajax({
                 url: '/blueseal/xhr/CatalogController',
@@ -852,35 +852,35 @@ $.bsModal = function (header, params) {
         };
 
         this.addProduct = function (product) {
-            var productList = self.productList;
+            let productList = self.productList;
             if ('single' == this.opt.mode) productList.html('');
             if ('multi' == this.opt.mode) //TODO aggiungi pulsante per chiudere il singolo prodotto;
-                var prodTemp = self.productTemplate.clone();
+                let prodTemp = self.productTemplate.clone();
             if ('single' == this.opt.mode) prodTemp.find('.product-close').remove();
-            var prodId = 'product-' + product.id + '-' + product.productVariantId;
+            let prodId = 'product-' + product.id + '-' + product.productVariantId;
 
             //controllo se la scheda del prodotto è già presente
-            var actualProd = productList.find('#' + prodId);
+            let actualProd = productList.find('#' + prodId);
             if (actualProd.length) {
                 self.editMoves(product, actualProd.find('table'));
             } else {
                 prodTemp.attr('id', 'product-' + product.id + '-' + product.productVariantId);
-                var prodTitle = prodTemp.find('.product-title');
-                var title = product.id + '-' + product.productVariantId + ' / ' + product.itemno + ' # ' + product.productVariantName;
+                let prodTitle = prodTemp.find('.product-title');
+                let title = product.id + '-' + product.productVariantId + ' / ' + product.itemno + ' # ' + product.productVariantName;
                 title += ' <span class="small">costo: ' + product.value + ' - prezzo vendita: ' + product.price + '</span>';
                 prodTitle.html(title);
-                var table = prodTemp.find('table');
-                var head = $(table).find('thead');
-                var body = $(table).find('tbody');
-                var sizes = self.writeSizesTable(product);
+                let table = prodTemp.find('table');
+                let head = $(table).find('thead');
+                let body = $(table).find('tbody');
+                let sizes = self.writeSizesTable(product);
                 head.append(sizes.head);
                 body.append(sizes.stock);
                 body.append(sizes.moves);
                 prodTemp.data('product', product);
-                var prodList = self.form.find('.mag-product-list');
+                let prodList = self.form.find('.mag-product-list');
                 prodList.append(prodTemp);
-                var prod = prodList.find('#' + prodId);
-                var closeProd = prod.find('.product-close');
+                let prod = prodList.find('#' + prodId);
+                let closeProd = prod.find('.product-close');
                 closeProd.on('click', function (e) {
                     e.preventDefault();
                     prod.remove();
@@ -892,11 +892,11 @@ $.bsModal = function (header, params) {
                 body.find('.move-qty').each(function () {
                     //controllo sui movimenti, mai minori della disponibilità
                     $(this).off().on('change', function (e) {
-                        var qty = $(this).data('stock');
-                        var move = parseInt($(this).val());
+                        let qty = $(this).data('stock');
+                        let move = parseInt($(this).val());
                         if (0 > qty + move) $(this).val(qty * -1);
                         //controllo il segno dei movimenti
-                        var sign = self.getCauseSign();
+                        let sign = self.getCauseSign();
                         if ('+' == sign) {
                             if (0 == $(this).val().indexOf('-')) {
                                 $(this).val('0');
@@ -919,42 +919,42 @@ $.bsModal = function (header, params) {
         };
 
         this.writeSizesTable = function (product) {
-            var head = $('<tr class="sizes"></tr>');
-            var stock = $('<tr class="stocks"></tr>');
-            var moves = $('<tr class="moves"></tr>');
+            let head = $('<tr class="sizes"></tr>');
+            let stock = $('<tr class="stocks"></tr>');
+            let moves = $('<tr class="moves"></tr>');
 
             head.append($('<th>Misure</th>'));
             stock.append($('<th>Disponibilità</th>'));
             moves.append($('<th>Movimenti</th>'));
-            for (var i in product.sizes) {
-                var qt = '';
-                var paddingStyle = '';
+            for (let i in product.sizes) {
+                let qt = '';
+                let paddingStyle = '';
                 head.append($('<th>' + product.sizes[i] + '</th>'));
                 if ('undefined' != typeof product.sku[i]) {
                     qt = (('undefined' != typeof product.sku[i]) && (0 < product.sku[i]['qty'])) ? product.sku[i]['qty'] : '';
                     paddingStyle = (product.sku[i]['padding']) ? 'style="color: red"' : '';
                 }
                 stock.append($('<td ' + paddingStyle + '>' + qt + '</td>'));
-                var moveQt = ('undefined' != typeof product.moves[i]) ? product.moves[i] : '';
-                var fieldName = product.id + '-' + product.productVariantId + '-' + i;
+                let moveQt = ('undefined' != typeof product.moves[i]) ? product.moves[i] : '';
+                let fieldName = product.id + '-' + product.productVariantId + '-' + i;
                 moves.append($('<td><input type="number" data-stock="' + (('' != qt) ? qt : 0) + '" class="move-qty form-control" name="move-' + fieldName + '" value="' + moveQt + '"></td>'));
             }
             return {head: head, stock: stock, moves: moves};
         };
 
         this.editMoves = function (product, table) {
-            for (var i in product.moves) {
-                var fieldName = product.id + '-' + product.productVariantId + '-' + i;
-                var field = $(table).find('input[name="move-' + fieldName + '"]');
+            for (let i in product.moves) {
+                let fieldName = product.id + '-' + product.productVariantId + '-' + i;
+                let field = $(table).find('input[name="move-' + fieldName + '"]');
                 field.val(parseInt(field.val()) + parseInt(product.moves[i]));
             }
         };
 
         this.getCauseSign = function () {
-            var causeElem = $('.mag-movementCause option:selected');
-            var sign = false;
+            let causeElem = $('.mag-movementCause option:selected');
+            let sign = false;
             if (-1 < causeElem.html().indexOf('(+)') || -1 < causeElem.html().indexOf('(-)')) {
-                var pos = causeElem.html().indexOf('(') + 1;
+                let pos = causeElem.html().indexOf('(') + 1;
                 sign = causeElem.html().substr(pos, 1);
             }
             return sign;
@@ -962,18 +962,18 @@ $.bsModal = function (header, params) {
 
 
         this.submitError = function (domElems, errors) {
-            var f = self.form;
+            let f = self.form;
             f.find('input, select').each(function () {
                 $(this).parent().removeClass('hasError');
             });
 
-            var alert = f.find('.alert');
+            let alert = f.find('.alert');
             alert.css('visibility', 'visible');
             alert.css('opacity', '1');
             alert.removeClass('alert-success');
             alert.addClass('alert-danger');
             alert.html('');
-            for (var msg in errors) {
+            for (let msg in errors) {
                 alert.append(errors[msg] + '<br />');
             }
             alert.css('visibility', 'visible');
@@ -986,16 +986,16 @@ $.bsModal = function (header, params) {
         };
 
         this.submitSuccess = function (msg) {
-            var f = self.form;
+            let f = self.form;
 
-            var alert = f.find('.alert');
+            let alert = f.find('.alert');
             alert.css('visibility', 'visible');
             alert.css('opacity', '1');
             alert.removeClass('alert-danger');
             alert.removeClass('alert-warning');
             alert.addClass('alert-success');
             alert.html('');
-            for (var i in msg) {
+            for (let i in msg) {
                 alert.append(msg[i] + '<br />');
             }
             alert.css('visibility', 'visible');
@@ -1007,16 +1007,16 @@ $.bsModal = function (header, params) {
         };
 
         this.submitwarning = function (msg) {
-            var f = self.form;
+            let f = self.form;
 
-            var alert = f.find('.alert');
+            let alert = f.find('.alert');
             alert.css('visibility', 'visible');
             alert.css('opacity', '1');
             alert.removeClass('alert-danger');
             alert.removeClass('alert-success');
             alert.addClass('alert-warning');
             alert.html('');
-            for (var i in msg) {
+            for (let i in msg) {
                 alert.append(msg[i] + '<br />');
             }
             alert.css('visibility', 'visible');
@@ -1045,7 +1045,7 @@ $.bsModal = function (header, params) {
         };
 
         this.save = function (successCallback, failCallback) {
-            var f = self.form;
+            let f = self.form;
             $('#form-movement').bsForm('save', {
                 url: '/blueseal/xhr/CatalogController',
                 method: 'post',
@@ -1065,7 +1065,7 @@ $.bsModal = function (header, params) {
                     }
                 },
             });
-            var post = {};
+            let post = {};
         };
 
         //constructor
@@ -1096,17 +1096,17 @@ $.bsModal = function (header, params) {
 
         //faccio partire i selectize
 
-        var shopSelect = $('.mag-shop');
+        let shopSelect = $('.mag-shop');
 
         if ('undefined' != typeof this.opt.product) {
             if ('string' == typeof this.opt.product) {
-                var string = this.opt.product;
+                let string = this.opt.product;
                 this.searchProduct(string, function (res) {
                     self.addProduct(res);
                 });
             } else if ($.isArray(this.opt.product)) {
-                for (var i in this.opt.product) {
-                    var string = this.opt.product[i];
+                for (let i in this.opt.product) {
+                    let string = this.opt.product[i];
                     this.searchProduct(string, function (res) {
                         self.addProduct(res);
                     });
@@ -1116,10 +1116,10 @@ $.bsModal = function (header, params) {
 
 
         //evento ricerca
-        var searchBtn = this.searchBlock.find('.search-btn');
+        let searchBtn = this.searchBlock.find('.search-btn');
         searchBtn.on('click', function (e) {
             e.preventDefault();
-            var string = self.form.find('.search-item').val();
+            let string = self.form.find('.search-item').val();
             self.searchProduct(string, function (res) {
                 self.addProduct(res);
             });
@@ -1127,7 +1127,7 @@ $.bsModal = function (header, params) {
         });
 
         //ricerca per barcode
-        /*        var searchInput = this.searchBlock.find('.search-item');
+        /*        let searchInput = this.searchBlock.find('.search-item');
          searchInput.on('keypress', function(e){
          if (13 == e.charCode) {
          e.preventDefault();
@@ -1137,7 +1137,7 @@ $.bsModal = function (header, params) {
          });*/
 
         //selectize search field
-        var searchInput = this.searchBlock.find('.search-item');
+        let searchInput = this.searchBlock.find('.search-item');
         searchInput.selectize({
             valueField: 'code',
             labelField: 'code',
@@ -1182,10 +1182,10 @@ $.bsModal = function (header, params) {
         });
 
         //azzero le quantità che non rispettano i criteri
-        var selectCause = this.form.find('.mag-movementCause');
+        let selectCause = this.form.find('.mag-movementCause');
         selectCause.on('change', function () {
-            var moves = self.form.find('.move-qty');
-            var sign = self.getCauseSign();
+            let moves = self.form.find('.move-qty');
+            let sign = self.getCauseSign();
             if (false == sign) {
                 moves.each(function () {
                     if ('' != $(this).val())
@@ -1211,11 +1211,11 @@ $.bsModal = function (header, params) {
 
 $(document).on('keypress', '.inputPrice', function (e) {
     console.log(e);
-    var target = e.target;
+    let target = e.target;
     e.preventDefault();
-    var permitted = "1234567890,.";
-    var char = String.fromCharCode(e.which);
-    var val = $(this).val();
+    let permitted = "1234567890,.";
+    let char = String.fromCharCode(e.which);
+    let val = $(this).val();
     if (-1 < permitted.indexOf(char)) {
         if ((-1 == val.indexOf(',')) || (2 >= val.length - val.indexOf(',')) || ((2 < val.length - val.indexOf(',')) && (target.selectionStart <= val.indexOf(',')))) {
             char = ('.' == char) ? ',' : char;
@@ -1223,17 +1223,17 @@ $(document).on('keypress', '.inputPrice', function (e) {
                 if (-1 == val.indexOf(',')) {
                     if (0 == val.length) $(this).val('0,');
                     else if (target.selectionStart >= val.length - 2) {
-                        var pos = target.selectionStart;
-                        var before = val.substring(0, target.selectionStart);
-                        var after = val.substring(target.selectionStart);
+                        let pos = target.selectionStart;
+                        let before = val.substring(0, target.selectionStart);
+                        let after = val.substring(target.selectionStart);
                         $(this).val(before + char + after);
                         $(this).setCursorPosition(pos + 1);
                     }
                 }
             } else {
-                var pos = target.selectionStart;
-                var before = val.substring(0, target.selectionStart);
-                var after = val.substring(target.selectionStart);
+                let pos = target.selectionStart;
+                let before = val.substring(0, target.selectionStart);
+                let after = val.substring(target.selectionStart);
                 $(this).val(before + char + after);
                 $(this).setCursorPosition(pos + 1);
             }
@@ -1246,7 +1246,7 @@ $.fn.setCursorPosition = function (pos) {
         if (elem.setSelectionRange) {
             elem.setSelectionRange(pos, pos);
         } else if (elem.createTextRange) {
-            var range = elem.createTextRange();
+            let range = elem.createTextRange();
             range.collapse(true);
             range.moveEnd('character', pos);
             range.moveStart('character', pos);
