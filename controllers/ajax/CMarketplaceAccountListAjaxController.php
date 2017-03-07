@@ -15,41 +15,13 @@ use bamboo\blueseal\business\CDataTables;
  *
  * @since ${VERSION}
  */
-class CMarketplaceAccountListAjaxController extends AAjaxController
+class CMarketplaceAccountListAjaxController extends AMarketplaceAccountAjaxController
 {
 
     public function get()
     {
-        $sql = "SELECT
-                  m.id                                                                                                       AS marketplaceId,
-                  ma.id                                                                                                      AS marketplaceAccountId,
-                  m.name                                                                                                     AS marketplace,
-                  ma.name                                                                                                    AS marketplaceAccount,
-                  c.id                                                                                                       AS campaignId,
-                  c.name                                                                                                     AS campaign,
-                  m.type                                                                                                     AS marketplaceType,
-                  (SELECT count(DISTINCT mahp.productId,mahp.productVariantId) 
-                    FROM MarketplaceAccountHasProduct mahp 
-                    WHERE ma.id = mahp.marketplaceAccountId AND
-                          ma.marketplaceId = mahp.marketplaceId AND mahp.isDeleted = 0 AND
-                          mahp.isToWork = 0 AND mahp.hasError = 0)                                                           AS productCount,
-                  count(cv.id)                                                                                               AS visits,
-                  round(sum(cv.cost),2)                                                                                               AS cost,
-                  count(o.id)                                                                                                AS orders,
-                  sum(ifnull(o.netTotal,0))  AS orderTotal,
-                  group_concat(DISTINCT o.id) AS ordersIds
-                FROM Marketplace m
-                  JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
-                  LEFT JOIN Campaign c ON c.marketplaceId = ma.marketplaceId and c.marketplaceAccountId = ma.id
-                  LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
-                  LEFT JOIN (CampaignVisitHasOrder cvho JOIN `Order` o ON o.id = cvho.orderId) ON cv.campaignId = cvho.campaignId AND cv.id = cvho.campaignVisitId
-                  WHERE (
-                    isnull(c.id) or (
-                    cv.timestamp BETWEEN ifnull(?,timestamp) AND ifnull(?,timestamp) OR 
-                    o.orderDate BETWEEN ifnull(?,o.orderDate) AND ifnull(?,o.orderDate) ))
-                GROUP BY ma.id, ma.marketplaceId";
 
-        $datatable = new CDataTables($sql, ['marketplaceId', 'marketplaceAccountId', 'campaignId'], $_GET, true);
+        $datatable = new CDataTables(self::SQL_SELECT_MARKETPLACE_ACCOUNT_STATISTICS, ['marketplaceId', 'marketplaceAccountId', 'campaignId'], $_GET, true);
 
         $timeFrom = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('startDate'));
         $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
