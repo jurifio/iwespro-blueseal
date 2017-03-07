@@ -104,58 +104,6 @@ $(document).ready(function () {
     });
 });
 
-//USATO SOLO SUGLI ORDINI
-$(document).on('click', 'button[data-ajax="true"]', function (e) {
-    e.preventDefault();
-    var button = $(this);
-    if (button.attr('disable') == 'disable') return;
-    button.attr('disable', 'disable');
-    var controller = button.data('controller');
-    var address = button.data('address') + '/' + controller;
-    var method = button.data('method');
-    var buttonClass = button.attr('class');
-    button.addClass('fa fa-spinner fa-spin').fadeIn();
-
-
-    $.ajax({
-        type: method,
-        url: address,
-        data: {value: button.val()}
-    }).done(function (content) {
-        var done = button.data('fail');
-        if (done != 'undefined') {
-            var fn = window[done];
-            if (typeof fn === "function") {
-                fn.apply(null, [button]);
-            }
-        }
-        button.fadeOut();
-        button.removeClass('fa fa-spinner fa-spin').addClass('fa fa-check').css('background-color', 'green').fadeIn();
-    }).fail(function (content) {
-        var fail = button.data('fail');
-        if (fail != 'undefined') {
-            var fn = window[fail];
-            if (typeof fn === "function") {
-                fn.apply(null, [button]);
-            }
-        }
-        button.fadeOut();
-        button.removeClass('fa fa-spinner fa-spin').addClass('fa fa-times').css('background-color', 'red').fadeIn();
-    }).always(function (content) {
-        var always = button.data('always');
-        if (always != 'undefined') {
-            var fn = window[always];
-            if (typeof fn === "function") {
-                fn.apply(null, [button]);
-            }
-        }
-        setTimeout(function () {
-            button.removeClass().toggleClass(buttonClass);
-            button.attr('disable', '');
-        }, 2000);
-    });
-});
-
 /** TODO: sostituire **/
 $(document).on('submit', 'form[data-ajax="true"]', function (e) {
     e.preventDefault();
@@ -172,7 +120,7 @@ $(document).on('submit', 'form[data-ajax="true"]', function (e) {
         type: method,
         url: address,
         data: form.serialize()
-    }).done(function (content) {
+    }).done(function (res) {
         var done = form.data('done');
         if (done != 'undefined') {
             var fn = window[done];
