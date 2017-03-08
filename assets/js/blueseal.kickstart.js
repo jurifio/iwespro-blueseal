@@ -380,7 +380,7 @@ $.bsModal = function (header, params) {
         delete(modal);
     }
     //constructor
-    let self = this;
+    self = this;
     if ('undefined' == typeof header) {
         console.error("the param 'header' is mandatory");
         return false;
