@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\domain\entities\COrderLine;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\utils\time\STimeToolbox;
@@ -149,12 +150,13 @@ class CFriendOrderListAjaxController extends AAjaxController
             $orderLineStatuses[$k] = $v->toArray();
         }
         foreach ($orderLines as $v) {
+            /** @var COrderLine $v */
 	        /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
             $response['data'][$i]['orderCode'] = $v->printId();
             $response['data'][$i]['line_id'] = $v->printId();
             $response['data'][$i]['orderId'] = $v->orderId;
-            $response['data'][$i]['code'] = $v->product->id . "-" . $v->product->productVariantId;
+            $response['data'][$i]['code'] = $v->product->printId();
             $response['data'][$i]['size'] = $v->productSize->name;
             $response['data'][$i]['dummyPicture'] =
                 '<a href="#1" class="enlarge-your-img"><img width="50" src="' .
@@ -182,7 +184,8 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['orderDate'] = date("d/m/Y H:i:s", $time);
             $response['data'][$i]['brand'] = $v->product->productBrand->name;
             $response['data'][$i]['season'] = $v->product->productSeason->name;
-            $response['data'][$i]['cpf'] = $v->product->itemno . ' # ' . $v->product->productVariant->name;
+            $response['data'][$i]['cpf'] = $v->product->printCpf();
+            $response['data'][$i]['extId'] = $v->productSku->getExternalId();
             $response['data'][$i]['shopName'] = $v->shop->title;
             if ($v->orderLineFriendPaymentStatusId) {
                 $fpsColor = $olfpsR->getColor($v->orderLineFriendPaymentStatusId);

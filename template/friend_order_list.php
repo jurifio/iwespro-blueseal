@@ -57,7 +57,10 @@
                                 <th data-slug="cpf"
                                     data-searchable="true"
                                     data-orderable="true" class="center">CPF</th>
-                                <?php if ($allShops) : ?>
+                                <th data-slug="extId"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Id Esterno</th>
+                                <?php if (\Monkey::app()->getUser()->getAuthorizedShops()->count() > 1) : ?>
                                 <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop</th>
