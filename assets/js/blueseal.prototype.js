@@ -1,12 +1,12 @@
 String.prototype.replaceAll = function (search, replacement) {
     let target = this;
-    return target.replace(new RegExp(search, 'g'), replacement);
+    return target.replace( (new RegExp(search, 'g')) , replacement);
 };
 
 
 window.bsToolbarLastButtonId = 0;
 
-var ui = function () {
+let ui = function () {
     this.registry = [];
 };
 
@@ -20,7 +20,7 @@ ui.prototype.register = function (widget) {
 
 ui.prototype.unregister = function (widget) {
     if (widget instanceof Widget) {
-        var idx = this.registry.indexOf(widget);
+        let idx = this.registry.indexOf(widget);
         if (idx > -1) {
             this.registry.splice(widget, 1);
         } else {
@@ -31,10 +31,10 @@ ui.prototype.unregister = function (widget) {
     }
 };
 
-var Widget = function () {
+let Widget = function () {
 };
 
-var UiElement = function (uiElementTagObject, allowedConfigKeyArray) {
+let UiElement = function (uiElementTagObject, allowedConfigKeyArray) {
     Widget.call(this);
     this.uiElementTagObject = uiElementTagObject;
     this.allowedConfigKeyArray = allowedConfigKeyArray;
@@ -50,13 +50,13 @@ UiElement.prototype.parseConfig = function () {
 /** override getscript to create a debuggable script */
 jQuery.extend({
     getScript: function (url, callback) {
-        var head = document.getElementsByTagName("head")[0];
-        var script = document.createElement("script");
+        let head = document.getElementsByTagName("head")[0];
+        let script = document.createElement("script");
         script.src = url;
 
         // Handle Script loading
         {
-            var done = false;
+            let done = false;
 
             // Attach handlers for all browsers
             script.onload = script.onreadystatechange = function () {
@@ -82,7 +82,7 @@ jQuery.extend({
 /**
  * @constructor
  */
-var DffBooleanAjax = function () {
+let DffBooleanAjax = function () {
 };
 
 /**
@@ -91,11 +91,11 @@ var DffBooleanAjax = function () {
  */
 DffBooleanAjax.prototype.getDeferred = function ($ajaxConfig) {
 
-    var dff = $.Deferred();
-    var ajaxPromise = $.ajax($ajaxConfig);
+    let dff = $.Deferred();
+    let ajaxPromise = $.ajax($ajaxConfig);
 
     ajaxPromise.then(function (data) {
-        var result = Boolean(data);
+        let result = Boolean(data);
         dff.resolve(result);
     }, function () {
         dff.reject();
@@ -110,7 +110,7 @@ DffBooleanAjax.prototype.getDeferred = function ($ajaxConfig) {
  * @returns {ButtonCfg}
  * @constructor
  */
-var ButtonCfg = function (data, expected) {
+let ButtonCfg = function (data, expected) {
     if (!(this instanceof ButtonCfg)) {
         return new ButtonCfg();
     }
@@ -126,9 +126,9 @@ ButtonCfg.prototype.constructor = UiElement;
  */
 ButtonCfg.prototype.extractFrom = function (data) {
 
-    var that = this;
-    var tempData = {};
-    var theData = data;
+    let that = this;
+    let tempData = {};
+    let theData = data;
 
     that.expected.forEach(function (v) {
         if (typeof theData[v] != 'undefined') tempData[v] = theData[v];
@@ -142,7 +142,7 @@ ButtonCfg.prototype.extractFrom = function (data) {
  * @returns {Button}
  * @constructor
  */
-var Button = function (data) {
+let Button = function (data) {
 
     if (!(this instanceof Button)) {
         return new Button(data);
@@ -197,8 +197,8 @@ Button.prototype.setTemplate = function (template) {
  * @param element
  */
 Button.prototype.draw = function (element) {
-    var that = this;
-    var html = this.parse();
+    let that = this;
+    let html = this.parse();
 
     if (element.prop('tagName') == 'BS-BUTTON') {
         $(document).trigger('bs.draw.inpage.button', [element, this, html])
@@ -218,10 +218,10 @@ Button.prototype.draw = function (element) {
  */
 Button.prototype.parse = function () {
 
-    var tag = this.template.replace(/\{tag}/gi, this.cfg.data.tag);
+    let tag = this.template.replace(/\{tag}/gi, this.cfg.data.tag);
 
     if (this.template.indexOf('{icon}') >= 0) {
-        var icons = this.cfg.data.icon.split(' ');
+        let icons = this.cfg.data.icon.split(' ');
 
         if (icons.length == 2) {
             this.cfg.data.icon = '<span class="fa-stack"><i class="fa ' + icons[1] + ' fa-stack-1x"></i><i class="fa ' + icons[0] + ' fa-stack-2x"></i></span>';
@@ -232,7 +232,7 @@ Button.prototype.parse = function () {
         tag = tag.replace(/\{icon}/gi, this.cfg.data.icon);
     }
 
-    var attributes = "";
+    let attributes = "";
 
     $.each(this.dataAttr.data, function (k, v) {
         attributes += 'data-' + k + '="' + v + '" ';
@@ -254,9 +254,9 @@ Button.prototype.parse = function () {
  */
 Button.prototype.checkPermission = function () {
 
-    var that = this;
+    let that = this;
 
-    var theButton = $('#bsButton_' + that.id);
+    let theButton = $('#bsButton_' + that.id);
 
     if (window.localStorage.getItem(that.cfg.data.permission) == '1') {
         if (theButton.is('select')) {
@@ -332,7 +332,7 @@ function checkPermission(permission, cache = true) {
  * @param data
  * @constructor
  */
-var Select = function (data) {
+let Select = function (data) {
     Button.call(this, data);
     this.options = data.options;
     this.template = "<{tag} {attributes} {id}>{options}</{tag}>";
@@ -346,8 +346,8 @@ Select.prototype = Object.create(Button.prototype);
  * @param element
  */
 Select.prototype.draw = function (element) {
-    var that = this;
-    var html = this.parse();
+    let that = this;
+    let html = this.parse();
 
     if (element.prop('tagName') == 'BS-BUTTON') {
         $(document).trigger('bs.draw.inpage.button', [element, this, html])
@@ -355,7 +355,7 @@ Select.prototype.draw = function (element) {
         $(document).trigger('bs.draw.toolbar.button', [element, this, html])
     }
 
-    var theButton = $('#bsButton_' + this.id);
+    let theButton = $('#bsButton_' + this.id);
 
     if (that.cfg.data.button == 'true') {
         theButton.next().on('click', function (e) {
@@ -376,10 +376,10 @@ Select.prototype.draw = function (element) {
  * @returns {string}
  */
 Select.prototype.parse = function () {
-    var options = "";
+    let options = "";
 
-    var selectTag = Button.prototype.parse.call(this);
-    var selectedOption = 'undefined';
+    let selectTag = Button.prototype.parse.call(this);
+    let selectedOption = 'undefined';
 
     if (typeof this.options.selected != 'undefined') {
         selectedOption = this.options.selected;
@@ -403,13 +403,13 @@ Select.prototype.parse = function () {
  * @param data
  * @constructor
  */
-var ButtonToggle = function (data) {
+let ButtonToggle = function (data) {
     Button.call(this, data);
 
     this.on = data.on;
     this.key = data.key;
     this.stateController = (function ($, key) {
-        var dt = $('table[data-datatable-name]').DataTable();
+        let dt = $('table[data-datatable-name]').DataTable();
         return dt.ajax.params()[key]
     })(jQuery, this.key);
     this.template = "<{tag} {attributes} {id}>{icon}</{tag}>";
@@ -424,8 +424,8 @@ ButtonToggle.prototype = Object.create(Button.prototype);
  * @returns {string}
  */
 ButtonToggle.prototype.parse = function () {
-    var buttonToggleTag = Button.prototype.parse.call(this);
-    var css = '';
+    let buttonToggleTag = Button.prototype.parse.call(this);
+    let css = '';
 
     if (typeof this.stateController !== 'undefined') {
         css = this.on;
@@ -441,7 +441,7 @@ ButtonToggle.prototype.parse = function () {
  * @returns {Alert}
  * @constructor
  */
-var Alert = function (config) {
+let Alert = function (config) {
     if (!(this instanceof Alert)) {
         return new Alert(config);
     }
@@ -477,7 +477,7 @@ var Alert = function (config) {
  * @returns {Alert}
  */
 Alert.prototype.draw = function () {
-    var that = this;
+    let that = this;
 
     if ($.inArray(that.data.type, ['warning', 'danger', 'info', 'success']) < 0) {
         throw new Error('Invalid alert type. Allowed types are [warning;danger;info;success]')
@@ -517,9 +517,9 @@ Alert.prototype.draw = function () {
 };
 
 Alert.prototype.open = function () {
-    var that = this;
+    let that = this;
     if (!that.data.silent) {
-        var sfx = new Audio(that.data.audio[that.data.type]);
+        let sfx = new Audio(that.data.audio[that.data.type]);
         sfx.play();
     }
     that.alertBox.off();
@@ -534,7 +534,7 @@ Alert.prototype.open = function () {
 };
 
 Alert.prototype.close = function () {
-    var that = this;
+    let that = this;
 
     that.alertBox.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd', function () {
         that.wrapper.css('height', '0%');
@@ -549,7 +549,7 @@ Alert.prototype.close = function () {
  * @returns {Replica}
  * @constructor
  */
-var Replica = function ($element, counterOffset) {
+let Replica = function ($element, counterOffset) {
 
     if (!$element instanceof jQuery) {
         throw new Error('$element must be an instance of jQuery');
@@ -571,14 +571,14 @@ var Replica = function ($element, counterOffset) {
  */
 Replica.prototype.replicateInto = function ($appendToThisElement, numberOfCopies) {
 
-    var that = this;
+    let that = this;
 
     if (!!numberOfCopies === false) {
         numberOfCopies = 1;
     }
 
-    for (var i = 0; i < numberOfCopies; i++) {
-        var $e = that.loopThrough(that.$replica.clone(true, true));
+    for (let i = 0; i < numberOfCopies; i++) {
+        let $e = that.loopThrough(that.$replica.clone(true, true));
 
         $e.addClass('fade');
 
@@ -610,7 +610,7 @@ Replica.prototype.replicateInto = function ($appendToThisElement, numberOfCopies
  */
 Replica.prototype.loopThrough = function ($element) {
 
-    var that = this;
+    let that = this;
 
     $element.each(function () {
 
@@ -633,7 +633,7 @@ Replica.prototype.loopThrough = function ($element) {
  */
 Replica.prototype.getLastReplicaId = function () {
 
-    var that = this;
+    let that = this;
 
     return that.$lastReplica.attr('id');
 };
@@ -642,7 +642,7 @@ Replica.prototype.getLastReplicaId = function () {
  * @returns {Echo}
  * @constructor
  */
-var Echo = function () {
+let Echo = function () {
 
     if (!this instanceof Echo) {
         return new Echo()
@@ -662,7 +662,7 @@ Echo.prototype.bind = function ($source, $target, eventsArray) {
         throw new Error('eventsArray must be an array containing events\' names triggering echo');
     }
 
-    var that = this;
+    let that = this;
 
     if (that.bound) {
         throw new Error('Echo already bound, to unbind use Echo::unbind()');
@@ -681,7 +681,7 @@ Echo.prototype.bind = function ($source, $target, eventsArray) {
 
 Echo.prototype.unbind = function () {
 
-    var that = this;
+    let that = this;
 
     that.$source.off();
 };
@@ -690,7 +690,7 @@ Echo.prototype.unbind = function () {
  * @returns {Modal}
  * @constructor
  */
-var Modal = function () {
+let Modal = function () {
 
     if (!this instanceof Modal) {
         return new Modal()
@@ -809,10 +809,10 @@ $.randomString = function (l) {
 
 $.drawUI = function () {
 
-    var buttons = $('bs-button');
+    let buttons = $('bs-button');
 
     $.each(buttons, function () {
-        var button = new Button($(this).data());
+        let button = new Button($(this).data());
         button.draw($(this));
     });
 
@@ -834,7 +834,7 @@ $.drawUI = function () {
     });
 };
 
-var Portlet = function (data) {
+let Portlet = function (data) {
     if (!(this instanceof Portlet)) {
         return new Portlet();
     }
@@ -866,7 +866,7 @@ Portlet.prototype = Object.create(UiElement.prototype);
 Portlet.prototype.constructor = UiElement;
 
 Portlet.prototype.draw = function (that) {
-    var _this = this;
+    let _this = this;
 
     _this.ajaxPromise.progress(function () {
         $(that).replaceWith(_this.loadingTemplate)
@@ -883,9 +883,9 @@ $.MatchMedia = function (a) {
 
 $.QueryString = (function (a) {
     if (a == "") return {};
-    var b = {};
-    for (var i = 0; i < a.length; ++i) {
-        var p = a[i].split('=');
+    let b = {};
+    for (let i = 0; i < a.length; ++i) {
+        let p = a[i].split('=');
         if (p.length != 2) continue;
         b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
     }
@@ -894,7 +894,7 @@ $.QueryString = (function (a) {
 
 $.decodeGetStringFromUrl = function (url) {
     "use strict";
-    var getString = url.split('\?', 2);
+    let getString = url.split('\?', 2);
     if (getString.length == 0) return false;
     if (getString.length == 1) return {baseUrl: url};
     if (getString.length == 2) return $.extend({baseUrl: getString[0]}, $.decodeGetString(getString[1]));
@@ -919,9 +919,9 @@ $.decodeGetString = function (a) {
     "use strict";
     if (a == "") return {};
     a = a.split('&');
-    var b = {};
-    for (var i = 0; i < a.length; ++i) {
-        var p = a[i].split('=');
+    let b = {};
+    for (let i = 0; i < a.length; ++i) {
+        let p = a[i].split('=');
         if (p.length != 2) continue;
         b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
     }
@@ -930,8 +930,8 @@ $.decodeGetString = function (a) {
 
 $.encodeGetString = function (o) {
     "use strict";
-    var a = [];
-    var r;
+    let a = [];
+    let r;
     if (typeof o.baseUrl != 'undefined' && o.baseUrl != 'undefined') {
         r = o.baseUrl;
         delete o.baseUrl;
@@ -945,8 +945,8 @@ $.encodeGetString = function (o) {
 
 $.myEncodeGetString = function (o) {
     "use strict";
-    var a = [];
-    var r;
+    let a = [];
+    let r;
     if (typeof o.url != 'undefined' && o.url != 'undefined') {
         r = o.url;
         delete o.url;
@@ -959,7 +959,7 @@ $.myEncodeGetString = function (o) {
 
 $.addGetParam = function (url, field, val) {
     "use strict";
-    var c = $.decodeGetStringFromUrl(url);
+    let c = $.decodeGetStringFromUrl(url);
     c[field] = val;
     return $.encodeGetString(c);
 };

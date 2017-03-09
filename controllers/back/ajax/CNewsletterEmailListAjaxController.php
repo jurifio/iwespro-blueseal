@@ -22,7 +22,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "SELECT n.id, if(n.isActive = 1,'Attiva','Non Attiva') , l.name as lang, ud.name, ud.surname, n.subscriptionDate FROM 
+        $sql = "SELECT n.id, if(n.isActive = 1,'Attiva','Non Attiva') as isActive  , l.name as lang, ud.name, ud.surname, n.subscriptionDate FROM 
                         Newsletter n 
                         JOIN Lang l ON n.langId = l.id 
                         LEFT JOIN (User u 

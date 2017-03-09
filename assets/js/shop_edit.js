@@ -9,6 +9,7 @@ $(document).on('bs.shop.save', function () {
     data.currentSeasonMultiplier = $('#shop_currentSeasonMultiplier').val();
     data.pastSeasonMultiplier = $('#shop_pastSeasonMultiplier').val();
     data.saleMultiplier = $('#shop_saleMultiplier').val();
+    data.minReleasedProducts = $('#shop_minReleasedProducts').val();
     data.config = {};
     data.config.refusalRate = $('#shop_config_refusalRate').val();
     data.config.refusalRateLastMonth = $('#shop_config_refusalRate_lastMonth').val();
@@ -70,6 +71,7 @@ $(document).on('bs.shop.save', function () {
             $('#shop_currentSeasonMultiplier').val(res.currentSeasonMultiplier);
             $('#shop_pastSeasonMultiplier').val(res.pastSeasonMultiplier);
             $('#shop_saleMultiplier').val(res.saleMultiplier);
+            $('#shop_minReleasedProducts').val(res.minReleasedProducts);
             $('#shop_config_refusalRate').val(res.config.refusalRate);
             $('#shop_config_refusalRate_lastMonth').val(res.config.refusalRateLastMonth);
             $('#shop_config_reactionRate').val(res.config.reactionRate);
@@ -121,80 +123,122 @@ function createGraphs(shop) {
     /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
     /* Done setting the chart up? Time to render it!*/
     let productDatas = [];
-    let orderMinimumData = [];
+    let productMinimumData = [];
     let orderDatas = [];
     let orderValueDatas = [];
     let index = 0;
-    for(let i in shop.productStatistics) {
+    for (let i in shop.productStatistics) {
         let point = shop.productStatistics[i];
         let xpoint = (new Date(point.date).getTime());
-        orderDatas[index] = {x:xpoint, y:0};
-        orderMinimumData[index] = {x:xpoint, y:shop.minReleasedProducts};
-        orderValueDatas[index] = {x:xpoint, y:0};
-        for(let k in shop.orderStatistics) {
-            if(shop.orderStatistics[k].date == point.date) {
-                orderDatas[index] = { x:xpoint, y:shop.orderStatistics[k].orders};
-                orderValueDatas[index] = { x:xpoint, y:shop.orderStatistics[k].ordersValue};
+        orderDatas[index] = {x: xpoint, y: 0};
+        productMinimumData[index] = {x: xpoint, y: shop.minReleasedProducts};
+        orderValueDatas[index] = {x: xpoint, y: 0};
+        for (let k in shop.orderStatistics) {
+            if (shop.orderStatistics[k].date == point.date) {
+                orderDatas[index] = {x: xpoint, y: shop.orderStatistics[k].orders};
+                orderValueDatas[index] = {x: xpoint, y: shop.orderStatistics[k].ordersValue};
                 break;
             }
         }
-        productDatas[index] = {x: xpoint, y:point.products };
+        productDatas[index] = {x: xpoint, y: point.products};
         index++;
     }
 
-    let myData = [
+    let productGraphData = [
         {
             values: productDatas,
             key: 'Prodotti Attivi',
             color: '#ff7f0e'
         },{
-            values: orderMinimumData,
-            key: 'Minimo Prodotti',
+            values: productMinimumData,
+            key: 'Prodotti Minimi Attivi',
             color: 'red'
-        },{
+        }
+
+    ];   //You need data...
+
+    let productChart = nv.models.lineChart();
+
+    productChart
+            .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
+            .options({
+                duration: 300,
+                useInteractiveGuideline: true
+            })
+            .color(d3.scale.category10().range())
+        ;
+
+    productChart.xAxis   //Chart x-axis settings
+        .showMaxMin(false)
+        .tickFormat(function (d, k) {
+            //let dx = productGraphData[0].values[d] && productGraphData[0].values[d].x || '0';
+            return d3.time.format('%Y-%m-%d')(new Date(d));
+        })
+        .showMaxMin(true)
+    ;
+
+    productChart.yAxis     //Chart y-axis settings
+        .tickFormat(d3.format(',f'));
+    //.tickFormat(d3.format(',.2r'));
+
+    d3.select('#productGraph') //Select the <svg> element you want to render the chart in.
+        .datum(productGraphData)         //Populate the <svg> element with chart data...
+        .call(productChart);          //Finally, render the chart!
+
+    //Update the chart when window resizes.
+    nv.utils.windowResize(productChart.update);
+    nv.addGraph(productChart);
+
+    /** ------------------- */
+
+    let orderGraphData = [
+        {
+            values: orderDatas,
+            key: 'N° Ordini',
+            color: 'yellow'
+        }, {
             values: orderValueDatas,
             bar: true,
             key: 'Incasso',
             color: 'green'
-        }
-    ];   //You need data...
+        }];
 
-    nv.addGraph(function() {
-        let chart = nv.models.linePlusBarChart()
-                .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
-                .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
-                .x(function(d,k) { return k; })
-                .color(d3.scale.category10().range())
-            ;
+    let orderChart = nv.models.linePlusBarChart();
 
-        chart.xAxis   //Chart x-axis settings
-            .showMaxMin(false)
-            .tickFormat(function(d,k) {
-                let dx = myData[0].values[d] && myData[0].values[d].x || '0';
-                return d3.time.format('%x')(new Date(dx));
-            })
-            .showMaxMin(true)
-        ;
+    orderChart
+        .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
+        .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
+        .color(d3.scale.category10().range())
+    ;
 
-        chart.y1Axis     //Chart y-axis settings
-            .tickFormat(function(d) { return '€' + d3.format(',f')(d) });
-        //.tickFormat(d3.format(',.2r'));
+    orderChart.xAxis   //Chart x-axis settings
+        .tickFormat(function (d, k) {
+            //let dx = orderGraphData[0].values[d] && orderGraphData[0].values[d].x || '0';
+            return d3.time.format('%Y-%m-%d')(new Date(d));
+        })
+    ;
 
-        chart.y2Axis     //Chart y-axis settings
-            .tickFormat(d3.format(',f'));
-        //.tickFormat(d3.format(',.2r'));
+    orderChart.y1Axis     //Chart y-axis settings
+        .tickFormat(function (d) {
+            return '€' + d3.format(',f')(d)
+        });
+    //.tickFormat(d3.format(',.2r'));
 
-        chart.bars.forceY([0]);
-        chart.focusEnable(false);
-        d3.select('#statisticGraphics svg') //Select the <svg> element you want to render the chart in.
-            .datum(myData)         //Populate the <svg> element with chart data...
-            .transition().duration(500)
-            .call(chart);          //Finally, render the chart!
+    orderChart.y2Axis     //Chart y-axis settings
+        .tickFormat(d3.format(',f'));
+    //.tickFormat(d3.format(',.2r'));
 
-        //Update the chart when window resizes.
-        nv.utils.windowResize(chart.update);
-        return chart;
-    });
+    orderChart.bars.forceY([0]);
+    orderChart.focusEnable(false);
+    d3.select('#orderGraph') //Select the <svg> element you want to render the chart in.
+        .datum(orderGraphData)         //Populate the <svg> element with chart data...
+        .transition().duration(500)
+        .call(orderChart);          //Finally, render the chart!
+
+    //Update the chart when window resizes.
+    nv.utils.windowResize(orderChart.update);
+
+    nv.addGraph(orderChart);
 }
 
 function readShipment(containerSelector) {
