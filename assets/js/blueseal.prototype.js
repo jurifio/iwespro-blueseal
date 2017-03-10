@@ -902,6 +902,7 @@ $.decodeGetStringFromUrl = function (url) {
 
 $.myDecodeGetStringFromUrl = function (url) {
     "use strict";
+    if ('undefined' === typeof url) url = window.location.href;
     let getString = url.split('\?', 2);
     let ret = {};
     ret.url = '';

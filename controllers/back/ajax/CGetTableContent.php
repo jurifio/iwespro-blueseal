@@ -45,8 +45,7 @@ class CGetTableContent extends AAjaxController
             throw new \Exception('Solo gli eletti, appartenenti alla Gilda degli Illuminati possono effettuare questa operazione. Contatta un amministratore');
 
         if (!$table) throw new \Exception('la variabile "table" è obbligatoria');
-        //if (!is_array($fields)) throw new \Exception('la variabile "fields" è obbligatoria e deve essere un array');
-        if ((false !== $condition) && ((!is_array($condition) || (!count($condition))))) throw new BambooException('Le condizioni devono essere passate sottoforma di array');
+        if (false !== $condition && !is_array($condition) || !count($condition)) throw new BambooException('Le condizioni devono essere passate sottoforma di array');
 
         if ($condition) $OC = $this->app->repoFactory->create($table)->findBy($condition);
         else $OC = $this->app->repoFactory->create($table)->findAll();
