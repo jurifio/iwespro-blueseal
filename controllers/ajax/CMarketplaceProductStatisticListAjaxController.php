@@ -78,7 +78,7 @@ class CMarketplaceProductStatisticListAjaxController extends AMarketplaceAccount
 
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';;
 
-            $row['shop'] = $val->getShops('<br>');
+            $row['shop'] = $val->getShops('<br>', true);
             $row['dummy'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
             $row['itemno'] = '<span class="small">';
             $row['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;
