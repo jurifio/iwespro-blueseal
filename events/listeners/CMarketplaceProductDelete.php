@@ -19,7 +19,7 @@ use bamboo\core\exceptions\BambooException;
  * @date $date
  * @since 1.0
  */
-class CMarketplacesDelete extends AEventListener
+class CMarketplaceProductDelete extends AEventListener
 {
     public function work($e)
     {
