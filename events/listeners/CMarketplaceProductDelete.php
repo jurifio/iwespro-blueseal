@@ -29,6 +29,7 @@ class CMarketplaceProductDelete extends AEventListener
         $product = $this->app->repoFactory->create('Product')->findOneByStringId($e->getEventData('productId'));
         foreach ($product->marketplaceAccountHasProduct as $marketplaceAccountHasProduct) {
             $marketplaceAccountHasProduct->isDeleted = 1;
+            $marketplaceAccountHasProduct->isToWork = 1;
             $marketplaceAccountHasProduct->update();
         }
     }
