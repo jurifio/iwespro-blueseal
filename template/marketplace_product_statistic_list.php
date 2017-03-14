@@ -57,6 +57,9 @@
                                     <th data-slug="fee"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Fee</th>
+                                    <th data-slug="marketplaceProductId"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Id Marketplace</th>
                                     <th data-slug="isDeleted"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Cancellato</th>
