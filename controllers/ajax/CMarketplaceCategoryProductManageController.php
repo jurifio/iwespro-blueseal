@@ -46,7 +46,7 @@ class CMarketplaceCategoryProductManageController extends AAjaxController
                     'marketplaceAccountId' => $marketplaceAccount->id,
                     'marketplaceId' => $marketplaceAccount->marketplaceId
                     ]);
-                if($mahpRepo->deleteProductFromMarketplace($mahp->printId())) $ok ++;
+                if($mahpRepo->deleteProductFromMarketplaceAccount($mahp->printId())) $ok ++;
                 else $ko ++;
             }
         }
