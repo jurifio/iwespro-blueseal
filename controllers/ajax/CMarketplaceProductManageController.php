@@ -71,7 +71,7 @@ class CMarketplaceProductManageController extends AAjaxController
 	    $i = 0;
 	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
 		    $product = $this->app->repoFactory->create('Product')->findOneByStringId($row);
-            $this->app->eventManager->triggerEvent('product.marketplace.change',['productIds'=>$product->printId()]);
+            $this->app->eventManager->triggerEvent('product.marketplace.change',['productId'=>$product->printId()]);
 	    }
 	    return $i;
     }
