@@ -80,8 +80,11 @@ $(document).on('bs.product.marketplace.publish', function (e, element, button) {
                         type: "POST",
                         data: data
                     }).done(function () {
-                        okButton.html('Chiudi').show();
                         body.html('Richiesta di pubblicazione inviata');
+                    }).fail(function () {
+                        body.html('Errore imprevisto');
+                    }).always(function () {
+                        okButton.html('Chiudi').show();
                     })
                 });
             });
