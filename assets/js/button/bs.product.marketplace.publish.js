@@ -45,7 +45,7 @@ $(document).on('bs.product.marketplace.publish', function (e, element, button) {
             url: '/blueseal/xhr/MarketplaceProductManageController',
             type: "get"
         }).done(function (response) {
-
+            okButton.show();
             let accounts = JSON.parse(response);
             let html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
                 '<label for="accountId">Marketplace Account</label>' +
