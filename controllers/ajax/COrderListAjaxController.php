@@ -178,7 +178,7 @@ class COrderListAjaxController extends AAjaxController
             $row["orderSources"] = [];
             foreach ($val->campaignVisitHasOrder as $campaignVisitHasOrder)
             {
-                $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name.' - '.$campaignVisitHasOrder->campaignVisit->timestamp.' - '.$campaignVisitHasOrder->campaignVisit->cost;
+                $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name.' - '.$campaignVisitHasOrder->campaignVisit->timestamp.' - '.$campaignVisitHasOrder->campaignVisit->cost.'€';
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
             $response['data'][] = $row;
