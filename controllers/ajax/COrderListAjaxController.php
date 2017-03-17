@@ -41,24 +41,24 @@ class COrderListAjaxController extends AAjaxController
                   `pb`.`name`                                            AS `productBrand`,
                   #concat(`o`.`netTotal`, '/' , `o`.`paidAmount`)         AS `dareavere`,
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
-                  o.paymentDate as paymentDate,
-                  o.note as notes
-                FROM ((((((((((`Order` `o`
-                  JOIN `User` `u`) 
-                  JOIN `UserDetails` `ud`) 
-                  JOIN `OrderPaymentMethod` `opm`) 
-                  JOIN `OrderStatus` `os`) 
-                  JOIN `OrderStatusTranslation` `oshl`) 
-                  JOIN `OrderLine` `ol`) 
-                  JOIN `Shop` `s`) 
-                  JOIN `OrderLineStatus` `ols`)
-                  JOIN `Product` `p`)
-                  JOIN `ProductBrand` `pb`)
-                WHERE ((`o`.`userId` = `u`.`id`) AND (`ud`.`userId` = `u`.`id`) AND (`o`.`orderPaymentMethodId` = `opm`.`id`) AND
-                       (`o`.`status` = `os`.`code`) AND (`o`.`status` LIKE 'ORD%') AND (`oshl`.`orderStatusId` = `os`.`id`) AND
-                       (`ol`.`orderId` = `o`.`id`) AND (`s`.`id` = `ol`.`shopId`) AND (`ol`.`productId` = `p`.`id`) AND
-                       (`ol`.`productVariantId` = `p`.`productVariantId`) AND (`p`.`productBrandId` = `pb`.`id`) AND
-                       (`ol`.`status` = `ols`.`code` ))";
+                  o.paymentDate AS paymentDate,
+                  o.note AS notes,
+                  group_concat(c.name) as orderSources
+                FROM `Order` `o`
+                  JOIN `User` `u` ON `o`.`userId` = `u`.`id`
+                  JOIN `UserDetails` `ud` ON `ud`.`userId` = `u`.`id`
+                  JOIN `OrderPaymentMethod` `opm` ON `o`.`orderPaymentMethodId` = `opm`.`id`
+                  JOIN `OrderStatus` `os` ON `o`.`status` = `os`.`code`
+                  JOIN `OrderStatusTranslation` `oshl` ON `oshl`.`orderStatusId` = `os`.`id`
+                  JOIN `OrderLine` `ol` ON `ol`.`orderId` = `o`.`id`
+                  JOIN `Shop` `s` ON `s`.`id` = `ol`.`shopId`
+                  JOIN `OrderLineStatus` `ols` ON `ol`.`status` = `ols`.`code`
+                  JOIN `Product` `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`
+                  JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
+                  LEFT JOIN ( 
+                    CampaignVisitHasOrder cvho JOIN 
+                    Campaign c ON cvho.campaignId = c.id) ON o.id = cvho.orderId
+                WHERE `o`.`status` LIKE 'ORD%' GROUP BY ol.id, ol.orderId";
 
         $critical = \Monkey::app()->router->request()->getRequestData('critical');
         $countersign = \Monkey::app()->router->request()->getRequestData('countersign');
@@ -77,7 +77,7 @@ class COrderListAjaxController extends AAjaxController
                          OR 
                         (`o`.`paymentDate` IS NULL AND `o`.`orderPaymentMethodId` = 5)
                     ))";
-        $datatable = new CDataTables($sql, ['id'], $_GET,true);
+        $datatable = new CDataTables($sql, ['id'], $_GET, true);
         $datatable->addSearchColumn('orderLineStatus');
         $datatable->addSearchColumn('shop');
         $datatable->addSearchColumn('productBrand');
@@ -150,17 +150,18 @@ class COrderListAjaxController extends AAjaxController
             $row["orderDate"] = $orderDate;
             $row["lastUpdate"] = isset($since) ? $since : "Mai";
             $row["user"] =
-                '<a href="/blueseal/utente?userId='.$val->user->printId().'"><span>' . $val->user->getFullName()
+                '<a href="/blueseal/utente?userId=' . $val->user->printId() . '"><span>' . $val->user->getFullName()
                 . '</span><br /><span>' . $val->user->email . '</span></a>';
             if (isset($val->user->rbacRole) && count($val->user->rbacRole) > 0) {
                 $row["user"] .= '<i class="fa fa-diamond"></i>';
-            } elseif(!empty($val->user->userDetails->note)) {
+            } elseif (!empty($val->user->userDetails->note)) {
                 $row["user"] .= '<i class="fa fa-sticky-note-o" aria-hidden="true"></i>';
             }
             try {
                 //TODO CHECK THIS WROOOONG
-                $row['user'].= '<br />' . $val->billingAddress->country->name;
-            } catch (\Throwable $e) {}
+                $row['user'] .= '<br />' . $val->billingAddress->country->name;
+            } catch (\Throwable $e) {
+            }
 
 
             $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
@@ -170,11 +171,16 @@ class COrderListAjaxController extends AAjaxController
             $row['paid'] = $paid;
             $row["paymentDate"] = $val->paymentDate;
             $row["payment"] = $val->orderPaymentMethod->name;
-            $row["notes"] = wordwrap($val->note,50,'</br>');
+            $row["notes"] = wordwrap($val->note, 50, '</br>');
             $userDetails = $val->user->userDetails;
-            $note = ($userDetails) ? wordwrap($val->user->userDetails->note,50,'</br>'): '-';
+            $note = ($userDetails) ? wordwrap($val->user->userDetails->note, 50, '</br>') : '-';
             $row["userNote"] = $note;
-
+            $row["orderSources"] = [];
+            foreach ($val->campaignVisitHasOrder as $campaignVisitHasOrder)
+            {
+                $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name;
+            }
+            $row["orderSources"] = implode('<br>',$row["orderSources"]);
             $response['data'][] = $row;
         }
         return json_encode($response);
@@ -206,7 +212,7 @@ class COrderListAjaxController extends AAjaxController
             $dba->beginTransaction();
             try {
                 $usoC = $ushoR->findBy(['orderId' => $orderId]);
-                foreach($usoC as $uso) {
+                foreach ($usoC as $uso) {
                     $uso->delete();
                 }
 
@@ -300,7 +306,7 @@ class COrderListAjaxController extends AAjaxController
 
                 $cvho = $cvhoR->findBy(['orderId' => $order->id]);
 
-                foreach($cvho as $cvhoSingle) {
+                foreach ($cvho as $cvhoSingle) {
                     $cvhoSingle->delete();
                 }
 
@@ -318,7 +324,8 @@ class COrderListAjaxController extends AAjaxController
                 \Monkey::app()->router->response()->raiseProcessingError();
                 return $e->getMessage();
             }
-        } return "L'ordine deve essere nello stato \"Cancellato\" o \"In attesa di pagamento\" per poter procedere!";
+        }
+        return "L'ordine deve essere nello stato \"Cancellato\" o \"In attesa di pagamento\" per poter procedere!";
     }
 
     public function orderBy()
