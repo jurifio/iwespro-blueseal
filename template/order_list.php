@@ -81,6 +81,10 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Note Utente</th>
+                                <th data-slug="orderSources"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Origine</th>
                             </tr>
                             </thead>
                             <tbody>

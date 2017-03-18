@@ -136,6 +136,9 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
+                data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.publish.products"
             ></bs-toolbar-button>
         <bs-toolbar-button

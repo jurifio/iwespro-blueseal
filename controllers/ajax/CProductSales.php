@@ -54,7 +54,7 @@ class CProductSales extends AAjaxController
                     $productSku->salePrice = floor($productSku->price / 100 * (100 - $percent));
                     $productSku->update();
                 }
-                $this->app->eventManager->triggerEvent('product.price.change', ['productIds' => $product->printId()]);
+                $this->app->eventManager->triggerEvent('product.price.change', ['productId' => $product->printId()]);
             } catch (\Throwable $e) {
                 $this->app->dbAdapter->rollback();
                 return "Non riesco ad avviare le promozioni le promozioni dai prodotti selezionati:<br />" . $e->getMessage();
@@ -75,7 +75,7 @@ class CProductSales extends AAjaxController
             } catch (\Throwable $e) {
                 return "OOPS! Non riesco a impostare le promozioni:<br />" . $e->getMessage();
             }
-            $this->app->eventManager->triggerEvent('product.price.change', ['productIds' => $product->printId()]);
+            $this->app->eventManager->triggerEvent('product.price.change', ['productId' => $product->printId()]);
         }
         return "Le promozioni sono state impostate correttamente.";
     }

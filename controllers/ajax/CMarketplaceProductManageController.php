@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
+
 use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
 
 /**
@@ -17,111 +18,76 @@ use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
  */
 class CMarketplaceProductManageController extends AAjaxController
 {
-	public function get()
-	{
-		$response = [];
-		foreach ($this->app->repoFactory->create('MarketplaceAccount')->findAll() as $account) {
-			$modifier = isset($account->config['priceModifier']) ? $account->config['priceModificer'] : 0;
-			$response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc'=>$account->marketplace->type != 'marketplace'];
-		}
+    public function get()
+    {
+        $response = [];
+        foreach ($this->app->repoFactory->create('MarketplaceAccount')->findAll() as $account) {
+            $modifier = isset($account->config['priceModifier']) ? $account->config['priceModificer'] : 0;
+            $response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc' => $account->marketplace->type != 'marketplace'];
+        }
 
-		return json_encode($response);
+        return json_encode($response);
     }
 
     public function post()
     {
-	    $productSample = $this->app->repoFactory->create('Product')->getEmptyEntity();
-	    $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
-	    $config = $marketplaceAccount->config;
-	    $config['priceModifier'] = $this->app->router->request()->getRequestData('modifier');
-	    $config['cpc'] = $this->app->router->request()->getRequestData('cpc');
-        if(!$config['cpc']) {
-            if(isset($marketplaceAccount->config['defaultCpc'])) {
-                $config['cpc'] = $marketplaceAccount->config['defaultCpc'];
-            }
-        }
-	    $i = 0;
+        $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
+        $modifier = $this->app->router->request()->getRequestData('modifier');
+        $cpc = $this->app->router->request()->getRequestData('cpc');
+        $i = 0;
         $rows = $this->app->router->request()->getRequestData('rows');
-        if($rows == 'all') {
-            $query = "select distinct concat(product,'-', variant) as code
-                      from vProductSortingView v 
-                      where (product, variant) not in (
-                        select distinct m.productId, m.productVariantId 
-                        from MarketplaceAccountHasProduct m 
-                        where m.marketplaceId = ? and m.marketplaceAccountId = ? )";
-            $rows = $this->app->dbAdapter->query($query,[$marketplaceAccount->marketplaceId,$marketplaceAccount->id])->fetchAll(\PDO::FETCH_COLUMN,0);
+        if ($rows == 'all') {
+            $query = "SELECT DISTINCT concat(product,'-', variant) AS code
+                      FROM vProductSortingView v 
+                      WHERE (product, variant) NOT IN (
+                        SELECT DISTINCT m.productId, m.productVariantId 
+                        FROM MarketplaceAccountHasProduct m 
+                        WHERE m.marketplaceId = ? AND m.marketplaceAccountId = ? )";
+            $rows = $this->app->dbAdapter->query($query, [$marketplaceAccount->marketplaceId, $marketplaceAccount->id])->fetchAll(\PDO::FETCH_COLUMN, 0);
         }
+        /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
+        $marketplaceAccountHasProductRepo = $this->app->repoFactory->create('MarketplaceAccountHasProduct');
+        $productRepo = $this->app->repoFactory->create('Product');
         $this->app->dbAdapter->beginTransaction();
-	    try {
-            $ids = [];
-	        foreach ($rows as $row) {
-	            set_time_limit(6);
-                $update = false;
-                $productSample->readId($row);
-                $marketplaceAccountHasProduct = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
-                $marketplaceAccountHasProduct->productId = $productSample->id;
-                $marketplaceAccountHasProduct->productVariantId = $productSample->productVariantId;
-                $marketplaceAccountHasProduct->marketplaceAccountId = $marketplaceAccount->id;
-                $marketplaceAccountHasProduct->marketplaceId = $marketplaceAccount->marketplaceId;
-                if($marketplaceAccountHasProduct2 = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy($marketplaceAccountHasProduct->getIds())) {
-                    $marketplaceAccountHasProduct = $marketplaceAccountHasProduct2;
-                    $update = true;
-                }
+        foreach ($rows as $row) {
+            try {
+                $ids = [];
 
-                $marketplaceAccountHasProduct->priceModifier = $config['priceModifier'];
-                if($marketplaceAccount->marketplace->type == 'cpc') {
-                    $marketplaceAccountHasProduct->fee = $config['cpc'];
-                }
-                if($update) {
-                    $marketplaceAccountHasProduct->isDeleted = 0;
-                    $marketplaceAccountHasProduct->isToWork = 1;
-                    $marketplaceAccountHasProduct->update();
-                } else {
-                    $marketplaceAccountHasProduct->insert();
-                }
+                set_time_limit(6);
+                $product = $productRepo->findOneByStringId($row);
+                $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product, $marketplaceAccount, $cpc, $modifier);
                 $i++;
-                $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>[$marketplaceAccountHasProduct->printId()]]);
+                $this->app->dbAdapter->commit();
+            } catch
+            (\Throwable $e) {
+                $this->app->dbAdapter->rollBack();
+                throw $e;
             }
-        } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
-            throw $e;
         }
-	    $this->app->dbAdapter->commit();
-	    return $i;
+        return $i;
     }
 
     public function put()
     {
-    	//RETRY
-	    $i = 0;
-        $revise = [];
-	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
-		    $product = $this->app->repoFactory->create('Product')->findOneByStringId($row);
-		    foreach ($product->marketplaceAccountHasProduct as $marketplaceAccountHasProduct) {
-			    if(1 == $marketplaceAccountHasProduct->hasError || 1 == $marketplaceAccountHasProduct->isToWork) {
-				    $this->app->eventManager->triggerEvent('marketplace.product.add',['newProductsKeys'=>$marketplaceAccountHasProduct->printId()]);
-				    $i++;
-			    } else {
-                    $revise[$product->printId()] = $product;
-                }
-		    }
-	    }
-	    foreach ($revise as $product) {
-            $this->app->eventManager->triggerEvent('product.marketplace.change',['productIds'=>$product->printId()]);
+        //RETRY
+        $i = 0;
+        foreach ($this->app->router->request()->getRequestData('rows') as $row) {
+            $product = $this->app->repoFactory->create('Product')->findOneByStringId($row);
+            $this->app->eventManager->triggerEvent('product.marketplace.change', ['productId' => $product->printId()]);
         }
-
-	    return $i;
+        return $i;
     }
 
     /**
      * @return int
      */
-    public function delete() {
+    public function delete()
+    {
         $count = 0;
         /** @var CMarketplaceAccountHasProductRepo $repo */
         $repo = $this->app->repoFactory->create('MarketplaceAccountHasProduct');
         foreach ($this->app->router->request()->getRequestData('ids') as $mId) {
-            if($repo->deleteProductFromMarketplace($mId)) $count++;
+            if ($repo->deleteProductFromMarketplaceAccount($mId)) $count++;
         }
         return $count;
     }

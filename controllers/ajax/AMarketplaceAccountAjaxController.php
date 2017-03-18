@@ -64,7 +64,7 @@ abstract class AMarketplaceAccountAjaxController extends AAjaxController
            `pb`.`name`                                            AS `brand`,
            `p`.`creationDate`                                     AS `creationDate`,
            concat(`m`.`name`, ' - ', `ma`.`name`)                 AS `marketplaceAccountName`,
-           `s`.`name`                                             AS `shop`,
+           concat(s.id,'-',`s`.`name`)                            AS `shop`,
            `s`.`id`                                               AS `shopId`,
            `mahp`.`marketplaceProductId`                          AS `marketplaceProductId`,
            `mahp`.`marketplaceId`                                 AS `marketplaceId`,

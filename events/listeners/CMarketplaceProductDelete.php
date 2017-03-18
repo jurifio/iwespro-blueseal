@@ -25,12 +25,10 @@ class CMarketplaceProductDelete extends AEventListener
     {
         if(!$e instanceof CEventEmitted) throw new BambooException('Event is not an event');
         $this->report('MarketplacesDelete','Deleting Product',$e->getEventData());
-
+        $marketplaceAccountHasProductRepo = $this->app->repoFactory->create('MarketplaceAccountHasProduct');
         $product = $this->app->repoFactory->create('Product')->findOneByStringId($e->getEventData('productId'));
         foreach ($product->marketplaceAccountHasProduct as $marketplaceAccountHasProduct) {
-            $marketplaceAccountHasProduct->isDeleted = 1;
-            $marketplaceAccountHasProduct->isToWork = 1;
-            $marketplaceAccountHasProduct->update();
+            $marketplaceAccountHasProductRepo->deleteProductFromMarketplaceAccount($marketplaceAccountHasProduct);
         }
     }
 }
