@@ -10,13 +10,12 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.lists.generate.csv', function () {
+$(document).on('bs.lists.generate.csv', function (e, element, button) {
 
     String.prototype.replaceAll = function(search, replacement) {
         var target = this;
         return target.split(search).join(replacement);
     };
-
 
     var table = $('.table');
 
@@ -30,7 +29,7 @@ $(document).on('bs.lists.generate.csv', function () {
     $(modal.okButton).prop('disabled', true);
     var url = table.DataTable().ajax.url();
     var tempData = table.DataTable().ajax.params();
-    tempData.length = 0;
+    if ('true' != element.data('visualized')) tempData.length = 0;
     //console.log(data);
     Pace.ignore(function() {
         "use strict";
