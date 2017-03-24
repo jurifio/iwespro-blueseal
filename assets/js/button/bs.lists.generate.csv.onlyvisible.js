@@ -29,7 +29,7 @@ $(document).on('bs.lists.generate.csv', function (e, element, button) {
     $(modal.okButton).prop('disabled', true);
     var url = table.DataTable().ajax.url();
     var tempData = table.DataTable().ajax.params();
-    tempData.length = 0;
+    //tempData.length = 0;
     //console.log(data);
     Pace.ignore(function() {
         "use strict";

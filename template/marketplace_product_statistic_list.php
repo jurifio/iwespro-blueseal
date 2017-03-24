@@ -167,7 +167,7 @@
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Esportazione">
         <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
+            data-remote="bs.lists.generate.csv.onlyvisible"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -1,12 +1,10 @@
 <?php
 
-namespace bamboo\blueseal\events\listeners;
+namespace bamboo\events\listeners;
 
-use bamboo\core\base\CObjectCollection;
 use bamboo\core\events\AEventListener;
 use bamboo\core\events\CEventEmitted;
 use bamboo\core\exceptions\BambooException;
-use bamboo\domain\entities\COrderLine;
 use bamboo\export\order\COrderExport;
 
 
