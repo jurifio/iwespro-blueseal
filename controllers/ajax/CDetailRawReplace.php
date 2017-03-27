@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers\ajax;
 use bamboo\core\utils\slugify\CSlugify;
+use bamboo\domain\repositories\CProductDetailRepo;
 
 /**
  * Class CDetailRawReplace
@@ -23,60 +24,48 @@ class CDetailRawReplace extends AAjaxController
      */
     public function put()
     {
-	    $productIds = $this->app->router->request()->getRequestData('productsId');
-        $productDetails = $this->app->router->request()->getRequestData()['newDetails'];
+	    $productsIds = $this->app->router->request()->getRequestData('productsId');
+        $productDetailsRaw = $this->app->router->request()->getRequestData()['newDetails'];
 
-        $ids = [];
+        /** @var CProductDetailRepo $detailRepo */
+        $detailRepo = $this->app->repoFactory->create('ProductDetail');
         $this->app->dbAdapter->beginTransaction();
-        foreach(explode("\n",$productDetails) as $productDetail) {
-            
-        }
-
-        foreach ($data as $key => $val) {
-	        if($val == $productDetailId) continue;
-            if($val == $productDetailName) continue;
-            $ids[] = $val;
-        }
-
-	    $productDetailPrimary = $this->app->repoFactory->create("ProductDetail")->findOneBy(['id' => $productDetailId]);
-	    $productDetailPrimary->productDetailTranslation->getFirst()->name = $productDetailName;
-        $slug = new CSlugify();
-        $productDetailPrimary->slug = $slug->slugify($productDetailName);
-	    $productDetailPrimary->productDetailTranslation->getFirst()->update();
-
-        $em = $this->app->entityManagerFactory->create('ProductSheetActual');
         try {
-
-            $modelRepo = $this->app->repoFactory->create('ProductSheetModelActual');
-            foreach($ids as $id) {
-                if ($id != $productDetailId) {
-                    $models = $modelRepo->findBy(['productDetailId' => $id]);
-                    foreach($models as $m) {
-                        $m->delete();
-                    }
-                }
+            $productDetails = [];
+            foreach(explode("\n",$productDetailsRaw) as $productDetail) {
+                $productDetails[] = $detailRepo->fetchOrInsert($productDetail);
             }
 
-            foreach ($ids as $id) {
-                $productSheets = $em->findBy(['productDetailId' => $id]);
+            $productRepo = $this->app->repoFactory->create('Product');
+            $productSheetActualRepo = $this->app->repoFactory->create('ProductSheetActual');
 
-                foreach ($productSheets as $productSheet) {
-                    $productSheet->delete();
-                    $productSheet->productDetailId = $productDetailId;
-                    $productSheet->insert();
+            foreach ($productsIds as $productId) {
+                $product = $productRepo->findOneByStringId($productId);
+                foreach ($product->productSheetActual as $productSheetActual) {
+                    $productSheetActual->delete();
                 }
-	            $productDetail = $this->app->repoFactory->create("ProductDetail",false)->findOneBy(['id' => $id]);
 
-	            foreach ($productDetail->productDetailTranslation as $detailTranslation) {
-					$detailTranslation->delete();
-	            }
-	            $productDetail->delete();
+                $product->productSheetPrototypeId = 33;
+                $product->update();
+                foreach ($productDetails as $productDetail) {
+                    $productDetailLabel = $product->productSheetPrototype->productDetailLabel->current();
+                    $productSheetActual = $productSheetActualRepo->getEmptyEntity();
+
+                    $productSheetActual->productId = $product->id;
+                    $productSheetActual->productVariantId = $product->productVariantId;
+                    $productSheetActual->productDetailLabelId = $productDetailLabel->id;
+                    $productSheetActual->productDetailId = $productDetail->id;
+                    $productSheetActual->insert();
+
+                    $product->productSheetPrototype->productDetailLabel->next();
+                }
             }
             $this->app->dbAdapter->commit();
-            return true;
-        } catch (\Throwable $e){
+            return count($productsIds);
+        } catch (\Throwable $e) {
             $this->app->dbAdapter->rollBack();
-	        throw $e;
+            throw $e;
         }
+
     }
 }
