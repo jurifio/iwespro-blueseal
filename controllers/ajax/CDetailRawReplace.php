@@ -33,7 +33,7 @@ class CDetailRawReplace extends AAjaxController
         try {
             $productDetails = [];
             foreach(explode("\n",$productDetailsRaw) as $productDetail) {
-                $productDetails[] = $detailRepo->fetchOrInsert($productDetail);
+                $productDetails[] = $detailRepo->fetchOrInsert(trim($productDetail));
             }
 
             $productRepo = $this->app->repoFactory->create('Product');
@@ -47,6 +47,7 @@ class CDetailRawReplace extends AAjaxController
 
                 $product->productSheetPrototypeId = 33;
                 $product->update();
+                $product->productSheetPrototype->productDetailLabel->getFirst();
                 foreach ($productDetails as $productDetail) {
                     $productDetailLabel = $product->productSheetPrototype->productDetailLabel->current();
                     $productSheetActual = $productSheetActualRepo->getEmptyEntity();

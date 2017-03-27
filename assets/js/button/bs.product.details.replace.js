@@ -33,7 +33,7 @@ $(document).on('bs.product.details.replace', function (e, element, button) {
         modal.hide();
         $.ajax({
             method:"put",
-            url:"/blueseal/DetailsReplace",
+            url:"/blueseal/xhr/DetailRawReplace",
             data:{
                 newDetails: value,
                 productsId: productsId
