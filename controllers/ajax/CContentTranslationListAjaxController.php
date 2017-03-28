@@ -24,7 +24,7 @@ class CContentTranslationListAjaxController extends AAjaxController
     {
         $langs = $this->app->repoFactory->create('Lang')->findAll();
 
-        $sql = "SELECT hash,";
+        $sql = "SELECT hash,hint";
         $sqlLang = [];
         foreach($langs as $lang) {
             $sqlLang[] = "max((CASE 
@@ -68,6 +68,7 @@ class CContentTranslationListAjaxController extends AAjaxController
                 $row[$key] =
                     '<div class="form-group form-group-default" style="width: 100%">
                         <input class="translation-element form-control" 
+                                style="width: 100%"
                                 data-hash="'.$row['hash'].'" 
                                 data-lang-id="'.$langId.'" '.($val && !empty($val) ? 'value="'.$val.'"' : '').'>
                     </div>';

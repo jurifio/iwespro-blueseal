@@ -35,6 +35,11 @@
                                     data-orderable="true"
                                     data-default-order="asc"
                                     class="center sorting">Termine</th>
+                                <th data-slug="hint"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center sorting">Suggerimento</th>
                                 <?php foreach($langs as $lang): ?>
                                 <th data-slug="lang_<?php echo $lang->id?>"
                                     data-searchable="true"
