@@ -24,17 +24,17 @@ class CContentTranslationListAjaxController extends AAjaxController
     {
         $langs = $this->app->repoFactory->create('Lang')->findAll();
 
-        $sql = "SELECT hash,hint";
+        $sql = "SELECT hash,hint,";
         $sqlLang = [];
-        foreach($langs as $lang) {
+        foreach ($langs as $lang) {
             $sqlLang[] = "max((CASE 
-                    WHEN l.id = ".$lang->id.
-                    " THEN t.string 
+                    WHEN l.id = " . $lang->id .
+                " THEN t.string 
                    ELSE NULL 
-                   END)) as lang_".$lang->id;
-            }
-        $sql.=implode(',',$sqlLang);
-        $sql.=" FROM Lang l
+                   END)) as lang_" . $lang->id;
+        }
+        $sql .= implode(',', $sqlLang);
+        $sql .= " FROM Lang l
                   LEFT JOIN Translation t ON langId = id
                   where hash is not null
                 GROUP BY t.hash";
@@ -44,14 +44,16 @@ class CContentTranslationListAjaxController extends AAjaxController
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
 
-        $strings = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
+        $strings = $this->app->dbAdapter->query($datatable->getQuery(false, true), $datatable->getParams())->fetchAll();
         $count = $this->app->dbAdapter->query($datatable->getQuery(true), $datatable->getParams())->fetch();
         foreach ($count as $c) {
-            $count = $c; break;
+            $count = $c;
+            break;
         }
         $totalCount = $this->app->dbAdapter->query($datatable->getQuery('full'), $datatable->getParams())->fetch();
         foreach ($totalCount as $c) {
-            $totalCount = $c; break;
+            $totalCount = $c;
+            break;
         }
 
         $response = [];
@@ -59,18 +61,27 @@ class CContentTranslationListAjaxController extends AAjaxController
         $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
-
+        $templatePath =  $this->app->rootPath() . $this->app->cfg()->fetch("paths", "public");
         foreach ($strings as $string) {
             $row = $string;
+            $row['hint'] = str_replace(
+                $templatePath,
+                    '...',
+                    $row['hint']);
+            $row['hint'] = str_replace(
+                ' -> ',
+                    '<br />',
+                    $row['hint']);
             unset($string['hash']);
-            foreach($string as $key=>$val) {
-                $langId = explode('_',$key)[1];
+            unset($string['hint']);
+            foreach ($string as $key => $val) {
+                $langId = explode('_', $key)[1];
                 $row[$key] =
                     '<div class="form-group form-group-default" style="width: 100%">
                         <input class="translation-element form-control" 
                                 style="width: 100%"
-                                data-hash="'.$row['hash'].'" 
-                                data-lang-id="'.$langId.'" '.($val && !empty($val) ? 'value="'.$val.'"' : '').'>
+                                data-hash="' . $row['hash'] . '" 
+                                data-lang-id="' . $langId . '" ' . ($val && !empty($val) ? 'value="' . $val . '"' : '') . '>
                     </div>';
             }
             $response['data'][] = $row;
