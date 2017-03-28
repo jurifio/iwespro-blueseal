@@ -19,7 +19,7 @@ $(document).on('bs.product.details.replace', function (e, element, button) {
             '<form id="detailsAdd">' +
                 '<div class="form-group">' +
                     '<label>Dettagli</label>' +
-                    '<textarea class="form-control" id="detailsText" name="detailsText" />' +
+                    '<textarea class="form-control" style="height: 200px" id="detailsText" name="detailsText" />' +
                 '</div>'+
             '</form>',
             okLabel: 'Sovrascrivi'
