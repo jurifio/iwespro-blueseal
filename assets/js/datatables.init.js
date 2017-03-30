@@ -491,3 +491,38 @@
         table.DataTable(setup);
     });
 })(jQuery);
+
+$.getDataTableSelectedRowsData = function(tableSelector,colName,min,max) {
+    "use strict";
+    if('undefined' == typeof colName) colName = 'DT_RowId';
+    if('undefined' == typeof tableSelector) tableSelector = '.table';
+
+    let selectedRows = $(tableSelector).DataTable().rows('.selected').data();
+    let selectedRowsCount = selectedRows.length;
+
+    if(typeof min != 'undefined' && selectedRowsCount < min) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare almeno "+min+" elementi"
+        }).open();
+        return false;
+    } else if (typeof max != 'undefined' && selectedRowsCount > max) {
+        new Alert({
+            type: "warning",
+            message: "Puoi selezionare massimo "+max+" elementi"
+        }).open();
+        return false;
+    }
+
+    let row = [];
+    $.each(selectedRows, function (k, v) {
+        row.push(v[colName]);
+    });
+
+    return row;
+};
+
+$.getDataTableSelectedRowData = function(tableSelector,colName,min,max) {
+    "use strict";
+    return $.getDataTableSelectedRowData(tableSelector,colName,1,1)[0];
+};

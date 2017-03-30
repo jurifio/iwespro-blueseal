@@ -72,6 +72,7 @@ $(document).on('bs.shipment.tracking.update', function (e, element, button) {
                 res.trackingNumber = $('#trackingNumber').val();
                 res.note = $('#note').val();
                 res.predictedShipmentDate = $('#predictedShipmentDate').val();
+                res.predictedDeliveryDate = $('#predictedDeliveryDate').val();
                 modal.showLoader();
                 modal.setOkEvent(function () {
                     modal.hide();
