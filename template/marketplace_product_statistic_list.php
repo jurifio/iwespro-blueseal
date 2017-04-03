@@ -57,6 +57,9 @@
                                     <th data-slug="fee"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Fee</th>
+                                    <th data-slug="marketplaceProductId"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Id Marketplace</th>
                                     <th data-slug="isDeleted"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Cancellato</th>
@@ -164,7 +167,7 @@
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Esportazione">
         <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
+            data-remote="bs.lists.generate.csv.onlyvisible"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

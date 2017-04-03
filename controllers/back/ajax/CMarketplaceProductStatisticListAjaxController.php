@@ -2,7 +2,6 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\CProduct;
 
@@ -73,12 +72,13 @@ class CMarketplaceProductStatisticListAjaxController extends AMarketplaceAccount
             $row["DT_RowClass"] = 'colore';
             $row['codice'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->printId() . '</a>';
             $row['marketCode'] = $prodottiMark->printId();
+            $row['marketplaceProductId'] = $prodottiMark->marketplaceProductId;
             $row['brand'] = $val->productBrand->name;
             $row['season'] = $val->productSeason->name;
 
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';;
 
-            $row['shop'] = $val->getShops('<br>');
+            $row['shop'] = $val->getShops('<br>', true);
             $row['dummy'] = '<img width="50" src="' . $img . '" />' . $imgs . '<br />';
             $row['itemno'] = '<span class="small">';
             $row['itemno'] .= $val->itemno . ' # ' . $val->productVariant->name;

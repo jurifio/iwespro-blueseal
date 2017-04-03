@@ -12,17 +12,17 @@ window.buttonSetup = {
 
 $(document).on('bs.product.marketplace.publish', function (e, element, button) {
 
-    var bsModal = $('#bsModal');
-    var header = $('.modal-header h4');
-    var body = $('.modal-body');
-    var cancelButton = $('.modal-footer .btn-default');
-    var okButton = $('.modal-footer .btn-success');
+    let bsModal = $('#bsModal');
+    let header = $('.modal-header h4');
+    let body = $('.modal-body');
+    let cancelButton = $('.modal-footer .btn-default');
+    let okButton = $('.modal-footer .btn-success');
 
     header.html('Pubblica Prodotti');
 
-    var getVarsArray = [];
-    var selectedRows = $('.table').DataTable().rows('.selected').data();
-    var selectedRowsCount = selectedRows.length;
+    let getVarsArray = [];
+    let selectedRows = $('.table').DataTable().rows('.selected').data();
+    let selectedRowsCount = selectedRows.length;
 
     if (selectedRowsCount < 1) {
         new Alert({
@@ -38,14 +38,16 @@ $(document).on('bs.product.marketplace.publish', function (e, element, button) {
 
 
     body.html('<img src="/assets/img/ajax-loader.gif" />');
+    okButton.hide();
 
     Pace.ignore(function () {
         $.ajax({
             url: '/blueseal/xhr/MarketplaceProductManageController',
             type: "get"
         }).done(function (response) {
-            var accounts = JSON.parse(response);
-            var html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
+            okButton.show();
+            let accounts = JSON.parse(response);
+            let html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
                 '<label for="accountId">Marketplace Account</label>' +
                 '<select class="full-width" placeholder="Seleziona l\'account" ' +
                 'data-init-plugin="selectize" title="" name="accountId" id="accountId" required>' +
@@ -61,8 +63,8 @@ $(document).on('bs.product.marketplace.publish', function (e, element, button) {
             body.html($(html));
 
             Pace.ignore(function () {
-                okButton.off().on('click',function () {
-                    okButton.off().on('click', function () {
+                okButton.html('Esegui').off().on('click',function () {
+                    okButton.off().hide().on('click', function () {
                         bsModal.modal('hide');
                         $('.table').DataTable().ajax.reload(null, false);
                     });
@@ -79,6 +81,10 @@ $(document).on('bs.product.marketplace.publish', function (e, element, button) {
                         data: data
                     }).done(function () {
                         body.html('Richiesta di pubblicazione inviata');
+                    }).fail(function () {
+                        body.html('Errore imprevisto');
+                    }).always(function () {
+                        okButton.html('Chiudi').show();
                     })
                 });
             });

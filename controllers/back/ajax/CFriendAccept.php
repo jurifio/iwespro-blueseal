@@ -101,6 +101,7 @@ class CFriendAccept extends AAjaxController
                 $shipmentRepo = $this->app->repoFactory->create('Shipment');
                 $shipmentRepo->newFriendShipmentToUs($carrierId,$fromAddressBookId,$bookingNumber,$shippingDate,$orderLineCollection);
                 $request->getRequestData();
+                $this->app->eventManager->triggerEvent('orderLine.friend.accept',['orderLines'=>$orderLineCollection]);
             }
 
             $dba->commit();
