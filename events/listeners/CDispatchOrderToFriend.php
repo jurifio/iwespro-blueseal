@@ -50,14 +50,19 @@ class CDispatchOrderToFriend extends AEventListener
         }
         $this->report('DispatchOrderToFriendEvent','dispatching lines',$shopOrderLines);
         foreach ($shopOrderLines as $shopId => $orderLines) {
-            $this->dispatch($shopId, $orderLines);
+            try{
+                $this->dispatch($shopId, $orderLines);
+            } catch (\Throwable $e) {
+                $this->error('Cycling shops', 'what',$e);
+            }
+
         }
     }
 
     public function dispatch($shopId, $orderLines)
     {
-        $orderExport = new COrderExport($this->app);
-        $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopId);
+        $orderExport = new COrderExport(\Monkey::app());
+        $shop = \Monkey::app()->repoFactory->create('Shop')->findOneByStringId($shopId);
         try {
             $this->report('Working Shop ' . $shop->name . ' Start', 'Found ' . count($orderLines) . ' to send');
             if ($shop->orderExport == 1 && count($orderLines) > 0) {
