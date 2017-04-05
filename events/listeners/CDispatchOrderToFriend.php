@@ -27,41 +27,48 @@ class CDispatchOrderToFriend extends AEventListener
     var $success = "ORD_FRND_ORDSNT";
     var $fail = "ORD_FRND_PYD";
 
-    public function work($e) {
-        if(!$e instanceof CEventEmitted) throw new BambooException('Event is not an event');
+    public function work($e)
+    {
+        $this->report('DispatchOrderToFriendEvent', 'Starting', $e);
+        if (!$e instanceof CEventEmitted) throw new BambooException('Event is not an event');
         $shopOrderLines = [];
-        if($e->getEventData('orderLineIds')) {
+        if ($e->getEventData('orderLineIds')) {
+            $this->report('DispatchOrderToFriendEvent', 'found orderLineIds', $e);
             foreach ($e->getEventData('orderLineIds') as $orderLineId) {
                 $orderLine = $this->app->repoFactory->create('OrderLine')->findOneByStringId($orderLineId);
                 $shopOrderLines[$orderLine->shopId][] = $orderLine;
             }
-        } elseif($e->getEventData('orderLineId')) {
+        } elseif ($e->getEventData('orderLineId')) {
+            $this->report('DispatchOrderToFriendEvent', 'found orderLineIds', $e);
             $orderLine = $this->app->repoFactory->create('OrderLine')->findOneByStringId($e->getEventData('orderLineId'));
             $shopOrderLines[$orderLine->shopId] = $orderLine;
-        } elseif($e->getEventData('orderLines')) {
+        } elseif ($e->getEventData('orderLines')) {
+            $this->report('DispatchOrderToFriendEvent', 'found orderLines', $e);
             foreach ($e->getEventData('orderLines') as $orderLine) {
                 $shopOrderLines[$orderLine->shopId][] = $orderLine;
             }
         }
+        $this->report('DispatchOrderToFriendEvent','dispatching lines',$shopOrderLines);
         foreach ($shopOrderLines as $shopId => $orderLines) {
-            $this->dispatch($shopId,$orderLines);
+            $this->dispatch($shopId, $orderLines);
         }
     }
 
-    public function dispatch($shopId, $orderLines) {
+    public function dispatch($shopId, $orderLines)
+    {
         $orderExport = new COrderExport($this->app);
         $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopId);
         try {
             $this->report('Working Shop ' . $shop->name . ' Start', 'Found ' . count($orderLines) . ' to send');
-            if ($shop->orderExport == 1 && count($orderLines) >0 ) {
+            if ($shop->orderExport == 1 && count($orderLines) > 0) {
                 $orderExport->exportOrderFileForFriend($shop, $orderLines);
             }
-            if (isset($shop->referrerEmails) && count($orderLines) >0 ) {
+            if (isset($shop->referrerEmails) && count($orderLines) > 0) {
                 $orderExport->sendMailForOrderNotification($shop, $orderLines);
             }
             $this->report('Working Shop ' . $shop->name . ' End', 'Export ended');
-        } catch(\Throwable $e){
-            $this->error( 'Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
+        } catch (\Throwable $e) {
+            $this->error('Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines', $e);
         }
     }
 }
