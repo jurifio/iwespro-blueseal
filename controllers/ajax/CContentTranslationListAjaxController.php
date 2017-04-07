@@ -78,10 +78,10 @@ class CContentTranslationListAjaxController extends AAjaxController
                 $langId = explode('_', $key)[1];
                 $row[$key] =
                     '<div class="form-group form-group-default" style="width: 100%">
-                        <input class="translation-element form-control" 
+                        <textarea class="translation-element form-control" 
                                 style="width: 100%"
                                 data-hash="' . $row['hash'] . '" 
-                                data-lang-id="' . $langId . '" ' . ($val && !empty($val) ? 'value="' . $val . '"' : '') . '>
+                                data-lang-id="' . $langId . '">' . ($val ?? '""') . '</textarea>
                     </div>';
             }
             $response['data'][] = $row;
