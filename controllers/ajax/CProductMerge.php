@@ -75,6 +75,15 @@ class CProductMerge extends AAjaxController
             }
         }*/
 
+       //find the shopIds of the choosen
+        $choosenShopIds = [];
+        $sop = $this->app->repoFactory->create('ShopHasProduct')
+            ->findBy(['productId' => $rows[$choosen]['id'], 'productVariantId' => $rows[$choosen]['productVariantId']]);
+
+        foreach($sop as $vshop) {
+                $choosenShopIds[] = $vshop->shopId;
+        }
+
         //controllo di nuovo i gruppi taglie e i
         $sizeGroup = 0;
         foreach ($rows as $k => $v) {
@@ -109,32 +118,19 @@ class CProductMerge extends AAjaxController
 
         try {
             $this->app->dbAdapter->beginTransaction();
+            $choosenShopId = null;
 
             foreach ($rows as $k => $v) {
-                if ($choosen == $k) continue;
-
-                //assegno lo shop assegnato al prodotto da fondere al prodotto scelto
+                if ($choosen == $k) {
+                    continue;
+                }
                 try {
-                    $sop = $this->app->repoFactory->create('ShopHasProduct')
-                        ->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-                    $choosenShopId = null;
                     foreach($sop as $vshop) {
-                        if ($v['id'] == $vshop->productId && $v['productVariantId'] == $vshop->productVariantId) {
-                            $choosenShopId = $vshop->shopId;
-                            break;
-                        }
-                    }
-                    if (null == $choosenShopId) throw new BambooException(
-                        'Shop del prodotto scelo per la fusione non trovato'
-                    );
-
-                    foreach($sop as $vshop) {
-                        if ($choosenShopId == $vshop->shopId) continue;
+                        if (in_array($vshop->shopId, $choosenShopId)) continue;
                         $vshop->productId = $rows[$choosen]['id'];
                         $vshop->productVariantId = $rows[$choosen]['productVariantId'];
                         $vshop->insert();
                     }
-
                 } catch (\Throwable $e) {
                     throw new BambooException(
                         $this->buildErrorMsg(
