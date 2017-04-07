@@ -118,7 +118,6 @@ class CProductMerge extends AAjaxController
 
         try {
             $this->app->dbAdapter->beginTransaction();
-            $choosenShopId = null;
 
             foreach ($rows as $k => $v) {
                 if ($choosen == $k) {
@@ -126,7 +125,7 @@ class CProductMerge extends AAjaxController
                 }
                 try {
                     foreach($sop as $vshop) {
-                        if (in_array($vshop->shopId, $choosenShopId)) continue;
+                        if (in_array($vshop->shopId, $choosenShopIds)) continue;
                         $vshop->productId = $rows[$choosen]['id'];
                         $vshop->productVariantId = $rows[$choosen]['productVariantId'];
                         $vshop->insert();
