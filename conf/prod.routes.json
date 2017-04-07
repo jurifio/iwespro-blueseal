@@ -1646,6 +1646,17 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/traduzioni/contenuti(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CContentTranslationController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT"
+            ]
         }
     ]
 }
