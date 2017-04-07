@@ -81,7 +81,7 @@ class CContentTranslationListAjaxController extends AAjaxController
                         <textarea class="translation-element form-control" 
                                 style="width: 100%"
                                 data-hash="' . $row['hash'] . '" 
-                                data-lang-id="' . $langId . '">' . ($val ?? '""') . '</textarea>
+                                data-lang-id="' . $langId . '">' . ($val ?? '') . '</textarea>
                     </div>';
             }
             $response['data'][] = $row;
