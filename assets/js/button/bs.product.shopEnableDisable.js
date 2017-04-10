@@ -57,9 +57,10 @@ $(document).on('bs.product.shopEnableDisable', function () {
                     ((1 == choosen.isActive) ? 'Il Friend verrà messo offline.' : 'Il Friend verrà riportato online ripristinando le quantità.')
                     + ' Continuare?');
                 var action = (0 == choosen.isActive) ? 'start' : 'stop';
-                let data = {shopId: choosen.id, action: action};
-                modal.showLoader();
+
                 modal.setOkEvent(function(){
+                    let data = {shopId: choosen.id, action: action};
+                    modal.showLoader();
                     $.ajax({
                         url: '/blueseal/xhr/ShopEnableDisable',
                         method: 'post',
