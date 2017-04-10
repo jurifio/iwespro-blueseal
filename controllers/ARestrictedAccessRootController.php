@@ -91,9 +91,13 @@ abstract class ARestrictedAccessRootController extends ARootController
 
         $this->app->setLang(new CLang(1,'it'));
 
-        /** @var CRouter $router */
-        $router = $this->app->router;
-        return $this->{$action}(new CInternalRequest('','',$router->getMatchedRoute()->getComputedFilters(),$router->request()->getMethod(),$action));
+        return $this->{$action}(
+            new CInternalRequest('',
+                                 'it',
+                                 $this->app->router->getMatchedRoute()->getComputedFilters(),
+                                $this->request->getRequestData(),
+                                $this->app->router->request()->getMethod())
+        );
     }
 
     /**
