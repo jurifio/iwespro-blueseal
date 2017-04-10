@@ -57,14 +57,15 @@ $(document).on('bs.product.shopEnableDisable', function () {
                     ((1 == choosen.isActive) ? 'Il Friend verrà messo offline.' : 'Il Friend verrà riportato online ripristinando le quantità.')
                     + ' Continuare?');
                 var action = (0 == choosen.isActive) ? 'start' : 'stop';
-
+                let data = {shopId: choosen.id, action: action};
+                modal.showLoader();
                 modal.setOkEvent(function(){
                     $.ajax({
                         url: '/blueseal/xhr/ShopEnableDisable',
                         method: 'post',
-                        data: {shopId: choosen.id, action: action}
+                        data: data
                     }).done(function(res){
-                        modal.write(res);
+                        modal.writeBody(res);
                     }).fail(function(res){
                         modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
                         console.error(res);
