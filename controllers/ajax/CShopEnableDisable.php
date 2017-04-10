@@ -39,16 +39,21 @@ class CShopEnableDisable extends AAjaxController
         $shpR = \Monkey::app()->repoFactory->create('Shop');
         $shopId = \Monkey::app()->router->request()->getRequestData('shopId');
         $action = \Monkey::app()->router->request()->getRequestData('action');
+
+        $shop = $shpR->findOneByStringId($shopId);
+
         $dba = \Monkey::app()->dbAdapter;
         $dba->beginTransaction();
         $message = 'OOPS! Non ho fatto nulla';
         try {
             if ('stop' == $action) {
                 $shpR->shutdownFriend($shopId);
-                $message = 'Friend Offline!';
+                if($shop->importer) $message = 'Friend Offline, ricordati di disattivare il job o le quantità potrebbero essere ripristinate!';
+                else $message = 'Friend Offline!';
             } elseif ('start' == $action) {
                 $shpR->restartFriend($shopId);
-                $message = 'Friend Online!';
+                if($shop->importer) $message = 'Friend Online, ricordati di riattivare il job o le quantità potrebbero essere non essere aggiornate!';
+                else $message = 'Friend Online!';
             }
             $dba->commit();
             return $message;
