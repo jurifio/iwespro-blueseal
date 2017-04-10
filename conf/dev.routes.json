@@ -14,150 +14,6 @@
             ]
         },
         {
-            "name": "Backoffice Contenuti",
-            "pattern": "/blueseal/contenuti(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CTranslationController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/homepage(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CHomepageContentController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/homepage/modifica/:wlang/:type/:id(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CHomepageContentEditController"
-            },
-            "filters": {
-                "id": "[A-Za-z0-9_-]+",
-                "type": "[A-Za-z0-9_-]+",
-                "wlang": "[a-z]{2}"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/homepage/aggiungi/:wlang/:type/:id(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CHomepageContentAddController"
-            },
-            "filters": {
-                "id": "[A-Za-z0-9_-]+",
-                "type": "[A-Za-z0-9_-]+",
-                "wlang": "[a-z]{2}"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/homepage/traduci/:wlang/:type/:id(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CHomepageContentTranslateController"
-            },
-            "filters": {
-                "id": "[A-Za-z0-9_-]+",
-                "type": "[A-Za-z0-9_-]+",
-                "wlang": "[a-z]{2}"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/catalogo(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCatalogContentController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/checkout(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCheckoutContentController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/database(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDatabaseContentController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/generale(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CGenericContentController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/altro(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\COtherContentController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/contenuti/prodotti/schede(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetContentController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
             "pattern": "/blueseal/logout/?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLogoutController"
@@ -1790,6 +1646,17 @@
             "translations": {},
             "methods": [
                 "GET"
+            ]
+        },{
+            "pattern": "/blueseal/traduzioni/contenuti(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CContentTranslationController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT"
             ]
         }
     ]
