@@ -124,6 +124,8 @@ class CProductMerge extends AAjaxController
                     continue;
                 }
                 try {
+                    $sop = $this->app->repoFactory->create('ShopHasProduct')
+                        ->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                     foreach($sop as $vshop) {
                         if (in_array($vshop->shopId, $choosenShopIds)) continue;
                         $vshop->productId = $rows[$choosen]['id'];
