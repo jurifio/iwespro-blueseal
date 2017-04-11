@@ -17,6 +17,8 @@ use bamboo\core\exceptions\BambooOutOfBoundException;
  *
  * @date 01/08/2016
  * @since 1.0
+ * @property CProductSku $productSku
+ * @property CStorehouseOperation $storehouseOperation
  */
 class CStorehouseOperationLine extends AEntity
 {

@@ -59,12 +59,14 @@ $(document).on('bs.product.shopEnableDisable', function () {
                 var action = (0 == choosen.isActive) ? 'start' : 'stop';
 
                 modal.setOkEvent(function(){
+                    let data = {shopId: choosen.id, action: action};
+                    modal.showLoader();
                     $.ajax({
                         url: '/blueseal/xhr/ShopEnableDisable',
                         method: 'post',
-                        data: {shopId: choosen.id, action: action}
+                        data: data
                     }).done(function(res){
-                        modal.write(res);
+                        modal.writeBody(res);
                     }).fail(function(res){
                         modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
                         console.error(res);
