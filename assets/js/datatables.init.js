@@ -524,5 +524,5 @@ $.getDataTableSelectedRowsData = function(tableSelector,colName,min,max) {
 
 $.getDataTableSelectedRowData = function(tableSelector,colName,min,max) {
     "use strict";
-    return $.getDataTableSelectedRowData(tableSelector,colName,1,1)[0];
+    return $.getDataTableSelectedRowsData(tableSelector,colName,1,1)[0];
 };
