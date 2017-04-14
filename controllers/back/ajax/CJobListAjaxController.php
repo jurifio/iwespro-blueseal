@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\blueseal\controllers\ajax;
+namespace bamboo\blueseal\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\controllers\back\ajax\AAjaxController;

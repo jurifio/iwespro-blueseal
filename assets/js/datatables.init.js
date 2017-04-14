@@ -250,7 +250,7 @@
                 bstoolbar.children('.dt-buttons').last().append(dtlength);
             }
 
-            if (toolbarSearch.length == 0) {
+                if (toolbarSearch.length == 0) {
                 bstoolbar.append('<div class="dt-buttons btn-group bs-toolbar-search" style="float:right;"><div class="btn-group-label">Cerca nella tabella</div></div>');
                 bstoolbar.children('.dt-buttons').last().append(dtfilters);
                 toolbarSearch = $('.bs-toolbar-search');
