@@ -3,8 +3,6 @@ namespace bamboo\blueseal\controllers\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\controllers\back\ajax\AAjaxController;
-use bamboo\domain\entities\CShipment;
-use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CJobListAjaxController
