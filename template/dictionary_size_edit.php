@@ -36,11 +36,11 @@
                                 <th data-slug="term"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="asc"
                                     class="center sorting">Termine</th>
                                 <th data-slug="foreign"
                                     data-searchable="true"
                                     data-orderable="true"
+                                    data-default-order="asc"
                                     class="center sorting">Traduzione</th>
                             </tr>
                             </thead>

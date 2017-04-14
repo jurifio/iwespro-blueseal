@@ -59,10 +59,10 @@ class CShopEnableDisable extends AAjaxController
             return $message;
         } catch(BambooStorehouseOperationException $e) {
             $dba->rollBack();
-            return $e->getMessage();
+            throw $e;
         } catch(BambooException $e) {
             $dba->rollBack();
-            return $e->getMessage();
+            throw $e;
         }
     }
 }
