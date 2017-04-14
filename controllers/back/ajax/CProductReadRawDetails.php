@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\blueseal\controllers\ajax;
+namespace bamboo\controllers\back\ajax;
 
 /**
  * Class CProductReadRawDetails

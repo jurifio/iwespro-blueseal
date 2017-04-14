@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\blueseal\controllers\ajax;
+namespace bamboo\controllers\back\ajax;
 use bamboo\core\utils\slugify\CSlugify;
 use bamboo\domain\repositories\CProductDetailRepo;
 

@@ -1,5 +1,5 @@
 <?php
-namespace bamboo\blueseal\controllers\ajax;
+namespace bamboo\controllers\back\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\CProductSku;
