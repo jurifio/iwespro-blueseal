@@ -1,8 +1,7 @@
 <?php
-namespace bamboo\blueseal\controllers\back\ajax;
+namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\controllers\back\ajax\AAjaxController;
 
 /**
  * Class CJobListAjaxController
