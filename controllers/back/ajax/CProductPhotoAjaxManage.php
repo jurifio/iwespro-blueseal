@@ -154,7 +154,7 @@ class CProductPhotoAjaxManage extends AAjaxController
                 $this->app->dbAdapter->rollback();
                 throw new RedPandaException('Could not Delete all the photos');
             }
-            $this->app->dbAdapter->delete('ProductSkuHasProductPhoto',["productId"=>$id,"productVariantId"=>$productVariantId,"productPhotoId"=>$photo['id']]);
+            $this->app->dbAdapter->delete('ProductHasProductPhoto',["productId"=>$id,"productVariantId"=>$productVariantId,"productPhotoId"=>$photo['id']]);
             $this->app->dbAdapter->delete('ProductHasProductPhoto',["productId"=>$id,"productVariantId"=>$productVariantId,"productPhotoId"=>$photo['id']]);
             $this->app->dbAdapter->delete('ProductPhoto',["id"=>$photo['id']]);
         }
