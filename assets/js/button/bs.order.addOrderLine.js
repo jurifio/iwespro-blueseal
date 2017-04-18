@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs.order.addOrderLine",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Modifica lo stato di pagamento",
+    title:"Aggiungi un prodotto all'ordine",
     placement:"bottom",
     toggle:"modal"
 };
