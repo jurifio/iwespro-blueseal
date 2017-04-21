@@ -34,7 +34,7 @@
                             </div>
                             <p>Taglie incluse</p>
                             <div class="row clearfix">
-                            <?php for($k=0;$k<12;$k++): ?>
+                            <?php for($k=0;$k<18;$k++): ?>
                                 <?php $actual = isset($sizeEdit) && $sizeEdit->valid() ? $sizeEdit->current() : false ; ?>
                                 <?php if($actual): ?>
                                 <input type="hidden" name="ProductSizeGroup_<?php echo $k?>_id" value="<?php echo $actual->id?>">
