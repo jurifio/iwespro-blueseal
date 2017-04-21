@@ -28,29 +28,31 @@ class COrderAddController extends ARestrictedAccessRootController
         ]);
     }
 
+    /**
+     * FIXME
+     */
     public function post()
     {
         try {
             $data = $this->app->router->request()->getRequestData();
 
-            $cart = $this->app->repoFactory->create('CartOrder')->getEmptyEntity();
-            $cart->userId = $data['user'];
-            $cart->orderPaymentMethodId = $data['orderPaymentMethod'];
-            $cart->billingAddressId = $data['billingAddress'];
-            $cart->shipmentAddressId = $data['shippingAddress'] ?? $data['billingAddress'];
-            $cart->note = $data['note'];
+            $order = $this->app->repoFactory->create('Order')->getEmptyEntity();
+            $order->userId = $data['user'];
+            $order->orderPaymentMethodId = $data['orderPaymentMethod'];
+            $order->billingAddressId = $data['billingAddress'];
+            $order->shipmentAddressId = $data['shippingAddress'] ?? $data['billingAddress'];
+            $order->note = $data['note'];
 
             $billingAddress = $this->app->repoFactory->create('UserAddress')->findOneBy(['id'=>$cart->billingAddressId,'userId'=>$cart->userId]);
             $shippingAddress = $this->app->repoFactory->create('UserAddress')->findOneBy(['id'=>$cart->shipmentAddressId,'userId'=>$cart->userId]);
 
-            $cart->frozenBillingAddress = $billingAddress->froze();
-            $cart->frozenShippingAddress = $shippingAddress->froze();
+            $order->frozenBillingAddress = $billingAddress->froze();
+            $order->frozenShippingAddress = $shippingAddress->froze();
 
-            $cart->id = $cart->insert();
-            $cart = $this->app->repoFactory->create('CartOrder')->findOne($cart->getIds());
+            $order->smartInsert();
             foreach ($data['orderLine'] as $line) {
                 $sku = $this->app->repoFactory->create('ProductSku')->findOneByStringId($line);
-                $this->app->cartManager->addSku($sku,1,$cart);
+                $this->app->repoFactory->create('Order')->addSku($order,$sku,1);
             }
 
             $coup = trim($data['coupon']);
@@ -62,7 +64,7 @@ class COrderAddController extends ARestrictedAccessRootController
                 }
                 if ($coupon != false) {
                     if ($coupon->couponType->validForCartTotal>0) {
-                        if($this->app->cartManager->calculateGrossTotal($cart) > $coupon->couponType->validForCartTotal) {
+                        if($this->app-$order->calculateGrossTotal($cart) > $coupon->couponType->validForCartTotal) {
                             $cart->couponId = $coupon->id;
                         }
                     } else {
