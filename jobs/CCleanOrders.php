@@ -57,8 +57,8 @@ class CCleanOrders extends ACronJob
     {
         $time = 1728000; //seconds to 20 days
         $query = "SELECT id
-                  FROM `Order` o
-                  where o.`status` like 'CRT%' and ( lastUpdate < ? or ( lastUpdate is null and creationDate < ?)) LIMIT 1000";
+                  FROM Cart
+                  where cartTypeId in (1,2) and ( lastUpdate < ? or ( lastUpdate is null and creationDate < ?)) LIMIT 1000";
         $timestamp = date('Y-m-d H:i:s',( time() - $time));
         $i=0;
 	    $k=0;
