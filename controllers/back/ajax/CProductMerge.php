@@ -43,6 +43,20 @@ class CProductMerge extends AAjaxController
                 }
             };
             $prods[$k]['areOrders'] = ($repoOrd->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']])->count()) ? 1 : 0;
+
+
+            $skus = [];
+            foreach($prod->productSku as $sku) {
+                if (!in_array($sku->shopId, $skus)) $skus[] = $sku->shopId;
+            }
+
+            if (1 < count($skus)) {
+                $prods[$k]['friend'] = 'multipli';
+            } else {
+                $prods[$k]['friend'] = \Monkey::app()->repoFactory->create('Shop')->findOne([$skus[0]])->title;
+            }
+
+            $prods[$k]['cpf'] = $prod->itemno . '#' . $prod->productVariant->name;
         }
 
         $res = [

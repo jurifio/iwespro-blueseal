@@ -91,7 +91,7 @@ $(document).on('bs.product.merge', function(){
                         selected = true;
                     }
                 }
-                radio += ' /> ' + v['id'] + '-' + v['productVariantId'] + ' - CPF: ' + v['cpf'] + ' - Brand: ' + v['brand'] + ' - Friend: ' + v['shops'] + '<br />';
+                radio += ' /> ' + v['id'] + '-' + v['productVariantId'] + ' - CPF: ' + v['cpf'] + ' - Brand: ' + v['brand'] + ' - Friend: ' + v['friend'] + '<br />';
             });
             bodyMsg += radio;
             bodyMsg += '</form><p>Se uno dei prodotti è stato acquistato sarà la scelta obbligata</p>';
