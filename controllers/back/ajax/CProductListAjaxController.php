@@ -59,12 +59,13 @@ class CProductListAjaxController extends AAjaxController
                   (SELECT group_concat(DISTINCT t.name) FROM `ProductHasTag` `pht` JOIN `TagTranslation` `t` ON `pht`.`tagId` = `t`.`tagId`
                    WHERE langId = 1 AND pht.productId = `p`.id AND `pht`.`productVariantId` = `p`.`productVariantId` GROUP BY p.productVariantId) as `tags`,
                   (select min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), null)) from ProductSku where ProductSku.productId = p.id and ProductSku.productVariantId = p.productVariantId) as activePrice,
-                  (SELECT group_concat(concat(m.name, ' - ', ma.name))
-                   FROM Marketplace m, MarketplaceAccount ma, MarketplaceAccountHasProduct mahp
-                   WHERE m.id = ma.marketplaceId AND
-                         ma.id = mahp.marketplaceAccountId AND
-                         ma.marketplaceId = mahp.marketplaceId AND
-                         mahp.productId = p.id AND
+                  (SELECT ifnull(group_concat(concat(m.name, ' - ', ma.name)),'')
+                   FROM Marketplace m 
+                      join MarketplaceAccount ma on (m.id = ma.marketplaceId) 
+                      JOIN MarketplaceAccountHasProduct mahp on 
+                          ma.id = mahp.marketplaceAccountId AND
+                          ma.marketplaceId = mahp.marketplaceId
+                   WHERE mahp.productId = p.id AND
                          mahp.productVariantId = p.productVariantId and mahp.isDeleted != 1)                            AS marketplaces
                 FROM (((((((((`Product` `p`
                   JOIN `ProductSeason` `pse` ON ((`p`.`productSeasonId` = `pse`.`id`)))
@@ -99,15 +100,15 @@ class CProductListAjaxController extends AAjaxController
         $dataTableParams = $datatable->getParams();
         $time = microtime(true);
         $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($dataTableQuery, $dataTableParams);
-        $response['queryTime'] = microtime(true) - $time;
+        $datatable->responseSet['selectTime'] = microtime(true) - $time;
 
         $time = microtime(true);
-        $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $response['countTime'] = microtime(true) - $time;
+        $response ['recordsFiltered'] = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $datatable->responseSet['countTime'] = microtime(true) - $time;
 
         $time = microtime(true);
-        $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-        $response['fullCountTime'] = microtime(true) - $time;
+        $datatable->responseSet['recordsTotal'] = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $datatable->responseSet['fullCountTime'] = microtime(true) - $time;
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99', '');
@@ -120,12 +121,6 @@ class CProductListAjaxController extends AAjaxController
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
-
-
-        $response ['draw'] = $_GET['draw'];
-        $response ['recordsTotal'] = $totalCount;
-        $response ['recordsFiltered'] = $count;
-        $response ['data'] = [];
 
         $time = microtime(true);
         /** @var $val CProduct */
@@ -204,9 +199,9 @@ class CProductListAjaxController extends AAjaxController
             $row['isOnSale'] = $val->isOnSale();
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
 
-            $response ['data'][] = $row;
+            $datatable->responseSet ['data'][] = $row;
         }
-        $response['resTime'] = microtime(true) - $time;
-        return json_encode($response);
+        $datatable->responseSet['resTime'] = microtime(true) - $time;
+        return $datatable->responseOut();
     }
 }
