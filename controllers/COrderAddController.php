@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers;
 
 use bamboo\core\ecommerce\APaymentGateway;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\repositories\CCartRepo;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
@@ -36,50 +37,28 @@ class COrderAddController extends ARestrictedAccessRootController
         try {
             $data = $this->app->router->request()->getRequestData();
 
-            $order = $this->app->repoFactory->create('Order')->getEmptyEntity();
-            $order->userId = $data['user'];
-            $order->orderPaymentMethodId = $data['orderPaymentMethod'];
-            $order->billingAddressId = $data['billingAddress'];
-            $order->shipmentAddressId = $data['shippingAddress'] ?? $data['billingAddress'];
-            $order->note = $data['note'];
+            /** @var CCartRepo $cartRepo */
+            $cartRepo = $this->app->repoFactory->create('Cart');
+            $cart = $cartRepo->getEmptyEntity();
+            $cart->userId = $data['user'];
+            $cart->cartTypeId = 5;
+            $cart->orderPaymentMethodId = $data['orderPaymentMethod'];
+            $cart->billingAddressId = $data['billingAddress'];
+            $cart->shipmentAddressId = $data['shippingAddress'] ?? $data['billingAddress'];
+            $cart->smartInsert();
 
-            $billingAddress = $this->app->repoFactory->create('UserAddress')->findOneBy(['id'=>$cart->billingAddressId,'userId'=>$cart->userId]);
-            $shippingAddress = $this->app->repoFactory->create('UserAddress')->findOneBy(['id'=>$cart->shipmentAddressId,'userId'=>$cart->userId]);
-
-            $order->frozenBillingAddress = $billingAddress->froze();
-            $order->frozenShippingAddress = $shippingAddress->froze();
-
-            $order->smartInsert();
             foreach ($data['orderLine'] as $line) {
                 $sku = $this->app->repoFactory->create('ProductSku')->findOneByStringId($line);
-                $this->app->repoFactory->create('Order')->addSku($order,$sku,1);
+                $cartRepo->addSku($sku,1,$cart);
             }
 
-            $coup = trim($data['coupon']);
-            if(!empty($coup)) {
-                $repo = $this->app->repoFactory->create('Coupon');
-                $coupon = $repo->findOneBy(['valid'=>1,'code'=>$coup]);
-                if($coupon == false) {
-                    $coupon = $this->app->repoFactory->create('CouponEvent')->getCouponFromEvent($coup);
-                }
-                if ($coupon != false) {
-                    if ($coupon->couponType->validForCartTotal>0) {
-                        if($this->app-$order->calculateGrossTotal($cart) > $coupon->couponType->validForCartTotal) {
-                            $cart->couponId = $coupon->id;
-                        }
-                    } else {
-                        $cart->couponId = $coupon->id;
-                    }
-                    try {
-                        $cart->update();
-                    } catch (\Throwable $e) {
-                        $this->app->router->response()->raiseUnauthorized();
-                    }
-                }
-            }
+            $cartRepo->setCouponCodeToCart($data['coupon']);
 
-            $order = $this->app->cartManager->customCartToOrder($cart);
+            $order = $cartRepo->customCartToOrder($cart);
             if(!$order) throw new BambooException('Errorissimo nel trasformare l\'ordine');
+
+            $order->note = $data['note'];
+            $order->update();
 
             /** @var APaymentGateway $gateway */
             $gateway = $this->app->orderManager->getPaymentGateway($order);
@@ -95,6 +74,5 @@ class COrderAddController extends ARestrictedAccessRootController
         } catch (\Throwable $e) {
             throw $e;
         }
-
     }
 }
