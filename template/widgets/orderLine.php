@@ -1,7 +1,5 @@
 <?php
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use bamboo\blueseal\business\COrderLineManager;
-/** @var COrderLineManager $lineManager */
 /** @var CRestrictedAccessWidgetHelper $app*/
 $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
 ?>
@@ -9,20 +7,20 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
 <td class="center"><a href="<?php echo $app->productBackofficeUrl($line->productId,$line->productVariantId) ?>" target="_blank" ><?php echo $sku->printPublicSku(); ?></a></td>
 <td class="center"><?php echo '<span title="'.$line->orderLineStatus->description.'" data-toggle="tooltip" >'.$line->orderLineStatus->title.'<span>';?></td>
 <td class="center">
-    <?php if($lineManager->isStatusManageable()): ?>
-        <?php if(!is_null($lineManager->nextOk())): ?>
+    <?php if($line->isStatusManageable()): ?>
+        <?php if(!is_null($line->getNextOkLineStatus())): ?>
         <button data-ajax="true"
                 data-method="PUT"
                 data-controller="ChangeLineStatus"
                 data-always="reloadLineFromButton"
                 data-address="<?php echo $app->urlForBluesealXhr() ?>"
                 class="btn btn-primary btn-animated from-left fa fa-thumbs-o-up"
-                value="<?php echo $line->id.'-'.$line->orderId.'-'.$lineManager->nextOk()->id; ?>"
+                value="<?php echo $line->id.'-'.$line->orderId.'-'.$line->getNextOkLineStatus()->id; ?>"
                 data-toggle="tooltip"
-                title="<?php echo $lineManager->nextOk()->description; ?>"
-                type="button"><span><?php echo $lineManager->nextOk()->title; ?></span></button>
+                title="<?php echo $line->getNextOkLineStatus()->description; ?>"
+                type="button"><span><?php echo $line->getNextOkLineStatus()->title; ?></span></button>
         <?php endif;
-            if(!is_null($lineManager->nextErr())):
+            if(!is_null($line->getNextErrLineStatus())):
         ?>
         <button data-ajax="true"
                 data-method="PUT"
@@ -30,10 +28,10 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
                 data-always="reloadLineFromButton"
                 data-address="<?php echo $app->urlForBluesealXhr() ?>"
                 class="btn btn-primary btn-animated from-left fa fa-thumbs-o-down"
-                value="<?php echo $line->id.'-'.$line->orderId.'-'.$lineManager->nextErr()->id; ?>"
+                value="<?php echo $line->id.'-'.$line->orderId.'-'.$line->getNextErrLineStatus()->id; ?>"
                 data-toggle="tooltip"
-                title="<?php echo $lineManager->nextErr()->description; ?>"
-                type="button"><span><?php echo $lineManager->nextErr()->title; ?></span></button>
+                title="<?php echo $line->getNextErrLineStatus()->description; ?>"
+                type="button"><span><?php echo $line->getNextErrLineStatus()->title; ?></span></button>
         <?php endif; ?>
     <?php else: ?>
     <span>Non modificabile</span>
@@ -45,7 +43,7 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
 <td class="center"><?php echo $line->product->itemno ;?></td>
 <td class="center"><?php
     $actualSku = $line->skus->getFirst();
-    if(!$lineManager->isFriendChangable()) {
+    if(!$line->isFriendChangable()) {
         echo $actualSku->shop->name;
     } else {
         /** Caso in cui ci sono piu shop possibili, select con bottone di conferma */
@@ -67,16 +65,16 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
     </td>
 <td class="center"><?php echo $line->productSize ;?></td>
 <td class="center"><?php
-        if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
+        if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
         else echo number_format($line->fullPrice, 2);
     ?></td>
-<td class="center"><?php if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
+<td class="center"><?php if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
     else echo number_format($line->activePrice, 2); ?></td>
-<td class="center"><?php if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
+<td class="center"><?php if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
     else echo number_format($line->netPrice, 2);?></td>
-<td class="center"><?php if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
+<td class="center"><?php if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
     else echo number_format($line->cost, 2); ?></td>
-<td class="center"><?php if (($lineManager->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) {
+<td class="center"><?php if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) {
                             if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
                             else echo number_format($line->friendRevenue, 2);
                          } else { ?>

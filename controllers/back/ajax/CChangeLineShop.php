@@ -6,7 +6,8 @@
  * Time: 13:00
  */
 namespace bamboo\controllers\back\ajax;
-use bamboo\blueseal\business\COrderLineManager;
+use bamboo\domain\entities\COrderLine;
+use bamboo\domain\repositories\COrderLineRepo;
 
 /**
  * Class CChangeLineShop
@@ -21,7 +22,10 @@ class CChangeLineShop extends AAjaxController
     public function put()
     {
         $datas = $this->data;
-        $orderLine = $this->app->repoFactory->create('OrderLine')->findOne(['id'=>$datas['orderLineId'],'orderId'=>$datas['orderId']]);
+        /** @var COrderLineRepo $orderLineRepo */
+        $orderLineRepo = $this->app->repoFactory->create('OrderLine');
+        /** @var COrderLine $orderLine */
+        $orderLine = $orderLineRepo->findOne(['id'=>$datas['orderLineId'],'orderId'=>$datas['orderId']]);
         if (3 > $orderLine->orderLineFriendPaymentStatusId) {
             $orderLine->productSku->stockQty += 1;
             $orderLine->productSku->padding += 1;
@@ -29,8 +33,8 @@ class CChangeLineShop extends AAjaxController
             $altSku = $this->app->repoFactory->create('ProductSku')->findOne(['productId' => $orderLine->productId, 'productVariantId' => $orderLine->productVariantId, 'productSizeId' => $orderLine->productSizeId, 'shopId' => $datas['selectShop']]);
             $altSku->stockQty -= 1;
             $altSku->padding -= 1;
-            $olm = new COrderLineManager($this->app, $orderLine);
-            if (!$olm->setNewSku($altSku)) {
+
+            if (!$orderLineRepo->setNewSku($orderLine,$altSku)) {
                 $this->app->router->response()->raiseProcessingError();
                 return false;
             }

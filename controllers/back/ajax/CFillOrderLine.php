@@ -3,11 +3,11 @@
 
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\domain\entities\COrderLine;
+use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\ecommerce\views\widget\VBase;
-use bamboo\blueseal\business\COrderLineManager;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\ecommerce\IBillingLogic;
 
 class CFillOrderLine extends AAjaxController
@@ -19,23 +19,22 @@ class CFillOrderLine extends AAjaxController
             $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/orderLine.php');
             $filters = $this->data;
 
-            /** @var CRepo $repo */
-            $repo = $this->app->repoFactory->create('OrderLine');
-            $line = $repo->findOne(explode('-',$filters['order']));
+            /** @var COrderLineRepo $repo */
+            $orderLineRepo = $this->app->repoFactory->create('OrderLine');
+            /** @var COrderLine $line */
+            $line = $orderLineRepo->findOne(explode('-',$filters['order']));
 
-            $lineManager = new COrderLineManager($this->app,$line);
-
-            $repo = $this->app->repoFactory->create('Product');
-            $line->product = $repo->findOne(array($line->productId,$line->productVariantId));
+            $productRepo = $this->app->repoFactory->create('Product');
+            $line->product = $productRepo->findOne(array($line->productId,$line->productVariantId));
 
             $size = $this->app->dbAdapter->query("select `name` from ProductSize where id = ? ", [$line->productSizeId] )->fetchAll()[0];
             $line->productSize = $size['name'];
 
             $line->skus = new CObjectCollection();
-            $line->skus->add( $lineManager->getSelectedSku());
+            $line->skus->add( $line->productSku);
 
-            if($lineManager->isFriendChangable()){
-                $line->skus->addAll($lineManager->getAlternativesSkus());
+            if($line->isFriendChangable()){
+                $line->skus->addAll($line->getAlternativesSkus());
             }
             $friendRev = 1000000;
             $iSku = 0;
@@ -50,8 +49,7 @@ class CFillOrderLine extends AAjaxController
 
             return $view->render([
                 'app' => new CRestrictedAccessWidgetHelper($this->app),
-                'line' => $line,
-                'lineManager' => $lineManager
+                'line' => $line
             ]);
 
         }catch (\Throwable $e){

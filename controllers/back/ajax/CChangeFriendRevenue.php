@@ -6,7 +6,7 @@
  * Time: 13:00
  */
 namespace bamboo\controllers\back\ajax;
-use bamboo\blueseal\business\COrderLineManager;
+use bamboo\domain\repositories\COrderLineRepo;
 
 /**
  * Class CChangeLineShop
@@ -20,9 +20,10 @@ class CChangeFriendRevenue extends AAjaxController
     public function put()
     {
         $datas = $this->data;
-        $orderLine = $this->app->repoFactory->create('OrderLine')->findOne(['id'=>$datas['orderLineId'],'orderId'=>$datas['orderId']]);
-        $olm = new COrderLineManager($this->app,$orderLine);
-        $olm->changeFriendRevenue($datas['change_revenue']);
+        /** @var COrderLineRepo $orderLineRepo */
+        $orderLineRepo = $this->app->repoFactory->create('OrderLine');
+        $orderLine = $orderLineRepo->findOne(['id'=>$datas['orderLineId'],'orderId'=>$datas['orderId']]);
+        $orderLineRepo->changeFriendRevenue($orderLine,$datas['change_revenue']);
         return true;
     }
 
