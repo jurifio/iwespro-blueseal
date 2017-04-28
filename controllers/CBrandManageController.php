@@ -6,6 +6,7 @@ use bamboo\core\exceptions\RedPandaAssetException;
 use bamboo\core\utils\amazonPhotoManager\ImageManager;
 use bamboo\core\utils\amazonPhotoManager\S3Manager;
 use bamboo\core\utils\slugify\CSlugify;
+use bamboo\utils\file\SFileToolbox;
 
 /**
  * Class CBrandManageController
@@ -80,14 +81,15 @@ class CBrandManageController extends ARestrictedAccessRootController
                     $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
                     $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
                     $extension = pathinfo($data['ProductBrand_logo'],PATHINFO_EXTENSION);
+                    $putRes = file_put_contents($tempFolder . $productBrand->slug, $imgBody);
 
-                    if(!$extension || empty($extension)) {
-                        throw new BambooException('Implementa il mime type detection');
+                    if(!$extension || empty($extension) || strlen($extension) > 4) {
+                        $extension = SFileToolbox::getExtensionFromFileMimeType($tempFolder . $productBrand->slug);
                     }
 
-                    $putRes = file_put_contents($tempFolder . $productBrand->slug.'.'.$extension, $imgBody);
+
                     $manager = new S3Manager($config['credential']);
-                    $res = $manager->putImage('iwes',$tempFolder . $productBrand->slug.'.'.$extension,'logos',$productBrand->slug.'.'.$extension);
+                    $res = $manager->putImage('iwes',$tempFolder . $productBrand->slug,'logos',$productBrand->slug.'.'.$extension);
                     $productBrand->logoUrl = $res->get('ObjectURL');;
                     $productBrand->update();
                 }
