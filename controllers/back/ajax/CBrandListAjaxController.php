@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -18,36 +19,29 @@ use bamboo\core\intl\CLang;
  */
 class CBrandListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
     /**
-     * @param $action
-     * @return mixed
+     * @return string
      */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."prodotti";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        $this->em = new \stdClass();
-        $this->em->products = $this->app->entityManagerFactory->create('Product');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
-        $datatable = new CDataTables('ProductBrand',['id'],$_GET,false);
+        $sql = "SELECT pb.id,
+                        pb.name,
+                        pb.slug,
+                        pb.description,
+                        pb.logoUrl,
+                        count(distinct p.id, p.productVariantId) as productCount 
+                from ProductBrand pb LEFT JOIN 
+                (Product p 
+                  JOIN ProductStatus ps on p.productStatusId = ps.id and ps.isVisible = 1) 
+                    on pb.id = p.productBrandId
+                GROUP BY pb.id";
+        $datatable = new CDataTables($sql, ['id'], $_GET );
 
-        $prodotti = $this->app->repoFactory->create('ProductBrand')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $prodotti = $this->app->repoFactory->create('ProductBrand')->findBySql($datatable->getQuery(), $datatable->getParams());
+        $count = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $modifica = $this->urls['base']."prodotti/brand/modifica";
+        $modifica = $this->app->baseUrl(false) . "/blueseal/prodotti/brand/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
@@ -59,15 +53,22 @@ class CBrandListAjaxController extends AAjaxController
 
         $i = 0;
 
-        foreach($prodotti as $val){
+        foreach ($prodotti as $val) {
 
-            $response['data'][$i]["DT_RowId"] = 'row__'.$val->id;
+            $response['data'][$i]["DT_RowId"] = 'row__' . $val->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'">'.$val->name.'</a>' : $val->name;
+            $response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '">' . $val->name . '</a>' : $val->name;
             $response['data'][$i]['slug'] = $val->slug;
-            $response['data'][$i]['productCount'] = $this->app->dbAdapter->query("SELECT COUNT(*) as conto FROM Product WHERE productBrandId = ? ",array($val->id))->fetch()['conto'];
+            $response['data'][$i]['description'] = $val->description;
+            $response['data'][$i]['logoUrl'] = $val->logoUrl && !empty($val->logoUrl) ? '<img style="max-height: 50px" src="' . $val->logoUrl . '">' : "";
+            $totalProduct = $this->app->dbAdapter->query("SELECT COUNT(*) AS conto FROM Product WHERE productBrandId = ? ", array($val->id))->fetch()['conto'];
+            $publishedProduct = $this->app->dbAdapter->query("SELECT COUNT(*) AS conto 
+                                                                     FROM Product JOIN ProductStatus ON Product.productStatusId = ProductStatus.id 
+                                                                     WHERE isVisible = 1 AND 
+                                                                     productBrandId = ? ", [$val->id])->fetch()['conto'];
+            $response['data'][$i]['productCount'] = $publishedProduct.' ('.$totalProduct.')';
 
-            $i++;
+                $i++;
         }
 
         return json_encode($response);

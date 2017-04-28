@@ -40,9 +40,17 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center sorting">Slug</th>
+                                <th data-slug="description"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center sorting">Description</th>
+                                <th data-slug="logoUrl"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center sorting">Logo</th>
                                 <th data-slug="productCount"
-                                    data-searchable="false"
-                                    data-orderable="false"
+                                    data-searchable="true"
+                                    data-orderable="true"
                                     class="center sorting">N° Prodotti</th>
                             </tr>
                             </thead>
