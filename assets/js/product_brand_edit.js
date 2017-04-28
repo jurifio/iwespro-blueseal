@@ -3,11 +3,16 @@ $(document).on('bs.brand.edit', function() {
         type: "PUT",
         url:"#",
         data: $('#form-project').serialize()
-    }).done(function (){
+    }).done(function (res){
         new Alert({
             type: "success",
             message: "Brand aggiornato correttamente"
         }).open();
+        let brand = JSON.parse(res);
+        $('#ProductBrand_name').val(brand.name);
+        $('#ProductBrand_slug').val(brand.slug);
+        $('#ProductBrand_description').val(brand.description);
+        $('#ProductBrand_logo').val(brand.logoUrl);
         return false;
     }).fail(function (){
         new Alert({

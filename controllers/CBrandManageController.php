@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\RedPandaAssetException;
 use bamboo\core\utils\amazonPhotoManager\ImageManager;
 use bamboo\core\utils\amazonPhotoManager\S3Manager;
@@ -8,7 +9,16 @@ use bamboo\core\utils\slugify\CSlugify;
 
 /**
  * Class CBrandManageController
- * @package bamboo\app\controllers
+ * @package bamboo\blueseal\controllers
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date $date
+ * @since 1.0
  */
 class CBrandManageController extends ARestrictedAccessRootController
 {
@@ -50,16 +60,43 @@ class CBrandManageController extends ARestrictedAccessRootController
 	    }
 
         try {
-
             $productBrand = $this->app->repoFactory->create("ProductBrand")->findOneBy(['id' => $data['ProductBrand_id']]);
             $productBrand->slug = trim($slug);
             $productBrand->name = trim($data['ProductBrand_name']);
-	        $productBrand->update();
+            $productBrand->description = $data['ProductBrand_description'];
+            $productBrand->update();
 
+            if(!empty($data['ProductBrand_logo']) && (strpos($data['ProductBrand_logo'],'amazonaws') === false)) {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $data['ProductBrand_logo']);
+                curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+                $imgBody = curl_exec($ch);
+                curl_close($ch);
+                if ($imgBody != false && !empty($imgBody)) {
+                    $this->app->vendorLibraries->load("amazon2723");
+                    $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
+                    $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
+                    $extension = pathinfo($data['ProductBrand_logo'],PATHINFO_EXTENSION);
+
+                    if(!$extension || empty($extension)) {
+                        throw new BambooException('Implementa il mime type detection');
+                    }
+
+                    $putRes = file_put_contents($tempFolder . $productBrand->slug.'.'.$extension, $imgBody);
+                    $manager = new S3Manager($config['credential']);
+                    $res = $manager->putImage('iwes',$tempFolder . $productBrand->slug.'.'.$extension,'logos',$productBrand->slug.'.'.$extension);
+                    $productBrand->logoUrl = $res->get('ObjectURL');;
+                    $productBrand->update();
+                }
+            }
+            return json_encode($productBrand);
         } catch (\Throwable $e) {
             $this->app->router->response()->raiseUnauthorized();
+            return false;
         }
-      //  $this->app->dbAdapter->update("ProductBrand",["slug"=>trim($slug), "name"=>trim($data['ProductBrand_name'])],["id"=>$data['ProductBrand_id']]);
     }
 
     /**

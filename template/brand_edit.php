@@ -26,9 +26,9 @@
                         <h5>Aggiorna <?php echo $brandEdit->name; ?></h5>
                     </div>
                     <div class="panel-body">
-                        <form id="form-project" role="form" action="" method="POST" autocomplete="on">
+                        <form id="form-project" role="form" action="#" method="POST" autocomplete="on">
                             <div class="row clearfix">
-                                <div class="col-md-4">
+                                <div class="col-md-7">
                                     <div class="form-group form-group-default required">
                                         <label for="ProductBrand_name">Nome Brand</label>
                                         <input type="text" class="form-control" id="ProductBrand_name" name="ProductBrand_name" value="<?php echo $brandEdit->name; ?>" required/>
@@ -36,12 +36,24 @@
                                         <input type="hidden" id="ProductBrand_id" name="ProductBrand_id" value="<?php echo $brandEdit->id; ?>" />
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <div class="form-group form-group-default">
                                         <label for="ProductBrand_slug">Slug Brand</label>
                                         <input type="text" class="form-control" id="ProductBrand_slug" name="ProductBrand_slug" value="<?php echo $brandEdit->slug; ?>" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-md-8">
+                                    <div class="form-group form-group-default">
+                                        <label for="ProductBrand_description">Descrizione Brand</label>
+                                        <textarea style="height: 400px" class="form-control" id="ProductBrand_description" name="ProductBrand_description"><?php echo $brandEdit->description; ?></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="ProductBrand_logo">Logo Brand</label>
+                                        <input id="ProductBrand_logo" class="form-control" type="text" name="ProductBrand_logo" value="<?php echo $brandEdit->logoUrl; ?>" />
                                     </div>
                                 </div>
                             </div>
