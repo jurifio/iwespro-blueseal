@@ -1,6 +1,7 @@
 <?php
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 /** @var CRestrictedAccessWidgetHelper $app*/
+/** @var $line \bamboo\domain\entities\COrderLine */
 $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
 ?>
 <td class="center"><?php echo $line->id;?></td>
