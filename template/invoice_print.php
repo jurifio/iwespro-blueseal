@@ -24,6 +24,11 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                 page-break-inside: avoid;
             }
 
+            @page {
+                size:A4;
+                margin:5mm 0mm 0mm 0mm;
+            }
+
             .cover {
                 display:none;
             }

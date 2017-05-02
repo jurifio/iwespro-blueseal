@@ -19,6 +19,10 @@
         @media print {
             .page-break	{ display: block; page-break-before: always; }
 
+            @page {
+                size:landscape;
+                margin:5mm 0mm 0mm 0mm;
+            }
 
             .cover {
                 display:none;
