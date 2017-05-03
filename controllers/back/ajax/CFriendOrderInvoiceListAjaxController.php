@@ -54,7 +54,9 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
 
         $datatable = new CDataTables($query, ['id'],$_GET, true);
         $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
-        $datatable->goAllTheThings();
+
+
+        $datatable->doAllTheThings();
 
         $abR = \Monkey::app()->repoFactory->create('AddressBook');
         /** @var CInvoiceLineHasOrderLine $ilhR */
@@ -114,30 +116,5 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
     public function delete()
     {
         throw new \Exception();
-    }
-
-    public function orderBy(){
-        $dtOrderingColumns = $_GET['order'];
-        $dbOrderingColumns = [
-            ['column'=>'o.id'],
-            ['column'=>'o.creationDate'],
-            ['column'=>'o.lastUpdate']
-        ];
-        $dbOrderingDefault = [
-            ['column'=>'o.creationDate','dir'=>'desc']
-        ];
-
-        $sqlOrder = " ORDER BY ";
-        foreach ($dtOrderingColumns as $column) {
-            if (isset($dbOrderingColumns[$column['column']]) && $dbOrderingColumns[$column['column']]['column'] !== null) {
-                $sqlOrder .= $dbOrderingColumns[$column['column']]['column']." ".$column['dir'].", ";
-            }
-        }
-        if (substr($sqlOrder,-1,2) != ', ') {
-            foreach($dbOrderingDefault as $column) {
-                $sqlOrder .= $column['column'].' '.$column['dir'].', ';
-            }
-        }
-        return rtrim($sqlOrder,', ');
     }
 }

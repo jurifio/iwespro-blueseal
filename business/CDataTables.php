@@ -222,11 +222,20 @@ class CDataTables
     /**
      * Does the query and save the result
      */
-    public function goAllTheThings()
+    public function doAllTheThings()
     {
+        $this->responseSet['selectSql'] = $this->getQuery();
+        $this->responseSet['selectParams'] = $this->getParams();
+        $microtime = microtime(true);
+        $this->responseSet ['data'] =
+            \Monkey::app()->dbAdapter->query(
+                $this->responseSet['selectSql'],
+                $this->responseSet['selectParams'], true)->fetchAll();
+        $this->responseSet['selectTime'] = microtime(true) - $microtime;
+
+
         $this->responseSet['countSql'] = $this->getQuery(true);
         $this->responseSet['countParams'] = $this->getParams();
-
         $microtime = microtime(true);
         $this->responseSet ['recordsFiltered'] =
             \Monkey::app()->dbAdapter->query(
@@ -242,15 +251,6 @@ class CDataTables
                 $this->responseSet['fullCountSql'],
                 $this->responseSet['fullCountParams'])->fetch()['conto'];
         $this->responseSet['fullCountTime'] = microtime(true) - $microtime;
-
-        $this->responseSet['selectSql'] = $this->getQuery();
-        $this->responseSet['selectParams'] = $this->getParams();
-        $microtime = microtime(true);
-        $this->responseSet ['data'] =
-            \Monkey::app()->dbAdapter->query(
-                $this->responseSet['selectSql'],
-                $this->responseSet['selectParams'], true)->fetchAll();
-        $this->responseSet['selectTime'] = microtime(true) - $microtime;
     }
 
     /**
@@ -316,9 +316,7 @@ class CDataTables
      */
     protected function where($count = false)
     {
-        if (!empty($this->where)) {
-            return $this->where;
-        }
+        $this->where = "";
         $conditions = [];
         $search = [];
         foreach ($this->conditions as $condition) {
@@ -507,6 +505,7 @@ class CDataTables
 
     public function getResponseSetData()
     {
+        $this->responseSet['initTime'] = microtime(true);
         return $this->responseSet['data'];
     }
 
@@ -543,6 +542,10 @@ class CDataTables
 
     public function responseOut()
     {
+        if(!isset($this->responseSet['resTime']) && isset($this->responseSet['initTime'])) {
+            $this->responseSet['resTime'] = microtime(true) - $this->responseSet['initTime'];
+            unset( $this->responseSet['initTime']);
+        }
         return json_encode($this->responseSet);
     }
 }
