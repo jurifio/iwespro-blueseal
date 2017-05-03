@@ -54,12 +54,12 @@
                                 <th data-slug="invoiceNumber"
                                     data-searchable="true"
                                     data-orderable="true" class="center">N. Fat.</th>
-                                <th data-slug="invoiceTotalAmount"
+                                <th data-slug="invoiceCalculatedTotal"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Imp. da Ord.</th>
-                                <th data-slug="invoiceCalculatedTotal"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Imp. da Friend</th>
+                                <th data-slug="invoiceTotalAmount"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Imp. da Friend</th>
                                 <th data-slug="paymentExpectedDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center dataFilterType">Data Previsto Pagamento</th>

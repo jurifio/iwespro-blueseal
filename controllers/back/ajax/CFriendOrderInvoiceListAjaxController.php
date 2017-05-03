@@ -28,6 +28,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                       ), ''
                     )
                   )as `documentT`,*/
+                  round((sum(ol.friendRevenue) / 100 * 22) + sum(ol.friendRevenue),2) as invoiceCalculatedTotal,
                   `it`.`name` as `documentType`,
                   `it`.`id` as `dt`,
                   if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') as `paymentDate`,
