@@ -36,7 +36,7 @@ $(document).on('bs.invoice.split', function () {
         Pace.ignore(function() {
             let parts = $('#invoiceParts').val();
             modal.showLoader();
-            modal.okButtonEvent(function() {
+            modal.okButton.on('click',function() {
                 modal.hide();
             });
             modal.okButton.hide();
