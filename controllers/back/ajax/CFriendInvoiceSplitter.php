@@ -32,7 +32,8 @@ class CFriendInvoiceSplitter extends AAjaxController
         foreach($data['invoicesId'] as $documentId) {
             /** @var CDocument $document */
             $document = $documentRepo->findOneByStringId($documentId);
-            if(!is_null($document->paymentBill)) {
+
+            if(!$document->paymentBill->isEmpty()) {
                 $this->app->repoFactory->rollback();
                 throw new \Exception('Non puoi dividere una fattura già in distinta');
             }
