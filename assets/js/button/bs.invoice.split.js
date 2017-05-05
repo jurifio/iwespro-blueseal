@@ -19,6 +19,7 @@ $(document).on('bs.invoice.split', function () {
             type: "warning",
             message: "Devi selezionare una sola Fattura"
         }).open();
+        return false;
     }
 
     let modal = new $.bsModal(
@@ -36,7 +37,9 @@ $(document).on('bs.invoice.split', function () {
         Pace.ignore(function() {
             let parts = $('#invoiceParts').val();
             modal.showLoader();
-            modal.okButton.on('click',function() {
+            modal.okButton.html('Chiudi');
+            modal.setOkEvent(function() {
+                $.refreshDataTable();
                 modal.hide();
             });
             modal.okButton.hide();
@@ -49,8 +52,7 @@ $(document).on('bs.invoice.split', function () {
                 }
             }).done(function () {
                 modal.writeBody('Fatto');
-                modal.okButton.html('Chiudi');
-                model.okButton.show();
+                modal.okButton.show();
             }).fail(function (res) {
                 modal.writeBody('Si è verificato un errore, controlla la console');
                 console.log(res);
