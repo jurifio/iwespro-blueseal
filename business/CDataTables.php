@@ -240,7 +240,7 @@ class CDataTables
         $this->responseSet ['recordsFiltered'] =
             \Monkey::app()->dbAdapter->query(
                 $this->responseSet['countSql'],
-                $this->responseSet['countParams'])->fetch()['conto'];
+                $this->responseSet['countParams'],true)->fetch()['conto'] ?? 0;
         $this->responseSet['countTime'] = microtime(true) - $microtime;
 
         $this->responseSet['fullCountSql'] = $this->getQuery('full');
@@ -249,7 +249,7 @@ class CDataTables
         $this->responseSet ['recordsTotal'] =
             \Monkey::app()->dbAdapter->query(
                 $this->responseSet['fullCountSql'],
-                $this->responseSet['fullCountParams'])->fetch()['conto'];
+                $this->responseSet['fullCountParams'],true)->fetch()['conto'] ?? 0;
         $this->responseSet['fullCountTime'] = microtime(true) - $microtime;
     }
 
@@ -317,6 +317,7 @@ class CDataTables
     protected function where($count = false)
     {
         $this->where = "";
+        $this->params = [];
         $conditions = [];
         $search = [];
         foreach ($this->conditions as $condition) {
