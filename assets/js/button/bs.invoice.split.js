@@ -36,6 +36,10 @@ $(document).on('bs.invoice.split', function () {
         Pace.ignore(function() {
             let parts = $('#invoiceParts').val();
             modal.showLoader();
+            modal.okButtonEvent(function() {
+                modal.hide();
+            });
+            modal.okButton.hide();
             $.ajax({
                 url: "/blueseal/xhr/FriendInvoiceSplitter",
                 method: "put",
@@ -45,6 +49,8 @@ $(document).on('bs.invoice.split', function () {
                 }
             }).done(function () {
                 modal.writeBody('Fatto');
+                modal.okButtonLabel('Chiudi');
+                model.okButton.show();
             }).fail(function (res) {
                 modal.writeBody('Si è verificato un errore, controlla la console');
                 console.log(res);

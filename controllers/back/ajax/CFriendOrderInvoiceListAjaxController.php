@@ -67,6 +67,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 	        /** ciclo le righe */
 	        $v = $documentRepo->findOneBy($row);
+            $row['DT_RowId'] = $v->printId();
             $row['id'] = $v->id;
             $ab = $abR->findOne([$v->shopRecipientId]);
             $friend = ($ab && $ab->shop) ? $ab->shop->title : "Non trovo il friend";
