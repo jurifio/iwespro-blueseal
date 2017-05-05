@@ -49,7 +49,7 @@ $(document).on('bs.invoice.split', function () {
                 }
             }).done(function () {
                 modal.writeBody('Fatto');
-                modal.okButtonLabel('Chiudi');
+                modal.okButton.html('Chiudi');
                 model.okButton.show();
             }).fail(function (res) {
                 modal.writeBody('Si è verificato un errore, controlla la console');

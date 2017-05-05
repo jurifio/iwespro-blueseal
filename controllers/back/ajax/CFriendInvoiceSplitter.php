@@ -6,6 +6,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooOrderLineException;
 use bamboo\core\exceptions\BambooShipmentException;
 use bamboo\domain\entities\COrderLine;
+use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\STimeToolbox;
@@ -27,6 +28,7 @@ class CFriendInvoiceSplitter extends AAjaxController
 {
     public function put() {
         $data = $this->app->router->request()->getRequestData();
-        var_dump($data);
+        /** @var CDocumentRepo $invoiceRepo */
+        $invoiceRepo = $this->app->repoFactory->create('Invoice');
     }
 }
