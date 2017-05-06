@@ -51,7 +51,7 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
     modal.body.css('minHeight', '350px');
     modal.show();
 
-    $(document).on('loaded.bs.modal',function () {
+    setTimeout(function () {
         $(".code-details").selectize({
             valueField: 'id',
             labelField: 'name',
@@ -84,7 +84,7 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
                 });
             }
         });
-    });
+    },1000);
 
 
     modal.setOkEvent(function () {
