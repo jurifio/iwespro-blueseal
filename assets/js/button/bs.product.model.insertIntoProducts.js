@@ -171,37 +171,39 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
 
     modal.body.css('minHeight', '350px');
 
-    $(".code-details").selectize({
-        valueField: 'id',
-        labelField: 'name',
-        searchField: 'name',
-        options: [],
-        create: false,
-        render: {
-            option: function (item, escape) {
-                return '<div>' +
-                    escape(item.name) +
-                    '</div>';
-            }
-        },
-        load: function (query, callback) {
-            if (3 >= query.length) {
-                return callback();
-            }
-            $.ajax({
-                url: '/blueseal/xhr/DetailModelGetDetails',
-                type: 'GET',
-                data: {
-                    search: query,
-                },
-                dataType: 'json',
-                error: function () {
-                    callback();
-                },
-                success: function (res) {
-                    callback(res);
+    $(modal).on('modalBuild', function() {
+        $(".code-details").selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            create: false,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        escape(item.name) +
+                        '</div>';
                 }
-            });
-        }
+            },
+            load: function (query, callback) {
+                if (3 >= query.length) {
+                    return callback();
+                }
+                $.ajax({
+                    url: '/blueseal/xhr/DetailModelGetDetails',
+                    type: 'GET',
+                    data: {
+                        search: query,
+                    },
+                    dataType: 'json',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res);
+                    }
+                });
+            }
+        });
     });
 });
