@@ -51,7 +51,7 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
     modal.body.css('minHeight', '350px');
     modal.show();
 
-    modal.bsModal.on('modalBuild',function () {
+    $(document).on('loaded.bs.modal',function () {
         $(".code-details").selectize({
             valueField: 'id',
             labelField: 'name',
