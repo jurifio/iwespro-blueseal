@@ -79,8 +79,7 @@ $(document).on('bs.product.model.insertIntoProducts', function (e, element, butt
                     callback();
                 },
                 success: function (res) {
-                    callback(res);
-                }
+                    callback(res); }
             });
         }
     });

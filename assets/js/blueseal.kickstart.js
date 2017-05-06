@@ -390,8 +390,6 @@ let modalMock = '<div class="modal fade" id="bsModal" tabindex="-1" role="dialog
     '</div></div></div></div>';
 
 $.bsModal = function (header, params) {
-    let self = this;
-
     this.bsModal = $('#bsModal');
     if(this.bsModal.length > 0) this.bsModal.replaceWith(modalMock);
     else {
@@ -404,7 +402,6 @@ $.bsModal = function (header, params) {
         delete(modal);
     }
     //constructor
-    self = this;
     if ('undefined' == typeof header) {
         console.error("the param 'header' is mandatory");
         return false;
@@ -425,13 +422,16 @@ $.bsModal = function (header, params) {
     this.opt = $.extend(opt, params);
     delete opt;
 
+    let self = this;
 
-    this.header = this.bsModal.find('.modal-header h4');
-    this.body = this.bsModal.find('.modal-body');
-    this.cancelButton = this.bsModal.find('.modal-footer .btn-default');
-    this.okButton = this.bsModal.find('.modal-footer .btn-success');
-    this.cross = this.bsModal.find('button.close');
+    this.header = self.bsModal.find('.modal-header h4');
+    this.body = self.bsModal.find('.modal-body');
+    this.cancelButton = self.bsModal.find('.modal-footer .btn-default');
+    this.okButton = self.bsModal.find('.modal-footer .btn-success');
+    this.cross = self.bsModal.find('button.close');
     this.loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
+
+
 
     this.header.html(header);
     this.body.html(this.opt.body);
