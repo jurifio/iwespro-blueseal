@@ -456,7 +456,7 @@ $.bsModal = function (header, params) {
     });
     this.bsModal.modal();
     //constructor end
-    this.trigger('modalBuild');
+    this.bsModal.trigger('modalBuild');
 
     this.writeHeader = function (header) {
         self.header.html(header);
