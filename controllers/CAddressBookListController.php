@@ -25,7 +25,7 @@ class CAddressBookListController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/order_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/address_book_list.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
