@@ -205,8 +205,6 @@ class CDocumentRepo extends ARepo
         \DateTime $creationDate = null
     )
     {
-        $docR = \Monkey::app()->repoFactory->create('Document');
-
         //date control
         if (!$creationDate) $creationDate = new \DateTime();
         $diff = $creationDate->diff($date);
@@ -223,11 +221,11 @@ class CDocumentRepo extends ARepo
         /** @var CInvoiceSectional $invoiceSectional */
 
         $invoiceWithNumber =
-            $docR->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
+            $this->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
         if ($invoiceWithNumber)
             throw new BambooInvoiceException('il numero della fattura è già presente nel nostro sistema e non può essere duplicato. id fattura: ' . $invoiceWithNumber->id);
 
-        $in = $docR->getEmptyEntity();
+        $in = $this->getEmptyEntity();
         $in->userId = $userId;
         if ($isShop) $in->shopRecipientId = $recipientOrEmitterId;
         else $in->userRecipientId = $recipientOrEmitterId;
@@ -770,6 +768,6 @@ class CDocumentRepo extends ARepo
                     AND date(d.paymentExpectedDate) <= date(ifnull(?,current_date)) 
                     ORDER BY d.paymentExpectedDate ASC ";
 
-        return $this->app->repoFactory->create('Document')->findBySql($sql, [STimeToolbox::DbFormattedDate($dueDate)]);
+        return $this->findBySql($sql, [STimeToolbox::DbFormattedDate($dueDate)]);
     }
 }
