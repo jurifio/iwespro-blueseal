@@ -389,16 +389,9 @@ let modalMock = '<div class="modal fade" id="bsModal" tabindex="-1" role="dialog
     '<button type="button" class="btn btn-success">Esegui</button>' +
     '</div></div></div></div>';
 
+/** FIXME questa cosa non è chiara, c'è già un costruttore della modale in bootstrap, un altro in prototype (mai chiamato) e questo */
 $.bsModal = function (header, params) {
     let self = this;
-
-    this.bsModal = $('#bsModal');
-    if(this.bsModal.length > 0) this.bsModal.replaceWith(modalMock);
-    else {
-        $(modalMock);
-        this.bsModal = $('#bsModal');
-    }
-
     if ('undefined' != typeof modal) {
         modal.hide();
         delete(modal);
@@ -425,12 +418,12 @@ $.bsModal = function (header, params) {
     this.opt = $.extend(opt, params);
     delete opt;
 
-
-    this.header = this.bsModal.find('.modal-header h4');
-    this.body = this.bsModal.find('.modal-body');
-    this.cancelButton = this.bsModal.find('.modal-footer .btn-default');
-    this.okButton = this.bsModal.find('.modal-footer .btn-success');
-    this.cross = this.bsModal.find('button.close');
+    this.bsModal = $('#bsModal');
+    this.header = $('#bsModal .modal-header h4');
+    this.body = $('#bsModal .modal-body');
+    this.cancelButton = $('#bsModal .modal-footer .btn-default');
+    this.okButton = $('#bsModal .modal-footer .btn-success');
+    this.cross = $('#bsModal button.close');
     this.loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
 
     this.header.html(header);
