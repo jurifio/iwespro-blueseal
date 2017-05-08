@@ -5,7 +5,6 @@ $(document).on('bs.shop.save', function () {
     data.title = $('#shop_title').val();
     data.owner = $('#shop_owner').val();
     data.referrerEmails = $('#shop_referrerEmails').val();
-    data.iban = $('#shop_iban').val();
     data.currentSeasonMultiplier = $('#shop_currentSeasonMultiplier').val();
     data.pastSeasonMultiplier = $('#shop_pastSeasonMultiplier').val();
     data.saleMultiplier = $('#shop_saleMultiplier').val();
@@ -256,6 +255,7 @@ function readShipment(containerSelector) {
     data.phone = element.find('#phone').val();
     data.cellphone = element.find('#cellphone').val();
     data.province = element.find('#province').val();
+    data.iban = element.find('#iban').val();
     return data;
 }
 
@@ -291,6 +291,7 @@ function appendShipment(data, containerSelector) {
                     element.find('#phone').val(data.phone);
                     element.find('#cellphone').val(data.cellphone);
                     element.find('#province').val(data.province);
+                    element.find('#iban').val(data.iban);
                 }
                 container.append(element);
             });

@@ -1657,6 +1657,16 @@
                 "GET",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/indirizzario(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CAddressBookListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

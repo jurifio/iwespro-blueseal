@@ -221,10 +221,11 @@ class CDataTables
 
     /**
      * Does the query and save the result
+     * @param bool $selectStar
      */
-    public function doAllTheThings()
+    public function doAllTheThings($selectStar = false)
     {
-        $this->responseSet['selectSql'] = $this->getQuery();
+        $this->responseSet['selectSql'] = $this->getQuery(false,$selectStar);
         $this->responseSet['selectParams'] = $this->getParams();
         $microtime = microtime(true);
         $this->responseSet ['data'] =

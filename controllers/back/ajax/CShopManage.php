@@ -50,7 +50,6 @@ class CShopManage extends AAjaxController
                 $shop->title = $shopData['title'];
                 $shop->owner = $shopData['owner'];
                 $shop->referrerEmails = $shopData['referrerEmails'];
-                $shop->iban = $shopData['iban'];
                 if ($this->app->getUser()->hasPermission('allShops')) {
                     $shop->currentSeasonMultiplier = $shopData['currentSeasonMultiplier'];
                     $shop->pastSeasonMultiplier = $shopData['pastSeasonMultiplier'];
@@ -128,6 +127,7 @@ class CShopManage extends AAjaxController
             $addressBook->phone = $addressBookData['phone'] ?? null;
             $addressBook->cellphone = $addressBookData['cellphone'] ?? null;
             $addressBook->province = $addressBookData['province'] ?? null;
+            $addressBook->iban = $addressBookData['iban'] ?? null;
 
             if (!isset($addressBook->id)) {
                 $addressBookC = $this->app->repoFactory->create('AddressBook')->findOneBy(['checksum' => $addressBook->calculateChecksum()]);

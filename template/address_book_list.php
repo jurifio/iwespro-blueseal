@@ -25,8 +25,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="job_list"
-                               data-controller="JobListAjaxController"
+                               data-datatable-name="address_book_list"
+                               data-controller="AddressBookListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500">
@@ -36,70 +36,37 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id
                                 </th>
-                                <th data-slug="scope"
-                                    data-searchable="true"
-                                    data-default-order="asc" data-orderable="true" class="center">Ambito
-                                </th>
                                 <th data-slug="name"
                                     data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Nome
+                                    data-orderable="true" class="center">Nome
                                 </th>
-                                <th data-slug="lastExecution"
+                                <th data-slug="subject"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Ultima Esecuzione
+                                    data-orderable="true" class="center">Soggetto
                                 </th>
-                                <th data-slug="isActive"
+                                <th data-slug="city"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Attivo
+                                    data-orderable="true" class="center">Città
                                 </th>
-                                <th data-slug="isRunning"
+                                <th data-slug="address"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">In esecuzione
+                                    data-orderable="true" class="center">Indirizzo
                                 </th>
-                                <th data-slug="manualStart"
+                                <th data-slug="vatNumber"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">In esecuzione Forzata
+                                    data-orderable="true" class="center">Vat
                                 </th>
-                                <th data-slug="manualKill"
+                                <th data-slug="billingShop"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">In Terminazione Forzata
+                                    data-orderable="true" class="center">Di fatturazione Per
                                 </th>
-                                <th data-slug="secondsToLive"
+                                <th data-slug="shippingShop"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Tempo di Vita
+                                    data-orderable="true" class="center">Di spedizione Per
                                 </th>
-                                <th data-slug="minute"
+                                <th data-slug="iban"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Minuti
-                                </th>
-                                <th data-slug="hour"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Ore
-                                </th>
-                                <th data-slug="mday"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Giorno del mese
-                                </th>
-                                <th data-slug="month"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Mese
-                                </th>
-                                <th data-slug="wday"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Giorno della Settimana
-                                </th>
-                                <th data-slug="isDebug"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Debug
-                                </th>
-                                <th data-slug="defaultArgs"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Argomenti di Default
-                                </th>
-                                <th data-slug="command"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Comando
+                                    data-orderable="true" class="center">IBAN
                                 </th>
                             </tr>
                             </thead>
@@ -116,10 +83,8 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione Job">
-        <bs-toolbar-button
-                data-remote="bs.job.start"
-        ></bs-toolbar-button>
+    <bs-toolbar-group data-group-label="Gestione Indirizzi">
+
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
