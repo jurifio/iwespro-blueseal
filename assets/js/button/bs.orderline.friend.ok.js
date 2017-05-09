@@ -112,7 +112,8 @@ $(document).on('bs.orderline.friend.ok', function () {
         $.ajax({
             url: '/blueseal/xhr/GetTableContent',
             data: {
-                table: 'Carrier'
+                table: 'Carrier',
+                condition: { isActive: 1 }
             },
             dataType: 'json'
         }).done(function (res) {
