@@ -211,7 +211,7 @@ class CDocumentRepo extends ARepo
             $note);
 
         foreach ($rows as $row) {
-            $this->addLineToInvoice($invoiceId,$row['description'],$row['price'],$rowsContainVat,$row['vat']);
+            $this->addLineToInvoice($invoiceId,$row['description'],$row['price'],$rowsContainVat,22);
         }
 
         $this->insertInvoiceBin($invoiceId, $filename,$fileUrl);

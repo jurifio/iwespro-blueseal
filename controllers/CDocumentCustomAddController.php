@@ -62,7 +62,7 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
             $data['number'],
             $data['note'] ?? "",
             $rows,
-            false,
+            true,
             $files['invoiceBin']['name'],
             $files['invoiceBin']['tmp_name']);
 

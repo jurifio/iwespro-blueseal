@@ -55,13 +55,6 @@
                                                        name="totalWithVat" required="required">
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default">
-                                                <label for="vat">IVA</label>
-                                                <input id="vat" class="form-control" required="required"
-                                                       placeholder="Iva" type="number" step="0.01" name="vat">
-                                            </div>
-                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="invoiceTypeId">Tipo Fattura</label>

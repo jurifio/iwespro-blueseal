@@ -88,20 +88,6 @@
     $(document).on('click', '#addInvoiceLine', function (e) {
         e.preventDefault();
         let mock = '<div class="row invoice-line" data-row-number="{{iterator}}">' +
-                        '<div class="col-xs-2">' +
-                            '<div class="form-group form-group-default">' +
-                                '<label for="row_{{iterator}}_priceNoVat">Prezzo senza Iva</label>' +
-                                '<input id="row_{{iterator}}_priceNoVat" class="form-control" placeholder="Prezzo Senza Iva" ' +
-                                        'name="row_{{iterator}}_priceNoVat" type="number" step="0.01" >' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="col-xs-2">' +
-                            '<div class="form-group form-group-default">' +
-                                '<label for="row_{{iterator}}_vat">Iva</label>' +
-                                '<input id="row_{{iterator}}_vat" class="form-control" placeholder="Iva" ' +
-                                        'name="row_{{iterator}}_vat" type="number" step="0.01" >' +
-                            '</div>' +
-                        '</div>' +
                         '<div class="col-xs-3">' +
                             '<div class="form-group form-group-default">' +
                                 '<label for="row_{{iterator}}_price">Totale Ivato</label>' +
@@ -162,3 +148,18 @@
     });
 
 })(jQuery);
+
+let old =                        '<div class="col-xs-2">' +
+    '<div class="form-group form-group-default">' +
+    '<label for="row_{{iterator}}_priceNoVat">Prezzo senza Iva</label>' +
+    '<input id="row_{{iterator}}_priceNoVat" class="form-control" placeholder="Prezzo Senza Iva" ' +
+    'name="row_{{iterator}}_priceNoVat" type="number" step="0.01" >' +
+    '</div>' +
+    '</div>' +
+    '<div class="col-xs-2">' +
+    '<div class="form-group form-group-default">' +
+    '<label for="row_{{iterator}}_vat">Iva</label>' +
+    '<input id="row_{{iterator}}_vat" class="form-control" placeholder="Iva" ' +
+    'name="row_{{iterator}}_vat" type="number" step="0.01" >' +
+    '</div>' +
+    '</div>';
