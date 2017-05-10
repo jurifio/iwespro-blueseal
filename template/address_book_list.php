@@ -84,7 +84,9 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione Indirizzi">
-
+        <bs-toolbar-button
+                data-remote="btn.add.addressBook"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

@@ -530,5 +530,8 @@ $.getDataTableSelectedRowData = function(tableSelector,colName,min,max) {
 $.refreshDataTable = function(tableSelector) {
     "use strict";
     if('undefined' == typeof tableSelector) tableSelector = '.table';
-    $(tableSelector).DataTable().ajax.reload(null, false);
+    let table = $(tableSelector);
+    if(table.length > 0){
+        table.DataTable().ajax.reload(null, false);
+    }
 };
