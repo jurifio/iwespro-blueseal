@@ -54,15 +54,19 @@ $(document).on('btn.add.addressBook', function (e, element, button) {
                 data.province = element.find('#province').val();
                 data.iban = element.find('#iban').val();
                 modal.showLoader();
+                modal.setOkEvent(function() {
+                    modal.hide();
+                });
+                modal.setCloseEvent(function () {
+                    $.refreshDataTable();
+                });
                 $.ajax({
                     method: 'post',
                     url: '/blueseal/xhr/AddressBookController',
                     data: data
                 }).done(function () {
                     modal.writeBody('Indirizzo inserito');
-                    modal.setCloseEvent(function () {
-                        $.refreshDataTable();
-                    });
+
                 });
                 return data;
             });

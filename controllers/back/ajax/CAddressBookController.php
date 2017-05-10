@@ -20,7 +20,8 @@ use bamboo\domain\entities\CAddressBook;
  */
 class CAddressBookController extends AAjaxController
 {
-    public function post() {
+    public function post()
+    {
         $addressBookData = $this->app->router->request()->getRequestData();
         $this->app->repoFactory->create('AddressBook');
 
@@ -48,13 +49,13 @@ class CAddressBookController extends AAjaxController
             $addressBook->province = $addressBookData['province'] ?? null;
             $addressBook->iban = $addressBookData['iban'] ?? null;
 
-            if(!isset($addressBook->id)) $addressBook->insert();
+            if (!isset($addressBook->id)) $addressBook->insert();
             else $addressBook->update();
 
         } catch (\Throwable $e) {
             return null;
         }
 
-        return json_encode($addressBook);
-    }
+return json_encode($addressBook);
+}
 }
