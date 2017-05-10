@@ -458,6 +458,10 @@ $.bsModal = function (header, params) {
         self.writeBody(self.loaderHtml);
     };
 
+    this.setCloseEvent = function(callback) {
+        self.bsModal.on('hidden.bs.modal',callback);
+    }
+
     this.writeBody = function (body) {
         self.body.html(body);
     };

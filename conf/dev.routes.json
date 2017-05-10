@@ -1668,6 +1668,17 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/fatture/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDocumentCustomAddController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST"
+            ]
         }
     ]
 }

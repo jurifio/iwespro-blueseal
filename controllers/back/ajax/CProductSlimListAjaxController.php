@@ -52,26 +52,19 @@ class CProductSlimListAjaxController extends AAjaxController
                 WHERE `pss`.`id` NOT IN (7, 8, 13)
                 GROUP BY `shp`.`productId`, `shp`.`productVariantId`, `shp`.`shopId`
                 ORDER BY `p`.`creationDate` DESC";
+
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         $datatable->addCondition('shopId', $shopsIds);
         if (!$allShops) $datatable->addLikeCondition('status', 'Fuso', true);
 
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-
-
+        $datatable->doAllTheThings();
         $okManage = $user->hasPermission('/admin/product/edit');
-
-        $response = [];
-        $response ['draw'] = $_GET['draw'];
-        $response ['recordsTotal'] = $totalCount;
-        $response ['recordsFiltered'] = $count;
-        $response ['data'] = [];
         $modifica = '/blueseal/friend/prodotti/modifica';
 
-        foreach ($prodotti as $val) {
-            $row = [];
+        $productRepo = $this->app->repoFactory->create('Product');
+        foreach ($datatable->getResponseSetData() as $key => $row) {
+
+            $val = $productRepo->findOneBy($row);
             /** @var CProduct $val */
             $row["DT_RowId"] = $val->printId();
             $row["DT_RowClass"] = 'colore';
@@ -170,8 +163,8 @@ class CProductSlimListAjaxController extends AAjaxController
 
             $row['status'] = $status;
             $row['creationDate'] = $val->creationDate;
-            $response['data'][] = $row;
+            $datatable->setResponseDataSetRow($key,$row);
         }
-        return json_encode($response);
+        return $datatable->responseOut();
     }
 }

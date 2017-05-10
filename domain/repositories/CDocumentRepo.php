@@ -177,6 +177,49 @@ class CDocumentRepo extends ARepo
     }
 
     /**
+     * insert a new custom document with file and rows
+     *
+     * @param int $invoiceTypeId
+     * @param int $userId
+     * @param int $recipientOrEmitterId
+     * @param \DateTime $date
+     * @param float $totalWithVat
+     * @param \DateTime $paymentExpectedDate
+     * @param string $number
+     * @param string $note
+     * @param array $rows
+     * @param $rowsContainVat
+     * @return \bamboo\core\db\pandaorm\entities\AEntity|null
+     */
+    public function storeNewCustomInvoice(
+        int $invoiceTypeId,
+        int $userId,
+        int $recipientOrEmitterId,
+        \DateTime $date,
+        float $totalWithVat,
+        \DateTime $paymentExpectedDate,
+        string $number,
+        string $note,
+        array $rows,
+        $rowsContainVat,
+        $filename,
+        $fileUrl
+    ) {
+
+        $invoiceId = $this->createInvoice($invoiceTypeId,$userId,true,$recipientOrEmitterId,$date,$totalWithVat,0,$paymentExpectedDate,
+            $number,
+            $note);
+
+        foreach ($rows as $row) {
+            $this->addLineToInvoice($invoiceId,$row['description'],$row['price'],$rowsContainVat,$row['vat']);
+        }
+
+        $this->insertInvoiceBin($invoiceId, $filename,$fileUrl);
+
+        return $this->findOne([$invoiceId]);
+    }
+
+    /**
      * @param $invoiceTypeId
      * @param int $userId
      * @param bool $isShop
@@ -248,11 +291,11 @@ class CDocumentRepo extends ARepo
 
     /**
      * @param int $invoiceId
-     * @param COrderLine|string $orderLine
-     * @param string $description
+     * @param $orderLine
      * @param float $price
      * @param bool $countainVat
-     * @param int|null $vat
+     * @param int $vat
+     * @return int|mixed
      */
     private function addOrderLineToInvoice(
         int $invoiceId,
@@ -287,6 +330,7 @@ class CDocumentRepo extends ARepo
      * @param float $price
      * @param bool $priceContainsVat
      * @param int $vat
+     * @return int|mixed
      */
     private function addLineToInvoice(
         int $invoiceId,
@@ -463,13 +507,23 @@ class CDocumentRepo extends ARepo
 
 
             if ($file) {
-                $ib = \Monkey::app()->repoFactory->create('InvoiceBin')->getEmptyEntity();
-                $ib->invoiceId = $insertedId;
-                $ib->fileName = $file['name'];
-                $ib->bin = file_get_contents($file['tmp_name']);
-                $ib->insert();
+                $this->insertInvoiceBin($insertedId,$file['name'],$file['tmp_name']);
             }
             return $insertedId;
+    }
+
+    /**
+     * @param $invoiceId
+     * @param $fineUrl
+     * @param $fileName
+     * @return int
+     */
+    private function insertInvoiceBin($invoiceId, $fineUrl,$fileName) {
+        $invoiceBin = \Monkey::app()->repoFactory->create('InvoiceBin')->getEmptyEntity();
+        $invoiceBin->invoiceId = $invoiceId;
+        $invoiceBin->fileName = $fileName;
+        $invoiceBin->bin = file_get_contents($fineUrl);
+        return $invoiceBin->insert();
     }
 
     public function storeFriendCreditNoteOnReturn(
