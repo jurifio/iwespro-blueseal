@@ -52,19 +52,24 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
             $rows[$val[1]][$val[2]] = $row;
         }
         $this->app->repoFactory->beginTransaction();
-        $documentId = $documentRepo->storeNewCustomInvoice(
-            (int) $data['invoiceTypeId'],
-            $this->app->getUser()->id,
-            (int) $data['shopRecipientId'],
-            STimeToolbox::GetDateTime($data['date']),
-            (float) $data['totalWithVat'],
-            STimeToolbox::GetDateTime($data['paymentExpectedDate']),
-            $data['number'],
-            $data['note'] ?? "",
-            $rows,
-            true,
-            $files['invoiceBin']['name'],
-            $files['invoiceBin']['tmp_name']);
+        try {
+            $documentId = $documentRepo->storeNewCustomInvoice(
+                (int) $data['invoiceTypeId'],
+                $this->app->getUser()->id,
+                (int) $data['shopRecipientId'],
+                STimeToolbox::GetDateTime($data['date']),
+                (float) $data['totalWithVat'],
+                STimeToolbox::GetDateTime($data['paymentExpectedDate']),
+                $data['number'],
+                $data['note'] ?? "",
+                $rows,
+                true,
+                $files['invoiceBin']['name'],
+                $files['invoiceBin']['tmp_name']);
+        } catch (\Throwable $e) {
+            $this->app->repoFactory->rollback();
+            throw $e;
+        }
 
         $this->app->repoFactory->commit();
     }

@@ -219,7 +219,7 @@ class CDocumentRepo extends ARepo
             $invoiceLine->insert();
         }
 
-        $this->insertInvoiceBin($invoiceId, $filename,$fileUrl);
+        $this->insertInvoiceBin($invoiceId, $fileUrl,$filename);
 
         return $this->findOne([$invoiceId]);
     }
