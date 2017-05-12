@@ -262,7 +262,7 @@ class CDataTables
     public function getQuery($count = false, $star = false)
     {
         $sqlSelect = $this->select($count, $star) . $this->from();
-        if ($count == 'full') {
+        if ($count === 'full') {
             $sqlSelect .= $this->where($count);
         } elseif ($count) {
             $sqlSelect .= $this->where($count);
@@ -333,7 +333,7 @@ class CDataTables
             $ingnobleCond = ' AND `' . $condition[0] . "` " . $not . " LIKE '" . $condition[1] . "'";
         }
         $columnsFilter = [];
-        if ($count != 'full') {
+        if ($count !== 'full') {
             foreach ($this->columns as $idx => $column) {
                 if ($column['searchable'] == true) {
                     if ($this->search) {
