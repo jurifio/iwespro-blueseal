@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -26,48 +27,32 @@ class CPaymentBillListAjaxController extends AAjaxController
     {
         $response = [];
 
-        $sql = "SELECT pb.id, 
-                       pb.amount as total, 
-                       pb.creationDate, 
-                       pb.paymentDate, 
-                       pb.submissionDate, 
-                       pb.note,
-                       count(distinct inn.shopRecipientId) as transfers,
-                       group_concat(s.title) as recipients,
-                       group_concat(inn.number) as invoices,
-                       group_concat(ab.subject)
-                from PaymentBill pb 
-                      JOIN PaymentBillHasInvoiceNew pbhin on pb.id = pbhin.paymentBillId 
-                      JOIN Document inn on pbhin.invoiceNewId = inn.id
-                      JOIN Shop s on inn.shopRecipientId = s.id  
-                      JOIN InvoiceType it on inn.invoiceTypeId = it.id
-                      JOIN AddressBook ab on shopRecipientId = ab.id
-                  GROUP BY pb.id";
+        $sql = "SELECT pb.id,
+                  pb.amount AS total,
+                  pb.creationDate,
+                  pb.paymentDate,
+                  pb.submissionDate,
+                  pb.note,
+                  count(DISTINCT inn.shopRecipientId) AS transfers,
+                  group_concat(DISTINCT s.title) AS recipients,
+                  group_concat(DISTINCT inn.number) AS invoices,
+                  group_concat(DISTINCT ab.subject)
+                FROM PaymentBill pb
+                  JOIN PaymentBillHasInvoiceNew pbhin ON pb.id = pbhin.paymentBillId
+                  JOIN Document inn ON pbhin.invoiceNewId = inn.id
+                  JOIN Shop s ON inn.shopRecipientId = s.billingAddressBookId
+                  JOIN InvoiceType it ON inn.invoiceTypeId = it.id
+                  JOIN AddressBook ab ON inn.shopRecipientId = ab.id
+                GROUP BY pb.id";
 
-        $datatable = new CDataTables($sql, ['id'], $_GET,true);
+        $datatable = new CDataTables($sql, ['id'], $_GET, true);
+        $datatable->doAllTheThings();
 
-        $time = microtime(true);
-        $paymentBills = $this->app->repoFactory->create('PaymentBill')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
-        $response['queryTime'] = microtime(true) - $time;
+        $paymentBillRepo = $this->app->repoFactory->create('PaymentBill');
 
-        $time = microtime(true);
-        $count = $this->app->repoFactory->create('PaymentBill')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $response['countTime'] = microtime(true) - $time;
-
-        $time = microtime(true);
-        $totalCount = $this->app->repoFactory->create('PaymentBill')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-        $response['fullCountTime'] = microtime(true) - $time;
-
-
-        $response ['draw'] = $_GET['draw'];
-        $response ['recordsTotal'] = $totalCount;
-        $response ['recordsFiltered'] = $count;
-        $response ['data'] = [];
-
-        $time = microtime(true);
-        /** @var CPaymentBill $paymentBill */
-        foreach ($paymentBills as $paymentBill) {
-            $row = [];
+        foreach ($datatable->getResponseSetData() as $key => $row) {
+            /** @var CPaymentBill $paymentBill */
+            $paymentBill = $paymentBillRepo->findOneBy($row);
 
             $row["DT_RowId"] = $paymentBill->printId();
             $row["DT_RowClass"] = 'colore';
@@ -77,29 +62,29 @@ class CPaymentBillListAjaxController extends AAjaxController
                 $name = $payment[0]->shopAddressBook->subject;
                 $total = 0;
                 foreach ($payment as $invoice) {
-                    $total+=$invoice->getSignedValueWithVat(true);
+                    $total += $invoice->getSignedValueWithVat(true);
                 }
-                $rec[] = $name.': '.$total;
+                $rec[] = $name . ': ' . $total;
 
             }
             $row['total'] = $paymentBill->getTotal();
-            $row['recipients'] = implode('<br />',$rec);
+            $row['recipients'] = implode('<br />', $rec);
 
             $inv = [];
             foreach ($paymentBill->document as $invoice) {
-                if($invoice->getSignedValueWithVat() < 0) $color = "text-green";
-                elseif($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
+                if ($invoice->getSignedValueWithVat() < 0) $color = "text-green";
+                elseif ($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
                 else $color = "";
-                $inv[] = '<span class="'.$color.'">'.$invoice->shopAddressBook->shop->name.' - '.$invoice->number.': '.$invoice->getSignedValueWithVat().' ('.$invoice->calculateOurTotal().')</span>';
+                $inv[] = '<span class="' . $color . '">' . $invoice->shopAddressBook->shop->name . ' - ' . $invoice->number . ': ' . $invoice->getSignedValueWithVat() . ' (' . $invoice->calculateOurTotal() . ')</span>';
             }
-            $row['invoices'] = implode('<br />',$inv);
-            $row['paymentDate'] = STimeToolbox::FormatDateFromDBValue($paymentBill->paymentDate,STimeToolbox::ANGLO_DATE_FORMAT);
+            $row['invoices'] = implode('<br />', $inv);
+            $row['paymentDate'] = STimeToolbox::FormatDateFromDBValue($paymentBill->paymentDate, STimeToolbox::ANGLO_DATE_FORMAT);
             $row['creationDate'] = $paymentBill->creationDate;
             $row['submissionDate'] = $paymentBill->submissionDate ?? 'Non Sottomessa';
             $row['note'] = $paymentBill->note;
-            $response ['data'][] = $row;
+            $datatable->setResponseDataSetRow($key, $row);
         }
-        $response['resTime'] = microtime(true) - $time;
-        return json_encode($response);
+
+        return $datatable->responseOut();
     }
 }

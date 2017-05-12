@@ -526,3 +526,12 @@ $.getDataTableSelectedRowData = function(tableSelector,colName,min,max) {
     "use strict";
     return $.getDataTableSelectedRowsData(tableSelector,colName,1,1)[0];
 };
+
+$.refreshDataTable = function(tableSelector) {
+    "use strict";
+    if('undefined' == typeof tableSelector) tableSelector = '.table';
+    let table = $(tableSelector);
+    if(table.length > 0){
+        table.DataTable().ajax.reload(null, false);
+    }
+};

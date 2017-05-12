@@ -21,6 +21,10 @@ class CDataTables
 {
     use TMySQLTimestamp;
     /**
+     * @var array
+     */
+    public $responseSet = [];
+    /**
      * @var string
      */
     protected $table;
@@ -82,11 +86,6 @@ class CDataTables
     protected $isSubQuery;
 
     /**
-     * @var array
-     */
-    public $responseSet = [];
-
-    /**
      * CDataTables constructor.
      * @param $table
      * @param array $keys
@@ -114,6 +113,76 @@ class CDataTables
         $this->readOrder($dtData['order']);
         $this->readSearch($dtData);
         $this->readLimits($dtData);
+    }
+
+    /**
+     * @param $columns
+     */
+    protected function readColumns($columns)
+    {
+        foreach ($columns as $column) {
+            $key = (isset($column['name']) && $column['name'] != '') ? $column['name'] : $column['data'];
+            $this->createColumn($key, $column['orderable'], $column['searchable'], null, null, $column['search']['value']);
+        }
+    }
+
+    /**
+     * @param $column
+     * @param bool $sortable
+     * @param bool $searchable
+     * @param null $search
+     * @param null $permission
+     * @param null $filter
+     */
+    protected function createColumn($column, $sortable = true, $searchable = true, $search = null, $permission = null, $filter = null)
+    {
+        $this->columns[] = ["name" => $column, "sortable" => filter_var($sortable, FILTER_VALIDATE_BOOLEAN), "searchable" => filter_var($searchable, FILTER_VALIDATE_BOOLEAN), "search" => $search, "permission" => $permission, "filter" => $filter];
+    }
+
+    /**
+     * @param $orders
+     */
+    protected function readOrder($orders)
+    {
+        foreach ($orders as $order) {
+            $this->orders[] = ['column' => $this->columns[$order['column']]['name'], 'dir' => !empty($order['dir']) ? $order['dir'] : 'asc'];
+        }
+    }
+
+    /**
+     * @param $dtData
+     */
+    protected function readSearch($dtData)
+    {
+        if (isset($dtData['search']) && isset($dtData['search']['value']) && !empty($dtData['search']['value'])) {
+            $this->rawSearch = $dtData['search']['value'];
+            $this->search = $this->likeSearch($dtData['search']['value']);
+//            if(value inizia per '-') aallora addcondition (not value)
+        }
+    }
+
+    /**
+     * @param $string
+     * @param bool $startWith
+     * @return string
+     */
+    protected function likeSearch($string, $startWith = true)
+    {
+        if (!$startWith) {
+            $string = ".*" . $string;
+        }
+        //$string = str_replace('.','\.', $string);
+        //$string = str_replace('*','.*', $string);
+        return $string;//$string.".*";
+    }
+
+    /**
+     * @param $dtData
+     */
+    protected function readLimits($dtData)
+    {
+        $this->limit = isset($dtData['length']) ? $dtData['length'] : false;
+        $this->offset = isset($dtData['start']) ? $dtData['start'] : 0;
     }
 
     /**
@@ -151,6 +220,41 @@ class CDataTables
     }
 
     /**
+     * Does the query and save the result
+     * @param bool $selectStar
+     */
+    public function doAllTheThings($selectStar = false)
+    {
+        $this->responseSet['selectSql'] = $this->getQuery(false,$selectStar);
+        $this->responseSet['selectParams'] = $this->getParams();
+        $microtime = microtime(true);
+        $this->responseSet ['data'] =
+            \Monkey::app()->dbAdapter->query(
+                $this->responseSet['selectSql'],
+                $this->responseSet['selectParams'], true)->fetchAll();
+        $this->responseSet['selectTime'] = microtime(true) - $microtime;
+
+
+        $this->responseSet['countSql'] = $this->getQuery(true);
+        $this->responseSet['countParams'] = $this->getParams();
+        $microtime = microtime(true);
+        $this->responseSet ['recordsFiltered'] =
+            \Monkey::app()->dbAdapter->query(
+                $this->responseSet['countSql'],
+                $this->responseSet['countParams'],true)->fetch()['conto'] ?? 0;
+        $this->responseSet['countTime'] = microtime(true) - $microtime;
+
+        $this->responseSet['fullCountSql'] = $this->getQuery('full');
+        $this->responseSet['fullCountParams'] = $this->getParams();
+        $microtime = microtime(true);
+        $this->responseSet ['recordsTotal'] =
+            \Monkey::app()->dbAdapter->query(
+                $this->responseSet['fullCountSql'],
+                $this->responseSet['fullCountParams'],true)->fetch()['conto'] ?? 0;
+        $this->responseSet['fullCountTime'] = microtime(true) - $microtime;
+    }
+
+    /**
      * @param bool $count
      * @param bool $star
      * @return string
@@ -160,35 +264,13 @@ class CDataTables
         $sqlSelect = $this->select($count, $star) . $this->from();
         if ($count == 'full') {
             $sqlSelect .= $this->where($count);
-            $this->responseSet['fullCountSql'] = $sqlSelect;
-            $this->responseSet['fullCountParams'] = $this->getParams();
         } elseif ($count) {
             $sqlSelect .= $this->where($count);
-            $this->responseSet['countSql'] = $sqlSelect;
-            $this->responseSet['countParams'] = $this->getParams();
         } else {
             $sqlSelect .= $this->where(false) . $this->groupBy() . $this->orderBy() . $this->limit();
-            $this->responseSet['selectSql'] = $sqlSelect;
-            $this->responseSet['selectParams'] = $this->getParams();
+
         }
         return $sqlSelect;
-    }
-
-    /**
-     * @return array
-     */
-    public function getParams()
-    {
-        return $this->params;
-    }
-
-    /**
-     * @param bool|false $count
-     * @return array
-     */
-    public function buildQuery($count = false)
-    {
-        return ["query" => $this->getQuery($count), "params" => $this->getParams()];
     }
 
     /**
@@ -205,8 +287,20 @@ class CDataTables
             $keys = "DISTINCT " . implode(',', $this->keys);
         }
 
-        return $count ? "SELECT COUNT( {$keys} ) " : "SELECT {$keys} ";
+        return $count ? "SELECT COUNT( {$keys} ) as conto " : "SELECT {$keys} ";
 
+    }
+
+    /**
+     * @param array $fields
+     * @throws \Throwable
+     */
+    public function addGroup($fields = [])
+    {
+        if (!is_array($fields)) throw new \Exception('Il parametro Fields deve essere un array');
+        foreach ($fields as $v) {
+            $this->group[] = $v;
+        }
     }
 
     /**
@@ -218,23 +312,13 @@ class CDataTables
     }
 
     /**
-     *
-     */
-    public function reset()
-    {
-        $this->where = "";
-        $this->params = [];
-    }
-
-    /**
      * @param bool $count
      * @return string
      */
     protected function where($count = false)
     {
-        if (!empty($this->where)) {
-            return $this->where;
-        }
+        $this->where = "";
+        $this->params = [];
         $conditions = [];
         $search = [];
         foreach ($this->conditions as $condition) {
@@ -368,33 +452,6 @@ class CDataTables
     }
 
     /**
-     * @param $string
-     * @param bool $startWith
-     * @return string
-     */
-    protected function likeSearch($string, $startWith = true)
-    {
-        if (!$startWith) {
-            $string = ".*" . $string;
-        }
-        //$string = str_replace('.','\.', $string);
-        //$string = str_replace('*','.*', $string);
-        return $string;//$string.".*";
-    }
-
-    /**
-     * @param array $fields
-     * @throws \Throwable
-     */
-    public function addGroup($fields = [])
-    {
-        if (!is_array($fields)) throw new \Exception('Il parametro Fields deve essere un array');
-        foreach ($fields as $v) {
-            $this->group[] = $v;
-        }
-    }
-
-    /**
      * @return string
      */
     protected function groupBy()
@@ -441,58 +498,40 @@ class CDataTables
     }
 
     /**
-     * @param $columns
+     * @return array
      */
-    protected function readColumns($columns)
+    public function getParams()
     {
-        foreach ($columns as $column) {
-            $key = (isset($column['name']) && $column['name'] != '') ? $column['name'] : $column['data'];
-            $this->createColumn($key, $column['orderable'], $column['searchable'], null, null, $column['search']['value']);
-        }
+        return $this->params;
+    }
+
+    public function getResponseSetData()
+    {
+        $this->responseSet['initTime'] = microtime(true);
+        return $this->responseSet['data'];
+    }
+
+    public function setResponseDataSetRow($rowNum, $value)
+    {
+        $this->responseSet['data'][$rowNum] = $value;
     }
 
     /**
-     * @param $orders
+     * @param bool|false $count
+     * @return array
      */
-    protected function readOrder($orders)
+    public function buildQuery($count = false)
     {
-        foreach ($orders as $order) {
-            $this->orders[] = ['column' => $this->columns[$order['column']]['name'], 'dir' => !empty($order['dir']) ? $order['dir'] : 'asc'];
-        }
+        return ["query" => $this->getQuery($count), "params" => $this->getParams()];
     }
 
     /**
-     * @param $dtData
+     *
      */
-    protected function readSearch($dtData)
+    public function reset()
     {
-        if (isset($dtData['search']) && isset($dtData['search']['value']) && !empty($dtData['search']['value'])) {
-            $this->rawSearch = $dtData['search']['value'];
-            $this->search = $this->likeSearch($dtData['search']['value']);
-//            if(value inizia per '-') aallora addcondition (not value)
-        }
-    }
-
-    /**
-     * @param $dtData
-     */
-    protected function readLimits($dtData)
-    {
-        $this->limit = isset($dtData['length']) ? $dtData['length'] : false;
-        $this->offset = isset($dtData['start']) ? $dtData['start'] : 0;
-    }
-
-    /**
-     * @param $column
-     * @param bool $sortable
-     * @param bool $searchable
-     * @param null $search
-     * @param null $permission
-     * @param null $filter
-     */
-    protected function createColumn($column, $sortable = true, $searchable = true, $search = null, $permission = null, $filter = null)
-    {
-        $this->columns[] = ["name" => $column, "sortable" => filter_var($sortable, FILTER_VALIDATE_BOOLEAN), "searchable" => filter_var($searchable, FILTER_VALIDATE_BOOLEAN), "search" => $search, "permission" => $permission, "filter" => $filter];
+        $this->where = "";
+        $this->params = [];
     }
 
     /**
@@ -505,6 +544,10 @@ class CDataTables
 
     public function responseOut()
     {
+        if(!isset($this->responseSet['resTime']) && isset($this->responseSet['initTime'])) {
+            $this->responseSet['resTime'] = microtime(true) - $this->responseSet['initTime'];
+            unset( $this->responseSet['initTime']);
+        }
         return json_encode($this->responseSet);
     }
 }

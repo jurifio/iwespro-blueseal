@@ -96,20 +96,6 @@ class CProductListAjaxController extends AAjaxController
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $datatable->addCondition('shopId', $shopIds);
 
-        $dataTableQuery = $datatable->getQuery();
-        $dataTableParams = $datatable->getParams();
-        $time = microtime(true);
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($dataTableQuery, $dataTableParams);
-        $datatable->responseSet['selectTime'] = microtime(true) - $time;
-
-        $time = microtime(true);
-        $response ['recordsFiltered'] = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $datatable->responseSet['countTime'] = microtime(true) - $time;
-
-        $time = microtime(true);
-        $datatable->responseSet['recordsTotal'] = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-        $datatable->responseSet['fullCountTime'] = microtime(true) - $time;
-
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99', '');
 
@@ -119,13 +105,13 @@ class CProductListAjaxController extends AAjaxController
         }
 
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
-
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
+        $productRepo = $this->app->repoFactory->create('Product');
+        $datatable->doAllTheThings();
 
-        $time = microtime(true);
-        /** @var $val CProduct */
-        foreach ($prodotti as $val) {
-            $row = [];
+        foreach ($datatable->getResponseSetData() as $key=>$row) {
+            /** @var $val CProduct */
+            $val = $productRepo->findOneBy($row);
 
             $row["DT_RowId"] = $val->printId();
             $row["DT_RowClass"] = 'colore';
@@ -199,9 +185,8 @@ class CProductListAjaxController extends AAjaxController
             $row['isOnSale'] = $val->isOnSale();
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
 
-            $datatable->responseSet ['data'][] = $row;
+            $datatable->setResponseDataSetRow($key,$row);
         }
-        $datatable->responseSet['resTime'] = microtime(true) - $time;
         return $datatable->responseOut();
     }
 }

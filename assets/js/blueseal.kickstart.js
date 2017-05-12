@@ -373,6 +373,23 @@ $.fn.humanized = function (method, data) {
     return methods[method](data);
 };
 
+let modalMock = '<div class="modal fade" id="bsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">' +
+    '<div class="modal-dialog" role="document">' +
+    '<div class="modal-content">' +
+    '<div class="modal-header">' +
+    '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+    '<span aria-hidden="true">&times;</span>' +
+    '</button>' +
+    '<h4 class="modal-title" id="myModalLabel">Modal title</h4>' +
+    '</div>' +
+    '<div class="modal-body">' +
+    '<img src="/assets/img/ajax-loader.gif" /></div>' +
+    '<div class="modal-footer">' +
+    '<button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>' +
+    '<button type="button" class="btn btn-success">Esegui</button>' +
+    '</div></div></div></div>';
+
+/** FIXME questa cosa non è chiara, c'è già un costruttore della modale in bootstrap, un altro in prototype (mai chiamato) e questo */
 $.bsModal = function (header, params) {
     let self = this;
     if ('undefined' != typeof modal) {
@@ -439,6 +456,10 @@ $.bsModal = function (header, params) {
 
     this.showLoader = function() {
         self.writeBody(self.loaderHtml);
+    };
+
+    this.setCloseEvent = function(callback) {
+        self.bsModal.on('hidden.bs.modal',callback);
     };
 
     this.writeBody = function (body) {

@@ -54,6 +54,7 @@ class COrderAddController extends ARestrictedAccessRootController
 
             $cartRepo->setCouponCodeToCart($data['coupon']);
 
+            $cart->refresh();
             $order = $cartRepo->customCartToOrder($cart);
             if(!$order) throw new BambooException('Errorissimo nel trasformare l\'ordine');
 

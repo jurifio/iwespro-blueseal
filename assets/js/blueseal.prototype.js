@@ -3,6 +3,10 @@ String.prototype.replaceAll = function (search, replacement) {
     return target.replace( (new RegExp(search, 'g')) , replacement);
 };
 
+Number.prototype.toDecimal = function() {
+    return parseFloat(+Math.round(this.toString() + "e+2")  + "e-2");
+};
+
 function b64DecodeUnicode(str) {
     return decodeURIComponent(atob(str).split('').map(function(c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);

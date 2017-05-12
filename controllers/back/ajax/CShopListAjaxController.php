@@ -53,7 +53,7 @@ class CShopListAjaxController extends AAjaxController
                 $users[] = $user->email;
             }
             $row['users'] = implode('<br />',$users);
-            $row['iban'] = $shop->iban;
+            $row['iban'] = $shop->billingAddressBook ? $shop->billingAddressBook->iban : null ;
 
             $response['data'][] = $row;
         }

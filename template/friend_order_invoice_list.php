@@ -46,7 +46,7 @@
                                 <th data-slug="documentType"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center dataFilterType">Tipo Documento</th>
+                                    class="center">Tipo Documento</th>
                                 <th data-slug="invoiceDate"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -54,23 +54,23 @@
                                 <th data-slug="invoiceNumber"
                                     data-searchable="true"
                                     data-orderable="true" class="center">N. Fat.</th>
-                                <th data-slug="invoiceTotalAmount"
+                                <th data-slug="invoiceCalculatedTotal"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Imp. da Ord.</th>
-                                <th data-slug="invoiceCalculatedTotal"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Imp. da Friend</th>
+                                <th data-slug="invoiceTotalAmount"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Imp. da Friend</th>
                                 <th data-slug="paymentExpectedDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data Previsto Pagamento</th>
+                                    data-orderable="true" class="center dataFilterType">Data Previsto Pagamento</th>
                                 <?php if ($allShops) : ?>
                                 <th data-slug="paymentDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data Pagamento</th>
-                                <?php endif;?>
+                                    data-orderable="true" class="center dataFilterType">Data Pagamento</th>
                                 <th data-slug="paymentBill"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Distinta Pagamento</th>
+                                <?php endif;?>
                             </tr>
                             </thead>
                             <tbody>
@@ -120,6 +120,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.friend.order.invoice.download"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.invoice.split"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
