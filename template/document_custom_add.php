@@ -49,8 +49,24 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default">
-                                                <label for="totalWithVat">Totale con iva</label>
-                                                <input id="totalWithVat" class="form-control"
+                                                <label for="total">Totale</label>
+                                                <input id="total" disabled="disabled" class="form-control"
+                                                       placeholder="Totale" type="number" step="0.01"
+                                                       name="total" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default">
+                                                <label for="vat">Vat</label>
+                                                <input id="vat" disabled="disabled" class="form-control"
+                                                       placeholder="Iva" type="number" step="0.01"
+                                                       name="vat" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default">
+                                                <label for="totalWithVat">Totale Con Iva</label>
+                                                <input id="totalWithVat" disabled="disabled" class="form-control"
                                                        placeholder="Totale" type="number" step="0.01"
                                                        name="totalWithVat" required="required">
                                             </div>

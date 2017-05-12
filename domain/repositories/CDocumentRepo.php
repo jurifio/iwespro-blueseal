@@ -211,7 +211,12 @@ class CDocumentRepo extends ARepo
             $note);
 
         foreach ($rows as $row) {
-            $this->addLineToInvoice($invoiceId,$row['description'],$row['price'],$rowsContainVat,22);
+            $invoiceLine = \Monkey::app()->repoFactory->create('InvoiceLine')->getEmptyEntity();
+            $invoiceLine->invoiceId = $invoiceId;
+            $invoiceLine->priceNoVat = $row['priceNoVat'];
+            $invoiceLine->vat = $row['vat'];
+            $invoiceLine->description = $row['description'];
+            $invoiceLine->insert();
         }
 
         $this->insertInvoiceBin($invoiceId, $filename,$fileUrl);

@@ -4,6 +4,10 @@
 (function ($) {
     "use strict";
     let addressSelect = $("#shopRecipientId");
+
+    let rowContainer = $('#invoiceLineContainer');
+    let headContainer = $('#invoiceHeadContainer');
+
     $.ajax({
         url: '/blueseal/xhr/GetTableContent',
         data: {
@@ -84,33 +88,48 @@
     $(document).on('click', ".removeRow",function (e) {
         e.preventDefault();
         $(this).closest('.row.invoice-line').remove();
+        updatePrices();
     });
     $(document).on('click', '#addInvoiceLine', function (e) {
         e.preventDefault();
         let mock = '<div class="row invoice-line" data-row-number="{{iterator}}">' +
+                        '<div class="col-xs-2">' +
+                            '<div class="form-group form-group-default">' +
+                                '<label for="row_{{iterator}}_priceNoVat">Prezzo senza Iva</label>' +
+                                '<input id="row_{{iterator}}_priceNoVat" class="form-control priceNoVat" placeholder="Prezzo Senza Iva" ' +
+                                    'name="row_{{iterator}}_priceNoVat" type="number" step="0.01" >' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="col-xs-2">' +
+                            '<div class="form-group form-group-default">' +
+                                '<label for="row_{{iterator}}_vat">Iva</label>' +
+                                '<input id="row_{{iterator}}_vat" class="form-control vat" placeholder="Iva" ' +
+                                    'name="row_{{iterator}}_vat" type="number" step="0.01" >' +
+                            '</div>' +
+                        '</div>' +
                         '<div class="col-xs-3">' +
                             '<div class="form-group form-group-default">' +
                                 '<label for="row_{{iterator}}_price">Totale Ivato</label>' +
-                                '<input id="row_{{iterator}}_price" class="form-control" placeholder="Totale Ivato" ' +
-                                        'name="row_{{iterator}}_price" type="number" step="0.01" >' +
+                                '<input id="row_{{iterator}}_price" class="form-control price" placeholder="Totale Ivato" ' +
+                                        'name="row_{{iterator}}_price" disabled="disabled" type="number" step="0.01" >' +
                             '</div>' +
                         '</div>' +
                         '<div class="col-xs-4">' +
                             '<div class="form-group form-group-default">' +
-                                '<label for="row_{{iterator}}_descrition">Descrizione</label>' +
-                                '<input id="row_{{iterator}}_descrition" class="form-control" placeholder="Descrizione" ' +
-                                        'name="row_{{iterator}}_descrition" type="text">' +
+                                '<label for="row_{{iterator}}_description">Descrizione</label>' +
+                                '<input id="row_{{iterator}}_description" class="form-control" placeholder="Descrizione" ' +
+                                        'name="row_{{iterator}}_description" type="text">' +
                             '</div>' +
                         '</div>' +
                         '<div class="col-xs-1">' +
                             '<a href="#" class="removeRow"><i class="fa fa-times-circle-o fa-2x" aria-hidden="true"></i></a>' +
                         '</div>' +
                     '</div>';
-        let container = $('#invoiceLineContainer');
-        let number = container.find('.invoice-line:last').data('rowNumber');
+
+        let number = rowContainer.find('.invoice-line:last').data('rowNumber');
         if(typeof number === 'undefined') number = 0;
         else number++;
-        container.append($(mock.replaceAll('{{iterator}}',number)));
+        rowContainer.append($(mock.replaceAll('{{iterator}}',number)));
     });
 
     $(document).on('bs.newInvoice.save',function() {
@@ -119,7 +138,14 @@
         if(formElement.valid() === false) {
             return false;
         }
+        let disabled = formElement.find('input:disabled');
+        disabled.each(function () {
+            $(this).prop('disabled',false);
+        });
         let form = new FormData(formElement[0]);
+        disabled.each(function () {
+            $(this).prop('disabled','disabled');
+        });
         //let formElement = document.querySelector("form");
         let modal = new $.bsModal('Salva Fattura', {
             body: 'Sei sicuro di voler inserire questa fattura?',
@@ -146,6 +172,31 @@
             });
         });
     });
+    let updatePrices = function () {
+        let price = 0;
+        let vat = 0;
+        rowContainer.find('.invoice-line').each(function() {
+            let singlePrice = parseFloat($(this).find('.priceNoVat').eq(0).val());
+            let singleVat = parseFloat($(this).find('.vat').eq(0).val());
+            price += singlePrice;
+            if($(this).find('.vat').eq(0).hasClass('manually') === false) {
+                singleVat = singlePrice / 100 * 22;
+                singleVat = singleVat.toDecimal();
+                $(this).find('.vat').eq(0).val(singleVat);
+            }
+            vat += singleVat;
+            $(this).find('.price').eq(0).val(singlePrice + singleVat);
+        });
+
+        headContainer.find('#total').val(price);
+        headContainer.find('#vat').val(vat);
+        headContainer.find('#totalWithVat').val(price+vat);
+    };
+    rowContainer.on("keyup",".priceNoVat, .vat", updatePrices);
+    rowContainer.on("keydown",".vat", function() {
+        $(this).addClass('manually');
+    });
+
 
 })(jQuery);
 
