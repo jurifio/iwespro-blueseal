@@ -21,17 +21,18 @@ class CDocumentRepo extends ARepo
 {
     /**
      * @param int $userId
-     * @param int $shopId
+     * @param int $billingAddressBookId
      * @param \DateTime $emissionDate
-     * @param \DateTime $paymentExpectedDate
+     * @param null $paymentExpectedDate
      * @param $paidAmount
      * @param string $number
-     * @param string $filePath
+     * @param array $orderLines
+     * @param $file
+     * @param null $totalWithVat
      * @param string|null $note
+     * @return int|mixed
      * @throws BambooException
      * @throws BambooInvoiceException
-     *
-     * @transaction
      */
     public function storeFriendInvoiceWithFile(
         int $userId,
@@ -425,7 +426,7 @@ class CDocumentRepo extends ARepo
     public function getNewNumber($entity, $invoiceType, $year)
     {
         if ('Shop' === $entity->getEntityName()) $addressBook = $entity->billingAddressBook;
-        elseif ('AddressBook' === $entity->getEntityNam()) $addressBook = $entity;
+        elseif ('AddressBook' === $entity->getEntityName()) $addressBook = $entity;
         if (!$addressBook)
             throw new BambooInvoiceException('Nel sistema non è presente un indirizzo di fatturazione associato a questo Friend');
         if (is_string($invoiceType)) $invoiceType = \Monkey::app()->repoFactory->create('invoiceType')->findOne([$invoiceType]);
