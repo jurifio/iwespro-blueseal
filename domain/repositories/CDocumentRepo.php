@@ -7,6 +7,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CDocument;
+use bamboo\domain\entities\CInvoiceNumber;
 use bamboo\domain\entities\CInvoiceSectional;
 use bamboo\domain\entities\CInvoiceType;
 use bamboo\utils\price\SPriceToolbox;
@@ -420,7 +421,7 @@ class CDocumentRepo extends ARepo
      * @param $entity
      * @param $invoiceType
      * @param $year
-     * @return \bamboo\core\db\pandaorm\entities\AEntity
+     * @return CInvoiceNumber
      * @throws BambooInvoiceException
      */
     public function getNewNumber($entity, $invoiceType, $year)
@@ -434,7 +435,12 @@ class CDocumentRepo extends ARepo
             ['shopRecipientId' => $addressBook->id, 'invoiceTypeId' => $invoiceType->id]
         );
         if (!$is) throw new BambooInvoiceException('Non ho trovato nessun sezionale per questa fattura');
-        $res = \Monkey::app()->dbAdapter->query('SELECT (max(invoiceNumber) + 1) AS `number` FROM `InvoiceNumber` AS `in` JOIN `InvoiceSectional` AS `is` ON `is`.id = `in`.invoiceSectionalId WHERE invoiceSectionalId = ? AND year = ?', [$is->id, $year])->fetch();
+        $res = \Monkey::app()->dbAdapter->query('SELECT (max(invoiceNumber) + 1) AS `number` 
+                                                        FROM `InvoiceNumber` AS `in` 
+                                                          JOIN `InvoiceSectional` AS `is` ON `is`.id = `in`.invoiceSectionalId 
+                                                        WHERE invoiceSectionalId = ? AND 
+                                                              year = ?', [$is->id, $year])->fetch();
+        /** @var CInvoiceNumber $in */
         $in = \Monkey::app()->repoFactory->create('InvoiceNumber')->getEmptyEntity();
         if (!$res['number']) {
             $in->invoiceNumber = 1;
