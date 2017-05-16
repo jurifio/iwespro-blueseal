@@ -146,6 +146,17 @@
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-file-text-o"
+                data-permission="/admin/order/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.document.preview"
+                data-title="Anteprima Fattura"
+                data-placement="bottom"
+                data-href="#"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

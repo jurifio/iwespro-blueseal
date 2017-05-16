@@ -11,12 +11,6 @@ window.buttonSetup = {
 };
 
 $(document).on('bs.lists.generate.csv', function (e, element, button) {
-
-    String.prototype.replaceAll = function(search, replacement) {
-        var target = this;
-        return target.split(search).join(replacement);
-    };
-
     var table = $('.table');
 
     modal = new $.bsModal(

@@ -7,7 +7,7 @@
 
     let rowContainer = $('#invoiceLineContainer');
     let headContainer = $('#invoiceHeadContainer');
-
+    let addressBooks = [];
     $.ajax({
         url: '/blueseal/xhr/GetTableContent',
         data: {
@@ -15,6 +15,7 @@
         },
         dataType: 'json'
     }).done(function (res) {
+        addressBooks = res;
         if (addressSelect.length > 0 && typeof addressSelect[0].selectize != 'undefined') addressSelect[0].selectize.destroy();
         addressSelect.selectize({
             valueField: 'id',
@@ -93,32 +94,52 @@
     $(document).on('click', '#addInvoiceLine', function (e) {
         e.preventDefault();
         let mock = '<div class="row invoice-line" data-row-number="{{iterator}}">' +
-                        '<div class="col-xs-2">' +
+                        '<div class="col-xs-3">' +
                             '<div class="form-group form-group-default">' +
-                                '<label for="row_{{iterator}}_priceNoVat">Prezzo senza Iva</label>' +
-                                '<input id="row_{{iterator}}_priceNoVat" class="form-control priceNoVat" placeholder="Prezzo Senza Iva" ' +
-                                    'name="row_{{iterator}}_priceNoVat" type="number" step="0.01" >' +
+                                '<label for="row_{{iterator}}_description">Descrizione</label>' +
+                                '<input id="row_{{iterator}}_description" class="form-control row-description" placeholder="Descrizione" ' +
+                                'name="row_{{iterator}}_description" type="text">' +
                             '</div>' +
                         '</div>' +
                         '<div class="col-xs-2">' +
+                            '<div class="form-group form-group-default">' +
+                                '<label for="row_{{iterator}}_singlePrice">Prezzo Unitario</label>' +
+                                '<input id="row_{{iterator}}_singlePrice" class="form-control singlePrice" ' +
+                                            'placeholder="Prezzo Unitario" type="number" step="0.01">' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="col-xs-1">' +
+                            '<div class="form-group form-group-default">' +
+                                '<label for="row_{{iterator}}_qty">Qty</label>' +
+                                '<input id="row_{{iterator}}_qty" class="form-control qty" ' +
+                                        'min="1" required="required" placeholder="Quantità" type="number" step="1" value="1" >' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="col-xs-1">' +
+                            '<div class="form-group form-group-default">' +
+                                '<label for="row_{{iterator}}_priceNoVat">Totale</label>' +
+                                '<input id="row_{{iterator}}_priceNoVat" disabled="disabled" class="form-control priceNoVat" ' +
+                                     'placeholder="Prezzo Senza Iva" name="row_{{iterator}}_priceNoVat" type="number" step="0.01" >' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="col-xs-1">' +
+                            '<div class="form-group form-group-default">' +
+                                '<label for="row_{{iterator}}_vatPercent">Aliquota</label>' +
+                                '<input id="row_{{iterator}}_vatPercent" class="form-control vatPercent" placeholder="Aliquota" type="number" step="1" value="22" >' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="col-xs-1">' +
                             '<div class="form-group form-group-default">' +
                                 '<label for="row_{{iterator}}_vat">Iva</label>' +
                                 '<input id="row_{{iterator}}_vat" class="form-control vat" placeholder="Iva" ' +
                                     'name="row_{{iterator}}_vat" type="number" step="0.01" >' +
                             '</div>' +
                         '</div>' +
-                        '<div class="col-xs-3">' +
+                        '<div class="col-xs-2">' +
                             '<div class="form-group form-group-default">' +
                                 '<label for="row_{{iterator}}_price">Totale Ivato</label>' +
                                 '<input id="row_{{iterator}}_price" class="form-control price" placeholder="Totale Ivato" ' +
                                         'name="row_{{iterator}}_price" disabled="disabled" type="number" step="0.01" >' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="col-xs-4">' +
-                            '<div class="form-group form-group-default">' +
-                                '<label for="row_{{iterator}}_description">Descrizione</label>' +
-                                '<input id="row_{{iterator}}_description" class="form-control" placeholder="Descrizione" ' +
-                                        'name="row_{{iterator}}_description" type="text">' +
                             '</div>' +
                         '</div>' +
                         '<div class="col-xs-1">' +
@@ -176,41 +197,102 @@
         let price = 0;
         let vat = 0;
         rowContainer.find('.invoice-line').each(function() {
-            let singlePrice = parseFloat($(this).find('.priceNoVat').eq(0).val());
-            let singleVat = parseFloat($(this).find('.vat').eq(0).val());
-            price += singlePrice;
+            let singlePrice = parseFloat($(this).find('.singlePrice').eq(0).val());
+            let qty = parseFloat($(this).find('.qty').eq(0).val());
+            let singleRow = singlePrice * qty;
+            let vatPerncent = parseFloat($(this).find('.vatPercent').eq(0).val());
+            let rowVat = 0;
+
             if($(this).find('.vat').eq(0).hasClass('manually') === false) {
-                singleVat = singlePrice / 100 * 22;
-                singleVat = singleVat.toDecimal();
-                $(this).find('.vat').eq(0).val(singleVat);
+                rowVat = singleRow / 100 * (isNaN(vatPerncent) ? 22 : vatPerncent);
+                rowVat = rowVat.toDecimal();
+                $(this).find('.vat').eq(0).val(rowVat);
+            } else {
+                rowVat = parseFloat($(this).find('.vat').eq(0).val());
+                $(this).find('vatPercent').eq(0).val(rowVat / singleRow * 100);
             }
-            vat += singleVat;
-            $(this).find('.price').eq(0).val(singlePrice + singleVat);
+
+            vat += rowVat;
+            price += singleRow;
+
+            $(this).find('.priceNoVat').val(singleRow);
+            $(this).find('.price').eq(0).val(singleRow + rowVat);
         });
 
         headContainer.find('#total').val(price);
         headContainer.find('#vat').val(vat);
         headContainer.find('#totalWithVat').val(price+vat);
     };
-    rowContainer.on("keyup",".priceNoVat, .vat", updatePrices);
+    rowContainer.on("change keyup",".singlePrice, .vat, .vatPercent, .qty", updatePrices);
     rowContainer.on("keydown",".vat", function() {
         $(this).addClass('manually');
     });
 
+    $(document).on('bs.document.preview',function() {
+
+        let mock = $.getTemplate('customInvoiceTemplate').done(function(template) {
+            let shopRecipientId = $('#shopRecipientId').val();
+            let shopAddress = null;
+            for(let i in addressBooks) {
+                if(!addressBooks.hasOwnProperty(i)) continue;
+                if(addressBooks[i].id == shopRecipientId) {
+                    shopAddress = addressBooks[i];
+                    break;
+                }
+            }
+            if(shopAddress === null) {
+                alert('nessun indirizzo trovato');
+                return false;
+            }
+
+            let tableRowMock = '<tr class="invoiceRow">' +
+                '<td class="small">{{rowDescription}}</td>' +
+                '<td class="text-right small">{{priceNoVat}} €</td>' +
+                '<td class="text-right small">{{qty}}</td>' +
+                '<td class="text-right small">{{totNoVat}} €</td>' +
+                '<td class="text-right small">{{vatPercent}}</td>' +
+                '<td class="text-right small">{{vat}} €</td>' +
+                '</tr>';
+            let tableRows = "";
+            $(".row.invoice-line").each(function() {
+                tableRows += tableRowMock
+                    .replaceAll('{{rowDescription}}',$(this).find('.row-description').val())
+                    .replaceAll('{{priceNoVat}}',$(this).find('.singlePrice').val())
+                    .replaceAll('{{qty}}',$(this).find('.qty').val())
+                    .replaceAll('{{totNoVat}}',$(this).find('.priceNoVat').val())
+                    .replaceAll('{{vatPercent}}',$(this).find('.vatPercent').val())
+                    .replaceAll('{{vat}}',$(this).find('.vat').val());
+            });
+
+            template = template.replaceAll('{{subject}}',shopAddress.subject)
+                    .replaceAll('{{address}}',shopAddress.address)
+                    .replaceAll('{{address2}}',shopAddress.extra)
+                    .replaceAll('{{city}}',shopAddress.city)
+                    .replaceAll('{{postcode}}',shopAddress.postcode)
+                    .replaceAll('{{fiscalCode}}',shopAddress.vatNumber)
+                    .replaceAll('{{phone}}',shopAddress.vatNumber)
+
+                    .replaceAll('{{invoiceNumber}}',$('#number').val())
+                    .replaceAll('{{invoiceDate}}',$('#date').val())
+
+                    .replaceAll('{{totPriceNoVat}}',$('#total').val())
+                    .replaceAll('{{totVat}}',$('#vat').val())
+                    .replaceAll('{{totalWithVat}}',$('#totalWithVat').val())
+                    .replaceAll('{{note}}',$('#note').val())
+                    .replaceAll('{{paymentExpectedDate}}',$('#paymentExpectedDate').val())
+                    .replaceAll('{{tableRows}}',tableRows);
+
+            let printWindow = window.open("", "_blank", "");
+            //open the window
+            printWindow.document.open();
+            //write the html to the new window, link to css file
+            printWindow.document.write(template);
+            printWindow.document.close();
+            printWindow.focus();
+            //The Timeout is ONLY to make Safari work, but it still works with FF, IE & Chrome.
+        });
+
+
+    })
 
 })(jQuery);
-
-let old =                        '<div class="col-xs-2">' +
-    '<div class="form-group form-group-default">' +
-    '<label for="row_{{iterator}}_priceNoVat">Prezzo senza Iva</label>' +
-    '<input id="row_{{iterator}}_priceNoVat" class="form-control" placeholder="Prezzo Senza Iva" ' +
-    'name="row_{{iterator}}_priceNoVat" type="number" step="0.01" >' +
-    '</div>' +
-    '</div>' +
-    '<div class="col-xs-2">' +
-    '<div class="form-group form-group-default">' +
-    '<label for="row_{{iterator}}_vat">Iva</label>' +
-    '<input id="row_{{iterator}}_vat" class="form-control" placeholder="Iva" ' +
-    'name="row_{{iterator}}_vat" type="number" step="0.01" >' +
-    '</div>' +
-    '</div>';

@@ -454,12 +454,12 @@ $.bsModal = function (header, params) {
         self.header.html(header);
     };
 
-    this.showLoader = function() {
+    this.showLoader = function () {
         self.writeBody(self.loaderHtml);
     };
 
-    this.setCloseEvent = function(callback) {
-        self.bsModal.on('hidden.bs.modal',callback);
+    this.setCloseEvent = function (callback) {
+        self.bsModal.on('hidden.bs.modal', callback);
     };
 
     this.writeBody = function (body) {
@@ -1279,6 +1279,7 @@ $.fn.setCursorPosition = function (pos) {
 };
 
 $.getTemplate = function (templateName) {
+    "use strict";
     return $.get({
         url: "/blueseal/xhr/TemplateFetchController",
         cache: true,
@@ -1297,7 +1298,7 @@ $.fn.dataTableFilter = function (button, fieldName) {
         $(button).removeClass('bs-button-toggle');
     } else {
         let buttons = $(document).find('.bs-button-toggle');
-        $(buttons).each(function(){
+        $(buttons).each(function () {
             $(this).removeClass('bs-button-toggle');
         });
         urlDecoded.params[fieldName] = 1;

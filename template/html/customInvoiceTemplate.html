@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Stampa Fattura {{invoiceNumber}}</title>
+    <link type="text/css" href="https://www.pickyshop.com/assets/css/pace.css" rel="stylesheet" media="screen">
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        body {
+            font-size: 2em;
+        }
+
+        h2.panel-title {
+            font-size: 1.4em;
+        }
+
+        @media print {
+            body {
+                font-size: 2em;
+            }
+
+            h2.panel-title {
+                font-size: 1.4em;
+            }
+
+            /*remove chrome links*/
+            a[href]:after {
+                content: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="" style="margin-top: 30px">
+<div class="container">
+    <!-- intestazione fattura -->
+    <div class="row">
+        <div class="col-xs-8">
+            <div class="row">
+                <div class="col-xs-7">
+                    <img alt="logo" class="invoice-logo" src="/assets/logoIwes.png"/>
+                    <hr/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-4">
+                    <address class="m-t-10">
+                        Via Cesare Pavese, 1<br/>
+                        62012 - Civitanova Marche (MC)<br/>
+                        P.IVA: 01865380438<br/>
+                        Tel.: +39.0733.471365<br/>
+                        Email: billing@iwes.it<br/>
+                    </address>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            Spettabile
+            <address class="m-t-10">
+                <strong>{{subject}}</strong><br/>
+                {{address}}<br/>
+                {{address2}}<br/>
+                {{postcode}} - {{city}}<br/>
+                {{fiscalCode}}<br/>
+            </address>
+        </div>
+    </div>
+    <hr/>
+    <!-- testata fattura -->
+    <!-- righe fattura -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title"><strong>Fattura N. :</strong> {{invoiceNumber}}
+                        <strong>del</strong> {{invoiceDate}}</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-condensed table-striped">
+                            <thead>
+                            <tr>
+                                <th class="small">Merce o servizio</th>
+                                <th class="text-right small">Prezzo</th>
+                                <th class="text-right small">Q.tà</th>
+                                <th class="text-right small">Totale</th>
+                                <th class="text-right small">Aliquota</th>
+                                <th class="text-right small">Iva</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{tableRows}}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="small">
+                                    TOTALE RIGHE
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right small">
+                                    {{totPriceNoVat}} €
+                                </td>
+                                <td></td>
+                                <td class="text-right small">
+                                    {{totVat}} €
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3 col-xs-offset-7">
+            Totale Fattura
+        </div>
+        <div class="col-xs-2 pull-left">
+            {{totalWithVat}} €
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6">
+            Da Corrispondere entro il: {{paymentExpectedDate}}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12">
+            {{note}}
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    Pace.on('done', function () {
+        setTimeout(function () {
+            window.print();
+            setTimeout(function () {
+                window.close();
+            }, 1);
+        }, 200);
+    });
+</script>
+</body>
+</html>
