@@ -8,6 +8,7 @@
     let rowContainer = $('#invoiceLineContainer');
     let headContainer = $('#invoiceHeadContainer');
     let addressBooks = [];
+    let types = [];
     $.ajax({
         url: '/blueseal/xhr/GetTableContent',
         data: {
@@ -57,6 +58,7 @@
         },
         dataType: 'json'
     }).done(function (res) {
+        types = res;
         if (invoiceType.length > 0 && typeof invoiceType[0].selectize !== 'undefined') invoiceType[0].selectize.destroy();
         invoiceType.selectize({
             valueField: 'id',
@@ -229,8 +231,24 @@
     });
 
     $(document).on('bs.document.preview',function() {
+        let templateName = null;
+        let typeId = $('#invoiceTypeId').val();
+        for(let i in types) {
+            if (!types.hasOwnProperty(i)) continue;
+            if (types[i].id == typeId && types[i].printTemplateName !== null) {
+                templateName = types[i].printTemplateName;
+                break;
+            }
+        }
+        if(templateName === null) {
+            new Alert({
+                type: "danger",
+                message: "Non è presente nessun template per il tipo fattura"
+            }).open();
+            return false;
+        }
 
-        let mock = $.getTemplate('customInvoiceTemplate').done(function(template) {
+        $.getTemplate(templateName).done(function(template) {
             let shopRecipientId = $('#shopRecipientId').val();
             let shopAddress = null;
             for(let i in addressBooks) {
@@ -241,7 +259,10 @@
                 }
             }
             if(shopAddress === null) {
-                alert('nessun indirizzo trovato');
+                new Alert({
+                    type: "danger",
+                    message: "Nessun indirizzo trovato"
+                }).open();
                 return false;
             }
 
