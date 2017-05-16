@@ -32,7 +32,15 @@
                                 </div>
                                 <div id="invoiceHeadContainer" class="panel-body clearfix">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="invoiceTypeId">Tipo Fattura</label>
+                                                <select id="invoiceTypeId" class="form-control"
+                                                        placeholder="Seleziona tipo fattura" required="required"
+                                                        name="invoiceTypeId"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="shopRecipientId">Indirizzo Fatturazione</label>
                                                 <select id="shopRecipientId" class="full-width selectpicker"
@@ -71,14 +79,7 @@
                                                        name="totalWithVat" required="required">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="invoiceTypeId">Tipo Fattura</label>
-                                                <select id="invoiceTypeId" class="form-control"
-                                                        placeholder="Seleziona tipo fattura" required="required"
-                                                        name="invoiceTypeId"></select>
-                                            </div>
-                                        </div>
+
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default">
                                                 <label for="date">Data Fattura</label>

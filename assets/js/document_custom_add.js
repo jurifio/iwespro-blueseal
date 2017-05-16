@@ -294,13 +294,13 @@
                     .replaceAll('{{phone}}',shopAddress.vatNumber)
 
                     .replaceAll('{{invoiceNumber}}',$('#number').val())
-                    .replaceAll('{{invoiceDate}}',$('#date').val())
+                    .replaceAll('{{invoiceDate}}',(new Date($('#date').val())).toLocaleDateString('it-IT'))
 
                     .replaceAll('{{totPriceNoVat}}',$('#total').val())
                     .replaceAll('{{totVat}}',$('#vat').val())
                     .replaceAll('{{totalWithVat}}',$('#totalWithVat').val())
                     .replaceAll('{{note}}',$('#note').val())
-                    .replaceAll('{{paymentExpectedDate}}',$('#paymentExpectedDate').val())
+                    .replaceAll('{{paymentExpectedDate}}',(new Date($('#paymentExpectedDate').val())).toLocaleDateString('it-IT'))
                     .replaceAll('{{tableRows}}',tableRows);
 
             let printWindow = window.open("", "_blank", "");
