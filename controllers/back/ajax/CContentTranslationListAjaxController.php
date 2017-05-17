@@ -64,10 +64,10 @@ class CContentTranslationListAjaxController extends AAjaxController
         $templatePath =  $this->app->rootPath() . $this->app->cfg()->fetch("paths", "public");
         foreach ($strings as $string) {
             $row = $string;
-            $row['hint'] = str_replace(
+            $row['hint'] = substr(str_replace(
                 $templatePath,
                     '...',
-                    $row['hint']);
+                    $row['hint']),0,70).'..';
             $row['hint'] = str_replace(
                 ' -> ',
                     '<br />',
