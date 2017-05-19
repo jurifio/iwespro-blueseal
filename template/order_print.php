@@ -137,6 +137,7 @@
                             <th class="font-montserrat small">Sku</th>
                             <th class="text-center font-montserrat small">Stato Riga</th>
                             <th class="font-montserrat small">Descrizione Prodotto</th>
+                            <th class="font-montserrat small">Codice Prodotto</th>
                             <th class="text-center font-montserrat small">Foto</th>
                             <th class="text-center font-montserrat small">Brand</th>
                             <th class="text-center font-montserrat small">Shop</th>
@@ -166,7 +167,8 @@
                                         echo $statusLine->title;
                                     }
                                 } ?></td>
-                            <td><?php echo '<p class="text-black">' . $productNameTranslation; ?></p></td>
+                            <td><p class="text-black"><?php echo $productNameTranslation; ?></p></td>
+                            <td><p class="text-black"><?php echo $productSku->getExternalId(); ?></p></td>
                             <td><img width="90" src="<?php echo $app->image($productSku->product->getPhoto(1,281),'amazon') ?>" /></td>
                             <td class="text-center"><?php echo $productSku->product->productBrand->name; ?></td>
                             <td class="text-center"><?php echo $productSku->shop->name; ?></td>
