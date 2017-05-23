@@ -548,7 +548,7 @@ class CDocumentRepo extends ARepo
 
 
             if ($file) {
-                $this->insertInvoiceBin($insertedId,$file['name'],$file['tmp_name']);
+                $this->insertInvoiceBin($insertedId,$file['tmp_name'],$file['name']);
             }
             return $insertedId;
     }

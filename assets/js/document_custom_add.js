@@ -217,13 +217,13 @@
             vat += rowVat;
             price += singleRow;
 
-            $(this).find('.priceNoVat').val(singleRow);
-            $(this).find('.price').eq(0).val(singleRow + rowVat);
+            $(this).find('.priceNoVat').val(singleRow.toDecimal());
+            $(this).find('.price').eq(0).val((singleRow + rowVat).toDecimal());
         });
 
-        headContainer.find('#total').val(price);
-        headContainer.find('#vat').val(vat);
-        headContainer.find('#totalWithVat').val(price+vat);
+        headContainer.find('#total').val(price.toDecimal());
+        headContainer.find('#vat').val(vat.toDecimal());
+        headContainer.find('#totalWithVat').val((price+vat).toDecimal());
     };
     rowContainer.on("change keyup",".singlePrice, .vat, .vatPercent, .qty", updatePrices);
     rowContainer.on("keydown",".vat", function() {
