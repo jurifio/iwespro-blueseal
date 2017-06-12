@@ -51,6 +51,7 @@ class CProductListAjaxController extends AAjaxController
                   `pc`.`id`                                                                                             AS `categoryId`,
                   `pcg`.`name`                                                                                          AS `colorGroup`,
                   `p`.`isOnSale`                                                                                      AS `isOnSale`,
+                  ifnull(`p`.`processing`, '-')                                                                       AS `processing`,
                   (((if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
                       (`pse`.`isActive` = 0), `s`.`pastSeasonMultiplier`,
                       if((`p`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
@@ -184,7 +185,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['isOnSale'] = $val->isOnSale();
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
-
+            $row['processing'] = ($val->processing) ? $val->processing : '-';
             $datatable->setResponseDataSetRow($key,$row);
         }
         return $datatable->responseOut();

@@ -119,6 +119,9 @@
                                         data-searchable="true"
                                         data-orderable="true"
                                         class="center">Prezzo Attivo</th>
+                                    <th data-slug="processing"
+                                        data-searchable="true"
+                                        data-orderable="false">Prodotto</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -212,6 +215,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.details.replace"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.processingUpdate"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione prezzi">
