@@ -451,6 +451,21 @@ class CDocumentRepo extends ARepo
         return $in;
     }
 
+    /**
+     * @param int $userId
+     * @param int $billingAddressBookId
+     * @param \DateTime $emissionDate
+     * @param null $paymentExpectedDate
+     * @param $paidAmount
+     * @param string $number
+     * @param array $orderLines
+     * @param $file
+     * @param null $totalWithVat
+     * @param string|null $note
+     * @return int|mixed
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     */
     public function storeFriendTransportDocWithFile(
         int $userId,
         int $billingAddressBookId,
@@ -490,6 +505,20 @@ class CDocumentRepo extends ARepo
         }
     }
 
+    /**
+     * @param CInvoiceType $invoiceType
+     * @param int $userId
+     * @param int $billingAddressBookId
+     * @param \DateTime $emissionDate
+     * @param null $paymentExpectedDate
+     * @param $paidAmount
+     * @param string $number
+     * @param array $orderLines
+     * @param $file
+     * @param null $totalWithVat
+     * @param string|null $note
+     * @return int|mixed
+     */
     public function storeFriendDocumentWithFile(
         CInvoiceType $invoiceType,
         int $userId,
@@ -538,6 +567,17 @@ class CDocumentRepo extends ARepo
         return $invoiceBin->insert();
     }
 
+    /**
+     * @param int $userId
+     * @param int $billingAddressBookId
+     * @param \DateTime $emissionDate
+     * @param null $paymentExpectedDate
+     * @param $paidAmount
+     * @param array $orderLines
+     * @param string|null $note
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     */
     public function storeFriendCreditNoteOnReturn(
         int $userId,
         int $billingAddressBookId,
@@ -580,6 +620,21 @@ class CDocumentRepo extends ARepo
         }
     }
 
+    /**
+     * @param int $userId
+     * @param int $billingAddressBookId
+     * @param \DateTime $emissionDate
+     * @param null $paymentExpectedDate
+     * @param $paidAmount
+     * @param string $number
+     * @param array $orderLines
+     * @param $file
+     * @param null $totalWithVat
+     * @param string|null $note
+     * @return int|mixed
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     */
     public function storeFriendCreditNoteWithFile(
         int $userId,
         int $billingAddressBookId,
