@@ -52,7 +52,7 @@ class COrderAddController extends ARestrictedAccessRootController
                 $cartRepo->addSku($sku,1,$cart);
             }
 
-            $cartRepo->setCouponCodeToCart($data['coupon']);
+            $cartRepo->setCouponCodeToCart($data['coupon'], $cart);
 
             $cart->refresh();
             $order = $cartRepo->customCartToOrder($cart);
