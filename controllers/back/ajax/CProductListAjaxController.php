@@ -115,7 +115,9 @@ class CProductListAjaxController extends AAjaxController
             $val = $productRepo->findOneBy($row);
 
             $row["DT_RowId"] = $val->printId();
-            $row["DT_RowClass"] = 'colore';
+            $row["DT_RowClass"] = $val->productStatus->isVisible == 1 ? 'verde' : (
+                $val->productStatus->isReady == 1 ? 'arancione' : ""
+            );
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
