@@ -468,7 +468,7 @@ $(document).on('bs.details.product.assign', function (e) {
 });
 
 (function ($) {
-    $.fn.selectDetails = function (arr) {
+    $.fn.selectDetails = function (arr, noName) {
         var prototypeId = 0;
         if ('undefined' === typeof arr) var arr = {};
         arr['type'] = ('type' in arr) ? arr['type'] : '';
@@ -515,7 +515,7 @@ $(document).on('bs.details.product.assign', function (e) {
                     }
                 });
                 var pname = $('.detailContent').data('product-name');
-                if ("" != pname) {
+                if ("" != pname && "no-name" !== noName) {
                     var selectName = $('#ProductName_1_name').selectize()[0].selectize;
                     selectName.addOption({name: pname});
                     selectName.addItem(pname);
@@ -692,10 +692,10 @@ function populatePage(res) {
             movable = true;
             $('.code-title').html('<a href="' + res['product']['link'] + '" target="_blank">' + res['code'] + '</a>');
             if (res['product']) {
-                fillTheFields(res['product']);
                 if ( false == res['skuEditable']) $('#Product_sizes').prop('readonly', true);
                 else $('#Product_sizes').prop('readonly', false);
-                $('#main-details').selectDetails({code: res['code']});
+                $('#main-details').selectDetails({code: res['code']}, "no-name");
+                fillTheFields(res['product']);
             }
             if (!$('#ProductCategory_id').val().length) {
                 $('#main-details').createCategoryBtn();
@@ -792,9 +792,11 @@ function fillTheFields(product) {
     $('#Product_retail_price').val(product['price']);
     $('#Product_value').val(product['value']);
     var selectName = $('#ProductName_1_name').selectize()[0].selectize;
-    selectName.addOption({name: product['productName']});
-    selectName.addItem(product['productName']);
+    let escaped = product['productName'];
+    selectName.addOption({name: escaped});
+    selectName.addItem(escaped);
     selectName.refreshOptions();
+    selectName.setValue(escaped);
     $('#Product_note').html(product['note']);
     $('#summernote1').code(product['productDescription']);
 }
