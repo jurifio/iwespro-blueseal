@@ -16,7 +16,7 @@ $(document).on('bs.coupon.add', function() {
     $.ajax({
         type: "POST",
         url: "#",
-        data: $('form').serializeObject()
+        data: $('form').serialize()
     }).done(function (content){
         body.html("Salvataggio riuscito");
         bsModal.modal();
