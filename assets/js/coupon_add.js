@@ -13,11 +13,11 @@ $(document).on('bs.coupon.add', function() {
     });
     cancelButton.remove();
 
-    $.ajaxForm({
+    $.ajax({
         type: "POST",
         url: "#",
-        formAutofill: true
-    },new FormData()).done(function (content){
+        data: $('form').serializeObject()
+    }).done(function (content){
         body.html("Salvataggio riuscito");
         bsModal.modal();
         okButton.off().on('click', function() {
