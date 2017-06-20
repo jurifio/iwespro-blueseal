@@ -30,19 +30,11 @@ class CNewsletterEmailListAjaxController extends AAjaxController
                         ON n.userId = u.id ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        $newsletter = $this->app->repoFactory->create('Newsletter')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $this->app->repoFactory->create('Newsletter')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('Newsletter')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $datatable->doAllTheThings();
 
+        foreach ($datatable->getResponseSetData() as $key=>$row) {
+            $val = $this->app->repoFactory->create('Newsletter')->findOne([$row['id']]);
 
-        $response = [];
-        $response ['draw'] = $_GET['draw'];
-        $response ['recordsTotal'] = $totalCount;
-        $response ['recordsFiltered'] = $count;
-        $response ['data'] = [];
-
-        foreach ($newsletter as $val) {
-            $row = [];
             $user = $val->user;
             $row["DT_RowId"] = $val->id;
             $row["DT_RowClass"] = 'colore';
@@ -51,15 +43,15 @@ class CNewsletterEmailListAjaxController extends AAjaxController
                 $row['name'] = ($user) ? $user->name : '-';
                 $row['surname'] = ($user) ? $user->surname : '-';
             }catch (\Throwable $e) {
-                echo $user->id;
+                //check this
             }
             $row['isActive'] = ($val->isActive) ? "Attiva" : "Non Attiva";
             $row['subscriptionDate'] = ($val->subscriptionDate) ? $val->subscriptionDate : "-";
             $row['unsubscriptionDate'] = ($val->unsubscriptionDate) ? $val->unsubscriptionDate : "-";
             $row['lang'] = $val->lang->lang;
-            $response['data'][] = $row;
+            $datatable->setResponseDataSetRow($key,$row);
         }
 
-        return json_encode($response);
+        return $datatable->responseOut();
     }
 }

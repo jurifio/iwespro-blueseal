@@ -20,8 +20,6 @@ class CProductListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $response = [];
-
         $sql = "SELECT
                   concat(`p`.`id`, '-', `pv`.`id`)                                                                      AS `code`,
                   `p`.`id`                                                                                              AS `id`,
