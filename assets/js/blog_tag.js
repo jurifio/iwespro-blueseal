@@ -5,13 +5,11 @@ $('textarea.summer').summernote({
 
 $(document).on('bs.postTag.add', function() {
 
-    var f = new FormData();
-
-    $.ajaxForm({
+    $.ajax({
         url: '#',
         type: 'post',
-	    formAutofill: true
-    }, f).done(function() {
+	    data: $('form').serialize()
+    }).done(function() {
 	        window.location.reload();
 	    });
 });

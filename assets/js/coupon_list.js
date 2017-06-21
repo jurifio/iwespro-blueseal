@@ -20,11 +20,11 @@ $(document).on('bs.coupon.del', function() {
         });
         cancelButton.remove();
 
-        $.ajaxForm({
+        $.ajax({
             type: "GET",
             url: "#",
-            formAutofill: true
-        }, new FormData()).done(function (content) {
+            data: $('form').serialize()
+        }).done(function (content) {
             body.html("Devi selezionare uno o più coupon da cancellare");
             bsModal.modal();
         })

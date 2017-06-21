@@ -5,11 +5,11 @@ $(document).on('bs.user.save',function() {
 	} else {
 		method = "POST";
 	}
-	$.ajaxForm({
+	$.ajax({
 		method: method,
 		url: "#",
-		formAutofill: true
-	}, new FormData()).done(function() {
+        data: $('form').serialize()
+	}).done(function() {
 		new Alert({
 			type: "success",
 			message: "Utente Salvato"

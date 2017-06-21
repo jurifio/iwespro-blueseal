@@ -13,11 +13,11 @@ $(document).on('bs.color.edit', function() {
     });
     cancelButton.remove();
 
-    $.ajaxForm({
+    $.ajax({
         type: "PUT",
         url: "#",
-        formAutofill: true
-    },new FormData()).done(function (content){
+        data: $('form').serialize()
+    }).done(function (content){
         body.html("Salvataggio riuscito");
         bsModal.modal();
     }).fail(function (){

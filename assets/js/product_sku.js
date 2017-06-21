@@ -27,11 +27,11 @@
 		});
 		cancelButton.remove();
 
-		$.ajaxForm({
+		$.ajax({
 			type: "POST",
 			url: "#",
-			formAutofill: true
-		},new FormData()).done(function (content){
+            data: $('form').serialize()
+		}).done(function (content){
 			body.html("Salvataggio riuscito");
 			bsModal.modal();
 			window.location.reload(true);
