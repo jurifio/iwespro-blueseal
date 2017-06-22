@@ -20,27 +20,29 @@
         div = $(div);
         $(div).html('<img src="/assets/img/ajax-loader.gif" />');
         "use strict";
-        $.ajax({
-            url: "/blueseal/xhr/MarketplaceCampaignMonitorDataProvider",
-            data: {
-                campaignId: $(div).data('id'),
-                period: $(div).data('period')
-            },
-            dataType: 'JSON'
-        }).done(function(res) {
-            var container = template
-                .replaceAll('{{title}}',div.data('title'))
-                .replaceAll('{{costo}}',res.cost)
-                .replaceAll('{{visite}}',res.visits)
-                .replaceAll('{{ordini}}',res.orders)
-                .replaceAll('{{incasso}}',res.ordersValue)
-                .replaceAll('{{elapsed}}',res.elapsed.toFixed(2) + '%')
-                .replaceAll('{{cpo}}',res.cost / (res.orders === 0 ? 1 : res.orders))
-                .replaceAll('{{roi}}',res.orders / (res.ordersValue === 0 ? 1 : res.ordersValue))
-                .replaceAll('{{crb}}',res.visits / (res.orders === 0 ? 1 : res.orders))
-                .replaceAll('{{campaignName}}',res.campaignName)
-            ;
-            div.html(container);
+        Pace.ignore(function () {
+            $.ajax({
+                url: "/blueseal/xhr/MarketplaceCampaignMonitorDataProvider",
+                data: {
+                    campaignId: $(div).data('id'),
+                    period: $(div).data('period')
+                },
+                dataType: 'JSON'
+            }).done(function(res) {
+                var container = template
+                    .replaceAll('{{title}}',div.data('title'))
+                    .replaceAll('{{costo}}',res.cost)
+                    .replaceAll('{{visite}}',res.visits)
+                    .replaceAll('{{ordini}}',res.orders)
+                    .replaceAll('{{incasso}}',res.ordersValue)
+                    .replaceAll('{{elapsed}}',res.elapsed.toFixed(2) + '%')
+                    .replaceAll('{{cpo}}',res.cost / (res.orders === 0 ? 1 : res.orders))
+                    .replaceAll('{{roi}}',res.orders / (res.ordersValue === 0 ? 1 : res.ordersValue))
+                    .replaceAll('{{crb}}',res.visits / (res.orders === 0 ? 1 : res.orders))
+                    .replaceAll('{{campaignName}}',res.campaignName)
+                ;
+                div.html(container);
+            });
         });
     }
 
