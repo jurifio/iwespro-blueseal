@@ -46,7 +46,7 @@
                 div.html(container);
                 var progress = new ProgressBar.Circle(div.find('.portlet-refresh div')[ 0 ], {
                     color: '#22bdcf',
-                    duration: 15000,
+                    duration: 8000,
                     strokeWidth:30
                 });
 
