@@ -2,6 +2,7 @@
 
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\domain\entities\CCampaign;
 use bamboo\utils\time\STimeToolbox;
 
 
@@ -24,7 +25,7 @@ class CMarketplaceCampaignMonitorDataProvider extends AAjaxController
     {
         $campaignId = $this->app->router->request()->getRequestData('campaignId');
         $period = $this->app->router->request()->getRequestData('period');
-        $campaign = $this->app->repoFactory->create('Campaign')->findOneByStringId($campaignId);
+
         switch ($period) {
             case 'today': {
                 $time = strtotime('midnight');
@@ -37,9 +38,9 @@ class CMarketplaceCampaignMonitorDataProvider extends AAjaxController
         }
 
         $sql = "SELECT
-                  round(sum(cv.cost))             AS cost,
+                  round(round(sum(cv.cost),2))             AS cost,
                   ifnull(count(cv.id), 0)         AS visits,
-                  ifnull(round(sum(o.netTotal)),0)       AS ordersValue,
+                  ifnull(round(sum(o.netTotal),2),0)       AS ordersValue,
                   ifnull(count(DISTINCT o.id), 0) AS orders
                 FROM Campaign c
                   JOIN CampaignVisit cv ON cv.campaignId = c.id
@@ -53,10 +54,13 @@ class CMarketplaceCampaignMonitorDataProvider extends AAjaxController
 
         $res = $this->app->dbAdapter->query($sql, [$campaignId, STimeToolbox::DbFormattedDateTime(\DateTime::createFromFormat('U', $time))], true)->fetchAll();
 
+        /** @var CCampaign $campaign */
+        $campaign = $this->app->repoFactory->create('Campaign')->findOneByStringId($campaignId);
+
         if (empty($res)) $res = ['cost' => 0, 'visits' => 0 ,'ordersValue'=> 0, 'orders'=> 0];
         else $res = $res[0];
         $res['elapsed'] = $elapsed;
-        $res['campaignName'] = $campaign->name;
+        $res['campaignName'] = $campaign->marketplaceAccount ? $campaign->marketplaceAccount->name : $campaign->name;
         return json_encode($res);
     }
 
