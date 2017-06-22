@@ -905,3 +905,9 @@ classi per colorare le righe delle tabelle da compilare in odd/even per il chiar
 .table.table-striped tbody tr.grey td {
     background: darkgrey;
 }
+
+
+.portlet-refresh div {
+    height: 15px;
+    width: 15px;
+}

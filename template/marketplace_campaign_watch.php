@@ -3,6 +3,7 @@
 <head>
     <?php include "parts/head.php"; ?>
     <?php echo $app->getAssets(['ui', 'forms', 'charts'], $page); ?>
+    <script src="/assets/progressbar.min.js"></script>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -30,9 +31,6 @@
                     </div>
                     <div class="col-md-4">
                         <div class="marketplace-monit" data-id="9" data-title="Oggi" data-period="today"></div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="marketplace-monit" data-id="27" data-title="Oggi" data-period="today"></div>
                     </div>
                 </div>
             </div>
