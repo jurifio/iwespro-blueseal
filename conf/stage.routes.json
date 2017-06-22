@@ -1678,6 +1678,16 @@
                 "GET",
                 "POST"
             ]
+        },{
+            "pattern": "/blueseal/marketplace/campaign/watch(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCampaignWatchController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
