@@ -22,16 +22,8 @@
             </div>
 
             <div class="container-fluid padding-25 sm-padding-10">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="marketplace-monit" data-id="11" data-title="Oggi" data-period="today"></div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="marketplace-monit" data-id="7" data-title="Oggi" data-period="today"></div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="marketplace-monit" data-id="9" data-title="Oggi" data-period="today"></div>
-                    </div>
+                <div id="monitorsContainer" data-period="today" class="row">
+
                 </div>
             </div>
         </div>

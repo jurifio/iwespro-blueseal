@@ -1,20 +1,50 @@
 (function($) {
 
     var templateRequest = $.getTemplate('marketplaceCampaignMonitorTemplate.html').promise();
+    const monitorsContainerSelector = '#monitorsContainer';
     const containerSelector = '.marketplace-monit';
-
+    var drawnElements = [];
     templateRequest.then(function(template) {
-
-
-        $(containerSelector).each(function() {
-            var that = $(this);
-            drawCard(template,that,true);
-        });
+        setupCards(template)
+        setInterval(setupCards,60000,template);
 
         $(document).on('click','.portlet-refresh',function () {
             drawCard(template, $(this).closest(containerSelector), true);
         });
     });
+
+    const containerMock = '<div class="col-md-4">' +
+        '<div class="marketplace-monit" data-id="{{id}}" data-title="Oggi" data-period="{{period}}"></div>' +
+        '</div>';
+
+    const setupCards = function(template) {
+        "use strict";
+        var container = $(monitorsContainerSelector);
+        Pace.ignore(function () {
+            $.ajax({
+                url: "/blueseal/xhr/MarketplaceActiveCampaignMonitorDataProvider",
+                data: {
+                    period: container.data('period')
+                },
+                dataType: 'JSON'
+            }).done(function (res) {
+                for(var i in res) {
+                    if(res.hasOwnProperty(i)) {
+                        if(!drawnElements.includes(res[i].id)) {
+                            var div = container.append(
+                                $(
+                                    containerMock
+                                    .replaceAll('{{id}}',res[i].id)
+                                    .replaceAll('{{period}}',container.data('period')))
+                            );
+                            drawnElements.push(res[i].id);
+                            drawCard(template, div.find('.marketplace-monit:last'), true);
+                        }
+                    }
+                }
+            });
+        });
+    };
 
 
 
@@ -81,7 +111,7 @@
                     drawCard(template,div);
                 });
             }).fail(function() {
-                setTimeout(drawCard, 3000, template,div);
+                setTimeout(drawCard, 8000, template,div);
             });
         });
     }
