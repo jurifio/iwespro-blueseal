@@ -4,8 +4,8 @@
     const containerSelector = '.marketplace-monit';
 
     templateRequest.then(function(template) {
-        "use strict";
-        var i = 0;
+
+
         $(containerSelector).each(function() {
             var that = $(this);
             drawCard(template,that,true);
