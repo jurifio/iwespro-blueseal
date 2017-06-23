@@ -450,6 +450,10 @@ $.bsModal = function (header, params) {
     this.bsModal.modal();
     //constructor end
 
+    this.addClass = function(classe) {
+        self.bsModal.addClass(classe);
+    };
+
     this.writeHeader = function (header) {
         self.header.html(header);
     };

@@ -911,3 +911,12 @@ classi per colorare le righe delle tabelle da compilare in odd/even per il chiar
     height: 15px;
     width: 15px;
 }
+
+.modal-wide .modal-dialog {
+    min-width: 80%;
+    max-width: 98%;
+}
+
+.modal-high .modal-dialog {
+    height: 500px;
+}

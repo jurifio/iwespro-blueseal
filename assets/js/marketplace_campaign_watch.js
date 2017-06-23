@@ -116,4 +116,52 @@
         });
     }
 
+    $.getTemplate('marketplaceCampaignCategoryMonitorTemplate.html').done(function(template) {
+        "use strict";
+        $(document).on('click','.show-categories-detail',function () {
+            var div = $(this).closest(containerSelector);
+
+
+
+            var modal = new $.bsModal(
+                'Dettaglio Catgorie '+ 'nome campagna',
+                { body: '' }
+            );
+            modal.okButton.hide();
+            modal.cancelButton.hide();
+            modal.showLoader();
+            modal.addClass('modal-wide');
+            modal.addClass('modal-high');
+
+            Pace.ignore(function() {
+                $.ajax({
+                    url: "/blueseal/xhr/MarketplaceCampaignCategoryMonitorDataProvider",
+                    data: {
+                        campaignId: div.data('id'),
+                        period: div.data('period')
+                    },
+                    dataType: 'JSON'
+                }).done(function(res) {
+                    modal.writeBody(template);
+                    var table = $('.modal-body .widget-11 table');
+                    var tableBody = table.find('tbody');
+                    var rowTemplate = tableBody.find('tr')[0].outerHTML;
+                    tableBody.html("");
+                    for(var i in res) {
+                        if(!res.hasOwnProperty(i)) continue;
+                        tableBody.append(
+                            rowTemplate
+                                .replaceAll('{{category}}',res[i].categoryPath)
+                                .replaceAll('{{visits}}',res[i].visits)
+                                .replaceAll('{{cost}}',res[i].cost)
+                                .replaceAll('{{orders}}',res[i].orders)
+                                .replaceAll('{{ordersValue}}',res[i].ordersValue)
+                                .replaceAll('{{exactOrders}}',res[i].exactOrders)
+                                .replaceAll('{{exactOrdersValue}}',res[i].exactOrdersValue)
+                        )
+                    }
+                })
+            });
+        });
+    });
 })(jQuery);
