@@ -49,7 +49,7 @@ class CCleanCarts extends ACronJob
         $res = $this->app->dbAdapter->delete('CartHistory',['cartId'=>$cartId]);
         $res = $this->app->dbAdapter->delete('UserSessionHasCart',['cartId'=>$cartId]);
         $res = $this->app->dbAdapter->delete('CartLine',['cartId'=>$cartId]);
-        $res = $this->app->dbAdapter->delete('Cart',['id'=>$orderId]);
+        $res = $this->app->dbAdapter->delete('Cart',['id'=>$cartId]);
         if($res>0) return true;
         return false;
     }

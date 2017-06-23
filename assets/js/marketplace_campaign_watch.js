@@ -90,11 +90,11 @@
                     div.html(container);
                 } else {
                     div.find('#visits').html(res.visits);
-                    div.find('#cost').html('&euro;' +res.cost);
+                    div.find('#cost').html('&euro; ' +res.cost);
                     div.find('#orders').html(res.orders);
                     div.find('#ordersValue').html('&euro; '+res.ordersValue);
-                    div.find('#cpo').html('&euro; '+ cpo);
-                    div.find('#crb').html('&euro; ' + crb);
+                    div.find('#cpo').html(cpo);
+                    div.find('#crb').html(crb);
                     div.find('#progress-bar').data('percentage',progressPercent);
                     div.find('.portlet-refresh div').html("");
                 }
