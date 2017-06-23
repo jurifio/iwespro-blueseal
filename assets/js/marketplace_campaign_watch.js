@@ -65,14 +65,14 @@
                 var color = '';
                 var cpo = '∞';
                 var crb = '∞';
-                if(res.orders === 0) {
+                if(res.ordersValue === 0) {
                     color = 'alert-danger';
                 } else {
-                    cpo = res.cost / res.orders * 100;
+                    cpo = (res.cost / res.ordersValue * 100) + '%';
                     if(cpo > 10) color = 'alert-danger';
                     else if(cpo > 5) color = 'alert-warning';
 
-                    crb = res.visits / res.orders * 100;
+                    crb = (res.visits / res.orders * 100).toFixed() + '%';
                 }
                 const progressPercent = res.elapsed.toFixed(2) + '%';
                 if(redraw) {
@@ -90,11 +90,11 @@
                     div.html(container);
                 } else {
                     div.find('#visits').html(res.visits);
-                    div.find('#cost').html(res.cost);
+                    div.find('#cost').html('&euro;' +res.cost);
                     div.find('#orders').html(res.orders);
-                    div.find('#ordersValue').html(res.ordersValue);
-                    div.find('#cpo').html(res.cost);
-                    div.find('#crb').html(res.cost);
+                    div.find('#ordersValue').html('&euro; '+res.ordersValue);
+                    div.find('#cpo').html('&euro; '+ cpo);
+                    div.find('#crb').html('&euro; ' + crb);
                     div.find('#progress-bar').data('percentage',progressPercent);
                     div.find('.portlet-refresh div').html("");
                 }
