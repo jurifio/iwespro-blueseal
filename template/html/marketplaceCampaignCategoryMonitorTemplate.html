@@ -3,26 +3,32 @@
         <table class="table table-condensed table-responsive table-hover">
             <thead>
                 <tr>
-                    <th>
+                    <th class="text-left">
                         Categoria
                     </th>
-                    <th>
+                    <th class="text-right">
                         Visite
                     </th>
-                    <th>
+                    <th class="text-right">
                         Costo
                     </th>
-                    <th>
+                    <th class="text-right">
                         Ordini
                     </th>
-                    <th>
+                    <th class="text-right">
+                        Di Cui Ordini Esatti
+                    </th>
+                    <th class="text-right">
                         Valore Ordini
                     </th>
-                    <th>
-                        Ordini Esatti
+                    <th class="text-right">
+                        Di Cui Valore Ordini Esatti
                     </th>
-                    <th>
-                        Valore Ordini Esatti
+                    <th class="text-right">
+                        CPO
+                    </th>
+                    <th class="text-right">
+                        CPOE
                     </th>
                 </tr>
             </thead>
@@ -41,13 +47,25 @@
                     <span class="hint-text small">{{orders}}</span>
                 </td>
                 <td class="text-right b-r b-dashed b-grey">
-                    <span class="hint-text small">{{ordersValue}}</span>
-                </td>
-                <td class="text-right b-r b-dashed b-grey">
                     <span class="hint-text small">{{exactOrders}}</span>
                 </td>
                 <td class="text-right b-r b-dashed b-grey">
+                    <span class="hint-text small">{{ordersValue}}</span>
+                </td>
+                <td class="text-right b-r b-dashed b-grey">
                     <span class="hint-text small">{{exactOrdersValue}}</span>
+                </td>
+                <td class="text-right b-r b-dashed b-grey">
+                    <span class="hint-text small">{{exactOrdersValue}}</span>
+                </td>
+                <td class="text-right b-r b-dashed b-grey">
+                    <span class="hint-text small">{{exactOrdersValue}}</span>
+                </td>
+                <td class="text-right b-r b-dashed b-grey">
+                    <span class="hint-text small">{{cpo}}</span>
+                </td>
+                <td class="text-right b-r b-dashed b-grey">
+                    <span class="hint-text small">{{cpoe}}</span>
                 </td>
             </tr>
             </tbody>
