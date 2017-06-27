@@ -30,6 +30,12 @@ class CSessionMonitor extends AAjaxController
                                                       count(DISTINCT userId) as users
                                                     FROM ActivityLog
                                                     WHERE creationDate > date_sub(now(), INTERVAL 1 MINUTE)", [])->fetchAll()[0];
+
+        $ret['job'] = $this->app->dbAdapter->query("SELECT
+                                                      count(id) as conto
+                                                    FROM Job
+                                                    WHERE isRunning = 1", [])->fetchAll()[0]['conto'];
+
         return json_encode($ret);
 
 

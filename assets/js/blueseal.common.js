@@ -10,6 +10,7 @@ $(document).ready(function () {
                     sessionMonitorContainer.find('#s1').html(res.traffic.sessions);
                     sessionMonitorContainer.find('#u1').html(res.traffic.users);
                     sessionMonitorContainer.find('#l1').html(res.load.m1 + '%');
+                    sessionMonitorContainer.find('#ja').html(res.job);
                 });
             });
         }, 60);

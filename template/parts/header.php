@@ -42,6 +42,7 @@
                             <th>Sessioni</th>
                             <th>Di cui loggate</th>
                             <th>Carico Server</th>
+                            <th>Job Attivi</th>
                         </tr>
                    </thead>
                     <tbody>
@@ -50,6 +51,7 @@
                             <td><span id="s1"></span></td>
                             <td><span id="u1"></span></td>
                             <td><span id="l1"></span></td>
+                            <td><span id="ja"></span></td>
                         </tr>
                     </tbody>
                 </table>
