@@ -234,9 +234,17 @@
                 "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             },
+            "monkeyUtil.js": {
+                "path": "scheme://localdomain/assets/js/",
+                "options": [""]
+            },
             "blueseal.page": {
                 "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
+            },
+            "blueseal.common.js": {
+                "path": "scheme://localdomain/assets/js/",
+                "options": ["defer","async"]
             }
         }
     }

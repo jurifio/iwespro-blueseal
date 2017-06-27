@@ -33,7 +33,28 @@
 
     <div class="pull-left sm-table">
         <div class="header-inner">
-            <div id="sessionMonitor"></div>
+            <?php if($app->user()->hasPermission('allShops') ): ?>
+            <div id="sessionMonitor">
+                <table class="mini-traffic-display">
+                   <thead>
+                        <tr>
+                            <th>Minuti</th>
+                            <th>Sessioni</th>
+                            <th>Di cui loggati</th>
+                            <th>Carico Server</th>
+                        </tr>
+                   </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><span id="s1"></span></td>
+                            <td><span id="u1"></span></td>
+                            <td><span id="l1"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 

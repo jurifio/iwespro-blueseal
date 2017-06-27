@@ -920,3 +920,19 @@ classi per colorare le righe delle tabelle da compilare in odd/even per il chiar
 .modal-high .modal-dialog {
     height: 500px;
 }
+
+th.narrow {
+    width: 120px;
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}
+
+table.mini-traffic-display {
+    border: dotted thin;
+}
+
+table.mini-traffic-display th, table.mini-traffic-display td {
+    border: dotted thin;
+    padding-right: 3px;
+    padding-left: 3px;
+}

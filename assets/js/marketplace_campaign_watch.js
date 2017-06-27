@@ -88,6 +88,7 @@
                         .replaceAll('{{campaignName}}',res.campaignName)
                     ;
                     div.html(container);
+                    div.data('campaignName',res.campaignName);
                 } else {
                     div.find('#visits').html(res.visits);
                     div.find('#cost').html('&euro; ' +res.cost);
@@ -121,10 +122,8 @@
         $(document).on('click','.show-categories-detail',function () {
             var div = $(this).closest(containerSelector);
 
-
-
             var modal = new $.bsModal(
-                'Dettaglio Catgorie '+ 'nome campagna',
+                'Dettaglio Catgorie: '+ div.data('campaignName'),
                 { body: '' }
             );
             modal.okButton.hide();
@@ -142,13 +141,42 @@
                     },
                     dataType: 'JSON'
                 }).done(function(res) {
+
                     modal.writeBody(template);
                     var table = $('.modal-body .widget-11 table');
                     var tableBody = table.find('tbody');
                     var rowTemplate = tableBody.find('tr')[0].outerHTML;
+
                     tableBody.html("");
                     for(var i in res) {
                         if(!res.hasOwnProperty(i)) continue;
+
+                        var color = '';
+                        var cpo = '∞';
+                        var crb = '∞';
+                        var cpoe = '∞';
+                        var crbe = '∞';
+                        if(res[i].ordersValue === 0) {
+                            color = 'alert-danger';
+                        } else {
+                            cpo = (res[i].cost / res[i].ordersValue * 100) + '%';
+                            if(cpo > 10) color = 'alert-danger';
+                            else if(cpo > 5) color = 'alert-warning';
+
+                            crb = (res[i].visits / res[i].orders * 100).toFixed() + '%';
+                        }
+
+                        if(res[i].exactOrdersValue === 0) {
+                            color = 'alert-danger';
+                        } else {
+                            cpoe = (res[i].cost / res[i].exactOrdersValue * 100) + '%';
+                            if(cpoe > 10) color = 'alert-danger';
+                            else if(cpoe > 5) color = 'alert-warning';
+
+                            crbe = (res[i].visits / res[i].exactOrders * 100).toFixed() + '%';
+                        }
+
+
                         tableBody.append(
                             rowTemplate
                                 .replaceAll('{{category}}',res[i].categoryPath)
@@ -158,6 +186,10 @@
                                 .replaceAll('{{ordersValue}}',res[i].ordersValue)
                                 .replaceAll('{{exactOrders}}',res[i].exactOrders)
                                 .replaceAll('{{exactOrdersValue}}',res[i].exactOrdersValue)
+                                .replaceAll('{{cpo}}',cpo)
+                                .replaceAll('{{cpoe}}',cpoe)
+                                .replaceAll('{{crb}}',crb)
+                                .replaceAll('{{crbe}}',crbe)
                         )
                     }
                 })

@@ -19,7 +19,20 @@ class CSessionMonitor extends AAjaxController
 	 */
 	public function get()
 	{
-		return 0;
+	    $CORES = 5;
+	    $load = sys_getloadavg();
+	    $ret['load']['m1'] = $load[0] / $CORES;
+	    $ret['load']['m5'] = $load[1] / $CORES;
+	    $ret['load']['m15'] = $load[2] / $CORES;
+
+        $ret['traffic'] = $this->app->dbAdapter->query("SELECT
+                                                      count(DISTINCT sid) as sessions,
+                                                      count(DISTINCT userId) as users
+                                                    FROM ActivityLog
+                                                    WHERE creationDate > date_sub(now(), INTERVAL 1 MINUTE)", [])->fetchAll()[0];
+        return json_encode($ret);
+
+
 		return $this->app->dbAdapter->query("	SELECT COUNT(DISTINCT sid) conto
 												FROM UserSession us
 												WHERE lastUpdate > (current_timestamp() - INTERVAL 30 SECOND ) OR
