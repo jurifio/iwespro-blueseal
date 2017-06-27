@@ -13,7 +13,7 @@ $(document).ready(function () {
                     sessionMonitorContainer.find('#ja').html(res.job);
                 });
             });
-        }, 60);
+        }, 6000);
 
     }
 });
