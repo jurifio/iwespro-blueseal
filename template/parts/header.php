@@ -40,7 +40,7 @@
                         <tr>
                             <th>Minuti</th>
                             <th>Sessioni</th>
-                            <th>Di cui loggati</th>
+                            <th>Di cui loggate</th>
                             <th>Carico Server</th>
                         </tr>
                    </thead>
