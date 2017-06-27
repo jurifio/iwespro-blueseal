@@ -78,7 +78,7 @@
                                         data-orderable="true" class="center">Grup.Taglie</th>
                                     <th data-slug="categoryId"
                                         data-searchable="true"
-                                        data-orderable="false" class="center categoryFilterType">Categorie</th>
+                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
                                     <th data-slug="tags"
                                         data-searchable="true"
                                         data-orderable="true"
