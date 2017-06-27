@@ -19,11 +19,11 @@ class CSessionMonitor extends AAjaxController
 	 */
 	public function get()
 	{
-	    $CORES = 5;
+	    $CORES = 6;
 	    $load = sys_getloadavg();
-	    $ret['load']['m1'] = $load[0] / $CORES;
-	    $ret['load']['m5'] = $load[1] / $CORES;
-	    $ret['load']['m15'] = $load[2] / $CORES;
+	    $ret['load']['m1'] = round($load[0] / $CORES * 100,2);
+	    $ret['load']['m5'] = round($load[1] / $CORES * 100,2);
+	    $ret['load']['m15'] = round($load[2] / $CORES * 100,2);
 
         $ret['traffic'] = $this->app->dbAdapter->query("SELECT
                                                       count(DISTINCT sid) as sessions,
