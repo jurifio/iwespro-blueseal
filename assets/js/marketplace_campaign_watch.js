@@ -72,7 +72,7 @@
                     if(cpo > 10) color = 'alert-danger';
                     else if(cpo > 5) color = 'alert-warning';
 
-                    crb = (res.orders /  res.visits * 100).toFixed() + '%';
+                    crb = (res.orders /  res.visits * 100).toFixed(2) + '%';
                 }
                 const progressPercent = res.elapsed.toFixed(2) + '%';
                 if(redraw) {
