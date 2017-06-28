@@ -40,7 +40,7 @@ class CMarketplaceCampaignMonitorDataProvider extends AAjaxController
         $sql = "SELECT
                   round(round(sum(cv.cost),2))             AS cost,
                   ifnull(count(cv.id), 0)         AS visits,
-                  ifnull(round(sum(o.netTotal),2),0)       AS ordersValue,
+                  ifnull(round(sum(distinct o.netTotal),2),0)       AS ordersValue,
                   ifnull(count(DISTINCT o.id), 0) AS orders
                 FROM Campaign c
                   JOIN CampaignVisit cv ON cv.campaignId = c.id
