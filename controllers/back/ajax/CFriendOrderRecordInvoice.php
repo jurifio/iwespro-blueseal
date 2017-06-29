@@ -96,8 +96,6 @@ class CFriendOrderRecordInvoice extends AAjaxController
         /** @var CDocumentRepo $inR */
         $inR = \Monkey::app()->repoFactory->create('Document');
 
-
-
         $res =[];
         $res['error'] = false;
         $res['responseText'] = 'Fattura inserita correttamente. Troverai il numero della fattura assegnato alle righe ordine interessate.';
