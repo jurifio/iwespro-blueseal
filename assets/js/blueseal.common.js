@@ -1,4 +1,4 @@
-const updateMonitoring = function () {
+const updateMonitoring = function (sessionMonitorContainer) {
     if(isVisible()) {
         Pace.ignore(function () {
             $.ajax({
@@ -18,8 +18,7 @@ const updateMonitoring = function () {
 $(document).ready(function () {
     var sessionMonitorContainer = $('#sessionMonitor');
     if(sessionMonitorContainer.length === 1) {
-        updateMonitoring();
-        setInterval(updateMonitoring, 10000);
-
+        updateMonitoring(sessionMonitorContainer);
+        setInterval(updateMonitoring, 10000,sessionMonitorContainer);
     }
 });
