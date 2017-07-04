@@ -750,7 +750,7 @@ class CDocumentRepo extends ARepo
                 throw new BambooInvoiceException('La fattura ' . $v->number . ', o è già stata saldata o, in caso di saldo parziale, va saldata singolarmente');
         }
 
-        return $due;
+        return round($due,2);
     }
 
     /**
@@ -831,7 +831,7 @@ class CDocumentRepo extends ARepo
             $pbh->insert();
         }
 
-        $pb->amount += $newAmount;
+        $pb->amount = round($pb->amount + $newAmount,2);
         $pb->update();
         return true;
     }

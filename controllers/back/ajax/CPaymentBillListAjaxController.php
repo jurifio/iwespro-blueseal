@@ -64,7 +64,7 @@ class CPaymentBillListAjaxController extends AAjaxController
                 foreach ($payment as $invoice) {
                     $total += $invoice->getSignedValueWithVat(true);
                 }
-                $rec[] = $name . ': ' . $total;
+                $rec[] = $name . ': ' . round($total,2);
 
             }
             $row['total'] = $paymentBill->getTotal();
