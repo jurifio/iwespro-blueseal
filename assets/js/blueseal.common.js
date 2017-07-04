@@ -1,12 +1,3 @@
-$(document).ready(function () {
-    var sessionMonitorContainer = $('#sessionMonitor');
-    if(sessionMonitorContainer.length === 1) {
-        updateMonitoring();
-        setInterval(updateMonitoring, 10000);
-
-    }
-});
-
 const updateMonitoring = function () {
     if(isVisible()) {
         Pace.ignore(function () {
@@ -21,4 +12,14 @@ const updateMonitoring = function () {
             });
         });
     }
-}
+};
+
+
+$(document).ready(function () {
+    var sessionMonitorContainer = $('#sessionMonitor');
+    if(sessionMonitorContainer.length === 1) {
+        updateMonitoring();
+        setInterval(updateMonitoring, 10000);
+
+    }
+});
