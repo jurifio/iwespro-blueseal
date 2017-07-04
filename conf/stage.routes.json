@@ -435,20 +435,6 @@
             ]
         },
         {
-            "pattern": "/blueseal/prodotti/roulette(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductRouletteController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
             "pattern": "/blueseal/prodotti/modifica(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductEditController"

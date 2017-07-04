@@ -228,20 +228,6 @@
             data-remote="bs.product.sales.price.change"
             ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Roulette">
-        <bs-toolbar-select
-            data-tag="select"
-            data-icon="fa-random"
-            data-button="true"
-            data-permission="/admin/product/add"
-            data-rel="tooltip"
-            data-placement="bottom"
-            data-class="btn btn-default"
-            data-title="Roulette prodotti"
-            data-event="bs.roulette.add"
-            data-options='<?php echo json_encode($roulette); ?>'
-            ></bs-toolbar-select>
-    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Filtri">
         <bs-toolbar-button
                 data-remote="bs.product.filterShootingCritical"

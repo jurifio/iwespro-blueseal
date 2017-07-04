@@ -4,9 +4,6 @@ var alertHtml = "" +
     "<span aria-hidden=\"true\">&times;</span></button>" +
     "<strong class=\"alert-title\">{title}</strong> <span class=\"alert-message\">{body}</span> </div>";
 
-$(document).on('bs.roulette.add', function (e, element, button) {
-    window.location = '/blueseal/prodotti/roulette?roulette=' + $(element).val();
-});
 
 $(document).on('bs.pub.product', function (e, element, button) {
 

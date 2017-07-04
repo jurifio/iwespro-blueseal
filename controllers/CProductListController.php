@@ -55,23 +55,6 @@ class CProductListController extends ARestrictedAccessRootController
             }
         }
 
-        $roulette = [];
-        $qry = "SELECT COUNT(DISTINCT dp.id) AS conto
-                FROM DirtyProduct dp, DirtySku ds
-                WHERE dp.id = ds.dirtyProductId AND
-                ds.shopId = ? AND
-                dp.productVariantId IS NULL AND
-                dp.dirtyStatus in ('E', '', 'F')";
-
-        $repo = $this->app->repoFactory->create('Shop');
-        foreach ($shops as $key => $shop) {
-            $one = $repo->findOne([$shop]);
-            if (isset($one->importer)) {
-                $one->roulette = $this->app->dbAdapter->query($qry, [$shop])->fetchAll()[0]['conto'];
-                $roulette[$one->name] = $one->title." (".$one->roulette.")";
-            }
-        }
-
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99','');
 
@@ -90,7 +73,6 @@ class CProductListController extends ARestrictedAccessRootController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'dummyUrl' => $dummyUrl,
             'statuses' => $statuses,
-            'roulette' => $roulette,
             'aggiungi' => $aggiungi,
             'carica' => $carica,
             'foto' => $foto,
