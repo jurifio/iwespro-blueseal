@@ -52,13 +52,13 @@ class CCouponTypeListAjaxController extends AAjaxController
     {
         $editCouponTypeLink = $this->urls['base']."tipocoupon/modifica";
         $sql = "SELECT
-  `CouponType`.`id`                AS `id`,
-  `CouponType`.`name`              AS `name`,
-  `CouponType`.`amount`            AS `amount`,
-  `CouponType`.`amountType`        AS `amountType`,
-  `CouponType`.`validity`          AS `validity`,
-  `CouponType`.`validForCartTotal` AS `validForCartTotal`
-FROM `CouponType`";
+                  `CouponType`.`id`                AS `id`,
+                  `CouponType`.`name`              AS `name`,
+                  `CouponType`.`amount`            AS `amount`,
+                  `CouponType`.`amountType`        AS `amountType`,
+                  `CouponType`.`validity`          AS `validity`,
+                  `CouponType`.`validForCartTotal` AS `validForCartTotal`
+                FROM `CouponType`";
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         if (!empty($this->authorizedShops)) {

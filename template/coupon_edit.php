@@ -45,16 +45,6 @@
                                         <input type="text" class="form-control" id="amount" name="amount" value="<?php echo $coupon->amount; ?>"/>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default radio radio-success">
-                                        <input type="radio" id="amountFixed" name="amountType" value="F" <?php echo ($coupon->amountType == 'F') ? 'checked="checked"' : null;?> />
-                                        <label for="amountFixed">Fisso</label>
-                                        <input type="radio" id="amountPercentage" name="amountType" value="P" <?php echo ($coupon->amountType == 'P') ? 'checked="checked"' : null;?> />
-                                        <label for="amountPercentage">Percentuale</label>
-                                        <input type="radio" id="amountPercentageFull" name="amountType" value="G" <?php echo ($coupon->amountType == 'G') ? 'checked="checked"' : null;?> />
-                                        <label for="amountPercentageFull">Percentuale sul prezzo pieno</label>
-                                    </div>
-                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">

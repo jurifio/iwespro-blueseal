@@ -64,16 +64,6 @@
                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default radio radio-success">
-                                        <input type="radio" id="amountFixed" name="amountType" value="F" />
-                                        <label for="amountFixed">Fisso</label>
-                                        <input type="radio" id="amountPercentage" name="amountType" value="P" checked="checked" />
-                                        <label for="amountPercentage">Percentuale</label>
-                                        <input type="radio" id="amountPercentageFull" name="amountType" value="G" />
-                                        <label for="amountPercentageFull">Percentuale sul prezzo pieno</label>
-                                    </div>
-                                </div>
                             </div>
                         </form>
                     </div>

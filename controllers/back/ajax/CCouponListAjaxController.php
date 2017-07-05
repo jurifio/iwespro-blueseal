@@ -61,10 +61,10 @@ class CCouponListAjaxController extends AAjaxController
                   `Coupon`.`issueDate`                                       AS `issueDate`,
                   `Coupon`.`validThru`                                       AS `validThru`,
                   `Coupon`.`amount`                                          AS `amount`,
-                  `Coupon`.`amountType`                                      AS `amountType`,
                   `Coupon`.`userId`                                          AS `userId`,
                   `Coupon`.`valid`                                           AS `valid`,
                   `CouponType`.`name`                                        AS `couponType`,
+                  `CouponType`.`amountType`                                  AS `amountType`,
                   `CouponType`.`validForCartTotal`                           AS `validForCartTotal`,
                   concat(`UserDetails`.`name`, ' ', `UserDetails`.`surname`) AS `utente`,
                   `Order`.`id`                                               AS `orderId`
@@ -78,18 +78,11 @@ class CCouponListAjaxController extends AAjaxController
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $coupons = $this->app->repoFactory->create('Coupon')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->coupons->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->coupons->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $datatable->doAllTheThings();
+        $repo = $this->app->repoFactory->create('Coupon');
+        foreach($datatable->getResponseSetData() as $key=>$raw) {
 
-        $response = [];
-        $response ['draw'] = $this->app->router->request()->getRequestData('draw');
-        $response ['recordsTotal'] = $totalCount;
-        $response ['recordsFiltered'] = $count;
-        $response ['data'] = [];
-
-        $i = 0;
-        foreach($coupons as $coupon) {
+            $coupon = $repo->findOneBy($raw);
 
             $issued = new \DateTime($coupon->issueDate);
             $valid = new \DateTime($coupon->validThru);
@@ -107,9 +100,9 @@ class CCouponListAjaxController extends AAjaxController
             $row['utente'] = $user ?? "";
             $row['orderId'] = $order ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editOrderLink.'?order='.$order->id.'">'.$order->id.'</a>' : '';
             $row['valid'] = ($coupon->valid == 1) ? 'valido' : 'non valido';
-            $response['data'][] = $row;
+            $datatable->setResponseDataSetRow($key,$row);
         }
 
-        return json_encode($response);
+        return $datatable->responseOut();
     }
 }
