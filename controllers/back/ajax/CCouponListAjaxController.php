@@ -56,7 +56,6 @@ class CCouponListAjaxController extends AAjaxController
                 SELECT
                   `Coupon`.`id`                                              AS `id`,
                   `Coupon`.`couponTypeId`                                    AS `couponTypeId`,
-                  `Coupon`.`tagId`                                           AS `tagId`,
                   `Coupon`.`code`                                            AS `code`,
                   `Coupon`.`issueDate`                                       AS `issueDate`,
                   `Coupon`.`validThru`                                       AS `validThru`,
