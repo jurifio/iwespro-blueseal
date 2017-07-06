@@ -41,6 +41,18 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Minimo spesa</th>
+                                <th data-slug="hasFreeShipping"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Spedizione Gratuita</th>
+                                <th data-slug="hasFreeReturn"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Reso Gratuito</th>
+                                <th data-slug="tags"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Tags</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -18,65 +18,36 @@ use bamboo\core\intl\CLang;
  */
 class CCouponTypeListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."tipocoupon";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        if ($this->app->getUser()->hasPermission('allShops')) {
-
-        } else{
-            $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
-            foreach($res as $val) {
-                $this->authorizedShops[] = $val['shopId'];
-            }
-        }
-
-        $this->em = new \stdClass();
-        $this->em->coupons = $this->app->entityManagerFactory->create('CouponType');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
-        $editCouponTypeLink = $this->urls['base']."tipocoupon/modifica";
+        $editCouponTypeLink = "/blueseal/tipocoupon/modifica";
+
         $sql = "SELECT
-                  `CouponType`.`id`                AS `id`,
-                  `CouponType`.`name`              AS `name`,
-                  `CouponType`.`amount`            AS `amount`,
-                  `CouponType`.`amountType`        AS `amountType`,
-                  `CouponType`.`validity`          AS `validity`,
-                  `CouponType`.`validForCartTotal` AS `validForCartTotal`
-                FROM `CouponType`";
+                  `ct`.`id`                AS `id`,
+                  `ct`.`name`              AS `name`,
+                  `ct`.`amount`            AS `amount`,
+                  `ct`.`amountType`        AS `amountType`,
+                  `ct`.`validity`          AS `validity`,
+                  `ct`.`validForCartTotal` AS `validForCartTotal`,
+                  if(`ct`.`hasFreeShipping` = 1, 'sisì','no') as hasFreeShipping,
+                  if(`ct`.`hasFreeReturn` = 1, 'sisì','no') as hasFreeReturn,
+                  ifnull(group_concat(distinct t.slug),'') as tags
+                FROM `CouponType` ct
+                  LEFT JOIN (
+                    CouponTypeHasTag ctht JOIN Tag t on ctht.tagId = t.id
+                  ) on ct.id = ctht.couponTypeId
+                GROUP BY ct.id";
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $coupons = $this->app->repoFactory->create('CouponType')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->coupons->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->coupons->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $datatable->doAllTheThings(true);
+        $couponRepo = $this->app->repoFactory->create('CouponType');
 
-        $response = [];
-        $response ['draw'] = $this->app->router->request()->getRequestData('draw');
-        $response ['recordsTotal'] = $totalCount;
-        $response ['recordsFiltered'] = $count;
-        $response ['data'] = [];
-
-        $i = 0;
-        foreach($coupons as $coupon) {
+        foreach($datatable->getResponseSetData() as $key=>$row) {
+            $coupon = $couponRepo->findOne($row);
 
             $valid = new \DateInterval($coupon->validity);
             if (($anni = ($valid->format('%y'))) != 0) {
@@ -87,15 +58,17 @@ class CCouponTypeListAjaxController extends AAjaxController
                 $periodo = ($valid->format('%d') > 1) ? $valid->format('%d') . " giorni" : $valid->format('%d') . " giorno";
             }
 
-            $response['data'][$i]["DT_RowId"] = 'row__'.$coupon->id;
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['name'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editCouponTypeLink.'/'.$coupon->id.'" >'.$coupon->name.'</a>';
-            $response['data'][$i]['validity'] = $periodo;
-            $response['data'][$i]['amount'] = ($coupon->amountType == 'F') ? $coupon->amount.' &euro;' : $coupon->amount.'%';
-            $response['data'][$i]['validForCartTotal'] = $coupon->validForCartTotal.' &euro;';
-            $i++;
+            $row["DT_RowId"] = 'row__'.$coupon->id;
+            $row["DT_RowClass"] = 'colore';
+            $row['name'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editCouponTypeLink.'/'.$coupon->id.'" >'.$coupon->name.'</a>';
+            $row['validity'] = $periodo;
+            $row['amount'] = ($coupon->amountType == 'F') ? $coupon->amount.' &euro;' : $coupon->amount.'%';
+            $row['validForCartTotal'] = $coupon->validForCartTotal.' &euro;';
+            $row['tags'] = implode('<br />',explode(',',$row['tags']));
+
+            $datatable->setResponseDataSetRow($key,$row);
         }
 
-        return json_encode($response);
+        return $datatable->responseOut();
     }
 }
