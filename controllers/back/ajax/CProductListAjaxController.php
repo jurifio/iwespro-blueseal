@@ -49,22 +49,14 @@ class CProductListAjaxController extends AAjaxController
                   `pc`.`id`                                                                                             AS `categoryId`,
                   `pcg`.`name`                                                                                          AS `colorGroup`,
                   `p`.`isOnSale`                                                                                        AS `isOnSale`,
+                  tagSelection.orderingTags,
+                  tagSelection.tags,
                   ifnull(`p`.`processing`, '-')                                                                         AS `processing`,
                   (((if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
                       (`pse`.`isActive` = 0), `s`.`pastSeasonMultiplier`,
                       if((`p`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
                    (if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100                           AS `mup`,
                   `p`.`qty`                                                                                             AS `hasQty`,
-                  (SELECT group_concat(DISTINCT tt.name)
-                   FROM `ProductHasTag` `pht`
-                     JOIN Tag t ON pht.tagId = t.id
-                     JOIN `TagTranslation` `tt` ON `t`.`id` = `tt`.`tagId`
-                   WHERE langId = 1 AND pht.productId = `p`.id AND `pht`.`productVariantId` = `p`.`productVariantId` AND
-                         t.sortingPriorityId = 999)                                                                     AS tags,
-                  (SELECT group_concat(distinct LPAD(t.sortingPriorityId,10,'0') order by t.sortingPriorityId) as sorting
-                   FROM `ProductHasTag` `pht`
-                     JOIN Tag t ON pht.tagId = t.id
-                   WHERE pht.productId = `p`.id AND `pht`.`productVariantId` = `p`.`productVariantId` AND t.sortingPriorityId != 999) AS orderingTags,
                   (SELECT min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), NULL))
                    FROM ProductSku
                    WHERE ProductSku.productId = p.id AND ProductSku.productVariantId = p.productVariantId)              AS activePrice,
@@ -84,6 +76,20 @@ class CProductListAjaxController extends AAjaxController
                   JOIN `ShopHasProduct` `sp`
                     ON (((`p`.`id` = `sp`.`productId`) AND (`p`.`productVariantId` = `sp`.`productVariantId`))))
                   JOIN `Shop` `s` ON ((`s`.`id` = `sp`.`shopId`)))
+                  JOIN (SELECT
+                          pht.productId,
+                          pht.productVariantId,
+                          group_concat(DISTINCT CASE WHEN t.sortingPriorityId != 999
+                            THEN LPAD(t.sortingPriorityId, 10, '0')
+                                                ELSE NULL END ORDER BY t.sortingPriorityId) AS orderingTags,
+                          group_concat(DISTINCT CASE WHEN t.sortingPriorityId = 999
+                            THEN tt.name
+                                                ELSE NULL END ORDER BY t.sortingPriorityId) AS tags
+                        FROM ProductHasTag pht
+                          JOIN Tag t ON pht.tagId = t.id
+                          JOIN TagTranslation tt ON t.id = tt.tagId AND tt.langId = 1
+                        GROUP BY pht.productId, pht.productVariantId) AS tagSelection
+                    ON (p.id, p.productVariantId) = (tagSelection.productId, tagSelection.productVariantId)
                   LEFT JOIN `ProductSizeGroup` `psg` ON ((`p`.`productSizeGroupId` = `psg`.`id`)))
                   LEFT JOIN `ProductSku` `psk`
                     ON (((`p`.`id` = `psk`.`productId`) AND (`p`.`productVariantId` = `psk`.`productVariantId`))))
