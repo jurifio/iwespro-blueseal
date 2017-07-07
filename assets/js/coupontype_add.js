@@ -23,7 +23,7 @@ $(document).on('bs.coupontype.add', function() {
         okButton.off().on('click', function() {
             bsModal.modal('hide');
             okButton.off();
-         //   window.location.href = '/blueseal/tipocoupon/modifica/'+content;
+            window.location.href = '/blueseal/tipocoupon/modifica/'+content;
         });
     }).fail(function(){
         body.html('Errore grave');

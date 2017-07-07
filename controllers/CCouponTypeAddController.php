@@ -63,7 +63,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                 $couponTypeHasTag = $this->app->repoFactory->create('CouponTypeHasTag')->getEmptyEntity();
                 $couponTypeHasTag->tagId = $tag;
                 $couponTypeHasTag->couponTypeId = $couponType->id;
-
+                $couponTypeHasTag->insert();
             }
 
             return $couponType->id;
