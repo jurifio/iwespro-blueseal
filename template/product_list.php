@@ -83,6 +83,10 @@
                                         data-searchable="true"
                                         data-orderable="true"
                                         data-visible="false" class="center">Tags</th>
+                                    <th data-slug="orderingTags"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        data-visible="false" class="center">Tags Ordinamento</th>
                                     <th data-slug="status"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>
