@@ -47,13 +47,22 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
         $data = $this->app->router->request()->getRequestData();
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
-        $couponRepo = $this->app->repoFactory->create('CouponType');
-        $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
+        $couponType = $this->app->repoFactory->create('CouponType')->findOneBy(['id'=>$couponId]);
 
         foreach ($data as $k => $v) {
-            $coupon->{$k} = $v;
+            $couponType->{$k} = $v;
+        }
+        $couponType->update();
+
+        foreach ($couponType->couponTypeHasTag as $couponTypeHasTag) {
+            $couponTypeHasTag->delete();
         }
 
-        $couponRepo->update($coupon);
+        foreach ($data['tags'] as $tag) {
+            $couponTypeHasTag = $this->app->repoFactory->create('CouponTypeHasTag')->getEmptyEntity();
+            $couponTypeHasTag->tagId = $tag;
+            $couponTypeHasTag->couponTypeId = $couponType->id;
+            $couponTypeHasTag->insert();
+        }
     }
 }
