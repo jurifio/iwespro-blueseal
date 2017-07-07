@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui', 'forms'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
+    <style>
+        #form-project .row > div {
+            min-height: 75px;
+        }
+    </style>
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -32,11 +37,47 @@
                                     <div class="form-group form-group-default">
                                         <label for="name">Nome tipo coupon</label>
                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                        <input type="text" class="form-control" id="name" name="name" />
+                                        <input type="text" class="form-control" id="name" name="name"/>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="validity">Validità</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona il periodo di validità"
+                                                data-init-plugin="selectize" tabindex="-1" title="validity"
+                                                name="validity" id="validity">
+                                            <?php $i = 0;
+                                            foreach ($possValids as $possValid): ?>
+                                                <option value="<?php echo $possValidity[$i]; ?>" required>
+                                                    <?php echo $possValid . "" ?>
+                                                </option>
+                                                <?php $i++;
+                                            endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label for="validForCartTotal">Minimo spesa</label>
+                                        <input type="text" class="form-control" id="validForCartTotal"
+                                               name="validForCartTotal"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="hasFreeShipping">Spedizione Gratuita</label>
+                                        <input type="checkbox" class="form-control" id="hasFreeShipping"
+                                               name="hasFreeShipping"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="hasFreeReturn">Reso Gratuito</label>
+                                        <input type="checkbox" class="form-control" id="hasFreeReturn"
+                                               name="hasFreeReturn"/>
+                                    </div>
+                                </div>
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="amount">Valore</label>
@@ -46,36 +87,23 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default radio radio-success">
-                                        <input type="radio" id="amountFixed" name="amountType" value="F" />
+                                        <input type="radio" id="amountFixed" name="amountType" value="F"/>
                                         <label for="amountFixed">Fisso</label>
-                                        <input type="radio" id="amountPercentage" name="amountType" value="P" checked="checked" />
+                                        <input type="radio" id="amountPercentage" name="amountType" value="P"
+                                               checked="checked"/>
                                         <label for="amountPercentage">Percentuale</label>
-                                        <input type="radio" id="amountPercentageFull" name="amountType" value="G" />
+                                        <input type="radio" id="amountPercentageFull" name="amountType" value="G"/>
                                         <label for="amountPercentageFull">Percentuale sul prezzo pieno</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                   <div class="col-sm-6">
-                                       <div class="form-group form-group-default selectize-enabled">
-                                           <label for="validity">Validità</label>
-                                           <select class="full-width selectpicker" placeholder="Seleziona il periodo di validità" data-init-plugin="selectize" tabindex="-1" title="validity" name="validity" id="validity">
-                                               <?php $i=0;
-                                               foreach ($possValids as $possValid): ?>
-                                                   <option value="<?php echo $possValidity[$i]; ?>" required >
-                                                       <?php echo $possValid . ""?>
-                                                   </option>
-                                                   <?php $i++;
-                                                    endforeach; ?>
-                                           </select>
-                                       </div>
-                                   </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="form-group form-group-default">
-                                        <label for="validForCartTotal">Minimo spesa</label>
-                                        <input type="text" class="form-control" id="validForCartTotal" name="validForCartTotal" />
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="tags">Tags</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona le tag di validità"
+                                                tabindex="-1" title="Tags"
+                                                name="tags[]" id="tags">
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -92,15 +120,15 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-floppy-o"
-            data-permission="/admin/marketing"
-            data-event="bs.coupontype.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Salva"
-            data-placement="bottom"
-            ></bs-toolbar-button>
+                data-tag="a"
+                data-icon="fa-floppy-o"
+                data-permission="/admin/marketing"
+                data-event="bs.coupontype.add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Salva"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

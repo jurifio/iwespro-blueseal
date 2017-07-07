@@ -48,19 +48,25 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
     }
 
     /**
-     * @return void
+     * @return mixed
      */
     public function post()
     {
         try {
             $data = $this->app->router->request()->getRequestData();
-            $couponRepo = $this->app->repoFactory->create('CouponType');
-            $coupon = $couponRepo->getEmptyEntity();
+            $couponType = $this->app->repoFactory->create('CouponType')->getEmptyEntity();
             foreach ($data as $k => $v) {
-                $coupon->{$k} = $v;
+                $couponType->{$k} = $v;
             }
-            $id = $couponRepo->insert($coupon);
-            return $id;
+            $couponType->smartInsert();
+            foreach ($data['tags'] as $tag) {
+                $couponTypeHasTag = $this->app->repoFactory->create('CouponTypeHasTag')->getEmptyEntity();
+                $couponTypeHasTag->tagId = $tag;
+                $couponTypeHasTag->couponTypeId = $couponType->id;
+
+            }
+
+            return $couponType->id;
         } catch (\Throwable $e) {
             $this->app->router->response()->raiseProcessingError();
             $this->app->router->response()->sendHeaders();

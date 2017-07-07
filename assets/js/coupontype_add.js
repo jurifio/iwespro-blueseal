@@ -30,3 +30,24 @@ $(document).on('bs.coupontype.add', function() {
         bsModal.modal();
     });
 });
+
+$(document).ready(function () {
+    $.ajax({
+        method:'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Tag'
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        var select = $('#tags');
+        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'slug',
+            searchField: ['slug'],
+            options: res,
+            maxItems: 50
+        });
+    });
+});
