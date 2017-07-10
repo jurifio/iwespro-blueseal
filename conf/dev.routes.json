@@ -823,6 +823,17 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/coupon/smart(/?)",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponAddSmartController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST"
+            ]
         },
         {
             "pattern": "/blueseal/coupon/modifica/:id(/?)",
