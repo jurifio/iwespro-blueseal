@@ -34,75 +34,12 @@
                         <form id="form-project" role="form" action="" method="POST" autocomplete="on">
                             <div class="row clearfix">
                                 <div class="col-sm-6">
-                                    <div class="form-group form-group-default">
-                                        <label for="name">Nome tipo coupon</label>
-                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                        <input type="text" class="form-control" id="name" name="name"/>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="validity">Validità</label>
-                                        <select class="full-width selectpicker"
-                                                placeholder="Seleziona il periodo di validità"
-                                                data-init-plugin="selectize" tabindex="-1" title="validity"
-                                                name="validity" id="validity">
-                                            <?php $i = 0;
-                                            foreach ($possValids as $possValid): ?>
-                                                <option value="<?php echo $possValidity[$i]; ?>" required>
-                                                    <?php echo $possValid . "" ?>
-                                                </option>
-                                                <?php $i++;
-                                            endforeach; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default">
-                                        <label for="validForCartTotal">Minimo spesa</label>
-                                        <input type="text" class="form-control" id="validForCartTotal"
-                                               name="validForCartTotal"/>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group form-group-default">
-                                        <label for="hasFreeShipping">Spedizione Gratuita</label>
-                                        <input type="checkbox" class="form-control" id="hasFreeShipping"
-                                               name="hasFreeShipping"/>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group form-group-default">
-                                        <label for="hasFreeReturn">Reso Gratuito</label>
-                                        <input type="checkbox" class="form-control" id="hasFreeReturn"
-                                               name="hasFreeReturn"/>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default">
-                                        <label for="amount">Valore</label>
-                                        <input type="text" class="form-control" id="amount" name="amount" required/>
+                                        <label for="CouponType">Tipo coupon</label>
                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default radio radio-success">
-                                        <input type="radio" id="amountFixed" name="amountType" value="F"/>
-                                        <label for="amountFixed">Fisso</label>
-                                        <input type="radio" id="amountPercentage" name="amountType" value="P"
-                                               checked="checked"/>
-                                        <label for="amountPercentage">Percentuale</label>
-                                        <input type="radio" id="amountPercentageFull" name="amountType" value="G"/>
-                                        <label for="amountPercentageFull">Percentuale sul prezzo pieno</label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default selectize-enabled">
-                                        <label for="tags">Tags</label>
                                         <select class="full-width selectpicker"
-                                                placeholder="Seleziona le tag di validità"
-                                                tabindex="-1" title="Tags"
-                                                name="tags[]" id="tags">
+                                                placeholder="Seleziona il tipo di coupon" tabindex="-1"
+                                                title="couponTypeId" name="couponTypeId" id="couponTypeId">
                                         </select>
                                     </div>
                                 </div>
@@ -118,7 +55,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="">
+    <bs-toolbar-group data-group-label="Coupon Smart">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-floppy-o"
@@ -127,6 +64,28 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Salva"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Tipo Coupon">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="/admin/marketing"
+                data-class="btn btn-default"
+                data-rel="noopener"
+                data-title="Aggiungi un nuovo Tipo Coupon"
+                data-placement="bottom"
+                data-href="/blueseal/tipocoupon/aggiungi"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-refresh"
+                data-permission="/admin/marketing"
+                data-event="bs.coupontype.refresh"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Ricarica Tipi"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

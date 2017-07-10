@@ -87,7 +87,6 @@
             data-rel="tooltip"
             data-title="Elimina prodotto"
             data-placement="bottom"
-            data-target="#bsModal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -7,8 +7,7 @@ window.buttonSetup = {
     rel: "tooltip",
     title: "Pubblica prodotti",
     placement: "bottom",
-    toggle: "modal",
-    target: "#bsModal"
+    toggle: "modal"
 };
 
 $(document).on('bs.pub.product', function (e, element, button) {

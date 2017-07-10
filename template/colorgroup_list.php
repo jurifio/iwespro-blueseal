@@ -91,7 +91,7 @@
             data-rel="tooltip"
             data-title="Elimina colore"
             data-placement="bottom"
-            data-target="#bsModal"
+
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

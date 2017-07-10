@@ -327,7 +327,7 @@
             data-title="Elimina"
             data-placement="bottom"
             data-toggle="modal"
-            data-target="#bsModal"
+
             ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

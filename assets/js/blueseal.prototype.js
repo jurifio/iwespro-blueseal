@@ -173,8 +173,8 @@ let Button = function (data) {
     this.template = "<{tag} {attributes} {id}>{icon}</{tag}>";
 
     this.cfg = new ButtonCfg(data, ['tag', 'icon', 'loadEvent', 'permission', 'event', 'button']);
-    this.tagAttr = new ButtonCfg(data, ['class', 'rel', 'href', 'title', 'name', 'download']);
-    this.dataAttr = new ButtonCfg(data, ['placement', 'toggle', 'target', 'json']);
+    this.tagAttr = new ButtonCfg(data, ['class', 'rel', 'href', 'title', 'name', 'download', 'target', 'data-target']);
+    this.dataAttr = new ButtonCfg(data, ['placement', 'toggle', 'json']);
 
     this.permissionCheckerEndPoint = "/blueseal/xhr/CheckPermission";
 };
