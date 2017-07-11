@@ -672,7 +672,8 @@
                 "PUT",
                 "DELETE"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendConfirmationController"
@@ -692,17 +693,6 @@
             "pattern": "/blueseal/print/azteccode(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPrintAztecCodeController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketing/landing(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageListController"
             },
             "filters": {},
             "translations": {},
@@ -821,6 +811,17 @@
             "translations": {},
             "methods": [
                 "GET"
+            ]
+        },{
+            "pattern": "/blueseal/marketing/coupon/smart(/?)",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponAddSmartController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST"
             ]
         },
         {
@@ -1468,39 +1469,6 @@
             "filters": {
                 "fileName": "[a-zA-Z0-9\\.]+"
             },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/campagne(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/accounts(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketing/campaigns(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
-            },
-            "filters": {},
             "translations": {},
             "methods": [
                 "GET"
