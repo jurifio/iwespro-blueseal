@@ -49,7 +49,7 @@ class CCouponAddController extends ARestrictedAccessRootController
     }
 
     /**
-     * @return void
+     * @return int|string
      */
     public function post()
     {
@@ -67,6 +67,7 @@ class CCouponAddController extends ARestrictedAccessRootController
         } catch (\Throwable $e) {
             $this->app->router->response()->raiseProcessingError();
             $this->app->router->response()->sendHeaders();
+            return $e->getTraceAsString();
         }
     }
 }

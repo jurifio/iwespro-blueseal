@@ -24,14 +24,13 @@
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
                 </div>
             </div>
-
-            <div class="container-fluid container-fixed-lg bg-white">
-                <div class="panel panel-transparent">
-                    <div class="panel-heading">
-                        <h5>Inserisci un nuovo Coupon</h5>
-                    </div>
-                    <div class="panel-body">
-                        <form id="form-project" role="form" action="" method="POST" autocomplete="on">
+            <form id="form-project" role="form" action="" method="POST" autocomplete="on">
+                <div class="container-fluid container-fixed-lg bg-white">
+                    <div class="panel panel-transparent">
+                        <div class="panel-heading">
+                            <h5>Inserisci un nuovo Coupon</h5>
+                        </div>
+                        <div class="panel-body">
                             <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
@@ -43,11 +42,27 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default radio radio-success">
+                                        <input type="radio" id="singleCoupon" name="couponSpecies" value="single"/>
+                                        <label for="singleCoupon">Coupon Singolo</label>
+                                        <input type="radio" id="multipleCoupon" name="couponSpecies" value="multi"/>
+                                        <label for="multipleCoupon">Coupon Multiplo</label>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+                    <div class="panel panel-transparent">
+                        <div class="panel-heading">
+                            <h5>Dettagli Coupon</h5>
+                        </div>
+                        <div class="panel-body coupon-specifics">
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
+
         </div>
         <?php include "parts/footer.php"; ?>
     </div>
@@ -60,7 +75,7 @@
                 data-tag="a"
                 data-icon="fa-floppy-o"
                 data-permission="/admin/marketing"
-                data-event="bs.coupontype.add"
+                data-event="bs.couponsmart.add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Salva"
@@ -74,6 +89,7 @@
                 data-permission="/admin/marketing"
                 data-class="btn btn-default"
                 data-rel="noopener"
+                data-target="_blank"
                 data-title="Aggiungi un nuovo Tipo Coupon"
                 data-placement="bottom"
                 data-href="/blueseal/tipocoupon/aggiungi"

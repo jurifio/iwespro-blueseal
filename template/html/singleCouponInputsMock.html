@@ -1,0 +1,29 @@
+<div class="row clearfix">
+    <div class="col-sm-6">
+        <div class="form-group form-group-default">
+            <label for="code">Codice Coupon Singolo</label>
+            <input type="text" class="form-control" id="code" name="code" value=""/>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group form-group-default">
+            <label for="validThru">Valido fino a</label>
+            <input type="datetime-local" class="form-control" id="validThru" name="validThru" value=""/>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group form-group-default">
+            <label for="amount">Valore</label>
+            <input type="text" class="form-control" id="amount" name="amount" required/>
+            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group form-group-default selectize-enabled">
+            <label for="userId">Utente</label>
+            <select id="userId" class="full-width selectpicker"
+                    placeholder="Seleziona un utente" name="userId"
+                    required="required"></select>
+        </div>
+    </div>
+</div>

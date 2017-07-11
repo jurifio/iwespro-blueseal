@@ -1440,28 +1440,6 @@
             ]
         },
         {
-            "pattern": "/blueseal/marketplace/account(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketing/campaigns(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
             "pattern": "/blueseal/statistiche/esporta(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExport"

@@ -482,12 +482,30 @@ $.bsModal = function (header, params) {
         self.cancelButton.hide();
     };
 
+    this.showOkBtn = function () {
+        self.cancelButton.show();
+    };
+
+    this.hideOkBtn = function () {
+        self.cancelButton.hide();
+    };
+
     this.setCancelEvent = function (callback) {
         self.cancelButton.off().on('click', callback);
     };
 
     this.setLabel = function (button /* ok, cancel */, string) {
         self[button + 'Button'].html(string);
+    };
+
+    this.setOkLabel = function (string) {
+        "use strict";
+        self.setLabel('ok',string);
+    };
+
+    this.setCancelLabel = function (string) {
+        "use strict";
+        self.setLabel('cancel',string);
     };
 
     this.disableOkButton = function () {
