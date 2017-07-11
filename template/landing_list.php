@@ -83,7 +83,6 @@
             data-title="Elimina"
             data-placement="bottom"
             data-toggle="modal"
-
             ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

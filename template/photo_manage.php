@@ -100,7 +100,6 @@
             data-class="btn btn-default"
             data-title="Aggiungi Foto"
             data-toggle="modal"
-
             data-href="#"
             ></bs-toolbar-button>
     </bs-toolbar-group>

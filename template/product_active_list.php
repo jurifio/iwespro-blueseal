@@ -118,7 +118,6 @@
             data-title="Pubblica prodotti"
             data-placement="bottom"
             data-toggle="modal"
-
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
