@@ -63,6 +63,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Valido</th>
+                                <th data-slug="couponEvent"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Coupon Multiplo</th>
                             </tr>
                             </thead>
                             <tbody>

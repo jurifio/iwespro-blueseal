@@ -62,7 +62,7 @@
                                     <div class="form-group form-group-default">
                                         <label for="startDate">Valido da</label>
                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                        <input type="datetime-local" class="form-control" id="startDate" name="startDate" value="<?php echo $startDate; ?> " />
+                                        <input type="date" class="form-control" id="startDate" name="startDate" value="" />
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                        <div class="form-group form-group-default">
                                            <label for="endDate">Valido fino a</label>
                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                           <input type="datetime-local" class="form-control" id="endDate" name="endDate" value="<?php echo $endDate; ?> " />
+                                           <input type="date" class="form-control" id="endDate" name="endDate" value="" />
                                        </div>
                                    </div>
                             </div>

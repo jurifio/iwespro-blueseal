@@ -18,80 +18,42 @@ use bamboo\core\intl\CLang;
  */
 class CCouponEventListAjaxController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."eventocoupon";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        if ($this->app->getUser()->hasPermission('allShops')) {
-
-        } else{
-            $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
-            foreach($res as $val) {
-                $this->authorizedShops[] = $val['shopId'];
-            }
-        }
-
-        $this->em = new \stdClass();
-        $this->em->coupons = $this->app->entityManagerFactory->create('CouponEvent');
-
-        return $this->{$action}();
-    }
 
     public function get()
     {
-        $editCouponEventLink = $this->urls['base']."eventocoupon/modifica";
+        $editCouponEventLink = "/blueseal/eventocoupon/modifica";
         $sql = "SELECT
-  `CouponEvent`.`id`          AS `id`,
-  `CouponEvent`.`name`        AS `name`,
-  `CouponEvent`.`description` AS `description`,
-  `CouponEvent`.`click`       AS `click`,
-  `CouponEvent`.`startDate`   AS `startDate`,
-  `CouponEvent`.`endDate`     AS `endDate`,
-  `CouponType`.`name`         AS `couponType`
-FROM (`CouponEvent`
-  JOIN `CouponType` ON ((`CouponEvent`.`couponTypeId` = `CouponType`.`id`)))";
+                  `CouponEvent`.`id`          AS `id`,
+                  `CouponEvent`.`name`        AS `name`,
+                  `CouponEvent`.`description` AS `description`,
+                  `CouponEvent`.`click`       AS `click`,
+                  `CouponEvent`.`startDate`   AS `startDate`,
+                  `CouponEvent`.`endDate`     AS `endDate`,
+                  `CouponType`.`name`         AS `couponType`
+                FROM (`CouponEvent`
+                  JOIN `CouponType` ON ((`CouponEvent`.`couponTypeId` = `CouponType`.`id`)))";
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
-
-        $coupons = $this->app->repoFactory->create('CouponEvent')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->em->coupons->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->em->coupons->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-
-        $response = [];
-        $response ['draw'] = $this->app->router->request()->getRequestData('draw');
-        $response ['recordsTotal'] = $totalCount;
-        $response ['recordsFiltered'] = $count;
-        $response ['data'] = [];
-
-        $i = 0;
-        foreach($coupons as $coupon) {
+        $repo = $this->app->repoFactory->create('CouponEvent');
+        $datatable->doAllTheThings(true);
+        foreach($datatable->getResponseSetData() as $key=>$row) {
+            $coupon = $repo->findOneBy($row);
             $start = new \DateTime($coupon->startDate);
             $end = new \DateTime($coupon->endDate);
 
-            $response['data'][$i]["DT_RowId"] = 'row__'.$coupon->id;
-            $response['data'][$i]["DT_RowClass"] = 'colore';
-            $response['data'][$i]['name'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editCouponEventLink.'/'.$coupon->id.'" >'.$coupon->name.'</a>';
-            $response['data'][$i]['description'] = $coupon->description;
-            $response['data'][$i]['couponType'] = $coupon->couponType->name;
-            $response['data'][$i]['startDate'] = $start->format('d-m-Y');
-            $response['data'][$i]['endDate'] = $end->format('d-m-Y');
-            $i++;
+            $row["DT_RowId"] = 'row__'.$coupon->id;
+            $row["DT_RowClass"] = 'colore';
+            $row['name'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editCouponEventLink.'/'.$coupon->id.'" >'.$coupon->name.'</a>';
+            $row['description'] = $coupon->description;
+            $row['couponType'] = $coupon->couponType->name;
+            $row['startDate'] = $start->format('d-m-Y');
+            $row['endDate'] = $end->format('d-m-Y');
+            $datatable->setResponseDataSetRow($key,$row);
         }
 
-        return json_encode($response);
+        return $datatable->responseOut();
     }
 }

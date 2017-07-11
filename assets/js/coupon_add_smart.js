@@ -138,7 +138,13 @@ const handleMultiInputs = function () {
 };
 
 $(document).on('bs.couponsmart.add',function () {
-    var data = $('form').serializeObject();
+    let form = $('form');
+    if(!form.valid()) {
+        form.validate();
+        return false;
+    };
+    var data = form.serializeObject();
+
     let url = "";
     switch (data.couponSpecies) {
         case 'single':

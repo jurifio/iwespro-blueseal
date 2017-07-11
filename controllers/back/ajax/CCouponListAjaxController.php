@@ -22,36 +22,10 @@ class CCouponListAjaxController extends AAjaxController
     protected $authorizedShops = [];
     protected $em;
 
-    /**
-     * @param $action
-     * @return mixed
-     */
-    public function createAction($action)
-    {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."coupon";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
-
-        if ($this->app->getUser()->hasPermission('allShops')) {
-
-        } else{
-            $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
-            foreach($res as $val) {
-                $this->authorizedShops[] = $val['shopId'];
-            }
-        }
-
-        $this->em = new \stdClass();
-        $this->em->coupons = $this->app->entityManagerFactory->create('Coupon');
-
-        return $this->{$action}();
-    }
-
     public function get()
     {
-        $editCouponLink = $this->urls['base']."coupon/modifica";
-        $editOrderLink = $this->urls['base']."ordini/aggiungi";
+        $editCouponLink = "/blueseal/coupon/modifica";
+        $editOrderLink = "/blueseal/ordini/aggiungi";
         $sql = "
                 SELECT
                   `Coupon`.`id`                                              AS `id`,
@@ -65,10 +39,12 @@ class CCouponListAjaxController extends AAjaxController
                   `CouponType`.`name`                                        AS `couponType`,
                   `CouponType`.`amountType`                                  AS `amountType`,
                   `CouponType`.`validForCartTotal`                           AS `validForCartTotal`,
-                  concat(`UserDetails`.`name`, ' ', `UserDetails`.`surname`) AS `utente`,
-                  `Order`.`id`                                               AS `orderId`
+                  if(UserDetails.userId is null, '', concat(`UserDetails`.`name`, ' ', `UserDetails`.`surname`)) AS `utente`,
+                  ifnull(`Order`.`id`,'')                                               AS `orderId`,
+                  ifnull(CouponEvent.name,'') as couponEvent
                 FROM (((`Coupon`
-                  JOIN `CouponType` ON ((`Coupon`.`couponTypeId` = `CouponType`.`id`))) 
+                  JOIN `CouponType` ON ((`Coupon`.`couponTypeId` = `CouponType`.`id`)))
+                   LEFT JOIN CouponEvent on (Coupon.couponEventId = CouponEvent.id)
                   LEFT JOIN `UserDetails` ON ((`UserDetails`.`userId` = `Coupon`.`userId`))) 
                   LEFT JOIN `Order` ON ((`Order`.`couponId` = `Coupon`.`id`)))";
         $datatable = new CDataTables($sql,['id'],$_GET, true);
@@ -77,17 +53,17 @@ class CCouponListAjaxController extends AAjaxController
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $datatable->doAllTheThings();
+        $datatable->doAllTheThings(true);
         $repo = $this->app->repoFactory->create('Coupon');
-        foreach($datatable->getResponseSetData() as $key=>$raw) {
+        foreach($datatable->getResponseSetData() as $key=>$row) {
 
-            $coupon = $repo->findOneBy($raw);
+            $coupon = $repo->findOneBy($row);
 
             $issued = new \DateTime($coupon->issueDate);
             $valid = new \DateTime($coupon->validThru);
             $user = (!is_null ($coupon->user) && !is_null($coupon->user->userDetails)) ? $coupon->user->userDetails->name.' '.$coupon->user->userDetails->surname : null;
             $order = $coupon->order;
-            $row = [];
+
             $row["DT_RowId"] = 'row__'.$coupon->id;
             $row["DT_RowClass"] = 'colore';
             $row['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editCouponLink.'/'.$coupon->id.'" style="font-family:consolas">'.$coupon->code.'</a>';
@@ -99,6 +75,7 @@ class CCouponListAjaxController extends AAjaxController
             $row['utente'] = $user ?? "";
             $row['orderId'] = $order ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editOrderLink.'?order='.$order->id.'">'.$order->id.'</a>' : '';
             $row['valid'] = ($coupon->valid == 1) ? 'valido' : 'non valido';
+
             $datatable->setResponseDataSetRow($key,$row);
         }
 

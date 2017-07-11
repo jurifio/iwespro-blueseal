@@ -37,6 +37,10 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Tipo coupon</th>
+                                <th data-slug="click"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Click</th>
                                 <th data-slug="startDate"
                                     data-searchable="true"
                                     data-orderable="true"

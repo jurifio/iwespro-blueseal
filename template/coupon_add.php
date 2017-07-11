@@ -52,7 +52,7 @@
                                    <div class="col-sm-6">
                                        <div class="form-group form-group-default">
                                            <label for="validThru">Valido fino a</label>
-                                           <input type="datetime-local" class="form-control" id="validThru" name="validThru" value="<?php echo $validThru; ?> " />
+                                           <input type="date" class="form-control" id="validThru" name="validThru" value="<?php echo $validThru; ?> " />
                                        </div>
                                    </div>
                             </div>

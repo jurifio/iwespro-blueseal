@@ -4,6 +4,8 @@ namespace bamboo\blueseal\controllers;
 use bamboo\core\base\CSerialNumber;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
+use bamboo\utils\price\SPriceToolbox;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CCouponEventAddController
@@ -47,19 +49,21 @@ class CCouponEventAddController extends ARestrictedAccessRootController
     }
 
     /**
-     * @return void
+     * @return int
      */
     public function post()
     {
         try {
             $data = $this->app->router->request()->getRequestData();
-            $couponRepo = $this->app->repoFactory->create('CouponEvent');
-            $coupon = $couponRepo->getEmptyEntity();
-            foreach ($data as $k => $v) {
-                $coupon->{$k} = $v;
-            }
-            $id = $couponRepo->insert($coupon);
-            return $id;
+
+            $couponEvent = $this->app->repoFactory->create('CouponEvent')->getEmptyEntity();
+            $couponEvent->couponTypeId = $data['couponTypeId'];
+            $couponEvent->name = $data['name'];
+            $couponEvent->description = $data['description'];
+            $couponEvent->startDate = STimeToolbox::DbFormattedDateTime($data['startDate']);
+            $couponEvent->endDate = STimeToolbox::DbFormattedDateTime($data['endDate']);
+
+            return $couponEvent->insert();
         } catch (\Throwable $e) {
             $this->app->router->response()->raiseProcessingError();
             $this->app->router->response()->sendHeaders();

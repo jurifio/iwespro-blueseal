@@ -2,19 +2,19 @@
     <div class="col-sm-6">
         <div class="form-group form-group-default">
             <label for="code">Codice Coupon Singolo</label>
-            <input type="text" class="form-control" id="code" name="code" value=""/>
+            <input type="text" class="form-control" id="code" name="code" value="" required="required"/>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group form-group-default">
             <label for="validThru">Valido fino a</label>
-            <input type="datetime-local" class="form-control" id="validThru" name="validThru" value=""/>
+            <input type="date" class="form-control" id="validThru" name="validThru" value="" required="required"/>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group form-group-default">
             <label for="amount">Valore</label>
-            <input type="text" class="form-control" id="amount" name="amount" required/>
+            <input type="text" class="form-control" id="amount" name="amount" required="required"/>
             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
         </div>
     </div>
@@ -22,8 +22,7 @@
         <div class="form-group form-group-default selectize-enabled">
             <label for="userId">Utente</label>
             <select id="userId" class="full-width selectpicker"
-                    placeholder="Seleziona un utente" name="userId"
-                    required="required"></select>
+                    placeholder="Seleziona un utente" name="userId" ></select>
         </div>
     </div>
 </div>

@@ -4,6 +4,7 @@ namespace bamboo\blueseal\controllers;
 use bamboo\core\base\CSerialNumber;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CCouponAddController
@@ -57,13 +58,16 @@ class CCouponAddController extends ARestrictedAccessRootController
             $data = $this->app->router->request()->getRequestData();
             $couponRepo = $this->app->repoFactory->create('Coupon');
             $coupon = $couponRepo->getEmptyEntity();
-            foreach ($data as $k => $v) {
-                $coupon->{$k} = $v;
-            }
-            $date = new \DateTime();
-            $coupon->issueDate = $date->format('Y-m-d H:i:s');
-            $id = $couponRepo->insert($coupon);
-            return $id;
+
+            $coupon->couponTypeId = $data['couponTypeId'];
+            $coupon->code = $data['code'];
+            $coupon->issueDate = STimeToolbox::DbFormattedDateTime();
+            $coupon->validThru = STimeToolbox::DbFormattedDateTime($data['validThru']);
+            $coupon->amount = $data['amount'];
+            $coupon->userId = isset($data['userId']) && !empty($data['userId']) ? $data['userId'] : null;
+            $coupon->valid = true;
+
+            return $coupon->insert();
         } catch (\Throwable $e) {
             $this->app->router->response()->raiseProcessingError();
             $this->app->router->response()->sendHeaders();
