@@ -23,7 +23,9 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                 height: 1100px;
                 overflow: hidden;
             }
-
+            .container {
+                width: 100%;
+            }
             .newpage {
                 page-break-before: always;
                 page-break-after: always;
@@ -264,7 +266,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                     <div class="pull-right sm-m-t-0">
                         <h2 class="font-montserrat all-caps hint-text">Fattura</h2>
 
-                        <div class="col-md-9 col-sm-height sm-padding-20">
+                        <div class="col-md-12 col-sm-height sm-padding-20">
                             <p class="small no-margin">Intestata a</p>
                             <h5 class="semi-bold m-t-0 no-margin"><?php echo $userAddress->surname . ' ' . $userAddress->name; ?></h5>
                             <address>
