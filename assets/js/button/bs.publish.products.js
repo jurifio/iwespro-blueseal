@@ -20,11 +20,12 @@ $(document).on('bs.pub.product', function (e, element, button) {
     };
 
     let bsModal = $('#bsModal');
+    bsModal.modal();
     let loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
-    let header = $('.modal-header h4');
-    let body = $('.modal-body');
-    let cancelButton = $('.modal-footer .btn-default');
-    let okButton = $('.modal-footer .btn-success');
+    let header = bsModal.find('.modal-header h4');
+    let body = bsModal.find('.modal-body');
+    let cancelButton = bsModal.find('.modal-footer .btn-default');
+    let okButton = bsModal.find('.modal-footer .btn-success');
 
     header.html(button.getTitle());
     Pace.ignore(function () {
@@ -36,13 +37,13 @@ $(document).on('bs.pub.product', function (e, element, button) {
             result = JSON.parse(response);
             body.html(result.bodyMessage);
 
-            if (result.cancelButtonLabel == null) {
+            if (result.cancelButtonLabel === null) {
                 cancelButton.hide();
             } else {
                 cancelButton.html(result.cancelButtonLabel);
             }
 
-            if (result.status == 'ok') {
+            if (result.status === 'ok') {
                 okButton.html(result.okButtonLabel).off().on('click', function (e) {
                     body.html(loaderHtml);
                     Pace.ignore(function () {
@@ -52,7 +53,7 @@ $(document).on('bs.pub.product', function (e, element, button) {
                         }).done(function (response) {
                             result = JSON.parse(response);
                             body.html(result.bodyMessage);
-                            if (result.cancelButtonLabel == null) {
+                            if (result.cancelButtonLabel === null) {
                                 cancelButton.hide();
                             }
                             okButton.html(result.okButtonLabel).off().on('click', function () {
@@ -63,7 +64,7 @@ $(document).on('bs.pub.product', function (e, element, button) {
                         });
                     });
                 });
-            } else if (result.status == 'ko') {
+            } else if (result.status === 'ko') {
                 okButton.html(result.okButtonLabel).off().on('click', function () {
                     bsModal.modal('hide');
                     okButton.off();
