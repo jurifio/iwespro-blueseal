@@ -28,7 +28,7 @@ class CProductListAjaxController extends AAjaxController
                   `pse`.`isActive`                                                                                      AS `isActive`,
                   concat(`p`.`itemno`, ' # ', `pv`.`name`)                                                              AS `cpf`,
                   `pv`.`description`                                                                                    AS `colorNameManufacturer`,
-                  concat(`s`.`id`, '-', `s`.`name`)                                                                     AS `shop`,
+                  concat(`s`.`id`, '-', `s`.`name`)                                                                   AS `shop`,
                   concat(ifnull(`p`.`externalId`, ''), '-', ifnull(`dp`.`extId`, ''), '-', ifnull(`ds`.`extSkuId`, '')) AS `externalId`,
                   `pb`.`name`                                                                                           AS `brand`,
                   `ps`.`name`                                                                                           AS `status`,
@@ -40,34 +40,32 @@ class CProductListAjaxController extends AAjaxController
                   if(((SELECT count(0)
                        FROM `ProductSheetActual`
                        WHERE ((`ProductSheetActual`.`productId` = `p`.`id`) AND
-                              (`ProductSheetActual`.`productVariantId` = `p`.`productVariantId`))) > 2), 'sìsi', 'no')  AS `hasDetails`,
-                  if((isnull(`p`.`dummyPicture`) OR (`p`.`dummyPicture` = 'bs-dummy-16-9.png')), 'no', 'sìsi')          AS `dummy`,
+                              (`ProductSheetActual`.`productVariantId` = `p`.`productVariantId`))) > 2), 'sì', 'no')    AS `hasDetails`,
+                  if((isnull(`p`.`dummyPicture`) OR (`p`.`dummyPicture` = 'bs-dummy-16-9.png')), 'no', 'sì')            AS `dummy`,
                   if((`p`.`id`, `p`.`productVariantId`) IN (SELECT
                                                               `ProductHasProductPhoto`.`productId`,
                                                               `ProductHasProductPhoto`.`productVariantId`
-                                                            FROM `ProductHasProductPhoto`), 'sìsi', 'no')               AS `hasPhotos`,
+                                                            FROM `ProductHasProductPhoto`), 'sì', 'no')                 AS `hasPhotos`,
                   `pc`.`id`                                                                                             AS `categoryId`,
                   `pcg`.`name`                                                                                          AS `colorGroup`,
-                  `p`.`isOnSale`                                                                                        AS `isOnSale`,
-                  tagSelection.orderingTags,
-                  tagSelection.tags,
-                  ifnull(`p`.`processing`, '-')                                                                         AS `processing`,
+                  `p`.`isOnSale`                                                                                      AS `isOnSale`,
+                  ifnull(`p`.`processing`, '-')                                                                       AS `processing`,
                   (((if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
                       (`pse`.`isActive` = 0), `s`.`pastSeasonMultiplier`,
                       if((`p`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
-                   (if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100                           AS `mup`,
+                   (if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100                       AS `mup`,
                   `p`.`qty`                                                                                             AS `hasQty`,
-                  (SELECT min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), NULL))
-                   FROM ProductSku
-                   WHERE ProductSku.productId = p.id AND ProductSku.productVariantId = p.productVariantId)              AS activePrice,
-                  (SELECT ifnull(group_concat(concat(m.name, ' - ', ma.name)), '')
-                   FROM Marketplace m
-                     JOIN MarketplaceAccount ma ON (m.id = ma.marketplaceId)
-                     JOIN MarketplaceAccountHasProduct mahp ON
-                                                              ma.id = mahp.marketplaceAccountId AND
-                                                              ma.marketplaceId = mahp.marketplaceId
+                  (SELECT group_concat(DISTINCT t.name) FROM `ProductHasTag` `pht` JOIN `TagTranslation` `t` ON `pht`.`tagId` = `t`.`tagId`
+                   WHERE langId = 1 AND pht.productId = `p`.id AND `pht`.`productVariantId` = `p`.`productVariantId`) as `tags`,
+                  (select min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), null)) from ProductSku where ProductSku.productId = p.id and ProductSku.productVariantId = p.productVariantId) as activePrice,
+                  (SELECT ifnull(group_concat(concat(m.name, ' - ', ma.name)),'')
+                   FROM Marketplace m 
+                      join MarketplaceAccount ma on (m.id = ma.marketplaceId) 
+                      JOIN MarketplaceAccountHasProduct mahp on 
+                          ma.id = mahp.marketplaceAccountId AND
+                          ma.marketplaceId = mahp.marketplaceId
                    WHERE mahp.productId = p.id AND
-                         mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces
+                         mahp.productVariantId = p.productVariantId and mahp.isDeleted != 1)                            AS marketplaces
                 FROM (((((((((`Product` `p`
                   JOIN `ProductSeason` `pse` ON ((`p`.`productSeasonId` = `pse`.`id`)))
                   JOIN `ProductVariant` `pv` ON ((`p`.`productVariantId` = `pv`.`id`)))
@@ -76,20 +74,6 @@ class CProductListAjaxController extends AAjaxController
                   JOIN `ShopHasProduct` `sp`
                     ON (((`p`.`id` = `sp`.`productId`) AND (`p`.`productVariantId` = `sp`.`productVariantId`))))
                   JOIN `Shop` `s` ON ((`s`.`id` = `sp`.`shopId`)))
-                  JOIN (SELECT
-                          pht.productId,
-                          pht.productVariantId,
-                          group_concat(DISTINCT CASE WHEN t.sortingPriorityId != 999
-                            THEN LPAD(t.sortingPriorityId, 10, '0')
-                                                ELSE NULL END ORDER BY t.sortingPriorityId) AS orderingTags,
-                          group_concat(DISTINCT CASE WHEN t.sortingPriorityId = 999
-                            THEN tt.name
-                                                ELSE NULL END ORDER BY t.sortingPriorityId) AS tags
-                        FROM ProductHasTag pht
-                          JOIN Tag t ON pht.tagId = t.id
-                          JOIN TagTranslation tt ON t.id = tt.tagId AND tt.langId = 1
-                        GROUP BY pht.productId, pht.productVariantId) AS tagSelection
-                    ON (p.id, p.productVariantId) = (tagSelection.productId, tagSelection.productVariantId)
                   LEFT JOIN `ProductSizeGroup` `psg` ON ((`p`.`productSizeGroupId` = `psg`.`id`)))
                   LEFT JOIN `ProductSku` `psk`
                     ON (((`p`.`id` = `psk`.`productId`) AND (`p`.`productVariantId` = `psk`.`productVariantId`))))
@@ -100,7 +84,7 @@ class CProductListAjaxController extends AAjaxController
                   LEFT JOIN (`DirtyProduct` `dp`
                     JOIN `DirtySku` `ds` ON ((`dp`.`id` = `ds`.`dirtyProductId`)))
                     ON (((`sp`.`productId` = `dp`.`productId`) AND (`sp`.`productVariantId` = `dp`.`productVariantId`) AND
-                         (`sp`.`shopId` = `dp`.`shopId`)))";
+                         (`sp`.`shopId` = `dp`.`shopId`))) ";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
@@ -122,7 +106,7 @@ class CProductListAjaxController extends AAjaxController
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
         $productRepo = $this->app->repoFactory->create('Product');
-        $datatable->doAllTheThings(true);
+        $datatable->doAllTheThings();
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
             /** @var $val CProduct */
@@ -130,7 +114,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row["DT_RowId"] = $val->printId();
             $row["DT_RowClass"] = $val->productStatus->isVisible == 1 ? 'verde' : (
-                $val->productStatus->isReady == 1 ? 'arancione' : ""
+            $val->productStatus->isReady == 1 ? 'arancione' : ""
             );
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
@@ -159,13 +143,7 @@ class CProductListAjaxController extends AAjaxController
             $row['description'] = '<span class="small">' . ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") . '</span>';
 
             $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
-            $row['tags'] = implode('<br />',explode(',',$row['tags']));
-            $row['orderingTags'] = [];
-            foreach ($val->tag as $tag) {
-                if($tag->sortingPriorityId != 999) $row['orderingTags'][] = $tag->getLocalizedName().' ('.$tag->sortingPriorityId.')';
-            }
-            $row['orderingTags'] = implode('<br />',$row['orderingTags']);
-
+            $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>', false) . '</span>';
             $row['status'] = $val->productStatus->name;
             $row['productPriority'] = $val->sortingPriorityId;
 

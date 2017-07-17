@@ -909,6 +909,7 @@ $.QueryString = (function (a) {
 
 $.decodeGetStringFromUrl = function (url) {
     "use strict";
+    if(typeof url === 'undefined') url = window.location.href;
     let getString = url.split('\?', 2);
     if (getString.length == 0) return false;
     if (getString.length == 1) return {baseUrl: url};
