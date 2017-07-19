@@ -94,7 +94,7 @@ class CFriendShipmentLabelPrintController extends AAjaxController
             "$cap $citta ($provincia)<br />" .
             "</h2>");
         $pdf->Ln(20);
-        $pdf->write1DBarcode(str_pad($shipment->id,12,'0',STR_PAD_LEFT), 'EAN13', '', '', '', 30, 0.4, $style, 'R');
+        $pdf->write1DBarcode(str_pad($shipment->id,10,'0',STR_PAD_LEFT), 'I25', '', '', '', 30, 0.4, $style, 'R');
         $pdf->Ln(20);
 
         $soggetto = 'Destinatario';
