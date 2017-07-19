@@ -30,10 +30,13 @@ $(document).on('bs.load.photo',function(){
 
 $(document).on('bs.add.photo', function (e){
     var bsModal = $('#bsModal');
-    var header = $('.modal-header h4');
-    var body = $('.modal-body');
-    var cancelButton = $('.modal-footer .btn-default');
-    var okButton = $('.modal-footer .btn-success');
+
+    var header = bsModal.find('.modal-header h4');
+    var body = bsModal.find('.modal-body');
+    var cancelButton = bsModal.find('.modal-footer .btn-default');
+    var okButton = bsModal.find('.modal-footer .btn-success');
+
+    bsModal.modal();
 
     header.html('Carica Foto');
     okButton.html('Fatto').off().on('click', function () {
