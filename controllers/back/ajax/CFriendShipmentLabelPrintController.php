@@ -85,29 +85,29 @@ class CFriendShipmentLabelPrintController extends AAjaxController
         $nome = $shipment->fromAddress->subject;
         $via = $shipment->fromAddress->address;
         $cap = $shipment->fromAddress->postcode;
-        $città = $shipment->fromAddress->city;;
+        $citta = $shipment->fromAddress->city;;
         $provincia = $shipment->fromAddress->province;
 
         $pdf->writeHTML("<h2>$soggetto:</h2><br />" .
             "<h1><strong>$nome</strong></h1><br />" .
             "<h2>$via<br />" .
-            "$cap $città ($provincia)<br />" .
+            "$cap $citta ($provincia)<br />" .
             "</h2>");
         $pdf->Ln(20);
-        $pdf->write1DBarcode('1234567890128', 'EAN13', '', '', '', 30, 0.4, $style, 'R');
+        $pdf->write1DBarcode(str_pad($shipment->id,12,'0',STR_PAD_LEFT), 'EAN13', '', '', '', 30, 0.4, $style, 'R');
         $pdf->Ln(20);
 
         $soggetto = 'Destinatario';
         $nome = $shipment->toAddress->subject;
         $via = $shipment->toAddress->address;
         $cap = $shipment->toAddress->postcode;
-        $città = $shipment->toAddress->city;;
+        $citta = $shipment->toAddress->city;;
         $provincia = $shipment->toAddress->province;
 
         $pdf->writeHTML("<div style=\"text-align:right;\"><h2>$soggetto:</h2><br />" .
             "<h1><strong>$nome</strong></h1><br />" .
             "<h2>$via<br />" .
-            "$cap $città $provincia<br />" .
+            "$cap $citta $provincia<br />" .
             "</h2></span>");
 
         $pdf->Ln();
