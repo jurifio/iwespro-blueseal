@@ -170,8 +170,8 @@ $(document).on('bs.orderline.friend.ok', function () {
             }
         }).done(function (res) {
             res = JSON.parse(res);
-            var x = typeof res.shipmentId === 'undefined' ? '' : '<a target="_blank" href="/blueseal/xhr/FriendShipmentLabelPrintController?shipmentId=' + res.shipmentId + '">Stampa Etichetta</a>';
-            x += '<p>' + res.message + '</p>';
+            var x = '<p>' + res.message + '</p><br />';
+            x += typeof res.shipmentId === 'undefined' ? '' : '<a target="_blank" href="/blueseal/xhr/FriendShipmentLabelPrintController?shipmentId=' + res.shipmentId + '">Stampa Etichetta</a>';
             modal.writeBody(x);
         }).fail(function (res) {
             modal.writeBody(res.responseText);
