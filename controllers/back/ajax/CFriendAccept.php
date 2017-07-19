@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\base\CObjectCollection;
@@ -24,7 +25,8 @@ use bamboo\utils\time\STimeToolbox;
  */
 class CFriendAccept extends AAjaxController
 {
-    public function get() {
+    public function get()
+    {
         $addresses = [];
         foreach ($this->app->getUser()->getAuthorizedShops() as $shop) {
             foreach ($shop->shippingAddressBook as $addressBook) {
@@ -41,7 +43,8 @@ class CFriendAccept extends AAjaxController
      * @return BambooException|BambooOrderLineException|\Exception|string
      * @transaction
      */
-    public function post() {
+    public function post()
+    {
         $dba = \Monkey::app()->dbAdapter;
 
         $request = \Monkey::app()->router->request();
@@ -82,7 +85,7 @@ class CFriendAccept extends AAjaxController
                     if ($shipment->shipmentDate)
                         throw new BambooOrderLineException(
                             'La riga d\'ordine <strong>' . $ol->stringId() . '</strong> è già stata spedita e non può essere annullata'
-                    );
+                        );
                     if (!$shipment->cancellationDate) {
                         $shipment->cancellationDate = STimeToolbox::DbFormattedDate();
                         $shipment->shipmentFaultId = 3;
@@ -91,7 +94,7 @@ class CFriendAccept extends AAjaxController
                 }
             }
 
-            if($verdict == 'Consenso') {
+            if ($verdict == 'Consenso') {
                 $fromAddressBookId = $request->getRequestData('fromAddressBookId');
                 $carrierId = $request->getRequestData('carrierId');
                 $shippingDate = $request->getRequestData('shippingDate');
@@ -99,22 +102,27 @@ class CFriendAccept extends AAjaxController
                 $bookingNumber = empty($bookingNumber) ? null : $bookingNumber;
                 /** @var CShipmentRepo $shipmentRepo */
                 $shipmentRepo = $this->app->repoFactory->create('Shipment');
-                $shipmentRepo->newFriendShipmentToUs($carrierId,$fromAddressBookId,$bookingNumber,$shippingDate,$orderLineCollection);
+                $shipment = $shipmentRepo->newFriendShipmentToUs($carrierId, $fromAddressBookId, $bookingNumber, $shippingDate, $orderLineCollection);
                 $request->getRequestData();
-                $this->app->eventManager->triggerEvent('orderLine.friend.accept',['orderLines'=>$orderLineCollection]);
+                $this->app->eventManager->triggerEvent('orderLine.friend.accept', ['orderLines' => $orderLineCollection]);
+
+                $dba->commit();
+                return json_encode(['error' => false, 'message' => $verdict . ' correttamente registrato', 'shipmentId' => $shipment->id]);
+            } else {
+
+                $dba->commit();
+                return json_encode(['error' => false, 'message' => $verdict . ' correttamente registrato']);
             }
 
-            $dba->commit();
-            return $verdict . ' correttamente registrato';
         } catch (BambooOrderLineException $e) {
             $dba->rollBack();
             $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
-            return $message . $e->getMessage();
+            return json_encode(['error' => true, 'message' => $message . $e->getMessage()]);
         } catch (BambooException $e) {
             $dba->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();
             $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
-            return $message . $e->getMessage();
+            return json_encode(['error' => true, 'message' => $message . $e->getMessage()]);
         }
     }
 }

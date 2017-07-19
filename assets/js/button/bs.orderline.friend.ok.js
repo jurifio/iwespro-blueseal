@@ -113,7 +113,7 @@ $(document).on('bs.orderline.friend.ok', function () {
             url: '/blueseal/xhr/GetTableContent',
             data: {
                 table: 'Carrier',
-                condition: { isActive: 1 }
+                condition: {isActive: 1}
             },
             dataType: 'json'
         }).done(function (res) {
@@ -169,7 +169,10 @@ $(document).on('bs.orderline.friend.ok', function () {
                 bookingNumber: bookingNubmer
             }
         }).done(function (res) {
-            modal.writeBody(res);
+            res = JSON.parse(res);
+            var x = typeof res.shipmentId === 'undefined' ? '' : '<a target="_blank" href="/blueseal/xhr/FriendShipmentLabelPrintController?shipmentId=' + res.shipmentId + '">Stampa Etichetta</a>';
+            x += '<p>' + res.message + '</p>';
+            modal.writeBody(x);
         }).fail(function (res) {
             modal.writeBody(res.responseText);
         });

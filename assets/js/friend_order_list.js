@@ -107,9 +107,12 @@ $(document).on('bs.friend.orderline.ko', function () {
     $.ajax({
         url: '/blueseal/xhr/FriendAccept',
         method: 'POST',
-        data: {rows: row, response: 'ko'}
+        data: {rows: row, response: 'ko'},
     }).done(function (res) {
-        modal.writeBody(res);
+        res = JSON.parse(res);
+        var x = typeof res.shipmentId === 'undefined' ? '' : '<a target="_blank" href="/blueseal/xhr/FriendShipmentLabelPrintController?shipmentId=' + res.shipmentId + '">Stampa Etichetta</a>';
+        x += '<p>' + res.message + '</p>';
+        modal.writeBody(x);
         $('.table').DataTable().ajax.reload(null, false);
     }).fail(function (res) {
         modal.writeBody(res.responseText);
