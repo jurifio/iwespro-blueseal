@@ -1,0 +1,16 @@
+{
+    "entity": {
+        "name": "WarehouseShelfPosition",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name": "warehouseShelf",
+                "entity": "WarehouseShelf",
+                "parentKeys": ["warehouseShelfId"],
+                "childKeys": ["id"],
+                "type": "OneToOne"
+            }
+        ]
+    }
+}
