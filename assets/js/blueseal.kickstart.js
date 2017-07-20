@@ -419,11 +419,11 @@ $.bsModal = function (header, params) {
     delete opt;
 
     this.bsModal = $('#bsModal');
-    this.header = $('#bsModal .modal-header h4');
-    this.body = $('#bsModal .modal-body');
-    this.cancelButton = $('#bsModal .modal-footer .btn-default');
-    this.okButton = $('#bsModal .modal-footer .btn-success');
-    this.cross = $('#bsModal button.close');
+    this.header = this.bsModal.find('.modal-header h4');
+    this.body = this.bsModal.find('.modal-body');
+    this.cancelButton = this.bsModal.find('.modal-footer .btn-default');
+    this.okButton = this.bsModal.find('.modal-footer .btn-success');
+    this.cross = this.bsModal.find('button.close');
     this.loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
 
     this.header.html(header);
@@ -483,11 +483,11 @@ $.bsModal = function (header, params) {
     };
 
     this.showOkBtn = function () {
-        self.cancelButton.show();
+        self.okButton.show();
     };
 
     this.hideOkBtn = function () {
-        self.cancelButton.hide();
+        self.okButton.hide();
     };
 
     this.setCancelEvent = function (callback) {

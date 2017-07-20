@@ -14,40 +14,44 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
     {
         $query = "
              SELECT
-                  `i`.`id` as `id`,
-                  `i`.`number` as `invoiceNumber`,
-                  `i`.`paymentExpectedDate` as paymentExpectedDate,
-                  `i`.`date` as `invoiceDate`,
-                  `i`.`totalWithVat` as `invoiceTotalAmount`,
-                  /*concat(`it`.`name`, 
-                    if(`it`.`id` = 6,
-                      concat(' - NdC: ', 
-                        (SELECT DISTINCT `number` FROM `Document` as subD JOIN InvoiceLineHasOrderLine as subIL on subIL.invoiceLineInvoiceId = subD.id 
-                          WHERE subIL.orderLineId = `ol`.id AND `subIL`.`orderLineOrderId` = `ol`.`orderId` AND `subD`.`invoiceTypeId` = 4 OR `subD`.`invoiceTypeId` = 5
-                        )
-                      ), ''
+              `i`.`id`                                                                        AS `id`,
+              `i`.`number`                                                                    AS `invoiceNumber`,
+              `i`.`paymentExpectedDate`                                                       AS paymentExpectedDate,
+              `i`.`date`                                                                      AS `invoiceDate`,
+              `i`.`totalWithVat`                                                              AS `invoiceTotalAmount`,
+              /*concat(`it`.`name`, 
+                if(`it`.`id` = 6,
+                  concat(' - NdC: ', 
+                    (SELECT DISTINCT `number` FROM `Document` as subD JOIN InvoiceLineHasOrderLine as subIL on subIL.invoiceLineInvoiceId = subD.id 
+                      WHERE subIL.orderLineId = `ol`.id AND `subIL`.`orderLineOrderId` = `ol`.`orderId` AND `subD`.`invoiceTypeId` = 4 OR `subD`.`invoiceTypeId` = 5
                     )
-                  )as `documentT`,*/
-                  round((sum(ol.friendRevenue) / 100 * 22) + sum(ol.friendRevenue),2) as invoiceCalculatedTotal,
-                  `it`.`name` as `documentType`,
-                  `it`.`id` as `dt`,
-                  if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') as `paymentDate`,
-                  group_concat(concat(`ol`.`id`, '-', `ol`.`orderId`)) as `orderLines`,
-                  `i`.`creationDate` as `creationDate`,
-                  if (`pb`.`id`, group_concat(DISTINCT `pb`.`id`), 'Non presente')  as `paymentBill`,
-                  `sh`.`title` as friend,
-                  `ab`.`id` as abid,
-                  sh.id as shopId
-                FROM
-                  `Document` as `i`
-                  JOIN `InvoiceType` as `it` on `it`.`id` = `i`.`invoiceTypeId`
-                  JOIN `AddressBook` as ab on `i`.`shopRecipientId` = `ab`.`id`
-                  JOIN `Shop` as sh on `i`.`shopRecipientId` = `sh`.`billingAddressBookId`
-                  LEFT JOIN `InvoiceLine` as `il` on `il`.`invoiceId` =  `i`.`id`
-                  LEFT JOIN `InvoiceLineHasOrderLine` as `ilhol` on `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId`
-                  LEFT JOIN `OrderLine` as `ol` on `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
-                  LEFT JOIN (`PaymentBillHasInvoiceNew` as `pbhin` JOIN `PaymentBill` as `pb` on `pb`.id = `pbhin`.`paymentBillId`) on `i`.`id` = `pbhin`.`invoiceNewId`
-                group by `i`.`id`
+                  ), ''
+                )
+              )as `documentT`,*/
+              round((sum(ol.friendRevenue) / 100 * 22) + sum(ol.friendRevenue), 2)            AS invoiceCalculatedTotal,
+              `it`.`name`                                                                     AS `documentType`,
+              `it`.`id`                                                                       AS `dt`,
+              if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') AS `paymentDate`,
+              group_concat(concat(`ol`.`id`, '-', `ol`.`orderId`))                            AS `orderLines`,
+              `i`.`creationDate`                                                              AS `creationDate`,
+              if(`pb`.`id`, group_concat(DISTINCT `pb`.`id`), 'Non presente')                 AS `paymentBill`,
+              `sh`.`title`                                                                    AS friend,
+              `ab`.`id`                                                                       AS abid,
+              sh.id                                                                           AS shopId,
+              ifnull(pb.paymentDate, '')                                                      AS paymentBillDate,
+              i.note                                                                          AS note
+            FROM
+              `Document` AS `i`
+              JOIN `InvoiceType` AS `it` ON `it`.`id` = `i`.`invoiceTypeId`
+              JOIN `AddressBook` AS ab ON `i`.`shopRecipientId` = `ab`.`id`
+              JOIN `Shop` AS sh ON `i`.`shopRecipientId` = `sh`.`billingAddressBookId`
+              LEFT JOIN `InvoiceLine` AS `il` ON `il`.`invoiceId` = `i`.`id`
+              LEFT JOIN `InvoiceLineHasOrderLine` AS `ilhol`
+                ON `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId`
+              LEFT JOIN `OrderLine` AS `ol` ON `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
+              LEFT JOIN (`PaymentBillHasInvoiceNew` AS `pbhin`
+                JOIN `PaymentBill` AS `pb` ON `pb`.id = `pbhin`.`paymentBillId`) ON `i`.`id` = `pbhin`.`invoiceNewId`
+            GROUP BY `i`.`id`
               ";
 
 
@@ -55,7 +59,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
         $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
 
-        $datatable->doAllTheThings();
+        $datatable->doAllTheThings(true);
 
         $abR = \Monkey::app()->repoFactory->create('AddressBook');
         /** @var CInvoiceLineHasOrderLine $ilhR */

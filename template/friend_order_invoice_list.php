@@ -70,6 +70,12 @@
                                 <th data-slug="paymentBill"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Distinta Pagamento</th>
+                                <th data-slug="paymentBillDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data Pagamento Distinta</th>
+                                <th data-slug="note"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Note</th>
                                 <?php endif;?>
                             </tr>
                             </thead>
@@ -123,6 +129,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.invoice.split"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.document.cancel"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"

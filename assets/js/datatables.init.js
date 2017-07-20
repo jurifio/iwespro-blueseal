@@ -494,19 +494,19 @@
 
 $.getDataTableSelectedRowsData = function(tableSelector,colName,min,max) {
     "use strict";
-    if('undefined' == typeof colName) colName = 'DT_RowId';
-    if('undefined' == typeof tableSelector) tableSelector = '.table';
+    if('undefined' === typeof colName || colName === null) colName = 'DT_RowId';
+    if('undefined' === typeof tableSelector || tableSelector === null) tableSelector = '.table';
 
     let selectedRows = $(tableSelector).DataTable().rows('.selected').data();
     let selectedRowsCount = selectedRows.length;
 
-    if(typeof min != 'undefined' && selectedRowsCount < min) {
+    if(typeof min !== 'undefined' && selectedRowsCount < min) {
         new Alert({
             type: "warning",
             message: "Devi selezionare almeno "+min+" elementi"
         }).open();
         return false;
-    } else if (typeof max != 'undefined' && selectedRowsCount > max) {
+    } else if (typeof max !== 'undefined' && selectedRowsCount > max) {
         new Alert({
             type: "warning",
             message: "Puoi selezionare massimo "+max+" elementi"
@@ -522,7 +522,7 @@ $.getDataTableSelectedRowsData = function(tableSelector,colName,min,max) {
     return row;
 };
 
-$.getDataTableSelectedRowData = function(tableSelector,colName,min,max) {
+$.getDataTableSelectedRowData = function(tableSelector,colName) {
     "use strict";
     return $.getDataTableSelectedRowsData(tableSelector,colName,1,1)[0];
 };

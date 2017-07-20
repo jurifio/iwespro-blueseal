@@ -791,6 +791,7 @@ class CDocumentRepo extends ARepo
             foreach ($invoiceLines as $v) {
                 /** @var COrderLine $ol */
                 $ol = $v->orderLine->getFirst();
+                if($ol == null) continue;
                 $ol->orderLineFriendPaymentStatusId = 4;
                 $ol->orderLineFriendPaymentDate = $date;
                 $ol->update();
