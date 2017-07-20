@@ -34,7 +34,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
               if(`i`.`paymentDate`, DATE_FORMAT(`i`.`paymentDate`, '%d-%m-%Y'), 'Non Pagato') AS `paymentDate`,
               group_concat(concat(`ol`.`id`, '-', `ol`.`orderId`))                            AS `orderLines`,
               `i`.`creationDate`                                                              AS `creationDate`,
-              if(`pb`.`id`, group_concat(DISTINCT `pb`.`id`), 'Non presente')                 AS `paymentBill`,
+              if(`pb`.`id`, group_concat(DISTINCT LPAD(`pb`.`id`,3,'0')), 'Non presente')                 AS `paymentBill`,
               `sh`.`title`                                                                    AS friend,
               `ab`.`id`                                                                       AS abid,
               sh.id                                                                           AS shopId,

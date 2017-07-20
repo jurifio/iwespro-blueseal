@@ -816,7 +816,6 @@ class CDocumentRepo extends ARepo
         if ($pb->isSubmitted()) {
             throw new BambooInvoiceException('Non puoi togliere una fattura da una distinta già sottomessa');
         }
-        $newAmount = 0;
 
         foreach ($invoices as $v) {
             if (0 < $v->paydAmount || $pb->isSubmitted()) throw new BambooInvoiceException(
@@ -825,14 +824,14 @@ class CDocumentRepo extends ARepo
             );
         }
         foreach ($invoices as $v) {
-            $newAmount += $v->getSignedValueWithVat();
+            $pb->amount += $v->getSignedValueWithVat();
             $pbh = $pbhR->getEmptyEntity();
             $pbh->paymentBillId = $idBill;
             $pbh->invoiceNewId = $v->id;
             $pbh->insert();
         }
 
-        $pb->amount = round($pb->amount + $newAmount,2);
+        $pb->amount = round($pb->amount,2);
         $pb->update();
         return true;
     }
