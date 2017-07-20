@@ -25,8 +25,6 @@ class CPaymentBillListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $response = [];
-
         $sql = "SELECT pb.id,
                   pb.amount AS total,
                   pb.creationDate,
@@ -38,15 +36,16 @@ class CPaymentBillListAjaxController extends AAjaxController
                   group_concat(DISTINCT inn.number) AS invoices,
                   group_concat(DISTINCT ab.subject)
                 FROM PaymentBill pb
-                  JOIN PaymentBillHasInvoiceNew pbhin ON pb.id = pbhin.paymentBillId
-                  JOIN Document inn ON pbhin.invoiceNewId = inn.id
-                  JOIN Shop s ON inn.shopRecipientId = s.billingAddressBookId
-                  JOIN InvoiceType it ON inn.invoiceTypeId = it.id
-                  JOIN AddressBook ab ON inn.shopRecipientId = ab.id
+                  LEFT JOIN (PaymentBillHasInvoiceNew pbhin 
+                      JOIN Document inn ON pbhin.invoiceNewId = inn.id
+                      JOIN Shop s ON inn.shopRecipientId = s.billingAddressBookId
+                      JOIN InvoiceType it ON inn.invoiceTypeId = it.id
+                      JOIN AddressBook ab ON inn.shopRecipientId = ab.id)
+                  ON pb.id = pbhin.paymentBillId
                 GROUP BY pb.id";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
-        $datatable->doAllTheThings();
+        $datatable->doAllTheThings(true);
 
         $paymentBillRepo = $this->app->repoFactory->create('PaymentBill');
 
@@ -64,7 +63,7 @@ class CPaymentBillListAjaxController extends AAjaxController
                 foreach ($payment as $invoice) {
                     $total += $invoice->getSignedValueWithVat(true);
                 }
-                $rec[] = $name . ': ' . round($total,2);
+                $rec[] = $name . ': ' . round($total, 2);
 
             }
             $row['total'] = $paymentBill->getTotal();
@@ -72,10 +71,15 @@ class CPaymentBillListAjaxController extends AAjaxController
 
             $inv = [];
             foreach ($paymentBill->document as $invoice) {
-                if ($invoice->getSignedValueWithVat() < 0) $color = "text-green";
-                elseif ($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
-                else $color = "";
-                $inv[] = '<span class="' . $color . '">' . $invoice->shopAddressBook->shop->name . ' - ' . $invoice->number . ': ' . $invoice->getSignedValueWithVat() . ' (' . $invoice->calculateOurTotal() . ')</span>';
+                try {
+                    if ($invoice->getSignedValueWithVat() < 0) $color = "text-green";
+                    elseif ($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
+                    else $color = "";
+                    $inv[] = '<span class="' . $color . '">' . $invoice->shopAddressBook->shop->name . ' - ' . $invoice->number . ': ' . $invoice->getSignedValueWithVat() . ' (' . $invoice->calculateOurTotal() . ')</span>';
+                } catch (\Throwable $e) {
+                    \Monkey::dump($e->getMessage());
+                }
+
             }
             $row['invoices'] = implode('<br />', $inv);
             $row['paymentDate'] = STimeToolbox::FormatDateFromDBValue($paymentBill->paymentDate, STimeToolbox::ANGLO_DATE_FORMAT);
