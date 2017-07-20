@@ -86,7 +86,7 @@ function drawObject(prefix, object, inputMock, box,offset) {
 }
 
 function drawInput(prefix,key,val,inputMock,box,offset) {
-    let newInput = $(inputMock.replaceAll('{{field}}',prefix+'_'+key).
+    let newInput = $(inputMock.monkeyReplaceAll('{{field}}',prefix+'_'+key).
                                 replaceAll('{{label}}',key).
                                 replaceAll('{{offset}}',offset).
                                 replaceAll('{{colLength}}',12-offset));

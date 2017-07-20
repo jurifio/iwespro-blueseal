@@ -61,25 +61,22 @@ class CShipmentManageController extends AAjaxController
             $shipment->predictedDeliveryDate = !empty($shipmentData['predictedDeliveryDate']) ? STimeToolbox::DbFormattedDateTime($shipmentData['predictedDeliveryDate']) : null;
             if (!$shipment->shipmentDate && !(empty($shipmentData['shipmentDate']))) {
                 $shipment->shipmentDate = STimeToolbox::DbFormattedDateTime($shipmentData['shipmentDate']);
-                $lineStatus = 'ORD_FRND_ORDSNT';
-                $date = $shipmentData['shipmentDate'];
-            }
-            if (!$shipment->deliveryDate && !(empty($shipmentData['deliveryDate']))) {
-                $shipment->deliveryDate = STimeToolbox::DbFormattedDateTime($shipmentData['deliveryDate']);
-                $lineStatus = 'ORD_CHK_IN';
-                $date = $shipmentData['deliveryDate'];
-            }
-            $shipment->note = $shipmentData['note'];
-            $shipment->update();
 
-            if ($lineStatus) {
                 /** @var COrderLineRepo $lR */
                 $olR = \Monkey::app()->repoFactory->create('OrderLine');
                 $orderLine = $shipment->orderLine;
                 foreach ($orderLine as $v) {
-                        $olR->updateStatus($v, $lineStatus, $date);
-                    }
+                    $olR->updateStatus($v, 'ORD_FRND_ORDSNT', $shipment->shipmentDate);
+                }
             }
+
+            if (!$shipment->deliveryDate && !(empty($shipmentData['deliveryDate']))) {
+                $shipment->deliveryDate = STimeToolbox::DbFormattedDateTime($shipmentData['deliveryDate']);
+                $this->app->repoFactory->create('Shipment')->checkIn($shipment);
+            }
+
+            $shipment->note = $shipmentData['note'];
+            $shipment->update();
 
             $dba->commit();
             return 'Stato della spedizione aggiornato';

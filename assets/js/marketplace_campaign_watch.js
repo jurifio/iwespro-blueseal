@@ -34,8 +34,8 @@
                             var div = container.append(
                                 $(
                                     containerMock
-                                    .replaceAll('{{id}}',res[i].id)
-                                    .replaceAll('{{period}}',container.data('period')))
+                                    .monkeyReplaceAll('{{id}}',res[i].id)
+                                    .monkeyReplaceAll('{{period}}',container.data('period')))
                             );
                             drawnElements.push(res[i].id);
                             drawCard(template, div.find('.marketplace-monit:last'), true);
@@ -77,15 +77,15 @@
                 const progressPercent = res.elapsed.toFixed(2) + '%';
                 if(redraw) {
                     var container = template
-                        .replaceAll('{{title}}',div.data('title'))
-                        .replaceAll('{{visite}}',res.visits)
-                        .replaceAll('{{costo}}',res.cost)
-                        .replaceAll('{{ordini}}',res.orders)
-                        .replaceAll('{{incasso}}',res.ordersValue)
-                        .replaceAll('{{elapsed}}',res.elapsed.toFixed(2) + '%')
-                        .replaceAll('{{cpo}}',cpo)
-                        .replaceAll('{{crb}}',crb)
-                        .replaceAll('{{campaignName}}',res.campaignName)
+                        .monkeyReplaceAll('{{title}}',div.data('title'))
+                        .monkeyReplaceAll('{{visite}}',res.visits)
+                        .monkeyReplaceAll('{{costo}}',res.cost)
+                        .monkeyReplaceAll('{{ordini}}',res.orders)
+                        .monkeyReplaceAll('{{incasso}}',res.ordersValue)
+                        .monkeyReplaceAll('{{elapsed}}',res.elapsed.toFixed(2) + '%')
+                        .monkeyReplaceAll('{{cpo}}',cpo)
+                        .monkeyReplaceAll('{{crb}}',crb)
+                        .monkeyReplaceAll('{{campaignName}}',res.campaignName)
                     ;
                     div.html(container);
                     div.data('campaignName',res.campaignName);
@@ -179,17 +179,17 @@
 
                         tableBody.append(
                             rowTemplate
-                                .replaceAll('{{category}}',res[i].categoryPath)
-                                .replaceAll('{{visits}}',res[i].visits)
-                                .replaceAll('{{cost}}',res[i].cost)
-                                .replaceAll('{{orders}}',res[i].orders)
-                                .replaceAll('{{ordersValue}}',res[i].ordersValue)
-                                .replaceAll('{{exactOrders}}',res[i].exactOrders)
-                                .replaceAll('{{exactOrdersValue}}',res[i].exactOrdersValue)
-                                .replaceAll('{{cpo}}',cpo)
-                                .replaceAll('{{cpoe}}',cpoe)
-                                .replaceAll('{{crb}}',crb)
-                                .replaceAll('{{crbe}}',crbe)
+                                .monkeyReplaceAll('{{category}}',res[i].categoryPath)
+                                .monkeyReplaceAll('{{visits}}',res[i].visits)
+                                .monkeyReplaceAll('{{cost}}',res[i].cost)
+                                .monkeyReplaceAll('{{orders}}',res[i].orders)
+                                .monkeyReplaceAll('{{ordersValue}}',res[i].ordersValue)
+                                .monkeyReplaceAll('{{exactOrders}}',res[i].exactOrders)
+                                .monkeyReplaceAll('{{exactOrdersValue}}',res[i].exactOrdersValue)
+                                .monkeyReplaceAll('{{cpo}}',cpo)
+                                .monkeyReplaceAll('{{cpoe}}',cpoe)
+                                .monkeyReplaceAll('{{crb}}',crb)
+                                .monkeyReplaceAll('{{crbe}}',crbe)
                         )
                     }
                 })

@@ -10,6 +10,13 @@
                 "parentKeys": ["warehouseShelfId"],
                 "childKeys": ["id"],
                 "type": "OneToOne"
+            },
+            {
+                "name": "orderLine",
+                "entity": "OrderLine",
+                "parentKeys": ["id"],
+                "childKeys": ["warehouseShelfPositionId"],
+                "type": "OneToOne"
             }
         ]
     }

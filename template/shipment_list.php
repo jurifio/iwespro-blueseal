@@ -81,8 +81,8 @@
                                     data-searchable="false"
                                     data-orderable="false" class="center">Contenuto Prodotti</th>
                                 <th data-slug="orderContent"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Contenuto Ordini</th>
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Contenuto Ordini</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -110,6 +110,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.shipment.delivery.time"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.shipment.print.positioning"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.shipment.cancel"

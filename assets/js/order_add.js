@@ -92,12 +92,12 @@ $(document).on('keypress', '#product-search', function (e) {
             for (var i in res) {
                 obj = res[i];
                 hbody += itemMock
-                    .replaceAll('{data.dummyUrl}', obj.dummyUrl)
-                    .replaceAll('{data.brand}', obj.brand)
-                    .replaceAll('{data.code}', obj.code)
-                    .replaceAll('{data.publicUrl}', obj.publicUrl)
-                    .replaceAll('{data.cpf}', obj.cpfVar)
-                    .replaceAll('{data.sizes}', obj.availableSizes.join(' - '));
+                    .monkeyReplaceAll('{data.dummyUrl}', obj.dummyUrl)
+                    .monkeyReplaceAll('{data.brand}', obj.brand)
+                    .monkeyReplaceAll('{data.code}', obj.code)
+                    .monkeyReplaceAll('{data.publicUrl}', obj.publicUrl)
+                    .monkeyReplaceAll('{data.cpf}', obj.cpfVar)
+                    .monkeyReplaceAll('{data.sizes}', obj.availableSizes.join(' - '));
             }
             hbody += "</div>";
             header.html('Scegli Prodotto');
@@ -134,9 +134,9 @@ $(document).on('keypress', '#product-search', function (e) {
                 $('.product-selection-box.product-box-selected').each(function () {
                     var that = $(this);
                     var element = rowMock
-                        .replaceAll("{data.brand}", that.find('.product-brand').data('brand'))
-                        .replaceAll("{data.code}", that.data('code'))
-                        .replaceAll("{data.publicUrl}", that.data('publicUrl'));
+                        .monkeyReplaceAll("{data.brand}", that.find('.product-brand').data('brand'))
+                        .monkeyReplaceAll("{data.code}", that.data('code'))
+                        .monkeyReplaceAll("{data.publicUrl}", that.data('publicUrl'));
                     element = $(element);
                     lineContainer.append(element);
                     Pace.ignore(function() {

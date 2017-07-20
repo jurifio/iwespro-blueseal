@@ -16,9 +16,19 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @date $date
  * @since 1.0
+ *
+ * @property CWarehouseShelf $warehouseShelf
+ * @property COrderLine $orderLine
  */
 class CWarehouseShelfPosition extends AEntity
 {
     protected $entityTable = 'WarehouseShelfPosition';
     protected $primaryKeys = ['id'];
+
+    /**
+     * @return bool
+     */
+    public function isEmpty() {
+        return $this->orderLine === null;
+    }
 }

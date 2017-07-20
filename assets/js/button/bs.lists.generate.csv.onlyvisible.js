@@ -62,7 +62,7 @@ $(document).on('bs.lists.generate.csv', function (e, element, button) {
                         if (!isNaN(output)) {
                             output = output.toString().replace('.', ',');
                         }
-                        line.push(encodeURIComponent(output).replaceAll('%0A', ' '));
+                        line.push(encodeURIComponent(output).monkeyReplaceAll('%0A', ' '));
                     }
                 }
                 str += line.join(';') + '%0A';

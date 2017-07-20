@@ -2,6 +2,7 @@
 
 namespace bamboo\domain\entities;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
 
 /**
@@ -16,6 +17,7 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @date $date
  * @since 1.0
+ * @property CObjectCollection $warehouseShelf
  */
 class CWarehouse extends AEntity
 {

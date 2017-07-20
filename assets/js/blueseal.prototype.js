@@ -1,4 +1,4 @@
-String.prototype.replaceAll = function (search, replacement) {
+String.prototype.monkeyReplaceAll = function (search, replacement) {
     let target = this;
     return target.replace( (new RegExp(search, 'g')) , replacement === null || replacement.length === 0 ? "" : replacement);
 };

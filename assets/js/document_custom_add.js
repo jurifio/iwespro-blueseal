@@ -152,7 +152,7 @@
         let number = rowContainer.find('.invoice-line:last').data('rowNumber');
         if(typeof number === 'undefined') number = 0;
         else number++;
-        rowContainer.append($(mock.replaceAll('{{iterator}}',number)));
+        rowContainer.append($(mock.monkeyReplaceAll('{{iterator}}',number)));
     });
 
     $(document).on('bs.newInvoice.save',function() {
@@ -277,31 +277,31 @@
             let tableRows = "";
             $(".row.invoice-line").each(function() {
                 tableRows += tableRowMock
-                    .replaceAll('{{rowDescription}}',$(this).find('.row-description').val())
-                    .replaceAll('{{priceNoVat}}',$(this).find('.singlePrice').val())
-                    .replaceAll('{{qty}}',$(this).find('.qty').val())
-                    .replaceAll('{{totNoVat}}',$(this).find('.priceNoVat').val())
-                    .replaceAll('{{vatPercent}}',$(this).find('.vatPercent').val())
-                    .replaceAll('{{vat}}',$(this).find('.vat').val());
+                    .monkeyReplaceAll('{{rowDescription}}',$(this).find('.row-description').val())
+                    .monkeyReplaceAll('{{priceNoVat}}',$(this).find('.singlePrice').val())
+                    .monkeyReplaceAll('{{qty}}',$(this).find('.qty').val())
+                    .monkeyReplaceAll('{{totNoVat}}',$(this).find('.priceNoVat').val())
+                    .monkeyReplaceAll('{{vatPercent}}',$(this).find('.vatPercent').val())
+                    .monkeyReplaceAll('{{vat}}',$(this).find('.vat').val());
             });
 
-            template = template.replaceAll('{{subject}}',shopAddress.subject)
-                    .replaceAll('{{address}}',shopAddress.address)
-                    .replaceAll('{{address2}}',shopAddress.extra)
-                    .replaceAll('{{city}}',shopAddress.city)
-                    .replaceAll('{{postcode}}',shopAddress.postcode)
-                    .replaceAll('{{fiscalCode}}',shopAddress.vatNumber)
-                    .replaceAll('{{phone}}',shopAddress.vatNumber)
+            template = template.monkeyReplaceAll('{{subject}}',shopAddress.subject)
+                    .monkeyReplaceAll('{{address}}',shopAddress.address)
+                    .monkeyReplaceAll('{{address2}}',shopAddress.extra)
+                    .monkeyReplaceAll('{{city}}',shopAddress.city)
+                    .monkeyReplaceAll('{{postcode}}',shopAddress.postcode)
+                    .monkeyReplaceAll('{{fiscalCode}}',shopAddress.vatNumber)
+                    .monkeyReplaceAll('{{phone}}',shopAddress.vatNumber)
 
-                    .replaceAll('{{invoiceNumber}}',$('#number').val())
-                    .replaceAll('{{invoiceDate}}',(new Date($('#date').val())).toLocaleDateString('it-IT'))
+                    .monkeyReplaceAll('{{invoiceNumber}}',$('#number').val())
+                    .monkeyReplaceAll('{{invoiceDate}}',(new Date($('#date').val())).toLocaleDateString('it-IT'))
 
-                    .replaceAll('{{totPriceNoVat}}',$('#total').val())
-                    .replaceAll('{{totVat}}',$('#vat').val())
-                    .replaceAll('{{totalWithVat}}',$('#totalWithVat').val())
-                    .replaceAll('{{note}}',$('#note').val())
-                    .replaceAll('{{paymentExpectedDate}}',(new Date($('#paymentExpectedDate').val())).toLocaleDateString('it-IT'))
-                    .replaceAll('{{tableRows}}',tableRows);
+                    .monkeyReplaceAll('{{totPriceNoVat}}',$('#total').val())
+                    .monkeyReplaceAll('{{totVat}}',$('#vat').val())
+                    .monkeyReplaceAll('{{totalWithVat}}',$('#totalWithVat').val())
+                    .monkeyReplaceAll('{{note}}',$('#note').val())
+                    .monkeyReplaceAll('{{paymentExpectedDate}}',(new Date($('#paymentExpectedDate').val())).toLocaleDateString('it-IT'))
+                    .monkeyReplaceAll('{{tableRows}}',tableRows);
 
             let printWindow = window.open("", "_blank", "");
             //open the window
