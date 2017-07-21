@@ -11,8 +11,12 @@ window.buttonSetup = {
 
 $(document).on('bs.shipment.print.positioning', function (e, element, button) {
 
-    let selected = $.getDataTableSelectedRowData();
-    let url = $.decodeGetStringFromUrl.baseUrl + '/blueseal/xhr/PrintOrderLines?'+$.param(selected);
+    let selected = $.getDataTableSelectedRowsData();
+    selected = {
+        shipmentsId:selected
+    };
+    let a = $.param(selected);
+    let url = window.origin + '/blueseal/xhr/ShipmentOrderLinesPrintController?'+ a;
     let win = window.open(url, '_blank');
     win.focus();
 });

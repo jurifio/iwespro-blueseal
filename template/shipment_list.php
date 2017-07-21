@@ -24,7 +24,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%"
+                        <table class="table table-striped responsive table-condensed" width="100%"
                                data-datatable-name="shipment_list"
                                data-controller="ShipmentListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
@@ -77,12 +77,12 @@
                                 <th data-slug="note"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Note</th>
-                                <th data-slug="productContent"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Contenuto Prodotti</th>
                                 <th data-slug="orderContent"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Contenuto Ordini</th>
+                                <th data-slug="productContent"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Contenuto Prodotti</th>
                             </tr>
                             </thead>
                             <tbody>
