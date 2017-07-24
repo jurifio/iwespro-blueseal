@@ -31,4 +31,8 @@ class CWarehouseShelfPosition extends AEntity
     public function isEmpty() {
         return $this->orderLine === null;
     }
+
+    public function printPosition($full = false) {
+        return $this->warehouseShelf->name.'-'.$this->name;
+    }
 }

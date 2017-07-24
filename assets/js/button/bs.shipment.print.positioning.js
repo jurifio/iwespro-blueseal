@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs.shipment.print.positioning",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Segnala Arrivo Spedizione",
+    title: "Stampa Segnaposto",
     placement: "bottom"
 };
 
