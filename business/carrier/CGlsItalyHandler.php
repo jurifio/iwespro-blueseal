@@ -2,6 +2,7 @@
 
 namespace bamboo\business\carrier;
 
+use Aws\CloudFront\Exception\Exception;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CShipment;
@@ -71,17 +72,21 @@ class CGlsItalyHandler extends ACarrierHandler
         $e = curl_error($ch);
         curl_close($ch);
         if (!$result) {
-            var_dump($e);
+            throw new BambooException($e);
         } else {
             $dom = new \DOMDocument();
-            $dom->loadXML($result);
+            try{
+                $dom->loadXML($result);
+            } catch (\Throwable $e) {
+                throw new BambooException($result);
+            }
             $parcels = $dom->getElementsByTagName('Parcel');
             foreach ($parcels as $parcel) {
                 /** @var \DOMElement $parcel */
                 $ids = $parcel->getElementsByTagName('ContatoreProgressivo');
                 /** @var \DOMNodeList $ids */
                 if ($ids->item(0)->nodeValue == $shipment->id) {
-                    $shipment->trackingNumber = $parcel->getElementsByTagName('NumeroSpedizione')->item(0)->nodeValue;
+                    $shipment->trackingNumber = $this->config['SedeGls'].' '.$parcel->getElementsByTagName('NumeroSpedizione')->item(0)->nodeValue;
                     if ($shipment->trackingNumber == '999999999') throw new BambooException('Errore nella spedizione: ' . $parcel->getElementsByTagName('NoteSpedizione')->item(0)->nodeValue);
                     $shipment->update();
                     break;
@@ -97,7 +102,7 @@ class CGlsItalyHandler extends ACarrierHandler
         $xml->startElement('Parcel');
         $xml->writeElement('CodiceContrattoGls', $this->config['CodiceContrattoGls']);
         if (!empty($shipment->trackingNumber)) {
-            $xml->writeElement('NumeroSpedizione', $shipment->trackingNumber);
+            $xml->writeElement('NumeroSpedizione', ltrim($shipment->trackingNumber,$this->config['SedeGls'].' '));
         }
 
         $xml->writeElement('RegioneSociale', $shipment->toAddress->subject);
@@ -105,6 +110,7 @@ class CGlsItalyHandler extends ACarrierHandler
         $xml->writeElement('Localita', $shipment->toAddress->city);
         $xml->writeElement('Zipcode', $shipment->toAddress->postcode);
         $xml->writeElement('Provincia', $shipment->toAddress->province);
+        $xml->writeElement('Bda', $shipment->orderLine->getFirst()->order->id);
         //$xml->writeElement('Bda',$shipment->toAddress->subject);
         //$xml->writeElement('DataDocumentoTrasporto',$shipment->toAddress->subject);
         $xml->writeElement('Colli', 1);
@@ -115,7 +121,8 @@ class CGlsItalyHandler extends ACarrierHandler
             $xml->writeElement('ImportoContrassegno', $shipment->orderLine->getFirst()->order->netTotal);
         }
 
-        $xml->writeElement('NoteSpedizione', $shipment->note);
+        $xml->writeElement('Notespedizione', $shipment->note);
+        $xml->writeElement('NoteAggiuntive', 'Order '.$shipment->orderLine->getFirst()->order->id);
         $xml->writeElement('TipoPorto', 'F');
         $xml->writeElement('TipoCollo', '0');
 
@@ -149,8 +156,8 @@ class CGlsItalyHandler extends ACarrierHandler
         $rawXml = $xml->outputMemory();
 
 
-        $url = $this->config['endpoint'] . '/CloseWorkingDay';
-        $data = ['XMLInfoParcel' => $rawXml];
+        $url = $this->config['endpoint'] . '/CloseWorkDay';
+        $data = ['XMLCloseInfoParcel' => $rawXml];
 
         $ch = curl_init();
 
@@ -168,22 +175,15 @@ class CGlsItalyHandler extends ACarrierHandler
         $e = curl_error($ch);
         curl_close($ch);
         if (!$result) {
-            var_dump($e);
+            throw new BambooException('Errore nella chiusura Giornata '.$e);
         } else {
             $dom = new \DOMDocument();
             $dom->loadXML($result);
-            $parcels = $dom->getElementsByTagName('Parcel');
-            foreach ($parcels as $parcel) {
-                /** @var \DOMElement $parcel */
-                $ids = $parcel->getElementsByTagName('ContatoreProgressivo');
-                /** @var \DOMNodeList $ids */
-                foreach ($shippings as $shipping) {
-                    if ($ids->item(0)->nodeValue == $shipping->id) {
-                        if ($shipping->trackingNumber == '999999999') throw new BambooException('Errore nella spedizione: ' . $parcel->getElementsByTagName('NoteSpedizione')->item(0)->nodeValue);
-                        break;
-                    }
-
-                }
+            $errore = $dom->getElementsByTagName('DescrizioneErrore')->item(0)->nodeValue;
+            if($errore == 'OK') {
+                //apposto
+            } else {
+                throw new BambooException('Errore nella chiusura Giornata '.$errore);
             }
         }
     }
@@ -200,28 +200,20 @@ class CGlsItalyHandler extends ACarrierHandler
 
     public function printParcelLabel(CShipment $shipment)
     {
-        $xml = new \XMLWriter();
-        $xml->openMemory();
-        $xml->setIndent(true);
-        $xml->startDocument('1.0', 'utf-8');
-        $xml->startElement('GetPdf');
-        $xml->writeAttribute('xmlns', 'https://weblabeling.gls-italy.com/');
-        $xml->writeElement('SedeGls', $this->config['SedeGls']);
-        $xml->writeElement('CodiceCliente', $this->config['CodiceClienteGls']);
-        $xml->writeElement('Password', $this->config['PasswordClienteGls']);
-        $xml->writeElement('CodiceContratto', $this->config['CodiceContrattoGls']);
-        $xml->writeElement('ContatoreProgressivo', $shipment->id);
-        $xml->endDocument();
-        $rawXml = $xml->outputMemory();
-
         $url = $this->config['endpoint'] . '/GetPdf';
-        $data = ['XMLInfoParcel' => $rawXml];
+        $data = [
+            'SedeGls' => $this->config['SedeGls'],
+            'CodiceCliente' => $this->config['CodiceClienteGls'],
+            'Password' => $this->config['PasswordClienteGls'],
+            'CodiceContratto' => $this->config['CodiceContrattoGls'],
+            'ContatoreProgressivo' => $shipment->id
+        ];
 
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, count($data));
+
         $postFields = http_build_query($data);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -236,7 +228,10 @@ class CGlsItalyHandler extends ACarrierHandler
             var_dump($e);
             return "";
         } else {
-            return $result;
+            $dom = new \DOMDocument();
+            $dom->loadXML($result);
+            $binary = $dom->getElementsByTagName('base64Binary')->item(0)->nodeValue;
+            return base64_decode($binary);
         }
     }
 }

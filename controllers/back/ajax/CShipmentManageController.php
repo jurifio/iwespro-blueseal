@@ -52,8 +52,8 @@ class CShipmentManageController extends AAjaxController
         try {
             $dba->beginTransaction();
             $lineStatus = null;
-            $date = '';
             $shipmentData = $this->app->router->request()->getRequestData('shipment');
+            /** @var CShipment $shipment */
             $shipment = $this->app->repoFactory->create('Shipment')->findOneByStringId($shipmentData['id']);
             $shipment->bookingNumber = $shipmentData['bookingNumber'];
             $shipment->trackingNumber = $shipmentData['trackingNumber'];
@@ -61,12 +61,14 @@ class CShipmentManageController extends AAjaxController
             $shipment->predictedDeliveryDate = !empty($shipmentData['predictedDeliveryDate']) ? STimeToolbox::DbFormattedDateTime($shipmentData['predictedDeliveryDate']) : null;
             if (!$shipment->shipmentDate && !(empty($shipmentData['shipmentDate']))) {
                 $shipment->shipmentDate = STimeToolbox::DbFormattedDateTime($shipmentData['shipmentDate']);
-
-                /** @var COrderLineRepo $lR */
-                $olR = \Monkey::app()->repoFactory->create('OrderLine');
-                $orderLine = $shipment->orderLine;
-                foreach ($orderLine as $v) {
-                    $olR->updateStatus($v, 'ORD_FRND_ORDSNT', $shipment->shipmentDate);
+                $shipment->confirmShipment();
+                if($shipment->scope == CShipment::SCOPE_SUPPLIER_TO_US) {
+                    /** @var COrderLineRepo $lR */
+                    $olR = \Monkey::app()->repoFactory->create('OrderLine');
+                    $orderLine = $shipment->orderLine;
+                    foreach ($orderLine as $v) {
+                        $olR->updateStatus($v, 'ORD_FRND_ORDSNT', $shipment->shipmentDate);
+                    }
                 }
             }
 

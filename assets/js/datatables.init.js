@@ -516,7 +516,12 @@ $.getDataTableSelectedRowsData = function(tableSelector,colName,min,max) {
 
     let row = [];
     $.each(selectedRows, function (k, v) {
-        row.push(v[colName]);
+        if(colName === false) {
+            row.push(v);
+        } else {
+            row.push(v[colName]);
+        }
+
     });
 
     return row;

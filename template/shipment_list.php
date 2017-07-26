@@ -24,7 +24,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive table-condensed" width="100%"
+                        <table class="table table-striped responsive" width="100%"
                                data-datatable-name="shipment_list"
                                data-controller="ShipmentListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
@@ -44,6 +44,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Carrier</th>
                                 <th data-slug="bookingNumber"
+                                    data-isVisible="false"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Booking</th>
                                 <th data-slug="trackingNumber"
@@ -71,6 +72,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center dataFilterType">Cancellazione</th>
                                 <th data-slug="creationDate"
+                                    data-isVisible="false"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc" class="center dataFilterType">Data Creazione</th>
@@ -81,6 +83,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Contenuto Ordini</th>
                                 <th data-slug="productContent"
+                                    data-is-visible="false"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Contenuto Prodotti</th>
                             </tr>
@@ -104,6 +107,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.shipment.tracking.update"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.shipment.print.label"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.shipment.shipped.time"
