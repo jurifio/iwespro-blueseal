@@ -145,6 +145,9 @@
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.order.shipment.prepare"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Filtra Ordini">
         <bs-toolbar-button

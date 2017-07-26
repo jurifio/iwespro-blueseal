@@ -1,0 +1,72 @@
+<?php
+
+namespace bamboo\controllers\back\ajax;
+
+use bamboo\core\exceptions\BambooException;
+use bamboo\core\traits\TMySQLTimestamp;
+use bamboo\domain\entities\COrder;
+use bamboo\domain\repositories\COrderRepo;
+use bamboo\domain\repositories\CShipmentRepo;
+
+/**
+ * Class CGetPermissionsForUser
+ * @package bamboo\blueseal\controllers\ajax
+ *
+ * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ *
+ * @copyright (c) Bambooshoot snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date $date
+ * @since 1.0
+ */
+class CPrepareOrderShipment extends AAjaxController
+{
+    use TMySQLTimestamp;
+
+    public function post()
+    {
+        $carrier = $this->app->router->request()->getRequestData('carrier');
+        $ordersId = $this->app->router->request()->getRequestData('ordersId');
+        $carrier = $this->app->repoFactory->create('Carrier')->findOneByStringId($carrier);
+
+        /** @var CShipmentRepo $shipmentRepo */
+        $shipmentRepo = $this->app->repoFactory->create('Shipment');
+        /** @var COrderRepo $orderRepo */
+        $orderRepo = $this->app->repoFactory->create('Order');
+
+        $trackingNumber = $this->app->router->request()->getRequestData('tracking');
+
+        $shipments = [];
+        if ($carrier->implementation == null) {
+            if (count($ordersId[0]) != 1) throw new BambooException('Non è possibile gestire più di un ordine per volta manualmente');
+
+        }
+        foreach ($ordersId as $orderId) {
+            /** @var COrder $order */
+            $order = $orderRepo->findOneByStringId($orderId);
+
+            $shipment = $shipmentRepo->newOrderShipmentToClient($carrier->id, null, $this->time(), $order);
+
+            if ($carrier->implementation != null) {
+                $shipment->sendToCarrier();
+            } else {
+                if (!$trackingNumber) throw new BambooException('Per una spedizione Manuale è necessario fornire il Tracking Number');
+                $shipment->trackingNumber = $trackingNumber;
+            }
+
+            $order->note = $order->note . " Tracking " . $shipment->carrier->name . ": " . $shipment->trackingNumber . ' Spedito: ' . date('Y-m-d');
+            $order->update();
+            $this->app->orderManager->changeStatus($order, 'ORD_SHIPPED');
+
+            $to = [$order->user->email];
+            $this->app->mailer->prepare('shipmentclient', 'no-reply', $to, [], [], ['order' => $order, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
+            $res = $this->app->mailer->send();
+
+        }
+
+        if ($res) return 'ok';
+        return false;
+    }
+}

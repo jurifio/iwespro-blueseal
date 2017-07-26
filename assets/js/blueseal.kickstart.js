@@ -450,6 +450,10 @@ $.bsModal = function (header, params) {
     this.bsModal.modal();
     //constructor end
 
+    this.getElement = function() {
+        return self.bsModal;
+    };
+
     this.addClass = function(classe) {
         self.bsModal.addClass(classe);
     };
@@ -468,6 +472,10 @@ $.bsModal = function (header, params) {
 
     this.writeBody = function (body) {
         self.body.html(body);
+    };
+
+    this.appendBody = function (body) {
+        self.body.append(body);
     };
 
     this.setOkEvent = function (callback) {

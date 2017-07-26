@@ -10,27 +10,29 @@ abstract class ACarrierHandler {
 
     public function __construct(array $config)
     {
-        $this->config = $config;
-
+        //$this->config = $config;
     }
 
     /**
      * Add a delivery Shipment, returns the Shipment
-     * @param $source
-     * @param $dest
-     * @param $date
-     * @param $notes
-     * @return CShipment
+     * @param CShipment $shipment
+     * @return mixed
      */
-    public abstract function addDelivery($source,$dest,$date,$notes);
+    public abstract function addDelivery(CShipment $shipment);
 
     /**
-     * Close the day shipping printing the "borderò"
+     * Close the day shipping
      * @param int $from
      * @param string $to
      * @return mixed
      */
-    public abstract function closeAndPrintPendentShipping($from = 0,$to = 'now');
+    public abstract function closePendentShipping($from = 0,$to = 'now');
+
+    /**
+     * Close the confirmed day shipping
+     * @return mixed
+     */
+    public abstract function printDayShipping();
 
     /**
      * @param $shipping
