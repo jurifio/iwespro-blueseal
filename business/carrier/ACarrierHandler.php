@@ -21,12 +21,10 @@ abstract class ACarrierHandler {
     public abstract function addDelivery(CShipment $shipment);
 
     /**
-     * Close the day shipping
-     * @param int $from
-     * @param string $to
+     * @param $shippings
      * @return mixed
      */
-    public abstract function closePendentShipping($from = 0,$to = 'now');
+    public abstract function closePendentShipping($shippings);
 
     /**
      * Close the confirmed day shipping

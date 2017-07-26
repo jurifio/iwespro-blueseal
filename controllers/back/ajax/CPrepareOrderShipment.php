@@ -39,6 +39,7 @@ class CPrepareOrderShipment extends AAjaxController
         $trackingNumber = $this->app->router->request()->getRequestData('tracking');
 
         $shipments = [];
+        $orders = [];
         if ($carrier->implementation == null) {
             if (count($ordersId[0]) != 1) throw new BambooException('Non è possibile gestire più di un ordine per volta manualmente');
 
@@ -64,9 +65,11 @@ class CPrepareOrderShipment extends AAjaxController
             $this->app->mailer->prepare('shipmentclient', 'no-reply', $to, [], [], ['order' => $order, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
             $res = $this->app->mailer->send();
 
+            $shipments[] = $shipment;
+            $orders[] = $order;
         }
 
-        if ($res) return 'ok';
-        return false;
+
+        return json_encode(['shipments'=>$shipments,'orders'=>$orders]);
     }
 }

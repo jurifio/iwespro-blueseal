@@ -81,6 +81,21 @@ $(document).on('bs.order.shipment.prepare', function (e, element, button) {
                 }).done(function(res) {
                     "use strict";
 
+                    let html = '';
+
+                    res = JSON.parse(res);
+                    for(let i in res.orders) {
+                        if(!res.orders.hasOwnProperty(i)) continue;
+                        console.log(res.orders[i]);
+                    }
+
+                    for(let i in res.shipments) {
+                        if(!res.shipments.hasOwnProperty(i)) continue;
+                        html +=  '<a href="/blueseal/xhr/PrintOrderShipmentLabel?shipmentId='+res.shipments[i].id+'">Etichetta '+res.shipments[i].id+'</a><br />';
+                    }
+
+                    modal.writeBody(html);
+
                 }).fail(function(res) {
                     "use strict";
                     modal.writeBody('Errore');
