@@ -16,9 +16,16 @@ abstract class ACarrierHandler {
     /**
      * Add a delivery Shipment, returns the Shipment
      * @param CShipment $shipment
-     * @return mixed
+     * @return CShipment
      */
     public abstract function addDelivery(CShipment $shipment);
+
+
+    /**
+     * @param CShipment $shipment
+     * @return mixed
+     */
+    public abstract function cancelDelivery(CShipment $shipment);
 
     /**
      * @param $shippings
@@ -40,7 +47,7 @@ abstract class ACarrierHandler {
 
     /**
      * @param CShipment $shipment
-     * @return mixed
+     * @return string
      */
     public abstract function printParcelLabel(CShipment $shipment);
 }

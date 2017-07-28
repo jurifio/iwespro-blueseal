@@ -22,7 +22,6 @@ class CInvoiceAjaxController extends AAjaxController
 {
     protected $fallBack = "blueseal";
     protected $pageSlug = "invoice_print";
-    protected $page;
 
     public function get()
     {

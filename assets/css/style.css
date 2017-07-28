@@ -936,3 +936,7 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     padding-right: 3px;
     padding-left: 3px;
 }
+
+.print-list a:visited {
+    color: grey;
+}

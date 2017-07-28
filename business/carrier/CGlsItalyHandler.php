@@ -2,7 +2,6 @@
 
 namespace bamboo\business\carrier;
 
-use Aws\CloudFront\Exception\Exception;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CShipment;
@@ -87,7 +86,7 @@ class CGlsItalyHandler extends ACarrierHandler
                 /** @var \DOMNodeList $ids */
                 if ($ids->item(0)->nodeValue == $shipment->id) {
                     $shipment->trackingNumber = $this->config['SedeGls'].' '.$parcel->getElementsByTagName('NumeroSpedizione')->item(0)->nodeValue;
-                    if ($shipment->trackingNumber == '999999999') throw new BambooException('Errore nella spedizione: ' . $parcel->getElementsByTagName('NoteSpedizione')->item(0)->nodeValue);
+                    if ($shipment->trackingNumber == $this->config['SedeGls'].' '.'999999999') throw new BambooException('Errore nella spedizione: ' . $parcel->getElementsByTagName('NoteSpedizione')->item(0)->nodeValue);
                     $shipment->update();
                     break;
                 }
@@ -95,6 +94,47 @@ class CGlsItalyHandler extends ACarrierHandler
         }
 
         return $shipment;
+    }
+
+    /**
+     * @param CShipment $shipment
+     * @return bool|string
+     */
+    public function cancelDelivery(CShipment $shipment)
+    {
+        $url = $this->config['endpoint'] . '/DeleteSped';
+
+        $data = [
+            'SedeGls' => $this->config['SedeGls'],
+            'CodiceCliente' => $this->config['CodiceClienteGls'],
+            'Password' => $this->config['PasswordClienteGls'],
+            'NumSpedizione' => ltrim($this->config['SedeGls'].' ',$shipment->trackingNumber)
+        ];
+
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        $postFields = http_build_query($data);
+        curl_setopt($ch, CURLOPT_POST, count($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-type: application/x-www-form-urlencoded'
+        ]);
+
+        $result = curl_exec($ch);
+        $e = curl_error($ch);
+        curl_close($ch);
+        if (!$result) {
+            \Monkey::dump($e);
+            return false;
+        } else {
+            $dom = new \DOMDocument();
+            $dom->loadXML($result);
+            return $data['NumSpedizione'] == $dom->getElementsByTagName('NumSpedizione')->item(0)->nodeValue;
+        }
     }
 
     protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
@@ -105,7 +145,7 @@ class CGlsItalyHandler extends ACarrierHandler
             $xml->writeElement('NumeroSpedizione', ltrim($shipment->trackingNumber,$this->config['SedeGls'].' '));
         }
 
-        $xml->writeElement('RegioneSociale', $shipment->toAddress->subject);
+        $xml->writeElement('Ragionesociale', $shipment->toAddress->subject);
         $xml->writeElement('Indirizzo', $shipment->toAddress->address . ' ' . $shipment->toAddress->extra);
         $xml->writeElement('Localita', $shipment->toAddress->city);
         $xml->writeElement('Zipcode', $shipment->toAddress->postcode);
@@ -135,7 +175,8 @@ class CGlsItalyHandler extends ACarrierHandler
     }
 
     /**
-     * @param CObjectCollection $shippings
+     * @param $shippings
+     * @throws BambooException
      */
     public function closePendentShipping($shippings)
     {
@@ -181,7 +222,7 @@ class CGlsItalyHandler extends ACarrierHandler
             $dom->loadXML($result);
             $errore = $dom->getElementsByTagName('DescrizioneErrore')->item(0)->nodeValue;
             if($errore == 'OK') {
-                //apposto
+                return true;
             } else {
                 throw new BambooException('Errore nella chiusura Giornata '.$errore);
             }

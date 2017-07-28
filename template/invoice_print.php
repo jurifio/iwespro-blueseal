@@ -223,7 +223,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
 <body class="fixed-header">
 
 
-<div class="container container-fluid container-fixed-lg">
+<div class="container container-fixed-lg">
 
     <div class="panel panel-default">
         <div class="panel-body">

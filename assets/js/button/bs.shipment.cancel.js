@@ -49,24 +49,31 @@ $(document).on('bs.shipment.cancel', function (e, element, button) {
             options += '<option value="' + res[i].id + '">' + res[i].description + '</option>';
         }
         let body = '<div class="row form-group">' +
-            '<p>ELimina la spedizione e creane una nuova per il giorno successivo al giorno successivo</p>' +
+            '<p>Elimina la spedizione e creane una nuova per il giorno successivo al giorno successivo</p>' +
             '<div class="col-xs-12 selectize-enabled">' +
             '<label for="faultId">Seleziona il motivo:</label>' +
             '<select id="faultId" class="form-control" name="faultId">' + options + '</select>' +
+            '</div>'+
+            '<div class="col-xs-12">' +
+            '<label for="newShipmentDate">Seleziona la data per la nuova spedizione:</label>' +
+            '<input id="newShipmentDate" class="form-control" name="newShipmentDate" type="date">' +
             '</div>';
+        ;
 
         modal.writeBody(body);
         modal.setOkEvent(function () {
-           let selectFault = $('#faultId');
-           if (selectFault.val()) {
+           let selectFault = $('#faultId').val();
+           let newShipmentDate = $('#newShipmentDate').val();
+           if (selectFault) {
                $.ajax({
                    method: "delete",
                    url: "/blueseal/xhr/ShipmentManageController",
                    data: {
-                       shipmentId: shipmentId, faultId: selectFault.val()
+                       shipmentId: shipmentId, faultId: selectFault, newShipmentDate: newShipmentDate
                    }
                }).done(function (res) {
                    modal.writeBody(res);
+                   modal.hideCancelBtn();
                }).fail(function (res) {
                    if (res.exception == 'shipment') {
                        res = JSON.parse(res);

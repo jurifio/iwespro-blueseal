@@ -81,25 +81,31 @@ $(document).on('bs.order.shipment.prepare', function (e, element, button) {
                 }).done(function(res) {
                     "use strict";
 
-                    let html = '';
+                    let html = '<div class="print-list">';
 
                     res = JSON.parse(res);
                     for(let i in res.orders) {
                         if(!res.orders.hasOwnProperty(i)) continue;
-                        console.log(res.orders[i]);
+                        html += '<a target="_blank" href="/blueseal/xhr/InvoiceAjaxController?orderId='+res.orders[i].id+'">Fattura Ordine '+res.orders[i].id+'</a><br />';
                     }
 
                     for(let i in res.shipments) {
                         if(!res.shipments.hasOwnProperty(i)) continue;
-                        html +=  '<a href="/blueseal/xhr/PrintOrderShipmentLabel?shipmentId='+res.shipments[i].id+'">Etichetta '+res.shipments[i].id+'</a><br />';
+                        html += '<a target="_blank" href="/blueseal/xhr/PrintOrderShipmentLabel?shipmentId='+res.shipments[i].id+'">Etichetta '+res.shipments[i].id+'</a><br />';
                     }
-
+                    html += '</div>';
                     modal.writeBody(html);
-
+                    modal.hideCancelBtn();
                 }).fail(function(res) {
                     "use strict";
+                    modal.hideOkBtn();
                     modal.writeBody('Errore');
-                })
+                }).always(function () {
+                    modal.setOkEvent(function () {
+                        modal.hide();
+                        dataTable.ajax.reload();
+                    });
+                });
             })
         });
     });

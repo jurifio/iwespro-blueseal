@@ -5,6 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\COrder;
+use bamboo\domain\entities\CShipment;
 use bamboo\domain\repositories\COrderRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 
@@ -48,24 +49,27 @@ class CPrepareOrderShipment extends AAjaxController
             /** @var COrder $order */
             $order = $orderRepo->findOneByStringId($orderId);
 
-            $shipment = $shipmentRepo->newOrderShipmentToClient($carrier->id, null, $this->time(), $order);
-
-            if ($carrier->implementation != null) {
-                $shipment->sendToCarrier();
-            } else {
-                if (!$trackingNumber) throw new BambooException('Per una spedizione Manuale è necessario fornire il Tracking Number');
-                $shipment->trackingNumber = $trackingNumber;
+            $exShipments = [];
+            foreach ($order->orderLine as $orderLine) {
+                foreach ($orderLine->shipment as $exShipment) {
+                    if($exShipment->scope == CShipment::SCOPE_US_TO_USER) {
+                        $exShipments[] = $exShipment;
+                    }
+                }
             }
 
-            $order->note = $order->note . " Tracking " . $shipment->carrier->name . ": " . $shipment->trackingNumber . ' Spedito: ' . date('Y-m-d');
-            $order->update();
-            $this->app->orderManager->changeStatus($order, 'ORD_PACK');
+            if(count($exShipments) == 0 && $order->orderStatus->order < 5) {
+                $shipment = $shipmentRepo->newOrderShipmentToClient($carrier->id, $trackingNumber, $this->time(), $order);
 
-            $to = [$order->user->email];
-            $this->app->mailer->prepare('shipmentclient', 'no-reply', $to, [], [], ['order' => $order, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
-            $res = $this->app->mailer->send();
+                $order->note = $order->note . " Tracking " . $shipment->carrier->name . ": " . $shipment->trackingNumber . ' Spedito: ' . date('Y-m-d');
+                $order->update();
+                $this->app->orderManager->changeStatus($order, 'ORD_PACK');
 
-            $shipments[] = $shipment;
+                $shipments[] = $shipment;
+            } else {
+                $shipments += $exShipments;
+            }
+
             $orders[] = $order;
         }
 
