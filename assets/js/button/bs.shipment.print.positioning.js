@@ -29,10 +29,12 @@ $(document).on('bs.shipment.print.positioning', function (e, element, button) {
     let url = window.origin + '/blueseal/xhr/ShipmentOrderLinesPrintController?' + a;
     let win = window.open(url, '_blank');
     win.focus();
+    if(wrong.length > 0) {
+        let html = "<p>Alcune spedizioni non sono state stampate perchè non adatte allo scopo: <br /> dal friend a Iwes: "+wrong.join(', ')+"</p>";
 
-    let html = "Alcune spedizioni non sono state stampate perchè non adatte allo scopo: dal friend a Iwes: "+wrong.join(', ');
+        let modal = new $.bsModal('Impossibile Stampare',{
+            body: html
+        })
+    }
 
-    let modal = new $.bsModal('Impossibile Stampare',{
-        body: html
-    })
 });
