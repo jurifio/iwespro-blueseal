@@ -41,6 +41,8 @@ class CCloseShipmentDay extends ACronJob
                     WHERE
                       c.isActive = 1 AND
                       c.implementation IS NOT NULL AND
+                      s.cancellationDate IS NULL AND
+                      s.shipmentDate IS NULL AND
                       nullif(trim(s.trackingNumber), '') IS NOT NULL AND
                       date(predictedShipmentDate) = date(now())
                     GROUP BY c.id",[],true)->fetchAll();

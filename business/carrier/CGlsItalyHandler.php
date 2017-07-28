@@ -106,9 +106,9 @@ class CGlsItalyHandler extends ACarrierHandler
 
         $data = [
             'SedeGls' => $this->config['SedeGls'],
-            'CodiceCliente' => $this->config['CodiceClienteGls'],
-            'Password' => $this->config['PasswordClienteGls'],
-            'NumSpedizione' => ltrim($this->config['SedeGls'].' ',$shipment->trackingNumber)
+            'CodiceClienteGls' => $this->config['CodiceClienteGls'],
+            'PasswordClienteGls' => $this->config['PasswordClienteGls'],
+            'NumSpedizione' => ltrim($shipment->trackingNumber,$this->config['SedeGls'].' ')
         ];
 
         $ch = curl_init();
@@ -133,7 +133,7 @@ class CGlsItalyHandler extends ACarrierHandler
         } else {
             $dom = new \DOMDocument();
             $dom->loadXML($result);
-            return $data['NumSpedizione'] == $dom->getElementsByTagName('NumSpedizione')->item(0)->nodeValue;
+            return $dom->getElementsByTagName('DescrizioneErrore')->item(0)->nodeValue == "Eliminazione della spedizione ".$data['NumSpedizione']." avvenuta.";
         }
     }
 
@@ -273,6 +273,49 @@ class CGlsItalyHandler extends ACarrierHandler
             $dom->loadXML($result);
             $binary = $dom->getElementsByTagName('base64Binary')->item(0)->nodeValue;
             return base64_decode($binary);
+        }
+    }
+
+    public function listShippings() {
+        $url = $this->config['endpoint'] . '/ListSped';
+        $data = [
+            'SedeGls' => $this->config['SedeGls'],
+            'CodiceClienteGls' => $this->config['CodiceClienteGls'],
+            'PasswordClienteGls' => $this->config['PasswordClienteGls']
+        ];
+
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        $postFields = http_build_query($data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-type: application/x-www-form-urlencoded'
+        ]);
+
+        $result = curl_exec($ch);
+        $e = curl_error($ch);
+        curl_close($ch);
+        if (!$result) {
+            var_dump($e);
+            return "";
+        } else {
+            $dom = new \DOMDocument();
+            $dom->loadXML($result);
+            $parcels = [];
+            foreach($dom->getElementsByTagName('Parcel') as $rawParcel) {
+                /** @var \DOMElement $rawParcel */
+                $parcel = [];
+                foreach ($rawParcel->childNodes as $key => $childNode) {
+                    if(!isset($childNode->tagName) || !$childNode->tagName) continue;
+                    $parcel[$childNode->tagName] = $childNode->nodeValue;
+                }
+                $parcels[] = $parcel;
+            }
+            return $parcels;
         }
     }
 }
