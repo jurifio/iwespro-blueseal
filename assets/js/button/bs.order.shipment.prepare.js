@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs.order.shipment.prepare",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Invia Codice Tracker",
+    title: "Prepara Spedizioni",
     placement: "bottom",
     toggle: "modal"
 };

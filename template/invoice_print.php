@@ -309,10 +309,9 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                             <td class="">
 
                                 <?php $productSku = \bamboo\domain\entities\CProductSku::defrost($orderLine->frozenProduct);
-                                $productSku->setEntityManager($app->application()->entityManagerFactory->create('ProductSku'));
 
                                 $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
-                                echo (($productNameTranslation) ? $productNameTranslation->name : '') . '<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId; ?>
+                                echo (($productNameTranslation) ? $productNameTranslation->name : '') . ($orderLine->warehouseShelfPosition ? ' / '.$orderLine->warehouseShelfPosition->printPosition() : '').'<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId; ?>
                             </td>
                             <td class="text-center"><?php echo $productSku->productSize->name; ?>
                             <td></td>
