@@ -35,56 +35,69 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Ordine</th>
+                                    class="center">Ordine
+                                </th>
                                 <th data-slug="orderDate"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc"
-                                    class="center dataFilterType">Data Ordine</th>
+                                    class="center dataFilterType">Data Ordine
+                                </th>
                                 <th data-slug="lastUpdate"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center dataFilterType">Ultimo Aggiornamento</th>
+                                    class="center dataFilterType">Ultimo Aggiornamento
+                                </th>
                                 <th data-slug="user"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Utente</th>
+                                    class="center">Utente
+                                </th>
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Contenuto</th>
+                                    class="center">Contenuto
+                                </th>
                                 <th data-slug="status"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Stato</th>
+                                    class="center">Stato
+                                </th>
                                 <th data-slug="dareavere"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Dovuto</th>
+                                    class="center">Dovuto
+                                </th>
                                 <th data-slug="paid"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Pagato</th>
+                                    class="center">Pagato
+                                </th>
                                 <th data-slug="paymentDate"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center dataFilterType">Data Pagamento</th>
+                                    class="center dataFilterType">Data Pagamento
+                                </th>
                                 <th data-slug="payment"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Metodo Pagamento</th>
+                                    class="center">Metodo Pagamento
+                                </th>
                                 <th data-slug="notes"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Note</th>
+                                    class="center">Note
+                                </th>
                                 <th data-slug="userNote"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Note Utente</th>
+                                    class="center">Note Utente
+                                </th>
                                 <th data-slug="orderSources"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Origine</th>
+                                    class="center">Origine
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -102,39 +115,24 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione ordini">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="/admin/order/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo ordine manuale"
-            data-placement="bottom"
-            data-href="/blueseal/ordini/inserisci"
+                data-tag="a"
+                data-icon="fa-file-o fa-plus"
+                data-permission="/admin/order/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi un nuovo ordine manuale"
+                data-placement="bottom"
+                data-href="/blueseal/ordini/inserisci"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-fighter-jet"
-            data-permission="/admin/order/edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Cancella ordine (!!!)"
-            data-placement="bottom"
-            data-event="bs.order.delete.panic"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.order.tracker.send"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.order.cancel.send"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.order.recall.send"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.order.wiretransfer.send"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.order.massiveUpdateStatus"
+                data-tag="a"
+                data-icon="fa-fighter-jet"
+                data-permission="/admin/order/edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Cancella ordine (!!!)"
+                data-placement="bottom"
+                data-event="bs.order.delete.panic"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.order.getStatusHistory"
@@ -143,12 +141,26 @@
                 data-remote="bs.order.getOrderLineStatusHistory"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
+                data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.order.shipment.prepare"
+                data-remote="bs.order.shipment.prepare"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Mail">
+        <bs-toolbar-button
+                data-remote="bs.order.cancel.send"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.order.recall.send"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.order.wiretransfer.send"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-button
+            data-remote="bs.order.massiveUpdateStatus"
+    ></bs-toolbar-button>
     <bs-toolbar-group data-group-label="Filtra Ordini">
         <bs-toolbar-button
                 data-remote="bs.order.viewCritical"
