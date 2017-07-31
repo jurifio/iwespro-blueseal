@@ -74,7 +74,7 @@ class CGlsItalyHandler extends ACarrierHandler
             throw new BambooException($e);
         } else {
             $dom = new \DOMDocument();
-            try{
+            try {
                 $dom->loadXML($result);
             } catch (\Throwable $e) {
                 throw new BambooException($result);
@@ -85,8 +85,8 @@ class CGlsItalyHandler extends ACarrierHandler
                 $ids = $parcel->getElementsByTagName('ContatoreProgressivo');
                 /** @var \DOMNodeList $ids */
                 if ($ids->item(0)->nodeValue == $shipment->id) {
-                    $shipment->trackingNumber = $this->config['SedeGls'].' '.$parcel->getElementsByTagName('NumeroSpedizione')->item(0)->nodeValue;
-                    if ($shipment->trackingNumber == $this->config['SedeGls'].' '.'999999999') throw new BambooException('Errore nella spedizione: ' . $parcel->getElementsByTagName('NoteSpedizione')->item(0)->nodeValue);
+                    $shipment->trackingNumber = $this->config['SedeGls'] . ' ' . $parcel->getElementsByTagName('NumeroSpedizione')->item(0)->nodeValue;
+                    if ($shipment->trackingNumber == $this->config['SedeGls'] . ' ' . '999999999') throw new BambooException('Errore nella spedizione: ' . $parcel->getElementsByTagName('NoteSpedizione')->item(0)->nodeValue);
                     $shipment->update();
                     break;
                 }
@@ -94,6 +94,43 @@ class CGlsItalyHandler extends ACarrierHandler
         }
 
         return $shipment;
+    }
+
+    protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
+    {
+        $xml->startElement('Parcel');
+        $xml->writeElement('CodiceContrattoGls', $this->config['CodiceContrattoGls']);
+        if (!empty($shipment->trackingNumber)) {
+            $xml->writeElement('NumeroSpedizione', ltrim($shipment->trackingNumber, $this->config['SedeGls'] . ' '));
+        }
+
+        $xml->writeElement('Ragionesociale', $shipment->toAddress->subject);
+        $xml->writeElement('Indirizzo', $shipment->toAddress->address . ' ' . $shipment->toAddress->extra);
+        $xml->writeElement('Localita', $shipment->toAddress->city);
+        $xml->writeElement('Zipcode', $shipment->toAddress->postcode);
+        $xml->writeElement('Provincia', $this->getProvinceCode($shipment->toAddress->province));
+        $xml->writeElement('Bda', $shipment->orderLine->getFirst()->order->id);
+        //$xml->writeElement('Bda',$shipment->toAddress->subject);
+        //$xml->writeElement('DataDocumentoTrasporto',$shipment->toAddress->subject);
+        $xml->writeElement('Colli', 1);
+        //$xml->writeElement('Incoterm',$shipment->toAddress->subject);
+        $xml->writeElement('PesoReale', 2.5);
+
+        if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
+            $xml->writeElement('ImportoContrassegno', $shipment->orderLine->getFirst()->order->netTotal);
+        }
+
+        $xml->writeElement('Notespedizione', $shipment->note);
+        $xml->writeElement('NoteAggiuntive', 'Order ' . $shipment->orderLine->getFirst()->order->id);
+        $xml->writeElement('TipoPorto', 'F');
+        $xml->writeElement('TipoCollo', '0');
+
+        $xml->writeElement('Email', $shipment->orderLine->getFirst()->order->user->email);
+        $xml->writeElement('Cellulare1', $shipment->toAddress->phone);
+        $xml->writeElement('GeneraPdf', 1);
+        $xml->writeElement('ContatoreProgressivo', $shipment->id);
+        $xml->endElement();
+        return true;
     }
 
     /**
@@ -108,7 +145,7 @@ class CGlsItalyHandler extends ACarrierHandler
             'SedeGls' => $this->config['SedeGls'],
             'CodiceClienteGls' => $this->config['CodiceClienteGls'],
             'PasswordClienteGls' => $this->config['PasswordClienteGls'],
-            'NumSpedizione' => ltrim($shipment->trackingNumber,$this->config['SedeGls'].' ')
+            'NumSpedizione' => ltrim($shipment->trackingNumber, $this->config['SedeGls'] . ' ')
         ];
 
         $ch = curl_init();
@@ -133,45 +170,8 @@ class CGlsItalyHandler extends ACarrierHandler
         } else {
             $dom = new \DOMDocument();
             $dom->loadXML($result);
-            return $dom->getElementsByTagName('DescrizioneErrore')->item(0)->nodeValue == "Eliminazione della spedizione ".$data['NumSpedizione']." avvenuta.";
+            return $dom->getElementsByTagName('DescrizioneErrore')->item(0)->nodeValue == "Eliminazione della spedizione " . $data['NumSpedizione'] . " avvenuta.";
         }
-    }
-
-    protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
-    {
-        $xml->startElement('Parcel');
-        $xml->writeElement('CodiceContrattoGls', $this->config['CodiceContrattoGls']);
-        if (!empty($shipment->trackingNumber)) {
-            $xml->writeElement('NumeroSpedizione', ltrim($shipment->trackingNumber,$this->config['SedeGls'].' '));
-        }
-
-        $xml->writeElement('Ragionesociale', $shipment->toAddress->subject);
-        $xml->writeElement('Indirizzo', $shipment->toAddress->address . ' ' . $shipment->toAddress->extra);
-        $xml->writeElement('Localita', $shipment->toAddress->city);
-        $xml->writeElement('Zipcode', $shipment->toAddress->postcode);
-        $xml->writeElement('Provincia', $shipment->toAddress->province);
-        $xml->writeElement('Bda', $shipment->orderLine->getFirst()->order->id);
-        //$xml->writeElement('Bda',$shipment->toAddress->subject);
-        //$xml->writeElement('DataDocumentoTrasporto',$shipment->toAddress->subject);
-        $xml->writeElement('Colli', 1);
-        //$xml->writeElement('Incoterm',$shipment->toAddress->subject);
-        $xml->writeElement('PesoReale', 2.5);
-
-        if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
-            $xml->writeElement('ImportoContrassegno', $shipment->orderLine->getFirst()->order->netTotal);
-        }
-
-        $xml->writeElement('Notespedizione', $shipment->note);
-        $xml->writeElement('NoteAggiuntive', 'Order '.$shipment->orderLine->getFirst()->order->id);
-        $xml->writeElement('TipoPorto', 'F');
-        $xml->writeElement('TipoCollo', '0');
-
-        $xml->writeElement('Email', $shipment->orderLine->getFirst()->order->user->email);
-        $xml->writeElement('Cellulare1', $shipment->toAddress->phone);
-        $xml->writeElement('GeneraPdf', 1);
-        $xml->writeElement('ContatoreProgressivo', $shipment->id);
-        $xml->endElement();
-        return true;
     }
 
     /**
@@ -216,15 +216,15 @@ class CGlsItalyHandler extends ACarrierHandler
         $e = curl_error($ch);
         curl_close($ch);
         if (!$result) {
-            throw new BambooException('Errore nella chiusura Giornata '.$e);
+            throw new BambooException('Errore nella chiusura Giornata ' . $e);
         } else {
             $dom = new \DOMDocument();
             $dom->loadXML($result);
             $errore = $dom->getElementsByTagName('DescrizioneErrore')->item(0)->nodeValue;
-            if($errore == 'OK') {
+            if ($errore == 'OK') {
                 return true;
             } else {
-                throw new BambooException('Errore nella chiusura Giornata '.$errore);
+                throw new BambooException('Errore nella chiusura Giornata ' . $errore);
             }
         }
     }
@@ -276,7 +276,8 @@ class CGlsItalyHandler extends ACarrierHandler
         }
     }
 
-    public function listShippings() {
+    public function listShippings()
+    {
         $url = $this->config['endpoint'] . '/ListSped';
         $data = [
             'SedeGls' => $this->config['SedeGls'],
@@ -306,16 +307,44 @@ class CGlsItalyHandler extends ACarrierHandler
             $dom = new \DOMDocument();
             $dom->loadXML($result);
             $parcels = [];
-            foreach($dom->getElementsByTagName('Parcel') as $rawParcel) {
+            foreach ($dom->getElementsByTagName('Parcel') as $rawParcel) {
                 /** @var \DOMElement $rawParcel */
                 $parcel = [];
                 foreach ($rawParcel->childNodes as $key => $childNode) {
-                    if(!isset($childNode->tagName) || !$childNode->tagName) continue;
+                    if (!isset($childNode->tagName) || !$childNode->tagName) continue;
                     $parcel[$childNode->tagName] = $childNode->nodeValue;
                 }
                 $parcels[] = $parcel;
             }
             return $parcels;
         }
+    }
+
+    private function getProvinceCode($province)
+    {
+        $province = trim($province);
+        if (strlen($province) == 2 && isset($this->getProvinceList()[$province])) return $province;
+        $lev = 30;
+        $province = "";
+        foreach ($this->getProvinceList() as $key => $val) {
+            $nLev = levenshtein($val, $province);
+            if ($nLev < $lev) {
+                $lev = $nLev;
+                $province = $key;
+            }
+        }
+        return $province;
+    }
+
+    private function getProvinceList()
+    {
+        if (!isset($this->provinces)) {
+            $this->provinces = [];
+            $provinces = \Monkey::app()->repoFactory->findAll();
+            foreach ($provinces as $province) {
+                $this->provinces[$province->code] = $province->name;
+            }
+        }
+        return $this->provinces;
     }
 }
