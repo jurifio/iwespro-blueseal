@@ -16,14 +16,13 @@ $(document).on('bs.shipment.delivery.time', function (e, element, button) {
 
     let selectedRows = dataTable.rows('.selected').data();
 
-    if (selectedRows.length != 1) {
-
+    if (selectedRows.length !== 1) {
         return false;
     }
 
     let shipmentId = selectedRows[0].DT_RowId;
 
-    if(selectedRows[0].deliveryDate && selectedRows[0].deliveryDate.length != 0) {
+    if(selectedRows[0].deliveryDate && selectedRows[0].deliveryDate.length !== 0) {
         new Alert({
             type: "warning",
             message: "Tempo già registrato"
@@ -75,6 +74,7 @@ $(document).on('bs.shipment.delivery.time', function (e, element, button) {
                         },
                     }).done(function (res2) {
                         modal.writeBody(res2);
+                        if(res2.scope === 'supplierToUs') $(document).trigger('bs.shipment.print.positioning');
                     }).fail(function (res) {
                         modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
                         console.error(error);
