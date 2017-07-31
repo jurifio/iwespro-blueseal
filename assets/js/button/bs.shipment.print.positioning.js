@@ -22,13 +22,16 @@ $(document).on('bs.shipment.print.positioning', function (e, element, button) {
             wrong.push(selected[i].id);
         }
     }
-    let a = $.param({
-        shipmentsId: params
-    });
+    if(params.length > 0)  {
+        let a = $.param({
+            shipmentsId: params
+        });
 
-    let url = window.origin + '/blueseal/xhr/ShipmentOrderLinesPrintController?' + a;
-    let win = window.open(url, '_blank');
-    win.focus();
+        let url = window.origin + '/blueseal/xhr/ShipmentOrderLinesPrintController?' + a;
+        let win = window.open(url, '_blank');
+        win.focus();
+    }
+
     if(wrong.length > 0) {
         let html = "<p>Alcune spedizioni non sono state stampate perchè non adatte allo scopo: <br /> dal friend a Iwes: "+wrong.join(', ')+"</p>";
 
