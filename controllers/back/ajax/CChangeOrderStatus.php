@@ -55,7 +55,11 @@ class CChangeOrderStatus extends AAjaxController
             }
 
             foreach($orders as $order) {
-                $oR->updateStatus($order, $datas['order_status'],$datas['order_note'] ?? null);
+                $oR->updateStatus($order, $datas['order_status']);
+
+                $order->note = $datas['order_note'] ?? null;
+                $order->shipmentNote = $datas['order_shipmentNote'] ?? null;
+                $order->update();
             }
             $dba->commit();
             return true;

@@ -65,7 +65,15 @@
                                                 <div class="col-lg-12 col-md-12">
                                                     <div class="form-group form-group-default">
                                                         <label class="">Stato dell'ordine</label>
-                                                        <input id="orderNote" name="order_note" class="full-width" value="<?php echo $order->note ?>"/>
+                                                        <input id="orderNote" name="order_note" autocomplete="off" class="full-width" value="<?php echo $order->note ?>"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12">
+                                                    <div class="form-group form-group-default">
+                                                        <label class="">Note di Spedizione</label>
+                                                        <input id="shipmentNote" name="order_shipmentNote" autocomplete="off" class="full-width" value="<?php echo $order->shipmentNote ?>"/>
                                                     </div>
                                                 </div>
                                             </div>
