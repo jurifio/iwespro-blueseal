@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs.shipment.print.label",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Stampa Segnaposto",
+    title: "Stampa SegnaCollo Spedizione",
     placement: "bottom"
 };
 
