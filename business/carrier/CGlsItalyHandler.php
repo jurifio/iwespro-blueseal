@@ -36,6 +36,7 @@ class CGlsItalyHandler extends ACarrierHandler
      */
     public function addDelivery(CShipment $shipment)
     {
+        \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Called AddParcel');
         $xml = new \XMLWriter();
         $xml->openMemory();
         $xml->setIndent(true);
@@ -53,7 +54,7 @@ class CGlsItalyHandler extends ACarrierHandler
 
         $url = $this->config['endpoint'] . '/AddParcel';
         $data = ['XMLInfoParcel' => $rawXml];
-
+        \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Request AddParcel',$rawXml);
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
@@ -69,6 +70,7 @@ class CGlsItalyHandler extends ACarrierHandler
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
+        \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Result AddParcel',$result);
         if (!$result) {
             throw new BambooException($e);
         } else {
@@ -117,6 +119,7 @@ class CGlsItalyHandler extends ACarrierHandler
 
         if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
             $xml->writeElement('ImportoContrassegno', $shipment->orderLine->getFirst()->order->netTotal);
+            $xml->writeElement('ModalitaIncasso', 'CONT');
         }
 
         $xml->writeElement('Notespedizione', $shipment->note);
@@ -324,7 +327,7 @@ class CGlsItalyHandler extends ACarrierHandler
     private function getProvinceCode($province)
     {
         $province = trim($province);
-        if (strlen($province) == 2 && isset($this->getProvinceList()[$province])) return $province;
+        if (strlen($province) == 2 && isset($this->getProvinceList()[strtoupper($province)])) return $province;
         $lev = 30;
         $province = "";
         foreach ($this->getProvinceList() as $key => $val) {
