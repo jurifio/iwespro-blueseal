@@ -180,6 +180,7 @@ class CGlsItalyHandler extends ACarrierHandler
      */
     public function closePendentShipping($shippings)
     {
+        \Monkey::app()->applicationReport('GlsItalyHandler','closePendentShipping','Called CloseWorkDay',$shippings);
         $xml = new \XMLWriter();
         $xml->openMemory();
         $xml->setIndent(true);
@@ -211,10 +212,11 @@ class CGlsItalyHandler extends ACarrierHandler
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-type: application/x-www-form-urlencoded'
         ]);
-
+        \Monkey::app()->applicationReport('GlsItalyHandler','closePendentShipping','Request CloseWorkDay',$rawXml);
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
+        \Monkey::app()->applicationReport('GlsItalyHandler','closePendentShipping','Response CloseWorkDay',$result);
         if (!$result) {
             throw new BambooException('Errore nella chiusura Giornata ' . $e);
         } else {
@@ -340,7 +342,7 @@ class CGlsItalyHandler extends ACarrierHandler
     {
         if (!isset($this->provinces)) {
             $this->provinces = [];
-            $provinces = \Monkey::app()->repoFactory->findAll();
+            $provinces = \Monkey::app()->repoFactory->create('Province')->findAll();
             foreach ($provinces as $province) {
                 $this->provinces[$province->code] = $province->name;
             }

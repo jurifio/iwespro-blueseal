@@ -57,15 +57,20 @@ class CCloseShipmentDay extends ACronJob
             foreach (explode(',',$res['shipmentsId']) as $shipmentId) {
                 $shipments->add($shipmentRepo->findOne([$shipmentId]));
             }
-            foreach ($shipmentRepo->closeShipmentsForCarrier($shipments,$carrier) as $shipment) {
+            $this->report('Cycle 1','Calling for shipments',$shipments);
+            $closed = $shipmentRepo->closeShipmentsForCarrier($shipments,$carrier);
+            $this->report('Cycle 1','Closed',$shipments);
+            foreach ($closed as $shipment) {
                 if($shipment->scope == CShipment::SCOPE_US_TO_USER) {
+                    $this->report('Cycle 2', 'Sending email for Orders');
                     foreach ($shipment->order as $order) {
                         /** @var COrder $order */
                         $order->updateStatus('ORD_SHIPPED');
                         try {
                             $to = [$order->user->email];
                             $this->app->mailer->prepare('shipmentclient', 'no-reply', $to, [], [], ['order' => $order, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
-                            $res = $this->app->mailer->send();
+                            //$res = $this->app->mailer->send();
+                            $this->report('Cycle 2', 'Sent Email for Order',$order);
                         } catch (\Throwable $e) {
                             $this->error('Shipping Emails','Error while shipment sending mail to client',$e->getTraceAsString());
                         }
