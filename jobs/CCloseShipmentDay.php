@@ -69,7 +69,7 @@ class CCloseShipmentDay extends ACronJob
                         try {
                             $to = [$order->user->email];
                             $this->app->mailer->prepare('shipmentclient', 'no-reply', $to, [], [], ['order' => $order, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
-                            //$res = $this->app->mailer->send();
+                            $res = $this->app->mailer->send();
                             $this->report('Cycle 2', 'Sent Email for Order',$order);
                         } catch (\Throwable $e) {
                             $this->error('Shipping Emails','Error while shipment sending mail to client',$e->getTraceAsString());
