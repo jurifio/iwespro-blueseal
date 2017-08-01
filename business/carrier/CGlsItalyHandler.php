@@ -2,7 +2,6 @@
 
 namespace bamboo\business\carrier;
 
-use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CShipment;
 
@@ -180,7 +179,7 @@ class CGlsItalyHandler extends ACarrierHandler
      */
     public function closePendentShipping($shippings)
     {
-        \Monkey::app()->applicationReport('GlsItalyHandler','closePendentShipping','Called CloseWorkDay',$shippings);
+        \Monkey::app()->applicationReport('GlsItalyHandler','closePendentShipping','Called CloseWorkDay');
         $xml = new \XMLWriter();
         $xml->openMemory();
         $xml->setIndent(true);
