@@ -84,16 +84,16 @@ class CDepublishMarketplaceProducts extends ACronJob
             $sizeFill = $actualSizes / $iniSizes;
 
             if ($sizeFill === 0) $nCos = 'NaN';
-            else $nCos = (
+            else $nCos = round((
                     $one['cost'] /
                     (
                         ($one['orderCount'] == 0 ? 0.1 : $one['orderCount']) * $product->getDisplayActivePrice()
                     )
                     * $sizeFill
-                ) * 100;
+                ) * 100,2);
 
             if ($one['orderCount'] == 0) $cos = 'NaN';
-            else $cos = $one['cost'] / $one['orderValue'];
+            else $cos = round($one['cost'] / $one['orderValue'] * 100,2);
             $this->debug('Cycle Res', 'Math Done', [
                 'cos' => $cos,
                 'nCos' => $nCos
@@ -110,6 +110,10 @@ class CDepublishMarketplaceProducts extends ACronJob
                 $marketplaceAccountHasProductRepo->deleteProductFromMarketplaceAccount($marketplaceAccountHasProduct);
                 $marketplaceAccountHasProduct->nCos = $nCos;
                 $marketplaceAccountHasProduct->cos = $cos;
+                $marketplaceAccountHasProduct->actualSizes = $actualSizes;
+                $marketplaceAccountHasProduct->iniSizes = $iniSizes;
+                $marketplaceAccountHasProduct->cost = $one['cost'];
+                $marketplaceAccountHasProduct->orderValue = $one['orderValue'];
 
                 if (!isset($reportArray[$marketplaceAccountHasProduct->marketplaceAccount->printId()]))
                     $reportArray[$marketplaceAccountHasProduct->marketplaceAccount->printId()] = [];
@@ -131,13 +135,18 @@ class CDepublishMarketplaceProducts extends ACronJob
             foreach ($marketplaceAccountHasProducts as $marketplaceAccountHasProduct) {
                 $text .= str_pad($marketplaceAccountHasProduct->product->printId(),15,' ',STR_PAD_RIGHT)
                     . ' - ' . str_pad($marketplaceAccountHasProduct->product->printCpf(),35,' ',STR_PAD_RIGHT)
-                    . ' - nCos: ' . str_pad( $marketplaceAccountHasProduct->nCos,10,' ',STR_PAD_RIGHT)
-                    . ' - cos: ' . str_pad( $marketplaceAccountHasProduct->cos ,10,' ',STR_PAD_RIGHT). PHP_EOL;
+                    . ' - nCos: ' . str_pad( $marketplaceAccountHasProduct->nCos,6,' ',STR_PAD_RIGHT)
+                    . ' - cos: ' . str_pad( $marketplaceAccountHasProduct->cos ,6,' ',STR_PAD_RIGHT)
+                    . ' - disp: ' . str_pad( $marketplaceAccountHasProduct->actualSizes ,6,' ',STR_PAD_RIGHT)
+                    . ' - prez: ' . str_pad( $marketplaceAccountHasProduct->product->getDisplayActivePrice() ,6,' ',STR_PAD_RIGHT)
+                    . ' - cost: ' . str_pad( $marketplaceAccountHasProduct->cost ,6,' ',STR_PAD_RIGHT)
+                    . ' - ord: ' . str_pad( $marketplaceAccountHasProduct->orderValue ,6,' ',STR_PAD_RIGHT)
+                    . PHP_EOL;
             }
         }
-
-        iwesMail('support@iwes.it',
-            'Report Depubblicazione produtti Marketplace',
+        $this->debug('Cycle Report', 'Sending Email', $text);
+        iwesMail('it@iwes.it',
+            'Report Depubblicazione produtti Marketplace '.\Monkey::app()->getName(),
             "Sono stati depubblicati i seguenti prodotti: " . PHP_EOL . $text);
 
     }
