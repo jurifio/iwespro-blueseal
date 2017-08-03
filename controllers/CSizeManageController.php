@@ -57,7 +57,7 @@ class CSizeManageController extends ARestrictedAccessRootController
         /** @var CMySQLAdapter $mysql */
         $mysql = $this->app->dbAdapter;
         $macroName = $post['ProductSizeGroup_macroName'];
-        for($k=0;$k<12;$k++){
+        for($k=0;$k<24;$k++){
             $productSizeGroupIn = [];
             $positions = [];
             $productSizeGroupId = "";
