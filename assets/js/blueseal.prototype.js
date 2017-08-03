@@ -313,7 +313,7 @@ Button.prototype.checkPermission = function () {
     });
 };
 
-function checkPermission(permission, cache = true) {
+const checkPermission = function(permission, cache = true) {
 
     let deferred = $.Deferred();
     let timer = setInterval(function () {
@@ -322,7 +322,7 @@ function checkPermission(permission, cache = true) {
 
     setTimeout(function () {
         clearInterval(timer);
-        if (cache == true && 'undefined' != typeof window.localStorage.getItem(permission) && window.localStorage.getItem(permission) != null) {
+        if (cache === true && 'undefined' !== typeof window.localStorage.getItem(permission) && window.localStorage.getItem(permission) !== null) {
             if(window.localStorage.getItem(permission) == 1) deferred.resolve();
             else deferred.reject();
         } else {
@@ -333,14 +333,18 @@ function checkPermission(permission, cache = true) {
                 }
             }).done(function(res) {
                 window.localStorage.setItem(permission,res);
+                if(res == 1) deferred.resolve();
+                deferred.reject(res);
+
             }).fail(function(res) {
                 window.localStorage.setItem(permission,0);
+                deferred.reject(res);
             });
         }
     }, 300);
 
     /** restituisco il deferred */
-    return deferred;
+    return deferred.promise();
 }
 
 /**

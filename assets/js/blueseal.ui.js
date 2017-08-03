@@ -15,7 +15,7 @@ $.fn.selectText = function () {
     var doc = document
         , element = this[0]
         , range, selection
-        ;
+    ;
     if (doc.body.createTextRange) {
         range = document.body.createTextRange();
         range.moveToElementText(element);
@@ -298,14 +298,14 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
         });
     });
 
-    $(document).on('column-visibility.dt draw.dt',function (e, settings, column, state) {
-        if(typeof state == 'undefined' || state) {
-            $('table.inner-size-table').each(function(k,table) {
+    $(document).on('column-visibility.dt draw.dt', function (e, settings, column, state) {
+        if (typeof state == 'undefined' || state) {
+            $('table.inner-size-table').each(function (k, table) {
                 table = $(table);
-                if(table.data('loaded') == 'true') return;
+                if (table.data('loaded') == 'true') return;
                 var container = table.closest('td');
                 var productId = table.data('productId');
-                if(typeof productId == 'undefined') {
+                if (typeof productId == 'undefined') {
                     container.html('Error');
                     return;
                 }
@@ -315,7 +315,7 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
 
                     $.ajax({
                         "url": "/blueseal/xhr/ProductSizeTable",
-                        "data": {"productId": productId },
+                        "data": {"productId": productId},
                         "dataType": "json"
                     }).done(function (data) {
                         if (data.rows.length == 0) {
@@ -325,7 +325,7 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
                         var thead = '<thead><tr>';
                         for (var i in data.head) {
                             var thd = data.head[i];
-                            thead+='<th>' + thd + '</th>';
+                            thead += '<th>' + thd + '</th>';
                         }
                         thead += '</tr></thead>';
                         table.append($(thead));
@@ -336,8 +336,8 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
                             row = '<tr>';
                             var rowD = data.rows[k];
                             for (i in data.head) {
-                                if(i == 0) {
-                                    row+='<td>'+rowD[i]+'</td>';
+                                if (i == 0) {
+                                    row += '<td>' + rowD[i] + '</td>';
                                 } else if (typeof rowD[i] == 'undefined') {
                                     row += '<td>0</td>';
                                 } else {
@@ -349,12 +349,38 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
                             body.append($(row));
                         }
                         table.append(body);
-                        table.data('loaded','true');
+                        table.data('loaded', 'true');
                         container.html(table);
                     });
                 });
             });
         }
+    });
+
+    const sessionCheck = function () {
+        "use strict";
+        let location = window.location.pathname.split('/');
+        if (location[1] === 'blueseal' &&
+            typeof location[2] !== 'undefined' &&
+            location[2].length !== 0 &&
+            isVisible()) {
+
+            checkPermission('blueseal', false)
+                .fail(function (res) {
+                    new Alert({
+                        type: "danger",
+                        message: "Sessione Scaduta!"
+                    }).open();
+                    setTimeout(function () {
+                        window.location.reload();
+                    },5000);
+
+                });
+        }
+    };
+
+    $(document).ready(function () {
+        setInterval(sessionCheck, 10000);
     });
 
 })(jQuery);
