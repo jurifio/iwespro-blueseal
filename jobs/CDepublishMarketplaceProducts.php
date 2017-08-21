@@ -56,7 +56,8 @@ class CDepublishMarketplaceProducts extends ACronJob
         $productRepo = \Monkey::app()->repoFactory->create('Product');
         /** @var CCampaignRepo $campaingRepo */
         $campaingRepo = \Monkey::app()->repoFactory->create('Campaign');
-        /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProduct */
+
+        /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
         $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
         $reportArray = [];
         $this->report('run', 'Starting Cycle for ' . count($res));
@@ -107,7 +108,11 @@ class CDepublishMarketplaceProducts extends ACronJob
                 $marketplaceAccountHasProduct->productVariantId = $product->productVariantId;
                 $marketplaceAccountHasProduct->marketplaceAccountId = $campaign->marketplaceAccount->id;
                 $marketplaceAccountHasProduct->marketplaceId = $campaign->marketplaceAccount->marketplaceId;
-                $marketplaceAccountHasProductRepo->deleteProductFromMarketplaceAccount($marketplaceAccountHasProduct);
+
+                if(!$marketplaceAccountHasProductRepo->deleteProductFromMarketplaceAccount($marketplaceAccountHasProduct->printId())) {
+                    $this->warning('Cycle','Could not delete a product',$marketplaceAccountHasProduct);
+                }
+
                 $marketplaceAccountHasProduct->nCos = $nCos;
                 $marketplaceAccountHasProduct->cos = $cos;
                 $marketplaceAccountHasProduct->actualSizes = $actualSizes;
