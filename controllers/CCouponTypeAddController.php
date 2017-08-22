@@ -59,7 +59,8 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                 $couponType->{$k} = $v;
             }
             $couponType->smartInsert();
-            foreach ($data['tags'] as $tag) {
+
+            foreach ($data['tags'] ?? [] as $tag) {
                 $couponTypeHasTag = $this->app->repoFactory->create('CouponTypeHasTag')->getEmptyEntity();
                 $couponTypeHasTag->tagId = $tag;
                 $couponTypeHasTag->couponTypeId = $couponType->id;
@@ -70,6 +71,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
         } catch (\Throwable $e) {
             $this->app->router->response()->raiseProcessingError();
             $this->app->router->response()->sendHeaders();
+            return $e->getMessage()."\n".$e->getTraceAsString();
         }
     }
 }
