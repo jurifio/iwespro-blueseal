@@ -71,11 +71,10 @@ class CCloseShipmentDay extends ACronJob
             $this->report('Cycle 1', 'Closed', $shipments);
             foreach ($closed as $shipment) {
                 if ($shipment->scope == CShipment::SCOPE_US_TO_USER) {
-                    $this->report('Cycle 2', 'Creating Coupons');
-                    $coupon = $couponRepo->createCouponFromType($couponType);
-
                     $this->report('Cycle 2', 'Sending email for Orders');
                     foreach ($shipment->order as $order) {
+                        $this->report('Cycle 2', 'Creating Coupons');
+                        $coupon = $couponRepo->createCouponFromType($couponType,$order->user->printId());
                         /** @var COrder $order */
                         $order->updateStatus('ORD_SHIPPED');
                         try {

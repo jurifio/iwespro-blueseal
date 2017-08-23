@@ -41,24 +41,16 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
         '<select id="#lang" name="lang" class="full-width"></select>' +
         '</div>' +
         '<div class="form-group form-group-default required">' +
-        '<label for="reason1">Motivo 1</label>' +
+        '<label for="reason1">Prodotto 1</label>' +
         '<input id="reason1" autocomplete="off" type="text" class="form-control" value="" required="required">' +
         '</div>'+
         '<div class="form-group form-group-default required">' +
-        '<label for="reason2">Motivo 2</label>' +
+        '<label for="reason2">Prodotto 2</label>' +
         '<input id="reason2" autocomplete="off" type="text" class="form-control" value="" required="required">' +
         '</div>'+
         '<div class="form-group form-group-default required">' +
-        '<label for="reason3">Motivo 3</label>' +
+        '<label for="reason3">Prodotto 3</label>' +
         '<input id="reason3" autocomplete="off" type="text" class="form-control" value="" required="required">' +
-        '</div>'+
-        '<div class="form-group form-group-default required">' +
-        '<label for="reason4">Motivo 4</label>' +
-        '<input id="reason4" autocomplete="off" type="text" class="form-control" value="" required="required">' +
-        '</div>'+
-        '<div class="form-group form-group-default required">' +
-        '<label for="reason5">Motivo 5</label>' +
-        '<input id="reason5" autocomplete="off" type="text" class="form-control" value="" required="required">' +
         '</div>'
     );
     bsModal.modal();
@@ -86,8 +78,6 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
             reasons.push($('#reason1').val());
             reasons.push($('#reason2').val());
             reasons.push($('#reason3').val());
-            reasons.push($('#reason4').val());
-            reasons.push($('#reason5').val());
             var langId = $('select[name=\"lang\"]').val();
             cancelButton.off().hide();
             okButton.html('Fatto').off().on('click', function () {
@@ -99,7 +89,7 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
                 type: "POST",
                 data: {
                     'orderId': orderId,
-                    'reasons': reasons,
+                    'productsIds': reasons,
                     'langId': langId
                 }
             }).done(function (response) {

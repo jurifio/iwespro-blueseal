@@ -1,5 +1,7 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
+
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\CShipment;
 
@@ -22,21 +24,31 @@ class COrderDelete extends AAjaxController
 
     public function post()
     {
-	    $orderId = $this->app->router->request()->getRequestData('orderId');
-	    $langId = $this->app->router->request()->getRequestData('langId');
-	    $reasons = $this->app->router->request()->getRequestData('reasons');
-
+        $orderId = $this->app->router->request()->getRequestData('orderId');
+        $langId = $this->app->router->request()->getRequestData('langId');
+        $productsIds = $this->app->router->request()->getRequestData('productsIds');
+        $products = [];
+        foreach ($productsIds as $productIds) {
+            $products[] = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($productIds);
+        }
         $order = $this->app->repoFactory->create('Order')->findOneByStringId($orderId);
         $lang = $this->app->repoFactory->create('Lang')->findOneByStringId($langId);
 
-        $order->note = $order->note." Cancellato: ".date('Y-m-d');
+        $order->note = $order->note . " Cancellato: " . date('Y-m-d');
         $order->update();
-        $this->app->orderManager->changeStatus($order,'ORD_FR_CANCEL');
+        $this->app->orderManager->changeStatus($order, 'ORD_FR_CANCEL');
+
+        $coupon = \Monkey::app()->repoFactory->create('Coupon')->createCouponFromType(37,$order->user->printId());
 
         $to = [$order->user->email];
-        $this->app->mailer->prepare('deleteorderclient','no-reply', $to,[],[],['order'=>$order,'orderId'=>$orderId,'reasons'=>$reasons,'lang'=>$lang->lang]);
+        $this->app->mailer->prepare('deleteorderclient', 'no-reply', $to, [], [],
+            ['order' => $order,
+                'orderId' => $orderId,
+                'products' => $products,
+                'coupon' => $coupon,
+                'lang' => $lang->lang]);
         $res = $this->app->mailer->send();
-        if($res) return 'ok';
+        if ($res) return 'ok';
         return false;
     }
 }
