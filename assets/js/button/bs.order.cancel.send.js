@@ -82,6 +82,7 @@ $(document).on('bs.order.cancel.send', function (e, element, button) {
             cancelButton.off().hide();
             okButton.html('Fatto').off().on('click', function () {
                 bsModal.modal('hide');
+                $.refreshDataTable();
             });
             body.html(loaderHtml);
             $.ajax({
