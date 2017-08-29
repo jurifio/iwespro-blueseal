@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 /**
@@ -13,15 +14,30 @@ namespace bamboo\controllers\back\ajax;
  *
  * @since ${VERSION}
  */
-class CGetCategoryTree extends AAjaxController
+class CCategoryTreeController extends AAjaxController
 {
     public function get()
     {
         $cache = $this->app->cacheService->getCache("misc")->get("FullCategoryTreeAsJSON");
         if (!$cache) {
             $cache = $this->app->categoryManager->categories()->treeToJson(1);
-            $this->app->cacheService->getCache("misc")->set("FullCategoryTreeAsJSON",$cache,13000);
+            $this->app->cacheService->getCache("misc")->set("FullCategoryTreeAsJSON", $cache, 13000);
         }
         return $cache;
+    }
+
+    public function post()
+    {
+
+    }
+
+    public function put()
+    {
+
+    }
+
+    public function delete()
+    {
+
     }
 }

@@ -27,12 +27,12 @@
                 "path": "scheme://s3-eu-west-1.amazonaws.com/bamboo-css/",
                 "options": ["screen"]
             },
-            "ui.fancytree.min.css": {
-                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.19.0/skin-bootstrap/",
-                "options": ["screen"]
-            },
             "skin-common.less": {
                 "path":  "scheme://github.com/mar10/fancytree/blob/master/dist/",
+                "options": ["screen"]
+            },
+            "ui.fancytree.min.css": {
+                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.24.0/skin-bootstrap/",
                 "options": ["screen"]
             }
         },
@@ -158,7 +158,7 @@
                 "options": ["defer"]
             },
             "jquery.fancytree-all.min.js": {
-                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.19.0/",
+                "path":  "scheme://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.24.0/",
                 "options": ["defer"]
             }
         },

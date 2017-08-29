@@ -429,7 +429,7 @@
                                 debugLevel: 0,
                                 selectMode: 2,
                                 source: {
-                                    url: "/blueseal/xhr/GetCategoryTree",
+                                    url: "/blueseal/xhr/CategoryTreeController",
                                     cache: true,
                                     complete: function () {
                                         $(document).trigger('bs.categoryTree.loaded');

@@ -602,7 +602,7 @@ $(document).on('bs.category.edit', function (e, element, button) {
         if (radioTree.length) {
             radioTree.dynatree({
                 initAjax: {
-                    url: "/blueseal/xhr/GetCategoryTree"
+                    url: "/blueseal/xhr/CategoryTreeController"
                 },
                 autoexpand: true,
                 checkbox: true,

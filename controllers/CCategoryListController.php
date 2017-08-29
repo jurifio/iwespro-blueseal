@@ -27,24 +27,10 @@ class CCategoryListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/category_list.php');
 
-        $blueseal = $this->app->baseUrl(false).'/blueseal';
-        $pageURL = $blueseal."/categories";
-        /** @var $em CEntityManager **/
-        $categories = $this->app->categoryManager->categories()->children(1);
-        $modifica = $blueseal."/prodotti/categorie/aggiungi";
-
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'categories' => $categories,
-            'modifica' => $modifica,
-            'pageURL' => $pageURL,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);
-    }
-
-    public function post()
-    {
-
     }
 }

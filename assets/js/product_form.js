@@ -115,7 +115,7 @@ $(document).ready(function() {
         if (!radioTree.length) {
             radioTree.dynatree({
                 initAjax: {
-                    url: "/blueseal/xhr/GetCategoryTree"
+                    url: "/blueseal/xhr/CategoryTreeController"
                 },
                 autoexpand: true,
                 checkbox: true,
