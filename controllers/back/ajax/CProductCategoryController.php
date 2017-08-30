@@ -35,7 +35,7 @@ class CProductCategoryController extends AAjaxController
         $productCategory->product;
         $productCategory->descendantMarketplaceAccountCategory = 0;
         $productCategory->descendantDictionaryCategory = 0;
-        $productCategory->descendantProduct = \Monkey::app()->repoFactory->create('Product')->getProductsByCategoryFullTree($productCategory->id)->count();
+        $productCategory->descendantProduct = \Monkey::app()->repoFactory->create('Product')->countProductsByCategoryFullTree($productCategory->id);
         foreach ($productCategory->descendantProductCategory as $descendantProductCategory) {
             if(!$descendantProductCategory->marketplaceAccountCategory->isEmpty())
                     $productCategory->descendantMarketplaceAccountCategory += $descendantProductCategory->marketplaceAccountCategory->count() ;
