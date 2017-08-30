@@ -431,7 +431,7 @@ $.bsModal = function (header, params) {
     this.okButton.html(this.opt.okLabel).off().on('click', function (e) {
         e.preventDefault();
         self.opt.okButtonEvent()
-    });
+    }).show();
 
     this.cancelButton.html(this.opt.cancelLable);
     if (!opt.isCancelButton) this.cancelButton.hide();

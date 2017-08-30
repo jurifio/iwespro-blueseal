@@ -59,5 +59,29 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
+<bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="Strumenti Categorie">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.category.insert"
+                data-title="Aggiungi Nuova"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-trash"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.category.delete"
+                data-title="Elimina"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+</bs-toolbar>
 </body>
 </html>

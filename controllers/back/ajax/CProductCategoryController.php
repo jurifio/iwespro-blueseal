@@ -5,6 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\COrder;
+use bamboo\domain\entities\CProductCategory;
 use bamboo\domain\repositories\COrderRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 
@@ -26,7 +27,22 @@ class CProductCategoryController extends AAjaxController
     public function get()
     {
         $id = $this->app->router->request()->getRequestData('id');
+        /** @var CProductCategory $productCategory */
         $productCategory = \Monkey::app()->repoFactory->create('ProductCategory',false)->findOneByStringId($id);
+        $productCategory->marketplaceAccountCategory;
+        $productCategory->dictionaryCategory;
+        $productCategory->productCategoryTranslation;
+        $productCategory->product;
+        $productCategory->descendantMarketplaceAccountCategory = 0;
+        $productCategory->descendantDictionaryCategory = 0;
+        $productCategory->descendantProduct = \Monkey::app()->repoFactory->create('Product')->getProductsByCategoryFullTree($productCategory->id)->count();
+        foreach ($productCategory->descendantProductCategory as $descendantProductCategory) {
+            if(!$descendantProductCategory->marketplaceAccountCategory->isEmpty())
+                    $productCategory->descendantMarketplaceAccountCategory += $descendantProductCategory->marketplaceAccountCategory->count() ;
+            if(!$descendantProductCategory->dictionaryCategory->isEmpty())
+                    $productCategory->descendantDictionaryCategory += $descendantProductCategory->dictionaryCategory->count();
+        }
+
         return json_encode($productCategory);
     }
 }
