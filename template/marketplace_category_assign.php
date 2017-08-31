@@ -50,7 +50,7 @@
                                 <th data-slug="internalCategory"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Categoria Interna</th>
+                                    class="center categoryFilterType">Categoria Interna</th>
                             </tr>
                             </thead>
                             <tbody>
