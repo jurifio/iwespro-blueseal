@@ -97,6 +97,11 @@ class CGlsItalyHandler extends ACarrierHandler
         return $shipment;
     }
 
+    /**
+     * @param \XMLWriter $xml
+     * @param CShipment $shipment
+     * @return bool
+     */
     protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
     {
         $xml->startElement('Parcel');
@@ -178,6 +183,7 @@ class CGlsItalyHandler extends ACarrierHandler
 
     /**
      * @param $shippings
+     * @return bool
      * @throws BambooException
      */
     public function closePendentShipping($shippings)
@@ -233,16 +239,26 @@ class CGlsItalyHandler extends ACarrierHandler
         }
     }
 
+    /**
+     *
+     */
     public function printDayShipping()
     {
         // TODO: Implement printDayShipping() method.
     }
 
+    /**
+     * @param $shipping
+     */
     public function getBarcode($shipping)
     {
         // TODO: Implement getBarcode() method.
     }
 
+    /**
+     * @param CShipment $shipment
+     * @return bool|string
+     */
     public function printParcelLabel(CShipment $shipment)
     {
         $url = $this->config['endpoint'] . '/GetPdf';
@@ -280,6 +296,9 @@ class CGlsItalyHandler extends ACarrierHandler
         }
     }
 
+    /**
+     * @return array|string
+     */
     public function listShippings()
     {
         $url = $this->config['endpoint'] . '/ListSped';
@@ -324,22 +343,30 @@ class CGlsItalyHandler extends ACarrierHandler
         }
     }
 
+    /**
+     * @param $province
+     * @return int|string
+     */
     private function getProvinceCode($province)
     {
         $province = trim($province);
         if (strlen($province) == 2 && isset($this->getProvinceList()[strtoupper($province)])) return $province;
         $lev = 30;
-        $province = "";
+        $provinceCode = "";
         foreach ($this->getProvinceList() as $key => $val) {
+            if($province == $val) return $key;
             $nLev = levenshtein($val, $province);
             if ($nLev < $lev) {
                 $lev = $nLev;
-                $province = $key;
+                $provinceCode = $key;
             }
         }
-        return $province;
+        return $provinceCode;
     }
 
+    /**
+     * @return array
+     */
     private function getProvinceList()
     {
         if (!isset($this->provinces)) {
