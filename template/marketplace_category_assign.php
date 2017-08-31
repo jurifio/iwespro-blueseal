@@ -47,7 +47,7 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Descrizione Marketplace</th>
-                                <th data-slug="internalCategory"
+                                <th data-slug="productCategoryId"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center categoryFilterType">Categoria Interna</th>

@@ -78,7 +78,7 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 		                         data-id="' . $val->printId() . '" 
 		                         tabindex="-1" ></select>';
 	        }
-            $row['internalCategory'] = $html;
+            $row['productCategoryId'] = $html;
             $datatable->setResponseDataSetRow($key,$row);
         }
         return $datatable->responseOut();
