@@ -1,7 +1,7 @@
 (function ($) {
     const treeSelector = "#categoryTree";
     $(document).ready(function () {
-        glyph_opts = {
+        var glyph_opts = {
             preset: "bootstrap3",
             map: {
                 expanderClosed: "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign

@@ -416,6 +416,14 @@
                     });
                     Pace.ignore(function () {
                         if (radioTree.length) {
+                            var glyph_opts = {
+                                preset: "bootstrap3",
+                                map: {
+                                    expanderClosed: "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign
+                                    expanderLazy: "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign
+                                    expanderOpen: "glyphicon glyphicon-menu-down"  // glyphicon-minus-sign
+                                }
+                            };
                             radioTree.fancytree({
                                 extensions: ["childcounter", "glyph", "wide"],
                                 checkbox: true,
@@ -435,29 +443,7 @@
                                         $(document).trigger('bs.categoryTree.loaded');
                                     }
                                 },
-                                glyph: {
-                                    map: {
-                                        doc: "glyphicon glyphicon-file",
-                                        docOpen: "glyphicon glyphicon-file",
-                                        checkbox: "glyphicon glyphicon-unchecked",
-                                        checkboxSelected: "glyphicon glyphicon-check",
-                                        checkboxUnknown: "glyphicon glyphicon-share",
-                                        dragHelper: "glyphicon glyphicon-play",
-                                        dropMarker: "glyphicon glyphicon-arrow-right",
-                                        error: "glyphicon glyphicon-warning-sign",
-                                        expanderClosed: "glyphicon glyphicon-menu-right",
-                                        expanderLazy: "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign
-                                        expanderOpen: "glyphicon glyphicon-menu-down",  // glyphicon-collapse-down
-                                        folder: "glyphicon glyphicon-folder-close",
-                                        folderOpen: "glyphicon glyphicon-folder-open",
-                                        loading: "glyphicon glyphicon-refresh glyphicon-spin"
-                                    }
-                                },
-                                wide: {
-                                    iconWidth: "1em",     // Adjust this if @fancy-icon-width != "16px"
-                                    iconSpacing: "0.5em", // Adjust this if @fancy-icon-spacing != "3px"
-                                    levelOfs: "1.5em"     // Adjust this if ul padding != "16px"
-                                },
+                                glyph: glyph_opts,
                                 dblclick: function (event, data) {
                                     cascadeSelection(data.node);
                                     function cascadeSelection(node) {
