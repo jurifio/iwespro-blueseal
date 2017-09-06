@@ -64,7 +64,7 @@ $(document).on('bs.dateinput.load', function (a, b) {
     var dataTable = table.DataTable();
     var that = $('#bsButton_' + b.id);
 
-    if(false && $.fn.DataTable.fnIsDataTable( table )) {
+    if($.fn.DataTable.fnIsDataTable( table )) {
         attachDatePicker(table,dataTable,that)
     } else {
         dataTable.on('draw.dt', attachDatePicker(table,dataTable,that));
