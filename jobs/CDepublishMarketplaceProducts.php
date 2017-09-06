@@ -151,7 +151,7 @@ class CDepublishMarketplaceProducts extends ACronJob
         }
         $this->debug('Cycle Report', 'Sending Email', $text);
         iwesMail('it@iwes.it',
-            'Report Depubblicazione produtti Marketplace '.\Monkey::app()->getName(),
+            'Report Depubblicazione prodotti Marketplace '.\Monkey::app()->getName(),
             "Sono stati depubblicati i seguenti prodotti: " . PHP_EOL . $text);
 
     }

@@ -112,7 +112,7 @@ class CShipmentOrderLinesPrintController extends AAjaxController
 
 
                 $note = $orderLine->order->note;
-                $payment = $orderLine->order->isPayed();
+                $payment = $orderLine->order->isPaid();
                 $paymentMethod = $orderLine->order->orderPaymentMethod->name;
                 $isContrassegno = $orderLine->order->orderPaymentMethod->name == 'contrassegno';
                 $isBilled = $orderLine->order->billingAddress->isBilling;
