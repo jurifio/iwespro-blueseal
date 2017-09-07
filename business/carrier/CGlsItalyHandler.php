@@ -350,7 +350,7 @@ class CGlsItalyHandler extends ACarrierHandler
     private function getProvinceCode($province)
     {
         $province = trim($province);
-        if (strlen($province) == 2 && isset($this->getProvinceList()[strtoupper($province)])) return $province;
+        if (strlen($province) == 2 && isset($this->getProvinceList()[strtoupper($province)])) return strtoupper($province);
         $lev = 30;
         $provinceCode = "";
         foreach ($this->getProvinceList() as $key => $val) {
