@@ -2,6 +2,7 @@
 
 namespace bamboo\business\carrier;
 
+
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CShipment;
 
