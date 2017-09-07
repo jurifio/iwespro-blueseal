@@ -1642,6 +1642,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/impostazioni/corrieri(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCarrierCountryListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

@@ -25,7 +25,7 @@ class CCarrierCountryListAjaxController extends AAjaxController
                     ca.id as carrierId,
                     co.id as countryId,
                     co.name as country,
-                    if(chc.countryId is null, 'no', 'sisì') as isActive,
+                    if(chc.isActive is not null and chc.isActive = 1, 'sisì','no' ) as isActive,
                     shipmentMinTime,
                     shipmentMaxTime,
                     shipmentCost,
@@ -38,10 +38,34 @@ class CCarrierCountryListAjaxController extends AAjaxController
         $datatable->doAllTheThings(true);
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
-
+            if($row['isActive'] == 'sisì') $row['isActive'] = 'sì';
             $datatable->setResponseDataSetRow($key,$row);
         }
 
         return $datatable->responseOut();
+    }
+
+    public function put() {
+        $carrierHasCountryRepo = \Monkey::app()->repoFactory->create('CarrierHasCountry');
+        $data = \Monkey::app()->router->request()->getRequestData('data');
+        foreach (\Monkey::app()->router->request()->getRequestData('selectedRows') as $key=>$val ) {
+            $carrierHasCountry = $carrierHasCountryRepo->findOneBy([
+                'carrierId'=>$val['carrierId'],
+                'countryId'=>$val['countryId']
+            ]);
+            if($carrierHasCountry === null) {
+                $carrierHasCountry = $carrierHasCountryRepo->getEmptyEntity();
+                $carrierHasCountry->carrierId = $val['carrierId'];
+                $carrierHasCountry->countryId = $val['countryId'];
+                $carrierHasCountry->smartInsert();
+            }
+
+            $carrierHasCountry->shipmentMinTime = empty($data['shipmentMinTime']) ? null : $data['shipmentMinTime'];
+            $carrierHasCountry->shipmentMaxTime = empty($data['shipmentMaxTime']) ? null : $data['shipmentMaxTime'];
+            $carrierHasCountry->shipmentCost = empty($data['shipmentCost']) ? null : $data['shipmentCost'];
+            $carrierHasCountry->shipmentPrice = empty($data['shipmentPrice']) ? null : $data['shipmentPrice'];
+            $carrierHasCountry->isActive = empty($data['isActive'] ?? '') ? false : (bool) $data['isActive'];
+            $carrierHasCountry->update();
+        }
     }
 }

@@ -48,19 +48,19 @@
                                 </th>
                                 <th data-slug="shipmentMinTime"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Ultima Esecuzione
+                                    data-orderable="true" class="center">Tempo minimo di consegna (gg)
                                 </th>
                                 <th data-slug="shipmentMaxTime"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Attivo
+                                    data-orderable="true" class="center">Tempo massimo di consegna (gg)
                                 </th>
                                 <th data-slug="shipmentCost"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">In esecuzione
+                                    data-orderable="true" class="center">Costi di spedizione
                                 </th>
                                 <th data-slug="shipmentPrice"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">In esecuzione Forzata
+                                    data-orderable="true" class="center">Prezzo di spedizione (al pubblico)
                                 </th>
                             </tr>
                             </thead>
