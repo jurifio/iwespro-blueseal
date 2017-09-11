@@ -8,11 +8,6 @@
 
         li {font-size:8pt;}
 
-        @page {
-            size:A4;
-            margin:5mm 0mm 0mm 0mm;
-        }
-
         .cover {
             position:absolute;
             top:0;
@@ -36,10 +31,16 @@
 
         @media print {
             body{zoom: 100%}
+
             .newpage {
                 page-break-before: always;
                 page-break-after: always;
                 page-break-inside: avoid;
+            }
+
+            @page {
+                size: A4;
+                margin: 5mm 0mm 0mm 0mm;
             }
 
             .cover {
