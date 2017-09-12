@@ -4,8 +4,8 @@ $(document).on('change', $('name[tagId]').val, function(event) {
         type: "PUT",
         url: changed.data('action'),
         data: {
-            tagId: changed.val(),
-            id: changed.data('pid')
+            tagId: encodeURIComponent(changed.val()),
+            id: encodeURIComponent(changed.data('pid'))
         }
     });
 });

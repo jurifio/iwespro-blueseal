@@ -4,8 +4,8 @@ $(document).on('change', $('name[sizeId]').val, function(event) {
         type: "PUT",
         url: changed.data('action'),
         data: {
-            sizeId: changed.val(),
-            id: changed.data('pid')
+            sizeId: encodeURIComponent(changed.val()),
+            id: encodeURIComponent(changed.data('pid'))
         }
     });
 });

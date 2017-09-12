@@ -4,8 +4,8 @@ $(document).on('change', $('name[seasonId]').val, function(event) {
         type: "PUT",
         url: changed.data('action'),
         data: {
-            seasonId: changed.val(),
-            id: changed.data('pid')
+            seasonId: encodeURIComponent(changed.val()),
+            id: encodeURIComponent(changed.data('pid'))
         }
     });
 });
