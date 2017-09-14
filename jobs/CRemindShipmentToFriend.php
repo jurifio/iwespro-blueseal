@@ -68,7 +68,7 @@ class CRemindShipmentToFriend extends ACronJob
             }
         }
         if(count($names) > 0) {
-            mail('friends@iwes.it',
+            iwesMail('friends@iwes.it',
                 'Mancate Spedizioni',
                 'Attenzione, si segnala che alcune spedizioni previste per ieri non sono arrivate: '.implode(', ',$names));
         }
