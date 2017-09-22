@@ -145,6 +145,21 @@
                                     data-orderable="true"
                                     class="center">Prezzo Attivo
                                 </th>
+                                <th data-slug="friendPrices"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Prezzo dai Friends
+                                </th>
+                                <th data-slug="friendValues"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Valore dai Friends
+                                </th>
+                                <th data-slug="friendSalePrices"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Saldo dai Friends
+                                </th>
                                 <th data-slug="processing"
                                     data-searchable="true"
                                     data-orderable="false">Prodotto

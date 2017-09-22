@@ -181,6 +181,19 @@ class CProductListAjaxController extends AAjaxController
             $row['mup'] .= implode('<br />', $mup);
             $row['mup'] .= '</span>';
 
+            $row['friendPrices'] = [];
+            $row['friendValues'] = [];
+            $row['friendSalePrices'] = [];
+            foreach ($val->shopHasProduct as $shp) {
+                $row['friendPrices'][] = $shp->price;
+                $row['friendValues'][] = $shp->value;
+                $row['friendSalePrices'][] = $shp->salePrice;
+            }
+
+            $row['friendPrices'] = implode('<br />',$row['friendPrices']);
+            $row['friendValues'] = implode('<br />',$row['friendValues']);
+            $row['friendSalePrices'] = implode('<br />',$row['friendSalePrices']);
+
             $row['colorNameManufacturer'] = $val->productVariant->description;
 
             $row['isOnSale'] = $val->isOnSale();
