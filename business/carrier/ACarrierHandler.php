@@ -50,4 +50,40 @@ abstract class ACarrierHandler {
      * @return string
      */
     public abstract function printParcelLabel(CShipment $shipment);
+
+    /**
+     * @param $province
+     * @return int|string
+     */
+    protected function getProvinceCode($province)
+    {
+        $province = trim($province);
+        if (strlen($province) == 2 && isset($this->getProvinceList()[strtoupper($province)])) return strtoupper($province);
+        $lev = 30;
+        $provinceCode = "";
+        foreach ($this->getProvinceList() as $key => $val) {
+            if($province == $val) return $key;
+            $nLev = levenshtein($val, $province);
+            if ($nLev < $lev) {
+                $lev = $nLev;
+                $provinceCode = $key;
+            }
+        }
+        return $provinceCode;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getProvinceList()
+    {
+        if (!isset($this->provinces)) {
+            $this->provinces = [];
+            $provinces = \Monkey::app()->repoFactory->create('Province')->findAll();
+            foreach ($provinces as $province) {
+                $this->provinces[$province->code] = $province->name;
+            }
+        }
+        return $this->provinces;
+    }
 }

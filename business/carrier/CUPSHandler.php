@@ -2,12 +2,12 @@
 
 namespace bamboo\business\carrier;
 
-
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CShipment;
+use bamboo\utils\time\STimeToolbox;
 
 /**
- * Class CGlsItalyHandler
+ * Class CUPSHandler
  * @package bamboo\business\carrier
  *
  * @author Iwes Team <it@iwes.it>
@@ -19,16 +19,85 @@ use bamboo\domain\entities\CShipment;
  * @date $date
  * @since 1.0
  */
-class CGlsItalyHandler extends ACarrierHandler
+class CUPSHandler extends ACarrierHandler
 {
 
     protected $config = [
-        'endpoint' => 'https://weblabeling.gls-italy.com/IlsWebService.asmx',
-        'SedeGls' => 'MC',
-        'CodiceClienteGls' => '136887',
-        'PasswordClienteGls' => 'iwesnc',
-        'CodiceContrattoGls' => '1108'
+        'testEndpoint' => 'https://wwwcie.ups.com/rest/Pickup',
+        'endpoint' => 'https://onlinetools.ups.com/rest/Pickup',
+        'ServiceAccessToken' => '4D32C405E147E40C'
     ];
+
+    public function addPickUp(CShipment $shipment)
+    {
+        $delivery = [
+            'UPSSecurity' => [
+                'UsernameToken' => [
+                    'Username' => 'FabrizioMarconi',
+                    'Password' => 'pKt)hT&n?^Q>gk*'
+                ],
+                'ServiceAccessToken' => [
+                    "AccessLicenseNumber" => $this->config['ServiceAccessToken']
+                ]
+            ],
+            'PickupCreationRequest' => [
+                'Request' => [
+                    'TransactionReference' => [
+                        'CustomerContext' => 'CustomerContext. ??'
+                    ]
+                ]
+            ],
+            'RatePickupIndicator' => 'Y',
+            'TaxInformationIndicator' => 'Y',
+            'PickupDateInfo' => [
+                'CloseTime' => '1900',
+                'ReadyTime' => '1700',
+                'PickupDate' => STimeToolbox::GetDateTime($shipment->predictedShipmentDate)->format('Ymd')
+            ],
+            'PickupAddress' => [
+                'Company' => $shipment->fromAddress->subject,
+                'AddressLine' => $shipment->fromAddress->address,
+                'City' => $shipment->fromAddress->city,
+                'StateProvince' => $this->getProvinceCode($shipment->fromAddress->province),
+                'PostalCode' => $shipment->fromAddress->postcode,
+                'CountryCode' => $shipment->fromAddress->country->ISO,
+                'ResidentialIndicator' => 'N',
+                'Phone' => [
+                    'Number' => '07337735245'//$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
+                ]
+            ],
+            'AlternateAddressIndicator' => 'N',
+            'PickupPiece' => [
+                'ServiceCode' => 001,
+                'Quantity' => 1,
+                'DestinationCountryCode' => $shipment->toAddress->country->ISO,
+                'ContainerCode' => 01
+            ],
+            'OverweightIndicator' => 'N',
+            'PaymentMethod' => 00
+        ];
+        var_dump($delivery);
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $this->config['testEndpoint']);
+
+        $postFields = http_build_query($delivery);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($delivery));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
+        ]);
+
+        $result = curl_exec($ch);
+        $e = curl_error($ch);
+        var_dump($result);
+        var_dump($e);
+        curl_close($ch);
+    }
 
     /**
      * @param CShipment $shipment
@@ -37,7 +106,8 @@ class CGlsItalyHandler extends ACarrierHandler
      */
     public function addDelivery(CShipment $shipment)
     {
-        \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Called AddParcel');
+
+        \Monkey::app()->applicationReport('GlsItalyHandler', 'addDelivery', 'Called AddParcel');
         $xml = new \XMLWriter();
         $xml->openMemory();
         $xml->setIndent(true);
@@ -55,7 +125,7 @@ class CGlsItalyHandler extends ACarrierHandler
 
         $url = $this->config['endpoint'] . '/AddParcel';
         $data = ['XMLInfoParcel' => $rawXml];
-        \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Request AddParcel',$rawXml);
+        \Monkey::app()->applicationReport('GlsItalyHandler', 'addDelivery', 'Request AddParcel', $rawXml);
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
@@ -71,7 +141,7 @@ class CGlsItalyHandler extends ACarrierHandler
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
-        \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Result AddParcel',$result);
+        \Monkey::app()->applicationReport('GlsItalyHandler', 'addDelivery', 'Result AddParcel', $result);
         if (!$result) {
             throw new BambooException($e);
         } else {
@@ -189,7 +259,7 @@ class CGlsItalyHandler extends ACarrierHandler
      */
     public function closePendentShipping($shippings)
     {
-        \Monkey::app()->applicationReport('GlsItalyHandler','closePendentShipping','Called CloseWorkDay');
+        \Monkey::app()->applicationReport('GlsItalyHandler', 'closePendentShipping', 'Called CloseWorkDay');
         $xml = new \XMLWriter();
         $xml->openMemory();
         $xml->setIndent(true);
@@ -221,11 +291,11 @@ class CGlsItalyHandler extends ACarrierHandler
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-type: application/x-www-form-urlencoded'
         ]);
-        \Monkey::app()->applicationReport('GlsItalyHandler','closePendentShipping','Request CloseWorkDay',$rawXml);
+        \Monkey::app()->applicationReport('GlsItalyHandler', 'closePendentShipping', 'Request CloseWorkDay', $rawXml);
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
-        \Monkey::app()->applicationReport('GlsItalyHandler','closePendentShipping','Response CloseWorkDay',$result);
+        \Monkey::app()->applicationReport('GlsItalyHandler', 'closePendentShipping', 'Response CloseWorkDay', $result);
         if (!$result) {
             throw new BambooException('Errore nella chiusura Giornata ' . $e);
         } else {
