@@ -68,10 +68,10 @@ class CUPSHandler extends ACarrierHandler
             ],
             'AlternateAddressIndicator' => 'N',
             'PickupPiece' => [
-                'ServiceCode' => 001,
-                'Quantity' => 1,
+                'ServiceCode' => '001',
+                'Quantity' => '1',
                 'DestinationCountryCode' => $shipment->toAddress->country->ISO,
-                'ContainerCode' => 01
+                'ContainerCode' => '01'
             ],
             'OverweightIndicator' => 'N',
             'PaymentMethod' => 00

@@ -63,7 +63,7 @@ class CShipmentManageController extends AAjaxController
             $shipment->predictedDeliveryDate = !empty($shipmentData['predictedDeliveryDate']) ? STimeToolbox::DbFormattedDateTime($shipmentData['predictedDeliveryDate']) : null;
             if (!$shipment->shipmentDate && !(empty($shipmentData['shipmentDate']))) {
                 $shipment->shipmentDate = STimeToolbox::DbFormattedDateTime($shipmentData['shipmentDate']);
-                $shipment->confirmShipment();
+                // $shipment->confirmShipment(); FIXME non ha mai funzionato?
                 if ($shipment->scope == CShipment::SCOPE_SUPPLIER_TO_US) {
                     /** @var COrderLineRepo $lR */
                     $olR = \Monkey::app()->repoFactory->create('OrderLine');
