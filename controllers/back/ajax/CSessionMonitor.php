@@ -36,13 +36,8 @@ class CSessionMonitor extends AAjaxController
                                                     FROM Job
                                                     WHERE isRunning = 1", [])->fetchAll()[0]['conto'];
 
+        $ret['eventQueue'] = \Monkey::app()->eventManager->getQueueLen();
+
         return json_encode($ret);
-
-
-		return $this->app->dbAdapter->query("	SELECT COUNT(DISTINCT sid) conto
-												FROM UserSession us
-												WHERE lastUpdate > (current_timestamp() - INTERVAL 30 SECOND ) OR
-                                                		creationDate > (current_timestamp() - INTERVAL 30 SECOND )", []
-											)->fetchAll(\PDO::FETCH_COLUMN, 'conto')[0];
 	}
 }

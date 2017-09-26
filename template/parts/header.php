@@ -43,6 +43,7 @@
                             <th>Di cui loggate</th>
                             <th>Carico Server</th>
                             <th>Job Attivi</th>
+                            <th>Coda Eventi</th>
                         </tr>
                    </thead>
                     <tbody>
@@ -52,6 +53,7 @@
                             <td><span id="u1"></span></td>
                             <td><span id="l1"></span></td>
                             <td><span id="ja"></span></td>
+                            <td><span id="eq"></span></td>
                         </tr>
                     </tbody>
                 </table>
