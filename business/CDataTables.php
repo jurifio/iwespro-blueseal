@@ -548,6 +548,7 @@ class CDataTables
             $this->responseSet['resTime'] = microtime(true) - $this->responseSet['initTime'];
             unset( $this->responseSet['initTime']);
         }
+        \Monkey::app()->router->response()->setContentType("application/json");
         return json_encode($this->responseSet);
     }
 }
