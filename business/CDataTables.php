@@ -530,6 +530,7 @@ class CDataTables
      */
     public function reset()
     {
+
         $this->where = "";
         $this->params = [];
     }
