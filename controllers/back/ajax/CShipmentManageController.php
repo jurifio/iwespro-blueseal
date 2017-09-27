@@ -115,6 +115,7 @@ class CShipmentManageController extends AAjaxController
     {
         $shipmentId = \Monkey::app()->router->request()->getRequestData('shipmentId');
         $faultId = \Monkey::app()->router->request()->getRequestData('faultId');
+        $recreateShipment = (bool) \Monkey::app()->router->request()->getRequestData('recreate');
         $newShipmentDate = \Monkey::app()->router->request()->getRequestData('newShipmentDate');
         /** @var CShipmentRepo $shipmentRepo */
         $shipmentRepo = \Monkey::app()->repoFactory->create('Shipment');
@@ -128,32 +129,35 @@ class CShipmentManageController extends AAjaxController
             $shipmentFault = $shipmentFaultRepo->findOne([$faultId]);
             $shipmentRepo->cancel($shipment, $shipmentFault);
 
-            switch ($shipment->scope) {
-                case CShipment::SCOPE_SUPPLIER_TO_US: {
-                    if(!$newShipmentDate) {
-                        $newShipmentDate = SDateToolbox::GetNextWorkingDay(STimeToolbox::GetDateTime());
-                    }
-                    $shipmentRepo->newFriendShipmentToUs(
-                        $shipment->carrierId,
-                        $shipment->fromAddressBookId,
-                        '',
-                        STimeToolbox::DbFormattedDate(date($newShipmentDate,STimeToolbox::ANGLO_DATE_FORMAT)),
-                        $shipment->orderLine
-                    );
-                    break;
-                }
-                case CShipment::SCOPE_US_TO_USER: {
-                    if ($newShipmentDate) {
-                        $newShipment = new \DateTime($newShipmentDate);
-                        $shipmentRepo->newOrderShipmentToClient(
+            if($recreateShipment) {
+                switch ($shipment->scope) {
+                    case CShipment::SCOPE_SUPPLIER_TO_US: {
+                        if(!$newShipmentDate) {
+                            $newShipmentDate = SDateToolbox::GetNextWorkingDay(STimeToolbox::GetDateTime());
+                        }
+                        $shipmentRepo->newFriendShipmentToUs(
                             $shipment->carrierId,
-                            null,
-                            STimeToolbox::DbFormattedDateTime($newShipment),
-                            $shipment->orderLine->getFirst()->order
+                            $shipment->fromAddressBookId,
+                            '',
+                            STimeToolbox::DbFormattedDate(date($newShipmentDate,STimeToolbox::ANGLO_DATE_FORMAT)),
+                            $shipment->orderLine
                         );
+                        break;
+                    }
+                    case CShipment::SCOPE_US_TO_USER: {
+                        if ($newShipmentDate) {
+                            $newShipment = new \DateTime($newShipmentDate);
+                            $shipmentRepo->newOrderShipmentToClient(
+                                $shipment->carrierId,
+                                null,
+                                STimeToolbox::DbFormattedDateTime($newShipment),
+                                $shipment->orderLine->getFirst()->order
+                            );
+                        }
                     }
                 }
             }
+
             $dba->commit();
             return 'Spedizione annullata';
         } catch (BambooShipmentException $e) {

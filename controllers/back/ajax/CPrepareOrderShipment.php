@@ -58,7 +58,7 @@ class CPrepareOrderShipment extends AAjaxController
                 }
             }
 
-            if(count($exShipments) == 0 && $order->orderStatus->order < 5) {
+            if(count($exShipments) == 0) {
                 $shipment = $shipmentRepo->newOrderShipmentToClient($carrier->id, $trackingNumber, $this->time(), $order);
 
                 $order->note = $order->note . " Tracking " . $shipment->carrier->name . ": " . $shipment->trackingNumber . ' Spedito: ' . date('Y-m-d');

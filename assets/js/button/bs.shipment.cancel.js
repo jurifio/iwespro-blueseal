@@ -55,9 +55,14 @@ $(document).on('bs.shipment.cancel', function (e, element, button) {
             '<select id="faultId" class="form-control" name="faultId">' + options + '</select>' +
             '</div>'+
             '<div class="col-xs-12">' +
+            '<label for="newShipmentDate">Vuoi ricreare la spedizione?</label>' +
+            '<input id="newShipmentDate" class="form-control" checked="checked" value="recreate" name="newShipment" type="checkbox">' +
+            '</div>' +
+            '<div class="col-xs-12">' +
             '<label for="newShipmentDate">Seleziona la data per la nuova spedizione:</label>' +
             '<input id="newShipmentDate" class="form-control" name="newShipmentDate" type="date">' +
-            '</div>';
+            '</div>'
+
         ;
 
         modal.writeBody(body);
