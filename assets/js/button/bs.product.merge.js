@@ -22,17 +22,17 @@ $(document).on('bs.product.merge', function(){
 
     var selectedRowsCount = selectedRows.length;
 
-    if (selectedRowsCount != 2) {
+    if (selectedRowsCount < 2) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare esattamente due prodotti"
+            message: "Devi selezionare almeno due prodotti"
         }).open();
         return false;
     }
 
     var i = 0;
     var row = [];
-    var getVars = '';
+
     $.each(selectedRows, function (k, v) {
         row[i] = {};
         var idsVars = v.DT_RowId.split('-');
@@ -43,9 +43,8 @@ $(document).on('bs.product.merge', function(){
         row[i].brand = v.brand;
         row[i].shops = v.shops;
         i++;
-        getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
     });
-    header.html('Fondi 2 prodotti');
+    header.html('Fondi '+(i)+' prodotti');
 
     body.css("text-align", 'left');
 
@@ -59,13 +58,6 @@ $(document).on('bs.product.merge', function(){
 
         //controllo se entrambi i prodotti hanno ordini
         var countOrderedProducts = 0;
-        /*$.each(res.rows, function(k, v){
-         if (v.areOrders) countOrderedProducts++;
-         });
-
-         if (1 < countOrderedProducts) {
-         error += "due o più prodotti selezionati hanno associati degli ordini. La fusione è impraticabile.";
-         }*/
 
         if (false === res.sizeGroupCompatibility) {
             error += "i due prodotti sono associati con gruppi taglia incompatibili."

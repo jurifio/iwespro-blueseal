@@ -1,9 +1,18 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
+
 use bamboo\core\exceptions\BambooException;
+use bamboo\core\exceptions\BambooLogicException;
 use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CProductPhoto;
+use bamboo\domain\entities\CProductSku;
+use bamboo\domain\entities\CShopHasProduct;
 use bamboo\domain\entities\CStorehouseOperation;
+use bamboo\domain\repositories\CCartRepo;
 use bamboo\domain\repositories\CProductRepo;
+use bamboo\domain\repositories\CProductSkuRepo;
+use bamboo\domain\repositories\CShopHasProductRepo;
 use bamboo\domain\repositories\CStorehouseOperationRepo;
 
 /**
@@ -46,7 +55,7 @@ class CProductMerge extends AAjaxController
 
 
             $skus = [];
-            foreach($prod->productSku as $sku) {
+            foreach ($prod->productSku as $sku) {
                 if (!in_array($sku->shopId, $skus)) $skus[] = $sku->shopId;
             }
 
@@ -74,215 +83,146 @@ class CProductMerge extends AAjaxController
         return $res;
     }
 
-    private function mergeProducts($rows, $choosen)
+    /**
+     * @param $rows
+     * @param $choosen
+     * @return string
+     */
+    public function mergeProducts($rows, $choosen)
     {
-        /** @var CProductRepo $pR */
-        $pR = \Monkey::app()->repoFactory->create('Product');
-        //controllo che i prodotti non scelti per la fusione non abbiano ordini
+        /** @var CProductRepo $productRepo */
+        $productRepo = \Monkey::app()->repoFactory->create('Product');
 
-       /* foreach ($rows as $k => $v) {
-            if ($choosen != $k) {
-                $ol = $this->app->repoFactory->create('OrderLine')->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-                if ($ol->count()) {
-                    return "ERRORE: Il prodotto da fondere non può contenere ordini!";
-                }
-            }
-        }*/
+        $chosenProduct = null;
+        $otherProducts = [];
+        foreach ($rows as $key => $row) {
+            $product = $productRepo->findOneBy([
+                'id' => $row['id'],
+                'productVariantId' => $row['productVariantId']
+            ]);
 
-       //find the shopIds of the choosen
-        $choosenShopIds = [];
-        $sop = $this->app->repoFactory->create('ShopHasProduct')
-            ->findBy(['productId' => $rows[$choosen]['id'], 'productVariantId' => $rows[$choosen]['productVariantId']]);
+            if ($product->productStatusId == 13) return "Errore: uno dei prodotti da fondere è già in stato FUSO: " . $product->printId();
 
-        foreach($sop as $vshop) {
-                $choosenShopIds[] = $vshop->shopId;
-        }
-
-        //controllo di nuovo i gruppi taglie e i
-        $sizeGroup = 0;
-        foreach ($rows as $k => $v) {
-            $prod = $pR->findOneBy(['Id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-            if (0 == $sizeGroup) $sizeGroup = $prod->productSizeGroupId;
-            elseif ($sizeGroup != $prod->productSizeGroupId) return "ERRORE: Il prodotto da fondere non può contenere ordini!";
-        }
-        //controllo che i prodotti da fondere non siano dello stesso shop
-        /*$shopControl = [];
-        foreach ($rows as $k => $v) {
-            $sku = $this->app->repoFactory->create('ProductSku')->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-            $shopSku = [];
-            foreach($sku as $v) {
-                $shopSku[] = $v->shopId;
-            }
-            $shopSku = array_unique($shopSku);
-
-            if (!empty(array_intersect($shopSku, $shopControl))) {
-                return "ERRORE: i prodotti selezionati per la fusione non possono venire dallo stesso Friend";
+            if ($key == $choosen) {
+                $chosenProduct = $product;
             } else {
-            $shopControl = array_merge($shopControl, $shopSku);
+                $otherProducts[] = $product;
             }
-        }*/
-
-        //controllo che nessuno dei prodotti sia già fuso.
-        foreach ($rows as $k => $v) {
-            $prod = $this->app->repoFactory->create('Product')->findOneBy(['Id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-            if (13 == $prod->productStatusId) return "ERRORE: I prodotti da fondere non possono essere già fusi!";
         }
-
-        //inizio la fusione
-
         try {
-            $this->app->dbAdapter->beginTransaction();
+            \Monkey::app()->dbAdapter->beginTransaction();
+            /** @var CCartRepo $cartRepo */
+            $cartRepo = \Monkey::app()->repoFactory->create('Cart');
+            /** @var CShopHasProductRepo $shopHasProductRepo */
+            $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
+            /** @var CProductSkuRepo $productSkuRepo */
+            $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
+            /** @var CStorehouseOperationRepo $storehouseOperationRepo */
+            $storehouseOperationRepo = \Monkey::app()->repoFactory->create('StorehouseOperation');
 
-            foreach ($rows as $k => $v) {
-                if ($choosen == $k) {
-                    continue;
+            /** @var CProduct $chosenProduct */
+            foreach ($otherProducts as $otherProduct) {
+                /** @var CProduct $otherProduct */
+                if ($otherProduct->productSizeGroupId !== null && $otherProduct->productSizeGroupId != $chosenProduct->productSizeGroupId) {
+                    return "Errore: I gruppi taglia dei prodotti da fondere sono incompatibili: " . $otherProduct->printId();
+                }
+
+                foreach ($otherProduct->shopHasProduct as $otherShopHasProduct) {
+                    /** @var CShopHasProduct $otherShopHasProduct */
+
+                    /** @var CShopHasProduct $chosenShopHasProduct */
+                    $chosenShopHasProduct = $shopHasProductRepo->findOneBy([
+                        'productId' => $chosenProduct->id,
+                        'productVariantId' => $chosenProduct->productVariantId,
+                        'shopId' => $otherShopHasProduct->shopId
+                    ]);
+
+                    if ($chosenShopHasProduct === null) {
+                        try {
+                            $chosenShopHasProduct = clone $otherShopHasProduct;
+                            $chosenShopHasProduct->productId = $chosenProduct->id;
+                            $chosenShopHasProduct->productVariantId = $chosenProduct->productVariantId;
+                            $chosenShopHasProduct->smartInsert();
+                        } catch (\Throwable $e) {
+                            throw new BambooLogicException('Non sono riuscito a inserire il nuovo prodotto nello shop', [], -1, $e);
+                        }
+
+                    }
+
+                    foreach ($otherShopHasProduct->dirtyProduct as $otherDirtyProduct) {
+                        try {
+                            $otherDirtyProduct->productId = $chosenProduct->id;
+                            $otherDirtyProduct->productVariantId = $chosenProduct->productVariantId;
+                            $otherDirtyProduct->update();
+                        } catch (\Throwable $e) {
+                            throw new BambooLogicException('Non sono riuscito ad aggiornre il prodotto sporco', [], -1, $e);
+                        }
+
+                    }
+
+                    foreach ($otherShopHasProduct->productSku as $otherProductSku) {
+                        /** @var CProductSku $chosenProductSku */
+                        /** @var CProductSku $otherProductSku */
+                        $chosenProductSku = $productSkuRepo->findOneBy([
+                            'productId' => $chosenProduct->id,
+                            'productVariantId' => $chosenProduct->productVariantId,
+                            'shopId' => $otherShopHasProduct->shopId,
+                            'productSizeId' => $otherProductSku->productSizeId
+                        ]);
+
+                        if ($chosenProductSku === null) {
+                            try {
+                                $chosenProductSku = clone $otherProductSku;
+                                $chosenProductSku->productId = $chosenProduct->id;
+                                $chosenProductSku->productVariantId = $chosenProduct->productVariantId;
+                                $chosenProductSku->insert();
+                            } catch (\Throwable $e) {
+                                throw new BambooLogicException('Non sono riuscito ad inserire il nuovo Sku', [], -1, $e);
+                            }
+
+                        } else {
+                            try {
+                                $chosenProductSku->stockQty += $otherProductSku->stockQty;
+                                $chosenProductSku->update();
+                            } catch (\Throwable $e) {
+                                throw new BambooLogicException('Non sono riuscito ad aggiornare il nuovo Sku', [], -1, $e);
+                            }
+                        }
+                        try {
+                            $otherProductSku->stockQty = 0;
+                            $otherProductSku->update();
+                        } catch (\Throwable $e) {
+                            throw new BambooLogicException('Non sono riuscito ad azzerare le quantità', [], -1, $e);
+                        }
+                        try {
+                            $storehouseOperationRepo->moveSilentlyMovementOnADifferentProductSku($otherProductSku, $chosenProductSku);
+                        } catch (\Throwable $e) {
+                            throw new BambooLogicException('Non sono riuscito a modificare i movimenti', [], -1, $e);
+                        }
+
+                        try {
+                            foreach ($otherProductSku->cartLine as $cartLine) {
+                                $cartRepo->removeSku($cartLine);
+                                $cartRepo->addSku($chosenProductSku, 1, $cartLine->cart);
+                            }
+                        } catch (\Throwable $e) {
+                            throw new BambooLogicException('Non sono riuscito a modificare i carrelli collegati', [], -1, $e);
+                        }
+                    }
                 }
                 try {
-                    $sop = $this->app->repoFactory->create('ShopHasProduct')
-                        ->findBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-                    foreach($sop as $vshop) {
-                        if (in_array($vshop->shopId, $choosenShopIds)) continue;
-                        $vshop->productId = $rows[$choosen]['id'];
-                        $vshop->productVariantId = $rows[$choosen]['productVariantId'];
-                        $vshop->insert();
-                    }
+                    $otherProduct->productStatusId = 13;
+                    $otherProduct->update();
                 } catch (\Throwable $e) {
-                    throw new BambooException(
-                        $this->buildErrorMsg(
-                            "l'assegnazione del prodotto al nuovo shop non è andata a buon fine.",
-                            $e->getMessage()),
-                        [],
-                        0,
-                        $e
-                    );
+                    throw new BambooLogicException('Non sono riuscito a modificare lo stato del carrello');
                 }
             }
 
-            //aggiorno la relazione tra product e dirtyProduct del prodotto da fondere se c'è l'importatore
-            //se è utilizzato il sistema dei movimenti interno creo i movimenti di scarico e carico
-            try {
-                $movedProducts = [];
-                foreach ($sop as $vshop) {
-                    $dp = $this->app->repoFactory->create('DirtyProduct')->findOneBy([
-                        'productId' => $v['id'],
-                        'productVariantId' => $v['productVariantId'],
-                        'shopId' => $vshop->shopId
-                    ]);
-                    if ($dp) {
-                        $dp->productId = $rows[$choosen]['id'];
-                        $dp->productVariantId = $rows[$choosen]['productVariantId'];
-                        $dp->update();
-                    } else {
-                        $solR = \Monkey::app()->repoFactory->create('StorehouseOperationLine');
-                        $solOC = $solR->findBy(
-                            [
-                                'shopId' => $vshop->shopId,
-                                'productId' => $v['id'],
-                                'productVariantId' => $v['productVariantId']
-                            ]
-                        );
-                        if ($solOC->count()) {
-                            /** @var CStorehouseOperationRepo $soR */
-                            $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
-                            $productSource = $pR->findOne([$v['id'], $v['productVariantId']]);
-                            $productDestination = $pR->findOne([
-                                $rows[$choosen]['id'], $rows[$choosen]['productVariantId']
-                            ]);
-
-                            $soR->moveStocksOnADifferentProduct(
-                                $productSource, $productDestination, $vshop->shopId
-                            );
-
-                            $moved = [];
-                            $moved['id'] = $productDestination->id;
-                            $moved['productVariantId'] = $productDestination->productVariantId;
-                            $movedProducts[] = $moved;
-                        }
-                    }
-                }
-            } catch(\Throwable $e) {
-                throw new BambooException(
-                    $this->buildErrorMsg(
-                        "l'aggiornento dell'associazione tra catalogo e importazione non ha funzionato.",
-                        $e->getMessage()),
-                    [],
-                    0,
-                    $e
-                );
-            }
-            // sposto gli sku dei prodotti da fondere, facendoli puntare al prodotto scelto
-            try {
-                $pskR = $this->app->repoFactory->create('ProductSku');
-                $psarr = $pskR->findBy([
-                    'productId' => $v['id'],
-                    'productVariantId' => $v['productVariantId']
-                    ]);
-                foreach($psarr as $k => $ps) {
-                    $isMoved = false;
-                    foreach($movedProducts as $mk => $mv) {
-                        if ($mv['id'] == $ps->productId && $mv['productVariantId'] == $ps->productVariantId) {
-                            $isMoved = true;
-                            break;
-                        }
-                    }
-                    if (false == $isMoved){
-                        $pskComparison = $pskR->findOneBy([
-                            'productId' => $rows[$choosen]['id'],
-                            'productVariantId' => $rows[$choosen]['productVariantId'],
-                            'productSizeId' => $ps->productSizeId,
-                            'shopId' => $ps->shopId,
-                        ]);
-                        if (null == $pskComparison) {
-                            $ps->productId = $rows[$choosen]['id'];
-                            $ps->productVariantId = $rows[$choosen]['productVariantId'];
-                            $ps->insert();
-                        } else {
-                            $pskComparison->stockQty+= $ps->stockQty;
-                            $pskComparison->update();
-                        }
-                    }
-                }
-            } catch(\Throwable $e) {
-                throw new BambooException(
-                    $this->buildErrorMsg(
-                        "Lo spostamento degli sku verso il prodotto scelto non ha funzionato.",
-                        $e->getMessage()),
-                    [],
-                    0,
-                    $e
-                );
-            }
-            
-            // il prodotto è fuso. Cambio lo stato in fuso
-
-            // sposto gli sku dei prodotti da fondere, facendoli puntare al prodotto scelto
-            try {
-                $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-                $p->productStatusId = 13;
-                $p->update();
-            } catch(\Throwable $e) {
-                throw new BambooException(
-                    $this->buildErrorMsg(
-                        "Il cambio di stato di uno dei prodotti non è stato eseguito.",
-                        $e->getMessage()),
-                    [],
-                    0,
-                    $e
-                );
-            }
-            
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->dbAdapter->commit();
             return "Fusione eseguita!";
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->dbAdapter->rollBack();
             return $e->getMessage();
         }
-    }
-
-    private function buildErrorMsg($customMsg, $exceptionMsg = '') {
-        $ret = 'OOPS! La fusione non è stata compiuta a causa di un errore:<br />';
-        $ret.= $customMsg;
-        $ret.= ($exceptionMsg) ? '<br />' . $exceptionMsg : '';
-        return $ret;
     }
 }
