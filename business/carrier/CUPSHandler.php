@@ -43,7 +43,7 @@ class CUPSHandler extends ACarrierHandler
             'PickupCreationRequest' => [
                 'Request' => [
                     'TransactionReference' => [
-                        'CustomerContext' => 'CustomerContext. ??'
+                        'CustomerContext' => 'CustomerContext.' //???
                     ]
                 ]
             ],
@@ -66,7 +66,7 @@ class CUPSHandler extends ACarrierHandler
                     'Number' => '07337735245'//$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
                 ]
             ],
-            'AlternateAddressIndicator' => 'N',
+            'AlternateAddressIndicator' => '', // mi sa che serve, se ognuno ha il suo account
             'PickupPiece' => [
                 'ServiceCode' => '001',
                 'Quantity' => '1',
@@ -77,6 +77,7 @@ class CUPSHandler extends ACarrierHandler
             'PaymentMethod' => 00
         ];
         var_dump($delivery);
+        echo json_encode($delivery);
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
