@@ -25,7 +25,10 @@ class CUPSHandler extends ACarrierHandler
     protected $config = [
         'testEndpoint' => 'https://wwwcie.ups.com/rest/Pickup',
         'endpoint' => 'https://onlinetools.ups.com/rest/Pickup',
-        'ServiceAccessToken' => '4D32C405E147E40C'
+        'ServiceAccessToken' => '4D32C405E147E40C',
+        'ServiceAccessToken2' => '9D339DDABFA49908',
+        'UPSClientCode' => '463V1V'
+
     ];
 
     public function addPickUp(CShipment $shipment)
@@ -45,36 +48,42 @@ class CUPSHandler extends ACarrierHandler
                     'TransactionReference' => [
                         'CustomerContext' => 'CustomerContext.' //???
                     ]
-                ]
-            ],
-            'RatePickupIndicator' => 'Y',
-            'TaxInformationIndicator' => 'Y',
-            'PickupDateInfo' => [
-                'CloseTime' => '1900',
-                'ReadyTime' => '1700',
-                'PickupDate' => STimeToolbox::GetDateTime($shipment->predictedShipmentDate)->format('Ymd')
-            ],
-            'PickupAddress' => [
-                'Company' => $shipment->fromAddress->subject,
-                'AddressLine' => $shipment->fromAddress->address,
-                'City' => $shipment->fromAddress->city,
-                'StateProvince' => $this->getProvinceCode($shipment->fromAddress->province),
-                'PostalCode' => $shipment->fromAddress->postcode,
-                'CountryCode' => $shipment->fromAddress->country->ISO,
-                'ResidentialIndicator' => 'N',
-                'Phone' => [
-                    'Number' => '07337735245'//$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
-                ]
-            ],
-            'AlternateAddressIndicator' => '', // mi sa che serve, se ognuno ha il suo account
-            'PickupPiece' => [
-                'ServiceCode' => '001',
-                'Quantity' => '1',
-                'DestinationCountryCode' => $shipment->toAddress->country->ISO,
-                'ContainerCode' => '01'
-            ],
-            'OverweightIndicator' => 'N',
-            'PaymentMethod' => 00
+                ],
+                'RatePickupIndicator' => 'Y',
+                'TaxInformationIndicator' => 'Y',
+                'PickupDateInfo' => [
+                    'CloseTime' => '1900',
+                    'ReadyTime' => '1700',
+                    'PickupDate' => STimeToolbox::GetDateTime($shipment->predictedShipmentDate)->format('Ymd')
+                ],
+                'Shipper' => [
+                    'Account' => [
+                        'AccountNumber'=>'0000463V1V',
+                        'AccountCountryCode'=>'IT'
+                    ]
+                ],
+                'PickupAddress' => [
+                    'CompanyName' => $shipment->fromAddress->subject,
+                    'ContactName' => 'Anyone',
+                    'AddressLine' => $shipment->fromAddress->address,
+                    'City' => $shipment->fromAddress->city,
+                    'PostalCode' => $shipment->fromAddress->postcode,
+                    'CountryCode' => $shipment->fromAddress->country->ISO,
+                    'ResidentialIndicator' => 'N',
+                    'Phone' => [
+                        'Number' => '07337735245'//$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
+                    ]
+                ],
+                'AlternateAddressIndicator' => '', // mi sa che serve, se ognuno ha il suo account
+                'PickupPiece' => [
+                    'ServiceCode' => '011',
+                    'Quantity' => '1',
+                    'DestinationCountryCode' => $shipment->toAddress->country->ISO,
+                    'ContainerCode' => '01'
+                ],
+                'OverweightIndicator' => 'N',
+                'PaymentMethod' => '01',
+            ]
         ];
         var_dump($delivery);
         echo json_encode($delivery);
