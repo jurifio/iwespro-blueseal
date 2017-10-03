@@ -23,8 +23,20 @@ class CUPSHandler extends ACarrierHandler
 {
 
     protected $config = [
-        'testEndpoint' => 'https://wwwcie.ups.com/rest/Pickup',
-        'endpoint' => 'https://onlinetools.ups.com/rest/Pickup',
+        'pickUpEndopoint' => 'https://onlinetools.ups.com/rest/Pickup',
+        'shipEndpoint' => 'https://onlinetools.ups.com/rest/Ship',
+        'voidPackageEndpoint' => 'https://onlinetools.ups.com/rest/Void',
+        'labelRecoveryEndpoint' => 'https://onlinetools.ups.com/rest/LBRecovery',
+        'ServiceAccessToken' => '4D32C405E147E40C',
+        'ServiceAccessToken2' => '9D339DDABFA49908',
+        'UPSClientCode' => '463V1V'
+    ];
+
+    protected $testConfig = [
+        'pickUpEndopoint' => 'https://wwwcie.ups.com/webservices/Pickup',
+        'shipEndpoint' => 'https://wwwcie.ups.com/rest/Ship',
+        'voidPackageEndpoint' => 'https://wwwcie.ups.com/rest/Void',
+        'labelRecoveryEndpoint' => 'https://wwwcie.ups.com/rest/LBRecovery',
         'ServiceAccessToken' => '4D32C405E147E40C',
         'ServiceAccessToken2' => '9D339DDABFA49908',
         'UPSClientCode' => '463V1V'
@@ -34,15 +46,7 @@ class CUPSHandler extends ACarrierHandler
     public function addPickUp(CShipment $shipment)
     {
         $delivery = [
-            'UPSSecurity' => [
-                'UsernameToken' => [
-                    'Username' => 'FabrizioMarconi',
-                    'Password' => 'pKt)hT&n?^Q>gk*'
-                ],
-                'ServiceAccessToken' => [
-                    "AccessLicenseNumber" => $this->config['ServiceAccessToken']
-                ]
-            ],
+            'UPSSecurity' => $this->getUpsSecurity($this->testConfig),
             'PickupCreationRequest' => [
                 'Request' => [
                     'TransactionReference' => [
@@ -58,8 +62,8 @@ class CUPSHandler extends ACarrierHandler
                 ],
                 'Shipper' => [
                     'Account' => [
-                        'AccountNumber'=>'0000463V1V',
-                        'AccountCountryCode'=>'IT'
+                        'AccountNumber' => '463V1V',
+                        'AccountCountryCode' => 'IT'
                     ]
                 ],
                 'PickupAddress' => [
@@ -71,7 +75,7 @@ class CUPSHandler extends ACarrierHandler
                     'CountryCode' => $shipment->fromAddress->country->ISO,
                     'ResidentialIndicator' => 'N',
                     'Phone' => [
-                        'Number' => '07337735245'//$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
+                        'Number' => '0733471365'//$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
                     ]
                 ],
                 'AlternateAddressIndicator' => '', // mi sa che serve, se ognuno ha il suo account
@@ -83,6 +87,7 @@ class CUPSHandler extends ACarrierHandler
                 ],
                 'OverweightIndicator' => 'N',
                 'PaymentMethod' => '01',
+
             ]
         ];
         var_dump($delivery);
@@ -90,9 +95,7 @@ class CUPSHandler extends ACarrierHandler
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $this->config['testEndpoint']);
-
-        $postFields = http_build_query($delivery);
+        curl_setopt($ch, CURLOPT_URL, $this->testConfig['testEndpoint']);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($delivery));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -104,9 +107,23 @@ class CUPSHandler extends ACarrierHandler
 
         $result = curl_exec($ch);
         $e = curl_error($ch);
-        var_dump($result);
+        echo $result;
         var_dump($e);
         curl_close($ch);
+    }
+
+    protected function getUpsSecurity($config)
+    {
+        return [
+
+            'UsernameToken' => [
+                'Username' => 'FabrizioMarconi',
+                'Password' => 'pKt)hT&n?^Q>gk*'
+            ],
+            'ServiceAccessToken' => [
+                "AccessLicenseNumber" => $config['ServiceAccessToken']
+            ]
+        ];
     }
 
     /**
@@ -116,109 +133,104 @@ class CUPSHandler extends ACarrierHandler
      */
     public function addDelivery(CShipment $shipment)
     {
+        \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called AddParcel');
+        $delivery = [
+            'UPSSecurity' => $this->getUpsSecurity($this->testConfig),
+            'ShipmentRequest' => [
+                'Request' => [
+                    'RequestOption' => 'validate',
+                    'TransactionReference' => [
+                        'CustomerContext' => 'CustomerContext.' //???
+                    ]
+                ],
+                'Shipment' => [
+                    'Description' => 'Descrizione della spedizione', //
+                    'Shipper' => [
+                        'Name' => $shipment->fromAddress->subject,
+                        'ShipperNumber' => '463V1V',
+                        'Address' => [
+                            'AddressLine' => $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra,
+                            'City' => $shipment->fromAddress->city,
+                            'PostalCode' => $shipment->fromAddress->postcode,
+                            'CountryCode' => $shipment->fromAddress->country->ISO
+                        ]
+                    ],
+                    'ShipFrom' => [
+                        'Name' => $shipment->fromAddress->subject,
+                        'Address' => [
+                            'AddressLine' => $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra,
+                            'City' => $shipment->fromAddress->city,
+                            'PostalCode' => $shipment->fromAddress->postcode,
+                            'CountryCode' => $shipment->fromAddress->country->ISO
+                        ]
+                    ],
+                    'ShipTo' => [
+                        'Name' => $shipment->toAddress->subject,
+                        'Address' => [
+                            'AddressLine' => $shipment->toAddress->address . ' ' . $shipment->toAddress->extra,
+                            'City' => $shipment->toAddress->city,
+                            'PostalCode' => $shipment->toAddress->postcode,
+                            'CountryCode' => $shipment->toAddress->country->ISO
+                        ]
+                    ],
+                    'PaymentInformation' => [
+                        'ShipmentCharge' => [
+                            'Type' => '01',
+                            'BillShipper' => [
+                                'AccountNumber' => '463V1V'
+                            ]
+                        ]
+                    ],
+                    'Service' => [
+                        'Code' => '11',
+                        'Description' => 'UPS Standard'
+                    ],
+                    'Package' => [
+                        'Description' => 'Scatola di Cartone',
+                        'Packaging' => [
+                            'Code' => '02',
+                            'Description' => 'Customer Supplied'
+                        ],
+                        'Dimensions' => [
+                            'UnitOfMeasurement' => [
+                                'Code' => 'CM'
 
-        \Monkey::app()->applicationReport('GlsItalyHandler', 'addDelivery', 'Called AddParcel');
-        $xml = new \XMLWriter();
-        $xml->openMemory();
-        $xml->setIndent(true);
-        $xml->startDocument('1.0', 'utf-8');
-        $xml->startElement('Info');
-        $xml->writeElement('SedeGls', $this->config['SedeGls']);
-        $xml->writeElement('CodiceClienteGls', $this->config['CodiceClienteGls']);
-        $xml->writeElement('PasswordClienteGls', $this->config['PasswordClienteGls']);
-
-        $this->writeParcel($xml, $shipment);
-
-        $xml->endDocument();
-        $rawXml = $xml->outputMemory();
-
-
-        $url = $this->config['endpoint'] . '/AddParcel';
-        $data = ['XMLInfoParcel' => $rawXml];
-        \Monkey::app()->applicationReport('GlsItalyHandler', 'addDelivery', 'Request AddParcel', $rawXml);
+                            ],
+                            'Length' => '45',
+                            'Width' => '35',
+                            'Height' => '15'
+                        ],
+                        'PackageWeight' => [
+                            'UnitOfMeasurement' => [
+                                'Code' => 'KGS',
+                                'Description' => 'Kilograms'
+                            ],
+                            'Weight' => '2.5'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        var_dump($delivery);
+        echo json_encode($delivery);
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, count($data));
-        $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($ch, CURLOPT_URL, $this->testConfig['shipEndpoint']);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($delivery));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-type: application/x-www-form-urlencoded'
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
         ]);
 
         $result = curl_exec($ch);
         $e = curl_error($ch);
+        echo $result;
+        var_dump($e);
         curl_close($ch);
-        \Monkey::app()->applicationReport('GlsItalyHandler', 'addDelivery', 'Result AddParcel', $result);
-        if (!$result) {
-            throw new BambooException($e);
-        } else {
-            $dom = new \DOMDocument();
-            try {
-                $dom->loadXML($result);
-            } catch (\Throwable $e) {
-                throw new BambooException($result);
-            }
-            $parcels = $dom->getElementsByTagName('Parcel');
-            foreach ($parcels as $parcel) {
-                /** @var \DOMElement $parcel */
-                $ids = $parcel->getElementsByTagName('ContatoreProgressivo');
-                /** @var \DOMNodeList $ids */
-                if ($ids->item(0)->nodeValue == $shipment->id) {
-                    $shipment->trackingNumber = $this->config['SedeGls'] . ' ' . $parcel->getElementsByTagName('NumeroSpedizione')->item(0)->nodeValue;
-                    if ($shipment->trackingNumber == $this->config['SedeGls'] . ' ' . '999999999') throw new BambooException('Errore nella spedizione: ' . $parcel->getElementsByTagName('NoteSpedizione')->item(0)->nodeValue);
-                    $shipment->update();
-                    break;
-                }
-            }
-        }
-
-        return $shipment;
-    }
-
-    /**
-     * @param \XMLWriter $xml
-     * @param CShipment $shipment
-     * @return bool
-     */
-    protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
-    {
-        $xml->startElement('Parcel');
-        $xml->writeElement('CodiceContrattoGls', $this->config['CodiceContrattoGls']);
-        if (!empty($shipment->trackingNumber)) {
-            $xml->writeElement('NumeroSpedizione', ltrim($shipment->trackingNumber, $this->config['SedeGls'] . ' '));
-        }
-
-        $xml->writeElement('Ragionesociale', $shipment->toAddress->subject);
-        $xml->writeElement('Indirizzo', $shipment->toAddress->address . ' ' . $shipment->toAddress->extra);
-        $xml->writeElement('Localita', $shipment->toAddress->city);
-        $xml->writeElement('Zipcode', $shipment->toAddress->postcode);
-        $xml->writeElement('Provincia', $this->getProvinceCode($shipment->toAddress->province));
-        $xml->writeElement('Bda', $shipment->orderLine->getFirst()->order->id);
-        //$xml->writeElement('Bda',$shipment->toAddress->subject);
-        //$xml->writeElement('DataDocumentoTrasporto',$shipment->toAddress->subject);
-        $xml->writeElement('Colli', 1);
-        //$xml->writeElement('Incoterm',$shipment->toAddress->subject);
-        $xml->writeElement('PesoReale', 2.5);
-
-        if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
-            $xml->writeElement('ImportoContrassegno', $shipment->orderLine->getFirst()->order->netTotal);
-            $xml->writeElement('ModalitaIncasso', 'CONT');
-        }
-
-        $xml->writeElement('Notespedizione', $shipment->note);
-        $xml->writeElement('NoteAggiuntive', 'Order ' . $shipment->orderLine->getFirst()->order->id);
-        $xml->writeElement('TipoPorto', 'F');
-        $xml->writeElement('TipoCollo', '0');
-
-        $xml->writeElement('Email', $shipment->orderLine->getFirst()->order->user->email);
-        $xml->writeElement('Cellulare1', $shipment->toAddress->phone);
-        $xml->writeElement('GeneraPdf', 1);
-        $xml->writeElement('ContatoreProgressivo', $shipment->id);
-        $xml->endElement();
-        return true;
     }
 
     /**
@@ -227,13 +239,13 @@ class CUPSHandler extends ACarrierHandler
      */
     public function cancelDelivery(CShipment $shipment)
     {
-        $url = $this->config['endpoint'] . '/DeleteSped';
+        $url = $this->testConfig['endpoint'] . '/DeleteSped';
 
         $data = [
-            'SedeGls' => $this->config['SedeGls'],
-            'CodiceClienteGls' => $this->config['CodiceClienteGls'],
-            'PasswordClienteGls' => $this->config['PasswordClienteGls'],
-            'NumSpedizione' => ltrim($shipment->trackingNumber, $this->config['SedeGls'] . ' ')
+            'SedeGls' => $this->testConfig['SedeGls'],
+            'CodiceClienteGls' => $this->testConfig['CodiceClienteGls'],
+            'PasswordClienteGls' => $this->testConfig['PasswordClienteGls'],
+            'NumSpedizione' => ltrim($shipment->trackingNumber, $this->testConfig['SedeGls'] . ' ')
         ];
 
         $ch = curl_init();
@@ -275,9 +287,9 @@ class CUPSHandler extends ACarrierHandler
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'utf-8');
         $xml->startElement('Info');
-        $xml->writeElement('SedeGls', $this->config['SedeGls']);
-        $xml->writeElement('CodiceClienteGls', $this->config['CodiceClienteGls']);
-        $xml->writeElement('PasswordClienteGls', $this->config['PasswordClienteGls']);
+        $xml->writeElement('SedeGls', $this->testConfig['SedeGls']);
+        $xml->writeElement('CodiceClienteGls', $this->testConfig['CodiceClienteGls']);
+        $xml->writeElement('PasswordClienteGls', $this->testConfig['PasswordClienteGls']);
 
         foreach ($shippings as $shipping) {
             $this->writeParcel($xml, $shipping);
@@ -287,7 +299,7 @@ class CUPSHandler extends ACarrierHandler
         $rawXml = $xml->outputMemory();
 
 
-        $url = $this->config['endpoint'] . '/CloseWorkDay';
+        $url = $this->testConfig['endpoint'] . '/CloseWorkDay';
         $data = ['XMLCloseInfoParcel' => $rawXml];
 
         $ch = curl_init();
@@ -321,6 +333,49 @@ class CUPSHandler extends ACarrierHandler
     }
 
     /**
+     * @param \XMLWriter $xml
+     * @param CShipment $shipment
+     * @return bool
+     */
+    protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
+    {
+        $xml->startElement('Parcel');
+        $xml->writeElement('CodiceContrattoGls', $this->testConfig['CodiceContrattoGls']);
+        if (!empty($shipment->trackingNumber)) {
+            $xml->writeElement('NumeroSpedizione', ltrim($shipment->trackingNumber, $this->testConfig['SedeGls'] . ' '));
+        }
+
+        $xml->writeElement('Ragionesociale', $shipment->toAddress->subject);
+        $xml->writeElement('Indirizzo', $shipment->toAddress->address . ' ' . $shipment->toAddress->extra);
+        $xml->writeElement('Localita', $shipment->toAddress->city);
+        $xml->writeElement('Zipcode', $shipment->toAddress->postcode);
+        $xml->writeElement('Provincia', $this->getProvinceCode($shipment->toAddress->province));
+        $xml->writeElement('Bda', $shipment->orderLine->getFirst()->order->id);
+        //$xml->writeElement('Bda',$shipment->toAddress->subject);
+        //$xml->writeElement('DataDocumentoTrasporto',$shipment->toAddress->subject);
+        $xml->writeElement('Colli', 1);
+        //$xml->writeElement('Incoterm',$shipment->toAddress->subject);
+        $xml->writeElement('PesoReale', 2.5);
+
+        if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
+            $xml->writeElement('ImportoContrassegno', $shipment->orderLine->getFirst()->order->netTotal);
+            $xml->writeElement('ModalitaIncasso', 'CONT');
+        }
+
+        $xml->writeElement('Notespedizione', $shipment->note);
+        $xml->writeElement('NoteAggiuntive', 'Order ' . $shipment->orderLine->getFirst()->order->id);
+        $xml->writeElement('TipoPorto', 'F');
+        $xml->writeElement('TipoCollo', '0');
+
+        $xml->writeElement('Email', $shipment->orderLine->getFirst()->order->user->email);
+        $xml->writeElement('Cellulare1', $shipment->toAddress->phone);
+        $xml->writeElement('GeneraPdf', 1);
+        $xml->writeElement('ContatoreProgressivo', $shipment->id);
+        $xml->endElement();
+        return true;
+    }
+
+    /**
      *
      */
     public function printDayShipping()
@@ -342,12 +397,12 @@ class CUPSHandler extends ACarrierHandler
      */
     public function printParcelLabel(CShipment $shipment)
     {
-        $url = $this->config['endpoint'] . '/GetPdf';
+        $url = $this->testConfig['endpoint'] . '/GetPdf';
         $data = [
-            'SedeGls' => $this->config['SedeGls'],
-            'CodiceCliente' => $this->config['CodiceClienteGls'],
-            'Password' => $this->config['PasswordClienteGls'],
-            'CodiceContratto' => $this->config['CodiceContrattoGls'],
+            'SedeGls' => $this->testConfig['SedeGls'],
+            'CodiceCliente' => $this->testConfig['CodiceClienteGls'],
+            'Password' => $this->testConfig['PasswordClienteGls'],
+            'CodiceContratto' => $this->testConfig['CodiceContrattoGls'],
             'ContatoreProgressivo' => $shipment->id
         ];
 
@@ -382,11 +437,11 @@ class CUPSHandler extends ACarrierHandler
      */
     public function listShippings()
     {
-        $url = $this->config['endpoint'] . '/ListSped';
+        $url = $this->testConfig['endpoint'] . '/ListSped';
         $data = [
-            'SedeGls' => $this->config['SedeGls'],
-            'CodiceClienteGls' => $this->config['CodiceClienteGls'],
-            'PasswordClienteGls' => $this->config['PasswordClienteGls']
+            'SedeGls' => $this->testConfig['SedeGls'],
+            'CodiceClienteGls' => $this->testConfig['CodiceClienteGls'],
+            'PasswordClienteGls' => $this->testConfig['PasswordClienteGls']
         ];
 
         $ch = curl_init();
