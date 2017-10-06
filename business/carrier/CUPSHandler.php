@@ -33,16 +33,23 @@ class CUPSHandler extends ACarrierHandler
     ];
 
     protected $testConfig = [
-        'pickUpEndopoint' => 'https://wwwcie.ups.com/webservices/Pickup',
+        'pickUpEndopoint' => 'https://wwwcie.ups.com/rest/Pickup',
         'shipEndpoint' => 'https://wwwcie.ups.com/rest/Ship',
         'voidPackageEndpoint' => 'https://wwwcie.ups.com/rest/Void',
         'labelRecoveryEndpoint' => 'https://wwwcie.ups.com/rest/LBRecovery',
         'ServiceAccessToken' => '4D32C405E147E40C',
         'ServiceAccessToken2' => '9D339DDABFA49908',
         'UPSClientCode' => '463V1V'
-
     ];
 
+    public function canPickUp() {
+        return true;
+    }
+
+    /**
+     * @param CShipment $shipment
+     * @return CShipment|bool
+     */
     public function addPickUp(CShipment $shipment)
     {
         $delivery = [
@@ -62,7 +69,7 @@ class CUPSHandler extends ACarrierHandler
                 ],
                 'Shipper' => [
                     'Account' => [
-                        'AccountNumber' => '463V1V',
+                        'AccountNumber' => $this->config['UPSClientCode'],
                         'AccountCountryCode' => 'IT'
                     ]
                 ],
@@ -75,7 +82,7 @@ class CUPSHandler extends ACarrierHandler
                     'CountryCode' => $shipment->fromAddress->country->ISO,
                     'ResidentialIndicator' => 'N',
                     'Phone' => [
-                        'Number' => '0733471365'//$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
+                        'Number' => !empty($shipment->fromAddress->phone) ? $shipment->fromAddress->phone : ($shipment->fromAddress->cellphone ? $shipment->fromAddress->cellphone : '0733471365') //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
                     ]
                 ],
                 'AlternateAddressIndicator' => '', // mi sa che serve, se ognuno ha il suo account
@@ -90,12 +97,10 @@ class CUPSHandler extends ACarrierHandler
 
             ]
         ];
-        var_dump($delivery);
-        echo json_encode($delivery);
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $this->testConfig['testEndpoint']);
+        curl_setopt($ch, CURLOPT_URL, $this->testConfig['pickUpEndopoint']);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($delivery));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -107,15 +112,25 @@ class CUPSHandler extends ACarrierHandler
 
         $result = curl_exec($ch);
         $e = curl_error($ch);
-        echo $result;
-        var_dump($e);
         curl_close($ch);
+
+        try{
+            $result = json_decode($result);
+            if($result->PickupCreationResponse->Response->ResponseStatus->Code == '1') {
+                $shipment->bookingNumber = $result->PickupCreationResponse->PRN;
+                $shipment->update();
+                return $shipment;
+            }
+        } catch (\Throwable $e) {
+            //todo log me
+            \Monkey::app()->applicationWarning('UpsHandler', 'addPickUp', 'Error while parsing response of addPickUp for '.$shipment->printId(), $e);
+        }
+        return false;
     }
 
     protected function getUpsSecurity($config)
     {
         return [
-
             'UsernameToken' => [
                 'Username' => 'FabrizioMarconi',
                 'Password' => 'pKt)hT&n?^Q>gk*'
@@ -144,10 +159,10 @@ class CUPSHandler extends ACarrierHandler
                     ]
                 ],
                 'Shipment' => [
-                    'Description' => 'Descrizione della spedizione', //
+                    'Description' => $shipment->printId(), //
                     'Shipper' => [
                         'Name' => $shipment->fromAddress->subject,
-                        'ShipperNumber' => '463V1V',
+                        'ShipperNumber' => $this->config['UPSClientCode'],
                         'Address' => [
                             'AddressLine' => $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra,
                             'City' => $shipment->fromAddress->city,
@@ -177,7 +192,7 @@ class CUPSHandler extends ACarrierHandler
                         'ShipmentCharge' => [
                             'Type' => '01',
                             'BillShipper' => [
-                                'AccountNumber' => '463V1V'
+                                'AccountNumber' => $this->config['UPSClientCode']
                             ]
                         ]
                     ],
@@ -211,8 +226,6 @@ class CUPSHandler extends ACarrierHandler
                 ]
             ]
         ];
-        var_dump($delivery);
-        echo json_encode($delivery);
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
@@ -228,9 +241,20 @@ class CUPSHandler extends ACarrierHandler
 
         $result = curl_exec($ch);
         $e = curl_error($ch);
-        echo $result;
-        var_dump($e);
         curl_close($ch);
+
+        try{
+            $result = json_decode($result);
+            if($result->ShipmentResponse->Response->ResponseStatus->Code == '1') {
+                $shipment->trackingNumber = $result->ShipmentResponse->ShipmentResults->ShipmentIdentificationNumber;
+                $shipment->update();
+                return $shipment;
+            }
+        } catch (\Throwable $e) {
+            //todo log me
+            \Monkey::app()->applicationWarning('UpsHandler', 'addPickUp', 'Error while parsing response of addPickUp for '.$shipment->printId(), $e);
+        }
+        return $shipment;
     }
 
     /**
