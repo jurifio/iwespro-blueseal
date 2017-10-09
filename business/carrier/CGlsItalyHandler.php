@@ -30,6 +30,10 @@ class CGlsItalyHandler extends ACarrierHandler
         'CodiceContrattoGls' => '1108'
     ];
 
+    public function addPickUp(CShipment $shipment) {
+        return false;
+    }
+
     /**
      * @param CShipment $shipment
      * @return CShipment
