@@ -251,7 +251,7 @@ if ($i == 1): ?>
                     <li><strong>CPF</strong> <?php echo $product->itemno; ?> # <?php echo $product->productVariant->name; ?></li>
                     <li><strong>BRD</strong> <?php echo $product->productBrand->slug; ?></li>
                     <li><strong>SHP</strong> <?php echo $product->getShops() ?></li>
-                    <li><strong>CAT</strong> <?php echo implode(', ',$product->getGendersName()) ?></li>
+                    <li><strong>SEX</strong> <?php echo implode(', ',$product->getGendersName()) ?></li>
                 </ul>
             </div>
         </div>
