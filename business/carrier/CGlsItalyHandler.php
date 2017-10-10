@@ -291,8 +291,7 @@ class CGlsItalyHandler extends ACarrierHandler
         $e = curl_error($ch);
         curl_close($ch);
         if (!$result) {
-            var_dump($e);
-            return "";
+            throw new BambooException($e);
         } else {
             $dom = new \DOMDocument();
             $dom->loadXML($result);
