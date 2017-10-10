@@ -18,21 +18,14 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
 
     public function get()
     {
-        $products =  new CArrayCollection();
+        $products = [];
 
         foreach ($this->app->router->request()->getRequestData('id') as $key => $value) {
 
-            $o = new \stdClass();
-            $o->product = $this->app->repoFactory->create('Product')->findOneByStringId($value);
-            $o->aztecCode = base64_encode($o->product->id.'-'.$o->product->productVariantId.'__'.$o->product->productBrand->name.' - '.$o->product->itemno.' - '.$o->product->productVariant->name);
+            $product = $this->app->repoFactory->create('Product')->findOneByStringId($value);
+            $product->aztecCode = base64_encode($product->printId().'__'.$product->productBrand->name.' - '.$product->itemno.' - '.$product->productVariant->name);
 
-            try {
-                $o->shop = $o->product->shop->getFirst()->name;
-            } catch (\Throwable $e) {
-                $o->shop = null;
-            }
-
-            $products->add(new CStdCollectibleItem($o));
+            $products[] = $product;
         }
 
         $view = new VBase(array());
