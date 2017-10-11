@@ -3,6 +3,7 @@
 namespace bamboo\business\carrier;
 
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CShipment;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\STimeToolbox;
@@ -28,21 +29,11 @@ class CUPSHandler extends ACarrierHandler
         'shipEndpoint' => 'https://onlinetools.ups.com/rest/Ship',
         'voidPackageEndpoint' => 'https://onlinetools.ups.com/rest/Void',
         'labelRecoveryEndpoint' => 'https://onlinetools.ups.com/rest/LBRecovery',
+        'checkPickupTimeEndpoint' => 'https://onlinetools.ups.com/rest/TimeInTransit',
         'ServiceAccessToken' => 'ED3442CCB18DBE8C',
         'UPSClientCode' => '463V1V',
         'username' => 'iwes123',
         'password' => 'Spedizioni123'
-    ];
-
-    protected $config2 = [
-        'pickUpEndopoint' => 'https://onlinetools.ups.com/rest/Pickup',
-        'shipEndpoint' => 'https://onlinetools.ups.com/rest/Ship',
-        'voidPackageEndpoint' => 'https://onlinetools.ups.com/rest/Void',
-        'labelRecoveryEndpoint' => 'https://onlinetools.ups.com/rest/LBRecovery',
-        'ServiceAccessToken' => '4D32C405E147E40C',
-        'UPSClientCode' => '463V1V',
-        'username' => 'FabrizioMarconi',
-        'password' => 'pKt)hT&n?^Q>gk*'
     ];
 
     protected $testConfig = [
@@ -50,6 +41,7 @@ class CUPSHandler extends ACarrierHandler
         'shipEndpoint' => 'https://wwwcie.ups.com/rest/Ship',
         'voidPackageEndpoint' => 'https://wwwcie.ups.com/rest/Void',
         'labelRecoveryEndpoint' => 'https://wwwcie.ups.com/rest/LBRecovery',
+        'checkPickupTimeEndpoint' => 'https://wwwcie.ups.com/rest/TimeInTransit',
         'ServiceAccessToken' => '4D32C405E147E40C',
         'UPSClientCode' => '463V1V',
         'username' => 'FabrizioMarconi',
@@ -532,4 +524,88 @@ class CUPSHandler extends ACarrierHandler
 
     }
 
+    public function checkPickupTime(CAddressBook $fromAddress, CAddressBook $toAddress, \DateTime $pickUpDateTime) {
+        $labelRequest = [
+            'UPSSecurity' => $this->getUpsSecurity(),
+            'TimeInTransitRequest' => [
+                'Request' => [
+                    'RequestOption' => 'TNT',
+                    'TransactionReference' => [
+                        'CustomerContext' => 'No Actual Context'
+                    ]
+                ],
+                'Pickup' => [
+                    'Date' => $pickUpDateTime->format('Ymd'),
+                    'Time' => $pickUpDateTime->format('Hi'),
+                ],
+                'ShipFrom' => [
+                    'Address' => [
+                        'AddressLine' => $fromAddress->address . ' ' . $fromAddress->extra,
+                        'City' => $fromAddress->city,
+                        'PostalCode' => $fromAddress->postcode,
+                        'CountryCode' => $fromAddress->country->ISO,
+                        'ResidentialAddressIndicator' => 'N'
+                    ]
+                ],
+                'ShipTo' => [
+                    'Address' => [
+                        'AddressLine' => $toAddress->address . ' ' . $toAddress->extra,
+                        'City' => $toAddress->city,
+                        'PostalCode' => $toAddress->postcode,
+                        'CountryCode' => $toAddress->country->ISO
+                    ]
+                ],
+                'ShipmentWeight' => [
+                    'UnitOfMeasurement' => [
+                        'Code' => 'KGS',
+                        'Description' => 'Kilograms'
+                    ],
+                    'Weight' => '2.5'
+                ]
+            ]
+        ];
+
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $this->getConfig('checkPickupTimeEndpoint'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($labelRequest));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
+        ]);
+
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Called checkPickupTime to ' . $this->getConfig('checkPickupTimeEndpoint'),
+            json_encode($labelRequest));
+        $result = curl_exec($ch);
+        $e = curl_error($ch);
+        curl_close($ch);
+
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Result checkPickupTime to ' . $this->getConfig('checkPickupTimeEndpoint'),
+            $result);
+
+        if (!$result) {
+            throw new BambooException($e);
+        } else {
+            $result = json_decode($result);
+            var_dump($result);
+            die();
+            try {
+                if ($result->LabelRecoveryResponse->Response->ResponseStatus->Code == '1') {
+                    return base64_decode($result->LabelRecoveryResponse->LabelResults->LabelImage->GraphicImage);
+                } else throw new BambooException('Failed to recover Image');
+            } catch (\Throwable $e) {
+                throw new BambooException('Failed to recover Parcel Image from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
+            }
+        }
+    }
 }
