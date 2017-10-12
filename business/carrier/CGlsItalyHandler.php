@@ -2,7 +2,6 @@
 
 namespace bamboo\business\carrier;
 
-
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CShipment;
 
@@ -29,10 +28,6 @@ class CGlsItalyHandler extends ACarrierHandler
         'PasswordClienteGls' => 'iwesnc',
         'CodiceContrattoGls' => '1108'
     ];
-
-    public function addPickUp(CShipment $shipment) {
-        return false;
-    }
 
     /**
      * @param CShipment $shipment
@@ -263,6 +258,7 @@ class CGlsItalyHandler extends ACarrierHandler
     /**
      * @param CShipment $shipment
      * @return bool|string
+     * @throws BambooException
      */
     public function printParcelLabel(CShipment $shipment)
     {

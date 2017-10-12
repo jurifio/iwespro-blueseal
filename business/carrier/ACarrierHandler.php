@@ -13,17 +13,6 @@ abstract class ACarrierHandler {
         //$this->config = $config;
     }
 
-    public function canPickUp() {
-        return false;
-    }
-
-    /**
-     * Add a pick-up request
-     * @param CShipment $shipment
-     * @return CShipment|bool
-     */
-    public abstract function addPickUp(CShipment $shipment);
-
     /**
      * Add a delivery Shipment, returns the Shipment
      * @param CShipment $shipment
