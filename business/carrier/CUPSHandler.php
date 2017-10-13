@@ -43,11 +43,10 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         'voidPackageEndpoint' => 'https://wwwcie.ups.com/rest/Void',
         'labelRecoveryEndpoint' => 'https://wwwcie.ups.com/rest/LBRecovery',
         'timeInTransitEndpoint' => 'https://wwwcie.ups.com/rest/TimeInTransit',
-        'ServiceAccessToken' => '4D32C405E147E40C',
+        'ServiceAccessToken' => 'ED3442CCB18DBE8C',
         'UPSClientCode' => '463V1V',
-        'username' => 'FabrizioMarconi',
-        'password' => 'pKt)hT&n?^Q>gk*'
-
+        'username' => 'iwes123',
+        'password' => 'Spedizioni123'
     ];
 
     /**
