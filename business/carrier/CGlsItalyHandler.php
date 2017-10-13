@@ -167,10 +167,19 @@ class CGlsItalyHandler extends ACarrierHandler
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-type: application/x-www-form-urlencoded'
         ]);
-
+        \Monkey::app()->applicationReport(
+            'GlsItaly',
+            'addDelivery',
+            'Called cancelDelivery to ' . $url,
+            json_encode($data));
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
+        \Monkey::app()->applicationReport(
+            'GlsItaly',
+            'addDelivery',
+            'Result cancelDelivery to ' . $url,
+            json_encode($data));
         if (!$result) {
             \Monkey::dump($e);
             return false;
