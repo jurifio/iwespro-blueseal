@@ -29,7 +29,7 @@ class CPaymentBillListAjaxController extends AAjaxController
                   pb.amount AS total,
                   pb.creationDate,
                   pb.paymentDate,
-                  pb.submissionDate,
+                  ifnull(pb.submissionDate,'Non Sottomessa'),
                   pb.note,
                   count(DISTINCT inn.shopRecipientId) AS transfers,
                   group_concat(DISTINCT s.title) AS recipients,
