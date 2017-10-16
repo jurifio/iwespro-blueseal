@@ -36,63 +36,78 @@
                         <p>Taglie incluse</p>
                         <div class="table-responsive">
                             <div class="dataTables_wrapper no-footer">
-                                <table class="table table-hover table-condensed dataTable no-footer" id="condensedTable"
+                                <table class="table table-hover table-condensed size-table"
                                        role="grid">
                                     <thead>
                                     <tr role="row">
-                                        <th style="width:30%" class="sorting_asc" tabindex="0"
-                                            aria-controls="condensedTable" rowspan="1" colspan="1" aria-sort="ascending"
-                                            aria-label="Title: activate to sort column descending">Title
-                                        </th>
-                                        <th style="width: 189px;" class="sorting" tabindex="0"
+                                        <th style="" class="sorting_asc" tabindex="0"
                                             aria-controls="condensedTable" rowspan="1" colspan="1"
-                                            aria-label="Key: activate to sort column ascending">Key
+                                            aria-sort="ascending"
+                                            aria-label="Positions">Posizioni
                                         </th>
-                                        <th style="width: 266px;" class="sorting" tabindex="0"
-                                            aria-controls="condensedTable" rowspan="1" colspan="1"
-                                            aria-label="Condensed: activate to sort column ascending">Condensed
-                                        </th>
+                                        <?php
+                                        /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
+                                        $z = 0;
+                                        foreach ($sizeEdit as $productSizeGroup): ?>
+                                            <th style="" class="" tabindex=""
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort=""
+                                                aria-label="<?php echo $productSizeGroup->locale ?>"><?php echo $productSizeGroup->locale ?>
+                                            </th>
+                                            <?php $z++;
+                                        endforeach;
+                                        for (; $z < 18; $z++): ?>
+                                            <th style="" class="" tabindex="0"
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort="ascending"
+                                                aria-label="Positions">Nuovo Gruppo
+                                            </th>
+                                        <?php endfor; ?>
                                     </tr>
                                     </thead>
                                     <tbody>
-
-
-                                    <tr role="row" class="odd">
-                                        <td class="v-align-middle semi-bold sorting_1">Fifth tour</td>
-                                        <td class="v-align-middle">Simple but not simpler</td>
-                                        <td class="v-align-middle semi-bold">Wonders can be true. Believe in your
-                                            dreams!
-                                        </td>
-                                    </tr>
-                                    <tr role="row" class="even">
-                                        <td class="v-align-middle semi-bold sorting_1">First tour</td>
-                                        <td class="v-align-middle">Simple but not simpler</td>
-                                        <td class="v-align-middle semi-bold">Wonders can be true. Believe in your
-                                            dreams!
-                                        </td>
-                                    </tr>
-                                    <tr role="row" class="odd">
-                                        <td class="v-align-middle semi-bold sorting_1">Fourth tour</td>
-                                        <td class="v-align-middle">Simple but not simpler</td>
-                                        <td class="v-align-middle semi-bold">Wonders can be true. Believe in your
-                                            dreams!
-                                        </td>
-                                    </tr>
-                                    <tr role="row" class="even">
-                                        <td class="v-align-middle semi-bold sorting_1">Second tour</td>
-                                        <td class="v-align-middle">Simple but not simpler</td>
-                                        <td class="v-align-middle semi-bold">Wonders can be true. Believe in your
-                                            dreams!
-                                        </td>
-                                    </tr>
-                                    <tr role="row" class="odd">
-                                        <td class="v-align-middle semi-bold sorting_1">Third tour</td>
-                                        <td class="v-align-middle">Simple but not simpler</td>
-                                        <td class="v-align-middle semi-bold">Wonders can be true. Believe in your
-                                            dreams!
-                                        </td>
-                                    </tr>
+                                    <?php for ($k = 0; $k < 36; $k++): ?>
+                                        <tr data-position="<?php echo $k; ?>" role="row" class="<?php echo $k % 2 == 0 ? 'even' : 'odd' ?>">
+                                            <td data-column="0" class="v-align-middle bold sorting_1"><?php echo $k + 1 ?></td>
+                                            <?php $z = 0;
+                                            foreach ($sizeEdit as $productSizeGroup):
+                                                $productSizeGroupHasProductSize = $productSizeGroup->productSizeGroupHasProductSize->findOneByKey('position', $k);
+                                                ?>
+                                                <td data-column="<?php echo $productSizeGroup->id ?>" class="v-align-middle semi-bold sorting_1"><?php echo $productSizeGroupHasProductSize ? $productSizeGroupHasProductSize->productSize->name : '' ?></td>
+                                                <?php $z++;
+                                            endforeach;
+                                            for (; $z < 18; $z++): ?>
+                                                <td data-column="false" class="v-align-middle bold sorting_1"></td>
+                                            <?php endfor; ?>
+                                        </tr>
+                                    <?php endfor; ?>
                                     </tbody>
+                                    <tfoot>
+                                    <tr role="row">
+                                        <th style="" class="sorting_asc" tabindex="0"
+                                            aria-controls="condensedTable" rowspan="1" colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Positions">Posizioni
+                                        </th>
+                                        <?php
+                                        /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
+                                        foreach ($sizeEdit as $productSizeGroup): ?>
+                                            <th style="" class="" tabindex="1"
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort=""
+                                                aria-label="<?php echo $productSizeGroup->locale ?>"><?php echo $productSizeGroup->locale ?>
+                                            </th>
+                                            <?php $z++;
+                                        endforeach;
+                                        for (; $z < 18; $z++): ?>
+                                            <th style="" class="" tabindex="0"
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort="ascending"
+                                                aria-label="Positions">Nuovo Gruppo
+                                            </th>
+                                        <?php endfor; ?>
+                                    </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
