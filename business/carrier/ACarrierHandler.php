@@ -8,9 +8,9 @@ abstract class ACarrierHandler {
 
     protected $config;
 
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
-        //$this->config = $config;
+        if(!empty($config)) $this->config = $config;
     }
 
     /**

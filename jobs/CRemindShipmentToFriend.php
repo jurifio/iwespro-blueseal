@@ -3,6 +3,7 @@ namespace bamboo\blueseal\jobs;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\jobs\ACronJob;
+use bamboo\domain\entities\CShipment;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\export\order\COrderExport;
 use bamboo\core\db\pandaorm\repositories\CRepo;
@@ -28,15 +29,16 @@ class CRemindShipmentToFriend extends ACronJob
     public function run($args = null)
     {
         $this->report('ShipmentRemind', 'starting remind to friends');
-        $query = "SELECT distinct Shop.id
+        $query = "SELECT distinct s.id
                   from 
                     Shipment s 
                     JOIN AddressBook ab on s.fromAddressBookId = ab.id
                     JOIN ShopHasShippingAddressBook shsab on shsab.addressBookId = ab.id
                     JOIN Shop on Shop.id = shsab.shopId
-                  where s.predictedShipmentDate = CURRENT_DATE
-                  and s.shipmentDate is null and  s.cancellationDate is null";
-        $shops = $this->app->repoFactory->create('Shop')->findBySql($query,[]);
+                  where s.predictedShipmentDate <= CURRENT_DATE
+                  and scope = ?
+                  and s.shipmentDate is null and s.cancellationDate is null and s.deliveryDate is null";
+        $shops = $this->app->repoFactory->create('Shop')->findBySql($query,[CShipment::SCOPE_SUPPLIER_TO_US]);
 
         foreach($shops as $shop){
             try {

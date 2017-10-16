@@ -65,6 +65,9 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Stato</th>
+                                <th data-slug="categoryId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center categoryFilterType">Categorie</th>
                                 <th data-slug="creationDate"
                                     data-searchable="false"
                                     data-orderable="true"
@@ -76,9 +79,7 @@
                                     class="center">Problemi</th>
                             </tr>
                             </thead>
-                            <tbody>
-
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>

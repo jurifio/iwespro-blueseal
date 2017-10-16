@@ -55,8 +55,8 @@ $(document).on('bs.shipment.cancel', function (e, element, button) {
             '<select id="faultId" class="form-control" name="faultId">' + options + '</select>' +
             '</div>'+
             '<div class="col-xs-12">' +
-            '<label for="newShipmentDate">Vuoi ricreare la spedizione?</label>' +
-            '<input id="newShipmentDate" class="form-control" checked="checked" value="recreate" name="newShipment" type="checkbox">' +
+            '<label for="recreate">Vuoi ricreare la spedizione?</label>' +
+            '<input id="recreate" class="form-control" checked="checked" value="recreate" name="recreate" type="checkbox">' +
             '</div>' +
             '<div class="col-xs-12">' +
             '<label for="newShipmentDate">Seleziona la data per la nuova spedizione:</label>' +
@@ -69,12 +69,16 @@ $(document).on('bs.shipment.cancel', function (e, element, button) {
         modal.setOkEvent(function () {
            let selectFault = $('#faultId').val();
            let newShipmentDate = $('#newShipmentDate').val();
+           let recreate = $('#recreate').val();
            if (selectFault) {
                $.ajax({
                    method: "delete",
                    url: "/blueseal/xhr/ShipmentManageController",
                    data: {
-                       shipmentId: shipmentId, faultId: selectFault, newShipmentDate: newShipmentDate
+                       shipmentId: shipmentId,
+                       faultId: selectFault,
+                       newShipmentDate: newShipmentDate,
+                       recreate: recreate
                    }
                }).done(function (res) {
                    modal.writeBody(res);

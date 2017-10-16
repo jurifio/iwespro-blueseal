@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers;
 
 use bamboo\core\ecommerce\APaymentGateway;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CCart;
 use bamboo\domain\repositories\CCartRepo;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
@@ -41,7 +42,7 @@ class COrderAddController extends ARestrictedAccessRootController
             $cartRepo = $this->app->repoFactory->create('Cart');
             $cart = $cartRepo->getEmptyEntity();
             $cart->userId = $data['user'];
-            $cart->cartTypeId = 5;
+            $cart->cartTypeId = CCartRepo::CART_TYPE_TRN;
             $cart->orderPaymentMethodId = $data['orderPaymentMethod'];
             $cart->billingAddressId = $data['billingAddress'];
             $cart->shipmentAddressId = $data['shippingAddress'] ?? $data['billingAddress'];

@@ -2,7 +2,6 @@
 
 namespace bamboo\business\carrier;
 
-
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CShipment;
 
@@ -168,10 +167,19 @@ class CGlsItalyHandler extends ACarrierHandler
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-type: application/x-www-form-urlencoded'
         ]);
-
+        \Monkey::app()->applicationReport(
+            'GlsItaly',
+            'addDelivery',
+            'Called cancelDelivery to ' . $url,
+            json_encode($data));
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
+        \Monkey::app()->applicationReport(
+            'GlsItaly',
+            'addDelivery',
+            'Result cancelDelivery to ' . $url,
+            json_encode($data));
         if (!$result) {
             \Monkey::dump($e);
             return false;
@@ -259,6 +267,7 @@ class CGlsItalyHandler extends ACarrierHandler
     /**
      * @param CShipment $shipment
      * @return bool|string
+     * @throws BambooException
      */
     public function printParcelLabel(CShipment $shipment)
     {
@@ -287,8 +296,7 @@ class CGlsItalyHandler extends ACarrierHandler
         $e = curl_error($ch);
         curl_close($ch);
         if (!$result) {
-            var_dump($e);
-            return "";
+            throw new BambooException($e);
         } else {
             $dom = new \DOMDocument();
             $dom->loadXML($result);

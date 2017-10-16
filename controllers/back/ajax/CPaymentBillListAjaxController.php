@@ -3,9 +3,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CPaymentBill;
-use bamboo\domain\entities\CProduct;
 use bamboo\utils\time\STimeToolbox;
 
 /**

@@ -16,10 +16,10 @@ class COrderStatusLog extends CLogging
 {
     public function work($eventName)
     {
-        if(!$eventName instanceof CEventEmitted) throw new BambooException('Event is not an event');
+        if (!$eventName instanceof CEventEmitted) throw new BambooException('Event is not an event');
         $this->backtrace = $eventName->getBacktrace();
         $this->params = $eventName->getEventData();
-        $userId = $eventName->getUserId();
+
         $time = STimeToolbox::DbFormattedDateTime($this->getParameter('time'));
         if (!$time) $time = date('Y-m-d H:i:s');
         $order = $this->getParameter('order');
@@ -28,6 +28,8 @@ class COrderStatusLog extends CLogging
         if (!$value) {
             $value = $order->status;
         }
+        $userId = $eventName->getUserId() ? $eventName->getUserId() : ($this->getParameter('user') ? $this->getParameter('user')->id : 0);
+
         $entityName = $order->getEntityName();
         $stringId = $order->printId();
         $logR = \Monkey::app()->repoFactory->create('Log');

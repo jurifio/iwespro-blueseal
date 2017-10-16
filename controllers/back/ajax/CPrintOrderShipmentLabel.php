@@ -2,12 +2,6 @@
 
 namespace bamboo\controllers\back\ajax;
 
-use bamboo\core\exceptions\BambooException;
-use bamboo\core\traits\TMySQLTimestamp;
-use bamboo\domain\entities\COrder;
-use bamboo\domain\repositories\COrderRepo;
-use bamboo\domain\repositories\CShipmentRepo;
-
 /**
  * Class CGetPermissionsForUser
  * @package bamboo\blueseal\controllers\ajax

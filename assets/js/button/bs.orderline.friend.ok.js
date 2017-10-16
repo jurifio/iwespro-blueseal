@@ -73,7 +73,7 @@ $(document).on('bs.orderline.friend.ok', function () {
             return false;
         }
 
-        if (shippingDate.length == 0) {
+        if (shippingDate.length === 0) {
             modal.body.append(
                 '<label for="shippingDate">Seleziona Data Ritiro</label>' +
                 '<select id="shippingDate" name="shippingDate" class="full-width selectize" disabled="disabled"></select><br />' +
@@ -82,6 +82,8 @@ $(document).on('bs.orderline.friend.ok', function () {
             );
             shippingDate = $('select[name=\"shippingDate\"]');
         }
+        if (typeof (shippingDate[0].selectize) != 'undefined') shippingDate[0].selectize.destroy();
+
         Pace.ignore(function () {
             $.ajax({
                 url: '/blueseal/xhr/FriendShipment',
@@ -113,7 +115,7 @@ $(document).on('bs.orderline.friend.ok', function () {
             url: '/blueseal/xhr/GetTableContent',
             data: {
                 table: 'Carrier',
-                condition: {isActive: 1}
+                condition: {isActive: 1, isForPickUp: 1}
             },
             dataType: 'json'
         }).done(function (res) {
@@ -127,13 +129,13 @@ $(document).on('bs.orderline.friend.ok', function () {
                     item: function (item, escape) {
                         return '<div>' +
                             '<span class="label">' + escape(item.name) + '</span>' +
-                            ' - <span class="caption">Limite prenotazione: ' + escape(item.prenotationTimeLimit) + '</span>' +
+                            ' - <span class="caption">Limite prenotazione: ' + escape(item.prenotationTimeLimit === null ? 'Variabile' : item.prenotationTimeLimit) + '</span>' +
                             '</div>'
                     },
                     option: function (item, escape) {
                         return '<div>' +
                             '<span class="label">' + escape(item.name) + '</span>' +
-                            ' - <span class="caption">Limite prenotazione: ' + escape(item.prenotationTimeLimit) + '</span>' +
+                            ' - <span class="caption">Limite prenotazione: ' + escape(item.prenotationTimeLimit === null ? 'Variabile' : item.prenotationTimeLimit) + '</span>' +
                             '</div>'
                     }
                 }
@@ -170,7 +172,8 @@ $(document).on('bs.orderline.friend.ok', function () {
             }
         }).done(function (res) {
             res = JSON.parse(res);
-            var x = '<p>' + res.message + '</p><br />';
+            var x = '<p>' + res.message + '</p><br />' +
+                '<strong style="color:red">RICORDATI DI STAMPARE ED APPLICARE L\'ETICHETTA AL COLLO!</strong><br />';
             x += typeof res.shipmentId === 'undefined' ? '' : '<a target="_blank" href="/blueseal/xhr/FriendShipmentLabelPrintController?shipmentId=' + res.shipmentId + '">Stampa Etichetta</a>';
             modal.writeBody(x);
         }).fail(function (res) {

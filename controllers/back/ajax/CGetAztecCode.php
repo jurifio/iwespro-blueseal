@@ -21,8 +21,11 @@ class CGetAztecCode extends AAjaxController
     public function get()
     {
         $this->app->vendorLibraries->load("aztec");
-
-        $code =  Encoder::encode(base64_decode($_GET['src']));
+        $input = $_GET['src'];
+        if(preg_match("/^[0-9]+-[0-9]+/u",$input) == 0) {
+            $input = base64_decode($_GET['src']);
+        }
+        $code =  Encoder::encode($input);
         $renderer = new PngRenderer();
 
         header('Content-Type: image/png');

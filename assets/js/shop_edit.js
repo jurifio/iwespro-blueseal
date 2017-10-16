@@ -245,11 +245,11 @@ function readShipment(containerSelector) {
     let data = {};
     let element = $(containerSelector);
     data.id = element.find('#id').val();
-    data.name = element.find('#name').val();
-    data.subject = element.find('#subject').val();
-    data.address = element.find('#address').val();
-    data.extra = element.find('#extra').val();
-    data.city = element.find('#city').val();
+    data.name = encodeURIComponent(element.find('#name').val());
+    data.subject = encodeURIComponent(element.find('#subject').val());
+    data.address = encodeURIComponent(element.find('#address').val());
+    data.extra = encodeURIComponent(element.find('#extra').val());
+    data.city = encodeURIComponent(element.find('#city').val());
     data.countryId = element.find('#country').val();
     data.postcode = element.find('#postcode').val();
     data.phone = element.find('#phone').val();

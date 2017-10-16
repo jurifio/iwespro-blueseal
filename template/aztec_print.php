@@ -229,8 +229,9 @@
 <body class="fixed-header">
 <div class="cover"><div>Usa CTRL-P per stampare</div></div>
 
-<?php $i = 1; foreach ($products as $productInfo): ?>
-<?php if ($i == 1): ?>
+<?php $i = 1; foreach ($products as $product):
+    /** @var \bamboo\domain\entities\CProduct $product */
+if ($i == 1): ?>
 <div class="container newpage">
     <div class="row">
 <?php endif; ?>
@@ -242,14 +243,15 @@
 <?php endif; ?>
         <div class="col-md-6">
             <div class="col-md-4" style="margin-top:10px">
-                <img src="<?php echo $aztecFactoryEndpoint.$productInfo->aztecCode; ?>" width="140" height="140"/>
+                <img src="<?php echo $aztecFactoryEndpoint.$product->aztecCode; ?>" width="140" height="140"/>
             </div>
             <div class="col-md-8 pull-left" style="border-right: 1px dotted #c0c0c0;">
                 <ul>
-                    <li><strong>INT</strong> <?php echo $productInfo->product->id.'-'.$productInfo->product->productVariantId; ?></li>
-                    <li><strong>CPF</strong> <?php echo $productInfo->product->itemno; ?> # <?php echo $productInfo->product->productVariant->name; ?></li>
-                    <li><strong>BRD</strong> <?php echo $productInfo->product->productBrand->slug; ?></li>
-                    <li><strong>SHP</strong> <?php echo !is_null($productInfo->shop) ? $productInfo->shop : "non presente" ?></li>
+                    <li><strong>INT</strong> <?php echo $product->printId(); ?></li>
+                    <li><strong>CPF</strong> <?php echo $product->itemno; ?> # <?php echo $product->productVariant->name; ?></li>
+                    <li><strong>BRD</strong> <?php echo $product->productBrand->slug; ?></li>
+                    <li><strong>SHP</strong> <?php echo $product->getShops() ?></li>
+                    <li><strong>SEX</strong> <?php echo implode(', ',$product->getGendersName()) ?></li>
                 </ul>
             </div>
         </div>

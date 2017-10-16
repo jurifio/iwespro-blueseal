@@ -3,7 +3,10 @@
 namespace bamboo\business\carrier;
 
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CShipment;
+use bamboo\domain\repositories\CShipmentRepo;
+use bamboo\utils\time\SDateToolbox;
 use bamboo\utils\time\STimeToolbox;
 
 /**
@@ -19,30 +22,44 @@ use bamboo\utils\time\STimeToolbox;
  * @date $date
  * @since 1.0
  */
-class CUPSHandler extends ACarrierHandler
+class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
 {
 
     protected $config = [
-        'testEndpoint' => 'https://wwwcie.ups.com/rest/Pickup',
-        'endpoint' => 'https://onlinetools.ups.com/rest/Pickup',
-        'ServiceAccessToken' => '4D32C405E147E40C',
-        'ServiceAccessToken2' => '9D339DDABFA49908',
-        'UPSClientCode' => '463V1V'
-
+        'pickUpEndopoint' => 'https://onlinetools.ups.com/rest/Pickup',
+        'shipEndpoint' => 'https://onlinetools.ups.com/rest/Ship',
+        'voidPackageEndpoint' => 'https://onlinetools.ups.com/rest/Void',
+        'labelRecoveryEndpoint' => 'https://onlinetools.ups.com/rest/LBRecovery',
+        'timeInTransitEndpoint' => 'https://onlinetools.ups.com/rest/TimeInTransit',
+        'ServiceAccessToken' => 'ED3442CCB18DBE8C',
+        'UPSClientCode' => '463V1V',
+        'username' => 'iwes123',
+        'password' => 'Spedizioni123'
     ];
 
+    protected $testConfig = [
+        'pickUpEndopoint' => 'https://wwwcie.ups.com/rest/Pickup',
+        'shipEndpoint' => 'https://wwwcie.ups.com/rest/Ship',
+        'voidPackageEndpoint' => 'https://wwwcie.ups.com/rest/Void',
+        'labelRecoveryEndpoint' => 'https://wwwcie.ups.com/rest/LBRecovery',
+        'timeInTransitEndpoint' => 'https://wwwcie.ups.com/rest/TimeInTransit',
+        'ServiceAccessToken' => 'ED3442CCB18DBE8C',
+        'UPSClientCode' => '463V1V',
+        'username' => 'iwes123',
+        'password' => 'Spedizioni123'
+    ];
+
+    /**
+     * @param CShipment $shipment
+     * @return CShipment|bool
+     * @throws \Throwable
+     */
     public function addPickUp(CShipment $shipment)
     {
+        \Monkey::app()->applicationReport('CUPSHandler', 'addPickup', 'Called addPickUp');
+
         $delivery = [
-            'UPSSecurity' => [
-                'UsernameToken' => [
-                    'Username' => 'FabrizioMarconi',
-                    'Password' => 'pKt)hT&n?^Q>gk*'
-                ],
-                'ServiceAccessToken' => [
-                    "AccessLicenseNumber" => $this->config['ServiceAccessToken']
-                ]
-            ],
+            'UPSSecurity' => $this->getUpsSecurity(),
             'PickupCreationRequest' => [
                 'Request' => [
                     'TransactionReference' => [
@@ -52,14 +69,14 @@ class CUPSHandler extends ACarrierHandler
                 'RatePickupIndicator' => 'Y',
                 'TaxInformationIndicator' => 'Y',
                 'PickupDateInfo' => [
-                    'CloseTime' => '1900',
-                    'ReadyTime' => '1700',
+                    'CloseTime' => '2000',
+                    'ReadyTime' => '0930',
                     'PickupDate' => STimeToolbox::GetDateTime($shipment->predictedShipmentDate)->format('Ymd')
                 ],
                 'Shipper' => [
                     'Account' => [
-                        'AccountNumber'=>'0000463V1V',
-                        'AccountCountryCode'=>'IT'
+                        'AccountNumber' => $this->getConfig('UPSClientCode'),
+                        'AccountCountryCode' => 'IT'
                     ]
                 ],
                 'PickupAddress' => [
@@ -71,7 +88,7 @@ class CUPSHandler extends ACarrierHandler
                     'CountryCode' => $shipment->fromAddress->country->ISO,
                     'ResidentialIndicator' => 'N',
                     'Phone' => [
-                        'Number' => '07337735245'//$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
+                        'Number' => !empty($shipment->fromAddress->phone) ? $shipment->fromAddress->phone : ($shipment->fromAddress->cellphone ? $shipment->fromAddress->cellphone : '0733471365') //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
                     ]
                 ],
                 'AlternateAddressIndicator' => '', // mi sa che serve, se ognuno ha il suo account
@@ -83,16 +100,13 @@ class CUPSHandler extends ACarrierHandler
                 ],
                 'OverweightIndicator' => 'N',
                 'PaymentMethod' => '01',
+
             ]
         ];
-        var_dump($delivery);
-        echo json_encode($delivery);
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $this->config['testEndpoint']);
-
-        $postFields = http_build_query($delivery);
+        curl_setopt($ch, CURLOPT_URL, $this->getConfig('pickUpEndopoint'));
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($delivery));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -101,12 +115,157 @@ class CUPSHandler extends ACarrierHandler
             'Access-Control-Allow-Origin: *',
             'Content-type: application/json'
         ]);
-
+        \Monkey::app()->applicationReport(
+            'UPSItalyHandler',
+            'addPickup',
+            'Request addPickup to' . $this->getConfig('pickUpEndopoint'),
+            json_encode($delivery));
         $result = curl_exec($ch);
         $e = curl_error($ch);
-        var_dump($result);
-        var_dump($e);
         curl_close($ch);
+        \Monkey::app()->applicationReport(
+            'UPSHandler',
+            'addDelivery',
+            'Result addPickup to ' . $this->getConfig()['pickUpEndopoint'],
+            $result);
+        try {
+            $result = json_decode($result);
+            try {
+                $status = $result->PickupCreationResponse->Response->ResponseStatus->Code;
+            } catch (\Throwable $e) {
+                throw new BambooException('Failed to addPickup from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
+            }
+
+            if ($status == '1') {
+                $shipment->bookingNumber = $result->PickupCreationResponse->PRN;
+                $shipment->update();
+
+                return $this->addDelivery($shipment);
+            }
+
+        } catch (\Throwable $e) {
+            //todo log me
+            \Monkey::app()->applicationWarning('UpsHandler', 'addPickUp', 'Error while parsing response of addPickUp for ' . $shipment->printId(), $e);
+            throw $e;
+        }
+        return false;
+    }
+
+    /**
+     * @param CAddressBook $fromAddress
+     * @param CAddressBook $toAddress
+     * @param \DateTime $pickUpDateTime
+     * @return mixed
+     * @throws BambooException
+     */
+    protected function requireTimeInTransit(CAddressBook $fromAddress, CAddressBook $toAddress, \DateTime $pickUpDateTime)
+    {
+        $labelRequest = [
+            'UPSSecurity' => $this->getUpsSecurity(),
+            'TimeInTransitRequest' => [
+                'Request' => [
+                    'RequestOption' => 'TNT',
+                    'TransactionReference' => [
+                        'CustomerContext' => 'No Actual Context'
+                    ]
+                ],
+                'Pickup' => [
+                    'Date' => $pickUpDateTime->format('Ymd'),
+                    'Time' => $pickUpDateTime > (new \DateTime()) ? $pickUpDateTime->format('Hi') : (new \DateTime())->format('Hi'),
+                ],
+                'ShipFrom' => [
+                    'Address' => [
+                        'AddressLine' => $fromAddress->address . ' ' . $fromAddress->extra,
+                        'City' => $fromAddress->city,
+                        'PostalCode' => $fromAddress->postcode,
+                        'CountryCode' => $fromAddress->country->ISO,
+                        'ResidentialAddressIndicator' => 'N'
+                    ]
+                ],
+                'ShipTo' => [
+                    'Address' => [
+                        'AddressLine' => $toAddress->address . ' ' . $toAddress->extra,
+                        'City' => $toAddress->city,
+                        'PostalCode' => $toAddress->postcode,
+                        'CountryCode' => $toAddress->country->ISO
+                    ]
+                ],
+                'ShipmentWeight' => [
+                    'UnitOfMeasurement' => [
+                        'Code' => 'KGS',
+                        'Description' => 'Kilograms'
+                    ],
+                    'Weight' => '2.5'
+                ]
+            ]
+        ];
+
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $this->getConfig('timeInTransitEndpoint'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($labelRequest));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
+        ]);
+
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Called TimeInTransit to ' . $this->getConfig('timeInTransitEndpoint'),
+            json_encode($labelRequest));
+        $result = curl_exec($ch);
+        $e = curl_error($ch);
+        curl_close($ch);
+
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Result TimeInTransit to ' . $this->getConfig('timeInTransitEndpoint'),
+            $result);
+
+        if (!$result) {
+            throw new BambooException($e);
+        } else {
+            $result = json_decode($result);
+            try {
+                if ($result->TimeInTransitResponse->Response->ResponseStatus->Code == '1') {
+                    return $result;
+                } else throw new BambooException('Failed to recover TimeInTransit');
+            } catch (\Throwable $e) {
+                throw new BambooException('Failed to recover TimeInTransit from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function getUpsSecurity()
+    {
+        return [
+            'UsernameToken' => [
+                'Username' => $this->getConfig('username'),
+                'Password' => $this->getConfig('password')
+            ],
+            'ServiceAccessToken' => [
+                "AccessLicenseNumber" => $this->getConfig('ServiceAccessToken')
+            ]
+        ];
+    }
+
+    /**
+     * @param null $name
+     * @return array|mixed
+     */
+    private function getConfig($name = null)
+    {
+        if ($name) return $this->config[$name];
+        return $this->config;
     }
 
     /**
@@ -116,149 +275,252 @@ class CUPSHandler extends ACarrierHandler
      */
     public function addDelivery(CShipment $shipment)
     {
+        \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called addDelivery');
+        $delivery = [
+            'UPSSecurity' => $this->getUpsSecurity(),
+            'ShipmentRequest' => [
+                'Request' => [
+                    'RequestOption' => 'validate',
+                    'TransactionReference' => [
+                        'CustomerContext' => 'CustomerContext.' //???
+                    ]
+                ],
+                'Shipment' => [
+                    'Description' => $shipment->printId(),
+                    'Shipper' => [
+                        'Name' => $shipment->fromAddress->subject,
+                        'ShipperNumber' => $this->getConfig()['UPSClientCode'],
+                        'Address' => [
+                            'AddressLine' => $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra,
+                            'City' => $shipment->fromAddress->city,
+                            'PostalCode' => $shipment->fromAddress->postcode,
+                            'CountryCode' => $shipment->fromAddress->country->ISO
+                        ]
+                    ],
+                    'ShipFrom' => [
+                        'Name' => $shipment->fromAddress->subject,
+                        'Address' => [
+                            'AddressLine' => $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra,
+                            'City' => $shipment->fromAddress->city,
+                            'PostalCode' => $shipment->fromAddress->postcode,
+                            'CountryCode' => $shipment->fromAddress->country->ISO
+                        ]
+                    ],
+                    'ShipTo' => [
+                        'Name' => $shipment->toAddress->subject,
+                        'Address' => [
+                            'AddressLine' => $shipment->toAddress->address . ' ' . $shipment->toAddress->extra,
+                            'City' => $shipment->toAddress->city,
+                            'PostalCode' => $shipment->toAddress->postcode,
+                            'CountryCode' => $shipment->toAddress->country->ISO
+                        ]
+                    ],
+                    'PaymentInformation' => [
+                        'ShipmentCharge' => [
+                            'Type' => '01',
+                            'BillShipper' => [
+                                'AccountNumber' => $this->getConfig()['UPSClientCode']
+                            ]
+                        ]
+                    ],
+                    'Service' => [
+                        'Code' => '11',
+                        'Description' => 'UPS Standard'
+                    ],
+                    'Package' => [
+                        'Description' => 'Scatola di Cartone',
+                        'Packaging' => [
+                            'Code' => '02',
+                            'Description' => 'Customer Supplied'
+                        ],
+                        'Dimensions' => [
+                            'UnitOfMeasurement' => [
+                                'Code' => 'CM'
 
-        \Monkey::app()->applicationReport('GlsItalyHandler', 'addDelivery', 'Called AddParcel');
-        $xml = new \XMLWriter();
-        $xml->openMemory();
-        $xml->setIndent(true);
-        $xml->startDocument('1.0', 'utf-8');
-        $xml->startElement('Info');
-        $xml->writeElement('SedeGls', $this->config['SedeGls']);
-        $xml->writeElement('CodiceClienteGls', $this->config['CodiceClienteGls']);
-        $xml->writeElement('PasswordClienteGls', $this->config['PasswordClienteGls']);
-
-        $this->writeParcel($xml, $shipment);
-
-        $xml->endDocument();
-        $rawXml = $xml->outputMemory();
-
-
-        $url = $this->config['endpoint'] . '/AddParcel';
-        $data = ['XMLInfoParcel' => $rawXml];
-        \Monkey::app()->applicationReport('GlsItalyHandler', 'addDelivery', 'Request AddParcel', $rawXml);
+                            ],
+                            'Length' => '45',
+                            'Width' => '35',
+                            'Height' => '15'
+                        ],
+                        'PackageWeight' => [
+                            'UnitOfMeasurement' => [
+                                'Code' => 'KGS',
+                                'Description' => 'Kilograms'
+                            ],
+                            'Weight' => '2.5'
+                        ]
+                    ]
+                ]
+            ]
+        ];
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, count($data));
-        $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($ch, CURLOPT_URL, $this->getConfig()['shipEndpoint']);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($delivery));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-type: application/x-www-form-urlencoded'
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
         ]);
-
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Called addDelivery to ' . $this->getConfig()['shipEndpoint'],
+            json_encode($delivery));
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
-        \Monkey::app()->applicationReport('GlsItalyHandler', 'addDelivery', 'Result AddParcel', $result);
-        if (!$result) {
-            throw new BambooException($e);
-        } else {
-            $dom = new \DOMDocument();
+        \Monkey::app()->applicationReport(
+            'UPSHandler',
+            'addDelivery',
+            'Result addDelivery to ' . $this->getConfig()['shipEndpoint'],
+            $result);
+        try {
+            $result = json_decode($result);
             try {
-                $dom->loadXML($result);
+                $status = $result->ShipmentResponse->Response->ResponseStatus->Code;
             } catch (\Throwable $e) {
-                throw new BambooException($result);
+                throw new BambooException('Failed to addDelivery from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
             }
-            $parcels = $dom->getElementsByTagName('Parcel');
-            foreach ($parcels as $parcel) {
-                /** @var \DOMElement $parcel */
-                $ids = $parcel->getElementsByTagName('ContatoreProgressivo');
-                /** @var \DOMNodeList $ids */
-                if ($ids->item(0)->nodeValue == $shipment->id) {
-                    $shipment->trackingNumber = $this->config['SedeGls'] . ' ' . $parcel->getElementsByTagName('NumeroSpedizione')->item(0)->nodeValue;
-                    if ($shipment->trackingNumber == $this->config['SedeGls'] . ' ' . '999999999') throw new BambooException('Errore nella spedizione: ' . $parcel->getElementsByTagName('NoteSpedizione')->item(0)->nodeValue);
-                    $shipment->update();
-                    break;
-                }
+            if ($status == '1') {
+                $shipment->trackingNumber = $result->ShipmentResponse->ShipmentResults->ShipmentIdentificationNumber;
+                $shipment->update();
+                return $shipment;
             }
+        } catch (\Throwable $e) {
+            //todo log me
+            \Monkey::app()->applicationWarning('UpsHandler', 'addPickUp', 'Error while parsing response of addDelivery for ' . $shipment->printId(), $e);
         }
-
         return $shipment;
     }
 
     /**
-     * @param \XMLWriter $xml
      * @param CShipment $shipment
-     * @return bool
+     * @return CShipment|bool
      */
-    protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
+    public function cancelPickUp(CShipment $shipment)
     {
-        $xml->startElement('Parcel');
-        $xml->writeElement('CodiceContrattoGls', $this->config['CodiceContrattoGls']);
-        if (!empty($shipment->trackingNumber)) {
-            $xml->writeElement('NumeroSpedizione', ltrim($shipment->trackingNumber, $this->config['SedeGls'] . ' '));
+        \Monkey::app()->applicationReport('CUPSHandler', 'cancelPickUp', 'Called cancelPickUp');
+        $delivery = [
+            'UPSSecurity' => $this->getUpsSecurity(),
+            'PickupCancelRequest' => [
+                'Request' => [
+                    'TransactionReference' => [
+                        'CustomerContext' => 'CustomerContext.' //???
+                    ]
+                ],
+                'CancelBy' => '02', // what
+                'PRN' => $shipment->bookingNumber,
+            ]
+        ];
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $this->getConfig('pickUpEndopoint'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($delivery));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
+        ]);
+        \Monkey::app()->applicationReport(
+            'UPSItalyHandler',
+            'cancelPickUp',
+            'Request cancelPickUp to' . $this->getConfig('pickUpEndopoint'),
+            json_encode($delivery));
+        $result = curl_exec($ch);
+        $e = curl_error($ch);
+        curl_close($ch);
+        \Monkey::app()->applicationReport(
+            'UPSHandler',
+            'cancelPickUp',
+            'Result cancelPickUp to ' . $this->getConfig()['pickUpEndopoint'],
+            $result);
+        try {
+            $result = json_decode($result);
+            try {
+                $status = $result->PickupCancelResponse->Response->ResponseStatus->Code;
+            } catch (\Throwable $e) {
+                throw new BambooException('Failed to addPickup from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
+            }
+
+            if ($status == '1') {
+                $shipment->bookingNumber = null;
+                $shipment->update();
+
+                return $shipment;
+            }
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationWarning('UpsHandler', 'cancelPickUp', 'Error while parsing response of cancelPickUp for ' . $shipment->printId(), $e);
         }
-
-        $xml->writeElement('Ragionesociale', $shipment->toAddress->subject);
-        $xml->writeElement('Indirizzo', $shipment->toAddress->address . ' ' . $shipment->toAddress->extra);
-        $xml->writeElement('Localita', $shipment->toAddress->city);
-        $xml->writeElement('Zipcode', $shipment->toAddress->postcode);
-        $xml->writeElement('Provincia', $this->getProvinceCode($shipment->toAddress->province));
-        $xml->writeElement('Bda', $shipment->orderLine->getFirst()->order->id);
-        //$xml->writeElement('Bda',$shipment->toAddress->subject);
-        //$xml->writeElement('DataDocumentoTrasporto',$shipment->toAddress->subject);
-        $xml->writeElement('Colli', 1);
-        //$xml->writeElement('Incoterm',$shipment->toAddress->subject);
-        $xml->writeElement('PesoReale', 2.5);
-
-        if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
-            $xml->writeElement('ImportoContrassegno', $shipment->orderLine->getFirst()->order->netTotal);
-            $xml->writeElement('ModalitaIncasso', 'CONT');
-        }
-
-        $xml->writeElement('Notespedizione', $shipment->note);
-        $xml->writeElement('NoteAggiuntive', 'Order ' . $shipment->orderLine->getFirst()->order->id);
-        $xml->writeElement('TipoPorto', 'F');
-        $xml->writeElement('TipoCollo', '0');
-
-        $xml->writeElement('Email', $shipment->orderLine->getFirst()->order->user->email);
-        $xml->writeElement('Cellulare1', $shipment->toAddress->phone);
-        $xml->writeElement('GeneraPdf', 1);
-        $xml->writeElement('ContatoreProgressivo', $shipment->id);
-        $xml->endElement();
-        return true;
+        return false;
     }
 
     /**
      * @param CShipment $shipment
-     * @return bool|string
+     * @return bool
+     * @throws BambooException
      */
     public function cancelDelivery(CShipment $shipment)
     {
-        $url = $this->config['endpoint'] . '/DeleteSped';
-
-        $data = [
-            'SedeGls' => $this->config['SedeGls'],
-            'CodiceClienteGls' => $this->config['CodiceClienteGls'],
-            'PasswordClienteGls' => $this->config['PasswordClienteGls'],
-            'NumSpedizione' => ltrim($shipment->trackingNumber, $this->config['SedeGls'] . ' ')
+        $cancelRequest = [
+            'UPSSecurity' => $this->getUpsSecurity(),
+            'VoidShipmentRequest' => [
+                'Request' => [
+                    'TransactionReference' => [
+                        'CustomerContext' => 'No Actual Context'
+                    ]
+                ],
+                'VoidShipment' => [
+                    'ShipmentIdentificationNumber' => $shipment->trackingNumber
+                ]
+            ]
         ];
 
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POST, count($data));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($ch, CURLOPT_URL, $this->getConfig('voidPackageEndpoint'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($cancelRequest));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-type: application/x-www-form-urlencoded'
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
         ]);
 
+
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Called cancelDelivery to ' . $this->getConfig()['voidPackageEndpoint'],
+            json_encode($cancelRequest));
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
+        \Monkey::app()->applicationReport(
+            'UPSHandler',
+            'addDelivery',
+            'Result cancelDelivery to ' . $this->getConfig()['voidPackageEndpoint'],
+            $result);
+
         if (!$result) {
-            \Monkey::dump($e);
-            return false;
+            throw new BambooException($e);
         } else {
-            $dom = new \DOMDocument();
-            $dom->loadXML($result);
-            return $dom->getElementsByTagName('DescrizioneErrore')->item(0)->nodeValue == "Eliminazione della spedizione " . $data['NumSpedizione'] . " avvenuta.";
+            $result = json_decode($result);
+            try {
+                if ($result->VoidShipmentResponse->Response->ResponseStatus->Code == '1') {
+                    return true;
+                } else throw new BambooException('Failed to Void Shipment');
+            } catch (\Throwable $e) {
+                throw new BambooException('Failed to Void Shipment from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
+            }
         }
     }
 
@@ -269,55 +531,7 @@ class CUPSHandler extends ACarrierHandler
      */
     public function closePendentShipping($shippings)
     {
-        \Monkey::app()->applicationReport('GlsItalyHandler', 'closePendentShipping', 'Called CloseWorkDay');
-        $xml = new \XMLWriter();
-        $xml->openMemory();
-        $xml->setIndent(true);
-        $xml->startDocument('1.0', 'utf-8');
-        $xml->startElement('Info');
-        $xml->writeElement('SedeGls', $this->config['SedeGls']);
-        $xml->writeElement('CodiceClienteGls', $this->config['CodiceClienteGls']);
-        $xml->writeElement('PasswordClienteGls', $this->config['PasswordClienteGls']);
-
-        foreach ($shippings as $shipping) {
-            $this->writeParcel($xml, $shipping);
-        }
-
-        $xml->endDocument();
-        $rawXml = $xml->outputMemory();
-
-
-        $url = $this->config['endpoint'] . '/CloseWorkDay';
-        $data = ['XMLCloseInfoParcel' => $rawXml];
-
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, count($data));
-        $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-type: application/x-www-form-urlencoded'
-        ]);
-        \Monkey::app()->applicationReport('GlsItalyHandler', 'closePendentShipping', 'Request CloseWorkDay', $rawXml);
-        $result = curl_exec($ch);
-        $e = curl_error($ch);
-        curl_close($ch);
-        \Monkey::app()->applicationReport('GlsItalyHandler', 'closePendentShipping', 'Response CloseWorkDay', $result);
-        if (!$result) {
-            throw new BambooException('Errore nella chiusura Giornata ' . $e);
-        } else {
-            $dom = new \DOMDocument();
-            $dom->loadXML($result);
-            $errore = $dom->getElementsByTagName('DescrizioneErrore')->item(0)->nodeValue;
-            if ($errore == 'OK') {
-                return true;
-            } else {
-                throw new BambooException('Errore nella chiusura Giornata ' . $errore);
-            }
-        }
+        return true;
     }
 
     /**
@@ -338,42 +552,63 @@ class CUPSHandler extends ACarrierHandler
 
     /**
      * @param CShipment $shipment
-     * @return bool|string
+     * @return mixed
+     * @throws BambooException
      */
     public function printParcelLabel(CShipment $shipment)
     {
-        $url = $this->config['endpoint'] . '/GetPdf';
-        $data = [
-            'SedeGls' => $this->config['SedeGls'],
-            'CodiceCliente' => $this->config['CodiceClienteGls'],
-            'Password' => $this->config['PasswordClienteGls'],
-            'CodiceContratto' => $this->config['CodiceContrattoGls'],
-            'ContatoreProgressivo' => $shipment->id
+        $labelRequest = [
+            'UPSSecurity' => $this->getUpsSecurity(),
+            'LabelRecoveryRequest' => [
+                'LabelSpecification' => [
+                    'LabelImageFormat' => [
+                        'Code' => 'PDF'
+                    ],
+                    'HTTPUserAgent' => 'Mozilla/4.5'
+                ],
+                'TrackingNumber' => $shipment->trackingNumber
+            ]
         ];
 
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($ch, CURLOPT_URL, $this->getConfig('labelRecoveryEndpoint'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($labelRequest));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-type: application/x-www-form-urlencoded'
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
         ]);
 
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Called labelRecovery to ' . $this->getConfig()['labelRecoveryEndpoint'],
+            json_encode($labelRequest));
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
+
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Result labelRecovery to ' . $this->getConfig()['labelRecoveryEndpoint'],
+            $result);
+
         if (!$result) {
-            var_dump($e);
-            return "";
+            throw new BambooException($e);
         } else {
-            $dom = new \DOMDocument();
-            $dom->loadXML($result);
-            $binary = $dom->getElementsByTagName('base64Binary')->item(0)->nodeValue;
-            return base64_decode($binary);
+            $result = json_decode($result);
+            try {
+                if ($result->LabelRecoveryResponse->Response->ResponseStatus->Code == '1') {
+                    return base64_decode($result->LabelRecoveryResponse->LabelResults->LabelImage->GraphicImage);
+                } else throw new BambooException('Failed to recover Image');
+            } catch (\Throwable $e) {
+                throw new BambooException('Failed to recover Parcel Image from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
+            }
         }
     }
 
@@ -382,46 +617,37 @@ class CUPSHandler extends ACarrierHandler
      */
     public function listShippings()
     {
-        $url = $this->config['endpoint'] . '/ListSped';
-        $data = [
-            'SedeGls' => $this->config['SedeGls'],
-            'CodiceClienteGls' => $this->config['CodiceClienteGls'],
-            'PasswordClienteGls' => $this->config['PasswordClienteGls']
-        ];
 
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-type: application/x-www-form-urlencoded'
-        ]);
-
-        $result = curl_exec($ch);
-        $e = curl_error($ch);
-        curl_close($ch);
-        if (!$result) {
-            var_dump($e);
-            return "";
-        } else {
-            $dom = new \DOMDocument();
-            $dom->loadXML($result);
-            $parcels = [];
-            foreach ($dom->getElementsByTagName('Parcel') as $rawParcel) {
-                /** @var \DOMElement $rawParcel */
-                $parcel = [];
-                foreach ($rawParcel->childNodes as $key => $childNode) {
-                    if (!isset($childNode->tagName) || !$childNode->tagName) continue;
-                    $parcel[$childNode->tagName] = $childNode->nodeValue;
-                }
-                $parcels[] = $parcel;
-            }
-            return $parcels;
-        }
     }
 
+    /**
+     * @param CAddressBook $fromAddress
+     * @param CAddressBook $toAddress
+     * @param int $maxTry
+     * @param \DateTime|null $dateTime
+     * @return bool|\DateTime
+     * @throws BambooException
+     */
+    public function getFirstPickUpDate(CAddressBook $fromAddress, CAddressBook $toAddress, $maxTry = 3, \DateTime $dateTime = null)
+    {
+        $dateTime = $dateTime ?? new \DateTime();
+        $response = $this->requireTimeInTransit($fromAddress, $toAddress, $dateTime);
+        $service = null;
+        foreach ($response->TimeInTransitResponse->TransitResponse->ServiceSummary as $serviceSummary) {
+            if ($serviceSummary->Service->Code == '25') {
+                $service = $serviceSummary;
+                break;
+            }
+        }
+        if ($service) {
+            if ($service->EstimatedArrival->Pickup->Date != $dateTime->format('Ymd')) {
+                $newDateTime = $service->EstimatedArrival->Pickup->Date . ' 093000';
+                return \DateTime::createFromFormat('Ymd His', $newDateTime);
+            } elseif ($service->EstimatedArrival->CustomerCenterCutoff > $dateTime->format('His')) {
+                return $dateTime;
+            } elseif ($maxTry > 0) {
+                return $this->getFirstPickUpDate($fromAddress, $toAddress, $maxTry - 1, SDateToolbox::GetNextWorkingDay($dateTime));
+            } else throw  new BambooException('No Valid PickUp date Found for this address');
+        } else throw new BambooException('Pickup Standard Service not available for this shipment');
+    }
 }
