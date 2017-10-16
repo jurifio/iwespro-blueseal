@@ -3,9 +3,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CPaymentBill;
-use bamboo\domain\entities\CProduct;
 use bamboo\utils\time\STimeToolbox;
 
 /**
@@ -29,7 +27,7 @@ class CPaymentBillListAjaxController extends AAjaxController
                   pb.amount AS total,
                   pb.creationDate,
                   pb.paymentDate,
-                  ifnull(pb.submissionDate,'Non Sottomessa'),
+                  pb.submissionDate,
                   pb.note,
                   count(DISTINCT inn.shopRecipientId) AS transfers,
                   group_concat(DISTINCT s.title) AS recipients,
