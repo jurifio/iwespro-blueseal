@@ -152,97 +152,6 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
     }
 
     /**
-     * @param CAddressBook $fromAddress
-     * @param CAddressBook $toAddress
-     * @param \DateTime $pickUpDateTime
-     * @return mixed
-     * @throws BambooException
-     */
-    protected function requireTimeInTransit(CAddressBook $fromAddress, CAddressBook $toAddress, \DateTime $pickUpDateTime)
-    {
-        $labelRequest = [
-            'UPSSecurity' => $this->getUpsSecurity(),
-            'TimeInTransitRequest' => [
-                'Request' => [
-                    'RequestOption' => 'TNT',
-                    'TransactionReference' => [
-                        'CustomerContext' => 'No Actual Context'
-                    ]
-                ],
-                'Pickup' => [
-                    'Date' => $pickUpDateTime->format('Ymd'),
-                    'Time' => $pickUpDateTime > (new \DateTime()) ? $pickUpDateTime->format('Hi') : (new \DateTime())->format('Hi'),
-                ],
-                'ShipFrom' => [
-                    'Address' => [
-                        'AddressLine' => $fromAddress->address . ' ' . $fromAddress->extra,
-                        'City' => $fromAddress->city,
-                        'PostalCode' => $fromAddress->postcode,
-                        'CountryCode' => $fromAddress->country->ISO,
-                        'ResidentialAddressIndicator' => 'N'
-                    ]
-                ],
-                'ShipTo' => [
-                    'Address' => [
-                        'AddressLine' => $toAddress->address . ' ' . $toAddress->extra,
-                        'City' => $toAddress->city,
-                        'PostalCode' => $toAddress->postcode,
-                        'CountryCode' => $toAddress->country->ISO
-                    ]
-                ],
-                'ShipmentWeight' => [
-                    'UnitOfMeasurement' => [
-                        'Code' => 'KGS',
-                        'Description' => 'Kilograms'
-                    ],
-                    'Weight' => '2.5'
-                ]
-            ]
-        ];
-
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $this->getConfig('timeInTransitEndpoint'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($labelRequest));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
-            'Access-Control-Allow-Methods: POST',
-            'Access-Control-Allow-Origin: *',
-            'Content-type: application/json'
-        ]);
-
-        \Monkey::app()->applicationReport(
-            'UpsHandler',
-            'addDelivery',
-            'Called TimeInTransit to ' . $this->getConfig('timeInTransitEndpoint'),
-            json_encode($labelRequest));
-        $result = curl_exec($ch);
-        $e = curl_error($ch);
-        curl_close($ch);
-
-        \Monkey::app()->applicationReport(
-            'UpsHandler',
-            'addDelivery',
-            'Result TimeInTransit to ' . $this->getConfig('timeInTransitEndpoint'),
-            $result);
-
-        if (!$result) {
-            throw new BambooException($e);
-        } else {
-            $result = json_decode($result);
-            try {
-                if ($result->TimeInTransitResponse->Response->ResponseStatus->Code == '1') {
-                    return $result;
-                } else throw new BambooException('Failed to recover TimeInTransit');
-            } catch (\Throwable $e) {
-                throw new BambooException('Failed to recover TimeInTransit from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
-            }
-        }
-    }
-
-    /**
      * @return array
      */
     protected function getUpsSecurity()
@@ -312,7 +221,10 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                             'AddressLine' => $shipment->toAddress->address . ' ' . $shipment->toAddress->extra,
                             'City' => $shipment->toAddress->city,
                             'PostalCode' => $shipment->toAddress->postcode,
-                            'CountryCode' => $shipment->toAddress->country->ISO
+                            'CountryCode' => $shipment->toAddress->country->ISO,
+                            'Phone' => [
+                                'Number' => !empty($shipment->toAddress->phone) ? $shipment->toAddress->phone : ($shipment->toAddress->cellphone ? $shipment->toAddress->cellphone : '+390733471365') //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
+                            ]
                         ]
                     ],
                     'PaymentInformation' => [
@@ -649,5 +561,96 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                 return $this->getFirstPickUpDate($fromAddress, $toAddress, $maxTry - 1, SDateToolbox::GetNextWorkingDay($dateTime));
             } else throw  new BambooException('No Valid PickUp date Found for this address');
         } else throw new BambooException('Pickup Standard Service not available for this shipment');
+    }
+
+    /**
+     * @param CAddressBook $fromAddress
+     * @param CAddressBook $toAddress
+     * @param \DateTime $pickUpDateTime
+     * @return mixed
+     * @throws BambooException
+     */
+    protected function requireTimeInTransit(CAddressBook $fromAddress, CAddressBook $toAddress, \DateTime $pickUpDateTime)
+    {
+        $labelRequest = [
+            'UPSSecurity' => $this->getUpsSecurity(),
+            'TimeInTransitRequest' => [
+                'Request' => [
+                    'RequestOption' => 'TNT',
+                    'TransactionReference' => [
+                        'CustomerContext' => 'No Actual Context'
+                    ]
+                ],
+                'Pickup' => [
+                    'Date' => $pickUpDateTime->format('Ymd'),
+                    'Time' => $pickUpDateTime > (new \DateTime()) ? $pickUpDateTime->format('Hi') : (new \DateTime())->format('Hi'),
+                ],
+                'ShipFrom' => [
+                    'Address' => [
+                        'AddressLine' => $fromAddress->address . ' ' . $fromAddress->extra,
+                        'City' => $fromAddress->city,
+                        'PostalCode' => $fromAddress->postcode,
+                        'CountryCode' => $fromAddress->country->ISO,
+                        'ResidentialAddressIndicator' => 'N'
+                    ]
+                ],
+                'ShipTo' => [
+                    'Address' => [
+                        'AddressLine' => $toAddress->address . ' ' . $toAddress->extra,
+                        'City' => $toAddress->city,
+                        'PostalCode' => $toAddress->postcode,
+                        'CountryCode' => $toAddress->country->ISO
+                    ]
+                ],
+                'ShipmentWeight' => [
+                    'UnitOfMeasurement' => [
+                        'Code' => 'KGS',
+                        'Description' => 'Kilograms'
+                    ],
+                    'Weight' => '2.5'
+                ]
+            ]
+        ];
+
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $this->getConfig('timeInTransitEndpoint'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($labelRequest));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
+        ]);
+
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Called TimeInTransit to ' . $this->getConfig('timeInTransitEndpoint'),
+            json_encode($labelRequest));
+        $result = curl_exec($ch);
+        $e = curl_error($ch);
+        curl_close($ch);
+
+        \Monkey::app()->applicationReport(
+            'UpsHandler',
+            'addDelivery',
+            'Result TimeInTransit to ' . $this->getConfig('timeInTransitEndpoint'),
+            $result);
+
+        if (!$result) {
+            throw new BambooException($e);
+        } else {
+            $result = json_decode($result);
+            try {
+                if ($result->TimeInTransitResponse->Response->ResponseStatus->Code == '1') {
+                    return $result;
+                } else throw new BambooException('Failed to recover TimeInTransit');
+            } catch (\Throwable $e) {
+                throw new BambooException('Failed to recover TimeInTransit from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
+            }
+        }
     }
 }
