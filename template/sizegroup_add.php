@@ -67,17 +67,23 @@
                                     </thead>
                                     <tbody>
                                     <?php for ($k = 0; $k < 36; $k++): ?>
-                                        <tr data-position="<?php echo $k; ?>" role="row" class="<?php echo $k % 2 == 0 ? 'even' : 'odd' ?>">
-                                            <td data-column="0" class="v-align-middle bold sorting_1"><?php echo $k + 1 ?></td>
+                                        <tr data-position="<?php echo $k; ?>" role="row"
+                                            class="<?php echo $k % 2 == 0 ? 'even' : 'odd' ?>">
+                                            <td data-column="0"
+                                                class="v-align-middle bold sorting_1"><?php echo $k + 1 ?></td>
                                             <?php $z = 0;
                                             foreach ($sizeEdit as $productSizeGroup):
                                                 $productSizeGroupHasProductSize = $productSizeGroup->productSizeGroupHasProductSize->findOneByKey('position', $k);
                                                 ?>
-                                                <td data-column="<?php echo $productSizeGroup->id ?>" class="v-align-middle semi-bold sorting_1"><?php echo $productSizeGroupHasProductSize ? $productSizeGroupHasProductSize->productSize->name : '' ?></td>
+                                                <td data-productsizeid="<?php echo $productSizeGroupHasProductSize ? $productSizeGroupHasProductSize->productSize->id : '' ?>"
+                                                    data-column="<?php echo $productSizeGroup->id ?>"
+                                                    tabindex="<?php echo str_pad($z, 2, '0') . str_pad($k, 2, '0') ?>"
+                                                    class="v-align-middle semi-bold sorting_1 edit-cell"><?php echo $productSizeGroupHasProductSize ? $productSizeGroupHasProductSize->productSize->name : '' ?></td>
                                                 <?php $z++;
                                             endforeach;
                                             for (; $z < 18; $z++): ?>
-                                                <td data-column="false" class="v-align-middle bold sorting_1"></td>
+                                                <td data-column="false"
+                                                    class="v-align-middle bold sorting_1 edit-cell"></td>
                                             <?php endfor; ?>
                                         </tr>
                                     <?php endfor; ?>

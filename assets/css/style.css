@@ -950,3 +950,7 @@ table.mini-traffic-display th, table.mini-traffic-display td {
 .table.size-table thead tr th, .table.size-table tbody tr td, .table.size-table tfoot tr th {
     text-align: center;
 }
+
+.table.size-table tbody tr td select, .table.size-table tbody tr td input {
+    width: 100%;
+}
