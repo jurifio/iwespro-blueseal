@@ -15,7 +15,7 @@
 
         const editCell = function (td) {
             if (locked) return;
-            if (td.find('input').length > 0) return;
+            if (td.find('select').length > 0) return;
             locked = true;
             td.data(savedHtmlDataName, td.html());
             const value = td.data(productSizeIdDataName);
@@ -43,7 +43,7 @@
             "use strict";
             if (!locked) return;
             const newHtml = cellInput.find('option:selected').html();
-            const value = cellInput.val();
+            const value = cellInput.find('select').val();
             const td = cellInput.closest('td');
             if (value === td.data('productsizeid')) {
                 undoCell(cellInput);

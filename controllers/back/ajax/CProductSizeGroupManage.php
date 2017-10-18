@@ -23,9 +23,27 @@ class CProductSizeGroupManage extends AAjaxController
     public function put()
     {
         $productSizeGroupHasProdctSizeRepo = \Monkey::app()->repoFactory->create('ProductSizeGroupHasProductSize');
-        $productSizeGroupId = \Monkey::app()->router->request()->getRequestData();
-        $data = \Monkey::app()->router->request()->getRequestData();
-        $data = \Monkey::app()->router->request()->getRequestData();
-        return json_encode($data);
+        $productSizeGroupId = \Monkey::app()->router->request()->getRequestData('productSizeGroupId');
+        $productSizeId = \Monkey::app()->router->request()->getRequestData('productSizeId');
+        $position = \Monkey::app()->router->request()->getRequestData('position');
+
+        $productSizeGroupHasProductSize = $productSizeGroupHasProdctSizeRepo->findOneBy([
+            'productSizeGroupId' => $productSizeGroupId,
+            'productSizeId' => $productSizeId,
+            'position' => $position
+        ]);
+
+        if(!$productSizeGroupHasProductSize) {
+            $productSizeGroupHasProductSize = $productSizeGroupHasProdctSizeRepo->getEmptyEntity();
+            $productSizeGroupHasProductSize->productSizeGroupId = $productSizeGroupId;
+            $productSizeGroupHasProductSize->productSizeId = $productSizeId;
+            $productSizeGroupHasProductSize->position = $position;
+
+            $productSizeGroupHasProductSize->insert();
+        } else {
+
+        }
+
+        return true;
     }
 }
