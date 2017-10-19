@@ -185,6 +185,19 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
     public function addDelivery(CShipment $shipment)
     {
         \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called addDelivery');
+
+        $service = [
+            'Code' => '11',
+            'Description' => 'UPS Standard'
+        ];
+
+        if($shipment->toAddress->country->continent != 'EU') {
+            $service = [
+                'Code' => '65',
+                'Description' => 'UPS Saver'
+            ];
+        }
+
         $delivery = [
             'UPSSecurity' => $this->getUpsSecurity(),
             'ShipmentRequest' => [
@@ -198,12 +211,16 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                     'Description' => $shipment->printId(),
                     'Shipper' => [
                         'Name' => $shipment->fromAddress->subject,
+                        'AttentionName' => $shipment->fromAddress->subject,
                         'ShipperNumber' => $this->getConfig()['UPSClientCode'],
                         'Address' => [
                             'AddressLine' => $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra,
                             'City' => $shipment->fromAddress->city,
                             'PostalCode' => $shipment->fromAddress->postcode,
                             'CountryCode' => $shipment->fromAddress->country->ISO
+                        ],
+                        'Phone' => [
+                            'Number' => !empty($shipment->fromAddress->phone) ? $shipment->fromAddress->phone : ($shipment->fromAddress->cellphone ? $shipment->fromAddress->cellphone : '+390733471365') //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
                         ]
                     ],
                     'ShipFrom' => [
@@ -216,15 +233,16 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                         ]
                     ],
                     'ShipTo' => [
+                        'AttentionName' => $shipment->toAddress->subject,
                         'Name' => $shipment->toAddress->subject,
                         'Address' => [
                             'AddressLine' => $shipment->toAddress->address . ' ' . $shipment->toAddress->extra,
                             'City' => $shipment->toAddress->city,
                             'PostalCode' => $shipment->toAddress->postcode,
-                            'CountryCode' => $shipment->toAddress->country->ISO,
-                            'Phone' => [
-                                'Number' => !empty($shipment->toAddress->phone) ? $shipment->toAddress->phone : ($shipment->toAddress->cellphone ? $shipment->toAddress->cellphone : '+390733471365') //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
-                            ]
+                            'CountryCode' => $shipment->toAddress->country->ISO
+                        ],
+                        'Phone' => [
+                            'Number' => !empty($shipment->toAddress->phone) ? $shipment->toAddress->phone : ($shipment->toAddress->cellphone ? $shipment->toAddress->cellphone : '+390733471365') //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
                         ]
                     ],
                     'PaymentInformation' => [
@@ -235,10 +253,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                             ]
                         ]
                     ],
-                    'Service' => [
-                        'Code' => '11',
-                        'Description' => 'UPS Standard'
-                    ],
+                    'Service' => $service,
                     'Package' => [
                         'Description' => 'Scatola di Cartone',
                         'Packaging' => [
