@@ -1,5 +1,9 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
+
+use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CProductSizeGroupHasProductSize;
 
 
 /**
@@ -22,28 +26,40 @@ class CProductSizeGroupManage extends AAjaxController
      */
     public function put()
     {
-        $productSizeGroupHasProdctSizeRepo = \Monkey::app()->repoFactory->create('ProductSizeGroupHasProductSize');
-        $productSizeGroupId = \Monkey::app()->router->request()->getRequestData('productSizeGroupId');
-        $productSizeId = \Monkey::app()->router->request()->getRequestData('productSizeId');
-        $position = \Monkey::app()->router->request()->getRequestData('position');
+        \Monkey::app()->router->response()->setContentType('application/json');
+        try {
+            $productSizeGroupHasProdctSizeRepo = \Monkey::app()->repoFactory->create('ProductSizeGroupHasProductSize');
+            $productSizeGroupId = \Monkey::app()->router->request()->getRequestData('productSizeGroupId');
+            $productSizeId = \Monkey::app()->router->request()->getRequestData('productSizeId');
+            $position = \Monkey::app()->router->request()->getRequestData('position');
 
-        $productSizeGroupHasProductSize = $productSizeGroupHasProdctSizeRepo->findOneBy([
-            'productSizeGroupId' => $productSizeGroupId,
-            'productSizeId' => $productSizeId,
-            'position' => $position
-        ]);
+            /** @var CProductSizeGroupHasProductSize $productSizeGroupHasProductSize */
+            $productSizeGroupHasProductSize = $productSizeGroupHasProdctSizeRepo->findOneBy([
+                'productSizeGroupId' => $productSizeGroupId,
+                'position' => $position
+            ]);
 
-        if(!$productSizeGroupHasProductSize) {
-            $productSizeGroupHasProductSize = $productSizeGroupHasProdctSizeRepo->getEmptyEntity();
-            $productSizeGroupHasProductSize->productSizeGroupId = $productSizeGroupId;
-            $productSizeGroupHasProductSize->productSizeId = $productSizeId;
-            $productSizeGroupHasProductSize->position = $position;
+            if (!$productSizeGroupHasProductSize) {
+                $productSizeGroupHasProductSize = $productSizeGroupHasProdctSizeRepo->getEmptyEntity();
+                $productSizeGroupHasProductSize->productSizeGroupId = $productSizeGroupId;
+                $productSizeGroupHasProductSize->productSizeId = $productSizeId;
+                $productSizeGroupHasProductSize->position = $position;
 
-            $productSizeGroupHasProductSize->insert();
-        } else {
+                $productSizeGroupHasProductSize->insert();
+            } else {
+                if(!$productSizeGroupHasProductSize->isProductSizeCorrespondenceDeletable()) throw new BambooException('Corrispondenza non eliminabile');
+                $productSizeGroupHasProductSize->delete();
 
+                $productSizeGroupHasProductSize->productSizeId = $productSizeId;
+                $productSizeGroupHasProductSize->insert();
+            }
+        } catch (\Throwable $e) {
+            \Monkey::app()->router->response()->raiseProcessingError();
+            return json_encode([$e->getMessage()] + $e->getTrace());
         }
 
-        return true;
+        return json_encode(true);
     }
+
+
 }

@@ -39,9 +39,12 @@
 
         };
 
+        let working = false;
         const saveCell = function (cellInput) {
             "use strict";
             if (!locked) return;
+            if(working) return;
+            working = true;
             const newHtml = cellInput.find('option:selected').html();
             const value = cellInput.find('select').val();
             const td = cellInput.closest('td');
@@ -66,6 +69,7 @@
                         message: "Taglia Salvata"
                     }).open();
                 }).fail(function (res) {
+                    console.log(res);
                     new Alert({
                         type: "danger",
                         message: "Errore nel salvataggio delle taglie"
@@ -73,6 +77,7 @@
                     td.html(td.data(savedHtmlDataName));
                 }).always(function () {
                     locked = false;
+                    working = false;
                 })
             });
 
@@ -90,7 +95,7 @@
         });
 
         $(document).on('blur', 'table.table.size-table tbody td.edit-cell select', function () {
-            saveCell($(this));
+            saveCell($(this).closest('td'));
         });
 
         $(document).on('keydown', 'table.table.size-table tbody td.edit-cell select', function (e) {
