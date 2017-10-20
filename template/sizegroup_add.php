@@ -27,7 +27,7 @@
                             <div class="col-md-12">
                                 <div class="form-group form-group-default required">
                                     <label>Nome MacroGruppo Taglie</label>
-                                    <input type="text" class="form-control" name="ProductSizeGroup_macroName"
+                                    <input type="text" id="productSizeGroupMacroName" disabled="disabled" class="form-control" name="ProductSizeGroup_macroName"
                                            value="<?php echo isset($sizeEdit) ? $sizeEdit->getFirst()->macroName : "" ?>"
                                            required title="">
                                 </div>
@@ -69,8 +69,7 @@
                                     <?php for ($k = 0; $k < 36; $k++): ?>
                                         <tr data-position="<?php echo $k; ?>" role="row"
                                             class="<?php echo $k % 2 == 0 ? 'even' : 'odd' ?>">
-                                            <td data-column="0"
-                                                class="v-align-middle bold sorting_1"><?php echo $k + 1 ?></td>
+                                            <td data-column="0" class="v-align-middle bold sorting_1"><?php echo $k ?></td>
                                             <?php $z = 0;
                                             foreach ($sizeEdit as $productSizeGroup):
                                                 $productSizeGroupHasProductSize = $productSizeGroup->productSizeGroupHasProductSize->findOneByKey('position', $k);
@@ -129,5 +128,39 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
+<bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="Strumenti">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="/admin/content/add"
+                data-event="bs.add.group"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi Gruppo"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-outdent"
+                data-permission="/admin/content/add"
+                data-event="bs.group.row.add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Inserisci Riga"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-strikethrough"
+                data-permission="/admin/content/add"
+                data-event="bs.group.row.delete"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Cancella Riga"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+</bs-toolbar>
 </body>
 </html>

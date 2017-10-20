@@ -1,4 +1,4 @@
-(function () {
+;(function () {
     $.ajax({
         url: '/blueseal/xhr/GetTableContent',
         data: {
@@ -19,7 +19,9 @@
             locked = true;
             td.data(savedHtmlDataName, td.html());
             const value = td.data(productSizeIdDataName);
-            td.html('<select class=""></select>');
+            td.html('<select class="">' +
+                '<option value="false"></option>' +
+                '</select>');
             for (let productSize of productSizes) {
                 td.find('select').append('<option value="' + productSize.id + '">' + productSize.name + '</option>');
             }
@@ -43,7 +45,7 @@
         const saveCell = function (cellInput) {
             "use strict";
             if (!locked) return;
-            if(working) return;
+            if (working) return;
             working = true;
             const newHtml = cellInput.find('option:selected').html();
             const value = cellInput.find('select').val();
@@ -55,7 +57,7 @@
             Pace.ignore(function () {
                 $.ajax({
                     method: 'put',
-                    url: '/blueseal/xhr/ProductSizeGroupManage',
+                    url: '/blueseal/xhr/ProductSizeGroupPositionManage',
                     data: {
                         productSizeGroupId: td.data('column'),
                         productSizeId: value,
@@ -73,14 +75,14 @@
                     res = res.responseJSON;
                     let title = "Errore nel salvataggio delle taglie";
                     let message = res.message + '<br />';
-                    if(res.products) {
-                        message+="<ul>";
-                        for(let product of res.products) {
-                            message+="<li>"+product.productId+'-'+product.productVariantId+"</li>";
+                    if (res.products) {
+                        message += "<ul>";
+                        for (let product of res.products) {
+                            message += "<li>" + product.productId + '-' + product.productVariantId + "</li>";
                         }
                     }
                     td.html(td.data(savedHtmlDataName));
-                    new $.bsModal(title,{
+                    new $.bsModal(title, {
                         body: message
                     });
                 }).always(function () {
@@ -138,4 +140,123 @@
         });
     });
 
+    $(document).on('bs.add.group', function () {
+        let bsModal = new $.bsModal('Aggiungi Gruppo', {
+            body: '<p>Aggiugi una nuova colonna Gruppo Taglia</p>' +
+            '<div class="form-group form-group-default required">' +
+            '<label for="productSizeGroupName">Nome Gruppo Taglia</label>' +
+            '<input autocomplete="off" type="text" id="productSizeGroupName" ' +
+            'placeholder="Nome Gruppo Taglia" class="form-control" name="productSizeGroupName" required="required">' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+            '<label for="locale">Locale</label>' +
+            '<input autocomplete="off" type="text" id="locale" ' +
+            'placeholder="Locale" class="form-control" name="locale" required="required">' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+            '<label for="publicName">Nome Pubblico</label>' +
+            '<input autocomplete="off" type="text" id="publicName" ' +
+            'placeholder="Nome Pubblico" class="form-control" name="publicName" required="required">' +
+            '</div>'
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            const data = {
+                name: $('input#productSizeGroupName').val(),
+                locale: $('input#locale').val(),
+                publicName: $('input#publicName').val(),
+                macroName: $('input#productSizeGroupMacroName').val()
+            };
+            bsModal.showLoader();
+            bsModal.hideOkBtn();
+            bsModal.hideCancelBtn();
+            Pace.ignore(function () {
+                $.ajax({
+                    method: 'post',
+                    url: '/blueseal/xhr/ProductSizeGroupManage',
+                    data: data,
+                    dataType: "json"
+                }).done(function (res) {
+                    bsModal.writeBody('Gruppo Taglie creato con successo!');
+                }).fail(function (res) {
+                    bsModal.writeBody('Errore nella creazione del gruppo taglie: <br />' + e.responseJSON.message);
+                }).always(function (res) {
+                    bsModal.setOkEvent(function () {
+                        window.location.reload();
+                    });
+                    bsModal.showOkBtn();
+                });
+            });
+        });
+    });
+
+    const deleteRow = function (rowNum) {
+
+        return $.ajax({
+            method: 'delete',
+            url: '/blueseal/xhr/ProductSizeGroupManage',
+            data: {
+                rowNum: rowNum,
+                macroName: $('input#productSizeGroupMacroName').val()
+            },
+            dataType: "json"
+        })
+    };
+
+    $(document).on('bs.group.row.add', function () {
+        let bsModal = new $.bsModal('Inserisci Riga', {
+            body: '<p>Inserisci una nuova riga dopo: (questo eliminerà l\'ultima riga della tabella)</p>' +
+            '<div class="form-group form-group-default required">' +
+            '<label for="starterRow">Riga</label>' +
+                '<input autocomplete="off" type="text" id="starterRow" ' +
+                    'placeholder="Riga" class="form-control" name="starterRow" required="required">' +
+            '</div>' +
+            '<div class="form-group form-group-default required selectize-enabled">' +
+                '<label for="versus">Seleziona il verso</label>' +
+                '<select id="versus" name="versus" class="full-width selectize">' +
+                    '<option value="up">In sù</option>' +
+                    '<option value="down">In giù</option>' +
+                '</select>' +
+            '</div>'
+        });
+        $('select#versus').selectize();
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            bsModal.showLoader();
+            bsModal.hideOkBtn();
+            bsModal.hideCancelBtn();
+            Pace.ignore(function () {
+                deleteRow(false)
+                    .done(function () {
+                        Pace.ignore(function () {
+                            $.ajax({
+                                method: 'put',
+                                url: '/blueseal/xhr/ProductSizeGroupManage',
+                                data: {
+                                    rowNum: rowNum,
+                                    macroName: $('input#productSizeGroupMacroName').val(),
+                                    versus: $('select#versus').val()
+                                },
+                                dataType: "json"
+                            })
+                        });
+                    }).fail(function () {
+
+                });
+            });
+        })
+    });
+
+    $(document).on('bs.group.row.delete', function () {
+        let bsModal = new $.bsModal('Inserisci Riga', {
+            body: '<p>Inserisci la riga da eliminare</p>' +
+            '<div class="form-group form-group-default required">' +
+            '<label for="deleteRow">Riga</label>' +
+            '<input autocomplete="off" type="number" min="0" max="36" step="1" id="deleteRow" ' +
+                'placeholder="Riga" class="form-control" name="deleteRow" required="required">' +
+            '</div>'
+        });
+
+    });
 })();

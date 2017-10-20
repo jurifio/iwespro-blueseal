@@ -26,9 +26,9 @@ $(document).on('bs.invoice.split', function () {
         'Separazione Fatture',
         {
             body: '<div class="form-group form-group-default required">' +
-            '<label for="invoiceParts">Numero Finale</label>' +
-            '<input autocomplete="off" type="number" id="invoiceParts" min="2" placeholder="Numero di fatture risultanti" step="1" class="form-control" name="invoicePart" value="2" required="required">' +
-            '</div>',
+                    '<label for="invoiceParts">Numero Finale</label>' +
+                    '<input autocomplete="off" type="number" id="invoiceParts" min="2" placeholder="Numero di fatture risultanti" step="1" class="form-control" name="invoicePart" value="2" required="required">' +
+                '</div>',
             okLabel: 'Dividi'
         }
     );
