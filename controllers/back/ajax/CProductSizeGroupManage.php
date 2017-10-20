@@ -47,7 +47,9 @@ class CProductSizeGroupManage extends AAjaxController
 
                 $productSizeGroupHasProductSize->insert();
             } else {
-                if(!$productSizeGroupHasProductSize->isProductSizeCorrespondenceDeletable()) throw new BambooException('Corrispondenza non eliminabile');
+                if (!$productSizeGroupHasProductSize->isProductSizeCorrespondenceDeletable())
+                    throw new BambooException('Corrispondenza non eliminabile', [], -1);
+
                 $productSizeGroupHasProductSize->delete();
 
                 $productSizeGroupHasProductSize->productSizeId = $productSizeId;
@@ -55,7 +57,13 @@ class CProductSizeGroupManage extends AAjaxController
             }
         } catch (\Throwable $e) {
             \Monkey::app()->router->response()->raiseProcessingError();
-            return json_encode([$e->getMessage()] + $e->getTrace());
+            $res = ['message' => $e->getMessage()];
+            if ($e->getCode() == -1) {
+                $res['products'] = $productSizeGroupHasProductSize->getProductCorrespondences();
+            } else {
+                $res['trace'] = $e->getTrace();
+            }
+            return json_encode($res);
         }
 
         return json_encode(true);

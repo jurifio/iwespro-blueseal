@@ -60,7 +60,8 @@
                         productSizeGroupId: td.data('column'),
                         productSizeId: value,
                         position: td.closest('tr').data('position')
-                    }
+                    },
+                    dataType: "json"
                 }).done(function (res) {
                     td.data(productSizeIdDataName, value);
                     td.html(newHtml);
@@ -69,11 +70,18 @@
                         message: "Taglia Salvata"
                     }).open();
                 }).fail(function (res) {
-                    console.log(res);
-                    new Alert({
-                        type: "danger",
-                        message: "Errore nel salvataggio delle taglie"
-                    }).open();
+                    res = res.responseJSON;
+                    let title = "Errore nel salvataggio delle taglie";
+                    let message = res.message + '<br />';
+                    if(res.products) {
+                        message+="<ul>";
+                        for(let product of res.products) {
+                            message+="<li>"+product.productId+'-'+product.productVariantId+"</li>";
+                        }
+                    }
+                    let bsModal = new $.bsModal(title,{
+                        body: message
+                    });
                     td.html(td.data(savedHtmlDataName));
                 }).always(function () {
                     locked = false;
