@@ -79,10 +79,10 @@
                             message+="<li>"+product.productId+'-'+product.productVariantId+"</li>";
                         }
                     }
-                    let bsModal = new $.bsModal(title,{
+                    td.html(td.data(savedHtmlDataName));
+                    new $.bsModal(title,{
                         body: message
                     });
-                    td.html(td.data(savedHtmlDataName));
                 }).always(function () {
                     locked = false;
                     working = false;
