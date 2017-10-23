@@ -220,9 +220,13 @@
                 '</select>' +
             '</div>'
         });
+
         $('select#versus').selectize();
+
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
+            const versus = $('select#versus').val();
+            const rowNum = $('input#starterRow').val();
             bsModal.showLoader();
             bsModal.hideOkBtn();
             bsModal.hideCancelBtn();
@@ -235,8 +239,8 @@
                                 url: '/blueseal/xhr/ProductSizeGroupManage',
                                 data: {
                                     rowNum: rowNum,
-                                    macroName: $('input#productSizeGroupMacroName').val(),
-                                    versus: $('select#versus').val()
+                                    versus: versus,
+                                    macroName: $('input#productSizeGroupMacroName').val()
                                 },
                                 dataType: "json"
                             })

@@ -43,16 +43,16 @@ class CProductSizeGroupManage extends AAjaxController
         try {
             $fromRow = \Monkey::app()->router->request()->getRequestData('fromRow');
             $versus = \Monkey::app()->router->request()->getRequestData('versus');
-            $macroGroupName = \Monkey::app()->router->request()->getRequestData('macroGroupName');
+            $macroGroupName = \Monkey::app()->router->request()->getRequestData('macroName');
 
-            if ($versus == 'up') {
+            if ($versus == 'down') {
                 $maxRowNum = 35;
-                $versusName = 'alto';
+                $versusName = 'basso';
                 $modifier = +1;
                 $updateVersus = 'DESC';
-            } elseif ($versus == 'down') {
+            } elseif ($versus == 'up') {
                 $maxRowNum = 0;
-                $versusName = 'basso';
+                $versusName = 'alto';
                 $modifier = -1;
                 $updateVersus = 'ASC';
             } else {
