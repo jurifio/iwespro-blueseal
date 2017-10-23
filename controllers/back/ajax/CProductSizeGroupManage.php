@@ -5,6 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeGroupHasProductSize;
+use bamboo\domain\repositories\CProductSizeGroupRepo;
 use function MongoDB\BSON\toJSON;
 
 
@@ -28,58 +29,19 @@ class CProductSizeGroupManage extends AAjaxController
      */
     public function put()
     {
-        $checkSql = "SELECT * 
-                FROM ProductSizeGroup psg JOIN 
-                  ProductSizeGroupHasProductSize psghps ON psg.id = psghps.productSizeGroupId
-                WHERE psg.macroName = ? AND psghps.position = ?";
-
         \Monkey::app()->router->response()->setContentType('application/json');
         try {
             $fromRow = \Monkey::app()->router->request()->getRequestData('rowNum');
             $versus = \Monkey::app()->router->request()->getRequestData('versus');
             $macroGroupName = \Monkey::app()->router->request()->getRequestData('macroName');
 
-            if ($versus == 'down') {
-                $maxRowNum = 35;
-                $versusName = 'basso';
-                $modifier = +1;
-                $updateVersus = 'DESC';
-                $maiorMinor = '>';
-            } elseif ($versus == 'up') {
-                $maxRowNum = 0;
-                $versusName = 'alto';
-                $modifier = -1;
-                $updateVersus = 'ASC';
-                $maiorMinor = '<';
-            } else {
-                throw new BambooException('Verso non valido');
-            }
-            $res = \Monkey::app()->dbAdapter->query($checkSql, [
-                $macroGroupName,
-                $maxRowNum
-            ])->fetchAll();
-            if (count($res)) throw new BambooException('Non posso scorrere in %s se la riga %d non è vuota', [$versusName, $maxRowNum]);
+            if($versus == 'up') $toRow = $fromRow - 1;
+            elseif($versus == 'down') $toRow = $fromRow + 1;
+            else $toRow = $fromRow;
 
-            $bind = [
-                    $modifier,
-                    $fromRow
-                ];
-
-            $groups = \Monkey::app()->dbAdapter->query(
-                'SELECT id FROM ProductSizeGroup WHERE macroName = ?', [$macroGroupName])->fetchAll(\PDO::FETCH_COLUMN);
-            $questionMarks = [];
-            foreach ($groups as $group) {
-                $questionMarks[] = '?';
-                $bind[] = $group;
-            }
-
-            $moveSql = "UPDATE ProductSizeGroupHasProductSize psghps 
-                    SET psghps.position = psghps.position + ?
-                    WHERE psghps.position ".$maiorMinor." ? AND psghps.productSizeGroupId IN (" . implode(',', $questionMarks) . ")
-                    ORDER BY position ";
-
-            $res = \Monkey::app()->dbAdapter->query($moveSql . $updateVersus, $bind);
-            return json_encode(true);
+            /** @var CProductSizeGroupRepo $productSizeGroupRepo */
+            $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
+            return json_encode($productSizeGroupRepo->moveSizesPosition($macroGroupName, $fromRow, $toRow,true));
 
         } catch (\Throwable $e) {
             \Monkey::app()->router->response()->raiseProcessingError();
@@ -111,43 +73,27 @@ class CProductSizeGroupManage extends AAjaxController
         }
     }
 
+    /**
+     * @return string
+     */
     public function delete()
     {
         try {
+            \Monkey::app()->router->response()->setContentType('application/json');
+
             $macroName = \Monkey::app()->router->request()->getRequestData('macroName');
             $rowNum = \Monkey::app()->router->request()->getRequestData('rowNum');
+            $shift = \Monkey::app()->router->request()->getRequestData('versus');
 
-            $productSizeGroups = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findBy([
-                'macroName' => $macroName
-            ]);
+            /** @var CProductSizeGroupRepo $productSizeGroupRepo */
+            $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
 
-            $products = [];
-            foreach ($productSizeGroups as $productSizeGroup) {
-                /** @var CProductSizeGroup $productSizeGroup */
-                /** @var CProductSizeGroupHasProductSize $productSizeGroupHasProductSize */
-                $productSizeGroupHasProductSize = $productSizeGroup->productSizeGroupHasProductSize->findOneByKey('position', $rowNum);
-
-                if ($productSizeGroupHasProductSize) {
-                    if (!$productSizeGroupHasProductSize->isProductSizeCorrespondenceDeletable()) {
-                        $products += $productSizeGroupHasProductSize->getProductCorrespondences();
-                    } else if (count($products) == 0) {
-                        $productSizeGroupHasProductSize->delete();
-                    }
-                }
-            }
-
-            if (count($products) == 0) {
-                \Monkey::app()->dbAdapter->commit();
-                return json_encode(true);
-            } else {
-                \Monkey::app()->dbAdapter->rollBack();
+            $res = $productSizeGroupRepo->deleteGroupPosition($macroName,$rowNum,$shift);
+            if(is_array($res)) {
                 \Monkey::app()->router->response()->raiseProcessingError();
-                return json_encode([
-                    'message' => 'Non ho potuto eliminare la riga perchè ci sono Prodotti collegato',
-                    'products' => $products
-                ]);
             }
 
+            return json_encode($res);
         } catch (\Throwable $e) {
             \Monkey::app()->dbAdapter->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();

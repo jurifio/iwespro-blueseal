@@ -110,6 +110,10 @@
 
         $(document).on('keydown', 'table.table.size-table tbody td.edit-cell select', function (e) {
             switch (e.keyCode) {
+                case 27:
+                    e.preventDefault();
+                    undoCell($(this));
+                    break;
                 case 9:
                     let td = $(this).closest('td');
                     let present = td.attr('tabindex');
@@ -133,9 +137,6 @@
                     e.preventDefault();
                     saveCell($(this).closest('td'));
                     break;
-                case 27:
-                    e.preventDefault();
-                    undoCell($(this));
             }
         });
     });
@@ -144,19 +145,19 @@
         let bsModal = new $.bsModal('Aggiungi Gruppo', {
             body: '<p>Aggiugi una nuova colonna Gruppo Taglia</p>' +
             '<div class="form-group form-group-default required">' +
-            '<label for="productSizeGroupName">Nome Gruppo Taglia</label>' +
-            '<input autocomplete="off" type="text" id="productSizeGroupName" ' +
-            'placeholder="Nome Gruppo Taglia" class="form-control" name="productSizeGroupName" required="required">' +
+                '<label for="productSizeGroupName">Nome Gruppo Taglia</label>' +
+                '<input autocomplete="off" type="text" id="productSizeGroupName" ' +
+                    'placeholder="Nome Gruppo Taglia" class="form-control" name="productSizeGroupName" required="required">' +
             '</div>' +
             '<div class="form-group form-group-default required">' +
-            '<label for="locale">Locale</label>' +
-            '<input autocomplete="off" type="text" id="locale" ' +
-            'placeholder="Locale" class="form-control" name="locale" required="required">' +
+                '<label for="locale">Locale</label>' +
+                '<input autocomplete="off" type="text" id="locale" ' +
+                    'placeholder="Locale" class="form-control" name="locale" required="required">' +
             '</div>' +
             '<div class="form-group form-group-default required">' +
-            '<label for="publicName">Nome Pubblico</label>' +
-            '<input autocomplete="off" type="text" id="publicName" ' +
-            'placeholder="Nome Pubblico" class="form-control" name="publicName" required="required">' +
+                '<label for="publicName">Nome Pubblico</label>' +
+                '<input autocomplete="off" type="text" id="publicName" ' +
+                    'placeholder="Nome Pubblico" class="form-control" name="publicName" required="required">' +
             '</div>'
         });
 
@@ -191,13 +192,15 @@
         });
     });
 
-    const deleteRow = function (rowNum) {
+    const deleteRow = function (rowNum,versus) {
+        if(versus === undefined || versus === 'false') versus = false;
 
         return $.ajax({
             method: 'delete',
             url: '/blueseal/xhr/ProductSizeGroupManage',
             data: {
                 rowNum: rowNum,
+                versus: versus,
                 macroName: $('input#productSizeGroupMacroName').val()
             },
             dataType: "json"
@@ -268,22 +271,33 @@
     });
 
     $(document).on('bs.group.row.delete', function () {
-        let bsModal = new $.bsModal('Inserisci Riga', {
-            body: '<p>Inserisci la riga da eliminare</p>' +
-            '<div class="form-group form-group-default required">' +
-            '<label for="deleteRow">Riga</label>' +
-            '<input autocomplete="off" type="number" min="0" max="36" step="1" id="deleteRow" ' +
-                'placeholder="Riga" class="form-control" name="deleteRow" required="required">' +
-            '</div>'
+        let bsModal = new $.bsModal('Elimina riga', {
+            body: '<p>Elimina la riga</p>' +
+                    '<div class="form-group form-group-default required">' +
+                    '<label for="deleteRow">Riga</label>' +
+                    '<input autocomplete="off" type="number" min="0" max="36" step="1" id="deleteRow" ' +
+                        'placeholder="Riga" class="form-control" name="deleteRow" required="required">' +
+                    '</div>' +
+                    '<div class="form-group form-group-default required selectize-enabled">' +
+                        '<label for="versus">Scorri Tabella</label>' +
+                        '<select id="versus" name="versus" class="full-width selectize">' +
+                            '<option selected="selected" value="false">No</option>' +
+                            '<option value="up">In sù</option>' +
+                            '<option value="down">In giù</option>' +
+                        '</select>' +
+                    '</div>'
         });
+        $('select#versus').selectize();
 
         bsModal.setOkEvent(function () {
             const rowToDelete = $('input#deleteRow').val();
+            const selectedVersus = $('select#versus').val();
             if(rowToDelete) {
-                deleteRow(rowToDelete)
+                deleteRow(rowToDelete,selectedVersus)
                     .done(function () {
                         bsModal.writeBody('Riga Eliminata');
                         bsModal.setOkEvent(function () {
+                            window.location.reload();
                             bsModal.hide();
                         });
                         bsModal.showOkBtn();
