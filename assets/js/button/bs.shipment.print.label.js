@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-barcode",
-    permission: "/admin/product/delete&&allShops",
+    permission: "/admin/blueseal",
     event: "bs.shipment.print.label",
     class: "btn btn-default",
     rel: "tooltip",
