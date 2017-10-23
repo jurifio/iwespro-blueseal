@@ -33,15 +33,9 @@ class CProductSizeGroupManage extends AAjaxController
                   ProductSizeGroupHasProductSize psghps ON psg.id = psghps.productSizeGroupId
                 WHERE psg.macroName = ? AND psghps.position = ?";
 
-        $moveSql = "UPDATE ProductSizeGroup psg 
-                      JOIN ProductSizeGroupHasProductSize psghps ON psg.id = psghps.productSizeGroupId 
-                    SET psghps.position = psghps.position + ?
-                    WHERE psg.macroName = ? AND psghps.position > ?
-                    ORDER BY position ";
-
         \Monkey::app()->router->response()->setContentType('application/json');
         try {
-            $fromRow = \Monkey::app()->router->request()->getRequestData('fromRow');
+            $fromRow = \Monkey::app()->router->request()->getRequestData('rowNum');
             $versus = \Monkey::app()->router->request()->getRequestData('versus');
             $macroGroupName = \Monkey::app()->router->request()->getRequestData('macroName');
 
@@ -50,11 +44,13 @@ class CProductSizeGroupManage extends AAjaxController
                 $versusName = 'basso';
                 $modifier = +1;
                 $updateVersus = 'DESC';
+                $maiorMinor = '>';
             } elseif ($versus == 'up') {
                 $maxRowNum = 0;
                 $versusName = 'alto';
                 $modifier = -1;
                 $updateVersus = 'ASC';
+                $maiorMinor = '<';
             } else {
                 throw new BambooException('Verso non valido');
             }
@@ -64,11 +60,25 @@ class CProductSizeGroupManage extends AAjaxController
             ])->fetchAll();
             if (count($res)) throw new BambooException('Non posso scorrere in %s se la riga %d non è vuota', [$versusName, $maxRowNum]);
 
-            $res = \Monkey::app()->dbAdapter->query($moveSql . $updateVersus, [
-                $modifier,
-                $macroGroupName,
-                $fromRow
-            ]);
+            $bind = [
+                    $modifier,
+                    $fromRow
+                ];
+
+            $groups = \Monkey::app()->dbAdapter->query(
+                'SELECT id FROM ProductSizeGroup WHERE macroName = ?', [$macroGroupName])->fetchAll(\PDO::FETCH_COLUMN);
+            $questionMarks = [];
+            foreach ($groups as $group) {
+                $questionMarks[] = '?';
+                $bind[] = $group;
+            }
+
+            $moveSql = "UPDATE ProductSizeGroupHasProductSize psghps 
+                    SET psghps.position = psghps.position + ?
+                    WHERE psghps.position ".$maiorMinor." ? AND psghps.productSizeGroupId IN (" . implode(',', $questionMarks) . ")
+                    ORDER BY position ";
+
+            $res = \Monkey::app()->dbAdapter->query($moveSql . $updateVersus, $bind);
             return json_encode(true);
 
         } catch (\Throwable $e) {

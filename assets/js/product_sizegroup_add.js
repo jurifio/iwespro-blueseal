@@ -243,11 +243,26 @@
                                     macroName: $('input#productSizeGroupMacroName').val()
                                 },
                                 dataType: "json"
+                            }).done(function () {
+                                bsModal.writeBody('Riga inserita');
+                                bsModal.setOkEvent(function () {
+                                    window.location.reload();
+                                });
+                                bsModal.showOkBtn();
+                            }).fail(function () {
+                                bsModal.writeBody('Errore nell\'inserire la riga');
+                                bsModal.setOkEvent(function () {
+                                    window.location.reload();
+                                });
                             })
                         });
                     }).fail(function () {
-
-                });
+                        bsModal.writeBody('Non è stato possibile eliminare la riga indicata');
+                        bsModal.setOkEvent(function () {
+                            bsModal.hide();
+                        });
+                        bsModal.showOkBtn();
+                    });
             });
         })
     });
@@ -261,6 +276,27 @@
                 'placeholder="Riga" class="form-control" name="deleteRow" required="required">' +
             '</div>'
         });
+
+        bsModal.setOkEvent(function () {
+            const rowToDelete = $('input#deleteRow').val();
+            if(rowToDelete) {
+                deleteRow(rowToDelete)
+                    .done(function () {
+                        bsModal.writeBody('Riga Eliminata');
+                        bsModal.setOkEvent(function () {
+                            bsModal.hide();
+                        });
+                        bsModal.showOkBtn();
+                    }).fail(function () {
+                        bsModal.writeBody('Non è stato possibile eliminare la riga indicata');
+                        bsModal.setOkEvent(function () {
+                            bsModal.hide();
+                        });
+                        bsModal.showOkBtn();
+                })
+            }
+
+        })
 
     });
 })();
