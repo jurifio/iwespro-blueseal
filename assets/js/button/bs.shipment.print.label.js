@@ -18,7 +18,7 @@ $(document).on('bs.shipment.print.label', function (e, element, button) {
     let url = window.origin + '/blueseal/xhr/PrintOrderShipmentLabel?shipmentId=';
     for (let i in selected) {
         if (!selected.hasOwnProperty(i)) continue;
-        if (selected[i].trackingNumber.length > 0) {
+        if (selected[i].trackingNumber && selected[i].trackingNumber.length > 0) {
             window.open(url + selected[i].id, 'Label: '+selected[i].id);
         } else {
             wrong.push(selected[i].id);
