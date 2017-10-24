@@ -43,7 +43,32 @@
                                         <th style="" class="sorting_asc" tabindex="0"
                                             aria-controls="condensedTable" rowspan="1" colspan="1"
                                             aria-sort="ascending"
-                                            aria-label="Positions">Posizioni
+                                            aria-label="Positions">ID
+                                        </th>
+                                        <?php
+                                        /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
+                                        $z = 0;
+                                        foreach ($sizeEdit as $productSizeGroup): ?>
+                                            <th style="" class="" tabindex=""
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort=""
+                                                aria-label="<?php echo $productSizeGroup->id ?>"><?php echo $productSizeGroup->id ?>
+                                            </th>
+                                            <?php $z++;
+                                        endforeach;
+                                        for (; $z < 18; $z++): ?>
+                                            <th style="" class="" tabindex="0"
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort="ascending"
+                                                aria-label="Positions">
+                                            </th>
+                                        <?php endfor; ?>
+                                    </tr>
+                                    <tr role="row">
+                                        <th style="" class="sorting_asc" tabindex="0"
+                                            aria-controls="condensedTable" rowspan="1" colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Positions">Locale
                                         </th>
                                         <?php
                                         /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
@@ -60,7 +85,32 @@
                                             <th style="" class="" tabindex="0"
                                                 aria-controls="condensedTable" rowspan="1" colspan="1"
                                                 aria-sort="ascending"
-                                                aria-label="Positions">Nuovo Gruppo
+                                                aria-label="Positions">
+                                            </th>
+                                        <?php endfor; ?>
+                                    </tr>
+                                    <tr role="row">
+                                        <th style="" class="sorting_asc" tabindex="0"
+                                            aria-controls="condensedTable" rowspan="1" colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Positions">Nome
+                                        </th>
+                                        <?php
+                                        /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
+                                        $z = 0;
+                                        foreach ($sizeEdit as $productSizeGroup): ?>
+                                            <th style="" class="" tabindex=""
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort=""
+                                                aria-label="<?php echo $productSizeGroup->name ?>"><?php echo $productSizeGroup->name ?>
+                                            </th>
+                                            <?php $z++;
+                                        endforeach;
+                                        for (; $z < 18; $z++): ?>
+                                            <th style="" class="" tabindex="0"
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort="ascending"
+                                                aria-label="Positions">
                                             </th>
                                         <?php endfor; ?>
                                     </tr>
@@ -129,12 +179,12 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Strumenti">
+    <bs-toolbar-group data-group-label="Strumenti Colonna">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus"
                 data-permission="/admin/content/add"
-                data-event="bs.add.group"
+                data-event="bs-group-add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Aggiungi Gruppo"
@@ -142,9 +192,21 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
+                data-icon="fa-trash"
+                data-permission="/admin/content/add"
+                data-event="bs-group-delete"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Elimina Gruppo"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Strumenti Riga">
+        <bs-toolbar-button
+                data-tag="a"
                 data-icon="fa-outdent"
                 data-permission="/admin/content/add"
-                data-event="bs.group.row.add"
+                data-event="bs-group-row-add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Inserisci Riga"
@@ -154,7 +216,7 @@
                 data-tag="a"
                 data-icon="fa-strikethrough"
                 data-permission="/admin/content/add"
-                data-event="bs.group.row.delete"
+                data-event="bs-group-row-delete"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Cancella Riga"

@@ -12,7 +12,6 @@
         const productSizeIdDataName = 'productsizeid';
         const savedHtmlDataName = 'savedValue';
 
-
         const editCell = function (td) {
             if (locked) return;
             if (td.find('select').length > 0) return;
@@ -141,14 +140,64 @@
         });
     });
 
-    $(document).on('bs.add.group', function () {
+    $(document).on('bs-group-delete', function () {
+        let bsModal = new $.bsModal('Aggiungi Gruppo', {
+            body: '<p>Elimina una colonna Gruppo Taglia</p>' +
+            '<div class="form-group form-group-default required">' +
+                '<label for="productSizeGroupId">ID Gruppo Taglia</label>' +
+                '<input autocomplete="off" type="number" id="productSizeGroupId" ' +
+                    'placeholder="ID Gruppo Taglia" class="form-control" name="productSizeGroupId" required="required">' +
+            '</div>'
+        });
+
+        bsModal.setOkEvent(function () {
+            const productSizeGroupId = $('#productSizeGroupId').val();
+            if(productSizeGroupId.length > 0) {
+                bsModal.showLoader();
+                Pace.ignore(function () {
+                    $.ajax({
+                        url: '/blueseal/xhr/ProductSizeGroupManage',
+                        method: 'delete',
+                        data: {
+                            productSizeGroupId: productSizeGroupId
+                        },
+                        dataType: 'json'
+                    }).done(function () {
+                        bsModal.writeBody('Gruppo Taglie eliminato!');
+                    }).fail(function (res) {
+                        let newBody = '<p>Errore nel cancellare il gruppo taglia</p>';
+                        if(res.responseJSON && res.responseJSON.products) {
+                            newBody += '<ul>';
+                            let i = 0;
+                            for(let product of res.responseJSON.products)
+                            {
+                                newBody += '<li>'+product.id+'-'+product.productVariantId+'</li>'
+                                if(++i > 100){
+                                    newBody+= '<li>...</li>';
+                                    break;
+                                }
+                            }
+                            newBody+='</ul>'
+                        }
+                        bsModal.writeBody(newBody);
+                    }).always(function () {
+                        bsModal.setOkEvent(function () {
+                            window.location.reload();
+                        });
+                    });
+                });
+            }
+        })
+    });
+
+    $(document).on('bs-group-add', function () {
         let bsModal = new $.bsModal('Aggiungi Gruppo', {
             body: '<p>Aggiugi una nuova colonna Gruppo Taglia</p>' +
             '<div class="form-group form-group-default required">' +
                 '<label for="productSizeGroupName">Nome Gruppo Taglia</label>' +
                 '<input autocomplete="off" type="text" id="productSizeGroupName" ' +
                     'placeholder="Nome Gruppo Taglia" class="form-control" name="productSizeGroupName" required="required">' +
-            '</div>' +
+                '</div>' +
             '<div class="form-group form-group-default required">' +
                 '<label for="locale">Locale</label>' +
                 '<input autocomplete="off" type="text" id="locale" ' +
@@ -175,7 +224,7 @@
             Pace.ignore(function () {
                 $.ajax({
                     method: 'post',
-                    url: '/blueseal/xhr/ProductSizeGroupManage',
+                    url: '/blueseal/xhr/CProductSizeGroupManage',
                     data: data,
                     dataType: "json"
                 }).done(function (res) {
@@ -192,12 +241,12 @@
         });
     });
 
-    const deleteRow = function (rowNum,versus) {
-        if(versus === undefined || versus === 'false') versus = false;
+    const deleteRow = function (rowNum, versus) {
+        if (versus === undefined || versus === 'false') versus = false;
 
         return $.ajax({
             method: 'delete',
-            url: '/blueseal/xhr/ProductSizeGroupManage',
+            url: '/blueseal/xhr/CProductSizeGroupRowManage',
             data: {
                 rowNum: rowNum,
                 versus: versus,
@@ -207,20 +256,20 @@
         })
     };
 
-    $(document).on('bs.group.row.add', function () {
+    $(document).on('bs-group-row-add', function () {
         let bsModal = new $.bsModal('Inserisci Riga', {
             body: '<p>Inserisci una nuova riga dopo: (questo eliminerà l\'ultima riga della tabella)</p>' +
             '<div class="form-group form-group-default required">' +
             '<label for="starterRow">Riga</label>' +
-                '<input autocomplete="off" type="text" id="starterRow" ' +
-                    'placeholder="Riga" class="form-control" name="starterRow" required="required">' +
+            '<input autocomplete="off" type="text" id="starterRow" ' +
+            'placeholder="Riga" class="form-control" name="starterRow" required="required">' +
             '</div>' +
             '<div class="form-group form-group-default required selectize-enabled">' +
-                '<label for="versus">Seleziona il verso</label>' +
-                '<select id="versus" name="versus" class="full-width selectize">' +
-                    '<option value="up">In sù</option>' +
-                    '<option value="down">In giù</option>' +
-                '</select>' +
+            '<label for="versus">Seleziona il verso</label>' +
+            '<select id="versus" name="versus" class="full-width selectize">' +
+            '<option value="up">In sù</option>' +
+            '<option value="down">In giù</option>' +
+            '</select>' +
             '</div>'
         });
 
@@ -239,7 +288,7 @@
                         Pace.ignore(function () {
                             $.ajax({
                                 method: 'put',
-                                url: '/blueseal/xhr/ProductSizeGroupManage',
+                                url: '/blueseal/xhr/ProductSizeGroupRowManage',
                                 data: {
                                     rowNum: rowNum,
                                     versus: versus,
@@ -260,40 +309,40 @@
                             })
                         });
                     }).fail(function () {
-                        bsModal.writeBody('Non è stato possibile eliminare la riga indicata');
-                        bsModal.setOkEvent(function () {
-                            bsModal.hide();
-                        });
-                        bsModal.showOkBtn();
+                    bsModal.writeBody('Non è stato possibile eliminare la riga indicata');
+                    bsModal.setOkEvent(function () {
+                        bsModal.hide();
                     });
+                    bsModal.showOkBtn();
+                });
             });
         })
     });
 
-    $(document).on('bs.group.row.delete', function () {
+    $(document).on('bs-group-row-delete', function () {
         let bsModal = new $.bsModal('Elimina riga', {
             body: '<p>Elimina la riga</p>' +
-                    '<div class="form-group form-group-default required">' +
-                    '<label for="deleteRow">Riga</label>' +
-                    '<input autocomplete="off" type="number" min="0" max="36" step="1" id="deleteRow" ' +
-                        'placeholder="Riga" class="form-control" name="deleteRow" required="required">' +
-                    '</div>' +
-                    '<div class="form-group form-group-default required selectize-enabled">' +
-                        '<label for="versus">Scorri Tabella</label>' +
-                        '<select id="versus" name="versus" class="full-width selectize">' +
-                            '<option selected="selected" value="false">No</option>' +
-                            '<option value="up">In sù</option>' +
-                            '<option value="down">In giù</option>' +
-                        '</select>' +
-                    '</div>'
+            '<div class="form-group form-group-default required">' +
+            '<label for="deleteRow">Riga</label>' +
+            '<input autocomplete="off" type="number" min="0" max="36" step="1" id="deleteRow" ' +
+            'placeholder="Riga" class="form-control" name="deleteRow" required="required">' +
+            '</div>' +
+            '<div class="form-group form-group-default required selectize-enabled">' +
+            '<label for="versus">Scorri Tabella</label>' +
+            '<select id="versus" name="versus" class="full-width selectize">' +
+            '<option selected="selected" value="false">No</option>' +
+            '<option value="up">In sù</option>' +
+            '<option value="down">In giù</option>' +
+            '</select>' +
+            '</div>'
         });
         $('select#versus').selectize();
 
         bsModal.setOkEvent(function () {
             const rowToDelete = $('input#deleteRow').val();
             const selectedVersus = $('select#versus').val();
-            if(rowToDelete) {
-                deleteRow(rowToDelete,selectedVersus)
+            if (rowToDelete) {
+                deleteRow(rowToDelete, selectedVersus)
                     .done(function () {
                         bsModal.writeBody('Riga Eliminata');
                         bsModal.setOkEvent(function () {
@@ -302,11 +351,11 @@
                         });
                         bsModal.showOkBtn();
                     }).fail(function () {
-                        bsModal.writeBody('Non è stato possibile eliminare la riga indicata');
-                        bsModal.setOkEvent(function () {
-                            bsModal.hide();
-                        });
-                        bsModal.showOkBtn();
+                    bsModal.writeBody('Non è stato possibile eliminare la riga indicata');
+                    bsModal.setOkEvent(function () {
+                        bsModal.hide();
+                    });
+                    bsModal.showOkBtn();
                 })
             }
 

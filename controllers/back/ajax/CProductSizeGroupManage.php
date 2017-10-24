@@ -27,31 +27,6 @@ class CProductSizeGroupManage extends AAjaxController
     /**
      * @return string
      */
-    public function put()
-    {
-        \Monkey::app()->router->response()->setContentType('application/json');
-        try {
-            $fromRow = \Monkey::app()->router->request()->getRequestData('rowNum');
-            $versus = \Monkey::app()->router->request()->getRequestData('versus');
-            $macroGroupName = \Monkey::app()->router->request()->getRequestData('macroName');
-
-            if($versus == 'up') $toRow = $fromRow - 1;
-            elseif($versus == 'down') $toRow = $fromRow + 1;
-            else $toRow = $fromRow;
-
-            /** @var CProductSizeGroupRepo $productSizeGroupRepo */
-            $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
-            return json_encode($productSizeGroupRepo->moveSizesPosition($macroGroupName, $fromRow, $toRow,true));
-
-        } catch (\Throwable $e) {
-            \Monkey::app()->router->response()->raiseProcessingError();
-            $res = ['message' => $e->getMessage()];
-            $res['trace'] = $e->getTrace();
-
-            return json_encode($res);
-        }
-    }
-
     public function post()
     {
         try {
@@ -63,9 +38,10 @@ class CProductSizeGroupManage extends AAjaxController
             //$productSizeGroup->publicName = $data['publicName'];
 
             return json_encode([
-                    'id' => $productSizeGroup->insert()]
-            );
+                    'id' => $productSizeGroup->insert()
+                ]);
         } catch (\Throwable $e) {
+            \Monkey::app()->router->response()->raiseProcessingError();
             return json_encode([
                 'message' => $e->getMessage(),
                 'trace' => $e->getTrace()
@@ -73,34 +49,24 @@ class CProductSizeGroupManage extends AAjaxController
         }
     }
 
-    /**
-     * @return string
-     */
     public function delete()
     {
-        try {
-            \Monkey::app()->router->response()->setContentType('application/json');
+        $data = \Monkey::app()->router->request()->getRequestData('productSizeGroupId');
+        /** @var CProductSizeGroup $productSizeGroup */
+        $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneBy(['id'=>$data]);
 
-            $macroName = \Monkey::app()->router->request()->getRequestData('macroName');
-            $rowNum = \Monkey::app()->router->request()->getRequestData('rowNum');
-            $shift = \Monkey::app()->router->request()->getRequestData('versus');
-
-            /** @var CProductSizeGroupRepo $productSizeGroupRepo */
-            $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
-
-            $res = $productSizeGroupRepo->deleteGroupPosition($macroName,$rowNum,$shift);
-            if(is_array($res)) {
-                \Monkey::app()->router->response()->raiseProcessingError();
-            }
-
-            return json_encode($res);
-        } catch (\Throwable $e) {
-            \Monkey::app()->dbAdapter->rollBack();
+        if(!$productSizeGroup->product->isEmpty()) {
             \Monkey::app()->router->response()->raiseProcessingError();
             return json_encode([
-                'message' => $e->getMessage(),
-                'trace' => $e->getTrace()
+                'products'=> $productSizeGroup->product
             ]);
         }
+
+        foreach ($productSizeGroup->productSizeGroupHasProductSize as $productSizeGroupHasProductSize) {
+            $productSizeGroupHasProductSize->delete();
+        }
+
+        $productSizeGroup->delete();
+        return json_encode(true);
     }
 }
