@@ -313,7 +313,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                 $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
                                 echo (($productNameTranslation) ? $productNameTranslation->name : '') . ($orderLine->warehouseShelfPosition ? ' / '.$orderLine->warehouseShelfPosition->printPosition() : '').'<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId; ?>
                             </td>
-                            <td class="text-center"><?php echo $productSku->productSize->name; ?>
+                            <td class="text-center"><?php echo $productSku->getPublicSize()->name; ?>
                             <td></td>
                             </td>
                             <td class="text-center"><?php

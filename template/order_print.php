@@ -176,7 +176,7 @@
                             <td><img width="90" src="<?php echo $app->image($productSku->product->getPhoto(1,281),'amazon') ?>" /></td>
                             <td class="text-center"><?php echo $productSku->product->productBrand->name; ?></td>
                             <td class="text-center"><?php echo $productSku->shop->name; ?></td>
-                            <td class="text-center"><?php echo $productSku->productSize->name; ?></td>
+                            <td class="text-center"><?php echo $productSku->getPublicSize()->name; ?></td>
                             <td class="text-center"><?php echo $productSku->product->productVariant->name; ?></td>
                             <td class="text-center"><?php
                                 $tot += $orderLine->activePrice;
