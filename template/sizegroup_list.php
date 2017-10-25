@@ -24,11 +24,6 @@
                     <div class="panel panel-transparent">
                         <div class="panel-heading">
                             <div class="panel-title">Elenco Gruppi Taglie</div>
-                            <div class="export-options-container pull-right"></div>
-                            <div class="pull-right"><a href="<?php echo $modifica; ?>">
-                                    <button class="btn btn-complete btn-cons">Aggiungi <i class="fa fa-plus"></i></button>
-                                </a></div>
-                            <div class="clearfix"></div>
                         </div>
                         <div class="panel-body">
                             <table class="table table-striped" id="tableWithExportOptions">

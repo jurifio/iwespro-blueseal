@@ -539,19 +539,6 @@
             ]
         },
         {
-            "pattern": "/blueseal/prodotti/gruppo-taglie/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeManageController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
             "pattern": "/blueseal/prodotti/gruppo-colore(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CColorListController"
