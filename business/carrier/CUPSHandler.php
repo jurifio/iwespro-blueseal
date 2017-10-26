@@ -63,7 +63,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         $orders = [];
 
         foreach ($shipment->orderLine as $orderLine) {
-            $orders[] = $orderLine;
+            $orders[] = $orderLine->printId();
         }
 
         $delivery = [
@@ -181,8 +181,8 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
      */
     private function getConfig($name = null)
     {
-        if ($name) return $this->config[$name];
-        return $this->config;
+        if ($name) return $this->testConfig[$name];
+        return $this->testConfig;
     }
 
     /**
