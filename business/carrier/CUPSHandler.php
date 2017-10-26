@@ -58,12 +58,20 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
     {
         \Monkey::app()->applicationReport('CUPSHandler', 'addPickup', 'Called addPickUp');
 
+        $shipment = $this->addDelivery($shipment);
+
+        $orders = [];
+
+        foreach ($shipment->orderLine as $orderLine) {
+            $orders[] = $orderLine;
+        }
+
         $delivery = [
             'UPSSecurity' => $this->getUpsSecurity(),
             'PickupCreationRequest' => [
                 'Request' => [
                     'TransactionReference' => [
-                        'CustomerContext' => 'CustomerContext.' //???
+                        'CustomerContext' => 'Order '.implode(',',$orders) //???
                     ]
                 ],
                 'RatePickupIndicator' => 'Y',
@@ -100,7 +108,9 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                 ],
                 'OverweightIndicator' => 'N',
                 'PaymentMethod' => '01',
-
+                'TrackingData' => [
+                    'TrackingNumber' => $shipment->trackingNumber
+                ]
             ]
         ];
         $ch = curl_init();
@@ -132,19 +142,17 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             $result = json_decode($result);
             try {
                 $status = $result->PickupCreationResponse->Response->ResponseStatus->Code;
+                if ($status == '1') {
+                    $shipment->bookingNumber = $result->PickupCreationResponse->PRN;
+                } else throw new BambooException('Status not 1');
+
+                $shipment->update();
             } catch (\Throwable $e) {
                 throw new BambooException('Failed to addPickup from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
             }
 
-            if ($status == '1') {
-                $shipment->bookingNumber = $result->PickupCreationResponse->PRN;
-                $shipment->update();
-
-                return $this->addDelivery($shipment);
-            }
-
         } catch (\Throwable $e) {
-            //todo log me
+            $this->cancelDelivery($shipment);
             \Monkey::app()->applicationWarning('UpsHandler', 'addPickUp', 'Error while parsing response of addPickUp for ' . $shipment->printId(), $e);
             throw $e;
         }
