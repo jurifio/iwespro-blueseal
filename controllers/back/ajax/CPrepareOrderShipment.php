@@ -63,7 +63,7 @@ class CPrepareOrderShipment extends AAjaxController
 
                 $order->note = $order->note . " Tracking " . $shipment->carrier->name . ": " . $shipment->trackingNumber . ' Spedito: ' . date('Y-m-d');
                 $order->update();
-                $this->app->orderManager->changeStatus($order, 'ORD_PACK');
+                $orderRepo->updateStatus($order,'ORD_PACK');
 
                 $shipments[] = $shipment;
             } else {

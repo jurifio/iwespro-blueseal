@@ -41,7 +41,7 @@ class COrderDelete extends AAjaxController
 
         $order->note = $order->note . " Cancellato: " . date('Y-m-d');
         $order->update();
-        $this->app->orderManager->changeStatus($order, 'ORD_FR_CANCEL');
+        \Monkey::app()->repoFactory->create('Order')->updateStatus($order,'ORD_FR_CANCEL');
 
         $coupon = \Monkey::app()->repoFactory->create('Coupon')->createCouponFromType(self::COUPONTYPE_ID,$order->user->printId());
 
