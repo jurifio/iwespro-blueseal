@@ -1,15 +1,22 @@
 <?php
-namespace bamboo\controllers\back\ajax;
 
+namespace bamboo\controllers\back\ajax;
 use bamboo\domain\entities\CProduct;
-use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
+use bamboo\domain\entities\CProductSizeGroup;
+use bamboo\domain\repositories\CProductRepo;
 
 /**
- * Class CProductIncompleteListController.php
- * @package bamboo\app\controllers
+ * Class CProductChangeProductSizeController
+ * @package bamboo\controllers\back\ajax
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date $date
+ * @since 1.0
  */
 class CProductChangeProductSizeController extends AAjaxController
 {
@@ -19,43 +26,44 @@ class CProductChangeProductSizeController extends AAjaxController
 
     public function get()
     {
-        $psg = $this->app->repoFactory->create('ProductSizeGroup')->findAll(null, 'order by locale, macroName, `name`');
-
-        $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo taglie</option>';
-        foreach($psg as $v) {
-            $ret .= '<option value="' . $v->id . '">' . $v->locale . " " . $v->macroName . " " . $v->name . '</option>';
+        $products = \Monkey::app()->router->request()->getRequestData('products');
+        $points = [];
+        $bind = [];
+        foreach ($products as $product) {
+            $points[] = '(?,?)';
+            $bind = array_merge($bind, explode('-', $product));
         }
-            $ret .= '</select></div>';
-        return $ret;
+        $points = implode(',',$points);
+        $sql = "SELECT psg.id
+                FROM ProductSizeGroup psg
+                  JOIN ProductSizeGroup psg2 on psg2.macroName = psg.macroName
+                  JOIN ShopHasProduct shp ON psg2.id = shp.productSizeGroupId 
+                WHERE (shp.productId,shp.productVariantId) IN ($points) ORDER BY psg.locale";
+        $productSizeGroups = $this->app->repoFactory->create('ProductSizeGroup')->findBySql($sql, $bind);
+        \Monkey::app()->router->response()->setContentType('application/json');
+        return json_encode($productSizeGroups);
     }
 
     public function put()
     {
+        /** @var CProductRepo $productRepo */
+        $productRepo = \Monkey::app()->repoFactory->create('Product');
+        $productSizeGroupId = $this->app->router->request()->getRequestData('productSizeGroupId');
+        /** @var CProductSizeGroup $productSizeGroup */
+        $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneByStringId($productSizeGroupId);
 
-        $pR = \Monkey::app()->repoFactory->create('Product');
-        $pseccR = \Monkey::app()->repoFactory->create('ProductSizeGroupHasProductSize');
-        $groupId = $this->app->router->request()->getRequestData('groupId');
-        if(!$groupId){
+        $productsIds = $this->app->router->request()->getRequestData('products');
+        if (!$productSizeGroupId) {
+            \Monkey::app()->router->response()->raiseProcessingError();
             return "Errore: nessun gruppo taglie selezionato.";
-        } elseif(empty($this->app->router->request()->getRequestData('products'))) {
+        } elseif (!$productsIds) {
+            \Monkey::app()->router->response()->raiseProcessingError();
             return "Nessun prodotto selezionato";
         } else {
-
-            foreach($this->app->router->request()->getRequestData('products') as $productIds) {
-                $product = $pR->findOneByStringId($productIds);
-
-                foreach ($product->productSku as $ps) {
-                    if (!($pseccR->findOneBy(['productSizeGroupId' => $groupId, 'productSizeId' => $ps->productSizeId]))) {
-                        $this->app->router->response()->raiseProcessingError();
-                        return "Impossibile cambiare gruppo taglia per prodotto: " . $product->printId();
-                    }
-                }
-            }
-
-            foreach($this->app->router->request()->getRequestData('products') as $productIds) {
-                $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
-                $product->productSizeGroupId = $groupId;
-                $product->update();
+            foreach ($productsIds as $productIds) {
+                /** @var CProduct $product */
+                $product = $productRepo->findOneByStringId($productIds);
+                $productRepo->changeProductSizeGroup($product, $productSizeGroup);
             }
             return "Il gruppo taglie è stato assegnato alle righe selezionate.";
         }

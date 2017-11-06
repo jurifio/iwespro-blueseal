@@ -10,70 +10,84 @@ window.buttonSetup = {
 };
 
 $(document).on('bs.manage.sizeGroups', function () {
-    var bsModal = $('#bsModal');
-    var dataTable = $('.dataTable').DataTable();
-    var header = $('.modal-header h4');
-    var body = $('.modal-body');
-    var loader = body.html();
-    var cancelButton = $('.modal-footer .btn-default');
-    var okButton = $('.modal-footer .btn-success');
 
-    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRows = $.getDataTableSelectedRowsData();
 
     if (selectedRows.length < 1) {
-        new Alert({
-            type: "warning",
-            message: "Devi selezionare uno o più prodotti per cambiare il gruppo taglie"
-        }).open();
         return false;
     }
 
-    var getVarsArray = [];
-    $.each(selectedRows, function (k, v) {
-        getVarsArray.push(v.DT_RowId);
-    });
-
-    header.html('Cambia gruppo Taglie');
-
+    let bsModal = new $.bsModal('Cambia gruppo Taglie Pubblico', {});
+    bsModal.showLoader();
     Pace.ignore(function () {
         $.ajax({
             url: "/blueseal/xhr/ProductChangeProductSizeController",
             type: "GET",
             data: {
-                products: getVarsArray
-            }
+                products: selectedRows
+            },
+            dataType: 'json'
         }).done(function (response) {
-            body.html(response);
-            $('#size-group-select').selectize({
-                sortField: "text"
-            });
-            cancelButton.html("Annulla");
-            bsModal.modal();
-            okButton.html('Assegna').off().on('click', function () {
-                $.ajax({
-                    url: "/blueseal/xhr/ProductChangeProductSizeController",
-                    type: "PUT",
-                    data: {
-                        products: getVarsArray,
-                        groupId: $('#size-group-select').val()
+            bsModal.writeBody('<div class="form-group form-group-default selectize-enabled required">' +
+                '<label>Gruppo Taglie Pubblico</label>' +
+                '<select class="full-width" id="productSizeGroupId" placeholder="Seleziona il gruppo taglie"></select>' +
+                '</div>');
+            let select = bsModal.getElement().find('#productSizeGroupId');
+            if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: response,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.locale) + '</span>' +
+                            ' - <span class="caption">' + escape(item.macroName + ' / ' + item.name) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.locale) + '</span>' +
+                            ' - <span class="caption">' + escape(item.macroName + ' / ' + item.name) + '</span>' +
+                            '</div>'
                     }
-                }).done(function (response) {
-                    body.html(response);
-                    cancelButton.hide();
-                    okButton.html('Ok').off().on('click', function () {
-                        bsModal.modal('hide');
+                }
+            });
+            bsModal.setCancelLabel("Annulla");
+            bsModal.showCancelBtn();
+            bsModal.setOkLabel("Assegna");
+            bsModal.setOkEvent(function () {
+                Pace.ignore(function () {
+                    let value = select.val();
+                    if(value.length === 0) return;
+                    bsModal.showLoader();
+                    bsModal.setOkLabel('Ok');
+                    bsModal.hideOkBtn();
+                    bsModal.hideCancelBtn();
+                    bsModal.setOkEvent(function () {
+                        bsModal.hide();
+                        $.refreshDataTable();
                     });
-                }).fail(function (res){
-                    body.html(res);
-                }).always(function() {
-                    dataTable.ajax.reload(null, false);
+                    $.ajax({
+                        url: "/blueseal/xhr/ProductChangeProductSizeController",
+                        type: "PUT",
+                        data: {
+                            products: selectedRows,
+                            productSizeGroupId: value
+                        }
+                    }).done(function (response) {
+                        bsModal.writeBody('Fatto');
+                        bsModal.showOkBtn();
+                    }).fail(function (res) {
+                        bsModal.writeBody('Errore');
+                        bsModal.showOkBtn();
+                    });
                 });
-
             });
         }).fail(function (response) {
-            body.html(response.responseText);
-            okButton.off().html('Chiudi');
+            bsModal.writeBody(response.responseText);
+            bsModal.setOkLabel('Chiudi');
         });
     });
-    bsModal.modal();
 });
