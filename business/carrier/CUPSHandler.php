@@ -126,7 +126,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             'Content-type: application/json'
         ]);
         \Monkey::app()->applicationReport(
-            'UPSItalyHandler',
+            'UPSHandler',
             'addPickup',
             'Request addPickup to' . $this->getConfig('pickUpEndopoint'),
             json_encode($delivery));
@@ -338,6 +338,8 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
      */
     public function cancelPickUp(CShipment $shipment)
     {
+        if(empty($shipment->bookingNumber)) return true;
+
         \Monkey::app()->applicationReport('CUPSHandler', 'cancelPickUp', 'Called cancelPickUp');
         $delivery = [
             'UPSSecurity' => $this->getUpsSecurity(),
@@ -364,7 +366,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             'Content-type: application/json'
         ]);
         \Monkey::app()->applicationReport(
-            'UPSItalyHandler',
+            'UPSHandler',
             'cancelPickUp',
             'Request cancelPickUp to' . $this->getConfig('pickUpEndopoint'),
             json_encode($delivery));
@@ -403,6 +405,8 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
      */
     public function cancelDelivery(CShipment $shipment)
     {
+        if(empty($shipment->trackingNumber)) return true;
+
         $cancelRequest = [
             'UPSSecurity' => $this->getUpsSecurity(),
             'VoidShipmentRequest' => [

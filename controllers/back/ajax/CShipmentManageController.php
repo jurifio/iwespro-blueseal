@@ -139,7 +139,7 @@ class CShipmentManageController extends AAjaxController
                             $shipment->carrierId,
                             $shipment->fromAddressBookId,
                             '',
-                            STimeToolbox::DbFormattedDate(date($newShipmentDate,STimeToolbox::ANGLO_DATE_FORMAT)),
+                            STimeToolbox::DbFormattedDate(date($newShipmentDate)),
                             $shipment->orderLine
                         );
                         break;
