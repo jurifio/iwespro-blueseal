@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-tag",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.tag",
+    event:"bs-product-tag",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Tagga prodotti",
@@ -11,7 +11,7 @@ window.buttonSetup = {
 (function($) {
     "use strict";
 
-    $(document).on('bs.product.tag', function () {
+    $(document).on('bs-product-tag', function () {
 
         var bsModal = $('#bsModal');
         var header = $('.modal-header h4');

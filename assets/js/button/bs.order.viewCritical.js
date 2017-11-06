@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-fire",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.order.viewCritical",
+    event: "bs-order-viewCritical",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Aggiungi un prodotto all'ordine",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.order.viewCritical', function (e, element, button) {
+$(document).on('bs-order-viewCritical', function (e, element, button) {
     let dataTable = $('.dataTable').DataTable();
     let urlDecoded = $.myDecodeGetStringFromUrl(dataTable.ajax.url());
     let critical = ('undefined' !== typeof urlDecoded.params.critical) ? urlDecoded.params.critical : 0;

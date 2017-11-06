@@ -6,14 +6,14 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-pencil",
     permission: "/admin/product/edit",
-    event: "bs.product.name.insert",
+    event: "bs-product-name-insert",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Inserisci un nuovo nome prodotto",
     placement: "bottom"
 };
 
-$(document).on('bs.product.name.insert', function (e, element, button) {
+$(document).on('bs-product-name-insert', function (e, element, button) {
     modal = new $.bsModal(
         'Inserisci un nuovo nome per i prodotti',
         {

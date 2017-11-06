@@ -6,10 +6,10 @@ window.buttonSetup = {
     rel: "tooltip",
     title: "Aggiungi una nuova distinta",
     placement: "bottom",
-    event: "btn.add.paymentbill"
+    event: "btn-add-paymentbill"
 };
 
-$(document).on('btn.add.paymentbill', function (a, b, c) {
+$(document).on('btn-add-paymentbill', function (a, b, c) {
     "use strict";
 
     let today = new Date().toISOString().slice(0, 10);

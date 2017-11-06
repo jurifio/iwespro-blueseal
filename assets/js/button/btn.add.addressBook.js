@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-address-card-o",
     permission: "/admin/product/edit",
-    event: "btn.add.addressBook",
+    event: "btn-add-addressBook",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Aggiungi Indirizzo",
     placement: "bottom"
 };
 
-$(document).on('btn.add.addressBook', function (e, element, button) {
+$(document).on('btn-add-addressBook', function (e, element, button) {
     let modal = new $.bsModal(
         'Aggiungi Indirizzo',
         {}

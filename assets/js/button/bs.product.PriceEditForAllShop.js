@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-dollar",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.PriceEditForAllShop",
+    event:"bs-product-PriceEditForAllShop",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Modifica Prezzi",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.PriceEditForAllShop', function(){
+$(document).on('bs-product-PriceEditForAllShop', function(){
 
     var selectedRows = $('.table').DataTable().rows('.selected').data();
     var selectedRowsCount = selectedRows.length;

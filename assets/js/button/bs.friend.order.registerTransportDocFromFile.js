@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-truck",
     permission:"/admin/product/edit",
-    event:"bs.friend.order.registerTransportDocFromFile",
+    event:"bs-friend-order-registerTransportDocFromFile",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Associa documento di trasporto per i resi ai friend",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.friend.order.registerTransportDocFromFile', function () {
+$(document).on('bs-friend-order-registerTransportDocFromFile', function () {
     var datatable = $('.table').DataTable();
     var selectedRows = datatable.rows('.selected').data();
 

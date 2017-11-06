@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-clone",
     permission:"/admin/product/add&&allShops",
-    event:"bs.dupe.product",
+    event:"bs-dupe-product",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Duplica prodotto",
     placement:"bottom"
 };
 
-$(document).on('bs.dupe.product', function () {
+$(document).on('bs-dupe-product', function () {
 
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();

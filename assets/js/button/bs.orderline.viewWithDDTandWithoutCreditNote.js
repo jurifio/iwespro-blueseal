@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-truck",
     permission: "/admin/order/list&&allShops",
-    event: "bs.orderline.viewWithDDTandWithoutCreditNote",
+    event: "bs-orderline-viewWithDDTandWithoutCreditNote",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Filtra le righe con DDT ma senza nota di credito",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.orderline.viewWithDDTandWithoutCreditNote', function (e, element, button) {
+$(document).on('bs-orderline-viewWithDDTandWithoutCreditNote', function (e, element, button) {
     let dataTable = $('.dataTable').DataTable();
     let urlDecoded = $.myDecodeGetStringFromUrl(dataTable.ajax.url());
     let ddtWithoutNcd = ('undefined' !== typeof urlDecoded.params.ddtWithoutNcd) ? urlDecoded.params.ddtWithoutNcd : 0;

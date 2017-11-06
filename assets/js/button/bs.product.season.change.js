@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-calendar",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.manage.changeSeason",
+    event:"bs-manage-changeSeason",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Cambia Stagione ai prodotti selezionati",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.manage.changeSeason', function () {
+$(document).on('bs-manage-changeSeason', function () {
 
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();

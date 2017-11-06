@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-object-group",
     permission: "/admin/product/edit&&allShops",
-    event: "bs.product.model.insertIntoProducts",
+    event: "bs-product-model-insertIntoProducts",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Aggiorna I prodotti da un modello",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.product.model.insertIntoProducts', function (e, element, button) {
+$(document).on('bs-product-model-insertIntoProducts', function (e, element, button) {
 
     var type = 'model';
 

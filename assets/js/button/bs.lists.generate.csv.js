@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-eye",
     permission: "/admin/product/edit&&allShops",
-    event: "bs.lists.generate.csv",
+    event: "bs-lists-generate-csv",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Esporta in CSV",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.lists.generate.csv', function (e, element, button) {
+$(document).on('bs-lists-generate-csv', function (e, element, button) {
     var table = $('.table');
 
     modal = new $.bsModal(

@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-arrow-up",
     permission: "/admin/product/delete",
-    event: "bs.shipment.shipped.time",
+    event: "bs-shipment-shipped-time",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Segnala Partenza Spedizione",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.shipment.shipped.time', function (e, element, button) {
+$(document).on('bs-shipment-shipped-time', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
 

@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-compass",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.shipment.tracking.update",
+    event: "bs-shipment-tracking-update",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Midifica Codici Ordine",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.shipment.tracking.update', function (e, element, button) {
+$(document).on('bs-shipment-tracking-update', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
 

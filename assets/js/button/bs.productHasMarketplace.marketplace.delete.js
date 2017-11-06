@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-eraser",
     permission: "/admin/product/edit&&allShops",
-    event: "bs.productHasMarketplace.marketplace.delete",
+    event: "bs-productHasMarketplace-marketplace-delete",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Cancella prodotto dal marketplace",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.productHasMarketplace.marketplace.delete', function (e, element, button) {
+$(document).on('bs-productHasMarketplace-marketplace-delete', function (e, element, button) {
 
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');

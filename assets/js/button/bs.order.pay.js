@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-money",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.order.pay",
+    event:"bs-order-pay",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Modifica lo stato di pagamento",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.order.pay', function () {
+$(document).on('bs-order-pay', function () {
     var orderId = $.QueryString['order'];
 
     modal = new $.bsModal(

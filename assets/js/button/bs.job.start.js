@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-play-circle",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.job.start",
+    event: "bs-job-start",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Avvia Job",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.job.start', function (e, element, button) {
+$(document).on('bs-job-start', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();

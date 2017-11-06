@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-eye",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.manage.changeStatus",
+    event:"bs-manage-changeStatus",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Cambia Status ai prodotti selezionati",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.manage.changeStatus', function () {
+$(document).on('bs-manage-changeStatus', function () {
 
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();

@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-money",
     permission:"/admin/product/edit",
-    event:"bs.friend.order.registerInvoiceFromFile",
+    event:"bs-friend-order-registerInvoiceFromFile",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Associa fattura alle righe dell'ordine",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.friend.order.registerInvoiceFromFile', function () {
+$(document).on('bs-friend-order-registerInvoiceFromFile', function () {
     var datatable = $('.table').DataTable();
     var selectedRows = datatable.rows('.selected').data();
 

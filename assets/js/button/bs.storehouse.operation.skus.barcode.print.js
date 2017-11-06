@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-barcode",
     permission:"/admin/product/list",
-    event:"bs.print.barcode",
+    event:"bs-print-barcode",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Stampa barcode",
@@ -12,7 +12,7 @@ window.buttonSetup = {
 /**
  * Created by enrico on 05/09/16.
  */
-$(document).on('bs.print.barcode', function (e, element, button) {
+$(document).on('bs-print-barcode', function (e, element, button) {
 
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();

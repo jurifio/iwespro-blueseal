@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-camera-retro",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.manage.photo",
+    event:"bs-manage-photo",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Gestisci foto",
     placement:"bottom"
 };
 
-$(document).on('bs.manage.photo', function () {
+$(document).on('bs-manage-photo', function () {
 
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();

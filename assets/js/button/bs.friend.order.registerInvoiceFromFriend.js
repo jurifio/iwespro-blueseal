@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-dollar",
     permission:"/admin/product/edit",
-    event:"bs.friend.order.registerInvoiceFromFriend",
+    event:"bs-friend-order-registerInvoiceFromFriend",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Crea  una fattura",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.friend.order.registerInvoiceFromFriend', function () {
+$(document).on('bs-friend-order-registerInvoiceFromFriend', function () {
     var datatable = $('.table').DataTable();
     var selectedRows = datatable.rows('.selected').data();
 

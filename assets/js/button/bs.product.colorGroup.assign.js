@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-brush",
     permission:"/admin/product/delete&&allShops",
-    event:"bs.product.colorGroup",
+    event:"bs-product-colorGroup",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Cambia gruppo colore",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.colorGroup', function (e, element, button) {
+$(document).on('bs-product-colorGroup', function (e, element, button) {
 
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');

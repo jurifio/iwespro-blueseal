@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-ship",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.order.shipment.prepare",
+    event: "bs-order-shipment-prepare",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Prepara Spedizioni",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.order.shipment.prepare', function (e, element, button) {
+$(document).on('bs-order-shipment-prepare', function (e, element, button) {
 
     const rows = $.getDataTableSelectedRowsData(null,null,1);
     if (rows === false || rows.length === 0) return;

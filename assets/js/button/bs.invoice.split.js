@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-scissors",
     permission: "/admin/product/edit&&allShops",
-    event: "bs.invoice.split",
+    event: "bs-invoice-split",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Dividi Fattura",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.invoice.split', function () {
+$(document).on('bs-invoice-split', function () {
 
     let rows = $.getDataTableSelectedRowsData();
 

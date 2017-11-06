@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-bar-chart",
     permission: "/admin/product/edit&&allShops",
-    event: "bs.product.marketing-analyze",
+    event: "bs-product-marketing-analyze",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Visualizza i dati di marketing",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.product.marketing-analyze', function (e, element, button) {
+$(document).on('bs-product-marketing-analyze', function (e, element, button) {
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();
     var header = $('#bsModal .modal-header h4');

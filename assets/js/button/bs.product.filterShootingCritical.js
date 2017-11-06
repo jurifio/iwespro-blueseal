@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-file-image-o",
     permission: "/admin/product/list&&allShops",
-    event: "bs.product.filterShootingCritical",
+    event: "bs-product-filterShootingCritical",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Filtra I prodotti con problemi allo shooting",
@@ -10,6 +10,6 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.product.filterShootingCritical', function (e, element, button) {
+$(document).on('bs-product-filterShootingCritical', function (e, element, button) {
     $('.dataTable').dataTableFilter(element, 'shootingCritical');
 });

@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-cogs",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.order.massiveUpdateStatus",
+    event: "bs-order-massiveUpdateStatus",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Modifica massiva dello stato degli ordini",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.order.massiveUpdateStatus', function (e, element, button) {
+$(document).on('bs-order-massiveUpdateStatus', function (e, element, button) {
     var dataTable = $('.dataTable').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 

@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-unlock-alt",
     permission: "/admin/product/edit&&allShops",
-    event: "bs.user.password.change",
+    event: "bs-user-password-change",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Cambia Password",
     placement: "bottom"
 };
 
-$(document).on('bs.user.password.change', function () {
+$(document).on('bs-user-password-change', function () {
 
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');

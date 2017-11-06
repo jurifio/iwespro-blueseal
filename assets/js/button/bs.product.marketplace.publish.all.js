@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-angle-double-right",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.marketplace.publish-all",
+    event:"bs-product-marketplace-publish-all",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Pubblica tutto!",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.marketplace.publish-all', function (e, element, button) {
+$(document).on('bs-product-marketplace-publish-all', function (e, element, button) {
 
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');

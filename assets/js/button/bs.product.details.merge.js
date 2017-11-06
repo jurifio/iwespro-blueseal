@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-tasks",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.details.merge",
+    event:"bs-product-details.merge",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Copia dettagli",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.details.merge', function (e, element, button) {
+$(document).on('bs-product-details.merge', function (e, element, button) {
 
     var type = 'model';
 
@@ -211,7 +211,7 @@ $(document).on('bs.product.details.merge', function (e, element, button) {
 
 //////////////////////////////////////////////////////////
 
-/*$(document).on('bs.product.mergedetails', function () {
+/*$(document).on('bs-product-mergedetails', function () {
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');

@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-file-code-o",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.paymentBill.print",
+    event: "bs-paymentBill-print",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Scarica XML Fattura",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.paymentBill.print', function (e, element, button) {
+$(document).on('bs-paymentBill-print', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();

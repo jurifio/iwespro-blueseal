@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-check-square-o",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.paymentBill.submit",
+    event: "bs-paymentBill-submit",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Segna distinta come Sottomessa",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.paymentBill.submit', function (e, element, button) {
+$(document).on('bs-paymentBill-submit', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();

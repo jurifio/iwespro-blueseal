@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-trash",
     permission:"/admin/product/delete&&allShops",
-    event:"bs.del.product",
+    event:"bs-del-product",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Elimina prodotto",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.del.product', function (e, element, button) {
+$(document).on('bs-del-product', function (e, element, button) {
 
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');

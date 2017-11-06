@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-share",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.marketplace.publish",
+    event:"bs-product-marketplace-publish",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Pubblica prodotto sui marketplace",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.marketplace.publish', function (e, element, button) {
+$(document).on('bs-product-marketplace-publish', function (e, element, button) {
 
     let bsModal = $('#bsModal');
     let header = $('.modal-header h4');

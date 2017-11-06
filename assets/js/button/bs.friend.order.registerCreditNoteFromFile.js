@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-dollar",
     permission:"/admin/product/edit",
-    event:"bs.friend.order.registerCreditNoteFromFile",
+    event:"bs-friend-order-registerCreditNoteFromFile",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Associa Nota di credito a righe d'ordine rese",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.friend.order.registerCreditNoteFromFile', function () {
+$(document).on('bs-friend-order-registerCreditNoteFromFile', function () {
     var datatable = $('.table').DataTable();
     var selectedRows = datatable.rows('.selected').data();
 

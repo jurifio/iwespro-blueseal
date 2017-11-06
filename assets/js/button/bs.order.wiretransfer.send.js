@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-university",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.order.wiretransfer.send",
+    event: "bs-order-wiretransfer-send",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Mail: Ordine con bonifico",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.order.wiretransfer.send', function (e, element, button) {
+$(document).on('bs-order-wiretransfer-send', function (e, element, button) {
 
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');

@@ -6,10 +6,10 @@ window.buttonSetup = {
     rel: "tooltip",
     title: "Aggiungi una nuova spedizione",
     placement: "bottom",
-    event: "btn.add.shipmentToUs"
+    event: "btn-add-shipmentToUs"
 };
 
-$(document).on('btn.add.shipmentToUs', function (a, b, c) {
+$(document).on('btn-add-shipmentToUs', function (a, b, c) {
     "use strict";
 
     let today = new Date().toISOString().slice(0, 10);

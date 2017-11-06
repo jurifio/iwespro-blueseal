@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-qrcode",
     permission:"/admin/product/list",
-    event:"bs.print.aztec",
+    event:"bs-print-aztec",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Stampa aztec",
     placement:"bottom"
 };
 
-$(document).on('bs.print.aztec', function (e, element, button) {
+$(document).on('bs-print-aztec', function (e, element, button) {
 
     var getVarsArray = [];
     var selectedRows = $('.table').DataTable().rows('.selected').data();

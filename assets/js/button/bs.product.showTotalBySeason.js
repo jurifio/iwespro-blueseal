@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-sitemap",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.showTotalBySeason",
+    event:"bs-product-showTotalBySeason",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Mostra prodotti per Friend",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.showTotalBySeason', function (e, element, button) {
+$(document).on('bs-product-showTotalBySeason', function (e, element, button) {
 
     $.when(
         $.ajax({

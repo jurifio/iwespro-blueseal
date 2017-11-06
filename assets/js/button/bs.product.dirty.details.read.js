@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-search",
     permission: "/admin/product/edit",
-    event: "bs.product.dirty.details.read",
+    event: "bs-product-dirty-details-read",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Leggi Dettagli da prodotti Sporchi",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.product.dirty.details.read', function (e) {
+$(document).on('bs-product-dirty-details-read', function (e) {
 
     let bsModal = $('#bsModal');
     let header = $('#bsModal .modal-header h4');

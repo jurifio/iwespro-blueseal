@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-percent",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.sales.price",
+    event:"bs-sales-price",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Cambia prezzi ai prodotti selezionati",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.sales.price', function () {
+$(document).on('bs-sales-price', function () {
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');

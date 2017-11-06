@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-camera",
     permission: "/admin/product/edit",
-    event: "bs.product.photo.download",
+    event: "bs-product-photo-download",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Scarica Foto",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.product.photo.download', function () {
+$(document).on('bs-product-photo-download', function () {
 
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');

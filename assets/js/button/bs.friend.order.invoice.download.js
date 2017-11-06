@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-print",
     permission:"/admin/product/edit",
-    event:"bs.friend.order.invoice.download",
+    event:"bs-friend-order-invoice-download",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Stampa la fattura",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.friend.order.invoice.download', function () {
+$(document).on('bs-friend-order-invoice-download', function () {
     var datatable = $('.table').DataTable();
     var selectedRows = datatable.rows('.selected').data();
     var selectedRowsCount = selectedRows.length;

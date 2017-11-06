@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-magic",
     permission: "/admin/product/edit&&allShops",
-    event: "bs.manage.sizeGroups",
+    event: "bs-manage-sizeGroups",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Assegna Gruppi taglie",
     placement: "bottom"
 };
 
-$(document).on('bs.manage.sizeGroups', function () {
+$(document).on('bs-manage-sizeGroups', function () {
 
     var selectedRows = $.getDataTableSelectedRowsData();
 

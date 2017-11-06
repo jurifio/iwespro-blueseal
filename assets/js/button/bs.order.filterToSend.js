@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-paper-plane",
     permission: "/admin/product/&&allShops",
-    event: "bs.product.filterToSend",
+    event: "bs-product-filterToSend",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Filtra gli ordini da spedire",
@@ -10,6 +10,6 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.product.filterToSend', function (e, element, button) {
+$(document).on('bs-product-filterToSend', function (e, element, button) {
     $('.dataTable').dataTableFilter(element, 'toSend');
 });

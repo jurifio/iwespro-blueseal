@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-sort-numeric-asc",
     permission: "/admin/product/edit&&allShops",
-    event: "bs.product.priority.change",
+    event: "bs-product-priority-change",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Cambia Priorità prodotto",
     placement: "bottom"
 };
 
-$(document).on('bs.product.priority.change', function () {
+$(document).on('bs-product-priority-change', function () {
 
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');

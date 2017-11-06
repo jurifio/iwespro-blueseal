@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-suitcase",
     permission:"/admin/product/mag&&allShops",
-    event:"bs.product.shopEnableDisable",
+    event:"bs-product-shopEnableDisable",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Accendi e spegni i friend",
     placement:"bottom"
 };
 
-$(document).on('bs.product.shopEnableDisable', function () {
+$(document).on('bs-product-shopEnableDisable', function () {
 
     modal = new  $.bsModal(
         'Il magico interruttore dei Friend',

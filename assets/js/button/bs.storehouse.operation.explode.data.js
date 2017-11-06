@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-bars",
     permission:"/admin/product/list",
-    event:"bs.storehouse.operation.explode.data",
+    event:"bs-storehouse-operation-explode-data",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Esplodi Movimenti",
@@ -12,7 +12,7 @@ window.buttonSetup = {
 /**
  * Created by enrico on 05/09/16.
  */
-$(document).on('bs.storehouse.operation.explode.data', function (e, element, button) {
+$(document).on('bs-storehouse-operation-explode-data', function (e, element, button) {
 
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();

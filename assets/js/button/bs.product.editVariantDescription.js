@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-paint-brush",
     permission: "/admin/product/edit",
-    event: "bs.product.editVariantDescription",
+    event: "bs-product-editVariantDescription",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Aggiorna nome colore produttore",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.product.editVariantDescription', function (e) {
+$(document).on('bs-product-editVariantDescription', function (e) {
     e.preventDefault();
 
     var selectedRows = $('.table').DataTable().rows('.selected').data();

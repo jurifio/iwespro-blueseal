@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-ban",
     permission: "allShops",
-    event: "bs.document.cancel",
+    event: "bs-document-cancel",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Annulla Documento",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.document.cancel', function (e, element, button) {
+$(document).on('bs-document-cancel', function (e, element, button) {
 
     var selectedRow = $.getDataTableSelectedRowData(null, null, 1, 1);
 

@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-book",
     permission: "/admin/product/edit",
-    event: "bs.order.getOrderLineStatusHistory",
+    event: "bs-order-getOrderLineStatusHistory",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Storico Stati Linee Ordine",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.order.getOrderLineStatusHistory', function () {
+$(document).on('bs-order-getOrderLineStatusHistory', function () {
     let datatable = $('.table').DataTable();
     let selectedRows = datatable.rows('.selected').data();
     let selectedRowsCount = selectedRows.length;

@@ -3,7 +3,7 @@ window.buttonSetup = {
     icon: "fa-calendar",
     permission: "/admin/product/edit",
     class: "btn btn-default",
-    loadEvent: "bs.dateinput.load",
+    loadEvent: "bs-dateinput-load",
     rel: "",
     title: "Seleziona Date",
     placement: "bottom"
@@ -59,7 +59,7 @@ var attachDatePicker = function (table,dataTable,button) {
     });
 };
 
-$(document).on('bs.dateinput.load', function (a, b) {
+$(document).on('bs-dateinput-load', function (a, b) {
     var table = $('table.table');
     var dataTable = table.DataTable();
     var that = $('#bsButton_' + b.id);

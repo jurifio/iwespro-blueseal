@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-pencil",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.order.viewCountersign",
+    event: "bs-order-viewCountersign",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Filtra gli ordini con contrassegno",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.order.viewCountersign', function (e, element, button) {
+$(document).on('bs-order-viewCountersign', function (e, element, button) {
     let dataTable = $('.dataTable').DataTable();
     let urlDecoded = $.myDecodeGetStringFromUrl(dataTable.ajax.url());
     let countersign = ('undefined' !== typeof urlDecoded.params.countersign) ? urlDecoded.params.countersign : 0;

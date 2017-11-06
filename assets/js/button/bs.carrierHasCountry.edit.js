@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-pencil-square-o",
     permission: "allShops",
-    event: "bs.carrierHasCountry.edit",
+    event: "bs-carrierHasCountry-edit",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Modifica",
     placement: "bottom"
 };
 
-$(document).on('bs.carrierHasCountry.edit', function (e, element, button) {
+$(document).on('bs-carrierHasCountry-edit', function (e, element, button) {
 
     var selectedRow = $.getDataTableSelectedRowsData(null,false,1);
 

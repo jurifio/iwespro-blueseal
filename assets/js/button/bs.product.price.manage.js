@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-qrcode",
     permission:"/admin/product/list&&allShops",
-    event:"bs.product.price.manage",
+    event:"bs-product-price-manage",
     class:"btn btn-dollar",
     rel:"tooltip",
     title:"Gestisci i prezzi di un prodotto",
     placement:"bottom"
 };
 
-$(document).on('bs.product.prices.manage', function(){
+$(document).on('bs-product-prices-manage', function(){
     var selectedRows = $('.table').DataTable().rows('.selected').data();
     var selectedRowsCount = selectedRows.length;
 

@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-burn",
     permission:"/admin/product/edit",
-    event:"bs.friend.order.registerCreditNoteOnReturn",
+    event:"bs-friend-order-registerCreditNoteOnReturn",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Crea  una nota di credito per un Reso",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.friend.order.registerCreditNoteOnReturn', function () {
+$(document).on('bs-friend-order-registerCreditNoteOnReturn', function () {
     var datatable = $('.table').DataTable();
     var selectedRows = datatable.rows('.selected').data();
 

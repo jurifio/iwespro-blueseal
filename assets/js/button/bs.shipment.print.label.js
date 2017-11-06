@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-barcode",
     permission: "/admin/blueseal",
-    event: "bs.shipment.print.label",
+    event: "bs-shipment-print-label",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Stampa SegnaCollo Spedizione",
     placement: "bottom"
 };
 
-$(document).on('bs.shipment.print.label', function (e, element, button) {
+$(document).on('bs-shipment-print-label', function (e, element, button) {
 
     let selected = $.getDataTableSelectedRowsData(null, false, 1);
     let params = [];

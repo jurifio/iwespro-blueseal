@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-map-marker",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.shipment.print.positioning",
+    event: "bs-shipment-print-positioning",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Stampa Segnaposto",
     placement: "bottom"
 };
 
-$(document).on('bs.shipment.print.positioning', function (e, element, button) {
+$(document).on('bs-shipment-print-positioning', function (e, element, button) {
 
     let selected = $.getDataTableSelectedRowsData(null, false, 1);
     let params = [];

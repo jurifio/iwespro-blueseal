@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-check-square-o",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.processingUpdate",
+    event:"bs-product-processingUpdate",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Cambia Stato di lavorazione ai prodotti selezionati",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.processingUpdate', function () {
+$(document).on('bs-product-processingUpdate', function () {
 
     let datatable = $('.table').DataTable();
 

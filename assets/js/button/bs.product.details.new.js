@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-plus-square",
     permission:"/admin/product/edit",
-    event:"bs.product.details.new",
+    event:"bs-product-details-new",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Aggiungi un nuovo dettaglio",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.details.new', function (e) {
+$(document).on('bs-product-details-new', function (e) {
     e.preventDefault();
 
     var bsModal = $('#bsModal');

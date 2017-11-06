@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-sitemap",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.model.createByProduct",
+    event:"bs-product-model-createByProduct",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Crea nuovo modello da prodotto",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.model.createByProduct', function (e, element, button) {
+$(document).on('bs-product-model-createByProduct', function (e, element, button) {
 
     var selectedRows = $('.table').DataTable().rows('.selected').data();
 

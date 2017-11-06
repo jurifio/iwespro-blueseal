@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-usd",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.sales.set",
+    event:"bs-sales-set",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Metti in saldo i prodotti Selezionati",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.sales.set', function () {
+$(document).on('bs-sales-set', function () {
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');
     var header = $('#bsModal .modal-header h4');

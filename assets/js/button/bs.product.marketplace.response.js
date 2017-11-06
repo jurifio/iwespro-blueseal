@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-file-code-o",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.product.marketplace.response",
+    event:"bs-product-marketplace-response",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Leggi Stato",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.product.marketplace.response', function () {
+$(document).on('bs-product-marketplace-response', function () {
 
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');

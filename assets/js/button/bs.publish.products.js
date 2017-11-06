@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-cloud-upload",
     permission: "/admin/product/publish&&allShops",
-    event: "bs.pub.product",
+    event: "bs-pub-product",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Pubblica prodotti",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.pub.product', function (e, element, button) {
+$(document).on('bs-pub-product', function (e, element, button) {
 
     let result = {
         status: "ko",

@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-times",
     permission: "/admin/friend/order",
-    event: "bs.shipment.cancel",
+    event: "bs-shipment-cancel",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Cancella una spedizione",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.shipment.cancel', function (e, element, button) {
+$(document).on('bs-shipment-cancel', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
 

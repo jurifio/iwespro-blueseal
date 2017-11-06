@@ -2,14 +2,14 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-list-ul",
     permission: "/admin/product/edit",
-    event: "bs.product.details.replace",
+    event: "bs-product-details-replace",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Sostituisci Dettagli",
     placement: "bottom"
 };
 
-$(document).on('bs.product.details.replace', function (e, element, button) {
+$(document).on('bs-product-details-replace', function (e, element, button) {
     let productsId = $.getDataTableSelectedRowsData('.table','DT_RowId',1);
     if(productsId == false) return false;
     let modal = new $.bsModal(

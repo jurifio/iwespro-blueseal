@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-arrow-down",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.shipment.delivery.time",
+    event: "bs-shipment-delivery-time",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Segnala Arrivo Spedizione",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.shipment.delivery.time', function (e, element, button) {
+$(document).on('bs-shipment-delivery-time', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
 
@@ -74,7 +74,7 @@ $(document).on('bs.shipment.delivery.time', function (e, element, button) {
                         },
                     }).done(function (res2) {
                         modal.writeBody(res2);
-                        if(res2.scope === 'supplierToUs') $(document).trigger('bs.shipment.print.positioning');
+                        if(res2.scope === 'supplierToUs') $(document).trigger('bs-shipment-print-positioning');
                     }).fail(function (res) {
                         modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
                         console.error(error);

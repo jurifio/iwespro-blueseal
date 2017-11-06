@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-sitemap",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.category.edit",
+    event:"bs-category-edit",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Cambia Categoria ai prodotti selezionati",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.category.edit', function (e, element, button) {
+$(document).on('bs-category-edit', function (e, element, button) {
     var bsModal = $('#bsModal');
     var dataTable = $('.dataTable').DataTable();
     var header = $('#bsModal .modal-header h4');

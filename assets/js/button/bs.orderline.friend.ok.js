@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-thumbs-up",
     permission: "/admin/product/list",
-    event: "bs.orderline.friend.ok",
+    event: "bs-orderline-friend-ok",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Accetta le righe d'ordine selezionate",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.orderline.friend.ok', function () {
+$(document).on('bs-orderline-friend-ok', function () {
     var dataTable = $('.table').DataTable();
     var selectedRows = dataTable.rows('.selected').data();
 

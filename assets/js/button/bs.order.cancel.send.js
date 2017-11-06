@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-times-circle-o",
     permission: "/admin/product/delete&&allShops",
-    event: "bs.order.cancel.send",
+    event: "bs-order-cancel-send",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Mail: Ordine Cancellato (mancante)",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs.order.cancel.send', function (e, element, button) {
+$(document).on('bs-order-cancel-send', function (e, element, button) {
 
     var dataTable = $('.dataTable').DataTable();
     var bsModal = $('#bsModal');

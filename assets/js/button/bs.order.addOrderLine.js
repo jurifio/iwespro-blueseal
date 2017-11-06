@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-plus-circle",
     permission:"/admin/product/edit&&allShops",
-    event:"bs.order.addOrderLine",
+    event:"bs-order-addOrderLine",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Aggiungi un prodotto all'ordine",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.order.addOrderLine', function () {
+$(document).on('bs-order-addOrderLine', function () {
     var orderId = $.QueryString['order'];
 
     modal = new $.bsModal(
