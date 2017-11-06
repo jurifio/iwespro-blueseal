@@ -130,8 +130,14 @@ class CShipmentManageController extends AAjaxController
             $shipmentRepo->cancel($shipment, $shipmentFault);
 
             if($recreateShipment) {
+                \Monkey::app()->applicationReport(
+                    'ShipmentManageController',
+                    'Shipment Recreation',
+                    'Recreating shipment for id: '.$shipment->printId().' to '.$newShipmentDate
+                    );
                 switch ($shipment->scope) {
                     case CShipment::SCOPE_SUPPLIER_TO_US: {
+
                         if(!$newShipmentDate) {
                             $newShipmentDate = SDateToolbox::GetNextWorkingDay(STimeToolbox::GetDateTime());
                         }
@@ -139,7 +145,7 @@ class CShipmentManageController extends AAjaxController
                             $shipment->carrierId,
                             $shipment->fromAddressBookId,
                             '',
-                            STimeToolbox::DbFormattedDate(date($newShipmentDate,STimeToolbox::ANGLO_DATE_FORMAT)),
+                            STimeToolbox::DbFormattedDate(date($newShipmentDate)),
                             $shipment->orderLine
                         );
                         break;
