@@ -38,15 +38,16 @@ class CProductMerge extends AAjaxController
         $repoPro = $this->app->repoFactory->create('Product');
         $repoOrd = $this->app->repoFactory->create('OrderLine');
         $sizeGroupCompatibility = true;
-        $sizeGroup = 0;
+        $sizeGroupMacroGroup = false;
 
         foreach ($prods as $k => $v) {
-            $prod = $repoPro->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            /** @var CProduct $product */
+            $product = $repoPro->findOne($v);
 
-            if (0 == $sizeGroup) {
-                $sizeGroup = $prod->productSizeGroupId;
+            if ($sizeGroupMacroGroup === false) {
+                $sizeGroupMacroGroup = $product->productSizeGroup->macroName;
             } else {
-                if ($prod->productSizeGroupId != $sizeGroup) {
+                if ($product->productSizeGroup->macroName != $sizeGroupMacroGroup) {
                     $sizeGroupCompatibility = false;
                     break;
                 }
@@ -55,7 +56,7 @@ class CProductMerge extends AAjaxController
 
 
             $skus = [];
-            foreach ($prod->productSku as $sku) {
+            foreach ($product->productSku as $sku) {
                 if (!in_array($sku->shopId, $skus)) $skus[] = $sku->shopId;
             }
 
@@ -65,7 +66,7 @@ class CProductMerge extends AAjaxController
                 $prods[$k]['friend'] = \Monkey::app()->repoFactory->create('Shop')->findOne([$skus[0]])->title;
             }
 
-            $prods[$k]['cpf'] = $prod->itemno . '#' . $prod->productVariant->name;
+            $prods[$k]['cpf'] = $product->printCpf();
         }
 
         $res = [
@@ -96,13 +97,10 @@ class CProductMerge extends AAjaxController
         $chosenProduct = null;
         $otherProducts = [];
         foreach ($rows as $key => $row) {
-            $product = $productRepo->findOneBy([
-                'id' => $row['id'],
-                'productVariantId' => $row['productVariantId']
-            ]);
+            /** @var CProduct $product */
+            $product = $productRepo->findOne($row);
 
             if ($product->productStatusId == 13) return "Errore: uno dei prodotti da fondere è già in stato FUSO: " . $product->printId();
-
             if ($key == $choosen) {
                 $chosenProduct = $product;
             } else {
@@ -122,8 +120,9 @@ class CProductMerge extends AAjaxController
 
             /** @var CProduct $chosenProduct */
             foreach ($otherProducts as $otherProduct) {
+
                 /** @var CProduct $otherProduct */
-                if ($otherProduct->productSizeGroupId !== null && $otherProduct->productSizeGroupId != $chosenProduct->productSizeGroupId) {
+                if ($otherProduct->productSizeGroupId !== null && $otherProduct->productSizeGroup->macroName != $chosenProduct->productSizeGroup->macroName) {
                     return "Errore: I gruppi taglia dei prodotti da fondere sono incompatibili: " . $otherProduct->printId();
                 }
 
@@ -201,9 +200,9 @@ class CProductMerge extends AAjaxController
                         }
 
                         try {
-                            foreach ($otherProductSku->cartLine as $cartLine) {
+                            foreach ($otherProductSku->getPublicProductSku()->cartLine as $cartLine) {
                                 $cartRepo->removeSku($cartLine);
-                                $cartRepo->addSku($chosenProductSku, 1, $cartLine->cart);
+                                $cartRepo->addSku($chosenProductSku->getPublicProductSku(), 1, $cartLine->cart);
                             }
                         } catch (\Throwable $e) {
                             throw new BambooLogicException('Non sono riuscito a modificare i carrelli collegati', [], -1, $e);

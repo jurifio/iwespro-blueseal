@@ -80,15 +80,21 @@ $(document).on('bs-product-merge', function () {
                     bsModal.setCancelLabel("Ci ho ripensato");
                     bsModal.setOkLabel('Fondi!!!');
                     bsModal.setOkEvent(function () {
+                        bsModal.hideOkBtn();
+                        bsModal.hideCancelBtn();
                         bsModal.showLoader();
                         Pace.ignore(function () {
                             $.ajax({
                                 url: '/blueseal/xhr/ProductMerge',
                                 type: 'POST',
-                                data: {action: "merge", rows: row, choosen: choosen}
+                                data: {
+                                    action: "merge",
+                                    rows: rows,
+                                    choosen: choosen
+                                }
                             }).done(function (res) {
                                 bsModal.writeBody(res);
-                                bsModal.hideCancelBtn();
+                                bsModal.showOkBtn();
                                 bsModal.setOkLabel("Ok");
                                 bsModal.setOkEvent(function () {
                                     bsModal.hide();
