@@ -27,7 +27,9 @@ $(document).on('bs-product-merge', function () {
         rows.push(row);
     });
     let bsModal = new $.bsModal('Fondi ' + (rows.length) + ' prodotti');
-
+    bsModal.hideCancelBtn();
+    bsModal.hideOkBtn();
+    bsModal.setCancelLabel('Annulla');
     Pace.ignore(function () {
         $.ajax({
             url: '/blueseal/xhr/ProductMerge',
@@ -45,10 +47,10 @@ $(document).on('bs-product-merge', function () {
             }
 
             if ('' !== error) {
-                body.html(':-( Non posso procedere alla fusione:<br />' + error);
-                cancelButton.hide();
-                okButton.html('Ok').off().on("click", function () {
-                    bsModal.modal("hide");
+                bsModal.writeBody(':-( Non posso procedere alla fusione:<br />' + error);
+                bsModal.hideCancelBtn();
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
                 });
             } else {
                 var bodyMsg = '<p>Seleziona il prodotto che rimarrà in catalogo:</p><form>';
@@ -59,7 +61,7 @@ $(document).on('bs-product-merge', function () {
                     if ((0 < countOrderedProducts) && (0 == v['areOrders'])) {
                         radio += 'disabled="disabled"'
                     } else {
-                        if (false == selected) {
+                        if (false === selected) {
                             radio += 'checked';
                             selected = true;
                         }
@@ -68,25 +70,30 @@ $(document).on('bs-product-merge', function () {
                 });
                 bodyMsg += radio;
                 bodyMsg += '</form><p>Se uno dei prodotti è stato acquistato sarà la scelta obbligata</p>';
-                body.html(bodyMsg);
-                cancelButton.html("Annulla").show().on('click', function () {
-                    bsModal.hide();
-                });
-                okButton.html("Fondi").off().on('click', function () {
+                bsModal.writeBody(bodyMsg);
+                bsModal.showCancelBtn();
+                bsModal.setOkLabel('Fondi');
+                bsModal.showOkBtn();
+                bsModal.setOkEvent(function () {
                     var choosen = $('input[name="choosen"]:checked').val();
-                    body.html("Pensaci un momento. L'azione non è reversibile!");
-                    cancelButton.html("Ci ho ripensato");
-                    okButton.html("Fondi!").off().on('click', function () {
-                        $.ajax({
-                            url: '/blueseal/xhr/ProductMerge',
-                            type: 'POST',
-                            data: {action: "merge", rows: row, choosen: choosen}
-                        }).done(function (res) {
-                            body.html(res);
-                            cancelButton.hide();
-                            okButton.html("Ok").off().on('click', function () {
-                                bsModal.modal("hide");
-                                dataTable.ajax.reload(null, false);
+                    bsModal.writeBody("Pensaci un momento. L'azione non è reversibile!");
+                    bsModal.setCancelLabel("Ci ho ripensato");
+                    bsModal.setOkLabel('Fondi!!!');
+                    bsModal.setOkEvent(function () {
+                        bsModal.showLoader();
+                        Pace.ignore(function () {
+                            $.ajax({
+                                url: '/blueseal/xhr/ProductMerge',
+                                type: 'POST',
+                                data: {action: "merge", rows: row, choosen: choosen}
+                            }).done(function (res) {
+                                bsModal.writeBody(res);
+                                bsModal.hideCancelBtn();
+                                bsModal.setOkLabel("Ok");
+                                bsModal.setOkEvent(function () {
+                                    bsModal.hide();
+                                    $.refreshDataTable();
+                                });
                             });
                         });
                     });

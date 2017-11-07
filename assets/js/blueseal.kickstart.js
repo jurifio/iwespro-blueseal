@@ -392,13 +392,13 @@ let modalMock = '<div class="modal fade" id="bsModal" tabindex="-1" role="dialog
 /** FIXME questa cosa non è chiara, c'è già un costruttore della modale in bootstrap, un altro in prototype (mai chiamato) e questo */
 $.bsModal = function (header, params) {
     let self = this;
-    if ('undefined' != typeof modal) {
+    if ('undefined' !== typeof modal) {
         modal.hide();
         delete(modal);
     }
     //constructor
     self = this;
-    if ('undefined' == typeof header) {
+    if ('undefined' === typeof header) {
         console.error("the param 'header' is mandatory");
         return false;
     }
