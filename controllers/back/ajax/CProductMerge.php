@@ -210,6 +210,7 @@ class CProductMerge extends AAjaxController
                     }
                 }
                 try {
+                    $otherProduct->writeHistory('Fusion','Fused with product: '.$chosenProduct->printId());
                     $otherProduct->productStatusId = 13;
                     $otherProduct->update();
                 } catch (\Throwable $e) {
