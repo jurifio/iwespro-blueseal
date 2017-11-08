@@ -19,17 +19,17 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
 
     let single = [];
     let multi = [];
-    for(let selectedRow of selectedRows) {
-        if(selectedRow['shops'] > 1) {
+    for (let selectedRow of selectedRows) {
+        if (selectedRow['shops'] > 1) {
             multi.push(selectedRow['DT_RowId']);
         } else {
             single.push(selectedRow['DT_RowId']);
         }
     }
 
-    if(multi.length === 0 && single.length > 0) {
+    if (multi.length === 0 && single.length > 0) {
         modificaSingoli(single);
-    } else if(multi.length > 1 && single.length > 0) {
+    } else if (multi.length > 1 && single.length > 0) {
         let bsModal = new $.bsModal('Cambia gruppo Taglie Privato', {
             body: 'Ci sono prodotti con più di uno shop, vuoi continuare ignorandoli?'
         });
@@ -37,7 +37,7 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
         bsModal.setOkEvent(function () {
             modificaSingoli(single);
         });
-    } else if(multi.length === 1 && single.length === 0) {
+    } else if (multi.length === 1 && single.length === 0) {
         modificaMultiplo(multi[0]);
     } else {
         new $.bsModal('Cambia gruppo Taglie Privato', {
@@ -46,16 +46,112 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
     }
 });
 
-const modificaMultiplo = function(selectedRow) {
+const modificaMultiplo = function (selectedRow) {
     "use strict";
+    let bsModal = new $.bsModal('Cambia gruppo Taglie Privato', {});
 
+    let ids = selectedRow.split('-');
+    let shopHasProductCall = $.ajax({
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: "ShopHasProduct",
+            condition: {
+                productId: ids[0],
+                productVariantId: ids[1]
+            },
+            fields: [
+                "productId",
+                "productVariantId",
+                "shopId",
+                "shop",
+                "productSizeGroup"
+            ]
+        },
+        dataType: "json"
+    }).then(function(res) {
+        if(typeof res === "object" || res instanceof Array) return res;
+        return JSON.parse(res);
+    });
+    let productSizeGroupCall = $.ajax({
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: "ProductSizeGroup"
+        },
+        dataType: "json"
+    }).then(function(res) {
+        if(typeof res === "object" || res instanceof Array) return res;
+        return JSON.parse(res);
+    });
+    Pace.ignore(function () {
+        $.when(shopHasProductCall, productSizeGroupCall).then(function (shopHasProducts, productSizeGroups) {
+            let html = '';
+            for (let shopHasProduct of shopHasProducts) {
+                let shopHasProductId = [shopHasProduct.productId,shopHasProduct.productVariantId,shopHasProduct.shopId].join('-');
+                html += '<div class="row">' +
+                    '<div class="col-sm-12">' +
+                        '<div class="form-group form-group-default selectize-enabled required">' +
+                            '<label>Gruppo Taglie Privato '+shopHasProduct.shop.name+'</label>' +
+                            '<select class="full-width productSizeGroupSelect" ' +
+                                'data-id="'+ shopHasProductId +'" ' +
+                                'data-preset="'+ shopHasProduct.productSizeGroup.id +'" ' +
+                                'placeholder="Seleziona il gruppo taglie"></select>' +
+                        '</div>' +
+                    '</div>' +
+                    '</div>';
+            }
+            bsModal.writeBody(html);
+            bsModal.getElement().find('.productSizeGroupSelect').each(function () {
+                let select = $(this);
+                if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    items: [$(this).data('preset')],
+                    options: productSizeGroups,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.locale) + '</span>' +
+                                ' - <span class="caption">' + escape(item.macroName + ' / ' + item.name) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.locale) + '</span>' +
+                                ' - <span class="caption">' + escape(item.macroName + ' / ' + item.name) + '</span>' +
+                                '</div>'
+                        }
+                    }
+                });
+            });
+
+            bsModal.showCancelBtn();
+            bsModal.setOkEvent(function () {
+                shopHasProducts = [];
+                bsModal.getElement().find('.productSizeGroupSelect').each(function () {
+                    shopHasProducts[$(this).data('id')] = $(this).val();
+                });
+                bsModal.showLoader();
+                Pace.ignore(function () {
+                    $.ajax({
+                        url: '/blueseal/xhr/ChangePrivateProductSizeGroupController',
+                        data: {
+                            shopHasProductsGroup: shopHasProducts
+                        },
+                        method: 'POST'
+                    });
+                });
+            });
+        });
+    });
 };
 
 const modificaSingoli = function (selectedRows) {
     "use strict";
 
     let bsModal = new $.bsModal('Cambia gruppo Taglie Privato', {});
-    bsModal.getElement().find('.modal-body').css('min-height','350px');
+    bsModal.getElement().find('.modal-body').css('min-height', '350px');
     bsModal.showLoader();
 
     Pace.ignore(function () {
@@ -104,7 +200,7 @@ const modificaSingoli = function (selectedRows) {
                 Pace.ignore(function () {
                     let value = select.val();
                     let forceChange = $('#forceChange:checked').length > 0;
-                    if(value.length === 0) return;
+                    if (value.length === 0) return;
                     bsModal.showLoader();
                     bsModal.setOkLabel('Ok');
                     bsModal.hideOkBtn();

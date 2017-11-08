@@ -2,6 +2,7 @@
 
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CShopHasProduct;
 use bamboo\domain\repositories\CShopHasProductRepo;
@@ -115,7 +116,31 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
 
     public function post()
     {
-        throw new \Exception();
+        $data = \Monkey::app()->router->request()->getRequestData('shopHasProductsGroup');
+        /** @var CShopHasProductRepo $shopHasProductRepo */
+        $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
+        $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
+        $macroGroupName = false;
+        try {
+
+            \Monkey::app()->dbAdapter->beginTransaction();
+            foreach ($data as $key => $value) {
+                /** @var CShopHasProduct $shopHasProduct */
+                $shopHasProduct = $shopHasProductRepo->findOneByStringId($key);
+                /** @var CProductSizeGroup $productSizeGroup */
+                $productSizeGroup = $productSizeGroupRepo->findOneByStringId($value);
+                if (!$macroGroupName) $macroGroupName = $productSizeGroup->macroName;
+
+                $shopHasProduct = $shopHasProductRepo->changeShopHasProductProductSizeGroup($shopHasProduct,$productSizeGroup,true);
+                if ($macroGroupName != $productSizeGroup->macroName) throw new BambooException("Macrogruppi Taglia incompatibili");
+            }
+            \Monkey::app()->dbAdapter->commit();
+            return true;
+        } catch (\Throwable $e) {
+            \Monkey::app()->dbAdapter->rollBack();
+            throw $e;
+        }
+
     }
 
     public function delete()

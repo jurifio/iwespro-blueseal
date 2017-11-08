@@ -48,23 +48,20 @@ class CGetTableContent extends AAjaxController
         if (!$table) throw new \Exception('la variabile "table" è obbligatoria');
         if (false !== $condition && !is_array($condition) || !count($condition)) throw new BambooException('Le condizioni devono essere passate sottoforma di array');
 
-        if ($condition) $OC = $this->app->repoFactory->create($table)->findBy($condition);
-        else $OC = $this->app->repoFactory->create($table)->findAll();
+        if ($condition) $objectCollection = $this->app->repoFactory->create($table)->findBy($condition);
+        else $objectCollection = $this->app->repoFactory->create($table)->findAll();
 
-        $ret = [];
-        $i = 0;
-        foreach($OC as $em) {
-            if(is_array($fields)) {
-                $ret[$i] = [];
-                foreach($fields as $f) {
-                    $ret[$i][$f] = $em->{$f};
+        if(is_array($fields)) {
+            $responseSet = [];
+            foreach($objectCollection as $item) {
+                $responseItem = [];
+                foreach ($fields as $f) {
+                    $responseItem[$f] = $item->{$f};
                 }
-            } else {
-                $ret[$i] = $em->toArray();
+                $responseSet[] = $responseItem;
             }
-
-            $i++;
-        }
-        return json_encode($ret);
+        } else $responseSet = json_encode($objectCollection);
+        \Monkey::app()->router->response()->setContentType('application/json');
+        return json_encode($responseSet);
     }
 }
