@@ -37,6 +37,7 @@ class CProductListAjaxController extends AAjaxController
                   `p`.`creationDate`                                                                                    AS `creationDate`,
                   `p`.`sortingPriorityId`                                                                               AS `productPriority`,
                   `s`.`id`                                                                                              AS `shopId`,
+                  (select count(*) from ShopHasProduct where (ShopHasProduct.productId,ShopHasProduct.productVariantId) = (p.id,p.productVariantId)) as shops,
                   if(((SELECT count(0)
                        FROM `ProductSheetActual`
                        WHERE ((`ProductSheetActual`.`productId` = `p`.`id`) AND
@@ -176,6 +177,7 @@ class CProductListAjaxController extends AAjaxController
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
 
             $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
+            $row['shops'] = $val->shopHasProduct->count();
 
             $row['mup'] = '<span class="small">';
             $row['mup'] .= implode('<br />', $mup);

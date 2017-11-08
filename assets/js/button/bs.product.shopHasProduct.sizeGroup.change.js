@@ -11,21 +11,59 @@ window.buttonSetup = {
 
 $(document).on('bs-manage-shop-sizeGroups', function () {
 
-    var selectedRows = $.getDataTableSelectedRowsData();
+    let selectedRows = $.getDataTableSelectedRowsData(undefined, false);
 
     if (selectedRows.length < 1) {
         return false;
     }
 
+    let single = [];
+    let multi = [];
+    for(let selectedRow of selectedRows) {
+        if(selectedRow['shops'] > 1) {
+            multi.push(selectedRow['DT_RowId']);
+        } else {
+            single.push(selectedRow['DT_RowId']);
+        }
+    }
+
+    if(multi.length === 0 && single.length > 0) {
+        modificaSingoli(single);
+    } else if(multi.length > 1 && single.length > 0) {
+        let bsModal = new $.bsModal('Cambia gruppo Taglie Privato', {
+            body: 'Ci sono prodotti con più di uno shop, vuoi continuare ignorandoli?'
+        });
+        bsModal.writeBody();
+        bsModal.setOkEvent(function () {
+            modificaSingoli(single);
+        });
+    } else if(multi.length === 1 && single.length === 0) {
+        modificaMultiplo(multi[0]);
+    } else {
+        new $.bsModal('Cambia gruppo Taglie Privato', {
+            body: 'La selezione effettuata non è gestita, riprova selezionando prodotti diversi'
+        });
+    }
+});
+
+const modificaMultiplo = function(selectedRow) {
+    "use strict";
+
+};
+
+const modificaSingoli = function (selectedRows) {
+    "use strict";
+
     let bsModal = new $.bsModal('Cambia gruppo Taglie Privato', {});
     bsModal.getElement().find('.modal-body').css('min-height','350px');
     bsModal.showLoader();
+
     Pace.ignore(function () {
         $.ajax({
             url: "/blueseal/xhr/ChangePrivateProductSizeGroupController",
             type: "GET",
             data: {
-                shopHasProducts: selectedRows
+                products: selectedRows
             },
             dataType: 'json'
         }).done(function (response) {
@@ -79,7 +117,7 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
                         url: "/blueseal/xhr/ChangePrivateProductSizeGroupController",
                         type: "PUT",
                         data: {
-                            shopHasProducts: selectedRows,
+                            products: selectedRows,
                             productSizeGroupId: value,
                             forceChange: forceChange
                         }
@@ -97,4 +135,4 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
             bsModal.setOkLabel('Chiudi');
         });
     });
-});
+};

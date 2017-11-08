@@ -7,7 +7,7 @@ use bamboo\domain\entities\CShopHasProduct;
 use bamboo\domain\repositories\CShopHasProductRepo;
 
 /**
- * Class CProductChangeShopProductSizeController
+ * Class CChangePrivateProductSizeGroupController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -19,21 +19,33 @@ use bamboo\domain\repositories\CShopHasProductRepo;
  * @date $date
  * @since 1.0
  */
-class CProductChangeShopProductSizeController extends AAjaxController
+class CChangePrivateProductSizeGroupController extends AAjaxController
 {
     public function get()
     {
         $products = \Monkey::app()->router->request()->getRequestData('products');
+        if ($products) {
+            $productRepo = \Monkey::app()->repoFactory->create('Product');
+            $shopHasProducts = [];
+            foreach ($products as $productIds) {
+                foreach ($productRepo->findOneByStringId($productIds)->shopHasProduct as $shopHasProduct) {
+                    $shopHasProducts[] = $shopHasProduct->printId();
+                };
+            }
+        } else {
+            $shopHasProducts = \Monkey::app()->router->request()->getRequestData('shopHasProducts');
+        }
         $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
+
         $points = [];
         $bind = [];
         $multi = [];
-        foreach ($products as $product) {
+        foreach ($shopHasProducts as $shopHasProductIds) {
             /** @var CShopHasProduct $shopHasProduct */
-            $shopHasProduct = $shopHasProductRepo->findOneByStringId($product);
-            if ($shopHasProduct->product->shopHasProduct->count() > 1) $multi[$shopHasProduct->product->printId()] = $product;
+            $shopHasProduct = $shopHasProductRepo->findOneByStringId($shopHasProductIds);
+            if ($shopHasProduct->product->shopHasProduct->count() > 1) $multi[$shopHasProduct->product->printId()] = $shopHasProductIds;
             $points[] = '(?,?,?)';
-            $bind = array_merge($bind, explode('-', $product));
+            $bind = array_merge($bind, explode('-', $shopHasProductIds));
         }
 
         if (count($multi) === 0) {
@@ -56,8 +68,23 @@ class CProductChangeShopProductSizeController extends AAjaxController
     public function put()
     {
         $productSizeGroupId = $this->app->router->request()->getRequestData('productSizeGroupId');
-        $productsIds = $this->app->router->request()->getRequestData('products');
         $forceChange = $this->app->router->request()->getRequestData('forceChange');
+
+        $productsIds = \Monkey::app()->router->request()->getRequestData('products');
+        if ($productsIds) {
+            $productRepo = \Monkey::app()->repoFactory->create('Product');
+            $shopHasProductsIds = [];
+            foreach ($productsIds as $productIds) {
+                foreach ($productRepo->findOneByStringId($productIds)->shopHasProduct as $shopHasProduct) {
+                    $shopHasProducts[] = $shopHasProduct->printId();
+                };
+            }
+            $forceChange = true;
+        } else {
+            $shopHasProductsIds = \Monkey::app()->router->request()->getRequestData('shopHasProducts');
+        }
+
+
         if (!$productSizeGroupId) {
             \Monkey::app()->router->response()->raiseProcessingError();
             return "Errore: nessun gruppo taglie selezionato.";
@@ -72,9 +99,9 @@ class CProductChangeShopProductSizeController extends AAjaxController
 
             try {
                 \Monkey::app()->dbAdapter->beginTransaction();
-                foreach ($productsIds as $productIds) {
+                foreach ($shopHasProductsIds as $shopHasProductIds) {
                     /** @var CShopHasProduct $shopHasProduct */
-                    $shopHasProduct = $shopHasProductRepo->findOneByStringId($productIds);
+                    $shopHasProduct = $shopHasProductRepo->findOneByStringId($shopHasProductIds);
                     $shopHasProductRepo->changeShopHasProductProductSizeGroup($shopHasProduct, $productSizeGroup, $forceChange);
                 }
                 \Monkey::app()->dbAdapter->commit();

@@ -21,7 +21,7 @@ $(document).on('bs-manage-sizeGroups', function () {
     bsModal.showLoader();
     Pace.ignore(function () {
         $.ajax({
-            url: "/blueseal/xhr/ProductChangeProductSizeController",
+            url: "/blueseal/xhr/ChangePublicProductSizeGroupController",
             type: "GET",
             data: {
                 products: selectedRows
@@ -70,7 +70,7 @@ $(document).on('bs-manage-sizeGroups', function () {
                         $.refreshDataTable();
                     });
                     $.ajax({
-                        url: "/blueseal/xhr/ProductChangeProductSizeController",
+                        url: "/blueseal/xhr/ChangePublicProductSizeGroupController",
                         type: "PUT",
                         data: {
                             products: selectedRows,

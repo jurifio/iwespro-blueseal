@@ -6,7 +6,7 @@ use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\repositories\CProductRepo;
 
 /**
- * Class CProductChangeProductSizeController
+ * Class CChangePublicProductSizeGroupController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -18,7 +18,7 @@ use bamboo\domain\repositories\CProductRepo;
  * @date $date
  * @since 1.0
  */
-class CProductChangeProductSizeController extends AAjaxController
+class CChangePublicProductSizeGroupController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];

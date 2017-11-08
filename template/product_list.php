@@ -145,6 +145,11 @@
                                     data-orderable="true"
                                     class="center">Prezzo Attivo
                                 </th>
+                                <th data-slug="shops"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Numero di Shops
+                                </th>
                                 <th data-slug="friendPrices"
                                     data-searchable="false"
                                     data-orderable="false"
@@ -190,16 +195,18 @@
                 data-remote="bs.product.print.aztec"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.tag.change"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.dupe"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
                 data-remote="bs.product.photo.manage"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.photo.download"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.marketplace.publish"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Attributi Prodotti">
+        <bs-toolbar-button
+                data-remote="bs.product.tag.change"
         ></bs-toolbar-button>
         <!--<bs-toolbar-button
             data-remote="bs.product.delete"
@@ -220,10 +227,10 @@
                 data-remote="bs.product.sizeGroup.change"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.model.createByProduct"
+                data-remote="bs.product.shopHasProduct.sizeGroup.change"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.PriceEditForAllShop"
+                data-remote="bs.product.model.createByProduct"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.details.merge"
@@ -244,17 +251,12 @@
                 data-remote="bs.product.dirty.details.read">
         </bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.marketplace.publish"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
                 data-remote="bs.product.editVariantDescription"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.priority.change"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.shopEnableDisable"
-        ></bs-toolbar-button>
+
         <bs-toolbar-button
                 data-remote="bs.product.details.replace"
         ></bs-toolbar-button>
@@ -264,18 +266,13 @@
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione prezzi">
         <bs-toolbar-button
+                data-remote="bs.product.PriceEditForAllShop"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.product.sales.set"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.sales.price.change"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Filtri">
-        <bs-toolbar-button
-                data-remote="bs.product.filterShootingCritical"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.filterDetailCritical"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

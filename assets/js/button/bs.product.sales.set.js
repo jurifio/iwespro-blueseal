@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-usd",
+    icon:"fa-ticket",
     permission:"/admin/product/edit&&allShops",
     event:"bs-sales-set",
     class:"btn btn-default",

@@ -27,51 +27,63 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="asc"
-                                    class="center">Id</th>
+                                    class="center">Id
+                                </th>
                                 <th data-slug="title"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Titolo</th>
+                                    class="center">Titolo
+                                </th>
                                 <th data-slug="owner"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Gestore</th>
+                                    class="center">Gestore
+                                </th>
                                 <th data-slug="currentSeasonMultiplier"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Moltiplicatore Stagione Corrente</th>
+                                    class="center">Moltiplicatore Stagione Corrente
+                                </th>
                                 <th data-slug="pastSeasonMultiplier"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Moltiplicatore Stagioni Passate</th>
+                                    class="center">Moltiplicatore Stagioni Passate
+                                </th>
                                 <th data-slug="saleMultiplier"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Moltiplicatore Saldi</th>
+                                    class="center">Moltiplicatore Saldi
+                                </th>
                                 <th data-slug="referrerEmails"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Email Notifica</th>
+                                    class="center">Email Notifica
+                                </th>
                                 <th data-slug="minReleasedProducts"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Minimo Prodotti Online</th>
+                                    class="center">Minimo Prodotti Online
+                                </th>
                                 <th data-slug="releasedProducts"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Prodotti Attualmente Online</th>
+                                    class="center">Prodotti Attualmente Online
+                                </th>
                                 <th data-slug="isActive"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Attivo</th>
+                                    class="center">Attivo
+                                </th>
                                 <th data-slug="iban"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Iban Pagamento</th>
+                                    class="center">Iban Pagamento
+                                </th>
                                 <th data-slug="users"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Utenti Attivi</th>
+                                    class="center">Utenti Attivi
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -87,7 +99,11 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-
+    <bs-toolbar-group data-group-label="Funzioni">
+        <bs-toolbar-button
+            data-remote="btn.shopEnableDisable"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
