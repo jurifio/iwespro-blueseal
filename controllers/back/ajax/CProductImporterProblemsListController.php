@@ -2,11 +2,9 @@
 
 namespace bamboo\controllers\back\ajax;
 
-use bamboo\domain\entities\CProduct;
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\intl\CLang;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
+use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CShopHasProduct;
 
 /**
  * Class CTestAjax.php
@@ -17,11 +15,10 @@ class CProductImporterProblemsListController extends AAjaxController
     public function get()
     {
         $bluesealBase = $this->app->baseUrl(false) . "/blueseal/";
-        $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
         $query =
             "SELECT
-              `p`.`id`                                                         AS `id`,
+              `p`.`id`                                                         AS `productId`,
               `p`.`productVariantId`                                           AS `productVariantId`,
               concat(`p`.`id`, '-', `p`.`productVariantId`)                    AS `productCode`,
               concat(`p`.`itemno`, ' # ', `pv`.`name`)                         AS `code`,
@@ -33,7 +30,7 @@ class CProductImporterProblemsListController extends AAjaxController
               concat_ws(' ', `psg`.`name`, `psg`.`macroName`, `psg`.`locale`)  AS `sizeGroup`,
               `p`.`creationDate`                                               AS `creationDate`,
               group_concat(`ds`.`size` ORDER BY `ds`.`size` ASC SEPARATOR '-') AS `problems`,
-              productCategoryId as categoryId
+              productCategoryId AS categoryId
             FROM `Product` `p`
               JOIN `ProductVariant` `pv` ON `pv`.`id` = `p`.`productVariantId`
               JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
@@ -44,7 +41,7 @@ class CProductImporterProblemsListController extends AAjaxController
               JOIN `ShopHasProduct` `sp` ON (`dp`.`productId` = `sp`.`productId`)
                                               AND (`dp`.`productVariantId` = `sp`.`productVariantId`)
                                               AND (`dp`.`shopId` = `sp`.`shopId`)
-              join ProductHasProductCategory phpc on p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
+              JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
               JOIN `Shop` `s` ON `sp`.`shopId` = `s`.`id`
             WHERE
               `ps`.`id` NOT IN (7, 8, 12, 13)
@@ -53,62 +50,61 @@ class CProductImporterProblemsListController extends AAjaxController
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
             HAVING (sum(`ds`.`qty`) > 0)";
 
-        $datatable = new CDataTables($query, ['id', 'productVariantId'], $_GET, true);
+        $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId'], $_GET, true);
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
         $datatable->doAllTheThings(true);
 
         $modifica = $bluesealBase . "prodotti/modifica";
-        $productRepo = \Monkey::app()->repoFactory->create('Product');
-        foreach ($datatable->getResponseSetData() as $key=>$row) {
-
-            $val = $productRepo->findOne($row);
+        $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
+        foreach ($datatable->getResponseSetData() as $key => $row) {
+            /** @var CShopHasProduct $shopHasProduct */
+            $shopHasProduct = $shopHasProductRepo->findOne($row);
             $cats = [];
-            foreach ($val->productCategoryTranslation as $cat) {
+            foreach ($shopHasProduct->product->productCategoryTranslation as $cat) {
                 $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                 unset($path[0]);
                 $cats[] = '<span>' . implode('/', array_column($path, 'slug')) . '</span>';
             }
-            $shops = [];
-            foreach ($val->shop as $shop) {
-                $shops[] = $shop->name;
-            }
-
-            $tools = "";
-            $tools .= $this->app->getUser()->hasPermission("/admin/product/list") ? '<span class="tools-spaced"><a href="' . $bluesealBase . 'printAztecCode.php?src=' . base64_encode($val->id . '-' . $val->productVariantId . '__' . $val->productBrand->name . ' - ' . $val->itemno . ' - ' . $val->productVariant->name) . '" target="_blank"><i class="fa fa-barcode"></i></a></span>' : '<span class="tools-spaced"><i class="fa fa-barcode"></i></span>';
-            $tools .= $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '"><i class="fa fa-pencil-square-o"></i></a></span>' : '<span class="tools-spaced"><i class="fa fa-pencil-square-o"></i></span>';
 
             /** @var CProduct $val */
 
-            $creationDate = new \DateTime($val->creationDate);
+            $creationDate = new \DateTime($shopHasProduct->product->creationDate);
 
-            $row["DT_RowId"] = $val->printId();
+            $row["DT_RowId"] = $shopHasProduct->printId();
             $row["DT_RowClass"] = 'colore';
-            $row["productCode"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a></span>' : $val->id . '-' . $val->productVariantId;
-            $row["shop"] = implode(',', $shops);
-            $row["code"] = $val->itemno . ' # ' . $val->productVariant->name;
-            $macroname = explode("_", explode("-", $val->productSizeGroup->macroName)[0])[0];
-            $row["sizeGroup"] = '<span class="small">' . $val->productSizeGroup->locale . '-' . $macroname . '</span>';
-            $row["dummyPicture"] = '<img width="80" src="' . $val->getDummyPictureUrl() . '">';
-            $row["brand"] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $row["categoryId"] = implode(',<br>',$cats);
-            $row["status"] = $val->productStatus->name;
+            $row["productCode"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="' . $modifica . '?id=' . $shopHasProduct->productId . '&productVariantId=' . $shopHasProduct->productVariantId . '">' . $shopHasProduct->printId() . '</a></span>' : $shopHasProduct->product->printId();
+            $row["shop"] = $shopHasProduct->shop->name;
+            $row["code"] = $shopHasProduct->product->printCpf();
+            $macroname = explode("_", explode("-", $shopHasProduct->productSizeGroup->macroName)[0])[0];
+            $row["sizeGroup"] = '<span class="small">' . $shopHasProduct->productSizeGroup->locale . '-' . $macroname . '</span>';
+            $row["dummyPicture"] = '<img width="80" src="' . $shopHasProduct->product->getDummyPictureUrl() . '">';
+            $row["brand"] = $shopHasProduct->product->productBrand->name;
+            $row["categoryId"] = $shopHasProduct->product->getLocalizedProductCategories('<br>', '/');
+            $row["status"] = $shopHasProduct->product->productStatus->name;
             $row["creationDate"] = $creationDate->format('d-m-Y H:i');
-            $row["problems"] = $this->parseProblem($val);
-            $datatable->setResponseDataSetRow($key,$row);
+            $row["problems"] = $this->parseProblem($shopHasProduct);
+            $datatable->setResponseDataSetRow($key, $row);
         }
         return $datatable->responseOut();
     }
 
     /**
-     * @param CProduct $product
+     * @param CShopHasProduct $shopHasProduct
      * @return string
      */
-    private function parseProblem(CProduct $product)
+    private function parseProblem(CShopHasProduct $shopHasProduct)
     {
         $message = "[500] Size Mismatch";
-        $sizes = $this->app->dbAdapter->query('SELECT size FROM DirtyProduct dp, DirtySku ds WHERE dp.id = ds.dirtyProductId AND dp.productId = ? AND dp.productVariantId = ?', [$product->id, $product->productVariantId])->fetchAll();
+        $sizes = $this->app->dbAdapter->query(
+            'SELECT size 
+                    FROM DirtyProduct dp 
+                      JOIN DirtySku ds on dp.id = ds.dirtyProductId 
+                    WHERE  
+                    dp.productId = :productId AND 
+                    dp.productVariantId = :productVariantId AND 
+                    dp.shopId = :shopId', $shopHasProduct->getIds())->fetchAll();
         $newSize = [];
         foreach ($sizes as $size) {
             $newSize[] = $size['size'];
