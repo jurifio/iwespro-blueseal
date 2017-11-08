@@ -103,7 +103,7 @@ $(document).on('bs.order.shipment.prepare', function (e, element, button) {
                 }).always(function () {
                     modal.setOkEvent(function () {
                         modal.hide();
-                        dataTable.ajax.reload();
+                        $.refreshDataTable();
                     });
                 });
             })
