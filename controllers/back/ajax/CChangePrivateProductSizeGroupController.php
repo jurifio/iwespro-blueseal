@@ -68,50 +68,53 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
 
     public function put()
     {
-        $productSizeGroupId = $this->app->router->request()->getRequestData('productSizeGroupId');
-        $forceChange = $this->app->router->request()->getRequestData('forceChange');
+        try {
+            $productSizeGroupId = $this->app->router->request()->getRequestData('productSizeGroupId');
+            $forceChange = $this->app->router->request()->getRequestData('forceChange');
 
-        $productsIds = \Monkey::app()->router->request()->getRequestData('products');
-        if ($productsIds) {
-            $productRepo = \Monkey::app()->repoFactory->create('Product');
-            $shopHasProductsIds = [];
-            foreach ($productsIds as $productIds) {
-                foreach ($productRepo->findOneByStringId($productIds)->shopHasProduct as $shopHasProduct) {
-                    $shopHasProducts[] = $shopHasProduct->printId();
-                };
-            }
-            $forceChange = true;
-        } else {
-            $shopHasProductsIds = \Monkey::app()->router->request()->getRequestData('shopHasProducts');
-        }
-
-
-        if (!$productSizeGroupId) {
-            \Monkey::app()->router->response()->raiseProcessingError();
-            return "Errore: nessun gruppo taglie selezionato.";
-        } elseif (!$productsIds) {
-            \Monkey::app()->router->response()->raiseProcessingError();
-            return "Nessun prodotto selezionato";
-        } else {
-            /** @var CShopHasProductRepo $shopHasProductRepo */
-            $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
-            /** @var CProductSizeGroup $productSizeGroup */
-            $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneByStringId($productSizeGroupId);
-
-            try {
-                \Monkey::app()->dbAdapter->beginTransaction();
-                foreach ($shopHasProductsIds as $shopHasProductIds) {
-                    /** @var CShopHasProduct $shopHasProduct */
-                    $shopHasProduct = $shopHasProductRepo->findOneByStringId($shopHasProductIds);
-                    $shopHasProductRepo->changeShopHasProductProductSizeGroup($shopHasProduct, $productSizeGroup, $forceChange);
+            $productsIds = \Monkey::app()->router->request()->getRequestData('products');
+            if ($productsIds) {
+                $productRepo = \Monkey::app()->repoFactory->create('Product');
+                $shopHasProductsIds = [];
+                foreach ($productsIds as $productIds) {
+                    foreach ($productRepo->findOneByStringId($productIds)->shopHasProduct as $shopHasProduct) {
+                        $shopHasProducts[] = $shopHasProduct->printId();
+                    };
                 }
-                \Monkey::app()->dbAdapter->commit();
-                return "Il gruppo taglie è stato assegnato alle righe selezionate.";
-            } catch (\Throwable $e) {
-                \Monkey::app()->dbAdapter->rollBack();
-                throw $e;
+                $forceChange = true;
+            } else {
+                $shopHasProductsIds = \Monkey::app()->router->request()->getRequestData('shopHasProducts');
             }
+
+
+            if (!$productSizeGroupId) {
+                throw new BambooException("Errore: nessun gruppo taglie selezionato.");
+            } elseif (!$productsIds) {
+                throw new BambooException("Nessun prodotto selezionato");
+            } else {
+                /** @var CShopHasProductRepo $shopHasProductRepo */
+                $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
+                /** @var CProductSizeGroup $productSizeGroup */
+                $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneByStringId($productSizeGroupId);
+
+                try {
+                    \Monkey::app()->dbAdapter->beginTransaction();
+                    foreach ($shopHasProductsIds as $shopHasProductIds) {
+                        /** @var CShopHasProduct $shopHasProduct */
+                        $shopHasProduct = $shopHasProductRepo->findOneByStringId($shopHasProductIds);
+                        $shopHasProductRepo->changeShopHasProductProductSizeGroup($shopHasProduct, $productSizeGroup, $forceChange);
+                    }
+                    \Monkey::app()->dbAdapter->commit();
+                    return "Il gruppo taglie è stato assegnato alle righe selezionate.";
+                } catch (\Throwable $e) {
+                    \Monkey::app()->dbAdapter->rollBack();
+                    throw $e;
+                }
+            }
+        } catch (\Throwable $e) {
+            return json_encode(['message'=>$e->getMessage(),'trace'=>$e->getTrace()]);
         }
+
     }
 
     public function post()
@@ -135,11 +138,11 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 $shopHasProduct = $shopHasProductRepo->changeShopHasProductProductSizeGroup($shopHasProduct,$productSizeGroup,true);
             }
             \Monkey::app()->dbAdapter->commit();
-            return true;
+            return json_encode(true);
         } catch (\Throwable $e) {
             \Monkey::app()->dbAdapter->rollBack();
             \Monkey::app()->router->response()->raiseProcessingError();
-            throw $e;
+            return json_encode(['message'=>$e->getMessage(),'trace'=>$e->getTrace()]);
         }
 
     }

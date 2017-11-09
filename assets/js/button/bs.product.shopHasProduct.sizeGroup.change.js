@@ -132,6 +132,8 @@ const modificaMultiplo = function (selectedRow) {
                 bsModal.getElement().find('select.productSizeGroupSelect').each(function () {
                     dataSet[$(this).data('id')] = $(this).val();
                 });
+                bsModal.hideOkBtn();
+                bsModal.hideCancelBtn();
                 bsModal.showLoader();
                 Pace.ignore(function () {
                     $.ajax({
@@ -139,7 +141,18 @@ const modificaMultiplo = function (selectedRow) {
                         data: {
                             shopHasProductsGroup: dataSet
                         },
-                        method: 'POST'
+                        method: 'POST',
+                        dataType: 'json'
+                    }).done(function (res) {
+                        bsModal.writeBody('Fatto');
+                    }).fail(function (res) {
+                        bsModal.writeBody('Errore: <br />'+res.responseJSON.message);
+                    }).always(function () {
+                        bsModal.setOkEvent(function () {
+                            $.refreshDataTable();
+                            bsModal.hide();
+                        });
+                        bsModal.showOkBtn();
                     });
                 });
             });
@@ -217,11 +230,15 @@ const modificaSingoli = function (selectedRows) {
                             productSizeGroupId: value,
                             forceChange: forceChange
                         }
-                    }).done(function (response) {
+                    }).done(function (res) {
                         bsModal.writeBody('Fatto');
-                        bsModal.showOkBtn();
                     }).fail(function (res) {
-                        bsModal.writeBody('Errore');
+                        bsModal.writeBody('Errore: <br />'+res.responseJSON.message);
+                    }).always(function () {
+                        bsModal.setOkEvent(function () {
+                            $.refreshDataTable();
+                            bsModal.hide();
+                        });
                         bsModal.showOkBtn();
                     });
                 });
