@@ -100,7 +100,7 @@ const modificaMultiplo = function (selectedRow) {
                     '</div>';
             }
             bsModal.writeBody(html);
-            bsModal.getElement().find('.productSizeGroupSelect').each(function () {
+            bsModal.getElement().find('select.productSizeGroupSelect').each(function () {
                 let select = $(this);
                 if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
                 select.selectize({
@@ -128,16 +128,16 @@ const modificaMultiplo = function (selectedRow) {
 
             bsModal.showCancelBtn();
             bsModal.setOkEvent(function () {
-                shopHasProducts = [];
-                bsModal.getElement().find('.productSizeGroupSelect').each(function () {
-                    shopHasProducts[$(this).data('id')] = $(this).val();
+                let dataSet = {};
+                bsModal.getElement().find('select.productSizeGroupSelect').each(function () {
+                    dataSet[$(this).data('id')] = $(this).val();
                 });
                 bsModal.showLoader();
                 Pace.ignore(function () {
                     $.ajax({
                         url: '/blueseal/xhr/ChangePrivateProductSizeGroupController',
                         data: {
-                            shopHasProductsGroup: shopHasProducts
+                            shopHasProductsGroup: dataSet
                         },
                         method: 'POST'
                     });

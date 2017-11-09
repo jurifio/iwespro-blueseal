@@ -130,14 +130,15 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 /** @var CProductSizeGroup $productSizeGroup */
                 $productSizeGroup = $productSizeGroupRepo->findOneByStringId($value);
                 if (!$macroGroupName) $macroGroupName = $productSizeGroup->macroName;
+                if ($macroGroupName != $productSizeGroup->macroName) throw new BambooException("Macrogruppi Taglia incompatibili");
 
                 $shopHasProduct = $shopHasProductRepo->changeShopHasProductProductSizeGroup($shopHasProduct,$productSizeGroup,true);
-                if ($macroGroupName != $productSizeGroup->macroName) throw new BambooException("Macrogruppi Taglia incompatibili");
             }
             \Monkey::app()->dbAdapter->commit();
             return true;
         } catch (\Throwable $e) {
             \Monkey::app()->dbAdapter->rollBack();
+            \Monkey::app()->router->response()->raiseProcessingError();
             throw $e;
         }
 
