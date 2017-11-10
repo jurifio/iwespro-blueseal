@@ -375,7 +375,9 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
                         }
                     }, 300);
             } else {
-                dataTable.columns(column).nodes().each(workTd);
+                if(dataTable.columns(column).visible()) {
+                    dataTable.columns(column).nodes().each(workTd);
+                }
             }
         }
     });
