@@ -298,74 +298,86 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
         });
     });
 
+    const workTd = function (container) {
+        container = $(container);
+        container.find('table.inner-size-table').each(function (k, table) {
+            table = $(table);
+            if (table.data('loaded') === 'true') return;
+            if (!table.is(":visible")) return;
+            let productId = table.data('productId');
+            if (typeof productId === 'undefined') {
+                container.html('Error');
+                return;
+            }
+            container.html('Loading...');
+            Pace.ignore(function () {
+                "use strict";
+
+                $.ajax({
+                    "url": "/blueseal/xhr/ProductSizeTable",
+                    "data": {"productId": productId},
+                    "dataType": "json"
+                }).done(function (data) {
+                    if (data.rows.length === 0) {
+                        container.html('Quantità non inserite');
+                        return;
+                    }
+                    let thead = '<thead><tr>';
+                    for (let thd in data.head) {
+                        if (!data.head.hasOwnProperty(thd)) continue;
+                        thead += '<th>' + data.head[thd] + '</th>';
+                    }
+                    thead += '</tr></thead>';
+                    table.append($(thead));
+                    let td;
+                    let row;
+                    let padding;
+                    let body = $('<tbody></tbody>');
+                    for (let k in data.rows) {
+                        row = '<tr>';
+                        let rowD = data.rows[k];
+                        for (let i in data.head) {
+                            if (!data.head.hasOwnProperty(i)) continue;
+                            if (i === '0') {
+                                row += '<td>' + rowD[i] + '</td>';
+                            } else if (i === '1') {
+                                row += '<td>' + rowD[i].substring(0, 6) + ".." + '</td>';
+                            } else if (typeof rowD[i] === 'undefined') {
+                                row += '<td>0</td>';
+                            } else {
+                                td = rowD[i];
+                                padding = Number(td.padding);
+                                row += '<td class="' + (padding !== 0 ? 'colorRed' : '' ) + '">' + (Number(td.qty) - padding) + '</td>';
+                            }
+                        }
+                        row += '</tr>';
+                        body.append($(row));
+                    }
+                    table.append(body);
+                    table.data('loaded', 'true');
+                    container.html(table);
+                });
+            });
+        });
+    };
+
 
     $(document).on('column-visibility.dt draw.dt', function (e, settings, column, state) {
         let dataTable = $(e.target).DataTable();
         if (typeof state === 'undefined' || state) {
-            dataTable.column(column).nodes().each(function (container) {
-                container = $(container);
-                container.find('table.inner-size-table').each(function (k, table) {
-                    table = $(table);
-                    if (table.data('loaded') === 'true') return;
-                    if (!table.is(":visible")) return;
-                    let productId = table.data('productId');
-                    if (typeof productId === 'undefined') {
-                        container.html('Error');
-                        return;
-                    }
-                    container.html('Loading...');
-                    Pace.ignore(function () {
-                        "use strict";
-
-                        $.ajax({
-                            "url": "/blueseal/xhr/ProductSizeTable",
-                            "data": {"productId": productId},
-                            "dataType": "json"
-                        }).done(function (data) {
-                            if (data.rows.length === 0) {
-                                container.html('Quantità non inserite');
-                                return;
+            if (column === undefined) {
+                setTimeout(
+                    function () {
+                        for (let c in dataTable.columns()[0]) {
+                            if (dataTable.column(c).visible()) {
+                                dataTable.column(c).nodes().each(workTd);
                             }
-                            let thead = '<thead><tr>';
-                            for (let thd in data.head) {
-                                if (!data.head.hasOwnProperty(thd)) continue;
-                                thead += '<th>' + data.head[thd] + '</th>';
-                            }
-                            thead += '</tr></thead>';
-                            table.append($(thead));
-                            let td;
-                            let row;
-                            let padding;
-                            let body = $('<tbody></tbody>');
-                            for (let k in data.rows) {
-                                row = '<tr>';
-                                let rowD = data.rows[k];
-                                for (let i in data.head) {
-                                    if (!data.head.hasOwnProperty(i)) continue;
-                                    if (i === '0') {
-                                        row += '<td>' + rowD[i] + '</td>';
-                                    } else if (i === '1') {
-                                        row += '<td>' + rowD[i].substring(0,6)+".." + '</td>';
-                                    } else if (typeof rowD[i] === 'undefined') {
-                                        row += '<td>0</td>';
-                                    } else {
-                                        td = rowD[i];
-                                        padding = Number(td.padding);
-                                        row += '<td class="' + (padding !== 0 ? 'colorRed' : '' ) + '">' + (Number(td.qty) - padding) + '</td>';
-                                    }
-                                }
-                                row += '</tr>';
-                                body.append($(row));
-                            }
-                            table.append(body);
-                            table.data('loaded', 'true');
-                            container.html(table);
-                        });
-                    });
-                });
-            });
+                        }
+                    }, 300);
+            } else {
+                dataTable.columns(column).nodes().each(workTd);
+            }
         }
-
     });
 
     const sessionCheck = function () {
