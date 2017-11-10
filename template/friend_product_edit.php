@@ -174,7 +174,7 @@ endif; ?></div>
                                                                     <option value="<?php echo $sizesGroup->id ?>" <?php
                                                                     if (isset($productEdit)) {
                                                                         if (!is_null($productEdit->productSizeGroup) && $productEdit->productSizeGroup->id == $sizesGroup->id) echo "selected";
-                                                                    } ?>> <?php echo $sizesGroup->locale . " " . $sizesGroup->macroName . " " . $sizesGroup->name . "" ?></option>
+                                                                    } ?>> <?php echo $sizesGroup->locale . " " . $sizesGroup->productSizeMacroGroup->name . " " . $sizesGroup->name . "" ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>
                                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>

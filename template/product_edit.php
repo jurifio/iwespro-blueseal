@@ -171,7 +171,7 @@
                                                                 name="Product_sizes" id="Product_sizes">
                                                             <option></option>
                                                             <?php foreach ($sizesGroups as $sizesGroup): ?>
-                                                                <option value="<?php echo $sizesGroup->id ?>" <?php if (!is_null($productEdit->productSizeGroup) && $productEdit->productSizeGroup->id == $sizesGroup->id) echo "selected"; ?>> <?php echo $sizesGroup->locale . " " . $sizesGroup->macroName . " " . $sizesGroup->name . "" ?></option>
+                                                                <option value="<?php echo $sizesGroup->id ?>" <?php if (!is_null($productEdit->productSizeGroup) && $productEdit->productSizeGroup->id == $sizesGroup->id) echo "selected"; ?>> <?php echo $sizesGroup->locale . " " . $sizesGroup->productSizeMacroGroup->name . " " . $sizesGroup->name . "" ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>

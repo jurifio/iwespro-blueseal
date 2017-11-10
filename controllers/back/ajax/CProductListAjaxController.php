@@ -33,7 +33,7 @@ class CProductListAjaxController extends AAjaxController
                   `pb`.`name`                                                                                           AS `brand`,
                   `ps`.`name`                                                                                           AS `status`,
                   concat(`psg`.`locale`, ' - ',
-                         `psg`.`macroName`)                                                                             AS `productSizeGroup`,
+                         `psmg`.`name`)                                                                             AS `productSizeGroup`,
                   `p`.`creationDate`                                                                                    AS `creationDate`,
                   `p`.`sortingPriorityId`                                                                               AS `productPriority`,
                   `s`.`id`                                                                                              AS `shopId`,
@@ -75,7 +75,9 @@ class CProductListAjaxController extends AAjaxController
                   JOIN `ShopHasProduct` `sp`
                     ON (((`p`.`id` = `sp`.`productId`) AND (`p`.`productVariantId` = `sp`.`productVariantId`))))
                   JOIN `Shop` `s` ON ((`s`.`id` = `sp`.`shopId`)))
-                  LEFT JOIN `ProductSizeGroup` `psg` ON ((`p`.`productSizeGroupId` = `psg`.`id`)))
+                  LEFT JOIN (`ProductSizeGroup` `psg` 
+                              JOIN ProductSizeMacroGroup psmg on psg.productSizeMacroGroupId = psmg.id)
+                      ON ((`p`.`productSizeGroupId` = `psg`.`id`)))
                   LEFT JOIN `ProductSku` `psk`
                     ON (((`p`.`id` = `psk`.`productId`) AND (`p`.`productVariantId` = `psk`.`productVariantId`))))
                   LEFT JOIN (`ProductHasProductCategory` `ppc`
@@ -120,7 +122,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
-            $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
+            $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-", $val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
 
             $row['details'] = "";
             foreach ($val->productSheetActual as $k => $v) {

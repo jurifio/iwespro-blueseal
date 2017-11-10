@@ -76,8 +76,6 @@ class CProductModelListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'">'.$val->code.'</a><br />';
             $response['data'][$i]['code'].= '<span class="small">(<a data-toggle="tooltip" title="Usa come modello" data-placement="right" href="'.$modifica.'?modelId='.$val->id.'">Usa come modello</a>)</span><br />';
-            //$response['data'][$i]['sizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
-
             $response['data'][$i]['name'] = $val->name;
             $response['data'][$i]['productName'] = $val->productName;
             $response['data'][$i]['prototypeName'] = $val->productSheetPrototype->name;

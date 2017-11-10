@@ -45,9 +45,9 @@ class CProductMerge extends AAjaxController
             $product = $repoPro->findOne($v);
 
             if ($sizeGroupMacroGroup === false) {
-                $sizeGroupMacroGroup = $product->productSizeGroup->macroName;
+                $sizeGroupMacroGroup = $product->productSizeGroup->productSizeMacroGroup->name;
             } else {
-                if ($product->productSizeGroup->macroName != $sizeGroupMacroGroup) {
+                if ($product->productSizeGroup->productSizeMacroGroup->name != $sizeGroupMacroGroup) {
                     $sizeGroupCompatibility = false;
                     break;
                 }
@@ -122,7 +122,7 @@ class CProductMerge extends AAjaxController
             foreach ($otherProducts as $otherProduct) {
 
                 /** @var CProduct $otherProduct */
-                if ($otherProduct->productSizeGroupId !== null && $otherProduct->productSizeGroup->macroName != $chosenProduct->productSizeGroup->macroName) {
+                if ($otherProduct->productSizeGroupId !== null && $otherProduct->productSizeGroup->productSizeMacroGroup->name != $chosenProduct->productSizeGroup->productSizeMacroGroup->name) {
                     return "Errore: I gruppi taglia dei prodotti da fondere sono incompatibili: " . $otherProduct->printId();
                 }
 

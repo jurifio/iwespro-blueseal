@@ -32,7 +32,8 @@ class CProductSizeGroupManage extends AAjaxController
         try {
             $data = \Monkey::app()->router->request()->getRequestData();
             $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->getEmptyEntity();
-            $productSizeGroup->macroName = $data['macroName'];
+            $productSizeMacroGroup = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->findOneBy(['name'=>$data['macroName']]);
+            $productSizeGroup->productSizeMacroGroupId = $productSizeMacroGroup->id;
             $productSizeGroup->locale = $data['locale'];
             $productSizeGroup->name = $data['name'];
             //$productSizeGroup->publicName = $data['publicName'];

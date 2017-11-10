@@ -55,12 +55,13 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
             $points = implode(',', $points);
             $sql = "SELECT psg.id
                 FROM ProductSizeGroup psg
-                  JOIN ProductSizeGroup psg2 on psg2.macroName = psg.macroName
-                  JOIN ProductSizeGroup psg3 on psg3.macroName = psg.macroName
+                  JOIN ProductSizeGroup psg2 on psg2.productSizeMacroGroupId = psg.productSizeMacroGroupId
+                  JOIN ProductSizeGroup psg3 on psg3.productSizeMacroGroupId = psg.productSizeMacroGroupId
                   JOIN ShopHasProduct shp ON psg2.id = shp.productSizeGroupId 
                   JOIN Product p on (p.id,p.productVariantId) = (shp.productId, shp.productVariantId) and p.productSizeGroupId = psg3.id
                 WHERE (shp.productId,shp.productVariantId,shp.shopId) IN ($points) ORDER BY psg.locale";
             $productSizeGroups = $this->app->repoFactory->create('ProductSizeGroup')->findBySql($sql, $bind);
+            foreach ($productSizeGroups as $productSizeGroup) $productSizeGroup->productSizeGroupMacroName;
             \Monkey::app()->router->response()->setContentType('application/json');
             return json_encode($productSizeGroups);
         }
@@ -123,7 +124,7 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
         /** @var CShopHasProductRepo $shopHasProductRepo */
         $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
         $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
-        $macroGroupName = false;
+        $productSizeMacroGroupId = false;
         try {
 
             \Monkey::app()->dbAdapter->beginTransaction();
@@ -132,8 +133,8 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 $shopHasProduct = $shopHasProductRepo->findOneByStringId($key);
                 /** @var CProductSizeGroup $productSizeGroup */
                 $productSizeGroup = $productSizeGroupRepo->findOneByStringId($value);
-                if (!$macroGroupName) $macroGroupName = $productSizeGroup->macroName;
-                if ($macroGroupName != $productSizeGroup->macroName) throw new BambooException("Macrogruppi Taglia incompatibili");
+                if (!$productSizeMacroGroupId) $macroGroupName = $productSizeGroup->productSizeMacroGroup->id;
+                if ($productSizeMacroGroupId != $productSizeGroup->productSizeMacroGroup->id) throw new BambooException("Macrogruppi Taglia incompatibili");
 
                 $shopHasProduct = $shopHasProductRepo->changeShopHasProductProductSizeGroup($shopHasProduct,$productSizeGroup,true);
             }

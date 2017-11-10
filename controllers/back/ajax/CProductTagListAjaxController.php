@@ -3,6 +3,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProduct;
 
 /**
  * Class CProductListAjaxController
@@ -115,6 +116,7 @@ class CProductTagListAjaxController extends AAjaxController
 
         foreach($prodotti as $val){
 
+            /** @var CProduct $val */
             $cats = [];
             foreach($val->productCategoryTranslation as $cat){
                 $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
@@ -139,12 +141,11 @@ class CProductTagListAjaxController extends AAjaxController
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'&productVariantId='.$val->productVariantId.'">'.$val->id.'-'.$val->productVariantId.'</a>' : $val->id.'-'.$val->productVariantId;
 
-            //$response['data'][$i]['sizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span>' : '';
             if($val->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
-            //$response['data'][$i]['dummyPicture'] = '<img width="60" src="'.$img.'" />'.$imgs;
+
             $response['data'][$i]['details'] = '<img width="50" src="'.$val->getDummyPictureUrl().'" />' . $imgs . '<br />';
-            $response['data'][$i]['details'] .= ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->macroName)[0] . '</span><br />' : '';
+            $response['data'][$i]['details'] .= ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span><br />' : '';
             $details = $this->app->repoFactory->create('ProductSheetActual')->em()->findBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
             foreach($details as $k => $v) {
                 if ($trans = $v->productDetail->productDetailTranslation->getFirst()) {

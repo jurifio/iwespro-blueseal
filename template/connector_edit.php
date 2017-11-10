@@ -42,7 +42,7 @@
                                                     <option></option>
                                                     <?php foreach ($productSizeGroup as $sizeGr) {?>
                                                         <option value="<?php echo $sizeGr->id ?>">
-                                                            <?php echo $sizeGr->macroName . ' ' . $sizeGr->locale . ''?>
+                                                            <?php echo $sizeGr->productSizeMacroGroup->name . ' ' . $sizeGr->locale . ''?>
                                                         </option>
                                                     <?php }?>
                                                 </select>
@@ -135,9 +135,9 @@
                             <div class="panel-body clearfix">
                                 <?php foreach ($productSizeGroup as $sizeGroup) {
                                     if ($sizeGroup->id == $value) {
-                                        echo '<p><strike>' . $sizeGroup->macroName . ' ' . $sizeGroup->locale. '</strike></p>';
+                                        echo '<p><strike>' . $sizeGroup->productSizeMacroGroup->name . ' ' . $sizeGroup->locale. '</strike></p>';
                                     } else {
-                                        echo '<p>' . $sizeGroup->macroName . ' ' . $sizeGroup->locale. '</p>';
+                                        echo '<p>' . $sizeGroup->productSizeMacroGroup->name . ' ' . $sizeGroup->locale. '</p>';
                                     }
                                 }?>
                             </div>

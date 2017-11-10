@@ -51,7 +51,7 @@ class CFriendProductEditController extends CProductManageController
         $seasons = $em->findAll();
 
         $em = $this->app->entityManagerFactory->create('ProductSizeGroup');
-        $sizesGroups = $em->findAll(null, 'order by locale, macroName, `name`');
+        $sizesGroups = $em->findAll(null, 'order by locale, `name`');
 
         $em = $this->app->entityManagerFactory->create('Shop');
 

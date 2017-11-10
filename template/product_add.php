@@ -119,7 +119,7 @@
                                                         <select class="full-width selectpicker" placeholder="Seleziona la schiera delle taglie" data-init-plugin="selectize"  title="Product_sizes" name="Product_sizes" id="Product_sizes">
                                                             <option></option>
                                                             <?php foreach ($sizesGroups as $sizesGroup): ?>
-                                                            <option value="<?php echo $sizesGroup->id ?>"> <?php echo $sizesGroup->locale . " " . $sizesGroup->macroName . " " . $sizesGroup->name . "" ?></option>
+                                                            <option value="<?php echo $sizesGroup->id ?>"> <?php echo $sizesGroup->locale . " " . $sizesGroup->productSizeMacroGroup->name . " " . $sizesGroup->name . "" ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>

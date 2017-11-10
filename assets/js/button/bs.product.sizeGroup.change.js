@@ -37,7 +37,7 @@ $(document).on('bs-manage-sizeGroups', function () {
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                searchField: ['macroName','locale'],
+                searchField: ['productSizeMacroGroup.name','locale'],
                 options: response,
                 render: {
                     item: function (item, escape) {

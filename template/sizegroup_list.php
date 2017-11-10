@@ -39,7 +39,7 @@
                                 <tbody>
                                     <?php foreach ($groups as $val): ?>
                                     <tr class="odd gradeX">
-                                        <td class="center"><?php echo $val->macroName; ?></td>
+                                        <td class="center"><?php echo $val->productSizeMacroGroup->name; ?></td>
                                         <td class="center"><?php echo $val->name; ?></td>
                                         <td class="center"><?php echo isset($val->locale) ? $val->locale : "" ; ?></td>
                                         <td class="center"><a href="<?php echo $modifica . "?productSizeGroupId=" . $val->id ?>"><i class="fa fa-pencil-square-o"></i></a></td>

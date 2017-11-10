@@ -50,7 +50,7 @@ class CSizeListController extends ARestrictedAccessRootController
             if(isset($_GET['delete']) && $_GET['delete'] == 'ko') $deleteError = true;
         }
         $em = $this->app->entityManagerFactory->create('ProductSizeGroup');
-        $groups = $em->findBySql("SELECT distinct id from ProductSizeGroup GROUP BY macroName ",[]);
+        $groups = $em->findBySql("SELECT distinct id from ProductSizeGroup GROUP BY productSizeMacroGroupId ",[]);
         $modifica = $blueseal."prodotti/gruppo-taglie/aggiungi";
 
         return $view->render([

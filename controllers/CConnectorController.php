@@ -37,7 +37,7 @@ class CConnectorController extends ARestrictedAccessRootController
         $importerLogicConnector = $this->app->repoFactory->create('ImporterLogicConnector')->findAll();
 
         $shop = $this->app->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
-        $productSizeGroup = $this->app->repoFactory->create('ProductSizeGroup')->findAll('limit 99999','order by macroName');
+        $productSizeGroup = $this->app->repoFactory->create('ProductSizeGroup')->findAll('limit 99999');
         $impConnector = $this->app->repoFactory->create('ImporterConnector')->findBy(['shopId' => $shopId]);
         $value = "";
 

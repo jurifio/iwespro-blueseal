@@ -20,10 +20,6 @@ use bamboo\domain\repositories\CProductRepo;
  */
 class CChangePublicProductSizeGroupController extends AAjaxController
 {
-    protected $urls = [];
-    protected $authorizedShops = [];
-    protected $em;
-
     public function get()
     {
         $products = \Monkey::app()->router->request()->getRequestData('products');
@@ -36,10 +32,11 @@ class CChangePublicProductSizeGroupController extends AAjaxController
         $points = implode(',',$points);
         $sql = "SELECT psg.id
                 FROM ProductSizeGroup psg
-                  JOIN ProductSizeGroup psg2 on psg2.macroName = psg.macroName
+                  JOIN ProductSizeGroup psg2 on psg2.productSizeMacroGroupId = psg.productSizeMacroGroupId
                   JOIN ShopHasProduct shp ON psg2.id = shp.productSizeGroupId 
                 WHERE (shp.productId,shp.productVariantId) IN ($points) ORDER BY psg.locale";
         $productSizeGroups = $this->app->repoFactory->create('ProductSizeGroup')->findBySql($sql, $bind);
+        foreach ($productSizeGroups as $productSizeGroup) $productSizeGroup->productSizeMacroGroup;
         \Monkey::app()->router->response()->setContentType('application/json');
         return json_encode($productSizeGroups);
     }

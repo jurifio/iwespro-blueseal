@@ -5,6 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeGroupHasProductSize;
+use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use function MongoDB\BSON\toJSON;
 
@@ -34,14 +35,15 @@ class CProductSizeGroupRowManage extends AAjaxController
             $fromRow = \Monkey::app()->router->request()->getRequestData('rowNum');
             $versus = \Monkey::app()->router->request()->getRequestData('versus');
             $macroGroupName = \Monkey::app()->router->request()->getRequestData('macroName');
-
+            /** @var CProductSizeMacroGroup $productSizeMacroGroup */
+            $productSizeMacroGroup = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->findOneBy(['name'=>$macroGroupName]);
             if($versus == 'up') $toRow = $fromRow - 1;
             elseif($versus == 'down') $toRow = $fromRow + 1;
             else $toRow = $fromRow;
 
             /** @var CProductSizeGroupRepo $productSizeGroupRepo */
             $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
-            return json_encode($productSizeGroupRepo->moveSizesPosition($macroGroupName, $fromRow, $toRow));
+            return json_encode($productSizeGroupRepo->moveSizesPosition($productSizeMacroGroup, $fromRow, $toRow));
 
         } catch (\Throwable $e) {
             \Monkey::app()->router->response()->raiseProcessingError();
@@ -66,8 +68,8 @@ class CProductSizeGroupRowManage extends AAjaxController
 
             /** @var CProductSizeGroupRepo $productSizeGroupRepo */
             $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
-
-            $res = $productSizeGroupRepo->deleteGroupPosition($macroName,$rowNum,$shift);
+            $productSizeMacroGroup = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->findOneBy(['name'=>$macroName]);
+            $res = $productSizeGroupRepo->deleteGroupPosition($productSizeMacroGroup,$rowNum,$shift);
             if(is_array($res)) {
                 \Monkey::app()->router->response()->raiseProcessingError();
             }

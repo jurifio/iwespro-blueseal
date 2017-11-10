@@ -28,7 +28,7 @@
                                 <div class="form-group form-group-default required">
                                     <label>Nome MacroGruppo Taglie</label>
                                     <input type="text" id="productSizeGroupMacroName" disabled="disabled" class="form-control" name="ProductSizeGroup_macroName"
-                                           value="<?php echo isset($sizeEdit) ? $sizeEdit->getFirst()->macroName : "" ?>"
+                                           value="<?php echo isset($sizeEdit) ? $sizeEdit->getFirst()->productSizeMacroGroup->name : "" ?>"
                                            required title="">
                                 </div>
                             </div>

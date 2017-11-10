@@ -27,7 +27,7 @@ class CProductImporterProblemsListController extends AAjaxController
               `pb`.`name`                                                      AS `brand`,
               `p`.`externalId`                                                 AS `externalId`,
               `ps`.`name`                                                      AS `status`,
-              concat_ws(' ', `psg`.`name`, `psg`.`macroName`, `psg`.`locale`)  AS `sizeGroup`,
+              concat_ws(' ', `psg`.`name`, `psmg`.`name`, `psg`.`locale`)  AS `sizeGroup`,
               `p`.`creationDate`                                               AS `creationDate`,
               group_concat(`ds`.`size` ORDER BY `ds`.`size` ASC SEPARATOR '-') AS `problems`,
               productCategoryId AS categoryId
@@ -36,6 +36,7 @@ class CProductImporterProblemsListController extends AAjaxController
               JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
               JOIN `ProductStatus` `ps` ON `p`.`productStatusId` = `ps`.`id`
               JOIN `ProductSizeGroup` `psg` ON `p`.`productSizeGroupId` = `psg`.`id`
+              JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id
               JOIN `DirtyProduct` `dp` ON (`p`.`id` = `dp`.`productId`) AND (`p`.`productVariantId` = `dp`.`productVariantId`)
               JOIN `DirtySku` `ds` ON `dp`.`id` = `ds`.`dirtyProductId`
               JOIN `ShopHasProduct` `sp` ON (`dp`.`productId` = `sp`.`productId`)
@@ -77,7 +78,7 @@ class CProductImporterProblemsListController extends AAjaxController
             $row["productCode"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="' . $modifica . '?id=' . $shopHasProduct->productId . '&productVariantId=' . $shopHasProduct->productVariantId . '">' . $shopHasProduct->printId() . '</a></span>' : $shopHasProduct->product->printId();
             $row["shop"] = $shopHasProduct->shop->name;
             $row["code"] = $shopHasProduct->product->printCpf();
-            $macroname = explode("_", explode("-", $shopHasProduct->productSizeGroup->macroName)[0])[0];
+            $macroname = explode("_", explode("-", $shopHasProduct->productSizeGroup->productSizeMacroGroup->macroName)[0])[0];
             $row["sizeGroup"] = '<span class="small">' . $shopHasProduct->productSizeGroup->locale . '-' . $macroname . '</span>';
             $row["dummyPicture"] = '<img width="80" src="' . $shopHasProduct->product->getDummyPictureUrl() . '">';
             $row["brand"] = $shopHasProduct->product->productBrand->name;

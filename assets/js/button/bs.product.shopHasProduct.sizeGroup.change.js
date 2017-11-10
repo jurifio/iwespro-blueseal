@@ -75,7 +75,13 @@ const modificaMultiplo = function (selectedRow) {
     let productSizeGroupCall = $.ajax({
         url: '/blueseal/xhr/GetTableContent',
         data: {
-            table: "ProductSizeGroup"
+            table: "ProductSizeGroup",
+            fields: [
+                "id",
+                "name",
+                "locale",
+                "productSizeMacroGroup"
+            ]
         },
         dataType: "json"
     }).then(function(res) {
@@ -106,7 +112,7 @@ const modificaMultiplo = function (selectedRow) {
                 select.selectize({
                     valueField: 'id',
                     labelField: 'name',
-                    searchField: ['macroName','locale'],
+                    searchField: ['productSizeMacroGroup.name','locale'],
                     items: [$(this).data('preset')],
                     options: productSizeGroups,
                     render: {
@@ -189,7 +195,7 @@ const modificaSingoli = function (selectedRows) {
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                searchField: ['macroName','locale'],
+                searchField: ['productSizeMacroGroup.name','locale'],
                 options: response,
                 render: {
                     item: function (item, escape) {
