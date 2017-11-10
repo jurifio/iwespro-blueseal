@@ -64,7 +64,7 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
         </form>
     <?php } ?>
     </td>
-<td class="center"><?php echo $line->productSize ;?></td>
+<td class="center"><?php echo $line->productSku->productSize->name . ' / '. $line->productSku->getPublicSize()->name;?></td>
 <td class="center"><?php
         if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
         else echo number_format($line->fullPrice, 2);

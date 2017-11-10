@@ -22,20 +22,14 @@ class CFillOrderLine extends AAjaxController
             /** @var COrderLineRepo $repo */
             $orderLineRepo = $this->app->repoFactory->create('OrderLine');
             /** @var COrderLine $line */
-            $line = $orderLineRepo->findOne(explode('-',$filters['order']));
-
-            $productRepo = $this->app->repoFactory->create('Product');
-            $line->product = $productRepo->findOne(array($line->productId,$line->productVariantId));
-
-            $size = $this->app->dbAdapter->query("select `name` from ProductSize where id = ? ", [$line->productSizeId] )->fetchAll()[0];
-            $line->productSize = $size['name'];
+            $line = $orderLineRepo->findOneByStringId($filters['order']);
 
             $line->skus = new CObjectCollection();
-            $line->skus->add( $line->productSku);
 
             if($line->isFriendChangable()){
                 $line->skus->addAll($line->getAlternativesSkus());
             }
+
             $friendRev = 1000000;
             $iSku = 0;
             foreach($line->skus as $sku) {
