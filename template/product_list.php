@@ -88,7 +88,7 @@
                                 </th>
                                 <th data-slug="productSizeGroup"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Grup.Taglie
+                                    data-orderable="true" class="center">Grup.Taglie Pubblico
                                 </th>
                                 <th data-slug="categoryId"
                                     data-searchable="true"

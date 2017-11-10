@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-manage-sizeGroups",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Assegna Gruppi taglie",
+    title: "Assegna Gruppi Taglia Pubblici",
     placement: "bottom"
 };
 
@@ -37,19 +37,19 @@ $(document).on('bs-manage-sizeGroups', function () {
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                searchField: 'name',
+                searchField: ['macroName','locale'],
                 options: response,
                 render: {
                     item: function (item, escape) {
                         return '<div>' +
-                            '<span class="label">' + escape(item.locale) + '</span>' +
-                            ' - <span class="caption">' + escape(item.macroName + ' / ' + item.name) + '</span>' +
+                            '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
+                            ' - <span class="caption">' + escape(item.name) + '</span>' +
                             '</div>'
                     },
                     option: function (item, escape) {
                         return '<div>' +
-                            '<span class="label">' + escape(item.locale) + '</span>' +
-                            ' - <span class="caption">' + escape(item.macroName + ' / ' + item.name) + '</span>' +
+                            '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
+                            ' - <span class="caption">' + escape(item.name) + '</span>' +
                             '</div>'
                     }
                 }
