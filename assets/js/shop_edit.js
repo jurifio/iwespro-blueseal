@@ -256,6 +256,7 @@ function readShipment(containerSelector) {
     data.cellphone = element.find('#cellphone').val();
     data.province = element.find('#province').val();
     data.iban = element.find('#iban').val();
+    data.note = element.find('#note').val();
     return data;
 }
 
@@ -292,6 +293,7 @@ function appendShipment(data, containerSelector) {
                     element.find('#cellphone').val(data.cellphone);
                     element.find('#province').val(data.province);
                     element.find('#iban').val(data.iban);
+                    element.find('#note').val(data.note);
                 }
                 container.append(element);
             });
