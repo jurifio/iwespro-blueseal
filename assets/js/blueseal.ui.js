@@ -302,8 +302,8 @@ $.fn.ajaxForm = function (ajaxConf, callback) {
     $(document).on('column-visibility.dt draw.dt', function (e, settings, column, state) {
         let dataTable = $(e.target).DataTable();
         if (typeof state === 'undefined' || state) {
-            dataTable.column(column).nodes().each(function () {
-                let container = $(this);
+            dataTable.column(column).nodes().each(function (container) {
+                container = $(container);
                 container.find('table.inner-size-table').each(function (k, table) {
                     table = $(table);
                     if (table.data('loaded') === 'true') return;
