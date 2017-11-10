@@ -54,11 +54,10 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
             <input type="hidden" name="orderLineId" value="<?php echo $line->id ?>" />
             <select id="select_shop" name="selectShop">
                 <option value="0">Seleziona:</option>
-                <?php $iSku = 0;
+                <?php
                 foreach($line->skus as $sku): ?>
-                    <option <?php if($iSku == $line->defaultSku){ /*echo 'selected="selected"'; */$i++; $actualSku = $sku; } ?> value="<?php echo $sku->shopId ?>"> <?php echo $sku->shop->name.' ('.number_format($sku->friendRevenue,2).')<br>'; ?></option>
-                <?php $iSku++;
-                endforeach; ?>
+                    <option <?php if($sku->shopId == $line->shopId) echo 'selected="selected"'; ?> value="<?php echo $sku->shopId ?>"> <?php echo $sku->shop->name.' ('.number_format($sku->friendRevenue,2).') '.$sku->productSize->name; ?></option>
+                <?php endforeach; ?>
             </select>
             <button id="changeShop" class="btn btn-success" type="submit"><i class="fa fa-random"></i></button>
         </form>
