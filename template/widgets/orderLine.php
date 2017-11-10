@@ -44,7 +44,7 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
 <td class="center"><?php echo $line->product->itemno ;?></td>
 <td class="center"><?php
     if(!$line->isFriendChangable()) {
-        echo $actualSku->shop->name;
+        echo $line->productSku->shop->name;
     } else {
         /** Caso in cui ci sono piu shop possibili, select con bottone di conferma */
         $i = 0 ?>
