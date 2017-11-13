@@ -30,7 +30,6 @@
                                 <th data-slug="shopId"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="asc"
                                     class="center">Shop
                                 </th>
                                 <th data-slug="count"
@@ -41,6 +40,7 @@
                                 <th data-slug="mancanti"
                                     data-searchable="true"
                                     data-orderable="true"
+                                    data-default-order="desc"
                                     class="center">N. Taglie non tradotti
                                 </th>
                             </tr>
