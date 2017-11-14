@@ -30,7 +30,6 @@
                                 <th data-slug="shopId"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="asc"
                                     class="center">Shop</th>
                                 <th data-slug="count"
                                     data-searchable="true"
@@ -39,6 +38,7 @@
                                 <th data-slug="mancanti"
                                     data-searchable="true"
                                     data-orderable="true"
+                                    data-default-order="desc"
                                     class="center">N. Brand non tradotti</th>
                             </tr>
                             </thead>

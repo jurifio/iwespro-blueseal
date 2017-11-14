@@ -128,6 +128,7 @@ class CShopManage extends AAjaxController
             $addressBook->cellphone = $addressBookData['cellphone'] ?? null;
             $addressBook->province = $addressBookData['province'] ?? null;
             $addressBook->iban = $addressBookData['iban'] ?? null;
+            $addressBook->note = $addressBookData['note'] ?? null;
 
             if (!isset($addressBook->id)) {
                 $addressBookC = $this->app->repoFactory->create('AddressBook')->findOneBy(['checksum' => $addressBook->calculateChecksum()]);

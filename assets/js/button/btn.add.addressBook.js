@@ -53,6 +53,7 @@ $(document).on('btn-add-addressBook', function (e, element, button) {
                 data.cellphone = element.find('#cellphone').val();
                 data.province = element.find('#province').val();
                 data.iban = element.find('#iban').val();
+                data.note = element.find('#note').val();
                 modal.showLoader();
                 modal.setOkEvent(function() {
                     modal.hide();

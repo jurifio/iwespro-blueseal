@@ -69,6 +69,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         $delivery = [
             'UPSSecurity' => $this->getUpsSecurity(),
             'PickupCreationRequest' => [
+                'SpecialInstruction' => substr(empty($shipment->fromAddress->note) ? 'Attività Commerciale' : $shipment->fromAddress->note,0,56),
                 'Request' => [
                     'TransactionReference' => [
                         'CustomerContext' => 'Order '.implode(',',$orders) //???
