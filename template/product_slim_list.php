@@ -56,8 +56,8 @@
                                         data-searchable="false"
                                         data-orderable="false" class="center">Immagine</th>
                                     <th data-slug="details"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Dettagli</th>
+                                        data-searchable="false"
+                                        data-orderable="false" class="center">Dettagli</th>
                                     <th data-slug="status"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>
