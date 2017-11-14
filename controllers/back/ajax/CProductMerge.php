@@ -217,7 +217,7 @@ class CProductMerge extends AAjaxController
                     throw new BambooLogicException('Non sono riuscito a modificare lo stato del carrello');
                 }
             }
-
+            $chosenProduct->updatePublicSkus();
             \Monkey::app()->dbAdapter->commit();
             return "Fusione eseguita!";
         } catch (\Throwable $e) {
