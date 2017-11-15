@@ -32,7 +32,7 @@ $(document).on('bs-order-shipment-prepare', function (e, element, button) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            if(res2 instanceof Object) {
+            if(typeof res2 === "string") {
                 res2 = JSON.parse(res2);
             }
             let select = $('select[name=\"carrier\"]');
