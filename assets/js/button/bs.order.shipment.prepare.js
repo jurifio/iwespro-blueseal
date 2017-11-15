@@ -32,6 +32,9 @@ $(document).on('bs-order-shipment-prepare', function (e, element, button) {
             },
             dataType: 'json'
         }).done(function (res2) {
+            if(res2 instanceof Object) {
+                res2 = JSON.parse(res2);
+            }
             let select = $('select[name=\"carrier\"]');
             if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
             let selectized = select.selectize({
