@@ -78,7 +78,7 @@ class CProductImporterProblemsListController extends AAjaxController
             $row["productCode"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="' . $modifica . '?id=' . $shopHasProduct->productId . '&productVariantId=' . $shopHasProduct->productVariantId . '">' . $shopHasProduct->printId() . '</a></span>' : $shopHasProduct->product->printId();
             $row["shop"] = $shopHasProduct->shop->name;
             $row["code"] = $shopHasProduct->product->printCpf();
-            $macroname = explode("_", explode("-", $shopHasProduct->productSizeGroup->productSizeMacroGroup->macroName)[0])[0];
+            $macroname = explode("_", explode("-", $shopHasProduct->productSizeGroup->productSizeMacroGroup->name)[0])[0];
             $row["sizeGroup"] = '<span class="small">' . $shopHasProduct->productSizeGroup->locale . '-' . $macroname . '</span>';
             $row["dummyPicture"] = '<img width="80" src="' . $shopHasProduct->product->getDummyPictureUrl() . '">';
             $row["brand"] = $shopHasProduct->product->productBrand->name;
