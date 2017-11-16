@@ -39,22 +39,27 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
                 '</div>');
             let select = bsModal.getElement().find('#productSizeGroupId');
             if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
+            let productSizeGroupsCopy = [];
+            for(let productSizeGroup of response) {
+                productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
+                productSizeGroupsCopy.push(productSizeGroup)
+            }
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                searchField: 'name',
-                options: response,
+                searchField: ['macroName','locale'],
+                options: productSizeGroupsCopy,
                 render: {
                     item: function (item, escape) {
                         return '<div>' +
-                            '<span class="label">' + escape(item.locale) + '</span>' +
-                            ' - <span class="caption">' + escape(item.macroName + ' / ' + item.name) + '</span>' +
+                            '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
+                            ' - <span class="caption">' + escape(item.name) + '</span>' +
                             '</div>'
                     },
                     option: function (item, escape) {
                         return '<div>' +
-                            '<span class="label">' + escape(item.locale) + '</span>' +
-                            ' - <span class="caption">' + escape(item.macroName + ' / ' + item.name) + '</span>' +
+                            '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
+                            ' - <span class="caption">' + escape(item.name) + '</span>' +
                             '</div>'
                     }
                 }

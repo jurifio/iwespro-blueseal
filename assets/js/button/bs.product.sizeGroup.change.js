@@ -34,11 +34,16 @@ $(document).on('bs-manage-sizeGroups', function () {
                 '</div>');
             let select = bsModal.getElement().find('#productSizeGroupId');
             if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
+            let productSizeGroupsCopy = [];
+            for(let productSizeGroup of response) {
+                productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
+                productSizeGroupsCopy.push(productSizeGroup)
+            }
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                searchField: ['productSizeMacroGroup.name','locale'],
-                options: response,
+                searchField: ['macroName','locale'],
+                options: productSizeGroupsCopy,
                 render: {
                     item: function (item, escape) {
                         return '<div>' +
