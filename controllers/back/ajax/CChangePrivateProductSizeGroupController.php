@@ -50,7 +50,7 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
         }
 
         if (count($multi) === 0) {
-            return json_encode(\Monkey::app()->repoFactory->create('ProductSizeGroup')->findAll());
+            $return = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findAll();
         } else {
             $points = implode(',', $points);
             $sql = "SELECT psg.id
@@ -62,9 +62,14 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 WHERE (shp.productId,shp.productVariantId,shp.shopId) IN ($points) ORDER BY psg.locale";
             $productSizeGroups = $this->app->repoFactory->create('ProductSizeGroup')->findBySql($sql, $bind);
             foreach ($productSizeGroups as $productSizeGroup) $productSizeGroup->productSizeGroupMacroName;
-            \Monkey::app()->router->response()->setContentType('application/json');
-            return json_encode($productSizeGroups);
+
+            $return = $productSizeGroups;
         }
+        \Monkey::app()->router->response()->setContentType('application/json');
+        foreach ($return as $productSizeGroup) {
+            $productSizeGroup->productSizeMacroGroup;
+        }
+        return json_encode($return);
     }
 
     public function put()
