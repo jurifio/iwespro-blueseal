@@ -92,10 +92,9 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 $shopHasProductsIds = \Monkey::app()->router->request()->getRequestData('shopHasProducts');
             }
 
-
             if (!$productSizeGroupId) {
                 throw new BambooException("Errore: nessun gruppo taglie selezionato.");
-            } elseif (!$productsIds) {
+            } elseif (!$shopHasProductsIds) {
                 throw new BambooException("Nessun prodotto selezionato");
             } else {
                 /** @var CShopHasProductRepo $shopHasProductRepo */
@@ -118,6 +117,7 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 }
             }
         } catch (\Throwable $e) {
+            \Monkey::app()->router->response()->raiseProcessingError();
             return json_encode(['message'=>$e->getMessage(),'trace'=>$e->getTrace()]);
         }
 

@@ -92,7 +92,9 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
                         bsModal.writeBody('Fatto');
                         bsModal.showOkBtn();
                     }).fail(function (res) {
-                        bsModal.writeBody('Errore');
+                        res = JSON.parse(res);
+                        let message = res && res.message ? res.message : 'Errore Sconosciuto';
+                        bsModal.writeBody('Errore: <br/>'.message);
                         bsModal.showOkBtn();
                     });
                 });
