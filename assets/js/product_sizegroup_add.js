@@ -62,7 +62,7 @@
                         productSizeId: value,
                         position: td.closest('tr').data('position')
                     },
-                    dataType: "json"
+                    dataType: "JSON"
                 }).done(function (res) {
                     res = JSON.parse(res);
                     td.data(productSizeIdDataName, value);
