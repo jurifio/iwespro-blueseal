@@ -136,7 +136,7 @@
                                     class="center">Marketplaces
                                 </th>
                                 <th data-slug="stock"
-                                    data-searchable="false"
+                                    data-searchable="true"
                                     data-orderable="false"
                                     class="center">Taglie
                                 </th>

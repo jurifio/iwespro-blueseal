@@ -21,73 +21,78 @@ class CProductListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT
-                  concat(`p`.`id`, '-', `pv`.`id`)                                                                      AS `code`,
-                  `p`.`id`                                                                                              AS `id`,
-                  `p`.`productVariantId`                                                                                AS `productVariantId`,
-                  concat(`pse`.`name`, ' ', `pse`.`year`)                                                               AS `season`,
-                  `pse`.`isActive`                                                                                      AS `isActive`,
-                  concat(`p`.`itemno`, ' # ', `pv`.`name`)                                                              AS `cpf`,
-                  `pv`.`description`                                                                                    AS `colorNameManufacturer`,
-                  concat(`s`.`id`, '-', `s`.`name`)                                                                   AS `shop`,
-                  concat(ifnull(`p`.`externalId`, ''), '-', ifnull(`dp`.`extId`, ''), '-', ifnull(`ds`.`extSkuId`, '')) AS `externalId`,
-                  `pb`.`name`                                                                                           AS `brand`,
-                  `ps`.`name`                                                                                           AS `status`,
-                  concat(`psg`.`locale`, ' - ',
-                         `psmg`.`name`)                                                                             AS `productSizeGroup`,
-                  `p`.`creationDate`                                                                                    AS `creationDate`,
-                  `p`.`sortingPriorityId`                                                                               AS `productPriority`,
-                  `s`.`id`                                                                                              AS `shopId`,
-                  (select count(*) from ShopHasProduct where (ShopHasProduct.productId,ShopHasProduct.productVariantId) = (p.id,p.productVariantId)) as shops,
+                  concat(p.id, '-', pv.id)                                                                      AS code,
+                  p.id                                                                                              AS id,
+                  p.productVariantId                                                                                AS productVariantId,
+                  concat(pse.name, ' ', pse.year)                                                               AS season,
+                  pse.isActive                                                                                      AS isActive,
+                  concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
+                  pv.description                                                                                    AS colorNameManufacturer,
+                  concat(s.id, '-', s.name)                                                                     AS shop,
+                  concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, '')) AS externalId,
+                  pb.name                                                                                           AS brand,
+                  ps.name                                                                                           AS status,
+                  concat(psg.locale, ' - ',
+                         psmg.name)                                                                                 AS productSizeGroup,
+                  p.creationDate                                                                                    AS creationDate,
+                  p.sortingPriorityId                                                                               AS productPriority,
+                  s.id                                                                                              AS shopId,
+                  (SELECT count(*)
+                   FROM ShopHasProduct
+                   WHERE (ShopHasProduct.productId, ShopHasProduct.productVariantId) = (p.id, p.productVariantId))      AS shops,
                   if(((SELECT count(0)
-                       FROM `ProductSheetActual`
-                       WHERE ((`ProductSheetActual`.`productId` = `p`.`id`) AND
-                              (`ProductSheetActual`.`productVariantId` = `p`.`productVariantId`))) > 2), 'sì', 'no')    AS `hasDetails`,
-                  if((isnull(`p`.`dummyPicture`) OR (`p`.`dummyPicture` = 'bs-dummy-16-9.png')), 'no', 'sì')            AS `dummy`,
-                  if((`p`.`id`, `p`.`productVariantId`) IN (SELECT
-                                                              `ProductHasProductPhoto`.`productId`,
-                                                              `ProductHasProductPhoto`.`productVariantId`
-                                                            FROM `ProductHasProductPhoto`), 'sì', 'no')                 AS `hasPhotos`,
-                  `pc`.`id`                                                                                             AS `categoryId`,
-                  `pcg`.`name`                                                                                          AS `colorGroup`,
-                  `p`.`isOnSale`                                                                                      AS `isOnSale`,
-                  ifnull(`p`.`processing`, '-')                                                                       AS `processing`,
-                  (((if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22) - (`psk`.`value` + ((`psk`.`value` * if(
-                      (`pse`.`isActive` = 0), `s`.`pastSeasonMultiplier`,
-                      if((`p`.`isOnSale` = 1), `s`.`saleMultiplier`, `s`.`currentSeasonMultiplier`))) / 100))) /
-                   (if((`p`.`isOnSale` = 0), `psk`.`price`, `psk`.`salePrice`) / 1.22)) * 100                       AS `mup`,
-                  `p`.`qty`                                                                                             AS `hasQty`,
-                  (SELECT group_concat(DISTINCT t.name) FROM `ProductHasTag` `pht` JOIN `TagTranslation` `t` ON `pht`.`tagId` = `t`.`tagId`
-                   WHERE langId = 1 AND pht.productId = `p`.id AND `pht`.`productVariantId` = `p`.`productVariantId`) as `tags`,
-                  (select min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), null)) from ProductSku where ProductSku.productId = p.id and ProductSku.productVariantId = p.productVariantId) as activePrice,
-                  (SELECT ifnull(group_concat(concat(m.name, ' - ', ma.name)),'')
-                   FROM Marketplace m 
-                      join MarketplaceAccount ma on (m.id = ma.marketplaceId) 
-                      JOIN MarketplaceAccountHasProduct mahp on 
-                          ma.id = mahp.marketplaceAccountId AND
-                          ma.marketplaceId = mahp.marketplaceId
+                       FROM ProductSheetActual
+                       WHERE ((ProductSheetActual.productId = p.id) AND
+                              (ProductSheetActual.productVariantId = p.productVariantId))) > 2), 'sì', 'no')    AS hasDetails,
+                  if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
+                  if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), 'sì', 'no')                 AS hasPhotos,
+                  pc.id                                                                                             AS categoryId,
+                  pcg.name                                                                                          AS colorGroup,
+                  p.isOnSale                                                                                        AS isOnSale,
+                  psiz.name                                                                                             AS stock,
+                  ifnull(p.processing, '-')                                                                         AS processing,
+                  (((if((p.isOnSale = 0), psk.price, psk.salePrice) / 1.22) - (psk.value + ((psk.value * if(
+                      (pse.isActive = 0), s.pastSeasonMultiplier,
+                      if((p.isOnSale = 1), s.saleMultiplier, s.currentSeasonMultiplier))) / 100))) /
+                   (if((p.isOnSale = 0), psk.price, psk.salePrice) / 1.22)) * 100                           AS mup,
+                  p.qty                                                                                             AS hasQty,
+                  (SELECT group_concat(DISTINCT t.name)
+                   FROM ProductHasTag pht
+                     JOIN TagTranslation t ON pht.tagId = t.tagId
+                   WHERE langId = 1 AND pht.productId = p.id AND pht.productVariantId = p.productVariantId)   AS tags,
+                  (SELECT min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), NULL))
+                   FROM ProductSku
+                   WHERE ProductSku.productId = p.id AND ProductSku.productVariantId = p.productVariantId)              AS activePrice,
+                  (SELECT ifnull(group_concat(concat(m.name, ' - ', ma.name)), '')
+                   FROM Marketplace m
+                     JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
+                     JOIN MarketplaceAccountHasProduct mahp ON (ma.id,ma.marketplaceId) = (mahp.marketplaceAccountId,mahp.marketplaceId)
                    WHERE mahp.productId = p.id AND
-                         mahp.productVariantId = p.productVariantId and mahp.isDeleted != 1)                            AS marketplaces
-                FROM (((((((((`Product` `p`
-                  JOIN `ProductSeason` `pse` ON ((`p`.`productSeasonId` = `pse`.`id`)))
-                  JOIN `ProductVariant` `pv` ON ((`p`.`productVariantId` = `pv`.`id`)))
-                  JOIN `ProductBrand` `pb` ON ((`p`.`productBrandId` = `pb`.`id`)))
-                  JOIN `ProductStatus` `ps` ON ((`ps`.`id` = `p`.`productStatusId`)))
-                  JOIN `ShopHasProduct` `sp`
-                    ON (((`p`.`id` = `sp`.`productId`) AND (`p`.`productVariantId` = `sp`.`productVariantId`))))
-                  JOIN `Shop` `s` ON ((`s`.`id` = `sp`.`shopId`)))
-                  LEFT JOIN (`ProductSizeGroup` `psg` 
-                              JOIN ProductSizeMacroGroup psmg on psg.productSizeMacroGroupId = psmg.id)
-                      ON ((`p`.`productSizeGroupId` = `psg`.`id`)))
-                  LEFT JOIN `ProductSku` `psk`
-                    ON (((`p`.`id` = `psk`.`productId`) AND (`p`.`productVariantId` = `psk`.`productVariantId`))))
-                  LEFT JOIN (`ProductHasProductCategory` `ppc`
-                    JOIN `ProductCategory` `pc` ON ((`ppc`.`productCategoryId` = `pc`.`id`)))
-                    ON (((`p`.`id` = `ppc`.`productId`) AND (`p`.`productVariantId` = `ppc`.`productVariantId`))))
-                  LEFT JOIN `ProductColorGroup` `pcg` ON (`p`.`productColorGroupId` = `pcg`.`id`)
-                  LEFT JOIN (`DirtyProduct` `dp`
-                    JOIN `DirtySku` `ds` ON ((`dp`.`id` = `ds`.`dirtyProductId`)))
-                    ON (((`sp`.`productId` = `dp`.`productId`) AND (`sp`.`productVariantId` = `dp`.`productVariantId`) AND
-                         (`sp`.`shopId` = `dp`.`shopId`))) ";
+                         mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces
+                FROM Product p
+                  JOIN ProductSeason pse ON p.productSeasonId = pse.id
+                  JOIN ProductVariant pv ON p.productVariantId = pv.id
+                  JOIN ProductBrand pb ON p.productBrandId = pb.id
+                  JOIN ProductStatus ps ON ps.id = p.productStatusId
+                  JOIN ShopHasProduct sp
+                    ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
+                  JOIN Shop s ON s.id = sp.shopId
+                  LEFT JOIN (ProductSizeGroup psg
+                              JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id)
+                            ON p.productSizeGroupId = psg.id
+                  LEFT JOIN (ProductSku psk
+                    JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
+                    ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
+                  LEFT JOIN (ProductHasProductCategory ppc
+                              JOIN ProductCategory pc ON ppc.productCategoryId = pc.id
+                    ) ON (p.id, p.productVariantId) = (ppc.productId,ppc.productVariantId)
+                  LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
+                  LEFT JOIN (DirtyProduct dp
+                              JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
+                    ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
