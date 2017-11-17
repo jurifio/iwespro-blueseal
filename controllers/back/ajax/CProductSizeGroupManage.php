@@ -70,4 +70,15 @@ class CProductSizeGroupManage extends AAjaxController
         $productSizeGroup->delete();
         return json_encode(true);
     }
+
+    public function put() {
+        $productSizeGroupId = \Monkey::app()->router->request()->getRequestData('productSizeGroupId');
+        $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneByStringId($productSizeGroupId);
+        foreach (\Monkey::app()->router->request()->getRequestData() as $key => $data) {
+            if($key == 'productSizeGroupId') continue;
+            $productSizeGroup->{$key} = $data;
+        }
+        $productSizeGroup->update();
+        return true;
+    }
 }

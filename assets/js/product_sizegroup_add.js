@@ -362,4 +362,49 @@
         })
 
     });
+
+    let oldValue = null;
+    $(document).on('click', 'table.table.size-table thead th product-size-group-name-name', function (e) {
+        oldValue = $(this).html();
+        $(this).html('<input name="name">');
+        $(this).find('input').val(oldValue);
+    });
+    $(document).on('click', 'table.table.size-table thead th product-size-group-name-locale', function (e) {
+        oldValue = $(this).html();
+        $(this).html('<input name="locale">');
+        $(this).find('input').val(oldValue);
+    });
+    $(document).on('keyup','table.table.size-table thead th input', function (e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            var input = $(this);
+            let data = [];
+            let newVal = $(this).val();
+            data[$(this).attr('name')] = newVal
+            data.productSizeGroupId = $(this).closest('th').data('column');
+            Pace.ignore(function () {
+                $.ajax({
+                    method: 'put',
+                    url: '/blueseal/xhr/CProductSizeGroupManage',
+                    data: data
+                }).done(function (res) {
+                    new Alert({
+                        type: "success",
+                        message: "Salvato"
+                    }).open();
+                    oldValue = newVal;
+                }).fail(function (res) {
+                    new Alert({
+                        type: "danger",
+                        message: "Errore nel salvataggio"
+                    }).open();
+                }).always(function () {
+                    input.closest('th').html(oldValue);
+                });
+            });
+        }
+    });
+    $(document).on('blur','table.table.size-table thead th input', function () {
+        $(this).closest('th').html(oldValue);
+    });
 })();

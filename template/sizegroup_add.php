@@ -74,9 +74,10 @@
                                         /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
                                         $z = 0;
                                         foreach ($sizeEdit as $productSizeGroup): ?>
-                                            <th style="" class="" tabindex=""
+                                            <th style="" class="product-size-group-name-locale" tabindex=""
                                                 aria-controls="condensedTable" rowspan="1" colspan="1"
                                                 aria-sort=""
+                                                data-column="<?php echo $productSizeGroup->id ?>"
                                                 aria-label="<?php echo $productSizeGroup->locale ?>"><?php echo $productSizeGroup->locale ?>
                                             </th>
                                             <?php $z++;
@@ -99,9 +100,10 @@
                                         /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
                                         $z = 0;
                                         foreach ($sizeEdit as $productSizeGroup): ?>
-                                            <th style="" class="" tabindex=""
+                                            <th style="" class="product-size-group-name" tabindex=""
                                                 aria-controls="condensedTable" rowspan="1" colspan="1"
                                                 aria-sort=""
+                                                data-column="<?php echo $productSizeGroup->id ?>"
                                                 aria-label="<?php echo $productSizeGroup->name ?>"><?php echo $productSizeGroup->name ?>
                                             </th>
                                             <?php $z++;
