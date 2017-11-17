@@ -80,7 +80,8 @@ const modificaMultiplo = function (selectedRow) {
                 "id",
                 "name",
                 "locale",
-                "productSizeMacroGroup"
+                "productSizeMacroGroup",
+                "productSize"
             ]
         },
         dataType: "json"
@@ -110,14 +111,19 @@ const modificaMultiplo = function (selectedRow) {
                 let select = $(this);
                 if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
                 let productSizeGroupsCopy = [];
-                for(let productSizeGroup of productSizeGroups) {
+                for(let productSizeGroup of response) {
                     productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
-                    productSizeGroupsCopy.push(productSizeGroup)
+                    productSizeGroup.sizeNames = [];
+                    for(let productSize of productSizeGroup.productSize) {
+                        productSizeGroup.sizeNames.push(productSize.name);
+                    }
+                    productSizeGroup.sizeNames = productSizeGroup.sizeNames.join('|');
+                    productSizeGroupsCopy.push(productSizeGroup);
                 }
                 select.selectize({
                     valueField: 'id',
                     labelField: 'name',
-                    searchField: ['macroName','locale'],
+                    searchField: ['macroName','locale','sizeNames'],
                     items: [$(this).data('preset')],
                     options: productSizeGroupsCopy,
                     render: {
@@ -200,12 +206,17 @@ const modificaSingoli = function (selectedRows) {
             let productSizeGroupsCopy = [];
             for(let productSizeGroup of response) {
                 productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
-                productSizeGroupsCopy.push(productSizeGroup)
+                productSizeGroup.sizeNames = [];
+                for(let productSize of productSizeGroup.productSize) {
+                    productSizeGroup.sizeNames.push(productSize.name);
+                }
+                productSizeGroup.sizeNames = productSizeGroup.sizeNames.join('|');
+                productSizeGroupsCopy.push(productSizeGroup);
             }
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                searchField: ['macroName','locale'],
+                searchField: ['macroName','locale','sizeNames'],
                 options: productSizeGroupsCopy,
                 items: [$(this).data('preset')],
                 render: {

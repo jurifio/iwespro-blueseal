@@ -36,7 +36,10 @@ class CChangePublicProductSizeGroupController extends AAjaxController
                   JOIN ShopHasProduct shp ON psg2.id = shp.productSizeGroupId 
                 WHERE (shp.productId,shp.productVariantId) IN ($points) ORDER BY psg.locale";
         $productSizeGroups = $this->app->repoFactory->create('ProductSizeGroup')->findBySql($sql, $bind);
-        foreach ($productSizeGroups as $productSizeGroup) $productSizeGroup->productSizeMacroGroup;
+        foreach ($productSizeGroups as $productSizeGroup) {
+            $productSizeGroup->productSizeMacroGroup;
+            $productSizeGroup->productSize;
+        }
         \Monkey::app()->router->response()->setContentType('application/json');
         return json_encode($productSizeGroups);
     }

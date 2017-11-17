@@ -42,12 +42,17 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
             let productSizeGroupsCopy = [];
             for(let productSizeGroup of response) {
                 productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
-                productSizeGroupsCopy.push(productSizeGroup)
+                productSizeGroup.sizeNames = [];
+                for(let productSize of productSizeGroup.productSize) {
+                    productSizeGroup.sizeNames.push(productSize.name);
+                }
+                productSizeGroup.sizeNames = productSizeGroup.sizeNames.join('|');
+                productSizeGroupsCopy.push(productSizeGroup);
             }
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                searchField: ['macroName','locale'],
+                searchField: ['macroName','locale','sizeNames'],
                 options: productSizeGroupsCopy,
                 render: {
                     item: function (item, escape) {
