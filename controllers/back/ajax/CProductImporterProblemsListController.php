@@ -27,7 +27,7 @@ class CProductImporterProblemsListController extends AAjaxController
               `pb`.`name`                                                      AS `brand`,
               `p`.`externalId`                                                 AS `externalId`,
               `ps`.`name`                                                      AS `status`,
-              concat_ws(' ', `psg`.`name`, `psmg`.`name`, `psg`.`locale`)  AS `sizeGroup`,
+              concat_ws('-',`psg`.`locale`, `psmg`.`name`)                     AS `sizeGroup`,
               `p`.`creationDate`                                               AS `creationDate`,
               group_concat(`ds`.`size` ORDER BY `ds`.`size` ASC SEPARATOR '-') AS `problems`,
               productCategoryId AS categoryId
@@ -101,7 +101,7 @@ class CProductImporterProblemsListController extends AAjaxController
         $sizes = $this->app->dbAdapter->query(
             'SELECT size 
                     FROM DirtyProduct dp 
-                      JOIN DirtySku ds on dp.id = ds.dirtyProductId 
+                      JOIN DirtySku ds ON dp.id = ds.dirtyProductId 
                     WHERE  
                     dp.productId = :productId AND 
                     dp.productVariantId = :productVariantId AND 
