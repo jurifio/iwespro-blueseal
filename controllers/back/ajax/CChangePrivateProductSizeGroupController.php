@@ -76,12 +76,13 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
             $forceChange = $this->app->router->request()->getRequestData('forceChange');
 
             $productsIds = \Monkey::app()->router->request()->getRequestData('products');
+
             if ($productsIds) {
                 $productRepo = \Monkey::app()->repoFactory->create('Product');
                 $shopHasProductsIds = [];
                 foreach ($productsIds as $productIds) {
                     foreach ($productRepo->findOneByStringId($productIds)->shopHasProduct as $shopHasProduct) {
-                        $shopHasProducts[] = $shopHasProduct->printId();
+                        $shopHasProductsIds[] = $shopHasProduct->printId();
                     };
                 }
                 $forceChange = true;
@@ -114,6 +115,7 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 }
             }
         } catch (\Throwable $e) {
+            \Monkey::app()->router->response()->setContentType('application/json');
             \Monkey::app()->router->response()->raiseProcessingError();
             return json_encode(['message'=>$e->getMessage(),'trace'=>$e->getTrace()]);
         }
