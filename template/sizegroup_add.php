@@ -75,7 +75,7 @@
                                         /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
                                         $z = 0;
                                         foreach ($sizeEdit as $productSizeGroup): ?>
-                                            <th style="" class="product-size-group-name-locale" tabindex=""
+                                            <th style="" class="editable" data-name="locale" tabindex=""
                                                 aria-controls="condensedTable" rowspan="1" colspan="1"
                                                 aria-sort=""
                                                 data-column="<?php echo $productSizeGroup->id ?>"
@@ -100,7 +100,7 @@
                                         /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
                                         $z = 0;
                                         foreach ($sizeEdit as $productSizeGroup): ?>
-                                            <th style="" class="product-size-group-name" tabindex=""
+                                            <th style="" class="editable" tabindex="" data-name="name"
                                                 aria-controls="condensedTable" rowspan="1" colspan="1"
                                                 aria-sort=""
                                                 data-column="<?php echo $productSizeGroup->id ?>"

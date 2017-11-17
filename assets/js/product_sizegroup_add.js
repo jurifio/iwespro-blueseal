@@ -364,17 +364,17 @@
     });
 
     let oldValue = null;
-    $(document).on('click', 'table.table.size-table thead th.product-size-group-name-name', function (e) {
-        if($(this).find('input').length > 0) return;
-        oldValue = $(this).html();
-        $(this).html('<input style="width: 100%" name="name">');
-        $(this).find('input').val(oldValue);
-    });
-    $(document).on('click', 'table.table.size-table thead th.product-size-group-name-locale', function (e) {
-        if($(this).find('input').length > 0) return;
-        oldValue = $(this).html();
-        $(this).html('<input style="width: 100%" name="locale">');
-        $(this).find('input').val(oldValue);
+    const insertInput = function(th,name) {
+        "use strict";
+        if(th.find('input').length > 0) return;
+        oldValue = th.html();
+        th.html('<input style="width: 100%" >');
+        th.find('input').attr('name',th.data('name'));
+        th.find('input').val(oldValue);
+        th.find('input').focus();
+    };
+    $(document).on('click', 'table.table.size-table thead th.editable', function (e) {
+        insertInput($(this));
     });
     $(document).on('keyup','table.table.size-table thead th input', function (e) {
         if (e.keyCode === 13) {
