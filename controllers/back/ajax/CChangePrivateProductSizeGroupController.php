@@ -65,6 +65,7 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
         \Monkey::app()->router->response()->setContentType('application/json');
         foreach ($return as $productSizeGroup) {
             $productSizeGroup->productSizeMacroGroup;
+            $productSizeGroup->productSize;
         }
         return json_encode($return);
     }
