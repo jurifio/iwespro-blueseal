@@ -6,7 +6,7 @@
         },
         dataType: 'json'
     }).done(function (productSizes) {
-
+        productSizes = JSON.parse(productSizes);
         "use strict";
         let locked = false;
         const productSizeIdDataName = 'productsizeid';
@@ -64,6 +64,7 @@
                     },
                     dataType: "json"
                 }).done(function (res) {
+                    res = JSON.parse(res);
                     td.data(productSizeIdDataName, value);
                     td.html(newHtml);
                     new Alert({
