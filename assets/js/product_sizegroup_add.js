@@ -3,8 +3,7 @@
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'ProductSize'
-        },
-        dataType: "JSON"
+        }
     }).done(function (productSizes) {
         productSizes = JSON.parse(productSizes);
         "use strict";
