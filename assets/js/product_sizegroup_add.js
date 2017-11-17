@@ -4,7 +4,7 @@
         data: {
             table: 'ProductSize'
         },
-        dataType: 'json'
+        dataType: "JSON"
     }).done(function (productSizes) {
         productSizes = JSON.parse(productSizes);
         "use strict";
