@@ -207,6 +207,7 @@ const modificaSingoli = function (selectedRows) {
                 labelField: 'name',
                 searchField: ['macroName','locale'],
                 options: productSizeGroupsCopy,
+                items: [$(this).data('preset')],
                 render: {
                     item: function (item, escape) {
                         return '<div>' +
