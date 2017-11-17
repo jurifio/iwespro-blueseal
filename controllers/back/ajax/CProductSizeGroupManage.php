@@ -74,8 +74,9 @@ class CProductSizeGroupManage extends AAjaxController
     public function put() {
         $productSizeGroupId = \Monkey::app()->router->request()->getRequestData('productSizeGroupId');
         $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneByStringId($productSizeGroupId);
+        $datas = \Monkey::app()->router->request()->getRequestData();
         foreach (\Monkey::app()->router->request()->getRequestData() as $key => $data) {
-            if($key == 'productSizeGroupId') continue;
+            if($key == 'productSizeGroupId' || $key == 'id') continue;
             $productSizeGroup->{$key} = $data;
         }
         $productSizeGroup->update();

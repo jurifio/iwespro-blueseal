@@ -364,28 +364,30 @@
     });
 
     let oldValue = null;
-    $(document).on('click', 'table.table.size-table thead th product-size-group-name-name', function (e) {
+    $(document).on('click', 'table.table.size-table thead th.product-size-group-name-name', function (e) {
+        if($(this).find('input').length > 0) return;
         oldValue = $(this).html();
-        $(this).html('<input name="name">');
+        $(this).html('<input style="width: 100%" name="name">');
         $(this).find('input').val(oldValue);
     });
-    $(document).on('click', 'table.table.size-table thead th product-size-group-name-locale', function (e) {
+    $(document).on('click', 'table.table.size-table thead th.product-size-group-name-locale', function (e) {
+        if($(this).find('input').length > 0) return;
         oldValue = $(this).html();
-        $(this).html('<input name="locale">');
+        $(this).html('<input style="width: 100%" name="locale">');
         $(this).find('input').val(oldValue);
     });
     $(document).on('keyup','table.table.size-table thead th input', function (e) {
         if (e.keyCode === 13) {
             e.preventDefault();
             var input = $(this);
-            let data = [];
+            let data = {};
             let newVal = $(this).val();
             data[$(this).attr('name')] = newVal
             data.productSizeGroupId = $(this).closest('th').data('column');
             Pace.ignore(function () {
                 $.ajax({
                     method: 'put',
-                    url: '/blueseal/xhr/CProductSizeGroupManage',
+                    url: '/blueseal/xhr/ProductSizeGroupManage',
                     data: data
                 }).done(function (res) {
                     new Alert({

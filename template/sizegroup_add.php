@@ -27,7 +27,8 @@
                             <div class="col-md-12">
                                 <div class="form-group form-group-default required">
                                     <label>Nome MacroGruppo Taglie</label>
-                                    <input type="text" id="productSizeGroupMacroName" disabled="disabled" class="form-control" name="ProductSizeGroup_macroName"
+                                    <input type="text" id="productSizeGroupMacroName" disabled="disabled"
+                                           class="form-control" name="ProductSizeGroup_macroName"
                                            value="<?php echo isset($sizeEdit) ? $sizeEdit->getFirst()->productSizeMacroGroup->name : "" ?>"
                                            required title="">
                                 </div>
@@ -78,8 +79,7 @@
                                                 aria-controls="condensedTable" rowspan="1" colspan="1"
                                                 aria-sort=""
                                                 data-column="<?php echo $productSizeGroup->id ?>"
-                                                aria-label="<?php echo $productSizeGroup->locale ?>"><?php echo $productSizeGroup->locale ?>
-                                            </th>
+                                                aria-label="<?php echo $productSizeGroup->locale ?>"><?php echo $productSizeGroup->locale ?></th>
                                             <?php $z++;
                                         endforeach;
                                         for (; $z < 18; $z++): ?>
@@ -104,8 +104,7 @@
                                                 aria-controls="condensedTable" rowspan="1" colspan="1"
                                                 aria-sort=""
                                                 data-column="<?php echo $productSizeGroup->id ?>"
-                                                aria-label="<?php echo $productSizeGroup->name ?>"><?php echo $productSizeGroup->name ?>
-                                            </th>
+                                                aria-label="<?php echo $productSizeGroup->name ?>"><?php echo $productSizeGroup->name ?></th>
                                             <?php $z++;
                                         endforeach;
                                         for (; $z < 18; $z++): ?>
@@ -121,7 +120,8 @@
                                     <?php for ($k = 0; $k < 36; $k++): ?>
                                         <tr data-position="<?php echo $k; ?>" role="row"
                                             class="<?php echo $k % 2 == 0 ? 'even' : 'odd' ?>">
-                                            <td data-column="0" class="v-align-middle bold sorting_1"><?php echo $k ?></td>
+                                            <td data-column="0"
+                                                class="v-align-middle bold sorting_1"><?php echo $k ?></td>
                                             <?php $z = 0;
                                             foreach ($sizeEdit as $productSizeGroup):
                                                 $productSizeGroupHasProductSize = $productSizeGroup->productSizeGroupHasProductSize->findOneByKey('position', $k);
