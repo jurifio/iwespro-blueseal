@@ -3,9 +3,9 @@
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'ProductSize'
-        }
+        },
+        dataType: 'json'
     }).done(function (productSizes) {
-        productSizes = JSON.parse(productSizes);
         "use strict";
         let locked = false;
         const productSizeIdDataName = 'productsizeid';

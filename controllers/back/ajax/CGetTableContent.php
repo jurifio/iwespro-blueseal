@@ -60,7 +60,7 @@ class CGetTableContent extends AAjaxController
                 }
                 $responseSet[] = $responseItem;
             }
-        } else $responseSet = json_encode($objectCollection);
+        } else $responseSet = $objectCollection;
         \Monkey::app()->router->response()->setContentType('application/json');
         return json_encode($responseSet);
     }
