@@ -3,7 +3,7 @@ namespace bamboo\blueseal\controllers;
 
 use bamboo\core\ecommerce\APaymentGateway;
 use bamboo\core\exceptions\BambooException;
-use bamboo\domain\entities\CCart;
+use bamboo\domain\entities\CProductSku;
 use bamboo\domain\repositories\CCartRepo;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
@@ -49,8 +49,9 @@ class COrderAddController extends ARestrictedAccessRootController
             $cart->smartInsert();
 
             foreach ($data['orderLine'] as $line) {
+                /** @var CProductSku $sku */
                 $sku = $this->app->repoFactory->create('ProductSku')->findOneByStringId($line);
-                $cartRepo->addSku($sku,1,$cart);
+                $cartRepo->addSku($sku->getPublicProductSku(),1,$cart);
             }
 
             $cartRepo->setCouponCodeToCart($data['coupon'], $cart);
