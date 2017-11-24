@@ -8,6 +8,7 @@ use bamboo\domain\entities\CCarrier;
 use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\CShipment;
 use bamboo\domain\repositories\CCouponRepo;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\export\order\COrderExport;
@@ -79,8 +80,14 @@ class CCloseShipmentDay extends ACronJob
                         $order->updateStatus('ORD_SHIPPED');
                         try {
                             $to = [$order->user->email];
-                            $this->app->mailer->prepare('shipmentclient', 'no-reply', $to, [], [], ['order' => $order, 'coupon' => $coupon, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
-                            $res = $this->app->mailer->send();
+
+                            //$this->app->mailer->prepare('shipmentclient', 'no-reply', $to, [], [], ['order' => $order, 'coupon' => $coupon, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
+                            //$res = $this->app->mailer->send();
+
+                            /** @var CEmailRepo $emailRepo */
+                            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $emailRepo->newPackagedMail('shipmentclient', 'no-reply@pickyshop.com', $to, [], [], ['order' => $order, 'coupon' => $coupon, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
+
                             $this->report('Cycle 2', 'Sent Email for Order', $order);
                         } catch (\Throwable $e) {
                             $this->error('Shipping Emails', 'Error while shipment sending mail to client', $e->getTraceAsString());

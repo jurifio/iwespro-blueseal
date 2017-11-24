@@ -2,9 +2,11 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\email\CEmail;
 use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CPaymentBill;
 use bamboo\domain\entities\CProduct;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\utils\time\STimeToolbox;
 
 /**
@@ -38,11 +40,19 @@ class CPaymentBillSubmit extends AAjaxController
                 $total+=$invoice->getSignedValueWithVat();
             }
 
-            $this->app->mailer->prepare('friendpaymentmail','no-reply', $to,[],['amministrazione@iwes.it'],['paymentBill'=>$paymentBill,
+            /*$this->app->mailer->prepare('friendpaymentmail','no-reply', $to,[],['amministrazione@iwes.it'],['paymentBill'=>$paymentBill,
                                                                                     'name'=>$name,
                                                                                     'total'=>$total,
                                                                                     'payment'=>$payment]);
-            $this->app->mailer->send();
+            $this->app->mailer->send();*/
+
+
+            /** @var CEmailRepo $mailRepo */
+            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+            $mailRepo->newPackagedMail('friendpaymentmail','no-reply@pickyshop.com', $to,[],['amministrazione@iwes.it'],['paymentBill'=>$paymentBill,
+                                                                                    'name'=>$name,
+                                                                                    'total'=>$total,
+                                                                                    'payment'=>$payment]);
         }
 
 

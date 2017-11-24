@@ -4,6 +4,7 @@ namespace bamboo\blueseal\jobs;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\jobs\ACronJob;
 use bamboo\domain\entities\CShipment;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\export\order\COrderExport;
 use bamboo\core\db\pandaorm\repositories\CRepo;
@@ -43,8 +44,16 @@ class CRemindShipmentToFriend extends ACronJob
         foreach($shops as $shop){
             try {
                 $to = explode(';',$shop->referrerEmails);
-                $this->app->mailer->prepare('friendshipmentreminder','no-reply', $to,[],[],['shop'=>$shop]);
-                $this->app->mailer->send();
+
+
+               /* $this->app->mailer->prepare('friendshipmentreminder','no-reply', $to,[],[],['shop'=>$shop]);
+                $this->app->mailer->send();*/
+
+                /** @var CEmailRepo $emailRepo */
+                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                $emailRepo->newPackagedMail('friendshipmentreminder','no-reply@pickyshop.com', $to,[],[],['shop'=>$shop]);
+
+
                 $this->report('Working Shop ' . $shop->name . ' End', 'Reminder Sent ended');
             } catch(\Throwable $e){
                 $this->error( 'Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
