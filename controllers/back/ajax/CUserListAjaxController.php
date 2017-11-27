@@ -45,7 +45,7 @@ class CUserListAjaxController extends AAjaxController
         $userRepo = \Monkey::app()->repoFactory->create('User');
         foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var CUser $user */
-            $user = $userRepo->findOne([$row]);
+            $user = $userRepo->findOne([$row['id']]);
             $row = [];
             $row["DT_RowId"] = 'row__' . $user->printId();
             $row["DT_RowClass"] = $user->isActive == 1 ? 'active' : 'unactive';;
