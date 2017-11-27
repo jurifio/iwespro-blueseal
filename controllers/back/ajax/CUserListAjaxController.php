@@ -43,9 +43,9 @@ class CUserListAjaxController extends AAjaxController
         $userEdit = $this->app->baseUrl(false) . "/blueseal/utente?userId=";
         /** @var CUserRepo $userRepo */
         $userRepo = \Monkey::app()->repoFactory->create('User');
-        foreach ($datatable->getResponseSetData() as $key => $raw) {
+        foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var CUser $user */
-            $user = $userRepo->findOne([$raw]);
+            $user = $userRepo->findOne([$row]);
             $row = [];
             $row["DT_RowId"] = 'row__' . $user->printId();
             $row["DT_RowClass"] = $user->isActive == 1 ? 'active' : 'unactive';;
