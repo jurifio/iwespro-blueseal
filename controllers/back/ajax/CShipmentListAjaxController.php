@@ -27,6 +27,7 @@ class CShipmentListAjaxController extends AAjaxController
                     c.name as carrier,
                     s.scope as scope,
                     shabf.shopId as shopId,
+                    sh.name as shop,
                     s.bookingNumber,
                     s.trackingNumber,
                     s.predictedShipmentDate,
@@ -42,6 +43,7 @@ class CShipmentListAjaxController extends AAjaxController
                   left join AddressBook f on s.fromAddressBookId = f.id
                   left join AddressBook t on s.toAddressBookId = t.id
                   left join ShopHasShippingAddressBook shabf on f.id = shabf.addressBookId
+                  left join Shop sh on sh.id = shabf.shopId
                   left join ShopHasShippingAddressBook shabt on t.id = shabt.addressBookId
                   LEFT JOIN (
                      OrderLineHasShipment olhs
