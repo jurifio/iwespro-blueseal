@@ -34,6 +34,7 @@ class CShipmentListAjaxController extends AAjaxController
                     s.deliveryDate,
                     s.predictedDeliveryDate,
                     s.shipmentDate,
+                    s.cancellationdate,
                     s.creationDate,
                     concat_ws(',',f.subject,f.city) as fromAddress,
                     concat_ws(',',t.subject,t.city) as toAddress,
