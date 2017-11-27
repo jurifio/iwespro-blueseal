@@ -2,7 +2,9 @@
 namespace bamboo\blueseal\jobs;
 
 use bamboo\core\base\CObjectCollection;
+use bamboo\core\email\CEmail;
 use bamboo\core\jobs\ACronJob;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\export\order\COrderExport;
 use bamboo\core\db\pandaorm\repositories\CRepo;
@@ -40,9 +42,16 @@ class CRemindOrderToFriend extends ACronJob
 
                 if (isset($shop->referrerEmails) && count($lines) >0 ) {
                     $to = explode(';',$shop->referrerEmails);
-                    $this->app->mailer->prepare('friendorderreminder','no-reply', $to,[],[],
+
+                    /*$this->app->mailer->prepare('friendorderreminder','no-reply', $to,[],[],
                         ['orderLines'=>$lines]);
-                    $this->app->mailer->send();
+                    $this->app->mailer->send();*/
+
+                    /** @var CEmailRepo $emailRepo */
+                    $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                    $emailRepo->newPackagedMail('friendorderreminder','no-reply@pickyshop.com', $to,[],[],
+                        ['orderLines'=>$lines]);
+
                     $this->report('Working Shop ' . $shop->name . ' End', 'Reminder Sent ended');
                 }
                 

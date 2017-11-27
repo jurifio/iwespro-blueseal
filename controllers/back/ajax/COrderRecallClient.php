@@ -1,7 +1,9 @@
 <?php
 namespace bamboo\controllers\back\ajax;
+use bamboo\core\email\CEmail;
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\CShipment;
+use bamboo\domain\repositories\CEmailRepo;
 
 /**
  * Class COrderRecallClient
@@ -29,9 +31,19 @@ class COrderRecallClient extends AAjaxController
             $order = $this->app->repoFactory->create('Order')->findOneByStringId($orderId);
 
             $to = [$order->user->email];
-            $this->app->mailer->prepare('remindmailclient','no-reply', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
 
-            if($this->app->mailer->send()) {
+            /** @var CEmailRepo $emailRepo */
+            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+            $res = $emailRepo->newPackagedMail('remindmailclient','no-reply@pickyshop.com', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
+
+            //$this->app->mailer->newPackagedMail('remindmailclient','no-reply', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
+
+            /*if($this->app->mailer->send()) {
+                $order->note = $order->note." RemindMail: ".date('Y-m-d');
+                $order->update();
+            };*/
+
+            if($res) {
                 $order->note = $order->note." RemindMail: ".date('Y-m-d');
                 $order->update();
             };

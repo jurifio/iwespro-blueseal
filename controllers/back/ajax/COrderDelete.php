@@ -5,6 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\CShipment;
+use bamboo\domain\repositories\CEmailRepo;
 
 /**
  * Class CGetPermissionsForUser
@@ -46,13 +47,16 @@ class COrderDelete extends AAjaxController
         $coupon = \Monkey::app()->repoFactory->create('Coupon')->createCouponFromType(self::COUPONTYPE_ID,$order->user->printId());
 
         $to = [$order->user->email];
-        $this->app->mailer->prepare('deleteorderclient', 'no-reply', $to, [], [],
+
+        /** @var CEmailRepo $emailRepo */
+        $emailRepo = \Monkey::app()->repoFactory->create('Email');
+        $res = $emailRepo->newPackagedMail('deleteorderclient', 'no-reply@pickyshop.com', $to, [], [],
             ['order' => $order,
                 'orderId' => $orderId,
                 'products' => $products,
                 'coupon' => $coupon,
                 'lang' => $lang->lang]);
-        $res = $this->app->mailer->send();
+
         if ($res) return 'ok';
         return false;
     }
