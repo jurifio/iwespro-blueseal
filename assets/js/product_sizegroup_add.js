@@ -224,7 +224,7 @@
             Pace.ignore(function () {
                 $.ajax({
                     method: 'post',
-                    url: '/blueseal/xhr/CProductSizeGroupManage',
+                    url: '/blueseal/xhr/ProductSizeGroupManage',
                     data: data,
                     dataType: "json"
                 }).done(function (res) {
