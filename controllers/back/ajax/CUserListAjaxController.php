@@ -3,6 +3,8 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CUser;
+use bamboo\domain\repositories\CUserRepo;
 
 /**
  * Class CProductListAjaxController
@@ -36,43 +38,38 @@ class CUserListAjaxController extends AAjaxController
                     ORDER BY `u`.`creationDate` DESC";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        $users = $this->app->repoFactory->create('User')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $this->app->repoFactory->create('User')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('User')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-
-        $response = [];
-        $response ['draw'] = $_GET['draw'];
-        $response ['recordsTotal'] = $totalCount;
-        $response ['recordsFiltered'] = $count;
-        $response ['data'] = [];
+        $datatable->doAllTheThings();
 
         $userEdit = $this->app->baseUrl(false) . "/blueseal/utente?userId=";
-
-        foreach ($users as $val) {
+        /** @var CUserRepo $userRepo */
+        $userRepo = \Monkey::app()->repoFactory->create('User');
+        foreach ($datatable->getResponseSetData() as $key => $raw) {
+            /** @var CUser $user */
+            $user = $userRepo->findOne([$raw]);
             $row = [];
-            $row["DT_RowId"] = 'row__' . $val->printId();
-            $row["DT_RowClass"] = $val->isActive == 1 ? 'active' : 'unactive';;
-            $row['id'] = '<a href="'.$userEdit.$val->id.'">'.$val->id.'</a>';
-            $row['name'] = $val->userDetails->name;
-            $row['surname'] = $val->userDetails->surname;
-            $row['email'] = $val->email;
-            $row['note'] = $val->userDetails->note;
-            $row['method'] = $val->registrationEntryPoint;
-            $row['sex'] = $val->userDetails->gender == 'M' ? 'Uomo' : 'Donna';
-            $color = $val->isActive == 1 ? '#008200' : '';
+            $row["DT_RowId"] = 'row__' . $user->printId();
+            $row["DT_RowClass"] = $user->isActive == 1 ? 'active' : 'unactive';;
+            $row['id'] = '<a href="'.$userEdit.$user->id.'">'.$user->id.'</a>';
+            $row['name'] = $user->userDetails->name;
+            $row['surname'] = $user->userDetails->surname;
+            $row['email'] = $user->email;
+            $row['note'] = $user->userDetails->note;
+            $row['method'] = $user->registrationEntryPoint;
+            $row['sex'] = $user->userDetails->gender == 'M' ? 'Uomo' : 'Donna';
+            $color = $user->isActive == 1 ? '#008200' : '';
             $icon = "fa-user";
-            if (isset($val->rbacRole) && !$val->rbacRole->isEmpty()) {
+            if (isset($user->rbacRole) && !$user->rbacRole->isEmpty()) {
                 $color = "#cbac59";
-                if ($val->rbacRole->findOneByKey('title', 'sa')) {
+                if ($user->rbacRole->findOneByKey('title', 'sa')) {
                     $icon = "fa-user-secret";
                 }
             }
             $row['status'] = '<i style="color: ' . $color . '" class="fa ' . $icon . '"></i>';
-            $row['phone'] = $val->userDetails->phone;
-            $row['creationDate'] = $val->creationDate;
-            $response['data'][] = $row;
+            $row['phone'] = $user->userDetails->phone;
+            $row['creationDate'] = $user->creationDate;
+            $datatable->setResponseDataSetRow($key, $row);
         }
 
-        return json_encode($response);
+        return $datatable->responseOut();
     }
 }
