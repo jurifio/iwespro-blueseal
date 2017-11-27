@@ -1,8 +1,6 @@
 <?php
 namespace bamboo\controllers\back\ajax;
-use bamboo\core\email\CEmail;
 use bamboo\core\traits\TMySQLTimestamp;
-use bamboo\domain\entities\CShipment;
 use bamboo\domain\repositories\CEmailRepo;
 
 /**
