@@ -111,7 +111,7 @@ const modificaMultiplo = function (selectedRow) {
                 let select = $(this);
                 if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
                 let productSizeGroupsCopy = [];
-                for(let productSizeGroup of response) {
+                for(let productSizeGroup of productSizeGroups) {
                     productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
                     productSizeGroup.sizeNames = [];
                     for(let productSize of productSizeGroup.productSize) {
