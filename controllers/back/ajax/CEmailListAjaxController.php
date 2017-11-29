@@ -42,6 +42,7 @@ class CEmailListAjaxController extends AAjaxController
                       group_concat(DISTINCT (CASE WHEN er.typeTo = 'TO' THEN concat(ea2.name, ' ', ea2.address) END )) AS `to`,
                       group_concat(DISTINCT (CASE WHEN er.typeTo = 'CC' THEN concat(ea2.name, ' ', ea2.address) END )) AS `cc`,
                       group_concat(DISTINCT (CASE WHEN er.typeTo = 'BCC' THEN concat(ea2.name, ' ', ea2.address) END )) AS `bcc`,
+                      e.htmlBody,
                       e.submissionDate,
                       max(er.responseDate) as lastResponse,
                       AVG(UNIX_TIMESTAMP(er.responseDate)) - UNIX_TIMESTAMP(e.submissionDate) as responseTime,
@@ -113,7 +114,7 @@ class CEmailListAjaxController extends AAjaxController
                     $row["DT_RowClass"] = "grey";
                     //grigio
                 } else {
-                    $row["DT_RowClass"] = "purple";
+                    $row["DT_RowClass"] = "violet";
                     //rosso
                 }
             }
@@ -122,6 +123,7 @@ class CEmailListAjaxController extends AAjaxController
             $row['to'] = str_replace(',','<br />',$row['to']);
             $row['cc'] = str_replace(',','<br />',$row['cc']);
             $row['bcc'] = str_replace(',','<br />',$row['bcc']);
+            $row['htmlBody'] = substr(trim(strip_tags($row['htmlBody'])), 0,50)."...";
             $row['responseTime'] = $this->secToTime($row['responseTime']);
 
 
