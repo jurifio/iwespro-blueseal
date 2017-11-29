@@ -61,7 +61,6 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">To</th>
                                 <th data-slug="cc"
-                                    data-isVisible="false"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Cc</th>
                                 <th data-slug="bcc"
@@ -72,7 +71,8 @@
                                     data-orderable="true" class="center">Testo</th>
                                 <th data-slug="submissionDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Submission</th>
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center">Submission</th>
                                 <th data-slug="lastResponse"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Delivery</th>
