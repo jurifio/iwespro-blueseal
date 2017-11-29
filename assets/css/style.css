@@ -870,7 +870,7 @@ h5.product-title {
 
 /**
 classi per colorare le righe delle tabelle da compilare in odd/even per il chiaroscuro
- */
+
 .table.table-striped tbody tr:nth-child(2n+1).green td {
     background: palegreen;
 }
@@ -907,7 +907,7 @@ classi per colorare le righe delle tabelle da compilare in odd/even per il chiar
 .table.table-striped tbody tr.grey td {
     background: darkgrey;
 }
-
+ */
 
 .portlet-refresh div {
     height: 15px;
@@ -955,4 +955,48 @@ table.mini-traffic-display th, table.mini-traffic-display td {
 
 .table.size-table tbody tr td select, .table.size-table tbody tr td input {
     width: 100%;
+}
+
+/* Colori tabella mail */
+.table-striped>tbody>tr.green.even td {
+    background-color: #b0dabc;
+}
+.table-striped>tbody>tr.green.odd td {
+    background-color: #93b79e;
+}
+.table-striped>tbody>tr.yellow.even td {
+    background-color: #d8dac0;
+}
+.table-striped>tbody>tr.yellow.odd td {
+    background-color: #dbd9a7;
+}
+.table-striped>tbody>tr.red.even td{
+    background-color: #c39494;
+}
+.table-striped>tbody>tr.red.odd td{
+    background-color: #c37777;
+}
+.table-striped>tbody>tr.orange.even td{
+    background-color: #e6bea3;
+}
+.table-striped>tbody>tr.orange.odd td{
+    background-color: #e4a87e;
+}
+.table-striped>tbody>tr.violet.even td{
+    background-color: #aba3b3;
+}
+.table-striped>tbody>tr.violet.odd td{
+    background-color: #a391b4;
+}
+.table-striped>tbody>tr.grey.even td{
+    background-color: #dadada;
+}
+.table-striped>tbody>tr.grey.odd td{
+    background-color: #c1c1c1;
+}
+.table-striped>tbody>tr.brown.even td{
+    background-color:#beab9b;
+}
+.table-striped>tbody>tr.brown.odd td{
+    background-color:#ad886b;
 }
