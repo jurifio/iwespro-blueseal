@@ -1000,3 +1000,33 @@ table.mini-traffic-display th, table.mini-traffic-display td {
 .table-striped>tbody>tr.brown.odd td{
     background-color:#ad886b;
 }
+
+
+.legenda{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.colorLeg{
+    height: 15px;
+    width: 15px;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.error{
+    background-color: #c39494;
+}
+
+.inviata{
+    background-color: #b0dabc;
+}
+
+.inviataP{
+    background-color: #d8dac0;
+}
+
+.accepted{
+    background-color: #dadada;
+}
