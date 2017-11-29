@@ -957,6 +957,12 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     width: 100%;
 }
 
+.table.size-table  thead tr th {
+    padding-left: 1px;
+    padding-right: 1px;
+    font-size: 11px;
+}
+
 /* Colori tabella mail */
 .table-striped>tbody>tr.green.even td {
     background-color: #b0dabc;
