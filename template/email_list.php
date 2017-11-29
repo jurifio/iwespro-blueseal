@@ -60,6 +60,9 @@
                                 <th data-slug="userName"
                                     data-searchable="true"
                                     data-orderable="true" class="center dataFilterType">Username</th>
+                                <th data-slug="isError"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Error</th>
                             </tr>
                             </thead>
                             <tbody>
