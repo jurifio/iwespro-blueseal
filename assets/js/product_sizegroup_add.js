@@ -2,7 +2,10 @@
     $.ajax({
         url: '/blueseal/xhr/GetTableContent',
         data: {
-            table: 'ProductSize'
+            table: 'ProductSize',
+            orderBy: [
+                'name'
+            ]
         },
         dataType: 'json'
     }).done(function (productSizes) {
