@@ -54,6 +54,9 @@
                                 <th data-slug="lastResponse"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Delivery</th>
+                                <th data-slug="responseTime"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Response Time</th>
                                 <th data-slug="userName"
                                     data-searchable="true"
                                     data-orderable="true" class="center dataFilterType">Username</th>
