@@ -437,9 +437,6 @@ class CDataTables
         } elseif (strpos($values, '§in:') === 0) {
             $values = substr($values, 5);
             return $this->buildCondition($field, explode(',', $values));
-        } elseif (strpos($values, '#in:') === 0) {
-            $values = substr($values, 0, 4);
-            return $this->buildCondition($field, explode($values, ','));
         } elseif ($values === null) {
             $condition .= ' IS ' . (($not) ? 'NOT ' : '') . '?';
             $params[] = $values;
