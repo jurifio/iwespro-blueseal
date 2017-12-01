@@ -327,7 +327,7 @@
             body: '<p>Elimina la riga</p>' +
             '<div class="form-group form-group-default required">' +
             '<label for="deleteRow">Riga</label>' +
-            '<input autocomplete="off" type="number" min="0" max="36" step="1" id="deleteRow" ' +
+            '<input autocomplete="off" type="number" min="0" max="51" step="1" id="deleteRow" ' +
             'placeholder="Riga" class="form-control" name="deleteRow" required="required">' +
             '</div>' +
             '<div class="form-group form-group-default required selectize-enabled">' +
