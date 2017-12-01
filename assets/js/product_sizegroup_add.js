@@ -249,7 +249,7 @@
 
         return $.ajax({
             method: 'delete',
-            url: '/blueseal/xhr/CProductSizeGroupRowManage',
+            url: '/blueseal/xhr/ProductSizeGroupRowManage',
             data: {
                 rowNum: rowNum,
                 versus: versus,
