@@ -30,7 +30,7 @@ $(document).on('bs-order-pay', function () {
             condition: {id: orderId}
         }
     }).done(function(res){
-        res = JSON.parse(res);
+
 
         var paid = res[0].paidAmount;
         var body = '';

@@ -21,6 +21,25 @@
                 </div>
             </div>
 
+            <div class="legenda container">
+                <div>
+                    <div class="inviata colorLeg"></div>
+                    <p>Email inviata a tutti i destinatari</p>
+                </div>
+                <div>
+                    <div class="error colorLeg"></div>
+                    <p>Email non inviata</p>
+                </div>
+                <div>
+                    <div class="inviataP colorLeg"></div>
+                    <p>Email inviata parzialmente</p>
+                </div>
+                <div>
+                    <div class="accepted colorLeg"></div>
+                    <p>Email accettata ma non inviata</p>
+                </div>
+            </div>
+
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
@@ -42,15 +61,18 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">To</th>
                                 <th data-slug="cc"
-                                    data-isVisible="false"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Cc</th>
                                 <th data-slug="bcc"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Bcc</th>
+                                <th data-slug="htmlBody"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Testo</th>
                                 <th data-slug="submissionDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Submission</th>
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center">Submission</th>
                                 <th data-slug="lastResponse"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Delivery</th>
