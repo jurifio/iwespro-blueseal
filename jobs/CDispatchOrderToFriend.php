@@ -28,11 +28,11 @@ class CDispatchOrderToFriend extends ACronJob
      */
     public function run($args = null)
     {
-        $shops = $this->app->repoFactory->create('Shop')->findAll();
+        $shops = \Monkey::app()->repoFactory->create('Shop')->findAll();
         $query = "SELECT * from OrderLine where `status` in ('ORD_FRND_PYD') AND shopId = ? ";
         $orderExport = new COrderExport($this->app);
         /** @var COrderLineRepo $orderLineRepo */
-        $orderLineRepo = $this->app->repoFactory->create('OrderLine');
+        $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
 
         foreach($shops as $shop){
             $lines = new CObjectCollection();
@@ -46,29 +46,29 @@ class CDispatchOrderToFriend extends ACronJob
                     $orderExport->sendMailForOrderNotification($shop, $lines);
                 }
                 $this->report('Working Shop ' . $shop->name . ' End', 'Export ended');
-                $this->app->dbAdapter->beginTransaction();
+                \Monkey::app()->repoFactory->beginTransaction();
                 foreach($lines as $line){
                     try {
-                        $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
+                        $orderLine = \Monkey::app()->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLineRepo->updateStatus($orderLine, $this->success);
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
                 }
-                $this->app->dbAdapter->commit();
+                \Monkey::app()->repoFactory->commit();
             } catch(\Throwable $e){
                 $this->error( 'Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
-                $this->app->dbAdapter->beginTransaction();
+                \Monkey::app()->repoFactory->beginTransaction();
                 foreach($lines as $line){
                     try {
 
-                        $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
+                        $orderLine = \Monkey::app()->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLineRepo->updateStatus($orderLine, $this->fail);
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
                 }
-                $this->app->dbAdapter->commit();
+                \Monkey::app()->repoFactory->commit();
             }
         }
     }

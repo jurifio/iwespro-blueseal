@@ -134,7 +134,7 @@ group by pn.id, `pc`.`id`";
             $cats = [];
             foreach($res as $v) {
                 if (10 == $iterator) break;
-                $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                $p = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
                 foreach($p->productCategoryTranslation as $cat) {
                     $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                     unset($path[0]);
@@ -165,13 +165,13 @@ group by pn.id, `pc`.`id`";
         $pn = $pnRepo->findOneBy(['name' => $name, 'langId' => 1]);
         if (!$pn) throw new BambooException('OOPS! Non si può inserire una traduzione se non esiste il nome in italiano');
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             $pntRepo->insertTranslation($name, $langId, $translated);
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         }  catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
            return $e->getMessage();
         }
     }

@@ -37,7 +37,7 @@ class CCouponEventListAjaxController extends AAjaxController
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
-        $repo = $this->app->repoFactory->create('CouponEvent');
+        $repo = \Monkey::app()->repoFactory->create('CouponEvent');
         $datatable->doAllTheThings(true);
         foreach($datatable->getResponseSetData() as $key=>$row) {
             $coupon = $repo->findOneBy($row);

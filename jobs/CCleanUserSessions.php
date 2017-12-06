@@ -56,13 +56,13 @@ class CCleanUserSessions extends ACronJob
         $this->report('Delete Start', "To do: ".count($res));
 		$i = 0;
         foreach($res as $us){
-            if($i%100 == 0) $this->app->dbAdapter->beginTransaction();
+            if($i%100 == 0) \Monkey::app()->repoFactory->beginTransaction();
             $resp = $this->deleteSession($us);
             if($i%200 == 0) $this->report('Delete Running', "Deleted: ".$i);
-	        if($i%100 == 0) $this->app->dbAdapter->commit();
+	        if($i%100 == 0) \Monkey::app()->repoFactory->commit();
             if($resp) $i++;
         }
-	    $this->app->dbAdapter->commit();
+	    \Monkey::app()->repoFactory->commit();
         $this->report('Delete End', "Deleted: ".$i);
     }
 }

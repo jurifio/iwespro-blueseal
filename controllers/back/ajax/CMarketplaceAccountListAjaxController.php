@@ -29,8 +29,8 @@ class CMarketplaceAccountListAjaxController extends AMarketplaceAccountAjaxContr
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
         $params = array_merge([$timeFrom, $timeTo, $timeFrom, $timeTo], $datatable->getParams());
         $marketplaceAccounts = $this->app->dbAdapter->query($datatable->getQuery(false, true), $params)->fetchAll();
-        $count = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery(true), $params);
-        $totalCount = $this->app->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery('full'), $params);
+        $count = \Monkey::app()->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery(true), $params);
+        $totalCount = \Monkey::app()->repoFactory->create('CampaingVisitHasProduct')->em()->findCountBySql($datatable->getQuery('full'), $params);
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -41,7 +41,7 @@ class CMarketplaceAccountListAjaxController extends AMarketplaceAccountAjaxContr
         $response ['data'] = [];
 
         foreach ($marketplaceAccounts as $val) {
-            $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneBy(['marketplaceId' => $val['marketplaceId'], 'id' => $val['marketplaceAccountId']]);
+            $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['marketplaceId' => $val['marketplaceId'], 'id' => $val['marketplaceAccountId']]);
             $row = [];
             $row["DT_RowId"] = $marketplaceAccount->printId();
             $row['code'] = $marketplaceAccount->printId();

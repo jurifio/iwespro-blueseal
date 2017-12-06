@@ -34,7 +34,7 @@ class CProductModelEditController extends CProductManageController
 
 		/** LOGICA */
 
-        $productCategories = $this->app->repoFactory->create('ProductCategory')->findAll();
+        $productCategories = \Monkey::app()->repoFactory->create('ProductCategory')->findAll();
         $categories = [];
         $idCat = 0;
         foreach($productCategories as $productCategory) {
@@ -44,7 +44,7 @@ class CProductModelEditController extends CProductManageController
             $idCat++;
         }
 
-        $productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
+        $productDetailsCollection = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
         $productDetails = [];
 
         foreach ($productDetailsCollection as $detail) {

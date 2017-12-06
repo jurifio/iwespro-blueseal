@@ -27,7 +27,7 @@ class CMarketplaceCampaignCategoryMonitorDataProvider extends AAjaxController
         $period = $this->app->router->request()->getRequestData('period');
         $campaignId = $this->app->router->request()->getRequestData('campaignId');
         /** @var CCampaign $campaign */
-        $campaign = $this->app->repoFactory->create('Campaign')->findOneByStringId($campaignId);
+        $campaign = \Monkey::app()->repoFactory->create('Campaign')->findOneByStringId($campaignId);
 
         switch ($period) {
             case 'today': {
@@ -88,7 +88,7 @@ class CMarketplaceCampaignCategoryMonitorDataProvider extends AAjaxController
         $res = $this->app->dbAdapter->query($sql, [$campaignId,STimeToolbox::DbFormattedDateTime(\DateTime::createFromFormat('U', $time))], true)->fetchAll();
 
         $res2 = [];
-        $categoryRepo = $this->app->repoFactory->create('ProductCategory');
+        $categoryRepo = \Monkey::app()->repoFactory->create('ProductCategory');
         foreach ($res as $data) {
             /** @var CProductCategory $productCategory */
             $productCategory = $categoryRepo->findOne([$data['productCategoryId']]);

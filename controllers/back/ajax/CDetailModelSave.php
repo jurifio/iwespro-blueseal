@@ -28,12 +28,12 @@ class CDetailModelSave extends AAjaxController
         $productPrototypeId = $get['Product_dataSheet'];
         $productDetails = $this->getDetails($get);
         try {
-            $this->app->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
 
             $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
             if (!$pn) throw new BambooException('Non si può creare un modello con un nome prodotto inesistente');
             $pnIt = $pn->findOneByKey('langId', 1);
-            $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
+            $newProt = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
             $newProt->productSheetPrototypeId = $productPrototypeId;
             $newProt->name = $get['name'];
             $newProt->code = $get['code'];
@@ -43,11 +43,11 @@ class CDetailModelSave extends AAjaxController
             $this->saveCats($get['categories'], $newId);
 
             $this->insertDetails($productDetails, $newId, $productPrototypeId);
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
 
             return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newId]);
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
         }
     }
@@ -60,10 +60,10 @@ class CDetailModelSave extends AAjaxController
 
         $productDetails = $this->getDetails($get);
 
-        $prot = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $id]);
+        $prot = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $id]);
 
         try {
-            $this->app->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
 
             //update model
 
@@ -88,9 +88,9 @@ class CDetailModelSave extends AAjaxController
             $this->insertDetails($productDetails, $prot->id, $prot->productSheetPrototypeId);
 
             $this->saveCats($get['categories'], $prot->id);
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
         }
         $res = ['status' => 'ok', 'productSheetModelPrototypeId' => $prot->id];
@@ -105,7 +105,7 @@ class CDetailModelSave extends AAjaxController
     private function insertDetails($productDetails, $productSheetModelPrototypeId, $productSheetPrototypeId)
     {
         foreach ($productDetails as $k => $v) {
-            $newSheet = $this->app->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+            $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
             $newSheet->productSheetModelPrototypeId = $productSheetModelPrototypeId;
             $newSheet->productDetailLabelId = $k;
             $newSheet->productDetailId = $v;

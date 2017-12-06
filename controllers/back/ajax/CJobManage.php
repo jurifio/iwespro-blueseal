@@ -29,7 +29,7 @@ class CJobManage extends AAjaxController
      */
     public function get() {
         $jobId = $this->app->router->request()->getRequestData('jobId');
-        $job = $this->app->repoFactory->create('Job')->findOneByStringId($jobId);
+        $job = \Monkey::app()->repoFactory->create('Job')->findOneByStringId($jobId);
         return json_encode($job);
     }
 
@@ -37,7 +37,7 @@ class CJobManage extends AAjaxController
     {
         $jobData = $this->app->router->request()->getRequestData('job');
         /** @var CPaymentBill $paymentBill */
-        $job = $this->app->repoFactory->create('Job')->findOneByStringId($jobData['id']);
+        $job = \Monkey::app()->repoFactory->create('Job')->findOneByStringId($jobData['id']);
 
         $job->manualStart = $jobData['manualStart'] ?? $job->manualStart;
         $job->update();

@@ -65,7 +65,7 @@ FROM `DictionaryCategory`";
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $categories = $this->app->repoFactory->create('DictionaryCategory')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $categories = \Monkey::app()->repoFactory->create('DictionaryCategory')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->categories->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->categories->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -75,7 +75,7 @@ FROM `DictionaryCategory`";
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $productCategories = $this->app->repoFactory->create('ProductCategory')->findAll("limit 99999", "order by lft");
+        $productCategories = \Monkey::app()->repoFactory->create('ProductCategory')->findAll("limit 99999", "order by lft");
 
 	    $explainCategories = [];
 	    foreach($productCategories as $productCategory) {
@@ -117,17 +117,17 @@ FROM `DictionaryCategory`";
         $shopId = $names[0];
         $term = $names[1];
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
-            $productCategory = $this->app->repoFactory->create('DictionaryCategory')->findOneBy(['shopId' => $shopId, 'term' => $term]);
+            $productCategory = \Monkey::app()->repoFactory->create('DictionaryCategory')->findOneBy(['shopId' => $shopId, 'term' => $term]);
 
             $productCategory->productCategoryId = $categoryId;
             $productCategory->update();
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
         }
     }
 }

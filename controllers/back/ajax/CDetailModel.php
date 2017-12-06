@@ -20,7 +20,7 @@ class CDetailModel extends AAjaxController
         $idName = $this->app->router->request()->getRequestData('name');
         $idCode = $this->app->router->request()->getRequestData('code');
 
-        $modelSheetRepo = $this->app->repoFactory->create('ProductSheetModelPrototype');
+        $modelSheetRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype');
         if ($idModel) {
             $detailModel = $modelSheetRepo->findOneBy(['id' => $idModel]);
         } elseif ($idName) {

@@ -23,10 +23,10 @@ class COrderRecallClient extends AAjaxController
     public function post()
     {
         $langId = $this->app->router->request()->getRequestData('langId');
-        $lang = $this->app->repoFactory->create('Lang')->findOneByStringId($langId);
+        $lang = \Monkey::app()->repoFactory->create('Lang')->findOneByStringId($langId);
 
 	    foreach ($this->app->router->request()->getRequestData('ordersId') as $orderId) {
-            $order = $this->app->repoFactory->create('Order')->findOneByStringId($orderId);
+            $order = \Monkey::app()->repoFactory->create('Order')->findOneByStringId($orderId);
 
             $to = [$order->user->email];
 

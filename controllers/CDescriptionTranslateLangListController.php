@@ -36,11 +36,11 @@ class CDescriptionTranslateLangListController extends CDescriptionTranslateLangM
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/description_translate_lang.php');
 
-        $marketplaces = $this->app->repoFactory->create('Marketplace')->findAll();
-        $brands = $this->app->repoFactory->create('ProductBrand')->findAll();
-        $langs = $this->app->repoFactory->create('Lang')->findAll();
-        $seasons = $this->app->repoFactory->create('ProductSeason')->findAll();
-        $colors = $this->app->repoFactory->create('ProductColorGroup')->findAll();
+        $marketplaces = \Monkey::app()->repoFactory->create('Marketplace')->findAll();
+        $brands = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
+        $langs = \Monkey::app()->repoFactory->create('Lang')->findAll();
+        $seasons = \Monkey::app()->repoFactory->create('ProductSeason')->findAll();
+        $colors = \Monkey::app()->repoFactory->create('ProductColorGroup')->findAll();
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

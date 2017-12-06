@@ -113,7 +113,7 @@ class CProductListAjaxController extends AAjaxController
 
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
-        $productRepo = $this->app->repoFactory->create('Product');
+        $productRepo = \Monkey::app()->repoFactory->create('Product');
         $datatable->doAllTheThings();
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {

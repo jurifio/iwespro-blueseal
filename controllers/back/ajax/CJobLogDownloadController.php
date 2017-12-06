@@ -51,7 +51,7 @@ class CJobLogDownloadController extends AAjaxController
 				$variantId = $contents[2];
 				//$lines['content'] =  $id . "-" . $variantId;
 
-				$prod = $this->app->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId]);
+				$prod = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $id, 'productVariantId' => $variantId]);
 				$brand = $prod->productBrand->name;
 				$shops = [];
 				foreach($prod->shop as $shop) $shops[] = $shop->name;

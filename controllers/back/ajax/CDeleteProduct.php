@@ -24,7 +24,7 @@ class CDeleteProduct extends AAjaxController
 
         $i=0;
         foreach ($this->app->router->request()->getRequestData('id') as $product) {
-            $product = $this->app->repoFactory->create('Product')->findOneByStringId($product);
+            $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($product);
             $i++;
             $html .= "<tr><td>" . $product->id . "-" . $product->productVariant->id . "</td><td><img width=\"100\" src=\"". $product->getDummyPictureUrl(). "\"></td></tr>";
         }
@@ -49,7 +49,7 @@ class CDeleteProduct extends AAjaxController
         $deletedProducts['ok'] = [];
         $deletedProducts['ko'] = [];
         foreach ($this->app->router->request()->getRequestData('ids') as $productIds) {
-            $product = $this->app->repoFactory->create('Product')->findOneByStringId($productIds);
+            $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($productIds);
             try {
                 $product->productStatusId = 8;//'C';
 	            $product->update();

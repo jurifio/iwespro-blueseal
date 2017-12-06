@@ -65,12 +65,12 @@ WHERE ((`pd`.`langId` = `l`.`id`) AND (`pd`.`description` <> '') AND (`pd`.`desc
         }
         $datatable->addCondition('langId',[1]);
 
-        $productsDesc = $this->app->repoFactory->create('ProductDescriptionTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productsDesc = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDesc->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsDesc->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $transRepo = $this->app->repoFactory->create('ProductDescriptionTranslation');
-        $repo = $this->app->repoFactory->create('Lang');
+        $transRepo = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation');
+        $repo = \Monkey::app()->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 
         $response = [];

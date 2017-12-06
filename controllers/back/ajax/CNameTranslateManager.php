@@ -21,7 +21,7 @@ class CNameTranslateManager extends AAjaxController
      */
     public function get()
     {
-        $repo = $this->app->repoFactory->create('Lang');
+        $repo = \Monkey::app()->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
         $html = '<div class="col-sm-6">';
         $html .= '<div class="form-group form-group-default radio radio-success">';

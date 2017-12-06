@@ -26,7 +26,7 @@ class CisProductEditable extends AAjaxController
         $user = $this->app->getUser();
         $get = $this->app->router->request()->getRequestData();
         $ret = [];
-        $product = $this->app->repoFactory->create('Product');
+        $product = \Monkey::app()->repoFactory->create('Product');
         if (array_key_exists('itemno', $get) && array_key_exists('variantName', $get) && array_key_exists('brandId', $get)) {
             if (!$get['itemno'] || !$get['variantName'] || !$get['brandId']) throw new \Exception("All parameters are needed");
             $res = $this->app->dbAdapter->query(

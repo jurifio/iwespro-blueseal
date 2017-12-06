@@ -54,7 +54,7 @@ class CCouponListAjaxController extends AAjaxController
         }
 
         $datatable->doAllTheThings(true);
-        $repo = $this->app->repoFactory->create('Coupon');
+        $repo = \Monkey::app()->repoFactory->create('Coupon');
         foreach($datatable->getResponseSetData() as $key=>$row) {
 
             $coupon = $repo->findOneBy($row);

@@ -37,7 +37,7 @@ class CSkuManageController extends ARestrictedAccessRootController
 
         $id = $this->app->router->request()->getRequestData('id');
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
-        $productEdit = $this->app->repoFactory->create('Product')->findOneBy(['id'=>$id, 'productVariantId' => $productVariantId]);
+        $productEdit = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$id, 'productVariantId' => $productVariantId]);
 
         $productSizeGroup = $productEdit->productSizeGroup;
         $productSkuEdit = $productEdit->productSku;
@@ -86,7 +86,7 @@ class CSkuManageController extends ARestrictedAccessRootController
             if (count($keys) != 3) continue;
             if ($keys[0] != 'ProductSku' || $keys[1] != 'stockQty') continue;
             try {
-                $productSku = $this->app->repoFactory->create("ProductSku")->findOneBy(['productId' => $post['id'], 'productVariantId' => $post['productVariantId'], 'shopId' => $post['shopId'], 'productSizeId' => $keys[2]]);
+                $productSku = \Monkey::app()->repoFactory->create("ProductSku")->findOneBy(['productId' => $post['id'], 'productVariantId' => $post['productVariantId'], 'shopId' => $post['shopId'], 'productSizeId' => $keys[2]]);
 
                 if (!is_null($productSku)) {
                     $productSku->stockQty = empty($val) ? 0 : $val;
@@ -97,7 +97,7 @@ class CSkuManageController extends ARestrictedAccessRootController
 	                $done++;
                 } else {
                     if (!empty($val)) {
-                        $productSku = $this->app->repoFactory->create("ProductSku")->getEmptyEntity();
+                        $productSku = \Monkey::app()->repoFactory->create("ProductSku")->getEmptyEntity();
 
                         $productSku->productId = $post['id'];
                         $productSku->productVariantId = $post['productVariantId'];

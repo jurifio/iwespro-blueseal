@@ -101,7 +101,7 @@ class CProductEditController extends CProductManageController
 		    $sortingOptions[$sortingPriority->id] = $sortingPriority->priority;
 	    }
 
-	    $productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
+	    $productDetailsCollection = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
 	    $productDetails = [];
 
 	    foreach ($productDetailsCollection as $detail) {

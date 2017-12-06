@@ -20,7 +20,7 @@ class CFillOrderLine extends AAjaxController
             $filters = $this->data;
 
             /** @var COrderLineRepo $repo */
-            $orderLineRepo = $this->app->repoFactory->create('OrderLine');
+            $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
             /** @var COrderLine $line */
             $line = $orderLineRepo->findOneByStringId($filters['order']);
 

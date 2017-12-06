@@ -18,7 +18,7 @@ class CCheckProductsToBePublished extends AAjaxController
 
     public function put()
     {
-        $products = $this->app->repoFactory->create('Product')->findBySql("
+        $products = \Monkey::app()->repoFactory->create('Product')->findBySql("
           SELECT DISTINCT p.id, p.productVariantId
 			FROM Product p,ProductHasProductPhoto phpp,ProductPhoto pp,ProductSku ps,ProductStatus pst
 			WHERE p.id = phpp.productId
@@ -51,10 +51,10 @@ class CCheckProductsToBePublished extends AAjaxController
             case "updateProductStatus":
                 if ($get['productStatusId']) {
                     $count = 0;
-                    $this->app->dbAdapter->beginTransaction();
+                    \Monkey::app()->repoFactory->beginTransaction();
                     try {
                         foreach ($rows as $k => $v) {
-                            $product = $this->app->repoFactory->create('Product')->findOneBy(
+                            $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(
                                 [
                                     'id' => $v['id'],
                                     'productVariantId' => $v['productVariantId']
@@ -62,7 +62,7 @@ class CCheckProductsToBePublished extends AAjaxController
                             $product->productStatusId = $get['productStatusId'];
                             $count += $product->update();
                         }
-                        $this->app->dbAdapter->commit();
+                        \Monkey::app()->repoFactory->commit();
                     } catch (\Throwable $e) {
                         return "Errore nell'aggiornamento dello stato dei prodotti:<br />" .
                             $e->getMessage();

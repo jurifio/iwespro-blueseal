@@ -25,16 +25,16 @@ class CFriendInvoiceSplitter extends AAjaxController
         if($data['parts'] < 2) return;
 
         /** @var CDocumentRepo $documentRepo */
-        $documentRepo = $this->app->repoFactory->create('Document');
+        $documentRepo = \Monkey::app()->repoFactory->create('Document');
 
-        $this->app->repoFactory->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
 
         foreach($data['invoicesId'] as $documentId) {
             /** @var CDocument $document */
             $document = $documentRepo->findOneByStringId($documentId);
 
             if(!$document->paymentBill->isEmpty()) {
-                $this->app->repoFactory->rollback();
+                \Monkey::app()->repoFactory->rollback();
                 throw new \Exception('Non puoi dividere una fattura già in distinta');
             }
             $newPrice = SPriceToolbox::roundVat($document->totalWithVat / $data['parts']);
@@ -54,6 +54,6 @@ class CFriendInvoiceSplitter extends AAjaxController
 
         }
 
-        $this->app->repoFactory->commit();
+        \Monkey::app()->repoFactory->commit();
     }
 }

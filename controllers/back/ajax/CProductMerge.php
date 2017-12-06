@@ -35,8 +35,8 @@ class CProductMerge extends AAjaxController
         $prods = $get['rows'];
 
         //controllo size group e se ci sono ordini relativi ai prodotti da unire
-        $repoPro = $this->app->repoFactory->create('Product');
-        $repoOrd = $this->app->repoFactory->create('OrderLine');
+        $repoPro = \Monkey::app()->repoFactory->create('Product');
+        $repoOrd = \Monkey::app()->repoFactory->create('OrderLine');
         $sizeGroupCompatibility = true;
         $sizeGroupMacroGroup = false;
 
@@ -108,7 +108,7 @@ class CProductMerge extends AAjaxController
             }
         }
         try {
-            \Monkey::app()->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             /** @var CCartRepo $cartRepo */
             $cartRepo = \Monkey::app()->repoFactory->create('Cart');
             /** @var CShopHasProductRepo $shopHasProductRepo */
@@ -218,10 +218,10 @@ class CProductMerge extends AAjaxController
                 }
             }
             $chosenProduct->updatePublicSkus();
-            \Monkey::app()->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return "Fusione eseguita!";
         } catch (\Throwable $e) {
-            \Monkey::app()->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return $e->getMessage();
         }
     }

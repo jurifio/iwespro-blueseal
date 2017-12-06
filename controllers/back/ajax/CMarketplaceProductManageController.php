@@ -20,7 +20,7 @@ class CMarketplaceProductManageController extends AAjaxController
     public function get()
     {
         $response = [];
-        foreach ($this->app->repoFactory->create('MarketplaceAccount')->findAll() as $account) {
+        foreach (\Monkey::app()->repoFactory->create('MarketplaceAccount')->findAll() as $account) {
             $modifier = isset($account->config['priceModifier']) ? $account->config['priceModificer'] : 0;
             $response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc' => $account->marketplace->type != 'marketplace'];
         }
@@ -30,7 +30,7 @@ class CMarketplaceProductManageController extends AAjaxController
 
     public function post()
     {
-        $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
         $modifier = $this->app->router->request()->getRequestData('modifier');
         $cpc = $this->app->router->request()->getRequestData('cpc');
         $i = 0;
@@ -45,9 +45,9 @@ class CMarketplaceProductManageController extends AAjaxController
             $rows = $this->app->dbAdapter->query($query, [$marketplaceAccount->marketplaceId, $marketplaceAccount->id])->fetchAll(\PDO::FETCH_COLUMN, 0);
         }
         /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
-        $marketplaceAccountHasProductRepo = $this->app->repoFactory->create('MarketplaceAccountHasProduct');
-        $productRepo = $this->app->repoFactory->create('Product');
-        $this->app->dbAdapter->beginTransaction();
+        $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+        $productRepo = \Monkey::app()->repoFactory->create('Product');
+        \Monkey::app()->repoFactory->beginTransaction();
         foreach ($rows as $row) {
             try {
                 $ids = [];
@@ -56,10 +56,10 @@ class CMarketplaceProductManageController extends AAjaxController
                 $product = $productRepo->findOneByStringId($row);
                 $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product, $marketplaceAccount, $cpc, $modifier);
                 $i++;
-                $this->app->dbAdapter->commit();
+                \Monkey::app()->repoFactory->commit();
             } catch
             (\Throwable $e) {
-                $this->app->dbAdapter->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 throw $e;
             }
         }
@@ -71,7 +71,7 @@ class CMarketplaceProductManageController extends AAjaxController
         //RETRY
         $i = 0;
         foreach ($this->app->router->request()->getRequestData('rows') as $row) {
-            $product = $this->app->repoFactory->create('Product')->findOneByStringId($row);
+            $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($row);
             $this->app->eventManager->triggerEvent('product.marketplace.change', ['productId' => $product->printId()]);
         }
         return $i;
@@ -84,7 +84,7 @@ class CMarketplaceProductManageController extends AAjaxController
     {
         $count = 0;
         /** @var CMarketplaceAccountHasProductRepo $repo */
-        $repo = $this->app->repoFactory->create('MarketplaceAccountHasProduct');
+        $repo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
         foreach ($this->app->router->request()->getRequestData('ids') as $mId) {
             if ($repo->deleteProductFromMarketplaceAccount($mId)) $count++;
         }

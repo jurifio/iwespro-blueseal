@@ -28,7 +28,7 @@ class CEmailListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/email_list.php');
 
-        //$shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        //$shops = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

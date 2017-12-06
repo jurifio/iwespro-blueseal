@@ -45,7 +45,7 @@ class CPaymentBillListAjaxController extends AAjaxController
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
         $datatable->doAllTheThings(true);
 
-        $paymentBillRepo = $this->app->repoFactory->create('PaymentBill');
+        $paymentBillRepo = \Monkey::app()->repoFactory->create('PaymentBill');
 
         foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var CPaymentBill $paymentBill */

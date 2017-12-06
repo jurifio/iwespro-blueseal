@@ -43,7 +43,7 @@ class CShopEnableDisable extends AAjaxController
         $shop = $shpR->findOneByStringId($shopId);
 
         $dba = \Monkey::app()->dbAdapter;
-        $dba->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         $message = 'OOPS! Non ho fatto nulla';
         try {
             if ('stop' == $action) {
@@ -55,13 +55,13 @@ class CShopEnableDisable extends AAjaxController
                 if($shop->importer) $message = 'Friend Online, ricordati di riattivare il job o le quantità potrebbero essere non essere aggiornate!';
                 else $message = 'Friend Online!';
             }
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return $message;
         } catch(BambooStorehouseOperationException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         } catch(BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
     }

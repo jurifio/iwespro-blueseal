@@ -31,22 +31,22 @@ class COrderAjaxController extends AAjaxController
 
         $orderId = $this->app->router->request()->getRequestData('orderId');
 
-        $orderRepo = $this->app->repoFactory->create('Order');
+        $orderRepo = \Monkey::app()->repoFactory->create('Order');
         $order = $orderRepo->findOneBy(['id' => $orderId]);
-        $repoStatus = $this->app->repoFactory->create('OrderStatus');
+        $repoStatus = \Monkey::app()->repoFactory->create('OrderStatus');
         $statuses = $repoStatus->findAll();
         foreach ($statuses as $status) {
             if ($status->code == $order->status) {
                 $orderStatus = $status->title;
             }
         }
-        $repoStatusLine = $this->app->repoFactory->create('OrderLineStatus');
+        $repoStatusLine = \Monkey::app()->repoFactory->create('OrderLineStatus');
         $statusesLine = $repoStatusLine->findAll();
 
         $userAddress = \bamboo\domain\entities\CUserAddress::defrost($order->frozenBillingAddress);
         $userShipping = \bamboo\domain\entities\CUserAddress::defrost($order->frozenShippingAddress);
 
-        $productRepo = $this->app->repoFactory->create('ProductNameTranslation');
+        $productRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

@@ -27,7 +27,7 @@ class CMagMovements extends AAjaxController
 
         if ($user->hasPermission('/admin/friend/friendProductEdit')) {
             if ($code && $shop) {
-                $productRepo = $this->app->repoFactory->create('Product');
+                $productRepo = \Monkey::app()->repoFactory->create('Product');
                 $product = $productRepo->findOneByStringId($code);
                 $ret = $product->toArray();
                 $ret['sku'] = [];
@@ -42,7 +42,7 @@ class CMagMovements extends AAjaxController
                 }
                 return json_encode($ret);
             } elseif ($defaultCause) {
-                $causes = $this->app->repoFactory->create('StorehouseOperationCause')->findAll();
+                $causes = \Monkey::app()->repoFactory->create('StorehouseOperationCause')->findAll();
                 $ret = [];
                 $i = 0;
                 foreach($causes as $v) {

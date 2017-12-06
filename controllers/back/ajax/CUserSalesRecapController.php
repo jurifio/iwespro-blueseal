@@ -47,7 +47,7 @@ class CUserSalesRecapController extends AAjaxController
 		$view = new VBase(array());
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_box.php');
 
-		$orders = $this->app->repoFactory->create("Order");
+		$orders = \Monkey::app()->repoFactory->create("Order");
 
 		$get = $this->app->router->request()->getRequestData();
 		//$completed = (($current - $start) / ($end - $start)) * 100;
@@ -58,7 +58,7 @@ class CUserSalesRecapController extends AAjaxController
             $valueToSelect = "friend";
 		}
 
-        $authorizedShops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $authorizedShops = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $shopsWhere = $authorizedShops;
 		//recupero i dati dal db
 		$res = [];

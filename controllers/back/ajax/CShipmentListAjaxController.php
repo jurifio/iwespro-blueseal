@@ -61,18 +61,18 @@ class CShipmentListAjaxController extends AAjaxController
             $datatable->addCondition('scope',[CShipment::SCOPE_SUPPLIER_TO_US]);
         }
 
-        $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
+        $datatable->addCondition('shopId',\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
         $datatable->doAllTheThings(true);
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
-            $val = $this->app->repoFactory->create('Shipment')->findOne([$row['id']]);
+            $val = \Monkey::app()->repoFactory->create('Shipment')->findOne([$row['id']]);
 
             $row["DT_RowId"] = $val->printId();
             $row['id'] = $val->printId();
 
-            $row['shop'] = $this->app->repoFactory->create('Shop')->findOne([$row['shopId']])->name;
+            $row['shop'] = \Monkey::app()->repoFactory->create('Shop')->findOne([$row['shopId']])->name;
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;

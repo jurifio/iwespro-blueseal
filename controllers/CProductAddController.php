@@ -69,7 +69,7 @@ class CProductAddController extends CProductManageController
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll();
 
-        $productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
+        $productDetailsCollection = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
         $productDetails = [];
         foreach ($productDetailsCollection as $detail) {
             try {

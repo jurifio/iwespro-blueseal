@@ -32,9 +32,9 @@ class CProductNamesListAjaxController extends AAjaxController
             $datatable->addIgnobleCondition('name', '% !', true);
         }
 
-        $productNames = $this->app->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $productNames = \Monkey::app()->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('ProductName')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -57,7 +57,7 @@ class CProductNamesListAjaxController extends AAjaxController
                 $cats = [];
                 foreach($res as $v) {
                     if (10 == $iterator) break;
-                    $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                    $p = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
                     foreach($p->productCategoryTranslation as $cat) {
                         $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                         unset($path[0]);

@@ -64,7 +64,7 @@ class CProductPriceEdit extends AAjaxController
         $prices = $this->parseRequest($get);
 
         try {
-            $this->app->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             $prodRepo = $this->rfc('Product');
             $shpRepo = $this->rfc('ShopHasProduct');
             $skuRepo = $this->rfc('ProductSku');
@@ -94,9 +94,9 @@ class CProductPriceEdit extends AAjaxController
                 //$shp->updatePrices($v['value'], $v['price'], (array_key_exists('salePrice', $v) ? $v['salePrice'] : 0));
                 $skuRepo->updateSkusPrices($shp->productId, $shp->productVariantId, $shp->shopId, $shp->value, $shp->price, $shp->salePrice);
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch(\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return json_encode($e->getMessage());
         }
         return json_encode(true);

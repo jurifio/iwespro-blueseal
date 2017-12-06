@@ -20,14 +20,14 @@ class CUserData extends AAjaxController
 	{
         if($this->app->getUser()->hasPermissions('/admin/user/list&&allShops')) {
             if($userId = $this->app->router->request()->getRequestData('userId')) {
-                $user = $this->app->repoFactory->create('User')->findOneByStringId($userId);
+                $user = \Monkey::app()->repoFactory->create('User')->findOneByStringId($userId);
                 $user->userDetails;
                 $user->userAddress;
                 $user->newsletter;
                 return json_encode($user->fullTreeToArray());
             } else {
                 $list = [];
-                foreach ($this->app->repoFactory->create('User')->findBy(['isDeleted'=>0],"","ORDER BY id desc") as $user) {
+                foreach (\Monkey::app()->repoFactory->create('User')->findBy(['isDeleted'=>0],"","ORDER BY id desc") as $user) {
                     $list[] = ['id'=>$user->id,
                         'email'=>$user->email,
                         'name'=> is_null($user->userDetails) ? "" : $user->userDetails->name,

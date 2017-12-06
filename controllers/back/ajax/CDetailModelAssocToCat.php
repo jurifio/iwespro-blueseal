@@ -28,12 +28,12 @@ class CDetailModelAssocToCat extends AAjaxController
         $countCats = 0;
 
         if ($code) {
-            $resByCode = $this->app->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
+            $resByCode = \Monkey::app()->repoFactory->create('Product')->findOneBy(['productVariantId' => $variantId])->productCategory;
             foreach ($resByCode as $k => $v) {
                 $cats[$countCats] = [];
                 $cats[$countCats]['id'] = $v->id;
                 $cats[$countCats]['slug'] = $v->slug;
-                $cats[$countCats]['name'] = $this->app->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1, 'productCategoryId' => $v->id])->name;
+                $cats[$countCats]['name'] = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1, 'productCategoryId' => $v->id])->name;
                 $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->id));
                 $cats[$countCats]['origin'] = 'code';
                 $countCats++;
@@ -42,13 +42,13 @@ class CDetailModelAssocToCat extends AAjaxController
         }
 
         if ($productSheetModelPrototypeId) {
-            $resByModelName = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $productSheetModelPrototypeId]);
+            $resByModelName = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $productSheetModelPrototypeId]);
             foreach ($resByModelName as $v) {
                 if (!in_array($v->productCategory->id, array_column($cats, 'id'))) {
                     $cats[$countCats] = [];
                     $cats[$countCats]['id'] = $v->productCategory->id;
                     $cats[$countCats]['slug'] = $v->productCategory->slug;
-                    $cats[$countCats]['name'] = $this->app->repoFactory->create('productCategoryTranslation')->findOneBy(
+                    $cats[$countCats]['name'] = \Monkey::app()->repoFactory->create('productCategoryTranslation')->findOneBy(
                         ['langId' => 1, 'productCategoryId' => $v->productCategory->id]
                     );
                     $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->productCategory->id));
@@ -60,13 +60,13 @@ class CDetailModelAssocToCat extends AAjaxController
         }
 
         if ($idModel) {
-            $resByModelName = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $productSheetModelPrototypeId]);
+            $resByModelName = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $productSheetModelPrototypeId]);
             foreach ($resByModelName as $v) {
                 if (!in_array($v->productCategory->id, array_column($cats, 'id'))) {
                     $cats[$countCats] = [];
                     $cats[$countCats]['id'] = $v->productCategory->id;
                     $cats[$countCats]['slug'] = $v->productCategory->slug;
-                    $cats[$countCats]['name'] = $this->app->repoFactory->create('productCategoryTranslation')->findOneBy(
+                    $cats[$countCats]['name'] = \Monkey::app()->repoFactory->create('productCategoryTranslation')->findOneBy(
                         ['langId' => 1, 'productCategoryId' => $v->productCategory->id]
                     );
                     $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->productCategory->id));
@@ -85,7 +85,7 @@ class CDetailModelAssocToCat extends AAjaxController
                     $cats[$countCats]['id'] = $v['productCategoryId'];
                     $cats[$countCats]['name'] = $v['name'];
                     $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v['productCategoryId']));
-                    $cats[$countCats]['slug'] = $this->app->repoFactory->create('ProductCategory')->findOneBy(['id' => $v['productCategoryId']])->slug;
+                    $cats[$countCats]['slug'] = \Monkey::app()->repoFactory->create('ProductCategory')->findOneBy(['id' => $v['productCategoryId']])->slug;
                     $cats[$countCats]['origin'] = 'search';
                     $countCats++;
                 }
@@ -100,16 +100,16 @@ class CDetailModelAssocToCat extends AAjaxController
         $categoryId = $get['categoryId'];
 
         try {
-            $cat = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productCategoryId' => $categoryId]);
+            $cat = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productCategoryId' => $categoryId]);
             if ($cat) {
-                $ent = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productSheetModelPrototypeId' => $productSheetModelPrototypeId]);
+                $ent = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->findOneBy(['productSheetModelPrototypeId' => $productSheetModelPrototypeId]);
                 if ($ent) {
                     $ent->delete();
                 }
                 $cat->productSheetModelPrototypeId = $productSheetModelPrototypeId;
                 $cat->update();
             } else {
-                $cat = $this->app->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->getEmptyEntity();
+                $cat = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeHasProductCategory')->getEmptyEntity();
                 $cat->productCategoryId = $categoryId;
                 $cat->productSheetModelPrototypeId = $productSheetModelPrototypeId;
                 $cat->insert();
@@ -129,7 +129,7 @@ class CDetailModelAssocToCat extends AAjaxController
         $names = [];
         foreach($arr as $v) {
             if (1 == $v['id']) continue;
-            $pct = $this->app->repoFactory->create('ProductCategoryTranslation')->findOneBy(['productCategoryId' => $v['id'], 'langId' => 1]);
+            $pct = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['productCategoryId' => $v['id'], 'langId' => 1]);
             $names[] = $pct->name;
         }
         return implode('/', $names);

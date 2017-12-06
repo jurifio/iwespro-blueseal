@@ -35,7 +35,7 @@ class CSizeManageController extends ARestrictedAccessRootController
         $slugy = new CSlugify();
 
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         /** @var CMySQLAdapter $mysql */
         $mysql = $this->app->dbAdapter;
         $macroName = $post['ProductSizeGroup_macroName'];
@@ -71,7 +71,7 @@ class CSizeManageController extends ARestrictedAccessRootController
                         continue;
                     }
 
-                    $productSizeGroup = $this->app->repoFactory->create("ProductSizeGroup")->findOneBy(['id' => $productSizeGroupId]);
+                    $productSizeGroup = \Monkey::app()->repoFactory->create("ProductSizeGroup")->findOneBy(['id' => $productSizeGroupId]);
                     $productSizeGroup->productSizeMacroGroupId = $productSizeMacroGroup->id;
                     $productSizeGroup->locale = $productSizeGroupIn['locale'];
                     $productSizeGroup->name = $productSizeGroupIn['name'];
@@ -97,7 +97,7 @@ class CSizeManageController extends ARestrictedAccessRootController
                     $res = $mysql->insert("ProductSizeGroupHasProductSize", ["productSizeGroupId" => $productSizeGroupId, "productSizeId" => $sizeId, "position" => $key]);
                 }
             } catch (\Throwable $e) {
-                $this->app->dbAdapter->rollback();
+                \Monkey::app()->repoFactory->rollback();
                 /** @noinspection PhpVoidFunctionResultUsedInspection */
                 die(var_dump($e));
             }

@@ -54,12 +54,12 @@ class CNameTranslateListAjaxController extends AAjaxController
         $datatable->addCondition('langId',[1]);
         $datatable->addCondition('name',[''],true);
 
-        $productName = $this->app->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productName = \Monkey::app()->repoFactory->create('ProductName')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsName->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsName->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $PNRepo = $this->app->repoFactory->create('ProductName');
-        $repo = $this->app->repoFactory->create('Lang');
+        $PNRepo = \Monkey::app()->repoFactory->create('ProductName');
+        $repo = \Monkey::app()->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 
         $response = [];
@@ -97,7 +97,7 @@ class CNameTranslateListAjaxController extends AAjaxController
             $cats = [];
             foreach($res as $v) {
                 if (10 == $iterator) break;
-                $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                $p = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
                 foreach($p->productCategoryTranslation as $cat) {
                     $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                     unset($path[0]);

@@ -22,11 +22,11 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
-        if(!in_array($shopId,$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser())) {
+        if(!in_array($shopId,\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser())) {
             $this->app->router->response()->raiseProcessingError();
             return 'Shop non autorizzato!';
         } else {
-            $sku = $this->app->repoFactory->create('ProductSku')->findOneBy(['barcode'=>$this->app->router->request()->getRequestData('barcode')]);
+            $sku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['barcode'=>$this->app->router->request()->getRequestData('barcode')]);
             if(is_null($sku)) {
                 $this->app->router->response()->raiseProcessingError();
                 return 'Barcode non trovato';
@@ -72,12 +72,12 @@ class CStorehouseOperationFastInsertBarcode extends AAjaxController
         $shop = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
 
         $dba = \Monkey::app()->dbAdapter;
-        $dba->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             $soR->registerOperation($skusToMove, $shop, $movementCauseId, $storehouse = null, $notes = null);
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessage();
         }

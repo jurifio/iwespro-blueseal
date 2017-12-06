@@ -40,7 +40,7 @@ class CAddressBookListAjaxController extends AAjaxController
         $datatable = new CDataTables($sql, ['id'], $_GET);
         $datatable->doAllTheThings(true);
 
-        $addressBookRepo = $this->app->repoFactory->create('AddressBook');
+        $addressBookRepo = \Monkey::app()->repoFactory->create('AddressBook');
         foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var $addressBook CAddressBook */
             $addressBook = $addressBookRepo->findOneBy($row);

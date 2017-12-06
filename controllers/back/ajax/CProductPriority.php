@@ -28,7 +28,7 @@ class CProductPriority extends AAjaxController
 	 */
     public function get()
     {
-	    $priorities = $this->app->repoFactory->create('SortingPriority')->findAll();
+	    $priorities = \Monkey::app()->repoFactory->create('SortingPriority')->findAll();
 	    $output = [];
 	    foreach ($priorities as $priority) {
 			$output[] = ['id'=>$priority->id,'priority'=>'('.$priority->id.') '.$priority->priority];
@@ -41,11 +41,11 @@ class CProductPriority extends AAjaxController
 	 */
     public function put()
     {
-	    $sample = $this->app->repoFactory->create('Product')->getEmptyEntity();
+	    $sample = \Monkey::app()->repoFactory->create('Product')->getEmptyEntity();
 	    $i = 0;
 	    foreach ($this->app->router->request()->getRequestData('rows') as $row) {
 	    	$sample->readId($row);
-		    $product = $this->app->repoFactory->create('Product')->findOneBy($sample->getIds());
+		    $product = \Monkey::app()->repoFactory->create('Product')->findOneBy($sample->getIds());
 		    $product->sortingPriorityId = $this->app->router->request()->getRequestData('priority');
 		    if($product->update() > 0) $i++;
 	    }

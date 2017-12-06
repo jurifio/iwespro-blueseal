@@ -55,19 +55,19 @@ class CFriendOrderPayInvoices extends AAjaxController
         $invoices = $iR->findBySql('SELECT id FROM Document WHERE id IN (' . implode(',', $row) . ')');
 
         $dba = \Monkey::app()->dbAdapter;
-        $dba->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             $iR->insertPaymentBillAndPayInvoices($invoices, $amount, $date);
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             $res['message'] = 'La distinta è stata registrata correttamente.';
             return json_encode($res);
         } catch (BambooInvoiceException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             $res['error'] = true;
             $res['message'] = $e->getMessage();
             return json_encode($res);
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessage();
         }
@@ -88,15 +88,15 @@ class CFriendOrderPayInvoices extends AAjaxController
         if ('add' == $act) {
             $invoices = $iR->findBySql('SELECT id FROM Document WHERE id IN (' . implode(',', $row) . ')');
             try {
-                $dba->beginTransaction();
+                \Monkey::app()->repoFactory->beginTransaction();
                 $iR->addInvoicesToPaymentBill($invoices, $idBill);
-                $dba->commit();
+                \Monkey::app()->repoFactory->commit();
                 return 'Le fatture selezionate sono state inserite nella distinta specificata';
             } catch (BambooInvoiceException $e) {
-                $dba->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 return $e->getMessage();
             } catch(BambooException $e) {
-                $dba->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 \Monkey::app()->router->response()->raiseProcessingError();
                 return $e->getMessage();
             }
@@ -107,18 +107,18 @@ class CFriendOrderPayInvoices extends AAjaxController
             $res['message'] = 'La fattura è stata scorporata dalla distinta';
 
             try {
-                $dba->beginTransaction();
+                \Monkey::app()->repoFactory->beginTransaction();
                 $invoice = $iR->findOne([$row]);
                 $iR->removeInvoiceFromPaymentBill($invoice);
-                $dba->commit();
+                \Monkey::app()->repoFactory->commit();
                 return json_encode($res);
             } catch(BambooInvoiceException $e) {
-                $dba->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 $res['error'] = true;
                 $res['message'] = $e->getMessage();
                 return json_encode($res);
             } catch(BambooException $e) {
-                $dba->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 \Monkey::app()->router->response()->raiseProcessingError();
                 return $e->getMessage();
             }

@@ -21,7 +21,7 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 {
     public function get()
     {
-	    $marketplaceAccountCategoryRepo =  $this->app->repoFactory->create('MarketplaceAccountCategory');
+	    $marketplaceAccountCategoryRepo =  \Monkey::app()->repoFactory->create('MarketplaceAccountCategory');
 
         $sql = "select `m`.`id` AS `marketplaceId`,
                        `ma`.`id` AS `marketplaceAccountId`,

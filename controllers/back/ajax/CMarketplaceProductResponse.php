@@ -23,9 +23,9 @@ class CMarketplaceProductResponse extends AAjaxController
 		$prodCode = $this->app->router->request()->getRequestData('rows')[0];
 
 				/** @var CProduct $prod */
-		$prod = $this->app->repoFactory->create('Product')->getEmptyEntity();
+		$prod = \Monkey::app()->repoFactory->create('Product')->getEmptyEntity();
 		$prod->readId($prodCode);
-		$prod = $this->app->repoFactory->create('Product')->findOneBy($prod->getIds());
+		$prod = \Monkey::app()->repoFactory->create('Product')->findOneBy($prod->getIds());
 		$response = "";
 		foreach ($prod->marketplaceAccountHasProduct as $mahp) {
 			$response.= $mahp->marketplaceAccount->marketplace->name .' - '.$mahp->marketplaceAccount->name.'<br>';

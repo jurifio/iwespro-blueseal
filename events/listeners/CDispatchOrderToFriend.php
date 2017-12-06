@@ -35,12 +35,12 @@ class CDispatchOrderToFriend extends AEventListener
         if ($e->getEventData('orderLineIds')) {
             $this->report('DispatchOrderToFriendEvent', 'found orderLineIds', $e);
             foreach ($e->getEventData('orderLineIds') as $orderLineId) {
-                $orderLine = $this->app->repoFactory->create('OrderLine')->findOneByStringId($orderLineId);
+                $orderLine = \Monkey::app()->repoFactory->create('OrderLine')->findOneByStringId($orderLineId);
                 $shopOrderLines[$orderLine->shopId][] = $orderLine;
             }
         } elseif ($e->getEventData('orderLineId')) {
             $this->report('DispatchOrderToFriendEvent', 'found orderLineIds', $e);
-            $orderLine = $this->app->repoFactory->create('OrderLine')->findOneByStringId($e->getEventData('orderLineId'));
+            $orderLine = \Monkey::app()->repoFactory->create('OrderLine')->findOneByStringId($e->getEventData('orderLineId'));
             $shopOrderLines[$orderLine->shopId] = $orderLine;
         } elseif ($e->getEventData('orderLines')) {
             $this->report('DispatchOrderToFriendEvent', 'found orderLines', $e);

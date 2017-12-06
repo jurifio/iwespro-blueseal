@@ -27,21 +27,21 @@ class CDetailModelGetDetails extends AAjaxController
 
         if ($modelId) {
             $details = [];
-            $modelRes = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $modelId]);
+            $modelRes = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $modelId]);
             $details['id'] = $modelRes->id;
             $details['prototype'] = $modelRes->productSheetPrototypeId;
             $modelDetails = $modelRes->productSheetModelActual;
-            //$modelDetails = $this->app->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $modelRes->id]);
+            //$modelDetails = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $modelRes->id]);
             foreach ($modelDetails as $v) {
                 $details[$v->productDetailLabelId] = [];
-                $details[$v->productDetailLabelId]['labelName'] = $this->app->repoFactory->create('ProductDetailLabelTranslation')->findOneBy(['langId' => 1, 'productDetailLabelId' => $v->productDetailLabelId]);
+                $details[$v->productDetailLabelId]['labelName'] = \Monkey::app()->repoFactory->create('ProductDetailLabelTranslation')->findOneBy(['langId' => 1, 'productDetailLabelId' => $v->productDetailLabelId]);
                 $details[$v->productDetailLabelId]['detailId'] = $v->productDetailId;
             }
             $res = $details;
         } else {
             if ($code) {
                 //list($id, $variantId) = explode('-', $code);
-                $product = $this->app->repoFactory->create('Product')->findByAnyString($code);
+                $product = \Monkey::app()->repoFactory->create('Product')->findByAnyString($code);
                 foreach($product as $v) {
                     $names[$namesCount] = [];
                     $names[$namesCount]['id'] = $v->productSheetPrototypeId;
@@ -94,25 +94,25 @@ class CDetailModelGetDetails extends AAjaxController
             }
         }
         if ($name) {
-            $prot = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
+            $prot = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
             if ($prot) {
                 return json_encode(['status' => 'exists']);
             } else {
                 try {
-                    $this->app->dbAdapter->beginTransaction();
-                    $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
+                    \Monkey::app()->repoFactory->beginTransaction();
+                    $newProt = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
                     $newProt->productSheetPrototypeId = $productPrototypeId;
                     $newProt->name = $name;
                     $newProt->insert();
 
-                    $newProt = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
+                    $newProt = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
 
                     $this->insertDetails($productDetails, $newProt->id);
-                    $this->app->dbAdapter->commit();
+                    \Monkey::app()->repoFactory->commit();
 
                     return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newProt->id]);
                 } catch (\Throwable $e) {
-                    $this->app->dbAdapter->rollBack();
+                    \Monkey::app()->repoFactory->rollback();
                     return json_encode(['status' => 'fail']);
                 }
             }
@@ -132,10 +132,10 @@ class CDetailModelGetDetails extends AAjaxController
             }
         }
 
-        $prot = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
+        $prot = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['name' => $name]);
 
         try {
-            $this->app->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             //delete all details associated to this model
             $psma = $prot->productSheetModelActual;
             foreach ($psma as $v) {
@@ -143,9 +143,9 @@ class CDetailModelGetDetails extends AAjaxController
             }
             //insert new details
             $this->insertDetails($productDetails, $prot->id);
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return json_encode(['status' => "ko"]);
         }
 
@@ -158,7 +158,7 @@ class CDetailModelGetDetails extends AAjaxController
     {
         foreach ($productDetails as $k => $v) {
             if (!$v) continue;
-            $newSheet = $this->app->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+            $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
             $newSheet->productSheetModelPrototypeId = $productPrototypeId;
             $newSheet->productDetailLabelId = $k;
             $newSheet->productDetailId = $v;

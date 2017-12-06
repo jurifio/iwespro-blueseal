@@ -44,7 +44,7 @@ class CMarketplaceActiveCampaignMonitorDataProvider extends AAjaxController
         $res2 = [];
         foreach ($res as $campaignId) {
             /** @var CCampaign $campaign */
-            $campaign = $this->app->repoFactory->create('Campaign')->findOneByStringId($campaignId['campaignId']);
+            $campaign = \Monkey::app()->repoFactory->create('Campaign')->findOneByStringId($campaignId['campaignId']);
             $res2[] = $campaign;
         }
 

@@ -36,7 +36,7 @@ class CBlueSealSidebar
     {
         $sidebar = $this->app->cacheService->getCache('misc')->get('BluesealSidebar:'.$this->app->getUser()->id);
         if($sidebar == false) {
-            $groups = $this->app->repoFactory->create('SidebarGroup')->em()->findBySql("Select id 
+            $groups = \Monkey::app()->repoFactory->create('SidebarGroup')->em()->findBySql("Select id 
                                                                                     from SidebarGroup 
                                                                                     ORDER BY `order` asc");
 

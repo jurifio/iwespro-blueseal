@@ -28,7 +28,7 @@ class CDetailTranslateListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/detail_translate_list.php');
 
-        $repo = $this->app->repoFactory->create('Lang');
+        $repo = \Monkey::app()->repoFactory->create('Lang');
         $activeLanguages = $repo->findBy([]);
 
         return $view->render([

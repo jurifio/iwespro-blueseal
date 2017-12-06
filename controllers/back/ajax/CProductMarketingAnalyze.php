@@ -24,7 +24,7 @@ class CProductMarketingAnalyze extends AAjaxController
     public function get()
     {
         $ids = $this->app->router->request()->getRequestData('row');
-        $product = $this->app->repoFactory->create('Product')->findOneByStringId($ids);
+        $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($ids);
         $queryStronza = "SELECT
                               count(id) as conto,
                               max(creationDate) as firstSeen,

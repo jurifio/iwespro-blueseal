@@ -52,7 +52,7 @@ class CDeleteCoupon extends AAjaxController
      */
     public function delete()
     {
-        $couponRepo = $this->app->repoFactory->create('Coupon');
+        $couponRepo = \Monkey::app()->repoFactory->create('Coupon');
 
         $id = [];
         foreach ($this->app->router->request()->getRequestData() as $couponId) {

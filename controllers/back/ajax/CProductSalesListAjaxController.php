@@ -57,7 +57,7 @@ class CProductSalesListAjaxController extends AAjaxController
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
 
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $prodotti = \Monkey::app()->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -148,7 +148,7 @@ class CProductSalesListAjaxController extends AAjaxController
                 $friendSaleMargin = '';
                 $friendPastMargin = '';
 
-                $shopRepo = $this->app->repoFactory->create("Shop")->findOneBy(['name' => $v['shop']]);
+                $shopRepo = \Monkey::app()->repoFactory->create("Shop")->findOneBy(['name' => $v['shop']]);
                 if ($v['val']) {
                     $friendRevenue = $v['val'] + $v['val'] * $shopRepo->currentSeasonMultiplier / 100;
                     $friendSaleRevenue = $v['val'] + $v['val'] * $shopRepo->saleMultiplier / 100;

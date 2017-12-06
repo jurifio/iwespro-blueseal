@@ -55,7 +55,7 @@ FROM ((`ProductDetail` `pd`
 WHERE ((`pdt`.`langId` = 1) AND (`p`.`dummyPicture` IS NOT NULL) AND (`p`.`qty` > 0)) AND (`p`.`productStatusId` in (5,6,11))";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        $productsDetail = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $productsDetail = \Monkey::app()->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -68,8 +68,8 @@ WHERE ((`pdt`.`langId` = 1) AND (`p`.`dummyPicture` IS NOT NULL) AND (`p`.`qty` 
 
         $i = 0;
 
-        $psaRepo = $this->app->repoFactory->create('ProductSheetModelActual');
-        $psmaRepo = $this->app->repoFactory->create('ProductSheetModelActual');
+        $psaRepo = \Monkey::app()->repoFactory->create('ProductSheetModelActual');
+        $psmaRepo = \Monkey::app()->repoFactory->create('ProductSheetModelActual');
 
         $colorTemp = '<span style="color: #880611;">{string}</span>';
         foreach ($productsDetail as $val) {
@@ -89,10 +89,10 @@ WHERE ((`pdt`.`langId` = 1) AND (`p`.`dummyPicture` IS NOT NULL) AND (`p`.`qty` 
                 $response['data'][$i]['slug'] = ($red) ? str_replace('{string}', $val->slug, $colorTemp) : $val->slug;
                 $response['data'][$i]['name'] = ($red) ? str_replace('{string}', $val->productDetailTranslation->getFirst()->name, $colorTemp) : $val->productDetailTranslation->getFirst()->name;
                 $response['data'][$i]['name'] .= " (";
-                $dt = $this->app->repoFactory->create('productDetailTranslation')->findBy(['productDetailId' => $val->id]);
+                $dt = \Monkey::app()->repoFactory->create('productDetailTranslation')->findBy(['productDetailId' => $val->id]);
                 $lang = [];
                 foreach ($dt as $vt) {
-                    $rLang = $this->app->repoFactory->create('Lang')->findOneBy(['id' => $vt->langId]);
+                    $rLang = \Monkey::app()->repoFactory->create('Lang')->findOneBy(['id' => $vt->langId]);
                     $lang[] = $rLang->lang;
                 }
                 $response['data'][$i]['name'] .= implode(',', $lang);
@@ -114,7 +114,7 @@ WHERE ((`pdt`.`langId` = 1) AND (`p`.`dummyPicture` IS NOT NULL) AND (`p`.`qty` 
                 $cats = [];
                 foreach($res as $v) {
                     if (10 == $iterator) break;
-                    $p = $this->app->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                    $p = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
                     foreach($p->productCategoryTranslation as $cat) {
                         $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                         unset($path[0]);

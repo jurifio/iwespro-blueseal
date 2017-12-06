@@ -56,7 +56,7 @@ class CCouponEventAddController extends ARestrictedAccessRootController
         try {
             $data = $this->app->router->request()->getRequestData();
 
-            $couponEvent = $this->app->repoFactory->create('CouponEvent')->getEmptyEntity();
+            $couponEvent = \Monkey::app()->repoFactory->create('CouponEvent')->getEmptyEntity();
             $couponEvent->couponTypeId = $data['couponTypeId'];
             $couponEvent->name = $data['name'];
             $couponEvent->description = $data['description'];

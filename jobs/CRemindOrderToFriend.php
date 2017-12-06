@@ -25,11 +25,11 @@ class CRemindOrderToFriend extends ACronJob
      */
     public function run($args = null)
     {
-        $shops = $this->app->repoFactory->create('Shop')->findAll();
+        $shops = \Monkey::app()->repoFactory->create('Shop')->findAll();
         $query = "SELECT * from OrderLine where `status` in ('ORD_FRND_SENT') AND shopId = ? ";
 
         /** @var COrderLineRepo $orderLineRepo */
-        $orderLineRepo = $this->app->repoFactory->create('OrderLine');
+        $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
 
         foreach($shops as $shop){
             try {

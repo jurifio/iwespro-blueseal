@@ -61,7 +61,7 @@ class CDictionaryTagEditAjaxController extends AAjaxController
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $tags = $this->app->repoFactory->create('DictionaryTag')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $tags = \Monkey::app()->repoFactory->create('DictionaryTag')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->tags->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->tags->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -71,7 +71,7 @@ class CDictionaryTagEditAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $productTags = $this->app->repoFactory->create('Tag')->findAll("limit 99999", "order by slug");
+        $productTags = \Monkey::app()->repoFactory->create('Tag')->findAll("limit 99999", "order by slug");
 
         $i = 0;
         foreach($tags as $tag) {
@@ -107,17 +107,17 @@ class CDictionaryTagEditAjaxController extends AAjaxController
         $shopId = $names[0];
         $term = $names[1];
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
-            $productTag = $this->app->repoFactory->create('DictionaryTag')->findOneBy(['shopId' => $shopId, 'term' => $term]);
+            $productTag = \Monkey::app()->repoFactory->create('DictionaryTag')->findOneBy(['shopId' => $shopId, 'term' => $term]);
 
             $productTag->tagId = $tagId;
             $productTag->update();
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
         }
     }
 }

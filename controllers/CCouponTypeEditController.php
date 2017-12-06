@@ -19,7 +19,7 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/coupontype_edit.php');
 
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
-        $couponRepo = $this->app->repoFactory->create('CouponType');
+        $couponRepo = \Monkey::app()->repoFactory->create('CouponType');
         $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
 
         $possValids =[];
@@ -47,7 +47,7 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
         $data = $this->app->router->request()->getRequestData();
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
-        $couponType = $this->app->repoFactory->create('CouponType')->findOneBy(['id'=>$couponId]);
+        $couponType = \Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id'=>$couponId]);
 
         foreach ($data as $k => $v) {
             $couponType->{$k} = $v;
@@ -59,7 +59,7 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
         }
 
         foreach ($data['tags'] as $tag) {
-            $couponTypeHasTag = $this->app->repoFactory->create('CouponTypeHasTag')->getEmptyEntity();
+            $couponTypeHasTag = \Monkey::app()->repoFactory->create('CouponTypeHasTag')->getEmptyEntity();
             $couponTypeHasTag->tagId = $tag;
             $couponTypeHasTag->couponTypeId = $couponType->id;
             $couponTypeHasTag->insert();

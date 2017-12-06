@@ -20,7 +20,7 @@ class CFriendsListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $shopIds = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
         $sql = "SELECT
   `s`.`name`                                                                              AS `shop`,
@@ -56,9 +56,9 @@ GROUP BY `s`.`id`, `pse`.`id`";
         $count = $this->app->dbAdapter->query($datatable->getQuery(true,true),$datatable->getParams())->fetch();
         $totalCount = $this->app->dbAdapter->query($datatable->getQuery('full',true),$datatable->getParams())->fetch();
 
-        /*$brands = $this->app->repoFactory->create('ProductBrand')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        /*$brands = \Monkey::app()->repoFactory->create('ProductBrand')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
         */
         $response = [];
         $response ['draw'] = $_GET['draw'];

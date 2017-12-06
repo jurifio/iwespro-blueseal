@@ -24,10 +24,10 @@ class CShopManage extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('id');
-        $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $shops = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         if (in_array($shopId, $shops)) {
             /** @var CShop $shop */
-            $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopId);
+            $shop = \Monkey::app()->repoFactory->create('Shop')->findOneByStringId($shopId);
             $shop->user;
             $shop->billingAddressBook;
             $shop->shippingAddressBook;
@@ -44,9 +44,9 @@ class CShopManage extends AAjaxController
     {
         try {
             $shopData = $this->app->router->request()->getRequestData('shop');
-            $shopsId = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+            $shopsId = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
             if (in_array($shopData['id'], $shopsId)) {
-                $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopData['id']);
+                $shop = \Monkey::app()->repoFactory->create('Shop')->findOneByStringId($shopData['id']);
                 $shop->title = $shopData['title'];
                 $shop->owner = $shopData['owner'];
                 $shop->referrerEmails = $shopData['referrerEmails'];
@@ -87,14 +87,14 @@ class CShopManage extends AAjaxController
                 }
 
                 $x = $shop->update();
-                $this->app->dbAdapter->commit();
+                \Monkey::app()->repoFactory->commit();
                 return $x;
             } else {
                 $this->app->router->response()->raiseUnauthorized();
                 return 'Bad Request';
             }
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
     }
@@ -113,8 +113,8 @@ class CShopManage extends AAjaxController
             }
         }
         if (!$ok) return null;
-        $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
-        if (is_null($addressBook)) $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
+        $addressBook = \Monkey::app()->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
+        if (is_null($addressBook)) $addressBook = \Monkey::app()->repoFactory->create('AddressBook')->getEmptyEntity();
         try {
             /** @var CAddressBook $addressBook */
             $addressBook->name = $addressBookData['name'] ?? null;
@@ -131,7 +131,7 @@ class CShopManage extends AAjaxController
             $addressBook->note = $addressBookData['note'] ?? null;
 
             if (!isset($addressBook->id)) {
-                $addressBookC = $this->app->repoFactory->create('AddressBook')->findOneBy(['checksum' => $addressBook->calculateChecksum()]);
+                $addressBookC = \Monkey::app()->repoFactory->create('AddressBook')->findOneBy(['checksum' => $addressBook->calculateChecksum()]);
                 if (!is_null($addressBookC)) $addressBook->id = $addressBookC->id;
             }
         } catch (\Throwable $e) {

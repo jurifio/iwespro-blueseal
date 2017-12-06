@@ -23,11 +23,11 @@ class CShopListAjaxController extends AAjaxController
     public function get()
     {
         $datatable = new CDataTables("Shop",['id'],$_GET,false);
-        $datatable->addCondition('id',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
+        $datatable->addCondition('id',\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
-        $shops = $this->app->repoFactory->create('Shop')->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('Shop')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('Shop')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $shops = \Monkey::app()->repoFactory->create('Shop')->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('Shop')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('Shop')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];

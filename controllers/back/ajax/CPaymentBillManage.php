@@ -29,13 +29,13 @@ class CPaymentBillManage extends AAjaxController
      */
     public function get() {
         $paymentBillId = $this->app->router->request()->getRequestData('paymentBillId');
-        $paymentBill = $this->app->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillId);
+        $paymentBill = \Monkey::app()->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillId);
         return json_encode($paymentBill);
     }
 
     public function post()
     {
-        $paymentBill = $this->app->repoFactory->create('PaymentBill')->getEmptyEntity();
+        $paymentBill = \Monkey::app()->repoFactory->create('PaymentBill')->getEmptyEntity();
 
         $paymentBill->paymentDate = STimeToolbox::DbFormattedDate($this->app->router->request()->getRequestData('paymentDate'));
         $paymentBill->amount = 0;
@@ -48,7 +48,7 @@ class CPaymentBillManage extends AAjaxController
     {
         $paymentBillData = $this->app->router->request()->getRequestData('paymentBill');
         /** @var CPaymentBill $paymentBill */
-        $paymentBill = $this->app->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillData['id']);
+        $paymentBill = \Monkey::app()->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillData['id']);
         if($paymentBill->isSubmitted()) throw new BambooInvoiceException('Non puoi modificare una distinta già sottomessa');
 
         $paymentBill->paymentDate = $paymentBillData['paymentDate'] && !empty($paymentBillData['paymentDate']) ? STimeToolbox::DbFormattedDate($paymentBillData['paymentDate']) : $paymentBill->paymentDate;

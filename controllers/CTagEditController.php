@@ -19,8 +19,8 @@ class CTagEditController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/tag_edit.php');
 
         $tagId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
-        $tag = $this->app->repoFactory->create('Tag')->findOneBy(['id' => $tagId]);
-        $tagTrans = $this->app->repoFactory->create('TagTranslation')->findBy(['tagId' => $tagId]);
+        $tag = \Monkey::app()->repoFactory->create('Tag')->findOneBy(['id' => $tagId]);
+        $tagTrans = \Monkey::app()->repoFactory->create('TagTranslation')->findBy(['tagId' => $tagId]);
 
         $sortingPriority = $this->app->entityManagerFactory->create('SortingPriority')->findAll();
         $langs = $this->app->entityManagerFactory->create('Lang')->findAll();
@@ -41,10 +41,10 @@ class CTagEditController extends ARestrictedAccessRootController
         $data = $this->app->router->request()->getRequestData();
         $tagId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
-            $tag = $this->app->repoFactory->create('Tag')->findOneBy(['id' => $tagId]);
-            $tagTransRepo = $this->app->repoFactory->create('TagTranslation');
+            $tag = \Monkey::app()->repoFactory->create('Tag')->findOneBy(['id' => $tagId]);
+            $tagTransRepo = \Monkey::app()->repoFactory->create('TagTranslation');
             foreach ($data as $k => $v) {
                 if(strstr($k, 'tagName_') && $v != '') {
                     $key = explode ('_',$k);
@@ -76,11 +76,11 @@ class CTagEditController extends ARestrictedAccessRootController
 
             $tag->update();
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch(\Throwable $e){
 
-            $this->app->dbAdapter->rollback();
+            \Monkey::app()->repoFactory->rollback();
             return false;
 
         }

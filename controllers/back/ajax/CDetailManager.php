@@ -28,10 +28,10 @@ class CDetailManager extends AAjaxController
 
         foreach ($res as $k => $v) {
             $res[$k]['name'] .= " (";
-            $dt = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['productDetailId' => $v['id']]);
+            $dt = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findBy(['productDetailId' => $v['id']]);
             $lang = [];
             foreach ($dt as $vt) {
-                $rLang = $this->app->repoFactory->create('Lang')->findOneBy(['id' => $vt->langId]);
+                $rLang = \Monkey::app()->repoFactory->create('Lang')->findOneBy(['id' => $vt->langId]);
                 $lang[] = $rLang->lang;
             }
             $res[$k]['name'] .= implode(',', $lang);
@@ -55,7 +55,7 @@ class CDetailManager extends AAjaxController
 	    unset($data['productDetailName']);
 
         $ids = [];
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
 
         foreach ($data as $key => $val) {
 	        if($val == $productDetailId) continue;
@@ -63,7 +63,7 @@ class CDetailManager extends AAjaxController
             $ids[] = $val;
         }
 
-	    $productDetailPrimary = $this->app->repoFactory->create("ProductDetail")->findOneBy(['id' => $productDetailId]);
+	    $productDetailPrimary = \Monkey::app()->repoFactory->create("ProductDetail")->findOneBy(['id' => $productDetailId]);
 	    $productDetailPrimary->productDetailTranslation->getFirst()->name = $productDetailName;
         $slug = new CSlugify();
         $productDetailPrimary->slug = $slug->slugify($productDetailName);
@@ -72,7 +72,7 @@ class CDetailManager extends AAjaxController
         $em = $this->app->entityManagerFactory->create('ProductSheetActual');
         try {
 
-            $modelRepo = $this->app->repoFactory->create('ProductSheetModelActual');
+            $modelRepo = \Monkey::app()->repoFactory->create('ProductSheetModelActual');
             foreach($ids as $id) {
                 if ($id != $productDetailId) {
                     $models = $modelRepo->findBy(['productDetailId' => $id]);
@@ -90,17 +90,17 @@ class CDetailManager extends AAjaxController
                     $productSheet->productDetailId = $productDetailId;
                     $productSheet->insert();
                 }
-	            $productDetail = $this->app->repoFactory->create("ProductDetail",false)->findOneBy(['id' => $id]);
+	            $productDetail = \Monkey::app()->repoFactory->create("ProductDetail",false)->findOneBy(['id' => $id]);
 
 	            foreach ($productDetail->productDetailTranslation as $detailTranslation) {
 					$detailTranslation->delete();
 	            }
 	            $productDetail->delete();
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e){
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
 	        throw $e;
         }
     }

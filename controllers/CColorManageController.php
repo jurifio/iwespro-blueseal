@@ -35,14 +35,14 @@ class CColorManageController extends ARestrictedAccessRootController
             $name = $val;
             $slug = empty($datas['ProductColorGroup_slug_' . $langId]) ? $slugify->slugify($name) : $slugify->slugify($datas['ProductColorGroup_slug_' . $langId]);
             try {
-                $colorGroup = $this->app->repoFactory->create('ProductColorGroup')->findOneBy(['id'=>$datas['ProductColorGroup_id'], 'langId'=>$langId]);
+                $colorGroup = \Monkey::app()->repoFactory->create('ProductColorGroup')->findOneBy(['id'=>$datas['ProductColorGroup_id'], 'langId'=>$langId]);
                 if (!is_null($colorGroup)) {
                     $colorGroup->langId = $langId;
                     $colorGroup->name = $name;
                     $colorGroup->slug = $slug;
                     $colorGroup->update();
                 } else {
-                    $colorGroup = $this->app->repoFactory->create("ProductColorGroup")->getEmptyEntity();
+                    $colorGroup = \Monkey::app()->repoFactory->create("ProductColorGroup")->getEmptyEntity();
 
                     $colorGroup->id = $mysql->query("SELECT MAX(id) AS id FROM ProductColorGroup", array())->fetch();
                     $colorGroup->id ++;
@@ -83,14 +83,14 @@ class CColorManageController extends ARestrictedAccessRootController
             $slug = empty($datas['ProductColorGroup_slug_' . $langId]) ? $slugify->slugify($name) : $slugify->slugify($datas['ProductColorGroup_slug_' . $langId]);
             if(empty($slug) && empty($name)) continue; // delete
             try {
-                $colorGroup = $this->app->repoFactory->create('ProductColorGroupTranslation')->findOneBy(['productColorGroupId'=>$datas['ProductColorGroup_id'], 'langId'=>$langId]);
+                $colorGroup = \Monkey::app()->repoFactory->create('ProductColorGroupTranslation')->findOneBy(['productColorGroupId'=>$datas['ProductColorGroup_id'], 'langId'=>$langId]);
                 if (!is_null($colorGroup)) {
                     $colorGroup->langId = $langId;
                     $colorGroup->name = $name;
                     $colorGroup->slug = $slug;
                     $colorGroup->update();
                 } else {
-                    $colorGroup = $this->app->repoFactory->create('ProductColorGroupTranslation')->getEmptyEntity();
+                    $colorGroup = \Monkey::app()->repoFactory->create('ProductColorGroupTranslation')->getEmptyEntity();
                     $colorGroup->productColorGroupId = $datas['ProductColorGroup_id'];
                     $colorGroup->langId = $langId;
                     $colorGroup->name = $name;

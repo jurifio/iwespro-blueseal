@@ -61,7 +61,7 @@ class CDictionarySeasonEditAjaxController extends AAjaxController
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $seasons = $this->app->repoFactory->create('DictionarySeason')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $seasons = \Monkey::app()->repoFactory->create('DictionarySeason')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->seasons->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->seasons->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -71,7 +71,7 @@ class CDictionarySeasonEditAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $productSeasons = $this->app->repoFactory->create('ProductSeason')->findAll("limit 99999", "order by name");
+        $productSeasons = \Monkey::app()->repoFactory->create('ProductSeason')->findAll("limit 99999", "order by name");
 
         $i = 0;
         foreach($seasons as $season) {
@@ -107,17 +107,17 @@ class CDictionarySeasonEditAjaxController extends AAjaxController
         $shopId = $names[0];
         $term = $names[1];
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
-            $productSeason = $this->app->repoFactory->create('DictionarySeason')->findOneBy(['shopId' => $shopId, 'term' => $term]);
+            $productSeason = \Monkey::app()->repoFactory->create('DictionarySeason')->findOneBy(['shopId' => $shopId, 'term' => $term]);
 
             $productSeason->productSeasonId = $seasonId;
             $productSeason->update();
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
         }
     }
 }

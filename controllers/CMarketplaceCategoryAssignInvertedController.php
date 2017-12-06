@@ -41,11 +41,11 @@ class CMarketplaceCategoryAssignInvertedController extends ARestrictedAccessRoot
         $catId = explode('__', $catId);
         $categoryId = explode('_', $catId[0])[1];
         $marketplaceAccountId = explode('_', $catId[1])[1];
-        \Monkey::dump($catId);
-        $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);;
+
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);;
 
         try {
-            $this->app->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             $this->app->dbAdapter->delete('ProductCategoryHasMarketplaceAccountCategory',
                 ['marketplaceId' => $marketplaceAccount->marketplaceId,
                     'marketplaceAccountId' => $marketplaceAccount->id,
@@ -66,7 +66,7 @@ class CMarketplaceCategoryAssignInvertedController extends ARestrictedAccessRoot
                         }
                     }
                 }
-                $marketplaceAccountCategory = $this->app->repoFactory->create('MarketplaceAccountCategory')->findOneByStringId($marketplaceAccountCategoryIds);
+                $marketplaceAccountCategory = \Monkey::app()->repoFactory->create('MarketplaceAccountCategory')->findOneByStringId($marketplaceAccountCategoryIds);
 
                 $this->app->dbAdapter->insert('ProductCategoryHasMarketplaceAccountCategory',
                     ['marketplaceId' => $marketplaceAccount->marketplaceId,
@@ -74,9 +74,9 @@ class CMarketplaceCategoryAssignInvertedController extends ARestrictedAccessRoot
                         'marketplaceAccountCategoryId' => $marketplaceAccountCategory->marketplaceCategoryId,
                         'productCategoryId' => $categoryId], false, true);
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
 

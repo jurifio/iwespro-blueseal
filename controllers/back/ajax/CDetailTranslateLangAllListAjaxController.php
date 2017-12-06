@@ -63,11 +63,11 @@ GROUP BY `view`.`id`";
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $productsDetail = $this->app->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productsDetail = \Monkey::app()->repoFactory->create('ProductDetail')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsDetail->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsDetail->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $transRepo = $this->app->repoFactory->create('ProductDetailTranslation');
+        $transRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -110,9 +110,9 @@ GROUP BY `view`.`id`";
         $transId = $names[1];
         $langId = $this->app->router->request()->getRequestData('lang');
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
-            $trans = $this->app->repoFactory->create('ProductDetailTranslation')->findOneBy(['productDetailId' => $transId, 'langId' => $langId]);
+            $trans = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findOneBy(['productDetailId' => $transId, 'langId' => $langId]);
             if (!is_null($trans)) {
                 if ($name == '') {
                     $trans->delete();
@@ -121,17 +121,17 @@ GROUP BY `view`.`id`";
                     $trans->update();
                 }
             } elseif ($name != '') {
-                $trans = $this->app->repoFactory->create("ProductDetailTranslation")->getEmptyEntity();
+                $trans = \Monkey::app()->repoFactory->create("ProductDetailTranslation")->getEmptyEntity();
 
                 $trans->productDetailId = $transId;
                 $trans->langId = $langId;
                 $trans->name = $name;
                 $trans->insert();
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
         }
     }
 }

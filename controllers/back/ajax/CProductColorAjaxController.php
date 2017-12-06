@@ -45,7 +45,7 @@ class CProductColorAjaxController extends AAjaxController
 
     public function get()
     {
-        $pcg = $this->app->repoFactory->create('ProductColorGroup')->findBy([], '', 'order by name');
+        $pcg = \Monkey::app()->repoFactory->create('ProductColorGroup')->findBy([], '', 'order by name');
 
         $ret = '<div style="height: 250px" class="form-group form-group-default selectize-enabled"><select class="full-width selectpicker" id="size-group-select" data-init-plugin="selectize"><option value="">Seleziona un gruppo colore</option>';
         foreach($pcg as $v) {
@@ -75,7 +75,7 @@ class CProductColorAjaxController extends AAjaxController
         $affected = 0;
         try {
             foreach ($variants as $k => $v) {
-                $product = $this->app->repoFactory->create('Product')->findOneBy($v);
+                $product = \Monkey::app()->repoFactory->create('Product')->findOneBy($v);
                 $product->productColorGroupId = $groupId;
                 $affected += $product->update();
             }

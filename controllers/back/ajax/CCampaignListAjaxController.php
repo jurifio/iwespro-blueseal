@@ -22,7 +22,7 @@ class CCampaignListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sample = $this->app->repoFactory->create('Campaign')->getEmptyEntity();
+        $sample = \Monkey::app()->repoFactory->create('Campaign')->getEmptyEntity();
 
         $query = "SELECT
                       c.id as id,

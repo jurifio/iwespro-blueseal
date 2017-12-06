@@ -27,7 +27,7 @@ class CPaymentBillPrintController extends ARestrictedAccessRootController
 
     public function get()
     {
-        $paymentBill = $this->app->repoFactory->create('PaymentBill')->findOneByStringId($this->app->router->getMatchedRoute()->getComputedFilter('id'));
+        $paymentBill = \Monkey::app()->repoFactory->create('PaymentBill')->findOneByStringId($this->app->router->getMatchedRoute()->getComputedFilter('id'));
         \Monkey::app()->router->response()->setContentType('application/xml');
         return $paymentBill->toXml();
     }

@@ -19,7 +19,7 @@ class CCouponEditController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/coupon_edit.php');
 
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
-        $couponRepo = $this->app->repoFactory->create('Coupon');
+        $couponRepo = \Monkey::app()->repoFactory->create('Coupon');
         $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
 
         return $view->render([
@@ -35,7 +35,7 @@ class CCouponEditController extends ARestrictedAccessRootController
         $data = $this->app->router->request()->getRequestData();
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
-        $couponRepo = $this->app->repoFactory->create('Coupon');
+        $couponRepo = \Monkey::app()->repoFactory->create('Coupon');
         $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
 
         foreach ($data as $k => $v) {

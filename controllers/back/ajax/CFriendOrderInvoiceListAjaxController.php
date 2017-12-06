@@ -56,7 +56,7 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
 
 
         $datatable = new CDataTables($query, ['id'],$_GET, true);
-        $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
+        $datatable->addCondition('shopId',\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
 
         $datatable->doAllTheThings(true);

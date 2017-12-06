@@ -23,12 +23,12 @@ class CProductPhotoDownload extends AAjaxController
 
     public function get()
     {
-        $shopsId = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $shopsId = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $contoProdotti = 0;
         $contoSoldi = 0;
         $listaProdotti = [];
         foreach ($this->app->router->request()->getRequestData('rows') as $productId) {
-            $product = $this->app->repoFactory->create('Product')->findOneByStringId($productId);
+            $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($productId);
             if ($product->productPhoto->count() < 1) continue;
             foreach ($product->shopHasProduct as $shopHasProduct) {
                 if (!in_array($shopHasProduct->shopId, $shopsId)) continue;
@@ -56,7 +56,7 @@ class CProductPhotoDownload extends AAjaxController
         $toDownload = [];
         $allShop = $this->app->getUser()->hasPermission('allShops');
         foreach ($this->app->router->request()->getRequestData('rows') as $productId) {
-            $shopHasProduct = $this->app->repoFactory->create('ShopHasProduct')->findOneByStringId($productId);
+            $shopHasProduct = \Monkey::app()->repoFactory->create('ShopHasProduct')->findOneByStringId($productId);
             $toDownload[$shopHasProduct->product->printId()] = $shopHasProduct->product;
 
             if (!$allShop) {

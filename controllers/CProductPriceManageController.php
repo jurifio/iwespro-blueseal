@@ -36,7 +36,7 @@ class CProductPriceManageController extends ARestrictedAccessRootController
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'shops' => $this->app->repoFactory->create('Shop')->findAll(),
+            'shops' => \Monkey::app()->repoFactory->create('Shop')->findAll(),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);

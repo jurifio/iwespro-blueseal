@@ -47,7 +47,7 @@ class CNameTranslateManageController extends ARestrictedAccessRootController
         $pn = $pnRepo->findOneBy(['id' => $idIta]);
         if (!$pn) throw new BambooException('Non si può modificare la traduzione di un nome inesistente');
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             $pn = $pnRepo->findBy(['name' => $pn->name]);
             foreach($pn as $n) {
@@ -95,10 +95,10 @@ class CNameTranslateManageController extends ARestrictedAccessRootController
                     }
                 }
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw new \Exception($e->getMessage());
         }
     }

@@ -25,7 +25,7 @@ class CGetProductNameLanguages extends AAjaxController
             $single = [];
             $single['name'] = $v;
             $single['languages'] = [];
-            $res = $this->app->repoFactory->create('ProductName')->findBy(['name' => $v]);
+            $res = \Monkey::app()->repoFactory->create('ProductName')->findBy(['name' => $v]);
             foreach($res as $v) {
                 $single['languages'][] = $v->lang->lang;
             }

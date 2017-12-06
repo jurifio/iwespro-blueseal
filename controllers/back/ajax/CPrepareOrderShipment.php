@@ -30,12 +30,12 @@ class CPrepareOrderShipment extends AAjaxController
     {
         $carrier = $this->app->router->request()->getRequestData('carrier');
         $ordersId = $this->app->router->request()->getRequestData('ordersId');
-        $carrier = $this->app->repoFactory->create('Carrier')->findOneByStringId($carrier);
+        $carrier = \Monkey::app()->repoFactory->create('Carrier')->findOneByStringId($carrier);
 
         /** @var CShipmentRepo $shipmentRepo */
-        $shipmentRepo = $this->app->repoFactory->create('Shipment');
+        $shipmentRepo = \Monkey::app()->repoFactory->create('Shipment');
         /** @var COrderRepo $orderRepo */
-        $orderRepo = $this->app->repoFactory->create('Order');
+        $orderRepo = \Monkey::app()->repoFactory->create('Order');
 
         $trackingNumber = $this->app->router->request()->getRequestData('tracking');
 

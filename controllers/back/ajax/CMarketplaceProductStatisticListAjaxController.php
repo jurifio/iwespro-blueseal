@@ -25,7 +25,7 @@ class CMarketplaceProductStatisticListAjaxController extends AMarketplaceAccount
     public function get()
     {
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
-        $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
 
         $query = self::SQL_SELECT_PRODUCT_MARKETPLACE_ACCOUNT_CATEGORY." order by visits desc";
 
@@ -38,12 +38,12 @@ class CMarketplaceProductStatisticListAjaxController extends AMarketplaceAccount
         $queryParameters = [$timeFrom, $timeTo,$timeFrom, $timeTo,$marketplaceAccount->id, $marketplaceAccount->marketplaceId ];
 
         $datatable = new CDataTables($query, ['productId','productVariantId'], $_GET, true);
-        //$datatable->addCondition('shopId', $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
+        //$datatable->addCondition('shopId', \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         $datatable->addSearchColumn('marketplaceProductId');
 
         $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge($queryParameters, $datatable->getParams()))->fetchAll();
-        $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
-        $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), array_merge($queryParameters, $datatable->getParams()));
+        $count = \Monkey::app()->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
+        $totalCount = \Monkey::app()->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), array_merge($queryParameters, $datatable->getParams()));
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -55,7 +55,7 @@ class CMarketplaceProductStatisticListAjaxController extends AMarketplaceAccount
         foreach ($prodottiMarks as $values) {
 
             $row = [];
-            $prodottiMark = $this->app->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy([
+            $prodottiMark = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy([
                 'marketplaceId' => $values['marketplaceId'],
                 'marketplaceAccountId' => $values['marketplaceAccountId'],
                 'productId' => $values['productId'],

@@ -23,14 +23,14 @@ class CChangeLineShop extends AAjaxController
     {
         $datas = $this->data;
         /** @var COrderLineRepo $orderLineRepo */
-        $orderLineRepo = $this->app->repoFactory->create('OrderLine');
+        $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
         /** @var COrderLine $orderLine */
         $orderLine = $orderLineRepo->findOne(['id'=>$datas['orderLineId'],'orderId'=>$datas['orderId']]);
         if (3 > $orderLine->orderLineFriendPaymentStatusId) {
             $orderLine->productSku->stockQty += 1;
             $orderLine->productSku->padding += 1;
             $orderLine->productSku->update();
-            $altSku = $this->app->repoFactory->create('ProductSku')->findOne(['productId' => $orderLine->productId, 'productVariantId' => $orderLine->productVariantId, 'productSizeId' => $orderLine->productSizeId, 'shopId' => $datas['selectShop']]);
+            $altSku = \Monkey::app()->repoFactory->create('ProductSku')->findOne(['productId' => $orderLine->productId, 'productVariantId' => $orderLine->productVariantId, 'productSizeId' => $orderLine->productSizeId, 'shopId' => $datas['selectShop']]);
             $altSku->stockQty -= 1;
             $altSku->padding -= 1;
 

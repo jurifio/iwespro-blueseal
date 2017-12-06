@@ -19,10 +19,10 @@ class CBlogPostAddController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/blog_add.php');
 
-        $cats = $this->app->repoFactory->create('PostCategory')->findAll();
-        $tags = $this->app->repoFactory->create('PostTag')->findAll();
+        $cats = \Monkey::app()->repoFactory->create('PostCategory')->findAll();
+        $tags = \Monkey::app()->repoFactory->create('PostTag')->findAll();
         $statuses = [];
-        foreach($this->app->repoFactory->create('PostStatus')->findAll() as $status) {
+        foreach(\Monkey::app()->repoFactory->create('PostStatus')->findAll() as $status) {
             if ($status->show) $statuses[$status->id] = $status->name;
         }
 
@@ -46,8 +46,8 @@ class CBlogPostAddController extends ARestrictedAccessRootController
         $coverImageData = $this->app->router->request()->getFiles();
         $fileFolder =  $this->app->rootPath().$this->app->cfg()->fetch('paths', 'blogImages') . '/';
 
-        $postRepo = $this->app->repoFactory->create('Post');
-        $postTranslationRepo = $this->app->repoFactory->create('PostTranslation');
+        $postRepo = \Monkey::app()->repoFactory->create('Post');
+        $postTranslationRepo = \Monkey::app()->repoFactory->create('PostTranslation');
 
         $PostTranslation = $postTranslationRepo->getEmptyEntity();
         $Post = $postRepo->getEmptyEntity();
@@ -59,7 +59,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
             }
             ${$tableField[0]}->{$tableField[1]} = $v;
         }
-		$this->app->dbAdapter->beginTransaction();
+		\Monkey::app()->repoFactory->beginTransaction();
         try {
 	        $postId = $postRepo->insert($Post);
 	        $PostTranslation->postId = $postId;
@@ -76,9 +76,9 @@ class CBlogPostAddController extends ARestrictedAccessRootController
 	        $postRepo->setCategories($postId,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
 	        $postRepo->setTags($postId,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
 	        $postTranslationRepo->insert($PostTranslation);
-	        $this->app->dbAdapter->commit();
+	        \Monkey::app()->repoFactory->commit();
         } catch (\Throwable $e) {
-			$this->app->dbAdapter->rollBack();
+			\Monkey::app()->repoFactory->rollback();
 	        throw $e;
         }
 	    

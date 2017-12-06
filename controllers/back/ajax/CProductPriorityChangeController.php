@@ -22,7 +22,7 @@ class CProductPriorityChangeController extends AAjaxController
     public function get()
     {
         $res = [];
-        foreach ($this->app->repoFactory->create('SortingPriority')->findAll() as $item) {
+        foreach (\Monkey::app()->repoFactory->create('SortingPriority')->findAll() as $item) {
             $res[] = ['id' => $item->id, 'name' => $item->priority];
         }
         return json_encode($res);
@@ -36,7 +36,7 @@ class CProductPriorityChangeController extends AAjaxController
         $i = 0;
         $priorità = $this->app->router->request()->getRequestData('priority');
         foreach ($this->app->router->request()->getRequestData('products') as $row) {
-            $product = $this->app->repoFactory->create('Product')->findOneByStringId($row);
+            $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($row);
             $product->sortingPriorityId = $priorità;
             $i+=$product->update();
         }

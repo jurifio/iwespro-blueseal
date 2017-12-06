@@ -20,7 +20,7 @@ class CPrintOrderShipmentLabel extends AAjaxController
     public function get()
     {
         $shipmentId = $this->app->router->request()->getRequestData('shipmentId');
-        $shipmentRepo = $this->app->repoFactory->create('Shipment');
+        $shipmentRepo = \Monkey::app()->repoFactory->create('Shipment');
         $shipment = $shipmentRepo->findOneByStringId($shipmentId);
         return $shipment->printLabel();
     }

@@ -27,7 +27,7 @@ class CMarketplaceCategoryStatisticListAjaxController extends AMarketplaceAccoun
     public function get()
     {
         $marketplaceAccountId = $this->app->router->request()->getRequestData('MarketplaceAccount');
-        $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountId);
 
         //IL PROBLEMA é IL DIOCANE DI TIMESTAMP CHE RIMANE NULL DI MERDA DI DIO
         $timeFrom = new \DateTime($this->app->router->request()->getRequestData('startDate').' 00:00:00');
@@ -40,8 +40,8 @@ class CMarketplaceCategoryStatisticListAjaxController extends AMarketplaceAccoun
         $datatable = new CDataTables(self::SQL_SELECT_MARKETPLACE_ACCOUNT_PRODUCT_CATEGORY_STATISTICS, ['category'], $_GET, true);
 
         $prodottiMarks = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge($queryParameters, $datatable->getParams()))->fetchAll();
-        $count = $this->app->repoFactory->create('ProductCategory')->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
-        $totalCount = $this->app->repoFactory->create('ProductCategory')->em()->findCountBySql($datatable->getQuery('full'), array_merge($queryParameters, $datatable->getParams()));
+        $count = \Monkey::app()->repoFactory->create('ProductCategory')->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
+        $totalCount = \Monkey::app()->repoFactory->create('ProductCategory')->em()->findCountBySql($datatable->getQuery('full'), array_merge($queryParameters, $datatable->getParams()));
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -51,7 +51,7 @@ class CMarketplaceCategoryStatisticListAjaxController extends AMarketplaceAccoun
 
         foreach ($prodottiMarks as $values) {
             /** @var CProductCategory $productCategory */
-            $productCategory = $this->app->repoFactory->create('ProductCategory')->findOne([$values['category']]);
+            $productCategory = \Monkey::app()->repoFactory->create('ProductCategory')->findOne([$values['category']]);
             $row = $values;
             $row["DT_RowId"] = $productCategory->printId();
             $row['category'] = $productCategory->getLocalizedPath();

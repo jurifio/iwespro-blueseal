@@ -76,7 +76,7 @@ class CProductSizeGroupRowManage extends AAjaxController
 
             return json_encode($res);
         } catch (\Throwable $e) {
-            \Monkey::app()->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return json_encode([
                 'message' => $e->getMessage(),

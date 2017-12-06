@@ -22,9 +22,9 @@ class CColorListAjaxController extends AAjaxController
     {
         $datatable = new CDataTables('ProductColorGroup',['id'],$_GET,false);
 
-        $prodotti = $this->app->repoFactory->create('ProductColorGroup')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('ProductColorGroup')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('ProductColorGroup')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $prodotti = \Monkey::app()->repoFactory->create('ProductColorGroup')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('ProductColorGroup')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('ProductColorGroup')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $modifica = $this->app->baseUrl()."/blueseal/prodotti/gruppo-colore/modifica";
 

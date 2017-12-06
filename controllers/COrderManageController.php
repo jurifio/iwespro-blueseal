@@ -22,10 +22,10 @@ class COrderManageController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/order_manage.php');
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
 
-        $repoStatus = $this->app->repoFactory->create('OrderStatus');
+        $repoStatus = \Monkey::app()->repoFactory->create('OrderStatus');
         $statuses = $repoStatus->findAll();
         $orderId =  $this->app->router->request()->getRequestData('order');
-	    $order = $this->app->repoFactory->create('Order')->findOne([$orderId]);
+	    $order = \Monkey::app()->repoFactory->create('Order')->findOne([$orderId]);
 
         $em = $this->app->entityManagerFactory->create('Country');
         $counties= $em->findAll("limit 999","");
@@ -52,7 +52,7 @@ class COrderManageController extends ARestrictedAccessRootController
                 $code = $this->app->dbAdapter->select("OrderStatus",array('id'=>$status))->fetch()['code'];
                 //controllare che code comincia per ORD
                 if($this->request->getRequestData('orderId')) {
-                    $order = $this->app->repoFactory->create("Order")->findOneBy(['id' => $this->request->getRequestData('orderId')]);
+                    $order = \Monkey::app()->repoFactory->create("Order")->findOneBy(['id' => $this->request->getRequestData('orderId')]);
                     \Monkey::app()->repoFactory->create('Order')->updateStatus($order, $code);
 	                $order->update();
 

@@ -81,7 +81,7 @@ class CUserSalesGridController extends AAjaxController
 						    ols.phase BETWEEN 5 AND 11 AND 
 						    o.orderDate is not null ".$shopsWhere." group BY orderId,id order by o.orderDate desc LIMIT ".$limit;
 
-		$data = $this->app->repoFactory->create('OrderLine')->em()->findBySql($sql,[]);
+		$data = \Monkey::app()->repoFactory->create('OrderLine')->em()->findBySql($sql,[]);
 		$sum = 0;
 		foreach ($data as $key=>$val){
 			if($valueToSelect == "iwes") {

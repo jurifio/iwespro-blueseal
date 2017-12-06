@@ -22,12 +22,12 @@ class CStorehouseOperationUpdateQtys extends ACronJob
     public function run($args = null)
     {
         $dba = \Monkey::app()->dbAdapter;
-        $dba->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             \Monkey::app()->repoFactory->create('StorehouseOperation')->updateStocksOnOperationTime();
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
         }catch(BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             $this->error('Aggiornamento disponibilità dai movimenti', $e->getMessage());
         }
     }

@@ -25,7 +25,7 @@ class CProductDetailsMerge extends AAjaxController
 
         //controllo size group e se ci sono ordini relativi ai prodotti da unire
         $selected = count($prods);
-        $repoPro = $this->app->repoFactory->create('Product');
+        $repoPro = \Monkey::app()->repoFactory->create('Product');
         $resProds = [];
         $resCount = 0;
         foreach ($prods as $k => $v) {
@@ -73,17 +73,17 @@ class CProductDetailsMerge extends AAjaxController
 
         if (!$choosen) return "Attenzione! Il codice inserito non è un codice valido";
 
-        $choosenPsa = $this->app->repoFactory->create('ProductSheetActual')->findBy(
+        $choosenPsa = \Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(
             [
                 'productId' => $choosen->id, 'productVariantId' => $choosen->productVariantId
             ]
         );
         try {
-            \Monkey::app()->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             foreach ($get['rows'] as $v) {
                 if ($choosen->productVariantId == $v['productVariantId']) continue;
 
-                $prod = $this->app->repoFactory->create('Product')->findOneBy(
+                $prod = \Monkey::app()->repoFactory->create('Product')->findOneBy(
                     [
                         'id' => $v['id'],
                         'productVariantId' => $v['productVariantId']
@@ -91,7 +91,7 @@ class CProductDetailsMerge extends AAjaxController
                 );
                 $prod->productSheetPrototypeId = $choosen->productSheetPrototypeId;
                 $prod->update();
-                $prodName = $this->app->repoFactory->create('ProductNameTranslation')->findBy(
+                $prodName = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(
                     [
                         'productId' => $prod->id,
                         'productVariantId' => $prod->productVariantId,
@@ -101,7 +101,7 @@ class CProductDetailsMerge extends AAjaxController
                     $name->delete();
                 }
                 
-                $choosenName = $this->app->repoFactory->create('ProductNameTranslation')->findBy(
+                $choosenName = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(
                     [
                         'productId' => $choosen->id,
                         'productVariantId' => $choosen->productVariantId,
@@ -109,7 +109,7 @@ class CProductDetailsMerge extends AAjaxController
                 );
 
                 foreach($choosenName as $name) {
-                    $newProdName = $this->app->repoFactory->create('ProductNameTranslation')->getEmptyEntity();
+                    $newProdName = \Monkey::app()->repoFactory->create('ProductNameTranslation')->getEmptyEntity();
                     $newProdName->productId = $prod->id;
                     $newProdName->productVariantId = $prod->productVariantId;
                     $newProdName->langId = $name->langId;
@@ -120,7 +120,7 @@ class CProductDetailsMerge extends AAjaxController
 
                 $prod->productNameTranslation = $choosen->productNameTranslation;
 
-                $psa = $this->app->repoFactory->create('ProductSheetActual')->findBy(
+                $psa = \Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(
                     [
                         'productId' => $prod->id, 'productVariantId' => $prod->productVariantId
                     ]
@@ -131,7 +131,7 @@ class CProductDetailsMerge extends AAjaxController
                 }
 
                 foreach ($choosenPsa as $cpsaSingle) {
-                    $newPsa = $this->app->repoFactory->create('ProductSheetActual')->getEmptyEntity();
+                    $newPsa = \Monkey::app()->repoFactory->create('ProductSheetActual')->getEmptyEntity();
                     $newPsa->productId = $prod->id;
                     $newPsa->productVariantId = $prod->productVariantId;
                     $newPsa->productDetailLabelId = $cpsaSingle->productDetailLabelId;
@@ -151,9 +151,9 @@ class CProductDetailsMerge extends AAjaxController
                     $ppc->insert();
                 }
             }
-            \Monkey::app()->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch (\Throwable $e) {
-            \Monkey::app()->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return 'OOPS! Si è verificato un problema:<br /> ' . $e->getMessage();
         }
         $res = 'I dettagli dei prodotti sono stati fusi correttamente.';
@@ -167,7 +167,7 @@ class CProductDetailsMerge extends AAjaxController
         if ( (false === $position) || (0 === $position) || ( (strlen($code)-1) == $position) ) return false;
         list($id, $productVariantId) = explode('-', $code);
         if (!((is_numeric($id)) AND (is_numeric($productVariantId)))) return false;
-        $ent = $this->app->repoFactory->create('Product');
+        $ent = \Monkey::app()->repoFactory->create('Product');
         if ($single) {
             $res = $ent->findOneBy(['id' => $id, 'productVariantId' => $productVariantId]);
         } else {

@@ -20,7 +20,7 @@ class CActivateUser extends AAjaxController
     {
 	    $ids = $this->app->router->request()->getRequestData('users');
 	    foreach($ids as $id) {
-			$user = $this->app->repoFactory->create('User')->findOne([$id]);
+			$user = \Monkey::app()->repoFactory->create('User')->findOne([$id]);
 		    $user->isActive = 1;
 		    $user->update();
 	    }

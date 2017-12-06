@@ -37,7 +37,7 @@ class CFriendProductEditController extends CProductManageController
         $user = $this->app->getUser();
         $get = $this->app->router->request()->getRequestData();
 
-        $product = $this->app->repoFactory->create('Product');
+        $product = \Monkey::app()->repoFactory->create('Product');
 
 
 
@@ -118,7 +118,7 @@ class CFriendProductEditController extends CProductManageController
         $qrMessage = $productEdit->getAztecCode();
         $qrMessage = base64_encode($qrMessage);
         */
-        $productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
+        $productDetailsCollection = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
         $productDetails = [];
 
         foreach ($productDetailsCollection as $detail) {

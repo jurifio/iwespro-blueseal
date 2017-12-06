@@ -19,7 +19,7 @@ class CCouponEventEditController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/couponevent_edit.php');
 
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
-        $couponRepo = $this->app->repoFactory->create('CouponEvent');
+        $couponRepo = \Monkey::app()->repoFactory->create('CouponEvent');
         $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
 
         $em = $this->app->entityManagerFactory->create('CouponType');
@@ -39,7 +39,7 @@ class CCouponEventEditController extends ARestrictedAccessRootController
         $data = $this->app->router->request()->getRequestData();
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
-        $couponRepo = $this->app->repoFactory->create('CouponEvent');
+        $couponRepo = \Monkey::app()->repoFactory->create('CouponEvent');
         $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
 
         foreach ($data as $k => $v) {

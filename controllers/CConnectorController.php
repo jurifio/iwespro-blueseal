@@ -31,18 +31,18 @@ class CConnectorController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/connector_edit.php');
         $shopId = $this->app->router->request()->getRequestData('shopId');
 
-        $importerFieldModifier = $this->app->repoFactory->create('ImporterFieldModifier')->findAll();
-        $importerField = $this->app->repoFactory->create('ImporterField')->findAll();
-        $importerOperator = $this->app->repoFactory->create('ImporterOperator')->findAll();
-        $importerLogicConnector = $this->app->repoFactory->create('ImporterLogicConnector')->findAll();
+        $importerFieldModifier = \Monkey::app()->repoFactory->create('ImporterFieldModifier')->findAll();
+        $importerField = \Monkey::app()->repoFactory->create('ImporterField')->findAll();
+        $importerOperator = \Monkey::app()->repoFactory->create('ImporterOperator')->findAll();
+        $importerLogicConnector = \Monkey::app()->repoFactory->create('ImporterLogicConnector')->findAll();
 
-        $shop = $this->app->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
-        $productSizeGroup = $this->app->repoFactory->create('ProductSizeGroup')->findAll('limit 99999');
-        $impConnector = $this->app->repoFactory->create('ImporterConnector')->findBy(['shopId' => $shopId]);
+        $shop = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
+        $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findAll('limit 99999');
+        $impConnector = \Monkey::app()->repoFactory->create('ImporterConnector')->findBy(['shopId' => $shopId]);
         $value = "";
 
         foreach ($impConnector as $impConn) {
-            $impConnectorStart = $this->app->repoFactory->create('ImporterConnectorStart')->findOneBy(['importerConnectorId' => $impConn->id]);
+            $impConnectorStart = \Monkey::app()->repoFactory->create('ImporterConnectorStart')->findOneBy(['importerConnectorId' => $impConn->id]);
             $value = $impConnectorStart->value;
         }
 

@@ -47,7 +47,7 @@ class CBlogPostTrashListAjaxController extends AAjaxController
 
         $datatable->addCondition('postStatusId', [3]);
 
-        $posts = $this->app->repoFactory->create('Post')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $posts = \Monkey::app()->repoFactory->create('Post')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 

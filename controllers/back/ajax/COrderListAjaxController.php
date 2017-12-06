@@ -85,17 +85,17 @@ class COrderListAjaxController extends AAjaxController
 
         $q = $datatable->getQuery();
         $p = $datatable->getParams();
-        $orders = $this->app->repoFactory->create('Order')->em()->findBySql($q, $p);
-        $count = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q, $p);
+        $count = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totlalCount = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $orderStatuses = $this->app->repoFactory->create('OrderStatus')->findAll();
+        $orderStatuses = \Monkey::app()->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
         foreach ($orderStatuses as $orderStatus) {
             $colorStatus[$orderStatus->code] = $orderStatus->color;
         }
 
-        $orderLineStatuses = $this->app->repoFactory->create('OrderLineStatus')->findAll();
+        $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll();
         $plainLineStatuses = [];
         $colorLineStatus = [];
         foreach ($orderLineStatuses as $orderLineStatus) {
@@ -209,7 +209,7 @@ class COrderListAjaxController extends AAjaxController
         if (!$order) throw new BambooException('L\'id ordine fornito non corrisponde a nessun ordine');
 
         if ('ORD_CANCEL' === $order->status || 'ORD_PENDING' === $order->status) {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             try {
                 $usoC = $ushoR->findBy(['orderId' => $orderId]);
                 foreach ($usoC as $uso) {
@@ -317,10 +317,10 @@ class COrderListAjaxController extends AAjaxController
                 }
                 $order->delete();
 
-                $dba->commit();
+                \Monkey::app()->repoFactory->commit();
                 return "Ordine eliminato!";
             } catch (BambooException $e) {
-                $dba->rollback();
+                \Monkey::app()->repoFactory->rollback();
                 \Monkey::app()->router->response()->raiseProcessingError();
                 return $e->getMessage();
             }

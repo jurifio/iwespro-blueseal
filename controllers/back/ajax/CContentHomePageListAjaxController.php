@@ -66,7 +66,7 @@ class CContentHomePageListAjaxController extends AAjaxController
         $view->setTemplatePath($this->app->rootPath().$bluesealPath.'/template/widgets/section.php');
         $this->app->setLang(new CLang(1,'it'));
 
-        $repo = $this->app->repoFactory->create('Lang');
+        $repo = \Monkey::app()->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 
         $structure = new CWidgetStructureParser($this->app,$installedLang,'homepage');

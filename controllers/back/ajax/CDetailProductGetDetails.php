@@ -19,14 +19,14 @@ class CDetailProductGetDetails extends AAjaxController
         $names = [];
         $namesCount = 0;
             $details = [];
-            $modelRes = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneByStringId($code);
+            $modelRes = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneByStringId($code);
             $details['id'] = $modelRes->id;
             $details['prototype'] = $modelRes->productSheetPrototypeId;
             $modelDetails = $modelRes->productSheetModelActual;
-            //$modelDetails = $this->app->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $modelRes->id]);
+            //$modelDetails = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $modelRes->id]);
             foreach ($modelDetails as $v) {
                 $details[$v->productDetailLabelId] = [];
-                $details[$v->productDetailLabelId]['labelName'] = $this->app->repoFactory->create('ProductDetailLabelTranslation')->findOneBy(['langId' => 1, 'productDetailLabelId' => $v->productDetailLabelId]);
+                $details[$v->productDetailLabelId]['labelName'] = \Monkey::app()->repoFactory->create('ProductDetailLabelTranslation')->findOneBy(['langId' => 1, 'productDetailLabelId' => $v->productDetailLabelId]);
                 $details[$v->productDetailLabelId]['detailId'] = $v->productDetailId;
             }
             $res = $details;

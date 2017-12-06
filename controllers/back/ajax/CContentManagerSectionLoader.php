@@ -24,7 +24,7 @@ class CContentManagerSectionLoader extends AAjaxController
         $root = $this->app->cfg()->fetch('paths','root');
         $this->app->setLang(new CLang(1,'it'));
 
-        $repo = $this->app->repoFactory->create('Lang');
+        $repo = \Monkey::app()->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 
         $json = new CJsonAdapter($root.'/back/content/structure.json');

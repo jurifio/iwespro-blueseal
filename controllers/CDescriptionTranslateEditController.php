@@ -34,13 +34,13 @@ class CDescriptionTranslateEditController extends CDescriptionTranslateManageCon
         $productId = $this->app->router->request()->getRequestData('productId');
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
 
-        $descriptionEdit = $this->app->repoFactory->create('ProductDescriptionTranslation')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'marketplaceId'=>1]);
+        $descriptionEdit = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'marketplaceId'=>1]);
 
         $productNameTranslation = [];
 
         foreach ($descriptionEdit as $des) {
 
-            $productsName = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $des->productId, 'productVariantId' => $des->productVariantId, 'langId' => $des->langId ]);
+            $productsName = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $des->productId, 'productVariantId' => $des->productVariantId, 'langId' => $des->langId ]);
             if ($productsName) {
                 $productNameTranslation[$des->langId] = $productsName->name;
             } else {

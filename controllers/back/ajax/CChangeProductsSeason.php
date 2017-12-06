@@ -26,10 +26,10 @@ class CChangeProductsSeason extends AAjaxController
             case "updateSeason":
                 if ($get['productSeasonId']) {
                     $count = 0;
-                    $this->app->dbAdapter->beginTransaction();
+                    \Monkey::app()->repoFactory->beginTransaction();
                     try {
                         foreach ($rows as $k => $v) {
-                            $product = $this->app->repoFactory->create('Product')->findOneBy(
+                            $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(
                                 [
                                     'id' => $v['id'],
                                     'productVariantId' => $v['productVariantId']
@@ -37,13 +37,13 @@ class CChangeProductsSeason extends AAjaxController
                             $product->productSeasonId = $get['productSeasonId'];
                             $count += $product->update();
                         }
-                        $this->app->dbAdapter->commit();
+                        \Monkey::app()->repoFactory->commit();
                         return "Aggiornato lo stato di " . $count . " prodotti";
                     } catch (\Throwable $e) {
                         return "Errore nell'aggiornamento dello stato dei prodotti:<br />" .
                             $e->getMessage();
                             "Contattare l'amministratore<br />";
-                        $this->app->dbAdapter->rollBack();
+                        \Monkey::app()->repoFactory->rollback();
                     }
 
                 }
@@ -53,7 +53,7 @@ class CChangeProductsSeason extends AAjaxController
 
     public function get()
     {   /** @var CObjectCollection $seasons */
-        $seasons = $this->app->repoFactory->create('ProductSeason')->findBy(['isActive' => 1]);
+        $seasons = \Monkey::app()->repoFactory->create('ProductSeason')->findBy(['isActive' => 1]);
 
         $expSeasons = [];
         $i = 0;

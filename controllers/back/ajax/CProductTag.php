@@ -28,11 +28,11 @@ class CProductTag extends AAjaxController
 	    $view = new VBase(array());
 	    $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/productTagSelection.php');
 
-        $tags = $this->app->repoFactory->create('Tag')->findAll('Tag');
+        $tags = \Monkey::app()->repoFactory->create('Tag')->findAll('Tag');
 
 	    $deleteTags = [];
 	    foreach ($this->app->router->request()->getRequestData('rows') as $key => $val ) {
-			$pro = $this->app->repoFactory->create('Product')->findOneByStringId($val);
+			$pro = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($val);
             foreach ($pro->tag as $tag) {
                 if (!array_key_exists($tag->id, $deleteTags)) $deleteTags[$tag->id] = $tag;
             }

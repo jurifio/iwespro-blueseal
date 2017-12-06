@@ -20,7 +20,7 @@ class CGetProductSkuDetails extends AAjaxController
      */
     public function get() {
         $id = $this->app->router->request()->getRequestData('productId');
-        $product = $this->app->repoFactory->create('Product')->findOneByStringId($id);
+        $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($id);
         $res = [];
         foreach ($product->productSku as $sku) {
             if($sku->stockQty < 1) continue;

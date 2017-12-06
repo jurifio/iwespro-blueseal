@@ -175,13 +175,13 @@ class CCatalogController extends AAjaxController
 
         /** var CStorehouseOperationRepo */
         $dba = \Monkey::app()->dbAdapter;
-        $dba->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             $soR->registerOperation($moves, $shop, $get['mag-movementCause']);
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch(BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return 'OOPS! Movimento non eseguito:<br /> ' . $e->getMessage();
         }
     }

@@ -42,7 +42,7 @@ class CContentManagerContentForm extends AAjaxController
         $this->app->setLang(new CLang(1,'it'));
 
         $jsonDescriptor = new CJsonAdapter($root.'/back/content/structure.json');
-        $repo = $this->app->repoFactory->create('Lang');
+        $repo = \Monkey::app()->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
 
         foreach ($installedLang as $lang) {

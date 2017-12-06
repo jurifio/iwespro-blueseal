@@ -29,7 +29,7 @@ class CLanguageController extends AAjaxController
         $widgetKey = $this->app->router->request()->getRequestData()['widgetKey'];
         $widgetPath = $this->app->cfg()->fetch('paths', 'app') . '/data/widget/';
 
-        $repo = $this->app->repoFactory->create('Lang');
+        $repo = \Monkey::app()->repoFactory->create('Lang');
         $languages = $repo->findAll();
 
         $html = "<table class='table'><thead><tr><th>Lingue</th><th>Stato traduzione</th><th>&nbsp;</th></tr></thead><tbody>";

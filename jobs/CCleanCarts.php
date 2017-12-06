@@ -67,14 +67,14 @@ class CCleanCarts extends ACronJob
             $this->report('Delete Start', "To do: ".count($res));
 
             foreach($res as $cart){
-                if($k%100 == 0) $this->app->dbAdapter->beginTransaction();
+                if($k%100 == 0) \Monkey::app()->repoFactory->beginTransaction();
 	            $k++;
                 $resp = $this->deleteCart($cart);
-                if($k%100 == 0) $this->app->dbAdapter->commit();
+                if($k%100 == 0) \Monkey::app()->repoFactory->commit();
                 if($resp) $i++;
             }
             $this->report('Delete End', "Deleted: ".$i);
         }
-        if($this->app->dbAdapter->hasTransaction()) $this->app->dbAdapter->commit();
+        if($this->app->dbAdapter->hasTransaction()) \Monkey::app()->repoFactory->commit();
     }
 }

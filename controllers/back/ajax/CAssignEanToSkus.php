@@ -25,10 +25,10 @@ class CAssignEanToSkus extends AAjaxController
     	$products = $this->app->router->request()->getRequestData('rows');
 	    foreach ($products as $product) {
 	    	$one = 0;
-	    	$product = $this->app->repoFactory->create('Product')->findOneByStringId($product);
+	    	$product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($product);
 		    foreach ($product->productSku as $productSku) {
 		    	if(empty($productSku->ean)) {
-					if($this->app->repoFactory->create('ProductSku')->assignNewEan($productSku)) {
+					if(\Monkey::app()->repoFactory->create('ProductSku')->assignNewEan($productSku)) {
 						$count++;
 						$one++;
 					};

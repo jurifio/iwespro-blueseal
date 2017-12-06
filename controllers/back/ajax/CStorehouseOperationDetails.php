@@ -17,7 +17,7 @@ use bamboo\ecommerce\views\VBase;
 class CStorehouseOperationDetails extends AAjaxController
 {
     public function get() {
-        $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->findOneByStringId($this->app->router->request()->getRequestData('id'));
+        $storehouseOperation = \Monkey::app()->repoFactory->create('StorehouseOperation')->findOneByStringId($this->app->router->request()->getRequestData('id'));
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/storage_operation_detail.php');

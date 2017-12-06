@@ -97,17 +97,17 @@ class COrderByUserListAjaxController extends AAjaxController
 	    $datatable->addSearchColumn('productBrand');
 	    $datatable->addSearchColumn('email');
 
-        $orders = $this->app->repoFactory->create('Order')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $orderStatuses = $this->app->repoFactory->create('OrderStatus')->findAll();
+        $orderStatuses = \Monkey::app()->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
         foreach($orderStatuses as $orderStatus){
             $colorStatus[$orderStatus->code] = $orderStatus->color;
         }
 
-        $orderLineStatuses = $this->app->repoFactory->create('OrderLineStatus')->findAll();
+        $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll();
 	    $plainLineStatuses = [];
         $colorLineStatus = [];
 	    foreach($orderLineStatuses as $orderLineStatus){

@@ -21,7 +21,7 @@ class CGetProductCategory extends AAjaxController
         $format = $this->app->router->request()->getRequestData('format');
         $format = (!$format) ? 'json' : $format;
 
-        $prodRepo = $this->app->repoFactory->create('Product');
+        $prodRepo = \Monkey::app()->repoFactory->create('Product');
         $prod = $prodRepo->findOneByStringId($code);
 
         $cats = [];

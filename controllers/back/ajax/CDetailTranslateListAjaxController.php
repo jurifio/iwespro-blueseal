@@ -24,7 +24,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $productDetail = $this->app->repoFactory->create('ProductDetail')->getEmptyEntity();
+        $productDetail = \Monkey::app()->repoFactory->create('ProductDetail')->getEmptyEntity();
         $sql = "SELECT
                   `view`.`id`                                     AS `id`,
                   `view`.`slug`                                   AS `slug`,
@@ -57,7 +57,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
 
 	    if($this->app->router->request()->getRequestData('useTargetLang')) {
 		    $langs = [];
-		    foreach($this->app->repoFactory->create('Lang')->findAll() as $lang) {
+		    foreach(\Monkey::app()->repoFactory->create('Lang')->findAll() as $lang) {
 			    if($this->app->router->request()->getRequestData('useTargetLang') == $lang->id) {
 				    $langs[] = 'x';
 			    } else {
@@ -74,10 +74,10 @@ class CDetailTranslateListAjaxController extends AAjaxController
 
         $query = $datatable->getQuery(false,true);
         $productDetails = $this->app->dbAdapter->query($query, $datatable->getParams())->fetchAll();
-        $count = $this->app->repoFactory->create('ProductDetail')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('ProductDetail')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('ProductDetail')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('ProductDetail')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
 
-        $activeLanguages = $this->app->repoFactory->create('Lang')->findBy(['isActive' => true]);
+        $activeLanguages = \Monkey::app()->repoFactory->create('Lang')->findBy(['isActive' => true]);
 
         $response = [];
         $response ['draw'] = $this->app->router->request()->getRequestData('draw');
@@ -130,7 +130,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
         $detailName = $this->app->router->request()->getRequestData('name');
         $detailId = $this->app->router->request()->getRequestData('id');
 
-        $detailRepo = $this->app->repoFactory->create('ProductDetailTranslation');
+        $detailRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
         $entity = $detailRepo->findOneBy(['langId'=>$langId, 'productDetailId'=>$detailId]);
 
         if (!$entity instanceof IEntity) {

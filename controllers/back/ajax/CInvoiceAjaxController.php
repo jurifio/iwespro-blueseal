@@ -31,9 +31,9 @@ class CInvoiceAjaxController extends AAjaxController
 
         $orderId = $this->app->router->request()->getRequestData('orderId');
 
-        $orderRepo = $this->app->repoFactory->create('Order');
+        $orderRepo = \Monkey::app()->repoFactory->create('Order');
         $order = $orderRepo->findOneBy(['id' => $orderId]);
-        $invoiceRepo = $this->app->repoFactory->create('Invoice');
+        $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
         $invoiceNew = $invoiceRepo->getEmptyEntity();
         $siteChar = $this->app->cfg()->fetch("miscellaneous","siteInvoiceChar");
         if ($order->invoice->isEmpty()) {
@@ -73,7 +73,7 @@ class CInvoiceAjaxController extends AAjaxController
 	                }
 
 
-                    $productRepo = $this->app->repoFactory->create('ProductNameTranslation');
+                    $productRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
 
                     $invoice->invoiceText = $view->render([
                         'app' => new CRestrictedAccessWidgetHelper($this->app),

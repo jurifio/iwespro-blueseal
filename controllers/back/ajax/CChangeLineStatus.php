@@ -17,20 +17,20 @@ class CChangeLineStatus extends AAjaxController
     {
         $dba = \Monkey::app()->dbAdapter;
         try {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             $ids = explode('-', $this->data['value']);
             /** @var COrderLineRepo $repo */
-            $repo = $this->app->repoFactory->create('OrderLine');
+            $repo = \Monkey::app()->repoFactory->create('OrderLine');
             $line = $repo->findOne(['id' => $ids[0], 'orderId' => $ids[1]]);
             $oldActive = $line->orderLineStatus->isActive;
 
             $line = $repo->updateStatus($line, $ids[2]);
             $newActive = $line->orderLineStatus->isActive;
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             if ($oldActive != $newActive) return 'reload';
             else return 'don\'t do it';
         } catch (BambooException $e) {
-            $dba->rollback();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return false;
         }

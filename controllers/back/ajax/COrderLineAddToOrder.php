@@ -38,7 +38,7 @@ class COrderLineAddToOrder extends AAjaxController
         $soR = \Monkey::app()->repoFactory->create('StorehouseOperation');
 
         $dba = \Monkey::app()->dbAdapter;
-        $dba->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             /** @var CProductSku $ps */
             $ps = $psR->findOneByStringId($productSkuStringId);
@@ -49,11 +49,11 @@ class COrderLineAddToOrder extends AAjaxController
 
             $ol = $oR->AddOrderLineToOrder($o, $ps);
 
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
 
             return $ol->stringId();
         } catch(BambooException $e){
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessate();
         }

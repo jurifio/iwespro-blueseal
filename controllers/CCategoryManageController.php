@@ -33,7 +33,7 @@ class CCategoryManageController extends ARestrictedAccessRootController
         $categories = new CObjectCollection();
 	    $categoryLang = null;
         if(isset($_GET['productCategoryId'])){
-            $categoryLang = $this->app->repoFactory->create('ProductCategoryTranslation',false);
+            $categoryLang = \Monkey::app()->repoFactory->create('ProductCategoryTranslation',false);
             $cat = $this->app->categoryManager->categories()->getDescendantsByNodeId($_GET['productCategoryId']);
             /** @var $em CEntityManager **/
             $em = $this->app->entityManagerFactory->create('ProductCategory',false);

@@ -21,15 +21,15 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 
 	    $id = $this->app->router->request()->getRequestData('id');
 	    $blogId = $this->app->router->request()->getRequestData('blogId');
-	    $post = $this->app->repoFactory->create('Post')->findOne(['id'=>$id,'blogId'=>$blogId]);
+	    $post = \Monkey::app()->repoFactory->create('Post')->findOne(['id'=>$id,'blogId'=>$blogId]);
 
 	    $defaultImage = '/assets/bs-dummy-16-9.png';
 
-	    $cats = $this->app->repoFactory->create('PostCategory')->findAll();
-	    $tags = $this->app->repoFactory->create('PostTag')->findAll();
+	    $cats = \Monkey::app()->repoFactory->create('PostCategory')->findAll();
+	    $tags = \Monkey::app()->repoFactory->create('PostTag')->findAll();
 	    $statuses = [];
 	    $statuses['selected'] = $post->postStatusId;
-	    foreach($this->app->repoFactory->create('PostStatus')->findAll() as $status) {
+	    foreach(\Monkey::app()->repoFactory->create('PostStatus')->findAll() as $status) {
 		    if ($status->show) $statuses[$status->id] = $status->name;
 	    }
 
@@ -50,7 +50,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 		$coverImageData = $this->app->router->request()->getFiles();
 		$fileFolder =  $this->app->rootPath().$this->app->cfg()->fetch('paths', 'blogImages') . '/';
 
-		$postRepo = $this->app->repoFactory->create('Post');
+		$postRepo = \Monkey::app()->repoFactory->create('Post');
 
 		$Post = $postRepo->findOneBy(['id'=>$newPostData['Post.id'],'blogId'=>$newPostData['Post.blogId']]);
 		$PostTranslation = $Post->postTranslation->getFirst();
@@ -69,7 +69,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 			}
 		}
 		try {
-			$this->app->dbAdapter->beginTransaction();
+			\Monkey::app()->repoFactory->beginTransaction();
 
 			$Post->update();
 
@@ -87,9 +87,9 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 
 			$postRepo->setCategories($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostCategory.id']));
 			$postRepo->setTags($Post->id,$Post->blogId,explode(',',$newPostData['PostHasPostTag.id']));
-			$this->app->dbAdapter->commit();
+			\Monkey::app()->repoFactory->commit();
 		} catch(\Throwable $e) {
-			$this->app->dbAdapter->rollBack();
+			\Monkey::app()->repoFactory->rollback();
 			throw $e;
 		}
 

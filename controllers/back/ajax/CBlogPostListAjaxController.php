@@ -43,9 +43,9 @@ class CBlogPostListAjaxController extends AAjaxController
 
 	    $datatable->addCondition('postStatusId',[3],true);
 
-        $posts = $this->app->repoFactory->create('Post')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('Post')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('Post')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $posts = \Monkey::app()->repoFactory->create('Post')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('Post')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('Post')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $modifica = "/blueseal/blog/modifica";
 

@@ -39,7 +39,7 @@ class CRemindShipmentToFriend extends ACronJob
                   where s.predictedShipmentDate <= CURRENT_DATE
                   and scope = ?
                   and s.shipmentDate is null and s.cancellationDate is null and s.deliveryDate is null";
-        $shops = $this->app->repoFactory->create('Shop')->findBySql($query,[CShipment::SCOPE_SUPPLIER_TO_US]);
+        $shops = \Monkey::app()->repoFactory->create('Shop')->findBySql($query,[CShipment::SCOPE_SUPPLIER_TO_US]);
 
         foreach($shops as $shop){
             try {
@@ -69,7 +69,7 @@ class CRemindShipmentToFriend extends ACronJob
                     JOIN Shop on Shop.id = shsab.shopId
                   where s.predictedShipmentDate = CURRENT_DATE - 1
                   and s.cancellationDate is null and s.deliveryDate is null";
-        $shops = $this->app->repoFactory->create('Shop')->findBySql($query,[]);
+        $shops = \Monkey::app()->repoFactory->create('Shop')->findBySql($query,[]);
 
         $names = [];
         foreach($shops as $shop){

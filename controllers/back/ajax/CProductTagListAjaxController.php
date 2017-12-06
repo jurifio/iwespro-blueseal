@@ -90,7 +90,7 @@ class CProductTagListAjaxController extends AAjaxController
 	    //$datatable->addSearchColumn('extId');
 	    //$datatable->addSearchColumn('extSkuId');
 
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $prodotti = \Monkey::app()->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -146,7 +146,7 @@ class CProductTagListAjaxController extends AAjaxController
 
             $response['data'][$i]['details'] = '<img width="50" src="'.$val->getDummyPictureUrl().'" />' . $imgs . '<br />';
             $response['data'][$i]['details'] .= ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale .  '-' . explode("-", $val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span><br />' : '';
-            $details = $this->app->repoFactory->create('ProductSheetActual')->em()->findBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
+            $details = \Monkey::app()->repoFactory->create('ProductSheetActual')->em()->findBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
             foreach($details as $k => $v) {
                 if ($trans = $v->productDetail->productDetailTranslation->getFirst()) {
                     $response['data'][$i]['details'] .= '<span class="small">' . $trans->name . "</span><br />";

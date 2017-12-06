@@ -46,7 +46,7 @@ class CBrandManageController extends ARestrictedAccessRootController
         } else {
             $slug = $slugify->slugify($data['ProductBrand_name']);
         }
-	    $brandRepo = $this->app->repoFactory->create('ProductBrand');
+	    $brandRepo = \Monkey::app()->repoFactory->create('ProductBrand');
 	    $brand = $brandRepo->findOne([$data['ProductBrand_id']]);
 
 	    //TODO FINISH DEVELOPING RENAME BRAND
@@ -61,7 +61,7 @@ class CBrandManageController extends ARestrictedAccessRootController
 	    }
 
         try {
-            $productBrand = $this->app->repoFactory->create("ProductBrand")->findOneBy(['id' => $data['ProductBrand_id']]);
+            $productBrand = \Monkey::app()->repoFactory->create("ProductBrand")->findOneBy(['id' => $data['ProductBrand_id']]);
             $productBrand->slug = trim($slug);
             $productBrand->name = trim($data['ProductBrand_name']);
             $productBrand->description = $data['ProductBrand_description'];

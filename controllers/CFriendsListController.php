@@ -30,7 +30,7 @@ class CFriendsListController extends ARestrictedAccessRootController
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
-            'shops'=>$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser(),
+            'shops'=>\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser(),
             'sidebar' => $this->sidebar->build()
         ]);
     }

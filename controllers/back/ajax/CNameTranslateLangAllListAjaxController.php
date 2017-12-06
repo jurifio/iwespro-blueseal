@@ -56,11 +56,11 @@ class CNameTranslateLangAllListAjaxController extends AAjaxController
         $datatable->addCondition('langId',[1]);
         $datatable->addCondition('name',[''],true);
 
-        $productsName = $this->app->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $productsName = \Monkey::app()->repoFactory->create('ProductNameTranslation')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->productsName->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsName->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $transRepo = $this->app->repoFactory->create('ProductNameTranslation');
+        $transRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
@@ -104,15 +104,15 @@ class CNameTranslateLangAllListAjaxController extends AAjaxController
 
         $langId = $this->app->router->request()->getRequestData('lang');
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
-            $trans = $this->app->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $productId, 'productVariantId' => $productVariantId, 'langId' => $langId]);
+            $trans = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $productId, 'productVariantId' => $productVariantId, 'langId' => $langId]);
             if (!is_null($trans)) {
                 $trans->name = $nameId;
                 $trans->update();
 
             } elseif ($nameId != '') {
-                $trans = $this->app->repoFactory->create("ProductNameTranslation")->getEmptyEntity();
+                $trans = \Monkey::app()->repoFactory->create("ProductNameTranslation")->getEmptyEntity();
 
                 $trans->productId = $productId;
                 $trans->productVariantId = $productVariantId;
@@ -120,10 +120,10 @@ class CNameTranslateLangAllListAjaxController extends AAjaxController
                 $trans->name = $nameId;
                 $trans->insert();
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
         }
     }
 }

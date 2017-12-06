@@ -23,7 +23,7 @@ class CAddressBookController extends AAjaxController
     public function post()
     {
         $addressBookData = $this->app->router->request()->getRequestData();
-        $this->app->repoFactory->create('AddressBook');
+        \Monkey::app()->repoFactory->create('AddressBook');
 
         $ok = false;
         foreach ($addressBookData as $field) {
@@ -33,8 +33,8 @@ class CAddressBookController extends AAjaxController
             }
         }
         if (!$ok) return null;
-        $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
-        if (is_null($addressBook)) $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
+        $addressBook = \Monkey::app()->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
+        if (is_null($addressBook)) $addressBook = \Monkey::app()->repoFactory->create('AddressBook')->getEmptyEntity();
         try {
             /** @var CAddressBook $addressBook */
             $addressBook->name = $addressBookData['name'] ?? null;

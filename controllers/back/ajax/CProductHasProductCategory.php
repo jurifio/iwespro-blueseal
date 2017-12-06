@@ -35,7 +35,7 @@ class CProductHasProductCategory extends AAjaxController
                 $rowsId = [];
 
                 try {
-                    $this->app->dbAdapter->beginTransaction();
+                    \Monkey::app()->repoFactory->beginTransaction();
                     foreach($get['rows'] as $k => $v) {
                         $this->app->dbAdapter->delete(
                             "ProductHasProductCategory",
@@ -60,9 +60,9 @@ class CProductHasProductCategory extends AAjaxController
                             if($this->app->dbAdapter->countAffectedRows() != 1) throw new \Exception('No rows Updated');
                         }
                     }
-                    $this->app->dbAdapter->commit();
+                    \Monkey::app()->repoFactory->commit();
                 } catch(\Throwable $e) {
-                    $this->app->dbAdapter->rollBack();
+                    \Monkey::app()->repoFactory->rollback();
                     return "OOPS! Errore nell'assegnazione delle categorie<br />" . $e->getMessage();
                 }
                 return "Le categorie sono state aggiornate!";

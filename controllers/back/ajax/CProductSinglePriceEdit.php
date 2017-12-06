@@ -36,9 +36,9 @@ class CProductSinglePriceEdit extends AAjaxController
         try {
             if (!$shop) throw new \Exception('Nessun negozio associato a questo utente');
 
-            $this->app->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
 
-            $shpRepo = $this->app->repoFactory->create('ShopHasProduct');
+            $shpRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
             $shp = $shpRepo->findOne([$id, $productVariantId, $shop->id]);
 
             if (!$shp) {
@@ -57,9 +57,9 @@ class CProductSinglePriceEdit extends AAjaxController
             $shp = $shpRepo->findOne([$id, $productVariantId, $shop->id]);
             $shp->updatePrices($value, $price);
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch(\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return json_encode($e->getMessage());
         }
         return json_encode(true);

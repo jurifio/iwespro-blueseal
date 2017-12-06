@@ -17,7 +17,7 @@ class CGetAllProductCategories extends AAjaxController
 {
     public function get()
     {
-        $productCategories = $this->app->repoFactory->create('ProductCategory')->findAll();
+        $productCategories = \Monkey::app()->repoFactory->create('ProductCategory')->findAll();
         $categories = [];
         $idCat = 0;
         foreach($productCategories as $productCategory) {

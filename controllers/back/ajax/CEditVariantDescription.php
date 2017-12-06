@@ -26,7 +26,7 @@ class CEditVariantDescription extends AAjaxController
         $groupId = \Monkey::app()->router->request()->getRequestData('groupId');
         $pvR = \Monkey::app()->repoFactory->create('ProductVariant');
         $dba = \Monkey::app()->dbAdapter;
-        $dba->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
 
         if (!count($codes)) {
             \Monkey::app()->router->response()->raiseProcessingError();
@@ -49,10 +49,10 @@ class CEditVariantDescription extends AAjaxController
                     $product->update();
                 }
             }
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return 'I prodotti sono stati aggiornati correttamente';
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return 'C\'è stato un problema:<br />' . $e->getMessage();
         }

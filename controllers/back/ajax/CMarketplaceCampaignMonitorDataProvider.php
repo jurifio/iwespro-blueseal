@@ -55,7 +55,7 @@ class CMarketplaceCampaignMonitorDataProvider extends AAjaxController
         $res = $this->app->dbAdapter->query($sql, [$campaignId, STimeToolbox::DbFormattedDateTime(\DateTime::createFromFormat('U', $time))], true)->fetchAll();
 
         /** @var CCampaign $campaign */
-        $campaign = $this->app->repoFactory->create('Campaign')->findOneByStringId($campaignId);
+        $campaign = \Monkey::app()->repoFactory->create('Campaign')->findOneByStringId($campaignId);
 
         if (empty($res)) $res = ['cost' => 0, 'visits' => 0 ,'ordersValue'=> 0, 'orders'=> 0];
         else $res = $res[0];

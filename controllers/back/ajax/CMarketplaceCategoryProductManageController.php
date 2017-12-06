@@ -25,9 +25,9 @@ class CMarketplaceCategoryProductManageController extends AAjaxController
     {
         $ids = $this->app->router->request()->getRequestData('categories');
         $marketplaceAccountIds = $this->app->router->request()->getRequestData('marketplaceAccountId');
-        $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountIds);
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($marketplaceAccountIds);
         /** @var CMarketplaceAccountHasProductRepo $mahpRepo */
-        $mahpRepo = $this->app->repoFactory->create('MarketplaceAccountHasProduct');
+        $mahpRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
         $ok = 0;
         $ko = 0;
 

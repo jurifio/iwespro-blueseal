@@ -42,9 +42,9 @@ class CProductSales extends AAjaxController
     private function assign($rows, $percent = 0)
     {
         foreach ($rows as $v) {
-            $this->app->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             try {
-                $product = $this->app->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+                $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                 foreach ($product->shopHasProduct as $shopHasProduct) {
                     $shopHasProduct->salePrice = floor($shopHasProduct->price / 100 * (100 - $percent));
                     $shopHasProduct->update();
@@ -56,10 +56,10 @@ class CProductSales extends AAjaxController
                 }
                 $this->app->eventManager->triggerEvent('product.price.change', ['productId' => $product->printId()]);
             } catch (\Throwable $e) {
-                $this->app->dbAdapter->rollback();
+                \Monkey::app()->repoFactory->rollback();
                 return "Non riesco ad avviare le promozioni le promozioni dai prodotti selezionati:<br />" . $e->getMessage();
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
         }
 
         return "Promozioni aggiunte e aggiornate!";
@@ -68,7 +68,7 @@ class CProductSales extends AAjaxController
     private function set($rows, $isSale)
     {
         foreach ($rows as $v) {
-            $product = $this->app->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
             try {
                 $product->isOnSale = $isSale;
                 $product->update();

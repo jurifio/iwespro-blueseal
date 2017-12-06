@@ -37,9 +37,9 @@ class CBrandListAjaxController extends AAjaxController
                 GROUP BY pb.id";
         $datatable = new CDataTables($sql, ['id'], $_GET );
 
-        $prodotti = $this->app->repoFactory->create('ProductBrand')->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $prodotti = \Monkey::app()->repoFactory->create('ProductBrand')->findBySql($datatable->getQuery(), $datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $modifica = $this->app->baseUrl(false) . "/blueseal/prodotti/brand/modifica";
 

@@ -26,7 +26,7 @@ class CChangeUserPassword extends AAjaxController
     public function put()
     {
         $uId = $this->app->router->request()->getRequestData('userId');
-        $user = $this->app->repoFactory->create('User')->findOneByStringId($uId);
+        $user = \Monkey::app()->repoFactory->create('User')->findOneByStringId($uId);
         $pwd = $this->app->router->request()->getRequestData('password');
         $user->password  = password_hash($pwd,PASSWORD_BCRYPT);
         $user->update();

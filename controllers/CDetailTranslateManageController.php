@@ -26,7 +26,7 @@ class CDetailTranslateManageController extends ARestrictedAccessRootController
         $blueseal = $this->app->baseUrl(false) . '/blueseal';
         $datas = $this->app->router->request()->getRequestData();
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             foreach ($datas as $key => $val) {
                 if ($key == 'ProductDetailId') continue;
@@ -34,14 +34,14 @@ class CDetailTranslateManageController extends ARestrictedAccessRootController
                 $langId = $keys[1];
                 $name = $val;
 
-                $productDetail = $this->app->repoFactory->create('ProductDetailTranslation')->findOneBy(['productDetailId'=>$datas['ProductDetailId'], 'langId'=>$langId]);
+                $productDetail = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findOneBy(['productDetailId'=>$datas['ProductDetailId'], 'langId'=>$langId]);
 
                 if (!is_null($productDetail)) {
                     $productDetail->name = $name;
                     $productDetail->update();
 
                 } elseif ($name != "") {
-                    $productDetail = $this->app->repoFactory->create("ProductDetailTranslation")->getEmptyEntity();
+                    $productDetail = \Monkey::app()->repoFactory->create("ProductDetailTranslation")->getEmptyEntity();
 
                     $productDetail->productDetailId = $datas['ProductDetailId'];
                     $productDetail->langId = $langId;
@@ -49,10 +49,10 @@ class CDetailTranslateManageController extends ARestrictedAccessRootController
                     $productDetail->insert();
                 }
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
         }
 
     }

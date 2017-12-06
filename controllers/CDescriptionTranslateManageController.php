@@ -37,8 +37,8 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
 
         /** LOGICHE DI UPDATE*/
         try {
-            $this->app->dbAdapter->beginTransaction();
-            $descRepo = $this->app->repoFactory->create('ProductDescriptionTranslation');
+            \Monkey::app()->repoFactory->beginTransaction();
+            $descRepo = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation');
             foreach ($post as $key => $val) {
                 $k = explode('_', $key);
                 if ($k[0] != 'ProductDescription') continue;
@@ -56,10 +56,10 @@ class CDescriptionTranslateManageController extends ARestrictedAccessRootControl
                     $descEdit->description = $val;
                     $descEdit->insert();
                 }            }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return json_encode($productIds);
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
 

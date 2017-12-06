@@ -25,7 +25,7 @@ class CImportProductFileController extends ARestrictedAccessRootController
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_import_file.php');
 
 		if($this->app->getUser()->hasPermission('allShops')) {
-			$shops = $this->app->repoFactory->create('Shop')->findAll();
+			$shops = \Monkey::app()->repoFactory->create('Shop')->findAll();
 		} else {
 			$shops = $this->app->getUser()->shop;
 		}
@@ -82,7 +82,7 @@ class CImportProductFileController extends ARestrictedAccessRootController
 			}
 
 			$shop = $this->app->router->request()->getRequestData('shopId');
-			$shop = $this->app->repoFactory->create('Shop')->findOne([$shop]);
+			$shop = \Monkey::app()->repoFactory->create('Shop')->findOne([$shop]);
 			$path = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'productSync') . '/' . $shop->name.'/import/';
 			$name = $this->app->router->request()->getRequestData('action').'_'
 						.$shop->id.'_'

@@ -51,7 +51,7 @@ class CFriendAccept extends AAjaxController
         $orderLines = $request->getRequestData('rows');
         $response = $request->getRequestData('response');
 
-        $dba->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
 
             if (FALSE == $response) {
@@ -101,25 +101,25 @@ class CFriendAccept extends AAjaxController
                 $bookingNumber = $request->getRequestData('bookingNumber');
                 $bookingNumber = empty($bookingNumber) ? null : $bookingNumber;
                 /** @var CShipmentRepo $shipmentRepo */
-                $shipmentRepo = $this->app->repoFactory->create('Shipment');
+                $shipmentRepo = \Monkey::app()->repoFactory->create('Shipment');
                 $shipment = $shipmentRepo->newFriendShipmentToUs($carrierId, $fromAddressBookId, $bookingNumber, $shippingDate, $orderLineCollection);
                 $request->getRequestData();
                 $this->app->eventManager->triggerEvent('orderLine.friend.accept', ['orderLines' => $orderLineCollection]);
 
-                $dba->commit();
+                \Monkey::app()->repoFactory->commit();
                 return json_encode(['error' => false, 'message' => $verdict . ' correttamente registrato', 'shipmentId' => $shipment->id]);
             } else {
 
-                $dba->commit();
+                \Monkey::app()->repoFactory->commit();
                 return json_encode(['error' => false, 'message' => $verdict . ' correttamente registrato']);
             }
 
         } catch (BambooOrderLineException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
             return json_encode(['error' => true, 'message' => $message . $e->getMessage()]);
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             $message = 'OOPS! Le operazioni richieste non sono state eseguite:<br />';
             return json_encode(['error' => true, 'message' => $message . $e->getMessage()]);

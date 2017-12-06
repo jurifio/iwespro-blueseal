@@ -100,9 +100,9 @@ class CNamesManager extends AAjaxController
     private function mergeNames($new, $old)
     {
         $pnRepo = \Monkey::app()->repoFactory->create('ProductName');
-        $pntRepo = $this->app->repoFactory->create('ProductNameTranslation');
+        $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
         try {
-            \Monkey::app()->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
 
             $newPn = $pnRepo->findBy(['name' => $new]);
             if (!$newPn->count()) {
@@ -122,9 +122,9 @@ class CNamesManager extends AAjaxController
 
             $pntRepo->updateTranslationFromName($new, $old);
 
-            \Monkey::app()->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch (\Exception $e) {
-            \Monkey::app()->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw new \Exception($e->getMessage());
         }
         return "Nomi aggiornati!";
@@ -141,15 +141,15 @@ class CNamesManager extends AAjaxController
             $pntRepo->insertName($new);
         }
         try {
-            $this->app->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             foreach ($oldCodes as $v) {
                 list($id, $productVariantId) = explode('-', $v);
                 $pntRepo->updateProductName($id, $productVariantId, $new);
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return 'Nomi aggiornati!';
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return 'OOPS! C\'è stato un problema!<br />' . $e->getMessage();
         }
     }

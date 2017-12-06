@@ -91,7 +91,7 @@ class CFriendOrderListAjaxController extends AAjaxController
 
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
-        $datatable->addCondition('shopId',$this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
+        $datatable->addCondition('shopId',\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
         if (!$allShops) {
             $datatable->addCondition('orderLineStatusCode',
                 [
@@ -108,20 +108,20 @@ class CFriendOrderListAjaxController extends AAjaxController
             );
         }
 
-        $orderLines = $this->app->repoFactory->create('OrderLine')
+        $orderLines = \Monkey::app()->repoFactory->create('OrderLine')
             ->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('OrderLine')
+        $count = \Monkey::app()->repoFactory->create('OrderLine')
             ->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = $this->app->repoFactory->create('OrderLine')
+        $totlalCount = \Monkey::app()->repoFactory->create('OrderLine')
             ->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $orderStatuses = $this->app->repoFactory->create('OrderStatus')->findAll();
+        $orderStatuses = \Monkey::app()->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
         foreach($orderStatuses as $orderStatus){
             $colorStatus[$orderStatus->code] = $orderStatus->color;
         }
 
-        $orderLineStatuses = $this->app->repoFactory->create('OrderLineStatus')->findAll();
+        $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll();
 	    $plainLineStatuses = [];
         $colorLineStatuses = [];
 	    foreach($orderLineStatuses as $orderLineStatus){
@@ -129,7 +129,7 @@ class CFriendOrderListAjaxController extends AAjaxController
             $colorLineStatuses[$orderLineStatus->code] = $orderLineStatus->colore;
 	    }
 
-        $orderLineStatuses = $this->app->repoFactory->create('OrderLineStatus')->findAll();
+        $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll();
         $plainLineStatuses = [];
         $colorLineStatuses = [];
         foreach($orderLineStatuses as $orderLineStatus){

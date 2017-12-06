@@ -21,7 +21,7 @@ class CProductSlimListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $shopsIds = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $shopsIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
         $user = \Monkey::app()->getUser();
         $allShops = $user->hasPermission('allShops');
@@ -61,7 +61,7 @@ class CProductSlimListAjaxController extends AAjaxController
         $okManage = $user->hasPermission('/admin/product/edit');
         $modifica = '/blueseal/friend/prodotti/modifica';
 
-        $productRepo = $this->app->repoFactory->create('Product');
+        $productRepo = \Monkey::app()->repoFactory->create('Product');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
             $val = $productRepo->findOneBy($row);

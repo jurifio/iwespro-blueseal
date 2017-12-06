@@ -45,9 +45,9 @@ class CProductManageController extends ARestrictedAccessRootController
             $productIdsExt = array("productId" => $post['Product_id'], "productVariantId" => $post['Product_productVariantId']);
             /** @var CEntityManager $em */
 
-            $productEdit = $this->app->repoFactory->create('Product')->findOne($productIds);
+            $productEdit = \Monkey::app()->repoFactory->create('Product')->findOne($productIds);
             /** INIZIO TRANSACTION */
-            if (!$this->app->dbAdapter->beginTransaction()) throw new \Exception();
+            if (!\Monkey::app()->repoFactory->beginTransaction()) throw new \Exception();
 
             /** UPDATE VARIANTE */
             $context = 'ProductVariant';
@@ -71,11 +71,11 @@ class CProductManageController extends ARestrictedAccessRootController
             $productEdit->update();
 
             //$productId = $this->app->dbAdapter->update("Product", $updateData, $productIds);
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
 
             /** INIZIO TRANSACTION PER IL CARICAMENTO DEI VALORI FACOLTATIVI DI PRODOTTO E DI DETTAGLI PRODOTTO */
             $context = 'Product second update';
-            if (!$this->app->dbAdapter->beginTransaction()) throw new \Exception();
+            if (!\Monkey::app()->repoFactory->beginTransaction()) throw new \Exception();
             /** UPDATE PRODUCT */
             if ($this->isValidInput("Product_productBrandId", $post)) {
 	            $productEdit->productBrandId = $post['Product_productBrandId'];
@@ -121,9 +121,9 @@ class CProductManageController extends ARestrictedAccessRootController
             /** UPDATE DEI DETTAGLI PRODOTTO */
             $context = "detail Update";
             if ($this->isValidInput("Product_dataSheet", $post)) {
-	            $detailRepo = $this->app->repoFactory->create('ProductDetail');
-	            $detailTranslationRepo = $this->app->repoFactory->create('ProductDetailTranslation');
-	            $productSheetActualRepo = $this->app->repoFactory->create('ProductSheetActual');
+	            $detailRepo = \Monkey::app()->repoFactory->create('ProductDetail');
+	            $detailTranslationRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
+	            $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');
                 /** INSERIMENTO DETTAGLI PRODOTTO */
 	            if($post['Product_dataSheet'] != $productEdit->productSheetPrototypeId) {
 		            foreach($productEdit->productSheetActual as $val) $val->delete();
@@ -183,7 +183,7 @@ class CProductManageController extends ARestrictedAccessRootController
 		            $productDescriptionTranslation->description = $input;
 		            $productDescriptionTranslation->update();
 	            } else {
-		            $productDescriptionTranslation = $this->app->repoFactory->create('ProductDescriptionTranslation')->getEmptyEntity();
+		            $productDescriptionTranslation = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->getEmptyEntity();
 		            $productDescriptionTranslation->langId = $inputName[1];
 		            $productDescriptionTranslation->marketplaceId = 1;
 		            $productDescriptionTranslation->description = $input;
@@ -213,7 +213,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 foreach ($user->shop as $s) {
                     $shopId = $s->id;
                 }
-                $shpRepo = $this->app->repoFactory->create('ShopHasProduct');
+                $shpRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
                 $shp = $shpRepo->findOneBy(['productId' => $productEdit->id, 'productVariantId' => $productEdit->productVariantId, 'shopId' => $shopId]);
                 if ($shp) {
                     $shp->extId = $post['Product_extId'];
@@ -232,7 +232,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
 
             if ((array_key_exists('Product_retail_price',$post)) && (array_key_exists('Product_value',$post))) {
-                $skus = $this->app->repoFactory->create('ProductSku')->findBy([
+                $skus = \Monkey::app()->repoFactory->create('ProductSku')->findBy([
                     'productId' => $productIds['id'],
                     'productVariantId' => $productIds['productVariantId'],
                     'shopId' => $shop->id
@@ -244,7 +244,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 }
             }
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
 
             $context = "Product Update Final";
             if ($this->isValidInput("Product_status", $post)) {
@@ -254,7 +254,7 @@ class CProductManageController extends ARestrictedAccessRootController
             $ret = ['code' => $productIds, 'message' => 'Il prodotto è stato aggiornato correttamente.'];
             return json_encode($ret);
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
 
             $ret = [];
             if ($productIds) $ret['code'] = $productIds;
@@ -270,7 +270,7 @@ class CProductManageController extends ARestrictedAccessRootController
         $files = $this->app->router->request()->getFiles();
         $productId = 0;
 
-        $prodRepo = $this->app->repoFactory->create('Product');
+        $prodRepo = \Monkey::app()->repoFactory->create('Product');
 
         if (isset($post['button']) && $post['button'] == 'hide' && isset($post['dirtyProductId'])) {
             $this->app->dbAdapter->query("UPDATE DirtyProduct SET dirtyStatus = 'N' WHERE id = ?", [$post['dirtyProductId']]);
@@ -281,7 +281,7 @@ class CProductManageController extends ARestrictedAccessRootController
         try {
 
             /** INIZIO TRANSACTION */
-            if (!$this->app->dbAdapter->beginTransaction()) throw new \Exception();
+            if (!\Monkey::app()->repoFactory->beginTransaction()) throw new \Exception();
 
             /** CONTROLLO SE IL PRODOTTO ESISTE GIA' */
 
@@ -294,7 +294,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
 
             /** INSERISCO IL PRODOTTO DI BASE */
-	        $var = $this->app->repoFactory->create('ProductVariant')->getEmptyEntity();
+	        $var = \Monkey::app()->repoFactory->create('ProductVariant')->getEmptyEntity();
 	        $var->name = $post['ProductVariant_name'];
 	        $var->description = $post['ProductVariant_description'];
 	        $variantId = $var->insert();
@@ -335,7 +335,7 @@ class CProductManageController extends ARestrictedAccessRootController
                     $shopId = $s->id;
                     break;
                 }
-                $shpRepo = $this->app->repoFactory->create('ShopHasProduct');
+                $shpRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
                 $shp = $shpRepo->getEmptyEntity();
                 $shp->productId = $productId;
                 $shp->productVariantId = $variantId;
@@ -347,13 +347,13 @@ class CProductManageController extends ARestrictedAccessRootController
                 $shp->updatePrices($post['Product_value'], $post['Product_retail_price']);
             }
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
 
             /** INIZIO TRANSACTION PER IL CARICAMENTO DEI VALORI FACOLTATIVI DI PRODOTTO E DI DETTAGLI PRODOTTO */
-            if (!$this->app->dbAdapter->beginTransaction()) throw new \Exception();
+            if (!\Monkey::app()->repoFactory->beginTransaction()) throw new \Exception();
 
             /** UPDATE PRODUCT */
-            $productNew = $this->app->repoFactory->create("Product")->findOneBy(['id' => $productId, 'productVariantId' => $variantId]);
+            $productNew = \Monkey::app()->repoFactory->create("Product")->findOneBy(['id' => $productId, 'productVariantId' => $variantId]);
 
             if ($this->isValidInput('Product_productSeasonId', $post)) {
                 $productNew->productSeasonId = $post['Product_productSeasonId'];
@@ -398,7 +398,7 @@ class CProductManageController extends ARestrictedAccessRootController
 	        $slugify = new CSlugify();
             /** INSERIMENTO DETTAGLI PRODOTTO */
 	        if ($this->isValidInput("Product_dataSheet", $post)) {
-		        $productSheetActualRepo = $this->app->repoFactory->create('ProductSheetActual');
+		        $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');
 		        /** INSERIMENTO DETTAGLI PRODOTTO */
 
 		        $productNew->productSheetPrototypeId = $post['Product_dataSheet'];
@@ -453,9 +453,9 @@ class CProductManageController extends ARestrictedAccessRootController
                 $this->app->dbAdapter->insert("ProductDescriptionTranslation", $insertData);
             }
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
 
             $ret = [];
             if ($productIds) $ret['code'] = $productIds;

@@ -22,7 +22,7 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
 
         foreach ($this->app->router->request()->getRequestData('id') as $key => $value) {
 
-            $product = $this->app->repoFactory->create('Product')->findOneByStringId($value);
+            $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($value);
             $product->aztecCode = base64_encode($product->printId().'__'.$product->productBrand->name.' - '.$product->itemno.' - '.$product->productVariant->name);
 
             $products[] = $product;

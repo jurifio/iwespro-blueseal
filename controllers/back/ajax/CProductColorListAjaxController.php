@@ -49,9 +49,9 @@ class CProductColorListAjaxController extends AAjaxController
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET);
 
-        $products = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $products = \Monkey::app()->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('Product')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
 
         $response = [];
@@ -78,7 +78,7 @@ class CProductColorListAjaxController extends AAjaxController
 
                     $response['data'][$i]['categorie'] .= '<span style="font-size: 0.8em">' . $res[0]['name'] . '</span><br />';
                 }
-                $res = $this->app->repoFactory->create("DirtyProduct")->em()->findOneBy(['productId' => $v->id, 'productVariantId' => $v->productVariantId]);
+                $res = \Monkey::app()->repoFactory->create("DirtyProduct")->em()->findOneBy(['productId' => $v->id, 'productVariantId' => $v->productVariantId]);
                 $response['data'][$i]['var'] = $res->var;
                 $response['data'][$i]['stato'] = $v->productStatus->name;
                 $i++;

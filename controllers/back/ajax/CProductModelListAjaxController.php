@@ -56,7 +56,7 @@ class CProductModelListAjaxController extends AAjaxController
 	    //$datatable->addSearchColumn('extId');
 	    //$datatable->addSearchColumn('extSkuId');
 
-        $modelli = $this->app->repoFactory->create('ProductSheetModelPrototype')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $modelli = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 

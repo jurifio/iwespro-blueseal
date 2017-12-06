@@ -39,7 +39,7 @@ class COrderAddController extends ARestrictedAccessRootController
             $data = $this->app->router->request()->getRequestData();
 
             /** @var CCartRepo $cartRepo */
-            $cartRepo = $this->app->repoFactory->create('Cart');
+            $cartRepo = \Monkey::app()->repoFactory->create('Cart');
             $cart = $cartRepo->getEmptyEntity();
             $cart->userId = $data['user'];
             $cart->cartTypeId = CCartRepo::CART_TYPE_TRN;
@@ -50,7 +50,7 @@ class COrderAddController extends ARestrictedAccessRootController
 
             foreach ($data['orderLine'] as $line) {
                 /** @var CProductSku $sku */
-                $sku = $this->app->repoFactory->create('ProductSku')->findOneByStringId($line);
+                $sku = \Monkey::app()->repoFactory->create('ProductSku')->findOneByStringId($line);
                 $cartRepo->addSku($sku->getPublicProductSku(),1,$cart);
             }
 

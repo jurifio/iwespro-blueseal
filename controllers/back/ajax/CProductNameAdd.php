@@ -35,7 +35,7 @@ class CProductNameAdd extends AAjaxController
                 $pntRepo->insertName($name);
                 return "ok";
             } catch (\Throwable $e) {
-                $this->app->dbAdapter->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 return "OOPS! Errore durante l'inserimento, che non è stato eseguito.<br />" . $e->getMessage();
             }
         } else {

@@ -54,14 +54,14 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
     {
         try {
             $data = $this->app->router->request()->getRequestData();
-            $couponType = $this->app->repoFactory->create('CouponType')->getEmptyEntity();
+            $couponType = \Monkey::app()->repoFactory->create('CouponType')->getEmptyEntity();
             foreach ($data as $k => $v) {
                 $couponType->{$k} = $v;
             }
             $couponType->smartInsert();
 
             foreach ($data['tags'] ?? [] as $tag) {
-                $couponTypeHasTag = $this->app->repoFactory->create('CouponTypeHasTag')->getEmptyEntity();
+                $couponTypeHasTag = \Monkey::app()->repoFactory->create('CouponTypeHasTag')->getEmptyEntity();
                 $couponTypeHasTag->tagId = $tag;
                 $couponTypeHasTag->couponTypeId = $couponType->id;
                 $couponTypeHasTag->insert();

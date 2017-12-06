@@ -21,7 +21,7 @@ class CProductReadRawDetails extends AAjaxController
     {
         $details = [];
         $productIds = $this->app->router->request()->getRequestData('productIds');
-        foreach ($this->app->repoFactory->create('Product')->findOneByStringId($productIds)->shopHasProduct as $shopHasProduct){
+        foreach (\Monkey::app()->repoFactory->create('Product')->findOneByStringId($productIds)->shopHasProduct as $shopHasProduct){
             foreach($shopHasProduct->dirtyProduct as $dirtyProduct) {
                 foreach ($dirtyProduct->dirtyDetail as $dirtyDetail) {
                     $detail['label'] = $dirtyDetail->label;

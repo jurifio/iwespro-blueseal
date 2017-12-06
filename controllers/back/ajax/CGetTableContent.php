@@ -51,8 +51,8 @@ class CGetTableContent extends AAjaxController
         if (!$table) throw new \Exception('la variabile "table" è obbligatoria');
         if (false !== $condition && !is_array($condition) || !count($condition)) throw new BambooException('Le condizioni devono essere passate sottoforma di array');
 
-        if ($condition) $objectCollection = $this->app->repoFactory->create($table)->findBy($condition,"",$orderBy);
-        else $objectCollection = $this->app->repoFactory->create($table)->findAll("",$orderBy);
+        if ($condition) $objectCollection = \Monkey::app()->repoFactory->create($table)->findBy($condition,"",$orderBy);
+        else $objectCollection = \Monkey::app()->repoFactory->create($table)->findAll("",$orderBy);
 
         if(is_array($fields)) {
             $responseSet = [];

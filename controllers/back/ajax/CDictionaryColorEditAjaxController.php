@@ -61,7 +61,7 @@ class CDictionaryColorEditAjaxController extends AAjaxController
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $colors = $this->app->repoFactory->create('DictionaryColorGroup')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $colors = \Monkey::app()->repoFactory->create('DictionaryColorGroup')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->colors->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->colors->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -71,7 +71,7 @@ class CDictionaryColorEditAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $productColors = $this->app->repoFactory->create('ProductColorGroup')->findBy([],'limit 99999','order by name');
+        $productColors = \Monkey::app()->repoFactory->create('ProductColorGroup')->findBy([],'limit 99999','order by name');
 
         $i = 0;
         foreach($colors as $color) {
@@ -107,17 +107,17 @@ class CDictionaryColorEditAjaxController extends AAjaxController
         $shopId = $names[0];
         $term = $names[1];
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
-            $productColor = $this->app->repoFactory->create('DictionaryColorGroup')->findOneBy(['shopId' => $shopId, 'term' => $term]);
+            $productColor = \Monkey::app()->repoFactory->create('DictionaryColorGroup')->findOneBy(['shopId' => $shopId, 'term' => $term]);
 
             $productColor->productColorGroupId = $colorId;
             $productColor->update();
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
         }
     }
 }

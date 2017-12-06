@@ -22,9 +22,9 @@ class CUserSalesGraphDataController extends AAjaxController
 {
 	public function get()
 	{
-	    $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+	    $shops = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $date = date("Y-m-d H:i:s", strtotime('begin of the year', time()));
-		$x = $this->app->repoFactory->create('Order')->statisticsPoints($shops,$date);
+		$x = \Monkey::app()->repoFactory->create('Order')->statisticsPoints($shops,$date);
         $res['key'] = "vendita per giorno";
         foreach ($x as $point) {
             $pointData = [];

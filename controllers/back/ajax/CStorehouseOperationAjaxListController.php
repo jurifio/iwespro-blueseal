@@ -86,7 +86,7 @@ class CStorehouseOperationAjaxListController extends AAjaxController
                          (`p`.`id` = `ps`.`productId`) AND (`p`.`productVariantId` = `ps`.`productVariantId`) AND
                          (`p`.`productVariantId` = `pv`.`id`))";
         $datatable = new CDataTables($sql, ['id', 'shopId', 'storehouseId'], $_GET,true);
-        $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $shops = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
 
         $datatable->addCondition('shopId', $shops);
         $datatable->addSearchColumn('code');
@@ -94,9 +94,9 @@ class CStorehouseOperationAjaxListController extends AAjaxController
 
         //var_dump($datatable->getQuery(),$datatable->getParams());
 
-        $operazioni = $this->app->repoFactory->create('StorehouseOperation')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $this->app->repoFactory->create('StorehouseOperation')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('StorehouseOperation')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $operazioni = \Monkey::app()->repoFactory->create('StorehouseOperation')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('StorehouseOperation')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('StorehouseOperation')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];

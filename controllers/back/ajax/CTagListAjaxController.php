@@ -18,9 +18,9 @@ class CTagListAjaxController extends AAjaxController
     {
         $datatable = new CDataTables('Tag', ['id'], $_GET, false);
 
-        $tags = $this->app->repoFactory->create('Tag')->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = $this->app->repoFactory->create('Tag')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('Tag')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $tags = \Monkey::app()->repoFactory->create('Tag')->findBySql($datatable->getQuery(), $datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('Tag')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('Tag')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
         $editTagLink = "/blueseal/tag/modifica";
@@ -38,7 +38,7 @@ class CTagListAjaxController extends AAjaxController
             $row['sortingPriorityId'] = $val->sortingPriorityId;
             $row['isPublic'] = $val->isPublic == 1 ? 'Visibile' : 'Nascosto';
             $translations = [];
-            foreach ($this->app->repoFactory->create('TagTranslation')->findBy(['tagId'=>$val->id]) as $translation) $translations[] = $translation->name;
+            foreach (\Monkey::app()->repoFactory->create('TagTranslation')->findBy(['tagId'=>$val->id]) as $translation) $translations[] = $translation->name;
             $row['translations'] = implode('<br>',$translations) ?? " ";
             $response['data'][] = $row;
         }

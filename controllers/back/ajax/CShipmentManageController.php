@@ -35,7 +35,7 @@ class CShipmentManageController extends AAjaxController
     public function get()
     {
         $shipmentId = $this->app->router->request()->getRequestData('shipmentId');
-        $shipment = $this->app->repoFactory->create('Shipment')->findOneByStringId($shipmentId);
+        $shipment = \Monkey::app()->repoFactory->create('Shipment')->findOneByStringId($shipmentId);
 
         $shipment->fromAddress;
         $shipment->toAddress;
@@ -52,11 +52,11 @@ class CShipmentManageController extends AAjaxController
     {
         $dba = \Monkey::app()->dbAdapter;
         try {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             $lineStatus = null;
             $shipmentData = $this->app->router->request()->getRequestData('shipment');
             /** @var CShipment $shipment */
-            $shipment = $this->app->repoFactory->create('Shipment')->findOneByStringId($shipmentData['id']);
+            $shipment = \Monkey::app()->repoFactory->create('Shipment')->findOneByStringId($shipmentData['id']);
             $shipment->bookingNumber = $shipmentData['bookingNumber'];
             $shipment->trackingNumber = $shipmentData['trackingNumber'];
             $shipment->predictedShipmentDate = !empty($shipmentData['predictedShipmentDate']) ? STimeToolbox::DbFormattedDateTime($shipmentData['predictedShipmentDate']) : null;
@@ -76,19 +76,19 @@ class CShipmentManageController extends AAjaxController
 
             if (!$shipment->deliveryDate && !(empty($shipmentData['deliveryDate']))) {
                 $shipment->deliveryDate = STimeToolbox::DbFormattedDateTime($shipmentData['deliveryDate']);
-                $this->app->repoFactory->create('Shipment')->checkIn($shipment);
+                \Monkey::app()->repoFactory->create('Shipment')->checkIn($shipment);
             }
 
             $shipment->note = $shipmentData['note'];
             $shipment->update();
 
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return 'Stato della spedizione aggiornato';
         } catch (BambooOrderLineException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             return $e->getMessage();
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessage();
         }
@@ -103,7 +103,7 @@ class CShipmentManageController extends AAjaxController
         $bookingNumber = $request->getRequestData('bookingNumber');
         $bookingNumber = empty($bookingNumber) ? null : $bookingNumber;
         /** @var CShipmentRepo $shipmentRepo */
-        $shipmentRepo = $this->app->repoFactory->create('Shipment');
+        $shipmentRepo = \Monkey::app()->repoFactory->create('Shipment');
         $shipmentRepo->newFriendShipmentToUs($carrierId, $fromAddressBookId, $bookingNumber, $shippingDate, []);
         return true;
     }
@@ -122,7 +122,7 @@ class CShipmentManageController extends AAjaxController
         $shipmentFaultRepo = \Monkey::app()->repoFactory->create('ShipmentFault');
         $dba = \Monkey::app()->dbAdapter;
         try {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             /** @var CShipment $shipment */
             $shipment = $shipmentRepo->findOne([$shipmentId]);
             /** @var CShipmentFault $shipmentFault */
@@ -164,17 +164,17 @@ class CShipmentManageController extends AAjaxController
                 }
             }
 
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return 'Spedizione annullata';
         } catch (BambooShipmentException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             $res = [
                 'exception' => 'shipment',
                 'message' => $e->getMessage()
             ];
             return json_encode($res);
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             $res = [
                 'exception' => 'general',
                 'message' => $e->getMessage()

@@ -42,7 +42,7 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
         $files = $this->app->router->request()->getFiles();
 
         /** @var CDocumentRepo $documentRepo */
-        $documentRepo = $this->app->repoFactory->create('Document');
+        $documentRepo = \Monkey::app()->repoFactory->create('Document');
 
         $rows = [];
         foreach ($data as $key => $row) {
@@ -51,7 +51,7 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
             if(!isset($rows[$val[1]])) $rows[$val[1]] = [];
             $rows[$val[1]][$val[2]] = $row;
         }
-        $this->app->repoFactory->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             $documentId = $documentRepo->storeNewCustomInvoice(
                 (int) $data['invoiceTypeId'],
@@ -67,10 +67,10 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
                 $files['invoiceBin']['name'],
                 $files['invoiceBin']['tmp_name']);
         } catch (\Throwable $e) {
-            $this->app->repoFactory->rollback();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
 
-        $this->app->repoFactory->commit();
+        \Monkey::app()->repoFactory->commit();
     }
 }

@@ -20,7 +20,7 @@ class CDetailGetAll extends AAjaxController
     public function get()
     {
 
-        $productDetailsCollection = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['langId' => 1]);
+        $productDetailsCollection = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findBy(['langId' => 1]);
         $productDetails = [];
 
         foreach ($productDetailsCollection as $detail) {

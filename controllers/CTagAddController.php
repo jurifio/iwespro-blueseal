@@ -25,8 +25,8 @@ class CTagAddController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/tag_add.php');
 
-        $sortings = $this->app->repoFactory->create('SortingPriority')->findAll();
-        $langs = $this->app->repoFactory->create('Lang')->findAll();
+        $sortings = \Monkey::app()->repoFactory->create('SortingPriority')->findAll();
+        $langs = \Monkey::app()->repoFactory->create('Lang')->findAll();
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
@@ -44,9 +44,9 @@ class CTagAddController extends ARestrictedAccessRootController
     {
         try {
             $data = $this->app->router->request()->getRequestData();
-            $tagRepo = $this->app->repoFactory->create('Tag');
+            $tagRepo = \Monkey::app()->repoFactory->create('Tag');
             $tag = $tagRepo->getEmptyEntity();
-            $tagTransRepo = $this->app->repoFactory->create('TagTranslation');
+            $tagTransRepo = \Monkey::app()->repoFactory->create('TagTranslation');
             $tagTrans = $tagTransRepo->getEmptyEntity();
             $lang =[];
 

@@ -36,8 +36,8 @@ class CDetailTranslateEditController extends CDetailTranslateManageController
 
         $productDetailId = $this->app->router->request()->getRequestData();
 
-        $detailEdit = $this->app->repoFactory->create('ProductDetail')->findOne($productDetailId);
-        $productDetailEdit = $this->app->repoFactory->create('ProductDetailTranslation')->findBy(['productDetailId' => $productDetailId]);
+        $detailEdit = \Monkey::app()->repoFactory->create('ProductDetail')->findOne($productDetailId);
+        $productDetailEdit = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findBy(['productDetailId' => $productDetailId]);
 
         $em = $this->app->entityManagerFactory->create('Lang');
         $langs = $em->findAll("limit 99999", "");

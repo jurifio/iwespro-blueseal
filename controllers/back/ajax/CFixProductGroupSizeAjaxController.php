@@ -70,7 +70,7 @@ where p.productSizeGroupId NOT IN (SELECT productSizeGroupId FROM ProductSizeGro
         $datatable = new CDataTables($query,['id','productVariantId'],$_GET, true);
         $getQuery = $datatable->getQuery();
         $getParams = $datatable->getParams();
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($getQuery, $getParams);
+        $prodotti = \Monkey::app()->repoFactory->create('Product')->em()->findBySql($getQuery, $getParams);
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 

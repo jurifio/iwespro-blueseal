@@ -24,11 +24,11 @@ class CGenerateDailyPaymentBill extends ACronJob
      */
     public function run($args = null)
     {
-        $plafond = $this->app->repoFactory->create('Configuration')->fetchConfigurationValue('paymentBillPlafond');
+        $plafond = \Monkey::app()->repoFactory->create('Configuration')->fetchConfigurationValue('paymentBillPlafond');
         $this->report('Creating PaymentBills','Plafond: '.$plafond);
-        $res = $this->app->repoFactory->create('PaymentBill')->createFillingBill($plafond);
+        $res = \Monkey::app()->repoFactory->create('PaymentBill')->createFillingBill($plafond);
         $this->report('Creating PaymentBills','Created bill to fit last day '.count($res).' bills',$res);
-        $res = $this->app->repoFactory->create('PaymentBill')->defaultPaymentBillsCreation($plafond);
+        $res = \Monkey::app()->repoFactory->create('PaymentBill')->defaultPaymentBillsCreation($plafond);
         $this->report('Creating PaymentBills','Created normal bills'.count($res).' bills',$res);
     }
 

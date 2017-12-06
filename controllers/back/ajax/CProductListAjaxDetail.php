@@ -99,7 +99,7 @@ class CProductListAjaxDetail extends AAjaxController
         //$sql ="SELECT pd.id as id FROM ProductDetail as pd LEFT JOIN ProductSheetActual as psa WHERE pd.id = psa.productDetailId AND psa.productDetailId IS NULL";
         $idDetail = $this->app->router->request()->getRequestData();
         $error = false;
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
 
         if (count($idDetail)) {
             $ids = [];
@@ -112,28 +112,28 @@ class CProductListAjaxDetail extends AAjaxController
             try {
                 $resPDA = $this->app->dbAdapter->query("DELETE FROM ProductSheetActual WHERE productDetailId IN (" . $in . ")", [])->countAffectedRows();
             } catch (\PDOException $e) {
-                $this->app->dbAdapter->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 $error = true;
                 $pdoErr = $e->errorInfo;
             }
             try {
                 $resPDA = $this->app->dbAdapter->query("DELETE FROM ProductSheetModelActual WHERE productDetailId IN (" . $in . ")", [])->countAffectedRows();
             } catch (\PDOException $e) {
-                $this->app->dbAdapter->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 $error = true;
                 $pdoErr = $e->errorInfo;
             }
             try {
                 $resDT = $this->app->dbAdapter->query("DELETE FROM ProductDetailTranslation WHERE productDetailId IN (" . $in . ")", [])->countAffectedRows();
             } catch (\PDOException $e) {
-                $this->app->dbAdapter->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 $error = true;
                 $pdoErr = $e->errorInfo;
             }
             try {
                 $resD = $this->app->dbAdapter->query("DELETE FROM `ProductDetail` WHERE id IN (" . $in . ")", [])->countAffectedRows();
             } catch (\PDOException $e) {
-                $this->app->dbAdapter->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 $error = true;
                 $pdoErr = $e->errorInfo;
             }
@@ -165,14 +165,14 @@ class CProductListAjaxDetail extends AAjaxController
                       WHERE psa.productDetailId IS NULL AND psma.productDetailId IS NULL",
                     [])->countAffectedRows();
             } catch (\PDOException $e) {
-                $this->app->dbAdapter->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 $error = true;
                 $PDOError = $e->errorInfo;
             }
             $message = $resD . " dettagli non associati a nessun prodotto sono stati cancellati, insieme alle relative " . $resDT . " traduzioni";
         }
 
-        $this->app->dbAdapter->commit();
+        \Monkey::app()->repoFactory->commit();
         // NON TOGLIERE "OOPS" DAL MESSAGGIO D'ERRORE. Viene cercato nel js che chiama sto metodo
         if ($error) return "OOPS! C'è stato un errore nella cancellazione dei dettagli!<br />Niente è andato perduto. Contatta l'amministratore.<br />"
             . "$PDOError<br />";

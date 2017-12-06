@@ -23,19 +23,19 @@ class CBlogPostTagController extends ARestrictedAccessRootController
 			'app'     => new CRestrictedAccessWidgetHelper($this->app),
 			'page'    => $this->page,
 			'sidebar' => $this->sidebar->build(),
-			'tags'    => $this->app->repoFactory->create('PostTag')->findAll()
+			'tags'    => \Monkey::app()->repoFactory->create('PostTag')->findAll()
 		]);
 	}
 
 	public function post()
 	{
 		$data = $this->app->router->request()->getRequestData();
-		$tag = $this->app->repoFactory->create('PostTag')->getEmptyEntity();
+		$tag = \Monkey::app()->repoFactory->create('PostTag')->getEmptyEntity();
 		$s = new CSlugify();
 		$tag->slug = $s->slugify($data['PostTagTranslation.name']);
 		$tag->id = $tag->insert();
 
-		$tagTranslation = $this->app->repoFactory->create('PostTagTranslation')->getEmptyEntity();
+		$tagTranslation = \Monkey::app()->repoFactory->create('PostTagTranslation')->getEmptyEntity();
 		$tagTranslation->postTagId = $tag->id;
 		$tagTranslation->langId = $this->app->getLang()->getId();
 		$tagTranslation->name = $data['PostTagTranslation.name'];
@@ -55,14 +55,14 @@ class CBlogPostTagController extends ARestrictedAccessRootController
 
 		foreach ($ids as $id) {
 			try {
-				$postTag = $this->app->repoFactory->create('PostTag')->findOneBy(['id' => $id]);;
+				$postTag = \Monkey::app()->repoFactory->create('PostTag')->findOneBy(['id' => $id]);;
 				foreach ($postTag->postTagTranslation as $item) {
 					$item->delete();
 				}
 				$postTag->delete();
-				$this->app->dbAdapter->commit();
+				\Monkey::app()->repoFactory->commit();
 			} catch (\Throwable $e) {
-				$this->app->dbAdapter->rollBack();
+				\Monkey::app()->repoFactory->rollback();
 				throw $e;
 			}
 		}

@@ -86,7 +86,7 @@ class CShipmentOrderLinesPrintController extends AAjaxController
 
         foreach ($shipmentsId as $shipmentId) {
             /** @var CShipment $shipment */
-            $shipment = $this->app->repoFactory->create('Shipment')->findOne([$shipmentId]);
+            $shipment = \Monkey::app()->repoFactory->create('Shipment')->findOne([$shipmentId]);
             foreach ($shipment->orderLine as $orderLine) {
                 /** @var COrderLine $orderLine */
                 $pdf->AddPage('P', 'A4', true, true);

@@ -28,11 +28,11 @@ class CDispatchPreorderToFriend extends ACronJob
      */
     public function run($args = null)
     {
-        $shops = $this->app->repoFactory->create('Shop')->findbY(['isActive' => 1]);
+        $shops = \Monkey::app()->repoFactory->create('Shop')->findbY(['isActive' => 1]);
         $query = "SELECT * from OrderLine where `status` in ('ORD_FRND_SNDING', 'ORD_ERR_SEND') AND shopId = ? ";
         $orderExport = new COrderExport($this->app);
         /** @var COrderLineRepo $orderLineRepo */
-        $orderLineRepo = $this->app->repoFactory->create('OrderLine');
+        $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
 
         foreach($shops as $shop){
             $lines = new CObjectCollection();
@@ -41,7 +41,7 @@ class CDispatchPreorderToFriend extends ACronJob
                 $this->report( 'Working Shop ' . $shop->name . ' Start', 'Found ' . count($lines) . ' to send');
                 foreach ($lines as $line) {
                     if($line->friendRevenue == 0 || is_null($line->friendRevenue)) {
-                        $line->friendRevenue = $this->app->repoFactory->create('ProductSku')->calculateFriendRevenue($line->productSku);
+                        $line->friendRevenue = \Monkey::app()->repoFactory->create('ProductSku')->calculateFriendRevenue($line->productSku);
                         $line->update();
                     }
                 }
@@ -52,32 +52,32 @@ class CDispatchPreorderToFriend extends ACronJob
                     $orderExport->sendMailForFriendConfirmation($shop, $lines);
                 }
                 $this->report( 'Working Shop ' . $shop->name . ' End', 'Export ended');
-                $this->app->dbAdapter->beginTransaction();
+                \Monkey::app()->repoFactory->beginTransaction();
                 foreach($lines as $line){
                     try {
 
-                        $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
+                        $orderLine = \Monkey::app()->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLineRepo->updateStatus($orderLine, $this->success);
 
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
                 }
-                $this->app->dbAdapter->commit();
+                \Monkey::app()->repoFactory->commit();
             } catch(\Throwable $e){
                 $this->error('Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
-                $this->app->dbAdapter->beginTransaction();
+                \Monkey::app()->repoFactory->beginTransaction();
                 foreach($lines as $line){
                     try {
 
-                        $orderLine = $this->app->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
+                        $orderLine = \Monkey::app()->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $orderLineRepo->updateStatus($orderLine, $this->fail);
 
                     } catch (\Throwable $e) {
                         $this->app->router->response()->raiseUnauthorized();
                     }
                 }
-                $this->app->dbAdapter->commit();
+                \Monkey::app()->repoFactory->commit();
             }
         }
     }

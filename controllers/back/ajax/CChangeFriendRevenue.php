@@ -21,7 +21,7 @@ class CChangeFriendRevenue extends AAjaxController
     {
         $datas = $this->data;
         /** @var COrderLineRepo $orderLineRepo */
-        $orderLineRepo = $this->app->repoFactory->create('OrderLine');
+        $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
         $orderLine = $orderLineRepo->findOne(['id'=>$datas['orderLineId'],'orderId'=>$datas['orderId']]);
         $orderLineRepo->changeFriendRevenue($orderLine,$datas['change_revenue']);
         return true;

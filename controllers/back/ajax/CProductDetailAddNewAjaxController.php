@@ -33,20 +33,20 @@ class CProductDetailAddNewAjaxController extends AAjaxController
         if (!count($res)) {
             try {
                 $get .= ' !';
-                $this->app->dbAdapter->beginTransaction();
-                $newDett = $this->app->repoFactory->create('ProductDetail')->getEmptyEntity();
+                \Monkey::app()->repoFactory->beginTransaction();
+                $newDett = \Monkey::app()->repoFactory->create('ProductDetail')->getEmptyEntity();
                 $newDett->slug = $slug;
                 $retId = $newDett->insert();
 
-                $newTrad = $this->app->repoFactory->create('ProductDetailTranslation')->getEmptyEntity();
+                $newTrad = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->getEmptyEntity();
                 $newTrad->productDetailId = $retId;
                 $newTrad->langId = 1;
                 $newTrad->name = $get;
                 $newTrad->insert();
-                $this->app->dbAdapter->commit();
+                \Monkey::app()->repoFactory->commit();
                 return "Dettaglio inserito!-" . $retId;
             } catch (\Throwable $e) {
-                $this->app->dbAdapter->rollBack();
+                \Monkey::app()->repoFactory->rollback();
                 return "OOPS! Errore durante l'inserimento, che non è stato eseguito.<br />" . $e->getMessage();
             }
         } else {
@@ -57,7 +57,7 @@ class CProductDetailAddNewAjaxController extends AAjaxController
     public function makeSlugUnique($slug, $recursive = 0) {
         $defSlug = $slug;
         if ($recursive) $defSlug = $slug . '-' . $recursive;
-        $det = $this->app->repoFactory->create('ProductDetail')->findOneBy(['slug' => $defSlug]);
+        $det = \Monkey::app()->repoFactory->create('ProductDetail')->findOneBy(['slug' => $defSlug]);
         if ($det) {
             return $this->makeSlugUnique($slug, $recursive + 1);
         } else {

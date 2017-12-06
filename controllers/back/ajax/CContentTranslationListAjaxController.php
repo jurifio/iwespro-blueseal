@@ -22,7 +22,7 @@ class CContentTranslationListAjaxController extends AAjaxController
 
     public function get()
     {
-        $langs = $this->app->repoFactory->create('Lang')->findAll();
+        $langs = \Monkey::app()->repoFactory->create('Lang')->findAll();
 
         $sql = "SELECT hash,hint,";
         $sqlLang = [];

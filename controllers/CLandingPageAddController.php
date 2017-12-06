@@ -29,7 +29,7 @@ class CLandingPageAddController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/landing_add.php');
 
-        $brandRepo = $this->app->repoFactory->create('ProductBrand');
+        $brandRepo = \Monkey::app()->repoFactory->create('ProductBrand');
         $brandCollection = $brandRepo->findAll();
 
         $categoryCollection = $this->app->categoryManager->categories()->bidim();

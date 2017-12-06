@@ -61,7 +61,7 @@ class CDictionarySizeEditAjaxController extends AAjaxController
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $sizes = $this->app->repoFactory->create('DictionarySize')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $sizes = \Monkey::app()->repoFactory->create('DictionarySize')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->sizes->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->sizes->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -71,7 +71,7 @@ class CDictionarySizeEditAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-        $productSizes = $this->app->repoFactory->create('ProductSize')->findAll("limit 99999", "order by name");
+        $productSizes = \Monkey::app()->repoFactory->create('ProductSize')->findAll("limit 99999", "order by name");
 
         $i = 0;
         foreach($sizes as $size) {
@@ -107,17 +107,17 @@ class CDictionarySizeEditAjaxController extends AAjaxController
         $shopId = $names[0];
         $term = $names[1];
 
-        $this->app->dbAdapter->beginTransaction();
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
-            $productSize = $this->app->repoFactory->create('DictionarySize')->findOneBy(['shopId' => $shopId, 'term' => $term]);
+            $productSize = \Monkey::app()->repoFactory->create('DictionarySize')->findOneBy(['shopId' => $shopId, 'term' => $term]);
 
             $productSize->productSizeId = $sizeId;
             $productSize->update();
 
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return true;
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
         }
     }
 }

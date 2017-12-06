@@ -27,15 +27,15 @@ class CBlogPostCategoryController extends ARestrictedAccessRootController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'sidebar' => $this->sidebar->build(),
-	        'rootCats' => $this->app->repoFactory->create('PostCategory')->findBy(['parentPostCategoryId'=>null]),
-	        'cats' => $this->app->repoFactory->create('PostCategory')->findAll()
+	        'rootCats' => \Monkey::app()->repoFactory->create('PostCategory')->findBy(['parentPostCategoryId'=>null]),
+	        'cats' => \Monkey::app()->repoFactory->create('PostCategory')->findAll()
         ]);
     }
 
 	public function post()
 	{
 		$data = $this->app->router->request()->getRequestData();
-		$category = $this->app->repoFactory->create('PostCategory')->getEmptyEntity();
+		$category = \Monkey::app()->repoFactory->create('PostCategory')->getEmptyEntity();
 		$s = new CSlugify();
 		$category->slug = $s->slugify($data['PostCategoryTranslation.name']);
 		if (isset($data['PostCategory.parentPostCategoryId']) && !empty($data['PostCategory.parentPostCategoryId'])) {
@@ -43,7 +43,7 @@ class CBlogPostCategoryController extends ARestrictedAccessRootController
 		}
 		$category->id = $category->insert();
 
-		$categoryTranslation = $this->app->repoFactory->create('PostCategoryTranslation')->getEmptyEntity();
+		$categoryTranslation = \Monkey::app()->repoFactory->create('PostCategoryTranslation')->getEmptyEntity();
 		$categoryTranslation->postCategoryId = $category->id;
 		$categoryTranslation->langId = $this->app->getLang()->getId();
 		$categoryTranslation->name = $data['PostCategoryTranslation.name'];
@@ -61,14 +61,14 @@ class CBlogPostCategoryController extends ARestrictedAccessRootController
 		$ids = explode(',',$data);
 
 		try{
-			$this->app->dbAdapter->beginTransaction();
+			\Monkey::app()->repoFactory->beginTransaction();
 			foreach ($ids as $id) {
-				$postCategory = $this->app->repoFactory->create('PostCategory')->findOneBy(['id'=>$id]);
+				$postCategory = \Monkey::app()->repoFactory->create('PostCategory')->findOneBy(['id'=>$id]);
 				$this->recursiveDelete($postCategory);
 			}
-			$this->app->dbAdapter->commit();
+			\Monkey::app()->repoFactory->commit();
 		} catch (\Throwable $e) {
-			$this->app->dbAdapter->rollBack();
+			\Monkey::app()->repoFactory->rollback();
 			throw $e;
 		}
 

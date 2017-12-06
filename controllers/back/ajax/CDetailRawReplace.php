@@ -28,16 +28,16 @@ class CDetailRawReplace extends AAjaxController
         $productDetailsRaw = $this->app->router->request()->getRequestData()['newDetails'];
 
         /** @var CProductDetailRepo $detailRepo */
-        $detailRepo = $this->app->repoFactory->create('ProductDetail');
-        $this->app->dbAdapter->beginTransaction();
+        $detailRepo = \Monkey::app()->repoFactory->create('ProductDetail');
+        \Monkey::app()->repoFactory->beginTransaction();
         try {
             $productDetails = [];
             foreach(explode("\n",$productDetailsRaw) as $productDetail) {
                 $productDetails[] = $detailRepo->fetchOrInsert(trim($productDetail));
             }
 
-            $productRepo = $this->app->repoFactory->create('Product');
-            $productSheetActualRepo = $this->app->repoFactory->create('ProductSheetActual');
+            $productRepo = \Monkey::app()->repoFactory->create('Product');
+            $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');
 
             foreach ($productsIds as $productId) {
                 $product = $productRepo->findOneByStringId($productId);
@@ -61,10 +61,10 @@ class CDetailRawReplace extends AAjaxController
                     $product->productSheetPrototype->productDetailLabel->next();
                 }
             }
-            $this->app->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return count($productsIds);
         } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
 

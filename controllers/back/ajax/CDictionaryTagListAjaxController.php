@@ -66,7 +66,7 @@ GROUP BY `d1`.`shopId`";
             $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $shops = $this->app->repoFactory->create('Shop')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $shops = \Monkey::app()->repoFactory->create('Shop')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->shops->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->shops->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 

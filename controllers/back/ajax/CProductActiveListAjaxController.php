@@ -56,7 +56,7 @@ class CProductActiveListAjaxController extends AAjaxController
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
 
-        $prodotti = $this->app->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $prodotti = \Monkey::app()->repoFactory->create('Product')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = $this->em->products->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totlalCount = $this->em->products->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 

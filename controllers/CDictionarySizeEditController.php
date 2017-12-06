@@ -29,7 +29,7 @@ class CDictionarySizeEditController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/dictionary_size_edit.php');
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
         $shopId = $this->app->router->getMatchedRoute()->getComputedFilter('shopId');
-        $shopName = $this->app->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
+        $shopName = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

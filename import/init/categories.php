@@ -13,7 +13,7 @@ use bamboo\core\theming\nestedCategory\CCategoryManager;
 /** @var CCategoryManager $cm */
 $cm = $ninetyNineMonkey->categoryManager;
 
-$ninetyNineMonkey->dbAdapter->beginTransaction();
+$ninetyNineMonkey->repoFactory->beginTransaction();
 /** livello 1 */
 $uomo = $cm->categories()->add('uomo','Uomo');
 $donna = $cm->categories()->add('donna','Donna');
@@ -172,4 +172,4 @@ $JeansU= $cm->categories()->add('jeans','Jeans', $denimU);
 $CamicieU= $cm->categories()->add('camicie','Camicie', $denimU);
 $GiaccheU= $cm->categories()->add('giacche','Giacche', $denimU);
 
-//$ninetyNineMonkey->dbAdapter->commit();
+//$ninetyNineMonkey->repoFactory->commit();

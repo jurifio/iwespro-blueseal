@@ -51,7 +51,7 @@ class CDocumentRepo extends ARepo
         $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => 'fr_invoice_orderlines_file']);
         $dba = \Monkey::app()->dbAdapter;
         try {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             $insertedId =$this->storeFriendDocumentWithFile(
                 $invoiceType,
                 $userId,
@@ -65,13 +65,13 @@ class CDocumentRepo extends ARepo
                 $totalWithVat,
                 $note
             );
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return $insertedId;
         } catch (BambooInvoiceException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
     }
@@ -393,7 +393,7 @@ class CDocumentRepo extends ARepo
         $newIn = $this->getNewNumber($shp, $invoiceType, $emissionDate->format('Y'));
         $completeNumber = $newIn->invoiceSectional->code . '/' . $newIn->invoiceNumber;
         try {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             $this->storeFriendDocumentBasic(
                 $invoiceType,
                 $userId,
@@ -407,12 +407,12 @@ class CDocumentRepo extends ARepo
                 $note
             );
             $newIn->insert();
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch (BambooInvoiceException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
     }
@@ -494,13 +494,13 @@ class CDocumentRepo extends ARepo
                 $totalWithVat,
                 $note
             );
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return $insertedId;
         } catch (BambooInvoiceException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
     }
@@ -596,7 +596,7 @@ class CDocumentRepo extends ARepo
         $newIn = $this->getNewNumber($shp, $invoiceType, $emissionDate->format('Y'));
         $completeNumber = $newIn->invoiceSectional->code . '/' . $newIn->invoiceNumber;
         try {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             $this->storeFriendDocumentBasic(
                 $invoiceType,
                 $userId,
@@ -610,12 +610,12 @@ class CDocumentRepo extends ARepo
                 $note
             );
             $newIn->insert();
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
         } catch (BambooInvoiceException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
     }
@@ -651,7 +651,7 @@ class CDocumentRepo extends ARepo
         $invoiceType = \Monkey::app()->repoFactory->create('InvoiceType')->findOneBy(['code' => 'fr_credit_note_w_file']);
         $dba = \Monkey::app()->dbAdapter;
         try {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             $insertedId =$this->storeFriendDocumentWithFile(
                 $invoiceType,
                 $userId,
@@ -665,13 +665,13 @@ class CDocumentRepo extends ARepo
                 $totalWithVat,
                 $note
             );
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return $insertedId;
         } catch (BambooInvoiceException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             throw $e;
         }
     }

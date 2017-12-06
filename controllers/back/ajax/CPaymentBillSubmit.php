@@ -23,8 +23,8 @@ class CPaymentBillSubmit extends AAjaxController
     {
         $paymentBillId = $this->app->router->request()->getRequestData('paymentBillId');
         /** @var CPaymentBill $paymentBill */
-        $paymentBill = $this->app->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillId);
-        $this->app->repoFactory->create('PaymentBill')->submitPaymentBill($paymentBill,new \DateTime());
+        $paymentBill = \Monkey::app()->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillId);
+        \Monkey::app()->repoFactory->create('PaymentBill')->submitPaymentBill($paymentBill,new \DateTime());
 
         foreach ($paymentBill->getDistinctPayments() as $key=>$payment) {
             $to = explode(';',$payment[0]->shopAddressBook->shop->referrerEmails);

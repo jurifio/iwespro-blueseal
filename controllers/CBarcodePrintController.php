@@ -35,7 +35,7 @@ class CBarcodePrintController extends ARestrictedAccessRootController
         switch($this->app->router->request()->getRequestData('source')) {
             case 'movement': {
                 foreach ($this->app->router->request()->getRequestData('id') as $storehouseOperationId) {
-                    $storehouseOperation = $this->app->repoFactory->create('StorehouseOperation')->findOneByStringId($storehouseOperationId);
+                    $storehouseOperation = \Monkey::app()->repoFactory->create('StorehouseOperation')->findOneByStringId($storehouseOperationId);
                     foreach ($storehouseOperation->storehouseOperationLine as $storehouseOperationLine) {
                         for($x = 0;$x<abs($storehouseOperationLine->qty);$x++) {
                             $productSkus->add(clone $storehouseOperationLine->productSku);
@@ -49,10 +49,10 @@ class CBarcodePrintController extends ARestrictedAccessRootController
             }
             break;
             case 'productId': {
-                $shopRepo = $this->app->repoFactory->create('Shop');
+                $shopRepo = \Monkey::app()->repoFactory->create('Shop');
                 $shopIds = $shopRepo->getAutorizedShopsIdForUser();
                 foreach ($this->app->router->request()->getRequestData('id') as $productId) {
-                    $product = $this->app->repoFactory->create('Product')->findOneByStringId($productId);
+                    $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($productId);
                     foreach($product->productSku as $sku) {
                         if (in_array($sku->shopId, $shopIds)) {
                             for ($x = 0; $x < abs($sku->stockQty); $x++) {

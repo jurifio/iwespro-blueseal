@@ -20,7 +20,7 @@ class CBrandValueListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $shopIds = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $sql = "SELECT
   `pb`.`id`                                                                               AS `id`,
   `pb`.`name`                                                                             AS `brand`,
@@ -59,9 +59,9 @@ GROUP BY `pb`.`id`, `pse`.`id`, `s`.`id`";
         $count = $this->app->dbAdapter->query($datatable->getQuery(true,true),$datatable->getParams())->fetch();
         $totalCount = $this->app->dbAdapter->query($datatable->getQuery('full',true),$datatable->getParams())->fetch();
 
-        /*$brands = $this->app->repoFactory->create('ProductBrand')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = $this->app->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        /*$brands = \Monkey::app()->repoFactory->create('ProductBrand')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('ProductBrand')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
         */
 
         foreach ($orribilità as $hellDoorKey => $horror) {

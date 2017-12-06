@@ -22,7 +22,7 @@ class CUserAddressManage extends AAjaxController
 	public function get()
 	{
 		$list = [];
-		$user = $this->app->repoFactory->create('User')->findOneBy(['id'=>$this->app->router->request()->getRequestData('userId')]);
+		$user = \Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$this->app->router->request()->getRequestData('userId')]);
 		foreach ($user->userAddress as $userAddress) {
             $address = $userAddress->toArray();
             $address['label'] = $userAddress->name.' '.$userAddress->surname.' - '.$userAddress->address;
@@ -37,7 +37,7 @@ class CUserAddressManage extends AAjaxController
 	public function post()
     {
         $data = $this->app->router->request()->getRequestData();
-        $userAddress = $this->app->repoFactory->create('UserAddress')->getEmptyEntity();
+        $userAddress = \Monkey::app()->repoFactory->create('UserAddress')->getEmptyEntity();
         $userAddress->userId = $data['user_id'];
         $userAddress->name = $data['user_address_name'];
         $userAddress->surname = $data['user_address_surname'];

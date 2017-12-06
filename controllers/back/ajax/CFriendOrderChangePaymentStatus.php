@@ -64,7 +64,7 @@ class CFriendOrderChangePaymentStatus extends AAjaxController
 
         $unixDate = strtotime($date);
         try {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
 
             if (!$unixDate) throw new BambooException('Non riconosco il formato della data');
             if (!\Monkey::app()->repoFactory->create('OrderLineFriendPaymentStatus')->findOneBy(['id' => $newStatus])) {
@@ -79,10 +79,10 @@ class CFriendOrderChangePaymentStatus extends AAjaxController
                 $olR->updateFriendPaymentStatus($s, $newStatus, $date);
             }
 
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return 'Lo stato di pagamento delle righe selezionate è stato modificato';
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessage();
         }

@@ -34,25 +34,25 @@ class CGetDataSheet extends AAjaxController
         $Pname = '';
 
         if ($type && ('model' == $type)) {
-            $productSheetModelPrototype = $this->app->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $value]);
+            $productSheetModelPrototype = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $value]);
             $productSheetPrototype = $productSheetModelPrototype->productSheetPrototype;
             $Pname= ($productSheetModelPrototype->productName) ? $productSheetModelPrototype->productName : '';
             $actual = $productSheetModelPrototype->productSheetModelActual;
         } elseif ($type &&  ('change' == $type)) {
-            $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['id' => $value]);
+            $productSheetPrototype = \Monkey::app()->repoFactory->create('ProductSheetPrototype')->findOneBy(['id' => $value]);
             $actual = [];
         } elseif (($code) || ($type && ('product' == $type))) {
             $str = (false != $code) ? $code : $value;
-            $prodCollection = $this->app->repoFactory->create('Product')->findByAnyString($str);
+            $prodCollection = \Monkey::app()->repoFactory->create('Product')->findByAnyString($str);
             $product = $prodCollection->getFirst();
             $productSheetPrototype = $product->productSheetPrototype;
-            if (null === $productSheetPrototype) $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOne([33]);
+            if (null === $productSheetPrototype) $productSheetPrototype = \Monkey::app()->repoFactory->create('ProductSheetPrototype')->findOne([33]);
 
             $productName = $product->productNameTranslation;
             if ($productName->count()) $Pname = $productName->getfirst()->name;
             $actual = $product->productSheetActual;
         } else {
-            $productSheetPrototype = $this->app->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
+            $productSheetPrototype = \Monkey::app()->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
             $actual = [];
         }
 

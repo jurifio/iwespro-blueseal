@@ -18,7 +18,7 @@ class COrderPay extends AAjaxController
             if (!$orderId) throw new BambooException('Nessun ordine è stato fornito');
             if (false === $toPay) throw new BambooException('Non so cosa farmene di questo ordine');
             if (!is_array($orderId)) $orderId = [$orderId];
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             foreach($orderId as $oId) {
                 $oE = $orderR->findOne([$oId]);
                 if (!$oE) throw new BambooException('Uno o più degli ordini forniti non esistono. L\'operazione è stata annullata');
@@ -32,7 +32,7 @@ class COrderPay extends AAjaxController
                     $oE->update();
                 }
             }
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             $non = ($toPay) ? '' : 'non ';
             return "L'ordine ora risulta " . $non . "pagato";
         } catch(BambooException $e) {

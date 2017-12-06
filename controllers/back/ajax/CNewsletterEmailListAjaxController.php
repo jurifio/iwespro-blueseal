@@ -33,7 +33,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
         $datatable->doAllTheThings();
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
-            $val = $this->app->repoFactory->create('Newsletter')->findOne([$row['id']]);
+            $val = \Monkey::app()->repoFactory->create('Newsletter')->findOne([$row['id']]);
 
             $user = $val->user;
             $row["DT_RowId"] = $val->id;

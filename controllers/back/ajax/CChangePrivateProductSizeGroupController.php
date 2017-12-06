@@ -60,7 +60,7 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                   JOIN ShopHasProduct shp ON psg2.id = shp.productSizeGroupId 
                   JOIN Product p on (p.id,p.productVariantId) = (shp.productId, shp.productVariantId) and p.productSizeGroupId = psg3.id
                 WHERE (shp.productId,shp.productVariantId,shp.shopId) IN ($points) ORDER BY psg.locale";
-            $return = $this->app->repoFactory->create('ProductSizeGroup')->findBySql($sql, $bind);
+            $return = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findBySql($sql, $bind);
         }
         \Monkey::app()->router->response()->setContentType('application/json');
         foreach ($return as $productSizeGroup) {
@@ -102,16 +102,16 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneByStringId($productSizeGroupId);
 
                 try {
-                    \Monkey::app()->dbAdapter->beginTransaction();
+                    \Monkey::app()->repoFactory->beginTransaction();
                     foreach ($shopHasProductsIds as $shopHasProductIds) {
                         /** @var CShopHasProduct $shopHasProduct */
                         $shopHasProduct = $shopHasProductRepo->findOneByStringId($shopHasProductIds);
                         $shopHasProductRepo->changeShopHasProductProductSizeGroup($shopHasProduct, $productSizeGroup, $forceChange);
                     }
-                    \Monkey::app()->dbAdapter->commit();
+                    \Monkey::app()->repoFactory->commit();
                     return "Il gruppo taglie è stato assegnato alle righe selezionate.";
                 } catch (\Throwable $e) {
-                    \Monkey::app()->dbAdapter->rollBack();
+                    \Monkey::app()->repoFactory->rollback();
                     throw $e;
                 }
             }
@@ -132,7 +132,7 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
         $productSizeMacroGroupId = false;
         try {
 
-            \Monkey::app()->dbAdapter->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             foreach ($data as $key => $value) {
                 /** @var CShopHasProduct $shopHasProduct */
                 $shopHasProduct = $shopHasProductRepo->findOneByStringId($key);
@@ -143,10 +143,10 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
 
                 $shopHasProduct = $shopHasProductRepo->changeShopHasProductProductSizeGroup($shopHasProduct,$productSizeGroup,true);
             }
-            \Monkey::app()->dbAdapter->commit();
+            \Monkey::app()->repoFactory->commit();
             return json_encode(true);
         } catch (\Throwable $e) {
-            \Monkey::app()->dbAdapter->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return json_encode(['message'=>$e->getMessage(),'trace'=>$e->getTrace()]);
         }

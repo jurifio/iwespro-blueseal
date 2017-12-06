@@ -30,7 +30,7 @@ class CContentTranslationController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/content_translation.php');
-        $langs = $this->app->repoFactory->create('Lang')->findAll();
+        $langs = \Monkey::app()->repoFactory->create('Lang')->findAll();
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
@@ -46,9 +46,9 @@ class CContentTranslationController extends ARestrictedAccessRootController
     {
         $request = $this->app->router->request()->getRequestData();
         if(empty($request['string'])) return false;
-        $translation = $this->app->repoFactory->create('Translation')->findOne(['hash'=>$request['hash'],'langId'=>$request['langId']]);
+        $translation = \Monkey::app()->repoFactory->create('Translation')->findOne(['hash'=>$request['hash'],'langId'=>$request['langId']]);
         if(is_null($translation)) {
-            $translation = $this->app->repoFactory->create('Translation')->getEmptyEntity();
+            $translation = \Monkey::app()->repoFactory->create('Translation')->getEmptyEntity();
             $translation->hash= $request['hash'];
             $translation->langId = $request['langId'];
             $translation->string = $request['string'];

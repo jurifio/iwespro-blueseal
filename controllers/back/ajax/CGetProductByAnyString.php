@@ -51,7 +51,7 @@ class CGetProductByAnyString extends AAjaxController
         $params[] = '%'.$search.'%';
         $params[] = $limit;
 
-        $products = $this->app->repoFactory->create('Product')->findBySql($query, $params);
+        $products = \Monkey::app()->repoFactory->create('Product')->findBySql($query, $params);
         $ret = [];
         foreach($products as $v) {
             /** @var CProduct $v */

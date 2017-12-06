@@ -32,7 +32,7 @@ class CFriendShipment extends AAjaxController
     {
         $fromAddressBookId = $this->app->router->request()->getRequestData('fromAddressBookId');
         $carrierId = $this->app->router->request()->getRequestData('carrierId');
-        $possibleDates = $this->app->repoFactory->create('Shipment')->getAvailableDatesForShipmentToUs($carrierId,$fromAddressBookId);
+        $possibleDates = \Monkey::app()->repoFactory->create('Shipment')->getAvailableDatesForShipmentToUs($carrierId,$fromAddressBookId);
 
         return json_encode($possibleDates);
     }
@@ -49,7 +49,7 @@ class CFriendShipment extends AAjaxController
         $olR = \Monkey::app()->repoFactory->create('OrderLine');
         $lR = \Monkey::app()->repoFactory->create('Log');
         try {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
 
             if (is_string($orderLines)) $orderLines = [$orderLines];
 
@@ -83,10 +83,10 @@ class CFriendShipment extends AAjaxController
                 $l->time = $date;
                 $l->insert();
             }
-            $dba->commit();
+            \Monkey::app()->repoFactory->commit();
             return json_encode($res);
         } catch (BambooException $e) {
-            $dba->rollBack();
+            \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();
             return $e->getMessage();
         }

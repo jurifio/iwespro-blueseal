@@ -25,7 +25,7 @@ class CUserManageController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/user_add.php');
 		$sources = [];
-	    foreach ($this->app->repoFactory->create('Marketplace')->findAll() as $marketplace) {
+	    foreach (\Monkey::app()->repoFactory->create('Marketplace')->findAll() as $marketplace) {
 	    	$sources[] = $marketplace->name;
 	    }
 	    foreach ($this->app->dbAdapter->query("SELECT distinct registrationEntryPoint from User where isDeleted != 1",[])->fetchAll() as $item) {
@@ -36,7 +36,7 @@ class CUserManageController extends ARestrictedAccessRootController
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
 	        'sources' => $sources,
-            'langs' => $this->app->repoFactory->create('Lang')->findAll(),
+            'langs' => \Monkey::app()->repoFactory->create('Lang')->findAll(),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);
@@ -44,7 +44,7 @@ class CUserManageController extends ARestrictedAccessRootController
 
     public function post()
     {
-    	$user = $this->app->repoFactory->create('User')->getEmptyEntity();
+    	$user = \Monkey::app()->repoFactory->create('User')->getEmptyEntity();
 	    $user->email = $this->app->router->request()->getRequestData('user_email');
         if(!empty($this->app->router->request()->getRequestData('user_password'))) {
             $user->password = password_hash($this->app->router->request()->getRequestData('user_password'), PASSWORD_BCRYPT);
@@ -55,7 +55,7 @@ class CUserManageController extends ARestrictedAccessRootController
         $user->langId = $this->app->router->request()->getRequestData('user_lang') ?? 1;
 	    $user->id = $user->insert();
 
-	    $userD = $this->app->repoFactory->create('UserDetails')->getEmptyEntity();
+	    $userD = \Monkey::app()->repoFactory->create('UserDetails')->getEmptyEntity();
 	    $userD->userId = $user->id;
 	    $userD->name = $this->app->router->request()->getRequestData('user_name');
 	    $userD->surname = $this->app->router->request()->getRequestData('user_surname');
@@ -66,16 +66,16 @@ class CUserManageController extends ARestrictedAccessRootController
         $userD->note = $this->app->router->request()->getRequestData('user_note');
 		$userD->insert();
 
-	    $userEmail = $this->app->repoFactory->create('UserEmail')->getEmptyEntity();
+	    $userEmail = \Monkey::app()->repoFactory->create('UserEmail')->getEmptyEntity();
 	    $userEmail->userId = $user->id;
 	    $userEmail->address = $user->email;
 	    $userEmail->isPrimary = true;
 	    $userEmail->insert();
 
-	    $this->app->repoFactory->create('User')->persistRegistrationToken($user->id,(new CToken(64))->getToken(),time() + $this->app->cfg()->fetch('miscellaneous', 'confirmExpiration'));
+	    \Monkey::app()->repoFactory->create('User')->persistRegistrationToken($user->id,(new CToken(64))->getToken(),time() + $this->app->cfg()->fetch('miscellaneous', 'confirmExpiration'));
 
         if($this->app->router->request()->getRequestData('user_newsletter')) {
-            $this->app->repoFactory->create('Newsletter')->insertNewEmail($user->email,$user->id,$user->langId);
+            \Monkey::app()->repoFactory->create('Newsletter')->insertNewEmail($user->email,$user->id,$user->langId);
         }
 
 	    return $user->id;
@@ -84,7 +84,7 @@ class CUserManageController extends ARestrictedAccessRootController
     public function put()
     {
 
-        $user = $this->app->repoFactory->create('User')->findOneByStringId($this->app->router->request()->getRequestData('user_id'));
+        $user = \Monkey::app()->repoFactory->create('User')->findOneByStringId($this->app->router->request()->getRequestData('user_id'));
         $user->email = $this->app->router->request()->getRequestData('user_email');
 
         if(!empty($this->app->router->request()->getRequestData('user_password'))) {
@@ -109,9 +109,9 @@ class CUserManageController extends ARestrictedAccessRootController
         $userD->update();
 
         if(!$user->newsletter && $this->app->router->request()->getRequestData('user_newsletter')) {
-            $this->app->repoFactory->create('Newsletter')->insertNewEmail($user->email,$user->id,$user->langId);
+            \Monkey::app()->repoFactory->create('Newsletter')->insertNewEmail($user->email,$user->id,$user->langId);
         } elseif($user->newsletter && !$this->app->router->request()->getRequestData('user_newsletter')) {
-            $this->app->repoFactory->create('Newsletter')->unsubscribe($user->email);
+            \Monkey::app()->repoFactory->create('Newsletter')->unsubscribe($user->email);
         }
 
         return $user->id;
@@ -122,7 +122,7 @@ class CUserManageController extends ARestrictedAccessRootController
     {
 	    $ids = $this->app->router->request()->getRequestData('users');
 	    foreach($ids as $id) {
-		    $user = $this->app->repoFactory->create('User')->findOne([$id]);
+		    $user = \Monkey::app()->repoFactory->create('User')->findOne([$id]);
 		    $user->isDeleted = 1;
 		    $user->update();
 	    }

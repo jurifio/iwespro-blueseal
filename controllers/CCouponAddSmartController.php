@@ -45,7 +45,7 @@ class CCouponAddSmartController extends ARestrictedAccessRootController
     {
         try {
             $data = $this->app->router->request()->getRequestData();
-            $couponRepo = $this->app->repoFactory->create('Coupon');
+            $couponRepo = \Monkey::app()->repoFactory->create('Coupon');
             $coupon = $couponRepo->getEmptyEntity();
             foreach ($data as $k => $v) {
                 $coupon->{$k} = $v;

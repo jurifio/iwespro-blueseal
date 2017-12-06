@@ -28,7 +28,7 @@ class CMarketplaceCategoryStatisticListController extends ARestrictedAccessRootC
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/marketplace_category_statistic_list.php');
 
-        $marketplaceAccount = $this->app->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->getMatchedRoute()->getComputedFilter('accountId'));
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->getMatchedRoute()->getComputedFilter('accountId'));
         $q = "?MarketplaceAccount=".$marketplaceAccount->printId();
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
