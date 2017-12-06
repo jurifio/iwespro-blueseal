@@ -72,19 +72,19 @@
                                 <th data-slug="submissionDate"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="desc" class="center">Submission</th>
+                                    data-default-order="desc" class="center dataFilterType">Submission</th>
                                 <th data-slug="lastResponse"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Delivery</th>
+                                    data-orderable="true" class="center dataFilterType">Delivery</th>
                                 <th data-slug="responseTime"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Response Time</th>
                                 <th data-slug="userName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center dataFilterType">Username</th>
+                                    data-orderable="true" class="center">Username</th>
                                 <th data-slug="isError"
                                     data-searchable="true"
-                                    data-orderable="true" class="center dataFilterType">Error</th>
+                                    data-orderable="true" class="center">Error</th>
                             </tr>
                             </thead>
                             <tbody>
