@@ -1,1 +1,0 @@
-bs.product.sizeGroup.change.js

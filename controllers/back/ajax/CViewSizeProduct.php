@@ -37,8 +37,7 @@ class CViewSizeProduct extends AAjaxController
 
         /** @var CProductSku $returnSize */
         $returnSize = \Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId' => $rowId, 'productVariantId' => $rowVariant ]);
-        $val = $returnSize->productSize->name;
-        echo $val;
+        return json_encode($returnSize);
 
 
     }
