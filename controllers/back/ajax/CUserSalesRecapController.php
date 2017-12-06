@@ -3,6 +3,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\intl\CLang;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\domain\repositories\COrderRepo;
 use bamboo\ecommerce\views\widget\VBase;
 
 /**
@@ -20,26 +21,6 @@ use bamboo\ecommerce\views\widget\VBase;
  */
 class CUserSalesRecapController extends AAjaxController
 {
-	protected $urls = [];
-	protected $authorizedShops = [];
-	protected $em;
-
-	/**
-	 * @param $action
-	 * @return mixed
-	 */
-	public function createAction($action)
-	{
-		$this->app->setLang(new CLang(1, 'it'));
-		$this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
-		$this->urls['page'] = $this->urls['base'] . "prodotti";
-		$this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
-
-		$this->em = new \stdClass();
-		$this->em->products = $this->app->entityManagerFactory->create('Product');
-
-		return $this->{$action}();
-	}
 
 	public function get()
 	{
@@ -47,6 +28,7 @@ class CUserSalesRecapController extends AAjaxController
 		$view = new VBase(array());
 		$view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/widgets/sales_box.php');
 
+		/** @var COrderRepo $orders */
 		$orders = \Monkey::app()->repoFactory->create("Order");
 
 		$get = $this->app->router->request()->getRequestData();
