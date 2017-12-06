@@ -275,6 +275,11 @@
                 data-remote="bs.product.sales.price.change"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione taglie">
+        <bs-toolbar-button
+                data-remote="bs.product.viewSize"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

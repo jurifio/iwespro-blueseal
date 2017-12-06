@@ -39,6 +39,7 @@ class CGetTableContent extends AAjaxController
     {
         $table = $this->app->router->request()->getRequestData('table');
         $fields = $this->app->router->request()->getRequestData('fields');
+        $extraFields = $this->app->router->request()->getRequestData('extraFields');
         $condition = $this->app->router->request()->getRequestData('condition');
         $orderBy = $this->app->router->request()->getRequestData('orderBy');
         if(!$orderBy) $orderBy = "";
@@ -62,6 +63,12 @@ class CGetTableContent extends AAjaxController
                 }
                 $responseSet[] = $responseItem;
             }
+        } elseif (is_array($extraFields)) {
+            foreach ($objectCollection as $item){
+                foreach ($extraFields as $field){
+                    $item->{$field};
+                }
+            } $responseSet = $objectCollection;
         } else $responseSet = $objectCollection;
         \Monkey::app()->router->response()->setContentType('application/json');
         return json_encode($responseSet);

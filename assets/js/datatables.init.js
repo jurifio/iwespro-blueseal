@@ -515,7 +515,8 @@ $.getDataTableSelectedRowsData = function(tableSelector,colName,min,max) {
 
 $.getDataTableSelectedRowData = function(tableSelector,colName) {
     "use strict";
-    return $.getDataTableSelectedRowsData(tableSelector,colName,1,1)[0];
+    let res = $.getDataTableSelectedRowsData(tableSelector,colName,1,1);
+    return res && res.length > 0 ? res[0] : false;
 };
 
 $.refreshDataTable = function(tableSelector) {

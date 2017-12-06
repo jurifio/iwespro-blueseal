@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-dollar",
+    icon:"fa-file-word-o",
     permission:"/admin/product/edit&&allShops",
     event:"bs-product-viewSize",
     class:"btn btn-default",
@@ -12,33 +12,37 @@ window.buttonSetup = {
 
 $(document).on('bs-product-viewSize', function(){
 
-    var selectedRows = $('.table').DataTable().rows('.selected').data();
-    var selectedRowsCount = selectedRows.length;
+    const row = $.getDataTableSelectedRowData();
 
-    if ((!selectedRowsCount) || ('' == selectedRowsCount || selectedRowsCount == 1 )){
-        var row = {};
-        var id;
-        var variant;
-        $.each(selectedRows, function (k, v) {
-            var idsVars = v.DT_RowId.split('-');
-            row.id = idsVars[0];
-            row.productVariantId = idsVars[1];
-            id = row.id;
-            variant = row.productVariantId;
-        });
-
-
-        var d ="aaa";
+    if (row){
+        let ids = row.split('-');
+        let id = ids[0];
+        let variant = ids[1];
 
         $.ajax({
-            method: 'post',
-            url: "/blueseal/xhr/ViewSizeProduct",
+            url: '/blueseal/xhr/getTableContent',
+            method: 'GET',
+            dataType: 'json',
             data: {
-                passId: id,
-                passVariant: variant
+                table: 'ProductSku',
+                condition: {
+                    productId: id,
+                    productVariantId: variant,
+                },
+                extraFields: ['productSize']
             }
         }).done(function(data){
             window.x = data;
+            let val = [];
+            for (let d of data){
+                val.push(d.productSize.name);
+            }
+            modal = new $.bsModal(
+                'Elenco taglie',
+                {
+                    body: 'Taglie per SKU:<br />'+val.join("<br />")
+                }
+            );
         });
     }
 
