@@ -964,10 +964,10 @@ table.mini-traffic-display th, table.mini-traffic-display td {
 }
 
 .table.table-striped tbody tr.green:nth-child(2n+1) td {
-    background-color: #f2fff6;
+    background-color: #dfffe8;
 }
 .table.table-striped tbody tr.green:nth-child(2n) td {
-    background-color: #dfffe8;
+    background-color: #def5e5;
 }
 .table.table-striped tbody tr.yellow:nth-child(2n+1) td {
     background-color: #fbfcf3;
