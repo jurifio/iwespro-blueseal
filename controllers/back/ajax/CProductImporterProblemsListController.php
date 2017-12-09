@@ -41,10 +41,10 @@ class CProductImporterProblemsListController extends AAjaxController
                                               AND (`dp`.`productVariantId` = `sp`.`productVariantId`)
                                               AND (`dp`.`shopId` = `sp`.`shopId`)
               JOIN `ProductSizeGroup` `psg` ON `sp`.`productSizeGroupId` = `psg`.`id`
-              JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id
-              
-              JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
               JOIN `Shop` `s` ON `sp`.`shopId` = `s`.`id`
+              LEFT JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id
+              
+              LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE
               `ps`.`id` NOT IN (7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
