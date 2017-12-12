@@ -37,8 +37,7 @@ class CSizeFullListManage extends AAjaxController
             $productSizeRepo->smartInsert();
             return true;
         } catch (\Throwable $e) {
-        return false;
-    }
+        }
     }
 
 }
