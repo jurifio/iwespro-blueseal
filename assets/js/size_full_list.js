@@ -28,7 +28,7 @@
                 }).done(function (res) {
                     bsModal.writeBody('Taglia aggiunta con successo!');
                 }).fail(function (res) {
-                    bsModal.writeBody('Errore nella creazione della taglia');
+                    bsModal.writeBody('Errore nella creazione della taglia, controllare se già esistente');
                 }).always(function (res) {
                     bsModal.setOkEvent(function () {
                         window.location.reload();

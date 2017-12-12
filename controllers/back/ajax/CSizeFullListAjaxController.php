@@ -3,8 +3,9 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
-use bamboo\domain\entities\CReturn;
-use bamboo\domain\repositories\CReturnRepo;
+use bamboo\domain\entities\CProductSize;
+use bamboo\domain\repositories\CProductSizeRepo;
+
 
 
 /**
@@ -28,19 +29,32 @@ class CSizeFullListAjaxController extends AAjaxController
      */
     public function get()
     {
-        $sql = "SELECT *
+        $sql = "SELECT ps.id, 
+                       ps.slug, 
+                       ps.name, 
+                       ps.detail
                 FROM ProductSize ps";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        $datatable->doAllTheThings(true);
+        $datatable->doAllTheThings();
 
-        ///** @var CReturnRepo $returnRepo */
-       // $returnRepo = \Monkey::app()->repoFactory->create('Return');
+        /** @var CProductSizeRepo $productSizeRepo */
+        $productSizeRepo = \Monkey::app()->repoFactory->create('ProductSize');
 
+        foreach ($datatable->getResponseSetData() as $key=>$row) {
 
-        //$blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        //$opera = $blueseal . "resi/aggiungi?return=";
+            /** @var CProductSize $productSize */
+            $productSize = $productSizeRepo->findOne([$row['id']]);
+
+            //$row["DT_RowId"] = $return->printId();
+            $row['id'] = $productSize->id;
+            $row['slug'] = $productSize->slug;
+            $row['name'] = $productSize->name;
+            $row['detail'] = $productSize->detail;
+
+            $datatable->setResponseDataSetRow($key,$row);
+        }
 
 
         return $datatable->responseOut();

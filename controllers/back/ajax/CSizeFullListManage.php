@@ -28,14 +28,17 @@ class CSizeFullListManage extends AAjaxController
      */
     public function post()
     {
+        try {
             $data = \Monkey::app()->router->request()->getRequestData();
             /** @var CProductSize $productSizeRepo */
             $productSizeRepo = \Monkey::app()->repoFactory->create('ProductSize')->getEmptyEntity();
             $productSizeRepo->slug = $data['slug'];
             $productSizeRepo->name = $data['name'];
             $productSizeRepo->smartInsert();
-        return true;
+            return true;
+        } catch (\Throwable $e) {
+        return false;
     }
-
+    }
 
 }
