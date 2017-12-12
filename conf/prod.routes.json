@@ -527,6 +527,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/lista-taglie(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeFullListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/brand/modifica(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandEditController"
