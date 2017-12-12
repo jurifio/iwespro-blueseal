@@ -1,13 +1,8 @@
 <?php
 namespace bamboo\controllers\back\ajax;
 
-use bamboo\blueseal\business\CDataTables;
-use bamboo\core\email\CEmail;
-use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CPaymentBill;
-use bamboo\domain\entities\CProduct;
 use bamboo\domain\repositories\CEmailRepo;
-use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CPaymentBillListAjaxController

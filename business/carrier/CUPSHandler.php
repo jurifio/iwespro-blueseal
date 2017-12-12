@@ -182,8 +182,13 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
      */
     private function getConfig($name = null)
     {
-        if ($name) return $this->config[$name];
-        return $this->config;
+        if(ENV == 'dev') {
+            $config = $this->testConfig;
+        } else {
+            $config = $this->config;
+        }
+        if ($name) return $config[$name];
+        return $config;
     }
 
     /**

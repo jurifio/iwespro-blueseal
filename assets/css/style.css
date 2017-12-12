@@ -870,7 +870,7 @@ h5.product-title {
 
 /**
 classi per colorare le righe delle tabelle da compilare in odd/even per il chiaroscuro
- */
+
 .table.table-striped tbody tr:nth-child(2n+1).green td {
     background: palegreen;
 }
@@ -907,7 +907,7 @@ classi per colorare le righe delle tabelle da compilare in odd/even per il chiar
 .table.table-striped tbody tr.grey td {
     background: darkgrey;
 }
-
+ */
 
 .portlet-refresh div {
     height: 15px;
@@ -955,4 +955,84 @@ table.mini-traffic-display th, table.mini-traffic-display td {
 
 .table.size-table tbody tr td select, .table.size-table tbody tr td input {
     width: 100%;
+}
+
+.table.size-table  thead tr th {
+    padding-left: 1px;
+    padding-right: 1px;
+    font-size: 11px;
+}
+
+/* Colori tabella mail */
+.table-striped>tbody>tr.green.even td {
+    background-color: #b0dabc !important;
+}
+.table-striped>tbody>tr.green.odd td {
+    background-color: #93b79e !important;
+}
+.table-striped>tbody>tr.yellow.even td {
+    background-color: #d8dac0 !important;
+}
+.table-striped>tbody>tr.yellow.odd td {
+    background-color: #dbd9a7 !important;
+}
+.table-striped>tbody>tr.red.even td{
+    background-color: #c39494 !important;
+}
+.table-striped>tbody>tr.red.odd td{
+    background-color: #c37777 !important;
+}
+.table-striped>tbody>tr.orange.even td{
+    background-color: #e6bea3 !important;
+}
+.table-striped>tbody>tr.orange.odd td{
+    background-color: #e4a87e !important;
+}
+.table-striped>tbody>tr.violet.even td{
+    background-color: #aba3b3 !important;
+}
+.table-striped>tbody>tr.violet.odd td{
+    background-color: #a391b4 !important;
+}
+.table-striped>tbody>tr.grey.even td{
+    background-color: #dadada !important;
+}
+.table-striped>tbody>tr.grey.odd td{
+    background-color: #c1c1c1 !important;
+}
+.table-striped>tbody>tr.brown.even td{
+    background-color:#beab9b !important;
+}
+.table-striped>tbody>tr.brown.odd td{
+    background-color:#ad886b !important;
+}
+
+
+.legenda{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.colorLeg{
+    height: 15px;
+    width: 15px;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.error{
+    background-color: #c39494;
+}
+
+.inviata{
+    background-color: #b0dabc;
+}
+
+.inviataP{
+    background-color: #d8dac0;
+}
+
+.accepted{
+    background-color: #dadada;
 }

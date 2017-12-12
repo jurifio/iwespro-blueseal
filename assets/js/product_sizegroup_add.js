@@ -2,7 +2,10 @@
     $.ajax({
         url: '/blueseal/xhr/GetTableContent',
         data: {
-            table: 'ProductSize'
+            table: 'ProductSize',
+            orderBy: [
+                'name'
+            ]
         },
         dataType: 'json'
     }).done(function (productSizes) {
@@ -224,7 +227,7 @@
             Pace.ignore(function () {
                 $.ajax({
                     method: 'post',
-                    url: '/blueseal/xhr/CProductSizeGroupManage',
+                    url: '/blueseal/xhr/ProductSizeGroupManage',
                     data: data,
                     dataType: "json"
                 }).done(function (res) {
@@ -246,7 +249,7 @@
 
         return $.ajax({
             method: 'delete',
-            url: '/blueseal/xhr/CProductSizeGroupRowManage',
+            url: '/blueseal/xhr/ProductSizeGroupRowManage',
             data: {
                 rowNum: rowNum,
                 versus: versus,
@@ -324,7 +327,7 @@
             body: '<p>Elimina la riga</p>' +
             '<div class="form-group form-group-default required">' +
             '<label for="deleteRow">Riga</label>' +
-            '<input autocomplete="off" type="number" min="0" max="36" step="1" id="deleteRow" ' +
+            '<input autocomplete="off" type="number" min="0" max="51" step="1" id="deleteRow" ' +
             'placeholder="Riga" class="form-control" name="deleteRow" required="required">' +
             '</div>' +
             '<div class="form-group form-group-default required selectize-enabled">' +

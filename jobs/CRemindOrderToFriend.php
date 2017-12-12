@@ -1,13 +1,9 @@
 <?php
 namespace bamboo\blueseal\jobs;
 
-use bamboo\core\base\CObjectCollection;
-use bamboo\core\email\CEmail;
 use bamboo\core\jobs\ACronJob;
 use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\COrderLineRepo;
-use bamboo\export\order\COrderExport;
-use bamboo\core\db\pandaorm\repositories\CRepo;
 
 /**
  * Class CRemindOrderToFriend
