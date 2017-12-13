@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductSize;
+use bamboo\domain\repositories\CProductSizeRepo;
 
 
 /**
@@ -28,16 +29,37 @@ class CSizeFullListManage extends AAjaxController
      */
     public function post()
     {
-        try {
             $data = \Monkey::app()->router->request()->getRequestData();
+            $slug = $data['slug'];
+            $name = $data['name'];
+
             /** @var CProductSize $productSizeRepo */
             $productSizeRepo = \Monkey::app()->repoFactory->create('ProductSize')->getEmptyEntity();
-            $productSizeRepo->slug = $data['slug'];
-            $productSizeRepo->name = $data['name'];
-            $productSizeRepo->smartInsert();
-            return true;
-        } catch (\Throwable $e) {
-        }
+
+
+            // Controllo se esiste una taglia per i valori in input
+            /** @var CProductSizeRepo $checkProductSizeRepo */
+            $checkProductSizeRepo = \Monkey::app()->repoFactory->create('ProductSize');
+
+            /** @var CProductSizeRepo $checkSlug */
+            $checkSlug = $checkProductSizeRepo->findOneBy(['slug' => $slug ]);
+
+            /** @var CProductSizeRepo $checkName */
+            $checkName = $checkProductSizeRepo->findOneBy(['name' => $name ]);
+
+            if( empty($checkSlug) && empty($checkName)){
+                //riempi il database
+                $productSizeRepo->slug = $data['slug'];
+                $productSizeRepo->name = $data['name'];
+                $productSizeRepo->smartInsert();
+                //restituisci messaggio di avvenuto inserimento
+                $res = "INSERIMENTO DELLA TAGLIA AVVENUTO CON SUCCESSO";
+            } else {
+                //restituisci messaggio di errore
+                $res = "LA TAGLIA CHE HAI INSERITO ESISTE GIA'";
+            }
+
+            return $res;
     }
 
 }

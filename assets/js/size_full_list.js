@@ -26,9 +26,9 @@
                     url: '/blueseal/xhr/SizeFullListManage',
                     data: data
                 }).done(function (res) {
-                    bsModal.writeBody('Taglia aggiunta con successo!');
+                    bsModal.writeBody(res);
                 }).fail(function (res) {
-                    bsModal.writeBody('Errore nella creazione della taglia, controllare se già esistente');
+                    bsModal.writeBody('Errore grave');
                 }).always(function (res) {
                     bsModal.setOkEvent(function () {
                         window.location.reload();
