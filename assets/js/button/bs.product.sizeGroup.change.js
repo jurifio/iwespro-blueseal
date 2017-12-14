@@ -53,13 +53,13 @@ $(document).on('bs-manage-sizeGroups', function () {
                     item: function (item, escape) {
                         return '<div>' +
                             '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
-                            ' - <span class="caption">' + escape(item.name) + '</span>' +
+                            ' - <span class="caption">' + escape(item.sizeNames) + '</span>' +
                             '</div>'
                     },
                     option: function (item, escape) {
                         return '<div>' +
                             '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
-                            ' - <span class="caption">' + escape(item.name) + '</span>' +
+                            ' - <span class="caption">' + escape(item.sizeNames) + '</span>' +
                             '</div>'
                     }
                 }
