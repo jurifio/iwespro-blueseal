@@ -83,7 +83,7 @@
                 data-event="bs-macroGroup-delete"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Crea Macrogruppo"
+                data-title="Cancella Macrogruppo"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

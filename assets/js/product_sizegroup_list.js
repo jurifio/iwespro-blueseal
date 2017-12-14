@@ -7,13 +7,30 @@
                 '<label for="productSizeMacroGroup">Nome macrogruppo</label>' +
                 '<input autocomplete="off" type="text" id="productSizeMacroGroup" ' +
                     'placeholder="Nome macrogruppo" class="form-control" name="productSizeMacroGroup" required="required">' +
-                '</div>'
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+                '<label for="productSizeGroupName">Nome Gruppo Taglia</label>' +
+                '<input autocomplete="off" type="text" id="productSizeGroupName" ' +
+                'placeholder="Nome Gruppo Taglia" class="form-control" name="productSizeGroupName" required="required">' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+                '<label for="locale">Locale</label>' +
+                '<input autocomplete="off" type="text" id="locale" ' +
+            'placeholder="Locale" class="form-control" name="locale" required="required">' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+                '<label for="publicName">Nome Pubblico</label>' +
+                '<input autocomplete="off" type="text" id="publicName" ' +
+            '   placeholder="Nome Pubblico" class="form-control" name="publicName" required="required">' +
+            '</div>'
         });
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {
-                name: $('input#productSizeMacroGroup').val()
+                name: $('input#productSizeMacroGroup').val(),
+                productSizeGroupName: $('input#productSizeGroupName').val(),
+                locale: $('input#locale').val(),
             };
                 $.ajax({
                     method: 'post',

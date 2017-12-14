@@ -2,13 +2,6 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\core\db\pandaorm\repositories\CRepo;
-use bamboo\core\intl\CLang;
-use bamboo\domain\entities\CProductSize;
-use bamboo\domain\entities\CProductSizeGroup;
-use bamboo\domain\entities\CProductSizeMacroGroup;
-use bamboo\domain\repositories\CProductSizeGroupRepo;
-use bamboo\domain\repositories\CProductSizeRepo;
 
 
 
@@ -49,12 +42,10 @@ class CSizeMacroGroupListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings(true);
 
+        $url = \Monkey::app()->baseUrl('false');
+
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
-            //** @var CProductSizeMacroGroup $productSizeMacroGroup */
-          //  $productSizeMacroGroup = $productSizeMacroGroupRepo->findBy($row)->findOneByKey('id',65);
-
-            //$row['idMacroGroup'] = $productSizeMacroGroup->id;
 
             if(empty($row['idGroupSize'])){
                 $row["DT_RowClass"] = "red";
@@ -64,7 +55,7 @@ class CSizeMacroGroupListAjaxController extends AAjaxController
                 $row['modifica'] = "<i class='fa fa-exclamation'></i>";
 
             } else {
-                $row['modifica'] = "<a href='gruppo-taglie/aggiungi?productSizeGroupId=" . $row['idGroupSize'] . " '><i class='fa fa-pencil-square-o'></i></a>";
+                $row['modifica'] = "<a href='".$url . "gruppo-taglie/aggiungi?productSizeGroupId=" . $row['idGroupSize'] . " '><i class='fa fa-pencil-square-o'></i></a>";
                 $row['sizes'] = str_replace(',',' | ',$row['sizes']);
             }
 
