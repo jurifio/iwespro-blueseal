@@ -98,13 +98,13 @@ class CSizeMacroGroupManage extends AAjaxController
         $checkMacroGroup = $productSizeMacroGroup;
 
         if (empty($checkMacroGroup)) {
-            $res = "Il macrogruppo che stai cercando di cancellare non esiste";
+            $res = "<p style='color:red'>Il macrogruppo che stai cercando di cancellare non esiste</p>";
         } else if ($productSizeMacroGroup->productSizeGroup->isEmpty()){
             $productSizeMacroGroup->delete();
             $res = "Cancellazione del macrogruppo avvenuta con successo";
 
         } else if (!$productSizeMacroGroup->productSizeGroup->isEmpty()) {
-            $res = "Impossibile cancellare il macrogruppo perché ci sono gruppi taglia collegati.";
+            $res = "<p style='color:red'>Impossibile cancellare il macrogruppo perché ci sono gruppi taglia collegati.</p>";
         }
 
         return $res;
