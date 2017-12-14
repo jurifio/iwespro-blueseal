@@ -38,6 +38,9 @@
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Nome macrogruppo</th>
+                                <th data-slug="idGroupSize"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Id gruppo</th>
                                 <th data-slug="productSizeGroupName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Nome gruppo</th>
@@ -78,7 +81,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-close"
+                data-icon="fa-trash-o"
                 data-permission="/admin/content/add"
                 data-event="bs-macroGroup-delete"
                 data-class="btn btn-default"

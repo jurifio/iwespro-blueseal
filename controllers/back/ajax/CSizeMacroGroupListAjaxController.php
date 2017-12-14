@@ -49,6 +49,7 @@ class CSizeMacroGroupListAjaxController extends AAjaxController
 
             if(empty($row['idGroupSize'])){
                 $row["DT_RowClass"] = "red";
+                $row['idGroupSize'] = "---";
                 $row['productSizeGroupName'] = "Macrogruppo collegato a nessun gruppo";
                 $row['sizes'] = "Macrogruppo collegato a nessun gruppo";
                 $row['locale'] = "Macrogruppo collegato a nessun gruppo";
