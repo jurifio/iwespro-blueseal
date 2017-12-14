@@ -1,0 +1,83 @@
+<?php
+namespace bamboo\controllers\back\ajax;
+
+use bamboo\blueseal\business\CDataTables;
+use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProductSize;
+use bamboo\domain\entities\CProductSizeGroup;
+use bamboo\domain\entities\CProductSizeMacroGroup;
+use bamboo\domain\repositories\CProductSizeGroupRepo;
+use bamboo\domain\repositories\CProductSizeRepo;
+
+
+
+/**
+ * Class CProductDetailListAjaxController
+ * @package bamboo\blueseal\controllers\ajax
+ *
+ * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ *
+ * @copyright (c) Bambooshoot snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date $date
+ * @since 1.0
+ */
+class CSizeMacroGroupListAjaxController extends AAjaxController
+{
+    /**
+     * @return string
+     * @throws \Throwable
+     */
+    public function get()
+    {
+        $sql = "SELECT  pmg.id,
+                        pmg.name,
+                        psg.name as productSizeGroupName,
+                        group_concat(ps.name) as sizes,
+                        psg.locale,
+                        psg.id as idGroupSize
+                FROM ProductSizeMacroGroup pmg
+                LEFT JOIN ProductSizeGroup psg ON pmg.id = psg.productSizeMacroGroupId
+                LEFT JOIN ProductSizeGroupHasProductSize psghps ON psg.id = psghps.productSizeGroupId
+                LEFT JOIN ProductSize ps ON psghps.productSizeId = ps.id
+                GROUP BY psg.id";
+
+        $datatable = new CDataTables($sql, ['idGroupSize'], $_GET, true);
+
+        $datatable->doAllTheThings(true);
+
+        foreach ($datatable->getResponseSetData() as $key=>$row) {
+
+            //** @var CProductSizeMacroGroup $productSizeMacroGroup */
+          //  $productSizeMacroGroup = $productSizeMacroGroupRepo->findBy($row)->findOneByKey('id',65);
+
+            //$row['idMacroGroup'] = $productSizeMacroGroup->id;
+
+            if(empty($row['idGroupSize'])){
+                $row["DT_RowClass"] = "red";
+                $row['productSizeGroupName'] = "Macrogruppo collegato a nessun gruppo";
+                $row['sizes'] = "Macrogruppo collegato a nessun gruppo";
+                $row['locale'] = "Macrogruppo collegato a nessun gruppo";
+                $row['modifica'] = "<i class='fa fa-exclamation'></i>";
+
+            } else {
+                $row['modifica'] = "<a href='gruppo-taglie/aggiungi?productSizeGroupId=" . $row['idGroupSize'] . " '><i class='fa fa-pencil-square-o'></i></a>";
+                $row['sizes'] = str_replace(',',' | ',$row['sizes']);
+            }
+
+
+
+
+
+            $datatable->setResponseDataSetRow($key,$row);
+        }
+
+
+        return $datatable->responseOut();
+
+    }
+
+}
