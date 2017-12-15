@@ -44,7 +44,9 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
                 productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
                 productSizeGroup.sizeNames = [];
                 for(let productSize of productSizeGroup.productSize) {
-                    productSizeGroup.sizeNames.push(productSize.name);
+                    if( ($.inArray(productSize.name, productSizeGroup.sizeNames)) === -1 ){
+                        productSizeGroup.sizeNames.push(productSize.name);
+                    }
                 }
                 productSizeGroup.sizeNames = productSizeGroup.sizeNames.join('|');
                 productSizeGroupsCopy.push(productSizeGroup);
@@ -58,13 +60,13 @@ $(document).on('bs-manage-shop-sizeGroups', function () {
                     item: function (item, escape) {
                         return '<div>' +
                             '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
-                            ' - <span class="caption">' + escape(item.name) + '</span>' +
+                            ' - <span class="caption">' + escape(item.sizeNames) + '</span>' +
                             '</div>'
                     },
                     option: function (item, escape) {
                         return '<div>' +
                             '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
-                            ' - <span class="caption">' + escape(item.name) + '</span>' +
+                            ' - <span class="caption">' + escape(item.sizeNames) + '</span>' +
                             '</div>'
                     }
                 }

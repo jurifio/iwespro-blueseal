@@ -39,7 +39,9 @@ $(document).on('bs-manage-sizeGroups', function () {
                 productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
                 productSizeGroup.sizeNames = [];
                 for(let productSize of productSizeGroup.productSize) {
-                    productSizeGroup.sizeNames.push(productSize.name);
+                    if( ($.inArray(productSize.name, productSizeGroup.sizeNames)) === -1 ){
+                        productSizeGroup.sizeNames.push(productSize.name);
+                    }
                 }
                 productSizeGroup.sizeNames = productSizeGroup.sizeNames.join('|');
                 productSizeGroupsCopy.push(productSizeGroup);
