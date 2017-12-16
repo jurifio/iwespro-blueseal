@@ -36,7 +36,7 @@ class CSizeMacroGroupListAjaxController extends AAjaxController
                 LEFT JOIN ProductSizeGroup psg ON pmg.id = psg.productSizeMacroGroupId
                 LEFT JOIN ProductSizeGroupHasProductSize psghps ON psg.id = psghps.productSizeGroupId
                 LEFT JOIN ProductSize ps ON psghps.productSizeId = ps.id
-                GROUP BY psg.id";
+                GROUP BY psg.id, pmg.id";
 
         $datatable = new CDataTables($sql, ['idGroupSize'], $_GET, true);
 

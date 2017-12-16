@@ -68,8 +68,8 @@ const modificaMultiplo = function (selectedRow) {
             ]
         },
         dataType: "json"
-    }).then(function(res) {
-        if(typeof res === "object" || res instanceof Array) return res;
+    }).then(function (res) {
+        if (typeof res === "object" || res instanceof Array) return res;
         return JSON.parse(res);
     });
     let productSizeGroupCall = $.ajax({
@@ -85,24 +85,24 @@ const modificaMultiplo = function (selectedRow) {
             ]
         },
         dataType: "json"
-    }).then(function(res) {
-        if(typeof res === "object" || res instanceof Array) return res;
+    }).then(function (res) {
+        if (typeof res === "object" || res instanceof Array) return res;
         return JSON.parse(res);
     });
     Pace.ignore(function () {
         $.when(shopHasProductCall, productSizeGroupCall).then(function (shopHasProducts, productSizeGroups) {
             let html = '';
             for (let shopHasProduct of shopHasProducts) {
-                let shopHasProductId = [shopHasProduct.productId,shopHasProduct.productVariantId,shopHasProduct.shopId].join('-');
+                let shopHasProductId = [shopHasProduct.productId, shopHasProduct.productVariantId, shopHasProduct.shopId].join('-');
                 html += '<div class="row">' +
                     '<div class="col-sm-12">' +
-                        '<div class="form-group form-group-default selectize-enabled required">' +
-                            '<label>Gruppo Taglie Privato '+shopHasProduct.shop.name+'</label>' +
-                            '<select class="full-width productSizeGroupSelect" ' +
-                                'data-id="'+ shopHasProductId +'" ' +
-                                'data-preset="'+ shopHasProduct.productSizeGroup.id +'" ' +
-                                'placeholder="Seleziona il gruppo taglie"></select>' +
-                        '</div>' +
+                    '<div class="form-group form-group-default selectize-enabled required">' +
+                    '<label>Gruppo Taglie Privato ' + shopHasProduct.shop.name + '</label>' +
+                    '<select class="full-width productSizeGroupSelect" ' +
+                    'data-id="' + shopHasProductId + '" ' +
+                    'data-preset="' + shopHasProduct.productSizeGroup.id + '" ' +
+                    'placeholder="Seleziona il gruppo taglie"></select>' +
+                    '</div>' +
                     '</div>' +
                     '</div>';
             }
@@ -111,11 +111,11 @@ const modificaMultiplo = function (selectedRow) {
                 let select = $(this);
                 if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
                 let productSizeGroupsCopy = [];
-                for(let productSizeGroup of productSizeGroups) {
+                for (let productSizeGroup of productSizeGroups) {
                     productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
                     productSizeGroup.sizeNames = [];
-                    for(let productSize of productSizeGroup.productSize) {
-                        if( ($.inArray(productSize.name, productSizeGroup.sizeNames)) === -1 ){
+                    for (let productSize of productSizeGroup.productSize) {
+                        if (($.inArray(productSize.name, productSizeGroup.sizeNames)) === -1) {
                             productSizeGroup.sizeNames.push(productSize.name);
                         }
                     }
@@ -125,19 +125,19 @@ const modificaMultiplo = function (selectedRow) {
                 select.selectize({
                     valueField: 'id',
                     labelField: 'name',
-                    searchField: ['macroName','locale','sizeNames'],
+                    searchField: ['macroName', 'locale', 'sizeNames'],
                     items: [$(this).data('preset')],
                     options: productSizeGroupsCopy,
                     render: {
                         item: function (item, escape) {
                             return '<div>' +
-                                '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
+                                '<span class="label">' + escape(item.locale + ' ' + item.macroName) + '</span>' +
                                 ' - <span class="caption">' + escape(item.sizeNames) + '</span>' +
                                 '</div>'
                         },
                         option: function (item, escape) {
                             return '<div>' +
-                                '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
+                                '<span class="label">' + escape(item.locale + ' ' + item.macroName) + '</span>' +
                                 ' - <span class="caption">' + escape(item.sizeNames) + '</span>' +
                                 '</div>'
                         }
@@ -165,7 +165,7 @@ const modificaMultiplo = function (selectedRow) {
                     }).done(function (res) {
                         bsModal.writeBody('Fatto');
                     }).fail(function (res) {
-                        bsModal.writeBody('Errore: <br />'+res.responseJSON.message);
+                        bsModal.writeBody('Errore: <br />' + res.responseJSON.message);
                     }).always(function () {
                         bsModal.setOkEvent(function () {
                             $.refreshDataTable();
@@ -206,11 +206,11 @@ const modificaSingoli = function (selectedRows) {
             let select = bsModal.getElement().find('#productSizeGroupId');
             if (select.length > 0 && typeof select[0].selectize !== 'undefined') select[0].selectize.destroy();
             let productSizeGroupsCopy = [];
-            for(let productSizeGroup of response) {
+            for (let productSizeGroup of response) {
                 productSizeGroup.macroName = productSizeGroup.productSizeMacroGroup.name;
                 productSizeGroup.sizeNames = [];
-                for(let productSize of productSizeGroup.productSize) {
-                    if( ($.inArray(productSize.name, productSizeGroup.sizeNames)) === -1 ){
+                for (let productSize of productSizeGroup.productSize) {
+                    if (($.inArray(productSize.name, productSizeGroup.sizeNames)) === -1) {
                         productSizeGroup.sizeNames.push(productSize.name);
                     }
                 }
@@ -220,19 +220,19 @@ const modificaSingoli = function (selectedRows) {
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                searchField: ['macroName','locale','sizeNames'],
+                searchField: ['macroName', 'locale', 'sizeNames'],
                 options: productSizeGroupsCopy,
                 items: [$(this).data('preset')],
                 render: {
                     item: function (item, escape) {
                         return '<div>' +
-                            '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
+                            '<span class="label">' + escape(item.locale + ' ' + item.macroName) + '</span>' +
                             ' - <span class="caption">' + escape(item.sizeNames) + '</span>' +
                             '</div>'
                     },
                     option: function (item, escape) {
                         return '<div>' +
-                            '<span class="label">' + escape(item.locale+ ' '+ item.macroName) + '</span>' +
+                            '<span class="label">' + escape(item.locale + ' ' + item.macroName) + '</span>' +
                             ' - <span class="caption">' + escape(item.sizeNames) + '</span>' +
                             '</div>'
                     }
@@ -265,7 +265,22 @@ const modificaSingoli = function (selectedRows) {
                     }).done(function (res) {
                         bsModal.writeBody('Fatto');
                     }).fail(function (res) {
-                        bsModal.writeBody('Errore: <br />'+res.responseJSON.message);
+                        let data = res.responseJSON;
+                        let message = 'Errore: <br />' + res.responseJSON.message;
+                        if (data && data.incompatibleSizes) {
+                            message += '<br>';
+                            for (let shopHasProduct of data.incompatibleSizes) {
+                                message += 'Per il prodotto '
+                                    + shopHasProduct.product.id + '-' + shopHasProduct.product.productVariantId
+                                    + ' dello shop: ' + shopHasProduct.shop.title + ' ci sono le seguenti taglie incompatibili:';
+
+                                for (let productSku of shopHasProduct.incompatibleSkus) {
+                                    message+=productSku.productSize.name+', '
+                                }
+                                message+= '<br>';
+                            }
+                        }
+                        bsModal.writeBody(message);
                     }).always(function () {
                         bsModal.setOkEvent(function () {
                             $.refreshDataTable();
