@@ -113,6 +113,33 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 } catch (\Throwable $e) {
                     \Monkey::app()->repoFactory->rollback();
                     throw $e;
+                    \Monkey::app()->dbAdapter->rollBack();
+                    if($e->getCode() == $shopHasProductRepo::INCOMPATIBLE_PRODUCT_SIZE_EXCEPTION_CODE) {
+
+                        $res = [];
+                        $res['message'] = $e->getMessage();
+                        $res['trace'] = $e->getTrace();
+                        $res['incompatibleSizes'] = [];
+                        foreach ($shopHasProductsIds as $shopHasProductIds) {
+                            $shopHasProduct = $shopHasProductRepo->findOneByStringId($shopHasProductIds);
+                            $shopHasProduct->shop;
+                            $shopHasProduct->product;
+
+                            $temp = $shopHasProductRepo->searchIncompatibleSizeInProductSizeGroup($shopHasProduct, $productSizeGroup);
+
+                            foreach ($temp as $productSku) {
+                                $productSku->productSize;
+                            }
+
+                            $shopHasProduct->incompatibleSkus = $temp;
+
+                            $res['incompatibleSizes'][] = $shopHasProduct;
+                        }
+
+                        \Monkey::app()->router->response()->setContentType('application/json');
+                        \Monkey::app()->router->response()->raiseProcessingError();
+                        return json_encode($res);
+                    } else throw $e;
                 }
             }
         } catch (\Throwable $e) {
@@ -122,6 +149,8 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
         }
 
     }
+
+
 
     public function post()
     {
