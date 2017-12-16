@@ -112,8 +112,6 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                     return "Il gruppo taglie è stato assegnato alle righe selezionate.";
                 } catch (\Throwable $e) {
                     \Monkey::app()->repoFactory->rollback();
-                    throw $e;
-                    \Monkey::app()->dbAdapter->rollBack();
                     if($e->getCode() == $shopHasProductRepo::INCOMPATIBLE_PRODUCT_SIZE_EXCEPTION_CODE) {
 
                         $res = [];
