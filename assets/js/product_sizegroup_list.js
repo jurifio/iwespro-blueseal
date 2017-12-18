@@ -31,6 +31,7 @@
                 name: $('input#productSizeMacroGroup').val(),
                 productSizeGroupName: $('input#productSizeGroupName').val(),
                 locale: $('input#locale').val(),
+                publicName: $('input#publicName').val(),
             };
                 $.ajax({
                     method: 'post',
@@ -42,7 +43,9 @@
                     bsModal.writeBody('Errore grave');
                 }).always(function (res) {
                     bsModal.setOkEvent(function () {
-                        window.location.reload();
+                        $.refreshDataTable();
+                        bsModal.hide();
+                        //window.location.reload();
                     });
                     bsModal.showOkBtn();
                 });
@@ -51,35 +54,57 @@
 
 
     $(document).on('bs-macroGroup-delete', function () {
-        let bsModal = new $.bsModal('Elimina Gruppo', {
-            body: '<p>Elimina macrogruppo</p>' +
-            '<div class="form-group form-group-default required">' +
-            '<label for="deleteMacroGroup">Elimina macrogruppo</label>' +
-            '<input autocomplete="off" type="text" id="deleteMacroGroup" ' +
-            'placeholder="ID macrogruppo da eliminare" class="form-control" name="deleteMacroGroup" required="required">' +
-            '</div>'
-        });
 
-        bsModal.showCancelBtn();
-        bsModal.setOkEvent(function () {
-            const data = {
-                idMacroGroup: $('input#deleteMacroGroup').val()
-            };
-            $.ajax({
-                method: 'delete',
-                url: '/blueseal/xhr/SizeMacroGroupManage',
-                data: data
-            }).done(function (res) {
-                bsModal.writeBody(res);
-            }).fail(function (res) {
-                bsModal.writeBody('Errore grave');
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
-                    window.location.reload();
-                });
-                bsModal.showOkBtn();
+        let dataTable = $('.dataTable').DataTable();
+        let selectedRows = dataTable.rows('.selected').data();
+        if (selectedRows.length === 1) {
+
+            var idMacroGroup = selectedRows[0].id;
+
+            let bsModal = new $.bsModal('Elimina Gruppo', {
+                body: '<p>Elimina macrogruppo</p>' +
+                '<div class="form-group form-group-default required">' +
+                '<label for="deleteMacroGroup">Elimina macrogruppo</label>' +
+                '<div><p>Premere ok per cancellare il macrogruppo con id:'+ idMacroGroup +'</p></div>' +
+                '</div>'
             });
-        });
+
+            bsModal.showCancelBtn();
+            bsModal.setOkEvent(function () {
+                const data = {
+                    idMacroGroup: idMacroGroup,
+                };
+                $.ajax({
+                    method: 'delete',
+                    url: '/blueseal/xhr/SizeMacroGroupManage',
+                    data: data
+                }).done(function (res) {
+                    bsModal.writeBody(res);
+                }).fail(function (res) {
+                    bsModal.writeBody('Errore grave');
+                }).always(function (res) {
+                    bsModal.setOkEvent(function () {
+                        $.refreshDataTable();
+                        bsModal.hide();
+                    });
+                    bsModal.showOkBtn();
+                });
+            });
+
+        } else if (selectedRows.length < 1){
+            new Alert({
+                type: "warning",
+                message: "Devi selezionare una riga"
+            }).open();
+            return false;
+        } else {
+            new Alert({
+                type: "warning",
+                message: "Puoi cancellare solamente un macrogruppo alla volta"
+            }).open();
+            return false;
+        }
+
     });
 
 })();

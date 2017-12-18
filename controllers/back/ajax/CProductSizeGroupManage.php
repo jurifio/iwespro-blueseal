@@ -36,7 +36,7 @@ class CProductSizeGroupManage extends AAjaxController
             $productSizeGroup->productSizeMacroGroupId = $productSizeMacroGroup->id;
             $productSizeGroup->locale = $data['locale'];
             $productSizeGroup->name = $data['name'];
-            //$productSizeGroup->publicName = $data['publicName'];
+            $productSizeGroup->publicName = $data['publicName'];
 
             return json_encode([
                     'id' => $productSizeGroup->insert()

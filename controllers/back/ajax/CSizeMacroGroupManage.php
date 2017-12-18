@@ -37,48 +37,55 @@ class CSizeMacroGroupManage extends AAjaxController
             $name = $data['name'];
             $productSizeGroupName = $data['productSizeGroupName'];
             $locale = $data['locale'];
+            $publicName = $data['publicName'];
 
 
-            /** @var CProductSizeMacroGroup $productSizeMacroGroupRepo */
-            $productSizeMacroGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->getEmptyEntity();
-
-
-            // Controllo se esiste un macrogruppo con lo stesso nome (case sensitive)
-            /** @var CRepo $checkProductSizeMacroGroupRepo */
-            $checkProductSizeMacroGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup');
-
-
-            /** @var CProductSizeRepo $checkName */
-            $checkName = $checkProductSizeMacroGroupRepo->findOneBy(['name' => $name ]);
-
-            $check = $checkName;
-
-            if(empty($check)){
-                //riempi il database
-                $productSizeMacroGroupRepo->name = $name;
-                $productSizeMacroGroupRepo->smartInsert();
-
-                //prendi id macrogruppo inserito
-                $findIdMacroGroup = $checkProductSizeMacroGroupRepo->findOneBy(['name' => $name ]);
-                $idMacroGroup = $findIdMacroGroup->id;
-
-                //creo il gruppo taglia
-                /** @var CProductSizeGroup $productSizeGroup */
-                $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->getEmptyEntity();
-                $productSizeGroup->productSizeMacroGroupId = $idMacroGroup;
-                $productSizeGroup->name = $productSizeGroupName;
-                $productSizeGroup->locale = $locale;
-                $productSizeGroup->smartInsert();
-
-
-                //restituisci messaggio di avvenuto inserimento
-                $res = "Macrogruppo e gruppo aggiunti con successo";
+            if(empty($name) || empty($productSizeGroupName) || empty($locale)){
+                $res = "Devi compilare tutti i campi prima di inserire un nuovo macrogruppo e un nuovo gruppo";
+                return $res;
             } else {
-                //restituisci messaggio di errore
-                $res = "Il macrogruppo inserito è già presente";
-            }
+                /** @var CProductSizeMacroGroup $productSizeMacroGroupRepo */
+                $productSizeMacroGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->getEmptyEntity();
 
-            return $res;
+
+                // Controllo se esiste un macrogruppo con lo stesso nome (case sensitive)
+                /** @var CRepo $checkProductSizeMacroGroupRepo */
+                $checkProductSizeMacroGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup');
+
+
+                /** @var CProductSizeRepo $checkName */
+                $checkName = $checkProductSizeMacroGroupRepo->findOneBy(['name' => $name]);
+
+                $check = $checkName;
+
+                if (empty($check)) {
+                    //riempi il database
+                    $productSizeMacroGroupRepo->name = $name;
+                    $productSizeMacroGroupRepo->smartInsert();
+
+                    //prendi id macrogruppo inserito
+                    $findIdMacroGroup = $checkProductSizeMacroGroupRepo->findOneBy(['name' => $name]);
+                    $idMacroGroup = $findIdMacroGroup->id;
+
+                    //creo il gruppo taglia
+                    /** @var CProductSizeGroup $productSizeGroup */
+                    $productSizeGroup = \Monkey::app()->repoFactory->create('ProductSizeGroup')->getEmptyEntity();
+                    $productSizeGroup->productSizeMacroGroupId = $idMacroGroup;
+                    $productSizeGroup->name = $productSizeGroupName;
+                    $productSizeGroup->locale = $locale;
+                    $productSizeGroup->publicName = $publicName;
+                    $productSizeGroup->smartInsert();
+
+
+                    //restituisci messaggio di avvenuto inserimento
+                    $res = "Macrogruppo e gruppo aggiunti con successo";
+                } else {
+                    //restituisci messaggio di errore
+                    $res = "Il macrogruppo inserito è già presente";
+                }
+
+                return $res;
+            }
     }
 
     /**
@@ -92,6 +99,7 @@ class CSizeMacroGroupManage extends AAjaxController
 
         $data = \Monkey::app()->router->request()->getRequestData();
         $idMacroGroupToDelete = $data['idMacroGroup'];
+
         /** @var CProductSizeMacroGroup $productSizeMacroGroup */
         $productSizeMacroGroup = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->findOneBy(['id'=>$idMacroGroupToDelete]);
 

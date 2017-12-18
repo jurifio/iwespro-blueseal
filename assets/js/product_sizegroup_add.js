@@ -144,7 +144,7 @@
     });
 
     $(document).on('bs-group-delete', function () {
-        let bsModal = new $.bsModal('Aggiungi Gruppo', {
+        let bsModal = new $.bsModal('Elimina Gruppo', {
             body: '<p>Elimina una colonna Gruppo Taglia</p>' +
             '<div class="form-group form-group-default required">' +
                 '<label for="productSizeGroupId">ID Gruppo Taglia</label>' +

@@ -115,6 +115,31 @@
                                             </th>
                                         <?php endfor; ?>
                                     </tr>
+                                    <tr role="row">
+                                        <th style="" class="sorting_asc" tabindex="0"
+                                            aria-controls="condensedTable" rowspan="1" colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Positions">Nome pubblico
+                                        </th>
+                                        <?php
+                                        /** @var \bamboo\domain\entities\CProductSizeGroup $productSizeGroup */
+                                        $z = 0;
+                                        foreach ($sizeEdit as $productSizeGroup): ?>
+                                            <th style="" class="editable" tabindex="" data-name="publicName"
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort=""
+                                                data-column="<?php echo $productSizeGroup->id ?>"
+                                                aria-label="<?php echo $productSizeGroup->publicName ?>"><?php echo $productSizeGroup->publicName ?></th>
+                                            <?php $z++;
+                                        endforeach;
+                                        for (; $z < 18; $z++): ?>
+                                            <th style="" class="" tabindex="0"
+                                                aria-controls="condensedTable" rowspan="1" colspan="1"
+                                                aria-sort="ascending"
+                                                aria-label="Positions">
+                                            </th>
+                                        <?php endfor; ?>
+                                    </tr>
                                     </thead>
                                     <tbody>
                                     <?php for ($k = 0; $k < 51; $k++): ?>

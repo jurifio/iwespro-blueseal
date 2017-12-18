@@ -30,10 +30,10 @@
                 }).fail(function (res) {
                     bsModal.writeBody('Errore grave');
                 }).always(function (res) {
-                    modal.setOkEvent(function () {
-                        //refresha solo tabella e non intera pagina
+                    bsModal.setOkEvent(function () {
+                       //refresha solo tabella e non intera pagina
                         $.refreshDataTable();
-                        modal.hide();
+                        bsModal.hide();
                     });
                     bsModal.showOkBtn();
                 });
