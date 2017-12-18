@@ -119,4 +119,27 @@ class CSizeMacroGroupManage extends AAjaxController
 
     }
 
+    /**
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function put() {
+
+        $data = \Monkey::app()->router->request()->getRequestData();
+        $idMacroGroupToUpdate = $data['idMacroGroup'];
+        $nameMacroGroup = $data['nameMacroGroup'];
+
+
+        /** @var CProductSizeMacroGroup $productSizeMacroGroup */
+        $productSizeMacroGroup = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->findOneBy(['id'=>$idMacroGroupToUpdate]);
+
+        $productSizeMacroGroup->name = $nameMacroGroup;
+        $productSizeMacroGroup->update();
+
+        $res = "Nome del macrogruppo aggiornato con successo";
+        return $res;
+
+    }
+
 }

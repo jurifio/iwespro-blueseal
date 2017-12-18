@@ -90,6 +90,18 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Strumenti Colonna">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="/admin/content/add"
+                data-event="bs-update-nameMacroGroup"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Crea Macrogruppo"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
