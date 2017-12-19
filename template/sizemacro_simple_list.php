@@ -40,7 +40,7 @@
                                     data-orderable="true" class="center">Name MC</th>
                                 <th data-slug="productSizeGroups"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">ID gruppo</th>
+                                    data-orderable="true" class="center">Nome gruppo</th>
                             </tr>
                             </thead>
                             <tbody>
