@@ -43,7 +43,8 @@ class CSizeMacroGroupListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings(true);
 
-        $url = \Monkey::app()->baseUrl('false');
+        $blueseal = $this->app->baseUrl(false).'/blueseal/';
+        $url = $blueseal."prodotti/gruppo-taglie/aggiungi";
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
@@ -57,7 +58,7 @@ class CSizeMacroGroupListAjaxController extends AAjaxController
                 $row['modifica'] = "<i class='fa fa-exclamation'></i>";
 
             } else {
-                $row['modifica'] = "<a href='".$url . "gruppo-taglie/aggiungi?productSizeGroupId=" . $row['idGroupSize'] . " '><i class='fa fa-pencil-square-o'></i></a>";
+                $row['modifica'] = "<a href='".$url . "?productSizeGroupId=" . $row['idGroupSize'] . " '><i class='fa fa-pencil-square-o'></i></a>";
                 $row['sizes'] = str_replace(',',' | ',$row['sizes']);
             }
 
