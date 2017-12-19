@@ -93,7 +93,7 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Strumenti Colonna">
+    <bs-toolbar-group data-group-label="Strumenti modifica">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-file-word-o"
