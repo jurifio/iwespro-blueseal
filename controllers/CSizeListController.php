@@ -55,11 +55,11 @@ class CSizeListController extends ARestrictedAccessRootController
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-           // 'groups' => $groups,
-           // 'modifica' => $modifica,
-           // 'deleteError' => $deleteError,
-           // 'pageURL' => $pageURL,
-           // 'res' => $res,
+            'groups' => $groups,
+            'modifica' => $modifica,
+            'deleteError' => $deleteError,
+            'pageURL' => $pageURL,
+            'res' => $res,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);
