@@ -59,7 +59,7 @@ class CSizeMacroGroupSimpleListAjaxController extends AAjaxController
 
             if (!empty($allGroupSize)){
                 foreach ($allGroupSize as $singleProductSizeGroup) {
-                    $row['productSizeGroups'][] = " ".$singleProductSizeGroup->name;
+                    $row['productSizeGroups'][] = " ,".$singleProductSizeGroup->name;
                 }
             } else {
                 $row['productSizeGroups'] = "---";

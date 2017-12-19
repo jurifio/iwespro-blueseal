@@ -4,7 +4,6 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 
 
-
 /**
  * Class CProductDetailListAjaxController
  * @package bamboo\blueseal\controllers\ajax
@@ -29,7 +28,7 @@ class CSizeMacroGroupListAjaxController extends AAjaxController
         $sql = "SELECT  pmg.id,
                         pmg.name,
                         psg.name as productSizeGroupName,
-                        group_concat(ps.name) as sizes,
+                        group_concat(DISTINCT(ps.name)) as sizes,
                         psg.locale,
                         psg.id as idGroupSize,
                         psg.publicName
