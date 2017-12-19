@@ -153,10 +153,15 @@
                     bsModal.showOkBtn();
                 });
             });
-        } else {
+        } else if(selectedRows.length < 1){
             new Alert({
-                type: "success",
-                message: "Modifica un macrogruppo alla volta"
+                type: "warning",
+                message: "Non hai selelezionato nessun macrogruppo"
+            }).open();
+        } else if (selectedRows.length > 1){
+            new Alert({
+                type: "warning",
+                message: "Puoi modificare il nome di un solo Macrogruppo alla volta"
             }).open();
         }
     });

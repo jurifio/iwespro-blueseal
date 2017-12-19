@@ -130,15 +130,19 @@ class CSizeMacroGroupManage extends AAjaxController
         $idMacroGroupToUpdate = $data['idMacroGroup'];
         $nameMacroGroup = $data['nameMacroGroup'];
 
+        if(!empty($nameMacroGroup)){
+            /** @var CProductSizeMacroGroup $productSizeMacroGroup */
+            $productSizeMacroGroup = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->findOneBy(['id'=>$idMacroGroupToUpdate]);
 
-        /** @var CProductSizeMacroGroup $productSizeMacroGroup */
-        $productSizeMacroGroup = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup')->findOneBy(['id'=>$idMacroGroupToUpdate]);
+            $productSizeMacroGroup->name = $nameMacroGroup;
+            $productSizeMacroGroup->update();
 
-        $productSizeMacroGroup->name = $nameMacroGroup;
-        $productSizeMacroGroup->update();
-
-        $res = "Nome del macrogruppo aggiornato con successo";
-        return $res;
+            $res = "Nome del macrogruppo aggiornato con successo";
+            return $res;
+        } else {
+            $res = "Non hai scritto nessun nuovo nome";
+            return $res;
+        }
 
     }
 

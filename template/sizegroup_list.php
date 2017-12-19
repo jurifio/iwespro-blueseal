@@ -34,16 +34,19 @@
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Id macrogruppo</th>
+                                    data-orderable="true" class="center">Id MC</th>
                                 <th data-slug="name"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Nome macrogruppo</th>
+                                    data-orderable="true" class="center">Nome MC</th>
                                 <th data-slug="idGroupSize"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id gruppo</th>
                                 <th data-slug="productSizeGroupName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Nome gruppo</th>
+                                <th data-slug="publicName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Nome pubb gr.</th>
                                 <th data-slug="sizes"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Taglie</th>
@@ -93,7 +96,7 @@
     <bs-toolbar-group data-group-label="Strumenti Colonna">
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-plus"
+                data-icon="fa-file-word-o"
                 data-permission="/admin/content/add"
                 data-event="bs-update-nameMacroGroup"
                 data-class="btn btn-default"

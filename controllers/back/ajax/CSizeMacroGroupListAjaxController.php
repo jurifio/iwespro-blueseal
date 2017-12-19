@@ -31,7 +31,8 @@ class CSizeMacroGroupListAjaxController extends AAjaxController
                         psg.name as productSizeGroupName,
                         group_concat(ps.name) as sizes,
                         psg.locale,
-                        psg.id as idGroupSize
+                        psg.id as idGroupSize,
+                        psg.publicName
                 FROM ProductSizeMacroGroup pmg
                 LEFT JOIN ProductSizeGroup psg ON pmg.id = psg.productSizeMacroGroupId
                 LEFT JOIN ProductSizeGroupHasProductSize psghps ON psg.id = psghps.productSizeGroupId
