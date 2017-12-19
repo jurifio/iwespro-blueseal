@@ -6,22 +6,27 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
 
 /**
- * Class CProductSlimListController
+ * Class CSizeMacroGroupSimpleListController
  * @package bamboo\blueseal\controllers
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ * @author Iwes Team <it@iwes.it>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 05/09/2016
+ * @date 19/12/2017
  * @since 1.0
  */
 class CSizeMacroGroupSimpleListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
     protected $pageSlug = "sizemacro_simple_list";
+
+    /**
+     * @return string
+     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
+     */
 
     public function get()
     {
