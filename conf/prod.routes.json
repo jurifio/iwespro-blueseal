@@ -538,6 +538,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/lista-macrogruppi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeMacroGroupSimpleListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/brand/modifica(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandEditController"
