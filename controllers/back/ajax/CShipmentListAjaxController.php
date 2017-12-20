@@ -88,13 +88,39 @@ class CShipmentListAjaxController extends AAjaxController
             $row['creationDate'] = $val->creationDate;
             $row['productContent'] = "";
 
+
             $orderlineIds = [];
+            $shippingSum = 0;
             foreach ($val->orderLine as $orderLine) {
                 if($allShop) $orderlineIds[] = '<a href="/blueseal/ordini/aggiungi?order='.$orderLine->orderId.'">'.$orderLine->printId().'</a>';
                 else $orderlineIds[] = $orderLine->printId();
+
+                //SE LA SPEDIZIONE VA DAL FRIEND A IWES NON FARE LA SOMMMA E MOSTRA 0 SU COSTO DI SPEDIZIONE
+                if($val->scope === "supplierToUs") {
+                    $shippingSum = 0;
+                } else {
+                    $shippingSum += $orderLine->shippingCharge;
+                }
+
+
             }
+
+            $row['orderShipmentPrice'] = $shippingSum;
             $row['orderContent'] = implode('<br />',$orderlineIds);
             $row['note'] = $val->note;
+
+            $row['shipmentInvoiceNumber'] = $val->shipmentInvoiceNumber;
+            $row['realShipmentPrice'] = $val->realShipmentPrice;
+
+            $margin = $shippingSum - $val->realShipmentPrice;
+
+            if ($margin > 0) {
+                $row['shipmentPriceMargin'] = "<p style='color:green'>".$margin."</p>";
+            } else if ($margin < 0){
+                $row['shipmentPriceMargin'] = "<p style='color:red'>".$margin."</p>";
+            } else {
+                $row['shipmentPriceMargin'] = $margin;
+            }
 
             $datatable->setResponseDataSetRow($key,$row);
         }

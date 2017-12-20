@@ -86,6 +86,22 @@
                                     data-is-visible="false"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Contenuto Prodotti</th>
+                                <th data-slug="shipmentInvoiceNumber"
+                                    data-is-visible="false"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Numero di fattura</th>
+                                <th data-slug="orderShipmentPrice"
+                                    data-is-visible="false"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Spese spedizione</th>
+                                <th data-slug="realShipmentPrice"
+                                    data-is-visible="false"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Costo effettivo spedizione</th>
+                                <th data-slug="shipmentPriceMargin"
+                                    data-is-visible="false"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Margine sulla spedizione</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -122,6 +138,11 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.shipment.cancel"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione fatturazione spedizione">
+        <bs-toolbar-button
+                data-remote="bs.shipment.invoiceInformation"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
