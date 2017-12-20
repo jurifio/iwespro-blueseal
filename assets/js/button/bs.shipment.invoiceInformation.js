@@ -72,7 +72,7 @@ $(document).on('bs-add-invoice-shipping-info', function () {
     } else {
         new Alert({
             type: "warning",
-            message: "Puoi cancellare solamente un macrogruppo alla volta"
+            message: "Puoi aggiornare una riga alla volta"
         }).open();
         return false;
     }
