@@ -43,12 +43,12 @@ class CProductImporterProblemsListController extends AAjaxController
               JOIN `ProductSizeGroup` `psg` ON `sp`.`productSizeGroupId` = `psg`.`id`
               JOIN `Shop` `s` ON `sp`.`shopId` = `s`.`id`
               LEFT JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id
-              
+
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE
               `ps`.`id` NOT IN (7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
-               AND (`ds`.`status` <> 'ok')
+               AND (`ds`.`status` not in ('ok', 'exclude') )
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
             HAVING (sum(`ds`.`qty`) > 0)";
 
