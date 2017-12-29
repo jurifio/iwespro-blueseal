@@ -39,7 +39,6 @@ class CSalePriceProductSkuModify extends AAjaxController
         $productId = $data['productId'];
         $productVariantId = $data['productVariantId'];
         $newSalePrice = $data['newSalePrice'];
-        $a =0;
 
         if(!empty($newSalePrice)){
 
