@@ -86,6 +86,16 @@
                 data-title="Modifica prezzo"
                 data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-arrows-h"
+                data-permission="/admin/content/add"
+                data-event="bs-emergency-alignment"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Allinea prezzi totali e con saldo nei prodotti pubblici"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

@@ -73,4 +73,37 @@
         let url = $.encodeGetString(link);
         window.open(url,'_blank');
     });
+
+
+    $(document).on('bs-emergency-alignment', function () {
+
+
+            let bsModal = new $.bsModal('Aggiorna i prezzi in saldo', {
+                body: '<p>ALLINEA I PREZZI TOTALI E I PREZZI IN SALDO</p>' +
+                '<div class="form-group form-group-default required">' +
+                '<p>Stai per allineare tutti i prezzi totali e i prezzi in saldo. PROCEDERE?</p>' + '</div>'
+            });
+
+            bsModal.showCancelBtn();
+            bsModal.setOkEvent(function () {
+                $.ajax({
+                    method: 'put',
+                    url: '/blueseal/xhr/EmergencyPricesAlign',
+                    data: data
+                }).done(function (res) {
+                    bsModal.writeBody(res);
+                }).fail(function (res) {
+                    bsModal.writeBody('Errore grave');
+                }).always(function (res) {
+                    bsModal.setOkEvent(function () {
+                        //refresha solo tabella e non intera pagina
+                        $.refreshDataTable();
+                        bsModal.hide();
+                    });
+                    bsModal.showOkBtn();
+                });
+            });
+    });
+
+
 })();
