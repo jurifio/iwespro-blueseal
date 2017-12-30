@@ -4,9 +4,11 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CProductSku;
+use bamboo\domain\repositories\CProductPublicSkuRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use bamboo\domain\repositories\CProductSizeRepo;
 use bamboo\domain\repositories\CProductSkuRepo;
@@ -53,6 +55,19 @@ class CSalePriceProductSkuModify extends AAjaxController
                 $singleSku->salePrice =  $newSalePrice;
                 $singleSku->update();
             }
+
+            /** @var CProductPublicSkuRepo $publicSkuRepo */
+            $publicSkuRepo = \Monkey::app()->repoFactory->create('ProductPublicSku');
+
+            /** @var CProductPublicSku $publicSku */
+            $publicSku = $publicSkuRepo->findBy(['productId' => $productId, 'productVariantId' => $productVariantId]);
+
+            /** @var CProductPublicSku $singlePublicSku */
+            foreach ($publicSku as $singlePublicSku) {
+                $singlePublicSku->salePrice = $newSalePrice;
+                $singlePublicSku->update();
+            }
+
 
             $res = "Prezzi aggiornati!!";
             return $res;

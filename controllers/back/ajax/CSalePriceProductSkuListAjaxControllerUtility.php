@@ -33,39 +33,27 @@ class CSalePriceProductSkuListAjaxControllerUtility extends AAjaxController
     public function get()
     {
         $sql = "SELECT
-  DISTINCT concat(finalPsk.productId,'-',finalPsk.productVariantId) as id,
-  finalPsk.productSizeId as size,
-  finalPsk.price as p_price,
-  finalPsk.salePrice as p_sale_price,
-  finalPsk.shopId as shp_id
-  FROM (
-    SELECT
-      toExtrapolate.Product,
-      toExtrapolate.skuID,
-      toExtrapolate.skuVariant
-    FROM (
-        SELECT
-          @a as Valore_prec,
-          @b := @a as Valore_per_confronto,
-          concat(p.id, '-', p.productVariantId) AS Product,
-          @a := concat(p.id,'-',p.productVariantId) ignora,
-          count(concat(p.id, '-', p.productVariantId)) as conto,
-          psk.productId as skuID,
-          psk.productVariantId as skuVariant,
-          psk.price,
-          psk.salePrice,
-          CASE WHEN @a = @b THEN 'yes'
-            ELSE NULL END AS control
+  ps1.productId,
+  ps1.productVariantId,
+  ps1.productSizeId as size,
+  ps1.shopId as shp_id,
+  concat(ps1.productId, '-', ps1.productVariantId) AS id,
+  ps1.price as p_price,
+  ps1.salePrice as p_sale_price,
+  q1.prezzi
+FROM ProductSku ps1
+  JOIN (SELECT
+          p.id,
+          p.productVariantId,
+          count(DISTINCT ps.salePrice) AS prezzi
         FROM Product p
-         JOIN ProductSku psk on p.id = psk.productId AND p.productVariantId = psk.productVariantId
-        WHERE p.isOnSale = 1 AND  p.productStatusId = 6
-        GROUP BY p.id, p.productVariantId, psk.salePrice) as toExtrapolate
+          JOIN ProductSku ps ON p.id = ps.productId AND p.productVariantId = ps.productVariantId
+        WHERE p.isOnSale > 0 AND p.qty > 0
+        GROUP BY p.id, p.productVariantId
+        HAVING prezzi > 1
+       ) q1 ON ps1.productId = q1.id AND ps1.productVariantId = q1.productVariantId";
 
-    WHERE control = 'yes') AS rightSku
-  JOIN ProductSku finalPsk ON (finalPsk.productId, finalPsk.productVariantId) = (rightSku.skuID, rightSku.skuVariant)
-  GROUP BY concat(finalPsk.productId,'-',finalPsk.productVariantId), finalPsk.productSizeId, finalPsk.shopId";
-
-        $datatable = new CDataTables($sql, ['id','size','shp_id'], $_GET, true);
+        $datatable = new CDataTables($sql, ['productId','productVariantId','size','shp_id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
 
