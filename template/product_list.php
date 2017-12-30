@@ -153,17 +153,17 @@
                                 <th data-slug="friendPrices"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Prezzo dai Friends
+                                    class="center">Prezzo pieno
                                 </th>
                                 <th data-slug="friendValues"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Valore dai Friends
+                                    class="center">Costo al friend
                                 </th>
                                 <th data-slug="friendSalePrices"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Saldo dai Friends
+                                    class="center">Prezzo in saldo
                                 </th>
                                 <th data-slug="processing"
                                     data-searchable="true"

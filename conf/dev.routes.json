@@ -1685,6 +1685,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/utility/gestione-forzata-saldi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CSalePriceProductSkuListControllerUtility"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
