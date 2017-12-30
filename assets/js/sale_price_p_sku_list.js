@@ -62,4 +62,15 @@
         }
     });
 
+    $(document).on('bs-sale-price-go-modify-price', function () {
+        //let dataTable = $('.dataTable').DataTable();
+        let ids = $.getDataTableSelectedRowData(undefined,'id');
+        //let selectedRows = dataTable.rows('.selected').data();
+        //let ids = selectedRows[0].id.split('-');
+        let link = {};
+        link.baseUrl = "/blueseal/prodotti/gestione-prezzi";
+        link.code = ids;
+        let url = $.encodeGetString(link);
+        window.open(url,'_blank');
+    });
 })();
