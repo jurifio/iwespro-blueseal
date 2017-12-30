@@ -4,9 +4,11 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CProductSku;
+use bamboo\domain\repositories\CProductPublicSkuRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use bamboo\domain\repositories\CProductSizeRepo;
 use bamboo\domain\repositories\CProductSkuRepo;
@@ -38,9 +40,15 @@ class CSalePriceProductSkuModify extends AAjaxController
         $data = \Monkey::app()->router->request()->getRequestData();
         $productId = $data['productId'];
         $productVariantId = $data['productVariantId'];
+        $newPrice = $data['newPrice'];
         $newSalePrice = $data['newSalePrice'];
 
-        if(!empty($newSalePrice)){
+        if(empty($newSalePrice) && empty($newPrice)){
+
+            $res = "Non hai scritto nessun nuovo prezzo!";
+            return $res;
+
+        } else {
 
             /** @var CProductSkuRepo $productSkuRepo */
             $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
@@ -50,14 +58,34 @@ class CSalePriceProductSkuModify extends AAjaxController
 
             /** @var CProductSku $singleSku */
             foreach ($productSku as $singleSku){
-                $singleSku->salePrice =  $newSalePrice;
+                if(!empty($newPrice)) {
+                    $singleSku->price = $newPrice;
+                }
+                if(!empty($newSalePrice)) {
+                    $singleSku->salePrice = $newSalePrice;
+                }
                 $singleSku->update();
             }
 
+            /** @var CProductPublicSkuRepo $publicSkuRepo */
+            $publicSkuRepo = \Monkey::app()->repoFactory->create('ProductPublicSku');
+
+            /** @var CProductPublicSku $publicSku */
+            $publicSku = $publicSkuRepo->findBy(['productId' => $productId, 'productVariantId' => $productVariantId]);
+
+            /** @var CProductPublicSku $singlePublicSku */
+            foreach ($publicSku as $singlePublicSku) {
+                if(!empty($newPrice)) {
+                    $singlePublicSku->price = $newPrice;
+                }
+                if(!empty($newSalePrice)) {
+                    $singlePublicSku->salePrice = $newSalePrice;
+                }
+                $singlePublicSku->update();
+            }
+
+
             $res = "Prezzi aggiornati!!";
-            return $res;
-        } else {
-            $res = "Non hai scritto nessun nuovo prezzo!";
             return $res;
         }
 

@@ -13,6 +13,11 @@
             let bsModal = new $.bsModal('Aggiorna i prezzi in saldo', {
                 body: '<p>Inserisci il nuovo prezzo scontato</p>' +
                 '<div class="form-group form-group-default required">' +
+                '<label for="changePrice">Metti il nuovo prezzo totale (Product SKU)</label>' +
+                '<input autocomplete="off" type="text" id="changePrice" ' +
+                'placeholder="Nuovo prezzo totale" class="form-control" name="changePrice" required="required">' +
+                '</div>' +
+                '<div class="form-group form-group-default required">' +
                 '<label for="changeSalePrice">Metti il nuovo prezzo in saldo (Product SKU)</label>' +
                 '<input autocomplete="off" type="text" id="changeSalePrice" ' +
                 'placeholder="Nuovo prezzo in saldo" class="form-control" name="changeSalePrice" required="required">' +
@@ -24,6 +29,7 @@
                 const data = {
                     productId:  productId,
                     productVariantId:  productVariantId,
+                    newPrice: $('input#changePrice').val(),
                     newSalePrice: $('input#changeSalePrice').val()
                 };
                 $.ajax({
