@@ -68,12 +68,22 @@
     <bs-toolbar-group data-group-label="Strumenti Colonna">
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-plus"
+                data-icon="fa-file-word-o"
                 data-permission="/admin/content/add"
                 data-event="bs-sale-price-modify"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Modifica saldo"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-external-link"
+                data-permission="/admin/content/add"
+                data-event="bs-sale-price-go-modify-price"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Modifica prezzo"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
