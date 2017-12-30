@@ -34,9 +34,9 @@ class CEmergencyPricesAlign extends AAjaxController
                         GROUP BY p.id, p.productVariantId
                         HAVING prezzi > 1 or prezziSaldo > 1
                        ) q1 ON ps1.productId = q1.id AND ps1.productVariantId = q1.productVariantId ";
-        $res = \Monkey::app()->dbAdapter->query($sql,[]);
+        $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
 
-        if($res['conto'] > 0) {
+        if($res[0]['conto'] > 0) {
             \Monkey::app()->router->response()->raiseProcessingError();
             return 'Non puoi allineare i prezzi sugli sku pubblici se sono disallineati negli sku, SVUOTA LA TABELLA';
         }
@@ -46,6 +46,6 @@ class CEmergencyPricesAlign extends AAjaxController
                  JOIN ProductSku psk ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
                   SET ppsk.salePrice = psk.salePrice, ppsk.price = psk.price
                 WHERE p.qty > 0 and (psk.salePrice <> ppsk.salePrice or psk.price <> ppsk.price)";
-        return 'Sono state aggoiornate: '.\Monkey::app()->dbAdapter->query($sql,[])->countAffectedRows().' righe';
+        //return 'Sono state aggoiornate: '.\Monkey::app()->dbAdapter->query($sql,[])->countAffectedRows().' righe';
     }
 }
