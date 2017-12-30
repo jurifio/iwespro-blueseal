@@ -87,9 +87,8 @@
             bsModal.showCancelBtn();
             bsModal.setOkEvent(function () {
                 $.ajax({
-                    method: 'put',
-                    url: '/blueseal/xhr/EmergencyPricesAlign',
-                    data: data
+                    method: 'post',
+                    url: '/blueseal/xhr/EmergencyPricesAlign'
                 }).done(function (res) {
                     bsModal.writeBody(res);
                 }).fail(function (res) {
