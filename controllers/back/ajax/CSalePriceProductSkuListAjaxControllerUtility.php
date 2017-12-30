@@ -40,17 +40,21 @@ class CSalePriceProductSkuListAjaxControllerUtility extends AAjaxController
   concat(ps1.productId, '-', ps1.productVariantId) AS id,
   ps1.price as p_price,
   ps1.salePrice as p_sale_price,
-  q1.prezzi
+  q1.prezzi,
+  q1.prezziSaldo,
+  q1.onSale as on_sale
 FROM ProductSku ps1
   JOIN (SELECT
           p.id,
           p.productVariantId,
-          count(DISTINCT ps.salePrice) AS prezzi
+          p.isOnSale as onSale,
+          count(DISTINCT ps.salePrice) AS prezziSaldo,
+          count(DISTINCT ps.price) AS prezzi
         FROM Product p
           JOIN ProductSku ps ON p.id = ps.productId AND p.productVariantId = ps.productVariantId
-        WHERE p.isOnSale > 0 AND p.qty > 0
+        WHERE p.qty > 0
         GROUP BY p.id, p.productVariantId
-        HAVING prezzi > 1
+        HAVING prezzi > 1 or prezziSaldo > 1
        ) q1 ON ps1.productId = q1.id AND ps1.productVariantId = q1.productVariantId";
 
         $datatable = new CDataTables($sql, ['productId','productVariantId','size','shp_id'], $_GET, true);

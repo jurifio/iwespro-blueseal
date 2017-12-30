@@ -40,9 +40,15 @@ class CSalePriceProductSkuModify extends AAjaxController
         $data = \Monkey::app()->router->request()->getRequestData();
         $productId = $data['productId'];
         $productVariantId = $data['productVariantId'];
+        $newPrice = $data['newPrice'];
         $newSalePrice = $data['newSalePrice'];
 
-        if(!empty($newSalePrice)){
+        if(empty($newSalePrice) && empty($newPrice)){
+
+            $res = "Non hai scritto nessun nuovo prezzo!";
+            return $res;
+
+        } else {
 
             /** @var CProductSkuRepo $productSkuRepo */
             $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
@@ -52,7 +58,12 @@ class CSalePriceProductSkuModify extends AAjaxController
 
             /** @var CProductSku $singleSku */
             foreach ($productSku as $singleSku){
-                $singleSku->salePrice =  $newSalePrice;
+                if(!empty($newPrice)) {
+                    $singleSku->price = $newPrice;
+                }
+                if(!empty($newSalePrice)) {
+                    $singleSku->salePrice = $newSalePrice;
+                }
                 $singleSku->update();
             }
 
@@ -64,15 +75,17 @@ class CSalePriceProductSkuModify extends AAjaxController
 
             /** @var CProductPublicSku $singlePublicSku */
             foreach ($publicSku as $singlePublicSku) {
-                $singlePublicSku->salePrice = $newSalePrice;
+                if(!empty($newPrice)) {
+                    $singlePublicSku->price = $newPrice;
+                }
+                if(!empty($newSalePrice)) {
+                    $singlePublicSku->salePrice = $newSalePrice;
+                }
                 $singlePublicSku->update();
             }
 
 
             $res = "Prezzi aggiornati!!";
-            return $res;
-        } else {
-            $res = "Non hai scritto nessun nuovo prezzo!";
             return $res;
         }
 
