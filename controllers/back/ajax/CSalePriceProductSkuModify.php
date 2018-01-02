@@ -2,15 +2,9 @@
 
 namespace bamboo\controllers\back\ajax;
 
-use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductPublicSku;
-use bamboo\domain\entities\CProductSizeGroup;
-use bamboo\domain\entities\CProductSizeMacroGroup;
-use bamboo\domain\entities\CProductSku;
-use bamboo\domain\repositories\CProductPublicSkuRepo;
-use bamboo\domain\repositories\CProductSizeGroupRepo;
-use bamboo\domain\repositories\CProductSizeRepo;
 use bamboo\domain\repositories\CProductSkuRepo;
 
 
@@ -31,6 +25,7 @@ class CSalePriceProductSkuModify extends AAjaxController
 {
 
     /**
+     * @return string
      * @throws BambooException
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
@@ -51,13 +46,13 @@ class CSalePriceProductSkuModify extends AAjaxController
         } else {
 
             /** @var CProductSkuRepo $productSkuRepo */
-            $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
+            $productSkuRepo = \Monkey::app()->repoFactory->create('ProductPublicSku');
 
-            /** @var CProductSku $productSku */
-            $productSku = $productSkuRepo->findBy(['productId' => $productId, 'productVariantId' => $productVariantId]);
+            /** @var CObjectCollection $productPublicSkus */
+            $productPublicSkus = $productSkuRepo->findBy(['productId' => $productId, 'productVariantId' => $productVariantId]);
 
-            /** @var CProductSku $singleSku */
-            foreach ($productSku as $singleSku){
+            /** @var CProductPublicSku $singleSku */
+            foreach ($productPublicSkus as $singleSku){
                 if(!empty($newPrice)) {
                     $singleSku->price = $newPrice;
                 }
@@ -66,24 +61,6 @@ class CSalePriceProductSkuModify extends AAjaxController
                 }
                 $singleSku->update();
             }
-
-            /** @var CProductPublicSkuRepo $publicSkuRepo */
-            $publicSkuRepo = \Monkey::app()->repoFactory->create('ProductPublicSku');
-
-            /** @var CProductPublicSku $publicSku */
-            $publicSku = $publicSkuRepo->findBy(['productId' => $productId, 'productVariantId' => $productVariantId]);
-
-            /** @var CProductPublicSku $singlePublicSku */
-            foreach ($publicSku as $singlePublicSku) {
-                if(!empty($newPrice)) {
-                    $singlePublicSku->price = $newPrice;
-                }
-                if(!empty($newSalePrice)) {
-                    $singlePublicSku->salePrice = $newSalePrice;
-                }
-                $singlePublicSku->update();
-            }
-
 
             $res = "Prezzi aggiornati!!";
             return $res;

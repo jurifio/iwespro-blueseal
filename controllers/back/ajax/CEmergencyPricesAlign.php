@@ -46,6 +46,6 @@ class CEmergencyPricesAlign extends AAjaxController
                  JOIN ProductSku psk ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
                   SET ppsk.salePrice = psk.salePrice, ppsk.price = psk.price
                 WHERE p.qty > 0 and (psk.salePrice <> ppsk.salePrice or psk.price <> ppsk.price)";
-        //return 'Sono state aggoiornate: '.\Monkey::app()->dbAdapter->query($sql,[])->countAffectedRows().' righe';
+        return 'Sono state aggoiornate: '.\Monkey::app()->dbAdapter->query($sql,[])->countAffectedRows().' righe';
     }
 }

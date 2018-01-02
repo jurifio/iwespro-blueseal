@@ -35,9 +35,6 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">ID</th>
-                                <th data-slug="shp_id"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Shop</th>
                                 <th data-slug="size"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Taglia</th>
