@@ -23,7 +23,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT n.id, if(n.isActive = 1,'Attiva','Non Attiva') as isActive  , l.name as lang, ud.name, ud.surname, n.subscriptionDate FROM 
-                        Newsletter n 
+                        NewsletterUser n 
                         JOIN Lang l ON n.langId = l.id 
                         LEFT JOIN (User u 
                           JOIN UserDetails ud ON u.id = ud.userId) 
@@ -33,7 +33,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
         $datatable->doAllTheThings();
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
-            $val = \Monkey::app()->repoFactory->create('Newsletter')->findOne([$row['id']]);
+            $val = \Monkey::app()->repoFactory->create('NewsletterUser')->findOne([$row['id']]);
 
             $user = $val->user;
             $row["DT_RowId"] = $val->id;

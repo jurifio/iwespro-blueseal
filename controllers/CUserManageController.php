@@ -75,7 +75,7 @@ class CUserManageController extends ARestrictedAccessRootController
 	    \Monkey::app()->repoFactory->create('User')->persistRegistrationToken($user->id,(new CToken(64))->getToken(),time() + $this->app->cfg()->fetch('miscellaneous', 'confirmExpiration'));
 
         if($this->app->router->request()->getRequestData('user_newsletter')) {
-            \Monkey::app()->repoFactory->create('Newsletter')->insertNewEmail($user->email,$user->id,$user->langId);
+            \Monkey::app()->repoFactory->create('NewsletterUser')->insertNewEmail($user->email,$user->id,$user->langId);
         }
 
 	    return $user->id;
@@ -108,10 +108,10 @@ class CUserManageController extends ARestrictedAccessRootController
         $userD->note = $this->app->router->request()->getRequestData('user_note');
         $userD->update();
 
-        if(!$user->newsletter && $this->app->router->request()->getRequestData('user_newsletter')) {
-            \Monkey::app()->repoFactory->create('Newsletter')->insertNewEmail($user->email,$user->id,$user->langId);
-        } elseif($user->newsletter && !$this->app->router->request()->getRequestData('user_newsletter')) {
-            \Monkey::app()->repoFactory->create('Newsletter')->unsubscribe($user->email);
+        if(!$user->newsletterUser && $this->app->router->request()->getRequestData('user_newsletter')) {
+            \Monkey::app()->repoFactory->create('NewsletterUser')->insertNewEmail($user->email,$user->id,$user->langId);
+        } elseif($user->newsletterUser && !$this->app->router->request()->getRequestData('user_newsletter')) {
+            \Monkey::app()->repoFactory->create('NewsletterUser')->unsubscribe($user->email);
         }
 
         return $user->id;

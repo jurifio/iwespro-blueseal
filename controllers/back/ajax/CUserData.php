@@ -23,7 +23,7 @@ class CUserData extends AAjaxController
                 $user = \Monkey::app()->repoFactory->create('User')->findOneByStringId($userId);
                 $user->userDetails;
                 $user->userAddress;
-                $user->newsletter;
+                $user->newsletterUser;
                 return json_encode($user->fullTreeToArray());
             } else {
                 $list = [];
