@@ -32,38 +32,75 @@ class CSalePriceProductSkuModify extends AAjaxController
      */
     public function put() {
 
+        $a = null;
         $data = \Monkey::app()->router->request()->getRequestData();
-        $productId = $data['productId'];
-        $productVariantId = $data['productVariantId'];
-        $newPrice = $data['newPrice'];
-        $newSalePrice = $data['newSalePrice'];
+        $multipleRow = $data['multipleRow'];
+        if ($multipleRow){
+            //Se ho selezionato più righe
+            $productCode = $data['productCode'];
+            $newPrice = $data['newPrice'];
+            $newSalePrice = $data['newSalePrice'];
 
-        if(empty($newSalePrice) && empty($newPrice)){
+            foreach ($productCode as $singleProductCode){
+                $newProductCode = explode('-', $singleProductCode);
+                $pId = $newProductCode[0];
+                $pVID = $newProductCode[1];
 
-            $res = "Non hai scritto nessun nuovo prezzo!";
-            return $res;
+                /** @var CProductSkuRepo $productSkuRepo */
+                $productSkuRepo = \Monkey::app()->repoFactory->create('ProductPublicSku');
 
-        } else {
+                /** @var CObjectCollection $productPublicSkus */
+                $productPublicSkus = $productSkuRepo->findBy(['productId' => $pId, 'productVariantId' => $pVID]);
 
-            /** @var CProductSkuRepo $productSkuRepo */
-            $productSkuRepo = \Monkey::app()->repoFactory->create('ProductPublicSku');
-
-            /** @var CObjectCollection $productPublicSkus */
-            $productPublicSkus = $productSkuRepo->findBy(['productId' => $productId, 'productVariantId' => $productVariantId]);
-
-            /** @var CProductPublicSku $singleSku */
-            foreach ($productPublicSkus as $singleSku){
-                if(!empty($newPrice)) {
-                    $singleSku->price = $newPrice;
+                /** @var CProductPublicSku $singleSku */
+                foreach ($productPublicSkus as $singleSku){
+                    if(!empty($newPrice)) {
+                        $singleSku->price = $newPrice;
+                    }
+                    if(!empty($newSalePrice)) {
+                        $singleSku->salePrice = $newSalePrice;
+                    }
+                    $singleSku->update();
                 }
-                if(!empty($newSalePrice)) {
-                    $singleSku->salePrice = $newSalePrice;
-                }
-                $singleSku->update();
             }
 
             $res = "Prezzi aggiornati!!";
             return $res;
+
+        } else {
+            //Se ho selezionato una sola riga
+            $productId = $data['productId'];
+            $productVariantId = $data['productVariantId'];
+            $newPrice = $data['newPrice'];
+            $newSalePrice = $data['newSalePrice'];
+
+            if(empty($newSalePrice) && empty($newPrice)){
+
+                $res = "Non hai scritto nessun nuovo prezzo!";
+                return $res;
+
+            } else {
+
+                /** @var CProductSkuRepo $productSkuRepo */
+                $productSkuRepo = \Monkey::app()->repoFactory->create('ProductPublicSku');
+
+                /** @var CObjectCollection $productPublicSkus */
+                $productPublicSkus = $productSkuRepo->findBy(['productId' => $productId, 'productVariantId' => $productVariantId]);
+
+                /** @var CProductPublicSku $singleSku */
+                foreach ($productPublicSkus as $singleSku){
+                    if(!empty($newPrice)) {
+                        $singleSku->price = $newPrice;
+                    }
+                    if(!empty($newSalePrice)) {
+                        $singleSku->salePrice = $newSalePrice;
+                    }
+                    $singleSku->update();
+                }
+
+                $res = "Prezzi aggiornati!!";
+                return $res;
+            }
         }
 
     }
