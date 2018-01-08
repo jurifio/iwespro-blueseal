@@ -145,6 +145,7 @@
     });
 
 
+    /*
     $(document).on('bs-emergency-alignment', function () {
 
 
@@ -172,7 +173,7 @@
                     bsModal.showOkBtn();
                 });
             });
-    });
+    });*/
 
 
 })();
