@@ -20,6 +20,7 @@ class CSupplierShippingTimeLog extends CLogging
         $this->backtrace = $eventName->getBacktrace();
         $this->params = $eventName->getEventData();
         $userId = $eventName->getUserId();
+
         $time = STimeToolbox::DbFormattedDateTime($this->getParameter('time'));
         if (!$time) $time = date('Y-m-d H:i:s');
         $order = $this->getParameter('order');
@@ -34,6 +35,7 @@ class CSupplierShippingTimeLog extends CLogging
         $lC = $logR->findBy(['entityName' => $entityName, 'stringId' => $stringId], '', 'ORDER BY time desc');
         $check = $lC->getFirst();
         if (!$check || $check->eventValue != $value) {
+            if($userId == 0) $userId = 1;
             $this->insertLogRow($eventName->getEventName(), $userId, $value, $entityName, $stringId, $time);
         }
     }
