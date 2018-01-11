@@ -46,13 +46,14 @@ FROM ProductPublicSku ps1
           p.id,
           p.productVariantId,
           p.isOnSale as onSale,
+          pps.salePrice as salePriceToConfront,
           count(DISTINCT pps.salePrice) AS prezziSaldo,
           count(DISTINCT pps.price) AS prezzi
         FROM Product p
           JOIN ProductPublicSku pps ON p.id = pps.productId AND p.productVariantId = pps.productVariantId
-        WHERE p.qty > 0 AND pps.salePrice = 0 AND p.isOnSale = 1
+        WHERE p.qty > 0
         GROUP BY p.id, p.productVariantId
-        HAVING prezzi = 1
+        HAVING (prezzi > 1 OR prezziSaldo > 1) or (prezzi = 1 AND onSale = 1 AND salePriceToConfront = 0)
        ) q1 ON ps1.productId = q1.id AND ps1.productVariantId = q1.productVariantId";
 
         $datatable = new CDataTables($sql, ['productId','productVariantId','size'], $_GET, true);
