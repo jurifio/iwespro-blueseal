@@ -59,6 +59,7 @@ class CProductSales extends AAjaxController
 
                 foreach ($product->productPublicSku as $singleProductPublicSku){
                     $singleProductPublicSku->salePrice = floor($singleProductPublicSku->price / 100 * (100 - $percent));
+                    $singleProductPublicSku->update();
                 }
 
                 $this->app->eventManager->triggerEvent('product.price.change', ['productId' => $product->printId()]);
