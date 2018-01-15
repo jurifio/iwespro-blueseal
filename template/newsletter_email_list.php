@@ -31,47 +31,22 @@
                                data-display-length="200">
                             <thead>
                             <tr>
-                                <th data-slug="email"
+                                <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Email
-                                </th>
-                                <th data-slug="isActive"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Attiva?
+                                    class="center">Id
                                 </th>
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Nome
+                                    class="center">Email List
                                 </th>
-                                <th data-slug="surname"
+                                <th data-slug="sql"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Cognome
+                                    class="center">sql
                                 </th>
-                                <th data-slug="lang"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center dataFilterType">Lingua
-                                </th>
-                                <th data-slug="subscriptionDate"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-default-order="desc"
-                                    class="center dataFilterType">Data iscrizione
-                                </th>
-                                <th data-slug="unsubscriptionDate"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center dataFilterType">Data disiscrizione
-                                </th>
-                                <th data-slug="lang"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center dataFilterType">Lingua
-                                </th>
+
                             </tr>
                             </thead>
                             <tbody>
