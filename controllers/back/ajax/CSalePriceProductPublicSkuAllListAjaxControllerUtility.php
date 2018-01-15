@@ -39,10 +39,13 @@ class CSalePriceProductPublicSkuAllListAjaxControllerUtility extends AAjaxContro
   concat(ps1.productId, '-', ps1.productVariantId) AS id,
   ps1.price as p_price,
   ps1.salePrice as p_sale_price,
-  p.isOnSale as on_sale
+  p.isOnSale as on_sale,
+  s.name as shopName
 FROM ProductPublicSku ps1
   JOIN ProductSize ps on ps1.productSizeId = ps.id
-  JOIN Product p ON ps1.productId = p.id AND ps1.productVariantId = p.productVariantId";
+  JOIN Product p ON ps1.productId = p.id AND ps1.productVariantId = p.productVariantId
+  JOIN ShopHasProduct shp ON p.id = shp.productId AND p.productVariantId = shp.productVariantId
+  JOIN Shop s ON shp.shopId = s.id";
 
         $datatable = new CDataTables($sql, ['productId','productVariantId','size'], $_GET, true);
 

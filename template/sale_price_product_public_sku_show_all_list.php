@@ -47,6 +47,9 @@
                                 <th data-slug="p_sale_price"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Prezzo in saldo</th>
+                                <th data-slug="shopName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop</th>
                             </tr>
                             </thead>
                             <tbody>
