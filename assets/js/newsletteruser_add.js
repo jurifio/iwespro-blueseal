@@ -1,7 +1,6 @@
 (function ($) {
     Pace.ignore(function () {
 
-
         $.ajax({
             method:'GET',
             url: '/blueseal/xhr/GetTableContent',
@@ -71,9 +70,9 @@ $(document).on('bs.newNewsletterUser.save', function () {
         newsletterEmailListId : $('#newsletterEmailListId').val(),
         newsletterTemplateId:$('#newsletterTemplateId').val(),
         subject : $('#subject').val(),
-        data : $('#data').val(),
-        preCompliedTemplate : $('#preCompliedTemplate').val(),
-        campaignId : $('#campaignId')
+        dataDescription : $('#dataDescription').val(),
+        preCompiledTemplate : $('#preCompiledTemplate').val(),
+        campaignId : $('#campaignId').val()
         };
         $.ajax({
             method: 'post',

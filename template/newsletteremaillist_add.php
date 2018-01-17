@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,24 +28,51 @@
                         <div class="col-md-6">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Aggiungi una Newsletter</h5>
+                                    <h5 class="m-t-10">Aggiungi una Lista</h5>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="user">Nome Newsletter</label>
+                                                <label for="name">Nome lista</label>
                                                 <input id="name" class="form-control"
-                                                 placeholder="Inserisci il nome della newsletter" name="name" required="required">
+                                                       placeholder="Inserisci il nome della lista destinatari"
+                                                       name="name" required="required">
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="filteredField">Seleziona la tipologia di Filtro</label>
+                                                <select id="filteredField" name="filteredField"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Colonna"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="inputAge">
+                                    </div>
+                                    <div id="inputCity">
+                                    </div>
+                                    <div id="inputCountry">
+                                    </div>
+                                    <div id="inputIsActive">
+                                    </div>
+                                    <div id="inputIsActive">
+                                    </div>
+                                    <div id="inputOrderDate">
+                                    </div>
+
 
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="dataDescription">Descrizione Newletter</label>
-                                                <input type="text" class="form-control" id="dataDescription" name="dataDescription" value="" />
+                                                <input type="text" class="form-control" id="dataDescription"
+                                                       name="dataDescription" value=""/>
                                             </div>
                                         </div>
                                     </div>
@@ -54,7 +80,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="preCompiledTemplate">Template Predefinito</label>
-                                                <input type="text" class="form-control" id="preCompiledTemplate" name="preCompiledTemplate" value="" />
+                                                <input type="text" class="form-control" id="preCompiledTemplate"
+                                                       name="preCompiledTemplate" value=""/>
                                             </div>
                                         </div>
                                     </div>
@@ -77,7 +104,6 @@
                             </div>
 
 
-
                         </div>
                         <div class="col-md-6">
                             <div class="panel panel-default clearfix">
@@ -90,7 +116,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="sendAddressDate">Data di Invio</label>
-                                                <input type="date" class="form-control" id="sendAddressDate" name="sendAddressDate" value="" />
+                                                <input type="date" class="form-control" id="sendAddressDate"
+                                                       name="sendAddressDate" value=""/>
                                             </div>
                                         </div>
                                     </div>
@@ -98,14 +125,16 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="fromEmailAddressId">no-reply@.pickyshop.com</label>
-                                                <input type="hidden" class="form-control" id="fromEmailAddressId" name="fromEmailAddressId" value="1" />
+                                                <input type="hidden" class="form-control" id="fromEmailAddressId"
+                                                       name="fromEmailAddressId" value="1"/>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterEmailListId">Seleziona la lista dei destinatari</label>
+                                                <label for="newsletterEmailListId">Seleziona la lista dei
+                                                    destinatari</label>
                                                 <select id="newsletterEmailListId" name="newsletterEmailListId"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
@@ -118,14 +147,16 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="subject">Oggetto</label>
-                                                <input type="text" class="form-control" id="subject" name="subject" value="" />
+                                                <input type="text" class="form-control" id="subject" name="subject"
+                                                       value=""/>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterTemplateId">Seleziona Il Template da Utilizzare</label>
+                                                <label for="newsletterTemplateId">Seleziona Il Template da
+                                                    Utilizzare</label>
                                                 <select id="newsletterTemplateId" name="NewletterTemplateId"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
@@ -136,10 +167,9 @@
                                     </div>
 
 
-
+                                </div>
                             </div>
                         </div>
-                    </div>
                 </form>
             </div>
         </div>
@@ -152,15 +182,15 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione NewsletterUser">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="AllShops"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-event="bs.newNewsletterUser.save"
-            data-title="Salva la  Newsletter"
-            data-placement="bottom"
-            data-href="#"
+                data-tag="a"
+                data-icon="fa-file-o fa-plus"
+                data-permission="AllShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.newNewsletterEmailList.save"
+                data-title="Salva la  Newsletter"
+                data-placement="bottom"
+                data-href="#"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

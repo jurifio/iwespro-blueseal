@@ -4,12 +4,12 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
-use bamboo\domain\entities\CNewsletterUser;
-use bamboo\domain\repositories\CNewsletterRepo;
+use bamboo\domain\entities\CNewsletterEmailList;
+use bamboo\domain\repositories\CNewsletterEmailListRepo;
 
 
 /**
- * Class CProductSizeGroupManage
+ * Class CNewsletterEmailList
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -21,13 +21,27 @@ use bamboo\domain\repositories\CNewsletterRepo;
  * @date $date
  * @since 1.0
  */
-class CNewsletterUserManage extends AAjaxController
+class CNewsletterEmailListManage extends AAjaxController
 {
     /**
      * @return int
      * @throws BambooException
      * @throws \Exception
      */
+    public function get()
+    {
+        $sql = "select u.id, u.name, u.sql  from pickyshop_dev.NewsletterEmailList u";
+        $datatable = new CDataTables($sql, ['id'], $_GET, true);
+
+        $datatable->doAllTheThings('true');
+
+        foreach ($datatable->getResponseSetData() as $key=>$row) {
+
+        }
+
+        return $datatable->responseOut();
+    }
+
     public function post()
     {
         //prendo i dati passati in input
@@ -54,22 +68,22 @@ class CNewsletterUserManage extends AAjaxController
         if (empty($newsletterUser)){
             //se la variabile non è istanziata inserisci in db
 
-        /** @var CNewsletterUser $newsletterUserInsert   */
-        $newsletterUserInsert = \Monkey::app()->repoFactory->create('NewsletterUser')->getEmptyEntity();
-        //popolo la tabella
+            /** @var CNewsletterUser $newsletterUserInsert   */
+            $newsletterUserInsert = \Monkey::app()->repoFactory->create('NewsletterUser')->getEmptyEntity();
+            //popolo la tabella
 
-         $newsletterUserInsert->name = $name;
-         $newsletterUserInsert->fromEmailAddressId     = $fromEmailAddressId;
-         $newsletterUserInsert->sendAddressDate        = $sendAddressDate;
-         $newsletterUserInsert->newsletterEmailListId  = $newsletterEmailListId;
-         $newsletterUserInsert->newsletterTemplateId   = $newsletterTemplateId;
-         $newsletterUserInsert->subject                = $subject;
-         $newsletterUserInsert->dataDescription        = $dataDescription;
-         $newsletterUserInsert->preCompiledTemplate    = $preCompiledTemplate;
-         $newsletterUserInsert->campaignId             = $campaignId;
-        // eseguo la commit sulla tabella;
+            $newsletterUserInsert->name = $name;
+            $newsletterUserInsert->fromEmailAddressId     = $fromEmailAddressId;
+            $newsletterUserInsert->sendAddressDate        = $sendAddressDate;
+            $newsletterUserInsert->newsletterEmailListId  = $newsletterEmailListId;
+            $newsletterUserInsert->newsletterTemplateId   = $newsletterTemplateId;
+            $newsletterUserInsert->subject                = $subject;
+            $newsletterUserInsert->dataDescription        = $dataDescription;
+            $newsletterUserInsert->preCompiledTemplate    = $preCompiledTemplate;
+            $newsletterUserInsert->campaignId             = $campaignId;
+            // eseguo la commit sulla tabella;
 
-         $newsletterUserInsert->smartInsert();
+            $newsletterUserInsert->smartInsert();
 
             $res = "Newsletter inserita con successo!";
 
