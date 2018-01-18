@@ -25,7 +25,7 @@
                 <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post"
                       autocomplete="off">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Aggiungi una Lista</h5>
@@ -53,6 +53,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div id="inputGender">
+                                    </div>
                                     <div id="inputAge">
                                     </div>
                                     <div id="inputCity">
@@ -65,76 +67,10 @@
                                     </div>
                                     <div id="inputOrderDate">
                                     </div>
-
-
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="dataDescription">Descrizione Newletter</label>
-                                                <input type="text" class="form-control" id="dataDescription"
-                                                       name="dataDescription" value=""/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="preCompiledTemplate">Template Predefinito</label>
-                                                <input type="text" class="form-control" id="preCompiledTemplate"
-                                                       name="preCompiledTemplate" value=""/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="campaignId">Seleziona la Campagna Associata</label>
-                                                <select id="campaignId" name="campaignId"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Seleziona la Campagna"
-                                                        data-init-plugin="selectize">
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <div class="col-md-6">
-                            <div class="panel panel-default clearfix">
-                                <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Dettagli Newletter</h5>
-                                </div>
-                                <div class="panel-body clearfix">
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="sendAddressDate">Data di Invio</label>
-                                                <input type="date" class="form-control" id="sendAddressDate"
-                                                       name="sendAddressDate" value=""/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="fromEmailAddressId">no-reply@.pickyshop.com</label>
-                                                <input type="hidden" class="form-control" id="fromEmailAddressId"
-                                                       name="fromEmailAddressId" value="1"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterEmailListId">Seleziona la lista dei
-                                                    destinatari</label>
+                                                <label for="newsletterEmailListId">Seleziona la lista dei destinatari</label>
                                                 <select id="newsletterEmailListId" name="newsletterEmailListId"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
@@ -143,33 +79,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="subject">Oggetto</label>
-                                                <input type="text" class="form-control" id="subject" name="subject"
-                                                       value=""/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterTemplateId">Seleziona Il Template da
-                                                    Utilizzare</label>
-                                                <select id="newsletterTemplateId" name="NewletterTemplateId"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Seleziona la Lista"
-                                                        data-init-plugin="selectize">
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
 
+
+                                    <div class="row">
+                                    </div>
 
                                 </div>
                             </div>
+
+
                         </div>
+
                 </form>
             </div>
         </div>

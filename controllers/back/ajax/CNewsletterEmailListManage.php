@@ -47,49 +47,46 @@ class CNewsletterEmailListManage extends AAjaxController
         //prendo i dati passati in input
         $data = \Monkey::app()->router->request()->getRequestData();
         $name = $data['name'];
-        $fromEmailAddressId    = $data['fromEmailAddressId'];
-        $sendAddressDate       = $data['sendAddressDate'];
+        $sql    = $data['sql'];
         $newsletterEmailListId = $data['newsletterEmailListId'];
-        $newsletterTemplateId  = $data['newsletterTemplateId'];
-        $subject               = $data['subject'];
-        $dataDescription       = $data['dataDescription'];
-        $preCompiledTemplate   = $data['preCompiledTemplate'];
-        $campaignId            = $data['campaignId'];
+        if( empty($sql)){
+            $sql="vuoto";
+        }
+
+        if(empty($name) || empty($sql) || empty($newsletterEmailListId)){
+            $res = "prego compila tutti i campi premi Annulla e compila i campi mancanti<br>Nome Lista Destinatari".$name."<br>Filtro  sql Generato:".$sql."<br>Id Codice newletter Associata:".$newsletterEmailListId;
+
+        } else {
 
 
+            /** @var CRepo $newsletterEmailListRepo */
+            $newsletterEmailListRepo = \Monkey::app()->repoFactory->create('NewsletterEmailList');
 
-        /** @var CRepo $newsletterUserRepo */
-        $newsletterUserRepo = \Monkey::app()->repoFactory->create('NewsletterUser');
-
-        /** @var CNewsletterUser $newsletterUser */
-        $newsletterUser = $newsletterUserRepo->findOneBy(['name' => $name]);
+            /** @var CNewsletterEmailList $newsletterEmailList */
+            $newsletterEmailList = $newsletterEmailListRepo->findOneBy(['name' => $name]);
 
 
-        if (empty($newsletterUser)){
-            //se la variabile non è istanziata inserisci in db
+            if (empty($newsletterEmailList)) {
+                //se la variabile non è istanziata inserisci in db
 
-            /** @var CNewsletterUser $newsletterUserInsert   */
-            $newsletterUserInsert = \Monkey::app()->repoFactory->create('NewsletterUser')->getEmptyEntity();
-            //popolo la tabella
+                /** @var CNewsletterEmailList $newsletterEmailListInsert */
+                $newsletterEmailListInsert = \Monkey::app()->repoFactory->create('NewsletterEmailList')->getEmptyEntity();
+                //popolo la tabella
 
-            $newsletterUserInsert->name = $name;
-            $newsletterUserInsert->fromEmailAddressId     = $fromEmailAddressId;
-            $newsletterUserInsert->sendAddressDate        = $sendAddressDate;
-            $newsletterUserInsert->newsletterEmailListId  = $newsletterEmailListId;
-            $newsletterUserInsert->newsletterTemplateId   = $newsletterTemplateId;
-            $newsletterUserInsert->subject                = $subject;
-            $newsletterUserInsert->dataDescription        = $dataDescription;
-            $newsletterUserInsert->preCompiledTemplate    = $preCompiledTemplate;
-            $newsletterUserInsert->campaignId             = $campaignId;
-            // eseguo la commit sulla tabella;
+                $newsletterEmailListInsert->name = $name;
+                $newsletterEmailListInsert->sql = $sql;
+                $newsletterEmailListInsert->newsletterEmailListId = $newsletterEmailListId;
 
-            $newsletterUserInsert->smartInsert();
+                // eseguo la commit sulla tabella;
 
-            $res = "Newsletter inserita con successo!";
+                $newsletterEmailListInsert->smartInsert();
 
-        }else{
-            //Se hai trovato qualcosa allora restituitsci messaggio di errore
-            $res = "Esiste già una newsletter con lo stesso nome";
+                $res = "filtro Lista Destinatari inserito con successo!";
+
+            } else {
+                //Se hai trovato qualcosa allora restituitsci messaggio di errore
+                $res = "Esiste già un filtro lista Destinatari con lo stesso nome";
+            }
         }
 
         return $res;

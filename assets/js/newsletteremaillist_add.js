@@ -4,6 +4,8 @@
         // select per la composizione della query
         var select = $('#filteredField');
         var newOptions = {
+            'clean' :'Pulisci',
+            'gender': 'Sesso',
             'birthDate': 'Età',
             'city': 'Città',
             'country': 'Nazione',
@@ -26,11 +28,12 @@
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
                     '<label for=\"filterAge\">Seleziona l\'Eta </label><select id=\"filterAge\" name=\"filterAge\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'eta\"' +
                     'data-init-plugin=\"selectize\">' +
-                    '<option value=\"and dataAge>=18 and dataAge<=24\">18-24</option>' +
-                    '<option value=\"and dataAge>=25 and dataAge<=34\">25-34</option>' +
-                    '<option value=\"and dataAge>=35 and dataAge<=44\">35-44</option>' +
-                    '<option value=\"and dataAge>=45 and dataAge<=54\">55-64</option>' +
-                    '<option value=\"and dataAge>=65\">55-64</option></select>' +
+                    '<option value=\"and a.dataAge>=18 and a.dataAge<=24\">18-24</option>' +
+                    '<option value=\"and a.dataAge>=25 and a.dataAge<=34\">25-34</option>' +
+                    '<option value=\"and a.dataAge>=35 and a.dataAge<=44\">35-44</option>' +
+                    '<option value=\"and a.dataAge>=45 and a.dataAge<=54\">45-54</option>' +
+                    '<option value=\"and a.dataAge>=55 and a.dataAge<=64\">55-64</option>' +
+                    '<option value=\"and dataAge>=65\">+65</option></select>' +
                     ' </div>' +
                     '</div>' +
                     '</div>');
@@ -59,7 +62,7 @@
                     var select = $('#filterCity');
                     if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
                     select.selectize({
-                        valueField: 'id',
+                        valueField: 'name',
                         labelField: 'name',
                         searchField: ['name'],
                         options: res2,
@@ -118,7 +121,7 @@
                 $("#inputOrderDate").append('<div class=\"row\">' +
                     ' <div class="col-md-12">' +
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
-                    '<label for=\"filterOrdeDateStart\">Seleziona Esclusione Ordini da Data </label><input type="\date\" id=\"filterOrdeDateStart\" name=\"filterOrdeDateStart\" class=\"form-control\" placeholder=\"Seleziona Esclusione Ordini da Data "' +
+                    '<label for=\"filterOrderDateStart\">Seleziona Esclusione Ordini da Data </label><input type="\date\" id=\"filterOrderDateStart\" name=\"filterOrderDateStart\" class=\"form-control\" placeholder=\"Seleziona Esclusione Ordini da Data "' +
                     'value=\"\"/>' +
                     ' </div>' +
                     '</div>' +
@@ -126,8 +129,32 @@
                 $("#inputOrderDate").append('<div class=\"row\">' +
                     ' <div class="col-md-12">' +
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
-                    '<label for=\"filterOrdeDateFinish\">Seleziona Esclusione Ordini a Data </label><input type="\date\" id=\"filterOrdeDateFinish\" name=\"filterOrdeDateFinish\" class=\"form-control\" placeholder=\"Seleziona Esclusione Ordini a Data "' +
+                    '<label for=\"filterOrderDateFinish\">Seleziona Esclusione Ordini a Data </label><input type="\date\" id=\"filterOrderDateFinish\" name=\"filterOrderDateFinish\" class=\"form-control\" placeholder=\"Seleziona Esclusione Ordini a Data "' +
                     'value=\"\"/>' +
+                    ' </div>' +
+                    '</div>' +
+                    '</div>');
+
+            } else if (selection == 'clean') {
+                $("#inputOrderDate").empty();
+                $("#inputIsActive").empty();
+                $("#inputCity").empty();
+                $("#inputCountry").empty();
+                $("#inputAge").empty();
+
+
+
+            }else if (selection == 'gender') {
+                $("#inputGender").empty();
+
+                $("#inputGender").append('<div class=\"row\">' +
+                    ' <div class="col-md-12">' +
+                    '<div class=\"form-group form-group-default selectize-enabled\">' +
+                    '<label for=\"filterGender\">Seleziona il Sesso </label><select id=\"filterGender\" name=\"filterGender\" class=\"full-width selectpicker\" placeholder=\"Selezione il Sesso"' +
+                    'data-init-plugin=\"selectize\">' +
+                    '<option value=\"and a.gender=\'M\'\">Sesso Maschile</option>' +
+                    '<option value=\"and a.gender=\'F\'\">Sesso Femminile</option>' +
+                    '</select>' +
                     ' </div>' +
                     '</div>' +
                     '</div>');
@@ -154,40 +181,7 @@
                 options: res2,
             });
         });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'NewsletterTemplate'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            var select = $('#newsletterTemplateId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'template',
-                searchField: ['template'],
-                options: res2,
-            });
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'Campaign'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            var select = $('#campaignId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2,
-            });
-        });
+
     });
 })(jQuery);
 
@@ -199,20 +193,62 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
+        let filterGender =$('#filterGender').val();
+        let filterAge =  $('#filterAge').val();
+        let filterCity = $('#filterCity').val();
+        let filterCountry = $('#filterCountry').val();
+        let filterIsActive = $('#filterIsActive').val();
+        let filterOrderDateStart = $('#filterOrderDateStart').val();
+        let filterOrderDateFinish = $('#filterOrderDateFinish').val();
+        if (typeof filterGender === "undefined"){
+            filterGender="";
+
+        }else{
+            filterGender=filterGender;
+        }
+        if (typeof filterAge === "undefined") {
+            filterAge = "";
+        }else{
+            filterAge = filterAge;
+        }
+        if (typeof filterCity === "undefined"){
+            filterCity="";
+        }else{
+            filterCity="and b.city='"+filterCity+"'";
+        }
+        if (typeof filterCountry === "undefined"){
+            filterCountry="";
+        }else{
+           filterCountry="and b.countryId='"+filterCountry+"'";
+        }
+        if (typeof filterIsActive === "undefined"){
+            filterIsActive="";
+        }else{
+            filterIsActive="and c.isActive='"+filterIsActive+"'";
+        }
+        if (typeof filterOrderDateStart === "undefined"){
+            filterOrderDateStart="";
+
+        }else{
+            filterOrderDateStart="and d.orderDate>='"+filterOrderDateStart+"'";
+        }
+        if (typeof filterOrderDateFinish === "undefined"){
+            filterOrderDateFinish="";
+        }else{
+            filterOrderDateFinish="and d.orderDate<='"+filterOrderDateFinish+"'";
+        }
+
+
+
+
         const data = {
             name: $('#name').val(),
-            fromEmailAddressId: $('#fromEmailAddressId').val(),
-            sendAddressDate: $('#sendAddressDate').val(),
-            newsletterEmailListId: $('#newsletterEmailListId').val(),
-            newsletterTemplateId: $('#newsletterTemplateId').val(),
-            subject: $('#subject').val(),
-            dataDescription: $('#dataDescription').val(),
-            preCompiledTemplate: $('#preCompiledTemplate').val(),
-            campaignId: $('#campaignId').val()
+            sql: filterGender + ' ' + filterAge + ' ' + filterCity + ' ' + filterCountry + ' ' + filterIsActive + ' ' + filterOrderDateStart + ' ' + filterOrderDateFinish,
+            newsletterEmailListId: $('#newsletterEmailListId').val()
         };
         $.ajax({
             method: 'post',
-            url: '/blueseal/xhr/NewsletterEmailList',
+            url: '/blueseal/xhr/NewsletterEmailListManage',
             data: data
         }).done(function (res) {
             bsModal.writeBody(res);
