@@ -28,12 +28,12 @@
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
                     '<label for=\"filterAge\">Seleziona l\'Eta </label><select id=\"filterAge\" name=\"filterAge\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'eta\"' +
                     'data-init-plugin=\"selectize\">' +
-                    '<option value=\"and a.dataAge>=18 and a.dataAge<=24\">18-24</option>' +
-                    '<option value=\"and a.dataAge>=25 and a.dataAge<=34\">25-34</option>' +
-                    '<option value=\"and a.dataAge>=35 and a.dataAge<=44\">35-44</option>' +
-                    '<option value=\"and a.dataAge>=45 and a.dataAge<=54\">45-54</option>' +
-                    '<option value=\"and a.dataAge>=55 and a.dataAge<=64\">55-64</option>' +
-                    '<option value=\"and dataAge>=65\">+65</option></select>' +
+                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 18 and 24 \">18-24</option>' +
+                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 25 and 34 \">25-34</option>' +
+                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 35 and 44  \">35-44</option>' +
+                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 45 and 54  \">45-54</option>' +
+                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 55 and 64  \">55-64</option>' +
+                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\'))  >=65\">+65</option></select>' +
                     ' </div>' +
                     '</div>' +
                     '</div>');

@@ -34,32 +34,7 @@
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="user">Nome Newsletter</label>
-                                                <input id="name" class="form-control"
-                                                 placeholder="Inserisci il nome della newsletter" name="name" required="required">
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="dataDescription">Descrizione Newletter</label>
-                                                <input type="text" class="form-control" id="dataDescription" name="dataDescription" value="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="preCompiledTemplate">Template Predefinito</label>
-                                                <input type="text" class="form-control" id="preCompiledTemplate" name="preCompiledTemplate" value="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="campaignId">Seleziona la Campagna Associata</label>
                                                 <select id="campaignId" name="campaignId"
@@ -71,7 +46,29 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <br><br><br><p><br>
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="user">Nome Newsletter</label>
+                                                <input id="name" class="form-control"
+                                                 placeholder="Inserisci il nome della newsletter" name="name" required="required">
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p><br><br>
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="dataDescription">Descrizione Newletter</label>
+                                                <input type="text" class="form-control" id="dataDescription" name="dataDescription" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
 
                                 </div>
                             </div>
@@ -131,7 +128,9 @@
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
                                                 </select>
+
                                             </div>
+                                            <p>
                                         </div>
                                     </div>
 
@@ -140,6 +139,20 @@
                             </div>
                         </div>
                     </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="preCompiledTemplate1">Template Predefinito</label>
+                                            <input type="file" class="form-control" id="preCompiledTemplate1" name="preCompiledTemplate1" value="" />
+                                            <input type="hidden" class="form-control" id="preCompiledTemplate" name="preCompiledTemplate" value="" />
+                                            <pre id="file-content"></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                        </div>
                 </form>
             </div>
         </div>
