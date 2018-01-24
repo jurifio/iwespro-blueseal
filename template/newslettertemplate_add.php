@@ -5,6 +5,7 @@
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
+    <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -14,13 +15,7 @@
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
-            <div class="container-fluid container-fixed-lg bg-white">
-                <div class="row">
-                    <div class="col-md-4 col-md-offset-4 alert-container closed">
 
-                    </div>
-                </div>
-            </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post"
@@ -35,23 +30,38 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="template">Nome Newsletter</label>
-                                                <input id="template" class="form-control"
-                                                       placeholder="Inserisci il nome del file  template" name="template" required="required">
+                                                <label for="name">Nome template</label>
+                                                <input id="name" class="form-control"
+                                                       placeholder="Inserisci il nome del file  template" name="name" required="required">
                                             </div>
                                         </div>
                                     </div>
 
-                                </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                            <label for="template">Editor template</label>
+                                            <div align="center">
+
+                                            <textarea cols="80" id="template" class="form-control"  name="template" required="required" rows="10"
+                                            placeholder="Definisci  il template">
+
+			                                    </textarea>
+
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </form>
             </div>
 
     </div>
 
-    <?php include "parts/footer.php" ?>
+    <?php include "parts/footer.php"; ?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>

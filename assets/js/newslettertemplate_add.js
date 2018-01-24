@@ -1,6 +1,10 @@
 (function ($) {
     Pace.ignore(function () {
+        CKEDITOR.replace( 'template', {
+            height: 260,
+            width:1024
 
+        } );
 
     });
 })(jQuery);
@@ -13,8 +17,11 @@ $(document).on('bs.newNewsletterTemplate.save', function () {
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
+        var templateEditor =CKEDITOR.instances.template.getData();
+
         const data = {
-            template: $('#template').val()
+            name : $('#name').val(),
+            template: templateEditor
         };
         $.ajax({
             method: 'post',
@@ -34,7 +41,3 @@ $(document).on('bs.newNewsletterTemplate.save', function () {
         });
     });
 });
-
-
-
-

@@ -32,6 +32,7 @@ class CNewsletterTemplateManage extends AAjaxController
     {
         //prendo i dati passati in input
         $data = \Monkey::app()->router->request()->getRequestData();
+        $name = $data['name'];
         $template = $data['template'];
 
 
@@ -41,7 +42,7 @@ class CNewsletterTemplateManage extends AAjaxController
         $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
 
         /** @var CNewsletterTemplate $newsletterTemplate */
-        $newsletterTemplateRepo = $newsletterTemplateRepo->findOneBy(['template' => $template]);
+        $newsletterTemplateRepo = $newsletterTemplateRepo->findOneBy(['name' => $name]);
 
 
         if (empty($newsletterTemplate)){
@@ -51,7 +52,9 @@ class CNewsletterTemplateManage extends AAjaxController
             $newsletterTemplateInsert = \Monkey::app()->repoFactory->create('NewsletterTemplate')->getEmptyEntity();
             //popolo la tabella
 
+            $newsletterTemplateInsert->name = $name ;
             $newsletterTemplateInsert->template = $template;
+
 
             // eseguo la commit sulla tabella;
 

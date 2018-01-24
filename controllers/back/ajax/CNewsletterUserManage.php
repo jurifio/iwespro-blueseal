@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CNewsletterTemplate;
 use bamboo\domain\entities\CNewsletterUser;
 use bamboo\domain\repositories\CNewsletterRepo;
 
@@ -42,7 +43,12 @@ class CNewsletterUserManage extends AAjaxController
         $preCompiledTemplate   = $data['preCompiledTemplate'];
         $campaignId            = $data['campaignId'];
 
+        /** @var CRepo $newsletterTemplateRepo */
+        $newsletterTemplateRepo =\Monkey::app()->repoFactory->create('NewsletterTemplate');
 
+        /** @var CNewsletterTemplate $newsletterTemplate */
+        $newsletterTemplate =  $newsletterTemplateRepo->findOneBy(['template'=>$newsletterTemplateId]);
+        $newsletterTemplateId= $newsletterTemplate->id;
 
         /** @var CRepo $newsletterUserRepo */
         $newsletterUserRepo = \Monkey::app()->repoFactory->create('NewsletterUser');

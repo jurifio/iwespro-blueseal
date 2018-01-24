@@ -4,7 +4,8 @@
         // select per la composizione della query
         var select = $('#filteredField');
         var newOptions = {
-            'clean' :'Pulisci',
+            'empty':'',
+            'clean': 'Pulisci',
             'gender': 'Sesso',
             'birthDate': 'Età',
             'city': 'Città',
@@ -17,40 +18,107 @@
             var option = new Option(key, text);
             select.append($(option));
         });
+        //inizializzo i campi a casccata
+        let inputAgeFieldCounter =0;
+        let inputCountryFieldCounter =0;
+        let inputCityFieldCounter =0;
         $("#filteredField").change(function () {
             var selection = $(this).val();
-            if (selection == 'birthDate') {
-                $("#inputAge").empty();
 
+            if (selection == 'birthDate') {
+               // $("#inputAge").empty();
+                inputAgeFieldCounter=inputAgeFieldCounter+1;
 
                 $("#inputAge").append('<div class=\"row\">' +
-                    ' <div class="col-md-12">' +
+                    ' <div class="col-md-6">' +
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
-                    '<label for=\"filterAge\">Seleziona l\'Eta </label><select id=\"filterAge\" name=\"filterAge\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'eta\"' +
+                    '<label for=\"filterAge'+inputAgeFieldCounter+'\">Seleziona l\'Eta </label><select id=\"filterAge'+inputAgeFieldCounter+'\" name=\"filterAge'+inputAgeFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'eta\"' +
                     'data-init-plugin=\"selectize\">' +
-                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 18 and 24 \">18-24</option>' +
-                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 25 and 34 \">25-34</option>' +
-                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 35 and 44  \">35-44</option>' +
-                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 45 and 54  \">45-54</option>' +
-                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 55 and 64  \">55-64</option>' +
-                    '<option value=\"and (DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\'))  >=65\">+65</option></select>' +
+                    '<option value=\"\"></option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 18 and 24 \">18-24</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 25 and 34 \">25-34</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 35 and 44  \">35-44</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 45 and 54  \">45-54</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 55 and 64  \">55-64</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\'))  >=65\">+65</option></select>' +
                     ' </div>' +
                     '</div>' +
+                    ' <div class="col-md-6">' +
+                    '<div class=\"form-group form-group-default selectize-enabled\">' +
+                    '<label for=\"filterAgeAndOr'+inputAgeFieldCounter+'\">Seleziona la condizione </label><select id=\"filterAgeAndOr'+inputAgeFieldCounter+'\" name=\"filterAgeAndOr'+inputAgeFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la copndizione\"' +
+                    'data-init-plugin=\"selectize\">' +
+                    '<option value=\"\"></option>' +
+                    '<option value=\" AND \">(AND) = COMPRESO </option>' +
+                    '<option value=\" OR \">(OR) = OPPURE</option>' +
+                    '<option value=\" NOT \">(NOT) = NON COMPRESO</option>' +
+                    '<option value=\" XOR \">(XOR) = ESCLUSIVO</option></select>' +
+
+                    ' </div>' +
+                    '</div>' +
+
                     '</div>');
+                var jqueryFilterAge = "#"+"filterAge"+inputAgeFieldCounter.toString();
+                var jqueryFilterAgeAndOr = "#"+"filterAgeAndOr"+inputAgeFieldCounter.toString();
+
+
+
+                $(jqueryFilterAgeAndOr).change(function () {
+
+                    var selectionFilter = $(jqueryFilterAge).val();
+
+                    var selectionFilterAndOr = $(jqueryFilterAgeAndOr).val();
+                    var resultSelectionFilter = selectionFilterAndOr + " " + selectionFilter;
+                    if ($("#filterAge").val()==""){
+                        $("#filterAge").val(resultSelectionFilter) ;
+                    }else{
+                        $('#filterAge').val($('#filterAge').val() + " " + resultSelectionFilter);
+                    }
+
+
+                });
+
 
             } else if (selection == 'city') {
-                $("#inputCountry").empty();
-                $("#inputCity").empty();
 
+                inputCityFieldCounter=inputCityFieldCounter+1;
                 $("#inputCity").append('<div class=\"row\">' +
-                    ' <div class="col-md-12">' +
+                    ' <div class="col-md-6">' +
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
-                    '<label for=\"filterCity\">Seleziona la Città </label><select id=\"filterCity\" name=\"filterCity\" class=\"full-width selectpicker\" placeholder=\"Selezione la citta\"' +
+                    '<label for=\"filterCity'+inputCityFieldCounter+'\">Seleziona la Città </label><select id=\"filterCity'+inputCityFieldCounter+'\" name=\"filterCity'+inputCityFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la citta\"' +
                     'data-init-plugin=\"selectize\"></select>' +
                     ' </div>' +
                     '</div>' +
+                    ' <div class="col-md-6">' +
+                    '<div class=\"form-group form-group-default selectize-enabled\">' +
+                    '<label for=\"filterCityAndOr'+inputCityFieldCounter+'\">Seleziona la condizione </label><select id=\"filterCityAndOr'+inputCityFieldCounter+'\" name=\"filterCityAndOr'+inputCityFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la copndizione\"' +
+                    'data-init-plugin=\"selectize\">' +
+                    '<option value=\"\"></option>' +
+                    '<option value=\" AND b.id= \">(AND) = COMPRESO </option>' +
+                    '<option value=\" OR b.id=\">(OR) = OPPURE</option>' +
+                    '<option value=\" NOT b.id= \">(NOT) = NON COMPRESO</option>' +
+                    '<option value=\" XOR b.id= \">(XOR) = ESCLUSIVO</option></select>' +
+                    ' </div>' +
+                    '</div>' +
                     '</div>');
+                var jqueryFilterCity = "#"+"filterCity"+inputCityFieldCounter.toString();
+                var jqueryFilterCityAndOr = "#"+"filterCityAndOr"+inputCityFieldCounter.toString();
 
+
+
+                $(jqueryFilterCityAndOr).change(function () {
+
+                    var selectionFilter = $(jqueryFilterCity).val();
+
+                    var selectionFilterAndOr = $(jqueryFilterCityAndOr).val();
+                    var resultSelectionFilter = selectionFilterAndOr + " " + selectionFilter;
+                    if ($("#filterCity").val()==""){
+                        $("#filterCity").val(resultSelectionFilter) ;
+                    }else{
+                        $('#filterCity').val($('#filterCity').val() + " " + resultSelectionFilter);
+                    }
+
+
+                });
                 $.ajax({
                     method: 'GET',
                     url: '/blueseal/xhr/GetTableContent',
@@ -59,29 +127,56 @@
                     },
                     dataType: 'json'
                 }).done(function (res2) {
-                    var select = $('#filterCity');
+                    var select = $(jqueryFilterCity);
                     if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
                     select.selectize({
-                        valueField: 'name',
+                        valueField: 'id',
                         labelField: 'name',
-                        searchField: ['name'],
+                        searchField: 'name',
                         options: res2,
                     });
                 });
 
+
             } else if (selection == 'country') {
-                $("#inputCountry").empty();
-                $("#inputCity").empty();
+                inputCountryFieldCounter=inputCountryFieldCounter+1;
 
                 $("#inputCountry").append('<div class=\"row\">' +
-                    ' <div class="col-md-12">' +
+                    ' <div class="col-md-6">' +
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
-                    '<label for=\"filterCountry\">Seleziona la Nazione </label><select id=\"filterCountry\" name=\"filterCountry\" class=\"full-width selectpicker\" placeholder=\"Selezione la nazione\"' +
+                    '<label for=\"filterCountry'+inputCountryFieldCounter+'\">Seleziona la Nazione </label><select id=\"filterCountry'+inputCountryFieldCounter+'\" name=\"filterCountry'+inputCountryFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la nazione\"' +
                     'data-init-plugin=\"selectize\"></select>' +
                     ' </div>' +
                     '</div>' +
+                    ' <div class="col-md-6">' +
+                    '<div class=\"form-group form-group-default selectize-enabled\">' +
+                    '<label for=\"filterCountryAndOr'+inputCountryFieldCounter+'\">Seleziona la condizione </label><select id=\"filterCountryAndOr'+inputCountryFieldCounter+'\" name=\"filterCountryAndOr'+inputCountryFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la copndizione\"' +
+                    'data-init-plugin=\"selectize\">' +
+                    '<option value=\"\"></option>' +
+                    '<option value=\" AND b.countryId = \">(AND) = COMPRESO </option>' +
+                    '<option value=\" OR b.countryId=\">(OR) = OPPURE</option>' +
+                    '<option value=\" NOT b.countryId=\">(NOT) = NON COMPRESO</option>' +
+                    '<option value=\" XOR b.countryId= \">(XOR) = ESCLUSIVO</option></select>' +
+                    ' </div>' +
+                    '</div>' +
                     '</div>');
+                var jqueryFilterCountry = "#"+"filterCountry"+inputCountryFieldCounter.toString();
+                var jqueryFilterCountryAndOr = "#"+"filterCountryAndOr"+inputCountryFieldCounter.toString();
 
+
+
+                $(jqueryFilterCountryAndOr).change(function () {
+
+                    var selectionFilter = $(jqueryFilterCountry).val();
+
+                    var selectionFilterAndOr = $(jqueryFilterCountryAndOr).val();
+                    var resultSelectionFilter = selectionFilterAndOr + " " + selectionFilter;
+                    if ($("#filterCountry").val()==""){
+                        $("#filterCountry").val(resultSelectionFilter) ;
+                    }else{
+                        $('#filterCountry').val($('#filterCountry').val() + " " + resultSelectionFilter);
+                    }
+                });
                 $.ajax({
                     method: 'GET',
                     url: '/blueseal/xhr/GetTableContent',
@@ -90,7 +185,7 @@
                     },
                     dataType: 'json'
                 }).done(function (res2) {
-                    var select = $('#filterCountry');
+                    var select = $(jqueryFilterCountry);
                     if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
                     select.selectize({
                         valueField: 'id',
@@ -98,6 +193,7 @@
                         searchField: ['name'],
                         options: res2,
                     });
+
                 });
 
             } else if (selection == 'isActive') {
@@ -136,15 +232,21 @@
                     '</div>');
 
             } else if (selection == 'clean') {
+
                 $("#inputOrderDate").empty();
                 $("#inputIsActive").empty();
                 $("#inputCity").empty();
                 $("#inputCountry").empty();
                 $("#inputAge").empty();
+                $("#filterAge").val("");
+                $("#filterCity").val("");
+                $("#filterCountry").val("");
+                 inputAgeFieldCounter =0;
+                 inputCountryFieldCounter = 0;
+                 inputCityFieldCounter = 0;
 
 
-
-            }else if (selection == 'gender') {
+            } else if (selection == 'gender') {
                 $("#inputGender").empty();
 
                 $("#inputGender").append('<div class=\"row\">' +
@@ -193,52 +295,50 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
-        let filterGender =$('#filterGender').val();
-        let filterAge =  $('#filterAge').val();
+        let filterGender = $('#filterGender').val();
+        let filterAge = $('#filterAge').val();
         let filterCity = $('#filterCity').val();
         let filterCountry = $('#filterCountry').val();
         let filterIsActive = $('#filterIsActive').val();
         let filterOrderDateStart = $('#filterOrderDateStart').val();
         let filterOrderDateFinish = $('#filterOrderDateFinish').val();
-        if (typeof filterGender === "undefined"){
-            filterGender="";
+        if (typeof filterGender === "undefined") {
+            filterGender = "";
 
-        }else{
-            filterGender=filterGender;
+        } else {
+            filterGender = filterGender;
         }
         if (typeof filterAge === "undefined") {
             filterAge = "";
-        }else{
+        } else {
             filterAge = filterAge;
         }
-        if (typeof filterCity === "undefined"){
-            filterCity="";
-        }else{
-            filterCity="and b.city='"+filterCity+"'";
+        if (typeof filterCity === "undefined") {
+            filterCity = "";
+        } else {
+            filterCity =  filterCity ;
         }
-        if (typeof filterCountry === "undefined"){
-            filterCountry="";
-        }else{
-           filterCountry="and b.countryId='"+filterCountry+"'";
+        if (typeof filterCountry === "undefined") {
+            filterCountry = "";
+        } else {
+            filterCountry = filterCountry ;
         }
-        if (typeof filterIsActive === "undefined"){
-            filterIsActive="";
-        }else{
-            filterIsActive="and c.isActive='"+filterIsActive+"'";
+        if (typeof filterIsActive === "undefined") {
+            filterIsActive = "";
+        } else {
+            filterIsActive = "and c.isActive='" + filterIsActive + "'";
         }
-        if (typeof filterOrderDateStart === "undefined"){
-            filterOrderDateStart="";
+        if (typeof filterOrderDateStart === "undefined") {
+            filterOrderDateStart = "";
 
-        }else{
-            filterOrderDateStart="and d.orderDate>='"+filterOrderDateStart+"'";
+        } else {
+            filterOrderDateStart = "and d.orderDate>='" + filterOrderDateStart + "'";
         }
-        if (typeof filterOrderDateFinish === "undefined"){
-            filterOrderDateFinish="";
-        }else{
-            filterOrderDateFinish="and d.orderDate<='"+filterOrderDateFinish+"'";
+        if (typeof filterOrderDateFinish === "undefined") {
+            filterOrderDateFinish = "";
+        } else {
+            filterOrderDateFinish = "and d.orderDate<='" + filterOrderDateFinish + "'";
         }
-
-
 
 
         const data = {

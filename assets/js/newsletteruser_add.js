@@ -1,5 +1,14 @@
 (function ($) {
-    function readSingleFile(e) {
+    if (CKEDITOR.instances.preCompiledTemplate1) {
+        CKEDITOR.instances.preCompiledTemplate1.destroy();
+    }
+    CKEDITOR.replace( 'preCompiledTemplate1', {
+        height: 260,
+        width:1280,
+        startupMode:'source'
+
+    } );
+    /*function readSingleFile(e) {
         var file = e.target.files[0];
         if (!file) {
             return;
@@ -10,18 +19,34 @@
             displayContents(contents);
         };
         reader.readAsText(file);
-    }
+    }*/
+    $("#newsletterTemplateId").change(function () {
+        CKEDITOR.instances.preCompiledTemplate1.setData("");
 
-    function displayContents(contents) {
+            $("#preCompiledTemplate1").empty();
+            var content1 = $(this).val();
+        CKEDITOR.instances.preCompiledTemplate1.setData(content1);
+            //var contentLessOccurence = content.indexOf('-');
+          //  var contentPreview = content.substring(5);
+       // $("#file-content").append(content);
+
+
+    });
+
+    /*function displayContents(contents) {
         var element = document.getElementById('file-content');
         element.innerHTML= contents;
-        $("#preCompiledTemplate").val(contents);
+        $("#preCompiledTemplate1").val(contents);
 
-    }
+    }*/
 
-    document.getElementById('preCompiledTemplate1')
-        .addEventListener('change', readSingleFile, false);
+
+   /* document.getElementById('preCompiledTemplate1')
+        .addEventListener('change', readSingleFile, false);*/
     Pace.ignore(function () {
+
+
+
 
         $.ajax({
             method:'GET',
@@ -36,7 +61,7 @@
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
-                searchField: ['name'],
+                searchField: 'name',
                 options: res2,
             });
         });
@@ -48,14 +73,16 @@
             },
             dataType: 'json'
         }).done(function (res2) {
+
             var select = $('#newsletterTemplateId');
             if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
-                valueField: 'id',
-                labelField: 'template',
-                searchField: ['template'],
+                valueField: 'template',
+                labelField: 'name',
+                searchField: 'name',
                 options: res2,
             });
+
         });
         $.ajax({
             method:'GET',
@@ -93,7 +120,7 @@ $(document).on('bs.newNewsletterUser.save', function () {
         newsletterTemplateId:$('#newsletterTemplateId').val(),
         subject : $('#subject').val(),
         dataDescription : $('#dataDescription').val(),
-        preCompiledTemplate : $('#preCompiledTemplate').val(),
+        preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
         campaignId : $('#campaignId').val()
         };
         $.ajax({

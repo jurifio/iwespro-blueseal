@@ -5,6 +5,7 @@
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
+    <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -129,8 +130,7 @@
                                                         data-init-plugin="selectize">
                                                 </select>
 
-                                            </div>
-                                            <p>
+                                            </div>                                            <p>
                                         </div>
                                     </div>
 
@@ -142,17 +142,22 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
+
                                     <div class="col-md-12">
+                                        <div align="center"
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="preCompiledTemplate1">Template Predefinito</label>
-                                            <input type="file" class="form-control" id="preCompiledTemplate1" name="preCompiledTemplate1" value="" />
-                                            <input type="hidden" class="form-control" id="preCompiledTemplate" name="preCompiledTemplate" value="" />
-                                            <pre id="file-content"></pre>
+                                            <textarea cols="80" id="preCompiledTemplate1" class="form-control"  name="preCompiledTemplate1" required="required" rows="10"
+                                                      placeholder="Modifica il template">
+
+                                                </textarea>
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
-                           </div>
+                            </div>
                         </div>
+
                 </form>
             </div>
         </div>

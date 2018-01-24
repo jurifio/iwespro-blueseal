@@ -56,10 +56,13 @@
                                     <div id="inputGender">
                                     </div>
                                     <div id="inputAge">
+
                                     </div>
                                     <div id="inputCity">
+
                                     </div>
                                     <div id="inputCountry">
+
                                     </div>
                                     <div id="inputIsActive">
                                     </div>
@@ -70,7 +73,39 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterEmailListId">Seleziona la lista dei destinatari</label>
+                                                <label for="filteAge">Costruzione Filtro Età</label>
+                                                <textarea class="form-control" name="filterAge" id="filterAge"
+                                                          value=""></textarea>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="filteCity">Costruzione Filtro Città</label>
+
+                                                <textarea class="form-control" name="filterCity" id="filterCity"
+                                                          value=""></textarea>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="filteCountry">Costruzione Filtro Nazione</label>
+                                                <textarea class="form-control" name="filterCountry" id="filterCountry"
+                                                          value=""></textarea>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="newsletterEmailListId">Seleziona la lista dei
+                                                    destinatari</label>
                                                 <select id="newsletterEmailListId" name="newsletterEmailListId"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
