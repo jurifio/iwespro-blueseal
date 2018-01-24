@@ -190,6 +190,20 @@
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php endif; ?>
+    <?php if ($allShops) : ?>
+        <bs-toolbar-group data-group-label="Gestione Rimozione documenti">
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-times"
+                    data-permission="/admin/order/add"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-title="Disassocia documenti"
+                    data-placement="bottom"
+                    data-event="bs.remove.invoice"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
+    <?php endif; ?>
 </bs-toolbar>
 </body>
 </html>

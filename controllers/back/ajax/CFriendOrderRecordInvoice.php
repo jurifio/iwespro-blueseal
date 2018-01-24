@@ -2,6 +2,9 @@
 namespace bamboo\controllers\back\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
+use bamboo\domain\entities\CDocument;
+use bamboo\domain\entities\CInvoiceLine;
+use bamboo\domain\entities\COrderLine;
 use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\utils\price\SPriceToolbox;
 
@@ -52,7 +55,12 @@ class CFriendOrderRecordInvoice extends AAjaxController
 
         $res['billingAddressBookId'] = $billingAddressBookId;
 
-        if (count($linesWInvoice)) {
+        /** @var CDocumentRepo $documentRepo */
+        $documentRepo = \Monkey::app()->repoFactory->create('Document');
+        $checkDDT = $documentRepo->checkIfExistOneDDTDocument($olArr);
+
+
+        if (!$checkDDT) {
             $res['error'] = true;
             $res['responseText'] = '<p>Una o più linee ordini selezionate sono già state fatturate</p><ul><li>' .
                 implode('</li><li>', $linesWInvoice) .
