@@ -64,7 +64,7 @@
                                     data-orderable="true"
                                     class="center">Nome Lista
                                 </th>
-                                <th data-slug="template"
+                                <th data-slug="templateName"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Template Utilizzato

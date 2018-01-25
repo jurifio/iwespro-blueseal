@@ -51,7 +51,7 @@ class CNewsletterUserManage extends AAjaxController
         $newsletterTemplateId= $newsletterTemplate->id;
 
         /** @var CRepo $newsletterUserRepo */
-        $newsletterUserRepo = \Monkey::app()->repoFactory->create('NewsletterUser');
+        $newsletterUserRepo = \Monkey::app()->repoFactory->create('Newsletter');
 
         /** @var CNewsletterUser $newsletterUser */
         $newsletterUser = $newsletterUserRepo->findOneBy(['name' => $name]);
@@ -61,7 +61,7 @@ class CNewsletterUserManage extends AAjaxController
             //se la variabile non è istanziata inserisci in db
 
         /** @var CNewsletterUser $newsletterUserInsert   */
-        $newsletterUserInsert = \Monkey::app()->repoFactory->create('NewsletterUser')->getEmptyEntity();
+        $newsletterUserInsert = \Monkey::app()->repoFactory->create('Newsletter')->getEmptyEntity();
         //popolo la tabella
 
          $newsletterUserInsert->name = $name;

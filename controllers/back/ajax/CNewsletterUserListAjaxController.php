@@ -17,14 +17,13 @@ class CNewsletterUserListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "SELECT n.id, n.name, E.address as fromEmailAddressId, n.sendAddressDate,  L.name as newsletterEmailListId, Template.template  , n.subject, C.name as campaignId  FROM
-  NewsletterUser n inner join   EmailAddress E ON n.fromEmailAddressId = E.id inner join NewsletterEmailList L ON n.newsletterEmailListId = L.id inner join Campaign C ON n.campaignId = C.id INNER join NewsletterTemplate Template ON n.newsletterTemplateId = Template.id";
+        $sql = "SELECT n.id, n.name, E.address as fromEmailAddressId, n.sendAddressDate,  L.name as newsletterEmailListId, T.name as templateName , n.subject, C.name as campaignId  FROM
+  Newsletter n inner join   EmailAddress E ON n.fromEmailAddressId = E.id inner join NewsletterEmailList L ON n.newsletterEmailListId = L.id inner join Campaign C ON n.campaignId = C.id INNER join NewsletterTemplate T ON n.newsletterTemplateId = T.id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
-
 
 
 

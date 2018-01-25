@@ -44,10 +44,10 @@
                                     data-orderable="true"
                                     class="center">Id
                                 </th>
-                                <th data-slug="template"
+                                <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Template
+                                    class="center">name
                                 </th>
 
                             </tr>

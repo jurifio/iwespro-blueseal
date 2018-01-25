@@ -17,7 +17,7 @@ class CNewsletterTemplateListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "SELECT n.id, n.template FROM 
+        $sql = "SELECT n.id, n.name FROM 
                         NewsletterTemplate n";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -31,7 +31,7 @@ class CNewsletterTemplateListAjaxController extends AAjaxController
             /** @var CNewsletterTemplate $newsLetterTemplate */
             $newsLetterTemplate = $newsletterTemplateRepo->findOneBy(['id' => $row['id']]);
 
-            $row['template'] = $newsLetterTemplate->template;
+            $row['name'] = $newsLetterTemplate->name;
         //var_dump($newsLetterTemplate);
 
 

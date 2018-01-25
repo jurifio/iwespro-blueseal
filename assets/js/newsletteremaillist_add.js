@@ -35,12 +35,12 @@
                     '<label for=\"filterAge'+inputAgeFieldCounter+'\">Seleziona l\'Eta </label><select id=\"filterAge'+inputAgeFieldCounter+'\" name=\"filterAge'+inputAgeFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'eta\"' +
                     'data-init-plugin=\"selectize\">' +
                     '<option value=\"\"></option>' +
-                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 18 and 24 \">18-24</option>' +
-                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 25 and 34 \">25-34</option>' +
-                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 35 and 44  \">35-44</option>' +
-                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 45 and 54  \">45-54</option>' +
-                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\')) between 55 and 64  \">55-64</option>' +
-                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(a.birthDate, \'%Y\'))  >=65\">+65</option></select>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(ud.birthDate, \'%Y\')) BETWEEN 18 AND 24 \">18-24</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(ud.birthDate, \'%Y\')) BETWEEN 25 AND 34 \">25-34</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(ud.birthDate, \'%Y\')) BETWEEN 35 AND 44  \">35-44</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(ud.birthDate, \'%Y\')) BETWEEN 45 AND 54  \">45-54</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(ud.birthDate, \'%Y\')) BETWEEN 55 AND 64  \">55-64</option>' +
+                    '<option value=\"(DATE_FORMAT(NOW(), \'%Y\')-DATE_FORMAT(ud.birthDate, \'%Y\'))  >=65\">+65</option></select>' +
                     ' </div>' +
                     '</div>' +
                     ' <div class="col-md-6">' +
@@ -93,10 +93,10 @@
                     '<label for=\"filterCityAndOr'+inputCityFieldCounter+'\">Seleziona la condizione </label><select id=\"filterCityAndOr'+inputCityFieldCounter+'\" name=\"filterCityAndOr'+inputCityFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la copndizione\"' +
                     'data-init-plugin=\"selectize\">' +
                     '<option value=\"\"></option>' +
-                    '<option value=\" AND b.id= \">(AND) = COMPRESO </option>' +
-                    '<option value=\" OR b.id=\">(OR) = OPPURE</option>' +
-                    '<option value=\" NOT b.id= \">(NOT) = NON COMPRESO</option>' +
-                    '<option value=\" XOR b.id= \">(XOR) = ESCLUSIVO</option></select>' +
+                    '<option value=\" AND ci.id= \">(AND) = COMPRESO </option>' +
+                    '<option value=\" OR ci.id=\">(OR) = OPPURE</option>' +
+                    '<option value=\" NOT ci.id= \">(NOT) = NON COMPRESO</option>' +
+                    '<option value=\" XOR ci.id= \">(XOR) = ESCLUSIVO</option></select>' +
                     ' </div>' +
                     '</div>' +
                     '</div>');
@@ -153,10 +153,10 @@
                     '<label for=\"filterCountryAndOr'+inputCountryFieldCounter+'\">Seleziona la condizione </label><select id=\"filterCountryAndOr'+inputCountryFieldCounter+'\" name=\"filterCountryAndOr'+inputCountryFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la copndizione\"' +
                     'data-init-plugin=\"selectize\">' +
                     '<option value=\"\"></option>' +
-                    '<option value=\" AND b.countryId = \">(AND) = COMPRESO </option>' +
-                    '<option value=\" OR b.countryId=\">(OR) = OPPURE</option>' +
-                    '<option value=\" NOT b.countryId=\">(NOT) = NON COMPRESO</option>' +
-                    '<option value=\" XOR b.countryId= \">(XOR) = ESCLUSIVO</option></select>' +
+                    '<option value=\" AND ua.countryId = \">(AND) = COMPRESO </option>' +
+                    '<option value=\" OR ua.countryId=\">(OR) = OPPURE</option>' +
+                    '<option value=\" NOT ua.countryId=\">(NOT) = NON COMPRESO</option>' +
+                    '<option value=\" XOR ua.countryId= \">(XOR) = ESCLUSIVO</option></select>' +
                     ' </div>' +
                     '</div>' +
                     '</div>');
@@ -204,8 +204,8 @@
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
                     '<label for=\"filterisActive\">Seleziona se Utenti Iscritti </label><select id=\"filterisActive\" name=\"filterisActive\" class=\"full-width selectpicker\" placeholder=\"Selezione se Iscritti"' +
                     'data-init-plugin=\"selectize\">' +
-                    '<option value=\"and isActive=1\">ISCRITTI</option>' +
-                    '<option value=\"and isActive=\'0\'\">NON ISCRITTI</option>' +
+                    '<option value=\"and nu.isActive=1\">ISCRITTI</option>' +
+                    '<option value=\"and nu.isActive=\'0\'\">NON ISCRITTI</option>' +
                     '</select>' +
                     ' </div>' +
                     '</div>' +
@@ -254,8 +254,8 @@
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
                     '<label for=\"filterGender\">Seleziona il Sesso </label><select id=\"filterGender\" name=\"filterGender\" class=\"full-width selectpicker\" placeholder=\"Selezione il Sesso"' +
                     'data-init-plugin=\"selectize\">' +
-                    '<option value=\"and a.gender=\'M\'\">Sesso Maschile</option>' +
-                    '<option value=\"and a.gender=\'F\'\">Sesso Femminile</option>' +
+                    '<option value=\"AND ud.gender=\'M\'\">Sesso Maschile</option>' +
+                    '<option value=\"AND ud.gender=\'F\'\">Sesso Femminile</option>' +
                     '</select>' +
                     ' </div>' +
                     '</div>' +
@@ -326,24 +326,31 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
         if (typeof filterIsActive === "undefined") {
             filterIsActive = "";
         } else {
-            filterIsActive = "and c.isActive='" + filterIsActive + "'";
+            filterIsActive = "AND nu.isActive='" + filterIsActive + "'";
         }
         if (typeof filterOrderDateStart === "undefined") {
             filterOrderDateStart = "";
 
         } else {
-            filterOrderDateStart = "and d.orderDate>='" + filterOrderDateStart + "'";
+            filterOrderDateStart =  filterOrderDateStart;
         }
         if (typeof filterOrderDateFinish === "undefined") {
             filterOrderDateFinish = "";
         } else {
-            filterOrderDateFinish = "and d.orderDate<='" + filterOrderDateFinish + "'";
+            filterOrderDateFinish =  filterOrderDateFinish ;
+        }
+        let groupby=" GROUP BY nu.id"
+       let filterOrderDateExclude = "";
+        if (filterOrderDateStart == "" || filterOrderDateFinish == "") {
+            filterOrderDateExclude = "";
+        } else {
+            filterOrderDateExclude = "AND o.orderDate NOT BETWEEN '" + filterOrderDateStart + "' AND  '" + filterOrderDateFinish + "'";
         }
 
 
         const data = {
             name: $('#name').val(),
-            sql: filterGender + ' ' + filterAge + ' ' + filterCity + ' ' + filterCountry + ' ' + filterIsActive + ' ' + filterOrderDateStart + ' ' + filterOrderDateFinish,
+            sql: filterGender + ' ' + filterAge + ' ' + filterCity + ' ' + filterCountry + ' ' + filterIsActive + ' ' + filterOrderDateExclude + groupby,
             newsletterEmailListId: $('#newsletterEmailListId').val()
         };
         $.ajax({
