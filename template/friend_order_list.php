@@ -179,9 +179,11 @@
 <!--        <bs-toolbar-button
                 data-remote="bs.friend.order.registerCreditNoteOnReturn"
         ></bs-toolbar-button>-->
+        <?php if ($allShops) : ?>
         <bs-toolbar-button
                 data-remote="bs.friend.order.registerTransportDocFromFile"
         ></bs-toolbar-button>
+        <?php endif; ?>
     </bs-toolbar-group>
     <?php if ($allShops): ?>
     <bs-toolbar-group data-group-label="Filtra righe">
