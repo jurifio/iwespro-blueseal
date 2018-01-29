@@ -30,22 +30,24 @@
                         <div class="col-md-6">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Aggiungi una Newsletter</h5>
+                                    <h5 class="m-t-10">Crea Inserzione Newsletter</h5>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
-
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="campaignId">Seleziona la Campagna Associata</label>
-                                                <select id="campaignId" name="campaignId"
+                                                <label for="filteredField">Seleziona se Creare una Campagna o selezionarla</label>
+                                                <select id="filteredField" name="filteredField"
                                                         class="full-width selectpicker"
-                                                        placeholder="Seleziona la Campagna"
+                                                        placeholder="Seleziona l\'opzione"
                                                         data-init-plugin="selectize">
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
+                                    <div id="inputCampaign"></div>
+                                    <div id="inputEvent"></div>
+
                                     <div class="row">
                                         <div class="col-md-12">
                                             <br><br><br><p><br>
@@ -80,7 +82,7 @@
                         <div class="col-md-6">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Dettagli Newletter</h5>
+                                    <h5 class="m-t-10">Dettagli Newsletter</h5>
                                 </div>
                                 <div class="panel-body clearfix">
 
@@ -88,7 +90,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="sendAddressDate">Data di Invio</label>
-                                                <input type="date" class="form-control" id="sendAddressDate" name="sendAddressDate" value="" />
+                                                <input type="datetime-local" class="form-control" id="sendAddressDate" name="sendAddressDate" value="" />
                                             </div>
                                         </div>
                                     </div>
@@ -124,7 +126,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="newsletterTemplateId">Seleziona Il Template da Utilizzare</label>
-                                                <select id="newsletterTemplateId" name="NewletterTemplateId"
+                                                <select id="newsletterTemplateId" name="NewsletterTemplateId"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">

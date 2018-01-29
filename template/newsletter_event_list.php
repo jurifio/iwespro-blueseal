@@ -6,8 +6,8 @@
  * Time: 16:35
  */
 ?>
-<!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+    <html>
 <head>
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
@@ -31,8 +31,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="newsletter_template_list"
-                               data-controller="NewsletterTemplateListAjaxController"
+                               data-datatable-name="newsletter_event_list"
+                               data-controller="NewsletterEventListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
@@ -47,7 +47,27 @@
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">name
+                                    class="center">Evento Campagna
+                                </th>
+                                <th data-slug="emailSent"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email Inviate
+                                </th>
+                                <th data-slug="emailDelivered"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email Consegnate
+                                </th>
+                                <th data-slug="emailOpened"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email Aperte
+                                </th>
+                                <th data-slug="emailClicked"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email Cliccate
                                 </th>
 
                             </tr>
@@ -65,14 +85,16 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Esportazione">
+    <bs-toolbar-group data-group-label="Gestione">
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
+
         <bs-toolbar-button
-                data-remote="bs.lists.create.newslettertemplate"
+            data-remote="bs.lists.create.newsletterevent"
         ></bs-toolbar-button>
+
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
-</html>
+    </html><?php

@@ -12,14 +12,12 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CNewsletterUser;
 
-class CNewsletterUserListAjaxController extends AAjaxController
+class CNewsletterCampaignListAjaxController extends AAjaxController
 {
 
     public function get()
     {
-        $sql = "SELECT n.id, n.name, E.address as fromEmailAddressId, n.sendAddressDate,  L.name as newsletterEmailListId, T.name as templateName , n.subject, C.name as campaignId  FROM
-  Newsletter n inner join   EmailAddress E ON n.fromEmailAddressId = E.id inner join NewsletterEmailList L 
-  ON n.newsletterEmailListId = L.id inner join NewsletterCampaign C ON n.newsletterCampaignId = C.id INNER join NewsletterTemplate T ON n.newsletterTemplateId = T.id";
+        $sql = "SELECT n.id, n.name,  n.dateCampaignStart, n.dateCampaignFinish from NewsletterCampaign n";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);

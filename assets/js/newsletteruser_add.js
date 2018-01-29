@@ -1,4 +1,194 @@
 (function ($) {
+    var select = $('#filteredField');
+    var newOptions = {
+        'empty':'',
+        'new': 'Nuova',
+        'exist': 'Esistente'
+
+    };
+    $('option', select).remove();
+    $.each(newOptions, function (text, key) {
+        var option = new Option(key, text);
+        select.append($(option));
+    });
+    $("#filteredField").change(function () {
+        var selection = $(this).val();
+
+        if (selection == 'new') {
+            $('#inputCampaign').empty();
+            $('#inputEvent').empty();
+
+            $("#inputCampaign").append('<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"campaignName\">Inserisci il nome della Campagna </label>' +
+                '<input id=\"campaignName\" class=\"form-control\"' +
+                'placeholder=\"Inserisci il nome della newsletter\" name=\"campaignName\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>'+
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"dateCampaignStart\">Inserisci la Data di Inizio della Campagna </label>' +
+                '<input  type =\'datetime-local\' id=\"dateCampaignStart\" class=\"form-control\"' +
+                'placeholder=\"Inserisci la Data di Inizio della Campagna \" name=\"dateCampaignStart\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>'+
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"dateCampaignFinish\">Inserisci la Data della Fine della Campagna </label>' +
+                '<input  type =\'datetime-local\' id=\"dateCampaignFinish\" class=\"form-control\"' +
+                'placeholder=\"Inserisci la Data della Fine della Campagna \" name=\"dateCampaignFinish\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>'+
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"newsletterEventName\">Inserisci il nome dell\'Evento </label>' +
+                '<input id=\"newsletterEventName\" class=\"form-control\"' +
+                'placeholder=\"Inserisci il nome dell\'Evento \" name=\"newsletterEventName\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>'
+            );
+
+
+        } else {
+            $('#inputCampaign').empty();
+            $("#inputCampaign").append('<div class=\"row\">' +
+                ' <div class="col-md-12">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"campaignId\">Seleziona la Campagna </label><select id=\"campaignId\" name=\"campaignId\" class=\"full-width selectpicker\" placeholder=\"Selezione la Campagna\"' +
+                'data-init-plugin=\"selectize\"></select>' +
+                ' </div>' +
+                '</div>' +
+                '</div>');
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'NewsletterCampaign'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                var select = $('#campaignId');
+                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    //labelField: 'name',
+                    labelField: ['name','dateCampaignStart','dateCampaignFinish'],
+                    searchField: ['name','dateCampaignStart','dateCampaignFinish'],
+                    options: res2,
+                    render: {
+                        option: function(item, escape) {
+
+                            return '<div>'
+                                + '<div>'
+                                + '<strong>'
+                                + 'Nome Campagna: '
+                                + escape(item.name) + ''
+                                + '</div>'
+                                + '</strong>'
+                                + '<strong>'
+                                + 'Inizio Campagna:'
+                                + '</strong>'
+                                + escape(item.dateCampaignStart).substr(8,2)+'-'
+                                + escape(item.dateCampaignStart).substr(5,2)+'-'
+                                + escape(item.dateCampaignStart).substr(0,4)+' '
+                                + escape(item.dateCampaignStart).substr(11,2)+':'
+                                + escape(item.dateCampaignStart).substr(14,2)+':'
+                                + escape(item.dateCampaignStart).substr(17,2)+' '
+                                + '<strong>'
+                                + 'Fine Campagna:'
+                                + '</strong>'
+                                + escape(item.dateCampaignFinish).substr(8,2)+'-'
+                                + escape(item.dateCampaignFinish).substr(5,2)+'-'
+                                + escape(item.dateCampaignFinish).substr(0,4)+' '
+                                + escape(item.dateCampaignFinish).substr(11,2)+':'
+                                + escape(item.dateCampaignFinish).substr(14,2)+':'
+                                + escape(item.dateCampaignFinish).substr(17,2)+' '
+                                + '</div>';
+                        },
+                        item: function(item, escape){
+                            return '<div>'
+                                + '<div>'
+                                + '<strong>'
+                                + 'Nome Campagna: '
+                                + escape(item.name) + ''
+                                + '</div>'
+                                + '</strong>'
+                                + '<strong>'
+                                + 'Inizio Campagna:'
+                                + '</strong>'
+                                + escape(item.dateCampaignStart).substr(8,2)+'-'
+                                + escape(item.dateCampaignStart).substr(5,2)+'-'
+                                + escape(item.dateCampaignStart).substr(0,4)+' '
+                                + escape(item.dateCampaignStart).substr(11,2)+':'
+                                + escape(item.dateCampaignStart).substr(14,2)+':'
+                                + escape(item.dateCampaignStart).substr(17,2)+' '
+
+                                + '<strong>'
+                                + 'Fine Campagna:'
+                                + '</strong>'
+                                + escape(item.dateCampaignFinish).substr(8,2)+'-'
+                                + escape(item.dateCampaignFinish).substr(5,2)+'-'
+                                + escape(item.dateCampaignFinish).substr(0,4)+' '
+                                + escape(item.dateCampaignFinish).substr(11,2)+':'
+                                + escape(item.dateCampaignFinish).substr(14,2)+':'
+                                + escape(item.dateCampaignFinish).substr(17,2)+' '
+                                + '</div>';
+                        }
+                    }
+                });
+            });
+            $("#campaignId").change(function () {
+                var selection = $(this).val();
+                $('#inputEvent').empty();
+                $("#inputEvent").append('<div class=\"row\">' +
+                    ' <div class="col-md-12">' +
+                    '<div class=\"form-group form-group-default selectize-enabled\">' +
+                    '<label for=\"newsletterEventId\">Seleziona l\'Evento Associato</label><select id=\"newsletterEventId\" name=\"newsletterEventId\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'evento per la Campagna\"' +
+                    'data-init-plugin=\"selectize\"></select>' +
+                    ' </div>' +
+                    '</div>' +
+                    '</div>');
+
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/blueseal/xhr/GetTableContent',
+                    data: {
+                        table: 'NewsletterEvent',
+                        condition: {newsletterCampaignId: selection}
+                    },
+                    dataType: 'json'
+                }).done(function (res2) {
+                    var select = $('#newsletterEventId');
+                    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                    select.selectize({
+                        valueField: 'id',
+                        labelField: 'name',
+                        searchField: 'name',
+                        options: res2,
+                    });
+                });
+            });
+
+//fine jquery select
+        }
+
+    });
+
+    ///////////////////////////////////////////////////////////////////
+
+
+
+
     if (CKEDITOR.instances.preCompiledTemplate1) {
         CKEDITOR.instances.preCompiledTemplate1.destroy();
     }
@@ -84,23 +274,7 @@
             });
 
         });
-        $.ajax({
-            method:'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'Campaign'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            var select = $('#campaignId');
-            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2,
-            });
-        });
+
     });
 })(jQuery);
 
@@ -112,6 +286,42 @@ $(document).on('bs.newNewsletterUser.save', function () {
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
+        let campaignIdPost=$('#campaignId').val();
+        let campaignNamePost = $('#campaignName').val();
+        let campaignEventIdPost=$('#newsletterEventId').val();
+        let campaignDateStartPost=$('#dateCampaignStart').val();
+        let campaignDateFinishPost=$('#dateCampaignFinish').val();
+        let campaignEventNamePost=$('#newsletterEventName').val();
+        if (typeof campaignIdPost === "undefined") {
+            campaignIdPost = "";
+        } else {
+            campaignIdPost = campaignIdPost;
+        }
+        if (typeof campaignNamePost === "undefined") {
+            campaignNamePost = "";
+        } else {
+            campaignNamePost =  campaignNamePost ;
+        }
+        if (typeof campaignEventIdPost === "undefined") {
+            campaignEventIdPost = "";
+        } else {
+            campaignEventIdPost =  campaignEventIdPost ;
+        }
+        if (typeof campaignEventNamePost === "undefined") {
+            campaignEventNamePost = "";
+        } else {
+            campaignEventNamePost =  campaignEventNamePost ;
+        }
+        if (typeof campaignDateStartPost === "undefined") {
+            campaignDateStartPost = "";
+        } else {
+            campaignDateStartPost =  campaignDateStartPost ;
+        }
+        if (typeof campaignDateFinishPost === "undefined") {
+            campaignDateFinishPost = "";
+        } else {
+            campaignDateFinishPost =  campaignDateFinishPost ;
+        }
         const data = {
         name: $('#name').val(),
         fromEmailAddressId : $('#fromEmailAddressId').val(),
@@ -121,7 +331,13 @@ $(document).on('bs.newNewsletterUser.save', function () {
         subject : $('#subject').val(),
         dataDescription : $('#dataDescription').val(),
         preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
-        campaignId : $('#campaignId').val()
+        campaignName : campaignNamePost,
+        campaignId : campaignIdPost,
+        newsletterEventId: campaignEventIdPost,
+        newsletterEventName: campaignEventNamePost,
+        dateCampaignStart:campaignDateStartPost,
+        dateCampaignFinish:campaignDateFinishPost,
+
         };
         $.ajax({
             method: 'post',

@@ -28,15 +28,28 @@
                         <div class="col-md-12">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Aggiungi una Lista</h5>
+                                    <h5 class="m-t-10">Aggiungi Filtro  </h5>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="name">Nome lista</label>
+                                                <label for="newsletterGroupId">Seleziona Il Gruppo
+                                                </label>
+                                                <select id="newsletterGroupId" name="newsletterGroupId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Lista"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="name">Codice Gruppo</label>
                                                 <input id="name" class="form-control"
-                                                       placeholder="Inserisci il nome della lista destinatari"
+                                                       placeholder="Inserisci il nome del Gruppo"
                                                        name="name" required="required">
                                             </div>
                                         </div>
@@ -44,7 +57,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteredField">Seleziona la tipologia di Filtro</label>
+                                                <label for="filteredField">Seleziona la tipologia di filtro per il  Gruppo</label>
                                                 <select id="filteredField" name="filteredField"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Colonna"
@@ -101,18 +114,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterEmailListId">Seleziona la lista dei
-                                                    destinatari</label>
-                                                <select id="newsletterEmailListId" name="newsletterEmailListId"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Seleziona la Lista"
-                                                        data-init-plugin="selectize">
-                                                </select>
-                                            </div>
-                                        </div>
+
                                     </div>
 
 
@@ -135,15 +137,15 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione NewsletterUser">
+    <bs-toolbar-group data-group-label="Gestione Gruppo">
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-file-o fa-plus"
+                data-icon="fa-floppy-o"
                 data-permission="AllShops"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.newNewsletterEmailList.save"
-                data-title="Salva la  Newsletter"
+                data-title="Salva il Gruppo"
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>

@@ -48,13 +48,13 @@ class CNewsletterEmailListManage extends AAjaxController
         $data = \Monkey::app()->router->request()->getRequestData();
         $name = $data['name'];
         $sql    = $data['sql'];
-        $newsletterEmailListId = $data['newsletterEmailListId'];
+        $newsletterGroupId = $data['newsletterGroupId'];
         if( empty($sql)){
             $sql="vuoto";
         }
 
-        if(empty($name) || empty($sql) || empty($newsletterEmailListId)){
-            $res = "prego compila tutti i campi premi Annulla e compila i campi mancanti<br>Nome Lista Destinatari".$name."<br>Filtro  sql Generato:".$sql."<br>Id Codice newletter Associata:".$newsletterEmailListId;
+        if(empty($name) || empty($sql) || empty($newsletterGroupId)){
+            $res = "prego compila tutti i campi premi Annulla e compila i campi mancanti<br>Nome Lista Destinatari".$name."<br>Filtro  sql Generato:".$sql."<br>Id Codice Gruppo newletter Associato:".$newsletterGroupId;
 
         } else {
 
@@ -75,17 +75,17 @@ class CNewsletterEmailListManage extends AAjaxController
 
                 $newsletterEmailListInsert->name = $name;
                 $newsletterEmailListInsert->sql = $sql;
-                $newsletterEmailListInsert->newsletterEmailListId = $newsletterEmailListId;
+                $newsletterEmailListInsert->newsletterGroupId = $newsletterGroupId;
 
                 // eseguo la commit sulla tabella;
 
                 $newsletterEmailListInsert->smartInsert();
 
-                $res = "filtro Lista Destinatari inserito con successo!";
+                $res = "filtro Lista Gruppo Destinatari inserito con successo!";
 
             } else {
                 //Se hai trovato qualcosa allora restituitsci messaggio di errore
-                $res = "Esiste già un filtro lista Destinatari con lo stesso nome";
+                $res = "Esiste già un filtro lista Gruppo Destinatari con lo stesso nome";
             }
         }
 

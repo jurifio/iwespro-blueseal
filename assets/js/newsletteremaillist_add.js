@@ -270,11 +270,11 @@
             method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
             data: {
-                table: 'NewsletterEmailList'
+                table: 'NewsletterGroup'
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#newsletterEmailListId');
+            var select = $('#newsletterGroupId');
             if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
@@ -288,8 +288,8 @@
 })(jQuery);
 
 $(document).on('bs.newNewsletterEmailList.save', function () {
-    let bsModal = new $.bsModal('Salva newsletter', {
-        body: '<div><p>Premere ok per Salvare la Newsletter' +
+    let bsModal = new $.bsModal('Salva il Gruppo', {
+        body: '<div><p>Premere ok per Salvare il Gruppo' +
         '</div>'
     });
 
@@ -351,7 +351,8 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
         const data = {
             name: $('#name').val(),
             sql: filterGender + ' ' + filterAge + ' ' + filterCity + ' ' + filterCountry + ' ' + filterIsActive + ' ' + filterOrderDateExclude + groupby,
-            newsletterEmailListId: $('#newsletterEmailListId').val()
+            newsletterGroupId: $('#newsletterGroupId').val(),
+
         };
         $.ajax({
             method: 'post',

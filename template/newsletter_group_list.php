@@ -1,11 +1,3 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: jurif
- * Date: 08/01/2018
- * Time: 16:35
- */
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,8 +23,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="newsletter_template_list"
-                               data-controller="NewsletterTemplateListAjaxController"
+                               data-datatable-name="newsletter_group_list"
+                               data-controller="NewsletterGroupListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
@@ -47,7 +39,12 @@
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">name
+                                    class="center">Gruppi Newsletter
+                                </th>
+                                <th data-slug="sql"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">sql
                                 </th>
 
                             </tr>
@@ -69,10 +66,12 @@
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Crea Gruppo Newsletter">
         <bs-toolbar-button
-                data-remote="bs.lists.create.newslettertemplate"
+            data-remote="bs.lists.create.group"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
-</html>
+</html><?php
