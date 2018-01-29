@@ -93,10 +93,10 @@
                     '<label for=\"filterCityAndOr'+inputCityFieldCounter+'\">Seleziona la condizione </label><select id=\"filterCityAndOr'+inputCityFieldCounter+'\" name=\"filterCityAndOr'+inputCityFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la copndizione\"' +
                     'data-init-plugin=\"selectize\">' +
                     '<option value=\"\"></option>' +
-                    '<option value=\" AND ci.id= \">(AND) = COMPRESO </option>' +
-                    '<option value=\" OR ci.id=\">(OR) = OPPURE</option>' +
-                    '<option value=\" NOT ci.id= \">(NOT) = NON COMPRESO</option>' +
-                    '<option value=\" XOR ci.id= \">(XOR) = ESCLUSIVO</option></select>' +
+                    '<option value=\" AND \">(AND) = COMPRESO </option>' +
+                    '<option value=\" OR \">(OR) = OPPURE</option>' +
+                    '<option value=\" NOT \">(NOT) = NON COMPRESO</option>' +
+                    '<option value=\" XOR \">(XOR) = ESCLUSIVO</option></select>' +
                     ' </div>' +
                     '</div>' +
                     '</div>');
@@ -110,7 +110,7 @@
                     var selectionFilter = $(jqueryFilterCity).val();
 
                     var selectionFilterAndOr = $(jqueryFilterCityAndOr).val();
-                    var resultSelectionFilter = selectionFilterAndOr + " " + selectionFilter;
+                    var resultSelectionFilter = selectionFilterAndOr + " " + "city LIKE '%"+selectionFilter+"%'";
                     if ($("#filterCity").val()==""){
                         $("#filterCity").val(resultSelectionFilter) ;
                     }else{
@@ -130,7 +130,7 @@
                     var select = $(jqueryFilterCity);
                     if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
                     select.selectize({
-                        valueField: 'id',
+                        valueField: 'name',
                         labelField: 'name',
                         searchField: 'name',
                         options: res2,

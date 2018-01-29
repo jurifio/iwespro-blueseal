@@ -2,11 +2,16 @@
 
 namespace bamboo\controllers\back\ajax;
 
+use Aws\DynamoDb\Model\Attribute;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
+use bamboo\core\exceptions\BambooORMInvalidEntityException;
+use bamboo\core\exceptions\BambooORMReadOnlyException;
+use bamboo\domain\entities\CNewsletter;
 use bamboo\domain\entities\CNewsletterCampaign;
 use bamboo\domain\entities\CNewsletterTemplate;
 use bamboo\domain\entities\CNewsletterUser;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\CNewsletterRepo;
 
 
@@ -135,6 +140,115 @@ class CNewsletterUserManage extends AAjaxController
 
 
     }
+    public function secToTime($init){
+        $hours = floor($init / 3600);
+        $minutes = floor(($init / 60) % 60);
+        $seconds = $init % 60;
+
+        return "$hours:$minutes:$seconds";
+    }
+
+    public function put()
+    {
+        $data = \Monkey::app()->router->request()->getRequestData();
+        $idNewsletterUser = $data['idNewsletterUser'];
+
+        /** @var CNewsletter $newsletterUser */
+        $newsletterUser = \Monkey::app()->repoFactory->create('Newsletter')->findOneBy(['id' => $idNewsletterUser]);
+
+        $newsletterId = $newsletterUser->id;
+
+        $checkNewsletterUser = $newsletterUser;
+
+        if (empty($checkNewsletterUser)) {
+            $res = "<p style='color:red'>la Newsletter  che stai cercando di inviare non esiste</p>";
+
+        } else if (!empty($newsletterId)) {
+            // ottengo i valori dalla tabella newsletter
+
+            $fromEmailAddressId = $newsletterUser->fromEmailAddressId;
+            $sendAddressDate = $newsletterUser->sendAddressDate;
+            $newsletterEmailListId = $newsletterUser->newsletterEmailListId;
+            $subject = $newsletterUser->subject;
+            $dataDescription = $newsletterUser->dataDescription;
+            $preCompiledTemplate = $newsletterUser->preCompiledTemplate;
+            $newsletterCampaignId = $newsletterUser->newsletterCampaignId;
+            $newsletterEventId = $newsletterUser->newsletterEventId;
+
+
+            //  ottengo le informazioni del sender;
+
+            /** @var CEmailAddress $emailAddress */
+
+            $emailAddress = \Monkey::app()->repoFactory->create('EmailAddress')->findOneBy(['id' => $fromEmailAddressId]);
+            $fromEmailAddress = $emailAddress->id;
+            $checkEmailAddress = $emailAddress;
+
+            if (empty($checkEmailAddress)) {
+                $res = "<p style='color:red'>il sender che stai cercando di selezionare non esiste</p>";
+            } else if (!empty($fromEmailAddress)) {
+                $from = $emailAddress->id;
+            }
+
+            /** @var  $CNewsletterEmailList $newsletterEmailList */
+            //ottengo  la query sql da applicare sul bacino di utenza selezionato
+
+            $newsletterEmailList = \Monkey::app()->repoFactory->create('NewsletterEmailList')->findOneBy(['id' => $newsletterEmailListId]);
+            $newsletterEmail = $newsletterEmailList->id;
+            $checkNewsletterEmailList = $newsletterEmailList;
+
+            if (empty($checkNewsletterUser)) {
+                $res = "<p style='color:red'>il filtro per il gruppo selezionato  che stai cercando non esiste</p>";
+            } else if (!empty($newsletterEmail)) {
+                $filterSql = $newsletterEmailList->sql;
+                $newsletterGroupId = $newsletterEmailList->newsletterGroupId;
+
+            }
+
+            // ottento la query sql del gruppo
+
+            /** @var CNewsletterGroup $newsletterGroup */
+
+            $newsletterGroup = \Monkey::app()->repoFactory->create('NewsletterGroup')->findOneBy(['id' => $newsletterGroupId]);
+            $group = $newsletterGroup->id;
+            $checkNewsletterGroup = $newsletterGroup;
+
+            if (empty($checkNewsletterGroup)) {
+                $res = "<p style='color:red'>il  gruppo selezionato  che stai cercando non esiste</p>";
+            } else if (!empty($group)) {
+                $sqlDefault = $newsletterGroup->sql;
+
+            }
+            $sql = $sqlDefault . " " . $filterSql;
+
+
+        }
+        // popolo l'array dei destinatari
+        $to = [];
+        $indirizzi = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $fineciclo = 0;
+        $verificafineciclo = 1;
+        foreach ($indirizzi as $val) {
+            $to[] = $val["email"];
+            $fineciclo = $fineciclo + 1;
+            $verificafineciclo = $verificafineciclo + 1;
+
+        }
+        $fineciclo = $fineciclo + 1;
+        //creo l'entità email
+        /** @var CEmailRepo $emailRepo */
+        $emailRepo = \Monkey::app()->repoFactory->create('Email');
+
+
+        $emailRepo->newMail($from, $to, [], [], $subject, $preCompiledTemplate, null, $newsletterId, 'mailGun', 'false');
+        if ($fineciclo === $verificafineciclo) {
+
+        $res = "Email Generate  ";
+
+        return res;
+    }
+    }
+
 
 
 }
