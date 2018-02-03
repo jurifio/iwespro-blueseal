@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-newNewsletterUser-send",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Invia Newsletter",
+    title: "Invia  Test Newsletter",
     placement: "bottom",
     toggle: "modal"
 };

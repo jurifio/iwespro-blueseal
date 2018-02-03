@@ -1,9 +1,41 @@
 (function ($) {
     Pace.ignore(function () {
 
+        $('#buttonOpen').on('click', function () {
+            var resultSelectionFilter =  " ("  ;
+            if ($("#filterQuery").val()==""){
+                $("#filterQuery").val(resultSelectionFilter) ;
+            }else{
+                $('#filterQuery').val($('#filterQuery').val() + " " + resultSelectionFilter);
+            }
+        });
+        $('#buttonClose').on('click', function () {
+            var resultSelectionFilter =  ") "  ;
+            if ($("#filterQuery").val()==""){
+                $("#filterQuery").val(resultSelectionFilter) ;
+            }else{
+                $('#filterQuery').val($('#filterQuery').val() + " " + resultSelectionFilter);
+            }
+        });
+        $('#buttonAnd').on('click', function () {
+            var resultSelectionFilter =  " AND  "  ;
+            if ($("#filterQuery").val()==""){
+                $("#filterQuery").val(resultSelectionFilter) ;
+            }else{
+                $('#filterQuery').val($('#filterQuery').val() + " " + resultSelectionFilter);
+            }
+        });
+        $('#buttonOr').on('click', function () {
+            var resultSelectionFilter =  " OR  "  ;
+            if ($("#filterQuery").val()==""){
+                $("#filterQuery").val(resultSelectionFilter) ;
+            }else{
+                $('#filterQuery').val($('#filterQuery').val() + " " + resultSelectionFilter);
+            }
+        });
 
         //inizializzo i campi a cascata
-
+        let inputGenderFieldCounter =0;
         let inputAgeFieldCounter =0;
         let inputCountryFieldCounter =0;
         let inputCityFieldCounter =0;
@@ -12,7 +44,7 @@
             inputAgeFieldCounter=inputAgeFieldCounter+1;
 
 
-                $("#inputAge").append('<div class=\"row\">' +
+                $("#inputQuery").append('<div class=\"row\">' +
                     ' <div class="col-md-6">' +
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
                     '<label for=\"filterAgeAndOr' + inputAgeFieldCounter + '\">Seleziona la condizione </label><select id=\"filterAgeAndOr' + inputAgeFieldCounter + '\" name=\"filterAgeAndOr' + inputAgeFieldCounter + '\" class=\"full-width selectpicker\" placeholder=\"Selezione la copndizione\"' +
@@ -45,16 +77,16 @@
                 var jqueryFilterAgeAndOr = "#" + "filterAgeAndOr" + inputAgeFieldCounter.toString();
 
 
-                $(jqueryFilterAgeAndOr).change(function () {
+                $(jqueryFilterAge).change(function () {
 
                     var selectionFilter = $(jqueryFilterAge).val();
 
                     var selectionFilterAndOr = $(jqueryFilterAgeAndOr).val();
                     var resultSelectionFilter = selectionFilterAndOr + " " + selectionFilter;
-                    if ($("#filterAge").val() == "") {
-                        $("#filterAge").val(resultSelectionFilter);
+                    if ($("#filterQuery").val() == "") {
+                        $("#filterQuery").val(resultSelectionFilter);
                     } else {
-                        $('#filterAge').val($('#filterAge').val() + " " + resultSelectionFilter);
+                        $('#filterQuery').val($('#filterQuery').val() + " " + resultSelectionFilter);
                     }
 
                     //  $('#filteredField option[value=vuoto]').attr('selected','selected');
@@ -64,32 +96,42 @@
 
         });
         $('#buttonGender').on('click', function () {
-            $("#inputGender").empty();
-
-            $("#inputGender").append('<div class=\"row\">' +
+            inputGenderFieldCounter=inputGenderFieldCounter+1
+            $("#inputQuery").append('<div class=\"row\">' +
                 ' <div class="col-md-12">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
-                '<label for=\"filterGender\">Seleziona il Sesso </label><select id=\"filterGender\" name=\"filterGender\" class=\"full-width selectpicker\" placeholder=\"Selezione il Sesso"' +
+                '<label for=\"filterGender' + inputGenderFieldCounter + '\">Seleziona l\'Eta </label><select id=\"filterGender' + inputGenderFieldCounter + '\" name=\"filterGender' + inputGenderFieldCounter + '\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'eta\"' +
                 'data-init-plugin=\"selectize\">' +
+                '<option value=\"\"></option>' +
                 '<option value=\"AND ud.gender=\'M\'\">Sesso Maschile</option>' +
                 '<option value=\"AND ud.gender=\'F\'\">Sesso Femminile</option>' +
                 '</select>' +
                 ' </div>' +
                 '</div>' +
                 '</div>');
+
+            var jqueryFilterGender = "#" + "filterGender" + inputGenderFieldCounter.toString();
+            $(jqueryFilterGender).change(function () {
+
+                var selectionFilter = $(jqueryFilterGender).val();
+
+
+                var resultSelectionFilter =  " " + selectionFilter ;
+                if ($("#filterQuery").val()==""){
+                    $("#filterQuery").val(resultSelectionFilter) ;
+                }else{
+                    $('#filterQuery').val($('#filterQuery').val() + " " + resultSelectionFilter);
+                }
+
+
+            });
         });
         $('#buttonCity').on('click', function () {
             inputCityFieldCounter=inputCityFieldCounter+1;
-            $("#inputCity").append('<div class=\"row\">' +
+            $("#inputQuery").append('<div class=\"row\">' +
                 ' <div class="col-md-6">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
-                '<label for=\"filterCity'+inputCityFieldCounter+'\">Seleziona la Città </label><select id=\"filterCity'+inputCityFieldCounter+'\" name=\"filterCity'+inputCityFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la citta\"' +
-                'data-init-plugin=\"selectize\"></select>' +
-                ' </div>' +
-                '</div>' +
-                ' <div class="col-md-6">' +
-                '<div class=\"form-group form-group-default selectize-enabled\">' +
-                '<label for=\"filterCityAndOr'+inputCityFieldCounter+'\">Seleziona la condizione </label><select id=\"filterCityAndOr'+inputCityFieldCounter+'\" name=\"filterCityAndOr'+inputCityFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la copndizione\"' +
+                '<label for=\"filterCityAndOr'+inputCityFieldCounter+'\">Seleziona la condizione </label><select id=\"filterCityAndOr'+inputCityFieldCounter+'\" name=\"filterCityAndOr'+inputCityFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la condizione\"' +
                 'data-init-plugin=\"selectize\">' +
                 '<option value=\"\"></option>' +
                 '<option value=\" AND \">(AND) = COMPRESO </option>' +
@@ -98,22 +140,29 @@
                 '<option value=\" XOR \">(XOR) = ESCLUSIVO</option></select>' +
                 ' </div>' +
                 '</div>' +
+                ' <div class="col-md-6">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"filterCity'+inputCityFieldCounter+'\">Seleziona la Città </label><select id=\"filterCity'+inputCityFieldCounter+'\" name=\"filterCity'+inputCityFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la citta\"' +
+                'data-init-plugin=\"selectize\"></select>' +
+                ' </div>' +
+                '</div>' +
+
                 '</div>');
             var jqueryFilterCity = "#"+"filterCity"+inputCityFieldCounter.toString();
             var jqueryFilterCityAndOr = "#"+"filterCityAndOr"+inputCityFieldCounter.toString();
 
 
 
-            $(jqueryFilterCityAndOr).change(function () {
+            $(jqueryFilterCity).change(function () {
 
                 var selectionFilter = $(jqueryFilterCity).val();
 
                 var selectionFilterAndOr = $(jqueryFilterCityAndOr).val();
                 var resultSelectionFilter = selectionFilterAndOr + " " + "city LIKE '%"+selectionFilter+"%'";
-                if ($("#filterCity").val()==""){
-                    $("#filterCity").val(resultSelectionFilter) ;
+                if ($("#filterQuery").val()==""){
+                    $("#filterQuery").val(resultSelectionFilter) ;
                 }else{
-                    $('#filterCity').val($('#filterCity').val() + " " + resultSelectionFilter);
+                    $('#filterQuery').val($('#filterQuery').val() + " " + resultSelectionFilter);
                 }
 
 
@@ -140,13 +189,7 @@
         $('#buttonCountry').on('click', function () {
             inputCountryFieldCounter=inputCountryFieldCounter+1;
 
-            $("#inputCountry").append('<div class=\"row\">' +
-                ' <div class="col-md-6">' +
-                '<div class=\"form-group form-group-default selectize-enabled\">' +
-                '<label for=\"filterCountry'+inputCountryFieldCounter+'\">Seleziona la Nazione </label><select id=\"filterCountry'+inputCountryFieldCounter+'\" name=\"filterCountry'+inputCountryFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la nazione\"' +
-                'data-init-plugin=\"selectize\"></select>' +
-                ' </div>' +
-                '</div>' +
+            $("#inputQuery").append('<div class=\"row\">' +
                 ' <div class="col-md-6">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
                 '<label for=\"filterCountryAndOr'+inputCountryFieldCounter+'\">Seleziona la condizione </label><select id=\"filterCountryAndOr'+inputCountryFieldCounter+'\" name=\"filterCountryAndOr'+inputCountryFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la copndizione\"' +
@@ -158,22 +201,29 @@
                 '<option value=\" XOR ua.countryId= \">(XOR) = ESCLUSIVO</option></select>' +
                 ' </div>' +
                 '</div>' +
+                ' <div class="col-md-6">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"filterCountry'+inputCountryFieldCounter+'\">Seleziona la Nazione </label><select id=\"filterCountry'+inputCountryFieldCounter+'\" name=\"filterCountry'+inputCountryFieldCounter+'\" class=\"full-width selectpicker\" placeholder=\"Selezione la nazione\"' +
+                'data-init-plugin=\"selectize\"></select>' +
+                ' </div>' +
+                '</div>' +
+
                 '</div>');
             var jqueryFilterCountry = "#"+"filterCountry"+inputCountryFieldCounter.toString();
             var jqueryFilterCountryAndOr = "#"+"filterCountryAndOr"+inputCountryFieldCounter.toString();
 
 
 
-            $(jqueryFilterCountryAndOr).change(function () {
+            $(jqueryFilterCountry).change(function () {
 
                 var selectionFilter = $(jqueryFilterCountry).val();
 
                 var selectionFilterAndOr = $(jqueryFilterCountryAndOr).val();
                 var resultSelectionFilter = selectionFilterAndOr + " " + selectionFilter;
-                if ($("#filterCountry").val()==""){
-                    $("#filterCountry").val(resultSelectionFilter) ;
+                if ($("#filterQuery").val()==""){
+                    $("#filterQuery").val(resultSelectionFilter) ;
                 }else{
-                    $('#filterCountry').val($('#filterCountry').val() + " " + resultSelectionFilter);
+                    $('#filterQuery').val($('#filterQuery').val() + " " + resultSelectionFilter);
                 }
             });
             $.ajax({
@@ -200,9 +250,9 @@
 
 
         $('#buttonIsActive').on('click', function () {
-            $("#inputIsActive").empty();
 
-            $("#inputIsActive").append('<div class=\"row\">' +
+
+            $("#inputQuery").append('<div class=\"row\">' +
                 ' <div class="col-md-12">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
                 '<label for=\"filterisActive\">Seleziona se Utenti Iscritti </label><select id=\"filterisActive\" name=\"filterisActive\" class=\"full-width selectpicker\" placeholder=\"Selezione se Iscritti"' +
@@ -213,13 +263,27 @@
                 ' </div>' +
                 '</div>' +
                 '</div>');
+            $("#filterisActive").change(function () {
+
+                var selectionFilter =  $("#filterisActive").val();
+
+
+                var resultSelectionFilter =  " " + selectionFilter ;
+                if ($("#filterQuery").val()==""){
+                    $("#filterQuery").val(resultSelectionFilter) ;
+                }else{
+                    $('#filterQuery').val($('#filterQuery').val() + " " + resultSelectionFilter);
+                }
+
+
+            });
 
         });
 
         $('#buttonOrder').on('click', function () {
-            $("#inputOrderDate").empty();
 
-            $("#inputOrderDate").append('<div class=\"row\">' +
+
+            $("#inputQuery").append('<div class=\"row\">' +
                 ' <div class="col-md-12">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
                 '<label for=\"filterOrderDateStart\">Seleziona Esclusione Ordini da Data </label><input type="\date\" id=\"filterOrderDateStart\" name=\"filterOrderDateStart\" class=\"form-control\" placeholder=\"Seleziona Esclusione Ordini da Data "' +
@@ -227,7 +291,7 @@
                 ' </div>' +
                 '</div>' +
                 '</div>');
-            $("#inputOrderDate").append('<div class=\"row\">' +
+            $("#inputQuery").append('<div class=\"row\">' +
                 ' <div class="col-md-12">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
                 '<label for=\"filterOrderDateFinish\">Seleziona Esclusione Ordini a Data </label><input type="\date\" id=\"filterOrderDateFinish\" name=\"filterOrderDateFinish\" class=\"form-control\" placeholder=\"Seleziona Esclusione Ordini a Data "' +
@@ -239,6 +303,7 @@
         });
 
         $('#buttonClean').on('click', function () {
+            $("#inputQuery").empty();
             $("#inputOrderDate").empty();
             $("#inputIsActive").empty();
             $("#inputCity").empty();
@@ -248,9 +313,12 @@
             $("#filterAge").val("");
             $("#filterCity").val("");
             $("#filterCountry").val("");
+            $("#filterQuery").val("");
+            $("#filterQuery").empty();
             inputAgeFieldCounter =0;
             inputCountryFieldCounter = 0;
             inputCityFieldCounter = 0;
+            inputGenderFieldCounter = 0;
         });
 
 
@@ -287,6 +355,7 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
+        let filterQuery = $('#filterQuery').val();
         let filterGender = $('#filterGender').val();
         let filterAge = $('#filterAge').val();
         let filterCity = $('#filterCity').val();
@@ -314,6 +383,11 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
             filterCountry = "";
         } else {
             filterCountry = filterCountry ;
+        }
+        if (typeof filterQuery === "undefined") {
+            filterCountry = "";
+        } else {
+            filterQuery = filterQuery ;
         }
         if (typeof filterIsActive === "undefined") {
             filterIsActive = "";
@@ -343,7 +417,7 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
         const data = {
             name: $('#name').val(),
             code: $('#code').val(),
-            sql: filterGender + ' ' + filterAge + ' ' + filterCity + ' ' + filterCountry + ' ' + filterIsActive + ' ' + filterOrderDateExclude + groupby,
+            sql: filterGender + ' ' + filterAge + ' ' + filterCity + ' ' + filterCountry + ' ' + filterQuery + ' ' + filterIsActive + ' ' + filterOrderDateExclude + groupby,
             newsletterGroupId: $('#newsletterGroupId').val(),
 
         };
