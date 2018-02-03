@@ -28,7 +28,7 @@
                         <div class="col-md-12">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Aggiungi Filtro  </h5>
+                                    <h5 class="m-t-10">Aggiungi Segmento di Pubblico  </h5>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
@@ -47,25 +47,40 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="name">Codice Gruppo</label>
-                                                <input id="name" class="form-control"
-                                                       placeholder="Inserisci il nome del Gruppo"
-                                                       name="name" required="required">
+                                                <label for="code">Codice Segmento di Pubblico</label>
+                                                <input id="code" class="form-control"
+                                                       placeholder="Inserisci il codice del  Segmento di Pubblico"
+                                                       name="code" required="required">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteredField">Seleziona la tipologia di filtro per il  Gruppo</label>
-                                                <select id="filteredField" name="filteredField"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Seleziona la Colonna"
-                                                        data-init-plugin="selectize">
-                                                </select>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="name">Nome Segmento di Pubblico</label>
+                                                    <input id="name" class="form-control"
+                                                           placeholder="Inserisci il nome del Segmento di Pubblico"
+                                                           name="name" required="required">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+
+                                        <div class="row">
+
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="filteredField">clicca sui Criteri  da Aggiungere al Segmento </label>
+                                                    <input  type="button" id ="buttonAge" name="buttonAge" class="button"  value="Eta" />
+                                                    <input  type="button" id ="buttonGender" name="buttonGender" class="button"  value="Sesso" />
+                                                    <input  type="button" id ="buttonCity" name="buttonCity" class="button"  value="Citta" />
+                                                    <input  type="button" id ="buttonCountry" name="buttonCountry" class="button"  value="Paese" />
+                                                    <input  type="button" id ="buttonIsActive" name="buttonIsActive" class="button"  value="Utenti Iscritti" />
+                                                    <input  type="button" id ="buttonOrder" name="buttonOrder" class="button"  value="Esclusione Ordini" />
+                                                    <input  type="button"  id ="buttonClean" name="buttonClean" class="button"  value="Pulisci" />
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     <div id="inputGender">
                                     </div>
                                     <div id="inputAge">
@@ -86,7 +101,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteAge">Costruzione Filtro Età</label>
+                                                <label for="filteAge">Costruzione Criterio Età</label>
                                                 <textarea class="form-control" name="filterAge" id="filterAge"
                                                           value=""></textarea>
 
@@ -96,7 +111,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteCity">Costruzione Filtro Città</label>
+                                                <label for="filteCity">Costruzione Criterio Città</label>
 
                                                 <textarea class="form-control" name="filterCity" id="filterCity"
                                                           value=""></textarea>
@@ -107,7 +122,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteCountry">Costruzione Filtro Nazione</label>
+                                                <label for="filteCountry">Costruzione Criterio Nazione</label>
                                                 <textarea class="form-control" name="filterCountry" id="filterCountry"
                                                           value=""></textarea>
 
@@ -137,7 +152,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione Gruppo">
+    <bs-toolbar-group data-group-label="Gestione Segmento di Pubblico">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-floppy-o"

@@ -3,7 +3,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables', 'charts'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
     <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>
 </head>
@@ -30,7 +30,10 @@
                         <div class="col-md-6">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Crea Inserzione Newsletter</h5>
+                                    <h5 class="m-t-10">Modifica Inserzione Newsletter</h5>
+                                    <input type ="hidden" name="newsletterId"
+                                           id="newsletterId"
+                                           value="<?php echo $newsletter->id;?>"/>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
@@ -45,16 +48,67 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="inputCampaign"></div>
-                                    <div id="inputEvent"></div>
+                                    <div id="inputCampaign">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="campaignName">Campagna</label>
+                                                    <select id="campaignName" name="campaignName"  class="full-width selectpicker"
+                                                            placeholder="Seleziona la Lista"
+                                                            data-init-plugin="selectize">>
+                                                            <option value="<?php echo $newsletterCampaign->id;?>"><?php echo $newsletterCampaign->name;?>
+                                                            </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="dateCampaignStart">Data Inizio Campagna:<?php echo $newsletterCampaign->dateCampaignStart;?></label>
+                                                    <input type="datetime-local" name="dateCampaignStart" value="<?php echo $newsletterCampaign->dateCampaignStart;?>"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="dateCampaignFinish">Data Fine Campagna:<?php echo $newsletterCampaign->dateCampaignFinish;?></label>
+                                                            <input type="datetime-local" name="dateCampaignFinish" value="<?php echo $newsletterCampaign->dateCampaignFinish;?>"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div id="inputEvent">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="newsletterEventName">Evento della Campagna</label>
+                                                    <select id="newsletterEventName" name="newsletterEventName"  class="full-width selectpicker"
+                                                            placeholder="Seleziona la Lista"
+                                                            data-init-plugin="selectize">
+                                                        <option value="<?php echo $newsletterEvent->id;?>"><?php echo $newsletterEvent->name;?>
+                                                        </option>
+
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
 
                                     <div class="row">
                                         <div class="col-md-12">
                                             <br><br><br><p><br>
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="user">Nome Newsletter</label>
-                                                <input id="name" class="form-control"
-                                                 placeholder="Inserisci il nome della newsletter" name="name" required="required">
+                                                <label for="name">Nome Newsletter</label>
+                                                <input id="name" class="form-control" value="<?php echo $newsletter->name;?>"
+                                                       placeholder="Inserisci il nome della newsletter" name="name" required="required">
                                             </div>
                                         </div>
                                     </div>
@@ -64,7 +118,7 @@
                                             <p><br><br>
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="dataDescription">Descrizione Newletter</label>
-                                                <input type="text" class="form-control" id="dataDescription" name="dataDescription" value="" />
+                                                <input type="text" class="form-control" id="dataDescription" name="dataDescription"  value="<?php echo $newsletter->dataDescription;?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -90,7 +144,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="sendAddressDate">Data di Invio</label>
-                                                <input type="datetime-local" class="form-control" id="sendAddressDate" name="sendAddressDate" value="" />
+                                                <input type="datetime-local" class="form-control" id="sendAddressDate" name="sendAddressDate" value="<?php echo $newsletter->sendAddressDate;?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -102,14 +156,22 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div id="inputNewsletterEmailList">
+                                        <input type ="hidden" name="newsletterEmailListId"
+                                               id="newsletterEmailListId"
+                                               value="<?php echo $newsletterEmailList->id;?>"/>
                                     <div class="row">
                                         <div class="col-md-12">
+
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterEmailListId">Seleziona il Segmento di Pubblico</label>
-                                                <select id="newsletterEmailListId" name="newsletterEmailListId"
+                                                <label for="newsletterEmailListIdPrev">Seleziona la lista dei destinatari</label>
+
+                                                <select id="newsletterEmailListIdPrev" name="newsletterEmailListIdPrev"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
+                                                        <option value="<?php echo $newsletterEmailList->id;?>"><?php echo $newsletterEmailList->name;?></option>
+                                                        <option value="new">Seleziona un altro Gruppo</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -118,7 +180,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="subject">Oggetto</label>
-                                                <input type="text" class="form-control" id="subject" name="subject" value="" />
+                                                <input type="text" class="form-control" id="subject" name="subject" value="<?php echo $newsletter->subject;?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -127,6 +189,7 @@
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="newsletterTemplateId">Seleziona Il Template da Utilizzare</label>
                                                 <select id="newsletterTemplateId" name="NewsletterTemplateId"
+                                                        value="<?php echo $newsletterTemplate->id;?>"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
@@ -135,12 +198,15 @@
                                             </div>                                            <p>
                                         </div>
                                     </div>
+                                        <div id="inputNewsletterTemplateId">
+
+                                        </div>
 
 
 
+                                </div>
                             </div>
                         </div>
-                    </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
@@ -150,15 +216,15 @@
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="preCompiledTemplate1">Template Predefinito</label>
                                             <textarea cols="80" id="preCompiledTemplate1" class="form-control"  name="preCompiledTemplate1" required="required" rows="10"
-                                                      placeholder="Modifica il template">
+                                                      placeholder="Modifica il template" value="<?php echo $newsletter->preCompiledTemplate;?>">
 
                                                 </textarea>
-                                        </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                 </form>
             </div>

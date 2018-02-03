@@ -449,6 +449,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/newsletter/modifica(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserEditController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/newsletter/newsletter-template-aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterTemplateAddController"

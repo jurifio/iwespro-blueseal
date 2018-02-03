@@ -47,14 +47,15 @@ class CNewsletterEmailListManage extends AAjaxController
         //prendo i dati passati in input
         $data = \Monkey::app()->router->request()->getRequestData();
         $name = $data['name'];
-        $sql    = $data['sql'];
+        $code = $data['code'];
+        $sql  = $data['sql'];
         $newsletterGroupId = $data['newsletterGroupId'];
         if( empty($sql)){
             $sql="vuoto";
         }
 
         if(empty($name) || empty($sql) || empty($newsletterGroupId)){
-            $res = "prego compila tutti i campi premi Annulla e compila i campi mancanti<br>Nome Lista Destinatari".$name."<br>Filtro  sql Generato:".$sql."<br>Id Codice Gruppo newletter Associato:".$newsletterGroupId;
+            $res = "prego compila tutti i campi premi Annulla e compila i campi mancanti<br>Nome Lista Destinatari".$name."<br>Filtro  sql Generato:".$sql."<br>Id Codice Lista di distrizuione Associata:".$newsletterGroupId;
 
         } else {
 
@@ -74,6 +75,7 @@ class CNewsletterEmailListManage extends AAjaxController
                 //popolo la tabella
 
                 $newsletterEmailListInsert->name = $name;
+                $newsletterEmailListInsert->code = $code;
                 $newsletterEmailListInsert->sql = $sql;
                 $newsletterEmailListInsert->newsletterGroupId = $newsletterGroupId;
 

@@ -5,7 +5,7 @@ window.buttonSetup = {
     permission:"/admin/product/add&&allShops",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Aggiungi un nuovo Filtro Gruppo",
+    title:"Aggiungi un nuovo Segmento di Pubblico",
     placement:"bottom",
     href:"/blueseal/newsletter/newsletter-email-lista-aggiungi",
 };

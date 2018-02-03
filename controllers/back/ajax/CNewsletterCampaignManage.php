@@ -72,18 +72,38 @@ class CNewsletterCampaignManage extends AAjaxController
         }
 
         return $res;
+    }
 
 
+    /**
+     * @return mixed
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function put()
+    {
+       $data  = $this->app->router->request()->getRequestData();
+       $id = $data["id"];
+       $name = $data["name"];
+       $startDate = $data["dateCampaignStart"];
+       $finishDate = $data["dateCampaignFinish"];
+
+       /** @var CRepo $newsletterCampaign */
+       $newsletterCampaign = \Monkey::app()->repoFactory->create('NewsletterCampaign');
+
+       /** @var CNewsletterCampaign $newsletter */
+       $newsletter = $newsletterCampaign->findOneBy(['id'=>$id]);
+
+        $newsletter->name = $name;
+        $newsletter->dateCampaignStart = $startDate;
+        $newsletter->dateCampaignFinish = $finishDate;
 
 
+        $newsletter->update();
 
-
-
-
-
-
-
-
+        $res = "Campagna aggiornata";
+        return $res;
     }
 
 

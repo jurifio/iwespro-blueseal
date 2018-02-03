@@ -1,0 +1,388 @@
+(function ($) {
+    var select = $('#filteredField');
+    var newOptions = {
+        'empty':'',
+        'new': 'Nuova',
+        'exist': 'Esistente'
+
+    };
+    var select =$('#filteredField');
+    $('option', select).remove();
+    $.each(newOptions, function (text, key) {
+        var option = new Option(key, text);
+        select.append($(option));
+    });
+
+
+    $("#filteredField").change(function () {
+        var selection = $(this).val();
+
+        if (selection == 'new') {
+            $('#inputCampaign').empty();
+            $('#inputEvent').empty();
+
+            $("#inputCampaign").append('<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"campaignName\">Inserisci il nome della Campagna </label>' +
+                '<input id=\"campaignName\" class=\"form-control\"' +
+                'placeholder=\"Inserisci il nome della newsletter\" name=\"campaignName\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>'+
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"dateCampaignStart\">Inserisci la Data di Inizio della Campagna </label>' +
+                '<input  type =\'datetime-local\' id=\"dateCampaignStart\" class=\"form-control\"' +
+                'placeholder=\"Inserisci la Data di Inizio della Campagna \" name=\"dateCampaignStart\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>'+
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"dateCampaignFinish\">Inserisci la Data della Fine della Campagna </label>' +
+                '<input  type =\'datetime-local\' id=\"dateCampaignFinish\" class=\"form-control\"' +
+                'placeholder=\"Inserisci la Data della Fine della Campagna \" name=\"dateCampaignFinish\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>'+
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"newsletterEventName\">Inserisci il nome dell\'Evento </label>' +
+                '<input id=\"newsletterEventName\" class=\"form-control\"' +
+                'placeholder=\"Inserisci il nome dell\'Evento \" name=\"newsletterEventName\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>'
+            );
+
+
+        } else {
+            $('#inputCampaign').empty();
+            $("#inputCampaign").append('<div class=\"row\">' +
+                ' <div class="col-md-12">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"campaignId\">Seleziona la Campagna </label><select id=\"campaignId\" name=\"campaignId\" class=\"full-width selectpicker\" placeholder=\"Selezione la Campagna\"' +
+                'data-init-plugin=\"selectize\"></select>' +
+                ' </div>' +
+                '</div>' +
+                '</div>');
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'NewsletterCampaign'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                var select = $('#campaignId');
+                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    //labelField: 'name',
+                    labelField: ['name','dateCampaignStart','dateCampaignFinish'],
+                    searchField: ['name','dateCampaignStart','dateCampaignFinish'],
+                    options: res2,
+                    render: {
+                        option: function(item, escape) {
+
+                            return '<div>'
+                                + '<div>'
+                                + '<strong>'
+                                + 'Nome Campagna: '
+                                + escape(item.name) + ''
+                                + '</div>'
+                                + '</strong>'
+                                + '<strong>'
+                                + 'Inizio Campagna:'
+                                + '</strong>'
+                                + escape(item.dateCampaignStart).substr(8,2)+'-'
+                                + escape(item.dateCampaignStart).substr(5,2)+'-'
+                                + escape(item.dateCampaignStart).substr(0,4)+' '
+                                + escape(item.dateCampaignStart).substr(11,2)+':'
+                                + escape(item.dateCampaignStart).substr(14,2)+':'
+                                + escape(item.dateCampaignStart).substr(17,2)+' '
+                                + '<strong>'
+                                + 'Fine Campagna:'
+                                + '</strong>'
+                                + escape(item.dateCampaignFinish).substr(8,2)+'-'
+                                + escape(item.dateCampaignFinish).substr(5,2)+'-'
+                                + escape(item.dateCampaignFinish).substr(0,4)+' '
+                                + escape(item.dateCampaignFinish).substr(11,2)+':'
+                                + escape(item.dateCampaignFinish).substr(14,2)+':'
+                                + escape(item.dateCampaignFinish).substr(17,2)+' '
+                                + '</div>';
+                        },
+                        item: function(item, escape){
+                            return '<div>'
+                                + '<div>'
+                                + '<strong>'
+                                + 'Nome Campagna: '
+                                + escape(item.name) + ''
+                                + '</div>'
+                                + '</strong>'
+                                + '<strong>'
+                                + 'Inizio Campagna:'
+                                + '</strong>'
+                                + escape(item.dateCampaignStart).substr(8,2)+'-'
+                                + escape(item.dateCampaignStart).substr(5,2)+'-'
+                                + escape(item.dateCampaignStart).substr(0,4)+' '
+                                + escape(item.dateCampaignStart).substr(11,2)+':'
+                                + escape(item.dateCampaignStart).substr(14,2)+':'
+                                + escape(item.dateCampaignStart).substr(17,2)+' '
+
+                                + '<strong>'
+                                + 'Fine Campagna:'
+                                + '</strong>'
+                                + escape(item.dateCampaignFinish).substr(8,2)+'-'
+                                + escape(item.dateCampaignFinish).substr(5,2)+'-'
+                                + escape(item.dateCampaignFinish).substr(0,4)+' '
+                                + escape(item.dateCampaignFinish).substr(11,2)+':'
+                                + escape(item.dateCampaignFinish).substr(14,2)+':'
+                                + escape(item.dateCampaignFinish).substr(17,2)+' '
+                                + '</div>';
+                        }
+                    }
+                });
+            });
+            $("#campaignId").change(function () {
+                var selection = $(this).val();
+                $('#inputEvent').empty();
+                $("#inputEvent").append('<div class=\"row\">' +
+                    ' <div class="col-md-12">' +
+                    '<div class=\"form-group form-group-default selectize-enabled\">' +
+                    '<label for=\"newsletterEventId\">Seleziona l\'Evento Associato</label><select id=\"newsletterEventId\" name=\"newsletterEventId\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'evento per la Campagna\"' +
+                    'data-init-plugin=\"selectize\"></select>' +
+                    ' </div>' +
+                    '</div>' +
+                    '</div>');
+
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/blueseal/xhr/GetTableContent',
+                    data: {
+                        table: 'NewsletterEvent',
+                        condition: {newsletterCampaignId: selection}
+                    },
+                    dataType: 'json'
+                }).done(function (res2) {
+                    var select = $('#newsletterEventId');
+                    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                    select.selectize({
+                        valueField: 'id',
+                        labelField: 'name',
+                        searchField: 'name',
+                        options: res2,
+                    });
+                });
+            });
+
+//fine jquery select
+        }
+
+    });
+
+
+
+    $("#newsletterEmailListIdPrev").change(function () {
+        var selectionNewsletterEmailList = $(this).val();
+
+        if (selectionNewsletterEmailList == 'new') {
+            $('#inputNewsletterEmailList').empty();
+            $("#inputNewsletterEmailList").append('<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"newsletterEmailListId\">Seleziona la Lista dei Destinatari </label>' +
+                '<input id=\"newsletterEmailListId\" class=\"form-control\"' +
+                'placeholder=\"Inserisci il nome della newsletter\" name=\"newsletterEmailListId\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>'
+            );
+            $.ajax({
+                method:'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'NewsletterEmailList'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                var select = $('#newsletterEmailListId');
+                if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: res2,
+                });
+            });
+
+        }
+    });
+
+    ///////////////////////////////////////////////////////////////////
+
+
+
+
+    if (CKEDITOR.instances.preCompiledTemplate1) {
+        CKEDITOR.instances.preCompiledTemplate1.destroy();
+    }
+    CKEDITOR.replace( 'preCompiledTemplate1', {
+        height: 260,
+        width:1280,
+        startupMode:'source'
+
+    } );
+    /*function readSingleFile(e) {
+        var file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var contents = e.target.result;
+            displayContents(contents);
+        };
+        reader.readAsText(file);
+    }*/
+    $("#newsletterTemplateId").change(function () {
+        CKEDITOR.instances.preCompiledTemplate1.setData("");
+
+        $("#preCompiledTemplate1").empty();
+        var content1 = $(this).val();
+        CKEDITOR.instances.preCompiledTemplate1.setData(content1);
+        //var contentLessOccurence = content.indexOf('-');
+        //  var contentPreview = content.substring(5);
+        // $("#file-content").append(content);
+
+
+    });
+
+    /*function displayContents(contents) {
+        var element = document.getElementById('file-content');
+        element.innerHTML= contents;
+        $("#preCompiledTemplate1").val(contents);
+
+    }*/
+
+
+    /* document.getElementById('preCompiledTemplate1')
+         .addEventListener('change', readSingleFile, false);*/
+    Pace.ignore(function () {
+
+
+
+
+
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'NewsletterTemplate'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+
+            var select = $('#newsletterTemplateId');
+            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'template',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
+
+        });
+
+    });
+})(jQuery);
+
+$(document).on('bs.newNewsletterUser.save', function () {
+    let bsModal = new $.bsModal('Salva newsletter', {
+        body: '<div><p>Premere ok per Salvare la Newsletter'+
+        '</div>'
+    });
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        let campaignIdPost=$('#campaignId').val();
+        let campaignNamePost = $('#campaignName').val();
+        let campaignEventIdPost=$('#newsletterEventId').val();
+        let campaignDateStartPost=$('#dateCampaignStart').val();
+        let campaignDateFinishPost=$('#dateCampaignFinish').val();
+        let campaignEventNamePost=$('#newsletterEventName').val();
+        if (typeof campaignIdPost === "undefined") {
+            campaignIdPost = "";
+        } else {
+            campaignIdPost = campaignIdPost;
+        }
+        if (typeof campaignNamePost === "undefined") {
+            campaignNamePost = "";
+        } else {
+            campaignNamePost =  campaignNamePost ;
+        }
+        if (typeof campaignEventIdPost === "undefined") {
+            campaignEventIdPost = "";
+        } else {
+            campaignEventIdPost =  campaignEventIdPost ;
+        }
+        if (typeof campaignEventNamePost === "undefined") {
+            campaignEventNamePost = "";
+        } else {
+            campaignEventNamePost =  campaignEventNamePost ;
+        }
+        if (typeof campaignDateStartPost === "undefined") {
+            campaignDateStartPost = "";
+        } else {
+            campaignDateStartPost =  campaignDateStartPost ;
+        }
+        if (typeof campaignDateFinishPost === "undefined") {
+            campaignDateFinishPost = "";
+        } else {
+            campaignDateFinishPost =  campaignDateFinishPost ;
+        }
+        const data = {
+            newsletterId: $('#newsletterId').val(),
+            name: $('#name').val(),
+            fromEmailAddressId : $('#fromEmailAddressId').val(),
+            sendAddressDate : $('#sendAddressDate').val(),
+            newsletterEmailListId : $('#newsletterEmailListId').val(),
+            newsletterTemplateId:$('#newsletterTemplateId').val(),
+            subject : $('#subject').val(),
+            dataDescription : $('#dataDescription').val(),
+            preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
+            campaignId : campaignIdPost,
+            newsletterEventId: campaignEventIdPost,
+            dateCampaignStart:campaignDateStartPost,
+            dateCampaignFinish:campaignDateFinishPost,
+
+        };
+        $.ajax({
+            method: 'put',
+            url: '/blueseal/xhr/NewsletterUserManageEdit',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                window.location.reload();
+                bsModal.hide();
+                // window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+});
+
+
+
+
+

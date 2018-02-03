@@ -85,7 +85,9 @@
 
         <bs-toolbar-button
                 data-remote="bs.lists.modify.newslettercampaign"
+
         ></bs-toolbar-button>
+
 
     </bs-toolbar-group>
 </bs-toolbar>

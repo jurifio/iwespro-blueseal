@@ -13,8 +13,8 @@ window.buttonSetup = {
 $(document).on('bs-newNewsletterUser-send', function () {
 
     let dataTable = $('.dataTable').DataTable();
-    let selectedRows = dataTable.rows('.selected').data();
-    if (selectedRows.length === 1) {
+        let selectedRows = dataTable.rows('.selected').data();
+        if (selectedRows.length === 1) {
 
         var idNewsletterUser = selectedRows[0].id;
 

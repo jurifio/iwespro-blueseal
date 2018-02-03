@@ -32,14 +32,19 @@
                             <thead>
                             <tr>
                                 <th data-slug="id"
+                                          data-searchable="true"
+                                          data-orderable="true"
+                                          class="center">Id
+                                </th>
+                                <th data-slug="code"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Id
+                                    class="center">Codice
                                 </th>
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Filtro Gruppi Newsletter
+                                    class="center">Segmento di Pubblico
                                 </th>
                                 <th data-slug="sql"
                                     data-searchable="true"
@@ -67,7 +72,7 @@
                 data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Crea Filtro Gruppo Newsletter">
+    <bs-toolbar-group data-group-label="Crea Segmento di Pubblico">
         <bs-toolbar-button
                 data-remote="bs.lists.create.filtergroup"
         ></bs-toolbar-button>

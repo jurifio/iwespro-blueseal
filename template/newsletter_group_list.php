@@ -39,7 +39,7 @@
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Gruppi Newsletter
+                                    class="center">Liste di Distribuzione
                                 </th>
                                 <th data-slug="sql"
                                     data-searchable="true"
@@ -67,7 +67,7 @@
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Crea Gruppo Newsletter">
+    <bs-toolbar-group data-group-label="Crea Lista di Distribuzione">
         <bs-toolbar-button
             data-remote="bs.lists.create.group"
         ></bs-toolbar-button>
