@@ -99,7 +99,7 @@
                                                     <input type="button" id="buttonOr" name="buttonOr"
                                                            class="button" value="OR = OPPURE"/>
                                                     <input type="button" id="buttonClose" name="buttonClose"
-                                                           class="button" value=") Chiudi Criterio"/>
+                                                           class="button" value=" Chiudi Criterio )"/>
 
                                                 </div>
                                             </div>
