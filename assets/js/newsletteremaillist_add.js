@@ -251,12 +251,13 @@
 
         $('#buttonIsActive').on('click', function () {
 
-
-            $("#inputQuery").append('<div class=\"row\">' +
+            $("#inputIsActive").empty();
+            $("#inputIsActive").append('<div class=\"row\">' +
                 ' <div class="col-md-12">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
                 '<label for=\"filterisActive\">Seleziona se Utenti Iscritti </label><select id=\"filterisActive\" name=\"filterisActive\" class=\"full-width selectpicker\" placeholder=\"Selezione se Iscritti"' +
                 'data-init-plugin=\"selectize\">' +
+                '<option value=\"\"></option>' +
                 '<option value=\"and nu.isActive=1\">ISCRITTI</option>' +
                 '<option value=\"and nu.isActive=\'0\'\">NON ISCRITTI</option>' +
                 '</select>' +
