@@ -100,7 +100,7 @@
             $("#inputQuery").append('<div class=\"row\">' +
                 ' <div class="col-md-12">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
-                '<label for=\"filterGender' + inputGenderFieldCounter + '\">Seleziona l\'Eta </label><select id=\"filterGender' + inputGenderFieldCounter + '\" name=\"filterGender' + inputGenderFieldCounter + '\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'eta\"' +
+                '<label for=\"filterGender' + inputGenderFieldCounter + '\">Seleziona l\'Eta </label><select id=\"filterGender' + inputGenderFieldCounter + '\" name=\"filterGender' + inputGenderFieldCounter + '\" class=\"full-width selectpicker\" placeholder=\"Selezione il Sesso\"' +
                 'data-init-plugin=\"selectize\">' +
                 '<option value=\"\"></option>' +
                 '<option value=\"AND ud.gender=\'M\'\">Sesso Maschile</option>' +
