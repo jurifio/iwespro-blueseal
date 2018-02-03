@@ -47,7 +47,7 @@
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">name
+                                    class="center">Nome Template
                                 </th>
 
                             </tr>
