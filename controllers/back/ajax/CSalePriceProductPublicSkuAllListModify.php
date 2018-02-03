@@ -21,7 +21,7 @@ use bamboo\domain\repositories\CProductSkuRepo;
  * @date 29/12/2017
  * @since 1.0
  */
-class CSalePriceProductSkuModify extends AAjaxController
+class CSalePriceProductPublicSkuAllListModify extends AAjaxController
 {
 
     /**

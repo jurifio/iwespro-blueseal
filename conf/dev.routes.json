@@ -1857,6 +1857,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/utility/gestione-forzata-sku-pubblici(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CSalePriceProductPublicSkuAllListControllerUtility"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

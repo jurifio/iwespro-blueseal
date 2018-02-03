@@ -25,8 +25,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="sale_price_product_sku_utility_list"
-                               data-controller="SalePriceProductSkuListAjaxControllerUtility"
+                               data-datatable-name="sale_price_product_public_sku_show_all_list"
+                               data-controller="SalePriceProductPublicSkuAllListAjaxControllerUtility"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500">
@@ -83,16 +83,6 @@
                 data-title="Modifica prezzo"
                 data-placement="bottom"
         ></bs-toolbar-button>
-        <!--<bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-arrows-h"
-                data-permission="/admin/content/add"
-                data-event="bs-emergency-alignment"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Allinea prezzi totali e con saldo nei prodotti pubblici"
-                data-placement="bottom"
-        ></bs-toolbar-button>-->
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\controllers\back\ajax;
+use bamboo\domain\entities\CProduct;
 
 /**
  * Class CProductListAjaxController
@@ -44,6 +45,7 @@ class CProductSales extends AAjaxController
         foreach ($rows as $v) {
             \Monkey::app()->repoFactory->beginTransaction();
             try {
+                /** @var CProduct $product */
                 $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                 foreach ($product->shopHasProduct as $shopHasProduct) {
                     $shopHasProduct->salePrice = floor($shopHasProduct->price / 100 * (100 - $percent));
@@ -54,6 +56,12 @@ class CProductSales extends AAjaxController
                     $productSku->salePrice = floor($productSku->price / 100 * (100 - $percent));
                     $productSku->update();
                 }
+
+                foreach ($product->productPublicSku as $singleProductPublicSku){
+                    $singleProductPublicSku->salePrice = floor($singleProductPublicSku->price / 100 * (100 - $percent));
+                    $singleProductPublicSku->update();
+                }
+
                 $this->app->eventManager->triggerEvent('product.price.change', ['productId' => $product->printId()]);
             } catch (\Throwable $e) {
                 \Monkey::app()->repoFactory->rollback();

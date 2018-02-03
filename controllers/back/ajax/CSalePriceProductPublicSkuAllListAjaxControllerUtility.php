@@ -24,7 +24,7 @@ use bamboo\domain\repositories\CProductSkuRepo;
  * @date $date
  * @since 1.0
  */
-class CSalePriceProductSkuListAjaxControllerUtility extends AAjaxController
+class CSalePriceProductPublicSkuAllListAjaxControllerUtility extends AAjaxController
 {
     /**
      * @return string
@@ -39,22 +39,10 @@ class CSalePriceProductSkuListAjaxControllerUtility extends AAjaxController
   concat(ps1.productId, '-', ps1.productVariantId) AS id,
   ps1.price as p_price,
   ps1.salePrice as p_sale_price,
-  q1.onSale as on_sale
+  p.isOnSale as on_sale
 FROM ProductPublicSku ps1
   JOIN ProductSize ps on ps1.productSizeId = ps.id
-  JOIN (SELECT
-          p.id,
-          p.productVariantId,
-          p.isOnSale as onSale,
-          pps.salePrice as salePriceToConfront,
-          count(DISTINCT pps.salePrice) AS prezziSaldo,
-          count(DISTINCT pps.price) AS prezzi
-        FROM Product p
-          JOIN ProductPublicSku pps ON p.id = pps.productId AND p.productVariantId = pps.productVariantId
-        WHERE p.qty > 0
-        GROUP BY p.id, p.productVariantId
-        HAVING (prezzi > 1 OR prezziSaldo > 1) or (prezzi = 1 AND onSale = 1 AND salePriceToConfront = 0)
-       ) q1 ON ps1.productId = q1.id AND ps1.productVariantId = q1.productVariantId";
+  JOIN Product p ON ps1.productId = p.id AND ps1.productVariantId = p.productVariantId";
 
         $datatable = new CDataTables($sql, ['productId','productVariantId','size'], $_GET, true);
 
