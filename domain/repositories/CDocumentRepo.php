@@ -7,6 +7,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CDocument;
+use bamboo\domain\entities\CInvoiceLine;
 use bamboo\domain\entities\CInvoiceNumber;
 use bamboo\domain\entities\CInvoiceSectional;
 use bamboo\domain\entities\CInvoiceType;
@@ -890,5 +891,38 @@ class CDocumentRepo extends ARepo
                     ORDER BY d.paymentExpectedDate ASC ";
 
         return $this->findBySql($sql, [STimeToolbox::DbFormattedDate($dueDate)]);
+    }
+
+
+    public function checkIfExistOneDDTDocument(array $orderLineCollection){
+        $check = 0;
+        /** @var COrderLine $singleOrderLine */
+        foreach ($orderLineCollection as $singleOrderLine){
+            $allInvoice = $singleOrderLine->invoiceLine;
+            if($allInvoice->count() == '1'){
+
+                //Gira sempre e solo una volta
+                /** @var CInvoiceLine $singleInvoice */
+                foreach ($allInvoice as $singleInvoice){
+                    if ($singleInvoice->document->invoiceTypeId == 6){
+                        $check = 1;
+                    } else {
+                        $check = 0;
+                    }
+                }
+
+                // Se Esiste una fattura (non ddt) -> errore
+                if (!$check) return $check;
+
+            } else if ($allInvoice->count() == '0'){
+                $check = 1;
+            } else {
+                //Se esistono più fatture -> errore
+                $check = 0;
+                return $check;
+            }
+        }
+
+        return $check;
     }
 }

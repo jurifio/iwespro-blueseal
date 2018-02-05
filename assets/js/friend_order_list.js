@@ -155,3 +155,57 @@ $(document).on('bs.friend.orderline.shippedByFriend', function () {
         console.error(res);
     });
 });
+
+$(document).on('bs.remove.invoice', function () {
+
+    var datatable = $('.table').DataTable();
+    var selectedRows = datatable.rows('.selected').data();
+
+    var selectedRowsCount = selectedRows.length;
+    if (selectedRowsCount === 1) {
+    let bsModal = new $.bsModal('Disassocia documenti', {
+        body: '<p>Disassocia:</p>' +
+        '<div>'+'' +
+        '<select id="remove">' +
+        '<option value="1">Fattura</option>' +
+        '<option value="6">DDT</option>' +
+        '</select>'+
+        '</div>'
+    });
+
+    var rows = [];
+    $.each(selectedRows, function (k, v) {
+        rows.push(v.orderCode);
+    });
+
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            let selectedValue = $( "#remove" ).val();
+            $.ajax({
+                method: 'delete',
+                url: '/blueseal/xhr/RemoveFriendInvoice',
+                data: { rows,
+                        selectedValue
+                }
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    $.refreshDataTable();
+                    bsModal.hide();
+                    //window.location.reload();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    } else {
+        new Alert({
+            type: "warning",
+            message: "Seleziona una sola riga"
+        }).open();
+    }
+});
