@@ -22,7 +22,7 @@ class CNewsletterGroupListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "select u.id, u.name, u.sql  from pickyshop_dev.NewsletterGroup u";
+        $sql = "select u.id, u.name, u.sql  from NewsletterGroup u";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings('true');
