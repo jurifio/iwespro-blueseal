@@ -28,7 +28,7 @@
                         <div class="col-md-12">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Aggiungi Segmento di Pubblico  </h5>
+                                    <h5 class="m-t-10">Aggiungi Segmento di Pubblico </h5>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
@@ -44,16 +44,16 @@
                                             </div>
                                         </div>
 
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="code">Codice Segmento di Pubblico</label>
-                                                <input id="code" class="form-control"
-                                                       placeholder="Inserisci il codice del  Segmento di Pubblico"
-                                                       name="code" required="required">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="code">Codice Segmento di Pubblico</label>
+                                                    <input id="code" class="form-control"
+                                                           placeholder="Inserisci il codice del  Segmento di Pubblico"
+                                                           name="code" required="required">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default selectize-enabled">
@@ -67,69 +67,73 @@
 
                                         <div class="row">
 
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="filteredField">clicca sui Criteri  da Aggiungere al Segmento </label>
-                                                    <input  type="button" id ="buttonAge" name="buttonAge" class="button"  value="Eta" />
-                                                    <input  type="button" id ="buttonGender" name="buttonGender" class="button"  value="Sesso" />
-                                                    <input  type="button" id ="buttonCity" name="buttonCity" class="button"  value="Citta" />
-                                                    <input  type="button" id ="buttonCountry" name="buttonCountry" class="button"  value="Paese" />
-                                                    <input  type="button" id ="buttonIsActive" name="buttonIsActive" class="button"  value="Utenti Iscritti" />
-                                                    <input  type="button" id ="buttonOrder" name="buttonOrder" class="button"  value="Esclusione Ordini" />
-                                                    <input  type="button"  id ="buttonClean" name="buttonClean" class="button"  value="Pulisci" />
+                                                    <label for="filteredField">clicca sui Criteri da Aggiungere al
+                                                        Segmento </label>
+                                                    <input type="button" id="buttonAge" name="buttonAge" class="button"
+                                                           value="Eta"/>
+                                                    <input type="button" id="buttonGender" name="buttonGender"
+                                                           class="button" value="Sesso"/>
+                                                    <input type="button" id="buttonCity" name="buttonCity"
+                                                           class="button" value="Citta"/>
+                                                    <input type="button" id="buttonCountry" name="buttonCountry"
+                                                           class="button" value="Paese"/>
+                                                    <input type="button" id="buttonIsActive" name="buttonIsActive"
+                                                           class="button" value="Utenti Iscritti"/>
+                                                    <input type="button" id="buttonOrder" name="buttonOrder"
+                                                           class="button" value="Esclusione Ordini"/>
+                                                    <input type="button" id="buttonClean" name="buttonClean"
+                                                           class="button" value="Pulisci"/>
+
+                                                </div>
+                                            </div>
+                                                <div class="col-md-6">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="Operatori">Operatori Logici e di inclusione
+                                                        Segmento tra vari Range </label>
+                                                    <input type="button" id="buttonOpen" name="buttonOpen" class="button"
+                                                           value="( apri Criterio"/>
+                                                    <input type="button" id="buttonAnd" name="buttonAnd"
+                                                           class="button" value="AND = COMPRESO  "/>
+                                                    <input type="button" id="buttonOr" name="buttonOr"
+                                                           class="button" value="OR = OPPURE"/>
+                                                    <input type="button" id="buttonClose" name="buttonClose"
+                                                           class="button" value=" Chiudi Criterio )"/>
 
                                                 </div>
                                             </div>
                                         </div>
+                                        <div id="inputQuery">
+                                        </div>
+                                        <div id="inputGender">
+                                        </div>
+                                        <div id="inputAge">
 
-                                    <div id="inputGender">
-                                    </div>
-                                    <div id="inputAge">
+                                        </div>
+                                        <div id="inputCity">
 
-                                    </div>
-                                    <div id="inputCity">
+                                        </div>
+                                        <div id="inputCountry">
 
-                                    </div>
-                                    <div id="inputCountry">
+                                        </div>
+                                        <div id="inputIsActive">
+                                        </div>
+                                        <div id="inputIsActive">
+                                        </div>
+                                        <div id="inputOrderDate">
+                                        </div>
 
-                                    </div>
-                                    <div id="inputIsActive">
-                                    </div>
-                                    <div id="inputIsActive">
-                                    </div>
-                                    <div id="inputOrderDate">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteAge">Costruzione Criterio Età</label>
-                                                <textarea class="form-control" name="filterAge" id="filterAge"
-                                                          value=""></textarea>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="filterQuery">Costruzione Lista</label>
+                                                    <textarea class="form-control" name="filterQuery" id="filterQuery"
+                                                              value=""></textarea>
 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteCity">Costruzione Criterio Città</label>
-
-                                                <textarea class="form-control" name="filterCity" id="filterCity"
-                                                          value=""></textarea>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteCountry">Costruzione Criterio Nazione</label>
-                                                <textarea class="form-control" name="filterCountry" id="filterCountry"
-                                                          value=""></textarea>
-
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     </div>
 
