@@ -22,7 +22,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "select u.id, u.name, u.sql, u.code  from pickyshop_dev.NewsletterEmailList u";
+        $sql = "select u.id, u.name, u.sql, u.code  from NewsletterEmailList u";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings('true');
