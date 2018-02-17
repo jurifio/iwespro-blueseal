@@ -1311,6 +1311,53 @@
             ]
         },
         {
+            "pattern": "/blueseal/newsletter-redemption(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/newsletter-redemption/single-redemption(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterSingleRedemptionListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/newsletter-redemption/newsletter-redemption/single-redemption/clicked-url(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterClickedUrlRedemptionListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/newsletter/newsletter-redemption-compara(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionCompareController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/newsletter-user(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserListController"

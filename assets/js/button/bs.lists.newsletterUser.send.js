@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-envelope",
+    icon: " fa-envelope",
     permission: "/admin/product/edit&&allShops",
     event: "bs-newNewsletterUser-send",
     class: "btn btn-default",
@@ -16,15 +16,16 @@ $(document).on('bs-newNewsletterUser-send', function () {
         let selectedRows = dataTable.rows('.selected').data();
         if (selectedRows.length === 1) {
 
-        var idNewsletterUser = selectedRows[0].id;
 
-        let bsModal = new $.bsModal('Invio', {
-            body: '<p>Invia La Newsletter selezionata</p>' +
-            '<div class="form-group form-group-default required">' +
-            '<label for="deleteMacroGroup">Invio</label>' +
-            '<div><p>Premere ok per confermare l\'invio con id:'+ idNewsletterUser +' e attendere il messaggio di generazione completata</p></div>' +
-            '</div>'
-        });
+            var idNewsletterUser = selectedRows[0].id;
+
+            let bsModal = new $.bsModal('Invio', {
+                body: '<p>Invia La Newsletter selezionata</p>' +
+                '<div class="form-group form-group-default required">' +
+                '<label for="deleteMacroGroup">Invio</label>' +
+                '<div><p>Premere ok per confermare l\'invio con id:'+ idNewsletterUser +' e attendere il messaggio di generazione completata</p></div>' +
+                '</div>'
+            });
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {

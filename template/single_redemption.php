@@ -32,67 +32,58 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="newsletter_redemption_list"
-                               data-controller="NewsletterRedemptionListAjaxController"
+                               data-controller="NewsletterSingleRedemptionListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
-                               data-display-length="200">
+                               data-display-length="200"
+                               data-newsletterId="<?php echo $newsletterId?>">
                             <thead>
                             <tr>
-                                <th data-slug="newsletterId"
+                                <th data-slug="emailAddressId"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">NewsletterId
+                                    class="center">EmailAddressId
+                                </th>
+                                <th data-slug="responseDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">ResponseDate
+                                </th>
+                                <th data-slug="queuedTime"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">QueuedTime
+                                </th>
+                                <th data-slug="sentTime"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">SentTime
+                                </th>
+                                <th data-slug="bounceTime"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">BounceTime
+                                </th>
+                                <th data-slug="firstOpenTime"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">FirstOpenTime
+                                </th>
+                                <th data-slug="firstClickTime"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">FirstClickTime
+                                </th>
+                                <th data-slug="lastClickTime"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">LastClickTime
                                 </th>
                                 <th data-slug="emailId"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">EmailId
-                                </th>
-                                <th data-slug="newsletterName"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Nome newsletter
-                                </th>
-                                <th data-slug="emailAddressCount"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">N. utenti inviata
-                                </th>
-                                <th data-slug="sendingTime"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Tempo d'invio
-                                </th>
-                                <th data-slug="openTimeSinceSent"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Tempo dall'apertura
-                                </th>
-                                <th data-slug="clickTimeSinceOpened"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Tempo accesso al sito da apertura
-                                </th>
-                                <th data-slug="aliveTime"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Tempo apertura a ultimo click
-                                </th>
-                                <th data-slug="sentPercent"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">% inviate
-                                </th>
-                                <th data-slug="openedPercent"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">% aperte
-                                </th>
-                                <th data-slug="clickedPercent"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center"> % cliccate
                                 </th>
                             </tr>
                             </thead>
@@ -109,12 +100,16 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Esportazione">
+    <bs-toolbar-group data-group-label="URL">
         <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.newsletterRedemption.send"
+                data-tag="a"
+                data-icon="fa-floppy-o"
+                data-permission="/admin/marketing"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.clicked.url"
+                data-title="Vedi url cliccati dall'utente"
+                data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

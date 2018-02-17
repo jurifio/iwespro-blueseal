@@ -6,44 +6,65 @@ use bamboo\core\intl\CLang;
 
 
 /**
- * Class CProductDetailListAjaxController
- * @package bamboo\blueseal\controllers\ajax
+ * Class CNewsletterRedemptionListAjaxController
+ * @package bamboo\controllers\back\ajax
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ * @author Iwes Team <it@iwes.it>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date $date
+ * @date 15/02/2018
  * @since 1.0
  */
 class CNewsletterRedemptionListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "SELECT
-n.name,
-count(DISTINCT er.emailAddressId),
-avg(er.sentTime - er.queuedTime) AS sendingTime,
-avg(er.sentTime - er.queuedTime) AS deliveryTime,
-avg(er.firstOpenTime - er.sentTime) AS openTimeSinceDelivered,
-avg(er.firstClickTime - er.firstOpenTime) AS clickTimeSinceOpened,
-avg(er.lastClickTime - er.sentTime) AS aliveTime,
-round(count(e.id) / count(er.sentTime) * 100, 2) as sentPercent,
-round(count(e.id) / count(deliveryTime) * 100, 2) as deliveredPercent,
-round(count(deliveredPercent) / count(er.firstOpenTime) * 100, 2) as openedPercent,
-round(count(deliveredPercent) / count(er.firstClickTime) * 100, 2) as clickedPercent
-FROM Newsletter n
-JOIN Email e ON n.id = e.newsletterId
-JOIN EmailRecipient er ON e.id = er.emailId
-GROUP BY n.id";
+        $sql = "  SELECT
+                  e.id                                                                     AS emailId,
+                  n.id                                                                     AS newsletterId,
+                  n.name                                                                   AS newsletterName,
+                  count(DISTINCT er.emailAddressId)                                        AS emailAddressCount,
+                  round(AVG(TIMESTAMPDIFF(SECOND, er.queuedTime, er.sentTime)),0)          AS sendingTime,
+                  round(AVG(TIMESTAMPDIFF(SECOND, er.sentTime, er.firstOpenTime)),0)       AS openTimeSinceSent,
+                  round(AVG(TIMESTAMPDIFF(SECOND, er.firstOpenTime, er.firstClickTime)),0) AS clickTimeSinceOpened,
+                  round(AVG(TIMESTAMPDIFF(SECOND, er.sentTime, er.lastClickTime)),0)       AS aliveTime,
+                  round(count(er.sentTime) * 100 / count(e.id),2)                          AS sentPercent,
+                  round(count(er.firstOpenTime) * 100 / count(er.sentTime),0)              AS openedPercent,
+                  round(count(er.firstClickTime) * 100 / count(er.sentTime),0)             AS clickedPercent,
+                  
+                  n.id                                                            
+                
+                
+                FROM Newsletter n
+                  JOIN Email e ON n.id = e.newsletterId
+                  JOIN EmailRecipient er ON e.id = er.emailId
+                  GROUP BY n.id";
+
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings('true');
 
+
+        $blueseal = $this->app->baseUrl(false) . '/blueseal/';
+        $url = $blueseal . "newsletter-redemption/single-redemption?newsletterId=";
+
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
+            $row["newsletterId"] = '<a href="'. $url.$row["newsletterId"] . '" target="_blank">' . $row["newsletterId"] . '</a>';
+
+            $row["sendingTime"] = $row["sendingTime"].'s';
+            $row["openTimeSinceSent"] = $row["openTimeSinceSent"].'s';
+            $row["clickTimeSinceOpened"] = $row["clickTimeSinceOpened"].'s';
+            $row["aliveTime"] = $row["aliveTime"].'s';
+
+            $row["sentPercent"] = $row["sentPercent"].'%';
+            $row["openedPercent"] = $row["openedPercent"].'%';
+            $row["clickedPercent"] = $row["clickedPercent"].'%';
+
+            $datatable->setResponseDataSetRow($key, $row);
         }
 
         return $datatable->responseOut();

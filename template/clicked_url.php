@@ -32,67 +32,54 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="newsletter_redemption_list"
-                               data-controller="NewsletterRedemptionListAjaxController"
+                               data-controller="NewsletterClickedUrlRedemptionListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
-                               data-display-length="200">
+                               data-display-length="200"
+                               data-emailid="<?php echo $emailId?>"
+                               data-emailaddressid="<?php echo $emailAddressId?>">
                             <thead>
                             <tr>
-                                <th data-slug="newsletterId"
+                                <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">NewsletterId
+                                    class="center">id
+                                </th>
+                                <th data-slug="url"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">url
+                                </th>
+                                <th data-slug="type"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">type
+                                </th>
+                                <th data-slug="productCode"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Prodotto
+                                </th>
+                                <th data-slug="productImage"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Image
+                                </th>
+                                <th data-slug="date"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">date
                                 </th>
                                 <th data-slug="emailId"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">EmailId
+                                    class="center">emailId
                                 </th>
-                                <th data-slug="newsletterName"
+                                <th data-slug="emailAddressId"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Nome newsletter
-                                </th>
-                                <th data-slug="emailAddressCount"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">N. utenti inviata
-                                </th>
-                                <th data-slug="sendingTime"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Tempo d'invio
-                                </th>
-                                <th data-slug="openTimeSinceSent"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Tempo dall'apertura
-                                </th>
-                                <th data-slug="clickTimeSinceOpened"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Tempo accesso al sito da apertura
-                                </th>
-                                <th data-slug="aliveTime"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Tempo apertura a ultimo click
-                                </th>
-                                <th data-slug="sentPercent"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">% inviate
-                                </th>
-                                <th data-slug="openedPercent"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">% aperte
-                                </th>
-                                <th data-slug="clickedPercent"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center"> % cliccate
+                                    class="center">emailAddressId
                                 </th>
                             </tr>
                             </thead>
@@ -108,15 +95,5 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
-<bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Esportazione">
-        <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.newsletterRedemption.send"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-</bs-toolbar>
 </body>
 </html>
