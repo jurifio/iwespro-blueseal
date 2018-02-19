@@ -38,6 +38,7 @@ class CPaymentBillCheck extends AAjaxController
         $allPaymentBill = $paymentBillRepo->findAll();
 
         $incongruentBill = [];
+        $somma = [];
 
         /** @var CPaymentBill $pb */
         foreach ($allPaymentBill as $pb){
@@ -52,14 +53,39 @@ class CPaymentBillCheck extends AAjaxController
             }
 
             if ((string)$pb->amount != (string)$sum ){
-                $incongruentBill[] = $pb->id;
+                $incongruentBill[] = [$pb->id, $sum];
             }
 
         }
 
-        $res = $incongruentBill;
+        $res[] = $incongruentBill;
 
-        return json_encode($incongruentBill);
+        return json_encode($res);
+
+    }
+
+
+    /**
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function put(){
+
+        $idsBilling = \Monkey::app()->router->request()->getRequestData('checked');
+
+        foreach ($idsBilling as $bill){
+
+            /** @var CPaymentBill $billing */
+            $billing = \Monkey::app()->repoFactory->create('PaymentBill')->findOneBy(['id'=> $bill[0]]);
+
+            $billing->amount = $bill[1];
+            $billing->update();
+        }
+
+        $res = "Distinte aggiornate correttamente";
+        return $res;
+
 
     }
 

@@ -18,21 +18,48 @@ $(document).on('btn-check-paymentbill', function () {
             }
         );
 
-        bsModal.setOkEvent(function () {
+        let text = '';
             $.ajax({
                 method: 'get',
                 url: '/blueseal/xhr/PaymentBillCheck',
                 data: {}
             }).done(function (res) {
-                bsModal.writeBody(res);
+                let ris = JSON.parse(res);
+
+                ris[0].forEach(function(element) {
+                    text += '<input type="checkbox" id="check" data-element="' + element[0] + '" data-sum="' + element[1] + '">' + 'id: ' + element[0] + '<br />'
+                });
+
+
+
+                bsModal.writeBody(text);
             }).fail(function (res) {
                 bsModal.writeBody('Errore grave');
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
+
+                    let checked = [];
+                    let i = 0;
+
+                    $('#check:checked').each(function () {
+                       checked[i] = [$(this).data('element'), $(this).data('sum')];
+                       i++;
+                    });
+
+                    $.ajax({
+                        method: 'put',
+                        url: '/blueseal/xhr/PaymentBillCheck',
+                        data: {
+                            checked: checked
+                        }
+                    }).done(function (res) {
+                        bsModal.writeBody(res);
+                    }).fail(function (res) {
+                        bsModal.writeBody('Errore grave');
+
                     bsModal.hide();
-                    //window.location.reload();
+                    window.location.reload();
                 });
                 bsModal.showOkBtn();
             });
-        });
 });
