@@ -73,7 +73,8 @@ class CPaymentBillListAjaxController extends AAjaxController
                     if ($invoice->getSignedValueWithVat() < 0) $color = "text-green";
                     elseif ($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
                     else $color = "";
-                    $inv[] = '<span class="' . $color . '">' . $invoice->shopAddressBook->shop->name . ' - ' . $invoice->number . ': ' . $invoice->getSignedValueWithVat() . ' (' . $invoice->calculateOurTotal() . ')</span>';
+                    if (!$invoice->note == "ANNULLATA"){
+                    $inv[] = '<span class="' . $color . '">' . $invoice->shopAddressBook->shop->name . ' - ' . $invoice->number . ': ' . $invoice->getSignedValueWithVat() . ' (' . $invoice->calculateOurTotal() . ')</span>';}
                 } catch (\Throwable $e) {
                     \Monkey::dump($e->getMessage());
                 }
