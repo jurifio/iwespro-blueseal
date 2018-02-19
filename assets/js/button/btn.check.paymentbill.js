@@ -13,53 +13,53 @@ $(document).on('btn-check-paymentbill', function () {
     "use strict";
 
 
-        let bsModal = new $.bsModal('Controlla congruenza distinte', {
-                body: 'Controlla se la sommma delle fatture corrisponde alla somma della distinta di pagamento'
-            }
-        );
+    let bsModal = new $.bsModal('Controlla congruenza distinte', {
+            body: 'Controlla se la sommma delle fatture corrisponde alla somma della distinta di pagamento'
+        }
+    );
 
-        let text = '';
+    let text = '';
+    $.ajax({
+        method: 'get',
+        url: '/blueseal/xhr/PaymentBillCheck',
+        data: {}
+    }).done(function (res) {
+        let ris = JSON.parse(res);
+
+        ris[0].forEach(function (element) {
+            text += '<input type="checkbox" id="check" data-element="' + element[0] + '" data-sum="' + element[1] + '">' + 'id: ' + element[0] + '<br />'
+        });
+
+
+        bsModal.writeBody(text);
+    }).fail(function (res) {
+        bsModal.writeBody('Errore grave');
+    }).always(function (res) {
+        bsModal.setOkEvent(function () {
+
+            let checked = [];
+            let i = 0;
+
+            $('#check:checked').each(function () {
+                checked[i] = [$(this).data('element'), $(this).data('sum')];
+                i++;
+            });
+
             $.ajax({
-                method: 'get',
+                method: 'put',
                 url: '/blueseal/xhr/PaymentBillCheck',
-                data: {}
+                data: {
+                    checked: checked
+                }
             }).done(function (res) {
-                let ris = JSON.parse(res);
-
-                ris[0].forEach(function(element) {
-                    text += '<input type="checkbox" id="check" data-element="' + element[0] + '" data-sum="' + element[1] + '">' + 'id: ' + element[0] + '<br />'
-                });
-
-
-
-                bsModal.writeBody(text);
+                bsModal.writeBody(res);
             }).fail(function (res) {
                 bsModal.writeBody('Errore grave');
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
 
-                    let checked = [];
-                    let i = 0;
-
-                    $('#check:checked').each(function () {
-                       checked[i] = [$(this).data('element'), $(this).data('sum')];
-                       i++;
-                    });
-
-                    $.ajax({
-                        method: 'put',
-                        url: '/blueseal/xhr/PaymentBillCheck',
-                        data: {
-                            checked: checked
-                        }
-                    }).done(function (res) {
-                        bsModal.writeBody(res);
-                    }).fail(function (res) {
-                        bsModal.writeBody('Errore grave');
-
-                    bsModal.hide();
-                    window.location.reload();
-                });
-                bsModal.showOkBtn();
+                bsModal.hide();
+                window.location.reload();
             });
+            bsModal.showOkBtn();
+        });
+    });
 });
