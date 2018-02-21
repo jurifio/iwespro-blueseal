@@ -42,7 +42,7 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
     $paymentBill = $paymentBillRepo->findOneBy(['id'=>$paymentBillId]);
 
         foreach ($paymentBill->getDistinctPayments() as $key => $payment) {
-            //$to = explode(';', $payment[0]->shopAddressBook->shop->referrerEmails);
+            $to = explode(';', $payment[0]->shopAddressBook->shop->referrerEmails);
 
             $name = $payment[0]->shopAddressBook->subject;
 
@@ -54,7 +54,7 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
 
             /** @var CEmailRepo $mailRepo */
             $mailRepo = \Monkey::app()->repoFactory->create('Email');
-            $mailRepo->newPackagedMail('friendpaymentinvoicemovements', 'no-reply@pickyshop.com', ['amministrazione@iwes.it'], [], [], ['paymentBill' => $paymentBill,
+            $mailRepo->newPackagedMail('friendpaymentinvoicemovements', 'no-reply@pickyshop.com', [$to], [], ['amministrazione@iwes.it'], ['paymentBill' => $paymentBill,
                 'billId' => $paymentBillId,
                 'name' => $name,
                 'total' => abs($total),
