@@ -57,7 +57,7 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
             $mailRepo->newPackagedMail('friendpaymentinvoicemovements', 'no-reply@pickyshop.com', ['amministrazione@iwes.it'], [], [], ['paymentBill' => $paymentBill,
                 'billId' => $paymentBillId,
                 'name' => $name,
-                'total' => $total,
+                'total' => abs($total),
                 'payment' => $payment]);
         }
 
