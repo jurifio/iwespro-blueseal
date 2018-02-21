@@ -26,28 +26,31 @@ class CPaymentBillSubmit extends AAjaxController
         $paymentBill = \Monkey::app()->repoFactory->create('PaymentBill')->findOneByStringId($paymentBillId);
         \Monkey::app()->repoFactory->create('PaymentBill')->submitPaymentBill($paymentBill,new \DateTime());
 
-        foreach ($paymentBill->getDistinctPayments() as $key=>$payment) {
-            $to = explode(';',$payment[0]->shopAddressBook->shop->referrerEmails);
-            $name = $payment[0]->shopAddressBook->subject;
 
-            $total = 0;
-            foreach ($payment as $invoice) {
-                $total+=$invoice->getSignedValueWithVat();
+        if($paymentBill->getTotal() > 0) {
+            foreach ($paymentBill->getDistinctPayments() as $key => $payment) {
+                $to = explode(';', $payment[0]->shopAddressBook->shop->referrerEmails);
+                $name = $payment[0]->shopAddressBook->subject;
+
+                $total = 0;
+                foreach ($payment as $invoice) {
+                    $total += $invoice->getSignedValueWithVat();
+                }
+
+                /*$this->app->mailer->prepare('friendpaymentmail','no-reply', $to,[],['amministrazione@iwes.it'],['paymentBill'=>$paymentBill,
+                                                                                        'name'=>$name,
+                                                                                        'total'=>$total,
+                                                                                        'payment'=>$payment]);
+                $this->app->mailer->send();*/
+
+
+                /** @var CEmailRepo $mailRepo */
+                $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                $mailRepo->newPackagedMail('friendpaymentmail', 'no-reply@pickyshop.com', $to, [], ['amministrazione@iwes.it'], ['paymentBill' => $paymentBill,
+                    'name' => $name,
+                    'total' => $total,
+                    'payment' => $payment]);
             }
-
-            /*$this->app->mailer->prepare('friendpaymentmail','no-reply', $to,[],['amministrazione@iwes.it'],['paymentBill'=>$paymentBill,
-                                                                                    'name'=>$name,
-                                                                                    'total'=>$total,
-                                                                                    'payment'=>$payment]);
-            $this->app->mailer->send();*/
-
-
-            /** @var CEmailRepo $mailRepo */
-            $mailRepo = \Monkey::app()->repoFactory->create('Email');
-            $mailRepo->newPackagedMail('friendpaymentmail','no-reply@pickyshop.com', $to,[],['amministrazione@iwes.it'],['paymentBill'=>$paymentBill,
-                                                                                    'name'=>$name,
-                                                                                    'total'=>$total,
-                                                                                    'payment'=>$payment]);
         }
 
 

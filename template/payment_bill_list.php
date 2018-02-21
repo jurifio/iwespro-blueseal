@@ -94,6 +94,9 @@
         <bs-toolbar-button
             data-remote="btn.check.paymentbill"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="btn.send.invoice.movements.paymentbill"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 
