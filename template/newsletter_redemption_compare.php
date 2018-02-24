@@ -16,6 +16,13 @@
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
 
+            <button class="openstat" id="consegnate">consegnate</button>
+            <button class="openstat" id="aperte">aperte</button>
+            <button class="openstat" id="cliccate">cliccate</button>
+            <button class="openstat" id="tinvio">tinvio</button>
+            <button class="openstat" id="tapertura">tapertura</button>
+            <button class="openstat" id="tfirstclic">tfirstclic</button>
+            <button class="openstat" id="tlastclick">tlastclick</button>
 
             <div class="container-fluid container-fixed-lg bg-white">
 
@@ -28,16 +35,15 @@
                             <div class="panel-body clearfix">
                                 <div class="panel-body clearfix">
                                     <div class="row">
-                                        <div class="col-md-4">
-
+                                        <div class="col-md-4 hide"  id="s-consegnate">
                                             <h5 class="m-t-10">Consegnate</h5>
                                             <canvas id="ChartDelivered"></canvas>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 hide"  id="s-aperte">
                                             <h5 class="m-t-10">Aperte</h5>
                                             <canvas id="ChartOpened"></canvas>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 hide "  id="s-cliccate">
                                             <h5 class="m-t-10">Cliccate</h5>
                                             <canvas id="ChartClicked"></canvas>
                                         </div>
@@ -60,19 +66,19 @@
                             <div class="panel-body clearfix">
                                 <div class="panel-body clearfix">
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 hide" id="s-tinvio">
                                             <h5 class="m-t-10">Tempo di Invio</h5>
                                             <canvas id="ChartSentTime"></canvas>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 hide"  id="s-tapertura">
                                             <h5 class="m-t-10">Tempo dall' apertura</h5>
                                             <canvas id="ChartOpenedTime"></canvas>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 hide"  id="s-tfirstclick">
                                             <h5 class="m-t-10">Tempo di Accesso al sito da Apertura</h5>
                                             <canvas id="ChartAccessTime"></canvas>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 hide"  id="s-tlastclick">
                                             <h5 class="m-t-10">Tempo di  Apertura da Ultimo Click</h5>
                                             <canvas id="ChartAccessTimeLastClick"></canvas>
                                         </div>

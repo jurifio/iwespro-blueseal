@@ -25,15 +25,16 @@ class CNewsletterSend extends ACronJob
      */
     public function run($args = null)
     {
-        $sql = "Select * from Newsletter where DATE_FORMAT(now(),'%Y%m%d%H%i') = DATE_FORMAT(sendAddressDate, '%Y%m%d%H%i') or id = 15";
+        $sql = "Select * from Newsletter where DATE_FORMAT(now(),'%Y%m%d%H%i') = DATE_FORMAT(sendAddressDate, '%Y%m%d%H%i')";
         /** @var CNewsletterRepo $newslettersRepo */
         $newslettersRepo = \Monkey::app()->repoFactory->create('Newsletter');
         $newsletters = $newslettersRepo->findBySql($sql);
-        $this->report('Starting','yeah');
+        $this->debug('Starting','newslettertosend:'.count($newsletters));
         foreach ($newsletters as $newsletter) {
-            $asd = $newslettersRepo->sendNewsletterEmails($newsletter, ENV === 'prod');
-            $this->report('fatto?', $asd);
+            $asd = $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod');
+            $this->report('Esiot Invio', $asd);
         }
+        $this->debug('Ending', 'inviate tutte le newsletter');
     }
 
 }
