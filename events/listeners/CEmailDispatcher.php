@@ -30,8 +30,13 @@ class CEmailDispatcher extends AEventListener
      */
     public function work($e)
     {
-        $this->debug('DispatchOrderToFriendEvent', 'Starting', $e);
-        if (!$e instanceof CEventEmitted) throw new BambooException('Event is not an event');
-        \Monkey::app()->repoFactory->create('Email')->newMail(...$e->getEventData());
+        try {
+            $this->debug('DispatchOrderToFriendEvent', 'Starting', $e);
+            if (!$e instanceof CEventEmitted) throw new BambooException('Event is not an event');
+            \Monkey::app()->repoFactory->create('Email')->newMail(...$e->getEventData());
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationWarning(__CLASS__, 'Error while sending', $e->getMessage(),$e);
+        }
+
     }
 }
