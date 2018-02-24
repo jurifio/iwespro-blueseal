@@ -55,7 +55,7 @@ class CNewsletterEventManage extends AAjaxController
             //popolo la tabella
 
             $newsletterEventInsert->name = $name ;
-            $newsletterEventInsert->campaignId = $campaignId;
+            $newsletterEventInsert->newsletterCampaignId = $campaignId;
 
 
 
