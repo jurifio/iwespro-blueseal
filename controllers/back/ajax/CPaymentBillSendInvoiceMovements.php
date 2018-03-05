@@ -289,8 +289,8 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
 EOD;
         $pdf->writeHTML($tbl, true, false, false, false, '');
 //Close and output PDF document
-        \Monkey::app()->router->response()->setContentType('application/pdf');
-        return $pdf->Output('spedizione.pdf', 'D');
+        //\Monkey::app()->router->response()->setContentType('application/pdf');
+        return $pdf->Output('spedizione.pdf', 'S');
 
     }
 
