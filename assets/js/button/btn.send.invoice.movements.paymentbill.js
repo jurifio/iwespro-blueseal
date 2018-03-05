@@ -19,30 +19,54 @@ $(document).on('btn-send-invoice-movements-paymentbill', function () {
     if (selectedRows.length === 1) {
 
         let bsModal = new $.bsModal('Controlla congruenza distinte', {
-                body: 'Sei sicuro di voler inviare la mail al friend?'
+                body: 'Scegli l\'opzione: <select id="invoiceOption">\n' +
+                '<option value="invia">Invia fatture</option>\n' +
+                '<option value="scarica">Scarica fatture</option>\n' +
+                '</select>'
             }
         );
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
 
-            $.ajax({
-                method: 'post',
-                url: '/blueseal/xhr/PaymentBillSendInvoiceMovements',
-                data: {
-                    id: id
-                }
-            }).done(function (res) {
-                bsModal.writeBody('Mail inviata con successo');
-            }).fail(function (res) {
-                bsModal.writeBody('Errore grave');
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
-                    bsModal.hide();
+            if($('#invoiceOption').val() === "invia") {
+                $.ajax({
+                    method: 'post',
+                    url: '/blueseal/xhr/PaymentBillSendInvoiceMovements',
+                    data: {
+                        id: id
+                    }
+                }).done(function (res) {
+                    bsModal.writeBody('Mail inviata con successo');
+                }).fail(function (res) {
+                    bsModal.writeBody('Errore grave');
+                }).always(function (res) {
+                    bsModal.setOkEvent(function () {
+                        bsModal.hide();
+                    });
+                    bsModal.showOkBtn();
                 });
-                bsModal.showOkBtn();
-            });
+            } else if($('#invoiceOption').val() === "scarica"){
+                $.ajax({
+                    method: 'get',
+                    url: '/blueseal/xhr/PaymentBillSendInvoiceMovements',
+                    data: {
+                        id: id
+                    }
+                }).done(function (res) {
+                    bsModal.writeBody('il file è stato scaricato con successo');
+                }).fail(function (res) {
+                    bsModal.writeBody('Errore grave');
+                }).always(function (res) {
+                    bsModal.setOkEvent(function () {
+                        bsModal.hide();
+                    });
+                    bsModal.showOkBtn();
+                });
+            }
         });
+
+
     } else {
         new Alert({
             type: "warning",
@@ -50,5 +74,4 @@ $(document).on('btn-send-invoice-movements-paymentbill', function () {
         }).open();
         return false;
     }
-
-});
+    });
