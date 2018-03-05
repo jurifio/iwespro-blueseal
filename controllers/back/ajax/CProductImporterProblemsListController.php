@@ -48,7 +48,7 @@ class CProductImporterProblemsListController extends AAjaxController
             WHERE
               `ps`.`id` NOT IN (6, 7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
-               AND (`ds`.`status` not in ('ok', 'exclude') )
+               AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
             HAVING (sum(`ds`.`qty`) > 0)";
 
