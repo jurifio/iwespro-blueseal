@@ -114,6 +114,7 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
                 throw new BambooMailException("Email package not present or readable: %s", [$templateMailRoot]);
             };
 
+
             extract($passedVars);
             ob_start();
             include $template;

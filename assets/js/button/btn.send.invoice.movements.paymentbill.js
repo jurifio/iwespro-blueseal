@@ -20,8 +20,8 @@ $(document).on('btn-send-invoice-movements-paymentbill', function () {
 
         let bsModal = new $.bsModal('Controlla congruenza distinte', {
                 body: 'Scegli l\'opzione: <select id="invoiceOption">\n' +
-                '<option value="invia">Invia fatture</option>\n' +
-                '<option value="scarica">Scarica fatture</option>\n' +
+                '<option value="invia">Invia Distinte</option>\n' +
+                '<option value="scarica">Scarica Distinte</option>\n' +
                 '</select>'
             }
         );
