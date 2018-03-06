@@ -5,7 +5,9 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\application\AApplication;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooInvoiceException;
+use bamboo\core\exceptions\BambooMailException;
 use bamboo\core\intl\CLang;
+use bamboo\core\theming\CMailerHelper;
 use bamboo\domain\entities\CDocument;
 use bamboo\domain\entities\CInvoice;
 use bamboo\domain\entities\CPaymentBill;
@@ -66,7 +68,8 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
     }
 
     /**
-     *
+     * @return string
+     * @throws BambooMailException
      */
     public function get(){
 
@@ -84,63 +87,40 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
             /** @var CDocument $invoice */
             foreach ($payment as $invoice) {
                 $total += $invoice->getSignedValueWithVat();
-            $friend = $invoice->shopAddressBook->subject;
+                $friend = $invoice->shopAddressBook->subject;
             }
 
+            $passedVars = [
+                'paymentBill' => $paymentBill,
+                'billId' => $paymentBillId,
+                'total' => abs($total),
+                'payment' => $payment
+            ];
+            $app = new CMailerHelper(\Monkey::app(), $passedVars);
+            $mailPackage = 'friendpaymentinvoicemovements';
 
+            $templateMailRoot = \Monkey::app()->rootPath() . '/client/public/content/mail' . '/' . $mailPackage;
+            $lang = isset($passedVars['lang']) ? $passedVars['lang'] : \Monkey::app()->getLang()->getLang();
+            $template = $templateMailRoot . '/' . $mailPackage . '.php';
 
-        foreach ($payment as $invoice){
-            if ($invoice->note == "ANNULLATA") {continue;}
-
-            $fattura[$friend.'_'.$i]["numero"] = $invoice->number;
-            $fattura[$friend.'_'.$i]["data"] = STimeToolbox::EurFormattedDate($invoice->date);
-
-            if($invoice->getSignedValueWithVat() < 0) {
-                $fattura[$friend.'_'.$i]["valore"] = abs($invoice->getSignedValueWithVat());
+            if (is_dir($templateMailRoot) && is_readable($templateMailRoot)) {
+                $css = file_get_contents($templateMailRoot . '/' . $mailPackage . '.css');
+                try {
+                    $data = json_decode(file_get_contents($templateMailRoot . '/' . $mailPackage . '.' . $lang . '.json'));
+                } catch (\Throwable $e) {
+                    $data = json_decode(file_get_contents($templateMailRoot . '/' . $mailPackage . '.it.json'));
+                }
             } else {
-                $fattura[$friend.'_'.$i]["valore"] = $invoice->getSignedValueWithVat() *-1;
-            }
+                throw new BambooMailException("Email package not present or readable: %s", [$templateMailRoot]);
+            };
 
-            $i++;
+            extract($passedVars);
+            ob_start();
+            include $template;
+            $body = ob_get_clean();
+
+            return $body;
         }
-
-
-
-
-        }
-
-        $list = $this->convert_multi_array($fattura);
-
-
-        \Monkey::app()->vendorLibraries->load('pdfGenerator');
-
-
-        $pdf = new \TCPDF('P', 'mm', 'A4');
-// set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Iwes');
-        $pdf->SetTitle('Lista delle fatture');
-        $pdf->SetSubject('Lista fatture');
-        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-        $pdf->setPrintHeader(false);
-// set header and footer fonts
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-// set default monospaced font
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-// set margins
-        $pdf->SetMargins(5, 10, 5);
-// set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-// set font
-        $pdf->SetFont('times', '', 12);
-// add a page
-        $pdf->AddPage();
-        $tbl = "Estratto conto della distinta n".$paymentBill->id.'<br />'.$list;
-
-
-        $pdf->writeHTML($tbl, true, false, false, false, '');
-//Close and output PDF document
-        return base64_encode($pdf->Output('test.pdf', 'S'));
     }
 
 

@@ -54,8 +54,14 @@ $(document).on('btn-send-invoice-movements-paymentbill', function () {
                         id: id
                     }
                 }).done(function (res) {
-                    let pdfWindow = window.open("");
-                    pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(res)+"'></iframe>")
+                    let win = window.open("", "Title", "width=1920,height=1080");
+                    win.document.write(res);
+                    win.document.close();
+                    win.onload = function() { // wait until all resources loaded
+                        win.focus(); // necessary for IE >= 10
+                        win.print();  // change window to mywindow
+                        win.close();// change window to mywindow
+                    };
                 }).fail(function (res) {
                     bsModal.writeBody('Errore grave');
                 }).always(function (res) {
