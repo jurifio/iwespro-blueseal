@@ -88,11 +88,7 @@
                 data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Crea Segmento di Pubblico">
-        <bs-toolbar-button
-                data-remote="bs.lists.create.filtergroup"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
+
 </bs-toolbar>
 </body>
 </html>
