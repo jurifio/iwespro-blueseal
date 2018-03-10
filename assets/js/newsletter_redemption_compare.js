@@ -303,9 +303,33 @@
 
 
     $('.openstat').on('click', function () {
-        let id = $('.openstat').attr('id');
-        $('#s-'+id).removeClass("hide");
+        $('#s-consegnate').removeClass("hide");
     });
+    $('.openstataperte').on('click', function () {
+
+        $('#s-aperte').removeClass("hide");
+    });
+    $('.openstatcliccate').on('click', function () {
+
+        $('#s-cliccate').removeClass("hide");
+    });
+    $('.openstattinvio').on('click', function () {
+
+        $('#s-tinvio').removeClass("hide");
+    });
+    $('.openstatapertura').on('click', function () {
+
+        $('#s-tapertura').removeClass("hide");
+    });
+    $('.openstatfirstclic').on('click', function () {
+
+        $('#s-tfirstclick').removeClass("hide");
+    });
+    $('.openstattlastclick').on('click', function () {
+
+        $('#s-tlastclick').removeClass("hide");
+    });
+
 
 })(jQuery);
 
