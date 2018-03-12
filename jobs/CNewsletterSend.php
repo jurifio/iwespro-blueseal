@@ -22,6 +22,7 @@ class CNewsletterSend extends ACronJob
 {
     /**
      * @param null $args
+     * @throws \bamboo\core\exceptions\BambooDBALException
      */
     public function run($args = null)
     {
@@ -29,12 +30,13 @@ class CNewsletterSend extends ACronJob
         /** @var CNewsletterRepo $newslettersRepo */
         $newslettersRepo = \Monkey::app()->repoFactory->create('Newsletter');
         $newsletters = $newslettersRepo->findBySql($sql);
-        $this->debug('Starting','newslettertosend:'.count($newsletters));
+        if(empty($newsletters)) return;
+        $this->report('Starting','Newsletters to send: '.count($newsletters));
         foreach ($newsletters as $newsletter) {
-            $asd = $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod');
-            $this->report('Esiot Invio', $asd);
+            $asd = $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod',true);
+            $this->report('Esito Invio: '.$newsletter->id, $asd);
         }
-        $this->debug('Ending', 'inviate tutte le newsletter');
+        $this->report('Ending', 'inviate tutte le newsletter');
     }
 
 }

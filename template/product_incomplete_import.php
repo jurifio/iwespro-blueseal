@@ -45,6 +45,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Shop</th>
+                                <th data-slug="nshop"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Num. shop</th>
                                 <th data-slug="code"
                                     data-searchable="true"
                                     data-orderable="true"

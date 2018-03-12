@@ -46,9 +46,9 @@ class CProductImporterProblemsListController extends AAjaxController
 
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE
-              `ps`.`id` NOT IN (7, 8, 12, 13)
+              `ps`.`id` NOT IN (6, 7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
-               AND (`ds`.`status` not in ('ok', 'exclude') )
+               AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
             HAVING (sum(`ds`.`qty`) > 0)";
 
@@ -78,6 +78,7 @@ class CProductImporterProblemsListController extends AAjaxController
             $row["DT_RowClass"] = 'colore';
             $row["productCode"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="' . $modifica . '?id=' . $shopHasProduct->productId . '&productVariantId=' . $shopHasProduct->productVariantId . '">' . $shopHasProduct->printId() . '</a></span>' : $shopHasProduct->product->printId();
             $row["shop"] = $shopHasProduct->shop->name;
+            $row["nshop"] = $shopHasProduct->product->shopHasProduct->count();
             $row["code"] = $shopHasProduct->product->printCpf();
             $macroname = explode("_", explode("-", $shopHasProduct->productSizeGroup->productSizeMacroGroup->name)[0])[0];
             $row["sizeGroup"] = '<span class="small">' . $shopHasProduct->productSizeGroup->locale . '-' . $macroname . '</span>';

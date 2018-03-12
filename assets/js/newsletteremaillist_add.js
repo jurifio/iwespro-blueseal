@@ -406,7 +406,7 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
         } else {
             filterOrderDateFinish =  filterOrderDateFinish ;
         }
-        let groupby=" GROUP BY nu.id"
+        let groupby="";
        let filterOrderDateExclude = "";
         if (filterOrderDateStart == "" || filterOrderDateFinish == "") {
             filterOrderDateExclude = "";
