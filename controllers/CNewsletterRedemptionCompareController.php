@@ -33,7 +33,7 @@ protected $pageSlug = "newsletter_redemption_compare";
     {
 
         $data = \Monkey::app()->router->request()->getRequestData();
-/*
+
         $nId = $data['nId'];
         $nId2 = $data['nId2'];
         $nName = $data['nName'];
@@ -51,10 +51,10 @@ protected $pageSlug = "newsletter_redemption_compare";
         $sP = $data['sP'];
         $sP2 = $data['sP2'];
         $oP = $data['oP'];
-        $oP2 = $data['oP'];
+        $oP2 = $data['oP2'];
         $cP = $data['cP'];
         $cP2 = $data['cP2'];
-*/
+
 
      $view = new VBase(array());
      $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/newsletter_redemption_compare.php');
