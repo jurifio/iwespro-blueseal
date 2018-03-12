@@ -5,7 +5,7 @@
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
-    <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>
+    <!--<script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -39,16 +39,9 @@
 
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                            <label for="template">Editor template</label>
-                                            <div align="center">
-
-                                            <textarea cols="80" id="template" class="form-control"  name="template" required="required" rows="10"
-                                            placeholder="Definisci  il template">
-
-			                                    </textarea>
-
-                                            </div>
+                                            <div class="summernote-wrapper">
+                                                <label for="template">Template </label>
+                                                <textarea class="summer" id="template" name="template" data-json="PostTranslation.content" rows="50"></textarea>
                                             </div>
                                         </div>
                                     </div>
