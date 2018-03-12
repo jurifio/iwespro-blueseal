@@ -23,14 +23,14 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h5 class="m-t-10">Visualizza</h5>
-                                        <button class="openstat btn-primary" id="consegnate">consegnate</button>
-                                        <button class="openstataperte btn-primary" id="aperte">aperte</button>
-                                        <button class="openstatcliccate btn-primary" id="cliccate">cliccate</button>
-                                        <button class="openstattinvio btn-primary" id="tinvio">tinvio</button>
-                                        <button class="openstatapertura btn-primary" id="tapertura">tapertura</button>
-                                        <button class="openstatfirstclic btn-primary" id="tfirstclic">tfirstclic
+                                        <button class="openstat btn-primary" id="consegnate">Consegnate</button>
+                                        <button class="openstataperte btn-primary" id="aperte">Aperte</button>
+                                        <button class="openstatcliccate btn-primary" id="cliccate">Cliccate</button>
+                                        <button class="openstattinvio btn-primary" id="tinvio">tempo Invio</button>
+                                        <button class="openstatapertura btn-primary" id="tapertura">Tempo Dall'Apertura</button>
+                                        <button class="openstatfirstclic btn-primary" id="tfirstclic">Tempo Apertura Primo Click
                                         </button>
-                                        <button class="openstattlastclick btn-primary" id="tlastclick">tlastclick
+                                        <button class="openstattlastclick btn-primary" id="tlastclick">tempo Apertura Ultimo Click
                                         </button>
                                     </div>
                                 </div>
