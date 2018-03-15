@@ -148,7 +148,7 @@
                                         <div class="form-group">
                                             <div class="summernote-wrapper">
                                                 <label>Template Predefinito</label>
-                                                <textarea class="summer" id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="50"></textarea>
+                                                <textarea class="summer" id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="300"></textarea>
                                             </div>
                                         </div>
                                     </div>
