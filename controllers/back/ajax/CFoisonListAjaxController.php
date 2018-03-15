@@ -37,7 +37,7 @@ class CFoisonListAjaxController extends AAjaxController
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        $datatable->doAllTheThings(true);
+        $datatable->doAllTheThings(false);
 
         /** @var CFoisonRepo $foisonRepo */
         $foisonRepo = \Monkey::app()->repoFactory->create('Foison');
@@ -48,6 +48,11 @@ class CFoisonListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             $foison = $foisonRepo->findOneBy(['id'=>$row["id"]]);
+            $row["id"] = $foison->id;
+            $row["name"] = $foison->name;
+            $row["surname"] = $foison->surname;
+            $row["email"] = $foison->email;
+            $row["iban"] = $foison->iban;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

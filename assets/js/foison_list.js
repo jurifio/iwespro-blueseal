@@ -19,11 +19,11 @@
         bsModal.setOkEvent(function () {
             const data = {
                 email: $('input#userMail').val(),
-                iban: $('input#iban').val()
+                iban: $('input#ibanFoison').val()
             };
                 $.ajax({
                     method: 'post',
-                    url: '/blueseal/xhr/FaisonManage',
+                    url: '/blueseal/xhr/FoisonManage',
                     data: data
                 }).done(function (res) {
                     bsModal.writeBody(res);

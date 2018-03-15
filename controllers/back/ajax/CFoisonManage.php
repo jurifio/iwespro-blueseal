@@ -40,7 +40,7 @@ class CFoisonManage extends AAjaxController
      $emailData = $data["email"];
      $iban = $data["iban"];
 
-     if(is_null($emailData) || is_null($iban)){
+     if(empty($emailData) || empty($iban)){
          $res = "Inserisci tutti i dati";
          return $res;
      }
@@ -56,8 +56,11 @@ class CFoisonManage extends AAjaxController
      /** @var CUser $user */
      $user = $userRepo->findOneBy(['email'=>$emailData]);
 
+
      if(is_null($user)){
          $res = "L'utente che stai associando non esiste";
+     } else if(!is_null($user->foison)){
+         $res = "L'utente che stai associando è già un foison";
      } else {
          //se trovo l'utente assegnalo
          $userId = $user->id;
