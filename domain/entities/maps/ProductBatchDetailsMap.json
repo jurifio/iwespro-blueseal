@@ -1,0 +1,22 @@
+{
+    "entity": {
+        "name": "ProductBatchDetails",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "productBatch",
+                "entity" : "ProductBatch",
+                "parentKeys": ["productBatchId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },{
+                "name" : "workCategorySteps",
+                "entity" : "WorkCategorySteps",
+                "parentKeys": ["workCategoryStepsId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            }
+        ]
+    }
+}

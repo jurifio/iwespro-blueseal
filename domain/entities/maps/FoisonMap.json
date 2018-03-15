@@ -1,0 +1,22 @@
+{
+    "entity": {
+        "name": "Foison",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "user",
+                "entity" : "User",
+                "parentKeys": ["userId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },{
+                "name" : "contracts",
+                "entity" : "Contracts",
+                "parentKeys": ["id"],
+                "childKeys" : ["foisonId"],
+                "type" : "OneToMany"
+            }
+        ]
+    }
+}

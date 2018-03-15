@@ -1,0 +1,28 @@
+{
+    "entity": {
+        "name": "ProductBatch",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "contractDetails",
+                "entity" : "ContractDetails",
+                "parentKeys": ["contractDetailsId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },{
+                "name" : "productBatchDetails",
+                "entity" : "ProductBatchDetails",
+                "parentKeys": ["id"],
+                "childKeys" : ["productBatchId"],
+                "type" : "OneToMany"
+            },{
+                "name" : "document",
+                "entity" : "Document",
+                "parentKeys": ["documentId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            }
+        ]
+    }
+}

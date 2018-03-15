@@ -1,0 +1,34 @@
+{
+    "entity": {
+        "name": "ContractDetails",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "contracts",
+                "entity" : "Contracts",
+                "parentKeys": ["contractId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },{
+                "name" : "workCategory",
+                "entity" : "WorkCategory",
+                "parentKeys": ["workCategoryId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },{
+                "name" : "workPriceList",
+                "entity" : "WorkPriceList",
+                "parentKeys": ["workPriceListId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },{
+                "name" : "productBatch",
+                "entity" : "ProductBatch",
+                "parentKeys": ["id"],
+                "childKeys" : ["contractDetailsId"],
+                "type" : "OneToOne"
+            }
+        ]
+    }
+}
