@@ -1945,6 +1945,18 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/work/contracts/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CContractDetailsListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

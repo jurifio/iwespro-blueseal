@@ -26,30 +26,25 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="size_full_list"
-                               data-controller="ContractsListAjaxController"
+                               data-controller="ContractDetailsListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="100, 200, 500">
+                               data-length-menu-setup="100, 200, 500"
+                                data-idcontract="<?php echo $contract->id; ?>">
                             <thead>
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
+                                <th data-slug="categoryName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Categoria di lavoro</th>
+                                <th data-slug="priceListName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Listino</th>
                                 <th data-slug="contractName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Nome Contratto</th>
-                                <th data-slug="contractDescription"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Descrizione Contratto</th>
-                                <th data-slug="foisonName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Nome Foison</th>
-                                <th data-slug="foisonSurname"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Cognome Foison</th>
-                                <th data-slug="foisonEmail"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Email Foison</th>
                             </tr>
                             </thead>
                             <tbody>

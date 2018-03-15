@@ -8,7 +8,7 @@ use bamboo\domain\repositories\CFoisonRepo;
 
 
 /**
- * Class CContractsListAjaxController
+ * Class CContractDetailsListAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -20,7 +20,7 @@ use bamboo\domain\repositories\CFoisonRepo;
  * @date 15/03/2018
  * @since 1.0
  */
-class CContractsListAjaxController extends AAjaxController
+class CContractDetailsListAjaxController extends AAjaxController
 {
     /**
      * @return string
@@ -28,15 +28,18 @@ class CContractsListAjaxController extends AAjaxController
      */
     public function get()
     {
+        $idContract = $this->data["idcontract"];
+
         $sql = "
-            SELECT C.id,
-                  C.name as contractName,
-                  C.description as contractDescription,
-                  F.name as foisonName,
-                  F.surname as foisonSurname,
-                  F.email as foisonEmail
-            FROM Foison F
-            JOIN Contracts C ON F.id = C.foisonId
+            SELECT cd.id,
+                  wk.nome as categoryName,
+                  wpl.nome as priceListName,
+                  c.name as contractName
+            FROM ContractDetails cd
+            JOIN WorkCategory wk ON cd.workCategoryId = wk.id
+            JOIN WorkPriceList wpl ON cd.workPriceListId = wpl.id
+            JOIN Contracts c ON cd.contractId = c.id
+            WHERE c.id = $idContract
         ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
@@ -46,14 +49,14 @@ class CContractsListAjaxController extends AAjaxController
         /** @var CContractsRepo $contractsRepo */
         $contractsRepo = \Monkey::app()->repoFactory->create('Contracts');
 
-        $blueseal = $this->app->baseUrl(false).'/blueseal/';
-        $url = $blueseal."work/contratti/";
+        //$blueseal = $this->app->baseUrl(false).'/blueseal/';
+        //$url = $blueseal."prodotti/gruppo-taglie/aggiungi";
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             /** @var CContracts $contracts */
             $contracts = $contractsRepo->findOneBy(['id'=>$row["id"]]);
-            $row["id"] = "<a href='".$url.$row["id"]."' target='_blank'>".$contracts->id."</a>";
+            $row["id"] = $contracts->id;
             $row["contractName"] = $contracts->name;
             $row["contractDescription"] = $contracts->description;
             $row["foisonName"] = $contracts->foison->name;

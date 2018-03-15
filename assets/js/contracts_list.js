@@ -1,6 +1,6 @@
 ;(function () {
 
-    $(document).on('bs-foison-add', function () {
+    $(document).on('bs-contract-add', function () {
 
         $.ajax({
             method:'GET',
