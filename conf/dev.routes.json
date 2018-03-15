@@ -1925,6 +1925,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/work/foison(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

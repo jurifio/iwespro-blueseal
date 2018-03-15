@@ -65,7 +65,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
                                                         <label for="user_password">Password</label>
-                                                        <input id="user_password" autocomplete="off" type="text" placeholder="*******" class="form-control" name="user_password" value="<?php echo bin2hex(mcrypt_create_iv(6, MCRYPT_DEV_URANDOM)); ?>" />
+                                                        <input id="user_password" autocomplete="off" type="text" placeholder="*******" class="form-control" name="user_password" value="<?php echo bin2hex(random_bytes(6)); ?>" />
                                                     </div>
                                                 </div>
                                             </div>
