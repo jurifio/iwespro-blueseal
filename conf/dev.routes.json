@@ -1957,6 +1957,16 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/work/lotti(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }

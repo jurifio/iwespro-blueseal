@@ -26,28 +26,36 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="size_full_list"
-                               data-controller="ContractDetailsListAjaxController"
+                               data-controller="ProductBatchListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="100, 200, 500"
-                                data-idcontract="<?php echo $contract->id; ?>">
+                               data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
-                                <th data-slug="contractDetailName"
+                                <th data-slug="creationDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Nome del dettaglio|contratto</th>
-                                <th data-slug="categoryName"
+                                    data-orderable="true" class="center">Data di creazione</th>
+                                <th data-slug="scheduledDelivery"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Categoria di lavoro</th>
-                                <th data-slug="priceListName"
+                                    data-orderable="true" class="center">Data prevista consegna</th>
+                                <th data-slug="confirmationDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Listino</th>
-                                <th data-slug="contractName"
+                                    data-orderable="true" class="center">Data di conferma lotto</th>
+                                <th data-slug="closingDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Nome Contratto</th>
+                                    data-orderable="true" class="center">Data di chiusura</th>
+                                <th data-slug="value"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Valore lotto</th>
+                                <th data-slug="paid"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Pagato</th>
+                                <th data-slug="sectional"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Sezionale</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -68,10 +76,10 @@
                 data-tag="a"
                 data-icon="fa-plus"
                 data-permission="/admin/content/add"
-                data-event="bs-contract-detail-add"
+                data-event="bs-new-batch-product-add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Assegna condizione per il dettaglio del contratto"
+                data-title="Crea un nuovo lotto"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

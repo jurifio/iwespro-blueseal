@@ -17,7 +17,7 @@ use bamboo\domain\entities\COrderLine;
 use bamboo\utils\time\STimeToolbox;
 
 /**
- * Class CContractDetailsRepo
+ * Class CProductBatchRepo
  * @package bamboo\domain\repositories
  *
  * @author Iwes Team <it@iwes.it>
@@ -29,7 +29,7 @@ use bamboo\utils\time\STimeToolbox;
  * @date 16/03/2018
  * @since 1.0
  */
-class CContractDetailsRepo extends ARepo
+class CProductBatchRepo extends ARepo
 {
     /**
      * @param $contractId
@@ -38,14 +38,7 @@ class CContractDetailsRepo extends ARepo
      * @return bool
      * @throws BambooException
      */
-    public function createNewContractDetail($contractId, $workCategoryId, $workListPriceId, $contractDetailName){
-        $cD = $this->getEmptyEntity();
-        $cD->workCategoryId = $workCategoryId;
-        $cD->workPriceListId = $workListPriceId;
-        $cD->contractId = $contractId;
-        $cD->contractDetailName = $contractDetailName;
-        $cD->insert();
+    public function newProductBatchNumber(){
 
-        return true;
     }
 }

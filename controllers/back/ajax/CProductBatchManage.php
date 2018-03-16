@@ -18,7 +18,7 @@ use bamboo\domain\repositories\CUserRepo;
 
 
 /**
- * Class CContractDetailsListManage
+ * Class CProductBatchManage
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -30,7 +30,7 @@ use bamboo\domain\repositories\CUserRepo;
  * @date 16/03/2018
  * @since 1.0
  */
-class CContractDetailsListManage extends AAjaxController
+class CProductBatchManage extends AAjaxController
 {
     /**
      * @return int
@@ -58,6 +58,25 @@ class CContractDetailsListManage extends AAjaxController
         };
 
         return $res;
+    }
+
+    public function get(){
+        $contractDetailId = \Monkey::app()->router->request()->getRequestData('contractDetail');
+        $numberOfProduct = \Monkey::app()->router->request()->getRequestData('numberOfProduct');
+
+        /** @var CContractDetailsRepo $contractDetailRepo */
+        $contractDetailRepo = \Monkey::app()->repoFactory->create('ContractDetails');
+
+        /** @var CContractDetails $contractDetails */
+        $contractDetails = $contractDetailRepo->findOneBy(['id'=>$contractDetailId]);
+
+        $unitPrice = $contractDetails->workPriceList->price;
+
+        $cost = $unitPrice * $numberOfProduct;
+
+        return $cost;
+
+
     }
 
 }

@@ -26,11 +26,16 @@
                 'placeholder="Seleziona la categoria" tabindex="-1"\n' +
                 'title="workCategory" name="workCategory" id="workCategory">\n' +
                 '</select>'+
+            '</div>' +
             '<div class="form-group form-group-default required">' +
                 '<select class="full-width selectpicker"\n id="workPriceList"' +
                 'placeholder="Seleziona il listino corretto" tabindex="-1"\n' +
                 'title="workPriceList" name="workPriceList" id="workPriceList">\n' +
-            '</select>'
+                '</select>' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+                '<input type="text" id="contractDetailName" name="contractDetailName">' +
+            '</div>'
         });
 
         $('#workCategory').change(function () {
@@ -65,7 +70,8 @@
             const data = {
                 workCategoryId: $('#workCategory').val(),
                 workPriceListId: $('#workPriceList').val(),
-                contractId: contractId
+                contractId: contractId,
+                contractDetailName: $('#contractDetailName').val()
             };
                 $.ajax({
                     method: 'post',

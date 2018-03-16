@@ -34,6 +34,7 @@ class CContractDetailsListAjaxController extends AAjaxController
 
         $sql = "
             SELECT cd.id,
+                  cd.contractDetailName as contractDetailName,
                   wk.name as categoryName,
                   wpl.name as priceListName,
                   c.name as contractName
@@ -57,6 +58,7 @@ class CContractDetailsListAjaxController extends AAjaxController
             $contractDetails = $contractDetailsRepo->findOneBy(['id'=>$row["id"]]);
 
             $row["id"] = $contractDetails->id;
+            $row["contractDetailName"] = $contractDetails->contractDetailName;
             $row["categoryName"] = $contractDetails->workCategory->name;
             $row["contractName"] = $contractDetails->contracts->name;
             $row["priceListName"] = $contractDetails->workPriceList->name;
