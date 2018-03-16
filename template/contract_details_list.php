@@ -65,10 +65,10 @@
                 data-tag="a"
                 data-icon="fa-plus"
                 data-permission="/admin/content/add"
-                data-event="bs-contract-add"
+                data-event="bs-contract-detail-add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Assegna utente a Foison"
+                data-title="Assegna condizione per il dettaglio del contratto"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

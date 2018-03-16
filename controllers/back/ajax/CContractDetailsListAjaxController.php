@@ -2,7 +2,9 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CContracts;
+use bamboo\domain\repositories\CContractDetailsRepo;
 use bamboo\domain\repositories\CContractsRepo;
 use bamboo\domain\repositories\CFoisonRepo;
 
@@ -32,8 +34,8 @@ class CContractDetailsListAjaxController extends AAjaxController
 
         $sql = "
             SELECT cd.id,
-                  wk.nome as categoryName,
-                  wpl.nome as priceListName,
+                  wk.name as categoryName,
+                  wpl.name as priceListName,
                   c.name as contractName
             FROM ContractDetails cd
             JOIN WorkCategory wk ON cd.workCategoryId = wk.id
@@ -46,23 +48,18 @@ class CContractDetailsListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings(false);
 
-        /** @var CContractsRepo $contractsRepo */
-        $contractsRepo = \Monkey::app()->repoFactory->create('Contracts');
-
-        //$blueseal = $this->app->baseUrl(false).'/blueseal/';
-        //$url = $blueseal."prodotti/gruppo-taglie/aggiungi";
+        /** @var CContractDetailsRepo $contractDetailsRepo */
+        $contractDetailsRepo = \Monkey::app()->repoFactory->create('ContractDetails');
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
-            /** @var CContracts $contracts */
-            $contracts = $contractsRepo->findOneBy(['id'=>$row["id"]]);
-            $row["id"] = $contracts->id;
-            $row["contractName"] = $contracts->name;
-            $row["contractDescription"] = $contracts->description;
-            $row["foisonName"] = $contracts->foison->name;
-            $row["foisonSurname"] = $contracts->foison->surname;
-            $row["foisonEmail"] = $contracts->foison->email;
+            /** @var CContractDetails $contractDetails */
+            $contractDetails = $contractDetailsRepo->findOneBy(['id'=>$row["id"]]);
 
+            $row["id"] = $contractDetails->id;
+            $row["categoryName"] = $contractDetails->workCategory->name;
+            $row["contractName"] = $contractDetails->contracts->name;
+            $row["priceListName"] = $contractDetails->workPriceList->name;
             $datatable->setResponseDataSetRow($key,$row);
         }
 

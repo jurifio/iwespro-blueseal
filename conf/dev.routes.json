@@ -1936,7 +1936,7 @@
                 "GET"
             ]
         },{
-            "pattern": "/blueseal/work/contracts(/)?",
+            "pattern": "/blueseal/work/contratti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CContractsListController"
             },
@@ -1946,7 +1946,7 @@
                 "GET"
             ]
         },{
-            "pattern": "/blueseal/work/contracts/:id(/)?",
+            "pattern": "/blueseal/work/contratti/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CContractDetailsListController"
             },
