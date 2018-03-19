@@ -50,6 +50,15 @@
                                 <th data-slug="foisonEmail"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Email Foison</th>
+                                <th data-slug="dailyQty"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Quantità giornaliera</th>
+                                <th data-slug="accepted"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Accettato</th>
+                                <th data-slug="acceptedDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data di accettazione</th>
                             </tr>
                             </thead>
                             <tbody>

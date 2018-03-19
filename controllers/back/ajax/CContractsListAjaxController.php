@@ -34,7 +34,10 @@ class CContractsListAjaxController extends AAjaxController
                   C.description as contractDescription,
                   F.name as foisonName,
                   F.surname as foisonSurname,
-                  F.email as foisonEmail
+                  F.email as foisonEmail,
+                  C.dailyQty,
+                  C.accepted,
+                  C.acceptedDate
             FROM Foison F
             JOIN Contracts C ON F.id = C.foisonId
         ";
@@ -59,6 +62,9 @@ class CContractsListAjaxController extends AAjaxController
             $row["foisonName"] = $contracts->foison->name;
             $row["foisonSurname"] = $contracts->foison->surname;
             $row["foisonEmail"] = $contracts->foison->email;
+            $row["dailyQty"] = $contracts->dailyQty;
+            $row["accepted"] = ($contracts->accepted == 1 ? "SI" : "NO");
+            $row["acceptedDate"] = $contracts->acceptedDate;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

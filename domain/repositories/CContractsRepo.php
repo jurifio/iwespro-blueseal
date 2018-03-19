@@ -35,14 +35,15 @@ class CContractsRepo extends ARepo
      * @param CFoison $foison
      * @param $name
      * @param $description
+     * @param $qContract
      * @return bool
-     * @throws BambooException
      */
-    public function createNewContract(CFoison $foison, $name, $description){
+    public function createNewContract(CFoison $foison, $name, $description, $qContract){
         $contract = $this->getEmptyEntity();
         $contract->foisonId = $foison->id;
         $contract->name = $name;
         $contract->description = $description;
+        $contract->dailyQty = $qContract;
         $contract->smartInsert();
 
         return true;

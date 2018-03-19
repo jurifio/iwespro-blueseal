@@ -72,6 +72,7 @@ class CProductBatchListAjaxController extends AAjaxController
             $row["paid"] = ($pbr->paid == 1 ? "yes" : "no");
             $row["sectional"] = $pbr->sectional;
             $row["foison"] = $pbr->contractDetails->contracts->foison->name.' '.$pbr->contractDetails->contracts->foison->surname;
+            $row["numberOfProduct"] = count($pbr->productBatchDetails);
 
             $datatable->setResponseDataSetRow($key,$row);
         }

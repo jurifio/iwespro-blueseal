@@ -41,8 +41,9 @@ class CContractsManage extends AAjaxController
         $foisonId = $data["foisonId"];
         $nContract = $data["nContract"];
         $dContract = $data["dContract"];
+        $qContract = $data["qContract"];
 
-        if(empty($foisonId) || empty($nContract) || empty($dContract)){
+        if(empty($foisonId) || empty($nContract) || empty($dContract) || empty($qContract)){
             $res = "Inserisci tutti i dati";
             return $res;
         }
@@ -53,7 +54,7 @@ class CContractsManage extends AAjaxController
         /** @var CContractsRepo $contractsRepo */
         $contractsRepo = \Monkey::app()->repoFactory->create('Contracts');
 
-        if($contractsRepo->createNewContract($foison, $nContract, $dContract)){
+        if($contractsRepo->createNewContract($foison, $nContract, $dContract, $qContract)){
             $res = "Contratto creato con successo";
         };
 

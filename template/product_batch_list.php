@@ -59,6 +59,9 @@
                                 <th data-slug="foison"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Foison</th>
+                                <th data-slug="numberOfProduct"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Numero di prodotti</th>
                             </tr>
                             </thead>
                             <tbody>
