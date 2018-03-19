@@ -43,7 +43,6 @@ class CContractsRepo extends ARepo
         $contract->foisonId = $foison->id;
         $contract->name = $name;
         $contract->description = $description;
-        $contract->dailyQty = $qContract;
         $contract->smartInsert();
 
         return true;

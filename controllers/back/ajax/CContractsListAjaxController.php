@@ -35,7 +35,6 @@ class CContractsListAjaxController extends AAjaxController
                   F.name as foisonName,
                   F.surname as foisonSurname,
                   F.email as foisonEmail,
-                  C.dailyQty,
                   C.accepted,
                   C.acceptedDate
             FROM Foison F
@@ -62,7 +61,6 @@ class CContractsListAjaxController extends AAjaxController
             $row["foisonName"] = $contracts->foison->name;
             $row["foisonSurname"] = $contracts->foison->surname;
             $row["foisonEmail"] = $contracts->foison->email;
-            $row["dailyQty"] = $contracts->dailyQty;
             $row["accepted"] = ($contracts->accepted == 1 ? "SI" : "NO");
             $row["acceptedDate"] = $contracts->acceptedDate;
 

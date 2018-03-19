@@ -33,11 +33,6 @@
             'placeholder="Titolo del Contratto" class="form-control" name="contractName" required="required">' +
             '</div>'+
             '<div class="form-group form-group-default required">' +
-                '<label for="dailyQty">Quantità giornaliera</label>' +
-                '<input autocomplete="off" type="text" id="dailyQty" ' +
-                'placeholder="Quantità giornaliera" class="form-control" name="dailyQty" required="required">' +
-            '</div>'+
-            '<div class="form-group form-group-default required">' +
                 '<label for="contractDescription">Descrizione contratto</label>' +
                 '<textarea id="contractDescription"></textarea>' +
             '</div>'
@@ -49,8 +44,7 @@
             const data = {
                 foisonId: $('#foisonSelect').val(),
                 nContract: $('input#contractName').val(),
-                dContract: $('#contractDescription').val(),
-                qContract: $('#dailyQty').val()
+                dContract: $('#contractDescription').val()
             };
                 $.ajax({
                     method: 'post',
