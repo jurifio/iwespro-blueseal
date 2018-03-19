@@ -35,8 +35,8 @@ class CContractDetailsRepo extends ARepo
      * @param $contractId
      * @param $workCategoryId
      * @param $workListPriceId
+     * @param $contractDetailName
      * @return bool
-     * @throws BambooException
      */
     public function createNewContractDetail($contractId, $workCategoryId, $workListPriceId, $contractDetailName){
         $cD = $this->getEmptyEntity();
@@ -44,7 +44,7 @@ class CContractDetailsRepo extends ARepo
         $cD->workPriceListId = $workListPriceId;
         $cD->contractId = $contractId;
         $cD->contractDetailName = $contractDetailName;
-        $cD->insert();
+        $cD->smartInsert();
 
         return true;
     }

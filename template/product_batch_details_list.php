@@ -26,7 +26,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="size_full_list"
-                               data-controller="ProductBatchListAjaxController"
+                               data-controller="ProductBatchDetailsListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500">
@@ -56,9 +56,6 @@
                                 <th data-slug="sectional"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Sezionale</th>
-                                <th data-slug="foison"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Foison</th>
                             </tr>
                             </thead>
                             <tbody>

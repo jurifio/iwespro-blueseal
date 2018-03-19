@@ -46,4 +46,19 @@ class CSectionalRepo extends ARepo
 
         return $newCode;
     }
+
+    public function calculateNextSectionalNumber($code){
+        /** @var CSectional $sectional */
+        $sectional = $this->findOneBy(["code"=>$code]);
+
+        if(is_null($sectional->last)){
+            $newNumber = $sectional->num;
+        } else {
+            $newNumber = $sectional->last + 1;
+        }
+
+        $newCode = $newNumber.'/'.$sectional->code;
+
+        return $newCode;
+    }
 }

@@ -1,20 +1,10 @@
 <?php
 namespace bamboo\domain\repositories;
 
-use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\exceptions\BambooException;
-use bamboo\core\exceptions\BambooInvoiceException;
-use bamboo\domain\entities\CAddressBook;
-use bamboo\domain\entities\CDocument;
-use bamboo\domain\entities\CFoison;
-use bamboo\domain\entities\CInvoiceLine;
-use bamboo\domain\entities\CInvoiceNumber;
-use bamboo\domain\entities\CInvoiceSectional;
-use bamboo\domain\entities\CInvoiceType;
-use bamboo\utils\price\SPriceToolbox;
-use bamboo\domain\entities\COrderLine;
-use bamboo\utils\time\STimeToolbox;
+use bamboo\domain\entities\CContractDetails;
+use bamboo\domain\entities\CProductBatch;
 
 /**
  * Class CProductBatchRepo
@@ -32,13 +22,40 @@ use bamboo\utils\time\STimeToolbox;
 class CProductBatchRepo extends ARepo
 {
     /**
-     * @param $contractId
-     * @param $workCategoryId
-     * @param $workListPriceId
+     * @param $scheduledDelivery
+     * @param $closingDate
+     * @param $value
+     * @param $contractDetailsId
+     * @param $products
      * @return bool
-     * @throws BambooException
      */
-    public function newProductBatchNumber(){
+    public function createNewProductBatch($scheduledDelivery, $closingDate, $value, $contractDetailsId, $products){
+
+        try {
+            /** @var CContractDetails $contractDetails */
+            $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBY(['id'=>$contractDetailsId]);
+
+            $sectionalCode = $contractDetails->workCategory->sectionalCode;
+
+            /** @var CSectionalRepo $sectionalRepo */
+            $sectionalRepo = \Monkey::app()->repoFactory->create('Sectional');
+
+            /** @var CProductBatch $productBatch */
+            $productBatch = $this->getEmptyEntity();
+            $productBatch->scheduledDelivery = $scheduledDelivery;
+            $productBatch->closingDate = $closingDate;
+            $productBatch->value = $value;
+            $productBatch->contractDetailsId = $contractDetailsId;
+            $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCode);
+            $productBatch->smartInsert();
+
+        /** @var CProductBatchDetailsRepo $productBatchDetailsRepo */
+        $productBatchDetailsRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
+        $productBatchDetailsRepo->createNewProductBatchDetails($productBatch, $products);
+        } catch (\Throwable $e){}
+
+        return true;
+
 
     }
 }

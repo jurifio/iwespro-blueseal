@@ -19,7 +19,7 @@ window.buttonSetup = {
 
         //id-variantId in array
         $.each(selectedRows, function (k, v) {
-            selectedProduct.push(v.DT_RowId);
+            selectedProduct.push(v.productCode);
         });
 
         let numberOfProduct = selectedProduct.length;
@@ -67,7 +67,8 @@ window.buttonSetup = {
             '</div>' +
             '<div>' +
                 '<p id="prodBatchValue">Valore</p>' +
-                '<button id="costWork" name="costWork">Prevedi costo</button>' +
+                '<p id="prodSectional">Sezionale</p>' +
+                '<button id="costWork" name="costWork">Prevedi costo e sezionale</button>' +
             '</div>' +
             '<div class="form-group form-group-default required">' +
                 '<label>Data di Consegna</label>' +
@@ -75,7 +76,7 @@ window.buttonSetup = {
             '</div>' +
             '<div class="form-group form-group-default required">' +
                 '<label>Data di Chiusura</label>' +
-            '   <input type="date" id="closingDate" name="closingDate">' +
+                '<input type="date" id="closingDate" name="closingDate">' +
             '</div>'
         });
 
@@ -139,7 +140,9 @@ window.buttonSetup = {
                     url: '/blueseal/xhr/ProductBatchManage',
                     data: data
                 }).done(function (res) {
-                    $('#prodBatchValue').text(res + 'Euro');
+                    res = JSON.parse(res);
+                    $('#prodBatchValue').text(res.cost + 'Euro');
+                    $('#prodSectional').text(res.sectional);
                 }).fail(function (res) {
                     $('#prodBatchValue').text('Errore');
                 });
@@ -155,15 +158,16 @@ window.buttonSetup = {
         bsModal.setOkEvent(function () {
             const data = {
                 products: selectedProduct,
-                foison: $('#foison').val(),
-                contract: $('#contract'),
-                contractDetails: $('#contractDetails'),
-                deliveryDate: $('#deliveryDate'),
-                closingDate: $('#closingDate')
+                foisonId: $('#foison').val(),
+                contractId: $('#contract').val(),
+                contractDetailsId: $('#contractDetails').val(),
+                deliveryDate: $('#deliveryDate').val(),
+                closingDate: $('#closingDate').val(),
+                numberOfProduct: numberOfProduct
             };
             $.ajax({
                 method: 'post',
-                url: '/blueseal/xhr/ContractDetailsListManage',
+                url: '/blueseal/xhr/ProductBatchManage',
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);

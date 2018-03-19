@@ -37,7 +37,6 @@ class CFoisonRepo extends ARepo
      * @param $iban
      * @param $userId
      * @return bool
-     * @throws BambooException
      */
     public function assignUser($name, $surname, $email, $iban, $userId){
         $faison = $this->getEmptyEntity();
@@ -46,7 +45,7 @@ class CFoisonRepo extends ARepo
         $faison->email = $email;
         $faison->iban = $iban;
         $faison->userId = $userId;
-        $faison->insert();
+        $faison->smartInsert();
 
         return true;
 

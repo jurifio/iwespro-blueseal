@@ -26,39 +26,27 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="size_full_list"
-                               data-controller="ProductBatchListAjaxController"
+                               data-controller="ProductWorkListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+                                <th data-slug="productCode"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Id</th>
-                                <th data-slug="creationDate"
+                                    data-orderable="true" class="center">Code</th>
+                                <th data-slug="productStatus"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data di creazione</th>
-                                <th data-slug="scheduledDelivery"
+                                    data-orderable="true" class="center">Stato</th>
+                                <th data-slug="dummyPicture"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data prevista consegna</th>
-                                <th data-slug="confirmationDate"
+                                    data-orderable="true" class="center">Img</th>
+                                <th data-slug="productBrand"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data di conferma lotto</th>
-                                <th data-slug="closingDate"
+                                    data-orderable="true" class="center">Brand</th>
+                                <th data-slug="productSeason"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data di chiusura</th>
-                                <th data-slug="value"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Valore lotto</th>
-                                <th data-slug="paid"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Pagato</th>
-                                <th data-slug="sectional"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Sezionale</th>
-                                <th data-slug="foison"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Foison</th>
+                                    data-orderable="true" class="center">Stagione</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -74,16 +62,9 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione Foison">
+    <bs-toolbar-group data-group-label="Lotti">
         <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-plus"
-                data-permission="/admin/content/add"
-                data-event="bs-new-batch-product-add"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Crea un nuovo lotto"
-                data-placement="bottom"
+                data-remote="bs.product.addBatch"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

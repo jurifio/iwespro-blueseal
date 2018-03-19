@@ -4,9 +4,11 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CContracts;
+use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\repositories\CContractDetailsRepo;
 use bamboo\domain\repositories\CContractsRepo;
 use bamboo\domain\repositories\CFoisonRepo;
+use bamboo\domain\repositories\CProductBatchRepo;
 
 
 /**
@@ -38,16 +40,34 @@ class CProductBatchListAjaxController extends AAjaxController
                   pb.closingDate,
                   pb.value,
                   pb.paid,
-                  pb.sectional
+                  pb.sectional,
+                  concat(f.name,' ',f.surname) as foison
             FROM ProductBatch pb
+            JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
+            JOIN Contracts c ON cd.contractId = c.id
+            JOIN Foison f ON c.foisonId = f.id
         ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        $datatable->doAllTheThings(true);
+        $datatable->doAllTheThings(false);
+
+        /** @var CProductBatchRepo $pbrRepo */
+        $pbrRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
+            /** @var CProductBatch $pbr */
+            $pbr = $pbrRepo->findOneBy(['id'=>$row["id"]]);
+            $row["id"] = $pbr->id;
+            $row["creationDate"] = $pbr->creationDate;
+            $row["scheduledDelivery"] = $pbr->scheduledDelivery;
+            $row["confirmationDate"] = $pbr->confirmationDate;
+            $row["closingDate"] = $pbr->closingDate;
+            $row["value"] = $pbr->value;
+            $row["paid"] = ($pbr->paid == 1 ? "yes" : "no");
+            $row["sectional"] = $pbr->sectional;
+            $row["foison"] = $pbr->contractDetails->contracts->foison->name.' '.$pbr->contractDetails->contracts->foison->surname;
 
             $datatable->setResponseDataSetRow($key,$row);
         }
