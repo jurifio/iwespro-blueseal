@@ -33,7 +33,7 @@ class CProductBatchDetailsListController extends ARestrictedAccessRootController
         $productBatchId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
         /** @var CProductBatch $productBatch */
-        $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=> $productBatchId]);
+        //$productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=> $productBatchId]);
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_batch_details_list.php');
@@ -42,7 +42,7 @@ class CProductBatchDetailsListController extends ARestrictedAccessRootController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
-            'productBatch' => $productBatch
+            'productBatchId' => $productBatchId
         ]);
     }
 }

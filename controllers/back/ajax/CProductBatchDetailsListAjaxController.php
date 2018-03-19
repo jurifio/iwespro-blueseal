@@ -5,6 +5,7 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CProductBatch;
+use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\repositories\CContractDetailsRepo;
 use bamboo\domain\repositories\CContractsRepo;
 use bamboo\domain\repositories\CFoisonRepo;
@@ -33,13 +34,17 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
      */
     public function get()
     {
+        $productBatchId = $this->data["productbatchid"];
+
         $sql = "
             SELECT pbd.id,
-                  concat(pbd.productId,'-',pbd.productVariantId),
-                  pbd.workCategoryStepsId,
-                  wcs.name
+                  concat(pbd.productId,'-',pbd.productVariantId) as productCode,
+                  pbd.productId,
+                  pbd.productVariantId,
+                  wcs.name as stepName
             FROM ProductBatchDetails pbd
             JOIN WorkCategorySteps wcs ON pbd.workCategoryStepsId = wcs.id
+            WHERE pbd.productBatchId = $productBatchId
         ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
@@ -51,8 +56,11 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
-            /** @var CProductBatch $pbr */
+            /** @var CProductBatchDetails $pbr */
             $pbr = $pbdRepo->findOneBy(['id'=>$row["id"]]);
+            $row["id"] = $pbr->id;
+            $row["productCode"] = $pbr->productId.'-'.$pbr->productVariantId;
+            $row["stepName"] = $pbr->workCategorySteps->name;
 
 
             $datatable->setResponseDataSetRow($key,$row);

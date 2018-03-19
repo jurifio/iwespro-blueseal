@@ -29,33 +29,19 @@
                                data-controller="ProductBatchDetailsListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="100, 200, 500">
+                               data-length-menu-setup="100, 200, 500"
+                               data-productbatchid="<?php echo $productBatchId ?>">
                             <thead>
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
-                                <th data-slug="creationDate"
+                                <th data-slug="productCode"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data di creazione</th>
-                                <th data-slug="scheduledDelivery"
+                                    data-orderable="true" class="center">Prodotto</th>
+                                <th data-slug="stepName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data prevista consegna</th>
-                                <th data-slug="confirmationDate"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Data di conferma lotto</th>
-                                <th data-slug="closingDate"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Data di chiusura</th>
-                                <th data-slug="value"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Valore lotto</th>
-                                <th data-slug="paid"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Pagato</th>
-                                <th data-slug="sectional"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Sezionale</th>
+                                    data-orderable="true" class="center">Fase</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -71,18 +57,6 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione Foison">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-plus"
-                data-permission="/admin/content/add"
-                data-event="bs-new-batch-product-add"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Crea un nuovo lotto"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

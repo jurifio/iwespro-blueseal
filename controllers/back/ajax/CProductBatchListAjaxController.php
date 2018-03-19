@@ -52,6 +52,10 @@ class CProductBatchListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings(false);
 
+
+        $blueseal = $this->app->baseUrl(false).'/blueseal/';
+        $url = $blueseal."work/lotti/";
+
         /** @var CProductBatchRepo $pbrRepo */
         $pbrRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
@@ -59,7 +63,7 @@ class CProductBatchListAjaxController extends AAjaxController
 
             /** @var CProductBatch $pbr */
             $pbr = $pbrRepo->findOneBy(['id'=>$row["id"]]);
-            $row["id"] = $pbr->id;
+            $row["id"] = '<a href="'.$url.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
             $row["creationDate"] = $pbr->creationDate;
             $row["scheduledDelivery"] = $pbr->scheduledDelivery;
             $row["confirmationDate"] = $pbr->confirmationDate;
