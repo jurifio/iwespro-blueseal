@@ -32,6 +32,13 @@ class CProductBatchListAjaxController extends AAjaxController
      */
     public function get()
     {
+
+        $user = \Monkey::app()->getUser();
+        $userId = $user->id;
+
+        $allShop = $user->hasPermission('allShops');
+        $isWorker = $user->hasPermission('worker');
+
         $sql = "
             SELECT pb.id,
                   pb.creationDate,
@@ -41,7 +48,8 @@ class CProductBatchListAjaxController extends AAjaxController
                   pb.value,
                   pb.paid,
                   pb.sectional,
-                  concat(f.name,' ',f.surname) as foison
+                  concat(f.name,' ',f.surname) as foison,
+                  f.userId
             FROM ProductBatch pb
             JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
             JOIN Contracts c ON cd.contractId = c.id
@@ -49,6 +57,10 @@ class CProductBatchListAjaxController extends AAjaxController
         ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
+
+        if($isWorker && !$allShop) {
+            $datatable->addCondition('userId', [$userId]);
+        }
 
         $datatable->doAllTheThings(false);
 

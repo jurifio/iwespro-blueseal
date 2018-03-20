@@ -790,8 +790,29 @@
                 "POST",
                 "DELETE"
             ]
-        },
-        {
+        },{
+            "pattern": "/blueseal/users/ruoli(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacRoleListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ]
+        },{
+            "pattern": "/blueseal/users/permessi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacPermissionListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ]
+        },{
             "pattern": "/blueseal/skus(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CSkuManageController"

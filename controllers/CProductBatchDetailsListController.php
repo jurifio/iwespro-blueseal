@@ -30,6 +30,9 @@ class CProductBatchDetailsListController extends ARestrictedAccessRootController
     public function get()
     {
 
+        //$user = \Monkey::app()->getUser();
+        //$isWorker = $user->hasPermission('worker');
+
         $productBatchId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
         /** @var CProductBatch $productBatch */

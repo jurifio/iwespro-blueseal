@@ -29,6 +29,8 @@ class CContractDetailsListController extends ARestrictedAccessRootController
      */
     public function get()
     {
+        $user = \Monkey::app()->getUser();
+        $allShops = $user->hasPermission('allShops');
 
         $contractId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
         /** @var CContracts $contract */
@@ -41,7 +43,8 @@ class CContractDetailsListController extends ARestrictedAccessRootController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
-            'contract' => $contract
+            'contract' => $contract,
+            'allShops' => $allShops
         ]);
     }
 }

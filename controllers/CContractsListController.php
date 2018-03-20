@@ -28,13 +28,17 @@ class CContractsListController extends ARestrictedAccessRootController
      */
     public function get()
     {
+        $user = \Monkey::app()->getUser();
+        $allShops = $user->hasPermission('allShops');
+
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/contracts_list.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+            'allShops' => $allShops
         ]);
     }
 }

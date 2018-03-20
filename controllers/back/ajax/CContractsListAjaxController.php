@@ -3,6 +3,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CContracts;
+use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CContractsRepo;
 use bamboo\domain\repositories\CFoisonRepo;
 
@@ -28,6 +29,16 @@ class CContractsListAjaxController extends AAjaxController
      */
     public function get()
     {
+
+        /** @var CUser $user */
+        $user = \Monkey::app()->getUser();
+        $userId = $user->id;
+
+        $allShop = $user->hasPermission('allShops');
+        $isWorker = $user->hasPermission('worker');
+
+
+
         $sql = "
             SELECT C.id,
                   C.name as contractName,
@@ -36,12 +47,18 @@ class CContractsListAjaxController extends AAjaxController
                   F.surname as foisonSurname,
                   F.email as foisonEmail,
                   C.accepted,
-                  C.acceptedDate
+                  C.acceptedDate,
+                  F.userId
             FROM Foison F
             JOIN Contracts C ON F.id = C.foisonId
         ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
+
+        if($isWorker && !$allShop) {
+            $datatable->addCondition('userId', [$userId]);
+        }
+
 
         $datatable->doAllTheThings(false);
 
