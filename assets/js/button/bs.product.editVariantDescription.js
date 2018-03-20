@@ -62,6 +62,7 @@ $(document).on('bs-product-editVariantDescription', function (e) {
                             modal.hideCancelBtn();
                             modal.setOkEvent(function () {
                                 modal.hide();
+                                $.refreshDataTable();
                             });
                         }).fail(function (res) {
                         console.log(res);

@@ -35,6 +35,9 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
+                                <th data-slug="workCategory"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Lavorazione</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data di creazione</th>

@@ -39,6 +39,33 @@
                                 <th data-slug="productCode"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Prodotto</th>
+                                <th data-slug="brand"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Brand</th>
+                                <th data-slug="productName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Nome del prodotto</th>
+                                <th data-slug="season"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stagione</th>
+                                <th data-slug="description"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Descrizione</th>
+                                <th data-slug="colorGroup"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Gruppo colore</th>
+                                <th data-slug="colorNameManufacturer"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Colore produttore</th>
+                                <th data-slug="details"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Dettagli</th>
+                                <th data-slug="dummy"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Immagine</th>
+                                <th data-slug="categoryId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Categorie</th>
                                 <th data-slug="stepName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fase</th>
@@ -57,6 +84,11 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="Gestione prodotti">
+        <bs-toolbar-button
+                data-remote="bs.product.editVariantDescription"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

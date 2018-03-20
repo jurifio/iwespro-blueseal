@@ -49,9 +49,11 @@ class CProductBatchListAjaxController extends AAjaxController
                   pb.paid,
                   pb.sectional,
                   concat(f.name,' ',f.surname) as foison,
-                  f.userId
+                  f.userId,
+                  wk.name as workCategory
             FROM ProductBatch pb
             JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
+            JOIN WorkCategory wk ON cd.workCategoryId = wk.id
             JOIN Contracts c ON cd.contractId = c.id
             JOIN Foison f ON c.foisonId = f.id
         ";
@@ -85,6 +87,7 @@ class CProductBatchListAjaxController extends AAjaxController
             $row["sectional"] = $pbr->sectional;
             $row["foison"] = $pbr->contractDetails->contracts->foison->name.' '.$pbr->contractDetails->contracts->foison->surname;
             $row["numberOfProduct"] = count($pbr->productBatchDetails);
+            $row["workCategory"] = $pbr->contractDetails->workCategory->name;
 
             $datatable->setResponseDataSetRow($key,$row);
         }
