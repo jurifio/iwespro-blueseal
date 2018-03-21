@@ -42,7 +42,7 @@ window.buttonSetup = {
             });
         });
 
-        let bsModal = new $.bsModal('Assegna un utente', {
+        let bsModal = new $.bsModal('Assegna un lotto', {
             body: '<p>Inserisci un nuovo contratto</p>' +
             '<div class="form-group form-group-default required">' +
                 '<label>Scegli il Foison</label>' +
@@ -109,7 +109,8 @@ window.buttonSetup = {
                 data: {
                     table: 'ContractDetails',
                     condition: {
-                        contractId: contractId
+                        contractId: contractId,
+                        accepted: 1
                     }
                 },
                 dataType: 'json'

@@ -19,7 +19,7 @@
             });
         });
 
-        let bsModal = new $.bsModal('Assegna un utente', {
+        let bsModal = new $.bsModal('Crea contratto', {
             body: '<p>Inserisci un nuovo contratto</p>' +
             '<div class="form-group form-group-default required">' +
                 '<select class="full-width selectpicker"\n id="foisonSelect"' +

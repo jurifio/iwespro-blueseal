@@ -35,10 +35,9 @@ class CContractsRepo extends ARepo
      * @param CFoison $foison
      * @param $name
      * @param $description
-     * @param $qContract
      * @return bool
      */
-    public function createNewContract(CFoison $foison, $name, $description, $qContract){
+    public function createNewContract(CFoison $foison, $name, $description){
         $contract = $this->getEmptyEntity();
         $contract->foisonId = $foison->id;
         $contract->name = $name;

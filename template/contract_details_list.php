@@ -54,6 +54,9 @@
                                 <th data-slug="note"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Note</th>
+                                <th data-slug="accepted"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato di accettazione</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -83,6 +86,18 @@
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php endif; ?>
+    <bs-toolbar-group data-group-label="Accetta contratto">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="worker"
+                data-event="bs-contract-detail-accept"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Accetta le condizioni del contratto"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

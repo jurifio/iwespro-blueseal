@@ -19,7 +19,7 @@
             });
         });
 
-        let bsModal = new $.bsModal('Assegna un utente', {
+        let bsModal = new $.bsModal('Crea dettaglio del contratto', {
             body: '<p>Inserisci un nuovo contratto</p>' +
             '<div class="form-group form-group-default required">' +
                 '<select class="full-width selectpicker"\n id="workCategory"' +
@@ -101,5 +101,64 @@
                     bsModal.showOkBtn();
                 });
         });
+    });
+
+    $(document).on('bs-contract-detail-accept', function () {
+
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length === 1){
+
+
+            let contractDetailId = selectedRows[0].id;
+            let contractDetailName = selectedRows[0].contractName;
+
+            let bsModal = new $.bsModal('Accettazione del contratto', {
+                body: '<p>Inserisci un nuovo contratto</p>' +
+                '<div class="form-group form-group-default required">' +
+                '<p>Confermi di voler accettare le condizioni del contratto con:' +
+                '<br />' + 'Codice: ' +
+                '<strong>' + contractDetailId + '</strong>' +
+                '<br />' + 'Nome: ' +
+                '<strong>' + contractDetailName + '</strong>' +
+                '</p>'+
+                '</div>'
+            });
+
+            bsModal.showCancelBtn();
+            bsModal.setOkEvent(function () {
+                const data = {
+                   contractDetailId: contractDetailId
+                };
+                $.ajax({
+                    method: 'post',
+                    url: '/blueseal/xhr/ContractAcceptedManage',
+                    data: data
+                }).done(function (res) {
+                    bsModal.writeBody(res);
+                }).fail(function (res) {
+                    bsModal.writeBody('Errore grave');
+                }).always(function (res) {
+                    bsModal.setOkEvent(function () {
+                        $.refreshDataTable();
+                        bsModal.hide();
+                    });
+                    bsModal.showOkBtn();
+                });
+            });
+        } else if (selectedRows.length < 1) {
+            new Alert({
+                type: "warning",
+                message: "Non hai selezionato nessun contratto"
+            }).open();
+            return false;
+        } else if (selectedRows.length > 1) {
+            new Alert({
+                type: "warning",
+                message: "Puoi accettare un solo contratto alla volta"
+            }).open();
+            return false;
+        }
+
     });
 })();
