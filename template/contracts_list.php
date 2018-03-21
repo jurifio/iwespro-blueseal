@@ -72,7 +72,7 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <?php if($allShops):?>
-    <bs-toolbar-group data-group-label="Gestione Foison">
+    <bs-toolbar-group data-group-label="Gestione Contratti">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus"

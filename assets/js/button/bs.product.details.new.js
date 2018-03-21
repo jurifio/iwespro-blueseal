@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-plus-square",
-    permission:"/admin/product/edit",
+    permission:"/admin/product/edit||worker",
     event:"bs-product-details-new",
     class:"btn btn-default",
     rel:"tooltip",

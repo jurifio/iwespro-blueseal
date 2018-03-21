@@ -80,6 +80,20 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
+    <?php if($allShops):?>
+    <bs-toolbar-group data-group-label="Conferma termine lotto">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-step-forward"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.end.product.batch"
+                data-title="Conferma termine lotto"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <?php endif; ?>
 </bs-toolbar>
 </body>
 </html>

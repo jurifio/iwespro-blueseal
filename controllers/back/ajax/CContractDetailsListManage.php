@@ -44,6 +44,8 @@ class CContractDetailsListManage extends AAjaxController
         $workPriceListId = $data["workPriceListId"];
         $contractId = $data["contractId"];
         $contractDetailName = $data["contractDetailName"];
+        $qty = $data["qty"];
+        $note = $data["note"];
 
         if(empty($workCategoryId) || empty($workPriceListId) || empty($contractId) || empty($contractDetailName)){
             $res = "Inserisci tutti i dati";
@@ -53,7 +55,7 @@ class CContractDetailsListManage extends AAjaxController
         /** @var CContractDetailsRepo $contractDetailRepo */
         $contractDetailRepo = \Monkey::app()->repoFactory->create('ContractDetails');
 
-        if($contractDetailRepo->createNewContractDetail($contractId, $workCategoryId, $workPriceListId, $contractDetailName)){
+        if($contractDetailRepo->createNewContractDetail($contractId, $workCategoryId, $workPriceListId, $contractDetailName, $qty, $note)){
             $res = "Contratto creato con successo";
         };
 

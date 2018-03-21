@@ -89,19 +89,47 @@
                 data-remote="bs.product.editVariantDescription"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.category.change"
+                data-tag="a"
+                data-icon="fa-sitemap"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-category-edit-worker"
+                data-title="Cambia Categoria ai prodotti selezionati"
+                data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.namesMerge"
+                data-tag="a"
+                data-icon="fa-paint-brush"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-product-namesMerge-worker"
+                data-title="Copia i nomi dei prodotti"
+                data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.details.new">
         </bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.details.merge"
+                data-tag="a"
+                data-icon="fa-tasks"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-product-details.merge-worker"
+                data-title="Copia dettagli"
+                data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.model.insertIntoProducts"
+                data-tag="a"
+                data-icon="fa-object-group"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-product-model-insertIntoProducts-worker"
+                data-title="Aggiorna I prodotti da un modello"
+                data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.name.insert"
@@ -111,7 +139,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-step-forward"
-                data-permission="/admin/product/add"
+                data-permission="worker"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.end.product.modify"
@@ -123,7 +151,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-hourglass-end"
-                data-permission="/admin/product/add"
+                data-permission="worker"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.end.product.modify.notify"

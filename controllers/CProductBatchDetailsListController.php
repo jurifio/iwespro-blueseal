@@ -30,8 +30,8 @@ class CProductBatchDetailsListController extends ARestrictedAccessRootController
     public function get()
     {
 
-        //$user = \Monkey::app()->getUser();
-        //$isWorker = $user->hasPermission('worker');
+        $user = \Monkey::app()->getUser();
+        $isWorker = $user->hasPermission('worker');
 
         $productBatchId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
@@ -45,7 +45,8 @@ class CProductBatchDetailsListController extends ARestrictedAccessRootController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
-            'productBatchId' => $productBatchId
+            'productBatchId' => $productBatchId,
+            'isWorker' => $isWorker
         ]);
     }
 }

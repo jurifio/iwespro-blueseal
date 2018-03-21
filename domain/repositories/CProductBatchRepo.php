@@ -23,13 +23,12 @@ class CProductBatchRepo extends ARepo
 {
     /**
      * @param $scheduledDelivery
-     * @param $closingDate
      * @param $value
      * @param $contractDetailsId
      * @param $products
      * @return bool
      */
-    public function createNewProductBatch($scheduledDelivery, $closingDate, $value, $contractDetailsId, $products){
+    public function createNewProductBatch($scheduledDelivery, $value, $contractDetailsId, $products){
 
         try {
             /** @var CContractDetails $contractDetails */
@@ -43,7 +42,6 @@ class CProductBatchRepo extends ARepo
             /** @var CProductBatch $productBatch */
             $productBatch = $this->getEmptyEntity();
             $productBatch->scheduledDelivery = $scheduledDelivery;
-            $productBatch->closingDate = $closingDate;
             $productBatch->value = $value;
             $productBatch->contractDetailsId = $contractDetailsId;
             $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCode);
@@ -55,7 +53,26 @@ class CProductBatchRepo extends ARepo
         } catch (\Throwable $e){}
 
         return true;
+    }
 
 
+    /**
+     * @param $id
+     * @return bool
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function closeProductBatch($id){
+
+        /** @var CProductBatch $productBatch */
+        $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$id]);
+
+        if($productBatch->closingDate == 0) {
+            $productBatch->closingDate = date('Y-m-d H:i:s');
+            $productBatch->update();
+        }
+
+        return true;
     }
 }

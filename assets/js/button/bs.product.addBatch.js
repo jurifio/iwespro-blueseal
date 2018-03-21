@@ -73,10 +73,6 @@ window.buttonSetup = {
             '<div class="form-group form-group-default required">' +
                 '<label>Data di Consegna</label>' +
                 '<input type="date" id="deliveryDate" name="deliveryDate">' +
-            '</div>' +
-            '<div class="form-group form-group-default required">' +
-                '<label>Data di Chiusura</label>' +
-                '<input type="date" id="closingDate" name="closingDate">' +
             '</div>'
         });
 
@@ -162,7 +158,6 @@ window.buttonSetup = {
                 contractId: $('#contract').val(),
                 contractDetailsId: $('#contractDetails').val(),
                 deliveryDate: $('#deliveryDate').val(),
-                closingDate: $('#closingDate').val(),
                 numberOfProduct: numberOfProduct
             };
             $.ajax({

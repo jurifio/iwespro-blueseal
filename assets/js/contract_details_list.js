@@ -34,7 +34,16 @@
                 '</select>' +
             '</div>' +
             '<div class="form-group form-group-default required">' +
+                '<label for="contractDetailName">Nome del contratto</label>' +
                 '<input type="text" id="contractDetailName" name="contractDetailName">' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+                '<label for="qty">Quantità giornaliera</label>' +
+                '<input type="text" id="qty" name="qty">' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+                '<label for="note">Note</label>' +
+                '<textarea id="note" name="note"></textarea>' +
             '</div>'
         });
 
@@ -71,7 +80,9 @@
                 workCategoryId: $('#workCategory').val(),
                 workPriceListId: $('#workPriceList').val(),
                 contractId: contractId,
-                contractDetailName: $('#contractDetailName').val()
+                contractDetailName: $('#contractDetailName').val(),
+                qty: $('#qty').val(),
+                note: $('#note').val()
             };
                 $.ajax({
                     method: 'post',

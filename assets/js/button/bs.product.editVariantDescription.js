@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-paint-brush",
-    permission: "/admin/product/edit",
+    permission: "/admin/product/edit||worker",
     event: "bs-product-editVariantDescription",
     class: "btn btn-default",
     rel: "tooltip",

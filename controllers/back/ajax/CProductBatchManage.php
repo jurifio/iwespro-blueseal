@@ -6,6 +6,7 @@ use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CFoison;
+use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CUser;
@@ -44,7 +45,6 @@ class CProductBatchManage extends AAjaxController
         $foisonId = $data["foisonId"];
         $contractDetailsId = $data["contractDetailsId"];
         $deliveryDate = $data["deliveryDate"];
-        $closingDate = $data["closingDate"];
         $numberOfProduct = $data["numberOfProduct"];
 
         //Costo
@@ -55,7 +55,7 @@ class CProductBatchManage extends AAjaxController
 
         /** @var CProductBatchRepo $productBatchRepo */
         $productBatchRepo = \Monkey::app()->repoFactory->create('ProductBatch');
-        if($productBatchRepo->createNewProductBatch($deliveryDate, $closingDate, $value, $contractDetailsId, $products)){
+        if($productBatchRepo->createNewProductBatch($deliveryDate, $value, $contractDetailsId, $products)){
             $res = "Lotto creato con sucecsso";
         } else {
             $res = "Errore durante la creazione";
@@ -92,6 +92,26 @@ class CProductBatchManage extends AAjaxController
         $result["sectional"] = $sectional;
 
         return json_encode($result);
+    }
+
+    /**
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function put(){
+        $ids = \Monkey::app()->router->request()->getRequestData('productBatchIds');
+
+        /** @var CProductBatchRepo $pbRepo */
+        $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
+
+        foreach ($ids as $id) {
+            $pbRepo->closeProductBatch($id);
+        }
+
+        $res = "Lotti chiusi con successo";
+
+        return $res;
     }
 
 }

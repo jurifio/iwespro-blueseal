@@ -36,14 +36,18 @@ class CContractDetailsRepo extends ARepo
      * @param $workCategoryId
      * @param $workListPriceId
      * @param $contractDetailName
+     * @param $qty
+     * @param $note
      * @return bool
      */
-    public function createNewContractDetail($contractId, $workCategoryId, $workListPriceId, $contractDetailName){
+    public function createNewContractDetail($contractId, $workCategoryId, $workListPriceId, $contractDetailName, $qty, $note){
         $cD = $this->getEmptyEntity();
         $cD->workCategoryId = $workCategoryId;
         $cD->workPriceListId = $workListPriceId;
         $cD->contractId = $contractId;
         $cD->contractDetailName = $contractDetailName;
+        $cD->dailyQty = $qty;
+        $cD->note = $note;
         $cD->smartInsert();
 
         return true;

@@ -28,6 +28,8 @@ class CProductBatchListController extends ARestrictedAccessRootController
      */
     public function get()
     {
+        $user = \Monkey::app()->getUser();
+        $allShops = $user->hasPermission('allShops');
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_batch_list.php');
@@ -35,7 +37,8 @@ class CProductBatchListController extends ARestrictedAccessRootController
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+            'allShops' => $allShops
         ]);
     }
 }

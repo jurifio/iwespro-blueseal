@@ -48,6 +48,12 @@
                                 <th data-slug="contractName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Nome Contratto</th>
+                                <th data-slug="dailyQty"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Quantità giornaliera</th>
+                                <th data-slug="note"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Note</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -64,7 +70,7 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <?php if($allShops) :?>
-    <bs-toolbar-group data-group-label="Gestione Foison">
+    <bs-toolbar-group data-group-label="Gestione dettagli contratti">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus"

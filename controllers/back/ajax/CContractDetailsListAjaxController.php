@@ -37,7 +37,10 @@ class CContractDetailsListAjaxController extends AAjaxController
                   cd.contractDetailName as contractDetailName,
                   wk.name as categoryName,
                   wpl.name as priceListName,
-                  c.name as contractName
+                  c.name as contractName,
+                  cd.dailyQty,
+                  cd.note
+  
             FROM ContractDetails cd
             JOIN WorkCategory wk ON cd.workCategoryId = wk.id
             JOIN WorkPriceList wpl ON cd.workPriceListId = wpl.id
@@ -62,6 +65,8 @@ class CContractDetailsListAjaxController extends AAjaxController
             $row["categoryName"] = $contractDetails->workCategory->name;
             $row["contractName"] = $contractDetails->contracts->name;
             $row["priceListName"] = $contractDetails->workPriceList->name;
+            $row["dailyQty"] = ($contractDetails->dailyQty == 0 ? "Non definita" : $contractDetails->dailyQty);
+            $row["note"] = $contractDetails->note;
             $datatable->setResponseDataSetRow($key,$row);
         }
 
