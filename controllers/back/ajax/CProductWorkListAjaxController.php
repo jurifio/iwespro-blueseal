@@ -38,6 +38,7 @@ class CProductWorkListAjaxController extends AAjaxController
             JOIN ProductStatus ps ON p.productStatusId = ps.id
             JOIN ProductBrand pb ON p.productBrandId = pb.id
             JOIN ProductSeason pse ON p.productSeasonId = pse.id
+            WHERE p.processing <> 'definito'
         ";
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
