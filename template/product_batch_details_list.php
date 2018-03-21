@@ -88,6 +88,48 @@
         <bs-toolbar-button
                 data-remote="bs.product.editVariantDescription"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.category.change"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.namesMerge"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.details.new">
+        </bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.details.merge"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.model.insertIntoProducts"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.name.insert"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Termina lavorazione sul prodotto">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-step-forward"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.end.product.modify"
+                data-title="Termina la lavorazione sui prodotti selezionati"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Notifica termine lotto">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-hourglass-end"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.end.product.modify.notify"
+                data-title="Notifica termine del lotto"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

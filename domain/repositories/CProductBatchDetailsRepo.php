@@ -4,6 +4,7 @@ namespace bamboo\domain\repositories;
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductBatch;
+use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CWorkCategorySteps;
 
 /**
@@ -25,7 +26,6 @@ class CProductBatchDetailsRepo extends ARepo
      * @param CProductBatch $productBatch
      * @param $products
      * @return bool
-     * @throws BambooException
      */
     public function createNewProductBatchDetails(CProductBatch $productBatch, $products){
 
@@ -49,5 +49,26 @@ class CProductBatchDetailsRepo extends ARepo
         }
 
         return true;
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function goToNextStep($id){
+
+        /** @var CProductBatchDetails $pbd */
+        $pbd = \Monkey::app()->repoFactory->create('ProductBatchDetails')->findOneBy(['id'=>$id]);
+
+        if(!is_null($pbd->workCategorySteps->rgt)) {
+            $pbd->workCategoryStepsId = ($pbd->workCategorySteps->rgt);
+            $pbd->update();
+        }
+
+        return true;
+
     }
 }

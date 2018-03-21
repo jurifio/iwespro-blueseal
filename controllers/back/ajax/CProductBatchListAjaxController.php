@@ -77,7 +77,7 @@ class CProductBatchListAjaxController extends AAjaxController
 
             /** @var CProductBatch $pbr */
             $pbr = $pbrRepo->findOneBy(['id'=>$row["id"]]);
-            $row["id"] = '<a href="'.$url.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+            $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
             $row["creationDate"] = $pbr->creationDate;
             $row["scheduledDelivery"] = $pbr->scheduledDelivery;
             $row["confirmationDate"] = $pbr->confirmationDate;

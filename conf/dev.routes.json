@@ -1989,11 +1989,12 @@
                 "GET"
             ]
         },{
-            "pattern": "/blueseal/work/lotti/:id(/)?",
+            "pattern": "/blueseal/work/lotti/normalizzazione-prodotti/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchDetailsListController"
             },
             "filters": {
+                "cat": "[0-9]+",
                 "id": "[0-9]+"
             },
             "translations": {},
