@@ -71,7 +71,7 @@ class CProductBatchDetailsManage extends AAjaxController
      */
     public function get(){
 
-        $isComplete = null;
+        $isComplete = true;
 
         $productBatchId = \Monkey::app()->router->request()->getRequestData('productBatchId');
 

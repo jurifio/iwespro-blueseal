@@ -11,6 +11,8 @@ use bamboo\domain\entities\CInvoiceLine;
 use bamboo\domain\entities\CInvoiceNumber;
 use bamboo\domain\entities\CInvoiceSectional;
 use bamboo\domain\entities\CInvoiceType;
+use bamboo\domain\entities\CProductBatch;
+use bamboo\domain\entities\CUser;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\domain\entities\COrderLine;
 use bamboo\utils\time\STimeToolbox;
@@ -239,7 +241,8 @@ class CDocumentRepo extends ARepo
      * @param string|null $number
      * @param string|null $note
      * @param \DateTime|null $creationDate
-     * @return int|mixed
+     * @return int
+     * @throws BambooException
      * @throws BambooInvoiceException
      */
     private function createInvoice(
@@ -279,7 +282,7 @@ class CDocumentRepo extends ARepo
         $in = $this->getEmptyEntity();
         $in->userId = $userId;
         if ($isShop) $in->shopRecipientId = $recipientOrEmitterId;
-        else $in->userRecipientId = $recipientOrEmitterId;
+        else $in->userAddressRecipientId = $recipientOrEmitterId;
         $in->number = $number;
         $in->date = $date->format('Y-m-d');
         $in->invoiceTypeId = $invoiceTypeId;
@@ -578,6 +581,8 @@ class CDocumentRepo extends ARepo
      * @param string|null $note
      * @throws BambooException
      * @throws BambooInvoiceException
+     * @throws \Exception
+     * @throws \bamboo\core\exceptions\BambooDBALException
      */
     public function storeFriendCreditNoteOnReturn(
         int $userId,
@@ -924,5 +929,37 @@ class CDocumentRepo extends ARepo
         }
 
         return $check;
+    }
+
+    /**
+     * @param $invoiceTypeId
+     * @param $userId
+     * @param $date
+     * @param $total
+     * @param $number
+     * @param $file
+     * @param $productBatchIds
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     */
+    public function insertInvoiceFromFoison($invoiceTypeId, $userId, $date, $total, $number, $file, $productBatchIds){
+
+        /** @var CUser $user */
+        $user = \Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$userId]);
+        $billingAddressId = $user->foison->addressBook->id;
+        $date = new \DateTime($date);
+
+        $invoiceId = $this->createInvoice($invoiceTypeId, $userId, false, $billingAddressId, $date, $total, 0, null, $number);
+
+        foreach ($productBatchIds as $pbId){
+
+            /** @var CProductBatch $productBatch */
+            $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$pbId]);
+
+            $productBatch->documentId = $invoiceId;
+            $productBatch->update();
+        }
+
+        $this->insertInvoiceBin($invoiceId,$file['tmp_name'],$file['name']);
     }
 }

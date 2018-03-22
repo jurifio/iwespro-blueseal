@@ -55,7 +55,10 @@ class CDownloadFileFromDb
         $ib = \Monkey::app()->repoFactory->create($table)->findOneBy([$field => $value]);
 
         if (!$ib) throw new BambooRoutingException('File Not Found');
-        if (!$user->hasShop($ib->document->shopAddressBook->shop->id)) throw new BambooRoutingException('NotAuthorized');
+        if(!$user->hasPermission("worker")){
+            if (!$user->hasShop($ib->document->shopAddressBook->shop->id)) throw new BambooRoutingException('NotAuthorized');
+        }
+
 
         $res['bin'] = $ib->bin;
         $finfo = new \finfo(FILEINFO_MIME);

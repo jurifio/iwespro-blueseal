@@ -119,11 +119,10 @@ class CContractDetailsRepo extends ARepo
 
             $to = $contractDetail->contracts->foison->email;
             $body = "Gentilissimo sig. $name,<br />
-                Le confermiamo l'avvenuta accettazione del contratto.<br /><br/>
+                Le confermiamo l'avvenuta accettazione del contratto.<br /><br />
                 Cordiali saluti;<br /><br />
                 Gianluca Cartechini<br />
-                Iwes
-        ";
+                Iwes";
 
             $mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma di accettazione contratto', $body);
 

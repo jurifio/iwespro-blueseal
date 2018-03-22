@@ -142,7 +142,7 @@
                 data-permission="worker"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-event="bs.end.product.modify"
+                data-event="bs.end.work.product"
                 data-title="Termina la lavorazione sui prodotti selezionati"
                 data-placement="bottom"
         ></bs-toolbar-button>

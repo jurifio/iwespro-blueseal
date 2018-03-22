@@ -65,6 +65,9 @@
                                 <th data-slug="numberOfProduct"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Numero di prodotti</th>
+                                <th data-slug="documentId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Fattura</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -94,6 +97,30 @@
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php endif; ?>
+    <bs-toolbar-group data-group-label="Carica fattura per i lotti">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-cloud-upload"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.end.invoice.product"
+                data-title="Carica la fattura"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Accetta il lotto assegnato">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-check-square"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.accept.product.batch"
+                data-title="Accetta il lotto"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

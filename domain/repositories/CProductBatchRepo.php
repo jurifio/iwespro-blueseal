@@ -75,4 +75,41 @@ class CProductBatchRepo extends ARepo
 
         return true;
     }
+
+    public function calculateProductBatchCost($productBatch){
+
+        if(is_numeric($productBatch)){
+            /** @var CProductBatch $pB */
+            $pB = $this->findOneBy(['id'=>$productBatch]);
+        }
+
+        $numberOfProducts = count($pB->productBatchDetails);
+
+        $unitPrice = $pB->contractDetails->workPriceList->price;
+        $cost = $unitPrice * $numberOfProducts;
+
+        return $cost;
+
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function acceptProductBatch($id){
+
+        $pB = $this->findOneBy(['id'=>$id]);
+
+        if($pB->confirmationDate !=0){
+            return false;
+        }
+        $date = new \DateTime();
+        $pB->confirmationDate = date_format($date, 'Y-m-d H:i:s');
+        $pB->update();
+
+        return true;
+    }
 }

@@ -12,6 +12,7 @@ use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CContractDetailsRepo;
 use bamboo\domain\repositories\CContractsRepo;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\CFoisonRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
@@ -101,12 +102,33 @@ class CProductBatchManage extends AAjaxController
      */
     public function put(){
         $ids = \Monkey::app()->router->request()->getRequestData('productBatchIds');
+        $emails = \Monkey::app()->router->request()->getRequestData('foisons');
 
         /** @var CProductBatchRepo $pbRepo */
         $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
         foreach ($ids as $id) {
             $pbRepo->closeProductBatch($id);
+        }
+
+        /** @var CEmailRepo $mailRepo */
+        $mailRepo = \Monkey::app()->repoFactory->create('Email');
+        foreach ($emails as $email){
+
+            /** @var CFoison $foison */
+            $foison = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['email' => $email]);
+            $foisonFullName = $foison->user->getFullName();
+            $url = \Monkey::app()->baseUrl(false) . "/blueseal/work/lotti";
+
+            $body = "Gentilissimo Sig. $foisonFullName<br /><br />
+            Prego prendere nota che il lotto n. è stato confermato, proceda pure ad emettere fattura ed inserirla nel portale al seguente link: $url
+            <br /><br />
+            Cordiali saluti<br />
+            Iwes
+            ";
+
+            $mailRepo->newMail('gianluca@iwes.it', [$email], [], [], "Lotto confermato e chiuso con successo", $body);
+
         }
 
         $res = "Lotti chiusi con successo";

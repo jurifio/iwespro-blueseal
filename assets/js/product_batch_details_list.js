@@ -1,5 +1,5 @@
 ;(function () {
-    $(document).on('bs.end.product.modify', function () {
+    $(document).on('bs.end.work.product', function () {
 
         //Prendo tutti i prodotti selezionati
         let selectedProductBatchDetailIds = [];

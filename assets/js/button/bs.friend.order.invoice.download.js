@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-print",
-    permission:"/admin/product/edit",
+    permission:"/admin/product/edit||worker",
     event:"bs-friend-order-invoice-download",
     class:"btn btn-default",
     rel:"tooltip",

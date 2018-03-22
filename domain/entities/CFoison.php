@@ -20,6 +20,7 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @property CUser $user
  * @property CObjectCollection $contracts
+ * @property CAddressBook $addressBook
  */
 class CFoison extends AEntity
 {

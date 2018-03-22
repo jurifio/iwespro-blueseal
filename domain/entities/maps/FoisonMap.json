@@ -16,6 +16,12 @@
                 "parentKeys": ["id"],
                 "childKeys" : ["foisonId"],
                 "type" : "OneToMany"
+            },{
+                "name" : "addressBook",
+                "entity" : "AddressBook",
+                "parentKeys": ["foisonAddressBookId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
             }
         ]
     }
