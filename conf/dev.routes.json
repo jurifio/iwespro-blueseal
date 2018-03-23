@@ -1925,6 +1925,29 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/shooting/righe-shooting(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/shooting/righe-shooting/:id(/?)",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingDetailsListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
+
     ]
 }
