@@ -3,6 +3,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CShooting;
+use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\domain\repositories\CShootingRepo;
 
 
@@ -49,6 +50,9 @@ class CShootingListAjaxController extends AAjaxController
         /** @var CShootingRepo $sRepo */
         $sRepo = \Monkey::app()->repoFactory->create('Shooting');
 
+        /** @var CDocumentRepo $dRepo */
+        $dRepo = \Monkey::app()->repoFactory->create('Document');
+
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             /** @var CShooting $shooting */
@@ -56,8 +60,8 @@ class CShootingListAjaxController extends AAjaxController
             $row["row_id"] = $shooting->id;
             $row["id"] = '<a href="'.$url.$shooting->id.'" target="_blank">'.$shooting->id.'</a>';
             $row["date"] = $shooting->date;
-            $row["friendDdt"] = $shooting->friendDdt;
-            $row["pickyDdt"] = $shooting->pickyDdt;
+            $row["friendDdt"] = $dRepo->findShootingFriendDdt($shooting);
+            $row["pickyDdt"] = (is_null($shooting->pickyDdt) ? "---" : $dRepo->findShootingPickyDdt($shooting));
             $row["note"] = $shooting->note;
             $row["phase"] = $shooting->phase;
             $row["shopName"] = $shooting->shop->name;

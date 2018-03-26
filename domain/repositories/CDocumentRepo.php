@@ -11,6 +11,7 @@ use bamboo\domain\entities\CInvoiceLine;
 use bamboo\domain\entities\CInvoiceNumber;
 use bamboo\domain\entities\CInvoiceSectional;
 use bamboo\domain\entities\CInvoiceType;
+use bamboo\domain\entities\CShooting;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\domain\entities\COrderLine;
 use bamboo\utils\time\STimeToolbox;
@@ -924,5 +925,29 @@ class CDocumentRepo extends ARepo
         }
 
         return $check;
+    }
+
+    public function findShootingFriendDdt(CShooting $shooting) : string {
+
+        $friendDdt = $shooting->friendDdt;
+
+        /** @var CDocument $doc */
+        $doc = $this->findOneBy(['id'=>$friendDdt]);
+
+        $docNumber = $doc->number;
+
+        return $docNumber;
+    }
+
+    public function findShootingPickyDdt(CShooting $shooting) : string {
+
+        $pickyDdt = $shooting->pickyDdt;
+
+        /** @var CDocument $doc */
+        $doc = $this->findOneBy(['id'=>$pickyDdt]);
+
+        $docNumber = $doc->number;
+
+        return $docNumber;
     }
 }
