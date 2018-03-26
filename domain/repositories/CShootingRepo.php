@@ -22,6 +22,11 @@ class CShootingRepo extends ARepo
 
     public function createShooting($productsIds, $friendDdt, $note, $shopId){
 
+        /** @var CDocumentRepo $documentRepo */
+        $documentRepo = \Monkey::app()->repoFactory->create('Document');
+
+        $documentRepo->cre
+
         $shooting = $this->getEmptyEntity();
         $shooting->friendDdt = $friendDdt;
         $shooting->note = $note;

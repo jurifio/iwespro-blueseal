@@ -2,7 +2,9 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\base\CObjectCollection;
 use bamboo\domain\entities\CShooting;
+use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\domain\repositories\CShootingRepo;
 
@@ -28,6 +30,8 @@ class CShootingListAjaxController extends AAjaxController
      */
     public function get()
     {
+        
+
         $sql = "SELECT s.id,
                         s.date,
                         s.friendDdt,
@@ -41,6 +45,8 @@ class CShootingListAjaxController extends AAjaxController
                ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
+
+        $datatable->addCondition('shopId', \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
         $datatable->doAllTheThings(false);
 

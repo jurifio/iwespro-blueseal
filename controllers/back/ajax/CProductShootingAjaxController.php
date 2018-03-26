@@ -54,7 +54,8 @@ class CProductShootingAjaxController extends AAjaxController
         //$existingShooting = $shootingRepo->findOneBy(['friendDdt'=>$friendDdt, 'shopId'=>$shopId]);
         $existingShooting = $shootingRepo->findOneBySql("SELECT *
                                                               FROM Shooting s
-                                                              WHERE s.friendDdt = ? AND 
+                                                              JOIN Document d ON s.friendDdt = d.id
+                                                              WHERE d.number = ? AND 
                                                               s.shopId = ?", [$friendDdt, $shopId]);
 
         if(is_null($existingShooting)){
