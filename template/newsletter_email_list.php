@@ -41,10 +41,15 @@
                                     data-orderable="true"
                                     class="center">Codice
                                 </th>
-                                <th data-slug="name"
+                                <th data-slug="newsletterSegmentName"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Segmento di Pubblico
+                                </th>
+                                <th data-slug="newsletterGroupName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Lista Di Distribuzione Associata
                                 </th>
                                 <th data-slug="sql"
                                     data-searchable="true"
@@ -75,6 +80,10 @@
     <bs-toolbar-group data-group-label="Crea Segmento di Pubblico">
         <bs-toolbar-button
                 data-remote="bs.lists.create.filtergroup"
+        ></bs-toolbar-button>
+
+        <bs-toolbar-button
+                data-remote="bs.lists.delete.newsletteremaillist"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

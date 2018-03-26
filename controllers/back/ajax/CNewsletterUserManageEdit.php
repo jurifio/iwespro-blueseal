@@ -92,6 +92,9 @@ class CNewsletterUserManageEdit extends AAjaxController
                 $newsletter->newsletterdataDescription = $newsletterdataDescription;
             }
             if (!empty($preCompiledTemplate)){
+            $newsletter->preCompiledTemplate = $preCompiledTemplate;
+             }
+            if (!empty($preCompiledTemplate)){
                 $newsletter->preCompiledTemplate = $preCompiledTemplate;
             }
             if (!empty($newsletterCampaignId)){

@@ -71,6 +71,13 @@
         <bs-toolbar-button
             data-remote="bs.lists.create.group"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.modify.newslettergroup"
+
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.delete.newslettergroup"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

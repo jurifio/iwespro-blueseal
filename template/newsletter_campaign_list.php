@@ -87,6 +87,10 @@
                 data-remote="bs.lists.modify.newslettercampaign"
 
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.delete.newslettercampaign"
+
+        ></bs-toolbar-button>
 
 
     </bs-toolbar-group>

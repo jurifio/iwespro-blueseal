@@ -44,11 +44,17 @@
                                     data-orderable="true"
                                     class="center">Id
                                 </th>
-                                <th data-slug="name"
+                                <th data-slug="eventName"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Evento Campagna
                                 </th>
+                                <th data-slug="campaignName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Campagna Associata
+                                </th>
+
                                 <th data-slug="emailSent"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -93,6 +99,13 @@
         <bs-toolbar-button
             data-remote="bs.lists.create.newsletterevent"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.modify.newsletterevent"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.delete.newsletterevent"
+        ></bs-toolbar-button>
+
 
     </bs-toolbar-group>
 </bs-toolbar>

@@ -74,16 +74,35 @@ class CNewsletterGroupManage extends AAjaxController
         return $res;
 
 
+    }
+    /**
+     * @return mixed
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function put()
+    {
+        $data  = $this->app->router->request()->getRequestData();
+        $id = $data["id"];
+        $name = $data["name"];
+        $sql = $data["sql"];
 
 
+        /** @var CRepo $newsletterGroup */
+        $newsletterGroup = \Monkey::app()->repoFactory->create('NewsletterGroup');
+
+        /** @var CNewsletterGroup $newsletter */
+        $newsletter = $newsletterGroup->findOneBy(['id'=>$id]);
+
+        $newsletter->name = $name;
+        $newsletter->sql = $sql;
 
 
+        $newsletter->update();
 
-
-
-
-
-
+        $res = "Gruppo Newsletter Aggiornato";
+        return $res;
     }
 
 

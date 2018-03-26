@@ -35,11 +35,6 @@ class CNewsletterEventManage extends AAjaxController
         $name = $data['name'];
         $campaignId = $data['campaignId'];
 
-
-
-
-
-
         /** @var CRepo $newsletterEventRepo */
         $newsletterEventRepo = \Monkey::app()->repoFactory->create('NewsletterEvent');
 
@@ -73,19 +68,34 @@ class CNewsletterEventManage extends AAjaxController
 
         return $res;
 
-
-
-
-
-
-
-
-
-
-
-
     }
 
+        public function put()
+        {
+            $data  = $this->app->router->request()->getRequestData();
+            $id = $data["id"];
+            $name = $data["name"];
+            $campaignId = $data["campaignId"];
 
+
+            /** @var CRepo $newsletterEvent */
+            $newsletterEvent = \Monkey::app()->repoFactory->create('NewsletterEvent');
+
+            /** @var CNewsletterEvent $newsletter */
+            $newsletter = $newsletterEvent->findOneBy(['id'=>$id]);
+
+            $newsletter->name = $name;
+            $newsletter->newsletterCampaignId = $campaignId;
+
+
+
+            $newsletter->update();
+
+            $res = "Evento Campagna aggiornato";
+            return $res;
+
+
+
+        }
 
 }

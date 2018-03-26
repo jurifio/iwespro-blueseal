@@ -22,7 +22,7 @@ class CNewsletterEmailListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "select u.id, u.name, u.sql, u.code  from NewsletterEmailList u";
+        $sql = "select u.id, u.name as newsletterSegmentName, G.name as newsletterGroupName, u.sql, u.code  from NewsletterEmailList u inner JOIN NewsletterGroup G ON u.newsletterGroupId = G.id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings('true');

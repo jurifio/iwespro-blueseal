@@ -5,7 +5,7 @@
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables', 'charts'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
-    <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>
+   <!-- <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -55,7 +55,7 @@
                                                     <label for="campaignName">Campagna</label>
                                                     <select id="campaignName" name="campaignName"  class="full-width selectpicker"
                                                             placeholder="Seleziona la Lista"
-                                                            data-init-plugin="selectize">>
+                                                            data-init-plugin="selectize">
                                                             <option value="<?php echo $newsletterCampaign->id;?>"><?php echo $newsletterCampaign->name;?>
                                                             </option>
                                                     </select>
@@ -189,10 +189,11 @@
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="newsletterTemplateId">Seleziona Il Template da Utilizzare</label>
                                                 <select id="newsletterTemplateId" name="NewsletterTemplateId"
-                                                        value="<?php echo $newsletterTemplate->id;?>"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
+                                                <option value="<?php echo $newsletterTemplate->id;?>"<?php echo $newsletterTemplate->name;?></option>
+
                                                 </select>
 
                                             </div>                                            <p>
@@ -201,9 +202,7 @@
                                         <div id="inputNewsletterTemplateId">
 
                                         </div>
-
-
-
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -213,12 +212,10 @@
 
                                     <div class="col-md-12">
                                         <div align="center"
-                                        <div class="form-group form-group-default selectize-enabled">
+                                        <div class="summernote-wrapper">
                                             <label for="preCompiledTemplate1">Template Predefinito</label>
-                                            <textarea cols="80" id="preCompiledTemplate1" class="form-control"  name="preCompiledTemplate1" required="required" rows="10"
-                                                      placeholder="Modifica il template" value="<?php echo $newsletter->preCompiledTemplate;?>">
 
-                                                </textarea>
+                                            <textarea class="summer" id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="300" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
                                         </div>
                                     </div>
                                 </div>

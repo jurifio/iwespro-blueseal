@@ -1,16 +1,16 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-envelope",
+    icon: "fa-paper-plane",
     permission: "/admin/product/edit&&allShops",
-    event: "bs-newNewsletterUser-send",
+    event: "bs-newNewsletterUser-sendNow",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Invia Test Newsletter",
+    title: "Esegui il lavoro di invio Newsletter",
     placement: "bottom",
     toggle: "modal"
 };
 
-$(document).on('bs-newNewsletterUser-send', function () {
+$(document).on('bs-newNewsletterUser-sendNow', function () {
 
     let dataTable = $('.dataTable').DataTable();
         let selectedRows = dataTable.rows('.selected').data();
@@ -30,11 +30,11 @@ $(document).on('bs-newNewsletterUser-send', function () {
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {
-                idNewsletterUser: idNewsletterUser,
+                id: idNewsletterUser,
             };
             $.ajax({
                 method: 'put',
-                url: '/blueseal/xhr/NewsletterUserManage',
+                url: '/blueseal/xhr/NewsletterSendNow',
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);

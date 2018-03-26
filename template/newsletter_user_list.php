@@ -107,6 +107,12 @@
         <bs-toolbar-button
                 data-remote="bs.lists.newsletterUser.send"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.newsletterUser.sendNow"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.delete.newsletter"
+        ></bs-toolbar-button>
 
     </bs-toolbar-group>
 </bs-toolbar>

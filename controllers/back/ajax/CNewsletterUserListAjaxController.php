@@ -53,6 +53,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
 
             $row['id'] = '<a href="' . $opera . $newsletter->id . '" >' . $newsletter->id . '</a>';
 
+
             $datatable->setResponseDataSetRow($key,$row);
         }
 
