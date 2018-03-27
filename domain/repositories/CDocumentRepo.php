@@ -12,6 +12,7 @@ use bamboo\domain\entities\CInvoiceNumber;
 use bamboo\domain\entities\CInvoiceSectional;
 use bamboo\domain\entities\CInvoiceType;
 use bamboo\domain\entities\CShooting;
+use bamboo\domain\entities\CUser;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\domain\entities\COrderLine;
 use bamboo\utils\time\STimeToolbox;
@@ -240,7 +241,9 @@ class CDocumentRepo extends ARepo
      * @param string|null $number
      * @param string|null $note
      * @param \DateTime|null $creationDate
-     * @return int|mixed
+     * @param bool $isEmptyDocument
+     * @return mixed
+     * @throws BambooException
      * @throws BambooInvoiceException
      */
     private function createInvoice(
@@ -254,7 +257,8 @@ class CDocumentRepo extends ARepo
         \DateTime $paymentExpectedDate = null,
         string $number = null,
         string $note = null,
-        \DateTime $creationDate = null
+        \DateTime $creationDate = null,
+        bool $isEmptyDocument = false
     )
     {
         //date control
@@ -274,8 +278,15 @@ class CDocumentRepo extends ARepo
 
         $invoiceWithNumber =
             $this->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
-        if ($invoiceWithNumber)
-            throw new BambooInvoiceException('il numero della fattura è già presente nel nostro sistema e non può essere duplicato. id fattura: ' . $invoiceWithNumber->id);
+        if ($invoiceWithNumber){
+            if(!$isEmptyDocument){
+                throw new BambooInvoiceException('il numero della fattura è già presente nel nostro sistema e non può essere duplicato. id fattura: ' . $invoiceWithNumber->id);
+            } else {
+                return $invoiceWithNumber;
+            }
+
+        }
+
 
         $in = $this->getEmptyEntity();
         $in->userId = $userId;
@@ -949,5 +960,44 @@ class CDocumentRepo extends ARepo
         $docNumber = $doc->number;
 
         return $docNumber;
+    }
+
+    public function insertInvoiceFromFoison($invoiceTypeId, $userId, $date, $total, $number, $file, $productBatchIds){
+
+        /** @var CUser $user */
+        $user = \Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$userId]);
+        $billingAddressId = $user->foison->addressBook->id;
+        $date = new \DateTime($date);
+
+        $invoiceId = $this->createInvoice($invoiceTypeId, $userId, false, $billingAddressId, $date, $total, 0, null, $number);
+
+        foreach ($productBatchIds as $pbId){
+
+            /** @var CProductBatch $productBatch */
+            $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$pbId]);
+
+            $productBatch->documentId = $invoiceId;
+            $productBatch->update();
+        }
+
+        $this->insertInvoiceBin($invoiceId,$file['tmp_name'],$file['name']);
+    }
+
+    /**
+     * @param int $shopId
+     * @param string $friendDdtNumber
+     * @return int
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     */
+    public function createEmptyDdtDocument(int $shopId, string $friendDdtNumber){
+
+        /** @var CUser $user */
+        $user = \Monkey::app()->getUser();
+        $date = date("Y-m-d");
+        $dateTime = new \DateTime($date);
+        $invoiceId = $this->createInvoice(6, $user->id, true, $shopId, $dateTime, 0, 0, null, $friendDdtNumber, null, null, true);
+
+        return $invoiceId;
     }
 }

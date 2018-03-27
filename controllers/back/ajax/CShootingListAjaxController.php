@@ -39,6 +39,7 @@ class CShootingListAjaxController extends AAjaxController
                         s.note,
                         s.phase,
                         s.shopId,
+                        s.pieces,
                         shp.name as shopName
                FROM Shooting s
                JOIN Shop shp ON s.shopId = shp.id
@@ -66,10 +67,11 @@ class CShootingListAjaxController extends AAjaxController
             $row["row_id"] = $shooting->id;
             $row["id"] = '<a href="'.$url.$shooting->id.'" target="_blank">'.$shooting->id.'</a>';
             $row["date"] = $shooting->date;
-            $row["friendDdt"] = $dRepo->findShootingFriendDdt($shooting);
+            $row["friendDdt"] = (is_null($shooting->friendDdt) ? "---" : $dRepo->findShootingFriendDdt($shooting));
             $row["pickyDdt"] = (is_null($shooting->pickyDdt) ? "---" : $dRepo->findShootingPickyDdt($shooting));
             $row["note"] = $shooting->note;
             $row["phase"] = $shooting->phase;
+            $row["pieces"] = (is_null($shooting->pieces) ? "---" : $shooting->pieces);
             $row["shopName"] = $shooting->shop->name;
 
             $datatable->setResponseDataSetRow($key,$row);

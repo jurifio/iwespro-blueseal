@@ -43,6 +43,9 @@
                                 <th data-slug="phase"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fase</th>
+                                <th data-slug="pieces"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Numero di colli</th>
                                 <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop</th>
@@ -61,6 +64,12 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
+    <!--
+    <bs-toolbar-group data-group-label="Stampa DDT (Friend)">
+        <bs-toolbar-button
+                data-remote="bs.product.create.ddt"
+        ></bs-toolbar-button>
+    </bs-toolbar-group> -->
 </bs-toolbar>
 </body>
 </html>

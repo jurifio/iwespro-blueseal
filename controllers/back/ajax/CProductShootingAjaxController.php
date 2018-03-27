@@ -2,15 +2,19 @@
 
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CShooting;
+use bamboo\domain\entities\CShop;
+use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\domain\repositories\CProductHasShootingRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use bamboo\domain\repositories\CProductSizeRepo;
 use bamboo\domain\repositories\CShootingRepo;
+use bamboo\domain\repositories\CShopRepo;
 
 
 /**
@@ -30,6 +34,8 @@ class CProductShootingAjaxController extends AAjaxController
 {
     /**
      * @return string
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooInvoiceException
      */
     public function post()
     {
@@ -40,6 +46,7 @@ class CProductShootingAjaxController extends AAjaxController
         $note = $data["note"];
         $productsIds = $data["products"];
         $shopId = $data["friendId"];
+        $pieces = $data["pieces"];
 
         if(empty($friendDdt)){
             $res = "Devi inserire il ddt del friend";
@@ -50,29 +57,73 @@ class CProductShootingAjaxController extends AAjaxController
         /** @var CShootingRepo $shootingRepo */
         $shootingRepo = \Monkey::app()->repoFactory->create('Shooting');
 
-        /** @var CShooting $existingShooting */
-        //$existingShooting = $shootingRepo->findOneBy(['friendDdt'=>$friendDdt, 'shopId'=>$shopId]);
-        $existingShooting = $shootingRepo->findOneBySql("SELECT *
-                                                              FROM Shooting s
-                                                              JOIN Document d ON s.friendDdt = d.id
-                                                              WHERE d.number = ? AND 
-                                                              s.shopId = ?", [$friendDdt, $shopId]);
+        $shootingId = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $shopId, $pieces);
+        $res = "Hai inserito correttamente i prodotti nello shooting con codice: ".$shootingId;
 
-        if(is_null($existingShooting)){
-            $shootingId = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $shopId);
-            $res = "Hai inserito correttamente i prodotti nello shooting con codice: ".$shootingId;
-        } else {
 
-            $shootingId = $existingShooting->id;
-
-            /** @var CProductHasShootingRepo $phsRepo */
-            $phsRepo = \Monkey::app()->repoFactory->create('ProductHasShooting');
-            if($phsRepo->associateNewProductsToShooting($productsIds, $shootingId)){
-                $res = "Hai aggiornato correttamente i prodotti nello shooting con codice: ".$shootingId;
-            };
-        }
 
         return $res;
+    }
+
+    public function get(){
+        $res = [];
+
+
+        $shops = \Monkey::app()->router->request()->getRequestData('shop');
+
+        //elenco array
+        $result = [];
+        foreach ($shops as $subarray) {
+            $result = array_merge($result, $subarray);
+        }
+
+        $uShops = array_unique($result);
+
+        if(count($uShops) == 1){
+
+            /** @var CDocumentRepo $dRepo */
+            $dRepo = \Monkey::app()->repoFactory->create('Document');
+
+            /** @var CObjectCollection $shootings */
+            $shootings = \Monkey::app()->repoFactory->create('Shooting')->findBy(['shopId'=>$uShops]);
+
+            $z = 0;
+            /** @var CShooting $shooting */
+            foreach ($shootings as $shooting){
+                if($z == 0) {
+                    $lastShooting = $shooting;
+                    $z++;
+                    continue;
+                }
+                if($shooting->date > $lastShooting->date){
+                    $lastShooting = $shooting;
+                    $z++;
+                } else {
+                    $z++;
+                }
+            }
+            $res["-lastDdt"] = $dRepo->findShootingFriendDdt($lastShooting);
+            $res["-pieces"] = $lastShooting->pieces;
+        }
+
+
+
+        /** @var CShopRepo $shopRepo */
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
+
+        $i = 0;
+
+        foreach ($uShops as $shopId){
+            /** @var CShop $shop */
+            $shop = $shopRepo->findOneBy(['id'=>$shopId]);
+
+            $res[$i]["id"] = $shop->id;
+            $res[$i]["name"] = $shop->name;
+            $i++;
+        }
+
+        return json_encode($res);
+
     }
 
 }

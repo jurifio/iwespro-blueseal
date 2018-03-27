@@ -13,6 +13,8 @@ window.buttonSetup = {
 $(document).on('bs-product-shooting-manage', function (e, element, button) {
 
     let products = [];
+    let shop = [];
+    let getVarsArray = [];
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 
     let selectedRowsCount = selectedRows.length;
@@ -25,8 +27,31 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         return false;
     }
 
+    let i = 0;
     $.each(selectedRows, function (k, v) {
         products.push(v.DT_RowId);
+        shop.push(v.row_shop);
+        getVarsArray[i] = 'id[]='+v.DT_RowId;
+        i++;
+    });
+
+
+    //Find only shops for this product
+    let partialRes = [];
+    let resTotal = [];
+    $.each(shop, function (k,v) {
+        //se cè la pipe slitta
+        if (v.indexOf("|") >= 0){
+            //splitta la pipe e cicla array
+            partialRes.push(v.split("|"));
+
+            $.each(partialRes[0], function (k,v) {
+                //splitta il singolo shop
+                resTotal.push(v.split("-",1));
+            });
+        } else {
+            resTotal.push(v.split("-",1))
+        }
     });
 
     let bsModal = new $.bsModal('Aggiungi prodotti in shooting', {
@@ -37,39 +62,62 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         '</div>' +
         '<div class="form-group form-group-default required">' +
         '<label for="friendDdt">DDT</label>' +
-        '<input autocomplete="off" type="text" id="friendDdt" ' +
+        '<input autocomplete="on" type="text" id="friendDdt" ' +
         'placeholder="DDT Friend" class="form-control" name="friendDdt" required="required">' +
         '</div>' +
         '<div class="form-group form-group-default required">' +
         '<label for="friendDdtNote">Note Ddt Friend</label>' +
         '<textarea id="friendDdtNote" name="friendDdtNote"></textarea>' +
+        '</div>'+
+        '<div class="form-group form-group-default required">' +
+        '<label for="pieces">Numero di colli</label>' +
+        '<input autocomplete="off" type="text" id="pieces" ' +
+        'placeholder="Numero di colli" class="form-control" name="pieces" required="required">' +
+        '</div>'+
+        '<div class="form-group form-group-default required">' +
+        '<label for="tmp">Nota temporanea</label>' +
+        '<input autocomplete="off" type="text" id="tmp" ' +
+        'placeholder="Nota temporanea" class="form-control" name="tmp" required="required">' +
         '</div>'
     });
 
+
+    const dataShop = {
+        shop: resTotal,
+    };
     $.ajax({
         method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Shop'
-        },
-        dataType: 'json'
+        url: '/blueseal/xhr/ProductShootingAjaxController',
+        data: dataShop
     }).done(function (res) {
-        var select = $(selectFriend);
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            options: res
+
+        let shops = JSON.parse(res);
+
+        $.each(shops, function(k, v) {
+            let i = k.toString();
+            if(i.indexOf("-") < 0){
+                $('#selectFriend') .append($("<option/>") .val(v.id) .text(v.name))
+            } else {
+                if(k === "-lastDdt"){
+                    $('#friendDdt').val(v);
+                } else if(k === "-pieces"){
+                    $('#pieces').val(v);
+                }
+
+            }
         });
     });
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
+        let tmp = $('#tmp').val();
+        printQR(tmp);
         const data = {
             friendId: $('#selectFriend').val(),
             friendDdt: $('#friendDdt').val(),
             note: $('#friendDdtNote').val(),
-            products: products
+            products: products,
+            pieces: $('#pieces').val()
         };
         $.ajax({
             method: 'post',
@@ -88,4 +136,10 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
             bsModal.showOkBtn();
         });
     });
+
+    function printQR(tmp){
+        let getVars = getVarsArray.join('&');
+        window.open('/blueseal/print/azteccode?' + getVars + '&tmp=' + tmp, 'aztec-print');
+        return true;
+    }
 });

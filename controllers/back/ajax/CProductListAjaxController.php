@@ -37,6 +37,7 @@ class CProductListAjaxController extends AAjaxController
                   p.creationDate                                                                                    AS creationDate,
                   p.sortingPriorityId                                                                               AS productPriority,
                   s.id                                                                                              AS shopId,
+                  s.name                                                                                            AS row_shop,
                   (SELECT count(*)
                    FROM ShopHasProduct
                    WHERE (ShopHasProduct.productId, ShopHasProduct.productVariantId) = (p.id, p.productVariantId))      AS shops,
@@ -182,7 +183,7 @@ class CProductListAjaxController extends AAjaxController
             $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
 
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
-
+            $row["row_shop"] = $val->getShops('|', true);
             $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
             $row['shops'] = $val->shopHasProduct->count();
 
