@@ -87,23 +87,27 @@ class CProductShootingAjaxController extends AAjaxController
             /** @var CObjectCollection $shootings */
             $shootings = \Monkey::app()->repoFactory->create('Shooting')->findBy(['shopId'=>$uShops]);
 
-            $z = 0;
-            /** @var CShooting $shooting */
-            foreach ($shootings as $shooting){
-                if($z == 0) {
-                    $lastShooting = $shooting;
-                    $z++;
-                    continue;
+            if(!$shootings->isEmpty()){
+                $z = 0;
+                /** @var CShooting $shooting */
+                foreach ($shootings as $shooting){
+                    if($z == 0) {
+                        $lastShooting = $shooting;
+                        $z++;
+                        continue;
+                    }
+                    if($shooting->date > $lastShooting->date){
+                        $lastShooting = $shooting;
+                        $z++;
+                    } else {
+                        $z++;
+                    }
                 }
-                if($shooting->date > $lastShooting->date){
-                    $lastShooting = $shooting;
-                    $z++;
-                } else {
-                    $z++;
-                }
+
+
+                $res["-lastDdt"] = $dRepo->findShootingFriendDdt($lastShooting);
+                $res["-pieces"] = $lastShooting->pieces;
             }
-            $res["-lastDdt"] = $dRepo->findShootingFriendDdt($lastShooting);
-            $res["-pieces"] = $lastShooting->pieces;
         }
 
 
