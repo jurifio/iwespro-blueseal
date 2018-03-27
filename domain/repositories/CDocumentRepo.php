@@ -996,7 +996,7 @@ class CDocumentRepo extends ARepo
         $user = \Monkey::app()->getUser();
         $date = date("Y-m-d");
         $dateTime = new \DateTime($date);
-        $invoiceId = $this->createInvoice(6, $user->id, true, $shopId, $dateTime, 0, 0, null, $friendDdtNumber, null, null, true);
+        $invoiceId = $this->createInvoice(11, $user->id, true, $shopId, $dateTime, 0, 0, null, $friendDdtNumber, null, null, true);
 
         return $invoiceId;
     }
