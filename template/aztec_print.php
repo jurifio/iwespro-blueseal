@@ -260,7 +260,7 @@
                 window.print();
 
                 setTimeout(function() {
-                    //window.close();
+                    window.close();
                 },1);
 
             },200);
