@@ -16,6 +16,9 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @date 23/03/2018
  * @since 1.0
+ *
+ * @property CProduct $product
+ *
  */
 class CProductHasShooting extends AEntity
 {

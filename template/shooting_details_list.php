@@ -41,6 +41,24 @@
                                 <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop</th>
+                                <th data-slug="season"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stagione</th>
+                                <th data-slug="externalId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Origin. ID</th>
+                                <th data-slug="cpf"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">cpf</th>
+                                <th data-slug="dummy"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">dummy</th>
+                                <th data-slug="productBrandName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Brand</th>
+                                <th data-slug="hasQty"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Quantità disponibile</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -56,9 +74,12 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Stampa qr code">
+    <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
                 data-remote="bs.product.print.aztec"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
