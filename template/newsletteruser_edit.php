@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -215,7 +214,6 @@
                                         <div align="center"
                                         <div class="summernote-wrapper">
                                             <label for="preCompiledTemplate1">Template Utilizzato</label>
-                                           <?php echo $newsletter->preCompiledTemplate;?>
 
                                             <textarea class="summer" id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="300" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
                                         </div>
