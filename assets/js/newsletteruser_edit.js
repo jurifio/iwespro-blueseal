@@ -431,7 +431,7 @@ $(document).on('bs.newNewsletterUser.save', function () {
             newsletterTemplateId:$('#newsletterTemplateId').val(),
             subject : $('#subject').val(),
             dataDescription : $('#dataDescription').val(),
-            preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
+            preCompiledTemplate : $('#preCompiledTemplate1').val(),
             campaignId : campaignIdPost,
             newsletterEventId: campaignEventIdPost,
             dateCampaignStart:campaignDateStartPost,
