@@ -188,7 +188,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="newsletterTemplateId">Seleziona Il Template da Utilizzare</label>
-                                                <select id="newsletterTemplateId" name="NewsletterTemplateId"
+                                                <select id="0
+" name="NewsletterTemplateId"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
