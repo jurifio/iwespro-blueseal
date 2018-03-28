@@ -1,0 +1,16 @@
+{
+    "entity": {
+        "name": "ProductHasShooting",
+        "keys": ["productId","productVariantId","shootingId"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name": "product",
+                "entity": "Product",
+                "parentKeys": ["productId","productVariantId"],
+                "childKeys": ["id","productVariantId"],
+                "type": "OneToOne"
+            }
+        ]
+    }
+}
