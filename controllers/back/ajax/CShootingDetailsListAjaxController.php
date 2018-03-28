@@ -37,7 +37,8 @@ class CShootingDetailsListAjaxController extends AAjaxController
                   phs.productVariantId,
                   phs.shootingId,
                   phs.creationDate,
-                  sp.name as shopName
+                  sp.name as shopName,
+                  phs.progressiveLineNumber
                 FROM ProductHasShooting phs
                   JOIN Shooting s ON phs.shootingId = s.id
                   JOIN Product p ON phs.productVariantId = p.productVariantId

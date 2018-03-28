@@ -2,7 +2,11 @@
 
 namespace bamboo\domain\repositories;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
+use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CProductHasShooting;
+use bamboo\domain\entities\CShooting;
 
 /**
  * Class CProductHasShootingRepo
@@ -22,13 +26,19 @@ class CProductHasShootingRepo extends ARepo
 
     public function associateNewProductsToShooting($productsIds, $shootingId){
 
+        $z = 0;
+        $lastShooting = null;
+        $existentProduct = [];
+        $infoWithExistentProduct = [];
+        $info =[];
+
 
         foreach ($productsIds as $productsId){
 
             $productId = explode('-',$productsId)[0];
             $productVariantId = explode('-',$productsId)[1];
 
-            //$existingAssociation = $this->findOneBy(['shootingId'=>$shootingId, 'productId'=>$productId, 'productVariantId'=>$productVariantId]);
+            /** @var CProductHasShooting $existingAssociation */
             $existingAssociation = $this->findOneBySql("SELECT *
                                                             FROM Shooting s
                                                             JOIN ProductHasShooting phs ON s.id = phs.shootingId
@@ -37,15 +47,69 @@ class CProductHasShootingRepo extends ARepo
                                                             phs.shootingId = ?", [$productsId, $productVariantId, $shootingId]);
 
             if(!is_null($existingAssociation)){
+                $existentProduct[] = $existingAssociation->productId.'-'.$existingAssociation->productVariantId;
                 continue;
             }
 
+            // Get last shooting product  ----------------------
+
+            /** @var CObjectCollection $shootings */
+            $shootings = $this->findBy(['shootingId'=>$shootingId]);
+
+            if(!$shootings->isEmpty()){
+                /** @var CShooting $shooting */
+                foreach ($shootings as $shooting){
+                    if($z == 0) {
+                        $lastShooting = $shooting;
+                        $z++;
+                        continue;
+                    }
+                    if($shooting->progressiveLineNumber > $lastShooting->progressiveLineNumber){
+                        $lastShooting = $shooting;
+                        $z++;
+                    } else {
+                        $z++;
+                    }
+                }
+            }
+
+            //-------------------------------------------
+
+            /** @var CProductHasShooting $sps */
             $sps = $this->getEmptyEntity();
             $sps->productId = $productId;
             $sps->productVariantId = $productVariantId;
             $sps->shootingId = $shootingId;
+            $sps->progressiveLineNumber = ($shootings->isEmpty() ? 1 : $lastShooting->progressiveLineNumber + 1);
             $sps->smartInsert();
+
+            $info[] = $this->getProductDetails($sps);
         }
-        return true;
+
+
+        $infoProduct["info"] = $info;
+        $infoProduct["existent"] = $existentProduct;
+        return $infoProduct;
+
+
+    }
+
+    private function getProductDetails(CProductHasShooting $phs) : array {
+
+        $info = [];
+
+        /** @var CProductRepo $productRepo */
+        $productRepo = \Monkey::app()->repoFactory->create('Product');
+
+        /** @var CProduct $product */
+        $product = $productRepo->findOneBy(['id'=>$phs->productId, 'productVariantId'=>$phs->productVariantId]);
+
+        $info[] = $product->id.'-'.$product->productVariantId;
+        $info[] = $product->itemno;
+        $info[] = $product->getShopExtenalIds(', ');
+        $info[] = $product->productBrand->name;
+        $info[] = $phs->progressiveLineNumber;
+
+        return $info;
     }
 }

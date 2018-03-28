@@ -57,8 +57,7 @@ class CProductShootingAjaxController extends AAjaxController
         /** @var CShootingRepo $shootingRepo */
         $shootingRepo = \Monkey::app()->repoFactory->create('Shooting');
 
-        $shootingId = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $shopId, $pieces);
-        $res = "Hai inserito correttamente i prodotti nello shooting con codice: ".$shootingId;
+        $res = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $shopId, $pieces);
 
 
 

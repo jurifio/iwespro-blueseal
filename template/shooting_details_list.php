@@ -26,6 +26,9 @@
                                 data-shootingid="<?php echo $shooting ?>">
                             <thead>
                             <tr>
+                                <th data-slug="progressiveLineNumber"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Numero progressivo</th>
                                 <th data-slug="shootingId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shooting</th>

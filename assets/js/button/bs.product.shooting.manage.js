@@ -73,11 +73,6 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         '<label for="pieces">Numero di colli</label>' +
         '<input autocomplete="off" type="text" id="pieces" ' +
         'placeholder="Numero di colli" class="form-control" name="pieces" required="required">' +
-        '</div>'+
-        '<div class="form-group form-group-default required">' +
-        '<label for="tmp">Nota temporanea</label>' +
-        '<input autocomplete="off" type="text" id="tmp" ' +
-        'placeholder="Nota temporanea" class="form-control" name="tmp" required="required">' +
         '</div>'
     });
 
@@ -110,8 +105,6 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
-        let tmp = $('#tmp').val();
-        printQR(tmp);
         const data = {
             friendId: $('#selectFriend').val(),
             friendDdt: $('#friendDdt').val(),
@@ -124,7 +117,20 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
             url: '/blueseal/xhr/ProductShootingAjaxController',
             data: data
         }).done(function (res) {
-            bsModal.writeBody(res);
+            let buttonPrint = '<br /><button id="printQRCode">Stampa QR</button>';
+            let formPersonalNote = '<div style="margin-top: 20px" class="form-group form-group-default required">' +
+                '<label for="tmp">Nota temporanea</label>' +
+                '<input autocomplete="off" type="text" id="tmp" ' +
+                'placeholder="Nota temporanea" class="form-control" name="tmp" required="required">' +
+                '</div>';
+
+            bsModal.writeBody(res + formPersonalNote + buttonPrint);
+
+            $('#printQRCode').on('click', function () {
+                let tmp = $('#tmp').val();
+                printQR(tmp);
+            })
+
         }).fail(function (res) {
             bsModal.writeBody('Errore grave');
         }).always(function (res) {

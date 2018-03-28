@@ -37,6 +37,9 @@
                                 <th data-slug="pickyDdt"
                                     data-searchable="true"
                                     data-orderable="true" class="center">DDT Picky</th>
+                                <th data-slug="nProduct"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Numero prodotti</th>
                                 <th data-slug="note"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Note</th>

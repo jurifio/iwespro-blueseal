@@ -40,9 +40,12 @@ class CShootingListAjaxController extends AAjaxController
                         s.phase,
                         s.shopId,
                         s.pieces,
-                        shp.name as shopName
+                        shp.name as shopName,
+                        count(phs.shootingId) as nProduct
                FROM Shooting s
+               JOIN ProductHasShooting phs ON s.id = phs.shootingId
                JOIN Shop shp ON s.shopId = shp.id
+               GROUP BY s.id
                ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
@@ -72,6 +75,7 @@ class CShootingListAjaxController extends AAjaxController
             $row["note"] = $shooting->note;
             $row["phase"] = $shooting->phase;
             $row["pieces"] = (is_null($shooting->pieces) ? "---" : $shooting->pieces);
+            $row["nProduct"] = $shooting->product->count();
             $row["shopName"] = $shooting->shop->name;
 
             $datatable->setResponseDataSetRow($key,$row);

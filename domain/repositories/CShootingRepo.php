@@ -58,10 +58,54 @@ class CShootingRepo extends ARepo
         /** @var CProductHasShootingRepo $pHsRepo */
         $pHsRepo = \Monkey::app()->repoFactory->create('ProductHasShooting');
 
+        $association = $pHsRepo->associateNewProductsToShooting($productsIds, $shooting->id);
 
-        if($pHsRepo->associateNewProductsToShooting($productsIds, $shooting->id)) {
-            return $shooting->id;
+
+        if(empty($association["info"]) && !empty($association["existent"])){
+            return "Shooting: ".$shooting->id.':<br />Prodotti esistenti:<br />'.implode(',<br /> ', $association["existent"]);
+        } else if (empty($association["existent"]) && !empty($association["info"])){
+            $res =  $this->fillProductTableInfo($shooting, $association["info"]);
+            return $res;
+        } else if(!empty($association["existent"]) && !empty($association["info"])){
+
+            $res1 = "<div style='border: 1px solid #000'>Shooting: ".$shooting->id.':<br />Prodotti esistenti:<br />'.implode(', ', $association["existent"]).'</div>';
+            $res2 = $this->fillProductTableInfo($shooting, $association["info"]);
+
+            return $res1.'<br />'.$res2;
+
+        }
+    }
+
+    private function fillProductTableInfo($shooting, $association){
+        $table = "";
+        foreach ($association as $singleProductInfo){
+
+            $table .= "
+                 <div style='
+                     margin-bottom: 20px;
+                     margin-top: 20px;
+                     border: 1px solid #000;
+                '>
+                 <table style='width:80%'>
+                  <tr>
+                    <th>Codice</th>
+                    <th>Cod. For</th> 
+                    <th>Id Or.</th>
+                    <th>Brand</th>
+                  </tr>
+                  <tr>
+                    <td>$singleProductInfo[0]</td>
+                    <td>$singleProductInfo[1]</td> 
+                    <td>$singleProductInfo[2]</td>
+                    <td>$singleProductInfo[3]</td>
+                  </tr>
+                </table>
+                <strong>Inserisci il codice: $singleProductInfo[4] nel prodotto $singleProductInfo[0]</strong>
+                </div>
+                ";
+
         }
 
+        return "Hai inserito correttamente i prodotti nello shooting con codice: $shooting->id".$table;
     }
 }
