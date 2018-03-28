@@ -286,7 +286,20 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 
     ///////////////////////////////////////////////////////////////////
 
+    $("#btnModifyTemplate").click(function () {
+        //CKEDITOR.instances.preCompiledTemplate1.setData("");
 
+         $("#preCompiledTemplate1").empty();
+         $('#preCompiledTemplate1').code('');
+        var valore = $("#newsletterTemplateIdSelected").val();
+        //CKEDITOR.instances.preCompiledTemplate1.setData(content1);
+        $('#preCompiledTemplate1').summernote('editor.pasteHTML', valore);
+        //var contentLessOccurence = content.indexOf('-');
+        //  varcontentPreview = content.substring(5);
+        // $("#file-content").append(content);
+
+
+    });
 
 
     /*if (CKEDITOR.instances.preCompiledTemplate1) {
@@ -324,6 +337,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 
 
     });
+
 
     /*function displayContents(contents) {
         var element = document.getElementById('file-content');

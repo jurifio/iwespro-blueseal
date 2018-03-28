@@ -5,7 +5,7 @@
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables', 'charts'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
-   <!-- <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
+  <!-- <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -66,7 +66,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="dateCampaignStart">Data Inizio Campagna:<?php echo $newsletterCampaign->dateCampaignStart;?></label>
-                                                    <input type="datetime-local" name="dateCampaignStart" value="<?php echo $newsletterCampaign->dateCampaignStart;?>"/>
+                                                    <input type="datetime" name="dateCampaignStart" value="<?php echo $newsletterCampaign->dateCampaignStart;?>"/>
 
                                                 </div>
                                             </div>
@@ -75,7 +75,7 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group form-group-default selectize-enabled">
                                                             <label for="dateCampaignFinish">Data Fine Campagna:<?php echo $newsletterCampaign->dateCampaignFinish;?></label>
-                                                            <input type="datetime-local" name="dateCampaignFinish" value="<?php echo $newsletterCampaign->dateCampaignFinish;?>"/>
+                                                            <input type="datetime" name="dateCampaignFinish" value="<?php echo $newsletterCampaign->dateCampaignFinish;?>"/>
 
                                                 </div>
                                             </div>
@@ -144,7 +144,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="sendAddressDate">Data di Invio</label>
-                                                <input type="datetime-local" class="form-control" id="sendAddressDate" name="sendAddressDate" value="<?php echo $newsletter->sendAddressDate;?>" />
+                                                <input type="datetime" class="form-control" id="sendAddressDate" name="sendAddressDate" value="<?php echo $newsletter->sendAddressDate;?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -176,6 +176,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -188,8 +189,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="newsletterTemplateId">Seleziona Il Template da Utilizzare</label>
-                                                <select id="0
-" name="NewsletterTemplateId"
+                                                <select id="newsletterTemplateId" name="newsletterTemplateId"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
@@ -203,7 +203,7 @@
                                         <div id="inputNewsletterTemplateId">
 
                                         </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -214,7 +214,8 @@
                                     <div class="col-md-12">
                                         <div align="center"
                                         <div class="summernote-wrapper">
-                                            <label for="preCompiledTemplate1">Template Predefinito</label>
+                                            <label for="preCompiledTemplate1">Template Utilizzato</label>
+                                           <?php echo $newsletter->preCompiledTemplate;?>
 
                                             <textarea class="summer" id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="300" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
                                         </div>
@@ -234,7 +235,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione NewsletterUser">
+    <bs-toolbar-group data-group-label="Gestione Newsletter">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-file-o fa-plus"
