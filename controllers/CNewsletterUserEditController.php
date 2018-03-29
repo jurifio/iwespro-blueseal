@@ -44,7 +44,7 @@ class CNewsletterUserEditController extends ARestrictedAccessRootController
         //recupero la lista destinatari associata;
 
         $newsletterEmailListId=$newsletter->newsletterEmailListId;
-        $repoNewsletterEmailList =\Monkey::app()->repoFactory->create('NewsletterEmailist');
+        $repoNewsletterEmailList =\Monkey::app()->repoFactory->create('NewsletterEmailList');
         $newsletterEmailListStatus =$repoNewsletterEmailList->findAll();
         $newsletterEmailList =\Monkey::app()->repoFactory->create('NewsletterEmailList')->findOne([$newsletterEmailListId]);
         // recupero il template
