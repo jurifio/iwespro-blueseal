@@ -28,6 +28,9 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
             $products[] = $product;
         }
 
+        $temp = \Monkey::app()->router->request()->getRequestData('tmp');
+
+
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/aztec_print.php');
         $aztecFactoryEndpoint = $this->app->baseUrl(false).'/blueseal/xhr/GetAztecCode?src=';
@@ -37,7 +40,8 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
             'aztecFactoryEndpoint'=> $aztecFactoryEndpoint,
             'products' => $products,
             'shop' => null,
-            'page' => $this->page
+            'page' => $this->page,
+            'temp' => $temp
         ]);
     }
 }

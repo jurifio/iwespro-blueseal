@@ -2021,6 +2021,50 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/shooting/righe-shooting(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/shooting/righe-shooting/:id(/?)",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingDetailsListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/users/ruoli(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacRoleListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ]
+        },{
+            "pattern": "/blueseal/users/permessi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacPermissionListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "DELETE"
+            ]
         }
     ]
 }

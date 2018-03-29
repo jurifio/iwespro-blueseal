@@ -229,18 +229,10 @@
 <body class="fixed-header">
 <div class="cover"><div>Usa CTRL-P per stampare</div></div>
 
-<?php $i = 1; foreach ($products as $product):
-    /** @var \bamboo\domain\entities\CProduct $product */
-if ($i == 1): ?>
+<?php foreach ($products as $product):
+    /** @var \bamboo\domain\entities\CProduct $product */?>
 <div class="container newpage">
-    <div class="row">
-<?php endif; ?>
-<?php if ($i%17 == 0): ?>
-    </div>
-</div>
-<div class="container newpage">
-    <div class="row">
-<?php endif; ?>
+    <div class="row"
         <div class="col-md-6">
             <div class="col-md-4" style="margin-top:10px">
                 <img src="<?php echo $aztecFactoryEndpoint.$product->aztecCode; ?>" width="140" height="140"/>
@@ -252,18 +244,13 @@ if ($i == 1): ?>
                     <li><strong>BRD</strong> <?php echo $product->productBrand->slug; ?></li>
                     <li><strong>SHP</strong> <?php echo $product->getShops() ?></li>
                     <li><strong>SEX</strong> <?php echo implode(', ',$product->getGendersName()) ?></li>
+                    <li><strong>DDT</strong> <?php echo $product->getDdt() ?></li>
+                    <li><strong>NOTE</strong> <?php echo $temp ?></li>
                 </ul>
             </div>
         </div>
-        <?php if ($i%2==0 && $i != 16): ?>
-        <div style="clear:both;border-bottom:1px dotted #c0c0c0;margin-left:30px;"><div style="position:relative;top:10px;"><i class="fa fa-scissors"></i></div></div>
-        <?php endif; ?>
-<?php if (count($products) == $i): ?>
-        <div style="clear:both;border-bottom:1px dotted #c0c0c0;margin-left:30px;"><div style="position:relative;top:10px;"><i class="fa fa-scissors"></i></div></div>
-    </div>
 </div>
-<?php endif; ?>
-<?php $i++; endforeach; ?>
+<?php endforeach; ?>
 <script type="application/javascript">
     $(document).ready(function() {
 
@@ -273,7 +260,7 @@ if ($i == 1): ?>
                 window.print();
 
                 setTimeout(function() {
-                    //window.close();
+                    window.close();
                 },1);
 
             },200);

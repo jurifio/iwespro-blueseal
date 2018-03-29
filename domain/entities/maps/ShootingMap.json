@@ -1,0 +1,30 @@
+{
+    "entity": {
+        "name": "Shooting",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "product",
+                "entity" : "Product",
+                "parentKeys": [
+                    "id"
+                ],
+                "childKeys" : ["id","productVariantId"],
+                "joinOn" :
+                {
+                    "table": "ProductHasShooting",
+                    "parentKeys" : ["shootingId"],
+                    "childKeys": ["productId","productVariantId"]
+                },
+                "type" : "ManyToMany"
+            },{
+                "name": "shop",
+                "entity": "Shop",
+                "parentKeys": ["shopId"],
+                "childKeys": ["id"],
+                "type": "OneToOne"
+            }
+        ]
+    }
+}

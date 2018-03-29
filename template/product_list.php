@@ -169,6 +169,14 @@
                                     data-searchable="true"
                                     data-orderable="false">Prodotto
                                 </th>
+                                <th data-slug="shooting"
+                                    data-searchable="true"
+                                    data-orderable="false">Shooting
+                                </th>
+                                <th data-slug="doc_number"
+                                    data-searchable="true"
+                                    data-orderable="false">N. DDT
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -202,6 +210,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.marketplace.publish"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.shooting.manage"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Attributi Prodotti">

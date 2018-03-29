@@ -74,6 +74,7 @@ class CProductSlimListAjaxController extends AAjaxController
             else $imgs = "";
             $row['image'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>' . $imgs . '<br />';
 
+            //$row["row_shop"] = $val->getShops('|', true);
             $row['shop'] = '<span>';
             $row['shop'] .= $val->getShops('<br />');
             $row['shop'] .= '</span>';

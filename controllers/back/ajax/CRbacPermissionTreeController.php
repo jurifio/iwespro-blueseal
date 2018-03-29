@@ -19,8 +19,8 @@ class CRbacPermissionTreeController extends AAjaxController
 {
     public function get()
     {
-       // $cache = \Monkey::app()->cacheService->getCache("misc")->get("FullCategoryTreeAsJSON");
-       $cache = false;
+        // $cache = \Monkey::app()->cacheService->getCache("misc")->get("FullCategoryTreeAsJSON");
+        $cache = false;
         if (!$cache) {
             //$cache = $this->app->categoryManager->categories()->treeToJson(1);
             $permission = $this->app->rbacManager->perms()->treeToJson(1,'title');
@@ -72,6 +72,6 @@ class CRbacPermissionTreeController extends AAjaxController
         }
         return true;
     */
-        }
+    }
 
 }

@@ -3,6 +3,8 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CShooting;
+use bamboo\domain\repositories\CDocumentRepo;
 
 /**
  * Class CProductListAjaxController
@@ -37,6 +39,9 @@ class CProductListAjaxController extends AAjaxController
                   p.creationDate                                                                                    AS creationDate,
                   p.sortingPriorityId                                                                               AS productPriority,
                   s.id                                                                                              AS shopId,
+                  s.name                                                                                            AS row_shop,
+                  concat(phs.shootingId)                                                             AS shooting,
+                  concat(doc.number)                                                             AS doc_number,
                   (SELECT count(*)
                    FROM ShopHasProduct
                    WHERE (ShopHasProduct.productId, ShopHasProduct.productVariantId) = (p.id, p.productVariantId))      AS shops,
@@ -92,7 +97,12 @@ class CProductListAjaxController extends AAjaxController
                   LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
                   LEFT JOIN (DirtyProduct dp
                               JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
-                    ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)";
+                    ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
+                    LEFT JOIN (
+                    ProductHasShooting phs 
+                      JOIN Shooting shoot ON phs.shootingId = shoot.id
+                        LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
@@ -114,6 +124,9 @@ class CProductListAjaxController extends AAjaxController
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
+
+        /** @var CDocumentRepo $docRepo */
+        $docRepo = \Monkey::app()->repoFactory->create('Document');
         $datatable->doAllTheThings();
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
@@ -182,7 +195,7 @@ class CProductListAjaxController extends AAjaxController
             $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
 
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
-
+            $row["row_shop"] = $val->getShops('|', true);
             $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
             $row['shops'] = $val->shopHasProduct->count();
 
@@ -208,6 +221,16 @@ class CProductListAjaxController extends AAjaxController
             $row['isOnSale'] = $val->isOnSale();
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
             $row['processing'] = ($val->processing) ? $val->processing : '-';
+
+            $sids = "";
+            $ddtNumbers = "";
+            /** @var CShooting $singleShooting */
+            foreach ($val->shooting as $singleShooting){
+                $sids .= '<br />'.$singleShooting->id;
+                $ddtNumbers .= '<br />'.$docRepo->findShootingFriendDdt($singleShooting);
+            }
+            $row["shooting"] = $sids;
+            $row["doc_number"] = $ddtNumbers;
             $datatable->setResponseDataSetRow($key,$row);
         }
         return $datatable->responseOut();
