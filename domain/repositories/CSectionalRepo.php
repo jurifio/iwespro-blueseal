@@ -75,6 +75,10 @@ class CSectionalRepo extends ARepo
         /** @var CSectional $sectional */
         $sectional = $this->findOneBy(["shopId"=>$shopId, "typeId"=>$typeId]);
 
+        if(is_null($sectional)){
+            return true;
+        }
+
         if(is_null($sectional->last)){
             $newNumber = $sectional->num;
             $sectional->last = $newNumber;
