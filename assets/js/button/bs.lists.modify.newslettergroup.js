@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-pencil-square-o",
     permission: "/admin/product/delete&&allShops",
-    event: "bs-newsletterevent-edit",
+    event: "bs-newslettergroup-edit",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Edita il Gruppo Newsletter",
