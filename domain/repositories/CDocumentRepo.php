@@ -996,7 +996,16 @@ class CDocumentRepo extends ARepo
         $user = \Monkey::app()->getUser();
         $date = date("Y-m-d");
         $dateTime = new \DateTime($date);
-        $invoiceId = $this->createInvoice(11, $user->id, true, $shopId, $dateTime, 0, 0, null, $friendDdtNumber, null, null, true);
+        $invoiceId = $this->createInvoice(CInvoiceType::DDT_SHOOTING, $user->id, true, $shopId, $dateTime, 0, 0, null, $friendDdtNumber, null, null, true);
+
+
+        /** @var CSectionalRepo $sectionalR */
+        $sectionalR = \Monkey::app()->repoFactory->create('Sectional');
+
+        $nextCode = $sectionalR->calculateNewSectionalCodeFromShop($shopId, CInvoiceType::DDT_SHOOTING);
+        if($friendDdtNumber == $nextCode){
+            $sectionalR->createNewSectionalCodeFromShop($shopId, CInvoiceType::DDT_SHOOTING);
+        }
 
         return $invoiceId;
     }

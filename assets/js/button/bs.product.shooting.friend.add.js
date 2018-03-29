@@ -1,8 +1,8 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-file-image-o",
-    permission:"/admin/product/edit&&allShops",
-    event:"bs-product-shooting-manage",
+    permission:"shooting",
+    event:"bs-product-shooting-friend-add",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Gestisci shooting",
@@ -10,8 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs-product-shooting-manage', function (e, element, button) {
-
+$(document).on('bs-product-shooting-friend-add', function (e, element, button) {
     let products = [];
     let shop = [];
     let getVarsArray = [];
@@ -65,9 +64,10 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         '<input autocomplete="on" type="text" id="friendDdt" ' +
         'placeholder="DDT Friend" class="form-control" name="friendDdt" required="required">' +
         '</div>' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="friendDdtNote">Note Ddt Friend</label>' +
-        '<textarea id="friendDdtNote" name="friendDdtNote"></textarea>' +
+        '<div>' +
+        '<label>Prossimo DDT</label>' +
+        '<p id="nextDdt"></p>' +
+        '<button id="copyCode">Usa questo codice</button>' +
         '</div>'+
         '<div class="form-group form-group-default required">' +
         '<label for="pieces">Numero di colli</label>' +
@@ -97,10 +97,16 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
                     $('#friendDdt').val(v);
                 } else if(k === "-pieces"){
                     $('#pieces').val(v);
+                } else if(k == "-nextDdt"){
+                    $('#nextDdt').text(v);
                 }
 
             }
         });
+    });
+
+    $('#copyCode').on('click', function () {
+        $('#friendDdt').val($('#nextDdt').text());
     });
 
     bsModal.showCancelBtn();
@@ -108,10 +114,9 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         const data = {
             friendId: $('#selectFriend').val(),
             friendDdt: $('#friendDdt').val(),
-            note: $('#friendDdtNote').val(),
             products: products,
             pieces: $('#pieces').val(),
-            friend: 0
+            friend: 1
         };
         $.ajax({
             method: 'post',
@@ -119,13 +124,8 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
             data: data
         }).done(function (res) {
             let buttonPrint = '<br /><button id="printQRCode">Stampa QR</button>';
-            let formPersonalNote = '<div style="margin-top: 20px" class="form-group form-group-default required">' +
-                '<label for="tmp">Nota temporanea</label>' +
-                '<input autocomplete="off" type="text" id="tmp" ' +
-                'placeholder="Nota temporanea" class="form-control" name="tmp" required="required">' +
-                '</div>';
 
-            bsModal.writeBody(res + formPersonalNote + buttonPrint);
+            bsModal.writeBody(res + buttonPrint);
 
             $('#printQRCode').on('click', function () {
                 let tmp = $('#tmp').val();
@@ -149,4 +149,5 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         window.open('/blueseal/print/azteccode?' + getVars + '&tmp=' + tmp, 'aztec-print');
         return true;
     }
+
 });

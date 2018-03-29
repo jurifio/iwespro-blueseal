@@ -31,7 +31,7 @@ class CShootingRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooException
      * @throws \bamboo\core\exceptions\BambooInvoiceException
      */
-    public function createShooting($productsIds, $friendDdtNumber, $note, $shopId, $pieces){
+    public function createShooting($productsIds, $friendDdtNumber, $note = null, $shopId, $pieces){
 
         /** @var CDocumentRepo $documentRepo */
         $documentRepo = \Monkey::app()->repoFactory->create('Document');
