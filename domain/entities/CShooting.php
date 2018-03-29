@@ -23,6 +23,9 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  */
 class CShooting extends AEntity
 {
+
+    const PREFIX_ON_DUPLICATE_PRODUCT = 000;
+
     protected $entityTable = 'Shooting';
     protected $primaryKeys = ['id'];
 }

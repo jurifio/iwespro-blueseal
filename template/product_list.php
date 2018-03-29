@@ -211,8 +211,13 @@
         <bs-toolbar-button
                 data-remote="bs.product.marketplace.publish"
         ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Shooting">
         <bs-toolbar-button
                 data-remote="bs.product.shooting.manage"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.force.shooting"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Attributi Prodotti">

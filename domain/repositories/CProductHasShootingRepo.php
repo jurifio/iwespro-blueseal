@@ -51,14 +51,15 @@ class CProductHasShootingRepo extends ARepo
                 continue;
             }
 
-            // Get last shooting product  ----------------------
+
 
             /** @var CObjectCollection $shootings */
             $shootings = $this->findBy(['shootingId'=>$shootingId]);
 
+            /*
             if(!$shootings->isEmpty()){
                 /** @var CShooting $shooting */
-                foreach ($shootings as $shooting){
+                /*foreach ($shootings as $shooting){
                     if($z == 0) {
                         $lastShooting = $shooting;
                         $z++;
@@ -71,7 +72,7 @@ class CProductHasShootingRepo extends ARepo
                         $z++;
                     }
                 }
-            }
+            }*/
 
             //-------------------------------------------
 
@@ -80,7 +81,7 @@ class CProductHasShootingRepo extends ARepo
             $sps->productId = $productId;
             $sps->productVariantId = $productVariantId;
             $sps->shootingId = $shootingId;
-            $sps->progressiveLineNumber = ($shootings->isEmpty() ? 1 : $lastShooting->progressiveLineNumber + 1);
+            $sps->progressiveLineNumber = ($shootings->isEmpty() ? 1 : $this->getLastProgressiveNumber($shootingId, true));
             $sps->smartInsert();
 
             $info[] = $this->getProductDetails($sps);
@@ -111,5 +112,29 @@ class CProductHasShootingRepo extends ARepo
         $info[] = $phs->progressiveLineNumber;
 
         return $info;
+    }
+
+    public function forceInsertProduct(CProductHasShooting $productHasShooting){
+
+        $newPhs = $this->getEmptyEntity();
+        $newPhs->productId = $productHasShooting->productId;
+        $newPhs->productVariantId = $productHasShooting->productVariantId;
+        $newPhs->shootingId = $productHasShooting->shootingId;
+        $newPhs->progressiveLineNumber = $this->getLastProgressiveNumber($productHasShooting->shootingId, true);
+        $newPhs->smartInsert();
+
+        return true;
+    }
+
+    public function getLastProgressiveNumber($shootingId, $increment = false){
+
+        $lpn = \Monkey::app()->dbAdapter->query("SELECT max(ps.progressiveLineNumber) as max
+                                                        FROM ProductHasShooting ps
+                                                        WHERE shootingId = ?", [$shootingId])->fetch();
+
+        $res = ($increment ? $lpn["max"] + 1 : $lpn["max"]);
+
+        return $res;
+
     }
 }

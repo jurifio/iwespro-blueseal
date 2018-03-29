@@ -57,10 +57,10 @@ class CShootingDetailsListAjaxController extends AAjaxController
                     JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
                     ON (shophasprod.productId,shophasprod.productVariantId,shophasprod.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
                 WHERE s.id = $shootingId
-                GROUP BY phs.productId, phs.productVariantId
+                GROUP BY phs.productId, phs.productVariantId, phs.progressiveLineNumber
                ";
 
-        $datatable = new CDataTables($sql, ['productId','productVariantId'], $_GET, true);
+        $datatable = new CDataTables($sql, ['productId','productVariantId', 'progressiveLineNumber'], $_GET, true);
 
         $datatable->doAllTheThings(false);
 
@@ -73,7 +73,7 @@ class CShootingDetailsListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             /** @var CProductHasShooting $phs */
-            $phs = $phsRepo->findOneBy(['productId'=>$row["productId"], 'productVariantId'=>$row["productVariantId"], 'shootingId'=>$shootingId]);
+            $phs = $phsRepo->findOneBy(['productId'=>$row["productId"], 'productVariantId'=>$row["productVariantId"], 'shootingId'=>$shootingId, 'progressiveLineNumber'=>$row["progressiveLineNumber"]]);
             $row["productId"] = $phs->productId;
             $row["productVariantId"] = $phs->productVariantId;
             $row["progressiveLineNumber"] = $phs->progressiveLineNumber;
