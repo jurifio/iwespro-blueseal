@@ -32,23 +32,28 @@ class CShootingListAjaxController extends AAjaxController
     {
         
 
-        $sql = "SELECT s.id,
-                        s.date,
-                        s.friendDdt,
-                        s.pickyDdt,
-                        s.note,
-                        s.phase,
-                        s.shopId,
-                        s.pieces,
-                        shp.name as shopName,
-                        count(phs.shootingId) as nProduct
-               FROM Shooting s
-               JOIN ProductHasShooting phs ON s.id = phs.shootingId
-               JOIN Shop shp ON s.shopId = shp.id
-               GROUP BY s.id
+        $sql = "SELECT
+                  s.id as idShooting,
+                  s.date,
+                  s.friendDdt as id,
+                  d1.number as ddtF,
+                  s.pickyDdt,
+                  d2.number as ddtP,
+                  s.note,
+                  s.phase,
+                  s.shopId,
+                  s.pieces,
+                  shp.name as shopName,
+                  count(phs.shootingId) as nProduct
+                FROM Shooting s
+                  JOIN ProductHasShooting phs ON s.id = phs.shootingId
+                  JOIN Shop shp ON s.shopId = shp.id
+                  LEFT JOIN Document d1 ON s.friendDdt = d1.id
+                  LEFT JOIN Document d2 ON s.pickyDdt = d2.id
+                GROUP BY s.id
                ";
 
-        $datatable = new CDataTables($sql, ['id'], $_GET, true);
+        $datatable = new CDataTables($sql, ['idShooting'], $_GET, true);
 
         $datatable->addCondition('shopId', \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
@@ -66,12 +71,13 @@ class CShootingListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             /** @var CShooting $shooting */
-            $shooting = $sRepo->findOneBy(['id'=>$row["id"]]);
+            $shooting = $sRepo->findOneBy(['id'=>$row["idShooting"]]);
+            $row["id"] = $shooting->friendDdt;
             $row["row_id"] = $shooting->id;
-            $row["id"] = '<a href="'.$url.$shooting->id.'" target="_blank">'.$shooting->id.'</a>';
+            $row["idShooting"] = '<a href="'.$url.$shooting->id.'" target="_blank">'.$shooting->id.'</a>';
             $row["date"] = $shooting->date;
-            $row["friendDdt"] = (is_null($shooting->friendDdt) ? "---" : $dRepo->findShootingFriendDdt($shooting));
-            $row["pickyDdt"] = (is_null($shooting->pickyDdt) ? "---" : $dRepo->findShootingPickyDdt($shooting));
+            $row["ddtF"] = (is_null($shooting->friendDdt) ? "---" : $dRepo->findShootingFriendDdt($shooting));
+            $row["ddtP"] = (is_null($shooting->pickyDdt) ? "---" : $dRepo->findShootingPickyDdt($shooting));
             $row["note"] = $shooting->note;
             $row["phase"] = $shooting->phase;
             $row["pieces"] = (is_null($shooting->pieces) ? "---" : $shooting->pieces);

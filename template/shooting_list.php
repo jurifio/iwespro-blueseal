@@ -25,16 +25,16 @@
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+                                <th data-slug="idShooting"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
                                 <th data-slug="date"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data</th>
-                                <th data-slug="friendDdt"
+                                <th data-slug="ddtF"
                                     data-searchable="true"
                                     data-orderable="true" class="center">DDT Friend</th>
-                                <th data-slug="pickyDdt"
+                                <th data-slug="ddtP"
                                     data-searchable="true"
                                     data-orderable="true" class="center">DDT Picky</th>
                                 <th data-slug="nProduct"
@@ -67,12 +67,15 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <!--
+
     <bs-toolbar-group data-group-label="Stampa DDT (Friend)">
         <bs-toolbar-button
                 data-remote="bs.product.create.ddt"
         ></bs-toolbar-button>
-    </bs-toolbar-group> -->
+        <bs-toolbar-button
+                data-remote="bs.friend.order.invoice.download"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

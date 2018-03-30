@@ -7,6 +7,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CDocument;
+use bamboo\domain\entities\CInvoiceBin;
 use bamboo\domain\entities\CInvoiceLine;
 use bamboo\domain\entities\CInvoiceNumber;
 use bamboo\domain\entities\CInvoiceSectional;
@@ -1008,5 +1009,37 @@ class CDocumentRepo extends ARepo
         }
 
         return $invoiceId;
+    }
+
+
+    /**
+     * @param $invoiceId
+     * @param $fileName
+     * @param $bin
+     * @return bool
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function insertInvoiceBinWithRowFile($invoiceId, $fileName, $bin){
+        /** @var ARepo $invoiceBin */
+        $invoiceBin = \Monkey::app()->repoFactory->create('InvoiceBin');
+
+        /** @var CInvoiceBin $ib */
+        $iB = $invoiceBin->findOneBy(['invoiceId' =>$invoiceId]);
+
+        if(is_null($iB)){
+            $iB = $invoiceBin->getEmptyEntity();
+            $iB->invoiceId = $invoiceId;
+            $iB->fileName = $fileName;
+            $iB->bin = $bin;
+            $iB->smartInsert();
+        } else {
+            $iB->bin = $bin;
+            $iB->update();
+        }
+
+        return true;
+
     }
 }

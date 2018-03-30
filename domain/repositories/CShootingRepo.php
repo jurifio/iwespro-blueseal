@@ -109,4 +109,27 @@ class CShootingRepo extends ARepo
 
         return "Hai inserito correttamente i prodotti nello shooting con codice: $shooting->id".$table;
     }
+
+    /**
+     * @param $shootingId
+     * @param $pieces
+     * @return bool
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function updatePieces($shootingId, $pieces){
+
+        /** @var CShooting $shooting */
+        $shooting = $this->findOneBy(['id'=>$shootingId]);
+
+        if($shooting->pieces == $pieces){
+            return;
+        }
+
+        $shooting->pieces = $pieces;
+        $shooting->update();
+
+        return true;
+    }
 }
