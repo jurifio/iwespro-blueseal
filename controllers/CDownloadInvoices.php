@@ -34,6 +34,8 @@ class CDownloadInvoices extends ARestrictedAccessRootController
             } elseif ($i->invoiceBin) {
                 $download = new CDownloadFileFromDb(ucfirst('InvoiceBin'), 'invoiceId', $filters['id']);
                 $ret = $download->getFile();
+            } else if (!$i->invoiceBin){
+                $ret = "Non è associato nessun contenuto alla fattura con numero:".$i->number;
             }
             echo $ret;
         } catch (BambooRoutingException $e) {
