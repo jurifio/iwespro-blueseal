@@ -25,17 +25,17 @@ class CDownloadInvoices extends ARestrictedAccessRootController
         $i = \Monkey::app()->repoFactory->create('Document')->findOne([$filters['id']]);
         try {
             $user = \Monkey::app()->getUser();
-
-            if(!$user->hasPermission("worker")){
+            if(!$user->hasPermission("shooting")) {
                 if (!$user->hasShop($i->shopAddressBook->shop->id)) throw new BambooRoutingException('Not Authorized');
             }
-
             if (!$i) throw new BambooRoutingException('File Not Found');
             if ($i->invoiceType->printTemplateName) {
                 $ret = $this->printOutInvoice($i);
             } elseif ($i->invoiceBin) {
                 $download = new CDownloadFileFromDb(ucfirst('InvoiceBin'), 'invoiceId', $filters['id']);
                 $ret = $download->getFile();
+            } else if (!$i->invoiceBin){
+                $ret = "Non è associato nessun contenuto alla fattura con numero:".$i->number;
             }
             echo $ret;
         } catch (BambooRoutingException $e) {

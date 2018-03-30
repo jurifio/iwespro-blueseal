@@ -5,14 +5,17 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CInvoiceType;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
+use bamboo\domain\entities\CSectional;
 use bamboo\domain\entities\CShooting;
 use bamboo\domain\entities\CShop;
 use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\domain\repositories\CProductHasShootingRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use bamboo\domain\repositories\CProductSizeRepo;
+use bamboo\domain\repositories\CSectionalRepo;
 use bamboo\domain\repositories\CShootingRepo;
 use bamboo\domain\repositories\CShopRepo;
 
@@ -41,15 +44,20 @@ class CProductShootingAjaxController extends AAjaxController
     {
         $res = "";
         $data = \Monkey::app()->router->request()->getRequestData();
-
+        $friend = $data["friend"];
         $friendDdt = $data["friendDdt"];
-        $note = $data["note"];
         $productsIds = $data["products"];
         $shopId = $data["friendId"];
         $pieces = $data["pieces"];
 
+        if ($friend == 0) {
+            $note = $data["note"];
+        } else {
+            $note = "DDT inserito da friend";
+        }
+
         if(empty($friendDdt)){
-            $res = "Devi inserire il ddt del friend";
+            $res = "Devi inserire il DDT";
             return $res;
         }
 
@@ -103,7 +111,11 @@ class CProductShootingAjaxController extends AAjaxController
                     }
                 }
 
+                /** @var CSectionalRepo $secRepo */
+                $secRepo = \Monkey::app()->repoFactory->create('Sectional');
 
+
+                $res["-nextDdt"] = $secRepo->calculateNewSectionalCodeFromShop($uShops, CInvoiceType::DDT_SHOOTING);
                 $res["-lastDdt"] = $dRepo->findShootingFriendDdt($lastShooting);
                 $res["-pieces"] = $lastShooting->pieces;
             }

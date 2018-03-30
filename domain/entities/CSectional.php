@@ -17,6 +17,9 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @date 16/03/2018
  * @since 1.0
+ *
+ * @property CInvoiceType $invoiceType
+ *
  */
 class CSectional extends AEntity
 {

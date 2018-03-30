@@ -61,4 +61,59 @@ class CSectionalRepo extends ARepo
 
         return $newCode;
     }
+
+    /**
+     * @param $shopId
+     * @param $typeId
+     * @return string
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function createNewSectionalCodeFromShop($shopId, $typeId){
+
+        /** @var CSectional $sectional */
+        $sectional = $this->findOneBy(["shopId"=>$shopId, "typeId"=>$typeId]);
+
+        if(is_null($sectional)){
+            return true;
+        }
+
+        if(is_null($sectional->last)){
+            $newNumber = $sectional->num;
+            $sectional->last = $newNumber;
+        } else {
+            $newNumber = $sectional->last + 1;
+            $sectional->last = $newNumber;
+        }
+
+        $sectional->update();
+
+        $newCode = $shopId.'/'.$newNumber.'/'.$sectional->code.'/'.$typeId;
+
+        return $newCode;
+    }
+
+
+    public function calculateNewSectionalCodeFromShop($shopId, $typeId){
+
+        /** @var CSectional $sectional */
+        $sectional = $this->findOneBy(["shopId"=>$shopId, "typeId"=>$typeId]);
+
+        if(is_null($sectional)){
+            return true;
+        }
+
+        if(is_null($sectional->last)){
+            $newNumber = $sectional->num;
+        } else {
+            $newNumber = $sectional->last + 1;
+        }
+
+        $newCode = $sectional->shopId.'/'.$newNumber.'/'.$sectional->code.'/'.$sectional->typeId;
+
+        return $newCode;
+    }
 }
+
+

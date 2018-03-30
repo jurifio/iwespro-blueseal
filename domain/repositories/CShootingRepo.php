@@ -31,7 +31,7 @@ class CShootingRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooException
      * @throws \bamboo\core\exceptions\BambooInvoiceException
      */
-    public function createShooting($productsIds, $friendDdtNumber, $note, $shopId, $pieces){
+    public function createShooting($productsIds, $friendDdtNumber, $note = null, $shopId, $pieces){
 
         /** @var CDocumentRepo $documentRepo */
         $documentRepo = \Monkey::app()->repoFactory->create('Document');
@@ -62,13 +62,14 @@ class CShootingRepo extends ARepo
 
 
         if(empty($association["info"]) && !empty($association["existent"])){
-            return "Shooting: ".$shooting->id.':<br />Prodotti esistenti:<br />'.implode(',<br /> ', $association["existent"]);
+            return "<div style='background-color: red; color: white'>Shooting ".$shooting->id.':<br />Prodotti esistenti:<br />'.implode(' | ', $association["existent"]).'</div>';
+
         } else if (empty($association["existent"]) && !empty($association["info"])){
             $res =  $this->fillProductTableInfo($shooting, $association["info"]);
             return $res;
         } else if(!empty($association["existent"]) && !empty($association["info"])){
 
-            $res1 = "<div style='border: 1px solid #000'>Shooting: ".$shooting->id.':<br />Prodotti esistenti:<br />'.implode(', ', $association["existent"]).'</div>';
+            $res1 = "<div style='background-color: red; color: white'>Shooting ".$shooting->id.':<br />Prodotti esistenti:<br />'.implode(' | ', $association["existent"]).'</div>';
             $res2 = $this->fillProductTableInfo($shooting, $association["info"]);
 
             return $res1.'<br />'.$res2;
@@ -100,12 +101,35 @@ class CShootingRepo extends ARepo
                     <td>$singleProductInfo[3]</td>
                   </tr>
                 </table>
-                <strong>Inserisci il codice: $singleProductInfo[4] nel prodotto $singleProductInfo[0]</strong>
+                <p style='font-size: 14px'>Inserisci il codice: <strong>$singleProductInfo[4]</strong></p>
                 </div>
                 ";
 
         }
 
         return "Hai inserito correttamente i prodotti nello shooting con codice: $shooting->id".$table;
+    }
+
+    /**
+     * @param $shootingId
+     * @param $pieces
+     * @return bool
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function updatePieces($shootingId, $pieces){
+
+        /** @var CShooting $shooting */
+        $shooting = $this->findOneBy(['id'=>$shootingId]);
+
+        if($shooting->pieces == $pieces){
+            return;
+        }
+
+        $shooting->pieces = $pieces;
+        $shooting->update();
+
+        return true;
     }
 }
