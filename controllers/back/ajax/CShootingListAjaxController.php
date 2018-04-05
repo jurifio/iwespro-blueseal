@@ -40,14 +40,15 @@ class CShootingListAjaxController extends AAjaxController
                   s.pickyDdt,
                   d2.number as ddtP,
                   s.note,
-                  s.phase,
-                  s.shopId,
+                  sb.shopId,
                   s.pieces,
                   shp.name as shopName,
-                  count(phs.shootingId) as nProduct
+                  count(phs.shootingId) as nProduct,
+                  s.printed
                 FROM Shooting s
                   JOIN ProductHasShooting phs ON s.id = phs.shootingId
-                  JOIN Shop shp ON s.shopId = shp.id
+                  JOIN ShootingBooking sb ON s.id = sb.shootingId
+                  JOIN Shop shp ON sb.shopId = shp.id
                   LEFT JOIN Document d1 ON s.friendDdt = d1.id
                   LEFT JOIN Document d2 ON s.pickyDdt = d2.id
                 GROUP BY s.id
@@ -79,10 +80,10 @@ class CShootingListAjaxController extends AAjaxController
             $row["ddtF"] = (is_null($shooting->friendDdt) ? "---" : $dRepo->findShootingFriendDdt($shooting));
             $row["ddtP"] = (is_null($shooting->pickyDdt) ? "---" : $dRepo->findShootingPickyDdt($shooting));
             $row["note"] = $shooting->note;
-            $row["phase"] = $shooting->phase;
             $row["pieces"] = (is_null($shooting->pieces) ? "---" : $shooting->pieces);
             $row["nProduct"] = $shooting->product->count();
-            $row["shopName"] = $shooting->shop->name;
+            $row["shopName"] = $shooting->shootingBooking->shop->name;
+            $row["printed"] = ($shooting->printed == 0 ?  "Mai stampato" : "Già stampato" );
 
             $datatable->setResponseDataSetRow($key,$row);
         }

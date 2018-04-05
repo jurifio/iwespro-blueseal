@@ -157,6 +157,9 @@
             data-remote="bs.product.details.new"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.product.booking.shooting"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.product.shooting.friend.add"
         ></bs-toolbar-button>
     </bs-toolbar-group>

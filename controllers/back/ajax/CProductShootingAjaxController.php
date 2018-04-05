@@ -10,8 +10,11 @@ use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CSectional;
 use bamboo\domain\entities\CShooting;
+use bamboo\domain\entities\CShootingBooking;
 use bamboo\domain\entities\CShop;
+use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CDocumentRepo;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\CProductHasShootingRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use bamboo\domain\repositories\CProductSizeRepo;
@@ -47,8 +50,10 @@ class CProductShootingAjaxController extends AAjaxController
         $friend = $data["friend"];
         $friendDdt = $data["friendDdt"];
         $productsIds = $data["products"];
-        $shopId = $data["friendId"];
+       // $shopId = $data["friendId"];
         $pieces = $data["pieces"];
+        $booking = $data["booking"];
+
 
         if ($friend == 0) {
             $note = $data["note"];
@@ -59,14 +64,19 @@ class CProductShootingAjaxController extends AAjaxController
         if(empty($friendDdt)){
             $res = "Devi inserire il DDT";
             return $res;
+        } else if(empty($booking)){
+            $res = "Devi selezionare una prenotazione";
+            return $res;
         }
 
         //creo shooting
         /** @var CShootingRepo $shootingRepo */
         $shootingRepo = \Monkey::app()->repoFactory->create('Shooting');
 
-        $res = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $shopId, $pieces);
+        /** @var CShootingBooking $sb */
+        $sb = \Monkey::app()->repoFactory->create('ShootingBooking')->findOneBy(['id'=>$booking]);
 
+        $res = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $sb->shopId, $pieces, $booking);
 
 
         return $res;
@@ -75,69 +85,77 @@ class CProductShootingAjaxController extends AAjaxController
     public function get(){
         $res = [];
 
-
         $shops = \Monkey::app()->router->request()->getRequestData('shop');
+        $step = \Monkey::app()->router->request()->getRequestData('step');
+        $selectedBooking = \Monkey::app()->router->request()->getRequestData('selectedBooking');
 
-        //elenco array
-        $result = [];
-        foreach ($shops as $subarray) {
-            $result = array_merge($result, $subarray);
-        }
+        if($step == 1){
+            //trovo gli shop autorizzati per l'utente
+            /** @var CUser $user */
+            $user = \Monkey::app()->getUser();
 
-        $uShops = array_unique($result);
+            $shopsAuth = $user->getAuthorizedShops();
 
-        if(count($uShops) == 1){
+            $allShops = [];
+            /** @var CShop $shp */
+            foreach ($shopsAuth as $shp){
+                $allShops[] = $shp->id;
+            }
 
-            /** @var CDocumentRepo $dRepo */
-            $dRepo = \Monkey::app()->repoFactory->create('Document');
+            $booked = [];
+            //trovo tutte le prenotazioni per gli shop gestiti dall'utente y
+            foreach ($allShops as $shopId){
 
-            /** @var CObjectCollection $shootings */
-            $shootings = \Monkey::app()->repoFactory->create('Shooting')->findBy(['shopId'=>$uShops]);
+                /** @var CObjectCollection $sbS */
+                $sbS = \Monkey::app()->repoFactory->create('ShootingBooking')->findBy(['shopId'=>$shopId]);
+                $booked[] = $sbS;
+            }
 
-            if(!$shootings->isEmpty()){
-                $z = 0;
-                /** @var CShooting $shooting */
-                foreach ($shootings as $shooting){
-                    if($z == 0) {
-                        $lastShooting = $shooting;
-                        $z++;
-                        continue;
-                    }
-                    if($shooting->date > $lastShooting->date){
-                        $lastShooting = $shooting;
-                        $z++;
-                    } else {
-                        $z++;
-                    }
+            $allowedBooking = [];
+            $k = 0;
+            /** @var CObjectCollection $singleBooking */
+            //ciclo tutte le prenotazioni disponibili e elimino le collezioni vuote
+            foreach ($booked as $singleBooking){
+                if($singleBooking->isEmpty()) continue;
+
+                /** @var CShootingBooking $bookingObj */
+                foreach ($singleBooking as $bookingObj){
+                    if($bookingObj->status == "o" || $bookingObj->status == "c") continue;
+
+                    $allowedBooking[$k]["id"] = $bookingObj->id;
+                    $allowedBooking[$k]["date"] = $bookingObj->date;
+                    $allowedBooking[$k]["shop"] = $bookingObj->shop->name;
+                    $k++;
                 }
 
-                /** @var CSectionalRepo $secRepo */
-                $secRepo = \Monkey::app()->repoFactory->create('Sectional');
-
-
-                $res["-nextDdt"] = $secRepo->calculateNewSectionalCodeFromShop($uShops, CInvoiceType::DDT_SHOOTING);
-                $res["-lastDdt"] = $dRepo->findShootingFriendDdt($lastShooting);
-                $res["-pieces"] = $lastShooting->pieces;
             }
+
+            $res["-booked"] = $allowedBooking;
+            return json_encode($res);
         }
 
+        if($step == 2){
 
+            /** @var CShootingBooking $bs */
+            $bs = \Monkey::app()->repoFactory->create('ShootingBooking')->findOneBy(['id'=>$selectedBooking]);
 
-        /** @var CShopRepo $shopRepo */
-        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
+            /** @var CShooting $s */
+            $s = $bs->shooting;
 
-        $i = 0;
+            if(!is_null($s)) {
+                /** @var CDocumentRepo $documentRepo */
+                $documentRepo = \Monkey::app()->repoFactory->create('Document');
+                $res["-pieces"] = $s->pieces;
+                $res["-lastDdt"] = $documentRepo->findShootingFriendDdt($s);
+            }
 
-        foreach ($uShops as $shopId){
-            /** @var CShop $shop */
-            $shop = $shopRepo->findOneBy(['id'=>$shopId]);
+            /** @var CSectionalRepo $secRepo */
+            $secRepo = \Monkey::app()->repoFactory->create('Sectional');
+            $res["-nextDdt"] = $secRepo->calculateNewSectionalCodeFromShop($bs->shopId, CInvoiceType::DDT_SHOOTING);
 
-            $res[$i]["id"] = $shop->id;
-            $res[$i]["name"] = $shop->name;
-            $i++;
+            return json_encode($res);
+
         }
-
-        return json_encode($res);
 
     }
 

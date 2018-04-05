@@ -4,6 +4,7 @@ namespace bamboo\domain\repositories;
 
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\domain\entities\CShooting;
+use bamboo\domain\entities\CShootingBooking;
 
 /**
  * Class CShootingRepo
@@ -31,7 +32,7 @@ class CShootingRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooException
      * @throws \bamboo\core\exceptions\BambooInvoiceException
      */
-    public function createShooting($productsIds, $friendDdtNumber, $note = null, $shopId, $pieces){
+    public function createShooting($productsIds, $friendDdtNumber, $note = null, $shopId, $pieces, $booking){
 
         /** @var CDocumentRepo $documentRepo */
         $documentRepo = \Monkey::app()->repoFactory->create('Document');
@@ -44,15 +45,20 @@ class CShootingRepo extends ARepo
             $shooting = $this->getEmptyEntity();
             $shooting->friendDdt = $documentId;
             $shooting->note = $note;
-            $shooting->phase = "accepted";
-            $shooting->shopId = $shopId;
             $shooting->year = $dateTime->format('Y');
             $shooting->pieces = $pieces;
             $shooting->smartInsert();
         } else if(is_object($documentId)) {
             /** @var CShooting $shooting */
-            $shooting = $this->findOneBy(['friendDdt'=>$documentId->id, 'shopId'=>$documentId->shopRecipientId, 'year'=>$documentId->year]);
+            $shooting = $this->findOneBy(['friendDdt'=>$documentId->id, 'year'=>$documentId->year]);
         }
+
+
+        //completo la tabella shootingbooking
+        /** @var CShootingBooking $sb */
+        $sb = \Monkey::app()->repoFactory->create('ShootingBooking')->findOneBy(['id'=>$booking]);
+        $sb->shootingId = $shooting->id;
+        $sb->update();
 
 
         /** @var CProductHasShootingRepo $pHsRepo */

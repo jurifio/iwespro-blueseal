@@ -1,0 +1,42 @@
+{
+    "entity": {
+        "name": "ShootingBooking",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "shop",
+                "entity" : "Shop",
+                "parentKeys": ["shopId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },{
+                "name" : "shooting",
+                "entity" : "Shooting",
+                "parentKeys": ["shootingId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },{
+                "name" : "shootingProductType",
+                "entity" : "ShootingProductType",
+                "parentKeys": [
+                    "id"
+                ],
+                "childKeys" : ["id"],
+                "joinOn" :
+                {
+                    "table": "ShootingBookingHasProductType",
+                    "childKeys": ["shootingProductTypeId"],
+                    "parentKeys" : ["shootingBookingId"]
+                },
+                "type" : "ManyToMany"
+            },{
+                "name" : "shootingBookingHasProductType",
+                "entity" : "ShootingBookingHasProductType",
+                "parentKeys": ["id"],
+                "childKeys" : ["shootingBookingId"],
+                "type" : "OneToMany"
+            }
+        ]
+    }
+}

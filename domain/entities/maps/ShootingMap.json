@@ -19,10 +19,10 @@
                 },
                 "type" : "ManyToMany"
             },{
-                "name": "shop",
-                "entity": "Shop",
-                "parentKeys": ["shopId"],
-                "childKeys": ["id"],
+                "name": "shootingBooking",
+                "entity": "ShootingBooking",
+                "parentKeys": ["id"],
+                "childKeys": ["shootingId"],
                 "type": "OneToOne"
             }
         ]

@@ -13,7 +13,6 @@ window.buttonSetup = {
 $(document).on('bs-product-shooting-manage', function (e, element, button) {
 
     let products = [];
-    let shop = [];
     let getVarsArray = [];
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 
@@ -30,36 +29,49 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
     let i = 0;
     $.each(selectedRows, function (k, v) {
         products.push(v.DT_RowId);
-        shop.push(v.row_shop);
         getVarsArray[i] = 'id[]='+v.DT_RowId;
         i++;
     });
 
 
-    //Find only shops for this product
-    let partialRes = [];
-    let resTotal = [];
-    $.each(shop, function (k,v) {
-        //se cè la pipe slitta
-        if (v.indexOf("|") >= 0){
-            //splitta la pipe e cicla array
-            partialRes.push(v.split("|"));
-
-            $.each(partialRes[0], function (k,v) {
-                //splitta il singolo shop
-                resTotal.push(v.split("-",1));
-            });
-        } else {
-            resTotal.push(v.split("-",1))
-        }
-    });
 
     let bsModal = new $.bsModal('Aggiungi prodotti in shooting', {
-        body: '<p>Aggiugi prodotti in shooting</p>' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="selectFriend">Seleziona il friend</label>' +
-        '<select id="selectFriend" name="selectFriend"></select>' +
-        '</div>' +
+        body: '<div class="form-group form-group-default required">' +
+        '<label for="booking">Seleziona la prenotazione</label>' +
+        '<select id="booking" name="booking">' +
+        '<option disabled selected value>Seleziona un\'opzione</option>' +
+        '</select>' +
+        '</div>' + '<div id="otherOptions"></div>'
+    });
+
+
+    const dataShop = {
+        step: 1
+    };
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/ProductShootingAjaxController',
+        data: dataShop
+    }).done(function (res) {
+
+        let booking = JSON.parse(res);
+
+        $.each(booking, function(k, v) {
+                if(k === "-booked"){
+                    $.each(this, function(k, v) {
+                        $('#booking') .append($("<option/>") .val(v.id) .text(v.id + ' | ' + v.date + ' | ' + v.shop))
+                    });
+                }
+        });
+    });
+
+    $('#booking').change(function () {
+
+        let selectedBook = $('#booking').val();
+
+        $('#booking').attr('disabled', 'disabled');
+
+        $('#otherOptions').append('<p>Aggiugi prodotti in shooting</p>' +
         '<div class="form-group form-group-default required">' +
         '<label for="friendDdt">DDT</label>' +
         '<input autocomplete="on" type="text" id="friendDdt" ' +
@@ -73,12 +85,11 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         '<label for="pieces">Numero di colli</label>' +
         '<input autocomplete="off" type="text" id="pieces" ' +
         'placeholder="Numero di colli" class="form-control" name="pieces" required="required">' +
-        '</div>'
-    });
-
+        '</div>');
 
     const dataShop = {
-        shop: resTotal,
+            step: 2,
+            selectedBooking: selectedBook
     };
     $.ajax({
         method: 'GET',
@@ -86,31 +97,32 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         data: dataShop
     }).done(function (res) {
 
-        let shops = JSON.parse(res);
+            let last = JSON.parse(res);
 
-        $.each(shops, function(k, v) {
-            let i = k.toString();
-            if(i.indexOf("-") < 0){
-                $('#selectFriend') .append($("<option/>") .val(v.id) .text(v.name))
-            } else {
+            $.each(last, function(k, v) {
                 if(k === "-lastDdt"){
                     $('#friendDdt').val(v);
+                    $("#friendDdt").prop("disabled", true);
                 } else if(k === "-pieces"){
                     $('#pieces').val(v);
-                }
+               }
+                    });
+        });
 
-            }
+        $('#copyCode').on('click', function () {
+            $('#friendDdt').val($('#nextDdt').text());
         });
     });
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
         const data = {
-            friendId: $('#selectFriend').val(),
+            //friendId: $('#selectFriend').val(),
             friendDdt: $('#friendDdt').val(),
             note: $('#friendDdtNote').val(),
             products: products,
             pieces: $('#pieces').val(),
+            booking: $('#booking').val(),
             friend: 0
         };
         $.ajax({

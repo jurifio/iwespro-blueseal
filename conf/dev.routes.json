@@ -2044,6 +2044,16 @@
                 "GET"
             ]
         },{
+            "pattern": "/blueseal/shooting/booking(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingBookingListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
             "pattern": "/blueseal/users/ruoli(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacRoleListController"

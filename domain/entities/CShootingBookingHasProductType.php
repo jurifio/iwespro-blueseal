@@ -2,11 +2,10 @@
 
 namespace bamboo\domain\entities;
 
-use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
 
 /**
- * Class CShooting
+ * Class CShootingBookingHasProductType
  * @package bamboo\domain\entities
  *
  * @author Iwes Team <it@iwes.it>
@@ -15,19 +14,15 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 23/03/2018
+ * @date 04/04/2018
  * @since 1.0
  *
- * @property CObjectCollection $product
- * @property CShootingBooking $shootingBooking
- *
+ * @property CShootingProductType $shootingProductType
  *
  */
-class CShooting extends AEntity
+class CShootingBookingHasProductType extends AEntity
 {
 
-    const PREFIX_ON_DUPLICATE_PRODUCT = 000;
-
-    protected $entityTable = 'Shooting';
-    protected $primaryKeys = ['id'];
+    protected $entityTable = 'ShootingBookingHasProductType';
+    protected $primaryKeys = ['shootingBookingId','shootingProductTypeId'];
 }

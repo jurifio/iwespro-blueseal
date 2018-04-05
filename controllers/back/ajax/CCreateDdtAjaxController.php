@@ -68,7 +68,7 @@ class CCreateDdtAjaxController extends AAjaxController
 
         //shop information
         /** @var CShop $shop */
-        $shop = $shooting->shop;
+        $shop = $shooting->shootingBooking->shop;
         $shopImageName = ($shop->name == "dalben" ? "dalben.png" : "logoiwes.jpg");
         $shopName = $shop->billingAddressBook->name;
         $shopAddress = $shop->billingAddressBook->address;

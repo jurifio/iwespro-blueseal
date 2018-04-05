@@ -18,40 +18,34 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="size_full_list"
-                               data-controller="ShootingListAjaxController"
+                               data-datatable-name="shooting_booking_list"
+                               data-controller="ShootingBookingListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
-                                <th data-slug="idShooting"
+                                <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
-                                <th data-slug="date"
+                                <th data-slug="creationDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data</th>
-                                <th data-slug="ddtF"
+                                    data-orderable="true" class="center">Data creazione</th>
+                                <th data-slug="bookingDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">DDT Friend</th>
-                                <th data-slug="ddtP"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">DDT Picky</th>
-                                <th data-slug="nProduct"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Numero prodotti</th>
-                                <th data-slug="note"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Note</th>
-                                <th data-slug="pieces"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Numero di colli</th>
+                                    data-orderable="true" class="center">Data prenotazione</th>
                                 <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop</th>
-                                <th data-slug="printed"
+                                <th data-slug="shootingId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Stampato</th>
+                                    data-orderable="true" class="center">Shooting</th>
+                                <th data-slug="status"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato</th>
+                                <th data-slug="uniqueQty"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Qty</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -68,12 +62,16 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
 
-    <bs-toolbar-group data-group-label="Stampa DDT (Friend)">
+    <bs-toolbar-group data-group-label="Gestisci prenotazione">
         <bs-toolbar-button
-                data-remote="bs.product.create.ddt"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.friend.ddt.invoice.download"
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="allShops"
+                data-event="bs-booking-accept"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Accetta la prenotazione"
+                data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

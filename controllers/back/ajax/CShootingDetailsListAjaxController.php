@@ -50,7 +50,8 @@ class CShootingDetailsListAjaxController extends AAjaxController
                   JOIN ProductSeason ps ON p.productSeasonId = ps.id
                   JOIN ProductBrand pb ON p.productBrandId = pb.id
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
-                  JOIN Shop sp ON s.shopId = sp.id
+                  JOIN ShootingBooking sb ON s.id = sb.shootingId
+                  JOIN Shop sp ON sb.shopId = sp.id
                   JOIN ShopHasProduct shophasprod
                     ON (p.id, p.productVariantId) = (shophasprod.productId, shophasprod.productVariantId)
                   LEFT JOIN (DirtyProduct dp
@@ -79,7 +80,7 @@ class CShootingDetailsListAjaxController extends AAjaxController
             $row["progressiveLineNumber"] = $phs->progressiveLineNumber;
             $row["creationDate"] = $phs->creationDate;
             $row["shootingId"] = $phs->shootingId;
-            $row["shopName"] = $shooting->shop->name;
+            $row["shopName"] = $shooting->shootingBooking->shop->name;
             $row["DT_RowId"] = $phs->productId.'-'.$phs->productVariantId;
             $row["season"] = $phs->product->productSeason->name.'-'.$phs->product->productSeason->year;
             $row["externalId"] = $phs->product->getShopExtenalIds(', ');

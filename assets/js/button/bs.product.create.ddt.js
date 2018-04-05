@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-qrcode",
+    icon:"fa-plus-square",
     permission:"/admin/product/list",
     event:"bs-create-ddt",
     class:"btn btn-default",
