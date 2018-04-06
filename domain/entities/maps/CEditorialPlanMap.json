@@ -17,7 +17,7 @@
                 "parentKeys": ["shopId"],
                 "childKeys" : ["id"],
                 "type" : "OneToOne"
-            },
+            }
         ]
     }
 }
