@@ -35,7 +35,7 @@ $(document).on('bs-product-booking-shooting', function (e, element, button) {
             let type = JSON.parse(res);
 
             $.each(type["tp"], function(k, v) {
-                $('<input />', { type: 'number', id: v.id, class: 'toGet' }).appendTo($("#typeCheck"));
+                $('<input />', { type: 'number', id: v.id, class: 'toGet', min: 1, step: 1 }).appendTo($("#typeCheck"));
                 $('<label />', { 'for': v.id, text: v.name }).appendTo($("#typeCheck"));
             });
 

@@ -98,6 +98,11 @@ class CShootingBookingAjaxController extends AAjaxController
         $cat = $data["cat"];
         $shop = $data["shop"];
 
+        if(empty($date)){
+            $res = "Non hai inserito nessuna data per la prenotazione";
+            return $res;
+        }
+
         /** @var CShootingBookingRepo $sbRepo */
         $sbRepo = \Monkey::app()->repoFactory->create('ShootingBooking');
 

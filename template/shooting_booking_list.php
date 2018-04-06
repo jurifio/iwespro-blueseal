@@ -73,6 +73,9 @@
                 data-title="Accetta la prenotazione"
                 data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.booking.shooting"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
