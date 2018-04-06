@@ -32,11 +32,11 @@ class CShootingRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooException
      * @throws \bamboo\core\exceptions\BambooInvoiceException
      */
-    public function createShooting($productsIds, $friendDdtNumber, $note = null, $shopId, $pieces, $booking){
+    public function createShooting($productsIds, $friendDdtNumber, $note = null, $shopId, $pieces, $booking, $sb){
 
         /** @var CDocumentRepo $documentRepo */
         $documentRepo = \Monkey::app()->repoFactory->create('Document');
-        $documentId = $documentRepo->createEmptyDdtDocument($shopId, $friendDdtNumber);
+        $documentId = $documentRepo->createEmptyDdtDocument($shopId, $friendDdtNumber, $sb);
 
         if(is_numeric($documentId)){
             $date = date("Y-m-d");

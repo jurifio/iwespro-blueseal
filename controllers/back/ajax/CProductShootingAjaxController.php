@@ -5,6 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CDocument;
 use bamboo\domain\entities\CInvoiceType;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
@@ -76,7 +77,7 @@ class CProductShootingAjaxController extends AAjaxController
         /** @var CShootingBooking $sb */
         $sb = \Monkey::app()->repoFactory->create('ShootingBooking')->findOneBy(['id'=>$booking]);
 
-        $res = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $sb->shopId, $pieces, $booking);
+        $res = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $sb->shop->billingAddressBook->id, $pieces, $booking, $sb);
 
 
         return $res;

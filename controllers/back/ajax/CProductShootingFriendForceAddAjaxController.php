@@ -76,7 +76,7 @@ class CProductShootingFriendForceAddAjaxController extends AAjaxController
         /** @var CShootingBooking $sb */
         $sb = \Monkey::app()->repoFactory->create('ShootingBooking')->findOneBy(['id'=>$booking]);
 
-        $res = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $sb->shopId, $pieces, $booking);
+        $res = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $sb->shop->billingAddressBook->id, $pieces, $booking, $sb);
 
         $shpname = $sb->shop->name;
 

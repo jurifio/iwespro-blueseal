@@ -994,7 +994,7 @@ class CDocumentRepo extends ARepo
      * @throws BambooException
      * @throws BambooInvoiceException
      */
-    public function createEmptyDdtDocument(int $shopId, string $friendDdtNumber){
+    public function createEmptyDdtDocument(int $shopId, string $friendDdtNumber, $sb){
 
         /** @var CUser $user */
         $user = \Monkey::app()->getUser();
@@ -1006,9 +1006,9 @@ class CDocumentRepo extends ARepo
         /** @var CSectionalRepo $sectionalR */
         $sectionalR = \Monkey::app()->repoFactory->create('Sectional');
 
-        $nextCode = $sectionalR->calculateNewSectionalCodeFromShop($shopId, CInvoiceType::DDT_SHOOTING);
+        $nextCode = $sectionalR->calculateNewSectionalCodeFromShop($sb->shopId, CInvoiceType::DDT_SHOOTING);
         if($friendDdtNumber == $nextCode){
-            $sectionalR->createNewSectionalCodeFromShop($shopId, CInvoiceType::DDT_SHOOTING);
+            $sectionalR->createNewSectionalCodeFromShop($sb->shopId, CInvoiceType::DDT_SHOOTING);
         }
 
         return $invoiceId;
