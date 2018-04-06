@@ -184,7 +184,8 @@ class CCreateDdtAjaxController extends AAjaxController
                              </span>
                              <span style="font-family:Helvetica,Arial,sans-serif;color:#000000; line-height:0.6;">
                                      <h4>IWES snc</h4>
-                                 <p>Via Cesare Pavese, 1 62100 Civitanova Marche (MC)</p>
+                                 <p>Via Cesare Pavese, 1</p>
+                                 <p>62100 Civitanova Marche (MC)</p>
                                  <p>Italia</p>
                              </span>
                              <span style="font-family:Helvetica,Arial,sans-serif;color:#000000; line-height:0.4; font-size: 14px;">
@@ -192,7 +193,8 @@ class CCreateDdtAjaxController extends AAjaxController
                              </span>
                              <span style="font-family:Helvetica,Arial,sans-serif;color:#000000; line-height:0.6;">
                                      <h4>IWES snc</h4>
-                                 <p>Via Cesare Pavese, 1 62100 Civitanova Marche (MC)</p>
+                                 <p>Via Cesare Pavese, 1</p>
+                                 <p>62100 Civitanova Marche (MC)</p>
                                  <p>Italia</p>
                              </span>
                     </td>
@@ -275,8 +277,8 @@ EOD;
         $pdf->SetFooterMargin(55);
         $pdf->writeHTML($tbl, true, false, false, false, '');
         //Close and output PDF document
-        \Monkey::app()->router->response()->setContentType('application/pdf');
-        ob_end_clean();
+        //\Monkey::app()->router->response()->setContentType('application/pdf');
+        //ob_end_clean();
         //$pdf->Output('spedizione.pdf', 'D');
 
         \Monkey::app()->router->response()->setContentType('application/pdf');
