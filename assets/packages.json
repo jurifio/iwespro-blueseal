@@ -16,7 +16,16 @@
             "jquery-ui.css": {
                 "path": "scheme://code.jquery.com/ui/1.11.4/themes/flick/",
                 "options": ["screen"]
+            },
+            "fullcalendar.min.css": {
+            "path": "scheme://localdomain/assets/css/",
+            "options": ["screen"]
+            },
+            "fullcalendar.print.min.css": {
+                "path": "scheme://localdomain/assets/css/",
+                "options": ["screen,print"]
             }
+
         },
         "ui": {
             "jquery.scrollbar.css": {
@@ -128,6 +137,18 @@
                 "options": ["defer"]
             },
             "blueseal.ui.js": {
+                "path": "scheme://localdomain/assets/js/",
+                "options": ["defer"]
+            },
+            "fullcalendar.min.js": {
+                "path": "scheme://localdomain/assets/js/",
+                "options": ["defer"]
+            },
+            "gcal.min.js": {
+                "path": "scheme://localdomain/assets/js/",
+                "options": ["defer"]
+            },
+            "moment.min.js": {
                 "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             }
