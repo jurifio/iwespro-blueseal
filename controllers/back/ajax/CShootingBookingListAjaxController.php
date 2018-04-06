@@ -45,7 +45,7 @@ class CShootingBookingListAjaxController extends AAjaxController
                   sb.status
                 FROM ShootingBooking sb
                   JOIN Shop s ON sb.shopId = s.id
-                  JOIN (
+                  LEFT JOIN (
                       SELECT group_concat(concat(spt.name, ' = ', sbhpt.qty)) uniqueQty, sbhpt.shootingBookingId
                         FROM ShootingBookingHasProductType sbhpt
                         JOIN ShootingProductType spt ON sbhpt.shootingProductTypeId = spt.id
