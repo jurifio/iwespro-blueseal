@@ -80,6 +80,14 @@
                                         data-searchable="true"
                                         data-orderable="true"
                                         data-default-order="desc" class="center dataFilterType">Data</th>
+                                    <th data-slug="shooting"
+                                        data-searchable="true"
+                                        data-orderable="false">Shooting
+                                    </th>
+                                    <th data-slug="doc_number"
+                                        data-searchable="true"
+                                        data-orderable="false">N. DDT
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>

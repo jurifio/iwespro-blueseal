@@ -4,6 +4,8 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CShooting;
+use bamboo\domain\repositories\CDocumentRepo;
 
 /**
  * Class CProductListAjaxController
@@ -41,7 +43,9 @@ class CProductSlimListAjaxController extends AAjaxController
                   `pss`.`name`                                         AS `status`,
                   shp.price                                            AS price,
                   shp.salePrice                                        AS salePrice,
-                  shp.value                                            AS value
+                  shp.value                                            AS value,
+                  concat(phs.shootingId)                               AS shooting,
+                  concat(doc.number)                                   AS doc_number
                 FROM `Product` `p`
                   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
                   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
@@ -49,6 +53,11 @@ class CProductSlimListAjaxController extends AAjaxController
                   JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
                   JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
                   JOIN `ProductSeason` `ps` ON `p`.`productSeasonId` = `ps`.`id`
+                  LEFT JOIN (
+                    ProductHasShooting phs 
+                      JOIN Shooting shoot ON phs.shootingId = shoot.id
+                        LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId
                 WHERE `pss`.`id` NOT IN (7, 8, 13)
                 GROUP BY p.id, p.productVariantId, s.id
                 ORDER BY `p`.`creationDate` DESC";
@@ -60,6 +69,9 @@ class CProductSlimListAjaxController extends AAjaxController
         $datatable->doAllTheThings();
         $okManage = $user->hasPermission('/admin/product/edit');
         $modifica = '/blueseal/friend/prodotti/modifica';
+
+        /** @var CDocumentRepo $docRepo */
+        $docRepo = \Monkey::app()->repoFactory->create('Document');
 
         $productRepo = \Monkey::app()->repoFactory->create('Product');
         foreach ($datatable->getResponseSetData() as $key => $row) {
@@ -142,6 +154,15 @@ class CProductSlimListAjaxController extends AAjaxController
 
             $row['status'] = $status;
             $row['creationDate'] = $val->creationDate;
+            $sids = "";
+            $ddtNumbers = "";
+            /** @var CShooting $singleShooting */
+            foreach ($val->shooting as $singleShooting){
+                $sids .= '<br />'.$singleShooting->id;
+                $ddtNumbers .= '<br />'.$docRepo->findShootingFriendDdt($singleShooting);
+            }
+            $row["shooting"] = $sids;
+            $row["doc_number"] = $ddtNumbers;
             $datatable->setResponseDataSetRow($key, $row);
         }
         return $datatable->responseOut();
