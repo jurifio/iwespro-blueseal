@@ -83,14 +83,14 @@
                 data-remote="bs.lists.create.editorialplan"
         ></bs-toolbar-button>
 
-       <!-- <bs-toolbar-button
+       <bs-toolbar-button
                 data-remote="bs.lists.modify.editorialplan"
 
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.lists.delete.editorialplan"
 
-        ></bs-toolbar-button>-->
+        ></bs-toolbar-button>
 
 
     </bs-toolbar-group>
