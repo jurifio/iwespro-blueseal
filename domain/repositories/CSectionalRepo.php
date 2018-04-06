@@ -89,7 +89,7 @@ class CSectionalRepo extends ARepo
 
         $sectional->update();
 
-        $newCode = $shopId.'/'.$newNumber.'/'.$sectional->code.'/'.$typeId;
+        $newCode = $newNumber.'/'.$sectional->code;
 
         return $newCode;
     }
@@ -110,7 +110,7 @@ class CSectionalRepo extends ARepo
             $newNumber = $sectional->last + 1;
         }
 
-        $newCode = $sectional->shopId.'/'.$newNumber.'/'.$sectional->code.'/'.$sectional->typeId;
+        $newCode = $newNumber.'/'.$sectional->code;
 
         return $newCode;
     }
