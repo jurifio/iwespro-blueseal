@@ -1,0 +1,23 @@
+{
+    "entity": {
+        "name": "EditorialPlanDetail",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "editorialPlan",
+                "entity" : "EditorialPlan",
+                "parentKeys": ["editorialPlanId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },
+            {
+                "name" : "editorialPlanSocial",
+                "entity" : "EditorialPlanSocial",
+                "parentKeys": ["editorialPlanId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            }
+        ]
+    }
+}
