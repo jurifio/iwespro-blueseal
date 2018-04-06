@@ -25,9 +25,9 @@ class CDownloadInvoices extends ARestrictedAccessRootController
         $i = \Monkey::app()->repoFactory->create('Document')->findOne([$filters['id']]);
         try {
             $user = \Monkey::app()->getUser();
-           // if(!$user->hasPermission("shooting")) {
+            if(!$user->hasPermission("shooting")) {
                 if (!$user->hasShop($i->shopAddressBook->shop->id)) throw new BambooRoutingException('Not Authorized');
-           // }
+            }
             if (!$i) throw new BambooRoutingException('File Not Found');
             if ($i->invoiceType->printTemplateName) {
                 $ret = $this->printOutInvoice($i);
