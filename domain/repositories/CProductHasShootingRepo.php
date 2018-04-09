@@ -24,7 +24,13 @@ use bamboo\domain\entities\CShooting;
 class CProductHasShootingRepo extends ARepo
 {
 
-    public function associateNewProductsToShooting($productsIds, $shootingId){
+    /**
+     * @param $productsIds
+     * @param $shootingId
+     * @param $productsInformation
+     * @return mixed
+     */
+    public function associateNewProductsToShooting($productsIds, $shootingId, $productsInformation){
 
         $z = 0;
         $lastShooting = null;
@@ -32,8 +38,29 @@ class CProductHasShootingRepo extends ARepo
         $infoWithExistentProduct = [];
         $info =[];
 
+        $splittedInfo = [];
+        $i = 0;
+        $z = 0;
+        foreach ($productsInformation as $val){
+
+            $splittedInfo[$i][] = $val;
+            $z++;
+            if($z % 3 == 0 && $z != 0){
+                $i++;
+            }
+        }
+
 
         foreach ($productsIds as $productsId){
+
+            foreach ($splittedInfo as $singleProductInfo){
+
+                if($singleProductInfo[0] == $productsId){
+                    $sizeToInsert = $singleProductInfo[1];
+                    $qtyToInsert = $singleProductInfo[2];
+                }
+
+            }
 
             $productId = explode('-',$productsId)[0];
             $productVariantId = explode('-',$productsId)[1];
@@ -53,34 +80,17 @@ class CProductHasShootingRepo extends ARepo
 
 
 
+
             /** @var CObjectCollection $shootings */
             $shootings = $this->findBy(['shootingId'=>$shootingId]);
-
-            /*
-            if(!$shootings->isEmpty()){
-                /** @var CShooting $shooting */
-                /*foreach ($shootings as $shooting){
-                    if($z == 0) {
-                        $lastShooting = $shooting;
-                        $z++;
-                        continue;
-                    }
-                    if($shooting->progressiveLineNumber > $lastShooting->progressiveLineNumber){
-                        $lastShooting = $shooting;
-                        $z++;
-                    } else {
-                        $z++;
-                    }
-                }
-            }*/
-
-            //-------------------------------------------
 
             /** @var CProductHasShooting $sps */
             $sps = $this->getEmptyEntity();
             $sps->productId = $productId;
             $sps->productVariantId = $productVariantId;
             $sps->shootingId = $shootingId;
+            $sps->size = $sizeToInsert;
+            $sps->qty = $qtyToInsert;
             $sps->progressiveLineNumber = ($shootings->isEmpty() ? 1 : $this->getLastProgressiveNumber($shootingId, true));
             $sps->smartInsert();
 
@@ -136,5 +146,12 @@ class CProductHasShootingRepo extends ARepo
 
         return $res;
 
+    }
+
+    public function array_unique_multidimensional($input)
+    {
+        $serialized = array_map('serialize', $input);
+        $unique = array_unique($serialized);
+        return array_intersect_key($input, $unique);
     }
 }

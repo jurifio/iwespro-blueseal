@@ -44,7 +44,9 @@ class CShootingListAjaxController extends AAjaxController
                   s.pieces,
                   shp.name as shopName,
                   count(phs.shootingId) as nProduct,
-                  s.printed
+                  s.printed,
+                  sb.id as shootingBookingId,
+                  sb.status
                 FROM Shooting s
                   JOIN ProductHasShooting phs ON s.id = phs.shootingId
                   JOIN ShootingBooking sb ON s.id = sb.shootingId
@@ -84,6 +86,17 @@ class CShootingListAjaxController extends AAjaxController
             $row["nProduct"] = $shooting->product->count();
             $row["shopName"] = $shooting->shootingBooking->shop->name;
             $row["printed"] = ($shooting->printed == 0 ?  "Mai stampato" : "Già stampato" );
+            $row["shootingBookingId"] = $shooting->shootingBooking->id;
+
+            if($shooting->shootingBooking->status == "o"){
+                $st = "aperto";
+            } else if($shooting->shootingBooking->status == "a") {
+                $st = "accettato";
+            } else if($shooting->shootingBooking->status == "c"){
+                $st = "chiuso";
+            }
+
+            $row["status"] = $st;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

@@ -26,13 +26,19 @@ class CShootingRepo extends ARepo
     /**
      * @param $productsIds
      * @param $friendDdtNumber
-     * @param $note
+     * @param null $note
      * @param $shopId
-     * @return mixed
+     * @param $pieces
+     * @param $booking
+     * @param $sb
+     * @param $productsInformation
+     * @return string
      * @throws \bamboo\core\exceptions\BambooException
      * @throws \bamboo\core\exceptions\BambooInvoiceException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function createShooting($productsIds, $friendDdtNumber, $note = null, $shopId, $pieces, $booking, $sb){
+    public function createShooting($productsIds, $friendDdtNumber, $note = null, $shopId, $pieces, $booking, $sb, $productsInformation){
 
         /** @var CDocumentRepo $documentRepo */
         $documentRepo = \Monkey::app()->repoFactory->create('Document');
@@ -64,7 +70,7 @@ class CShootingRepo extends ARepo
         /** @var CProductHasShootingRepo $pHsRepo */
         $pHsRepo = \Monkey::app()->repoFactory->create('ProductHasShooting');
 
-        $association = $pHsRepo->associateNewProductsToShooting($productsIds, $shooting->id);
+        $association = $pHsRepo->associateNewProductsToShooting($productsIds, $shooting->id, $productsInformation);
 
 
         if(empty($association["info"]) && !empty($association["existent"])){

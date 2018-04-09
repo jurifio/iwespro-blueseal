@@ -28,6 +28,12 @@
                                 <th data-slug="idShooting"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
+                                <th data-slug="shootingBookingId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">N. prenotazione</th>
+                                <th data-slug="status"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato prenotazione</th>
                                 <th data-slug="date"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data</th>

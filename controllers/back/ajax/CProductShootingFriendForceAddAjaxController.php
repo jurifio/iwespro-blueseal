@@ -53,7 +53,7 @@ class CProductShootingFriendForceAddAjaxController extends AAjaxController
         // $shopId = $data["friendId"];
         $pieces = $data["pieces"];
         $booking = $data["booking"];
-
+        $productsInformation = $data["productsInformation"];
 
         if ($friend == 0) {
             $note = $data["note"];
@@ -67,6 +67,16 @@ class CProductShootingFriendForceAddAjaxController extends AAjaxController
         } else if(empty($booking)){
             $res = "Devi selezionare una prenotazione";
             return $res;
+        } else if(empty($productsInformation)){
+            $res = "Se non desideri inserire la quantità o la taglia per ogni prodotto clicca sul pulsante per inserire la quantità di default";
+            return $res;
+        }
+
+        foreach ($productsInformation as $s){
+            if(empty($s)){
+                $res = "Se non desideri inserire la quantità o la taglia per ogni prodotto clicca sul pulsante per inserire la quantità di default";
+                return $res;
+            }
         }
 
         //creo shooting
@@ -76,7 +86,7 @@ class CProductShootingFriendForceAddAjaxController extends AAjaxController
         /** @var CShootingBooking $sb */
         $sb = \Monkey::app()->repoFactory->create('ShootingBooking')->findOneBy(['id'=>$booking]);
 
-        $res = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $sb->shop->billingAddressBook->id, $pieces, $booking, $sb);
+        $res = $shootingRepo->createShooting($productsIds, $friendDdt, $note, $sb->shop->billingAddressBook->id, $pieces, $booking, $sb, $productsInformation);
 
         $shpname = $sb->shop->name;
 

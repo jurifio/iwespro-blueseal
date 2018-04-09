@@ -85,7 +85,8 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         '<label for="pieces">Numero di colli</label>' +
         '<input autocomplete="off" type="text" id="pieces" ' +
         'placeholder="Numero di colli" class="form-control" name="pieces" required="required">' +
-        '</div>');
+        '</div>'+
+        '<div class="form-group form-group-default required" id="productSizeList"></div>');
 
     const dataShop = {
             step: 2,
@@ -112,10 +113,64 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
         $('#copyCode').on('click', function () {
             $('#friendDdt').val($('#nextDdt').text());
         });
+
+
+        let qtyAndSize = '<p>INSERISCI LA TAGLIA E LE QUANTITA\' DI OGNI PRODOTTO</p>';
+        $.each(products, function (k, v) {
+            qtyAndSize +=
+                '<div style="border: 1px dotted #00000038; padding: 16px" class="valueToGet" id="' + v + '">' +
+                '<p>' + v + '</p>' +
+
+                '<div style="display: flex; margin: 10px 0">' +
+                    '<label style="width: 30%" for="size_' + v + '">Taglia</label>' +
+                    '<input style="width: 70%; border: 1px solid #00000038" autocomplete="off" type="text" id="size_' + v + '" ' +
+                    'placeholder="Taglia" class="form-control getSize" name="size_' + v + '" required="required">' +
+                '</div>' +
+
+                '<div style="display: flex; margin: 10px 0">' +
+                    '<label style="width: 30%" for="qty_' + v + '">Quantità</label>' +
+                    '<input style="width: 70%; border: 1px solid #00000038" autocomplete="off" type="text" id="qty_' + v + '" ' +
+                    'placeholder="Quantità" class="form-control getQty" name="qty_' + v + '" required="required">' +
+                '</div>' +
+
+                '<button class="defaultValue" id="default_' + v + '">Inserisci il valore di default</button>' +
+
+                '</div>'
+        });
+
+        $('#productSizeList').append(qtyAndSize);
+
+        $('.defaultValue').on('click', function () {
+            $("#size_" + $(this).attr('id').split('_')[1]).val('---');
+            $("#qty_" + $(this).attr('id').split('_')[1]).val(0);
     });
+
+    });
+
+
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
+
+        let prod = [];
+
+        $('.valueToGet').find('input:text').each(function () {
+
+            prod.push($(this).attr('id').split('_')[1]);
+            prod.push($(this).val());
+        });
+
+        let uniqueAllElement = unique(prod);
+
+        function unique(list) {
+            let result = [];
+            $.each(list, function(i, e) {
+                if ($.inArray(e, result) == -1) result.push(e);
+            });
+            return result;
+        }
+
+
         const data = {
             //friendId: $('#selectFriend').val(),
             friendDdt: $('#friendDdt').val(),
@@ -123,6 +178,7 @@ $(document).on('bs-product-shooting-manage', function (e, element, button) {
             products: products,
             pieces: $('#pieces').val(),
             booking: $('#booking').val(),
+            productsInformation: uniqueAllElement,
             friend: 0
         };
         $.ajax({
