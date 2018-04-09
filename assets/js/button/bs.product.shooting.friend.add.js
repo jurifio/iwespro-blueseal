@@ -145,8 +145,8 @@ $(document).on('bs-product-shooting-friend-add', function (e, element, button) {
         $('#productSizeList').append(qtyAndSize);
 
         $('.defaultValue').on('click', function () {
-            $("#size_" + $(this).attr('id').split('_')[1]).val('---');
-            $("#qty_" + $(this).attr('id').split('_')[1]).val(0);
+            $("#size_" + $(this).attr('id').split('_')[1]).val('noSize-'+$(this).attr('id').split('_')[1]);
+            $("#qty_" + $(this).attr('id').split('_')[1]).val('noQty-'+$(this).attr('id').split('_')[1]);
         });
 
     });
