@@ -39,6 +39,19 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
+                                                <label for="shopId">Seleziona lo Shop </label>
+                                                <select id="shopId" name="shopId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Lista"
+                                                        data-init-plugin="selectize">
+                                                </select>
+
+                                            </div>                                            <p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
                                                 <label for="startDate">Data Inizio Piano Editoriale</label>
                                                 <input type="datetime-local" id="startDate" class="form-control"
                                                        placeholder="Inserisci la data di Inizio Piano Editoriale" name="startDate"

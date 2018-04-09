@@ -36,6 +36,7 @@ class CEditorialPlanManage extends AAjaxController
         $name = $data['name'];
         $startDate = $data['startDate'];
         $endDate = $data['endDate'];
+        $shopId =$data['shopId'];
 
 
 
@@ -56,6 +57,7 @@ class CEditorialPlanManage extends AAjaxController
             //popolo la tabella
 
             $editorialPlanInsert->name = $name ;
+            $editorialPlanInsert->shopId = $shopId ;
             $editorialPlanInsert->startDate = $startDate;
             $editorialPlanInsert->endDate = $endDate;
 

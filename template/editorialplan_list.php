@@ -49,6 +49,11 @@
                                     data-orderable="true"
                                     class="center">Nome Piano Editoriale
                                 </th>
+                                <th data-slug="shopName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shop
+                                </th>
                                 <th data-slug="startDate"
                                     data-searchable="true"
                                     data-orderable="true"

@@ -35,19 +35,48 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         '</div>' +
         '</div>' +
         '<div class="row">' +
+        '<div class="col-xs-12">' +
+
+        '<label for="shopId">Seleziona lo Shop </label>'+
+        '<select id="shopId" name="shopId"'+
+        'class="full-width selectpicker"'+
+        'placeholder="Seleziona la Lista"'+
+        'data-init-plugin="selectize" value="' +selectedRows[0].shopId+'">'+
+        '</select>'+
+        '</div>'+
+        '</div>'+
+
+        '<div class="row">' +
         '<div class="col-xs-6>">' +
         '<label for="startDate">Data di Inizio Piano Editoriale</label>' +
         '<input autocomplete="off" type="datetime-local" id="startDate"' +
-        'class="form-control" name="startDate" value="' + selectedRows[0].startDate + '">' +
+        'class="form-control" name="startDate" value=\"' + selectedRows[0].startDate + '">' +
         '</div>' +
         '</div>' +
-        '<div class="row">' +
-        '<div class="col-xs-6>">' +
+        '<div class=\"row\">' +
+        '<div class=\"col-xs-6>\">' +
         '<label for="endDate">Data di Fine Piano Editoriale</label>' +
         '<input autocomplete="off" type="datetime-local" id="endDate"' +
         'class="form-control" name="endDate" value="' + selectedRows[0].endDate + '">' +
         '</div>' +
         '</div>'
+    });
+    $.ajax({
+        method:'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Shop'
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#shopId');
+        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
     });
 
 

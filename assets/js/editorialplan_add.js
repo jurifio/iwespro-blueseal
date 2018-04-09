@@ -1,6 +1,23 @@
 (function ($) {
 
     Pace.ignore(function () {
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Shop'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#shopId');
+            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
+        });
 
     })
 })(jQuery);
@@ -18,6 +35,7 @@ $(document).on('bs.newEditorialPlan.save', function () {
             name: $('#name').val(),
             startDate: $('#startDate').val(),
             endDate: $('#endDate').val(),
+            shopId:  $('#shopId').val(),
 
         };
         $.ajax({
