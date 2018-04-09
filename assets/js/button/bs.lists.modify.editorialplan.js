@@ -86,6 +86,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         let dateStartDate = $('#startDate').val();
         let dateEndDate = $('#endDate').val();
         let name = $('#editorialPlanName').val();
+        let shopId = $('#shopId').val();
 
         $.ajax({
             method: "put",
@@ -95,6 +96,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
                 dateStartDate: dateStartDate,
                 dateEndDate: dateEndDate,
                 name: name,
+                shopId:shopId,
             }
         }).done(function (res) {
             bsModal.writeBody(res);

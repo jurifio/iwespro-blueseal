@@ -36,31 +36,27 @@ class CEditorialPlanManage extends AAjaxController
         $name = $data['name'];
         $startDate = $data['startDate'];
         $endDate = $data['endDate'];
-        $shopId =$data['shopId'];
-
-
-
+        $shopId = $data['shopId'];
 
 
         /** @var CRepo $editorialPlanRepo */
         $editorialPlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
 
-        /** @var CEditorialPlan $editorialPlan*/
+        /** @var CEditorialPlan $editorialPlan */
         $editorialPlanRepo = $editorialPlanRepo->findOneBy(['name' => $name]);
 
 
-        if (empty($editorialPlan)){
+        if (empty($editorialPlan)) {
             //se la variabile non è istanziata inserisci in db
 
-            /** @var CEditorialPlan $editorialPlanInsert   */
+            /** @var CEditorialPlan $editorialPlanInsert */
             $editorialPlanInsert = \Monkey::app()->repoFactory->create('EditorialPlan')->getEmptyEntity();
             //popolo la tabella
 
-            $editorialPlanInsert->name = $name ;
-            $editorialPlanInsert->shopId = $shopId ;
+            $editorialPlanInsert->name = $name;
+            $editorialPlanInsert->shopId = $shopId;
             $editorialPlanInsert->startDate = $startDate;
             $editorialPlanInsert->endDate = $endDate;
-
 
 
             // eseguo la commit sulla tabella;
@@ -69,7 +65,7 @@ class CEditorialPlanManage extends AAjaxController
 
             $res = "Piano Editoriale inserito con successo!";
 
-        }else{
+        } else {
             //Se hai trovato qualcosa allora restituitsci messaggio di errore
             $res = "Esiste già un Piano Editoriale con lo stesso nome";
         }
@@ -86,21 +82,24 @@ class CEditorialPlanManage extends AAjaxController
      */
     public function put()
     {
-       $data  = $this->app->router->request()->getRequestData();
-       $id = $data["id"];
-       $name = $data["name"];
-       $startDate = $data["dateStartDate"];
-       $endDate = $data["dateEndDate"];
+        $data = $this->app->router->request()->getRequestData();
+        $id = $data["id"];
+        $name = $data["name"];
+        $shopId = $data['shopId'];
+        $startDate = $data["dateStartDate"];
+        $endDate = $data["dateEndDate"];
 
-       /** @var CRepo $editorialPlan */
-       $editorialPlan = \Monkey::app()->repoFactory->create('EditorialPlan');
 
-       /** @var CEditorialPlan $editorialPlan */
-       $editorialPlan = $editorialPlan->findOneBy(['id'=>$id]);
+        /** @var CRepo $editorialPlan */
+        $editorialPlan = \Monkey::app()->repoFactory->create('EditorialPlan');
+
+        /** @var CEditorialPlan $editorialPlan */
+        $editorialPlan = $editorialPlan->findOneBy(['id' => $id]);
 
         $editorialPlan->name = $name;
         $editorialPlan->startDate = $startDate;
         $editorialPlan->endDate = $endDate;
+        $editorialPlan->shopId = $shopId;
 
 
         $editorialPlan->update();
@@ -108,8 +107,6 @@ class CEditorialPlanManage extends AAjaxController
         $res = "Piano Editoriale  aggiornato";
         return $res;
     }
-
-
 
 
 }
