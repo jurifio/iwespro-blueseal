@@ -27,7 +27,8 @@
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Id</th>
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center">Id</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data creazione</th>

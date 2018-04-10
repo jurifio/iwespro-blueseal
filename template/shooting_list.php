@@ -27,7 +27,8 @@
                             <tr>
                                 <th data-slug="idShooting"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Id</th>
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center">Id</th>
                                 <th data-slug="shootingBookingId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">N. prenotazione</th>
