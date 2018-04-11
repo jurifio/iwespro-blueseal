@@ -7,7 +7,7 @@
             {
                 "name" : "editorialPlanDetail",
                 "entity" : "EditorialPlanDetail",
-                "parentKeys": ["editorialPlanSocialId"],
+                "parentKeys": ["socialId"],
                 "childKeys" : ["id"],
                 "type" : "OneToMany"
             }

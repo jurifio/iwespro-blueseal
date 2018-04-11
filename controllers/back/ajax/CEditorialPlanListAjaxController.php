@@ -21,10 +21,22 @@ class CEditorialPlanListAjaxController extends AAjaxController
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
+        /** @var CEditorialPlanRepo $editorialPlanRepo */
+        $editorialPlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
+
+
+        $blueseal = $this->app->baseUrl(false) . '/blueseal/';
+        $opera = $blueseal . "editorial/editoriale-pianodettagli-lista/";
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
+            /** @var CEditorialPlan $editorialPlan */
+            $editorialPlan = $editorialPlanRepo->findOneBy(['id' => $row["id"] ]);
 
+            $row['id'] = '<a href="' . $opera . $editorialPlan->id . '" >' . $editorialPlan->id . '</a>';
+
+
+            $datatable->setResponseDataSetRow($key,$row);
 
 
         }

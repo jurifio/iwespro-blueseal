@@ -24,6 +24,14 @@
             "fullcalendar.print.min.css": {
                 "path": "scheme://localdomain/assets/css/",
                 "options": ["screen,print"]
+            },
+            "scheduler.css": {
+                "path": "scheme://localdomain/assets/css/",
+                "options": ["screen,print"]
+            },
+            "scheduler.min.css": {
+                "path": "scheme://localdomain/assets/css/",
+                "options": ["screen,print"]
             }
 
         },
@@ -149,6 +157,14 @@
                 "options": ["defer"]
             },
             "moment.min.js": {
+                "path": "scheme://localdomain/assets/js/",
+                "options": ["defer"]
+            },
+            "scheduler.min.js": {
+                "path": "scheme://localdomain/assets/js/",
+                "options": ["defer"]
+            },
+            "scheduler.js": {
                 "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
             }

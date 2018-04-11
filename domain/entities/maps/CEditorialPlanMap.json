@@ -12,11 +12,11 @@
                 "type" : "OneToOne"
             },
             {
-                "name" : "shop",
-                "entity" : "Shop",
-                "parentKeys": ["shopId"],
-                "childKeys" : ["id"],
-                "type" : "OneToOne"
+                "name" : "editorialPlanDetail",
+                "entity" : "EditorialPlanDetail",
+                "parentKeys": ["id"],
+                "childKeys" : ["editorialPlanId"],
+                "type" : "OneToMany"
             }
         ]
     }

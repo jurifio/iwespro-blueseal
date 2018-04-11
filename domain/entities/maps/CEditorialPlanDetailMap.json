@@ -14,7 +14,7 @@
             {
                 "name" : "editorialPlanSocial",
                 "entity" : "EditorialPlanSocial",
-                "parentKeys": ["editorialPlanId"],
+                "parentKeys": ["socialId"],
                 "childKeys" : ["id"],
                 "type" : "OneToOne"
             }

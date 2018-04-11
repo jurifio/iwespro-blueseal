@@ -2101,6 +2101,21 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/editorial/editoriale-pianodettagli-lista/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanDetailListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }
