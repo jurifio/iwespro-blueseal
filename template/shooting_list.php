@@ -75,12 +75,17 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
 
-    <bs-toolbar-group data-group-label="Stampa DDT (Friend)">
+    <bs-toolbar-group data-group-label="DDT FRIEND">
         <bs-toolbar-button
                 data-remote="bs.product.create.ddt"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.friend.ddt.invoice.download"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="DDT PICKY">
+        <bs-toolbar-button
+                data-remote="bs.product.create.ddt.pickyshop"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

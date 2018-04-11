@@ -252,7 +252,7 @@ class CDocumentRepo extends ARepo
         $invoiceTypeId,
         int $userId,
         bool $isShop,
-        int $recipientOrEmitterId,
+        $recipientOrEmitterId,
         \DateTime $date,
         float $totalWithVat,
         float $paidAmount = 0.0,
@@ -277,6 +277,7 @@ class CDocumentRepo extends ARepo
         //find sectional
         $fieldToSearchInvoice = (false == $isShop) ? 'userAddressRecipientId' : 'shopRecipientId';
         /** @var CInvoiceSectional $invoiceSectional */
+
 
         $invoiceWithNumber =
             $this->findOneBy(['number' => $number, $fieldToSearchInvoice => $recipientOrEmitterId, 'year' => $year]);
@@ -954,16 +955,26 @@ class CDocumentRepo extends ARepo
         return $docNumber;
     }
 
-    public function findShootingPickyDdt(CShooting $shooting) : string {
+
+    /**
+     * @param CShooting $shooting
+     * @return string
+     */
+    public function findShootingPickyDdt(CShooting $shooting) {
 
         $pickyDdt = $shooting->pickyDdt;
 
-        /** @var CDocument $doc */
-        $doc = $this->findOneBy(['id'=>$pickyDdt]);
+        if(!is_null($pickyDdt)){
+            /** @var CDocument $doc */
+            $doc = $this->findOneBy(['id'=>$pickyDdt]);
 
-        $docNumber = $doc->number;
+            $res = $doc->number;
+        } else {
+            $res = false;
+        }
 
-        return $docNumber;
+
+        return $res;
     }
 
     public function insertInvoiceFromFoison($invoiceTypeId, $userId, $date, $total, $number, $file, $productBatchIds){
@@ -990,9 +1001,12 @@ class CDocumentRepo extends ARepo
     /**
      * @param int $shopId
      * @param string $friendDdtNumber
-     * @return int
+     * @param $sb
+     * @return mixed
      * @throws BambooException
      * @throws BambooInvoiceException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
     public function createEmptyDdtDocument(int $shopId, string $friendDdtNumber, $sb){
 
@@ -1044,5 +1058,35 @@ class CDocumentRepo extends ARepo
 
         return true;
 
+    }
+
+
+    /**
+     * @param string $pickyDdtNumber
+     * @param $sb
+     * @return mixed
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function createPickyDDTDocument(string $pickyDdtNumber){
+
+        /** @var CUser $user */
+        $user = \Monkey::app()->getUser();
+        $date = date("Y-m-d");
+        $dateTime = new \DateTime($date);
+        $invoiceId = $this->createInvoice(CInvoiceType::DDT_SHOOTING, $user->id, true, null, $dateTime, 0, 0, null, $pickyDdtNumber, null, null, true);
+
+
+        /** @var CSectionalRepo $sectionalR */
+        $sectionalR = \Monkey::app()->repoFactory->create('Sectional');
+
+        $nextCode = $sectionalR->calculateNewSectionalCodeFromShop(null, CInvoiceType::DDT_RETURN_SHOOTING);
+        if($pickyDdtNumber == $nextCode){
+            $sectionalR->createNewSectionalCodeFromShop(null, CInvoiceType::DDT_RETURN_SHOOTING);
+        }
+
+        return $invoiceId;
     }
 }

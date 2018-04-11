@@ -6,20 +6,24 @@ use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\pdfprint\CPrintDdt;
+use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CDocument;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CShooting;
+use bamboo\domain\entities\CShootingBooking;
 use bamboo\domain\entities\CShop;
 use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use bamboo\domain\repositories\CProductSizeRepo;
+use bamboo\domain\repositories\CSectionalRepo;
 use bamboo\domain\repositories\CShootingRepo;
+use bamboo\domain\repositories\CShopRepo;
 
 
 /**
- * Class CCreateDdtAjaxController
+ * Class CCreatePickyDdtAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -28,11 +32,69 @@ use bamboo\domain\repositories\CShootingRepo;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 26/03/2018
+ * @date 10/04/2018
  * @since 1.0
  */
-class CCreateDdtAjaxController extends AAjaxController
+class CCreatePickyDdtAjaxController extends AAjaxController
 {
+
+    public function get(){
+        $step = \Monkey::app()->router->request()->getRequestData('step');
+        $shootingId = \Monkey::app()->router->request()->getRequestData('shooting');
+        $res = [];
+
+        if($step == 1){
+
+            /** @var CDocumentRepo $dRepo */
+            $dRepo = \Monkey::app()->repoFactory->create('Document');
+
+            /** @var CShooting $shooting */
+            $shooting = \Monkey::app()->repoFactory->create('Shooting')->findOneBy(['id'=>$shootingId]);
+
+            $dId = $dRepo->findShootingPickyDdt($shooting);
+
+            if($dId == false){
+                /** @var CSectionalRepo $sectionalRepo */
+                $sectionalRepo = \Monkey::app()->repoFactory->create('Sectional');
+
+                $nextDdt = $sectionalRepo->calculateNewSectionalCodeFromShop(null, 12);
+                $res["nextDdt"] = $nextDdt;
+            } else if (is_string($dId)){
+                $res["oldDdt"] = $dId;
+            }
+
+
+        } else if($step == 2){
+
+            /** @var CShootingBooking $sb */
+            $sb = \Monkey::app()->repoFactory->create('ShootingBooking')->findOneBy(['shootingId'=>$shootingId]);
+
+            /** @var CShopRepo $shopRepo */
+            $shopRepo = \Monkey::app()->repoFactory->create('Shop');
+
+            /** @var CShop $shop */
+            $shop = $shopRepo->findOneBy(['id'=>$sb->shopId]);
+
+            /** @var CObjectCollection $bAdd */
+            $bAdd = $shop->shippingAddressBook;
+
+
+            $i = 0;
+            /** @var CAddressBook $sAdd */
+            foreach ($bAdd as $sAdd){
+                $res[$i]["id"] = $sAdd->id;
+                $res[$i]["subject"] = $sAdd->subject;
+                $res[$i]["address"] = $sAdd->address;
+                $res[$i]["city"] = $sAdd->postcode.' '.$sAdd->city.' ('.$sAdd->province.')';
+                $res[$i]["country"] = $sAdd->country->name;
+                $i++;
+            }
+        }
+
+        return json_encode($res);
+    }
+
+
     /**
      * @return string
      * @throws BambooException
@@ -54,8 +116,11 @@ class CCreateDdtAjaxController extends AAjaxController
         $shootingId = \Monkey::app()->router->request()->getRequestData('shooting');
         $coll = \Monkey::app()->router->request()->getRequestData('coll');
         $carrier = \Monkey::app()->router->request()->getRequestData('carrier');
+        $dest = \Monkey::app()->router->request()->getRequestData('dest');
+        $destLoc = \Monkey::app()->router->request()->getRequestData('destLoc');
+        $ddtN = \Monkey::app()->router->request()->getRequestData('ddt');
 
-        if(empty($coll) || empty($carrier)) return "Inserire tutti i dati";
+        if(empty($coll) || empty($carrier) || empty($dest) || empty($destLoc)) return "Inserire tutti i dati";
 
         /** @var CShootingRepo $sRepo */
         $sRepo = \Monkey::app()->repoFactory->create('Shooting');
@@ -66,31 +131,64 @@ class CCreateDdtAjaxController extends AAjaxController
         /** @var CShooting $shooting */
         $shooting = $sRepo->findOneBy(['id'=>$shootingId]);
 
-        //shop information
-        /** @var CShop $shop */
-        $shop = $shooting->shootingBooking->shop;
-        $shopImageName = ($shop->name == "dalben" ? "dalben.png" : "logoiwes.jpg");
-        $shopName = $shop->billingAddressBook->name;
-        $shopAddress = $shop->billingAddressBook->address;
-        $codeAddress = $shop->billingAddressBook->postcode.' '.$shop->billingAddressBook->city.' ('.$shop->billingAddressBook->province.')';
-        $vatNumber = $shop->billingAddressBook->vatNumber;
-        $phone = $shop->billingAddressBook->phone;
+        /** @var CAddressBook $destinatario */
+        $destinatario = \Monkey::app()->repoFactory->create('AddressBook')->findOneBy(['id'=>$dest]);
+        $destName = $destinatario->subject;
+        $address = $destinatario->address;
+        $city = $destinatario->postcode.' '.$destinatario->city.' ('.$destinatario->province.')';
+        $country = $destinatario->country->name;
 
-        //shooting info
-        $ddtNumber = $documentRepo->findShootingFriendDdt($shooting);
+        /** @var CAddressBook $luogoDestinazione */
+        $luogoDestinazione = \Monkey::app()->repoFactory->create('AddressBook')->findOneBy(['id'=>$destLoc]);
+        $destNameL = $luogoDestinazione->subject;
+        $addressL = $luogoDestinazione->address;
+        $cityL = $luogoDestinazione->postcode.' '.$luogoDestinazione->city.' ('.$luogoDestinazione->province.')';
+        $countryL = $luogoDestinazione->country->name;
 
         //date
         $date = $shooting->date;
         $date = new \DateTime($date);
         $newDate = $date->format('d-m-Y');
 
-        //Cause
-        /** @var CDocument $document */
-        $document = $documentRepo->findOneBy(['id'=>$shooting->friendDdt]);
-        $cause = $document->invoiceType->name;
+
 
         /** @var CObjectCollection $products */
         $products = $shooting->product;
+
+        /** @var CDocument $doc */
+        $date = date("Y-m-d");
+        $dateTime = new \DateTime($date);
+        $year = $dateTime->format('Y');
+
+        //posso trovare più documenti con questa caratteristica quindi cerco solo quelli fatti da picky
+        /** @var CObjectCollection $docs */
+        $docs = $documentRepo->findBy(['number' => $ddtN, 'year' => $year]);
+
+
+        if($docs->isEmpty()){
+            $invoiceId = $documentRepo->createPickyDDTDocument($ddtN);
+        } else {
+            $stop = false;
+            /** @var CDocument $doc */
+            foreach ($docs as $doc){
+                //se userAddressRecipientId/shopRecipientId è vuoto vuol dire che è un documento creato da picky e quindi ok
+                if(is_null($doc->userAddressRecipientId) && is_null($doc->shopRecipientId)){
+                    $invoiceId = $doc->id;
+                    $stop = true;
+                    break;
+                }
+            }
+            //se siamo qui è perché nonostante la collezione di oggetti non sia vuota, all'interno di questa non sono stati trovati documenti realizzati da pickyshop
+            if(!$stop){
+                $invoiceId = $documentRepo->createPickyDDTDocument($ddtN);
+            }
+
+        }
+
+        //Cause
+        /** @var CDocument $document */
+        $document = $documentRepo->findOneBy(['id'=>$invoiceId]);
+        $cause = $document->invoiceType->name;
 
 
 
@@ -128,7 +226,7 @@ class CCreateDdtAjaxController extends AAjaxController
                         <table>
                             <tr>
                                 <td>
-                                    <img src="https://cdn.iwes.it/assets/{$shopImageName}" alt="logo" height="80">
+                                    <img src="https://cdn.iwes.it/assets/logoiwes.jpg" alt="logo" height="80">
                                 </td>
                             </tr>
                         </table>
@@ -136,12 +234,10 @@ class CCreateDdtAjaxController extends AAjaxController
                             <tr>
                                 <td>
                              <span style="font-family:Helvetica,Arial,sans-serif;color:#000000; line-height:0.7;">
-                                 <h4>$shopName</h4>
-                                 <p>$shopAddress</p>
-                                 <p>$codeAddress</p>
+                                 <h4>IWES snc</h4>
+                                 <p>Via Cesare Pavese, 1</p>
                                  <p>Italia</p>
-                                 <p>$vatNumber</p>
-                                 <p>TEL: $phone</p>
+                                 <p>P. Iva 01865380438</p>
                              </span>
                                 </td>
                             </tr>
@@ -170,7 +266,7 @@ class CCreateDdtAjaxController extends AAjaxController
                     <td style="border-top: 1px solid #ffffff; border-right: 2px solid #ffffff; border-left: 1px solid #ffffff; border-bottom: 2px solid #ffffff;">
                              <span style="font-family:Helvetica,Arial,sans-serif;color:#000000; line-height:0.8;">
                                         <h3>DOCUMENTO DI TRASPORTO</h3>
-                                 <h3>N° $ddtNumber - Data $newDate</h3>
+                                 <h3>N° $ddtN - Data $newDate</h3>
                              </span>
                     </td>
                 </tr>
@@ -183,19 +279,19 @@ class CCreateDdtAjaxController extends AAjaxController
                                      <h3>Destinatario</h3>
                              </span>
                              <span style="font-family:Helvetica,Arial,sans-serif;color:#000000; line-height:0.6;">
-                                     <h4>IWES snc</h4>
-                                 <p>Via Cesare Pavese, 1</p>
-                                 <p>62100 Civitanova Marche (MC)</p>
-                                 <p>Italia</p>
+                                 <h4>$destName</h4>
+                                 <p>$address</p>
+                                 <p>$city</p>
+                                 <p>$country</p>
                              </span>
                              <span style="font-family:Helvetica,Arial,sans-serif;color:#000000; line-height:0.4; font-size: 14px;">
                                      <h3>Luogo di destinazione</h3>
                              </span>
                              <span style="font-family:Helvetica,Arial,sans-serif;color:#000000; line-height:0.6;">
-                                     <h4>IWES snc</h4>
-                                 <p>Via Cesare Pavese, 1</p>
-                                 <p>62100 Civitanova Marche (MC)</p>
-                                 <p>Italia</p>
+                                 <h4>$destNameL</h4>
+                                 <p>$addressL</p>
+                                 <p>$cityL</p>
+                                 <p>$countryL</p>
                              </span>
                     </td>
                 </tr>
@@ -276,21 +372,16 @@ EOD;
         $pdf->SetAutoPageBreak(true, 55);
         $pdf->SetFooterMargin(55);
         $pdf->writeHTML($tbl, true, false, false, false, '');
-        //Close and output PDF document
-        //\Monkey::app()->router->response()->setContentType('application/pdf');
-        //ob_end_clean();
-        //$pdf->Output('spedizione.pdf', 'D');
 
         \Monkey::app()->router->response()->setContentType('application/pdf');
 
         $ddt = $pdf->Output('DdtFriend.pdf', 'S');
 
-        if($documentRepo->insertInvoiceBinWithRowFile($shooting->friendDdt, $ddtNumber,$ddt)){
-            $res = "Documento di trasporto inserito con successo";
+        if($documentRepo->insertInvoiceBinWithRowFile($invoiceId, $ddtN, $ddt)){
+            $shooting->pickyDdt = $invoiceId;
+            $shooting->update();
+            $res = $invoiceId;
         };
-
-        //Aggiorna colli
-        $sRepo->updatePieces($shooting->id, $coll);
 
         return $res;
 
