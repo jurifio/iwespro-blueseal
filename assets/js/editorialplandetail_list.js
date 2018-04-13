@@ -1,74 +1,115 @@
 (function ($) {
 
 
-    Pace.ignore(function () {
 
+$('#calendar').fullCalendar({
+    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
+});
 
+$(document).ready(function() {
+
+    let url = window.location.href;
+    let id = url.substring(url.lastIndexOf('/') + 1);
+
+    $.ajax({
+        url: '/blueseal/xhr/EditorialPlanDetailListAjaxController',
+        type: 'GET',
+        data: {
+            id: id,
+        }
+    }).done(function (res) {
+        res = JSON.parse(res);
+
+        let a = "ci";
     });
-})(jQuery);
 
-$(function() { // document ready
 
-    $('#calendar').fullCalendar({
-        now: '2018-04-07',
-        editable: true, // enable draggable events
-        aspectRatio: 1.8,
-        scrollTime: '00:00', // undo default 6am scrollTime
-        header: {
-            left: 'today prev,next',
-            center: 'title',
-            right: 'timelineDay,timelineThreeDays,agendaWeek,month,listWeek'
+    var calendar = $('#calendar').fullCalendar({
+        editable:true,
+        header:{
+            left:'prev,next today',
+            center:'title',
+            right:'month,agendaWeek,agendaDay'
         },
-        defaultView: 'timelineDay',
-        views: {
-            timelineThreeDays: {
-                type: 'timeline',
-                duration: { days: 3 }
+        selectable:true,
+        selectHelper:true,
+        select: function(start, end, allDay)
+        {
+            var title = prompt("Enter Event Title");
+            if(title)
+            {
+                var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+                var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+                $.ajax({
+                    url:"insert.php",
+                    type:"POST",
+                    data:{title:title, start:start, end:end},
+                    success:function()
+                    {
+                        calendar.fullCalendar('refetchEvents');
+                        alert("Added Successfully");
+                    }
+                })
             }
         },
-        resourceLabelText: 'Rooms',
-        resources: [
-            { id: 'a', title: 'Auditorium A' },
-            { id: 'b', title: 'Auditorium B', eventColor: 'green' },
-            { id: 'c', title: 'Auditorium C', eventColor: 'orange' },
-            { id: 'd', title: 'Auditorium D', children: [
-                    { id: 'd1', title: 'Room D1' },
-                    { id: 'd2', title: 'Room D2' }
-                ] },
-            { id: 'e', title: 'Auditorium E' },
-            { id: 'f', title: 'Auditorium F', eventColor: 'red' },
-            { id: 'g', title: 'Auditorium G' },
-            { id: 'h', title: 'Auditorium H' },
-            { id: 'i', title: 'Auditorium I' },
-            { id: 'j', title: 'Auditorium J' },
-            { id: 'k', title: 'Auditorium K' },
-            { id: 'l', title: 'Auditorium L' },
-            { id: 'm', title: 'Auditorium M' },
-            { id: 'n', title: 'Auditorium N' },
-            { id: 'o', title: 'Auditorium O' },
-            { id: 'p', title: 'Auditorium P' },
-            { id: 'q', title: 'Auditorium Q' },
-            { id: 'r', title: 'Auditorium R' },
-            { id: 's', title: 'Auditorium S' },
-            { id: 't', title: 'Auditorium T' },
-            { id: 'u', title: 'Auditorium U' },
-            { id: 'v', title: 'Auditorium V' },
-            { id: 'w', title: 'Auditorium W' },
-            { id: 'x', title: 'Auditorium X' },
-            { id: 'y', title: 'Auditorium Y' },
-            { id: 'z', title: 'Auditorium Z' }
-        ],
-        events: [
-            { id: '1', resourceId: 'b', start: '2018-04-07T02:00:00', end: '2018-04-07T07:00:00', title: 'event 1' },
-            { id: '2', resourceId: 'c', start: '2018-04-07T05:00:00', end: '2018-04-07T22:00:00', title: 'event 2' },
-            { id: '3', resourceId: 'd', start: '2018-04-06', end: '2018-04-08', title: 'event 3' },
-            { id: '4', resourceId: 'e', start: '2018-04-07T03:00:00', end: '2018-04-07T08:00:00', title: 'event 4' },
-            { id: '5', resourceId: 'f', start: '2018-04-07T00:30:00', end: '2018-04-07T02:30:00', title: 'event 5' }
-        ]
-    });
+        editable:true,
+        eventResize:function(event)
+        {
+            var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+            var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+            var title = event.title;
+            var id = event.id;
+            $.ajax({
+                url:"update.php",
+                type:"POST",
+                data:{title:title, start:start, end:end, id:id},
+                success:function(){
+                    calendar.fullCalendar('refetchEvents');
+                    alert('Event Update');
+                }
+            })
+        },
 
+        eventDrop:function(event)
+        {
+            var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+            var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+            var title = event.title;
+            var id = event.id;
+            $.ajax({
+                url:"update.php",
+                type:"POST",
+                data:{title:title, start:start, end:end, id:id},
+                success:function()
+                {
+                    calendar.fullCalendar('refetchEvents');
+                    alert("Event Updated");
+                }
+            });
+        },
+
+        eventClick:function(event)
+        {
+            if(confirm("Are you sure you want to remove it?"))
+            {
+                var id = event.id;
+                $.ajax({
+                    url:"delete.php",
+                    type:"POST",
+                    data:{id:id},
+                    success:function()
+                    {
+                        calendar.fullCalendar('refetchEvents');
+                        alert("Event Removed");
+                    }
+                })
+            }
+        },
+
+    });
 });
 
 
 
+})(jQuery);
 

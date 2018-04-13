@@ -6,6 +6,7 @@ use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\domain\entities\CEditorialPlan;
+use bamboo\domain\entities\CEditorialPlanDetail;
 use bamboo\ecommerce\views\VBase;
 
 /**
@@ -31,18 +32,6 @@ class CEditorialPlanDetailListController extends ARestrictedAccessRootController
 
         $editorialPlanId = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
 
-        //trovi il piano editoriale
-        /** @var ARepo $ePlanRepo */
-        $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
-
-        /** @var CEditorialPlan $editorialPlan */
-        $editorialPlan = $ePlanRepo->findOneBy(['id'=>$editorialPlanId]);
-
-        /** @var CObjectCollection $editorialDetails */
-       // $editorialDetails = $editorialPlan->editorialPlanDetail;
-
-        //trovi tutti i dettagli
-
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/editorialplandetail_list.php');
@@ -50,8 +39,7 @@ class CEditorialPlanDetailListController extends ARestrictedAccessRootController
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
-            'sidebar' => $this->sidebar->build(),
-           // 'editorialDetails' => $editorialDetails,
+            'sidebar' => $this->sidebar->build()
         ]);
     }
 }
