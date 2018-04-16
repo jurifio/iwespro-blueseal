@@ -1,36 +1,65 @@
 (function ($) {
 
-
-
-$('#calendar').fullCalendar({
-    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
-});
-
-$(document).ready(function() {
-
+    $('#calendar').fullCalendar('destroy');
     let url = window.location.href;
     let id = url.substring(url.lastIndexOf('/') + 1);
-
     $.ajax({
         url: '/blueseal/xhr/EditorialPlanDetailListAjaxController',
-        type: 'GET',
-        data: {
-            id: id,
-        }
-    }).done(function (res) {
-        res = JSON.parse(res);
+        type: 'POST',
+        async: false,
+        data: { id: id },
+        success: function (data) {
+            obj = JSON.parse(data);
 
-        let a = "ci";
+        },
+        error: function (xhr, err) {
+            alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+            alert("responseText: " + xhr.responseText);
+        }
     });
 
+    /* initialize the external events
+    -----------------------------------------------------------------*/
+    $('#calendar div.calendar').each(function () {
+        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+        // it doesn't need to have a start or end
+        var eventObject = {
+            title: $.trim($(this).text()) // use the element's text as the event title
+        };
+        // store the Event Object in the DOM element so we can get to it later
+        $(this).data('eventObject', eventObject);
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+            zIndex: 999,
+            revert: true,      // will cause the event to go back to its
+            revertDuration: 0  //  original position after the drag
+        });
+    });
+
+    /* initialize the calendar
+    -----------------------------------------------------------------*/
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
 
     var calendar = $('#calendar').fullCalendar({
-        editable:true,
-        header:{
-            left:'prev,next today',
-            center:'title',
-            right:'month,agendaWeek,agendaDay'
+        lang: 'it',
+        //isRTL: true,
+        buttonHtml: {
+            prev: '<i class="ace-icon fa fa-chevron-left"></i>',
+            next: '<i class="ace-icon fa fa-chevron-right"></i>'
         },
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        //obj that we get json result from ajax
+        events: obj
+        ,
+        editable: true,
+        selectable: true,
         selectable:true,
         selectHelper:true,
         select: function(start, end, allDay)
@@ -107,7 +136,13 @@ $(document).ready(function() {
         },
 
     });
-});
+
+
+
+
+
+
+
 
 
 

@@ -16,7 +16,7 @@ use bamboo\domain\entities\CEditorialPlanDetail;
 class CEditorialPlanDetailListAjaxController extends AAjaxController
 {
 
-    public function get()
+    public function post()
     {
         $editorialPlanId = \Monkey::app()->router->request()->getRequestData('id');
 
@@ -36,6 +36,7 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
             $data[$i]["title"] = $singleDetail->title;
             $data[$i]["start"] = $singleDetail->startEventDate;
             $data[$i]["end"] = $singleDetail->endEventDate;
+
             $i++;
         }
 
