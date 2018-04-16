@@ -20,6 +20,7 @@ use bamboo\domain\repositories\CProductHasShootingRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use bamboo\domain\repositories\CProductSizeRepo;
 use bamboo\domain\repositories\CSectionalRepo;
+use bamboo\domain\repositories\CShootingBookingRepo;
 use bamboo\domain\repositories\CShootingRepo;
 use bamboo\domain\repositories\CShopRepo;
 
@@ -93,14 +94,50 @@ class CProductShootingAjaxController extends AAjaxController
         return $res;
     }
 
+
+    /**
+     * @return string
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
     public function get(){
         $res = [];
+        $resLast = [];
+
 
         $shops = \Monkey::app()->router->request()->getRequestData('shop');
         $step = \Monkey::app()->router->request()->getRequestData('step');
-        $selectedBooking = \Monkey::app()->router->request()->getRequestData('selectedBooking');
 
         if($step == 1){
+
+            $shopArr = [];
+            foreach ($shops as $shopId){
+                $shopArr[] = $shopId[0];
+            }
+
+            $uniqueShop = array_unique($shopArr);
+
+            $nShop = count($uniqueShop);
+
+            //se lo è stato selezionato un solo shop lo memorizzo temporaneamente e lo ripropongo fino a quando non si cambia!
+            if($nShop == 1){
+
+                /** @var CShootingBookingRepo $allSBRepo */
+                $allSBRepo = \Monkey::app()->repoFactory->create('ShootingBooking');
+
+                /** @var CShootingBooking $allSb */
+                $allSb = $allSBRepo->findLastSelected($uniqueShop[0]);
+
+                if($allSb != false){
+                    $resLast["lastId"] = $allSb->id;
+                    $resLast["lastDate"] = $allSb->date;
+                    $resLast["lastShop"] = $allSb->shop->name;
+
+                    $res["last"] = $resLast;
+                }
+            }
+
             //trovo gli shop autorizzati per l'utente
             /** @var CUser $user */
             $user = \Monkey::app()->getUser();
@@ -147,6 +184,8 @@ class CProductShootingAjaxController extends AAjaxController
 
         if($step == 2){
 
+            $selectedBooking = \Monkey::app()->router->request()->getRequestData('selectedBooking');
+
             /** @var CShootingBooking $bs */
             $bs = \Monkey::app()->repoFactory->create('ShootingBooking')->findOneBy(['id'=>$selectedBooking]);
 
@@ -163,6 +202,11 @@ class CProductShootingAjaxController extends AAjaxController
             /** @var CSectionalRepo $secRepo */
             $secRepo = \Monkey::app()->repoFactory->create('Sectional');
             $res["-nextDdt"] = $secRepo->calculateNewSectionalCodeFromShop($bs->shopId, CInvoiceType::DDT_SHOOTING);
+
+            $date = date("Y-m-d H:i:s");
+            $dateTime = new \DateTime($date);
+            $bs->lastSelection = $dateTime->format('Y-m-d  H:i:s');;
+            $bs->update();
 
             return json_encode($res);
 
