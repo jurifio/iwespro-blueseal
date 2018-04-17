@@ -12,6 +12,7 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CEditorialPlan;
 use bamboo\domain\entities\CEditorialPlanDetail;
+use \bamboo\utils\time\STimeToolbox;
 
 class CEditorialPlanDetailAddAjaxController extends AAjaxController
 {
@@ -29,6 +30,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $status = $data['status'];
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
+        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate,'Y-m-d h:m:s');
+        $endEventDate =STimeToolbox::FormatDateFromDBValue($endEventDate,'Y-m-d h:m:s');
+
 
 
         /** @var CRepo $editorialPlanDetailRepo */

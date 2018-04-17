@@ -150,7 +150,7 @@
                 '<div class=\"row\">' +
                 ' <div class="col-md-12">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
-                '<label for=\"socialPlanId\">Seleziona il media da Associare </label><select id=\"socialPlanId\"  required=\"required\" name=\"socialPlanId\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'evento per la Campagna\"' +
+                '<label for=\"socialPlanId\">Seleziona il media da Associare </label><select id=\"socialPlanId\"  required=\"required\" name=\"socialPlanId\" class=\"full-width selectpicker\" placeholder=\"Selezione il media da associare\"' +
                 'data-init-plugin=\"selectize\"></select>' +
                 ' </div>' +
                 '</div>' +
@@ -159,7 +159,7 @@
                 '<label for="okSend">Invio</label>' +
                 '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
                 '</div>'+
-                '<input type="hidden" name="editorialPlanId" value=\"'+id+'\"/>'
+                '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"'+id+'\"/>'
             });
             $.ajax({
                 method: 'GET',
@@ -180,24 +180,20 @@
                 });
             });
 
-            var start = $.fullCalendar.formatDate(start, "YYYY-MM-DD HH:mm:ss");
-            var end = $.fullCalendar.formatDate(end, "YYYY-MM-DD HH:mm:ss");
+
             bsModal.showCancelBtn();
             bsModal.setOkEvent(function () {
                 const data = {
-                    title: title,
-                    start: start,
+                    title: $('#titleEvent').val(),
+                    start:start,
                     end: end,
                     argument : $('#argument').val(),
                     description :$('#description').val(),
                     note: $('#note').val(),
-                    photUrl:$('#photoUrl').val(),
+                    photoUrl:$('#photoUrl').val(),
                     status:$('#status').val(),
-                    socialPlandId: $('#socialPlanId').val(),
-                    editorialPlanId:$('#editorialPlanId').val(),
-
-
-
+                    socialId: $('#socialPlanId').val(),
+                    editorialPlanId:$('#editorialPlanId').val()
                 };
                 $.ajax({
                     type: 'POST',
@@ -222,33 +218,208 @@
         },
         editable: true,
         eventResize: function (event) {
+
+            var title = event.title;
+            var editorialPlanDetailId = event.id;
+            var argument =event.argument;
+            var description =event.description;
+            var photoUrl=event.photoUrl;
+            var status=event.status;
+            var selectedDraft="";
+            var selectedApproved="";
+            var selectedRejected="";
+            var selectedPublished="";
+            let url1 = window.location.href;
+            let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
+
+            if (status ==='Draft') {
+                selectedDraft = 'selected=selected';
+            }
+            if (status ==='Approved') {
+                selectedApproved = 'selected=selected';
+            }
+            if (status ==='Rejected') {
+                selectedRejected = 'selected=selected';
+            }
+            if (status ==='Published') {
+                selectedPublished = 'selected=selected';
+            }
+            var note =event.note;
+            var socialId = event.socialId;
+
             var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
             var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-            var title = event.title;
-            var id = event.id;
+            let bsModal = new $.bsModal('Invio', {
+                body: '<p>Modifica un dettaglio per il piano Editoriale</p>' +
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"\"></label>' +
+                '<input id=\"titleEvent\" class=\"form-control\"' +
+                'placeholder=\"Inserisci il titolo\" name=\"titleEvent\" value=\"'+ title +'\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"startEventDate\">Inserisci la Data di Inizio del Dettaglio </label>' +
+                '<input  type =\'datetime\' id=\"startEventDate\" class=\"form-control\"' +
+                'placeholder=\"Inserisci la Data di Inizio del Dettaglio\" name=\"startEventDate\" value=\"'+start+'\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"endEventDate\">Inserisci la Data della Fine del Dettaglio </label>' +
+                '<input  type =\'datetime\' id=\"EndEventDate\" class=\"form-control\"' +
+                'placeholder=\"Inserisci la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"'+end+'\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"argument\">Inserisci l\'argomento</label>' +
+                '<input id=\"argument\" class=\"form-control\"' +
+                'placeholder=\"Inserisci l\'argomento \" name=\"argument\"value=\"'+argument+'\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"description\">Inserisci la Descrizione</label>' +
+                '<input id=\"description\" class=\"form-control\"' +
+                'placeholder=\"Inserisci la descrizione \" name=\"description\" value=\"'+ description +'\">'  +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"photoUrl\">Inserisci il link  immagine </label>' +
+                '<input id=\"photoUrl\" class=\"form-control\"' +
+                'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" value=\"'+ photoUrl +'\">'  +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"note\">Inserisci le note </label>' +
+                '<input id=\"note\" class=\"form-control\"' +
+                'placeholder=\"Inserisci le note \" name=\"note\" value=\"'+ note +'\">'  +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                '<div class="col-md-12">' +
+                '<div class="form-group form-group-default selectize-enabled">' +
+                '<label for="status">Seleziona lo Stato</label>' +
+                '<select id="status" name="status" required="required"' +
+                'class="full-width selectpicker"' +
+                'placeholder="Seleziona lo stato"' +
+                'data-init-plugin="selectize">' +
+                '<option value="new">Seleziona lo stato</option>' +
+
+                '<option value="Draft"selected="selected">Bozza</option>' +
+
+                '<option ' + selectedDraft + ' value="Draft">Bozza</option>' +
+                '<option ' + selectedApproved +' value="Approved">Approvata</option>' +
+                '<option ' + selectedRejected +' value="Rejected">Rifiutata</option>' +
+                '<option' + selectedPublished + ' value="Published">Pubblicata</option>' +
+                '</select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class=\"row\">' +
+                ' <div class="col-md-12">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"socialPlanId\">Seleziona il media da Associare </label><select id=\"socialPlanId\"  required=\"required\"   name=\"socialPlanId\" class=\"full-width selectpicker\" placeholder=\"Seleziona il media da Associare\"' +
+                'data-init-plugin=\"selectize\"></select>' +
+                ' </div>' +
+                '</div>' +
+                '</div>'+
+                '<div class="form-group form-group-default required">' +
+                '<label for="okSend">Invio</label>' +
+                '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
+                '</div>'+
+                '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"'+editorialPlanId+'\"/>' +
+                '<input type="hidden" id="editorialPlanDetailId" name="editorialPlanDetailId" value=\"'+ editorialPlanDetailId+'\"/>'
+            });
             $.ajax({
-                url: "update.php",
-                type: "POST",
-                data: {title: title, start: start, end: end, id: id},
-                success: function () {
-                    calendar.fullCalendar('refetchEvents');
-                    alert('Event Update');
-                }
-            })
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'EditorialPlanSocial',
+
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                var select = $('#socialPlanId');
+                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: res2,
+                });
+            });
+
+
+            bsModal.showCancelBtn();
+            bsModal.setOkEvent(function () {
+                const data = {
+                    title: $('#titleEvent').val(),
+                    start:start,
+                    end: end,
+                    argument : $('#argument').val(),
+                    description :$('#description').val(),
+                    note: $('#note').val(),
+                    photoUrl:$('#photoUrl').val(),
+                    status:$('#status').val(),
+                    socialId: $('#socialPlanId').val(),
+                    editorialPlanId:$('#editorialPlanId').val(),
+                    editorialPlanDetailId:$('#editorialPlanDetailId').val()
+
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
+                    data: data
+                }).done(function (res) {
+                    bsModal.writeBody(res);
+                }).fail(function (res) {
+                    bsModal.writeBody(res);
+                }).always(function (res) {
+                    bsModal.setOkEvent(function () {
+                        window.location.reload();
+                        bsModal.hide();
+                        // window.location.reload();
+                    });
+                    bsModal.showOkBtn();
+                });
+
+            });
+
+
         },
 
         eventDrop: function (event) {
-            var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-            var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+             start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+             end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
             var title = event.title;
             var id = event.id;
             $.ajax({
-                url: "update.php",
-                type: "POST",
+                url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
+                type: 'POST',
                 data: {title: title, start: start, end: end, id: id},
                 success: function () {
                     calendar.fullCalendar('refetchEvents');
                     alert("Event Updated");
+
                 }
             });
         },
@@ -271,5 +442,6 @@
     });
 
 
-})(jQuery);
+})
+(jQuery);
 

@@ -33,9 +33,18 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
         $i = 0;
         /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
         foreach ($editorialDetails as $singleDetail) {
+            $data[$i]["id"]= $singleDetail->id;
             $data[$i]["title"] = $singleDetail->title;
             $data[$i]["start"] = $singleDetail->startEventDate;
             $data[$i]["end"] = $singleDetail->endEventDate;
+            $data[$i]["description"]=$singleDetail->description;
+            $data[$i]["argument"]=$singleDetail->argument;
+            $data[$i]["photoUrl"]= $singleDetail->photoUrl;
+            $data[$i]["note"]= $singleDetail->note;
+            $data[$i]["socialId"]=$singleDetail->socialId;
+            $data[$i]["socialName"]=$singleDetail->editorialPlanSocial->name;
+            $data[$i]["editorialPlanId"]=$singleDetail->editorialPlanId;
+
 
             $i++;
         }
