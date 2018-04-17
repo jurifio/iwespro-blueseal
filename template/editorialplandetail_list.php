@@ -13,12 +13,9 @@
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
-    <script src="https://astrotel.it/locale-all.js"></script>
+
 
 </head>
 <body class="fixed-header">
@@ -26,7 +23,38 @@
 <div class="page-container">
     <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
+    <div id="createEventModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span> <span class="sr-only">close</span></button>
+                    <h4>Add an Event</h4>
+                </div>
+                <div id="modalBody" class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="Event Name" id="eventName">
+                    </div>
 
+                    <div class="form-group form-inline">
+                        <div class="input-group date" data-provide="datepicker">
+                            <input type="text" id="eventDueDate" class="form-control" placeholder="Due Date mm/dd/yyyy">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea class="form-control" type="text" rows="4" placeholder="Event Description" id= "eventDescription"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitButton">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
 
