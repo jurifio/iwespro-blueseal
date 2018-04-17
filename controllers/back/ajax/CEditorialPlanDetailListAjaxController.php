@@ -40,6 +40,7 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
             $data[$i]["description"]=$singleDetail->description;
             $data[$i]["argument"]=$singleDetail->argument;
             $data[$i]["photoUrl"]= $singleDetail->photoUrl;
+            $data[$i]["status"]= $singleDetail->status;
             $data[$i]["note"]= $singleDetail->note;
             $data[$i]["socialId"]=$singleDetail->socialId;
             $data[$i]["socialName"]=$singleDetail->editorialPlanSocial->name;
