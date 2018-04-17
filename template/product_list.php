@@ -200,9 +200,6 @@
                 data-remote="bs.publish.products"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.print.aztec"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
                 data-remote="bs.product.photo.manage"
         ></bs-toolbar-button>
         <bs-toolbar-button
@@ -218,6 +215,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.force.shooting"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.print.aztec"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Attributi Prodotti">
