@@ -217,7 +217,7 @@
 
         },
         editable: true,
-        eventResize: function (event) {
+        eventClick: function (event) {
 
             var title = event.title;
             var editorialPlanDetailId = event.id;
@@ -430,13 +430,41 @@
                 },
                 success: function () {
                     calendar.fullCalendar('refetchEvents');
-                    alert("Event Updated");
+                    alert("Dettaglio Piano Editoriale Aggiornato");
+
+                }
+            });
+        },
+        eventResize: function (event) {
+            start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+            end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+
+            var title = event.title;
+            var editorialPlanDetailId = event.id;
+            var argument =event.argument;
+            var description =event.description;
+            var photoUrl=event.photoUrl;
+            var status = event.status;
+            var note =event.note;
+            var socialId =event.socialId;
+
+            let url1 = window.location.href;
+            let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
+            $.ajax({
+                url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
+                type: 'POST',
+                data: {title: title, start: start, end: end, note:note, editorialPlanId: editorialPlanId, editorialPlanDetailId:editorialPlanDetailId, argument:argument, description:
+                    description, photoUrl:photoUrl, status:status, socialId:socialId
+                },
+                success: function () {
+                    calendar.fullCalendar('refetchEvents');
+                    alert("Dettaglio Piano Editoriale Aggiornato");
 
                 }
             });
         },
 
-        eventClick: function (event) {
+        /*eventDoubleClick: function (event) {
             if (confirm("Are you sure you want to remove it?")) {
                 var id = event.id;
                 $.ajax({
@@ -445,11 +473,11 @@
                     data: {id: id},
                     success: function () {
                         calendar.fullCalendar('refetchEvents');
-                        alert("Event Removed");
+                        alert("Dettaglio Piano Editoriale Aggiornato");
                     }
                 })
             }
-        },
+        },*/
 
     });
 
