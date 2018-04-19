@@ -2075,6 +2075,26 @@
                 "GET",
                 "DELETE"
             ]
+        },{
+            "pattern": "/blueseal/prodotti/filtri-custom(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCustomFilterListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/filtri-custom/preview(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCustomFilterPreviewListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
