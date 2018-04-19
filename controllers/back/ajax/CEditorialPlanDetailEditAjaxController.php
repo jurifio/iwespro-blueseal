@@ -91,4 +91,17 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
         return $res;
     }
+    public function put()
+{
+    $data  = $this->app->router->request()->getRequestData();
+    $id = $data["id"];
+    /** @var CRepo $editorialPlanDetail */
+    $editorialPlanDetail = \Monkey::app()->repoFactory->create('editorialPlanDetail');
+
+    /** @var CEditorialPlanDetail $editorial */
+    $editorial= $editorialPlanDetail->findOneBy(['id'=>$id]);
+    $editorial->delete();
+    $res = "Dettaglio Piano Editoriale Cancellato";
+    return $res;
+}
 }
