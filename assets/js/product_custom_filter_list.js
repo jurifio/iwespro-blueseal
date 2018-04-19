@@ -140,10 +140,10 @@
             checkedSeasonName[i] = $(this).attr('name');
         });
 
-        if(checkedShop.length === 0 || checkedSeason.length === 0){
+        if(checkedShop.length === 0 || checkedSeason.length === 0 || ids.length === 0){
             new Alert({
                 type: "warning",
-                message: "Devi selezionare almeno uno shop e una stagione"
+                message: "Devi selezionare almeno uno shop, una stagione e una categoria"
             }).open();
             return false;
         }
@@ -186,13 +186,12 @@
 
 
             $.each(count, function (k, v) {
+                    //preparo categoria
+                    let catId = k.split('-')[2];
+                    let singleCat = k.split('-')[0] + '-' + k.split('-')[1];
 
-                //preparo categoria
-                let catId = k.split('-')[2];
-                let singleCat = k.split('-')[0] + '-' + k.split('-')[1];
-
-                $('#tableResult tr:last').after(
-                    '<tr>' +
+                    $('#tableResult tr:last').after(
+                        '<tr>' +
                         '<td data-cat="' + catId + '">' + singleCat + '</td>' +
                         '<td>' + v + '</td>' +
                         '<td>' + seasName + '</td>' +
@@ -200,14 +199,15 @@
                         '<td>' + hasShooting + '</td>' +
                         '<td>' + shpName + '</td>' +
                         '<td>' +
-                            '<a href="/blueseal/prodotti/filtri-custom/preview?catid=' + catId +'&seasons='+ encodedSeasons + '&shops=' + encodedShops + '" target="_blank">' +
-                            '<button class="btn btn-dafault">Vedi i prodotti' +
-                                 '</button> ' +
-                            '</a>' +
+                        '<a href="/blueseal/prodotti/filtri-custom/preview?catid=' + catId + '&seasons=' + encodedSeasons + '&shops=' + encodedShops + '" target="_blank">' +
+                        '<button class="btn btn-dafault" disabled>Vedi i prodotti' +
+                        '</button> ' +
+                        '</a>' +
                         '</td>' +
-                    '</tr>');
-                sumCategory += k + "<br />";
-                sum = sum + v;
+                        '</tr>');
+                    sumCategory += k + "<br />";
+                    sum = sum + v;
+
             });
             $('#tableResult tr:last').after(
                     '<tr style="border-top: 2px solid black; font-weight: bold">' +
@@ -219,7 +219,7 @@
                         '<td>' + shpName + '</td>' +
                         '<td>' +
                             '<a href="/blueseal/prodotti/filtri-custom/preview?catid=' + encodedCats +'&seasons='+ encodedSeasons + '&shops=' + encodedShops + '" target="_blank">' +
-                                '<button class="btn btn-dafault">Vedi i prodotti' +
+                                '<button class="btn btn-dafault" disabled>Vedi i prodotti' +
                                 '</button> ' +
                             '</a>' +
                         '</td>' +
