@@ -2054,6 +2054,16 @@
                 "GET"
             ]
         },{
+            "pattern": "/blueseal/shooting/accettazione-prodotti(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingAcceptProductListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
             "pattern": "/blueseal/users/ruoli(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacRoleListController"
