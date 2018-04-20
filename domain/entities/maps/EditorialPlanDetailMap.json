@@ -17,6 +17,13 @@
                 "parentKeys": ["socialId"],
                 "childKeys" : ["id"],
                 "type" : "OneToOne"
+            },
+            {
+                "name" : "editorialPlanArgument",
+                "entity" : "EditorialPlanArgument",
+                "parentKeys": ["editorialPlanArgumentId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
             }
         ]
     }

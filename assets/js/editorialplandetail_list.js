@@ -24,8 +24,7 @@
         // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
         // it doesn't need to have a start or end
         var eventObject = {
-            title: $.trim($(this).text()),
-            description:$.trim($(this).text())// use the element's text as the event title
+            title: $.trim($(this).text())
         };
         // store the Event Object in the DOM element so we can get to it later
         $(this).data('eventObject', eventObject);
@@ -96,11 +95,14 @@
                 '</div>' +
                 '</div>' +
                 '<div class=\"row\">' +
-                '<div class=\"col-md-12\">' +
-                '<div class=\"form-group form-group-default selectize-enabled\">' +
-                '<label for=\"argument\">Inserisci l\'argomento</label>' +
-                '<input id=\"argument\" class=\"form-control\"' +
-                'placeholder=\"Inserisci l\'argomento \" name=\"argument\" required=\"required\">' +
+                '<div class="col-md-12">' +
+                '<div class="form-group form-group-default selectize-enabled">' +
+                '<label for="editorialPlanArgumentId">Seleziona l\' argomento da associare</label>' +
+                '<select id="editorialPlanArgumentId"' +
+                ' name="editorialPlanArgumentId" class="full-width selectpicker"' +
+                '  required="required"' +
+                ' placeholder="Selezione l\'argomento da utilizzare"' +
+                ' data-init-plugin="selectize"></select>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -153,7 +155,7 @@
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
                 '<label for=\"socialPlanId\">Seleziona il media da Associare </label><select id=\"socialPlanId\"  required=\"required\" name=\"socialPlanId\" class=\"full-width selectpicker\" placeholder=\"Selezione il media da associare\"' +
                 'data-init-plugin=\"selectize\"></select>' +
-                ' </div>' +
+                '</div>' +
                 '</div>' +
                 '</div>' +
                 '<div class="row">' +
@@ -177,6 +179,7 @@
                 '</div>' +
                 '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
             });
+
             $.ajax({
                 method: 'GET',
                 url: '/blueseal/xhr/GetTableContent',
@@ -192,6 +195,24 @@
                     valueField: 'id',
                     labelField: 'name',
                     searchField: 'name',
+                    options: res2,
+                });
+            });
+        $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'EditorialPlanArgument',
+                    condition:{type:1},
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                var select = $('#editorialPlanArgumentId');
+                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'titleArgument',
+                    searchField: 'titleArgument',
                     options: res2,
                 });
             });
@@ -247,6 +268,7 @@
             var selectedApproved = "";
             var selectedRejected = "";
             var selectedPublished = "";
+            var argumentName = event.argumentName;
             let url1 = window.location.href;
             let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
 
@@ -298,11 +320,15 @@
                 '</div>' +
                 '</div>' +
                 '<div class=\"row\">' +
-                '<div class=\"col-md-12\">' +
-                '<div class=\"form-group form-group-default selectize-enabled\">' +
-                '<label for=\"argument\">Inserisci l\'argomento</label>' +
-                '<input id=\"argument\" class=\"form-control\"' +
-                'placeholder=\"Inserisci l\'argomento \" name=\"argument\"value=\"' + argument + '\" required=\"required\">' +
+                '<div class="col-md-12">' +
+                '<div class="form-group form-group-default selectize-enabled">' +
+                '<label for="editorialPlanArgumentId">Seleziona l\' Argomento da associare</label>' +
+                '<select id="editorialPlanArgumentId"' +
+                ' name="editorialPlanArgumentId" class="full-width selectpicker"' +
+                '  required="required"' +
+                ' placeholder="Selezione l\' argomento da utilizzare"' +
+                '<option selected="selected" value="' + argument + '">' + argumentName + '</option>' +
+                ' data-init-plugin="selectize"></select>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -451,6 +477,26 @@
             options: res2,
         });
     });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'EditorialPlanArgument',
+                    selection: {id: argument},
+                    condition:{type:1}
+
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                var select = $('#editorialPlanArgumentId');
+                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'titleArgument',
+                    searchField: 'titleArgument',
+                    options: res2,
+                });
+            });
 
 
     bsModal.showCancelBtn();

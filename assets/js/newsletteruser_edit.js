@@ -226,7 +226,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                     url: '/blueseal/xhr/GetTableContent',
                     data: {
                         table: 'NewsletterEvent',
-                        condition: {newsletterCampaignId: selection}
+                            condition: {newsletterCampaignId: selection}
                     },
                     dataType: 'json'
                 }).done(function (res2) {

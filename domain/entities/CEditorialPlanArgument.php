@@ -6,7 +6,7 @@ use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
 
 /**
- * Class CEditorialPlanDetail
+ * Class CEditorialPlanArgument
  * @package bamboo\domain\entities
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>
@@ -17,14 +17,10 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @date 01/08/2016
  * @since 1.0
- * @property  CObjectCollection editorialPlan
- * @property  CObjectCollection editorialPlanSocial
- * @property  CObjectCollection editorialPlanArgument
-
-
+ *
  */
-class CEditorialPlanDetail extends AEntity
+class CEditorialPlanArgument extends AEntity
 {
-	protected $entityTable = 'EditorialPlanDetail';
-	protected $primaryKeys = ['id'];
+	protected $entityTable = 'EditorialPlanArgument';
+	protected $primaryKeys = ['id','type'];
 }

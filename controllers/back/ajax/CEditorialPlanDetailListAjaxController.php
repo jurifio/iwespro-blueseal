@@ -13,6 +13,7 @@ use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CEditorialPlan;
 use bamboo\domain\entities\CEditorialPlanDetail;
+use bamboo\domain\entities\CEditorialPlanArgument;
 
 class CEditorialPlanDetailListAjaxController extends AAjaxController
 {
@@ -40,7 +41,8 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
             $data[$i]["start"] = $singleDetail->startEventDate;
             $data[$i]["end"] = $singleDetail->endEventDate;
             $data[$i]["description"] = $singleDetail->description;
-            $data[$i]["argument"] = $singleDetail->argument;
+            $data[$i]["argument"] = $singleDetail->editorialPlanArgumentId;
+            $data[$i]["argumentName"]= $singleDetail->editorialPlanArgument->titleArgument;
             $data[$i]["photoUrl"] = $singleDetail->photoUrl;
             $data[$i]["status"] = $singleDetail->status;
             $data[$i]["note"] = $singleDetail->note;

@@ -1,0 +1,16 @@
+{
+    "entity": {
+        "name": "EditorialPlanArgument",
+        "keys": ["id,type"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "editorialPlanDetail",
+                "entity" : "EditorialPlanDetail",
+                "parentKeys": ["editorialPlanArgumentId"],
+                "childKeys" : ["id"],
+                "type" : "OneToMany"
+            }
+        ]
+    }
+}
