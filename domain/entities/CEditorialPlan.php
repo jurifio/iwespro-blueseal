@@ -18,6 +18,7 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * @date 01/08/2016
  * @since 1.0
  * @property CObjectCollection editorialPlanDetail
+ * @property CObjectCollection shop
  *
  */
 class CEditorialPlan extends AEntity

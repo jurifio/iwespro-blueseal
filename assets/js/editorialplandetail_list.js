@@ -24,7 +24,8 @@
         // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
         // it doesn't need to have a start or end
         var eventObject = {
-            title: $.trim($(this).text()) // use the element's text as the event title
+            title: $.trim($(this).text()),
+            description:$.trim($(this).text())// use the element's text as the event title
         };
         // store the Event Object in the DOM element so we can get to it later
         $(this).data('eventObject', eventObject);
@@ -155,6 +156,21 @@
                 ' </div>' +
                 '</div>' +
                 '</div>' +
+                '<div class="row">' +
+                '<div class="col-md-12">' +
+                '<div class="form-group form-group-default selectize-enabled">' +
+                '<label for="notifyEmail">Notificare al Cliente</label>' +
+                '<select id="notifyEmail" name="notifyEmail" required="required"' +
+                'class="full-width selectpicker"' +
+                'placeholder="Seleziona"' +
+                'data-init-plugin="selectize">' +
+                '<option value="">Seleziona</option>' +
+                '<option value="yesNotify">Invia la Notifica</option>' +
+                '<option value="notNotify">Non Inviare la Notifica</option>' +
+                '</select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
                 '<div class="form-group form-group-default required">' +
                 '<label for="okSend">Invio</label>' +
                 '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
@@ -193,7 +209,9 @@
                     photoUrl: $('#photoUrl').val(),
                     status: $('#status').val(),
                     socialId: $('#socialPlanId').val(),
-                    editorialPlanId: $('#editorialPlanId').val()
+                    editorialPlanId: $('#editorialPlanId').val(),
+                    notifyEmail: $('#notifyEmail').val(),
+
                 };
                 $.ajax({
                     type: 'POST',
@@ -342,6 +360,21 @@
                 ' </div>' +
                 '</div>' +
                 '</div>' +
+                '<div class="row">' +
+                '<div class="col-md-12">' +
+                '<div class="form-group form-group-default selectize-enabled">' +
+                '<label for="notifyEmail">Notificare al Cliente</label>' +
+                '<select id="notifyEmail" name="notifyEmail" required="required"' +
+                'class="full-width selectpicker"' +
+                'placeholder="Seleziona"' +
+                'data-init-plugin="selectize">' +
+                '<option value="">Seleziona</option>' +
+                '<option value="yesNotify">Invia la Notifica</option>' +
+                '<option value="notNotify">Non Inviare la Notifica</option>' +
+                '</select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
                 '<div class="form-group form-group-default required">' +
                 '<label for="okSend">Modifica</label>' +
                 '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
@@ -349,184 +382,219 @@
                 '<div class="form-group form-group-default required">' +
                 '<label for="deleteDetail">Cancellazione</label>' +
                 '<div><p>Cancella il Dettaglio</p></div>' +
-                '<input type="button" class="btn-success" id="deleteDetail" name="deleteDetail" value="Cancella il Dettaglio del Piano"'+
+                '<input type="button" class="btn-success" id="deleteDetail" name="deleteDetail" value="Cancella il Dettaglio del Piano"' +
                 '</div>' +
                 '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + editorialPlanId + '\"/>' +
                 '<input type="hidden" id="editorialPlanDetailId" name="editorialPlanDetailId" value=\"' + editorialPlanDetailId + '\"/>'
             });
-            $("#deleteDetail").click(function() {
+            $("#deleteDetail").click(function () {
                 if (confirm("Sei Sicuro di Cancellare il Dettaglio del Piano Editoriale")) {
-                    var id = event.id;
+                 /*   var title = event.title;
+                    var editorialPlanDetailId = event.id;
+                    var startEventDate = event.start;
+                    var endEventDate = event.end;
+                    var argument = event.argument;
+                    var description = event.description;
+                    var photoUrl = event.photoUrl;
+                    var status = event.status;
+                    var note = event.note;
+                    var notify socialId = event.socialId;
+*/
+                    var url1 = window.location.href;
+                    var editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
                     $.ajax({
                         url: "/blueseal/xhr/EditorialPlanDetailEditAjaxController",
                         type: "put",
-                        data: {id: id},
-                        success: function (res) {
+                        data: {
+                            editorialPlanId: editorialPlanId,
+                            editorialPlanDetailId: editorialPlanDetailId,
+                            argument: argument,
+                            description: description,
+                            photoUrl: photoUrl,
+                            status: status,
+                            socialId: socialId,
+                            title: title,
+                            note: note,
 
-                            alert(res);
-                            calendar.fullCalendar('refetchEvents');
-
-                        }
-
-                    })
-                    bsModal.hide();
-                    window.location.reload();
-                }
-            });
-            $.ajax({
-                method: 'GET',
-                url: '/blueseal/xhr/GetTableContent',
-                data: {
-                    table: 'EditorialPlanSocial',
-                    selection: {id: socialId}
-
-                },
-                dataType: 'json'
-            }).done(function (res2) {
-                var select = $('#socialPlanId');
-                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-                select.selectize({
-                    valueField: 'id',
-                    labelField: 'name',
-                    searchField: 'name',
-                    options: res2,
-                });
-            });
+                    },
 
 
-            bsModal.showCancelBtn();
-            bsModal.setOkEvent(function () {
-                const data = {
-                    title: $('#titleEvent').val(),
-                    start: start,
-                    end: end,
-                    argument: $('#argument').val(),
-                    description: $('#description').val(),
-                    note: $('#note').val(),
-                    photoUrl: $('#photoUrl').val(),
-                    status: $('#status').val(),
-                    socialId: $('#socialPlanId').val(),
-                    editorialPlanId: $('#editorialPlanId').val(),
-                    editorialPlanDetailId: $('#editorialPlanDetailId').val()
+                    //  data: {editorialPlanDetailId:editorialPlanDetailId},
+                    success: function (res) {
+                        alert(res);
+                         calendar.fullCalendar('refetchEvents');
 
-                };
-                $.ajax({
-                    type: 'POST',
-                    url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
-                    data: data
-                }).done(function (res) {
-                    bsModal.writeBody(res);
-                }).fail(function (res) {
-                    bsModal.writeBody(res);
-                }).always(function (res) {
-                    bsModal.setOkEvent(function () {
-                        window.location.reload();
-                        bsModal.hide();
-                        // window.location.reload();
-                    });
-                    bsModal.showOkBtn();
-                });
-
-            });
-
-
-        },
-
-        eventDrop: function (event) {
-            start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-            end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-
-            var title = event.title;
-            var editorialPlanDetailId = event.id;
-            var argument = event.argument;
-            var description = event.description;
-            var photoUrl = event.photoUrl;
-            var status = event.status;
-            var note = event.note;
-            var socialId = event.socialId;
-
-            let url1 = window.location.href;
-            let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
-            $.ajax({
-                url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
-                type: 'POST',
-                data: {
-                    title: title,
-                    start: start,
-                    end: end,
-                    note: note,
-                    editorialPlanId: editorialPlanId,
-                    editorialPlanDetailId: editorialPlanDetailId,
-                    argument: argument,
-                    description:
-                    description,
-                    photoUrl: photoUrl,
-                    status: status,
-                    socialId: socialId
-                },
-                success: function () {
-                    calendar.fullCalendar('refetchEvents');
-                    alert("Dettaglio Piano Editoriale Aggiornato");
-
-                }
-            });
-        },
-        eventResize: function (event) {
-            start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-            end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-
-            var title = event.title;
-            var editorialPlanDetailId = event.id;
-            var argument = event.argument;
-            var description = event.description;
-            var photoUrl = event.photoUrl;
-            var status = event.status;
-            var note = event.note;
-            var socialId = event.socialId;
-
-            let url1 = window.location.href;
-            let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
-            $.ajax({
-                url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
-                type: 'POST',
-                data: {
-                    title: title,
-                    start: start,
-                    end: end,
-                    note: note,
-                    editorialPlanId: editorialPlanId,
-                    editorialPlanDetailId: editorialPlanDetailId,
-                    argument: argument,
-                    description:
-                    description,
-                    photoUrl: photoUrl,
-                    status: status,
-                    socialId: socialId
-                },
-                success: function () {
-                    calendar.fullCalendar('refetchEvents');
-                    alert("Dettaglio Piano Editoriale Aggiornato");
-
-                }
-            });
-        },
-
-        eventDoubleClick: function (event) {
-            if (confirm("Are you sure you want to remove it?")) {
-                var id = event.id;
-                $.ajax({
-                    url: "delete.php",
-                    type: "POST",
-                    data: {id: id},
-                    success: function () {
-                        calendar.fullCalendar('refetchEvents');
-                        alert("Dettaglio Piano Editoriale Aggiornato");
                     }
-                })
-            }
+
+                }
+            );
+            bsModal.hide();
+            window.location.reload();
+        }
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'EditorialPlanSocial',
+            selection: {id: socialId}
+
         },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#socialPlanId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+    });
+
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        const data = {
+            title: $('#titleEvent').val(),
+            start: start,
+            end: end,
+            argument: $('#argument').val(),
+            description: $('#description').val(),
+            note: $('#note').val(),
+            photoUrl: $('#photoUrl').val(),
+            status: $('#status').val(),
+            socialId: $('#socialPlanId').val(),
+            editorialPlanId: $('#editorialPlanId').val(),
+            editorialPlanDetailId: $('#editorialPlanDetailId').val(),
+            notifyEmail: $('#notifyEmail').val(),
+
+
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                window.location.reload();
+                bsModal.hide();
+                // window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
 
     });
+
+
+},
+
+    eventDrop:
+
+function (event) {
+    start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+    end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+
+    var title = event.title;
+    var editorialPlanDetailId = event.id;
+    var argument = event.argument;
+    var description = event.description;
+    var photoUrl = event.photoUrl;
+    var status = event.status;
+    var note = event.note;
+    var socialId = event.socialId;
+    var notifyEmail="yesNotify";
+
+    let url1 = window.location.href;
+    let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
+    $.ajax({
+        url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
+        type: 'POST',
+        data: {
+            title: title,
+            start: start,
+            end: end,
+            note: note,
+            editorialPlanId: editorialPlanId,
+            editorialPlanDetailId: editorialPlanDetailId,
+            argument: argument,
+            description: description,
+            photoUrl: photoUrl,
+            status: status,
+            socialId: socialId,
+            notifyEmail:notifyEmail
+        },
+        success: function () {
+            calendar.fullCalendar('refetchEvents');
+            alert("Dettaglio Piano Editoriale Aggiornato");
+
+        }
+    });
+}
+
+,
+eventResize: function (event) {
+    start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+    end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+
+    var title = event.title;
+    var editorialPlanDetailId = event.id;
+    var argument = event.argument;
+    var description = event.description;
+    var photoUrl = event.photoUrl;
+    var status = event.status;
+    var note = event.note;
+    var socialId = event.socialId;
+
+    let url1 = window.location.href;
+    let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
+    $.ajax({
+        url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
+        type: 'POST',
+        data: {
+            title: title,
+            start: start,
+            end: end,
+            note: note,
+            editorialPlanId: editorialPlanId,
+            editorialPlanDetailId: editorialPlanDetailId,
+            argument: argument,
+            description: description,
+            photoUrl: photoUrl,
+            status: status,
+            socialId: socialId
+        },
+        success: function () {
+            calendar.fullCalendar('refetchEvents');
+            alert("Dettaglio Piano Editoriale Aggiornato");
+
+        }
+    });
+}
+,
+
+eventDoubleClick: function (event) {
+    if (confirm("Are you sure you want to remove it?")) {
+        var id = event.id;
+        $.ajax({
+            url: "delete.php",
+            type: "POST",
+            data: {id: id},
+            success: function () {
+                calendar.fullCalendar('refetchEvents');
+                alert("Dettaglio Piano Editoriale Aggiornato");
+            }
+        })
+    }
+}
+,
+
+})
+;
 
 
 })

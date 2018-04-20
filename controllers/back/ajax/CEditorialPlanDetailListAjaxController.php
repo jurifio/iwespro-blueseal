@@ -9,6 +9,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CEditorialPlan;
 use bamboo\domain\entities\CEditorialPlanDetail;
@@ -32,21 +33,19 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
         $data = [];
         $i = 0;
         /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
+
         foreach ($editorialDetails as $singleDetail) {
-            $data[$i]["id"]= $singleDetail->id;
+            $data[$i]["id"] = $singleDetail->id;
             $data[$i]["title"] = $singleDetail->title;
             $data[$i]["start"] = $singleDetail->startEventDate;
             $data[$i]["end"] = $singleDetail->endEventDate;
-            $data[$i]["description"]=$singleDetail->description;
-            $data[$i]["argument"]=$singleDetail->argument;
-            $data[$i]["photoUrl"]= $singleDetail->photoUrl;
-            $data[$i]["status"]= $singleDetail->status;
-            $data[$i]["note"]= $singleDetail->note;
-            $data[$i]["socialId"]=$singleDetail->socialId;
-            $data[$i]["socialName"]=$singleDetail->editorialPlanSocial->name;
-            $data[$i]["editorialPlanId"]=$singleDetail->editorialPlanId;
-
-
+            $data[$i]["description"] = $singleDetail->description;
+            $data[$i]["argument"] = $singleDetail->argument;
+            $data[$i]["photoUrl"] = $singleDetail->photoUrl;
+            $data[$i]["status"] = $singleDetail->status;
+            $data[$i]["note"] = $singleDetail->note;
+            $data[$i]["socialId"] = $singleDetail->socialId;
+            $data[$i]["socialName"] = $singleDetail->editorialPlanSocial->name;
             $i++;
         }
 

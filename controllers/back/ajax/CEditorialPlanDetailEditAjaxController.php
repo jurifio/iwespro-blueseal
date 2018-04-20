@@ -30,13 +30,13 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $status = $data['status'];
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
-        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate,'Y-m-d h:m:s');
-        $endEventDate =STimeToolbox::FormatDateFromDBValue($endEventDate,'Y-m-d h:m:s');
+        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
+        $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');
         $editorialPlanDetailId = $data['editorialPlanDetailId'];
+        $notifyEmail = $data['notifyEmail'];
 
-       /* $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
-        $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');*/
-
+        /* $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
+         $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');*/
 
 
         /** @var CRepo $editorialDetailRepo */
@@ -81,27 +81,118 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         }
 
 
-
         // eseguo la commit sulla tabella;
 
         $editorialPlanDetail->update();
 
         $res = "Dettaglio Piano modificato con successo!";
+        /** @var ARepo $shopRepo */
+        $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
+
+        /** @var CEditorialPlan $editorialPlan */
+        $editorialPlan = $ePlanRepo->findOneBy(['id' => $editorialPlanId]);
+
+        $shopId = $editorialPlan->shop->id;
+        $shopEmail = $editorialPlan->shop->referrerEmails;
+        /** @var Ceditorial $to */
+        $to = $shopEmail;
+        $editorialPlanName = $editorialPlan->name;
+        $subject = "Modifica Dettaglio Piano Editoriale";
+        $message = "Modifica Dettaglio Piano Editoriale<p>";
+        $message .= "Title:" . $title . "<p>";
+        $message .= "Data di Inizio:" . $startEventDate . "<p>";
+        $message .= "Data di Fine:" . $endEventDate . "<p>";
+        $message .= "Argomento:" . $argument . "<p>";
+        $message .= "Descrizione:" . $description . "<p>";
+        $message .= "Stato:" . $status . "<p>";
+        $message .= "Note:" . $note . "<p>";
+        /** @var ARepo $ePlanSocialRepo */
+        $ePlanSocialRepo = \Monkey::app()->repoFactory->create('EditorialPlanSocial');
+        /** @var CEditorialPlanSocial $editorialPlanSocial */
+        $editorialPlanSocial = $ePlanSocialRepo->findOneBy(['id' => $socialId]);
+
+        /** @var CObjectCollection $editorialPlanSocialName */
+        $editorialPlanSocialName = $editorialPlanSocial->name . "<p>";
+        $message .= "Media utilizzato:" . $editorialPlanSocialName . "<p>";
+        $message .= "Piano Editoriale:" . $editorialPlanName . "<p>";
+
+
+        if ($notifyEmail === "yesNotify") {
+
+            if (ENV == 'dev') return false;
+            /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
+            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+            if (!is_array($to)) {
+                $to = [$to];
+            }
+            $emailRepo->newMail('Iwes IT Department <it@iwes.it>', $to, [], [], $subject, $message);
+        }
 
 
         return $res;
     }
-    public function put()
-{
-    $data  = $this->app->router->request()->getRequestData();
-    $id = $data["id"];
-    /** @var CRepo $editorialPlanDetail */
-    $editorialPlanDetail = \Monkey::app()->repoFactory->create('editorialPlanDetail');
 
-    /** @var CEditorialPlanDetail $editorial */
-    $editorial= $editorialPlanDetail->findOneBy(['id'=>$id]);
-    $editorial->delete();
-    $res = "Dettaglio Piano Editoriale Cancellato";
-    return $res;
-}
+    public function put()
+    {
+        $data = $this->app->router->request()->getRequestData();
+        $title = $data['title'];
+
+        $argument = $data['argument'];
+        $note = $data['note'];
+        $description = $data['description'];
+        $photoUrl = $data['photoUrl'];
+        $status = $data['status'];
+        $socialId = $data['socialId'];
+        $editorialPlanId = $data['editorialPlanId'];
+        $notifyEmail = "yesNotify";
+
+        $editorialPlanDetailId = $data['editorialPlanDetailId'];
+        /** @var CRepo $editorialPlanDetail */
+        $editorialPlanDetail = \Monkey::app()->repoFactory->create('editorialPlanDetail');
+
+        /** @var CEditorialPlanDetail $editorial */
+        $editorial = $editorialPlanDetail->findOneBy(['id' => $editorialPlanDetailId]);
+        $editorial->delete();
+        $res = "Dettaglio Piano Editoriale Cancellato";
+        /** @var ARepo $shopRepo */
+        $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
+
+        /** @var CEditorialPlan $editorialPlan */
+        $editorialPlan = $ePlanRepo->findOneBy(['id' => $editorialPlanId]);
+
+        $shopId = $editorialPlan->shop->id;
+        $shopEmail = $editorialPlan->shop->referrerEmails;
+        /** @var Ceditorial $to */
+        $to = $shopEmail;
+        $editorialPlanName = $editorialPlan->name;
+        $subject = "Cancellazione Dettaglio Piano Editoriale";
+        $message = "Cancellazione Dettaglio Piano Editoriale<p>";
+        $message .= "Title:" . $title . "<p>";
+        $message .= "Argomento:" . $argument . "<p>";
+        $message .= "Descrizione:" . $description . "<p>";
+        $message .= "Stato:" . $status . "<p>";
+        $message .= "Note:" . $note . "<p>";
+        /** @var ARepo $ePlanSocialRepo */
+        $ePlanSocialRepo = \Monkey::app()->repoFactory->create('EditorialPlanSocial');
+        /** @var CEditorialPlanSocial $editorialPlanSocial */
+        $editorialPlanSocial = $ePlanSocialRepo->findOneBy(['id' => $socialId]);
+
+        /** @var CObjectCollection $editorialPlanSocialName */
+        $editorialPlanSocialName = $editorialPlanSocial->name . "<p>";
+        $message .= "Media utilizzato:" . $editorialPlanSocialName . "<p>";
+        $message .= "Piano Editoriale:" . $editorialPlanName . "<p>";
+
+
+        if ($notifyEmail === "yesNotify") {
+
+            // if (ENV == 'dev') return false;
+            /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
+            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+            if (!is_array($to)) {
+                $to = [$to];
+            }
+            $emailRepo->newMail('Iwes IT Department <it@iwes.it>', $to, [], [], $subject, $message);
+        }
+        return $res;
+    }
 }
