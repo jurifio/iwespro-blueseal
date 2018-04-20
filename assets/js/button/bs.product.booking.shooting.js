@@ -35,8 +35,9 @@ $(document).on('bs-product-booking-shooting', function (e, element, button) {
             let type = JSON.parse(res);
 
             $.each(type["tp"], function(k, v) {
-                $('<input />', { type: 'number', id: v.id, class: 'toGet', min: 1, step: 1 }).appendTo($("#typeCheck"));
-                $('<label />', { 'for': v.id, text: v.name }).appendTo($("#typeCheck"));
+                $('#typeCheck').append('<div style="margin: 10px 0" id="type-'+ v.id +'"></div>');
+                $("#type-"+v.id).append('<input style="display: inline; margin-right: 10px" type="number" id="' + v.id + '" class="toGet" min="1" step="1">');
+                $("#type-"+v.id).append('<label style="display: inline" for="' + v.id + '">' + v.name + '</label>');
             });
 
             $.each(type["sh"], function(k, v) {

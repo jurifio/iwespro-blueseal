@@ -233,11 +233,11 @@
     /** @var \bamboo\domain\entities\CProduct $product */?>
 <div class="container newpage">
     <div class="row"
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="col-md-4" style="margin-top:10px">
                 <img src="<?php echo $aztecFactoryEndpoint.$product->aztecCode; ?>" width="140" height="140"/>
             </div>
-            <div class="col-md-8 pull-left" style="border-right: 1px dotted #c0c0c0;">
+            <div class="col-md-4" style="border-right: 1px dotted #c0c0c0;">
                 <ul>
                     <li><strong>INT</strong> <?php echo $product->printId(); ?></li>
                     <li><strong>CPF</strong> <?php echo $product->itemno; ?> # <?php echo $product->productVariant->name; ?></li>
@@ -248,7 +248,14 @@
                     <li><strong>NOTE</strong> <?php echo $temp ?></li>
                 </ul>
             </div>
+            <div class="col-md-4">
+                <ul>
+                    <li><strong>BARCODE_INT</strong> <?php echo (is_string($product->getBarcodeInt()) ? $product->getBarcodeInt() : "---" ) ?></li>
+                    <li><strong>EXTID</strong> <?php echo $product->getShopExtenalIds('<br />') ?></li>
+                </ul>
+            </div>
         </div>
+    </div>
 </div>
 <?php endforeach; ?>
 <script type="application/javascript">

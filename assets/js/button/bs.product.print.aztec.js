@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs-print-aztec",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Stampa aztec",
+    title:"Stampa QR prodotti già accettati",
     placement:"bottom"
 };
 
