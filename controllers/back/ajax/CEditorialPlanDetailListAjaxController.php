@@ -28,8 +28,9 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
 
         /** @var CEditorialPlan $editorialPlan */
         $editorialPlan = $ePlanRepo->findOneBy(['id'=>$editorialPlanId]);
-
+        $editorialPlanName=$editorialPlan->name;
         /** @var CObjectCollection $editorialDetails */
+
         $editorialDetails = $editorialPlan->editorialPlanDetail;
         $data = [];
         $i = 0;
@@ -48,6 +49,7 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
             $data[$i]["note"] = $singleDetail->note;
             $data[$i]["socialId"] = $singleDetail->socialId;
             $data[$i]["socialName"] = $singleDetail->editorialPlanSocial->name;
+            $data[$i]['titleEditorialPlan'] = $editorialPlanName;
             $i++;
         }
 

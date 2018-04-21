@@ -7,6 +7,7 @@ use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\domain\entities\CEditorialPlan;
 use bamboo\domain\entities\CEditorialPlanDetail;
+use bamboo\domain\entities\CEditorialPlanSocial;
 use bamboo\ecommerce\views\VBase;
 
 /**
@@ -31,7 +32,18 @@ class CEditorialPlanDetailListController extends ARestrictedAccessRootController
     {
 
         $editorialPlanId = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
+        //$editorialPlanDetId = \Monkey::app()->router->request()->getRequestData('id');
 
+        //trovi il piano editoriale
+        /** @var ARepo $ePlanRepo */
+        $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
+
+        /** @var CEditorialPlan $editorialPlan */
+        $editorialPlan = $ePlanRepo->findOneBy(['id'=>$editorialPlanId]);
+        /** @var aRepo $ePlanSocialRepo */
+        $ePlanSocialRepo = \Monkey::app()->repoFactory->create('EditorialPlanSocial');
+         /** @var CEditorialPlanSocial $editorialPlanSocial */
+         $editorialPlanSocial=$ePlanSocialRepo->findAll();
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/editorialplandetail_list.php');
@@ -39,7 +51,10 @@ class CEditorialPlanDetailListController extends ARestrictedAccessRootController
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
-            'sidebar' => $this->sidebar->build()
+            'sidebar' => $this->sidebar->build(),
+            'editorialPlan'=> $editorialPlan,
+            'editorialPlanSocial'=>$editorialPlanSocial,
+
         ]);
     }
 }
