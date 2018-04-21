@@ -1,4 +1,23 @@
 (function ($) {
+    $(document).ready(function () {
+
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/EditorialSocialFilterAjaxController',
+        }).done(function (res) {
+            let ret = JSON.parse(res);
+
+            $.each(ret.shop, function (k, v) {
+                $('#filterMedia').append('<div><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</div>');
+            });
+
+
+
+
+        });
+
+    });
 
     $('#calendar').fullCalendar('destroy');
     let url = window.location.href;
