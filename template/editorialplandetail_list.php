@@ -34,31 +34,29 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <div class="col-md-3"style="border: 1px solid #a7a7a752; margin: 7px">
-                            <div id='editorialPlanName'><b>Piano Editoriale: </b><?php echo $editorialPlan->name; ?></div>
+                        <div class="col-md-1"style="border: 1px solid #a7a7a752; margin: 7px">
+                            <div id='editorialPlanName'><b>Piano:</b><?php echo $editorialPlan->name; ?></div>
                         </div>
                         <div class="col-md-3"style="border: 1px solid #a7a7a752; margin: 7px">
-                            <div id='editorialStartDate'><b>Inizio Piano Editoriale: </b><?php echo $editorialPlan->startDate; ?></div>
+                            <div id='editorialStartDate'><b>Inizio Piano :</b><?php echo $editorialPlan->startDate; ?></div>
                         </div>
                         <div class="col-md-3"style="border: 1px solid #a7a7a752; margin: 7px">
-                            <div id='editorialEndDate'><b>Fine Piano Editoriale: </b><?php echo $editorialPlan->endDate; ?></div>
+                            <div id='editorialEndDate'><b>Fine Piano :</b><?php echo $editorialPlan->endDate; ?></div>
                         </div>
                         <div class="col-md-2"style="border: 1px solid #a7a7a752; margin: 7px">
-                            <div id='editorialEndDate'><b>Cliente: </b><?php echo $editorialPlan->shop->name; ?></div>
+                            <div id='editorialEndDate'><b>Cliente:</b><?php echo $editorialPlan->shop->name; ?></div>
+                            </div>
+                            <div class="col-md-2" style="border: 1px solid #a7a7a752; margin: 7px">
+                                <div id='filterMedia' ><b>MEDIA: </b></div>
+                                <button class="btn btn-info" id="selectAllSocial">Seleziona tutto</button>
+                                <button class="btn btn-success" id="search">RICERCA</button>
+                            </div>
                         </div>
 
                     </div>
                 </div>
             </div>
-            <div class="container-fluid container-fixed-lg bg-white">
-                <div class="panel panel-transparent">
-                    <div class="panel-body">
-                        <div class="col-md-12"style="border: 1px solid #a7a7a752; margin: 7px">
-                            <div id='filterMedia'><b>MEDIA: </b></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">

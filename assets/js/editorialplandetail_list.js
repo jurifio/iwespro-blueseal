@@ -4,16 +4,62 @@
 
         $.ajax({
             method: 'GET',
-            url: '/blueseal/xhr/EditorialSocialFilterAjaxController',
+            url: '/blueseal/xhr/EditorialPlanSocialFilterAjaxController',
         }).done(function (res) {
             let ret = JSON.parse(res);
 
-            $.each(ret.shop, function (k, v) {
+            $.each(ret.social, function (k, v) {
                 $('#filterMedia').append('<div><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</div>');
             });
 
 
 
+
+        });
+
+    });
+    $('#selectAllSocial').click(function(){
+        $('#filterMedia input:checkbox').each(function(){
+            if( $(this).is(':checked') ){
+                $(this).prop('checked',false);
+            } else {
+                $(this).prop('checked',true);
+            }
+
+        })
+    });
+    $('#search').on('click', function () {
+        $('#calendar').fullCalendar('destroy');
+
+
+        let checkedSocial = [];
+        let checkedSocialName = [];
+        $('#filterMedia input:checked').each(function(i){
+            checkedSocial[i] = $(this).val();
+            checkedSocialName[i] = $(this).attr('name');
+        });
+
+
+        let url = window.location.href;
+        let id = url.substring(url.lastIndexOf('/') + 1);
+
+        const data = {
+            socialId: checkedSocial,
+            id:id
+        };
+        $.ajax({
+            method: 'POST',
+            url: '/blueseal/xhr/EditorialPlanDetailListFilteredAjaxController',
+            async: false,
+            data: data
+        }).success(function (res) {
+            obj = JSON.parse(res);
+
+
+        }).fail(function (res) {
+            alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+            alert("responseText: " + xhr.responseText);
+        }).always(function (res) {
 
         });
 
