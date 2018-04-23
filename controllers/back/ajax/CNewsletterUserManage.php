@@ -16,7 +16,7 @@ use bamboo\domain\repositories\CNewsletterRepo;
 
 
 /**
- * Class CProductSizeGroupManage
+ * Class CnewsletterUserManage
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -39,103 +39,120 @@ class CNewsletterUserManage extends AAjaxController
     {
         //prendo i dati passati in input
         $data = \Monkey::app()->router->request()->getRequestData();
-        $name = $data['name'];
-        $fromEmailAddressId = $data['fromEmailAddressId'];
-        $sendAddressDate = $data['sendAddressDate'];
-        $newsletterEmailListId = $data['newsletterEmailListId'];
-        $newsletterTemplateId = $data['newsletterTemplateId'];
-        $subject = $data['subject'];
-        $dataDescription = $data['dataDescription'];
-        $preCompiledTemplate = $data['preCompiledTemplate'];
-        $campaignName = $data['campaignName'];
-        $campaignId = $data['campaignId'];
-        $newsletterEventId = $data['newsletterEventId'];
-        $dateCampaignStart = $data['dateCampaignStart'];
-        $dateCampaignFinish = $data['dateCampaignFinish'];
-        $newsletterEventName = $data['newsletterEventName'];
-        if (empty($campaignId)) {
+        $typeOperation=$data['typeOperation'];
+        if($typeOperation==="1"){
+            $name = $data['name'];
+            $fromEmailAddressId = $data['fromEmailAddressId'];
+            $sendAddressDate = $data['sendAddressDate'];
+            $newsletterEmailListId = $data['newsletterEmailListId'];
+            $newsletterTemplateId = $data['newsletterTemplateId'];
+            $subject = $data['subject'];
+            $dataDescription = $data['dataDescription'];
+            $preCompiledTemplate = $data['preCompiledTemplate'];
+            $campaignName = $data['campaignName'];
+            $campaignId = $data['campaignId'];
+            $newsletterEventId = $data['newsletterEventId'];
+            $dateCampaignStart = $data['dateCampaignStart'];
+            $dateCampaignFinish = $data['dateCampaignFinish'];
+            $newsletterEventName = $data['newsletterEventName'];
 
-            /** @var CRepo $newsletterCampaignRepo */
 
-            $newsletterCampaignRepo = \Monkey::app()->repoFactory->create('NewsletterCampaign');
+            if (empty($campaignId)) {
 
-            /** @var CNewsletterCampaign $newsletterCampaign */
+                /** @var CRepo $newsletterCampaignRepo */
 
-            $newsletterCampaign = $newsletterCampaignRepo->findOneBy(['name' => $campaignName]);
+                $newsletterCampaignRepo = \Monkey::app()->repoFactory->create('NewsletterCampaign');
 
-            if (empty($newsletterCampaign)) {
-                $newsletterCampaignInsert = \Monkey::app()->repoFactory->create('NewsletterCampaign')->getEmptyEntity();
-                $newsletterCampaignInsert->name = $campaignName;
-                $newsletterCampaignInsert->dateCampaignStart = $dateCampaignStart;
-                $newsletterCampaignInsert->dateCampaignFinish = $dateCampaignFinish;
-                $newsletterCampaignInsert->smartInsert();
+                /** @var CNewsletterCampaign $newsletterCampaign */
+
                 $newsletterCampaign = $newsletterCampaignRepo->findOneBy(['name' => $campaignName]);
-                $campaignId = $newsletterCampaign->id;
-                $res = "Campagna inserita con successo";
-                if (empty($newsletterEventId)) {
-                    /** var CRepo $newsletterEventRepo */
-                    $newsletterEventRepo = \Monkey::app()->repoFactory->create('NewsletterEvent');
-                    /** var CNewsletterEvent $newsletterEvent */
-                    $newsletterEvent = $newsletterEventRepo->findOneBy(['name' => $newsletterEventName]);
-                    if (empty($newsletterEvent)) {
-                        $newsletterEventInsert = \Monkey::app()->repoFactory->create('NewsletterEvent')->getEmptyEntity();
-                        $newsletterEventInsert->name = $newsletterEventName;
-                        $newsletterEventInsert->newsletterCampaignId = $campaignId;
-                        $newsletterEventInsert->smartInsert();
+
+                if (empty($newsletterCampaign)) {
+                    $newsletterCampaignInsert = \Monkey::app()->repoFactory->create('NewsletterCampaign')->getEmptyEntity();
+                    $newsletterCampaignInsert->name = $campaignName;
+                    $newsletterCampaignInsert->dateCampaignStart = $dateCampaignStart;
+                    $newsletterCampaignInsert->dateCampaignFinish = $dateCampaignFinish;
+                    $newsletterCampaignInsert->smartInsert();
+                    $newsletterCampaign = $newsletterCampaignRepo->findOneBy(['name' => $campaignName]);
+                    $campaignId = $newsletterCampaign->id;
+                    $res = "Campagna inserita con successo";
+                    if (empty($newsletterEventId)) {
+                        /** var CRepo $newsletterEventRepo */
+                        $newsletterEventRepo = \Monkey::app()->repoFactory->create('NewsletterEvent');
+                        /** var CNewsletterEvent $newsletterEvent */
                         $newsletterEvent = $newsletterEventRepo->findOneBy(['name' => $newsletterEventName]);
-                        $newsletterEventId = $newsletterEvent->id;
-                        $res = "Evento della Campagna inserita con successo";
-                    } else {
-                        $res = "Attenzione esiste gia un evento della Campagna con lo stesso nome ";
+                        if (empty($newsletterEvent)) {
+                            $newsletterEventInsert = \Monkey::app()->repoFactory->create('NewsletterEvent')->getEmptyEntity();
+                            $newsletterEventInsert->name = $newsletterEventName;
+                            $newsletterEventInsert->newsletterCampaignId = $campaignId;
+                            $newsletterEventInsert->smartInsert();
+                            $newsletterEvent = $newsletterEventRepo->findOneBy(['name' => $newsletterEventName]);
+                            $newsletterEventId = $newsletterEvent->id;
+                            $res = "Evento della Campagna inserita con successo";
+                        } else {
+                            $res = "Attenzione esiste gia un evento della Campagna con lo stesso nome ";
+                        }
                     }
+                } else {
+                    $res = "Attenzione esiste già una campagna con lo stesso nome";
                 }
-            } else {
-                $res = "Attenzione esiste già una campagna con lo stesso nome";
             }
+
+            /** @var CRepo $newsletterTemplateRepo */
+            $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
+
+            /** @var CNewsletterTemplate $newsletterTemplate */
+            $newsletterTemplate = $newsletterTemplateRepo->findOneBy(['template' => $newsletterTemplateId]);
+            $newsletterTemplateId = $newsletterTemplate->id;
+
+            /** @var CRepo $newsletterUserRepo */
+            $newsletterUserRepo = \Monkey::app()->repoFactory->create('Newsletter');
+
+            /** @var CNewsletterUser $newsletterUser */
+            $newsletterUser = $newsletterUserRepo->findOneBy(['name' => $name]);
+
+
+            if (empty($newsletterUser)) {
+                //se la variabile non è istanziata inserisci in db
+
+                /** @var CNewsletterUser $newsletterUserInsert */
+                $newsletterUserInsert = \Monkey::app()->repoFactory->create('Newsletter')->getEmptyEntity();
+                //popolo la tabella
+
+                $newsletterUserInsert->name = $name;
+                $newsletterUserInsert->fromEmailAddressId = $fromEmailAddressId;
+                $newsletterUserInsert->sendAddressDate = $sendAddressDate;
+                $newsletterUserInsert->newsletterEmailListId = $newsletterEmailListId;
+                $newsletterUserInsert->newsletterTemplateId = $newsletterTemplateId;
+                $newsletterUserInsert->subject = $subject;
+                $newsletterUserInsert->dataDescription = $dataDescription;
+                $newsletterUserInsert->preCompiledTemplate = $preCompiledTemplate;
+                $newsletterUserInsert->newsletterCampaignId = $campaignId;
+                $newsletterUserInsert->newsletterEventId = $newsletterEventId;
+                // eseguo la commit sulla tabella;
+
+                $newsletterUserInsert->smartInsert();
+
+                $res = "Newsletter inserita con successo!";
+
+            } else {
+                //Se hai trovato qualcosa allora restituitsci messaggio di errore
+                $res = "Esiste già una newsletter con lo stesso nome";
+            }
+        }else{
+            $to=$data['toEmailAddressTest'];
+            $message=$data['preCompiledTemplate'];
+            $subject=$data['subject'];
+            $fromEmailAddressId=$data['fromEmailAddressId'];
+          //  if (ENV == 'dev') return false;
+            /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
+            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+            if (!is_array($to)) {
+                $to = [$to];
+            }
+            $emailRepo->newMail($fromEmailAddressId, $to, [], [], $subject, $message);
+            $res="Test Inviato con successo";
         }
-
-        /** @var CRepo $newsletterTemplateRepo */
-        $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
-
-        /** @var CNewsletterTemplate $newsletterTemplate */
-        $newsletterTemplate = $newsletterTemplateRepo->findOneBy(['template' => $newsletterTemplateId]);
-        $newsletterTemplateId = $newsletterTemplate->id;
-
-        /** @var CRepo $newsletterUserRepo */
-        $newsletterUserRepo = \Monkey::app()->repoFactory->create('Newsletter');
-
-        /** @var CNewsletterUser $newsletterUser */
-        $newsletterUser = $newsletterUserRepo->findOneBy(['name' => $name]);
-
-
-        if (empty($newsletterUser)) {
-            //se la variabile non è istanziata inserisci in db
-
-            /** @var CNewsletterUser $newsletterUserInsert */
-            $newsletterUserInsert = \Monkey::app()->repoFactory->create('Newsletter')->getEmptyEntity();
-            //popolo la tabella
-
-            $newsletterUserInsert->name = $name;
-            $newsletterUserInsert->fromEmailAddressId = $fromEmailAddressId;
-            $newsletterUserInsert->sendAddressDate = $sendAddressDate;
-            $newsletterUserInsert->newsletterEmailListId = $newsletterEmailListId;
-            $newsletterUserInsert->newsletterTemplateId = $newsletterTemplateId;
-            $newsletterUserInsert->subject = $subject;
-            $newsletterUserInsert->dataDescription = $dataDescription;
-            $newsletterUserInsert->preCompiledTemplate = $preCompiledTemplate;
-            $newsletterUserInsert->newsletterCampaignId = $campaignId;
-            $newsletterUserInsert->newsletterEventId = $newsletterEventId;
-            // eseguo la commit sulla tabella;
-
-            $newsletterUserInsert->smartInsert();
-
-            $res = "Newsletter inserita con successo!";
-
-        } else {
-            //Se hai trovato qualcosa allora restituitsci messaggio di errore
-            $res = "Esiste già una newsletter con lo stesso nome";
-        }
-
         return $res;
 
 

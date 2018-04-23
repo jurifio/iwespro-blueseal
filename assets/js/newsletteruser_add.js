@@ -1,3 +1,4 @@
+/* newsletteruser_add.js */
 var summer = $('textarea.summer');
 summer.summernote({
     lang: "it-IT",
@@ -249,38 +250,38 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 
 
 
-  /*  if (CKEDITOR.instances.preCompiledTemplate1) {
-        CKEDITOR.instances.preCompiledTemplate1.destroy();
-    }
-    CKEDITOR.replace( 'preCompiledTemplate1', {
-        height: 260,
-        width:1280,
-        startupMode:'source'
+    /*  if (CKEDITOR.instances.preCompiledTemplate1) {
+          CKEDITOR.instances.preCompiledTemplate1.destroy();
+      }
+      CKEDITOR.replace( 'preCompiledTemplate1', {
+          height: 260,
+          width:1280,
+          startupMode:'source'
 
-    } );
-    /*function readSingleFile(e) {
-        var file = e.target.files[0];
-        if (!file) {
-            return;
-        }
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var contents = e.target.result;
-            displayContents(contents);
-        };
-        reader.readAsText(file);
-    }*/
+      } );
+      /*function readSingleFile(e) {
+          var file = e.target.files[0];
+          if (!file) {
+              return;
+          }
+          var reader = new FileReader();
+          reader.onload = function(e) {
+              var contents = e.target.result;
+              displayContents(contents);
+          };
+          reader.readAsText(file);
+      }*/
     $("#newsletterTemplateId").change(function () {
         //CKEDITOR.instances.preCompiledTemplate1.setData("");
 
-            $("#preCompiledTemplate1").empty();
+        $("#preCompiledTemplate1").empty();
         $('#preCompiledTemplate1').code('');
-            var content1 = $(this).val();
+        var content1 = $(this).val();
         //CKEDITOR.instances.preCompiledTemplate1.setData(content1);
         $('#preCompiledTemplate1').summernote('editor.pasteHTML', content1);
-            //var contentLessOccurence = content.indexOf('-');
-          //  var contentPreview = content.substring(5);
-       // $("#file-content").append(content);
+        //var contentLessOccurence = content.indexOf('-');
+        //  var contentPreview = content.substring(5);
+        // $("#file-content").append(content);
 
 
     });
@@ -293,8 +294,8 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
     }*/
 
 
-   /* document.getElementById('preCompiledTemplate1')
-        .addEventListener('change', readSingleFile, false);*/
+    /* document.getElementById('preCompiledTemplate1')
+         .addEventListener('change', readSingleFile, false);*/
     Pace.ignore(function () {
 
 
@@ -354,6 +355,7 @@ $(document).on('bs.newNewsletterUser.save', function () {
         let campaignDateStartPost=$('#dateCampaignStart').val();
         let campaignDateFinishPost=$('#dateCampaignFinish').val();
         let campaignEventNamePost=$('#newsletterEventName').val();
+        let typeOperation="1";
         if (typeof campaignIdPost === "undefined") {
             campaignIdPost = "";
         } else {
@@ -385,21 +387,22 @@ $(document).on('bs.newNewsletterUser.save', function () {
             campaignDateFinishPost =  campaignDateFinishPost ;
         }
         const data = {
-        name: $('#name').val(),
-        fromEmailAddressId : $('#fromEmailAddressId').val(),
-        sendAddressDate : $('#sendAddressDate').val(),
-        newsletterEmailListId : $('#newsletterEmailListId').val(),
-        newsletterTemplateId:$('#newsletterTemplateId').val(),
-        subject : $('#subject').val(),
-        dataDescription : $('#dataDescription').val(),
-        preCompiledTemplate :  $('#preCompiledTemplate1').val(),
-        //preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
-        campaignName : campaignNamePost,
-        campaignId : campaignIdPost,
-        newsletterEventId: campaignEventIdPost,
-        newsletterEventName: campaignEventNamePost,
-        dateCampaignStart:campaignDateStartPost,
-        dateCampaignFinish:campaignDateFinishPost,
+            typeOperation:typeOperation,
+            name: $('#name').val(),
+            fromEmailAddressId : $('#fromEmailAddressId').val(),
+            sendAddressDate : $('#sendAddressDate').val(),
+            newsletterEmailListId : $('#newsletterEmailListId').val(),
+            newsletterTemplateId:$('#newsletterTemplateId').val(),
+            subject : $('#subject').val(),
+            dataDescription : $('#dataDescription').val(),
+            preCompiledTemplate :  $('#preCompiledTemplate1').val(),
+            //preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
+            campaignName : campaignNamePost,
+            campaignId : campaignIdPost,
+            newsletterEventId: campaignEventIdPost,
+            newsletterEventName: campaignEventNamePost,
+            dateCampaignStart:campaignDateStartPost,
+
 
         };
         $.ajax({
@@ -414,13 +417,104 @@ $(document).on('bs.newNewsletterUser.save', function () {
             bsModal.setOkEvent(function () {
                 window.location.reload();
                 bsModal.hide();
-               // window.location.reload();
+                // window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+});$(document).on('bs.newNewsletterUser.sendTest', function () {
+    let bsModal = new $.bsModal('Invia Test Newsletter', {
+        body: '<div><p>Premere ok per inviare il Test'+
+        '<div class=\"row\">' +
+        '<div class=\"col-md-12\">' +
+        '<div class=\"form-group form-group-default selectize-enabled\">' +
+        '<label for=\"toEmailAddressTest\">Inserisci la mail per il test</label>' +
+        '<input id=\"toEmailAddressTest\" class=\"form-control\"' +
+        'placeholder=\"Inserisci la mail per il test \" name=\"toEmailAddressTest\" required=\"required\">' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>'
+    });
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        let campaignIdPost=$('#campaignId').val();
+        let campaignNamePost = $('#campaignName').val();
+        let campaignEventIdPost=$('#newsletterEventId').val();
+        let campaignDateStartPost=$('#dateCampaignStart').val();
+        let campaignDateFinishPost=$('#dateCampaignFinish').val();
+        let campaignEventNamePost=$('#newsletterEventName').val();
+        let toEmailAddressTest=$('#toEmailAddressTest').val();
+        let typeOperation="2";
+        if (typeof campaignIdPost === "undefined") {
+            campaignIdPost = "";
+        } else {
+            campaignIdPost = campaignIdPost;
+        }
+        if (typeof campaignNamePost === "undefined") {
+            campaignNamePost = "";
+        } else {
+            campaignNamePost =  campaignNamePost ;
+        }
+        if (typeof campaignEventIdPost === "undefined") {
+            campaignEventIdPost = "";
+        } else {
+            campaignEventIdPost =  campaignEventIdPost ;
+        }
+        if (typeof campaignEventNamePost === "undefined") {
+            campaignEventNamePost = "";
+        } else {
+            campaignEventNamePost =  campaignEventNamePost ;
+        }
+        if (typeof campaignDateStartPost === "undefined") {
+            campaignDateStartPost = "";
+        } else {
+            campaignDateStartPost =  campaignDateStartPost ;
+        }
+        if (typeof campaignDateFinishPost === "undefined") {
+            campaignDateFinishPost = "";
+        } else {
+            campaignDateFinishPost =  campaignDateFinishPost ;
+        }
+        const data = {
+            typeOperation:typeOperation,
+            name: $('#name').val(),
+            fromEmailAddressId : $('#fromEmailAddressId').val(),
+            sendAddressDate : $('#sendAddressDate').val(),
+            newsletterEmailListId : $('#newsletterEmailListId').val(),
+            newsletterTemplateId:$('#newsletterTemplateId').val(),
+            subject : $('#subject').val(),
+            dataDescription : $('#dataDescription').val(),
+            preCompiledTemplate :  $('#preCompiledTemplate1').val(),
+            //preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
+            campaignName : campaignNamePost,
+            campaignId : campaignIdPost,
+            newsletterEventId: campaignEventIdPost,
+            newsletterEventName: campaignEventNamePost,
+            dateCampaignStart:campaignDateStartPost,
+            toEmailAddressTest:toEmailAddressTest,
+
+
+        };
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/NewsletterUserManage',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                // window.location.reload();
+                bsModal.hide();
+                // window.location.reload();
             });
             bsModal.showOkBtn();
         });
     });
 });
-
 
 
 
