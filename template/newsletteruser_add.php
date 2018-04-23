@@ -181,6 +181,17 @@
             data-placement="bottom"
             data-href="#"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-envelope-o"
+                data-permission="AllShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.newNewsletterUser.sendTest"
+                data-title="Invia Test"
+                data-placement="bottom"
+                data-href="#"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

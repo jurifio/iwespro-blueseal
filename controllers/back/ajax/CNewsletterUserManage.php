@@ -39,6 +39,8 @@ class CNewsletterUserManage extends AAjaxController
     {
         //prendo i dati passati in input
         $data = \Monkey::app()->router->request()->getRequestData();
+        $typeOperation=$data['typeOperation'];
+        if($typeOperation==="1"){
         $name = $data['name'];
         $fromEmailAddressId = $data['fromEmailAddressId'];
         $sendAddressDate = $data['sendAddressDate'];
@@ -53,6 +55,8 @@ class CNewsletterUserManage extends AAjaxController
         $dateCampaignStart = $data['dateCampaignStart'];
         $dateCampaignFinish = $data['dateCampaignFinish'];
         $newsletterEventName = $data['newsletterEventName'];
+
+
         if (empty($campaignId)) {
 
             /** @var CRepo $newsletterCampaignRepo */
@@ -135,7 +139,19 @@ class CNewsletterUserManage extends AAjaxController
             //Se hai trovato qualcosa allora restituitsci messaggio di errore
             $res = "Esiste già una newsletter con lo stesso nome";
         }
-
+       }else{
+           $to=$data['toEmailAddressTest'];
+           $message=$data['preCompiledTemplate'];
+           $subject=$data['subject'];
+           if (ENV == 'dev') return false;
+           /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
+           $emailRepo = \Monkey::app()->repoFactory->create('Email');
+           if (!is_array($to)) {
+               $to = [$to];
+           }
+           $emailRepo->newMail('Iwes IT Department <it@iwes.it>', $to, [], [], $subject, $message);
+      $res="Test Inviato con successo";
+       }
         return $res;
 
 
