@@ -10,10 +10,22 @@
     }
   /*  const variable = $.decodeGetStringFromUrl(window.location.href);
     alert(window.location.href);*/
-    let eAC =  getParameterByName('eAC');
+
     let Name = getParameterByName('nName');
     let Name2 = getParameterByName('nName2');
+    let eAC =  getParameterByName('eAC');
     let eAC2 = getParameterByName('eAC2');
+    let eACP =  getParameterByName('eACP');
+    let eACP2 = getParameterByName('eACP2');
+    let eACN =  getParameterByName('eACN');
+    let eACN2 = getParameterByName('eACN2');
+    let eACA=  getParameterByName('eACA');
+    let eACA2 = getParameterByName('eACA2');
+    let eACD =  getParameterByName('eACD');
+    let eACD2 = getParameterByName('eACD2');
+    let eACDD =  getParameterByName('eACDD');
+    let eACDD2 = getParameterByName('eACDD2');
+
     let oP = getParameterByName('oP');
     let oP2 = getParameterByName('oP2');
     oP = oP.substring(0, oP.length - 1);
@@ -41,13 +53,13 @@
 
 
 
-    let ctxDelivered = document.getElementById("ChartDelivered").getContext('2d');
-    let ChartDelivered = new Chart(ctxDelivered, {
+    let ctxSent = document.getElementById("ChartSent").getContext('2d');
+    let ChartSent = new Chart(ctxSent, {
         type: 'bar',
         data: {
             labels: [Name, Name2],
             datasets: [{
-                label: 'inviate %',
+                label: 'Elaborate',
                 data: [eAC, eAC2],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -78,6 +90,163 @@
             }
         }
     });
+    let ctxPending = document.getElementById("ChartPending").getContext('2d');
+    let ChartPending = new Chart(ctxPending, {
+        type: 'bar',
+        data: {
+            labels: [Name, Name2],
+            datasets: [{
+                label: 'In Coda',
+                data: [eACP, eACP2],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+    let ctxAccepted = document.getElementById("ChartAccepted").getContext('2d');
+    let ChartAccepted = new Chart(ctxAccepted, {
+        type: 'bar',
+        data: {
+            labels: [Name, Name2],
+            datasets: [{
+                label: 'Elaborate',
+                data: [eACA, eACA2],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+
+    let eACDelivered=eACD*100/eAC;
+   let  eACDelivered2=eACD2*100/eAC2;
+    parseFloat(eACD).toFixed(3);
+    parseFloat(eACD2).toFixed(3);
+
+    let ctxDelivered = document.getElementById("ChartDelivered").getContext('2d');
+    let ChartDelivered = new Chart(ctxDelivered, {
+        type: 'bar',
+        data: {
+            labels: [Name, Name2],
+            datasets: [{
+                label: 'Consegnate %',
+                data: [eACDelivered, eACDelivered2],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+
+
+    let ctxBounced = document.getElementById("ChartBounced").getContext('2d');
+    let ChartBounced = new Chart(ctxBounced, {
+        type: 'bar',
+        data: {
+            labels: [Name, Name2],
+            datasets: [{
+                label: 'Bounced',
+                data: [eACDD, eACDD2],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+
     let ctxOpened = document.getElementById("ChartOpened").getContext('2d');
     let ChartOpened = new Chart(ctxOpened, {
         type: 'bar',
@@ -302,7 +471,19 @@
     });
 
 
-    $('.openstat').on('click', function () {
+    $('.openstatelaborate').on('click', function () {
+        $('#s-elaborate').removeClass("hide");
+    });
+    $('.openstatpending').on('click', function () {
+        $('#s-pending').removeClass("hide");
+    });
+    $('.openstataccettate').on('click', function () {
+        $('#s-accettate').removeClass("hide");
+    });
+    $('.openstatbounced').on('click', function () {
+        $('#s-bounced').removeClass("hide");
+    });
+    $('.openstatconsegnate').on('click', function () {
         $('#s-consegnate').removeClass("hide");
     });
     $('.openstataperte').on('click', function () {
