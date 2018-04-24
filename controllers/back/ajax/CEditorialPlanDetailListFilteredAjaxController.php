@@ -25,6 +25,7 @@ class CEditorialPlanDetailListFilteredAjaxController extends AAjaxController
         $editorialPlanSocialId = $data['socialId'];
 
 
+
         //trovi il piano editoriale
         /** @var ARepo $ePlanDetailRepo */
         $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
@@ -32,28 +33,34 @@ class CEditorialPlanDetailListFilteredAjaxController extends AAjaxController
         /** @var CEditorialPlan $editorialPlan */
         $editorialPlan = $ePlanRepo->findOneBy(['id'=>$editorialPlanId]);
         $editorialPlanName=$editorialPlan->name;
-        /** @var CObjectCollection $editorialDetails */
 
+        /** @var CObjectCollection $editorialDetails */
         $editorialDetails = $editorialPlan->editorialPlanDetail;
+
+
+
         $data = [];
         $i = 0;
         /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
 
         foreach ($editorialDetails as $singleDetail) {
-            $data[$i]["id"] = $singleDetail->id;
-            $data[$i]["title"] = $singleDetail->title;
-            $data[$i]["start"] = $singleDetail->startEventDate;
-            $data[$i]["end"] = $singleDetail->endEventDate;
-            $data[$i]["description"] = $singleDetail->description;
-            $data[$i]["argument"] = $singleDetail->editorialPlanArgumentId;
-            $data[$i]["argumentName"]= $singleDetail->editorialPlanArgument->titleArgument;
-            $data[$i]["photoUrl"] = $singleDetail->photoUrl;
-            $data[$i]["status"] = $singleDetail->status;
-            $data[$i]["note"] = $singleDetail->note;
-            $data[$i]["socialId"] = $singleDetail->socialId;
-            $data[$i]["socialName"] = $singleDetail->editorialPlanSocial->name;
-            $data[$i]['titleEditorialPlan'] = $editorialPlanName;
-            $i++;
+
+            if(in_array($singleDetail->socialId, $editorialPlanSocialId)) {
+                $data[$i]["id"] = $singleDetail->id;
+                $data[$i]["title"] = $singleDetail->title;
+                $data[$i]["start"] = $singleDetail->startEventDate;
+                $data[$i]["end"] = $singleDetail->endEventDate;
+                $data[$i]["description"] = $singleDetail->description;
+                $data[$i]["argument"] = $singleDetail->editorialPlanArgumentId;
+                $data[$i]["argumentName"] = $singleDetail->editorialPlanArgument->titleArgument;
+                $data[$i]["photoUrl"] = $singleDetail->photoUrl;
+                $data[$i]["status"] = $singleDetail->status;
+                $data[$i]["note"] = $singleDetail->note;
+                $data[$i]["socialId"] = $singleDetail->socialId;
+                $data[$i]["socialName"] = $singleDetail->editorialPlanSocial->name;
+                $data[$i]['titleEditorialPlan'] = $editorialPlanName;
+                $i++;
+            }
         }
 
         return json_encode($data);
