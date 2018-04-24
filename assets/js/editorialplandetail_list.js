@@ -52,14 +52,15 @@
             url: '/blueseal/xhr/EditorialPlanDetailListFilteredAjaxController',
             async: false,
             data: data
-        }).success(function (res) {
-            obj = JSON.parse(res);
+        }).success(function (data) {
+            calendar.fullCalendar('refetchEvents');
+            obj = JSON.parse(data);
 
 
-        }).fail(function (res) {
+        }).fail(function (data) {
             alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
             alert("responseText: " + xhr.responseText);
-        }).always(function (res) {
+        }).always(function (data) {
 
         });
 
@@ -121,8 +122,7 @@
                 right: 'month,agendaWeek,agendaDay'
             },
             //obj that we get json result from ajax
-            events: obj
-            ,
+            events: obj ,
             eventRender: function (event, element) {
                 element.find('.fc-title').append('"<br/><b>Descrizione:</b>"' + event.description +
                     '"<br/><b>Argomento:</b>"' + event.argumentName +

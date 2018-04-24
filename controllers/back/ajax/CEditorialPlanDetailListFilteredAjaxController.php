@@ -35,27 +35,27 @@ class CEditorialPlanDetailListFilteredAjaxController extends AAjaxController
         /** @var CObjectCollection $editorialDetails */
 
         $editorialDetails = $editorialPlan->editorialPlanDetail;
-        $res = [];
+        $data = [];
         $i = 0;
         /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
 
         foreach ($editorialDetails as $singleDetail) {
-            $res[$i]["id"] = $singleDetail->id;
-            $res[$i]["title"] = $singleDetail->title;
-            $res[$i]["start"] = $singleDetail->startEventDate;
-            $res[$i]["end"] = $singleDetail->endEventDate;
-            $res[$i]["description"] = $singleDetail->description;
-            $res[$i]["argument"] = $singleDetail->editorialPlanArgumentId;
-            $res[$i]["argumentName"]= $singleDetail->editorialPlanArgument->titleArgument;
-            $res[$i]["photoUrl"] = $singleDetail->photoUrl;
-            $res[$i]["status"] = $singleDetail->status;
-            $res[$i]["note"] = $singleDetail->note;
-            $res[$i]["socialId"] = $singleDetail->socialId;
-            $res[$i]["socialName"] = $singleDetail->editorialPlanSocial->name;
-            $res[$i]['titleEditorialPlan'] = $editorialPlanName;
+            $data[$i]["id"] = $singleDetail->id;
+            $data[$i]["title"] = $singleDetail->title;
+            $data[$i]["start"] = $singleDetail->startEventDate;
+            $data[$i]["end"] = $singleDetail->endEventDate;
+            $data[$i]["description"] = $singleDetail->description;
+            $data[$i]["argument"] = $singleDetail->editorialPlanArgumentId;
+            $data[$i]["argumentName"]= $singleDetail->editorialPlanArgument->titleArgument;
+            $data[$i]["photoUrl"] = $singleDetail->photoUrl;
+            $data[$i]["status"] = $singleDetail->status;
+            $data[$i]["note"] = $singleDetail->note;
+            $data[$i]["socialId"] = $singleDetail->socialId;
+            $data[$i]["socialName"] = $singleDetail->editorialPlanSocial->name;
+            $data[$i]['titleEditorialPlan'] = $editorialPlanName;
             $i++;
         }
 
-        return json_encode($res);
+        return json_encode($data);
     }
 }
