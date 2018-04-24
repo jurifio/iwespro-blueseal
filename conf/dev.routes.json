@@ -2054,6 +2054,16 @@
                 "GET"
             ]
         },{
+            "pattern": "/blueseal/shooting/accettazione-prodotti(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingAcceptProductListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
             "pattern": "/blueseal/users/ruoli(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacRoleListController"
@@ -2074,6 +2084,26 @@
             "methods": [
                 "GET",
                 "DELETE"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/filtri-custom(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCustomFilterListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/filtri-custom/preview(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCustomFilterPreviewListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
             ]
         },{
             "pattern": "/blueseal/editorial(/)?",

@@ -96,7 +96,7 @@ class CNewsletterUserSend extends AAjaxController
 
             }
 
-            // ottento la query sql del gruppo
+            // ottengo la query sql del gruppo
 
             /** @var CNewsletterGroup $newsletterGroup */
 
@@ -110,7 +110,7 @@ class CNewsletterUserSend extends AAjaxController
                 $sqlDefault = $newsletterGroup->sql;
 
             }
-            $sql = $sqlDefault." ". $filterSql;
+            $sql = $sqlDefault." ". $filterSql ."group by nu.userId";
 
 
         }

@@ -27,7 +27,14 @@
                             <tr>
                                 <th data-slug="idShooting"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Id</th>
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center">Id</th>
+                                <th data-slug="shootingBookingId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">N. prenotazione</th>
+                                <th data-slug="status"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato prenotazione</th>
                                 <th data-slug="date"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data</th>
@@ -68,12 +75,17 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
 
-    <bs-toolbar-group data-group-label="Stampa DDT (Friend)">
+    <bs-toolbar-group data-group-label="DDT FRIEND">
         <bs-toolbar-button
                 data-remote="bs.product.create.ddt"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.friend.ddt.invoice.download"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="DDT PICKY">
+        <bs-toolbar-button
+                data-remote="bs.product.create.ddt.pickyshop"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

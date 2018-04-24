@@ -18,35 +18,42 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="shooting_booking_list"
-                               data-controller="ShootingBookingListAjaxController"
+                               data-datatable-name="shooting_accept_product_list"
+                               data-controller="ShootingAcceptProductListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+                                <th data-slug="code"
                                     data-searchable="true"
-                                    data-orderable="true"
-                                    data-default-order="desc" class="center">Id</th>
+                                    data-orderable="true" class="center">Codice</th>
+                                <?php if(count($shops) > 1): ?>
+                                    <th data-slug="shop"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Shop</th>
+                                <?php endif; ?>
+                                <th data-slug="brand"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Brand</th>
+                                <th data-slug="cpf"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">CPF</th>
+                                <th data-slug="externalId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">ID Orig.</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data creazione</th>
-                                <th data-slug="bookingDate"
+                                    data-orderable="true"
+                                    data-default-order="desc" class="center dataFilterType">Data</th>
+                                <th data-slug="shooting"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data prenotazione</th>
-                                <th data-slug="shopName"
+                                    data-orderable="false">Shooting
+                                </th>
+                                <th data-slug="doc_number"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Shop</th>
-                                <th data-slug="shootingId"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Shooting</th>
-                                <th data-slug="status"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Stato</th>
-                                <th data-slug="uniqueQty"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Qty</th>
+                                    data-orderable="false">N. DDT
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -62,20 +69,18 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-
-    <bs-toolbar-group data-group-label="Gestisci prenotazione">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-plus"
-                data-permission="allShops"
-                data-event="bs-booking-accept"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Accetta la prenotazione"
-                data-placement="bottom"
-        ></bs-toolbar-button>
+    <bs-toolbar-group data-group-label="Gestione Shooting">
         <bs-toolbar-button
                 data-remote="bs.product.booking.shooting"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.shooting.friend.add"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.shooting.friend.force"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.print.aztec"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

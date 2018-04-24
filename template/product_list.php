@@ -171,11 +171,11 @@
                                 </th>
                                 <th data-slug="shooting"
                                     data-searchable="true"
-                                    data-orderable="false">Shooting
+                                    data-orderable="true">Shooting
                                 </th>
                                 <th data-slug="doc_number"
                                     data-searchable="true"
-                                    data-orderable="false">N. DDT
+                                    data-orderable="true">N. DDT
                                 </th>
                             </tr>
                             </thead>
@@ -200,9 +200,6 @@
                 data-remote="bs.publish.products"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.print.aztec"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
                 data-remote="bs.product.photo.manage"
         ></bs-toolbar-button>
         <bs-toolbar-button
@@ -218,6 +215,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.force.shooting"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.print.aztec"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Attributi Prodotti">

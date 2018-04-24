@@ -59,6 +59,31 @@
                                     data-orderable="true"
                                     class="center">N. utenti inviata
                                 </th>
+                                <th data-slug="emailPending"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email da Inviare
+                                </th>
+                                <th data-slug="emailNotQueued"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email non In Coda
+                                </th>
+                                <th data-slug="emailAccepted"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email Accettate
+                                </th>
+                                <th data-slug="emailDelivered"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email Consegnate
+                                </th>
+                                <th data-slug="emailDropped"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email Non Consegnate
+                                </th>
                                 <th data-slug="sendingTime"
                                     data-searchable="true"
                                     data-orderable="true"

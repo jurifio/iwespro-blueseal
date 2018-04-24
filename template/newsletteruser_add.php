@@ -188,7 +188,7 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.newNewsletterUser.sendTest"
-                data-title="Invia Test"
+                data-title="Salva la  Newsletter"
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>

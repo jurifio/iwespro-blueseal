@@ -23,9 +23,13 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h5 class="m-t-10">Visualizza</h5>
-                                        <button class="openstat btn-primary" id="consegnate">Consegnate</button>
+                                        <button class="openstatelaborate btn-primary" id="elaborate">Elaborate</button>
+                                        <button class="openstatpending btn-primary" id="pending">In Coda</button>
+                                        <button class="openstataccettate btn-primary" id="accettate">Accettate</button>
+                                        <button class="openstatconsegnate btn-primary" id="consegnate">Consegnate</button>
                                         <button class="openstataperte btn-primary" id="aperte">Aperte</button>
                                         <button class="openstatcliccate btn-primary" id="cliccate">Cliccate</button>
+                                        <button class="openstatbounced btn-primary" id="bounced">Bounced</button>
                                         <button class="openstattinvio btn-primary" id="tinvio">tempo Invio</button>
                                         <button class="openstatapertura btn-primary" id="tapertura">Tempo Dall'Apertura</button>
                                         <button class="openstatfirstclic btn-primary" id="tfirstclic">Tempo Apertura Primo Click
@@ -47,6 +51,25 @@
                         </div>
                         <div class="panel-body clearfix">
                             <div class="panel-body clearfix">
+                                <div class="row">
+                                    <div class="col-md-3 hide" id="s-elaborate">
+                                        <h5 class="m-t-10">Elaborate</h5>
+                                        <canvas id="ChartSent"></canvas>
+                                    </div>
+                                    <div class="col-md-3 hide" id="s-pending">
+                                        <h5 class="m-t-10">In Coda</h5>
+                                        <canvas id="ChartPending"></canvas>
+                                    </div>
+
+                                    <div class="col-md-3 hide" id="s-accettate">
+                                        <h5 class="m-t-10">Accettate</h5>
+                                        <canvas id="ChartAccepted"></canvas>
+                                    </div>
+                                    <div class="col-md-3 hide" id="s-bounced">
+                                        <h5 class="m-t-10">Bounced</h5>
+                                        <canvas id="ChartBounced"></canvas>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-4 hide" id="s-consegnate">
                                         <h5 class="m-t-10">Consegnate</h5>

@@ -113,11 +113,11 @@ class CShootingBookingAjaxController extends AAjaxController
             $shp = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$shop]);
             $shopName = $shp->name;
 
-            $body = "Lo shop ".$shopName." ha inserito dei prodotti nello shooting ".$sbId;
+            $body = "Lo shop ".$shopName." ha creato una nuova prenotazione con id ".$sbId."<br />Link prenotazione: https://www.pickyshop.com/blueseal/shooting/booking";
 
             /** @var CEmailRepo $mailRepo */
             $mailRepo = \Monkey::app()->repoFactory->create('Email');
-            $mailRepo->newMail('it@iwes.it', ["it@iwes.it"],[],[],"Nuova prenotazione shooting", $body);
+            $mailRepo->newMail('it@iwes.it', ["friend@iwes.it"],[],[],"Nuova prenotazione shooting", $body);
 
             $res = "Shooting prenotato con successo. Codice prenotazione: ".$sbId;
         }

@@ -72,8 +72,13 @@ class CSectionalRepo extends ARepo
      */
     public function createNewSectionalCodeFromShop($shopId, $typeId){
 
-        /** @var CSectional $sectional */
-        $sectional = $this->findOneBy(["shopId"=>$shopId, "typeId"=>$typeId]);
+        if(is_null($shopId)){
+            /** @var CSectional $sectional */
+            $sectional = $this->findOneBy(['id'=>3]);
+        } else {
+            /** @var CSectional $sectional */
+            $sectional = $this->findOneBy(["shopId"=>$shopId, "typeId"=>$typeId]);
+        }
 
         if(is_null($sectional)){
             return true;
@@ -89,7 +94,7 @@ class CSectionalRepo extends ARepo
 
         $sectional->update();
 
-        $newCode = $shopId.'/'.$newNumber.'/'.$sectional->code.'/'.$typeId;
+        $newCode = $newNumber.'/'.$sectional->code;
 
         return $newCode;
     }
@@ -97,8 +102,13 @@ class CSectionalRepo extends ARepo
 
     public function calculateNewSectionalCodeFromShop($shopId, $typeId){
 
-        /** @var CSectional $sectional */
-        $sectional = $this->findOneBy(["shopId"=>$shopId, "typeId"=>$typeId]);
+        if(is_null($shopId)){
+            /** @var CSectional $sectional */
+            $sectional = $this->findOneBy(['id'=>3]);
+        } else {
+            /** @var CSectional $sectional */
+            $sectional = $this->findOneBy(["shopId"=>$shopId, "typeId"=>$typeId]);
+        }
 
         if(is_null($sectional)){
             return true;
@@ -110,7 +120,7 @@ class CSectionalRepo extends ARepo
             $newNumber = $sectional->last + 1;
         }
 
-        $newCode = $sectional->shopId.'/'.$newNumber.'/'.$sectional->code.'/'.$sectional->typeId;
+        $newCode = $newNumber.'/'.$sectional->code;
 
         return $newCode;
     }

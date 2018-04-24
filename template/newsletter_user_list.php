@@ -105,6 +105,9 @@
                     data-remote="bs.lists.create.newsletter"
             ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.lists.clone.newsletter"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.lists.newsletterUser.send"
         ></bs-toolbar-button>
         <bs-toolbar-button

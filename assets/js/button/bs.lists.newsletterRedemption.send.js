@@ -22,6 +22,17 @@ $(document).on('bs-newNewsletterRedemption-send', function () {
             var idNewsletterRedemptionName2 = selectedRows[1].newsletterName;
             var emailAddressCount = selectedRows[0].emailAddressCount;
             var emailAddressCount2 = selectedRows[1].emailAddressCount;
+            var emailAddressCountPending=selectedRows[0].emailPending;
+            var emailAddressCountPending2=selectedRows[1].emailPending;
+            var emailAddressCountNotQueued=selectedRows[0].emailNotQueued;
+            var emailAddressCountNotQueued2=selectedRows[1].emailNotQueued;
+            var emailAddressCountAccepted=selectedRows[0].emailAccepted;
+            var emailAddressCountAccepted2=selectedRows[1].emailAccepted;
+            var emailAddressCountDelivered=selectedRows[0].emailDelivered;
+            var emailAddressCountDelivered2=selectedRows[1].emailDelivered;
+            var emailAddressCountDropped=selectedRows[0].emailDropped;
+            var emailAddressCountDropped2=selectedRows[1].emailDropped;
+
             var sendingTime = selectedRows[0].sendingTime;
             var sendingTime2 = selectedRows[1].sendingTime;
             var openTimeSinceSent = selectedRows[0].openTimeSinceSent;
@@ -51,6 +62,11 @@ $(document).on('bs-newNewsletterRedemption-send', function () {
             let url = 'newsletter/newsletter-redemption-compara?' + 'nId=' + encodeURIComponent(idNewsletterRedemption) + '&nId2=' + encodeURIComponent(idNewsletterRedemption2) +
                                                                     '&nName=' + encodeURIComponent(idNewsletterRedemptionName) + '&nName2=' + encodeURIComponent(idNewsletterRedemptionName2) +
                                                                     '&eAC=' + encodeURIComponent(emailAddressCount) + '&eAC2=' + encodeURIComponent(emailAddressCount2) +
+                                                                    '&eACP=' + encodeURIComponent(emailAddressCountPending) + '&eACP2=' + encodeURIComponent(emailAddressCountPending2) +
+                                                                    '&eACN=' + encodeURIComponent(emailAddressCountNotQueued) + '&eACN2=' + encodeURIComponent(emailAddressCountNotQueued2) +
+                                                                    '&eACA=' + encodeURIComponent(emailAddressCountAccepted) + '&eACA2=' + encodeURIComponent(emailAddressCountAccepted2) +
+                                                                    '&eACD=' + encodeURIComponent(emailAddressCountDelivered) + '&eACD2=' + encodeURIComponent(emailAddressCountDelivered2) +
+                                                                    '&eACDR=' + encodeURIComponent(emailAddressCountDropped) + '&eACDR2=' + encodeURIComponent(emailAddressCountDropped2) +
                                                                     '&sTime=' + encodeURIComponent(sendingTime) + '&sTime2=' + encodeURIComponent(sendingTime2) +
                                                                     '&oTSS=' + encodeURIComponent(openTimeSinceSent) + '&oTSS2=' + encodeURIComponent(openTimeSinceSent2) +
                                                                     '&cTSO=' + encodeURIComponent(clickTimeSinceOpened) + '&cTSO2=' + encodeURIComponent(clickTimeSinceOpened2) +
