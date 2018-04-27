@@ -27,31 +27,58 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
         $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
 
         /** @var CEditorialPlan $editorialPlan */
-        $editorialPlan = $ePlanRepo->findOneBy(['id'=>$editorialPlanId]);
-        $editorialPlanName=$editorialPlan->name;
+        $editorialPlan = $ePlanRepo->findOneBy(['id' => $editorialPlanId]);
+        $editorialPlanName = $editorialPlan->name;
         /** @var CObjectCollection $editorialDetails */
 
         $editorialDetails = $editorialPlan->editorialPlanDetail;
         $data = [];
         $i = 0;
+        $p = \Monkey::app()->getUser()->hasPermission('allShops');
         /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
 
+
         foreach ($editorialDetails as $singleDetail) {
+            $data[$i]["allShops"] = $p;
             $data[$i]["id"] = $singleDetail->id;
             $data[$i]["title"] = $singleDetail->title;
             $data[$i]["start"] = $singleDetail->startEventDate;
             $data[$i]["end"] = $singleDetail->endEventDate;
+            $data[$i]["isEventVisible"] = $singleDetail->isEventVisible;
             $data[$i]["description"] = $singleDetail->description;
+            $data[$i]["isVisibleDescription"] = $singleDetail->isVisibleDescription;
             $data[$i]["argument"] = $singleDetail->editorialPlanArgumentId;
-            $data[$i]["argumentName"]= $singleDetail->editorialPlanArgument->titleArgument;
+            $data[$i]["argumentName"] = $singleDetail->editorialPlanArgument->titleArgument;
+            $data[$i]["isVisibleEditorialPlanArgument"] = $singleDetail->isVisibleEditorialPlanArgument;
             $data[$i]["photoUrl"] = $singleDetail->photoUrl;
-            $data[$i]["status"] = $singleDetail->status;
+            $data[$i]["isVisiblePhotoUrl"] = $singleDetail->isVisiblePhotoUrl;
+            switch ($singleDetail->status) {
+                case "Draft":
+                    $status = "Bozza";
+                    break;
+                case "Approved":
+                    $status = "Approvata";
+                    break;
+                case "Rejected":
+                    $status = "Rifiutata";
+                    break;
+                case "Published":
+                    $status = "Pubblicata";
+                    break;
+            }
+            $data[$i]["status"] = $status;
+            $data[$i]["bodyEvent"]=$singleDetail->bodyEvent;
+            $data[$i]["isVisibleBodyEvent"]=$singleDetail->isVisibleBodyEvent;
             $data[$i]["note"] = $singleDetail->note;
+            $data[$i]["isVisibleNote"] = $singleDetail->isVisibleNote;
             $data[$i]["socialId"] = $singleDetail->socialId;
             $data[$i]["socialName"] = $singleDetail->editorialPlanSocial->name;
             $data[$i]['titleEditorialPlan'] = $editorialPlanName;
+
+
             $i++;
         }
+
 
         return json_encode($data);
     }
