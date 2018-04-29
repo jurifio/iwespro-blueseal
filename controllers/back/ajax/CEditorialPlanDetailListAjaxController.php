@@ -36,7 +36,11 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
         $i = 0;
         $p = \Monkey::app()->getUser()->hasPermission('allShops');
         /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
-
+        if ($p == true) {
+            $p = "1";
+        } else {
+            $p = "0";
+        }
 
         foreach ($editorialDetails as $singleDetail) {
             $data[$i]["allShops"] = $p;

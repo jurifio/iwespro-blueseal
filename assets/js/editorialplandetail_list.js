@@ -110,7 +110,7 @@
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
-        if (TypePermission == "true") {
+        if (TypePermission == "1") {
 
 
             var calendar = $('#calendar').fullCalendar({
