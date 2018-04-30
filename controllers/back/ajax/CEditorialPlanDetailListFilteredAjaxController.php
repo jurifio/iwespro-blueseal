@@ -37,7 +37,13 @@ class CEditorialPlanDetailListFilteredAjaxController extends AAjaxController
         /** @var CObjectCollection $editorialDetails */
         $editorialDetails = $editorialPlan->editorialPlanDetail;
 
-
+        $p = \Monkey::app()->getUser()->hasPermission('allShops');
+        /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
+        if ($p == true) {
+            $p = "1";
+        } else {
+            $p = "0";
+        }
 
         $data = [];
         $i = 0;
@@ -46,6 +52,7 @@ class CEditorialPlanDetailListFilteredAjaxController extends AAjaxController
         foreach ($editorialDetails as $singleDetail) {
 
             if(in_array($singleDetail->socialId, $editorialPlanSocialId)) {
+                $data[$i]["allShops"] = $p;
                 $data[$i]["id"] = $singleDetail->id;
                 $data[$i]["title"] = $singleDetail->title;
                 $data[$i]["start"] = $singleDetail->startEventDate;

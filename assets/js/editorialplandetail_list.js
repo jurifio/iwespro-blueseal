@@ -53,7 +53,8 @@
 
             obj = JSON.parse(data);
 
-            createcalendar(obj);
+            var TypePermission = obj[0].allShops;
+            createcalendar(obj, TypePermission);
 
 
         }).fail(function (data) {
@@ -76,7 +77,7 @@
         success: function (data) {
             obj = JSON.parse(data);
             var TypePermission = obj[0].allShops;
-            createcalendar(obj,TypePermission);
+            createcalendar(obj, TypePermission);
 
         },
         error: function (xhr, err) {
@@ -128,19 +129,19 @@
                 //obj that we get json result from ajax
                 events: obj,
                 eventRender: function (event, element) {
-                    let bgRender="#ffffff";
-                    switch(event.status){
+                    let bgRender = "#ffffff";
+                    switch (event.status) {
                         case "Bozza":
-                            bgRender='<div style="background-color:darkblue>';
+                            bgRender = '<div style="background-color:darkblue>';
                             break;
                         case "Approvata":
-                            bgRender='<div style="background-color:darkorange">';
+                            bgRender = '<div style="background-color:darkorange">';
                             break;
                         case "Rifiutata":
-                            bgRender='<div style="background-color:red">';
+                            bgRender = '<div style="background-color:red">';
                             break;
                         case "Pubblicata":
-                            bgRender='<div style="background-color:green">';
+                            bgRender = '<div style="background-color:green">';
                             break;
 
                     }
@@ -161,13 +162,20 @@
                     var start = $.fullCalendar.formatDate(start, "DD-MM-YYYY hh:mm:ss");
                     var end = $.fullCalendar.formatDate(end, "DD-MM-YYYY hh:mm:ss");
                     let bsModal = new $.bsModal('Invio', {
-                        body: '<p>Inserisci un dettaglio per il piano Editoriale</p>' +
+                        body: '<p>Inserisci un Evento per il Piano Editoriale</p>' +
                         '<div class=\"row\">' +
-                        '<div class=\"col-md-12\">' +
+                        '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"\"></label>' +
+                        '<label for=\"titleEvent\">Titolo Azione Evento</label>' +
                         '<input id=\"titleEvent\" class=\"form-control\"' +
                         'placeholder=\"Inserisci il titolo\" name=\"titleEvent\" required=\"required\">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isEventVisible\">Evento Azione Visibile</label>' +
+                        '<input  type="checkbox" id=\"isEventVisible\" class=\"form-control\"' +
+                        'placeholder=\"Visible\" checked="true" name=\"isEventVisible\" ">' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
@@ -190,7 +198,7 @@
                         '</div>' +
                         '</div>' +
                         '<div class=\"row\">' +
-                        '<div class="col-md-12">' +
+                        '<div class="col-md-6">' +
                         '<div class="form-group form-group-default selectize-enabled">' +
                         '<label for="editorialPlanArgumentId">Seleziona l\' argomento da associare</label>' +
                         '<select id="editorialPlanArgumentId"' +
@@ -200,31 +208,74 @@
                         ' data-init-plugin="selectize"></select>' +
                         '</div>' +
                         '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisibleEditorialPlanArgument\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisibleEditorialPlanArgument\" class=\"form-control\"' +
+                        'placeholder=\"Visible\" checked="true" name=\"isVisibleEditorialPlanArgument\" ">' +
+                        '</div>' +
+                        '</div>' +
                         '</div>' +
                         '<div class=\"row\">' +
-                        '<div class=\"col-md-12\">' +
+                        '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"description\">Inserisci la Descrizione</label>' +
                         '<input id=\"description\" class=\"form-control\"' +
                         'placeholder=\"Inserisci la descrizione \" name=\"description\" ">' +
                         '</div>' +
                         '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisibleDescription\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisibleDescription\" class=\"form-control\"' +
+                        'placeholder=\"Visible\" checked="true" name=\"isVisibleDescription\" ">' +
+                        '</div>' +
+                        '</div>' +
                         '</div>' +
                         '<div class=\"row\">' +
-                        '<div class=\"col-md-12\">' +
+                        '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"photoUrl\">Inserisci il link  immagine </label>' +
                         '<input id=\"photoUrl\" class=\"form-control\"' +
                         'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" ">' +
                         '</div>' +
                         '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisiblePhotoUrl\" class=\"form-control\"' +
+                        'placeholder=\"Visible\" checked="true" name=\"isVisiblePhotoUrl\" ">' +
+                        '</div>' +
+                        '</div>' +
                         '</div>' +
                         '<div class=\"row\">' +
-                        '<div class=\"col-md-12\">' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"bodyEvent\">Inserisci il Contenuto </label>' +
+                        '<textarea id="bodyEvent" name="bodyEvent"></textarea>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisibleBodyEvent\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisibleBodyEvent\" class=\"form-control\"' +
+                        'placeholder=\"Visible\" checked="true" name=\"isVisibleBodyEvent\" ">' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"row\">' +
+                        '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"note\">Inserisci le note </label>' +
                         '<input id=\"note\" class=\"form-control\"' +
                         'placeholder=\"Inserisci le note \" name=\"note\">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisibleNote\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisibleNote\" class=\"form-control\"' +
+                        'placeholder=\"Visible\" checked="true" name=\"isVisibleNote\" ">' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
@@ -319,7 +370,7 @@
                             title: $('#titleEvent').val(),
                             start: start,
                             end: end,
-                            argument: $('#argument').val(),
+                            argument: $('#editorialPlanArgumentId').val(),
                             description: $('#description').val(),
                             note: $('#note').val(),
                             photoUrl: $('#photoUrl').val(),
@@ -327,6 +378,14 @@
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
                             notifyEmail: $('#notifyEmail').val(),
+                            isEventVisible: $('#isEventVisible').val(),
+                            isVisibleEditorialPlanArgument: $('#isVisibleEditorialPlanArgument').val(),
+                            isVisibleDescription: $('#isVisibleDescription').val(),
+                            isVisiblePhotoUrl: $('#isVisiblePhotoUrl').val(),
+                            isVisibleDescription: $('#isVisibleDescription').val(),
+                            bodyEvent: $('#bodyEvent').val(),
+                            isVisibleBodyEvent: $('#isVisibleBodyEvent').val(),
+
 
                         };
                         $.ajax({
@@ -357,16 +416,19 @@
                     var editorialPlanDetailId = event.id;
                     var argument = event.argument;
                     var description = event.description;
+                    var isVisibleDescription = event.isVisibleDescription;
+                    var isEventVisible = event.isEventVisible;
+                    var isVisibleEditorialPlanArgument = event.isVisibleEditorialPlanArgument;
+                    var isVisibleNote = event.isVisibleNote;
+                    var bodyEvent = event.bodyEvent;
+                    var isVisibleBodyEvent = event.isVisibleBodyEvent;
+                    var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
                     var photoUrl = event.photoUrl;
                     var status = event.status;
                     var selectedDraft = "";
                     var selectedApproved = "";
                     var selectedRejected = "";
                     var selectedPublished = "";
-                    var argumentName = event.argumentName;
-                    let url1 = window.location.href;
-                    let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
-
                     if (status === 'Draft') {
                         selectedDraft = 'selected=selected';
                     }
@@ -379,6 +441,11 @@
                     if (status === 'Published') {
                         selectedPublished = 'selected=selected';
                     }
+
+                    var argumentName = event.argumentName;
+                    let url1 = window.location.href;
+                    let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
+
                     var note = event.note;
                     var socialId = event.socialId;
                     var socialName = event.socialName;
@@ -386,13 +453,20 @@
                     var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
                     var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
                     let bsModal = new $.bsModal('Invio', {
-                        body: '<p>Modifica un dettaglio per il piano Editoriale</p>' +
+                        body: '<p>Modifica l\'evento per il Piano Editoriale</p>' +
                         '<div class=\"row\">' +
-                        '<div class=\"col-md-12\">' +
+                        '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"\"></label>' +
+                        '<label for=\"\">Modifica Evento Azione Piano Editoriale</label>' +
                         '<input id=\"titleEvent\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci il titolo\" name=\"titleEvent\" value=\"' + title + '\" required=\"required\">' +
+                        'placeholder=\"Modifica il titolo\" name=\"titleEvent\" value=\"' + title + '\" required=\"required\">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isEventVisible\">Evento Azione Visibile</label>' +
+                        '<input  type="checkbox" id=\"isEventVisible\" class=\"form-control\"' +
+                        'placeholder=\"Visible\" name=\"isEventVisible\" ">' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
@@ -401,7 +475,7 @@
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"startEventDate\">Inserisci la Data di Inizio del Dettaglio </label>' +
                         '<input  type =\'datetime\' id=\"startEventDate\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci la Data di Inizio del Dettaglio\" name=\"startEventDate\" value=\"' + start + '\" required=\"required\">' +
+                        'placeholder=\"Modifica la Data di Inizio del Dettaglio\" name=\"startEventDate\" value=\"' + start + '\" required=\"required\">' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
@@ -410,47 +484,89 @@
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"endEventDate\">Inserisci la Data della Fine del Dettaglio </label>' +
                         '<input  type =\'datetime\' id=\"EndEventDate\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
+                        'placeholder=\"Modifica la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
                         '<div class=\"row\">' +
-                        '<div class="col-md-12">' +
+                        '<div class="col-md-6">' +
                         '<div class="form-group form-group-default selectize-enabled">' +
                         '<label for="editorialPlanArgumentId">Seleziona l\' Argomento da associare</label>' +
-                        '<select id="editorialPlanArgumentId"' +
-                        ' name="editorialPlanArgumentId" class="full-width selectpicker"' +
-                        '  required="required"' +
-                        ' placeholder="Selezione l\' argomento da utilizzare"' +
-                        '<option selected="selected" value="' + argument + '">' + argumentName + '</option>' +
-                        ' data-init-plugin="selectize"></select>' +
+                        '<select id="editorialPlanArgumentId" name="editorialPlanArgumentId" class="full-width selectpicker"' +
+                        'placeholder="Selezione l\' argomento da utilizzare"' +
+                        'data-init-plugin="selectize">' +
+                        '<option  value="' + argument + '">' + argumentName + '</option>' +
+                        '</select>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisibleEditorialPlanArgument\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisibleEditorialPlanArgument\" class=\"form-control\"' +
+                        'placeholder=\"Visible\"  name=\"isVisibleEditorialPlanArgument\" ">' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
                         '<div class=\"row\">' +
-                        '<div class=\"col-md-12\">' +
+                        '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"description\">Inserisci la Descrizione</label>' +
+                        '<label for=\"description\">Modifica la Descrizione</label>' +
                         '<input id=\"description\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci la descrizione \" name=\"description\" value=\"' + description + '\">' +
+                        'placeholder=\"Modifica la descrizione \" name=\"description\" value=\"' + description + '\">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisibleDescription\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisibleDescription\" class=\"form-control\"' +
+                        'placeholder=\"Visible\" name=\"isVisibleDescription\" ">' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
                         '<div class=\"row\">' +
-                        '<div class=\"col-md-12\">' +
+                        '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"photoUrl\">Inserisci il link  immagine </label>' +
+                        '<label for=\"photoUrl\">Modifica il link  immagine </label>' +
                         '<input id=\"photoUrl\" class=\"form-control\"' +
                         'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" value=\"' + photoUrl + '\">' +
                         '</div>' +
                         '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisiblePhotoUrl\" class=\"form-control\"' +
+                        'placeholder=\"Visible\" name=\"isVisiblePhotoUrl\">' +
+                        '</div>' +
+                        '</div>' +
                         '</div>' +
                         '<div class=\"row\">' +
-                        '<div class=\"col-md-12\">' +
+                        '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"note\">Inserisci le note </label>' +
+                        '<label for=\"bodyEvent\">Modifica il Contenuto </label>' +
+                        '<textarea id="bodyEvent" name="bodyEvent">'+bodyEvent+'</textarea>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisibleBodyEvent\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisibleBodyEvent\" class=\"form-control\"' +
+                        'placeholder=\"Visible\"  name=\"isVisibleBodyEvent\">' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"row\">' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"note\">Modifica le note </label>' +
                         '<input id=\"note\" class=\"form-control\"' +
                         'placeholder=\"Inserisci le note \" name=\"note\" value=\"' + note + '\">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class=\"col-md-6\">' +
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"isVisibleNote\">Visibile</label>' +
+                        '<input  type="checkbox" id=\"isVisibleNote\" class=\"form-control\"' +
+                        'placeholder=\"Visible\"  name=\"isVisibleNote\" ">' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
@@ -462,7 +578,6 @@
                         'class="full-width selectpicker"' +
                         'placeholder="Seleziona lo stato"' +
                         'data-init-plugin="selectize">' +
-
                         '<option ' + selectedDraft + ' value="Draft">Bozza</option>' +
                         '<option ' + selectedApproved + ' value="Approved">Approvata</option>' +
                         '<option ' + selectedRejected + ' value="Rejected">Rifiutata</option>' +
@@ -508,6 +623,38 @@
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + editorialPlanId + '\"/>' +
                         '<input type="hidden" id="editorialPlanDetailId" name="editorialPlanDetailId" value=\"' + editorialPlanDetailId + '\"/>'
                     });
+                    if(isEventVisible=="1"){
+                        $('#isEventVisible').prop('checked', true);
+                    }
+                    if(isVisibleEditorialPlanArgument=="1"){
+                        $('#isVisibleEditorialPlanArgument').prop('checked', true);
+
+                    }
+                    if(isVisibleDescription =="1"){
+                        $('#isVisibleDescription').prop('checked', true);
+
+                    }
+                    if(isVisibleNote =="1"){
+                        $('#isVisibleNote').prop('checked', true);
+                    }
+                    if(isVisibleBodyEvent =="1"){
+                        $('#isVisibleBodyEvent').prop('checked', true);
+
+                    }
+
+                    if(isVisiblePhotoUrl =="1"){
+                        $('#isVisiblePhotoUrl').prop('checked', true);
+
+                    }
+
+                    var isEvVisible = ($('#isEventVisible').is(":checked") ? 1 : 0);
+                    var isVisEdPlanArg = ($('#isVisibleEditorialPlanArgument').is(":checked") ? 1 : 0);
+                    var isVisDesc = ($('#isVisibleDescription').is(":checked") ? 1 : 0);
+                    var isVisNote = ($('#isVisibleNote').is(":checked") ? 1 : 0);
+                    var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? 1 : 0);
+                    var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? 1 : 0);
+
+
                     $("#deleteDetail").click(function () {
                         if (confirm("Sei Sicuro di Cancellare il Dettaglio del Piano Editoriale")) {
                             /*   var title = event.title;
@@ -536,6 +683,8 @@
                                         socialId: socialId,
                                         title: title,
                                         note: note,
+
+
 
                                     },
 
@@ -578,7 +727,7 @@
                         data: {
                             table: 'EditorialPlanArgument',
                             selection: {id: argument},
-                            condition: {type: 1}
+                            condition: {type: 1},
 
                         },
                         dataType: 'json'
@@ -600,15 +749,23 @@
                             title: $('#titleEvent').val(),
                             start: start,
                             end: end,
-                            argument: $('#argument').val(),
+                            argument: $('#editorialPlanArgumentId').val(),
                             description: $('#description').val(),
                             note: $('#note').val(),
+                            isVisibleNote: isVisNote,
                             photoUrl: $('#photoUrl').val(),
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
                             editorialPlanDetailId: $('#editorialPlanDetailId').val(),
                             notifyEmail: $('#notifyEmail').val(),
+                            isEventVisible: isEvVisible,
+                            isVisibleEditorialPlanArgument: isVisEdPlanArg,
+                            isVisibleDescription: isVisDesc,
+                            isVisiblePhotoUrl: isVisPhoto,
+                            bodyEvent: $('#bodyEvent').val(),
+                            isVisibleBodyEvent: isVisBody
+
 
 
                         };
@@ -750,7 +907,7 @@
                 },
                 //obj that we get json result from ajax
                 events: obj,
-                textColor:'black',
+                textColor: 'black',
                 eventRender: function (event, element) {
                     let visibleArgument;
                     let visibleDescription;
@@ -758,19 +915,19 @@
                     let visibleBodyEvent;
                     let visibleNote;
                     if (event.isVisibleDescription === "1") {
-                        visibleDescription = "<br/><b>Descrizione:</b>" + event.description ;
+                        visibleDescription = "<br/><b>Descrizione:</b>" + event.description;
                     } else {
                         visibleDescription = "";
 
                     }
                     if (event.isVisibleEditorialPlanArgument === "1") {
-                        visibleArgument = "<br/><b>Argomento:</b>" + event.argumentName ;
+                        visibleArgument = "<br/><b>Argomento:</b>" + event.argumentName;
                     } else {
                         visibleArgument = "";
 
                     }
                     if (event.isVisiblePhotoUrl === "1") {
-                        visiblePhotoUrl = "<br/><b>Immagine:</b>" + event.photoUrl ;
+                        visiblePhotoUrl = "<br/><b>Immagine:</b>" + event.photoUrl;
                     } else {
                         visiblePhotoUrl = "";
 
@@ -781,23 +938,22 @@
                         visibleNote = "";
 
                     }
-                    let bgRender="#ffffff";
-                    switch(event.status){
+                    let bgRender = "#ffffff";
+                    switch (event.status) {
                         case "Bozza":
-                            bgRender='<div style="background-color:darkblue>';
-                        break;
+                            bgRender = '<div style="background-color:darkblue>';
+                            break;
                         case "Approvata":
-                            bgRender='<div style="background-color:darkorange">';
+                            bgRender = '<div style="background-color:darkorange">';
                             break;
                         case "Rifiutata":
-                            bgRender='<div style="background-color:red">';
+                            bgRender = '<div style="background-color:red">';
                             break;
                         case "Pubblicata":
-                            bgRender='<div style="background-color:green">';
+                            bgRender = '<div style="background-color:green">';
                             break;
 
                     }
-
 
 
                     if (event.isEventVisible === "1") {
@@ -805,13 +961,10 @@
                         element.find('.fc-title').append(bgRender + visibleDescription + visibleArgument +
                             '"<br/><b>Piano Editoriale:</b>"' + event.titleEditorialPlan +
                             '"<br/><b>Media utilizzato:</b>"' + event.socialName +
-                            '"<br/><b>Stato:</b>' + event.status +  visibleNote + visiblePhotoUrl + "</div>");
-                    }else{
+                            '"<br/><b>Stato:</b>' + event.status + visibleNote + visiblePhotoUrl + "</div>");
+                    } else {
                         element.find('.fc-content').hide();
                         element.find('.fc-title').hide();
-
-
-
 
 
                     }

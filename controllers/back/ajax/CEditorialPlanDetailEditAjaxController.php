@@ -11,6 +11,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CEditorialPlan;
+use bamboo\domain\entities\CEditorialPlanArgument;
 use bamboo\domain\entities\CEditorialPlanDetail;
 use \bamboo\utils\time\STimeToolbox;
 
@@ -21,12 +22,19 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
     {
         $data = \Monkey::app()->router->request()->getRequestData();
         $title = $data['title'];
+        $isEventVisible = $data['isEventVisible'];
         $startEventDate = $data['start'];
         $endEventDate = $data['end'];
         $argument = $data['argument'];
+        $isVisibleEditorialPlanArgument = $data['isVisibleEditorialPlanArgument'];
+        $isVisibleNote = $data['isVisibleNote'];
         $note = $data['note'];
         $description = $data['description'];
+        $isVisibleDescription = $data['isVisibleDescription'];
         $photoUrl = $data['photoUrl'];
+        $isVisiblePhotoUrl = $data['isVisiblePhotoUrl'];
+        $bodyEvent = $data['bodyEvent'];
+        $isVisibleBodyEvent = $data['isVisibleBodyEvent'];
         $status = $data['status'];
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
@@ -55,6 +63,8 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         if (!empty($title)) {
             $editorialPlanDetail->title = $title;
         }
+
+        $editorialPlanDetail->isEventVisible = $isEventVisible;
         if (!empty($startEventDate)) {
             $editorialPlanDetail->startEventDate = $startEventDate;
         }
@@ -62,17 +72,33 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
             $editorialPlanDetail->endEventDate = $endEventDate;
         }
         if (!empty($argument)) {
-            $editorialPlanDetail->argument = $argument;
+            $editorialPlanDetail->editorialPlanArgumentId = $argument;
         }
+
+        $editorialPlanDetail->isVisibleEditorialPlanArgument = $isVisibleEditorialPlanArgument;
         if (!empty($description)) {
             $editorialPlanDetail->description = $description;
         }
+
+        $editorialPlanDetail->isVisibleDescription = $isVisibleDescription;
         if (!empty($photoUrl)) {
             $editorialPlanDetail->photoUrl = $photoUrl;
         }
+
+        $editorialPlanDetail->isVisiblePhotoUrl = $isVisiblePhotoUrl;
         if (!empty($status)) {
             $editorialPlanDetail->status = $status;
         }
+        if (!empty($bodyEvent)) {
+            $editorialPlanDetail->bodyEvent = $bodyEvent;
+        }
+        if (!empty($note)) {
+            $editorialPlanDetail->note = $note;
+        }
+
+        $editorialPlanDetail->isVisibleNote = $isVisibleNote;
+
+        $editorialPlanDetail->isVisibleBodyEvent = $isVisibleBodyEvent;
         if (!empty($socialId)) {
             $editorialPlanDetail->socialId = $socialId;
         }
@@ -85,7 +111,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
         $editorialPlanDetail->update();
 
-        $res = "Dettaglio Piano modificato con successo!";
+        $res = "Evento Azione  Piano modificato con successo!";
         /** @var ARepo $shopRepo */
         $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
 
@@ -94,15 +120,22 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
         $shopId = $editorialPlan->shop->id;
         $shopEmail = $editorialPlan->shop->referrerEmails;
+        /** var ARepo $editorialPlanArgumentRepo */
+        $editorialPlanArgumentRepo = \Monkey::app()->repoFactory->create('EditorialPlanArgument');
+
+        /** @var CEditorialPlanArgument $editorialPlanArgument */
+        $editorialPlanArgument = $editorialPlanArgumentRepo->findOneBy(['id' => $argument]);
+        $argumentName = $editorialPlanArgument->titleArgument;
+
         /** @var Ceditorial $to */
         $to = $shopEmail;
         $editorialPlanName = $editorialPlan->name;
-        $subject = "Modifica Dettaglio Piano Editoriale";
-        $message = "Modifica Dettaglio Piano Editoriale<p>";
+        $subject = "Modifica Evento Azione Piano Editoriale";
+        $message = "Modifica Evento Azione Piano Editoriale<p>";
         $message .= "Title:" . $title . "<p>";
         $message .= "Data di Inizio:" . $startEventDate . "<p>";
         $message .= "Data di Fine:" . $endEventDate . "<p>";
-        $message .= "Argomento:" . $argument . "<p>";
+        $message .= "Argomento:" . $argumentName . "<p>";
         $message .= "Descrizione:" . $description . "<p>";
         $message .= "Stato:" . $status . "<p>";
         $message .= "Note:" . $note . "<p>";
@@ -153,22 +186,29 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         /** @var CEditorialPlanDetail $editorial */
         $editorial = $editorialPlanDetail->findOneBy(['id' => $editorialPlanDetailId]);
         $editorial->delete();
-        $res = "Dettaglio Piano Editoriale Cancellato";
+        $res = "  Evento Azione Piano Editoriale Cancellato";
         /** @var ARepo $shopRepo */
         $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
 
         /** @var CEditorialPlan $editorialPlan */
         $editorialPlan = $ePlanRepo->findOneBy(['id' => $editorialPlanId]);
 
+        /** var ARepo $editorialPlanArgumentRepo */
+        $editorialPlanArgumentRepo = \Monkey::app()->repoFactory->create('EditorialPlanArgument');
+
+        /** @var CEditorialPlanArgument $editorialPlanArgument */
+        $editorialPlanArgument = $editorialPlanArgumentRepo->findOneBy(['id' => $argument]);
+        $argumentName = $editorialPlanArgument->titleArgument;
+
         $shopId = $editorialPlan->shop->id;
         $shopEmail = $editorialPlan->shop->referrerEmails;
         /** @var Ceditorial $to */
         $to = $shopEmail;
         $editorialPlanName = $editorialPlan->name;
-        $subject = "Cancellazione Dettaglio Piano Editoriale";
-        $message = "Cancellazione Dettaglio Piano Editoriale<p>";
+        $subject = "Cancellazione Evento Azione Piano Editoriale";
+        $message = "Cancellazione Evento Azione Editoriale<p>";
         $message .= "Title:" . $title . "<p>";
-        $message .= "Argomento:" . $argument . "<p>";
+        $message .= "Argomento:" . $argumentName . "<p>";
         $message .= "Descrizione:" . $description . "<p>";
         $message .= "Stato:" . $status . "<p>";
         $message .= "Note:" . $note . "<p>";
