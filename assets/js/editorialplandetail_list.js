@@ -326,6 +326,14 @@
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
                     });
 
+                    $('#isEventVisible').prop('checked', true);
+                    $('#isVisibleEditorialPlanArgument').prop('checked', true);
+                    $('#isVisibleDescription').prop('checked', true);
+                    $('#isVisibleNote').prop('checked', true);
+                    $('#isVisibleBodyEvent').prop('checked', true);
+                    $('#isVisiblePhotoUrl').prop('checked', true);
+
+
                     $.ajax({
                         method: 'GET',
                         url: '/blueseal/xhr/GetTableContent',
@@ -366,6 +374,12 @@
 
                     bsModal.showCancelBtn();
                     bsModal.setOkEvent(function () {
+                        var isEvVisible = ($('#isEventVisible').is(":checked") ? "1" : "0");
+                        var isVisEdPlanArg = ($('#isVisibleEditorialPlanArgument').is(":checked") ? "1" : "0");
+                        var isVisDesc = ($('#isVisibleDescription').is(":checked") ? "1" : "0");
+                        var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
+                        var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
+                        var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
                         const data = {
                             title: $('#titleEvent').val(),
                             start: start,
@@ -373,18 +387,18 @@
                             argument: $('#editorialPlanArgumentId').val(),
                             description: $('#description').val(),
                             note: $('#note').val(),
+                            isVisibleNote: isVisNote,
                             photoUrl: $('#photoUrl').val(),
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
                             notifyEmail: $('#notifyEmail').val(),
-                            isEventVisible: $('#isEventVisible').val(),
-                            isVisibleEditorialPlanArgument: $('#isVisibleEditorialPlanArgument').val(),
-                            isVisibleDescription: $('#isVisibleDescription').val(),
-                            isVisiblePhotoUrl: $('#isVisiblePhotoUrl').val(),
-                            isVisibleDescription: $('#isVisibleDescription').val(),
+                            isEventVisible: isEvVisible,
+                            isVisibleEditorialPlanArgument: isVisEdPlanArg,
+                            isVisiblePhotoUrl: isVisPhoto,
+                            isVisibleDescription: isVisDesc,
                             bodyEvent: $('#bodyEvent').val(),
-                            isVisibleBodyEvent: $('#isVisibleBodyEvent').val(),
+                            isVisibleBodyEvent: isVisBody,
 
 
                         };
@@ -543,7 +557,7 @@
                         '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"bodyEvent\">Modifica il Contenuto </label>' +
-                        '<textarea id="bodyEvent" name="bodyEvent">'+bodyEvent+'</textarea>' +
+                        '<textarea id="bodyEvent" name="bodyEvent">' + bodyEvent + '</textarea>' +
                         '</div>' +
                         '</div>' +
                         '<div class=\"col-md-6\">' +
@@ -623,36 +637,41 @@
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + editorialPlanId + '\"/>' +
                         '<input type="hidden" id="editorialPlanDetailId" name="editorialPlanDetailId" value=\"' + editorialPlanDetailId + '\"/>'
                     });
-                    if(isEventVisible=="1"){
+                    if (isEventVisible == "1") {
                         $('#isEventVisible').prop('checked', true);
+                    } else {
+                        $('#isEventVisible').prop('checked', false);
                     }
-                    if(isVisibleEditorialPlanArgument=="1"){
+                    if (isVisibleEditorialPlanArgument == "1") {
                         $('#isVisibleEditorialPlanArgument').prop('checked', true);
 
+                    } else {
+                        $('#isVisibleEditorialPlanArgument').prop('checked', false);
                     }
-                    if(isVisibleDescription =="1"){
+                    if (isVisibleDescription == "1") {
                         $('#isVisibleDescription').prop('checked', true);
 
+                    } else {
+                        $('#isVisibleDescription').prop('checked', false);
                     }
-                    if(isVisibleNote =="1"){
+                    if (isVisibleNote == "1") {
                         $('#isVisibleNote').prop('checked', true);
+                    } else {
+                        $('#isVisibleNote').prop('checked', false);
                     }
-                    if(isVisibleBodyEvent =="1"){
+                    if (isVisibleBodyEvent == "1") {
                         $('#isVisibleBodyEvent').prop('checked', true);
 
+                    } else {
+                        $('#isVisibleBodyEvent').prop('checked', false);
                     }
 
-                    if(isVisiblePhotoUrl =="1"){
+                    if (isVisiblePhotoUrl == "1") {
                         $('#isVisiblePhotoUrl').prop('checked', true);
 
+                    } else {
+                        $('#isVisiblePhotoUrl').prop('checked', false);
                     }
-
-                    var isEvVisible = ($('#isEventVisible').is(":checked") ? 1 : 0);
-                    var isVisEdPlanArg = ($('#isVisibleEditorialPlanArgument').is(":checked") ? 1 : 0);
-                    var isVisDesc = ($('#isVisibleDescription').is(":checked") ? 1 : 0);
-                    var isVisNote = ($('#isVisibleNote').is(":checked") ? 1 : 0);
-                    var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? 1 : 0);
-                    var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? 1 : 0);
 
 
                     $("#deleteDetail").click(function () {
@@ -683,7 +702,6 @@
                                         socialId: socialId,
                                         title: title,
                                         note: note,
-
 
 
                                     },
@@ -745,6 +763,12 @@
 
                     bsModal.showCancelBtn();
                     bsModal.setOkEvent(function () {
+                        var isEvVisible = ($('#isEventVisible').is(":checked") ? "1" : "0");
+                        var isVisEdPlanArg = ($('#isVisibleEditorialPlanArgument').is(":checked") ? "1" : "0");
+                        var isVisDesc = ($('#isVisibleDescription').is(":checked") ? "1" : "0");
+                        var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
+                        var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
+                        var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
                         const data = {
                             title: $('#titleEvent').val(),
                             start: start,
@@ -765,7 +789,6 @@
                             isVisiblePhotoUrl: isVisPhoto,
                             bodyEvent: $('#bodyEvent').val(),
                             isVisibleBodyEvent: isVisBody
-
 
 
                         };

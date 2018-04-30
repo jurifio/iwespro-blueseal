@@ -23,19 +23,25 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
     {
         $data = \Monkey::app()->router->request()->getRequestData();
         $title = $data['title'];
+        $isEventVisible = $data['isEventVisible'];
         $startEventDate = $data['start'];
         $endEventDate = $data['end'];
         $argument = $data['argument'];
+        $isVisibleEditorialPlanArgument = $data['isVisibleEditorialPlanArgument'];
+        $isVisiblePhotoUrl = $data['isVisiblePhotoUrl'];
+        $bodyEvent = $data['bodyEvent'];
+        $isVisibleBodyEvent = $data['isVisibleBodyEvent'];
         $note = $data['note'];
+        $isVisibleNote = $data['isVisibleNote'];
         $description = $data['description'];
+        $isVisibleDescription = $data['isVisibleDescription'];
         $photoUrl = $data['photoUrl'];
         $status = $data['status'];
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
-        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate,'Y-m-d h:m:s');
-        $endEventDate =STimeToolbox::FormatDateFromDBValue($endEventDate,'Y-m-d h:m:s');
-        $notifyEmail=$data['notifyEmail'];
-
+        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
+        $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');
+        $notifyEmail = $data['notifyEmail'];
 
 
         /** @var CRepo $editorialPlanDetailRepo */
@@ -53,14 +59,21 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             //popolo la tabella
 
             $editorialPlanDetailInsert->title = $title;
+            $editorialPlanDetailInsert->isEventVisible = $isEventVisible;
             $editorialPlanDetailInsert->startEventDate = $startEventDate;
             $editorialPlanDetailInsert->endEventDate = $endEventDate;
             $editorialPlanDetailInsert->argument = $argument;
+            $editorialPlanDetailInsert->isVisibleEditorialPlanArgument = $isVisibleEditorialPlanArgument;
             $editorialPlanDetailInsert->description = $description;
+            $editorialPlanDetailInsert->isVisibleDescription = $isVisibleDescription;
             $editorialPlanDetailInsert->photoUrl = $photoUrl;
+            $editorialPlanDetailInsert->isVisiblePhotoUrl = $isVisiblePhotoUrl;
             $editorialPlanDetailInsert->status = $status;
             $editorialPlanDetailInsert->note = $note;
+            $editorialPlanDetailInsert->isVisibleNote = $isVisibleNote;
             $editorialPlanDetailInsert->socialId = $socialId;
+            $editorialPlanDetailInsert->bodyEvent =$bodyEvent;
+            $editorialPlanDetailInsert->isVisibleBodyEvent =$isVisibleBodyEvent;
             $editorialPlanDetailInsert->editorialPlanId = $editorialPlanId;
 
             // eseguo la commit sulla tabella;
@@ -76,6 +89,12 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
             $shopId = $editorialPlan->shop->id;
             $shopEmail = $editorialPlan->shop->referrerEmails;
+            /** var ARepo $editorialPlanArgumentRepo */
+            $editorialPlanArgumentRepo = \Monkey::app()->repoFactory->create('EditorialPlanArgument');
+
+            /** @var CEditorialPlanArgument $editorialPlanArgument */
+            $editorialPlanArgument = $editorialPlanArgumentRepo->findOneBy(['id' => $argument]);
+            $argumentName = $editorialPlanArgument->titleArgument;
             /** @var Ceditorial $to */
             $to = $shopEmail;
             $editorialPlanName = $editorialPlan->name;
@@ -84,7 +103,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $message .= "Title:" . $title . "<p>";
             $message .= "Data di Inizio:" . $startEventDate . "<p>";
             $message .= "Data di Fine:" . $endEventDate . "<p>";
-            $message .= "Argomento:" . $argument . "<p>";
+            $message .= "Argomento:" . $argumentName . "<p>";
             $message .= "Descrizione:" . $description . "<p>";
             $message .= "Stato:" . $status . "<p>";
             $message .= "Note:" . $note . "<p>";
@@ -101,18 +120,18 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
             if ($notifyEmail === "yesNotify") {
 
-            if (ENV == 'dev') return false;
-            /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
-            $emailRepo = \Monkey::app()->repoFactory->create('Email');
-            if (!is_array($to)) {
-                $to = [$to];
+                if (ENV == 'dev') return false;
+                /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
+                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                if (!is_array($to)) {
+                    $to = [$to];
+                }
+                $emailRepo->newMail('Iwes IT Department <it@iwes.it>', $to, [], [], $subject, $message);
             }
-            $emailRepo->newMail('Iwes IT Department <it@iwes.it>', $to, [], [], $subject, $message);
-        }
 
         } else {
             //Se hai trovato qualcosa allora restituitsci messaggio di errore
-            $res = "Esiste già una Dettaglio piano Editoriale con lo stesso nome";
+            $res = "Esiste già un Evento Azione per il  piano Editoriale con lo stesso nome";
         }
 
 
