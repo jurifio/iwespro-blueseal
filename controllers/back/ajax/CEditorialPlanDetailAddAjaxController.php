@@ -62,7 +62,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $editorialPlanDetailInsert->isEventVisible = $isEventVisible;
             $editorialPlanDetailInsert->startEventDate = $startEventDate;
             $editorialPlanDetailInsert->endEventDate = $endEventDate;
-            $editorialPlanDetailInsert->argument = $argument;
+            $editorialPlanDetailInsert->editorialPlanArgumentId = $argument;
             $editorialPlanDetailInsert->isVisibleEditorialPlanArgument = $isVisibleEditorialPlanArgument;
             $editorialPlanDetailInsert->description = $description;
             $editorialPlanDetailInsert->isVisibleDescription = $isVisibleDescription;

@@ -817,16 +817,37 @@
                 eventDrop:
 
                     function (event) {
-                        start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-                        end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                         var newstart = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                          var newend = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
 
                         var title = event.title;
+                        var isEventVisible = event.isEventVisible;
                         var editorialPlanDetailId = event.id;
                         var argument = event.argument;
+                        var isVisibleEditorialPlanArgument = event.isVisibleEditorialPlanArgument;
                         var description = event.description;
+                        var isVisibleDescription = event.isVisibleDescription;
                         var photoUrl = event.photoUrl;
+                        var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
                         var status = event.status;
+                        switch(status){
+                            case "Bozza":
+                                status ="Draft";
+                                break;
+                            case "Approvata":
+                                status ="Approved";
+                                break;
+                            case "Rifiutata":
+                                status ="Rejected";
+                                break;
+                            case "Pubblicata":
+                                status ="Published";
+                                break;
+                        }
                         var note = event.note;
+                        var isVisibleNote = event.isVisibleNote;
+                        var bodyEvent = event.bodyEvent;
+                        var isVisibleBodyEvent = event.isVisibleBodyEvent;
                         var socialId = event.socialId;
                         var notifyEmail = "yesNotify";
 
@@ -837,15 +858,22 @@
                             type: 'POST',
                             data: {
                                 title: title,
-                                start: start,
-                                end: end,
+                                isEventVisible:isEventVisible,
+                                start: newstart,
+                                end: newend,
                                 note: note,
+                                isVisibleNote:isVisibleNote,
                                 editorialPlanId: editorialPlanId,
                                 editorialPlanDetailId: editorialPlanDetailId,
                                 argument: argument,
+                                isVisibleEditorialPlanArgument:isVisibleEditorialPlanArgument,
+                                isVisiblePhotoUrl:isVisiblePhotoUrl,
                                 description: description,
+                                isVisibleDescription:isVisibleDescription,
                                 photoUrl: photoUrl,
                                 status: status,
+                                bodyEvent:bodyEvent,
+                                isVisibleBodyEvent:isVisibleBodyEvent,
                                 socialId: socialId,
                                 notifyEmail: notifyEmail
                             },
@@ -859,17 +887,39 @@
 
                 ,
                 eventResize: function (event) {
-                    start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-                    end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                    let newstart = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                    let newend = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
 
                     var title = event.title;
+                    var isEventVisible = event.isEventVisible;
                     var editorialPlanDetailId = event.id;
                     var argument = event.argument;
+                    var isVisibleEditorialPlanArgument = event.isVisibleEditorialPlanArgument;
                     var description = event.description;
+                    var isVisibleDescription = event.isVisibleDescription;
                     var photoUrl = event.photoUrl;
+                    var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
                     var status = event.status;
+                    switch(status){
+                        case "Bozza":
+                            status ="Draft";
+                            break;
+                        case "Approvata":
+                            status ="Approved";
+                            break;
+                        case "Rifiutata":
+                            status ="Rejected";
+                            break;
+                        case "Pubblicata":
+                            status ="Published";
+                            break;
+                    }
                     var note = event.note;
+                    var isVisibleNote = event.isVisibleNote;
+                    var bodyEvent = event.bodyEvent;
+                    var isVisibleBodyEvent = event.isVisibleBodyEvent;
                     var socialId = event.socialId;
+                    var notifyEmail = "yesNotify";
 
                     let url1 = window.location.href;
                     let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
@@ -878,16 +928,24 @@
                         type: 'POST',
                         data: {
                             title: title,
-                            start: start,
-                            end: end,
+                            isEventVisible:isEventVisible,
+                            start: newstart,
+                            end: newend,
                             note: note,
+                            isVisibleNote:isVisibleNote,
                             editorialPlanId: editorialPlanId,
                             editorialPlanDetailId: editorialPlanDetailId,
                             argument: argument,
+                            isVisibleEditorialPlanArgument:isVisibleEditorialPlanArgument,
+                            isVisiblePhotoUrl:isVisiblePhotoUrl,
                             description: description,
+                            isVisibleDescription:isVisibleDescription,
                             photoUrl: photoUrl,
                             status: status,
-                            socialId: socialId
+                            bodyEvent:bodyEvent,
+                            isVisibleBodyEvent:isVisibleBodyEvent,
+                            socialId: socialId,
+                            notifyEmail: notifyEmail
                         },
                         success: function () {
                             calendar.fullCalendar('refetchEvents');

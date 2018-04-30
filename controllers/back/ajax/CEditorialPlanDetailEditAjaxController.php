@@ -179,6 +179,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $editorialPlanId = $data['editorialPlanId'];
         $notifyEmail = "yesNotify";
 
+
         $editorialPlanDetailId = $data['editorialPlanDetailId'];
         /** @var CRepo $editorialPlanDetail */
         $editorialPlanDetail = \Monkey::app()->repoFactory->create('editorialPlanDetail');
