@@ -76,7 +76,7 @@
         success: function (data) {
             obj = JSON.parse(data);
             var TypePermission = obj[0].allShops;
-            createcalendar(obj);
+            createcalendar(obj,TypePermission);
 
         },
         error: function (xhr, err) {
