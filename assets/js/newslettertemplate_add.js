@@ -56,7 +56,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         reader.readAsDataURL(this.files[0]);
     }
 });
-/*(function ($) {
+(function ($) {
     Pace.ignore(function () {
         CKEDITOR.replace( 'template', {
             height: 260,
@@ -65,7 +65,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         } );
 
     });
-})*/
+})
 (jQuery);
 
 $(document).on('bs.newNewsletterTemplate.save', function () {

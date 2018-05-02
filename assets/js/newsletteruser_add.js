@@ -402,6 +402,7 @@ $(document).on('bs.newNewsletterUser.save', function () {
             newsletterEventId: campaignEventIdPost,
             newsletterEventName: campaignEventNamePost,
             dateCampaignStart:campaignDateStartPost,
+            dateCampaignFinish:campaignDateFinishPost,
 
 
         };
