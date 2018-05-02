@@ -252,7 +252,7 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.newNewsletterUser.sendTest"
-                data-title="Invia la Newsletter"
+                data-title="Invia il test per  la Newsletter"
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>
