@@ -422,7 +422,8 @@ $(document).on('bs.newNewsletterUser.save', function () {
             bsModal.showOkBtn();
         });
     });
-});$(document).on('bs.newNewsletterUser.sendTest', function () {
+});
+$(document).on('bs.newNewsletterUser.sendTest', function () {
     let bsModal = new $.bsModal('Invia Test Newsletter', {
         body: '<div><p>Premere ok per inviare il Test'+
         '<div class=\"row\">' +
