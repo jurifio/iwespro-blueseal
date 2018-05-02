@@ -143,7 +143,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="sendAddressDate">Data di Invio</label>
-                                                <input type="datetime" class="form-control" id="sendAddressDate" name="sendAddressDate" value="<?php echo $newsletter->sendAddressDate;?>" />
+                                                <input type="datetime-local" class="form-control" id="sendAddressDate" name="sendAddressDate" value="<?php echo $newsletter->sendAddressDate;?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -192,7 +192,7 @@
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
-                                                <option value="<?php echo $newsletterTemplate->id;?>"<?php echo $newsletterTemplate->name;?></option>
+
 
                                                 </select>
 

@@ -311,6 +311,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         reader.readAsText(file);
     }*/
     $("#newsletterTemplateId").change(function () {
+        var selection1 = $(this).val();
         //CKEDITOR.instances.preCompiledTemplate1.setData("");
 
         $("#preCompiledTemplate1").empty();
@@ -346,7 +347,8 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
             method:'GET',
             url: '/blueseal/xhr/GetTableContent',
             data: {
-                table: 'NewsletterTemplate'
+                table: 'NewsletterTemplate',
+              //  selection: {id: textnewslettertemplate },
             },
             dataType: 'json'
         }).done(function (res2) {
@@ -356,7 +358,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
             select.selectize({
                 valueField: 'template',
                 labelField: 'name',
-                searchField: 'name',
+                searchField: 'id',
                 options: res2,
             });
 
