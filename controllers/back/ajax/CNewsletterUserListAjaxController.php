@@ -51,7 +51,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
             /** @var CNewsletter $newsletter */
             $newsletter = $newsletterRepo->findOneBy(['id' => $row["id"] ]);
 
-            $row['id'] = '<a href="' . $opera . $newsletter->id . '" >' . $newsletter->id . '</a>';
+            $row['id'] = '<a href="' . $opera . $newsletter->id . '">' . $newsletter->id . '</a>';
 
 
             $datatable->setResponseDataSetRow($key,$row);

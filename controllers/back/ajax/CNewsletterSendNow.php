@@ -39,17 +39,34 @@ class CNewsletterSendNow extends AAjaxController
     public function put(){
         $data  = $this->app->router->request()->getRequestData();
         $id = $data["id"];
+        $finalpositionId = strpos($id,'</a>');
+        $initialpositionId =strpos($id,'">');
+        $finalpositionId=$finalpositionId;
+        $initialpositionId=$initialpositionId+2;
+        $lenghtposition =$finalpositionId-$initialpositionId;
+        $id=substr($id, $initialpositionId,$lenghtposition);
 
         $sql = "Select * from Newsletter where id='".$id."'";
         /** @var CNewsletterRepo $newslettersRepo */
         $newslettersRepo = \Monkey::app()->repoFactory->create('Newsletter');
+
         $newsletters = $newslettersRepo->findBySql($sql);
+
         if(empty($newsletters)) return;
        $res='Starting'.' Newsletters to send: '.count($newsletters);
         foreach ($newsletters as $newsletter) {
              $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod',true);
 
         }
+
+        /** @var CRepo $newsletterUserRepo */
+        $newsletterUserRepo = \Monkey::app()->repoFactory->create('Newsletter');
+
+        /** @var CNewsletter $newsletter */
+        $newsletter = $newsletterUserRepo->findOneBy(['id' => $id]);
+        $now =  (new \DateTime())->format('Y-m-d h:i:s');
+        $newsletter->sendAddressDate = $now;
+        $newsletter->update();
         return $res;
 
 
