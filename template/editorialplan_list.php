@@ -96,10 +96,7 @@
                 data-remote="bs.lists.delete.editorialplan"
 
         ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.add.editorialplandetail"
 
-        ></bs-toolbar-button>
 
 
     </bs-toolbar-group>
