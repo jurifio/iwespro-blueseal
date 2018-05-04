@@ -82,17 +82,17 @@ class CNewsletterUserManageEdit extends AAjaxController
             if (!empty($newsletterEmailListId)){
                 $newsletter->newsletterEmailListId = $newsletterEmailListId;
             }
-           /*  if (!empty($newsletterTemplateId)){
+            // if (!empty($newsletterTemplateId)){
 
                  /** @var CRepo $newsletterTemplateRepo */
-               //  $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
+              //  $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
 
-               //  /** @var CNewsletterTemplate $newsletterTemplate */
-             //    $newsletterTemplate = $newsletterTemplateRepo->findOneBy(['template' => $newsletterTemplateId]);
-               //  $newnewsletterTemplateId=$newsletterTemplate->id;
-//
-              //   $newsletter->newsletterTemplateId = $newnewsletterTemplateId;
-         //   }*/
+                 /** @var CNewsletterTemplate $newsletterTemplate */
+                // $newsletterTemplate = $newsletterTemplateRepo->findOneBy(['template' => $newsletterTemplateId]);
+                 //$newnewsletterTemplateId=$newsletterTemplate->id;
+
+                //$newsletter->newsletterTemplateId = $newnewsletterTemplateId;
+         //   }
              if (!empty($subject)){
                 $newsletter->subject = $subject;
             }
