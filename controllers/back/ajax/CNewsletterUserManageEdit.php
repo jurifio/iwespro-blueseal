@@ -46,7 +46,7 @@ class CNewsletterUserManageEdit extends AAjaxController
         $newsletterEmailListId = $data['newsletterEmailListId'];
         $newsletterTemplateId = $data['newsletterTemplateId'];
         $subject = $data['subject'];
-        $dataDescription = $data['dataDescription'];
+        $newsletterdataDescription = $data['dataDescription'];
         $preCompiledTemplate = $data['preCompiledTemplate'];
         $campaignId = $data['campaignId'];
         $newsletterEventId = $data['newsletterEventId'];
@@ -82,14 +82,22 @@ class CNewsletterUserManageEdit extends AAjaxController
             if (!empty($newsletterEmailListId)){
                 $newsletter->newsletterEmailListId = $newsletterEmailListId;
             }
-             if (!empty($newsletterTemplateId)){
-                 $newsletter->newsletterTemplateId = $newsletterTemplateId;
-            }
+           /*  if (!empty($newsletterTemplateId)){
+
+                 /** @var CRepo $newsletterTemplateRepo */
+               //  $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
+
+               //  /** @var CNewsletterTemplate $newsletterTemplate */
+             //    $newsletterTemplate = $newsletterTemplateRepo->findOneBy(['template' => $newsletterTemplateId]);
+               //  $newnewsletterTemplateId=$newsletterTemplate->id;
+//
+              //   $newsletter->newsletterTemplateId = $newnewsletterTemplateId;
+         //   }*/
              if (!empty($subject)){
                 $newsletter->subject = $subject;
             }
             if (!empty($newsletterdataDescription)){
-                $newsletter->newsletterdataDescription = $newsletterdataDescription;
+                $newsletter->dataDescription = $newsletterdataDescription;
             }
             if (!empty($preCompiledTemplate)){
             $newsletter->preCompiledTemplate = $preCompiledTemplate;

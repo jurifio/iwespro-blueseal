@@ -358,7 +358,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
             select.selectize({
                 valueField: 'template',
                 labelField: 'name',
-                searchField: 'id',
+                searchField: 'name',
                 options: res2,
             });
 

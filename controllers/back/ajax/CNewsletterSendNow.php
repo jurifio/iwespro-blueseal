@@ -64,7 +64,7 @@ class CNewsletterSendNow extends AAjaxController
 
         /** @var CNewsletter $newsletter */
         $newsletter = $newsletterUserRepo->findOneBy(['id' => $id]);
-        $now =  (new \DateTime())->format('Y-m-d h:i:s');
+        $now =  (new \DateTime())->format('Y-m-d H:i:s');
         $newsletter->sendAddressDate = $now;
         $newsletter->update();
         return $res;
