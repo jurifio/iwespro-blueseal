@@ -37,7 +37,7 @@ class CEditorialPlanDetailViewAllListAjaxController extends AAjaxController
         INNER JOIN EditorialPlan P on n.editorialPlanId =P.id
         INNER JOIN Shop S ON P.shopId = S.id
         INNER JOIN EditorialPlanSocial E ON n.socialId=E.id
-        INNER JOIN EditorialPlanArgument A ON n.editorialPlanArgumentId = A.id group by editorialPlanId order BY startDateEditorial asc";
+        INNER JOIN EditorialPlanArgument A ON n.editorialPlanArgumentId = A.id group by id order BY startDateEditorial asc";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
