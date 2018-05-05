@@ -145,7 +145,7 @@
                             break;
 
                     }
-                    element.find('.fc-title').append('bgrender+"<br/><b>Descrizione:</b>"' + event.description +
+                    element.find('.fc-title').append(bgRender+'<br/><b>Descrizione:</b>' + event.description +
                         '"<br/><b>Argomento:</b>"' + event.argumentName +
                         '"<br/><b>Piano Editoriale:</b>"' + event.titleEditorialPlan +
                         '"<br/><b>Media utilizzato:</b>"' + event.socialName +
