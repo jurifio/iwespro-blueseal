@@ -30,7 +30,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
                  n.subject, 
                  C.name as campaignId  
                 FROM Newsletter n 
-                inner join   EmailAddress E ON n.fromEmailAddressId = E.id K
+                inner join   EmailAddress E ON n.fromEmailAddressId = E.id 
                 left outer join   Email o ON n.id=o.newsletterId
                 inner join NewsletterEmailList L ON n.newsletterEmailListId = L.id 
                 inner join NewsletterCampaign C ON n.newsletterCampaignId = C.id 
