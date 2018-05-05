@@ -151,7 +151,7 @@
                         '"<br/><b>Media utilizzato:</b>"' + event.socialName +
                         '"<br/><b>Stato:</b>"' + event.status +
                         '"<br/><b>Note:</b>"' + event.note +
-                        '"<br/><b>Immagine</b>"' + event.photoUrl + '</div>');
+                        '"<br/><b>Immagine:</b><img width="20px" src="' + event.photoUrl + '"></div>');
                 },
                 editable: true,
                 selectable: true,
