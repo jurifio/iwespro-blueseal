@@ -24,16 +24,17 @@ class CNewsletterUserListAjaxController extends AAjaxController
                  n.name,
                  E.address as fromEmailAddressId, 
                  n.sendAddressDate,  
-                 E.submissionDate as submissionDate,
+                 o.submissionDate AS submissionDate,
                  L.name as newsletterEmailListId, 
                  T.name as templateName, 
                  n.subject, 
                  C.name as campaignId  
                 FROM Newsletter n 
                 inner join   EmailAddress E ON n.fromEmailAddressId = E.id 
+                inner join   Email o ON n.id=o.newsletterId
                 inner join NewsletterEmailList L ON n.newsletterEmailListId = L.id 
                 inner join NewsletterCampaign C ON n.newsletterCampaignId = C.id 
-                INNER join NewsletterTemplate T ON n.newsletterTemplateId = T.id";
+                INNER join NewsletterTemplate T ON n.newsletterTemplateId = T.id group by id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
