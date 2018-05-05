@@ -52,7 +52,12 @@
                                 <th data-slug="sendAddressDate"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Spedita Il
+                                    class="center">Programmata il
+                                </th>
+                                <th data-slug="submissionDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Spedita il
                                 </th>
                                 <th data-slug="fromEmailAddressId"
                                     data-searchable="true"

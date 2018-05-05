@@ -24,6 +24,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
                  n.name,
                  E.address as fromEmailAddressId, 
                  n.sendAddressDate,  
+                 E.submissionDate as submissionDate,
                  L.name as newsletterEmailListId, 
                  T.name as templateName, 
                  n.subject, 
