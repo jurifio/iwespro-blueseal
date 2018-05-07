@@ -58,7 +58,10 @@
                                     data-orderable="true" class="center">Shop</th>
                                 <th data-slug="printedNum"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Stampato</th>
+                                    data-orderable="true" class="center">QR stampati</th>
+                                <th data-slug="printed"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">DDT stampato</th>
                             </tr>
                             </thead>
                             <tbody>
