@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-file",
-    permission:"allShops",
+    permission:"/admin/product/edit&&allShops",
     event:"bs-create-ddt-picky",
     class:"btn btn-default",
     rel:"tooltip",
