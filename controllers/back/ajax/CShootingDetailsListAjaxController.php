@@ -43,7 +43,8 @@ class CShootingDetailsListAjaxController extends AAjaxController
                    concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, '')) AS externalId,
                     concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
                     pb.name as productBrandName,
-                    p.qty as hasQty
+                    p.qty as hasQty,
+                    phs.lastAztecPrint
                 FROM ProductHasShooting phs
                   JOIN Shooting s ON phs.shootingId = s.id
                   JOIN Product p ON phs.productVariantId = p.productVariantId
@@ -87,6 +88,7 @@ class CShootingDetailsListAjaxController extends AAjaxController
             $row["cpf"] = $phs->product->printCpf();
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $phs->product->getDummyPictureUrl() . '" /></a>';
             $row["productBrandName"] = $phs->product->productBrand->name;
+            $row["lastAztecPrint"] = ($phs->lastAztecPrint == 0 ? "-" : $phs->lastAztecPrint);
 
             $qty = 0;
             foreach ($phs->product->productSku as $sku) {

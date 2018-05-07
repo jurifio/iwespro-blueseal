@@ -1,7 +1,9 @@
 <?php
 namespace bamboo\domain\repositories;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
+use bamboo\domain\entities\CShooting;
 use bamboo\domain\entities\CShootingBooking;
 use bamboo\domain\entities\CShootingBookingHasProductType;
 use bamboo\domain\entities\CUser;
@@ -34,6 +36,31 @@ class CShootingBookingHasProductTypeRepo extends ARepo
         }
 
         return true;
+    }
+
+    /**
+     * @param CShootingBooking $shootingBooking
+     * @return bool
+     */
+    public function deleteShootingBookingHasProductType(CShootingBooking $shootingBooking) : bool {
+
+        /** @var CObjectCollection $sbhptColl */
+        $sbhptColl = $this->findBy(['shootingBookingId'=>$shootingBooking->id]);
+
+        if(!$sbhptColl->isEmpty()){
+            /** @var CShootingBookingHasProductType $sbhpt */
+            foreach ($sbhptColl as $sbhpt){
+                try {
+                    $sbhpt->delete();
+                }
+                catch (\Throwable $e){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
     }
 
 }

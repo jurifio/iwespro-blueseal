@@ -56,7 +56,7 @@
                                 <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop</th>
-                                <th data-slug="printed"
+                                <th data-slug="printedNum"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stampato</th>
                             </tr>
@@ -82,10 +82,33 @@
         <bs-toolbar-button
                 data-remote="bs.friend.ddt.invoice.download"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-trash-o"
+                data-permission="shooting"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.delete.shooting"
+                data-title="Elimina lo shooting"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-pencil"
+                data-permission="shooting"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.update.ddt.number"
+                data-title="Modifica numero DDT"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="DDT PICKY">
         <bs-toolbar-button
                 data-remote="bs.product.create.ddt.pickyshop"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.close.shooting"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

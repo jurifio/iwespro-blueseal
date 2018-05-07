@@ -70,6 +70,7 @@ class CShootingBookingListAjaxController extends AAjaxController
             $row["bookingDate"] = $sb->bookingDate;
             $row["shopName"] = $sb->shop->name;
             $row["shootingId"] = $sb->shootingId;
+            $row["c_bookingId"] = $sb->id;
 
             if($sb->status == "o"){
                 $st = "aperto";

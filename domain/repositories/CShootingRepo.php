@@ -3,8 +3,12 @@
 namespace bamboo\domain\repositories;
 
 use bamboo\core\db\pandaorm\repositories\ARepo;
+use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\domain\entities\CDocument;
+use bamboo\domain\entities\CInvoiceBin;
 use bamboo\domain\entities\CShooting;
 use bamboo\domain\entities\CShootingBooking;
+use bamboo\domain\entities\CShootingBookingHasProductType;
 
 /**
  * Class CShootingRepo
@@ -144,4 +148,106 @@ class CShootingRepo extends ARepo
 
         return true;
     }
+
+    /**
+     * @param array $shootings
+     * @return bool
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function deleteShooting(array $shootings): array {
+
+
+        $result = [];
+        $notEmpty = [];
+        $empty = [];
+        $errShooting = [];
+        foreach ($shootings as $shootingId){
+
+            /** @var CShooting $shooting */
+            $shooting = \Monkey::app()->repoFactory->create('Shooting')->findOneBy(['id' => $shootingId]);
+
+            if($shooting->product->count() != 0) {
+                $notEmpty[] = $shooting->id;
+                continue;
+            }
+
+            // ---------------- Cancello ShootingBookingHasProductType ----------------
+            /** @var CShootingBookingHasProductTypeRepo $sbhptRepo */
+            $sbhptRepo = \Monkey::app()->repoFactory->create('ShootingBookingHasProductType');
+            $sbhptRepo->deleteShootingBookingHasProductType($shooting->shootingBooking);
+            // ------------------------------------------------------------------------
+
+
+
+            // ---------------- Cancello ShootingBooking ------------------------------
+            /** @var CShootingBookingRepo $sbRepo */
+            $sbRepo = \Monkey::app()->repoFactory->create('ShootingBooking');
+
+            /** @var CShootingBooking $sbhpt */
+            $sbhpt = $sbRepo->findOneBy(['shootingId'=>$shootingId]);
+
+            if(!is_null($sbhpt)){
+                $sbhpt->delete();
+            } else {
+                $errShooting[] = $shooting->id;
+            }
+            // ------------------------------------------------------------------------
+
+
+            /** @var CRepo $invoiceBinRepo */
+            $invoiceBinRepo = \Monkey::app()->repoFactory->create('InvoiceBin');
+            /** @var CDocumentRepo $document */
+            $documentRepo = \Monkey::app()->repoFactory->create('Document');
+
+
+            // ---------------- Cancello Shooting -------------------------------------
+            $shooting->delete();
+            // ------------------------------------------------------------------------
+
+
+            // ---------------- Cancello Document (Picky) -----------------------------
+            if(!is_null($shooting->pickyDdt)) {
+
+                /** @var CInvoiceBin $pickyDocContent */
+                $pickyDocContent = $invoiceBinRepo->findOneBy(['invoiceId' => $shooting->pickyDdt]);
+                if (!is_null($pickyDocContent)) {
+                    $pickyDocContent->delete();
+                }
+
+                /** @var CDocument $pickyDocument */
+                $pickyDocument = $documentRepo->findOneBy(['id' => $shooting->pickyDdt]);
+                $pickyDocument->delete();
+
+            }
+            // ------------------------------------------------------------------------
+
+
+            // ---------------- Cancello Document (Friend) -----------------------------
+            if(!is_null($shooting->friendDdt)) {
+
+                /** @var CInvoiceBin $friendDocContent */
+                $friendDocContent = $invoiceBinRepo->findOneBy(['invoiceId' => $shooting->friendDdt]);
+                if (!is_null($friendDocContent)) {
+                    $friendDocContent->delete();
+                }
+
+                /** @var CDocument $friendDocument */
+                $friendDocument = $documentRepo->findOneBy(['id' => $shooting->friendDdt]);
+                $friendDocument->delete();
+
+            }
+            // ------------------------------------------------------------------------
+
+            $empty[] = $shooting->id;
+        }
+
+        $result["deleted"] = $empty;
+        $result["notDeleted"] = $notEmpty;
+        $result["errShooting"] = $errShooting;
+        return $result;
+
+    }
+
 }

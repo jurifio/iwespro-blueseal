@@ -20,6 +20,7 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @property CObjectCollection $product
  * @property CShootingBooking $shootingBooking
+ * @property CObjectCollection $productHasShooting
  *
  *
  */

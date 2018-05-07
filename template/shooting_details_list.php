@@ -59,6 +59,9 @@
                                 <th data-slug="hasQty"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Quantità disponibile</th>
+                                <th data-slug="lastAztecPrint"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Ultima stampa QR Code</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -76,10 +79,27 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
-                data-remote="bs.product.print.aztec"
+                data-tag="a"
+                data-icon="fa-qrcode"
+                data-permission="shooting"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-print-aztec-shooting"
+                data-title="Stampa codice qr"
+                data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-trash-o"
+                data-permission="shooting"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.delete.shooting.product"
+                data-title="Elimina il prodotto dallo shooting"
+                data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

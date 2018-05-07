@@ -24,6 +24,12 @@
                 "parentKeys": ["id"],
                 "childKeys": ["shootingId"],
                 "type": "OneToOne"
+            },{
+                "name": "productHasShooting",
+                "entity": "ProductHasShooting",
+                "parentKeys": ["id"],
+                "childKeys": ["shootingId"],
+                "type": "OneToMany"
             }
         ]
     }

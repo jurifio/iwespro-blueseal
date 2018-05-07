@@ -3,6 +3,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\base\CObjectCollection;
+use bamboo\domain\entities\CProductHasShooting;
 use bamboo\domain\entities\CShooting;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CDocumentRepo;
@@ -46,9 +47,10 @@ class CShootingListAjaxController extends AAjaxController
                   count(phs.shootingId) as nProduct,
                   s.printed,
                   sb.id as shootingBookingId,
-                  sb.status
+                  sb.status,
+                  COUNT(CASE WHEN phs.lastAztecPrint != 0000-00-00 then 1 END) as printedNum
                 FROM Shooting s
-                  JOIN ProductHasShooting phs ON s.id = phs.shootingId
+                  LEFT JOIN ProductHasShooting phs ON s.id = phs.shootingId
                   JOIN ShootingBooking sb ON s.id = sb.shootingId
                   JOIN Shop shp ON sb.shopId = shp.id
                   LEFT JOIN Document d1 ON s.friendDdt = d1.id
@@ -86,7 +88,8 @@ class CShootingListAjaxController extends AAjaxController
             $row["nProduct"] = $shooting->product->count();
             $row["shopName"] = $shooting->shootingBooking->shop->name;
             $row["printed"] = ($shooting->printed == 0 ?  "Mai stampato" : "Già stampato" );
-            $row["shootingBookingId"] = $shooting->shootingBooking->id;
+            $row["shootingBookingId"] = "P".$shooting->shootingBooking->id;
+            $row["c_bookingId"] = $shooting->shootingBooking->id;
 
             if($shooting->shootingBooking->status == "o"){
                 $st = "aperto";
@@ -97,6 +100,16 @@ class CShootingListAjaxController extends AAjaxController
             }
 
             $row["status"] = $st;
+
+            $c = 0;
+            /** @var CProductHasShooting $phs */
+            foreach ($shooting->productHasShooting as $phs){
+                if($phs->lastAztecPrint != 0){
+                    $c++;
+                }
+            }
+
+            $row["printedNum"] = $c;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

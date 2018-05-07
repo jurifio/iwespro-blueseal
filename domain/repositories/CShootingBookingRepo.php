@@ -3,6 +3,7 @@ namespace bamboo\domain\repositories;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
+use bamboo\domain\entities\CShooting;
 use bamboo\domain\entities\CShootingBooking;
 use bamboo\domain\entities\CUser;
 
@@ -71,5 +72,6 @@ class CShootingBookingRepo extends ARepo
         } else return $last;
 
     }
+
 
 }

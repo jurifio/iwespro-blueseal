@@ -142,7 +142,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php for ($k = 0; $k < 171; $k++): ?>
+                                    <?php for ($k = 0; $k < 201; $k++): ?>
                                         <tr data-position="<?php echo $k; ?>" role="row"
                                             class="<?php echo $k % 2 == 0 ? 'even' : 'odd' ?>">
                                             <td data-column="0"

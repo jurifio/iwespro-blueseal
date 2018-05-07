@@ -154,4 +154,33 @@ class CProductHasShootingRepo extends ARepo
         $unique = array_unique($serialized);
         return array_intersect_key($input, $unique);
     }
+
+
+    /**
+     * @param array $products
+     * @param int $shootingId
+     * @return bool
+     */
+    public function deleteProductsFromShooting(array $products, int $shootingId) : bool {
+
+        foreach ($products as $prodId){
+
+            try {
+                $pId = explode('-', $prodId)[0];
+                $pVarId = explode('-', $prodId)[1];
+
+                /** @var CProductHasShooting $phs */
+                $phs = $this->findOneBy(['productId'=>$pId, 'productVariantId'=>$pVarId, 'shootingId'=>$shootingId]);
+
+                $phs->delete();
+
+            } catch (\Throwable $e){
+                return false;
+            }
+
+        }
+
+        return true;
+
+    }
 }
