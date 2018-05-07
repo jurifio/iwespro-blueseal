@@ -49,8 +49,10 @@ class CShootingAcceptProductListAjaxController extends AAjaxController
                   `s`.`title`                                          AS `shop`,
                   concat(phs.shootingId)                               AS shooting,
                   concat(doc.number)                                   AS doc_number,
-                  `p`.`creationDate`                                   AS `creationDate`
+                  `p`.`creationDate`                                   AS `creationDate`,
+                  `pss`.`name`                                         AS `status`
                 FROM `Product` `p`
+                  JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
                   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
                   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
                   JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)

@@ -88,7 +88,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-trash-o"
-                data-permission="shooting"
+                data-permission="allShops"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.delete.shooting"
