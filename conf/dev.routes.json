@@ -1972,6 +1972,18 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "pattern": "/blueseal/work/foison/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonDetailController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         },
         {
             "pattern": "/blueseal/work/contratti(/)?",

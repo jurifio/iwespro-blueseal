@@ -58,7 +58,7 @@ class CProductWorkInvoiceListAjaxController extends AAjaxController
             JOIN User u ON d.userId = u.id
             JOIN Foison f ON u.id = f.userId
             JOIN UserDetails ud ON u.id = ud.userId
-            WHERE d.invoiceTypeId = 11 OR d.invoiceTypeId = 12 OR d.invoiceTypeId = 13
+            WHERE d.invoiceTypeId = 13 OR d.invoiceTypeId = 14 OR d.invoiceTypeId = 15
             ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);

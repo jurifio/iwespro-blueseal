@@ -1,5 +1,6 @@
 ;(function () {
 
+
     $(document).on('bs-foison-add', function () {
         let bsModal = new $.bsModal('Assegna un utente', {
             body: '<p>Associa un utente esistene ad un Foison</p>' +
@@ -7,11 +8,6 @@
                 '<label for="userMail">Email dell\'utente</label>' +
                 '<input autocomplete="off" type="text" id="userMail" ' +
                     'placeholder="Inserisci l\'Email dell\'Utente" class="form-control" name="userMail" required="required">' +
-            '</div>'+
-            '<div class="form-group form-group-default required">' +
-                '<label for="ibanFoison">Iban</label>' +
-                '<input autocomplete="off" type="text" id="ibanFoison" ' +
-            'placeholder="IBAN" class="form-control" name="ibanFoison" required="required">' +
             '</div>'
         });
 
@@ -39,4 +35,5 @@
                 });
         });
     });
+
 })();

@@ -31,9 +31,12 @@ class CFoisonListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/foison_list.php');
 
+        $perm = \Monkey::app()->getUser()->hasPermission('allShops');
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'perm' => $perm,
             'sidebar' => $this->sidebar->build()
         ]);
     }

@@ -1,19 +1,9 @@
 <?php
 namespace bamboo\domain\repositories;
 
-use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
-use bamboo\core\exceptions\BambooException;
-use bamboo\core\exceptions\BambooInvoiceException;
-use bamboo\domain\entities\CAddressBook;
-use bamboo\domain\entities\CDocument;
-use bamboo\domain\entities\CInvoiceLine;
-use bamboo\domain\entities\CInvoiceNumber;
-use bamboo\domain\entities\CInvoiceSectional;
-use bamboo\domain\entities\CInvoiceType;
-use bamboo\utils\price\SPriceToolbox;
-use bamboo\domain\entities\COrderLine;
-use bamboo\utils\time\STimeToolbox;
+use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\domain\entities\CRbacRole;
 
 /**
  * Class CFoisonRepo
@@ -34,18 +24,26 @@ class CFoisonRepo extends ARepo
      * @param $name
      * @param $surname
      * @param $email
-     * @param $iban
      * @param $userId
      * @return bool
      */
-    public function assignUser($name, $surname, $email, $iban, $userId){
+    public function assignUser($name, $surname, $email, $userId){
         $faison = $this->getEmptyEntity();
         $faison->name = $name;
         $faison->surname = $surname;
         $faison->email = $email;
-        $faison->iban = $iban;
         $faison->userId = $userId;
         $faison->smartInsert();
+
+        /** @var CRepo $uhbrRepo */
+        $uhbrRepo = \Monkey::app()->repoFactory->create('UserHasRbacRole');
+
+        $uhbr = $uhbrRepo->getEmptyEntity();
+        $uhbr->userId = $userId;
+        $uhbr->rbacRoleId = CRbacRole::WORKER;
+        $uhbr->assignmentDate = date('Y-m-d H:i:s');
+        $uhbr->smartInsert();
+
 
         return true;
 

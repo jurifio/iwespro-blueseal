@@ -977,6 +977,20 @@ class CDocumentRepo extends ARepo
         return $res;
     }
 
+
+    /**
+     * @param $invoiceTypeId
+     * @param $userId
+     * @param $date
+     * @param $total
+     * @param $number
+     * @param $file
+     * @param $productBatchIds
+     * @throws BambooException
+     * @throws BambooInvoiceException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
     public function insertInvoiceFromFoison($invoiceTypeId, $userId, $date, $total, $number, $file, $productBatchIds){
 
         /** @var CUser $user */

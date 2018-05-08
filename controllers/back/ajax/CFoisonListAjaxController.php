@@ -2,6 +2,8 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\domain\entities\CFoison;
+use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CFoisonRepo;
 
 
@@ -26,33 +28,48 @@ class CFoisonListAjaxController extends AAjaxController
      */
     public function get()
     {
+
+        $perm = \Monkey::app()->getUser()->hasPermission('allShops');
+
         $sql = "
             SELECT F.id,
                   F.name,
                   F.surname,
                   F.email,
-                  F.iban
+                  B.iban
             FROM Foison F
+            LEFT JOIN AddressBook B ON F.foisonAddressBookId = B.id
         ";
 
+
+
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
+        if(!$perm) {
+            /** @var CUser $user */
+            $user = \Monkey::app()->getUser();
+            /** @var CFoison $foisonUs */
+            $foisonUs = $user->foison;
+            $datatable->addCondition('id',[$foisonUs->id]);
+        }
 
         $datatable->doAllTheThings(false);
 
         /** @var CFoisonRepo $foisonRepo */
         $foisonRepo = \Monkey::app()->repoFactory->create('Foison');
 
-        //$blueseal = $this->app->baseUrl(false).'/blueseal/';
-        //$url = $blueseal."prodotti/gruppo-taglie/aggiungi";
+        $blueseal = $this->app->baseUrl(false).'/blueseal/';
+        $url = $blueseal."work/foison/";
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
+            /** @var CFoison $foison */
             $foison = $foisonRepo->findOneBy(['id'=>$row["id"]]);
-            $row["id"] = $foison->id;
+            $row["DT_RowId"] = 'row__' . $foison->user->printId();
+            $row["id"] = '<a href=" '.$url.$foison->id.' " target="_blank"> '.$foison->id.' </a>';
             $row["name"] = $foison->name;
             $row["surname"] = $foison->surname;
             $row["email"] = $foison->email;
-            $row["iban"] = $foison->iban;
+            $row["iban"] = (empty($foison->addressBook->iban) ? '-' : $foison->addressBook->iban);
 
             $datatable->setResponseDataSetRow($key,$row);
         }

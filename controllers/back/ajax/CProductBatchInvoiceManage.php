@@ -95,13 +95,13 @@ class CProductBatchInvoiceManage extends AAjaxController
 
         switch ($invTyp){
             case 1:
-                $invoiceTypeId = 11;
+                $invoiceTypeId = 13;
                 break;
             case 2:
-                $invoiceTypeId = 12;
+                $invoiceTypeId = 14;
                 break;
             case 3:
-                $invoiceTypeId = 13;
+                $invoiceTypeId = 15;
                 break;
         }
 

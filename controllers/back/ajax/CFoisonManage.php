@@ -36,11 +36,12 @@ class CFoisonManage extends AAjaxController
      */
     public function post()
     {
+
      $data = \Monkey::app()->router->request()->getRequestData();
      $emailData = $data["email"];
-     $iban = $data["iban"];
 
-     if(empty($emailData) || empty($iban)){
+
+     if(empty($emailData)){
          $res = "Inserisci tutti i dati";
          return $res;
      }
@@ -67,7 +68,7 @@ class CFoisonManage extends AAjaxController
          $name = $user->userDetails->name;
          $surname = $user->userDetails->surname;
          $email = $user->getEmail();
-         $createdFaison = $foisonRepo->assignUser($name, $surname, $email, $iban, $userId);
+         $createdFaison = $foisonRepo->assignUser($name, $surname, $email, $userId);
 
          if($createdFaison){
              $res = "Utente associato con successo";
