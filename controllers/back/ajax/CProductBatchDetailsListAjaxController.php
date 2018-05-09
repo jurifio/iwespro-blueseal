@@ -85,7 +85,8 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
             $row['productName'] = $product->productNameTranslation->getFirst() ? $product->productNameTranslation->getFirst()->name : "";
             $row['description'] = '<span class="small">' . ($product->productDescriptionTranslation->getFirst() ? $product->productDescriptionTranslation->getFirst()->description : "") . '</span>';
             $row['categoryId'] = '<span class="small">' . $product->getLocalizedProductCategories(" ", "<br>") . '</span>';
-
+            $row['productCard'] = (!$product->getProductCardUrl() ? '-' :'<a href="#1" class="enlarge-your-img"><img width="50" src="' . $product->getProductCardUrl() . '" /></a>');
+            $row['row_pCardUrl'] = (!$product->getProductCardUrl() ? '-' : $product->getProductCardUrl());
             $datatable->setResponseDataSetRow($key,$row);
         }
 

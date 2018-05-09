@@ -74,7 +74,6 @@
     });
 
 
-
     $(document).on('bs-category-edit-worker', function (e, element, button) {
         var bsModal = $('#bsModal');
         var dataTable = $('.dataTable').DataTable();
@@ -234,7 +233,7 @@
             bodyContent += 'Cambia il testo se vuoi modificare il dettaglio selezionato<br />';
             bodyContent += '<input id="productDetailName" autocomplete="off" type="text" class="form-control" name="productDetailName" title="productDetailName" value="">';
             body.html(bodyContent);
-            var prodNameId = $ ('#productDetailId');
+            var prodNameId = $('#productDetailId');
             prodNameId.selectize({
                 valueField: 'name',
                 labelField: 'name',
@@ -274,14 +273,14 @@
 
 
             prodNameId.selectize()[0].selectize.setValue(0);
-            var prodName = $ ('#productDetailName');
+            var prodName = $('#productDetailName');
 
-            var detName = prodNameId.find ('option:selected').text();
-            prodName.val (detName);
+            var detName = prodNameId.find('option:selected').text();
+            prodName.val(detName);
 
-            prodNameId.on ('change', function(){
-                detName = prodNameId.find ('option:selected').text();
-                prodName.val (detName);
+            prodNameId.on('change', function () {
+                detName = prodNameId.find('option:selected').text();
+                prodName.val(detName);
             });
 
             $(bsModal).find('table').addClass('table');
@@ -347,16 +346,34 @@
 
         var i = 0;
         var row = [];
+        let url = selectedRows[0].row_pCardUrl;
+        let colCont = '';
+        let colImage = '';
+
         $.each(selectedRows, function (k, v) {
             row[i] = v.DT_RowId;
             i++;
             //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
         });
 
+        if (selectedRowsCount == 1 && url !== '-') {
+            colCont = 'col-md-6 pre-scrollable';
+            colImage = 'col-md-6'
+        } else {
+            colCont = 'col-md-12';
+            colImage = 'hide'
+        }
+
         modal = new $.bsModal(
             'Aggiorna i dettagli da un prodotto',
             {
-                body: '<div class="detail-form"><div style="min-height: 250px"><p>Seleziona il prodotto da usare come modello:</p><select class="full-width" placehoder="Seleziona il Prodotto da usare" name="productCodeSelect" id="productCodeSelect"><option value=""></option></select></div></div>',            okButtonEvent: function() {
+                body:
+                '<div class="' + colCont + '">' +
+                '<div class="detail-form"><div style="min-height: 250px"><p>Seleziona il prodotto da usare come modello:</p><select class="full-width" placehoder="Seleziona il Prodotto da usare" name="productCodeSelect" id="productCodeSelect"><option value=""></option></select></div></div></div>' +
+                '<div class="' + colImage + '">' +
+                '<img width="100%" src="' + url + '" />' +
+                '</div>',
+                okButtonEvent: function () {
                     var id = $('#productCodeSelect').val();
                     $('.detail-form').html('<div class="form-group">' +
                         '<label for="ProductName_1_name">Nome del prodotto</label>' +
@@ -365,7 +382,8 @@
                         '<label for="productCategories">Categorie</label>' +
                         '<select id="productCategories" name="productCategories" class="form-control required"></select>' +
                         '</div>' +
-                        '<div class="detail-modal"></div>'
+                        '<div class="detail-modal"></div>' +
+                        '</div'
                     );
 
                     $("#ProductName_1_name").selectize({
@@ -412,7 +430,7 @@
                         method: 'GET',
                         dataType: 'json',
                         data: {id: id}
-                    }).done(function(res){
+                    }).done(function (res) {
                         $("#productCategories").selectize({
                             valueField: 'id',
                             labelField: 'name',
@@ -433,7 +451,7 @@
                             id,
                             'product',
                             {
-                                after: function(detailBody){
+                                after: function (detailBody) {
                                     var productCategory = detailBody.find('.detailContent').data('category');
                                     $('#productCategories').humanized('addItems', productCategory);
                                 }
@@ -441,9 +459,9 @@
                         );
                     });
 
-                    modal.setOkEvent(function(){
+                    modal.setOkEvent(function () {
                         var currentDets = {};
-                        $(".productDetails select").each(function() {
+                        $(".productDetails select").each(function () {
                             if ("" != $(this).val()) currentDets[$(this).attr('name').split('_')[2]] = $(this).val();
                         });
                         if ($('#productCategories').length) var categories = $('#productCategories').val();
@@ -458,14 +476,14 @@
                                 products: row,
                                 category: categories
                             }
-                        }).done(function(res) {
+                        }).done(function (res) {
                             modal.body.html(res);
                             modal.body.append('<p><button class="btn newModelPageBtn">Crea Nuovo Modello</button></p>');
-                            $('.newModelPageBtn').off().on('click', function(){
+                            $('.newModelPageBtn').off().on('click', function () {
                                 var codes = row[0].split('-');
                                 window.open('/blueseal/prodotti/modelli/modifica?code=' + codes[0] + '-' + codes[1], '_blank');
                             });
-                            modal.setOkEvent(function(){
+                            modal.setOkEvent(function () {
                                 modal.hide();
                                 $('.table').DataTable().ajax.reload();
                             });
@@ -476,6 +494,8 @@
             }
         );
 
+        modal.addClass('modal-wide');
+        modal.addClass('modal-high');
 
         $.ajax({
             url: '/blueseal/xhr/ProductDetailsMerge',
@@ -547,25 +567,51 @@
 
         var i = 0;
         var row = [];
+        let url = selectedRows[0].row_pCardUrl;
+        let body = '';
+
         $.each(selectedRows, function (k, v) {
             row[i] = v.DT_RowId;
             i++;
             //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
         });
 
-        modal = new $.bsModal(
-            'Aggiorna i prodotti da Modello',
-            {
-                body: '<div class="alert alertModal"></div>' +
+        if (selectedRowsCount == 1 && url !== '-') {
+            body = '<div class="col-md-6 pre-scrollable">' +
+                '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal">' +
                 '<label for="code-details">Nome Modello:</label>' +
                 '<select class="form-control code-details" name="code-details"></select>' +
                 '</div>' +
-                '</div>',
+                '</div>' +
+                '</div>' +
+                '<div class="col-md-6">' +
+                '<img width="100%" src="' + url + '" />' +
+                '</div>';
+        } else {
+            body =
+                '<div class="alert alertModal"></div>' +
+                '<div class="detail-form form-group">' +
+                '<div class="detail-modal">' +
+                '<label for="code-details">Nome Modello:</label>' +
+                '<select class="form-control code-details" name="code-details"></select>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+        }
+
+
+        let modal = new $.bsModal(
+            'Aggiorna i prodotti da Modello',
+            {
+                body: body,
                 isCancelButton: true
             }
         );
+
+        modal.addClass('modal-wide');
+        modal.addClass('modal-high');
 
         modal.body.css('minHeight', '350px');
         modal.show();
@@ -599,11 +645,12 @@
                             callback();
                         },
                         success: function (res) {
-                            callback(res); }
+                            callback(res);
+                        }
                     });
                 }
             });
-        },1000);
+        }, 1000);
 
 
         modal.setOkEvent(function () {

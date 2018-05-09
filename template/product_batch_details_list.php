@@ -69,6 +69,9 @@
                                 <th data-slug="stepName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fase</th>
+                                <th data-slug="productCard"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Foto per normalizzazione</th>
                             </tr>
                             </thead>
                             <tbody>

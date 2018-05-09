@@ -1,0 +1,16 @@
+{
+    "entity": {
+        "name": "ProductCardPhoto",
+        "keys": ["productId", "productVariantId"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name": "product",
+                "entity": "Product",
+                "parentKeys": ["productId","productVariantId"],
+                "childKeys": ["id","productVariantId"],
+                "type": "OneToOne"
+            }
+        ]
+    }
+}

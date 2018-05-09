@@ -1,6 +1,8 @@
 <?php
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\domain\entities\CProductCardPhoto;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\exceptions\RedPandaAssetException;
 use bamboo\core\exceptions\RedPandaException;
@@ -58,6 +60,30 @@ class CProductCardsPhotoAjaxManage extends AAjaxController
             }
 
             unlink($tempFolder . $_FILES['file']['name'][$i]);
+
+            if($res){
+
+                $pId = explode('-',$fileName['name'])[0];
+                $pVarId = explode('-',$fileName['name'])[1];
+                $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/product-cards/".$fileName['name'].'.'.$fileName['extension'];
+
+                /** @var CRepo $prodCardPhotoRepo */
+                $prodCardPhotoRepo = \Monkey::app()->repoFactory->create('ProductCardPhoto');
+
+                /** @var CProductCardPhoto $prodCardPhoto */
+                $prodCardPhoto = $prodCardPhotoRepo->findOneBy([
+                    'productId'=>$pId,
+                    'productVariantId'=>$pVarId
+                ]);
+
+                if(is_null($prodCardPhoto)){
+                    $prodCardPhoto = $prodCardPhotoRepo->getEmptyEntity();
+                    $prodCardPhoto->productId = $pId;
+                    $prodCardPhoto->productVariantId = $pVarId;
+                    $prodCardPhoto->productCardUrl = $url;
+                    $prodCardPhoto->smartInsert();
+                }
+            }
 
         }
 
