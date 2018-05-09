@@ -203,6 +203,9 @@
                 data-remote="bs.product.photo.manage"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.product.cards.photo.manage"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.product.photo.download"
         ></bs-toolbar-button>
         <bs-toolbar-button
