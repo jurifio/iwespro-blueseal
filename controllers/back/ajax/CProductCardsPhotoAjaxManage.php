@@ -61,46 +61,6 @@ class CProductCardsPhotoAjaxManage extends AAjaxController
 
         }
 
-
-
-
-        /*
-            if (!move_uploaded_file($_FILES['file']['tmp_name'], $tempFolder . $_FILES['file']['name'])) {
-                throw new RedPandaException('Cannot move the uploaded Files');
-            }
-
-
-
-            $fileName['name'] = $product->printId();
-            $fileName['number'] = (string) str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
-            $fileName['extension'] = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-
-            try{
-                $res = $image->process($_FILES['file']['name'], $fileName, $config['bucket'].'-fason', 'product-cards');
-            }catch(RedPandaAssetException $e){
-                $this->app->router->response()->raiseProcessingError();
-                return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
-            }
-
-            $futureDummy = "";
-            if (count($res) < 4) {
-                //error
-            } else {
-                foreach ($res as $key => $val) {
-                    if (empty($futureDummy)) {
-                        $futureDummy = $val;
-                    }
-                    $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $fileName['number'], 'size' => $key));
-                }
-                unlink($tempFolder . $_FILES['file']['name']);
-                $count = 0;
-                foreach ($ids as $key => $val) {
-                    $this->app->dbAdapter->insert("ProductHasProductPhoto", ["productId" => $product->id, "productVariantId" => $product->productVariantId, "productPhotoId" => $val]);
-                    $count++;
-                }
-            }
-            */
-
         return true;
     }
 
