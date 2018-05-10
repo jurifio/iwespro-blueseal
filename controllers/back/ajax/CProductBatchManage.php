@@ -83,10 +83,10 @@ class CProductBatchManage extends AAjaxController
 
         //Lotto sezionale stimato
         /** @var CSectionalRepo $sectionalRepo */
-        $sectionalCode = $contractDetails->workCategory->sectionalCode;
+        $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
 
         $sectionalRepo = \Monkey::app()->repoFactory->create('Sectional');
-        $sectional = $sectionalRepo->calculateNextSectionalNumber($sectionalCode);
+        $sectional = $sectionalRepo->calculateNextSectionalNumber($sectionalCodeId);
 
         $result = [];
         $result["cost"] = $cost;

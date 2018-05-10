@@ -27,10 +27,10 @@ class CSectionalRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function createNewSectionalCode($code){
+    public function createNewSectionalCode($sectionalId){
 
         /** @var CSectional $sectional */
-        $sectional = $this->findOneBy(["code"=>$code]);
+        $sectional = $this->findOneBy(["id"=>$sectionalId]);
 
         if(is_null($sectional->last)){
             $newNumber = $sectional->num;
@@ -47,9 +47,9 @@ class CSectionalRepo extends ARepo
         return $newCode;
     }
 
-    public function calculateNextSectionalNumber($code){
+    public function calculateNextSectionalNumber($sectionalId){
         /** @var CSectional $sectional */
-        $sectional = $this->findOneBy(["code"=>$code]);
+        $sectional = $this->findOneBy(["id"=>$sectionalId]);
 
         if(is_null($sectional->last)){
             $newNumber = $sectional->num;

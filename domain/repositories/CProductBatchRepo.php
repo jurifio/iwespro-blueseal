@@ -34,7 +34,7 @@ class CProductBatchRepo extends ARepo
             /** @var CContractDetails $contractDetails */
             $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBY(['id'=>$contractDetailsId]);
 
-            $sectionalCode = $contractDetails->workCategory->sectionalCode;
+            $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
 
             /** @var CSectionalRepo $sectionalRepo */
             $sectionalRepo = \Monkey::app()->repoFactory->create('Sectional');
@@ -44,7 +44,7 @@ class CProductBatchRepo extends ARepo
             $productBatch->scheduledDelivery = $scheduledDelivery;
             $productBatch->value = $value;
             $productBatch->contractDetailsId = $contractDetailsId;
-            $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCode);
+            $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCodeId);
             $productBatch->smartInsert();
 
         /** @var CProductBatchDetailsRepo $productBatchDetailsRepo */
