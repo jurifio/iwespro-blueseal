@@ -53,6 +53,14 @@
 
         var selectedRowsCount = selectedRows.length;
 
+        if(selectedRowsCount < 1){
+            new Alert({
+                type: "warning",
+                message: "Devi selezionare uno o più lotti in cui associare la fattura"
+            }).open();
+            return false;
+        }
+
         var i = 0;
         var rows = [];
         $.each(selectedRows, function (k, v) {
@@ -61,7 +69,7 @@
 
         //Far scegliere
         modal = new $.bsModal(
-            'Registrazione fattura per i pagamenti delle righe d\'ordine',
+            'Registrazione fattura',
             { body: '<div id="invoiceType">' +
                 '<select id="productBatchInvoiceType">' +
                ' <option disabled selected value>Seleziona un\'opzione</option>' +
@@ -120,7 +128,7 @@
                     invoiceTable +=
                         '<tr>' +
                         '<td style="text-align: right; font-weight: bold">' +
-                        'Totale fattura da ordini' +
+                        'Totale fattura' +
                         '</td>' +
                         '<td style="text-align: right; font-weight: bold">' + res.total + '</td>' +
                         '</tr>';
@@ -157,19 +165,19 @@
                         '<div class="row">' +
                         '<div class="col-sm-6">' +
                         '<div class="form-group">' +
-                        '<label for="invoiceTotalPreview">Totale fattura da ordine</label>' +
+                        '<label for="invoiceTotalPreview">Totale fattura</label>' +
                         '<input type="text" class="form-control" id="invoiceTotalPreview" name="invoiceTotalPreview" value="' + res.total +'" readonly/>' +
                         '</div>' +
                         '<div class="col-sm-6">' +
                         '<div class="form-group">' +
-                        '<label for="invoiceTotal">Totale fattura da friend</label>' +
+                        '<label for="invoiceTotal">Totale fattura da fason</label>' +
                         '<input style="" type="text" class="form-control inputPrice" id="invoiceTotal" name="invoiceTotal" value="' + res.total +'" />' +
                         '</div>' +
                         '</div>';
                     '</div>'
                     '</form>';
 
-                    var body = '<h4>Riepilogo dei prodotti selezionati</h4>';
+                    var body = '<h4>Riepilogo</h4>';
                     body+= invoiceTable;
                     body+= '<h5 style="padding-top: 30px;">Inserisci i dati della fattura qui di seguito.</h5>';
                     body+= invoiceForm;

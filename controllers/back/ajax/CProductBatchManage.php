@@ -121,7 +121,7 @@ class CProductBatchManage extends AAjaxController
             $url = \Monkey::app()->baseUrl(false) . "/blueseal/work/lotti";
 
             $body = "Gentilissimo Sig. $foisonFullName<br /><br />
-            Prego prendere nota che il lotto n. è stato confermato, proceda pure ad emettere fattura ed inserirla nel portale al seguente link: $url
+            Prego prendere nota che il lotto è stato confermato, proceda pure ad emettere fattura ed inserirla nel portale al seguente link: $url
             <br /><br />
             Cordiali saluti<br />
             Iwes

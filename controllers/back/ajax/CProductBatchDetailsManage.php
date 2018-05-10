@@ -100,10 +100,10 @@ class CProductBatchDetailsManage extends AAjaxController
 
             $subject = "Termine del lotto n. ".$productBatchId;
 
-            $body = "Il Foison ".$name." chiede la revisione del lotto n. ".$productBatchId." per presunto fine lavoro";
+            $body = "Il Foison ".$name."(". $email .")"." chiede la revisione del lotto n. ".$productBatchId." per presunto fine lavoro";
 
 
-            $emailRepo->newMail($email, ['gianluca@iwes.it'], [], [], $subject, $body);
+            $emailRepo->newMail('gianluca@iwes.it', ['gianluca@iwes.it'], [], [], $subject, $body);
 
             $res = "Mail inviata con successo";
 
