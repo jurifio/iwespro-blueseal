@@ -21,6 +21,7 @@
 
         let bsModal = new $.bsModal('Crea contratto', {
             body: '<p>Inserisci un nuovo contratto</p>' +
+            '<p>Con questa operazione si definisce l\'arco temporale in cui è valido il contratto. All\'interno di esso verranno in seguito definiti tutti i dettagli.</p>' +
             '<div class="form-group form-group-default required">' +
                 '<select class="full-width selectpicker"\n id="foisonSelect"' +
                 'placeholder="Seleziona il Foison" tabindex="-1"\n' +

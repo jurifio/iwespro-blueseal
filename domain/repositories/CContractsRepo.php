@@ -6,6 +6,7 @@ use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\entities\CAddressBook;
+use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CDocument;
 use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CInvoiceLine;
@@ -35,17 +36,25 @@ class CContractsRepo extends ARepo
      * @param CFoison $foison
      * @param $name
      * @param $description
-     * @return bool
+     * @return \bamboo\core\db\pandaorm\entities\AEntity|CContracts|bool
+     * @throws \bamboo\core\exceptions\BambooDBALException
      */
-    public function createNewContract(CFoison $foison, $name, $description){
-        $contract = $this->getEmptyEntity();
-        $contract->foisonId = $foison->id;
-        $contract->name = $name;
-        $contract->description = $description;
-        $contract->smartInsert();
+    public function createNewContract(CFoison $foison, $name, $description) {
 
-        return true;
+        try{
+            \Monkey::app()->repoFactory->beginTransaction();
+            /** @var CContracts $contract */
+            $contract = $this->getEmptyEntity();
+            $contract->foisonId = $foison->id;
+            $contract->name = $name;
+            $contract->description = $description;
+            $contract->smartInsert();
+            \Monkey::app()->repoFactory->commit();
+        } catch (\Throwable $e){
+            \Monkey::app()->repoFactory->rollback();
+            return false;
+        }
 
-
+        return $contract;
     }
 }

@@ -32,7 +32,10 @@ class CGetTableContent extends AAjaxController
         'Tag',
         'TagTranslation',
         'Province',
-        'ShipmentFault'
+        'ShipmentFault',
+        'ProductSheetModelPrototypeGender',
+        'ProductSheetModelPrototypeCategoryGroup',
+        'ProductSheetModelPrototypeMaterial'
     ];
 
     public function get()

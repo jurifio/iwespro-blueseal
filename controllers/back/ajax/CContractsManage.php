@@ -3,12 +3,15 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\core\email\CEmail;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CContractsRepo;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\CFoisonRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use bamboo\domain\repositories\CProductSizeRepo;
@@ -53,9 +56,25 @@ class CContractsManage extends AAjaxController
         /** @var CContractsRepo $contractsRepo */
         $contractsRepo = \Monkey::app()->repoFactory->create('Contracts');
 
-        if($contractsRepo->createNewContract($foison, $nContract, $dContract)){
+        /** @var CContracts $contr */
+        $contr = $contractsRepo->createNewContract($foison, $nContract, $dContract);
+        if(is_object($contr)){
             $res = "Contratto creato con successo";
+        } else {
+            return "Errore durante la creazione del contratto. Contattare l'assistenza tecnica.";
         };
+
+        $cId = $contr->id;
+        $body = "
+        Le confermiamo che il contratto $cId-$nContract è stato creato con successo.<br/>
+        Cordiali saluti,<br /><br />
+        Gianluca Cartechini<br />
+        Iwes
+        ";
+        /** @var CEmailRepo $mail */
+        $mail = \Monkey::app()->repoFactory->create('Email');
+        $foisonMail = $foison->email;
+        $mail->newMail('gianluca@iwes.it', [$foisonMail], [], [], "Contratto creato con successo", $body);
 
         return $res;
     }
