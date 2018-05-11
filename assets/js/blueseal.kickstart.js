@@ -458,6 +458,10 @@ $.bsModal = function (header, params) {
         self.bsModal.addClass(classe);
     };
 
+    this.removeClass = function (classe) {
+        self.bsModal.removeClass(classe)
+    };
+
     this.writeHeader = function (header) {
         self.header.html(header);
     };

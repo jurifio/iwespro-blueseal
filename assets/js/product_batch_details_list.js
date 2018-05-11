@@ -494,8 +494,13 @@
             }
         );
 
-        modal.addClass('modal-wide');
-        modal.addClass('modal-high');
+        if (selectedRowsCount == 1 && url !== '-') {
+            modal.addClass('modal-wide');
+            modal.addClass('modal-high');
+        } else {
+            modal.removeClass('modal-wide');
+            modal.removeClass('modal-high');
+        }
 
         $.ajax({
             url: '/blueseal/xhr/ProductDetailsMerge',
@@ -580,26 +585,27 @@
             body = '<div class="col-md-6 pre-scrollable">' +
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
-                '<div class="detail-modal">' +
+                '<div class="detail-modal"' +
                 '<div class="gender-modal">' +
-                '<label for="gender">Genere:</label>' +
+                '<label style="display: block" for="gender">Genere:</label>' +
                 '<select class="gender" name="gender">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
                 '<div class="categ-modal">' +
-                '<label for="categ">Nome Modello:</label>' +
+                '<label style="display: block" for="categ">Nome Modello:</label>' +
                 '<select class="categ" name="categ">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
                 '<div class="mat-modal">' +
-                '<label for="mat">Materiali:</label>' +
+                '<label style="display: block" for="mat">Materiali:</label>' +
                 '<select class="mat" name="mat">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
                 '<div>' +
+                '<label style="display: block">Modello:</label>' +
                 '<input type="text" value="" data-id="" id="resultModel" disabled>' +
                 '</div>' +
                 '</div>' +
@@ -614,24 +620,25 @@
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal">' +
                 '<div class="gender-modal">' +
-                '<label for="gender">Genere:</label>' +
+                '<label style="display: block" for="gender">Genere:</label>' +
                 '<select class="gender" name="gender">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
                 '<div class="categ-modal">' +
-                '<label for="categ">Nome Modello:</label>' +
+                '<label style="display: block" for="categ">Nome Modello:</label>' +
                 '<select class="categ" name="categ">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
                 '<div class="mat-modal">' +
-                '<label for="mat">Materiali:</label>' +
+                '<label style="display: block" for="mat">Materiali:</label>' +
                 '<select class="mat" name="mat">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
                 '<div>' +
+                '<label style="display: block">Modello:</label>' +
                 '<input type="text" value="" data-id="" id="resultModel" disabled>' +
                 '</div>' +
                 '</div>' +
@@ -648,10 +655,15 @@
             }
         );
 
-        modal.addClass('modal-wide');
-        modal.addClass('modal-high');
+        if (selectedRowsCount == 1 && url !== '-') {
+            modal.addClass('modal-wide');
+            modal.addClass('modal-high');
+        } else {
+            modal.removeClass('modal-wide');
+            modal.removeClass('modal-high');
+        }
 
-        modal.body.css('minHeight', '350px');
+        //modal.body.css('minHeight', '350px');
         modal.show();
 
         $.ajax({
