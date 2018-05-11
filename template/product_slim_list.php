@@ -88,6 +88,9 @@
                                         data-searchable="true"
                                         data-orderable="false">N. DDT
                                     </th>
+                                    <th data-slug="hasPhotos"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Ha Foto
                                 </tr>
                             </thead>
                             <tbody>

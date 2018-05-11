@@ -189,6 +189,55 @@ $(document).ready(function () {
     });
 
 
+    $("#genders").selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        maxItems: 1,
+        options: JSON.parse($('.JSON-gend').html()),
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    escape(item.name) +
+                    '</div>';
+            }
+        }
+    });
+
+    $("#prodCats").selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        maxItems: 1,
+        options: JSON.parse($('.JSON-pcats').html()),
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    escape(item.name) +
+                    '</div>';
+            }
+        }
+    });
+
+    $("#materials").selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        maxItems: 1,
+        options: JSON.parse($('.JSON-mat').html()),
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    escape(item.name) +
+                    '</div>';
+            }
+        }
+    });
+
+
     //init page
     if (Object.keys($_GET.all).length) {
         if ('string' == typeof $_GET.all.id) {
@@ -266,6 +315,7 @@ $(document).ready(function () {
 
                 var productCategory = detailContentElem.data('category');
                 $('#categories').humanized('addItems', productCategory);
+
 
                 if ('undefined' != typeof $_GET.all.name) $('input[name="name"]').val(decodeURI($_GET.all.name));
                 if ('undefined' != typeof $_GET.all.codeName) $('input[name="code"]').val(decodeURI($_GET.all.codeName));

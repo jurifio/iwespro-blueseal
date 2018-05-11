@@ -47,6 +47,41 @@ class CProductModelEditController extends CProductManageController
         $productDetailsCollection = \Monkey::app()->repoFactory->create('ProductDetailTranslation')->findBy(['langId'=>1]);
         $productDetails = [];
 
+        //gender
+        $gends = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeGender')->findAll();
+        $genders = [];
+        $iGend = 0;
+        foreach ($gends as $gend){
+            $genders[$iGend] = [];
+            $genders[$iGend]['id'] = $gend->id;
+            $genders[$iGend]['name'] = $gend->name;
+            $iGend++;
+        }
+
+        //prodCat
+        $prodCat = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findAll();
+        $prodCats = [];
+        $iCat = 0;
+        foreach ($prodCat as $cat){
+            $prodCats[$iCat] = [];
+            $prodCats[$iCat]['id'] = $cat->id;
+            $prodCats[$iCat]['name'] = $cat->name;
+            $iCat++;
+        }
+
+        //material
+        $material = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMaterial')->findAll();
+        $materials = [];
+        $iMat = 0;
+        foreach ($material as $mat){
+            $materials[$iMat] = [];
+            $materials[$iMat]['id'] = $mat->id;
+            $materials[$iMat]['name'] = $mat->name;
+            $iMat++;
+        }
+
+
+
         foreach ($productDetailsCollection as $detail) {
             try {
                 $productDetails[$detail->productDetailId] = $detail->name;
@@ -60,6 +95,9 @@ class CProductModelEditController extends CProductManageController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'categories' => json_encode($categories),
+            'genders' => json_encode($genders),
+            'prodCats' => json_encode($prodCats),
+            'materials' => json_encode($materials),
             'sidebar' => $this->sidebar->build(),
             'productDetails' => $productDetails
         ]);

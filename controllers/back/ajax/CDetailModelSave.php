@@ -38,6 +38,10 @@ class CDetailModelSave extends AAjaxController
             $newProt->name = $get['name'];
             $newProt->code = $get['code'];
             $newProt->productName = str_replace(' !', '', $pnIt->name);
+            $newProt->genderId = $get['genders'];
+            $newProt->categoryGroupId =  $get['prodCats'];
+            $newProt->materialId =  $get['materials'];
+            $newProt->note =  $get['note'];
             $newId = $newProt->insert();
 
             $this->saveCats($get['categories'], $newId);
@@ -77,7 +81,14 @@ class CDetailModelSave extends AAjaxController
             if ($get['productName']) {
                 $prot->productName = str_replace(' !', '', $pnIt->name);
             }
-            $prot->productSheetPrototypeId = $pspid;
+
+            if(isset($get['genders'])) $prot->genderId = $get['genders'];
+
+
+            if(isset($get['prodCats'])) $prot->categoryGroupId = $get['prodCats'];
+
+            if(isset($get['materials'])) $prot->materialId = $get['materials'];
+
             $prot->update();
             //delete all details associated to this model
             $psma = $prot->productSheetModelActual;

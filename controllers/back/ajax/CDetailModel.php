@@ -41,6 +41,20 @@ class CDetailModel extends AAjaxController
             $res['categories'][] = $cats->id;
         }
 
+
+        if(!is_null($detailModel->genderId)){
+            $res['genders'] = $detailModel->genderId;
+        }
+
+        if (!is_null($detailModel->categoryGroupId)){
+            $res['prodCats'] = $detailModel->categoryGroupId;
+        }
+
+        if(!is_null($detailModel->materialId)){
+            $res['materials'] = $detailModel->materialId;
+        }
+
+
         return json_encode($res);
     }
 }

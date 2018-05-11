@@ -85,11 +85,60 @@
                                                 <label for="model_categories">Categorie</label>
                                                 <select type="text" class="form-control categories" name="categories"
                                                         id="categories" value="" >
-                                                    </select>
+                                                </select>
 
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- ON TEST -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <div class="JSON-gend" style="display: none"><?php echo $genders; ?></div>
+                                                <label for="model_genders">Genere</label>
+                                                <select type="text" class="form-control genders" name="genders"
+                                                        id="genders" value="" >
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <div class="JSON-pcats" style="display: none"><?php echo $prodCats; ?></div>
+                                                <label for="model_pcats">Categorie pre-impostate</label>
+                                                <select type="text" class="form-control prodCats" name="prodCats"
+                                                        id="prodCats" value="" >
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <div class="JSON-mat" style="display: none"><?php echo $materials; ?></div>
+                                                <label for="model_mat">Materiali</label>
+                                                <select type="text" class="form-control materials" name="materials"
+                                                        id="materials" value="" >
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <label for="model_note">Note</label>
+                                                <textarea id="note" name="note"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ON TEST -->
                                 </div>
                             </div>
                         </div>
@@ -119,24 +168,29 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-floppy-o"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-event="bs.product.edit"
-            data-title="Salva"
-            data-placement="bottom"
+                data-tag="a"
+                data-icon="fa-floppy-o"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.edit"
+                data-title="Salva"
+                data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione Nomi Prodotti">
         <bs-toolbar-button
-            data-remote="bs.product.name.insert"
+                data-remote="bs.product.name.insert"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione Dettagli">
         <bs-toolbar-button
-            data-remote="bs.product.details.new"
+                data-remote="bs.product.details.new"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Aggiungi nuove categorie per fason">
+        <bs-toolbar-button
+                data-remote="bs.details.research.fason"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -581,8 +581,27 @@
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal">' +
-                '<label for="code-details">Nome Modello:</label>' +
-                '<select class="form-control code-details" name="code-details"></select>' +
+                '<div class="gender-modal">' +
+                '<label for="gender">Genere:</label>' +
+                '<select class="gender" name="gender">' +
+                '<option disabled selected value>Seleziona un\'opzione</option>' +
+                '</select>' +
+                '</div>' +
+                '<div class="categ-modal">' +
+                '<label for="categ">Nome Modello:</label>' +
+                '<select class="categ" name="categ">' +
+                '<option disabled selected value>Seleziona un\'opzione</option>' +
+                '</select>' +
+                '</div>' +
+                '<div class="mat-modal">' +
+                '<label for="mat">Materiali:</label>' +
+                '<select class="mat" name="mat">' +
+                '<option disabled selected value>Seleziona un\'opzione</option>' +
+                '</select>' +
+                '</div>' +
+                '<div>' +
+                '<input type="text" value="" data-id="" id="resultModel" disabled>' +
+                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -594,8 +613,27 @@
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal">' +
-                '<label for="code-details">Nome Modello:</label>' +
-                '<select class="form-control code-details" name="code-details"></select>' +
+                '<div class="gender-modal">' +
+                '<label for="gender">Genere:</label>' +
+                '<select class="gender" name="gender">' +
+                '<option disabled selected value>Seleziona un\'opzione</option>' +
+                '</select>' +
+                '</div>' +
+                '<div class="categ-modal">' +
+                '<label for="categ">Nome Modello:</label>' +
+                '<select class="categ" name="categ">' +
+                '<option disabled selected value>Seleziona un\'opzione</option>' +
+                '</select>' +
+                '</div>' +
+                '<div class="mat-modal">' +
+                '<label for="mat">Materiali:</label>' +
+                '<select class="mat" name="mat">' +
+                '<option disabled selected value>Seleziona un\'opzione</option>' +
+                '</select>' +
+                '</div>' +
+                '<div>' +
+                '<input type="text" value="" data-id="" id="resultModel" disabled>' +
+                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</div>';
@@ -616,45 +654,104 @@
         modal.body.css('minHeight', '350px');
         modal.show();
 
-        setTimeout(function () {
-            $(".code-details").selectize({
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'ProductSheetModelPrototypeGender'
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            var select = $('.gender');
+            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
                 valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
-                options: [],
-                create: false,
-                render: {
-                    option: function (item, escape) {
-                        return '<div>' +
-                            escape(item.name) +
-                            '</div>';
-                    }
-                },
-                load: function (query, callback) {
-                    if (3 >= query.length) {
-                        return callback();
-                    }
-                    $.ajax({
-                        url: '/blueseal/xhr/DetailModelGetDetails',
-                        type: 'GET',
-                        data: {
-                            search: query,
-                        },
-                        dataType: 'json',
-                        error: function () {
-                            callback();
-                        },
-                        success: function (res) {
-                            callback(res);
-                        }
-                    });
-                }
+                labelField: ['name'],
+                options: res
             });
-        }, 1000);
+        });
+
+        $('.gender').change(function () {
+            $('.categ').prop('disabled', false);
+            $('.mat').prop('disabled', false);
+            $('.categ').empty().append('<option disabled selected value>Seleziona un\'opzione</option>');
+            $('.mat').empty().append('<option disabled selected value>Seleziona un\'opzione</option>');
+            const dataG = {
+                genderId: $('.gender').val(),
+                step: 1
+            };
+            $.ajax({
+                method: 'get',
+                url: '/blueseal/xhr/DetailModelGetDetailsFason',
+                data: dataG
+            }).done(function (res1) {
+                let cats = JSON.parse(res1);
+                
+                $.each(cats, function (k, v) {
+                    $('.categ')
+                        .append($("<option></option>")
+                            .attr("value",v.id)
+                            .text(v.name));
+                })
+            }).fail(function (res1) {
+                modal.writeBody('Errore grave');
+            });
+
+        });
+
+
+        $('.categ').change(function () {
+
+            const dataC = {
+                genderId: $('.gender').val(),
+                categId: $('.categ').val(),
+                step: 2
+            };
+            $.ajax({
+                method: 'get',
+                url: '/blueseal/xhr/DetailModelGetDetailsFason',
+                data: dataC
+            }).done(function (res2) {
+                let mats = JSON.parse(res2);
+
+                $.each(mats, function (k, v) {
+                    $('.mat')
+                        .append($("<option></option>")
+                            .attr("value",v.id)
+                            .text(v.name));
+                })
+            }).fail(function (res2) {
+                modal.writeBody('Errore grave');
+            });
+
+        });
+
+        $('.mat').change(function () {
+            $('.categ').prop('disabled', true);
+            $('.mat').prop('disabled', true);
+            const dataM = {
+                genderId: $('.gender').val(),
+                categId: $('.categ').val(),
+                matId: $('.mat').val(),
+                step: 3
+            };
+            $.ajax({
+                method: 'get',
+                url: '/blueseal/xhr/DetailModelGetDetailsFason',
+                data: dataM
+            }).done(function (res3) {
+                let final = JSON.parse(res3);
+                $('#resultModel').val(final.name);
+                $('#resultModel').attr('data-id',final.id);
+            }).fail(function (res3) {
+                modal.writeBody('Errore grave');
+            });
+
+        });
 
 
         modal.setOkEvent(function () {
-            var id = $('.code-details').val();
+            var id = $('#resultModel').data('id');
             $('.detail-form').prepend('<div class="form-group">' +
                 '<label for="ProductName_1_name">Nome del prodotto</label>' +
                 '<select id="ProductName_1_name" name="ProductName_1_name" class="form-control required"></select>' +
@@ -729,6 +826,7 @@
                     type,
                     {
                         after: function (detailBody) {
+                            let zs = detailBody.find('.detailContent');
                             var productCategory = detailBody.find('.detailContent').data('category');
                             $('#productCategories').humanized('addItems', productCategory);
                         }

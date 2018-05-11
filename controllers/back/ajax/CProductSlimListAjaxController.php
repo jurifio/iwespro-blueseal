@@ -45,7 +45,11 @@ class CProductSlimListAjaxController extends AAjaxController
                   shp.salePrice                                        AS salePrice,
                   shp.value                                            AS value,
                   concat(phs.shootingId)                               AS shooting,
-                  concat(doc.number)                                   AS doc_number
+                  concat(doc.number)                                   AS doc_number,
+                  if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), 'sì', 'no')                 AS hasPhotos
                 FROM `Product` `p`
                   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
                   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
@@ -163,6 +167,7 @@ class CProductSlimListAjaxController extends AAjaxController
             }
             $row["shooting"] = $sids;
             $row["doc_number"] = $ddtNumbers;
+            $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
             $datatable->setResponseDataSetRow($key, $row);
         }
         return $datatable->responseOut();
