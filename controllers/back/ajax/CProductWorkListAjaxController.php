@@ -33,13 +33,18 @@ class CProductWorkListAjaxController extends AAjaxController
                    ps.name as productStatus,
                    p.dummyPicture,
                    pb.name as productBrand,
-                   pse.name as productSeason
+                   pse.name as productSeason,
+                   if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductCardPhoto.productId,
+                                                              ProductCardPhoto.productVariantId
+                                                            FROM ProductCardPhoto), 'sì', 'no')                 AS productCard
             FROM Product p
+            LEFT JOIN ProductCardPhoto pcp ON p.id = pcp.productId AND p.productVariantId = p.productVariantId
             JOIN ProductStatus ps ON p.productStatusId = ps.id
             JOIN ProductBrand pb ON p.productBrandId = pb.id
             JOIN ProductSeason pse ON p.productSeasonId = pse.id
             WHERE p.processing <> 'definito'
-        ";
+";
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
 
@@ -58,6 +63,8 @@ class CProductWorkListAjaxController extends AAjaxController
             $row['dummyPicture'] = '<img width="50" src="' . $product->getDummyPictureUrl() . '" />';
             $row['productBrand'] = $product->productBrand->name;
             $row['productSeason'] = $product->productSeason->name;
+            $row['productCard'] = (!$product->getProductCardUrl() ? '-' :'<a href="#1" class="enlarge-your-img"><img width="50" src="' . $product->getProductCardUrl() . '" /></a>');
+
 
             $datatable->setResponseDataSetRow($key,$row);
         }

@@ -193,6 +193,11 @@
                 data-remote="bs.details.research.fason"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Aggiungi nuova tipo scheda prodotto">
+        <bs-toolbar-button
+                data-remote="bs.insert.new.product.sheet.prototype"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

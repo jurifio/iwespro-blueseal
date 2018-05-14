@@ -18,7 +18,12 @@
 <div class="row productDetails">
     <div class="col-md-12">
         <div class="tab-content bg-white">
-            <?php foreach ($productSheetPrototype->productDetailLabel as $detaillabel): ?>
+            <?php
+            /** @var \bamboo\core\base\CObjectCollection $newObjCollection */
+            $newObjCollection = $productSheetPrototype->productDetailLabel;
+            $newObjCollection->reorder('order');
+
+            foreach ($newObjCollection as $detaillabel): ?>
                 <div class="col-md-6">
                     <div class="form-group form-group-default selectize-enabled">
                         <label

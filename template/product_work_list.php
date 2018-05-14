@@ -47,6 +47,9 @@
                                 <th data-slug="productSeason"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione</th>
+                                <th data-slug="productCard"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Foto scheda</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -51,7 +51,7 @@ $(document).on('bs-new-batch-product-add', function () {
         }).always(function (res) {
             bsModal.setOkEvent(function () {
                 bsModal.hide();
-                //window.location.reload();
+                window.location.reload();
             });
             bsModal.showOkBtn();
         });

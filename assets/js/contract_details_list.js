@@ -114,8 +114,7 @@
             let contractDetailName = selectedRows[0].contractName;
 
             let bsModal = new $.bsModal('Accettazione del contratto', {
-                body: '<p>Inserisci un nuovo contratto</p>' +
-                '<div class="form-group form-group-default required">' +
+                body: '<div class="form-group form-group-default required">' +
                 '<p>Confermi di voler accettare le condizioni del contratto con:' +
                 '<br />' + 'Codice: ' +
                 '<strong>' + contractDetailId + '</strong>' +
