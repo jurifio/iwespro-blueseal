@@ -692,7 +692,10 @@
             },
             dataType: 'json'
         }).done(function (desc) {
-            $('#descriptionSheet').html(desc[0].description);
+            if(desc[0].description != ''){
+                $('#descriptionSheet').html(desc[0].description);
+            }
+
         }).fail(function () {
             $('#descriptionSheet').html('err');
         });
