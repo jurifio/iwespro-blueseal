@@ -162,6 +162,19 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione ordine">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-question-circle"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Istruzioni"
+                data-placement="bottom"
+                data-href="/document/NORMALIZZAZIONE-DEI-PRODOTTI-NEL-CATALOGO.pdf"
+                data-target="_blank"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
