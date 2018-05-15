@@ -556,6 +556,8 @@
 
     $(document).on('bs-product-model-insertIntoProducts-worker', function (e, element, button) {
 
+        let pId = '';
+        let pVariantId = '';
         var type = 'model';
 
         var selectedRows = $('.table').DataTable().rows('.selected').data();
@@ -612,10 +614,14 @@
                 '</div>' +
                 '</div>' +
                 '<div class="col-md-6">' +
+                '<p id="descriptionSheet"></p>' +
                 '<img width="100%" src="' + url + '" />' +
                 '</div>';
         } else {
             body =
+                '<div>' +
+                '<p id="descriptionSheet"></p>' +
+                '</div>' +
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal">' +
@@ -665,6 +671,33 @@
 
         //modal.body.css('minHeight', '350px');
         modal.show();
+
+
+        if(selectedRowsCount == 1){
+            pId = selectedRows[0].DT_RowId.split('-')[0];
+            pVariantId = selectedRows[0].DT_RowId.split('-')[1];
+        }
+
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'ProductDescriptionTranslation',
+                condition: {
+                    productId: pId,
+                    productVariantId: pVariantId,
+                    marketplaceId: 1,
+                    langId: 1
+                }
+            },
+            dataType: 'json'
+        }).done(function (desc) {
+            $('#descriptionSheet').html(desc[0].description);
+        }).fail(function () {
+            $('#descriptionSheet').html('err');
+        });
+
+
 
         $.ajax({
             method:'GET',
