@@ -4,6 +4,9 @@ namespace bamboo\controllers\back\ajax;
 
 
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CFoison;
+use bamboo\domain\entities\CProductBatch;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
 
 
@@ -30,14 +33,32 @@ class CProductBatchAccept extends AAjaxController
      */
     public function post()
     {
+      $ids = [];
       $pbIds = \Monkey::app()->router->request()->getRequestData('productBatchIds');
 
       /** @var CProductBatchRepo $pbRepo */
       $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
       foreach ($pbIds as $pbId){
-          $pbRepo->acceptProductBatch($pbId);
+          $ids[] = $pbRepo->acceptProductBatch($pbId);
       }
+
+      /** @var CProductBatch $prBatch */
+      $prBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$ids[0]]);
+
+      /** @var CFoison $foison */
+      $foison = $prBatch->contractDetails->contracts->foison;
+
+      $name = $foison->user->getFullName();
+      $idH = implode(', ', $ids);
+
+
+      /** @var CEmailRepo $mailRepo */
+      $mailRepo = \Monkey::app()->repoFactory->create('Email');
+
+        $body = "Il fason $name ha accettato i lotti con id: $idH";
+
+        $mailRepo->newMail('gianluca@iwes.it', ['gianluca@iwes.it'], [], [], 'Conferma accettazione lotto lotto', $body);
 
       $res = "Lotto accettato con successo";
       return $res;

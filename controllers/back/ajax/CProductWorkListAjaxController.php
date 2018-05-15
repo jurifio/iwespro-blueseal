@@ -27,7 +27,7 @@ class CProductWorkListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "
-            SELECT concat(p.id, '-', p.productVariantId) as productCode, 
+            SELECT concat(p.id, '-', p.productVariantId) as DT_RowId, 
                    p.id,
                    p.productVariantId,
                    ps.name as productStatus,
@@ -58,7 +58,7 @@ class CProductWorkListAjaxController extends AAjaxController
             /** @var CProduct $product */
             $product = $productRepo->findOneBy($row);
 
-            $row['productCode'] = $product->printId();
+            $row["DT_RowId"] = $product->printId();
             $row['productStatus'] = $product->productStatus->name;
             $row['dummyPicture'] = '<img width="50" src="' . $product->getDummyPictureUrl() . '" />';
             $row['productBrand'] = $product->productBrand->name;

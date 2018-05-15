@@ -299,6 +299,11 @@
                 data-remote="bs.product.viewSize"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Lotti">
+        <bs-toolbar-button
+                data-remote="bs.product.addBatch"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

@@ -26,7 +26,7 @@ class CProductBatchRepo extends ARepo
      * @param $value
      * @param $contractDetailsId
      * @param $products
-     * @return bool
+     * @return \bamboo\core\db\pandaorm\entities\AEntity|CProductBatch
      */
     public function createNewProductBatch($scheduledDelivery, $value, $contractDetailsId, $products){
 
@@ -52,7 +52,7 @@ class CProductBatchRepo extends ARepo
         $productBatchDetailsRepo->createNewProductBatchDetails($productBatch, $products);
         } catch (\Throwable $e){}
 
-        return true;
+        return $productBatch;
     }
 
 
@@ -110,6 +110,6 @@ class CProductBatchRepo extends ARepo
         $pB->confirmationDate = date_format($date, 'Y-m-d H:i:s');
         $pB->update();
 
-        return true;
+        return $pB->id;
     }
 }

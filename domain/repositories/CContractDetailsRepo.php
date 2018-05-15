@@ -124,7 +124,7 @@ class CContractDetailsRepo extends ARepo
                 Gianluca Cartechini<br />
                 Iwes";
 
-            $mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma di accettazione contratto', $body);
+            $mailRepo->newMail('gianluca@iwes.it', [$to], [], ['gianluca@iwes.it'], 'Conferma di accettazione contratto', $body);
 
             return true;
         } else {

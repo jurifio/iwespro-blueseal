@@ -37,7 +37,10 @@ use bamboo\domain\repositories\CUserRepo;
 class CProductBatchManage extends AAjaxController
 {
     /**
-     *
+     * @return string
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
     public function post()
     {
@@ -56,7 +59,31 @@ class CProductBatchManage extends AAjaxController
 
         /** @var CProductBatchRepo $productBatchRepo */
         $productBatchRepo = \Monkey::app()->repoFactory->create('ProductBatch');
-        if($productBatchRepo->createNewProductBatch($deliveryDate, $value, $contractDetailsId, $products)){
+
+        /** @var CProductBatch $pBatch */
+        $pBatch = $productBatchRepo->createNewProductBatch($deliveryDate, $value, $contractDetailsId, $products);
+        if(is_object($pBatch)){
+
+            /** @var CEmailRepo $mailRepo */
+            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+
+            /** @var CFoison $fason*/
+            $fason = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$foisonId]);
+
+            $name = $fason->user->getFullName();
+            $to = $fason->email;
+            $batchId = $pBatch->id;
+
+
+            $body = "Gentilissimo sig. $name,<br />
+                Le confermiamo l'avvenuta creazione del lotto n. $batchId<br /><br />
+                Cordiali saluti;<br /><br />
+                Gianluca Cartechini<br />
+                Iwes";
+
+            $mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma creazione lotto', $body);
+
+
             $res = "Lotto creato con sucecsso";
         } else {
             $res = "Errore durante la creazione";

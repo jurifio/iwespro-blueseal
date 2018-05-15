@@ -25,14 +25,14 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="size_full_list"
+                               data-datatable-name="product_work_list"
                                data-controller="ProductWorkListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
-                                <th data-slug="productCode"
+                                <th data-slug="DT_RowId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Code</th>
                                 <th data-slug="productStatus"

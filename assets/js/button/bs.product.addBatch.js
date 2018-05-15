@@ -19,7 +19,7 @@ window.buttonSetup = {
 
         //id-variantId in array
         $.each(selectedRows, function (k, v) {
-            selectedProduct.push(v.productCode);
+            selectedProduct.push(v.DT_RowId);
         });
 
         let numberOfProduct = selectedProduct.length;
@@ -68,7 +68,7 @@ window.buttonSetup = {
             '<div>' +
                 '<p id="prodBatchValue">Valore</p>' +
                 '<p id="prodSectional">Sezionale</p>' +
-                '<button id="costWork" name="costWork">Prevedi costo e sezionale</button>' +
+                '<button id="costWork" name="costWork">Anteprima costo e sezionale</button>' +
             '</div>' +
             '<div class="form-group form-group-default required">' +
                 '<label>Data di Consegna</label>' +
