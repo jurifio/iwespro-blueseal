@@ -1538,6 +1538,16 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/prodotti/modelli/schede-prodotto(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetPrototypeListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         },
         {
             "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
