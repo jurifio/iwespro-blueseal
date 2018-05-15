@@ -576,6 +576,7 @@
         var row = [];
         let url = selectedRows[0].row_pCardUrl;
         let body = '';
+        let visibleImg = '';
 
         $.each(selectedRows, function (k, v) {
             row[i] = v.DT_RowId;
@@ -583,7 +584,10 @@
             //getVars += 'row_' + i + '=' + v.DT_RowId.split('__')[1] + '&';
         });
 
-        if (selectedRowsCount == 1 && url !== '-') {
+        if (selectedRowsCount == 1) {
+
+            visibleImg = (url == '-') ? 'hide' : 'block';
+
             body = '<div class="col-md-6 pre-scrollable">' +
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
@@ -615,7 +619,7 @@
                 '</div>' +
                 '<div class="col-md-6">' +
                 '<p id="descriptionSheet"></p>' +
-                '<img width="100%" src="' + url + '" />' +
+                '<img id="imgVisible" class="' + visibleImg + '" width="100%" src="' + url + '" />' +
                 '</div>';
         } else {
             body =
@@ -661,7 +665,7 @@
             }
         );
 
-        if (selectedRowsCount == 1 && url !== '-') {
+        if (selectedRowsCount == 1) {
             modal.addClass('modal-wide');
             modal.addClass('modal-high');
         } else {
