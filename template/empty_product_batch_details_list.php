@@ -25,8 +25,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="size_full_list"
-                               data-controller="ProductBatchDetailsListAjaxController"
+                               data-datatable-name="empty_product_batch_list"
+                               data-controller="EmptyProductBatchDetailsListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500"
@@ -87,94 +87,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione prodotti">
-        <bs-toolbar-button
-                data-remote="bs.product.editVariantDescription"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-sitemap"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs-category-edit-worker"
-                data-title="Cambia Categoria ai prodotti selezionati"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-paint-brush"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs-product-namesMerge-worker"
-                data-title="Copia i nomi dei prodotti"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.details.new">
-        </bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-tasks"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs-product-details.merge-worker"
-                data-title="Copia dettagli"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-object-group"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs-product-model-insertIntoProducts-worker"
-                data-title="Aggiorna I prodotti da un modello"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.name.insert"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Termina lavorazione sul prodotto">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-step-forward"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs.end.work.product"
-                data-title="Termina la lavorazione sui prodotti selezionati"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Notifica termine lotto">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-hourglass-end"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs.end.product.modify.notify"
-                data-title="Notifica termine del lotto"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Istruzioni">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-question-circle"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Istruzioni"
-                data-placement="bottom"
-                data-href="/document/NORMALIZZAZIONE-DEI-PRODOTTI-NEL-CATALOGO.pdf"
-                data-target="_blank"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
+
     <bs-toolbar-group data-group-label="Elimina prodotti">
         <bs-toolbar-button
                 data-remote="bs.delete.product.from.batch"

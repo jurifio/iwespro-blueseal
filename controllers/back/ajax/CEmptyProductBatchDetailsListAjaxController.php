@@ -29,7 +29,7 @@ use bamboo\domain\repositories\CWorkCategoryRepo;
  * @date 19/03/2018
  * @since 1.0
  */
-class CProductBatchDetailsListAjaxController extends AAjaxController
+class CEmptyProductBatchDetailsListAjaxController extends AAjaxController
 {
     /**
      * @return string

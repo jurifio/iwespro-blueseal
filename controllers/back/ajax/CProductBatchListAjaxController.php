@@ -51,12 +51,13 @@ class CProductBatchListAjaxController extends AAjaxController
                   concat(f.name,' ',f.surname) as foison,
                   f.userId,
                   wk.name as workCategory,
-                  pb.documentId
+                  pb.documentId,
+                  pb.description as descr
             FROM ProductBatch pb
-            JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
-            JOIN WorkCategory wk ON cd.workCategoryId = wk.id
-            JOIN Contracts c ON cd.contractId = c.id
-            JOIN Foison f ON c.foisonId = f.id
+            LEFT JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
+            LEFT JOIN WorkCategory wk ON cd.workCategoryId = wk.id
+            LEFT JOIN Contracts c ON cd.contractId = c.id
+            LEFT JOIN Foison f ON c.foisonId = f.id
         ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
@@ -79,7 +80,18 @@ class CProductBatchListAjaxController extends AAjaxController
             /** @var CProductBatch $pbr */
             $pbr = $pbrRepo->findOneBy(['id'=>$row["id"]]);
             $row["row_id"] = $pbr->id;
-            $row["id"] = ((is_null($pbr->confirmationDate) && !$allShop) ? $pbr->id :'<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>');
+
+            $row["id"] = (((is_null($pbr->confirmationDate) && !$allShop) || (is_null($pbr->contractDetailsId))) ? $pbr->id :'<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>');
+
+            if(((is_null($pbr->confirmationDate) && !$allShop) )){
+                $row["id"] = $pbr->id;
+            } else if(is_null($pbr->contractDetailsId)) {
+                $row["id"] = '<a href="'.$url.'prodotti'.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+            } else {
+                $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+            }
+
+
             $row["creationDate"] = $pbr->creationDate;
             $row["scheduledDelivery"] = $pbr->scheduledDelivery;
             $row["confirmationDate"] = ($pbr->confirmationDate == 0 ? "-" : $pbr->confirmationDate);
@@ -87,11 +99,12 @@ class CProductBatchListAjaxController extends AAjaxController
             $row["value"] = $pbr->value;
             $row["paid"] = ($pbr->paid == 1 ? "yes" : "no");
             $row["sectional"] = $pbr->sectional;
-            $row["foison"] = $pbr->contractDetails->contracts->foison->name.' '.$pbr->contractDetails->contracts->foison->surname;
+            $row["foison"] =(is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->contracts->foison->name.' '.$pbr->contractDetails->contracts->foison->surname);
             $row["numberOfProduct"] = count($pbr->productBatchDetails);
-            $row["workCategory"] = $pbr->contractDetails->workCategory->name;
+            $row["workCategory"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->workCategory->name);
             $row["documentId"] = $pbr->documentId;
-            $row["foisonEmail"] = $pbr->contractDetails->contracts->foison->email;
+            $row["foisonEmail"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->contracts->foison->email);
+            $row["descr"] = $pbr->description;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

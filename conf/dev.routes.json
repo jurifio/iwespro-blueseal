@@ -2045,6 +2045,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/work/lotti/prodotti/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBatchDetailsListController"
+            },
+            "filters": {
+                "cat": "[0-9]+",
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/work/prodotti-conto-lavoro(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkListController"

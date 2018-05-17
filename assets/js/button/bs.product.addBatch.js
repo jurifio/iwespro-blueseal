@@ -24,6 +24,14 @@ window.buttonSetup = {
 
         let numberOfProduct = selectedProduct.length;
 
+        if(numberOfProduct == 0){
+            new Alert({
+                type: "warning",
+                message: "Devi selezionare almeno un prodotto"
+            }).open();
+            return false;
+        }
+
         //SELEZIONA IL FOISON
         $.ajax({
             method:'GET',

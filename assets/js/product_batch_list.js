@@ -1,5 +1,39 @@
 ;(function () {
 
+    $(document).on('bs.empty.product.batch', function () {
+
+        let bsModal = new $.bsModal('Chiudi lotto', {
+            body: `<p>Crea un lotto vuoto</p>
+                    <p style="font-weight: bold">Inserisci una descrizione</p>
+                    <input type="text" id="prodBatchDescription">`
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const dataDesc = {
+                desc: $('#prodBatchDescription').val()
+            };
+
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/EmptyProductBatchManage',
+                data: dataDesc
+            }).done(function (res) {
+                bsModal.writeBody('Lotto creato con successo');
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
+
     $(document).on('bs.end.product.batch', function () {
 
         //Prendo tutti i lotti selezionati
@@ -270,6 +304,176 @@
                 bsModal.showOkBtn();
             });
         });
+    });
+
+    $(document).on('bs.product.batch.to.fason', function () {
+
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length != 1){
+            new Alert({
+                type: "warning",
+                message: "Devi un fason alla volta"
+            }).open();
+            return false;
+        }
+
+        let productBatchId = selectedRows[0].row_id;
+
+        //SELEZIONA IL FOISON
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Foison'
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            var select = $('#foison');
+            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: ['name'],
+                options: res
+            });
+        });
+
+        let bsModal = new $.bsModal('Assegna un lotto', {
+            body: '<p>Inserisci un nuovo contratto</p>' +
+            '<div class="form-group form-group-default required">' +
+            '<label>Scegli il Foison</label>' +
+            '<select class="full-width selectpicker"\n id="foison"' +
+            'placeholder="Seleziona il Foison" tabindex="-1"\n' +
+            'title="foison" name="foison" id="foison">\n' +
+            '</select>'+
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+            '<label>Scegli il Contratto</label>' +
+            '<select class="full-width selectpicker"\n id="contract"' +
+            'placeholder="Seleziona il contratto" tabindex="-1"\n' +
+            'title="contract" name="contract" id="contract">\n' +
+            '</select>' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+            '<label>Scegli i dettagli del contratto</label>' +
+            '<select class="full-width selectpicker"\n id="contractDetails"' +
+            'placeholder="Seleziona i dettagli del contratto" tabindex="-1"\n' +
+            'title="contractDetails" name="contractDetails" id="contractDetails">\n' +
+            '</select>' +
+            '</div>' +
+            '<div>' +
+            '<p id="prodBatchValue">Valore</p>' +
+            '<p id="prodSectional">Sezionale</p>' +
+            '<button id="costWork" name="costWork">Anteprima costo e sezionale</button>' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
+            '<label>Data di Consegna</label>' +
+            '<input type="date" id="deliveryDate" name="deliveryDate">' +
+            '</div>'
+        });
+
+        //setto i contratti a seconda del foison
+        $('#foison').change(function () {
+            let foisonId = $('#foison').val();
+            $.ajax({
+                method:'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'Contracts',
+                    condition: {
+                        foisonId: foisonId
+                    },
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                var select = $('#contract');
+                if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    options: res
+                });
+            });
+        });
+
+        //setto i dettagli a seconda dei contratti
+        $('#contract').change(function () {
+            let contractId = $('#contract').val();
+            $.ajax({
+                method:'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'ContractDetails',
+                    condition: {
+                        contractId: contractId,
+                        accepted: 1
+                    }
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                var select = $('#contractDetails');
+                if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'contractDetailName',
+                    options: res
+                });
+            });
+        });
+
+
+        $('#costWork').on('click', function () {
+            if($('#contractDetails').val()){
+                const data = {
+                    contractDetail: $('#contractDetails').val(),
+                    productBatchId: productBatchId
+                };
+                $.ajax({
+                    method: 'get',
+                    url: '/blueseal/xhr/AssociateEmptyProductBatchManage',
+                    data: data
+                }).done(function (res) {
+                    res = JSON.parse(res);
+                    $('#prodBatchValue').text(res.cost + 'Euro');
+                    $('#prodSectional').text(res.sectional);
+                }).fail(function (res) {
+                    $('#prodBatchValue').text('Errore');
+                });
+            } else {
+                $('#prodBatchValue').text('Completa i campi soprastanti');
+            }
+
+        });
+
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            const data = {
+                productBatchId: productBatchId,
+                foisonId: $('#foison').val(),
+                contractId: $('#contract').val(),
+                contractDetailsId: $('#contractDetails').val(),
+                deliveryDate: $('#deliveryDate').val()
+            };
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/AssociateEmptyProductBatchManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    $.refreshDataTable();
+                    bsModal.hide();
+                    //window.location.reload();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+
     });
 
 

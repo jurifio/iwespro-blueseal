@@ -35,6 +35,9 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
+                                <th data-slug="descr"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Descrizione</th>
                                 <th data-slug="workCategory"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Lavorazione</th>
@@ -84,6 +87,18 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <?php if($allShops):?>
+    <bs-toolbar-group data-group-label="Nuovo lotto">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.empty.product.batch"
+                data-title="Crea un nuovo lotto"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Conferma termine lotto">
         <bs-toolbar-button
                 data-tag="a"
@@ -96,6 +111,18 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Associa lotto a fason">
+            <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-arrows-h"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.batch.to.fason"
+                data-title="Associa lotto a fason"
+                data-placement="bottom"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
     <?php endif; ?>
     <bs-toolbar-group data-group-label="Carica fattura per i lotti">
         <bs-toolbar-button

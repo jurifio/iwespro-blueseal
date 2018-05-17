@@ -112,4 +112,36 @@ class CProductBatchRepo extends ARepo
 
         return $pB->id;
     }
+
+    /**
+     * @param $productBatch
+     * @param $scheduledDelivery
+     * @param $value
+     * @param $contractDetailsId
+     * @return CProductBatch
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function associateProductBatch($productBatch, $scheduledDelivery, $value, $contractDetailsId){
+
+        /** @var CContractDetails $contractDetails */
+        $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBY(['id'=>$contractDetailsId]);
+
+        $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
+
+        /** @var CSectionalRepo $sectionalRepo */
+        $sectionalRepo = \Monkey::app()->repoFactory->create('Sectional');
+
+        /** @var CProductBatch $productBatch */
+        $productBatch->scheduledDelivery = $scheduledDelivery;
+        $productBatch->value = $value;
+        $productBatch->contractDetailsId = $contractDetailsId;
+        $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCodeId);
+        $productBatch->update();
+
+        return $productBatch;
+
+
+    }
 }

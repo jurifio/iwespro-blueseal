@@ -2,6 +2,7 @@
 
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CContractDetails;
@@ -24,7 +25,7 @@ use bamboo\domain\repositories\CUserRepo;
 
 
 /**
- * Class CProductBatchManage
+ * Class CAssociateEmptyProductBatchManage
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -33,10 +34,10 @@ use bamboo\domain\repositories\CUserRepo;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 16/03/2018
+ * @date 17/05/2018
  * @since 1.0
  */
-class CProductBatchManage extends AAjaxController
+class CAssociateEmptyProductBatchManage extends AAjaxController
 {
     /**
      * @return string
@@ -47,23 +48,33 @@ class CProductBatchManage extends AAjaxController
     public function post()
     {
         $data = \Monkey::app()->router->request()->getRequestData();
-        $products = $data["products"];
+        $productBatchId = $data["productBatchId"];
         $foisonId = $data["foisonId"];
         $contractDetailsId = $data["contractDetailsId"];
         $deliveryDate = $data["deliveryDate"];
-        $numberOfProduct = $data["numberOfProduct"];
+
+
+        /** @var CProductBatchRepo $pbRepo */
+        $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
+
+        /** @var CProductBatch $pb */
+        $pb = $pbRepo->findOneBy(['id'=>$productBatchId]);
+
+        if(!is_null($pb->contractDetailsId)) return 'Il lotto che stai associando è gia di un\'altro Fason';
+
+        /** @var CObjectCollection $pbd */
+        $pbd = $pb->productBatchDetails;
+
+        $numP = $pbd->count();
 
         //Costo
         /** @var CContractDetails $contractDetails */
         $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBy(['id'=>$contractDetailsId]);;
         $unitPrice = $contractDetails->workPriceList->price;
-        $value = $unitPrice * $numberOfProduct;
-
-        /** @var CProductBatchRepo $productBatchRepo */
-        $productBatchRepo = \Monkey::app()->repoFactory->create('ProductBatch');
+        $value = $unitPrice * $numP;
 
         /** @var CProductBatch $pBatch */
-        $pBatch = $productBatchRepo->createNewProductBatch($deliveryDate, $value, $contractDetailsId, $products);
+        $pBatch = $pbRepo->associateProductBatch($pb, $deliveryDate, $value, $contractDetailsId);
         if(is_object($pBatch)){
 
             /** @var CEmailRepo $mailRepo */
@@ -83,7 +94,7 @@ class CProductBatchManage extends AAjaxController
                 Gianluca Cartechini<br />
                 Iwes";
 
-            $mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma creazione lotto', $body);
+            //$mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma creazione lotto', $body);
 
 
             $res = "Lotto creato con sucecsso";
@@ -94,12 +105,15 @@ class CProductBatchManage extends AAjaxController
         return $res;
     }
 
-    /**
-     * @return string
-     */
     public function get(){
         $contractDetailId = \Monkey::app()->router->request()->getRequestData('contractDetail');
-        $numberOfProduct = \Monkey::app()->router->request()->getRequestData('numberOfProduct');
+        $productBatchId = \Monkey::app()->router->request()->getRequestData('productBatchId');
+
+        /** @var CProductBatch $pb */
+        $pb = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId]);
+
+        /** @var CObjectCollection $pbd */
+        $pbd = $pb->productBatchDetails;
 
         /** @var CContractDetailsRepo $contractDetailRepo */
         $contractDetailRepo = \Monkey::app()->repoFactory->create('ContractDetails');
@@ -108,7 +122,7 @@ class CProductBatchManage extends AAjaxController
 
         //Costo stimato
         $unitPrice = $contractDetails->workPriceList->price;
-        $cost = $unitPrice * $numberOfProduct;
+        $cost = $unitPrice * $pbd->count();
 
         //Lotto sezionale stimato
         /** @var CSectionalRepo $sectionalRepo */
@@ -122,64 +136,6 @@ class CProductBatchManage extends AAjaxController
         $result["sectional"] = $sectional;
 
         return json_encode($result);
-    }
-
-    /**
-     * @throws BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
-    public function put(){
-        $ids = \Monkey::app()->router->request()->getRequestData('productBatchIds');
-        $emails = \Monkey::app()->router->request()->getRequestData('foisons');
-
-        /** @var CProductBatchRepo $pbRepo */
-        $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
-
-        foreach ($ids as $id) {
-            $pbRepo->closeProductBatch($id);
-        }
-
-        /** @var CEmailRepo $mailRepo */
-        $mailRepo = \Monkey::app()->repoFactory->create('Email');
-        foreach ($emails as $email){
-
-            /** @var CFoison $foison */
-            $foison = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['email' => $email]);
-            $foisonFullName = $foison->user->getFullName();
-            $url = \Monkey::app()->baseUrl(false) . "/blueseal/work/lotti";
-
-            $body = "Gentilissimo Sig. $foisonFullName<br /><br />
-            Prego prendere nota che il lotto è stato confermato, proceda pure ad emettere fattura ed inserirla nel portale al seguente link: $url
-            <br /><br />
-            Cordiali saluti<br />
-            Iwes
-            ";
-
-            $mailRepo->newMail('gianluca@iwes.it', [$email], [], [], "Lotto confermato e chiuso con successo", $body);
-
-        }
-
-        $res = "Lotti chiusi con successo";
-
-        return $res;
-    }
-
-    public function delete(){
-        $products = \Monkey::app()->router->request()->getRequestData('products');
-        $productBatchId = \Monkey::app()->router->request()->getRequestData('productBatchId');
-        $emptyBatch = \Monkey::app()->router->request()->getRequestData('emptyBatch');
-
-        $e = ($emptyBatch == 'empty' ? true : false);
-
-        /** @var CProductBatchDetailsRepo $pbdRepo */
-        $pbdRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
-
-
-        $d = $pbdRepo->deleteProductFromBatch($productBatchId, $products, $e);
-
-        if($d) return 'Prodotti eliminati con successo dal lotto';
-
     }
 
 }
