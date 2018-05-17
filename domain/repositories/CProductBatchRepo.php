@@ -1,10 +1,12 @@
 <?php
 namespace bamboo\domain\repositories;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CProductBatch;
+use bamboo\domain\entities\CProductBatchDetails;
 
 /**
  * Class CProductBatchRepo
@@ -139,6 +141,22 @@ class CProductBatchRepo extends ARepo
         $productBatch->contractDetailsId = $contractDetailsId;
         $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCodeId);
         $productBatch->update();
+
+        /** @var CWorkCategoryStepsRepo $catStR */
+        $catStR = \Monkey::app()->repoFactory->create('WorkCategorySteps');
+
+        $initStep = $catStR->getFirstStepsFromCategoryId($productBatch->contractDetails->workCategory->id);
+
+        /** @var CObjectCollection $pbds */
+        $pbds = $productBatch->productBatchDetails;
+
+
+        /** @var CProductBatchDetails $pbd */
+        foreach ($pbds as $pbd){
+            $pbd->workCategoryStepsId = $initStep->id;
+            $pbd->update();
+        }
+
 
         return $productBatch;
 

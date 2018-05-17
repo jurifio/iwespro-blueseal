@@ -145,7 +145,7 @@ class CProductBatchDetailsRepo extends ARepo
                         $ext = $pbd->findOneByKeys(['productId'=>$pId,'productVariantId'=>$pVId]);
                     }
 
-                    if(isset($ext) && !$ext) {
+                    if((isset($ext) && !$ext) || $pbd->count() == 0) {
                         $pBD = $this->getEmptyEntity();
                         $pBD->productid = $pId;
                         $pBD->productVariantId = $pVId;
