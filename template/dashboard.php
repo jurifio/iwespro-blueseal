@@ -191,10 +191,10 @@
                 <div class="container-fluid padding-25 sm-padding-10">
                     <div class="row">
                         <div class="col-lg-12">
-                            <?php if($app->$app->user()->hasPermission('worker')): ?>
-                                <img style="width: 100%" src="/assets/dashboardImage.png">
-                            <?php else: ?>
+                            <?php if($app->user()->hasPermission('worker')): ?>
                                 <img style="width: 100%" src="/assets/dashboardImageWorker.png">
+                            <?php else: ?>
+                                <img style="width: 100%" src="/assets/dashboardImage.png">
                             <?php endif; ?>
                         </div>
                     </div>
