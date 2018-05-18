@@ -32,7 +32,7 @@ $(document).on('bs-delete-product-from-batch', function () {
 
 
 
-    let bsModal = new $.bsModal('Associa prodotti a un lotto esistente', {
+    let bsModal = new $.bsModal('Elimina i prodotti da un lotto', {
         body: `<p>Sicuro di voler eliminare questi prodotti dal lotto?</p>`
     });
 

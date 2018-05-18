@@ -50,6 +50,9 @@
                                 <th data-slug="productCard"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Foto scheda</th>
+                                <th data-slug="productBatchNumber"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Lotto</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -71,6 +74,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.addBatch.empty"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.delete.product.from.batch.work.list"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

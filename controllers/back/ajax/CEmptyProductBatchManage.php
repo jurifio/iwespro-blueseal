@@ -58,5 +58,4 @@ class CEmptyProductBatchManage extends AAjaxController
         return 'Prodotti inseriti con successo';
 
     }
-
 }

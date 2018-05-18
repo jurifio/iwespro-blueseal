@@ -2,7 +2,10 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\base\CObjectCollection;
 use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CProductBatchDetails;
+use bamboo\domain\repositories\CProductBatchDetailsRepo;
 use bamboo\domain\repositories\CProductRepo;
 
 /**
@@ -37,18 +40,24 @@ class CProductWorkListAjaxController extends AAjaxController
                    if((p.id, p.productVariantId) IN (SELECT
                                                               ProductCardPhoto.productId,
                                                               ProductCardPhoto.productVariantId
-                                                            FROM ProductCardPhoto), 'sì', 'no')                 AS productCard
+                                                            FROM ProductCardPhoto), 'sì', 'no')                 AS productCard,
+                   group_concat(pbd.productBatchId) as productBatchNumber                                  
             FROM Product p
             LEFT JOIN ProductCardPhoto pcp ON p.id = pcp.productId AND p.productVariantId = p.productVariantId
             JOIN ProductStatus ps ON p.productStatusId = ps.id
             JOIN ProductBrand pb ON p.productBrandId = pb.id
             JOIN ProductSeason pse ON p.productSeasonId = pse.id
+            LEFT JOIN ProductBatchDetails pbd ON p.id = pbd.productId AND p.productVariantId = pbd.productVariantId
             WHERE p.processing <> 'definito'
+            GROUP BY p.id, p.productVariantId
 ";
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
 
         $datatable->doAllTheThings(false);
+
+        /** @var CProductBatchDetailsRepo $pbdRepo */
+        $pbdRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
 
         /** @var CProductRepo $productRepo */
         $productRepo = \Monkey::app()->repoFactory->create('Product');
@@ -64,6 +73,17 @@ class CProductWorkListAjaxController extends AAjaxController
             $row['productBrand'] = $product->productBrand->name;
             $row['productSeason'] = $product->productSeason->name;
             $row['productCard'] = (!$product->getProductCardUrl() ? '-' :'<a href="#1" class="enlarge-your-img"><img width="50" src="' . $product->getProductCardUrl() . '" /></a>');
+
+            /** @var CObjectCollection $pbds */
+            $pbds = $pbdRepo->findBy(['productId'=>$product->id, 'productVariantId'=>$product->productVariantId]);
+
+            $pbdsIds = "";
+            /** @var CProductBatchDetails $pbd */
+            foreach ($pbds as $pbd){
+                $pbdsIds .= $pbd->productBatchId.', ';
+            }
+
+            $row['productBatchNumber'] = $pbdsIds;
 
 
             $datatable->setResponseDataSetRow($key,$row);
