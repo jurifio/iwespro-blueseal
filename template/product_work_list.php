@@ -70,13 +70,13 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Lotti">
         <bs-toolbar-button
+                data-remote="bs.delete.product.from.batch.work.list"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.product.addBatch"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.addBatch.empty"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.delete.product.from.batch.work.list"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
