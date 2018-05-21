@@ -67,8 +67,9 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
             $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$pbr->productId, 'productVariantId'=>$pbr->productVariantId]);
 
             $row["DT_RowId"] = $product->printId();
-            $row["id"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
-            $row["productCode"] = $pbr->productId.'-'.$pbr->productVariantId;
+            $row["id"] = $pbr->id;
+            $row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
+            //$row["productCode"] = $pbr->productId.'-'.$pbr->productVariantId;
             $row["stepName"] = (is_null($pbr->workCategoryStepsId)? '-' : $pbr->workCategorySteps->name);
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
             $row['colorNameManufacturer'] = $product->productVariant->description;

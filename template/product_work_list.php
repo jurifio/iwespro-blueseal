@@ -79,6 +79,11 @@
                 data-remote="bs.product.addBatch.empty"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Assegna prodotti con lettore">
+    <bs-toolbar-button
+            data-remote="bs.product.addBatch.massive"
+    ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

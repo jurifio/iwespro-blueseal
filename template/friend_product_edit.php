@@ -322,7 +322,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-floppy-o"
-                data-permission="/admin/product/add"
+                data-permission="/admin/product/add||worker"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.product.edit"
@@ -354,7 +354,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-sitemap"
-                data-permission="/admin/product/add"
+                data-permission="/admin/product/add||worker"
                 data-event="bs.category.edit"
                 data-class="btn btn-default"
                 data-rel="tooltip"
@@ -410,7 +410,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-eraser"
-                data-permission="/admin/product/edit"
+                data-permission="/admin/product/edit||worker"
                 data-event="bs.det.erase"
                 data-class="btn btn-default"
                 data-rel="tooltip"
@@ -423,7 +423,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-files-o"
-                data-permission="/admin/product/edit"
+                data-permission="/admin/product/edit||worker"
                 data-event="bs.details.model.assign"
                 data-class="btn btn-default"
                 data-rel="tooltip"
@@ -433,7 +433,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-file"
-                data-permission="/admin/product/edit"
+                data-permission="/admin/product/edit||worker"
                 data-event="bs.details.product.assign"
                 data-class="btn btn-default"
                 data-rel="tooltip"
