@@ -6,9 +6,9 @@
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header" data-shops=""><div style="display:none" class="product-code"><?php
-if (isset($productEdit) && !is_null($productEdit)):
-    echo $productEdit->id . '-' . $productEdit->productVariantId;
-endif; ?></div>
+    if (isset($productEdit) && !is_null($productEdit)):
+        echo $productEdit->id . '-' . $productEdit->productVariantId;
+    endif; ?></div>
 <div style="display:none" id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>
 <?php include "parts/sidebar.php"; ?>
 <div class="page-container">
@@ -44,10 +44,10 @@ endif; ?></div>
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">
-                                     Codice: <span class="code-title">-</span>
+                                        Codice: <span class="code-title">-</span>
                                     </h5>
-                                    <?php if ($allShops) : ?>
-                                    <p class="categoryPath"></p>
+                                    <?php if ($allShops || $worker) : ?>
+                                        <p class="categoryPath"></p>
                                     <?php endif; ?>
                                 </div>
                                 <div class="panel-body clearfix">
@@ -102,7 +102,7 @@ endif; ?></div>
                                                     <button type="button" class="search-product btn btn-success pull-right">Cerca</button>
                                                 </div>
                                             </div>
-                                            <?php if (!$allShops): ?>
+                                            <?php if (!$allShops && !$worker): ?>
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group form-group-default">
@@ -232,32 +232,32 @@ endif; ?></div>
                         </div>
                         <div class="col-md-4">
                             <div class="disableBlank disablePrice">
-                            <?php if (!$allShops): ?>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group form-group-default required">
-                                            <label for="Product_retail_price">Prezzo Vendita (Retail Price)</label>
-                                            <input autocomplete="off" type="text" id="Product_retail_price"
-                                                   class="form-control required search-product inputPrice" name="Product_retail_price"
-                                                   value="<?php echo (isset($productEdit) && isset($productEdit->itemno)) ? $productEdit->itemno : '' ?>"
-                                                   required>
-                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                <?php if (!$allShops && !$worker): ?>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default required">
+                                                <label for="Product_retail_price">Prezzo Vendita (Retail Price)</label>
+                                                <input autocomplete="off" type="text" id="Product_retail_price"
+                                                       class="form-control required search-product inputPrice" name="Product_retail_price"
+                                                       value="<?php echo (isset($productEdit) && isset($productEdit->itemno)) ? $productEdit->itemno : '' ?>"
+                                                       required>
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group form-group-default required">
-                                            <label for="Product_value">Costo Fornitore</label>
-                                            <input id="Product_value" autocomplete="off" type="text"
-                                                   class="form-control required search-product inputPrice" name="Product_value"
-                                                   value="<?php echo (isset($productEdit)) ? $productEdit->productVariant->name : "" ?>"
-                                                   required>
-                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default required">
+                                                <label for="Product_value">Costo Fornitore</label>
+                                                <input id="Product_value" autocomplete="off" type="text"
+                                                       class="form-control required search-product inputPrice" name="Product_value"
+                                                       value="<?php echo (isset($productEdit)) ? $productEdit->productVariant->name : "" ?>"
+                                                       required>
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            <?php endif; ?>
+                                <?php endif; ?>
                             </div>
                             <div class="disableBlank">
                                 <div class="panel panel-default clearfix">
@@ -294,7 +294,7 @@ endif; ?></div>
                                     </div>
                                 </div>
                             </div>
-                            <?php if ($allShops) : ?>
+                            <?php if ($allShops || $worker) : ?>
                                 <div class="panel panel-default clearfix">
                                     <div class="panel-heading clearfix">
                                         <h5 class="m-t-10">Friend</h5>
@@ -320,163 +320,167 @@ endif; ?></div>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione prodotti">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-floppy-o"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-event="bs.product.edit"
-            data-title="Salva"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-qrcode"
-            data-permission="/admin/product/add"
-            data-event="bs.print.aztec"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Codice Aztec"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-image"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-event="bs.dummy.edit"
-            data-rel="tooltip"
-            data-title="Dummy picture"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-sitemap"
-            data-permission="/admin/product/add"
-            data-event="bs.category.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Categorie"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-tag"
-            data-permission="/admin/product/add"
-            data-event="bs.tag.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Tag"
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-sort-numeric-asc"
-            data-permission="/admin/product/edit"
-            data-event="bs.priority.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Priorità"
-            data-json='<?php echo json_encode($sortingOptions); ?>'
-            data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-sort-numeric-asc"
-            data-permission="/admin/product/edit"
-            data-event="bs.priority.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Priorità"
-            data-json='<?php echo json_encode($sortingOptions); ?>'
-            data-placement="bottom"
+                data-tag="a"
+                data-icon="fa-floppy-o"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.edit"
+                data-title="Salva"
+                data-placement="bottom"
         ></bs-toolbar-button>
         <?php if ($allShops): ?>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-dollar"
-            data-permission="/admin/product/add"
-            data-event="bs.price.edit"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Modifica prezzi"
-            data-placement="bottom"
+                data-tag="a"
+                data-icon="fa-qrcode"
+                data-permission="/admin/product/add"
+                data-event="bs.print.aztec"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Codice Aztec"
+                data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-image"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-event="bs.dummy.edit"
+                data-rel="tooltip"
+                data-title="Dummy picture"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <?php endif; ?>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-sitemap"
+                data-permission="/admin/product/add"
+                data-event="bs.category.edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Categorie"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <?php if ($allShops): ?>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-tag"
+                data-permission="/admin/product/add"
+                data-event="bs.tag.edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Tag"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-sort-numeric-asc"
+                data-permission="/admin/product/edit"
+                data-event="bs.priority.edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Priorità"
+                data-json='<?php echo json_encode($sortingOptions); ?>'
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-sort-numeric-asc"
+                data-permission="/admin/product/edit"
+                data-event="bs.priority.edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Priorità"
+                data-json='<?php echo json_encode($sortingOptions); ?>'
+                data-placement="bottom"
+        ></bs-toolbar-button>
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-dollar"
+                    data-permission="/admin/product/add"
+                    data-event="bs.price.edit"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-title="Modifica prezzi"
+                    data-placement="bottom"
+            ></bs-toolbar-button>
         <?php endif; ?>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione dettagli">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-eraser"
-            data-permission="/admin/product/edit"
-            data-event="bs.det.erase"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Vuota i dettagli"
-            data-placement="bottom"
+                data-tag="a"
+                data-icon="fa-eraser"
+                data-permission="/admin/product/edit"
+                data-event="bs.det.erase"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Vuota i dettagli"
+                data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.product.details.new"
+                data-remote="bs.product.details.new"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-files-o"
-            data-permission="/admin/product/edit"
-            data-event="bs.details.model.assign"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Carica i dettagli da modello"
-            data-placement="bottom"
+                data-tag="a"
+                data-icon="fa-files-o"
+                data-permission="/admin/product/edit"
+                data-event="bs.details.model.assign"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Carica i dettagli da modello"
+                data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file"
-            data-permission="/admin/product/edit"
-            data-event="bs.details.product.assign"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Carica i dettagli da prodotto"
-            data-placement="bottom"
+                data-tag="a"
+                data-icon="fa-file"
+                data-permission="/admin/product/edit"
+                data-event="bs.details.product.assign"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Carica i dettagli da prodotto"
+                data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php if ($allShops): ?>
     <bs-toolbar-group data-group-label="Movimenti">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-exchange"
-            data-permission="/admin/product/edit"
-            data-event="bs.details.mag.move"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Quantità e movimenti"
-            data-placement="bottom"
+                data-tag="a"
+                data-icon="fa-exchange"
+                data-permission="/admin/product/edit"
+                data-event="bs.details.mag.move"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Quantità e movimenti"
+                data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php endif; ?>
     <bs-toolbar-group data-group-label="Gestione Nomi Prodotti">
         <bs-toolbar-button
-            data-remote="bs.product.name.insert"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Aiuto">
-        <bs-toolbar-button
-            data-remote="btn.href.smart_product.guide"
+                data-remote="bs.product.name.insert"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <?php  if ($allShops): ?>
-    <bs-toolbar-group data-group-label="Stato del prodotto">
-        <bs-toolbar-select
-            data-tag="select"
-            data-icon="fa-random"
-            data-permission="/admin/product/add"
-            data-rel="tooltip"
-            data-button="false"
-            data-placement="bottom"
-            data-class="btn btn-default selectStatus"
-            data-name="Product_status"
-            data-title="Modifica stato"
-            data-event="bs.product.changestatus"
-            data-options='<?php echo json_encode($statuses); ?>'
-        ></bs-toolbar-select>
+    <bs-toolbar-group data-group-label="Aiuto">
+        <bs-toolbar-button
+                data-remote="btn.href.smart_product.guide"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Stato del prodotto">
+            <bs-toolbar-select
+                    data-tag="select"
+                    data-icon="fa-random"
+                    data-permission="/admin/product/add"
+                    data-rel="tooltip"
+                    data-button="false"
+                    data-placement="bottom"
+                    data-class="btn btn-default selectStatus"
+                    data-name="Product_status"
+                    data-title="Modifica stato"
+                    data-event="bs.product.changestatus"
+                    data-options='<?php echo json_encode($statuses); ?>'
+            ></bs-toolbar-select>
+        </bs-toolbar-group>
     <?php endif; ?>
 </bs-toolbar>
 </body>

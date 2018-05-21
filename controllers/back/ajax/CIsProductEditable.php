@@ -24,6 +24,7 @@ class CisProductEditable extends AAjaxController
         $wh = new CWidgetHelper(\Monkey::app());
 
         $user = $this->app->getUser();
+        $worker = $user->hasPermission('worker');
         $get = $this->app->router->request()->getRequestData();
         $ret = [];
         $product = \Monkey::app()->repoFactory->create('Product');
@@ -70,7 +71,7 @@ class CisProductEditable extends AAjaxController
             $name = $productEdit->productNameTranslation->getFirst();
             $productArr['productName'] = ($name) ? $name->name : '' ;
 
-            if (!$user->hasPermission('allShops')) {
+            if (!$user->hasPermission('allShops') && !$worker) {
                 foreach ($user->shop as $s) {
                     $shopId = $s->id;
                     break;
@@ -86,7 +87,7 @@ class CisProductEditable extends AAjaxController
             $productArr['price'] = "";
             $productArr['value'] = "";
 
-            if (!$user->hasPermission('allShops')) {
+            if (!$user->hasPermission('allShops') && !$worker) {
                 $shop = $user->shop;
                 $shopId = 0;
                 foreach ($shop as $k => $v) {
@@ -102,7 +103,7 @@ class CisProductEditable extends AAjaxController
             }
             $editable = false;
             $message = 'Il prodotto è già presente nel nostro cataolgo. Puoi modificarne il prezzo e le quantità';
-            if (((count($intersect = array_intersect($userShops, $productShops))) && (($productStatus == 2) || ($productStatus == 11))) || ($this->app->getUser()->hasPermission('allShops'))) {
+            if (((count($intersect = array_intersect($userShops, $productShops))) && (($productStatus == 2) || ($productStatus == 11))) || ($this->app->getUser()->hasPermission('allShops') || $this->app->getUser()->hasPermission('worker'))) {
                 $editable = true;
                 $message = false;
             }

@@ -130,6 +130,8 @@ class CFriendProductEditController extends CProductManageController
         }
         unset($productDetailsCollection);
 
+        $worker = \Monkey::app()->getUser()->hasPermission('worker');
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
@@ -145,7 +147,8 @@ class CFriendProductEditController extends CProductManageController
             'productSheets' => $productSheets,
             'tags' => $tag,
             'sortingOptions' => $sortingOptions,
-            'productDetails' => $productDetails
+            'productDetails' => $productDetails,
+            'worker' => $worker
         ]);
         /*
         'dummyUrl' => $dummyUrl,
