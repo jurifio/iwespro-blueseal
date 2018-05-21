@@ -612,7 +612,7 @@
                 '</div>' +
                 '<div>' +
                 '<label style="display: block">Modello:</label>' +
-                '<input type="text" value="" data-id="" id="resultModel" disabled>' +
+                '<input type="text" value="" data-id="" style="width: 70%" id="resultModel" disabled>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -649,7 +649,7 @@
                 '</div>' +
                 '<div>' +
                 '<label style="display: block">Modello:</label>' +
-                '<input type="text" value="" data-id="" id="resultModel" disabled>' +
+                '<input type="text" value="" data-id="" style="width: 70%" id="resultModel" disabled>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
