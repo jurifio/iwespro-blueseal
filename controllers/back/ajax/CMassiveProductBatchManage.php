@@ -91,7 +91,7 @@ class CMassiveProductBatchManage extends AAjaxController
 
         $avaiable = [];
 
-        if($product->hasPhoto()) $avaiable['Foto'] = 1;
+        if(!$product->hasPhoto()) $avaiable['Foto'] = 1;
 
         if($product->productStatusId == 7 || $product->productStatusId == 8 || $product->productStatusId == 12) $avaiable['Stato'] = 1;
 
