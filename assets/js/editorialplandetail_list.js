@@ -1,6 +1,7 @@
 (function ($) {
     var obj = null;
     $(document).ready(function () {
+        createcalendar(obj,1);
         $.ajax({
             method: 'GET',
             url: '/blueseal/xhr/EditorialPlanSocialFilterAjaxController',
