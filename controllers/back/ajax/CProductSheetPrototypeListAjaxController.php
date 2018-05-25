@@ -62,11 +62,13 @@ class CProductSheetPrototypeListAjaxController extends AAjaxController
         /** @var CRepo $trRepo */
         $trRepo = \Monkey::app()->repoFactory->create('ProductDetailLabelTranslation');
 
+        $url = $this->app->baseUrl(false) . "/blueseal/prodotti/modelli/modifica-schede-prodotto/";
+
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             /** @var CProductSheetPrototype $psp */
             $psp = $pspRepo->findOneBy(['id'=>$row['id']]);
-            $row['id'] = $psp->id;
+            $row['id'] = "<a href='".$url.$psp->id."' target='_blank'>".$psp->id."</a>";
             $row['name'] = $psp->name;
 
             /** @var CObjectCollection $details */

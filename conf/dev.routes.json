@@ -1576,8 +1576,19 @@
             "methods": [
                 "GET"
             ]
-        },
-        {
+        },{
+            "pattern": "/blueseal/prodotti/modelli/modifica-schede-prodotto/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CModifyProductSheetPrototypeListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
             "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementsEditController"
