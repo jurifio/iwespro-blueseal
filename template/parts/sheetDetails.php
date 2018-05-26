@@ -21,7 +21,7 @@
             <?php
             /** @var \bamboo\core\base\CObjectCollection $newObjCollection */
             $newObjCollection = $productSheetPrototype->productDetailLabel;
-            $newObjCollection->reorder('order');
+            $newObjCollection->reorderNumbersAndDates('order','true');
 
             foreach ($newObjCollection as $detaillabel): ?>
                 <div class="col-md-6">

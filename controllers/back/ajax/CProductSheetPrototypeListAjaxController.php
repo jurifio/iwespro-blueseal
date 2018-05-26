@@ -74,7 +74,7 @@ class CProductSheetPrototypeListAjaxController extends AAjaxController
             /** @var CObjectCollection $details */
             $details = $psp->productDetailLabel;
 
-            $details->reorder('order');
+            $details->reorderNumbersAndDates('order');
             $vals = '';
             /** @var CProductDetailLabel $detail */
             foreach ($details as $detail){
