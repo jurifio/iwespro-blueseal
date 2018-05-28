@@ -5,6 +5,7 @@
     <?php echo $app->getAssets(['ui', 'forms', 'tables', 'charts'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
   <!-- <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=z3tiwzxrspg36g21tiusdfsqt9f27isw6547l88aw19e0qej"></script>
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -212,11 +213,10 @@
 
                                     <div class="col-md-12">
                                         <div align="center"
-                                        <div class="summernote-wrapper">
+
                                             <label for="preCompiledTemplate1">Template Utilizzato</label>
 
-                                            <textarea class="summer" id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="300" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
-                                        </div>
+                                            <textarea id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="300" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
                                     </div>
                                 </div>
                             </div>
