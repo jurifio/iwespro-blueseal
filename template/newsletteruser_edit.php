@@ -216,7 +216,7 @@
 
                                             <label for="preCompiledTemplate1">Template Utilizzato</label>
 
-                                            <textarea id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="300" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
+                                            <textarea id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="1000" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
                                     </div>
                                 </div>
                             </div>
