@@ -49,7 +49,11 @@ class CProductWorkListAjaxController extends AAjaxController
                    pc.id                                                                                             AS categoryId,
                    pv.description                                                                                    AS colorNameManufacturer,
                    pcg.name                                                                                          AS colorGroup,
-                   concat(s.id,'-',s.name) as Shop               
+                   concat(s.id,'-',s.name) as Shop,
+                   if(((SELECT count(0)
+                       FROM ProductSheetActual
+                       WHERE ((ProductSheetActual.productId = p.id) AND
+                              (ProductSheetActual.productVariantId = p.productVariantId))) > 2), 'sì', 'no')    AS hasDetails               
             FROM Product p
             LEFT JOIN ProductCardPhoto pcp ON p.id = pcp.productId AND p.productVariantId = p.productVariantId
             JOIN ProductStatus ps ON p.productStatusId = ps.id
@@ -110,6 +114,7 @@ class CProductWorkListAjaxController extends AAjaxController
             $row['colorNameManufacturer'] = $product->productVariant->description;
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
             $row['shop'] = '<span class="small">'.$product->getShops('<br />', true).'</span>';
+            $row['hasDetails'] = (2 < $product->productSheetActual->count()) ? 'sì' : 'no';
 
             $datatable->setResponseDataSetRow($key,$row);
         }

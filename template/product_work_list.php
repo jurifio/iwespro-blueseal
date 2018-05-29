@@ -68,6 +68,9 @@
                                 <th data-slug="shop"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop</th>
+                                <th data-slug="hasDetails"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Ha Dett.</th>
                             </tr>
                             </thead>
                             <tbody>

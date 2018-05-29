@@ -2,9 +2,11 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\base\CObjectCollection;
 use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CProductBatch;
+use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\repositories\CContractDetailsRepo;
 use bamboo\domain\repositories\CContractsRepo;
 use bamboo\domain\repositories\CFoisonRepo;
@@ -105,6 +107,24 @@ class CProductBatchListAjaxController extends AAjaxController
             $row["documentId"] = $pbr->documentId;
             $row["foisonEmail"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->contracts->foison->email);
             $row["descr"] = $pbr->description;
+
+            /** @var CObjectCollection $pbDetails */
+            $pbDetails = $pbr->productBatchDetails;
+
+            $finish = 0;
+            $todo = 0;
+           if(!is_null($pbr->contractDetailsId)) {
+                /** @var CProductBatchDetails $singleProductBatchDetails */
+                foreach ($pbDetails as $singleProductBatchDetails) {
+                    if (!is_null($singleProductBatchDetails->workCategorySteps->rgt)) {
+                        $todo++;
+                    } else {
+                        $finish++;
+                    }
+                }
+            }
+            $row['finish'] = $finish;
+            $row['todo'] = $todo;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

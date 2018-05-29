@@ -67,6 +67,7 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
             $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$pbr->productId, 'productVariantId'=>$pbr->productVariantId]);
 
             $row["DT_RowId"] = $product->printId();
+            $row["work_category"] = $pbr->productBatch->contractDetails->workCategory->id;
             $row["id"] = $pbr->id;
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
             $row["productCode"] = $pbr->productId.'-'.$pbr->productVariantId;

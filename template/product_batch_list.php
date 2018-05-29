@@ -68,6 +68,12 @@
                                 <th data-slug="numberOfProduct"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Numero di prodotti</th>
+                                <th data-slug="finish"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Norm ok</th>
+                                <th data-slug="todo"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Norm da fare</th>
                                 <th data-slug="documentId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura</th>
