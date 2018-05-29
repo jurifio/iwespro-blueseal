@@ -35,14 +35,20 @@ window.buttonSetup = {
                let arr = JSON.parse(res);
                let ris = '';
 
-                if (typeof(arr['ko']) != 'undefined' && arr['ko'] != null ) {
-                    $.each(arr['ko'], function (k, v) {
-                        $.each(v, function (k, v) {
-                            ris += `Mancante: ${k} <br>`;
-                        });
-                        ris += `<strong>Prodotto: ${k}</strong> <br>`;
-                    });
-                }
+
+               $.each(arr, function (k, v) {
+                   if(v.constructor === Object){
+                       let err = '';
+                       $.each(v, function (k1, v1) {
+                           err += `${k1} | `;
+                       });
+                       ris += `Pr: ${k} - Ris: ${err} <br>`;
+
+                   } else {
+                       ris += `Pr: ${k} - Ris: ${v} <br>`;
+                   }
+
+               });
 
                 bsModal.writeBody(ris);
             }).fail(function (res) {

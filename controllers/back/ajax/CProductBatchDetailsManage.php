@@ -115,4 +115,26 @@ class CProductBatchDetailsManage extends AAjaxController
 
     }
 
+
+    /**
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function put(){
+        $ids = \Monkey::app()->router->request()->getRequestData('prod');
+        $catId = \Monkey::app()->router->request()->getRequestData('cat');
+
+        foreach ($ids as $id){
+
+            /** @var CProductBatchDetails $pd */
+            $pd = \Monkey::app()->repoFactory->create('ProductBatchDetails')->findOneBy(['id'=>$id]);
+
+            $pd->workCategoryStepsId = $catId;
+            $pd->update();
+        }
+
+        return 'Stati aggiornati con successo';
+    }
+
 }
