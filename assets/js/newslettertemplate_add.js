@@ -122,11 +122,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 });
 (function ($) {
     Pace.ignore(function () {
-        CKEDITOR.replace( 'template', {
-            height: 260,
-            width:1024
 
-        } );
 
     });
 })
