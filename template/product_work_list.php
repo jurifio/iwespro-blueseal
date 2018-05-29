@@ -53,6 +53,18 @@
                                 <th data-slug="productBatchNumber"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Lotto</th>
+                                <th data-slug="categoryId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center categoryFilterType">Categorie</th>
+                                <th data-slug="productName"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Nome</th>
+                                <th data-slug="colorGroup"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Gruppo Colore</th>
+                                <th data-slug="colorNameManufacturer"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Colore Produttore</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -82,6 +94,17 @@
     <bs-toolbar-group data-group-label="Assegna prodotti con lettore">
     <bs-toolbar-button
             data-remote="bs.product.addBatch.massive"
+    ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Modifiche">
+    <bs-toolbar-button
+            data-remote="bs.product.category.change"
+    ></bs-toolbar-button>
+    <bs-toolbar-button
+            data-remote="bs.product.namesMerge"
+    ></bs-toolbar-button>
+    <bs-toolbar-button
+            data-remote="bs.product.editVariantDescription"
     ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -68,6 +68,7 @@ class CProductSheetPrototypeListAjaxController extends AAjaxController
 
             /** @var CProductSheetPrototype $psp */
             $psp = $pspRepo->findOneBy(['id'=>$row['id']]);
+            $row['row_id'] = $psp->id;
             $row['id'] = "<a href='".$url.$psp->id."' target='_blank'>".$psp->id."</a>";
             $row['name'] = $psp->name;
 

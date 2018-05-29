@@ -56,6 +56,16 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Aggiungi nuova tipo scheda prodotto">
+        <!-- <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-pencil-square-o"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.copy.product.sheet"
+                data-title="Copia scheda"
+                data-placement="bottom"
+        ></bs-toolbar-button> -->
         <bs-toolbar-button
                 data-remote="bs.insert.new.product.sheet.prototype"
         ></bs-toolbar-button>

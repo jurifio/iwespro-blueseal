@@ -41,13 +41,21 @@ class CProductWorkListAjaxController extends AAjaxController
                                                               ProductCardPhoto.productId,
                                                               ProductCardPhoto.productVariantId
                                                             FROM ProductCardPhoto), 'sì', 'no')                 AS productCard,
-                   group_concat(pbd.productBatchId) as productBatchNumber                                  
+                   group_concat(pbd.productBatchId) as productBatchNumber,
+                   pc.id                                                                                             AS categoryId,
+                   pv.description                                                                                    AS colorNameManufacturer,
+                   pcg.name                                                                                          AS colorGroup                        
             FROM Product p
             LEFT JOIN ProductCardPhoto pcp ON p.id = pcp.productId AND p.productVariantId = p.productVariantId
             JOIN ProductStatus ps ON p.productStatusId = ps.id
             JOIN ProductBrand pb ON p.productBrandId = pb.id
             JOIN ProductSeason pse ON p.productSeasonId = pse.id
             LEFT JOIN ProductBatchDetails pbd ON p.id = pbd.productId AND p.productVariantId = pbd.productVariantId
+            LEFT JOIN (ProductHasProductCategory ppc
+                              JOIN ProductCategory pc ON ppc.productCategoryId = pc.id
+                    ) ON (p.id, p.productVariantId) = (ppc.productId,ppc.productVariantId)
+            JOIN ProductVariant pv ON p.productVariantId = pv.id
+            LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
             WHERE p.processing <> 'definito'
             GROUP BY p.id, p.productVariantId
 ";
@@ -84,7 +92,10 @@ class CProductWorkListAjaxController extends AAjaxController
             }
 
             $row['productBatchNumber'] = $pbdsIds;
-
+            $row['categoryId'] = '<span class="small">' . $product->getLocalizedProductCategories(" ", "<br>") . '</span>';
+            $row['productName'] = $product->productNameTranslation->getFirst() ? $product->productNameTranslation->getFirst()->name : "";
+            $row['colorNameManufacturer'] = $product->productVariant->description;
+            $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
 
             $datatable->setResponseDataSetRow($key,$row);
         }

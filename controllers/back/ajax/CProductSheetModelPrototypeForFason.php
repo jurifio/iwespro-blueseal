@@ -2,7 +2,9 @@
 
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\domain\entities\CProductSheetPrototype;
 
 
 /**
@@ -86,6 +88,21 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
         }
 
        return true;
+    }
+
+    public function put(){
+
+
+        $id = \Monkey::app()->router->request()->getRequestData('idCopy');
+
+        /** @var CRepo $psp */
+        $psp = \Monkey::app()->repoFactory->create('ProductSheetPrototype');
+
+        /** @var CObjectCollection $pspDetail */
+        $pspDetail = $psp->productDetailLabel;
+
+
+
     }
 
 }
