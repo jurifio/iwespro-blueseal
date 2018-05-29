@@ -43,7 +43,9 @@ class CMassiveProductBatchManage extends AAjaxController
         $allProducts = [];
         $productids = explode("\n", $strProducts);
 
-        $noProd = [];
+        $not = [];
+        $resFinal = [];
+        $count = 0;
 
         foreach ($productids as $id){
 
@@ -56,12 +58,14 @@ class CMassiveProductBatchManage extends AAjaxController
 
             if(!is_null($product)){
 
-                $noProd[$product->printId()] = $this->checkAvaiable($product);
-
-                if (!empty($noProd[$product->printId()])){
+                if($this->checkAvaiable($product) !== 'ok'){
+                    $resFinal[$product->printId()] = $this->checkAvaiable($product);
+                    $count = 0;
                     continue;
                 }
 
+                $count++;
+                $resFinal[$product->printId()] = $pCode[0].'-'.$count;
                 $allProducts[] = $pCode[0];
             } else continue;
 
@@ -73,11 +77,8 @@ class CMassiveProductBatchManage extends AAjaxController
         if(!empty($allProducts)){
             $res = $pbdRepo->insertProductInEmptyProductBatch($pBatch, $allProducts);
             if (!$res) return 'Errore durante l\'associazione';
-            //$resFinal['ok'] = $allProducts;
         }
 
-        $resFinal = [];
-        $resFinal['ko'] = $noProd;
 
         return json_encode($resFinal);
     }
@@ -85,18 +86,22 @@ class CMassiveProductBatchManage extends AAjaxController
 
     /**
      * @param CProduct $product
-     * @return array
+     * @return array|bool
      */
-    private function checkAvaiable(CProduct $product) : array {
+    private function checkAvaiable(CProduct $product) {
 
-        $avaiable = [];
+        $notAvaiable = [];
 
-        if(!$product->hasPhoto()) $avaiable['Foto'] = 1;
+        if(!$product->hasPhoto()) $notAvaiable['Foto'] = 1;
 
-        if($product->productStatusId == 7 || $product->productStatusId == 8 || $product->productStatusId == 12) $avaiable['Stato'] = 1;
+        if($product->productStatusId == 7 || $product->productStatusId == 8 || $product->productStatusId == 12) $notAvaiable['Stato-'.$product->productStatus->name] = 1;
 
-        if(is_null($product->productCardPhoto)) $avaiable['Scheda_prodotto'] = 1;
+        if(is_null($product->productCardPhoto)) $notAvaiable['Scheda_prodotto'] = 1;
 
-        return $avaiable;
+        return 'ok';
+
+       if(empty($notAvaiable)) return 'ok';
+
+       return $notAvaiable;
     }
 }

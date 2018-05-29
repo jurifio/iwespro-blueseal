@@ -65,6 +65,9 @@
                                 <th data-slug="colorNameManufacturer"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Colore Produttore</th>
+                                <th data-slug="shop"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop</th>
                             </tr>
                             </thead>
                             <tbody>

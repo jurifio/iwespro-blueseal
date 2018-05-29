@@ -41,10 +41,15 @@ class CProductWorkListAjaxController extends AAjaxController
                                                               ProductCardPhoto.productId,
                                                               ProductCardPhoto.productVariantId
                                                             FROM ProductCardPhoto), 'sì', 'no')                 AS productCard,
-                   group_concat(pbd.productBatchId) as productBatchNumber,
+                                                            
+                   if((pbd.productBatchId) IN (SELECT pbd.productBatchId
+                                                      FROM ProductBatch pb1), group_concat(pbd.productBatchId), 0)                 AS productBatchNumber,                                         
+                                                            
+                   #group_concat(pbd.productBatchId) as productBatchNumber,
                    pc.id                                                                                             AS categoryId,
                    pv.description                                                                                    AS colorNameManufacturer,
-                   pcg.name                                                                                          AS colorGroup                        
+                   pcg.name                                                                                          AS colorGroup,
+                   concat(s.id,'-',s.name) as Shop               
             FROM Product p
             LEFT JOIN ProductCardPhoto pcp ON p.id = pcp.productId AND p.productVariantId = p.productVariantId
             JOIN ProductStatus ps ON p.productStatusId = ps.id
@@ -56,6 +61,9 @@ class CProductWorkListAjaxController extends AAjaxController
                     ) ON (p.id, p.productVariantId) = (ppc.productId,ppc.productVariantId)
             JOIN ProductVariant pv ON p.productVariantId = pv.id
             LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
+             JOIN ShopHasProduct sp
+                    ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
+                  JOIN Shop s ON s.id = sp.shopId
             WHERE p.processing <> 'definito'
             GROUP BY p.id, p.productVariantId
 ";
@@ -86,16 +94,22 @@ class CProductWorkListAjaxController extends AAjaxController
             $pbds = $pbdRepo->findBy(['productId'=>$product->id, 'productVariantId'=>$product->productVariantId]);
 
             $pbdsIds = "";
-            /** @var CProductBatchDetails $pbd */
-            foreach ($pbds as $pbd){
-                $pbdsIds .= $pbd->productBatchId.', ';
+            if(!$pbds->isEmpty()){
+                /** @var CProductBatchDetails $pbd */
+                foreach ($pbds as $pbd){
+                    $pbdsIds .= $pbd->productBatchId.', ';
+                }
+            } else {
+                $pbdsIds = 0;
             }
+
 
             $row['productBatchNumber'] = $pbdsIds;
             $row['categoryId'] = '<span class="small">' . $product->getLocalizedProductCategories(" ", "<br>") . '</span>';
             $row['productName'] = $product->productNameTranslation->getFirst() ? $product->productNameTranslation->getFirst()->name : "";
             $row['colorNameManufacturer'] = $product->productVariant->description;
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
+            $row['shop'] = '<span class="small">'.$product->getShops('<br />', true).'</span>';
 
             $datatable->setResponseDataSetRow($key,$row);
         }
