@@ -475,6 +475,7 @@ $(document).on('bs.newNewsletterUser.save', function () {
         } else {
             campaignDateFinishPost =  campaignDateFinishPost ;
         }
+        tinyMCE.triggerSave();
         const data = {
             newsletterId: $('#newsletterId').val(),
             name: $('#name').val(),

@@ -456,6 +456,7 @@ $(document).on('bs.newNewsletterUser.save', function () {
         } else {
             campaignDateFinishPost =  campaignDateFinishPost ;
         }
+        tinyMCE.triggerSave();
         const data = {
             typeOperation:typeOperation,
             name: $('#name').val(),

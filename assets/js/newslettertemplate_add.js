@@ -137,10 +137,11 @@ $(document).on('bs.newNewsletterTemplate.save', function () {
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
 
-
+        tinyMCE.triggerSave();
+       var template= $('#template').val();
         const data = {
             name : $('#name').val(),
-            template: $('#template').val()
+            template: template,
         };
         $.ajax({
             method: 'post',
