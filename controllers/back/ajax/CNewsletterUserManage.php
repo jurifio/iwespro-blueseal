@@ -45,7 +45,7 @@ class CNewsletterUserManage extends AAjaxController
             $fromEmailAddressId = $data['fromEmailAddressId'];
             $sendAddressDate = $data['sendAddressDate'];
             $newsletterEmailListId = $data['newsletterEmailListId'];
-            $newsletterTemplateId = $data['newsletterTemplateId'];
+            $newsletterTemplateId = "1";
             $subject = $data['subject'];
             $dataDescription = $data['dataDescription'];
             $preCompiledTemplate = $data['preCompiledTemplate'];
@@ -99,11 +99,11 @@ class CNewsletterUserManage extends AAjaxController
             }
 
             /** @var CRepo $newsletterTemplateRepo */
-            $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
+      //      $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
 
             /** @var CNewsletterTemplate $newsletterTemplate */
-            $newsletterTemplate = $newsletterTemplateRepo->findOneBy(['template' => $newsletterTemplateId]);
-            $newsletterTemplateId = $newsletterTemplate->id;
+          //  $newsletterTemplate = $newsletterTemplateRepo->findOneBy(['template' => $newsletterTemplateId]);
+         //   $newsletterTemplateId = $newsletterTemplate->id;
 
             /** @var CRepo $newsletterUserRepo */
             $newsletterUserRepo = \Monkey::app()->repoFactory->create('Newsletter');
