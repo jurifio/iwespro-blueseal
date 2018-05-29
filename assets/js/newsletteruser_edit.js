@@ -1,4 +1,5 @@
 tinymce.init({
+    entity_encoding : "raw",
     selector: "textarea",
     height: 450,
     plugins: [
@@ -389,7 +390,26 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         tinymce.get('preCompiledTemplate1').setContent(content1);
 
     });
+    $.ajax({
+        method:'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'NewsletterTemplate',
+            //  selection: {id: textnewslettertemplate },
+        },
+        dataType: 'json'
+    }).done(function (res2) {
 
+        var select = $('#newsletterTemplateId');
+        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'template',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
 
     /*function displayContents(contents) {
         var element = document.getElementById('file-content');
@@ -407,26 +427,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 
 
 
-        $.ajax({
-            method:'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'NewsletterTemplate',
-              //  selection: {id: textnewslettertemplate },
-            },
-            dataType: 'json'
-        }).done(function (res2) {
 
-            var select = $('#newsletterTemplateId');
-            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'template',
-                labelField: 'name',
-                searchField: 'name',
-                options: res2,
-            });
-
-        });
 
     });
 })(jQuery);
@@ -475,7 +476,15 @@ $(document).on('bs.newNewsletterUser.save', function () {
         } else {
             campaignDateFinishPost =  campaignDateFinishPost ;
         }
-        tinyMCE.triggerSave();
+        tinymce.activeEditor.save();
+       //var content=tinymce.get('preCompiledTemplate1').getContent({format : 'html'});
+        //var content = document.getElementById('preCompiledTemplate1').innerHTML;
+       // var content=$('#preCompiledTemplate1').val();
+
+          var content = $('#preCompiledTemplate1').val();
+
+
+
         const data = {
             newsletterId: $('#newsletterId').val(),
             name: $('#name').val(),
@@ -485,7 +494,7 @@ $(document).on('bs.newNewsletterUser.save', function () {
             newsletterTemplateId:$('#newsletterTemplateId').val(),
             subject : $('#subject').val(),
             dataDescription : $('#dataDescription').val(),
-            preCompiledTemplate : $('#preCompiledTemplate1').val(),
+            preCompiledTemplate : content,
             campaignId : campaignIdPost,
             newsletterEventId: campaignEventIdPost,
             dateCampaignStart:campaignDateStartPost,
@@ -565,6 +574,7 @@ $(document).on('bs.newNewsletterUser.sendTest', function () {
         } else {
             campaignDateFinishPost =  campaignDateFinishPost ;
         }
+        tinymce.activeEditor.save();
         const data = {
             typeOperation:typeOperation,
             name: $('#name').val(),
@@ -574,7 +584,8 @@ $(document).on('bs.newNewsletterUser.sendTest', function () {
             newsletterTemplateId:$('#newsletterTemplateId').val(),
             subject : $('#subject').val(),
             dataDescription : $('#dataDescription').val(),
-            preCompiledTemplate :  $('#preCompiledTemplate1').val(),
+            //preCompiledTemplate :  $('#preCompiledTemplate1').val(),
+            preCompiledTemplate : tinyMCE.activeEditor.getContent({format : 'raw'}),
             //preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
             campaignName : campaignNamePost,
             campaignId : campaignIdPost,

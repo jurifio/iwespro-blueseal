@@ -1,6 +1,7 @@
 /* newsletteruser_add.js */
 tinymce.init({
     selector: "textarea",
+    entity_encoding : "raw",
     height: 450,
     plugins: [
         "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak",
@@ -342,7 +343,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         $('#preCompiledTemplate1').code('');*/
         var content1 = $(this).val();
         //CKEDITOR.instances.preCompiledTemplate1.setData(content1);
-     //   $('#preCompiledTemplate1').summernote('editor.pasteHTML', content1);
+      // $('#preCompiledTemplate1').summernote('editor.pasteHTML', content1);
         //var contentLessOccurence = content.indexOf('-');
         //  var contentPreview = content.substring(5);
         // $("#file-content").append(content);

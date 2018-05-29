@@ -1,4 +1,5 @@
 tinymce.init({
+    entity_encoding : "raw",
     selector: "textarea",
     height: 450,
     plugins: [

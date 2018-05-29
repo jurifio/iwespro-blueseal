@@ -4,7 +4,7 @@
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables', 'charts'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
-  <!-- <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
+    <!-- <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
     <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=z3tiwzxrspg36g21tiusdfsqt9f27isw6547l88aw19e0qej"></script>
 </head>
 <body class="fixed-header">
@@ -56,8 +56,8 @@
                                                     <select id="campaignName" name="campaignName"  class="full-width selectpicker"
                                                             placeholder="Seleziona la Lista"
                                                             data-init-plugin="selectize">
-                                                            <option value="<?php echo $newsletterCampaign->id;?>"><?php echo $newsletterCampaign->name;?>
-                                                            </option>
+                                                        <option value="<?php echo $newsletterCampaign->id;?>"><?php echo $newsletterCampaign->name;?>
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -72,10 +72,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group form-group-default selectize-enabled">
-                                                            <label for="dateCampaignFinish">Data Fine Campagna:<?php echo $newsletterCampaign->dateCampaignFinish;?></label>
-                                                            <input type="datetime" name="dateCampaignFinish" value="<?php echo $newsletterCampaign->dateCampaignFinish;?>"/>
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="dateCampaignFinish">Data Fine Campagna:<?php echo $newsletterCampaign->dateCampaignFinish;?></label>
+                                                    <input type="datetime" name="dateCampaignFinish" value="<?php echo $newsletterCampaign->dateCampaignFinish;?>"/>
 
                                                 </div>
                                             </div>
@@ -160,22 +160,22 @@
                                         <input type ="hidden" name="newsletterEmailListId"
                                                id="newsletterEmailListId"
                                                value="<?php echo $newsletterEmailList->id;?>"/>
-                                    <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-12">
 
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterEmailListIdPrev">Seleziona la lista dei destinatari</label>
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="newsletterEmailListIdPrev">Seleziona la lista dei destinatari</label>
 
-                                                <select id="newsletterEmailListIdPrev" name="newsletterEmailListIdPrev"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Seleziona la Lista"
-                                                        data-init-plugin="selectize">
+                                                    <select id="newsletterEmailListIdPrev" name="newsletterEmailListIdPrev"
+                                                            class="full-width selectpicker"
+                                                            placeholder="Seleziona la Lista"
+                                                            data-init-plugin="selectize">
                                                         <option value="<?php echo $newsletterEmailList->id;?>"><?php echo $newsletterEmailList->name;?></option>
                                                         <option value="new">Seleziona un altro Gruppo</option>
-                                                </select>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -200,9 +200,9 @@
                                             </div>                                            <p>
                                         </div>
                                     </div>
-                                        <div id="inputNewsletterTemplateId">
+                                    <div id="inputNewsletterTemplateId">
 
-                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -214,9 +214,9 @@
                                     <div class="col-md-12">
                                         <div align="center"
 
-                                            <label for="preCompiledTemplate1">Template Utilizzato</label>
+                                        <label for="preCompiledTemplate1">Template Utilizzato</label>
 
-                                            <textarea id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="1000" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
+                                        <textarea id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="1000" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -235,15 +235,15 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione Newsletter">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="AllShops"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-event="bs.newNewsletterUser.save"
-            data-title="Salva la  Newsletter"
-            data-placement="bottom"
-            data-href="#"
+                data-tag="a"
+                data-icon="fa-file-o fa-plus"
+                data-permission="AllShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.newNewsletterUser.save"
+                data-title="Salva la  Newsletter"
+                data-placement="bottom"
+                data-href="#"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"

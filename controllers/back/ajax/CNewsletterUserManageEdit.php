@@ -47,7 +47,7 @@ class CNewsletterUserManageEdit extends AAjaxController
      //   $newsletterTemplateId = $data['newsletterTemplateId'];
         $subject = $data['subject'];
         $newsletterdataDescription = $data['dataDescription'];
-        $preCompiledTemplate = $data['preCompiledTemplate'];
+        $preCompiledTemplate =  $data["preCompiledTemplate"];
         $campaignId = $data['campaignId'];
         $newsletterEventId = $data['newsletterEventId'];
         $dateCampaignStart = $data['dateCampaignStart'];
