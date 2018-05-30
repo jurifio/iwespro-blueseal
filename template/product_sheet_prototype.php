@@ -76,7 +76,7 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.disable.product.sheet"
-                data-title="Elimina scheda"
+                data-title="Nascondi scheda"
                 data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
