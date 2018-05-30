@@ -4,6 +4,10 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\domain\entities\CProductSheetModelPrototype;
+use bamboo\domain\entities\CProductSheetModelPrototypeCategoryGroup;
+use bamboo\domain\entities\CProductSheetModelPrototypeGender;
+use bamboo\domain\entities\CProductSheetModelPrototypeMaterial;
 use bamboo\domain\entities\CProductSheetPrototype;
 
 
@@ -89,6 +93,99 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
 
        return true;
     }
+
+    /**
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function delete(){
+
+        $gS = \Monkey::app()->router->request()->getRequestData('gender');
+        $cS = \Monkey::app()->router->request()->getRequestData('cat');
+        $mS = \Monkey::app()->router->request()->getRequestData('material');
+
+        /** @var CRepo $psmpR */
+        $psmpR = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype');
+
+        $psmpAss = [];
+
+        if($gS){
+            /** @var CRepo $psmpGRepo */
+            $psmpGRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeGender');
+            foreach ($gS as $g){
+                /** @var CObjectCollection $psmpGC */
+                $psmpGC = $psmpR->findBy(['genderId'=>$g]);
+
+                /** @var CProductSheetModelPrototypeGender $psmpGDel */
+                $psmpGDel = $psmpGRepo->findOneBy(['id'=>$g]);
+
+                if($psmpGC->isEmpty()) {
+                    $psmpAss[] = $psmpGDel->name.' | Eliminata';
+                    $psmpGDel->delete();
+                    continue;
+                }
+
+                /** @var CProductSheetModelPrototype $psmpG */
+                foreach ($psmpGC as $psmpG){
+                    $psmpAss[] = $psmpG->id.' - '.$psmpGDel->name.' | Genere';
+                }
+            }
+
+        }
+
+
+        if($cS){
+            /** @var CRepo $psmpCRepo */
+            $psmpCRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeHasProductCategory');
+            foreach ($cS as $c){
+                /** @var CObjectCollection $psmpCC */
+                $psmpCC = $psmpR->findBy(['categoryGroupId'=>$c]);
+
+                /** @var CProductSheetModelPrototypeCategoryGroup $psmpCDel */
+                $psmpCDel = $psmpCRepo->findOneBy(['id'=>$c]);
+
+                if($psmpCC->isEmpty()) {
+                    $psmpAss[] = $psmpCDel->name.' | Eliminata';
+                    $psmpCDel->delete();
+                    continue;
+                }
+
+                /** @var CProductSheetModelPrototype $psmpC */
+                foreach ($psmpCC as $psmpC){
+                    $psmpAss[] = $psmpC->id.' - '.$psmpCDel->name.' | Categoria';
+                }
+            }
+        }
+
+
+        if($mS){
+            /** @var CRepo $psmpMRepo */
+            $psmpMRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMaterial');
+            foreach ($mS as $m){
+                /** @var CObjectCollection $psmpMC */
+                $psmpMC = $psmpR->findBy(['materialId'=>$m]);
+
+                /** @var CProductSheetModelPrototypeMaterial $psmpMDel */
+                $psmpMDel = $psmpMRepo->findOneBy(['id'=>$m]);
+
+                if($psmpMC->isEmpty()) {
+                    $psmpAss[] = $psmpMDel->name.' | Eliminata';
+                    $psmpMDel->delete();
+                    continue;
+                }
+
+                /** @var CProductSheetModelPrototype $psmpM */
+                foreach ($psmpMC as $psmpM){
+                    $psmpAss[] = $psmpM->id.' - '.$psmpMDel->name.' | Materiale';
+                }
+            }
+        }
+
+        return json_encode($psmpAss);
+
+    }
+
 
     public function put(){
 
