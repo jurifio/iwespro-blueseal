@@ -41,6 +41,9 @@
                                 <th data-slug="namePr"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Dettagli | Priorità</th>
+                                <th data-slug="vis"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Visibile</th>
                             </thead>
                             <tbody>
                             </tbody>
@@ -55,7 +58,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Aggiungi nuova tipo scheda prodotto">
+    <bs-toolbar-group data-group-label="Operazioni sulle schede prodotto">
         <!-- <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-pencil-square-o"
@@ -66,6 +69,16 @@
                 data-title="Copia scheda"
                 data-placement="bottom"
         ></bs-toolbar-button> -->
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-close"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.disable.product.sheet"
+                data-title="Elimina scheda"
+                data-placement="bottom"
+        ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.insert.new.product.sheet.prototype"
         ></bs-toolbar-button>

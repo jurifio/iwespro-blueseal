@@ -42,7 +42,11 @@ class CProductSheetPrototypeListAjaxController extends AAjaxController
         $sql = "
             SELECT psp.id,
               psp.name,
-              group_concat(concat(pdlt.name,' Pr: ',pdl.order)) as namePr
+              group_concat(concat(pdlt.name,' Pr: ',pdl.order)) as namePr,
+              CASE
+                 WHEN psp.isVisible = 0 THEN 'no'
+                 ELSE 'si'
+               END as vis 
             FROM ProductSheetPrototype psp
             JOIN ProductSheetPrototypeHasProductDetailLabel psphpdl ON psp.id = psphpdl.productSheetPrototypeId
             JOIN ProductDetailLabel pdl ON psphpdl.productDetailLabelId = pdl.id
@@ -87,6 +91,7 @@ class CProductSheetPrototypeListAjaxController extends AAjaxController
             }
 
             $row['namePr'] = $vals;
+            $row['vis'] = ($psp->isVisible == 0 ? 'no' : 'si');
 
             $datatable->setResponseDataSetRow($key,$row);
         }

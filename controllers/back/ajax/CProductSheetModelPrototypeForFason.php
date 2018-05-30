@@ -92,15 +92,15 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
 
     public function put(){
 
-
+/*
         $id = \Monkey::app()->router->request()->getRequestData('idCopy');
 
-        /** @var CRepo $psp */
+
         $psp = \Monkey::app()->repoFactory->create('ProductSheetPrototype');
 
-        /** @var CObjectCollection $pspDetail */
-        $pspDetail = $psp->productDetailLabel;
 
+        $pspDetail = $psp->productDetailLabel;
+*/
 
 
     }
