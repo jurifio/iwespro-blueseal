@@ -42,7 +42,7 @@ window.buttonSetup = {
                        $.each(v, function (k1, v1) {
                            err += `${k1} | `;
                        });
-                       ris += `Pr: ${k} - Ris: ${err} <br>`;
+                       ris += `<strong>Pr: ${k} - Ris: ${err}</strong> <br>`;
 
                    } else {
                        ris += `Pr: ${k} - Ris: ${v} <br>`;

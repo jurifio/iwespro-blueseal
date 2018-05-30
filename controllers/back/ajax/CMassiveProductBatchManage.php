@@ -98,8 +98,6 @@ class CMassiveProductBatchManage extends AAjaxController
 
         if(is_null($product->productCardPhoto)) $notAvaiable['Scheda_prodotto'] = 1;
 
-        return 'ok';
-
        if(empty($notAvaiable)) return 'ok';
 
        return $notAvaiable;
