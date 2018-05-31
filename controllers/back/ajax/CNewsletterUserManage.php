@@ -132,6 +132,15 @@ class CNewsletterUserManage extends AAjaxController
                 // eseguo la commit sulla tabella;
 
                 $newsletterUserInsert->smartInsert();
+                /** var CRepo $newsletterUserRepo */
+                $newsletterUserRepo = \Monkey::app()->repoFactory->create('Newsletter');
+                /** var CNewsletterUserUpdate $newsletterUserUpdate **/
+                $newsletterUserUpdate = $newsletterUserRepo->findOneBy(['name' => $name]);
+
+                $newsletterUserId=$newsletterUserUpdate->id;
+                $newsletterUserUpdate->newsletterCloneId = $newsletterUserId;
+                $newsletterUserUpdate->update();
+                //popolo la tabella
 
                 $res = "Newsletter inserita con successo!";
 

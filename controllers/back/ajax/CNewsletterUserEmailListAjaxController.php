@@ -11,9 +11,11 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CNewsletter;
+use bamboo\domain\entities\CNewsletterEmailList;
 use bamboo\domain\entities\CNewsletterUser;
 use bamboo\domain\repositories\CNewsletterRepo;
 use bamboo\domain\repositories\CNewsletterUserRepo;
+use bamboo\core\base\CObjectCollection;
 
 class CNewsletterUserEmailListAjaxController extends AAjaxController
 {
@@ -49,6 +51,20 @@ left outer join UserDetails ud ON n.userId=ud.userId";
             /** @var CNewsletter $newsletter */
             $newsletter = $newsletterRepo->findOneBy(['id' => $row["id"] ]);
             $verified=$newsletter->isActive;
+            $email=$newsletter->email;
+            /** @var CRepo $newsletterEmailList */
+            $newsletterEmailList=\Monkey::app()->repoFactory->create('NewsletterGroup');
+
+
+            /** @var CObjectCollection $newslettersql */
+            $newslettersql = $newsletterEmailList->findAll();
+            foreach ($newslettersql as $value){
+
+
+                    $row['List']=$value->name;
+
+
+            }
             if ($verified=="1") {
 
                 $row['isActive'] = "Attivo";

@@ -66,6 +66,12 @@
                                     data-orderable="true"
                                     class="center">Attivo
                                 </th>
+                                <th data-slug="List"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Liste di Distribuzione
+                                </th>
+
 
 
                             </tr>

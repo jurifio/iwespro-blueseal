@@ -23,12 +23,13 @@ class CNewsletterEmailListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "SELECT u.id, u.name AS newsletterSegmentName, G.name AS newsletterGroupName, u.sql, u.code  FROM NewsletterEmailList u INNER JOIN NewsletterGroup G ON u.newsletterGroupId = G.id";
+        $sql = "SELECT u.id, u.name AS newsletterSegmentName, G.name AS newsletterGroupName, u.criterium, u.code  FROM NewsletterEmailList u INNER JOIN NewsletterGroup G ON u.newsletterGroupId = G.id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings('true');
 
         foreach ($datatable->getResponseSetData() as $key => $row) {
+
 
         }
 

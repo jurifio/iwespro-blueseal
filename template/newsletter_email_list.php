@@ -51,10 +51,10 @@
                                     data-orderable="true"
                                     class="center">Lista Di Distribuzione Associata
                                 </th>
-                                <th data-slug="sql"
+                                <th data-slug="criterium"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">sql
+                                    class="center">Criteri
                                 </th>
 
                             </tr>
