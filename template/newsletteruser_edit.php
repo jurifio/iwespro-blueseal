@@ -257,7 +257,7 @@
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>
+</html>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
-</html>

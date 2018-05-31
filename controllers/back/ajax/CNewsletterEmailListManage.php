@@ -50,6 +50,7 @@ class CNewsletterEmailListManage extends AAjaxController
         $code = $data['code'];
         $sql  = $data['sql'];
         $newsletterGroupId = $data['newsletterGroupId'];
+        $criterium =$data['criterium'];
         if( empty($sql)){
             $sql="vuoto";
         }
@@ -77,6 +78,7 @@ class CNewsletterEmailListManage extends AAjaxController
                 $newsletterEmailListInsert->name = $name;
                 $newsletterEmailListInsert->code = $code;
                 $newsletterEmailListInsert->sql = $sql;
+                $newsletterEmailListInsert->criterium = $criterium;
                 $newsletterEmailListInsert->newsletterGroupId = $newsletterGroupId;
 
                 // eseguo la commit sulla tabella;

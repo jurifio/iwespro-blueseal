@@ -134,6 +134,16 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="filterQuery">Criteri utilizzati</label>
+                                                    <textarea class="form-control" name="filterQuery1" id="filterQuery1"
+                                                              value=""></textarea>
+
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </div>
 

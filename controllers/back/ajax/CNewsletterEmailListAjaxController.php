@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -22,12 +23,12 @@ class CNewsletterEmailListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "select u.id, u.name as newsletterSegmentName, G.name as newsletterGroupName, u.sql, u.code  from NewsletterEmailList u inner JOIN NewsletterGroup G ON u.newsletterGroupId = G.id";
+        $sql = "SELECT u.id, u.name AS newsletterSegmentName, G.name AS newsletterGroupName, u.sql, u.code  FROM NewsletterEmailList u INNER JOIN NewsletterGroup G ON u.newsletterGroupId = G.id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings('true');
 
-        foreach ($datatable->getResponseSetData() as $key=>$row) {
+        foreach ($datatable->getResponseSetData() as $key => $row) {
 
         }
 
