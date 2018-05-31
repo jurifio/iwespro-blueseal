@@ -3,6 +3,7 @@
 namespace bamboo\controllers\back\ajax;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductBatch;
+use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\repositories\CProductBatchDetailsRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
 
@@ -101,5 +102,33 @@ class CMassiveProductBatchManage extends AAjaxController
        if(empty($notAvaiable)) return 'ok';
 
        return $notAvaiable;
+    }
+
+
+    /**
+     * @return string
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function put(){
+
+        $posProds = \Monkey::app()->router->request()->getRequestData('posProds');
+        $note = \Monkey::app()->router->request()->getRequestData('note');
+
+        if(empty($note)) return 'Inserisci il testo della nota';
+
+        /** @var CProductBatchDetailsRepo $pbdRepo */
+        $pbdRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
+
+        foreach ($posProds as $posProd) {
+
+            /** @var CProductBatchDetails $pbd */
+            $pbd = $pbdRepo->findOneBy(['id'=>$posProd]);
+            $pbd->note = $note;
+            $pbd->update();
+        }
+
+        return 'Note inserite con successo';
     }
 }

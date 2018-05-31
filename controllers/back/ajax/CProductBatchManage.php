@@ -136,7 +136,12 @@ class CProductBatchManage extends AAjaxController
         /** @var CProductBatchRepo $pbRepo */
         $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
+
         foreach ($ids as $id) {
+            /** @var CProductBatch $pb */
+            $pb = $pbRepo->findOneBy(['id' => $id]);
+            if(!$pb->isComplete()) return 'Impossibile chiudere il lotto, il fason non ha normalizzato tutti i prodotti';
+
             $pbRepo->closeProductBatch($id);
         }
 

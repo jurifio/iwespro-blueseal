@@ -979,7 +979,8 @@
         bsModal.setOkEvent(function () {
             const data = {
                 prod: selectedProductBatchDetailIds,
-                cat: $('#categories').val()
+                cat: $('#categories').val(),
+                pb: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
             };
             $.ajax({
                 method: 'put',

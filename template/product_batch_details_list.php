@@ -72,6 +72,9 @@
                                 <th data-slug="productCard"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Foto per normalizzazione</th>
+                                <th data-slug="note"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Note</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -188,6 +191,11 @@
     <bs-toolbar-group data-group-label="Elimina prodotti">
         <bs-toolbar-button
                 data-remote="bs.delete.product.from.batch"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Inserisci nota">
+        <bs-toolbar-button
+                data-remote="bs.note.product.batch"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

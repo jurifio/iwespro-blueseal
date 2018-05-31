@@ -26,4 +26,18 @@ class CProductBatch extends AEntity
 {
     protected $entityTable = 'ProductBatch';
     protected $primaryKeys = ['id'];
+
+    public function isComplete(){
+
+        /** @var CObjectCollection $pBdetails */
+        $pBdetails = $this->productBatchDetails;
+
+        /** @var CProductBatchDetails $pBdetail */
+        foreach ($pBdetails as $pBdetail){
+            if(!is_null($pBdetail->workCategorySteps->rgt)) return false;
+        }
+
+        return true;
+
+    }
 }

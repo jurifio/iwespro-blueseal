@@ -23,6 +23,9 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  */
 class CProductBatchDetails extends AEntity
 {
+
+    const UNFIT_NORM = 3;
+
     protected $entityTable = 'ProductBatchDetails';
     protected $primaryKeys = ['id'];
 }
