@@ -81,8 +81,10 @@ class CMessageManage extends AAjaxController
 
         $url = $this->app->baseUrl(false) . "/blueseal/message/".$message->id;
 
-        $body = "Nuovo messaggio con priorità $prName all'interno di Pickyshop, si prega di controllare.<br>Link messaggio: 
-                <a href='$url' target='_blank'>Vai al messaggio</a>";
+        $body = "Un nuovo messaggio con priorità $prName è stato postato all'interno della tua area
+                 riservata, accedi con il seguente link per visualizzarne il contenuto.<br>Link messaggio: 
+                <a href='$url' target='_blank'>Vai al messaggio</a><br><br>
+                Iwes Operator Team";
         /** @var CFoison $foison */
         foreach ($foisons as $foison){
             $mail->newMail('gianluca@iwes.it', [$foison->email], [],[], 'Nuovo messaggio da Pickyshop', $body);
@@ -128,8 +130,10 @@ class CMessageManage extends AAjaxController
 
         $url = $this->app->baseUrl(false) . "/blueseal/message/".$message->id;
 
-        $body = "Il messaggio n. $mesId è stato modificato all'interno di Pickyshop, si prega di controllare<br>Link messaggio: 
-                <a href='$url' target='_blank'>Vai al messaggio</a> ";
+        $body = "Il messaggio postato nella tua area riservata è stato modificato, 
+                accedi con il seguente link per visualizzarne il contenuto.<br>Link messaggio: 
+                <a href='$url' target='_blank'>Vai al messaggio</a><br><br>
+                Iwes Operator Team";
         $title = "Il messaggio n. $mesId è stato modificato";
         /** @var CFoison $foison */
         foreach ($foisons as $foison){
