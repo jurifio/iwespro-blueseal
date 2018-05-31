@@ -1,0 +1,16 @@
+{
+    "entity": {
+        "name": "Message",
+        "keys": ["id","foisonId","messageId"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "messageHasUser",
+                "entity" : "MessageHasUser",
+                "parentKeys": ["id"],
+                "childKeys" : ["messageId"],
+                "type" : "OneToMany"
+            }
+        ]
+    }
+}
