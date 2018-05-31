@@ -188,9 +188,12 @@
                 data-remote="bs.product.details.new"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Aggiungi nuove categorie per fason">
+    <bs-toolbar-group data-group-label="Aggiungi/elimina categorie per fason">
         <bs-toolbar-button
                 data-remote="bs.details.research.fason"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.delete.category.research.fason"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Aggiungi nuova tipo scheda prodotto">
