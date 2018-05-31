@@ -24,7 +24,7 @@ class CNewsletterRedemptionListAjaxController extends AAjaxController
     {
         $sql = "  SELECT
                   e.id                                                                     AS emailId,
-                  n.id                                                                     AS newsletterId,
+                  n.newsletterCloneId                                                      AS newsletterId,
                   n.name                                                                   AS newsletterName,
                   count(DISTINCT er.emailAddressId)                                        AS emailAddressCount,
                   count(distinct er.emailStatusId=1)                                       AS emailPending,
@@ -44,7 +44,7 @@ class CNewsletterRedemptionListAjaxController extends AAjaxController
                 
                 
                 FROM Newsletter n
-                  JOIN Email e ON n.id = e.newsletterId
+                  JOIN Email e ON n.newsletterCloneId = e.newsletterId
                   JOIN EmailRecipient er ON e.id = er.emailId
                   GROUP BY n.id";
 
