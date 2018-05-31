@@ -72,6 +72,7 @@ class CNewsletterClone extends AAjaxController
         $newsletterUserInsert->newsletterCampaignId = $newsletterCloneNewsletterCampaignId;
         $newsletterUserInsert->CampaignId = $newsletterCloneCampaignId;
         $newsletterUserInsert->newsletterEventId = $newsletterCloneEventId;
+        $newsletterUserInsert->newsletterCloneId=$value;
         // eseguo la commit sulla tabella;
 
         $newsletterUserInsert->smartInsert();

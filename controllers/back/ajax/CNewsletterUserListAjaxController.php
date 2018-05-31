@@ -21,6 +21,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
     {
         $sql = "SELECT 
                  n.id, 
+                 n.newsletterCloneId as newsletterCloneId,
                  n.name,
                  E.address as fromEmailAddressId, 
                  n.sendAddressDate,  
@@ -34,7 +35,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
                 left outer join   Email o ON n.id=o.newsletterId
                 inner join NewsletterEmailList L ON n.newsletterEmailListId = L.id 
                 inner join NewsletterCampaign C ON n.newsletterCampaignId = C.id 
-                INNER join NewsletterTemplate T ON n.newsletterTemplateId = T.id group by id";
+                INNER join NewsletterTemplate T ON n.newsletterTemplateId = T.id  order by newsletterCloneId ASC ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
@@ -58,6 +59,11 @@ class CNewsletterUserListAjaxController extends AAjaxController
 
                 $row['id'] = '<a href="' . $opera . $newsletter->id . '">' . $newsletter->id . '</a>';
 
+            }
+            if ($newsletter->id == $newsletter->newsletterCloneId){
+                $row['newsletterCloneId']="Newsletter Genitore";
+            }else{
+                $row['newsletterCloneId']="Newsletter figlia di :".$newsletter->newsletterCloneId;
             }
             $datatable->setResponseDataSetRow($key,$row);
         }

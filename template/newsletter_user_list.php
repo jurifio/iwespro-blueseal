@@ -44,6 +44,11 @@
                                     data-orderable="true"
                                     class="center">Id
                                 </th>
+                                <th data-slug="newsletterCloneId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Derivata da
+                                </th>
                                 <th data-slug="name"
                                          data-searchable="true"
                                          data-orderable="true"
