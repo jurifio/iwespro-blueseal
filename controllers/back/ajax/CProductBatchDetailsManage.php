@@ -124,7 +124,9 @@ class CProductBatchDetailsManage extends AAjaxController
     public function put(){
         $ids = \Monkey::app()->router->request()->getRequestData('prod');
         $catId = \Monkey::app()->router->request()->getRequestData('cat');
+        $pb = \Monkey::app()->router->request()->getRequestData('pb');
 
+        $unfitPr = '';
         foreach ($ids as $id){
 
             /** @var CProductBatchDetails $pd */
@@ -132,7 +134,26 @@ class CProductBatchDetailsManage extends AAjaxController
 
             $pd->workCategoryStepsId = $catId;
             $pd->update();
+
+            if($catId == CProductBatchDetails::UNFIT_NORM){
+                $unfitPr .= 'id: '.$pd->id.' | '.$pd->productId.'-'.$pd->productVariantId.'<br>';
+            }
+
         }
+
+        if($catId == CProductBatchDetails::UNFIT_NORM){
+            /** @var CEmailRepo $mail */
+            $mail = \Monkey::app()->repoFactory->create('Email');
+
+            /** @var CProductBatch $pbatch */
+            $pbatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$pb]);
+
+            $fasonEmail = $pbatch->contractDetails->contracts->foison->email;
+            $body = "I seguenti prodotti non sono stati normalizzati correttamente:<br> $unfitPr Si prega di controllare le note";
+
+            $mail->newMail('gianluca@iwes.it', [$fasonEmail], [], [], 'Prodotti non idonei', $body);
+        }
+
 
         return 'Stati aggiornati con successo';
     }

@@ -44,7 +44,8 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
                   concat(pbd.productId,'-',pbd.productVariantId) as productCode,
                   pbd.productId,
                   pbd.productVariantId,
-                  wcs.name as stepName
+                  wcs.name as stepName,
+                  pbd.note
             FROM ProductBatchDetails pbd
             LEFT JOIN WorkCategorySteps wcs ON pbd.workCategoryStepsId = wcs.id
             WHERE pbd.productBatchId = $productBatchId
@@ -89,6 +90,8 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
             $row['categoryId'] = '<span class="small">' . $product->getLocalizedProductCategories(" ", "<br>") . '</span>';
             $row['productCard'] = (!$product->getProductCardUrl() ? '-' :'<a href="#1" class="enlarge-your-img"><img width="50" src="' . $product->getProductCardUrl() . '" /></a>');
             $row['row_pCardUrl'] = (!$product->getProductCardUrl() ? '-' : $product->getProductCardUrl());
+            $row['note'] = $pbr->note;
+
             $datatable->setResponseDataSetRow($key,$row);
         }
 
