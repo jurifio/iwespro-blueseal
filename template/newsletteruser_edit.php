@@ -216,7 +216,8 @@
 
                                         <label for="preCompiledTemplate1">Template Utilizzato</label>
 
-                                        <textarea id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="1000" value="<?php echo $newsletter->preCompiledTemplate;?>"></textarea>
+                                        <textarea id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content"><?php echo $newsletter->preCompiledTemplate;?>
+                                        </textarea>
                                     </div>
                                 </div>
                             </div>
@@ -256,7 +257,7 @@
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>
+</html>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
-</html>
