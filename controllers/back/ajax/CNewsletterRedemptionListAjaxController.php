@@ -24,7 +24,8 @@ class CNewsletterRedemptionListAjaxController extends AAjaxController
     {
         $sql = "  SELECT
                   e.id                                                                     AS emailId,
-                  n.newsletterCloneId                                                      AS newsletterId,
+                  n.id                                                                     AS newsletterId,
+                  n.newsletterCloneId                                                      AS newsletterCloneId,
                   n.name                                                                   AS newsletterName,
                   count(DISTINCT er.emailAddressId)                                        AS emailAddressCount,
                   count(distinct er.emailStatusId=1)                                       AS emailPending,
@@ -44,9 +45,9 @@ class CNewsletterRedemptionListAjaxController extends AAjaxController
                 
                 
                 FROM Newsletter n
-                  JOIN Email e ON n.newsletterCloneId = e.newsletterId
+                  JOIN Email e ON n.id = e.newsletterId
                   JOIN EmailRecipient er ON e.id = er.emailId
-                  GROUP BY n.id";
+                  order  BY n.newsletterCloneId";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -59,6 +60,7 @@ class CNewsletterRedemptionListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             $row["newsletterId"] = '<a href="'. $url.$row["newsletterId"] . '" target="_blank">' . $row["newsletterId"] . '</a>';
+            $row["newsletterCloneId"]="Derivata da Newsletter :".$row['newsletterCloneId'];
 
             $row["sendingTime"] = $row["sendingTime"].'s';
             $row["openTimeSinceSent"] = $row["openTimeSinceSent"].'s';
