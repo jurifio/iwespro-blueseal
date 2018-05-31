@@ -49,12 +49,12 @@ class CNewsletterUserListAjaxController extends AAjaxController
         $opera = $blueseal . "newsletter/modifica?newsletter=";
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
-
+            if ($row['submissionDate']==""){
             /** @var CNewsletter $newsletter */
             $newsletter = $newsletterRepo->findOneBy(['id' => $row["id"] ]);
-            if (row['submissionDate']!=""){
+
                 $row['id']=$newsletter->id;
-            }else {
+
 
                 $row['id'] = '<a href="' . $opera . $newsletter->id . '">' . $newsletter->id . '</a>';
 
