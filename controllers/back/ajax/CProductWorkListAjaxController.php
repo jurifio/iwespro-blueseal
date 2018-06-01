@@ -124,7 +124,7 @@ class CProductWorkListAjaxController extends AAjaxController
 
             /** @var CProductDescriptionTranslation $descT */
             $descT = $product->productDescriptionTranslation->findOneByKeys(['marketplaceId'=>1, 'langId'=>1]);
-            $row['pDescTranslate'] = (is_null($descT ) ? '-' : $descT->description);
+            $row['pDescTranslate'] = $descT->description;
 
             $datatable->setResponseDataSetRow($key,$row);
         }
