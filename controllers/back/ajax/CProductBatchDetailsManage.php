@@ -57,7 +57,27 @@ class CProductBatchDetailsManage extends AAjaxController
         $pbDRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
 
         foreach ($ids as $id){
+
+            /** @var CProductBatchDetails $pbd */
+            $pbd = $pbDRepo->findOneBy(['id'=>$id]);
+
+            $catToChange = $pbd->workCategoryStepsId;
+
             $pbDRepo->goToNextStep($id);
+
+
+            if($catToChange == CProductBatchDetails::UNFIT_NORM){
+
+
+                /** @var CProductBatch $pb */
+                $pb = $pbd->productBatch;
+
+                if($pb->isValid() == 'ok'){
+                    $pb->isFixed = 1;
+                    $pb->unfitDate = date('Y-m-d H:i:s');
+                    $pb->update();
+                }
+            }
         }
 
         $res = "Procedura di aggiornamento fase di lavoro completata con successo";
@@ -126,7 +146,6 @@ class CProductBatchDetailsManage extends AAjaxController
         $catId = \Monkey::app()->router->request()->getRequestData('cat');
         $pb = \Monkey::app()->router->request()->getRequestData('pb');
 
-        $unfitPr = '';
         foreach ($ids as $id){
 
             /** @var CProductBatchDetails $pd */
@@ -135,24 +154,15 @@ class CProductBatchDetailsManage extends AAjaxController
             $pd->workCategoryStepsId = $catId;
             $pd->update();
 
+
+            /** @var CProductBatch $pb */
+            $pba = $pd->productBatch;
             if($catId == CProductBatchDetails::UNFIT_NORM){
-                $unfitPr .= 'id: '.$pd->id.' | '.$pd->productId.'-'.$pd->productVariantId.'<br>';
+                $pba->isFixed = 0;
+                $pba->update();
             }
-
         }
 
-        if($catId == CProductBatchDetails::UNFIT_NORM){
-            /** @var CEmailRepo $mail */
-            $mail = \Monkey::app()->repoFactory->create('Email');
-
-            /** @var CProductBatch $pbatch */
-            $pbatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$pb]);
-
-            $fasonEmail = $pbatch->contractDetails->contracts->foison->email;
-            $body = "I seguenti prodotti non sono stati normalizzati correttamente:<br> $unfitPr Si prega di controllare le note";
-
-            $mail->newMail('gianluca@iwes.it', [$fasonEmail], [], [], 'Prodotti non idonei', $body);
-        }
 
 
         return 'Stati aggiornati con successo';

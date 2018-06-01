@@ -47,6 +47,7 @@ class CProductBatchListAjaxController extends AAjaxController
                   pb.scheduledDelivery,
                   pb.confirmationDate,
                   pb.closingDate,
+                  pb.unfitDate,
                   pb.value,
                   pb.paid,
                   pb.sectional,
@@ -81,6 +82,13 @@ class CProductBatchListAjaxController extends AAjaxController
 
             /** @var CProductBatch $pbr */
             $pbr = $pbrRepo->findOneBy(['id'=>$row["id"]]);
+
+            if($pbr->unfitDate != 0 && $pbr->closingDate == 0 && $pbr->isFixed == 0){
+                $row["DT_RowClass"] = "red";
+            } else if($pbr->unfitDate != 0 && $pbr->closingDate == 0 && $pbr->isFixed == 1){
+                $row["DT_RowClass"] = "green";
+            }
+
             $row["row_id"] = $pbr->id;
 
             $row["id"] = (((is_null($pbr->confirmationDate) && !$allShop) || (is_null($pbr->contractDetailsId))) ? $pbr->id :'<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>');
@@ -98,6 +106,7 @@ class CProductBatchListAjaxController extends AAjaxController
             $row["scheduledDelivery"] = $pbr->scheduledDelivery;
             $row["confirmationDate"] = ($pbr->confirmationDate == 0 ? "-" : $pbr->confirmationDate);
             $row["closingDate"] = ($pbr->closingDate == 0 ? "-" : $pbr->closingDate);
+            $row["unfitDate"] = ($pbr->unfitDate== 0 ? "-" : $pbr->unfitDate);
             $row["value"] = $pbr->value;
             $row["paid"] = ($pbr->paid == 1 ? "yes" : "no");
             $row["sectional"] = $pbr->sectional;

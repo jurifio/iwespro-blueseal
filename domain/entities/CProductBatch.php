@@ -40,4 +40,25 @@ class CProductBatch extends AEntity
         return true;
 
     }
+
+    public function isValid(){
+        /** @var CObjectCollection $pBdetails */
+        $pBdetails = $this->productBatchDetails;
+
+        $unfitProduct = [];
+
+        /** @var CProductBatchDetails $pBdetail */
+        foreach ($pBdetails as $pBdetail){
+
+            if($pBdetail->workCategoryStepsId == CProductBatchDetails::UNFIT_NORM){
+                $unfitProduct[] = 'id: '.$pBdetail->id.
+                                  ' | Lotto: '.$pBdetail->productBatchId.
+                                  ' | Prodotto: '.$pBdetail->productId.'-'.$pBdetail->productVariantId;
+            }
+        }
+
+        if(empty($unfitProduct)) return 'ok';
+
+        return $unfitProduct;
+    }
 }

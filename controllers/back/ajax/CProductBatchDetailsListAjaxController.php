@@ -72,7 +72,19 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
             $row["id"] = $pbr->id;
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
             $row["productCode"] = $pbr->productId.'-'.$pbr->productVariantId;
-            $row["stepName"] = (is_null($pbr->workCategoryStepsId)? '-' : $pbr->workCategorySteps->name);
+
+            if(is_null($pbr->workCategoryStepsId)){
+                $stepName = '-';
+            } else if($pbr->workCategoryStepsId == CProductBatchDetails::UNFIT_NORM & $pbr->productBatch->unfitDate == 0){
+                $stepName = '<p style="color: red; font-weight: bold">'.$pbr->workCategorySteps->name.' IN VERIFICA, NON MODIFICARE!</p>';
+            } else if($pbr->workCategoryStepsId == CProductBatchDetails::UNFIT_NORM){
+                $stepName = '<p style="color: red; font-weight: bold">'.$pbr->workCategorySteps->name.' DA MODIFICARE</p>';
+            } else {
+                $stepName = $pbr->workCategorySteps->name;
+            }
+
+
+            $row["stepName"] = $stepName;
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
             $row['colorNameManufacturer'] = $product->productVariant->description;
             $row['season'] = '<span class="small">' . $product->productSeason->name . " " . $product->productSeason->year . '</span>';

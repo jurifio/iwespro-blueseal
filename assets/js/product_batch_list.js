@@ -477,4 +477,47 @@
     });
 
 
+    $(document).on('bs.unfit.batch', function () {
+
+        //Prendo tutti i lotti selezionati
+        let productsBatch = [];
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        $.each(selectedRows, function (k, v) {
+            productsBatch.push({
+                batch: v.row_id,
+                fason: v.foisonEmail
+            })
+        });
+
+        let bsModal = new $.bsModal('LOTTO NON IDONEO', {
+            body: '<p>Inviare la notifica al Fason per "lotto non idoneo"?</p>'
+        });
+
+
+        const data = {
+            pB: productsBatch
+        };
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/UnfitProductBatchManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
+
 })();

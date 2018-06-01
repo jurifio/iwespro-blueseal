@@ -53,6 +53,9 @@
                                 <th data-slug="closingDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data di chiusura</th>
+                                <th data-slug="unfitDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data di notifica non idoneità</th>
                                 <th data-slug="value"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Valore lotto</th>
@@ -114,6 +117,16 @@
                 data-rel="tooltip"
                 data-event="bs.end.product.batch"
                 data-title="Conferma termine lotto"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-stop"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.unfit.batch"
+                data-title="Notifica lotto non idoneo"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

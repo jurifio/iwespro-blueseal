@@ -94,7 +94,7 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
                 Gianluca Cartechini<br />
                 Iwes";
 
-            //$mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma creazione lotto', $body);
+            $mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma creazione lotto', $body);
 
 
             $res = "Lotto creato con sucecsso";
