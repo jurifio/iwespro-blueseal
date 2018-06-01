@@ -200,6 +200,9 @@
         <bs-toolbar-button
                 data-remote="bs.insert.new.product.sheet.prototype"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.modify.model.prototype.category.group"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

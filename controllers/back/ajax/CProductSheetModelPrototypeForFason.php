@@ -187,19 +187,22 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
     }
 
 
+    /**
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
     public function put(){
 
-/*
-        $id = \Monkey::app()->router->request()->getRequestData('idCopy');
+        $cat = \Monkey::app()->router->request()->getRequestData('cat');
+        $name = \Monkey::app()->router->request()->getRequestData('name');
 
+        /** @var CProductSheetModelPrototypeCategoryGroup $c */
+        $c = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findOneBy(['id'=>$cat]);
+        $c->name = $name;
+        $c->update();
 
-        $psp = \Monkey::app()->repoFactory->create('ProductSheetPrototype');
-
-
-        $pspDetail = $psp->productDetailLabel;
-*/
-
-
+        return 'Il nome della categoria è stato modificato con successo.';
     }
 
 }

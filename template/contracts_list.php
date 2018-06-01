@@ -84,6 +84,18 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Crea listino">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-id-card-o"
+                data-permission="/admin/content/add"
+                data-event="bs-contract-details-add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Crea accoppiata categoria/listino"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
     <?php endif; ?>
 </bs-toolbar>
 </body>
