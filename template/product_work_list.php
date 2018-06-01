@@ -71,6 +71,9 @@
                                 <th data-slug="hasDetails"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Ha Dett.</th>
+                                <th data-slug="pDescTranslate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Dettagli</th>
                             </tr>
                             </thead>
                             <tbody>
