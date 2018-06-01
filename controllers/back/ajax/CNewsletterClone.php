@@ -25,7 +25,6 @@ class CNewsletterClone extends AAjaxController
 {
 
 
-
     /**
      * @return mixed
      * @throws BambooException
@@ -33,30 +32,31 @@ class CNewsletterClone extends AAjaxController
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
 
-    public function put(){
-        $data  = $this->app->router->request()->getRequestData();
+    public function put()
+    {
+        $data = $this->app->router->request()->getRequestData();
         $id = $data["id"];
         $value = $id;
         $value = strstr($value, ">");
         $value = strstr($value, "</a>", true);
-        $value =trim(str_replace(">","",$value));
+        $value = trim(str_replace(">", "", $value));
         /** @var CRepo $newsletterUserRepo */
         $newsletterUserRepo = \Monkey::app()->repoFactory->create('Newsletter');
 
         /** @var CNewsletter $newsletter */
-        $newsletter = $newsletterUserRepo->findOneBy(['id'=>$value]);
-        $newsletterCloneName=$newsletter->name;
-        $newsletterCloneFromEmailAddressId=$newsletter->fromEmailAddressId;
-        $newsletterCloneSendAddressdate='2100-00-00 00:00:00';
-        $newsletterCloneNewsletterEmailListId=$newsletter->newsletterEmailListId;
-        $newsletterCloneNewsletterTemplateId=$newsletter->newsletterTemplateId;
-        $newsletterCloneSubject=$newsletter->subject;
-        $newsletterCloneDataDescription=$newsletter->dataDescription;
-        $newsletterClonePreCompiledTemplate=$newsletter->preCompiledTemplate;
-        $newsletterCloneNewsletterCampaignId=$newsletter->newsletterCampaignId;
-        $newsletterCloneCampaignId=$newsletter->campaignId;
-        $newsletterCloneEventId=$newsletter->newsletterEventId;
-        $newsletterCloneName="Copia di ".$newsletterCloneName;
+        $newsletter = $newsletterUserRepo->findOneBy(['id' => $value]);
+        $newsletterCloneName = $newsletter->name;
+        $newsletterCloneFromEmailAddressId = $newsletter->fromEmailAddressId;
+        $newsletterCloneSendAddressdate = '2100-00-00 00:00:00';
+        $newsletterCloneNewsletterEmailListId = $newsletter->newsletterEmailListId;
+        $newsletterCloneNewsletterTemplateId = $newsletter->newsletterTemplateId;
+        $newsletterCloneSubject = $newsletter->subject;
+        $newsletterCloneDataDescription = $newsletter->dataDescription;
+        $newsletterClonePreCompiledTemplate = $newsletter->preCompiledTemplate;
+        $newsletterCloneNewsletterCampaignId = $newsletter->newsletterCampaignId;
+        $newsletterCloneCampaignId = $newsletter->campaignId;
+        $newsletterCloneEventId = $newsletter->newsletterEventId;
+        $newsletterCloneName = "Copia di " . $newsletterCloneName;
         /** @var CNewsletterUser $newsletterUserInsert */
         $newsletterUserInsert = \Monkey::app()->repoFactory->create('Newsletter')->getEmptyEntity();
         //popolo la tabella
@@ -72,19 +72,16 @@ class CNewsletterClone extends AAjaxController
         $newsletterUserInsert->newsletterCampaignId = $newsletterCloneNewsletterCampaignId;
         $newsletterUserInsert->CampaignId = $newsletterCloneCampaignId;
         $newsletterUserInsert->newsletterEventId = $newsletterCloneEventId;
-        $newsletterUserInsert->newsletterCloneId=$value;
+        $newsletterUserInsert->newsletterCloneId = $value;
         // eseguo la commit sulla tabella;
 
         $newsletterUserInsert->smartInsert();
-
-
 
 
         $res = " Newsletter Duplicata";
         return $res;
 
     }
-
 
 
 }
