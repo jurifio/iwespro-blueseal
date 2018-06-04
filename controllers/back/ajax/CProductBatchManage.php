@@ -140,7 +140,7 @@ class CProductBatchManage extends AAjaxController
         foreach ($ids as $id) {
             /** @var CProductBatch $pb */
             $pb = $pbRepo->findOneBy(['id' => $id]);
-            if(!$pb->isComplete()) return 'Impossibile chiudere il lotto, il fason non ha normalizzato tutti i prodotti';
+            if(!$pb->isComplete()) return 'Impossibile chiudere il lotto, il fason non ha completato tutte le lavorazioni';
 
             $pbRepo->closeProductBatch($id);
         }

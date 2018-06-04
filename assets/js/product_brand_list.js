@@ -95,3 +95,55 @@ $(document).on('bs.brand.delete', function (e, element, button) {
         }
     });
 });
+
+
+$(document).on('bs.brand.modify.fason', function () {
+
+
+    let selectedProductBrand = [];
+    let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+    //id-variantId in array
+    $.each(selectedRows, function (k, v) {
+        selectedProductBrand.push(v.DT_RowId.split('__')[1]);
+    });
+
+    if(selectedProductBrand.length == 0){
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare almeno un prodotto"
+        }).open();
+        return false;
+    }
+
+
+
+    let bsModal = new $.bsModal('Associa brand a un lotto esistente', {
+        body: `<p>Inserisci il numero di lotto a cui aggiungere i Brand</p>
+                    <input type="number" min="0" id="pb">`
+    });
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        const data = {
+            batch: $('#pb').val(),
+            brand: selectedProductBrand
+        };
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/EmptyProductBrandBatchManage',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                $.refreshDataTable();
+                bsModal.hide();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+
+});

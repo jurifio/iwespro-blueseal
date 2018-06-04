@@ -75,7 +75,7 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
 
             if(is_null($pbr->workCategoryStepsId)){
                 $stepName = '-';
-            } else if($pbr->workCategoryStepsId == CProductBatchDetails::UNFIT_NORM & $pbr->productBatch->unfitDate == 0){
+            } else if($pbr->workCategoryStepsId == CProductBatchDetails::UNFIT_NORM && $pbr->productBatch->unfitDate == 0){
                 $stepName = '<p style="color: red; font-weight: bold">'.$pbr->workCategorySteps->name.' IN VERIFICA, NON MODIFICARE!</p>';
             } else if($pbr->workCategoryStepsId == CProductBatchDetails::UNFIT_NORM){
                 $stepName = '<p style="color: red; font-weight: bold">'.$pbr->workCategorySteps->name.' DA MODIFICARE</p>';

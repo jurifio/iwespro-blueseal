@@ -2,8 +2,29 @@
 
     $(document).on('bs.empty.product.batch', function () {
 
-        let bsModal = new $.bsModal('Chiudi lotto', {
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'WorkCategory'
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            var select = $('#workCat');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                options: res
+            });
+        });
+
+
+        let bsModal = new $.bsModal('Nuovo lotto', {
             body: `<p>Crea un lotto vuoto</p>
+                    <p>Seleziona la categoria alla quale assocerai il lotto</p>
+                    <select id="workCat"></select>
                     <p style="font-weight: bold">Inserisci una descrizione</p>
                     <input type="text" id="prodBatchDescription">`
         });
@@ -12,7 +33,8 @@
         bsModal.setOkEvent(function () {
 
             const dataDesc = {
-                desc: $('#prodBatchDescription').val()
+                desc: $('#prodBatchDescription').val(),
+                workCat: $('#workCat').val()
             };
 
             $.ajax({
@@ -313,7 +335,7 @@
         if(selectedRows.length != 1){
             new Alert({
                 type: "warning",
-                message: "Devi un fason alla volta"
+                message: "Seleziona un lotto alla volta"
             }).open();
             return false;
         }
@@ -339,7 +361,7 @@
         });
 
         let bsModal = new $.bsModal('Assegna un lotto', {
-            body: '<p>Inserisci un nuovo contratto</p>' +
+            body: '<p>Assegna un nuovo lotto</p>' +
             '<div class="form-group form-group-default required">' +
             '<label>Scegli il Foison</label>' +
             '<select class="full-width selectpicker"\n id="foison"' +

@@ -22,6 +22,23 @@
                 "parentKeys": ["documentId"],
                 "childKeys" : ["id"],
                 "type" : "OneToOne"
+            },{
+                "name": "productBrand",
+                "entity": "ProductBrand",
+                "parentKeys": ["id"],
+                "childKeys": ["id"],
+                "joinOn": {
+                    "table": "ProductBatchHasProductBrand",
+                    "parentKeys": ["productBatchId"],
+                    "childKeys": ["productBrandId"]
+                },
+                "type": "ManyToMany"
+            },{
+                "name" : "productBatchHasProductBrand",
+                "entity" : "ProductBatchHasProductBrand",
+                "parentKeys": ["id"],
+                "childKeys" : ["productBatchId"],
+                "type" : "OneToMany"
             }
         ]
     }

@@ -2,11 +2,10 @@
 
 namespace bamboo\domain\entities;
 
-use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
 
 /**
- * Class CWorkCategory
+ * Class CProductBatchHasProductBrand
  * @package bamboo\domain\entities
  *
  * @author Iwes Team <it@iwes.it>
@@ -15,20 +14,17 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 14/03/2018
+ * @date 04/06/2018
  * @since 1.0
  *
  * @property CWorkCategorySteps $workCategorySteps
+ * @property CProductBatch $productBatch
+ *
  */
-class CWorkCategory extends AEntity
+class CProductBatchHasProductBrand extends AEntity
 {
+    const UNFIT_BRAND = 6;
 
-    const NORM = 1;
-    const BRAND = 3;
-
-    const SLUG_EMPTY_NORM = 'prodotti';
-    const SLUG_EMPTY_BRAND = 'brands';
-
-    protected $entityTable = 'WorkCategory';
-    protected $primaryKeys = ['id'];
+    protected $entityTable = 'ProductBatchHasProductBrand';
+    protected $primaryKeys = ['productBatchId','productBrandId'];
 }

@@ -88,6 +88,16 @@
             data-title="Elimina prodotto"
             data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-arrows-h"
+            data-permission="/admin/product/add"
+            data-event="bs.brand.modify.fason"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Assegna brand a lotto"
+            data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

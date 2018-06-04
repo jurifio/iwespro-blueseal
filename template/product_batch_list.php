@@ -80,6 +80,9 @@
                                 <th data-slug="documentId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura</th>
+                                <th data-slug="workCategoryId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Categoria</th>
                             </tr>
                             </thead>
                             <tbody>

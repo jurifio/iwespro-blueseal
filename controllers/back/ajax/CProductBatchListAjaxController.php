@@ -7,10 +7,14 @@ use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
+use bamboo\domain\entities\CProductBatchHasProductBrand;
+use bamboo\domain\entities\CProductCategory;
+use bamboo\domain\entities\CWorkCategory;
 use bamboo\domain\repositories\CContractDetailsRepo;
 use bamboo\domain\repositories\CContractsRepo;
 use bamboo\domain\repositories\CFoisonRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
+use bamboo\domain\repositories\CWorkCategoryRepo;
 
 
 /**
@@ -55,7 +59,8 @@ class CProductBatchListAjaxController extends AAjaxController
                   f.userId,
                   wk.name as workCategory,
                   pb.documentId,
-                  pb.description as descr
+                  pb.description as descr,
+                  pb.workCategoryId
             FROM ProductBatch pb
             LEFT JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
             LEFT JOIN WorkCategory wk ON cd.workCategoryId = wk.id
@@ -71,6 +76,8 @@ class CProductBatchListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings(false);
 
+        /** @var CWorkCategoryRepo $wCRepo */
+        $wCRepo = \Monkey::app()->repoFactory->create('WorkCategory');
 
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $url = $blueseal."work/lotti/";
@@ -79,6 +86,9 @@ class CProductBatchListAjaxController extends AAjaxController
         $pbrRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
+
+            $finish = 0;
+            $todo = 0;
 
             /** @var CProductBatch $pbr */
             $pbr = $pbrRepo->findOneBy(['id'=>$row["id"]]);
@@ -96,7 +106,17 @@ class CProductBatchListAjaxController extends AAjaxController
             if(((is_null($pbr->confirmationDate) && !$allShop) )){
                 $row["id"] = $pbr->id;
             } else if(is_null($pbr->contractDetailsId)) {
-                $row["id"] = '<a href="'.$url.'prodotti'.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+
+                switch ($pbr->workCategoryId){
+                    case CWorkCategory::NORM:
+                        $row["id"] = '<a href="'.$url.CWorkCategory::SLUG_EMPTY_NORM.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
+                    case CWorkCategory::BRAND:
+                        $row["id"] = '<a href="'.$url.CWorkCategory::SLUG_EMPTY_BRAND.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
+                }
+
+
             } else {
                 $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
             }
@@ -111,29 +131,68 @@ class CProductBatchListAjaxController extends AAjaxController
             $row["paid"] = ($pbr->paid == 1 ? "yes" : "no");
             $row["sectional"] = $pbr->sectional;
             $row["foison"] =(is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->contracts->foison->name.' '.$pbr->contractDetails->contracts->foison->surname);
-            $row["numberOfProduct"] = count($pbr->productBatchDetails);
+
+            switch ($pbr->workCategoryId){
+
+                case CWorkCategory::NORM:
+                    $n = count($pbr->productBatchDetails);
+
+                    /** @var CObjectCollection $pbDetails */
+                    $pbDetails = $pbr->productBatchDetails;
+
+                    if(!is_null($pbr->contractDetailsId)) {
+                        /** @var CProductBatchDetails $singleProductBatchDetails */
+                        foreach ($pbDetails as $singleProductBatchDetails) {
+                            if (!is_null($singleProductBatchDetails->workCategorySteps->rgt)) {
+                                $todo++;
+                            } else {
+                                $finish++;
+                            }
+                        }
+                    }
+                    break;
+                case CWorkCategory::BRAND:
+                    $n = count($pbr->productBrand);
+
+                    /** @var CObjectCollection $pbhpbs */
+                    $pbhpbs = $pbr->productBatchHasProductBrand;
+
+                    if(!is_null($pbr->contractDetailsId)) {
+                        /** @var CProductBatchHasProductBrand $pbhpb */
+                        foreach ($pbhpbs as $pbhpb) {
+                            if (!is_null($pbhpb->workCategorySteps->rgt)) {
+                                $todo++;
+                            } else {
+                                $finish++;
+                            }
+                        }
+                    }
+                    break;
+            }
+
+
+
+            $row["numberOfProduct"] = $n;
             $row["workCategory"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->workCategory->name);
             $row["documentId"] = $pbr->documentId;
             $row["foisonEmail"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->contracts->foison->email);
             $row["descr"] = $pbr->description;
 
-            /** @var CObjectCollection $pbDetails */
-            $pbDetails = $pbr->productBatchDetails;
 
-            $finish = 0;
-            $todo = 0;
-           if(!is_null($pbr->contractDetailsId)) {
-                /** @var CProductBatchDetails $singleProductBatchDetails */
-                foreach ($pbDetails as $singleProductBatchDetails) {
-                    if (!is_null($singleProductBatchDetails->workCategorySteps->rgt)) {
-                        $todo++;
-                    } else {
-                        $finish++;
-                    }
-                }
-            }
+
             $row['finish'] = $finish;
             $row['todo'] = $todo;
+
+            if(is_null($pbr->contractDetailsId)){
+                /** @var CWorkCategory $cat */
+                $cat = $wCRepo->findOneBy(['id'=>$pbr->workCategoryId]);
+            } else {
+                /** @var CWorkCategory $cat */
+                $cat = $pbr->contractDetails->workCategory;
+            }
+
+
+            $row['workCategoryId'] = $cat->name;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

@@ -21,6 +21,9 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * @property CContractDetails $contractDetails
  * @property CObjectCollection $productBatchDetails
  * @property CDocument $document
+ * @property CObjectCollection $productBrand
+ * @property CObjectCollection $productBatchHasProductBrand
+ *
  */
 class CProductBatch extends AEntity
 {
@@ -29,12 +32,27 @@ class CProductBatch extends AEntity
 
     public function isComplete(){
 
-        /** @var CObjectCollection $pBdetails */
-        $pBdetails = $this->productBatchDetails;
+        $workCategory = $this->contractDetails->workCategory->id;
 
-        /** @var CProductBatchDetails $pBdetail */
-        foreach ($pBdetails as $pBdetail){
-            if(!is_null($pBdetail->workCategorySteps->rgt)) return false;
+        switch ($workCategory){
+            case CWorkCategory::NORM:
+                /** @var CObjectCollection $pBdetails */
+                $pBdetails = $this->productBatchDetails;
+
+                /** @var CProductBatchDetails $pBdetail */
+                foreach ($pBdetails as $pBdetail){
+                    if(!is_null($pBdetail->workCategorySteps->rgt)) return false;
+                }
+                break;
+            case CWorkCategory::BRAND:
+                /** @var CObjectCollection $pbhpbs */
+                $pbhpbs = $this->productBatchHasProductBrand;
+
+                /** @var CProductBatchHasProductBrand $pbhpb */
+                foreach ($pbhpbs as $pbhpb){
+                    if(!is_null($pbhpb->workCategorySteps->rgt)) return false;
+                }
+                break;
         }
 
         return true;
@@ -42,23 +60,46 @@ class CProductBatch extends AEntity
     }
 
     public function isValid(){
-        /** @var CObjectCollection $pBdetails */
-        $pBdetails = $this->productBatchDetails;
 
-        $unfitProduct = [];
+        $workCategory = $this->contractDetails->workCategory->id;
 
-        /** @var CProductBatchDetails $pBdetail */
-        foreach ($pBdetails as $pBdetail){
+        $unfitElement = [];
 
-            if($pBdetail->workCategoryStepsId == CProductBatchDetails::UNFIT_NORM){
-                $unfitProduct[] = 'id: '.$pBdetail->id.
-                                  ' | Lotto: '.$pBdetail->productBatchId.
-                                  ' | Prodotto: '.$pBdetail->productId.'-'.$pBdetail->productVariantId;
-            }
+        switch ($workCategory){
+            case CWorkCategory::NORM:
+                /** @var CObjectCollection $pBdetails */
+                $pBdetails = $this->productBatchDetails;
+
+                /** @var CProductBatchDetails $pBdetail */
+                foreach ($pBdetails as $pBdetail){
+
+                    if($pBdetail->workCategoryStepsId == CProductBatchDetails::UNFIT_NORM){
+                        $unfitElement[] = 'id: '.$pBdetail->id.
+                            ' | Lotto: '.$pBdetail->productBatchId.
+                            ' | Prodotto: '.$pBdetail->productId.'-'.$pBdetail->productVariantId;
+                    }
+                }
+                break;
+            case CWorkCategory::BRAND:
+                /** @var CObjectCollection $pbhpbs */
+                $pbhpbs = $this->productBatchHasProductBrand;
+
+                /** @var CProductBatchHasProductBrand $pbhpb */
+                foreach ($pbhpbs as $pbhpb){
+
+                    if($pbhpb->workCategoryStepsId == CProductBatchHasProductBrand::UNFIT_BRAND){
+                        $unfitElement[] =
+                            ' | Lotto: '.$pbhpb->productBatchId.
+                            ' | Brand: '.$pbhpb->productBrandId;
+                    }
+                }
+                break;
         }
 
-        if(empty($unfitProduct)) return 'ok';
 
-        return $unfitProduct;
+
+        if(empty($unfitElement)) return 'ok';
+
+        return $unfitElement;
     }
 }

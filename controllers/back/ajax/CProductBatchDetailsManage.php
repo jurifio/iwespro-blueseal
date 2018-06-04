@@ -9,9 +9,12 @@ use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
+use bamboo\domain\entities\CProductBatchHasProductBrand;
+use bamboo\domain\entities\CProductBrand;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CUser;
+use bamboo\domain\entities\CWorkCategory;
 use bamboo\domain\repositories\CContractDetailsRepo;
 use bamboo\domain\repositories\CContractsRepo;
 use bamboo\domain\repositories\CEmailRepo;
@@ -98,16 +101,32 @@ class CProductBatchDetailsManage extends AAjaxController
         /** @var CProductBatch $productBatch */
         $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId]);
 
-        /** @var CObjectCollection $pbDetails */
-        $pbDetails = $productBatch->productBatchDetails;
-
-        /** @var CProductBatchDetails $singleProductBatchDetails */
-        foreach ($pbDetails as $singleProductBatchDetails){
-            if(!is_null($singleProductBatchDetails->workCategorySteps->rgt)){
-                $isComplete = false;
+        switch ($productBatch->contractDetails->workCategory->id){
+            case CWorkCategory::NORM:
+                /** @var CObjectCollection $pbDetails */
+                $pbDetails = $productBatch->productBatchDetails;
+                /** @var CProductBatchDetails $singleProductBatchDetails */
+                foreach ($pbDetails as $singleProductBatchDetails){
+                    if(!is_null($singleProductBatchDetails->workCategorySteps->rgt)){
+                        $isComplete = false;
+                        break;
+                    }
+                }
                 break;
-            }
+            case CWorkCategory::BRAND:
+                /** @var CObjectCollection $brands */
+                $brands = $productBatch->productBatchHasProductBrand;
+
+                /** @var CProductBatchHasProductBrand $brand */
+                foreach ($brands as $brand){
+                    if(!is_null($brand->workCategorySteps->rgt)){
+                        $isComplete = false;
+                        break;
+                    }
+                }
+                break;
         }
+
 
         if($isComplete){
             /** @var CUser $user */
@@ -145,15 +164,36 @@ class CProductBatchDetailsManage extends AAjaxController
         $ids = \Monkey::app()->router->request()->getRequestData('prod');
         $catId = \Monkey::app()->router->request()->getRequestData('cat');
         $pb = \Monkey::app()->router->request()->getRequestData('pb');
+        $workType = \Monkey::app()->router->request()->getRequestData('workType');
 
+        switch ($workType){
+            case 'normalizzazione-prodotti':
+                $this->updStepNorm($catId, $ids);
+                break;
+            case 'dettagli-brand':
+                $this->updStepBrand($catId, $ids, $pb);
+                break;
+        }
+
+
+        return 'Stati aggiornati con successo';
+    }
+
+    /**
+     * @param $catId
+     * @param $ids
+     * @return bool
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    private function updStepNorm($catId, $ids){
         foreach ($ids as $id){
-
             /** @var CProductBatchDetails $pd */
             $pd = \Monkey::app()->repoFactory->create('ProductBatchDetails')->findOneBy(['id'=>$id]);
 
             $pd->workCategoryStepsId = $catId;
             $pd->update();
-
 
             /** @var CProductBatch $pb */
             $pba = $pd->productBatch;
@@ -163,9 +203,34 @@ class CProductBatchDetailsManage extends AAjaxController
             }
         }
 
-
-
-        return 'Stati aggiornati con successo';
+        return true;
     }
 
+    /**
+     * @param $catId
+     * @param $ids
+     * @param $pb
+     * @return bool
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    private function updStepBrand($catId, $ids, $pb){
+        foreach ($ids as $id){
+            /** @var CProductBatchHasProductBrand $pbhpb */
+            $pbhpb = \Monkey::app()->repoFactory->create('ProductBatchHasProductBrand')->findOneBy(['productBrandId'=>$id, 'productBatchId'=>$pb]);
+
+            $pbhpb->workCategoryStepsId = $catId;
+            $pbhpb->update();
+        }
+
+        if($catId == CProductBatchHasProductBrand::UNFIT_BRAND){
+            /** @var CProductBatch $pba */
+            $pba = $pbhpb->productBatch;
+            $pba->isFixed = 0;
+            $pba->update();
+        }
+
+        return true;
+    }
 }

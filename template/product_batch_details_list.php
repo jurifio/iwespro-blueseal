@@ -153,26 +153,12 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-step-backward"
-                data-permission="/admin/product/add"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs.back.work.product"
-                data-title="Cambia lo stato di uno o più prodotti"
-                data-placement="bottom"
+                data-remote="bs.change.product.status.batch"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Notifica termine lotto">
         <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-hourglass-end"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs.end.product.modify.notify"
-                data-title="Notifica termine del lotto"
-                data-placement="bottom"
+                data-remote="bs.end.product.batch"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Istruzioni">

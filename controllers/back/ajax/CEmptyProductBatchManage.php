@@ -25,6 +25,7 @@ class CEmptyProductBatchManage extends AAjaxController
     public function post()
     {
         $d = \Monkey::app()->router->request()->getRequestData('desc');
+        $workCat = \Monkey::app()->router->request()->getRequestData('workCat');
 
         if(!empty($d)){
 
@@ -35,6 +36,7 @@ class CEmptyProductBatchManage extends AAjaxController
             $pb = $pbRepo->getEmptyEntity();
             $pb->paid = 0;
             $pb->description = $d;
+            $pb->workCategoryId = $workCat;
             $pb->smartInsert();
 
 

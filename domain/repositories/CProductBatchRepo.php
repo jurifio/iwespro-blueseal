@@ -7,6 +7,8 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
+use bamboo\domain\entities\CWorkCategory;
+use bamboo\domain\entities\CWorkCategorySteps;
 
 /**
  * Class CProductBatchRepo
@@ -85,7 +87,16 @@ class CProductBatchRepo extends ARepo
             $pB = $this->findOneBy(['id'=>$productBatch]);
         }
 
-        $numberOfProducts = count($pB->productBatchDetails);
+        $numberOfProducts = null;
+
+        switch ($pB->contractDetails->workCategory->id){
+            case CWorkCategory::NORM:
+                $numberOfProducts = count($pB->productBatchDetails);
+                break;
+            case CWorkCategory::BRAND:
+                $numberOfProducts = count($pB->productBrand);
+                break;
+        }
 
         $unitPrice = $pB->contractDetails->workPriceList->price;
         $cost = $unitPrice * $numberOfProducts;
@@ -128,7 +139,7 @@ class CProductBatchRepo extends ARepo
     public function associateProductBatch($productBatch, $scheduledDelivery, $value, $contractDetailsId){
 
         /** @var CContractDetails $contractDetails */
-        $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBY(['id'=>$contractDetailsId]);
+        $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBy(['id'=>$contractDetailsId]);
 
         $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
 
@@ -145,17 +156,34 @@ class CProductBatchRepo extends ARepo
         /** @var CWorkCategoryStepsRepo $catStR */
         $catStR = \Monkey::app()->repoFactory->create('WorkCategorySteps');
 
-        $initStep = $catStR->getFirstStepsFromCategoryId($productBatch->contractDetails->workCategory->id);
+        $catId = $productBatch->contractDetails->workCategory->id;
 
-        /** @var CObjectCollection $pbds */
-        $pbds = $productBatch->productBatchDetails;
+        /** @var CWorkCategorySteps $initStep */
+        $initStep = $catStR->getFirstStepsFromCategoryId($catId);
 
+        switch ($catId){
+            case CWorkCategory::NORM:
+                /** @var CObjectCollection $pbds */
+                $pbds = $productBatch->productBatchDetails;
 
-        /** @var CProductBatchDetails $pbd */
-        foreach ($pbds as $pbd){
-            $pbd->workCategoryStepsId = $initStep->id;
-            $pbd->update();
+                /** @var CProductBatchDetails $pbd */
+                foreach ($pbds as $pbd){
+                    $pbd->workCategoryStepsId = $initStep->id;
+                    $pbd->update();
+                }
+                break;
+            case CWorkCategory::BRAND:
+                /** @var CObjectCollection $pbhpbs */
+                $pbhpbs = $productBatch->productBrand;
+
+                foreach ($pbhpbs as $pbhpb){
+                    $pbhpb->workCategoryStepsId = $initStep->id;
+                    $pbhpb->update();
+                }
+                break;
         }
+
+
 
 
         return $productBatch;

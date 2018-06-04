@@ -12,6 +12,7 @@ use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CUser;
+use bamboo\domain\entities\CWorkCategory;
 use bamboo\domain\repositories\CContractDetailsRepo;
 use bamboo\domain\repositories\CContractsRepo;
 use bamboo\domain\repositories\CEmailRepo;
@@ -62,10 +63,19 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
 
         if(!is_null($pb->contractDetailsId)) return 'Il lotto che stai associando è gia di un\'altro Fason';
 
-        /** @var CObjectCollection $pbd */
-        $pbd = $pb->productBatchDetails;
+
+        switch ($pb->workCategoryId){
+            case CWorkCategory::NORM:
+                /** @var CObjectCollection $pbd */
+                $pbd = $pb->productBatchDetails;
+                break;
+            case CWorkCategory::BRAND:
+                $pbd = $pb->productBrand;
+                break;
+        }
 
         $numP = $pbd->count();
+
 
         //Costo
         /** @var CContractDetails $contractDetails */
@@ -112,6 +122,19 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
         /** @var CProductBatch $pb */
         $pb = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId]);
 
+        switch ($pb->workCategoryId){
+            case CWorkCategory::NORM:
+                $res = $this->getValuesFromNormalization($pb,$contractDetailId);
+                break;
+            case CWorkCategory::BRAND:
+                $res = $this->getValuesFromBrands($pb,$contractDetailId);
+                break;
+        }
+
+        return $res;
+    }
+
+    private function getValuesFromNormalization(CProductBatch $pb, $contractDetailId){
         /** @var CObjectCollection $pbd */
         $pbd = $pb->productBatchDetails;
 
@@ -136,6 +159,36 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
         $result["sectional"] = $sectional;
 
         return json_encode($result);
+    }
+
+    private function getValuesFromBrands(CProductBatch $pb,$contractDetailId){
+
+        /** @var CObjectCollection $brands */
+        $brands = $pb->productBrand;
+
+        /** @var CContractDetailsRepo $contractDetailRepo */
+        $contractDetailRepo = \Monkey::app()->repoFactory->create('ContractDetails');
+        /** @var CContractDetails $contractDetails */
+        $contractDetails = $contractDetailRepo->findOneBy(['id'=>$contractDetailId]);
+
+        //Costo stimato
+        $unitPrice = $contractDetails->workPriceList->price;
+        $cost = $unitPrice * $brands->count();
+
+        //Lotto sezionale stimato
+        /** @var CSectionalRepo $sectionalRepo */
+        $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
+
+        $sectionalRepo = \Monkey::app()->repoFactory->create('Sectional');
+        $sectional = $sectionalRepo->calculateNextSectionalNumber($sectionalCodeId);
+
+        $result = [];
+        $result["cost"] = $cost;
+        $result["sectional"] = $sectional;
+
+        return json_encode($result);
+
+
     }
 
 }
