@@ -63,18 +63,8 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
 
         if(!is_null($pb->contractDetailsId)) return 'Il lotto che stai associando è gia di un\'altro Fason';
 
-
-        switch ($pb->workCategoryId){
-            case CWorkCategory::NORM:
-                /** @var CObjectCollection $pbd */
-                $pbd = $pb->productBatchDetails;
-                break;
-            case CWorkCategory::BRAND:
-                $pbd = $pb->productBrand;
-                break;
-        }
-
-        $numP = $pbd->count();
+        $elems = $pb->getElements();
+        $numP = $elems->count();
 
 
         //Costo
@@ -107,7 +97,7 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
             $mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma creazione lotto', $body);
 
 
-            $res = "Lotto creato con sucecsso";
+            $res = "Lotto creato con successo";
         } else {
             $res = "Errore durante la creazione";
         }
@@ -122,21 +112,8 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
         /** @var CProductBatch $pb */
         $pb = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId]);
 
-        switch ($pb->workCategoryId){
-            case CWorkCategory::NORM:
-                $res = $this->getValuesFromNormalization($pb,$contractDetailId);
-                break;
-            case CWorkCategory::BRAND:
-                $res = $this->getValuesFromBrands($pb,$contractDetailId);
-                break;
-        }
-
-        return $res;
-    }
-
-    private function getValuesFromNormalization(CProductBatch $pb, $contractDetailId){
-        /** @var CObjectCollection $pbd */
-        $pbd = $pb->productBatchDetails;
+        /** @var CObjectCollection $elems */
+        $elems = $pb->getElements();
 
         /** @var CContractDetailsRepo $contractDetailRepo */
         $contractDetailRepo = \Monkey::app()->repoFactory->create('ContractDetails');
@@ -145,7 +122,7 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
 
         //Costo stimato
         $unitPrice = $contractDetails->workPriceList->price;
-        $cost = $unitPrice * $pbd->count();
+        $cost = $unitPrice * $elems->count();
 
         //Lotto sezionale stimato
         /** @var CSectionalRepo $sectionalRepo */
@@ -159,36 +136,6 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
         $result["sectional"] = $sectional;
 
         return json_encode($result);
-    }
-
-    private function getValuesFromBrands(CProductBatch $pb,$contractDetailId){
-
-        /** @var CObjectCollection $brands */
-        $brands = $pb->productBrand;
-
-        /** @var CContractDetailsRepo $contractDetailRepo */
-        $contractDetailRepo = \Monkey::app()->repoFactory->create('ContractDetails');
-        /** @var CContractDetails $contractDetails */
-        $contractDetails = $contractDetailRepo->findOneBy(['id'=>$contractDetailId]);
-
-        //Costo stimato
-        $unitPrice = $contractDetails->workPriceList->price;
-        $cost = $unitPrice * $brands->count();
-
-        //Lotto sezionale stimato
-        /** @var CSectionalRepo $sectionalRepo */
-        $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
-
-        $sectionalRepo = \Monkey::app()->repoFactory->create('Sectional');
-        $sectional = $sectionalRepo->calculateNextSectionalNumber($sectionalCodeId);
-
-        $result = [];
-        $result["cost"] = $cost;
-        $result["sectional"] = $sectional;
-
-        return json_encode($result);
-
-
     }
 
 }

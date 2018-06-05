@@ -132,53 +132,26 @@ class CProductBatchListAjaxController extends AAjaxController
             $row["sectional"] = $pbr->sectional;
             $row["foison"] =(is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->contracts->foison->name.' '.$pbr->contractDetails->contracts->foison->surname);
 
-            switch ($pbr->workCategoryId){
-
-                case CWorkCategory::NORM:
-                    $n = count($pbr->productBatchDetails);
-
-                    /** @var CObjectCollection $pbDetails */
-                    $pbDetails = $pbr->productBatchDetails;
-
-                    if(!is_null($pbr->contractDetailsId)) {
-                        /** @var CProductBatchDetails $singleProductBatchDetails */
-                        foreach ($pbDetails as $singleProductBatchDetails) {
-                            if (!is_null($singleProductBatchDetails->workCategorySteps->rgt)) {
-                                $todo++;
-                            } else {
-                                $finish++;
-                            }
-                        }
-                    }
-                    break;
-                case CWorkCategory::BRAND:
-                    $n = count($pbr->productBrand);
-
-                    /** @var CObjectCollection $pbhpbs */
-                    $pbhpbs = $pbr->productBatchHasProductBrand;
-
-                    if(!is_null($pbr->contractDetailsId)) {
-                        /** @var CProductBatchHasProductBrand $pbhpb */
-                        foreach ($pbhpbs as $pbhpb) {
-                            if (!is_null($pbhpb->workCategorySteps->rgt)) {
-                                $todo++;
-                            } else {
-                                $finish++;
-                            }
-                        }
-                    }
-                    break;
-            }
 
 
-
-            $row["numberOfProduct"] = $n;
+            $row["numberOfProduct"] = count($pbr->getElements());
             $row["workCategory"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->workCategory->name);
             $row["documentId"] = $pbr->documentId;
             $row["foisonEmail"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->contracts->foison->email);
             $row["descr"] = $pbr->description;
 
+            /** @var CObjectCollection $elems */
+            $elems = $pbr->getElements();
 
+            if(!is_null($pbr->contractDetailsId)) {
+                foreach ($elems as $elem) {
+                    if (!is_null($elem->workCategorySteps->rgt)) {
+                        $todo++;
+                    } else {
+                        $finish++;
+                    }
+                }
+            }
 
             $row['finish'] = $finish;
             $row['todo'] = $todo;

@@ -101,30 +101,13 @@ class CProductBatchDetailsManage extends AAjaxController
         /** @var CProductBatch $productBatch */
         $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId]);
 
-        switch ($productBatch->contractDetails->workCategory->id){
-            case CWorkCategory::NORM:
-                /** @var CObjectCollection $pbDetails */
-                $pbDetails = $productBatch->productBatchDetails;
-                /** @var CProductBatchDetails $singleProductBatchDetails */
-                foreach ($pbDetails as $singleProductBatchDetails){
-                    if(!is_null($singleProductBatchDetails->workCategorySteps->rgt)){
-                        $isComplete = false;
-                        break;
-                    }
-                }
-                break;
-            case CWorkCategory::BRAND:
-                /** @var CObjectCollection $brands */
-                $brands = $productBatch->productBatchHasProductBrand;
 
-                /** @var CProductBatchHasProductBrand $brand */
-                foreach ($brands as $brand){
-                    if(!is_null($brand->workCategorySteps->rgt)){
-                        $isComplete = false;
-                        break;
-                    }
-                }
-                break;
+        $elems = $productBatch->getElements();
+
+        foreach ($elems as $elem){
+            if(!is_null($elem->workCategorySteps->rgt)){
+                $isComplete = false;
+            }
         }
 
 

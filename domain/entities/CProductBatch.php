@@ -34,25 +34,11 @@ class CProductBatch extends AEntity
 
         $workCategory = $this->contractDetails->workCategory->id;
 
-        switch ($workCategory){
-            case CWorkCategory::NORM:
-                /** @var CObjectCollection $pBdetails */
-                $pBdetails = $this->productBatchDetails;
 
-                /** @var CProductBatchDetails $pBdetail */
-                foreach ($pBdetails as $pBdetail){
-                    if(!is_null($pBdetail->workCategorySteps->rgt)) return false;
-                }
-                break;
-            case CWorkCategory::BRAND:
-                /** @var CObjectCollection $pbhpbs */
-                $pbhpbs = $this->productBatchHasProductBrand;
+        $elems = $this->getElements();
 
-                /** @var CProductBatchHasProductBrand $pbhpb */
-                foreach ($pbhpbs as $pbhpb){
-                    if(!is_null($pbhpb->workCategorySteps->rgt)) return false;
-                }
-                break;
+        foreach ($elems as $elem) {
+            if(!is_null($elem->workCategorySteps->rgt)) return false;
         }
 
         return true;
@@ -61,45 +47,52 @@ class CProductBatch extends AEntity
 
     public function isValid(){
 
-        $workCategory = $this->contractDetails->workCategory->id;
-
         $unfitElement = [];
 
-        switch ($workCategory){
-            case CWorkCategory::NORM:
-                /** @var CObjectCollection $pBdetails */
-                $pBdetails = $this->productBatchDetails;
+        $elems = $this->getElements();
 
-                /** @var CProductBatchDetails $pBdetail */
-                foreach ($pBdetails as $pBdetail){
+        foreach ($elems as $elem){
 
-                    if($pBdetail->workCategoryStepsId == CProductBatchDetails::UNFIT_NORM){
-                        $unfitElement[] = 'id: '.$pBdetail->id.
-                            ' | Lotto: '.$pBdetail->productBatchId.
-                            ' | Prodotto: '.$pBdetail->productId.'-'.$pBdetail->productVariantId;
-                    }
-                }
-                break;
-            case CWorkCategory::BRAND:
-                /** @var CObjectCollection $pbhpbs */
-                $pbhpbs = $this->productBatchHasProductBrand;
-
-                /** @var CProductBatchHasProductBrand $pbhpb */
-                foreach ($pbhpbs as $pbhpb){
-
-                    if($pbhpb->workCategoryStepsId == CProductBatchHasProductBrand::UNFIT_BRAND){
-                        $unfitElement[] =
-                            ' | Lotto: '.$pbhpb->productBatchId.
-                            ' | Brand: '.$pbhpb->productBrandId;
-                    }
-                }
-                break;
+            switch ($elem->workCategoryStepsId){
+                case CProductBatchDetails::UNFIT_NORM:
+                    $unfitElement[] = 'id: '.$elem->id.
+                        ' | Lotto: '.$elem->productBatchId.
+                        ' | Prodotto: '.$elem->productId.'-'.$elem->productVariantId;
+                    break;
+                case CWorkCategory::BRAND:
+                    $unfitElement[] =
+                        ' | Lotto: '.$elem->productBatchId.
+                        ' | Brand: '.$elem->productBrandId;
+                    break;
+            }
         }
-
-
 
         if(empty($unfitElement)) return 'ok';
 
         return $unfitElement;
+    }
+
+    public function getElements(){
+
+        $elems = null;
+        $workCategory = null;
+
+        if(is_null($this->contractDetailsId)){
+            $workCategory = $this->workCategoryId;
+        } else {
+            $workCategory = $this->contractDetails->workCategory->id;
+        }
+
+        switch ($workCategory){
+            case CWorkCategory::NORM:
+                $elems = $this->productBatchDetails;
+                break;
+            case CWorkCategory::BRAND:
+                $elems = $this->productBatchHasProductBrand;
+                break;
+
+        }
+
+        return $elems;
     }
 }

@@ -87,16 +87,7 @@ class CProductBatchRepo extends ARepo
             $pB = $this->findOneBy(['id'=>$productBatch]);
         }
 
-        $numberOfProducts = null;
-
-        switch ($pB->contractDetails->workCategory->id){
-            case CWorkCategory::NORM:
-                $numberOfProducts = count($pB->productBatchDetails);
-                break;
-            case CWorkCategory::BRAND:
-                $numberOfProducts = count($pB->productBrand);
-                break;
-        }
+        $numberOfProducts = count($pB->getElements());
 
         $unitPrice = $pB->contractDetails->workPriceList->price;
         $cost = $unitPrice * $numberOfProducts;
@@ -161,33 +152,15 @@ class CProductBatchRepo extends ARepo
         /** @var CWorkCategorySteps $initStep */
         $initStep = $catStR->getFirstStepsFromCategoryId($catId);
 
-        switch ($catId){
-            case CWorkCategory::NORM:
-                /** @var CObjectCollection $pbds */
-                $pbds = $productBatch->productBatchDetails;
+        /** @var CObjectCollection $elems */
+        $elems = $productBatch->getElements();
 
-                /** @var CProductBatchDetails $pbd */
-                foreach ($pbds as $pbd){
-                    $pbd->workCategoryStepsId = $initStep->id;
-                    $pbd->update();
-                }
-                break;
-            case CWorkCategory::BRAND:
-                /** @var CObjectCollection $pbhpbs */
-                $pbhpbs = $productBatch->productBrand;
-
-                foreach ($pbhpbs as $pbhpb){
-                    $pbhpb->workCategoryStepsId = $initStep->id;
-                    $pbhpb->update();
-                }
-                break;
+        foreach ($elems as $elem){
+            $elem->workCategoryStepsId = $initStep->id;
+            $elem->update();
         }
 
-
-
-
         return $productBatch;
-
-
     }
+
 }
