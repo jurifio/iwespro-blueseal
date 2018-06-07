@@ -58,13 +58,24 @@ left outer join UserDetails ud ON n.userId=ud.userId";
 
             /** @var CObjectCollection $newslettersql */
             $newslettersql = $newsletterEmailList->findAll();
-            foreach ($newslettersql as $value){
+            foreach ($newslettersql as $value) {
+                $group=[];
+                $sql = $value->sql . " and nu.email LIKE '%" . $email . "%' GROUP by nu.email";
+
+                $searchRes = $this->app->dbAdapter->query($sql,array())->fetchAll();
+                foreach ($searchRes as $val) {
 
 
-                    $row['List']=$value->name;
+                    if ($email == $val['email']) {
 
+array_push($group,$value->name);
+                        $group =$value->name;
+                    }
+                    $row['List']= explode(",",$group);
+                }
 
             }
+
             if ($verified=="1") {
 
                 $row['isActive'] = "Attivo";

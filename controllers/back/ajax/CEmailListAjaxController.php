@@ -48,7 +48,8 @@ class CEmailListAjaxController extends AAjaxController
                       AVG(UNIX_TIMESTAMP(er.responseDate)) - UNIX_TIMESTAMP(e.submissionDate) as responseTime,
                       IF (e.isError = 1, 'sisì', 'no') as isError,
                       group_concat(DISTINCT concat(ud.name,' ',ud.surname)) AS userName
-                    FROM Email e
+                    FROM Email 
+                    e
                       JOIN EmailAddress ea ON e.fromEmailAddressId = ea.id
                       JOIN EmailRecipient er ON e.id = er.emailId
                       JOIN EmailAddress ea2 ON er.emailAddressId = ea2.id
