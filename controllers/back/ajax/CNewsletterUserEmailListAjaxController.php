@@ -54,12 +54,12 @@ left outer join UserDetails ud ON n.userId=ud.userId";
             $email=$newsletter->email;
             /** @var CRepo $newsletterEmailList */
             $newsletterEmailList=\Monkey::app()->repoFactory->create('NewsletterGroup');
-
+            $group=[];
 
             /** @var CObjectCollection $newslettersql */
             $newslettersql = $newsletterEmailList->findAll();
             foreach ($newslettersql as $value) {
-                $group=[];
+
                 $sql = $value->sql . " and nu.email LIKE '%" . $email . "%' GROUP by nu.email";
 
                 $searchRes = $this->app->dbAdapter->query($sql,array())->fetchAll();
@@ -67,15 +67,16 @@ left outer join UserDetails ud ON n.userId=ud.userId";
 
 
                     if ($email == $val['email']) {
+                        $news=$value->name;
+                    array_push($group,$news);
 
-array_push($group,$value->name);
-                        $group =$value->name;
+                        //$group =$value->name;
                     }
-                    $row['List']= explode(",",$group);
+
                 }
 
             }
-
+            $row['List']= $group;
             if ($verified=="1") {
 
                 $row['isActive'] = "Attivo";
