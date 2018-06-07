@@ -2047,7 +2047,6 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchDetailsListController"
             },
             "filters": {
-                "cat": "[0-9]+",
                 "id": "[0-9]+"
             },
             "translations": {},
@@ -2061,7 +2060,6 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBatchDetailsListController"
             },
             "filters": {
-                "cat": "[0-9]+",
                 "id": "[0-9]+"
             },
             "translations": {},
@@ -2084,6 +2082,18 @@
             "pattern": "/blueseal/work/lotti/brands/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBrandBatchDetailsListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/work/lotti/traduzione-nomi/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNameTranslationListController"
             },
             "filters": {
                 "id": "[0-9]+"

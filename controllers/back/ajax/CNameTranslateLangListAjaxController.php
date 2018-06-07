@@ -2,8 +2,11 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProductBatchHasProductName;
+use bamboo\domain\entities\CProductName;
 
 
 /**
@@ -45,32 +48,56 @@ class CNameTranslateLangListAjaxController extends AAjaxController
     public function get()
     {
         $langId = $this->app->router->request()->getRequestData('lang');
+
+        $ids = $this->app->router->request()->getRequestData('ids');
+
+
         $sql =
-"SELECT
-  `pn`.`id` as `id`,
-  `pnt`.`productId` as `productId`,
-  `pnt`.`productVariantId` as `productVariantId`,
-  `pn`.`name` as `name`,
-  `pn`.`langId` as langId,
-  group_concat(`translated`.`langId`) as `langIdTranslated`,
-  `pc`.`id` as category,
-  0 as count,
-  count( DISTINCT p.productVariantId) as countProds
-FROM (((((`ProductName` as `pn`
-  JOIN `ProductNameTranslation` as `pnt` on `pn`.`name` = `pnt`.`name` AND `pn`.`langId` = `pnt`.`langId`)
-  JOIN `Product` `p` ON (`pnt`.`productId` = `p`.`id` AND `pnt`.`productVariantId` = `p`.`productVariantId`))
-  JOIN `ProductSku` as `ps` ON `ps`.`productId` = `p`.`id` AND `ps`.`productVariantId` = `p`.`productVariantId`)
-  LEFT JOIN (`ProductHasProductCategory` `phpc`
-    JOIN `ProductCategory` `pc` ON `phpc`.`productCategoryId` = `pc`.`id`)
-    ON (`p`.`id` = `phpc`.`productId`) AND (`p`.`productVariantId` = `phpc`.`productVariantId`)
-  JOIN `ProductStatus` ON `ProductStatus`.`id` = `p`.`productStatusId`)
-  LEFT JOIN (SELECT translation, name, langId FROM ProductName) as translated on translated.name = pn.name )
-WHERE `p`.`qty` > 0 AND `p`.`dummyPicture` NOT LIKE '%bs-dummy%'
-      AND `p`.`productStatusId` in (5,6,11)
-group by pn.id, `pc`.`id`";
+            "SELECT
+              `pn`.`id` as `id`,
+              `pnt`.`productId` as `productId`,
+              `pnt`.`productVariantId` as `productVariantId`,
+              `pn`.`name` as `name`,
+              `pn`.`langId` as langId,
+              group_concat(`translated`.`langId`) as `langIdTranslated`,
+              `pc`.`id` as category,
+              0 as count,
+              count( DISTINCT p.productVariantId) as countProds,
+              `stepTb`.stepName as stepName
+            FROM (((((`ProductName` as `pn`
+              JOIN `ProductNameTranslation` as `pnt` on `pn`.`name` = `pnt`.`name` AND `pn`.`langId` = `pnt`.`langId`)
+              JOIN `Product` `p` ON (`pnt`.`productId` = `p`.`id` AND `pnt`.`productVariantId` = `p`.`productVariantId`))
+              JOIN `ProductSku` as `ps` ON `ps`.`productId` = `p`.`id` AND `ps`.`productVariantId` = `p`.`productVariantId`)
+              LEFT JOIN (`ProductHasProductCategory` `phpc`
+                JOIN `ProductCategory` `pc` ON `phpc`.`productCategoryId` = `pc`.`id`)
+                ON (`p`.`id` = `phpc`.`productId`) AND (`p`.`productVariantId` = `phpc`.`productVariantId`)
+              JOIN `ProductStatus` ON `ProductStatus`.`id` = `p`.`productStatusId`)
+              LEFT JOIN (SELECT translation, name, langId FROM ProductName) as translated on translated.name = pn.name 
+              LEFT JOIN (SELECT `pbhpn`.`productName` as batchName,
+                                `wcs`.`name` as `stepName`,
+                                `pbhpn`.`langId` as `langBatch`
+                        FROM `ProductBatchHasProductName` `pbhpn`
+                        JOIN `WorkCategorySteps` `wcs` ON `pbhpn`.`workCategoryStepsId` = `wcs`.`id`) as stepTb ON `pn`.`name` = `stepTb`.batchName AND `pn`.`langId` = `stepTb`.`langBatch`
+              )
+            WHERE `p`.`qty` > 0 AND `p`.`dummyPicture` NOT LIKE '%bs-dummy%'
+                  AND `p`.`productStatusId` in (5,6,11) AND `pn`.`id` in ($ids)
+            group by pn.id, `pc`.`id`";
+
+
+        if(empty($ids)){
+            $sql = str_replace(' AND `pn`.`id` in ()', '', $sql);
+        }
+
+
         $datatable = new CDataTables($sql,['id'],$_GET, true);
 
-        $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
+        if($this->app->getUser()->hasPermission('/admin/product/edit') ||$this->app->getUser()->hasPermission('worker') ){
+            $okManage = true;
+        } else {
+            false;
+        }
+
+        //$okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId',$this->authorizedShops);
@@ -111,6 +138,10 @@ group by pn.id, `pc`.`id`";
 
         $i = 0;
 
+        /** @var CRepo $pbhpnRepo */
+        $pbhpnRepo = \Monkey::app()->repoFactory->create('ProductBatchHasProductName');
+
+        /** @var CProductName $val */
         foreach($productsName as $val){
 
             $pnTranslated = $pnRepo->findOneBy(['name' => $val->name, 'langId' => $langId]);
@@ -147,6 +178,28 @@ group by pn.id, `pc`.`id`";
             }
             $response['data'][$i]['category'] = implode('', $cats);
             $response['data'][$i]['name'] = $val->name;
+
+            /** @var CProductBatchHasProductName $inBatch */
+            $inBatch = $pbhpnRepo->findOneBy(['productName'=>$val->name, 'langId'=>$langId]);
+
+            if(!is_null($inBatch)) {
+                if (is_null($inBatch->workCategoryStepsId)) {
+                    $stepName = '-';
+                } else if (($inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG
+                        || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC) && $inBatch->productBatch->unfitDate == 0) {
+                    $stepName = '<p style="color: red; font-weight: bold">' . $inBatch->workCategorySteps->name . ' IN VERIFICA, NON MODIFICARE!</p>';
+                } else if ($inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG
+                    || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC) {
+                    $stepName = '<p style="color: red; font-weight: bold">' . $inBatch->workCategorySteps->name . ' DA MODIFICARE</p>';
+                } else {
+                    $stepName = $inBatch->workCategorySteps->name;
+                }
+            } else {
+                $stepName = '-';
+            }
+
+            $response['data'][$i]['stepName'] = $stepName;
+            $response['data'][$i]['work_category'] = (!is_null($inBatch) ? $inBatch->workCategorySteps->workCategoryId : '');
             $i++;
         }
         return json_encode($response);

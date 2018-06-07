@@ -3,6 +3,9 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProductName;
+use bamboo\domain\repositories\CProductNameRepo;
+use bamboo\domain\repositories\CProductNameTranslationRepo;
 
 /**
  * Class CNameTranslateListAjaxController
@@ -42,7 +45,43 @@ class CNameTranslateListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "select `pn`.`id` AS `id`,`pnt`.`productId` AS `productId`,`pnt`.`productVariantId` AS `productVariantId`,`pn`.`name` AS `name`,`pn`.`langId` AS `langId`,`pc`.`id` AS `category`,0 AS `count` from (((((`ProductName` `pn` join `ProductNameTranslation` `pnt` on(((`pn`.`name` = `pnt`.`name`) and (`pn`.`langId` = `pnt`.`langId`)))) join `Product` `p` on(((`pnt`.`productId` = `p`.`id`) and (`pnt`.`productVariantId` = `p`.`productVariantId`)))) join `ProductSku` `ps` on(((`ps`.`productId` = `p`.`id`) and (`ps`.`productVariantId` = `p`.`productVariantId`)))) join (`ProductHasProductCategory` `phpc` join `ProductCategory` `pc` on((`phpc`.`productCategoryId` = `pc`.`id`))) on(((`p`.`id` = `phpc`.`productId`) and (`p`.`productVariantId` = `phpc`.`productVariantId`)))) join `ProductStatus` on((`ProductStatus`.`id` = `p`.`productStatusId`))) where ((`pn`.`langId` = 1) and (`pnt`.`langId` = 1) and (`ps`.`stockQty` > 0) and (not((`p`.`dummyPicture` like '%bs-dummy%'))) and (`p`.`productStatusId` in (5,6,11)))";
+        $sql = "SELECT pn.name,
+              pIt.it as italian,
+              pEn.en as england,
+              pDe.de as deutsch,
+              `pn`.`id` AS `id`,
+              `pnt`.`productId` AS `productId`,
+              `pnt`.`productVariantId` AS `productVariantId`,
+              `pn`.`langId` AS `langId`,
+              `pc`.`id` AS `category`,
+              0 AS `count`
+            FROM ProductName pn
+              LEFT JOIN (SELECT pn1.translation as it,
+                           pn1.name as pn1name,
+                           pn1.langId as pn1lang
+                    FROM ProductName pn1
+                    WHERE pn1.langId = 1) as pIt ON pIt.pn1name = pn.name
+              LEFT JOIN (SELECT pn2.translation as en,
+                           pn2.name as pn2name,
+                           pn2.langId as pn2lang
+                    FROM ProductName pn2
+                    WHERE pn2.langId = 2) as pEn ON pEn.pn2name = pn.name
+              LEFT JOIN (SELECT pn3.translation as de,
+                           pn3.name as pn3name,
+                           pn3.langId as pn3lang
+                    FROM ProductName pn3
+                    WHERE pn3.langId = 3) as pDe ON pDe.pn3name = pn.name
+            
+              join `ProductNameTranslation` `pnt` on(((`pn`.`name` = `pnt`.`name`) and (`pn`.`langId` = `pnt`.`langId`)))
+            join `Product` `p` on(((`pnt`.`productId` = `p`.`id`) and (`pnt`.`productVariantId` = `p`.`productVariantId`)))
+            join `ProductSku` `ps` on(((`ps`.`productId` = `p`.`id`) and (`ps`.`productVariantId` = `p`.`productVariantId`)))
+            join (`ProductHasProductCategory` `phpc`
+            join `ProductCategory` `pc` on((`phpc`.`productCategoryId` = `pc`.`id`)))
+            on(((`p`.`id` = `phpc`.`productId`) and (`p`.`productVariantId` = `phpc`.`productVariantId`)))
+            join `ProductStatus` on((`ProductStatus`.`id` = `p`.`productStatusId`))
+            where ((`pn`.`langId` = 1) and (`pnt`.`langId` = 1) and (`ps`.`stockQty` > 0) and
+            (not((`p`.`dummyPicture` like '%bs-dummy%'))) and (`p`.`productStatusId` in (5,6,11)))";
+
         $datatable = new CDataTables($sql,['id'],$_GET,true);
         $modifica = $this->urls['base']."traduzioni/nomi/modifica";
 
@@ -58,6 +97,7 @@ class CNameTranslateListAjaxController extends AAjaxController
         $count = $this->em->productsName->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->productsName->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
+        /** @var CProductNameRepo $PNRepo */
         $PNRepo = \Monkey::app()->repoFactory->create('ProductName');
         $repo = \Monkey::app()->repoFactory->create('Lang');
         $installedLang = $repo->findAll();
@@ -70,6 +110,7 @@ class CNameTranslateListAjaxController extends AAjaxController
 
         $i = 0;
 
+        /** @var CProductName $val */
         foreach($productName as $val){
             $html = '';
 
@@ -109,8 +150,14 @@ class CNameTranslateListAjaxController extends AAjaxController
                 }
             }
 
-            $response['data'][$i]['category'] = implode('', $cats);
+            $ita = $PNRepo->findOneBy(['name'=>$val->name, 'langId'=>1]);
+            $eng = $PNRepo->findOneBy(['name'=>$val->name, 'langId'=>2]);
+            $dtc = $PNRepo->findOneBy(['name'=>$val->name, 'langId'=>3]);
 
+            $response['data'][$i]['category'] = implode('', $cats);
+            $response['data'][$i]['italian'] = (is_null($ita) ? '-' : $ita->translation);
+            $response['data'][$i]['england'] = (is_null($eng) ? '-' : $eng->translation);
+            $response['data'][$i]['deutsch'] = (is_null($dtc) ? '-' : $dtc->translation);
             $i++;
         }
 

@@ -39,6 +39,12 @@
                 "parentKeys": ["id"],
                 "childKeys" : ["productBatchId"],
                 "type" : "OneToMany"
+            },{
+                "name" : "productBatchHasProductName",
+                "entity" : "ProductBatchHasProductName",
+                "parentKeys": ["id"],
+                "childKeys" : ["productBatchId"],
+                "type" : "OneToMany"
             }
         ]
     }

@@ -23,6 +23,7 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * @property CDocument $document
  * @property CObjectCollection $productBrand
  * @property CObjectCollection $productBatchHasProductBrand
+ * @property CObjectCollection $productBatchHasProductName
  *
  */
 class CProductBatch extends AEntity
@@ -59,10 +60,16 @@ class CProductBatch extends AEntity
                         ' | Lotto: '.$elem->productBatchId.
                         ' | Prodotto: '.$elem->productId.'-'.$elem->productVariantId;
                     break;
-                case CWorkCategory::BRAND:
+                case CProductBatchHasProductBrand::UNFIT_BRAND:
                     $unfitElement[] =
                         ' | Lotto: '.$elem->productBatchId.
                         ' | Brand: '.$elem->productBrandId;
+                    break;
+                case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG:
+                case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC:
+                $unfitElement[] =
+                    ' | Lotto: '.$elem->productBatchId.
+                    ' | Brand: '.$elem->productName;
                     break;
             }
         }
@@ -90,7 +97,10 @@ class CProductBatch extends AEntity
             case CWorkCategory::BRAND:
                 $elems = $this->productBatchHasProductBrand;
                 break;
-
+            case CWorkCategory::NAME_ENG:
+            case CWorkCategory::NAME_DTC:
+                $elems = $this->productBatchHasProductName;
+                break;
         }
 
         return $elems;

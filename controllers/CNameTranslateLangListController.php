@@ -28,7 +28,21 @@ class CNameTranslateLangListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/name_lang_list.php');
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
+
+        $ids = $this->app->router->request()->getRequestData();
+        $params = '';
+
+        if(!empty($ids)){
+            foreach ($ids as $id){
+                $params .= $id.',';
+            }
+            $params = substr($params, 0, -1);
+        }
+
+
         $langId = $this->app->router->getMatchedRoute()->getComputedFilter('langId');
+
+
         $urlAll = $this->urls['base']."traduzioni/nomi/lingua_list/" .$langId;
         $urlTrans = $this->urls['base']."traduzioni/nomi/lingua/" .$langId;
 
@@ -38,6 +52,7 @@ class CNameTranslateLangListController extends ARestrictedAccessRootController
             'page'=>$this->page,
             'urlAll'=>$urlAll,
             'urlTrans'=>$urlTrans,
+            'ids'=>$params,
             'sidebar' => $this->sidebar->build()
         ]);
     }

@@ -2152,6 +2152,42 @@
             "methods": [
                 "GET"
             ]
+        }, {
+            "pattern": "/blueseal/work/lotti/dettagli-brand/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBrandBatchDetailsListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/work/lotti/brands/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBrandBatchDetailsListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
+            "pattern": "/blueseal/work/lotti/traduzione-nomi/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNameTranslationListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         },{
             "pattern": "/blueseal/work/lotti/prodotti/:id(/)?",
             "behaviour": {

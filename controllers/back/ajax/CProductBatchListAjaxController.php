@@ -8,12 +8,15 @@ use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CProductBatchHasProductBrand;
+use bamboo\domain\entities\CProductBatchHasProductName;
 use bamboo\domain\entities\CProductCategory;
+use bamboo\domain\entities\CProductName;
 use bamboo\domain\entities\CWorkCategory;
 use bamboo\domain\repositories\CContractDetailsRepo;
 use bamboo\domain\repositories\CContractsRepo;
 use bamboo\domain\repositories\CFoisonRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
+use bamboo\domain\repositories\CProductNameRepo;
 use bamboo\domain\repositories\CWorkCategoryRepo;
 
 
@@ -85,6 +88,9 @@ class CProductBatchListAjaxController extends AAjaxController
         /** @var CProductBatchRepo $pbrRepo */
         $pbrRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
+        /** @var CProductNameRepo $pNameRepo */
+        $pNameRepo = \Monkey::app()->repoFactory->create('ProductName');
+
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             $finish = 0;
@@ -114,11 +120,36 @@ class CProductBatchListAjaxController extends AAjaxController
                     case CWorkCategory::BRAND:
                         $row["id"] = '<a href="'.$url.CWorkCategory::SLUG_EMPTY_BRAND.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
                         break;
+                    case CWorkCategory::NAME_ENG:
+                    case CWorkCategory::NAME_DTC:
+                        $row["id"] = '<a href="'.$url.CWorkCategory::SLUG_EMPTY_TRANS.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
                 }
 
 
             } else {
-                $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                if($pbr->contractDetails->workCategory->id != CWorkCategory::NAME_ENG && $pbr->contractDetails->workCategory->id != CWorkCategory::NAME_DTC ){
+                    $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                } else if($pbr->contractDetails->workCategory->id == CWorkCategory::NAME_ENG || $pbr->contractDetails->workCategory->id == CWorkCategory::NAME_DTC) {
+
+                    /** @var CObjectCollection $pBatchNames */
+                    $pBatchNames = $pbr->getElements();
+                    $pLangId = $pBatchNames->getFirst()->langId;
+                    $par = [];
+                    /** @var CProductBatchHasProductName $pName */
+                    foreach ($pBatchNames as $pName){
+
+                        /** @var CProductName $pn */
+                        $pn = $pNameRepo->findOneBy(['name'=>$pName->productName, 'langId'=>1]);
+
+                        $par[] = $pn->id;
+                    }
+                    $parUrl = http_build_query($par, 'id_');
+
+
+                    $row["id"] = '<a href="'.$blueseal.$pbr->contractDetails->workCategory->slug.'/'.$pLangId.'?'.$parUrl.'" target="_blank">'.$pbr->id.'</a>';
+                }
+
             }
 
 

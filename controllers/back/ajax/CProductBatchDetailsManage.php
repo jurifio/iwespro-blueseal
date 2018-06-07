@@ -10,6 +10,7 @@ use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CProductBatchHasProductBrand;
+use bamboo\domain\entities\CProductBatchHasProductName;
 use bamboo\domain\entities\CProductBrand;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
@@ -156,6 +157,9 @@ class CProductBatchDetailsManage extends AAjaxController
             case 'dettagli-brand':
                 $this->updStepBrand($catId, $ids, $pb);
                 break;
+            case 'lingua':
+                $this->updStepNameTrans($catId, $ids, $pb);
+                break;
         }
 
 
@@ -210,6 +214,35 @@ class CProductBatchDetailsManage extends AAjaxController
         if($catId == CProductBatchHasProductBrand::UNFIT_BRAND){
             /** @var CProductBatch $pba */
             $pba = $pbhpb->productBatch;
+            $pba->isFixed = 0;
+            $pba->update();
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $catId
+     * @param $names
+     * @param $lang
+     * @return bool
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    private function updStepNameTrans($catId, $names, $lang){
+        foreach ($names as $name){
+            /** @var CProductBatchHasProductName $pbhpn */
+            $pbhpn = \Monkey::app()->repoFactory->create('ProductBatchHasProductName')->findOneBy(['productName'=>$name, 'langId'=>$lang]);
+
+            $pbhpn->workCategoryStepsId = $catId;
+            $pbhpn->update();
+        }
+
+        if((($lang == 2 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG))
+            || ($lang == 3 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC)){
+            /** @var CProductBatch $pba */
+            $pba = $pbhpn->productBatch;
             $pba->isFixed = 0;
             $pba->update();
         }

@@ -28,6 +28,7 @@
                                data-datatable-name="name_lang_list"
                                data-controller="NameTranslateLangListAjaxController?marks=tutto&translated=tutto"
                                data-lang="<?php echo $langId; ?>"
+                               data-ids="<?php echo $ids; ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="50, 100, 200, 500, 1000"
@@ -51,6 +52,10 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center sorting">Traduzione</th>
+                                <th data-slug="stepName"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center sorting">Stato</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -108,6 +113,21 @@
             data-rel="tooltip"
             data-title="Filtra per punti esclamativi"
             data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Termina lavorazione sul prodotto">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-step-forward"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.end.work.product.name.translation"
+                data-title="Termina la lavorazione sui prodotti selezionati"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.change.product.status.batch"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

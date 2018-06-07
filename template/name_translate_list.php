@@ -48,6 +48,18 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center sorting">Lingua</th>
+                                <th data-slug="italian"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center sorting">Italiano</th>
+                                <th data-slug="england"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center sorting">Inglese</th>
+                                <th data-slug="deutsch"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center sorting">Tedesco</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -69,6 +81,16 @@
             data-icon="fa-language"
             data-permission="/admin/product/edit"
             data-event="bs.translate.name"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Traduci nomi"
+            data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-arrows-h"
+            data-permission="/admin/product/edit"
+            data-event="bs.name.to.batch"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Traduci nomi"

@@ -163,4 +163,33 @@ class CProductBatchRepo extends ARepo
         return $productBatch;
     }
 
+
+    public function checkRightLanguage($pbId, $langId){
+
+        /** @var CProductBatch $pb */
+        $pb = $this->findOneBy(['id'=>$pbId]);
+
+        if(is_null($pb)) return false;
+
+
+
+        if(is_null($pb->contractDetailsId)){
+            $wk = $pb->workCategoryId;
+        } else {
+            $wk = $pb->contractDetails->workCategory->id;
+        }
+
+        $correct = false;
+        switch ($langId){
+            case 2:
+                if($wk == CWorkCategory::NAME_ENG) $correct = true;
+                break;
+            case 3:
+                if($wk == CWorkCategory::NAME_DTC) $correct = true;
+                break;
+        }
+
+        return $correct;
+    }
+
 }

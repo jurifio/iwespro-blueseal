@@ -28,16 +28,25 @@ window.buttonSetup = {
 
         let selectedElement = [];
 
+        let pb = '';
         switch (workType){
             case 'normalizzazione-prodotti':
                 $.each(selectedRows, function (k, v) {
                     selectedElement.push(v.id);
                 });
+                pb = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
                 break;
             case 'dettagli-brand':
                 $.each(selectedRows, function (k, v) {
                     selectedElement.push(v.DT_RowId);
                 });
+                pb = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+                break;
+            case 'lingua':
+                $.each(selectedRows, function (k, v) {
+                    selectedElement.push(v.name);
+                });
+                pb = window.location.href.split('?')[0].substring(window.location.href.lastIndexOf('/') + 1);
                 break;
         }
 
@@ -76,7 +85,7 @@ window.buttonSetup = {
             const data = {
                 prod: selectedElement,
                 cat: $('#categories').val(),
-                pb: window.location.href.substring(window.location.href.lastIndexOf('/') + 1),
+                pb: pb,
                 workType: workType
             };
             $.ajax({

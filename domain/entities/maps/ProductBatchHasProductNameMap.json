@@ -1,0 +1,30 @@
+{
+    "entity": {
+        "name": "ProductBatchHasProductName",
+        "keys": ["productBatchId","productName","langId"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "workCategorySteps",
+                "entity" : "WorkCategorySteps",
+                "parentKeys": ["workCategoryStepsId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },
+            {
+                "name" : "productBatch",
+                "entity" : "ProductBatch",
+                "parentKeys": ["productBatchId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            },
+            {
+                "name" : "lang",
+                "entity" : "Lang",
+                "parentKeys": ["langId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
+            }
+        ]
+    }
+}

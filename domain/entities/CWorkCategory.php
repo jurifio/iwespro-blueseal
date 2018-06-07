@@ -24,10 +24,13 @@ class CWorkCategory extends AEntity
 {
 
     const NORM = 1;
-    const BRAND = 3;
+    const BRAND = 2;
+    const NAME_ENG = 3;
+    const NAME_DTC = 4;
 
     const SLUG_EMPTY_NORM = 'prodotti';
     const SLUG_EMPTY_BRAND = 'brands';
+    const SLUG_EMPTY_TRANS = 'traduzione-nomi';
 
     protected $entityTable = 'WorkCategory';
     protected $primaryKeys = ['id'];

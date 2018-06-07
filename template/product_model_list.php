@@ -43,6 +43,15 @@
                                     <th data-slug="details"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Dettagli</th>
+                                    <th data-slug="catGroupName"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Categorie preImpostate</th>
+                                    <th data-slug="gendName"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Genere</th>
+                                    <th data-slug="matName"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Materiale</th>
                                 </tr>
                             </thead>
                             <tbody>
