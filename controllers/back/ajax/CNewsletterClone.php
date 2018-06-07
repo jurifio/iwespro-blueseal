@@ -37,15 +37,17 @@ class CNewsletterClone extends AAjaxController
         $data = $this->app->router->request()->getRequestData();
         $id = $data["id"];
         $value = $id;
-        $value = strstr($value, ">");
-        $value = strstr($value, "</a>", true);
-        $value = trim(str_replace(">", "", $value));
+        if (strlen($value)>10) {
+            $value = strstr($value, ">");
+            $value = strstr($value, "</a>", true);
+            $value = trim(str_replace(">", "", $value));
+        }
         /** @var CRepo $newsletterUserRepo */
         $newsletterUserRepo = \Monkey::app()->repoFactory->create('Newsletter');
 
         /** @var CNewsletter $newsletter */
         $newsletter = $newsletterUserRepo->findOneBy(['id' => $value]);
-        $newsletterCloneName = $newsletter->name;
+        //$newsletterCloneName = $newsletter->name;
         $newsletterCloneFromEmailAddressId = $newsletter->fromEmailAddressId;
         $newsletterCloneSendAddressdate = '2100-00-00 00:00:00';
         $newsletterCloneNewsletterEmailListId = $newsletter->newsletterEmailListId;
@@ -56,7 +58,7 @@ class CNewsletterClone extends AAjaxController
         $newsletterCloneNewsletterCampaignId = $newsletter->newsletterCampaignId;
         $newsletterCloneCampaignId = $newsletter->campaignId;
         $newsletterCloneEventId = $newsletter->newsletterEventId;
-        $newsletterCloneName = "Copia di " . $newsletterCloneName;
+        $newsletterCloneName = "Copia di " . $newsletter->name;
         /** @var CNewsletterUser $newsletterUserInsert */
         $newsletterUserInsert = \Monkey::app()->repoFactory->create('Newsletter')->getEmptyEntity();
         //popolo la tabella
