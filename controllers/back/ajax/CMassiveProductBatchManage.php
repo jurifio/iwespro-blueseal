@@ -125,7 +125,7 @@ class CMassiveProductBatchManage extends AAjaxController
 
             /** @var CProductBatchDetails $pbd */
             $pbd = $pbdRepo->findOneBy(['id'=>$posProd]);
-            $pbd->note = $note;
+            $pbd->note = (is_null($pbd->note) ? $note.'.' : $pbd->note.' '.$note.'.');
             $pbd->update();
         }
 
