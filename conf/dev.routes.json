@@ -1372,6 +1372,19 @@
             ]
         },
         {
+            "pattern": "/blueseal/newsletter-list-userscomponent(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterGroupEmailListController"
+            },
+            "filters": {
+
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/newsletter-redemption/newsletter-redemption/single-redemption/clicked-url(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterClickedUrlRedemptionListController"

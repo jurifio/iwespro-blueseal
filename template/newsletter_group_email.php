@@ -23,29 +23,22 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="newsletter_group_list"
-                               data-controller="NewsletterGroupListAjaxController"
+                               data-datatable-name="newsletter_group_email"
+                               data-controller="NewsletterGroupEmailListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
-                               data-display-length="200">
+                               data-display-length="200"
+                               data-id="<?php echo $id?>">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+
+                                <th data-slug="email"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Id
+                                    class="center">Email
                                 </th>
-                                <th data-slug="name"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Liste di Distribuzione
-                                </th>
-                                <th data-slug="sql"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">sql
-                                </th>
+
 
                             </tr>
                             </thead>

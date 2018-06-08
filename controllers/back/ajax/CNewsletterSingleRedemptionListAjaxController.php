@@ -41,7 +41,7 @@ class CNewsletterSingleRedemptionListAjaxController extends AAjaxController
                   JOIN UserEmail ue ON er.emailId = er.emailId
                   WHERE n.id = $newsletterId";
 
-        $datatable = new CDataTables($sql, ['emailAddressId'], $_GET, true);
+        $datatable = new CDataTables($sql, ['Email'], $_GET, true);
 
         $datatable->doAllTheThings('true');
 
