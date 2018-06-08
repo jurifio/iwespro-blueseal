@@ -31,8 +31,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="newsletter_redemption_list"
-                               data-controller="NewsletterRedemptionListAjaxController"
+                               data-datatable-name="newsletter_redemptiongrouped_list"
+                               data-controller="NewsletterRedemptionGroupedListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
