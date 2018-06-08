@@ -47,7 +47,7 @@ class CNewsletterRedemptionListAjaxController extends AAjaxController
                 FROM Newsletter n
                   JOIN Email e ON n.id = e.newsletterId
                   JOIN EmailRecipient er ON e.id = er.emailId
-                  order  BY n.newsletterCloneId";
+                  group  BY n.id ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
