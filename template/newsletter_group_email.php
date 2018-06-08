@@ -60,22 +60,6 @@
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Crea Lista di Distribuzione">
-        <bs-toolbar-button
-            data-remote="bs.lists.create.group"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.modify.newslettergroup"
-
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.view.newslettergroup"
-
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.delete.newslettergroup"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html><?php
