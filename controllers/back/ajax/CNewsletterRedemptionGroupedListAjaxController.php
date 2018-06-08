@@ -18,7 +18,7 @@ use bamboo\core\intl\CLang;
  * @date 15/02/2018
  * @since 1.0
  */
-class CNewsletterRedemptionListAjaxController extends AAjaxController
+class CNewsletterRedemptiongroupedListAjaxController extends AAjaxController
 {
     public function get()
     {

@@ -1333,6 +1333,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/newsletter-redemption-grouped(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionGroupedListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/newsletter-redemption/single-redemption(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterSingleRedemptionListController"
