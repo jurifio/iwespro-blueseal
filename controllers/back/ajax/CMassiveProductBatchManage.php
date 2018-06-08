@@ -115,6 +115,7 @@ class CMassiveProductBatchManage extends AAjaxController
 
         $posProds = \Monkey::app()->router->request()->getRequestData('posProds');
         $note = \Monkey::app()->router->request()->getRequestData('note');
+        $type = \Monkey::app()->router->request()->getRequestData('type');
 
         if(empty($note)) return 'Inserisci il testo della nota';
 
@@ -125,8 +126,20 @@ class CMassiveProductBatchManage extends AAjaxController
 
             /** @var CProductBatchDetails $pbd */
             $pbd = $pbdRepo->findOneBy(['id'=>$posProd]);
-            $pbd->note = (is_null($pbd->note) ? $note.'.' : $pbd->note.' '.$note.'.');
+
+            if($type == 's' || is_null($pbd->note)){
+                $pbd->note = $note;
+            } else if($type == 'a'){
+                $pbd->note = $pbd->note.'. '.$note.'.';
+            }
+
+            $pbd->workCategoryStepsId = CProductBatchDetails::UNFIT_NORM;
             $pbd->update();
+
+            /** @var CProductBatch $pb */
+            $pba = $pbd->productBatch;
+            $pba->isFixed = 0;
+            $pba->update();
         }
 
         return 'Note inserite con successo';

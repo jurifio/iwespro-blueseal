@@ -30,7 +30,11 @@ $(document).on('bs-note-product-batch', function () {
 
 
     let bsModal = new $.bsModal('Aggiungi una nota per i prodotti selezionati', {
-        body: `<p>Inserisci una nuova nota</p>
+        body: `<p>Inserisci/accoda/sovrascrivi una nuova nota</p>
+               <select style="display: block; margin: 0 auto" id="type">
+               <option value="s">Inserisci/sovrascrivi</option>
+               <option value="a">Accoda</option>
+               </select>
                <textarea style="width: 400px; height: 400px;" id="newProductNote"></textarea>`
     });
 
@@ -39,7 +43,8 @@ $(document).on('bs-note-product-batch', function () {
 
         const data = {
             posProds: selectedProduct,
-            note: $('#newProductNote').val()
+            note: $('#newProductNote').val(),
+            type: $('#type').val()
         };
         $.ajax({
             method: 'put',

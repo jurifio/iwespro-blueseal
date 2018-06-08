@@ -74,7 +74,7 @@
                                     data-orderable="false" class="center">Foto per normalizzazione</th>
                                 <th data-slug="note"
                                     data-searchable="false"
-                                    data-orderable="false" class="center">Note</th>
+                                    data-orderable="true" class="center">Note</th>
                             </tr>
                             </thead>
                             <tbody>
