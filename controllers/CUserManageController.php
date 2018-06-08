@@ -124,6 +124,7 @@ class CUserManageController extends ARestrictedAccessRootController
 	    foreach($ids as $id) {
 		    $user = \Monkey::app()->repoFactory->create('User')->findOne([$id]);
 		    $user->isDeleted = 1;
+		    $user->isActive = 0;
 		    $user->update();
 	    }
 
