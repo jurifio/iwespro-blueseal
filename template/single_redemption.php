@@ -45,7 +45,7 @@
                                     data-orderable="true"
                                     class="center">EmailAddressId
                                 </th>
-                                <th data-slug="email"
+                                <th data-slug="Email"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Destinatario
