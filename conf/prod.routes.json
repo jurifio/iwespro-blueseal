@@ -1391,6 +1391,19 @@
             ]
         },
         {
+            "pattern": "/blueseal/newsletter-list-userscomponent(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterGroupEmailListController"
+            },
+            "filters": {
+
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/fusione(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductFusionListController"
