@@ -45,6 +45,11 @@
                                     data-orderable="true"
                                     class="center">EmailAddressId
                                 </th>
+                                <th data-slug="email"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Destinatario
+                                </th>
                                 <th data-slug="responseDate"
                                     data-searchable="true"
                                     data-orderable="true"

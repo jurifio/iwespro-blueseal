@@ -27,6 +27,7 @@ class CNewsletterSingleRedemptionListAjaxController extends AAjaxController
         $sql = "  SELECT 
                         er.emailId as emailId,
                         er.emailAddressId as emailAddressId,
+                        ue.address as Email,
                         er.responseDate as responseDate,
                         er.queuedTime as queuedTime,
                         er.sentTime as sentTime,
@@ -37,6 +38,7 @@ class CNewsletterSingleRedemptionListAjaxController extends AAjaxController
                   FROM Newsletter n
                   JOIN Email e ON n.id = e.newsletterId
                   JOIN EmailRecipient er ON e.id = er.emailId
+                  JOIN UserEmail ue ON er.emailId = er.emailId
                   WHERE n.id = $newsletterId";
 
         $datatable = new CDataTables($sql, ['emailAddressId'], $_GET, true);
