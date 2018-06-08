@@ -44,8 +44,8 @@ class CNewsletterSingleRedemptionListAjaxController extends AAjaxController
         $datatable->doAllTheThings('true');
 
 
-        $blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        $url = $blueseal . "newsletter-redemption/single-redemption?newsletterId=";
+       /* $blueseal = $this->app->baseUrl(false) . '/blueseal/';
+        $url = $blueseal . "newsletter-redemption/single-redemption?newsletterId=";*/
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
