@@ -11,7 +11,6 @@ window.buttonSetup = {
 };
 
 $(document).on('bs-editorialplan-edit', function (e, element, button) {
-
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
 
@@ -65,7 +64,8 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         method:'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
-            table: 'Shop'
+            table: 'Shop',
+            selection: {id: selectedRows[0].shopId}
         },
         dataType: 'json'
     }).done(function (res2) {

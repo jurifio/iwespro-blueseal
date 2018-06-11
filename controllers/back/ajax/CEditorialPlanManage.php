@@ -84,6 +84,15 @@ class CEditorialPlanManage extends AAjaxController
     {
         $data = $this->app->router->request()->getRequestData();
         $id = $data["id"];
+        if (strlen($id)>10) {
+            $finalpositionId = strrpos($id, '</a>');
+            $initialpositionId = strrpos($id, '" >');
+            $finalpositionId = $finalpositionId;
+            $initialpositionId = $initialpositionId + 2;
+            $lenghtposition = $finalpositionId - $initialpositionId;
+            $id = substr($id, $initialpositionId, $lenghtposition);
+            $id =str_replace('>','',$id);
+        }
         $name = $data["name"];
         $shopId = $data['shopId'];
         $startDate = $data["dateStartDate"];
