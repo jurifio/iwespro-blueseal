@@ -104,11 +104,16 @@ class CEditorialPlanManage extends AAjaxController
 
         /** @var CEditorialPlan $editorialPlan */
         $editorialPlan = $editorialPlan->findOneBy(['id' => $id]);
-
         $editorialPlan->name = $name;
-        $editorialPlan->startDate = $startDate;
-        $editorialPlan->endDate = $endDate;
-        $editorialPlan->shopId = $shopId;
+        if ($startDate!="0000-00-00 00:00:00") {
+            $editorialPlan->startDate = $startDate;
+        }
+        if ($startDate!="0000-00-00 00:00:00") {
+            $editorialPlan->endDate = $endDate;
+        }
+        if ($startDate!="") {
+            $editorialPlan->shopId = $shopId;
+        }
 
 
         $editorialPlan->update();
