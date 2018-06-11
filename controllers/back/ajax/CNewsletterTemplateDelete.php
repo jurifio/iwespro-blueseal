@@ -33,7 +33,7 @@ class CNewsletterTemplateDelete extends AAjaxController
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
 
-    public function put(){
+    public function delete(){
         $data  = $this->app->router->request()->getRequestData();
         $id = $data["id"];
         /** @var CRepo $newsletterTemplate */

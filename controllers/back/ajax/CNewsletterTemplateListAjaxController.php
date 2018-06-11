@@ -22,6 +22,8 @@ class CNewsletterTemplateListAjaxController extends AAjaxController
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
+        $blueseal = $this->app->baseUrl(false) . '/blueseal/';
+        $opera = $blueseal . "newsletter/newsletter-template-modifica?id=";
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
@@ -29,12 +31,16 @@ class CNewsletterTemplateListAjaxController extends AAjaxController
             $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
 
             /** @var CNewsletterTemplate $newsLetterTemplate */
-            $newsLetterTemplate = $newsletterTemplateRepo->findOneBy(['id' => $row['id']]);
+            $newsletterTemplate = $newsletterTemplateRepo->findOneBy(['id' => $row['id']]);
+            $row['id']=$newsletterTemplate->id;
 
-            $row['name'] = $newsLetterTemplate->name;
+
+            $row['id'] = '<a href="' . $opera . $newsletterTemplate->id . '">' . $newsletterTemplate->id . '</a>';
+
+            $row['name'] = $newsletterTemplate->name;
         //var_dump($newsLetterTemplate);
 
-
+            $datatable->setResponseDataSetRow($key,$row);
         }
 
         return $datatable->responseOut();

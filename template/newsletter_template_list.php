@@ -73,6 +73,9 @@
                 data-remote="bs.lists.create.newslettertemplate"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.lists.modify.newslettertemplate"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.lists.delete.newslettertemplate"
         ></bs-toolbar-button>
     </bs-toolbar-group>

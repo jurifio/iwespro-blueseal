@@ -1,8 +1,8 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-eraser",
+    icon: "fa-pencil",
     permission: "/admin/product/delete&&allShops",
-    event: "bs-newslettertemplate-delete",
+    event: "bs-newslettertemplate-modify",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Cancella il Template",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs-newslettertemplate-delete', function (e, element, button) {
+$(document).on('bs-newslettertemplate-modify', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
@@ -19,14 +19,14 @@ $(document).on('bs-newslettertemplate-delete', function (e, element, button) {
     if (selectedRows.length != 1) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare un Template per eliminarlo"
+            message: "Devi selezionare un Template per modificarlo"
         }).open();
         return false;
     }
 
-    let newsletterEventId = selectedRows[0].id;
-    let bsModal = new $.bsModal('Cancellazione', {
-        body: '<p>Cancella il Template selezionato</p>'
+    let newsletterTemplateId = selectedRows[0].id;
+    let bsModal = new $.bsModal('Modifica', {
+        body: '<p>Modifica il Template selezionato</p>'
     });
 
 
@@ -37,7 +37,7 @@ $(document).on('bs-newslettertemplate-delete', function (e, element, button) {
 
         $.ajax({
             method: "delete",
-            url: "/blueseal/xhr/NewsletterTemplateDelete",
+            url: "/blueseal/xhr/NewsletterTemplateManage",
             data: {
                 id: id
             }
