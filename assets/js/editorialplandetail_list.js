@@ -216,7 +216,7 @@
                         '<div class=\"col-md-3\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"photoUrl\">Immagine Evento</label>' +
-                        '<input type=\"file\" id=\"photoUrl\" class=\"form-control\"' +
+                        '<input type=\"text\" id=\"photoUrl\" class=\"form-control\"' +
                         'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" ">' +
                         '</div>' +
                         '</div>' +
