@@ -1,6 +1,7 @@
 (function ($) {
     var obj = null;
     $(document).ready(function () {
+        $(this).trigger('bs.load.photo');
         createcalendar(obj, 1);
         $.ajax({
             method: 'GET',
@@ -160,13 +161,31 @@
                 selectHelper: true,
 
                 select: function (start, end, allDay) {
+                    let bsModal = $('#bsModal');
+
+                    let header = bsModal.find('.modal-header h4');
+                    let body = bsModal.find('.modal-body');
+                    let cancelButton = bsModal.find('.modal-footer .btn-default');
+                    let okButton = bsModal.find('.modal-footer .btn-success');
+
+                    bsModal.modal();
+
+                    header.html('Carica Foto');
+                    okButton.html('Fatto').off().on('click', function () {
+                        bsModal.modal('hide');
+                        okButton.off();
+                    });
+                    cancelButton.remove();
+                    var photogroup="";
                     let bodyContent =
-                        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
+                        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">'+
                         '<div class="fallback">'+
                         '<input name="file" type="file" multiple />' +
                         '</div>' +
                         '</form>';
-
+                    $('#photoUrl').change(function() {
+                        photogroup =$('#photoUrl').val();
+                    });
                     body.html(bodyContent);
 
                     var start = $.fullCalendar.formatDate(start, "DD-MM-YYYY hh:mm:ss");
@@ -221,7 +240,13 @@
                         '<input  type="checkbox" id=\"isVisibleDescription\" class=\"form-control\"' +
                         'placeholder=\"Visible\" checked="true" name=\"isVisibleDescription\" ">' +
                         '</div>' +
-                        '</div>' + bodycontent +
+                        '</div>' +
+                            bodyContent+
+                        /*'<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
+                        '<div class="fallback">'+
+                        '<input name="photoUrl" id="photoUrl" type="file" multiple />' +
+                        '</div>' +
+                        '</form>'+*/
                        /* '<div class=\"col-md-3\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"photoUrl\">Immagine Evento</label>' +
@@ -325,27 +350,7 @@
                         '</div>' +
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
                     });
-                    let dropzone = new Dropzone("#dropzoneModal",{
-                        url: "/blueseal/xhr/ProductCardsPhotoAjaxManage",
-                        maxFilesize: 5,
-                        maxFiles: 100,
-                        parallelUploads: 10,
-                        acceptedFiles: "image/jpeg",
-                        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
-                        uploadMultiple: true,
-                        sending: function(file, xhr, formData) {
-                            formData.append("id", $.QueryString["id"]);
-                            formData.append("productletiantId", $.QueryString["productletiantId"]);
-                        }
-                    });
 
-                    dropzone.on('addedfile',function(){
-                        okButton.attr("disabled", "disabled");
-                    });
-                    dropzone.on('queuecomplete',function(){
-                        okButton.removeAttr("disabled");
-                        $(document).trigger('bs.load.photo');
-                    });
 
                     bsModal1.addClass('modal-wide');
                     bsModal1.addClass('modal-high');
@@ -412,7 +417,7 @@
                             description: $('#description').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
-                            photoUrl: $('#photoUrl').val(),
+                          //  photoUrl: photogroup,
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
@@ -428,8 +433,8 @@
                         };
                         $.ajax({
                             type: 'POST',
-                            url: '/blueseal/xhr/EditorialPlanDetailAddAjaxController',
-                            data: data
+                            url: "/blueseal/xhr/EditorialPlanDetailAddAjaxController",
+                            data: data,
                         }).done(function (res) {
                             bsModal1.writeBody(res);
                         }).fail(function (res) {
@@ -443,6 +448,26 @@
                             bsModal1.showOkBtn();
                         });
 
+                    });
+                    let dropzone = new Dropzone("#dropzoneModal",{
+                        url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
+
+                        maxFilesize: 5,
+                        maxFiles: 100,
+                        parallelUploads: 10,
+                        acceptedFiles: "image/jpeg",
+                        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+                        uploadMultiple: true,
+                        sending: function(file, xhr, formData) {
+                        }
+                    });
+
+                    dropzone.on('addedfile',function(){
+                        okButton.attr("disabled", "disabled");
+                    });
+                    dropzone.on('queuecomplete',function(){
+                        okButton.removeAttr("disabled");
+                        $(document).trigger('bs.load.photo');
                     });
 
 

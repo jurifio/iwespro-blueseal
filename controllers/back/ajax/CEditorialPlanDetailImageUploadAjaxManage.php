@@ -23,7 +23,7 @@ use bamboo\core\utils\amazonPhotoManager\S3Manager;
  * @date 09/05/2018
  * @since 1.0
  */
-class CProductCardsPhotoAjaxManage extends AAjaxController
+class CEditorialPlanDetailImageUploadAjaxManage extends AAjaxController
 {
 
     /**

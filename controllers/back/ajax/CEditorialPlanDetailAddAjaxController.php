@@ -35,14 +35,25 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $isVisibleNote = $data['isVisibleNote'];
         $description = $data['description'];
         $isVisibleDescription = $data['isVisibleDescription'];
-        $photoUrl = $data['photoUrl'];
+        $photoUrl = [];
         $status = $data['status'];
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
         $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
         $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');
         $notifyEmail = $data['notifyEmail'];
+        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/";
+        $files = glob($tempFolder . "*.jpg");
+        $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images";
+        foreach ($files as $jpg) {
 
+            $finalslash = strrpos($jpg, '/');
+            $photo = substr($jpg, $finalslash, 1000);
+            $photo = trim($photo);
+            $image = $url . $photo;
+            array_push($photoUrl, $image);
+        }
+$groupimage=implode("-",$photoUrl);
 
         /** @var CRepo $editorialPlanDetailRepo */
         $editorialPlanDetailRepo = \Monkey::app()->repoFactory->create('EditorialPlanDetail');
@@ -66,20 +77,23 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $editorialPlanDetailInsert->isVisibleEditorialPlanArgument = $isVisibleEditorialPlanArgument;
             $editorialPlanDetailInsert->description = $description;
             $editorialPlanDetailInsert->isVisibleDescription = $isVisibleDescription;
-            $editorialPlanDetailInsert->photoUrl = $photoUrl;
+            $editorialPlanDetailInsert->photoUrl = $groupimage;
             $editorialPlanDetailInsert->isVisiblePhotoUrl = $isVisiblePhotoUrl;
             $editorialPlanDetailInsert->status = $status;
             $editorialPlanDetailInsert->note = $note;
             $editorialPlanDetailInsert->isVisibleNote = $isVisibleNote;
             $editorialPlanDetailInsert->socialId = $socialId;
-            $editorialPlanDetailInsert->bodyEvent =$bodyEvent;
-            $editorialPlanDetailInsert->isVisibleBodyEvent =$isVisibleBodyEvent;
+            $editorialPlanDetailInsert->bodyEvent = $bodyEvent;
+            $editorialPlanDetailInsert->isVisibleBodyEvent = $isVisibleBodyEvent;
             $editorialPlanDetailInsert->editorialPlanId = $editorialPlanId;
 
             // eseguo la commit sulla tabella;
 
             $editorialPlanDetailInsert->smartInsert();
 
+            foreach ($photoUrl as $file) {
+                unlink($tempFolder . $file);
+            }
             $res = "Dettaglio Piano Editoriale inserito con successo!";
             /** @var ARepo $shopRepo */
             $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
