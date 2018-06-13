@@ -76,7 +76,7 @@ class CProductModelListAjaxController extends AAjaxController
                   left join `ProductSheetModelPrototypeGender` `pspg` ON `p`.`genderId` = `pspg`.`id`
                   left join `ProductSheetModelPrototypeMaterial` `pspm` ON `p`.`genderId` = `pspm`.`id`
                   )
-                  where ((`pct`.`langId` = 1) and (`pdt`.`langId` = 1)) group by `p`.`id`";
+                  where ((`pct`.`langId` = 1) and (`pdt`.`langId` = 1) AND `p`.`isVisible` = 1) group by `p`.`id`";
 
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 

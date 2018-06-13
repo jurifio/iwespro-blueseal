@@ -44,7 +44,7 @@ $(document).on('bs.product.add', function() {
         body.html("Salvataggio riuscito");
         bsModal.modal();
         var ids = $.parseJSON(content);
-        window.location.replace("/blueseal/prodotti/modifica?id="+ids.id+"&productVariantId="+ids.productVariantId);
+        window.location.replace("/blueseal/prodotti/modifica?id="+ids['code'].id+"&productVariantId="+ids['code'].productVariantId);
     }).fail(function (){
         body.html("Errore grave");
         bsModal.modal();

@@ -18,20 +18,23 @@ $(document).on('bs-del-cat-fason', function () {
         body: `
         <div>
             <div class="col-md-4 pre-scrollable text-left">
-                 <p>Seleziona i generi da eliminare</p>
+                 <strong>GENERI</strong>
                  <div id="checkGender"></div>
             </div>
             <div class="col-md-4 pre-scrollable text-left">
-                 <p>Seleziona le da eliminare</p>
+                 <strong>CATEGORIE</strong>
                  <div id="checkCatGroup"></div>
             </div>
             <div class="col-md-4 pre-scrollable text-left">
-                 <p>Seleziona i materiali da eliminare</p>
+                 <strong>MATERIALI</strong>
                  <div id="checkMaterial"></div>
             </div>
         </div>
         `
     });
+
+    bsModal.addClass('modal-wide');
+    bsModal.addClass('modal-high');
 
 
     $.ajax({
@@ -40,12 +43,33 @@ $(document).on('bs-del-cat-fason', function () {
         dataType: 'json',
         data: {
             table: 'ProductSheetModelPrototypeGender',
+            orderBy: [
+                'name'
+            ]
         }
     }).done(function(genders){
+
+        let numGend = 0;
         $.each(genders, function (k, v) {
-            $('#checkGender').append('<div><input type="checkbox" name="' + v.id + '" value="' + v.id + '" /> ' + v.name + '</div>');
+
+            $.ajax({
+                url: '/blueseal/xhr/getTableContent',
+                method: 'GET',
+                dataType: 'json',
+                data: {
+                    table: 'ProductSheetModelPrototype',
+                    condition: {
+                        genderId: v.id
+                    }
+                }
+            }).done(function(ids){
+                numGend = ids.length;
+            }).success(function () {
+                $('#checkGender').append('<div><input type="checkbox" name="' + v.id + '" value="' + v.id + '" /> ' + v.name + ' (' +  numGend +')</div>');
+            });
         })
     });
+
 
     $.ajax({
         url: '/blueseal/xhr/getTableContent',
@@ -53,11 +77,32 @@ $(document).on('bs-del-cat-fason', function () {
         dataType: 'json',
         data: {
             table: 'ProductSheetModelPrototypeCategoryGroup',
+            orderBy: [
+                'name'
+            ]
         }
     }).done(function(catGroup){
+
+
+        let numCat = 0;
         $.each(catGroup, function (k, v) {
-            $('#checkCatGroup').append('<div><input type="checkbox" name="' + v.id + '" value="' + v.id + '" /> ' + v.name + '</div>');
-        })
+
+            $.ajax({
+                url: '/blueseal/xhr/getTableContent',
+                method: 'GET',
+                dataType: 'json',
+                data: {
+                    table: 'ProductSheetModelPrototype',
+                    condition: {
+                        categoryGroupId: v.id
+                    }
+                }
+            }).done(function(ids){
+                numCat = ids.length;
+            }).success(function () {
+                $('#checkCatGroup').append('<div><input type="checkbox" name="' + v.id + '" value="' + v.id + '" /> ' + v.name + ' (' + numCat +')</div>');
+            });
+        });
     });
 
     $.ajax({
@@ -66,11 +111,32 @@ $(document).on('bs-del-cat-fason', function () {
         dataType: 'json',
         data: {
             table: 'ProductSheetModelPrototypeMaterial',
+            orderBy: [
+                'name'
+            ]
         }
     }).done(function(material){
+
+
+        let numMat = 0;
         $.each(material, function (k, v) {
-            $('#checkMaterial').append('<div><input type="checkbox" name="' + v.id + '" value="' + v.id + '" /> ' + v.name + '</div>');
-        })
+
+            $.ajax({
+                url: '/blueseal/xhr/getTableContent',
+                method: 'GET',
+                dataType: 'json',
+                data: {
+                    table: 'ProductSheetModelPrototype',
+                    condition: {
+                        materialId: v.id
+                    }
+                }
+            }).done(function(ids){
+                numMat = ids.length;
+            }).success(function () {
+                $('#checkMaterial').append('<div><input type="checkbox" name="' + v.id + '" value="' + v.id + '" /> ' + v.name + ' (' + numMat +')</div>');
+            });
+        });
     });
 
 
@@ -121,5 +187,4 @@ $(document).on('bs-del-cat-fason', function () {
             bsModal.showOkBtn();
         });
     });
-
 });

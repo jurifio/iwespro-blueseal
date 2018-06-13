@@ -17,6 +17,10 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @date 10/05/2018
  * @since 1.0
+ *
+ *
+ * @property CProductSheetModelPrototypeMacroCategoryGroup $productSheetModelPrototypeMacroCategoryGroup
+ *
  */
 class CProductSheetModelPrototypeCategoryGroup extends AEntity
 {

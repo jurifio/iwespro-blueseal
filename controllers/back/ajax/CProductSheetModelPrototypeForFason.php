@@ -137,7 +137,7 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
 
         if($cS){
             /** @var CRepo $psmpCRepo */
-            $psmpCRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeHasProductCategory');
+            $psmpCRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
             foreach ($cS as $c){
                 /** @var CObjectCollection $psmpCC */
                 $psmpCC = $psmpR->findBy(['categoryGroupId'=>$c]);

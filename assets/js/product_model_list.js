@@ -1077,3 +1077,44 @@ $(document).on('bs.product.mergenames', function () {
         bsModal.modal();
     });
 });
+
+
+$(document).on('bs-hide-model-prototype', function () {
+
+
+    let models = [];
+    let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+    //id-variantId in array
+    $.each(selectedRows, function (k, v) {
+        models.push(v.DT_RowId.split('__')[1]);
+    });
+
+    let bsModal = new $.bsModal('Conferma Nascondi Modelli', {
+        body: '<p>Confermi di voler nascondere i modelli selezionati?</p>'
+    });
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        const data = {
+            ids: models
+        };
+        $.ajax({
+            method: 'put',
+            url: '/blueseal/xhr/ProductSheetModelPrototypeManage',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.hide();
+                $.refreshDataTable();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+
+
+});

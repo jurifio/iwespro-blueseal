@@ -588,7 +588,7 @@
 
             visibleImg = (url == '-') ? 'hide' : 'block';
 
-            body = '<div class="col-md-6 pre-scrollable">' +
+            body = '<div class="col-md-6 pre-scrollable" style="max-height: none">' +
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal"' +
@@ -601,6 +601,12 @@
                 '<div class="categ-modal">' +
                 '<label style="display: block" for="categ">Nome Modello:</label>' +
                 '<select class="categ" name="categ">' +
+                '<option disabled selected value>Seleziona un\'opzione</option>' +
+                '</select>' +
+                '</div>' +
+                '<div class="categ-spec-modal">' +
+                '<label style="display: block" for="categ-spec">Nome Categoria:</label>' +
+                '<select class="categ-spec" name="categ-spec">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
@@ -638,6 +644,12 @@
                 '<div class="categ-modal">' +
                 '<label style="display: block" for="categ">Nome Modello:</label>' +
                 '<select class="categ" name="categ">' +
+                '<option disabled selected value>Seleziona un\'opzione</option>' +
+                '</select>' +
+                '</div>' +
+                '<div class="categ-spec-modal">' +
+                '<label style="display: block" for="categ-spec">Nome Categoria:</label>' +
+                '<select class="categ-spec" name="categ-spec">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
@@ -725,8 +737,10 @@
 
         $('.gender').change(function () {
             $('.categ').prop('disabled', false);
+            $('.categ-spec').prop('disabled', false);
             $('.mat').prop('disabled', false);
             $('.categ').empty().append('<option disabled selected value>Seleziona un\'opzione</option>');
+            $('.categ-spec').empty().append('<option disabled selected value>Seleziona un\'opzione</option>');
             $('.mat').empty().append('<option disabled selected value>Seleziona un\'opzione</option>');
             const dataG = {
                 genderId: $('.gender').val(),
@@ -751,12 +765,12 @@
 
         });
 
-
+        //test
         $('.categ').change(function () {
 
             const dataC = {
                 genderId: $('.gender').val(),
-                categId: $('.categ').val(),
+                macroCategId: $('.categ').val(),
                 step: 2
             };
             $.ajax({
@@ -764,8 +778,66 @@
                 url: '/blueseal/xhr/DetailModelGetDetailsFason',
                 data: dataC
             }).done(function (res2) {
-                let mats = JSON.parse(res2);
+                $('.categ-spec').empty().append('<option disabled selected value>Seleziona un\'opzione</option>');
+                $('.mat').empty().append('<option disabled selected value>Seleziona un\'opzione</option>');
 
+                let result = JSON.parse(res2);
+                var select_spec = $('.categ-spec');
+
+                if (typeof (select_spec[0].selectize) != 'undefined') select_spec[0].selectize.destroy();
+                select_spec.selectize({
+                    valueField: 'id',
+                    searchField: 'name',
+                    options: result,
+                    render: {
+                        option: function (item, escape) {
+                            return '<div>' +
+                                escape(item.name) + ' | ' +
+                                escape(item.desc) + ' | ' +
+                                "<img style='width: 50px' src='" + escape(item.img) + "'>" +
+                                '</div>';
+                        },
+                        item: function (item, escape) {
+                            return '<div>' +
+                                escape(item.name) +
+                                '</div>';
+                        }
+                    }
+                    });
+
+               // let mats = JSON.parse(res2);
+
+                /*$.each(mats, function (k, v) {
+                    $('.categ-spec')
+                        .append($("<option class='fason-category'></option>")
+                            .attr("value",v.id)
+                            .text(v.img + v.name));
+                })*/
+            }).fail(function (res2) {
+                modal.writeBody('Errore grave');
+            });
+
+        });
+
+
+        //
+
+
+
+        $('.categ-spec').change(function () {
+
+            const dataC = {
+                genderId: $('.gender').val(),
+                categId: $('.categ-spec').val(),
+                step: 3
+            };
+            $.ajax({
+                method: 'get',
+                url: '/blueseal/xhr/DetailModelGetDetailsFason',
+                data: dataC
+            }).done(function (res2) {
+                let mats = JSON.parse(res2);
+                $('.mat').empty().append('<option disabled selected value>Seleziona un\'opzione</option>');
                 $.each(mats, function (k, v) {
                     $('.mat')
                         .append($("<option></option>")
@@ -779,13 +851,14 @@
         });
 
         $('.mat').change(function () {
+            $('.categ-spec').prop('disabled', true);
             $('.categ').prop('disabled', true);
             $('.mat').prop('disabled', true);
             const dataM = {
                 genderId: $('.gender').val(),
-                categId: $('.categ').val(),
+                categId: $('.categ-spec').val(),
                 matId: $('.mat').val(),
-                step: 3
+                step: 4
             };
             $.ajax({
                 method: 'get',

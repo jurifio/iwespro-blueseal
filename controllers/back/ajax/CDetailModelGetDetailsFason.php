@@ -4,6 +4,7 @@ use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CProductSheetModelPrototype;
 use bamboo\domain\entities\CProductSheetModelPrototypeCategoryGroup;
+use bamboo\domain\entities\CProductSheetModelPrototypeMacroCategoryGroup;
 use bamboo\domain\entities\CProductSheetModelPrototypeMaterial;
 
 /**
@@ -50,18 +51,79 @@ class CDetailModelGetDetailsFason extends AAjaxController
             $catRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
             $catInfo = [];
             $i = 0;
+
+            $macro = [];
             foreach ($catsU as $cat){
                 /** @var CProductSheetModelPrototypeCategoryGroup $sCat */
                 $sCat = $catRepo->findOneBy(['id'=>$cat]);
-                $catInfo[$i]['id'] = $sCat->id;
-                $catInfo[$i]['name'] = $sCat->name;
+
+                //prendo la macro corrispondente
+
+                /** @var CProductSheetModelPrototypeMacroCategoryGroup $macroCat */
+                $macroCat = $sCat->productSheetModelPrototypeMacroCategoryGroup;
+                $macro[$i]['id'] = $macroCat->id;
+                $macro[$i]['name'] = $macroCat->name;
                 $i++;
+
+
+
+                //$catInfo[$i]['id'] = $sCat->id;
+                //$catInfo[$i]['name'] = $sCat->name;
+                //$i++;
             }
-            return json_encode($catInfo);
+            return json_encode(array_unique($macro, SORT_REGULAR));
 
         }
 
+
         if($step == 2){
+
+            $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
+            $macroCategId = \Monkey::app()->router->request()->getRequestData('macroCategId');
+
+            /** @var CObjectCollection $psmpS2 */
+            $psmpS2 = $psmp->findBy(['genderId'=>$genderId]);
+
+            if($psmpS2->isEmpty()){
+                return false;
+            } else {
+                $cats1 = [];
+
+                /** @var CProductSheetModelPrototype $val */
+                foreach ($psmpS2 as $val){
+                    $cats1[] = $val->categoryGroupId;
+                }
+
+            }
+
+            $catsU = array_unique($cats1);
+
+            /** @var CRepo $catRepo */
+            $catRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
+            $catInfo1 = [];
+            $i = 0;
+            foreach ($catsU as $cat){
+                /** @var CProductSheetModelPrototypeCategoryGroup $sCat1 */
+                $sCat1 = $catRepo->findOneBySql('SELECT * FROM ProductSheetModelPrototypeCategoryGroup p WHERE p.id = ? AND p.macroCategoryGroupId = ?',
+                    [$cat, $macroCategId]);
+
+                if(!is_null($sCat1)) {
+                    $catInfo1[$i]['id'] = $sCat1->id;
+                    $catInfo1[$i]['name'] = $sCat1->name;
+                    $catInfo1[$i]['img'] = $sCat1->imageUrl;
+                    $catInfo1[$i]['desc'] = $sCat1->description;
+                    $i++;
+                }
+            }
+            return json_encode($catInfo1);
+
+
+
+        }
+
+
+
+        if($step == 3){
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
             $categId = \Monkey::app()->router->request()->getRequestData('categId');
 
@@ -102,7 +164,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
         }
 
 
-        if($step == 3){
+        if($step == 4){
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
             $categId = \Monkey::app()->router->request()->getRequestData('categId');
             $matId = \Monkey::app()->router->request()->getRequestData('matId');

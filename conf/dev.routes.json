@@ -1627,6 +1627,16 @@
                 "GET"
             ]
         },{
+            "pattern": "/blueseal/prodotti/modelli/category-group(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetModelPrototypeCategoryGroupListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
             "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementsEditController"

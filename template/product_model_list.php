@@ -90,7 +90,18 @@
         ></bs-toolbar-button>
 
     </bs-toolbar-group>
-
+    <bs-toolbar-group data-group-label="Gestione visualizzazione elementi">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-minus"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-hide-model-prototype"
+                data-title="Nascondi elementi"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
