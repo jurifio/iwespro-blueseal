@@ -3,6 +3,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CProductCardPhoto;
+use bamboo\domain\entities\CProductSheetModelPrototypeCategoryGroup;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\exceptions\RedPandaAssetException;
 use bamboo\core\exceptions\RedPandaException;
@@ -39,12 +40,12 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
 
         /** @var CRepo $prodCatGroupRepo */
         $prodCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
-        /** @var CProductCardPhoto $prodCardPhoto */
-        $prodCardPhoto = $prodCatGroupRepo->findOneBy([
+        /** @var CProductSheetModelPrototypeCategoryGroup $prodCatPhoto */
+        $prodCatPhoto = $prodCatGroupRepo->findOneBy([
             'id'=>$catId
         ]);
 
-        if(is_null($prodCardPhoto)){
+        if(is_null($prodCatPhoto)){
             return false;
         }
 
@@ -76,8 +77,8 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
 
             if($res){
                 $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-category/".$fileName['name'].'.'.$fileName['extension'];
-                $prodCardPhoto->imageUrl = $url;
-                $prodCardPhoto->update();
+                $prodCatPhoto->imageUrl = $url;
+                $prodCatPhoto->update();
             }
 
         }
