@@ -160,6 +160,15 @@
                 selectHelper: true,
 
                 select: function (start, end, allDay) {
+                    let bodyContent =
+                        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
+                        '<div class="fallback">'+
+                        '<input name="file" type="file" multiple />' +
+                        '</div>' +
+                        '</form>';
+
+                    body.html(bodyContent);
+
                     var start = $.fullCalendar.formatDate(start, "DD-MM-YYYY hh:mm:ss");
                     var end = $.fullCalendar.formatDate(end, "DD-MM-YYYY hh:mm:ss");
                     let bsModal1 = new $.bsModal('Invio', {
@@ -212,14 +221,14 @@
                         '<input  type="checkbox" id=\"isVisibleDescription\" class=\"form-control\"' +
                         'placeholder=\"Visible\" checked="true" name=\"isVisibleDescription\" ">' +
                         '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
+                        '</div>' + bodycontent +
+                       /* '<div class=\"col-md-3\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"photoUrl\">Immagine Evento</label>' +
                         '<input type=\"text\" id=\"photoUrl\" class=\"form-control\"' +
                         'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" ">' +
                         '</div>' +
-                        '</div>' +
+                        '</div>' +*/
                         '<div class=\"col-md-3\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
@@ -315,6 +324,27 @@
                         '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
                         '</div>' +
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
+                    });
+                    let dropzone = new Dropzone("#dropzoneModal",{
+                        url: "/blueseal/xhr/ProductCardsPhotoAjaxManage",
+                        maxFilesize: 5,
+                        maxFiles: 100,
+                        parallelUploads: 10,
+                        acceptedFiles: "image/jpeg",
+                        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+                        uploadMultiple: true,
+                        sending: function(file, xhr, formData) {
+                            formData.append("id", $.QueryString["id"]);
+                            formData.append("productletiantId", $.QueryString["productletiantId"]);
+                        }
+                    });
+
+                    dropzone.on('addedfile',function(){
+                        okButton.attr("disabled", "disabled");
+                    });
+                    dropzone.on('queuecomplete',function(){
+                        okButton.removeAttr("disabled");
+                        $(document).trigger('bs.load.photo');
                     });
 
                     bsModal1.addClass('modal-wide');
