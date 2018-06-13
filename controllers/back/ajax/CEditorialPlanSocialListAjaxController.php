@@ -33,7 +33,7 @@ class CEditorialPlanSocialListAjaxController extends AAjaxController
             /** @var CEditorialPlanSocial $editorialPlanSocial */
             $editorialPlanSocial = $editorialPlanSocialRepo->findOneBy(['id' => $row["id"] ]);
 
-            $row['id'] = '<a href="' . $opera . $editorialPlanSocial->id . '" >' . $editorialPlanSocial->id . '</a>';
+            $row['id'] =  $editorialPlanSocial->id ;
 
 
             $datatable->setResponseDataSetRow($key,$row);
