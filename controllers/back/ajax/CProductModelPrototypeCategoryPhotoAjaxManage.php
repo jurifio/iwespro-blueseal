@@ -63,7 +63,7 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
             }
 
             $fileName['name'] = explode('_', $_FILES['file']['name'][$i])[0];
-            $fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
+            //$fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 
             try{
@@ -76,7 +76,7 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
             unlink($tempFolder . $_FILES['file']['name'][$i]);
 
             if($res){
-                $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-category/".$fileName['name'].'.'.$fileName['extension'];
+                $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-category/".$fileName['name'];
                 $prodCatPhoto->imageUrl = $url;
                 $prodCatPhoto->update();
             }
