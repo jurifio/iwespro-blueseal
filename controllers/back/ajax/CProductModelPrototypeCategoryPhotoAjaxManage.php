@@ -66,7 +66,7 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
 
 
             try{
-                $res = $image->processProductCardsPhoto($_FILES['file']['name'][$i], $fileName, $config['bucket'].'-fason', 'model-prototype-category');
+                $res = $image->processProductModelPrototypeCategoryGroupPhoto($_FILES['file']['name'][$i], $fileName, $config['bucket'].'-fason', 'model-prototype-category');
             }catch(RedPandaAssetException $e){
                 $this->app->router->response()->raiseProcessingError();
                 return 'Dimensioni della foto errate: il rapporto deve esser 9:16';

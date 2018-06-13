@@ -794,7 +794,7 @@
                             return '<div>' +
                                 escape(item.name) + ' | ' +
                                 escape(item.desc) + ' | ' +
-                                "<img style='width: 50px' src='" + escape(item.img) + "'>" +
+                                "<img style='width: 100px' src='" + escape(item.img) + "'>" +
                                 '</div>';
                         },
                         item: function (item, escape) {
