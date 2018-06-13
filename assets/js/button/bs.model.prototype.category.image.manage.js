@@ -56,8 +56,8 @@ $(document).on('bs-manage-prototype-category-photo', function () {
     let dropzone = new Dropzone("#dropzoneModal",{
         url: "/blueseal/xhr/ProductModelPrototypeCategoryPhotoAjaxManage",
         maxFilesize: 5,
-        maxFiles: 100,
-        parallelUploads: 10,
+        maxFiles: 1,
+        parallelUploads: 1,
         acceptedFiles: "image/jpeg",
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
         uploadMultiple: true,
