@@ -43,6 +43,7 @@ $(document).on('bs-manage-prototype-category-photo', function () {
     okButton.html('Fatto').off().on('click', function () {
         bsModal.modal('hide');
         okButton.off();
+        $.refreshDataTable();
     });
     cancelButton.remove();
     let bodyContent =
@@ -70,6 +71,7 @@ $(document).on('bs-manage-prototype-category-photo', function () {
         okButton.attr("disabled", "disabled");
     });
     dropzone.on('queuecomplete',function(){
+
         okButton.removeAttr("disabled");
         $(document).trigger('bs.load.photo');
     });
