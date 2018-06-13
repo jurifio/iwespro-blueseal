@@ -18,14 +18,14 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
     if (selectedRows.length != 1) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare un Piano Editoriale per Cambiare la data"
+            message: "Devi selezionare un Media per eseguire delle Modifiche"
         }).open();
         return false;
     }
 
     let editorialPlanId = selectedRows[0].id;
     let bsModal = new $.bsModal('Invio', {
-        body: '<p>Modifica il Piano Editoriale Selezionato</p>' +
+        body: '<p>Modifica il Media Selezionato</p>' +
         '<div class="row">' +
         '<div class="col-xs-6>">' +
         '<label for="editorialPlanSocialName">Nome Media</label>' +

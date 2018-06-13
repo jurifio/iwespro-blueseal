@@ -2,15 +2,15 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-eraser",
     permission: "/admin/product/delete&&allShops",
-    event: "bs-editorialplansocial-delete",
+    event: "bs-editorialplanargument-delete",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Cancella il Media",
+    title: "Cancella Argomento",
     placement: "bottom",
     toggle: "modal"
 };
 
-$(document).on('bs-editorialplansocial-delete', function (e, element, button) {
+$(document).on('bs-editorialplanargument-delete', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
@@ -19,14 +19,14 @@ $(document).on('bs-editorialplansocial-delete', function (e, element, button) {
     if (selectedRows.length != 1) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare una media  per eliminarlo"
+            message: "Devi selezionare unargomento  per eliminarlo"
         }).open();
         return false;
     }
 
     let editorialPlanId = selectedRows[0].id;
     let bsModal = new $.bsModal('Cancellazione', {
-        body: '<p>Cancella Il Media Selezionato</p>'
+        body: '<p>Cancella Argomento Selezionato</p>'
     });
 
 
@@ -37,7 +37,7 @@ $(document).on('bs-editorialplansocial-delete', function (e, element, button) {
 
         $.ajax({
             method: "put",
-            url: "/blueseal/xhr/EditorialPlanSocialDelete",
+            url: "/blueseal/xhr/EditorialPlanArgumentDelete",
             data: {
                 id: id
             }

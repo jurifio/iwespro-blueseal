@@ -178,10 +178,14 @@
                     cancelButton.remove();
                     var photogroup="";
                     let bodyContent =
+                        '<div class="col-md-3">' +
                         '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">'+
-                        '<div class="fallback">'+
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"file\">Immagine Evento</label>' +
                         '<input name="file" type="file" multiple />' +
                         '</div>' +
+                        '</div>' +
+
                         '</form>';
                     $('#photoUrl').change(function() {
                         photogroup =$('#photoUrl').val();
@@ -512,6 +516,32 @@
                     var note = event.note;
                     var socialId = event.socialId;
                     var socialName = event.socialName;
+                    let bsModal = $('#bsModal');
+                    let header = bsModal.find('.modal-header h4');
+                    let body = bsModal.find('.modal-body');
+                    let cancelButton = bsModal.find('.modal-footer .btn-default');
+                    let okButton = bsModal.find('.modal-footer .btn-success');
+
+                    bsModal.modal();
+
+                    header.html('Carica Foto');
+                    okButton.html('Fatto').off().on('click', function () {
+                        bsModal.modal('hide');
+                        okButton.off();
+                    });
+                    cancelButton.remove();
+                    let bodyContent =
+                        '<div class="col-md-3">' +
+                        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">'+
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"file\">Immagine Evento</label>' +
+                        '<input name="file" type="file" value="' + photoUrl + '" multiple />' +
+                        '</div>' +
+                        '</div>' +
+                    $('#photoUrl').change(function() {
+                        photogroup =$('#photoUrl').val();
+                    });
+                    body.html(bodyContent);
 
                     var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
                     var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
