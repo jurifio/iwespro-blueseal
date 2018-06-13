@@ -22,6 +22,10 @@ $(document).on('bs-del-cat-fason', function () {
                  <div id="checkGender"></div>
             </div>
             <div class="col-md-4 pre-scrollable text-left">
+                 <strong>MACROCATEGORIE</strong>
+                 <div id="checkMacroCatGroup"></div>
+            </div>
+            <div class="col-md-4 pre-scrollable text-left">
                  <strong>CATEGORIE</strong>
                  <div id="checkCatGroup"></div>
             </div>
@@ -69,6 +73,43 @@ $(document).on('bs-del-cat-fason', function () {
             });
         })
     });
+
+
+    $.ajax({
+        url: '/blueseal/xhr/getTableContent',
+        method: 'GET',
+        dataType: 'json',
+        data: {
+            table: 'ProductSheetModelPrototypeMacroCategoryGroup',
+            orderBy: [
+                'name'
+            ]
+        }
+    }).done(function(macroCatGroup){
+
+
+        let numMacroCat = 0;
+        $.each(macroCatGroup, function (k, v) {
+
+            $.ajax({
+                url: '/blueseal/xhr/getTableContent',
+                method: 'GET',
+                dataType: 'json',
+                data: {
+                    table: 'ProductSheetModelPrototypeCategoryGroup',
+                    condition: {
+                        macroCategoryGroupId: v.id
+                    }
+                }
+            }).done(function(ids){
+                numMacroCat = ids.length;
+            }).success(function () {
+                $('#checkMacroCatGroup').append('<div><input type="checkbox" name="' + v.id + '" value="' + v.id + '" /> ' + v.name + ' (' + numMacroCat +')</div>');
+            });
+        });
+    });
+
+
 
 
     $.ajax({
@@ -149,6 +190,11 @@ $(document).on('bs-del-cat-fason', function () {
             checkGender[i] = $(this).attr('value');
         });
 
+        let checkMacroCatGroup = [];
+        $('#checkMacroCatGroup input:checked').each(function(i){
+            checkMacroCatGroup[i] = $(this).attr('value');
+        });
+
         let checkCatGroup = [];
         $('#checkCatGroup input:checked').each(function(i){
             checkCatGroup[i] = $(this).attr('value');
@@ -162,6 +208,7 @@ $(document).on('bs-del-cat-fason', function () {
 
         const data = {
             gender: checkGender,
+            macCat: checkMacroCatGroup,
             cat: checkCatGroup,
             material: checkMaterial
         };

@@ -73,7 +73,7 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
             $row['name'] = $cat->name;
             $row['description'] = $cat->description;
             $row['imageUrl'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $cat->imageUrl . '" /></a>';
-            $row['macroName'] = $cat->productSheetModelPrototypeMacroCategoryGroup->name;
+            $row['macroName'] = (is_null($cat->macroCategoryGroupId) ? '-' : $cat->productSheetModelPrototypeMacroCategoryGroup->name);
 
             $datatable->setResponseDataSetRow($key,$row);
         }

@@ -7,6 +7,7 @@ use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CProductSheetModelPrototype;
 use bamboo\domain\entities\CProductSheetModelPrototypeCategoryGroup;
 use bamboo\domain\entities\CProductSheetModelPrototypeGender;
+use bamboo\domain\entities\CProductSheetModelPrototypeMacroCategoryGroup;
 use bamboo\domain\entities\CProductSheetModelPrototypeMaterial;
 use bamboo\domain\entities\CProductSheetPrototype;
 
@@ -33,11 +34,13 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
     {
 
        $gDate = \Monkey::app()->router->request()->getRequestData('gender');
+       $mCDate = \Monkey::app()->router->request()->getRequestData('macroCat');
        $cDate = \Monkey::app()->router->request()->getRequestData('cat');
        $mDate = \Monkey::app()->router->request()->getRequestData('material');
 
 
        $gender = explode(', ', $gDate);
+       $macroCat = explode(', ', $mCDate);
        $cat = explode(', ', $cDate);
        $material = explode(', ', $mDate);
 
@@ -56,6 +59,22 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
 
            }
        }
+
+        if (!empty($mCDate)){
+            /** @var CRepo $mCCatRepo */
+            $mCCatRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
+            foreach ($macroCat as $val){
+
+                $extistent = $mCCatRepo->findOneBy(['name'=>ucfirst($val)]);
+
+                if(is_null($extistent)){
+                    $mCatP = $mCCatRepo->getEmptyEntity();
+                    $mCatP->name = ucfirst($val);
+                    $mCatP->smartInsert();
+                }
+
+            }
+        }
 
 
         if (!empty($cDate)) {
@@ -102,6 +121,7 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
     public function delete(){
 
         $gS = \Monkey::app()->router->request()->getRequestData('gender');
+        $mCS = \Monkey::app()->router->request()->getRequestData('macCat');
         $cS = \Monkey::app()->router->request()->getRequestData('cat');
         $mS = \Monkey::app()->router->request()->getRequestData('material');
 
@@ -133,6 +153,36 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
             }
 
         }
+
+        if($mCS){
+            /** @var CRepo $pCatGroupRepo */
+            $pCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
+
+            /** @var CRepo $macroCatRepo */
+            $macroCatRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
+            foreach ($mCS as $mC) {
+                /** @var CObjectCollection $exMacroOnCat */
+                $exMacroOnCat = $pCatGroupRepo->findBy(['macroCategoryGroupId'=>$mC]);
+
+                /** @var CProductSheetModelPrototypeMacroCategoryGroup $macroCat */
+                $macroCat = $macroCatRepo->findOneBy(['id'=>$mC]);
+
+                if($exMacroOnCat->isEmpty()){
+                    $psmpAss[] = $macroCat->name.' | Eliminata';
+                    $macroCat->delete();
+                    continue;
+                }
+
+                /** @var CProductSheetModelPrototypeCategoryGroup $macCat */
+                foreach ($exMacroOnCat as $macCat){
+                    $psmpAss[] = $macCat->id.' - '.$macCat->name.' | Genere';
+                }
+
+
+            }
+
+        }
+
 
 
         if($cS){

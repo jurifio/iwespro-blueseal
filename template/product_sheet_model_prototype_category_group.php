@@ -76,6 +76,16 @@
                 data-title="Inserisci Descrizione"
                 data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-arrows-h"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.sheet.model.cat.group.macro"
+                data-title="Associa a macrocategoria"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
