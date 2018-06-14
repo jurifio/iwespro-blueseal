@@ -151,6 +151,7 @@ class CNewsletterUserManage extends AAjaxController
         }else{
             $to=$data['toEmailAddressTest'];
             $message=$data['preCompiledTemplate'];
+            str_replace('{emailunsuscriber}',$to,$message);
             $subject=$data['subject'];
             $fromEmailAddressId=$data['fromEmailAddressId'];
           //  if (ENV == 'dev') return false;
