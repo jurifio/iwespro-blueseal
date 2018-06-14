@@ -1609,6 +1609,16 @@
                 "GET"
             ]
         },{
+            "pattern": "/blueseal/prodotti/modelli/macro-category-group(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetModelPrototypeMacroCategoryGroupListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },{
             "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementsEditController"

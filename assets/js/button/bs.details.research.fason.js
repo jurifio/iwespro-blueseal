@@ -22,7 +22,11 @@ $(document).on('bs-new-batch-product-add', function () {
                  <textarea style="width: 400px; height: 150px" id="gender"></textarea>
             </div>
             <div>
-                 <p>Inserisci uno o più categorie separati da ", "</p>
+                 <p>Inserisci una o più macrocategorie separate da ", "</p>
+                 <textarea style="width: 400px; height: 150px" id="macro-cat"></textarea>
+            </div>
+            <div>
+                 <p>Inserisci una o più categorie separati da ", "</p>
                  <textarea style="width: 400px; height: 150px" id="cat"></textarea>
             </div>
             <div>
@@ -37,6 +41,7 @@ $(document).on('bs-new-batch-product-add', function () {
     bsModal.setOkEvent(function () {
         const data = {
             gender: $('#gender').val(),
+            macroCat: $('#macro-cat').val(),
             cat: $('#cat').val(),
             material: $('#material').val()
         };

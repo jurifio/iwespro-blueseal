@@ -25,8 +25,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="product_sheet_model_prototype_category_group"
-                               data-controller="ProductSheetModelPrototypeCategoryGroupListAjaxController"
+                               data-datatable-name="product_sheet_model_prototype_macro_category_group"
+                               data-controller="ProductSheetModelPrototypeMacroCategoryGroupListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500">
@@ -38,16 +38,9 @@
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Nome</th>
-                                <th data-slug="description"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Descrizione</th>
                                 <th data-slug="imageUrl"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Photo</th>
-                                <th data-slug="macroName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Macrocategoria</th>
-                            </tr>
                             </thead>
                             <tbody>
                             </tbody>
@@ -64,27 +57,7 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione foto">
         <bs-toolbar-button
-                data-remote="bs.model.prototype.category.image.manage"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-file-text-o"
-                data-permission="/admin/product/add"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs.product.sheet.model.cat.group.desc"
-                data-title="Inserisci Descrizione"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-arrows-h"
-                data-permission="/admin/product/add"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs.product.sheet.model.cat.group.macro"
-                data-title="Associa a macrocategoria"
-                data-placement="bottom"
+                data-remote="bs.model.prototype.macro.category.image.manage"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Aggiungi/elimina categorie per fason">

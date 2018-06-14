@@ -752,13 +752,29 @@
                 data: dataG
             }).done(function (res1) {
                 let cats = JSON.parse(res1);
-                
-                $.each(cats, function (k, v) {
-                    $('.categ')
-                        .append($("<option></option>")
-                            .attr("value",v.id)
-                            .text(v.name));
-                })
+
+                var select_cat = $('.categ');
+
+                if (typeof (select_cat[0].selectize) != 'undefined') select_cat[0].selectize.destroy();
+                select_cat.selectize({
+                    valueField: 'id',
+                    searchField: 'name',
+                    options: cats,
+                    render: {
+                        option: function (item, escape) {
+                            return '<div>' +
+                                escape(item.name) + ' | ' +
+                                "<img style='width: 100px' src='" + escape(item.img) + "'>" +
+                                '</div>';
+                        },
+                        item: function (item, escape) {
+                            return '<div>' +
+                                escape(item.name) +
+                                '</div>';
+                        }
+                    }
+                });
+
             }).fail(function (res1) {
                 modal.writeBody('Errore grave');
             });
@@ -794,7 +810,7 @@
                             return '<div>' +
                                 escape(item.name) + ' | ' +
                                 escape(item.desc) + ' | ' +
-                                "<img style='width: 50px' src='" + escape(item.img) + "'>" +
+                                "<img style='width: 100px' src='" + escape(item.img) + "'>" +
                                 '</div>';
                         },
                         item: function (item, escape) {

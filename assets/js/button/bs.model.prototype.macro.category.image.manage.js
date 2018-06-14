@@ -2,7 +2,7 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-id-card-o",
     permission:"/admin/product/edit&&allShops",
-    event:"bs-manage-prototype-category-photo",
+    event:"bs-manage-prototype-macro-category-photo",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Gestisci foto modello categorie",
@@ -15,7 +15,7 @@ $(document).ready(function() {
 });
 
 
-$(document).on('bs-manage-prototype-category-photo', function () {
+$(document).on('bs-manage-prototype-macro-category-photo', function () {
 
 
     let selectedRows = $('.table').DataTable().rows('.selected').data();
@@ -28,7 +28,7 @@ $(document).on('bs-manage-prototype-category-photo', function () {
         return false;
     }
 
-    let catId = selectedRows[0].id;
+    let macroCatId = selectedRows[0].id;
 
     let bsModal = $('#bsModal');
 
@@ -55,7 +55,7 @@ $(document).on('bs-manage-prototype-category-photo', function () {
 
     body.html(bodyContent);
     let dropzone = new Dropzone("#dropzoneModal",{
-        url: "/blueseal/xhr/ProductModelPrototypeCategoryPhotoAjaxManage",
+        url: "/blueseal/xhr/ProductModelPrototypeMacroCategoryPhotoAjaxManage",
         maxFilesize: 5,
         maxFiles: 1,
         parallelUploads: 1,
@@ -63,7 +63,7 @@ $(document).on('bs-manage-prototype-category-photo', function () {
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
         uploadMultiple: true,
         sending: function(file, xhr, formData) {
-            formData.append("catId", catId);
+            formData.append("macroCatId", macroCatId);
         }
     });
 

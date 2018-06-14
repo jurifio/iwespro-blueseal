@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CProductCardPhoto;
 use bamboo\domain\entities\CProductSheetModelPrototypeCategoryGroup;
+use bamboo\domain\entities\CProductSheetModelPrototypeMacroCategoryGroup;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\exceptions\RedPandaAssetException;
 use bamboo\core\exceptions\RedPandaException;
@@ -12,7 +13,7 @@ use bamboo\core\utils\amazonPhotoManager\ImageManager;
 use bamboo\core\utils\amazonPhotoManager\S3Manager;
 
 /**
- * Class CModelPrototypeCategoryPhotoAjaxManage
+ * Class CProductModelPrototypeMacroCategoryPhotoAjaxManage
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -21,10 +22,10 @@ use bamboo\core\utils\amazonPhotoManager\S3Manager;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 12/06/2018
+ * @date 14/06/2018
  * @since 1.0
  */
-class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
+class CProductModelPrototypeMacroCategoryPhotoAjaxManage extends AAjaxController
 {
 
     /**
@@ -35,17 +36,17 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
      */
     public function post()
     {
-        $catId = \Monkey::app()->router->request()->getRequestData('catId');
+        $macroCatId = \Monkey::app()->router->request()->getRequestData('macroCatId');
 
 
-        /** @var CRepo $prodCatGroupRepo */
-        $prodCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
-        /** @var CProductSheetModelPrototypeCategoryGroup $prodCatPhoto */
-        $prodCatPhoto = $prodCatGroupRepo->findOneBy([
-            'id'=>$catId
+        /** @var CRepo $prodMacroCatGroupRepo */
+        $prodMacroCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
+        /** @var CProductSheetModelPrototypeMacroCategoryGroup $prodMacroCatPhoto */
+        $prodMacroCatPhoto = $prodMacroCatGroupRepo->findOneBy([
+            'id'=>$macroCatId
         ]);
 
-        if(is_null($prodCatPhoto)){
+        if(is_null($prodMacroCatPhoto)){
             return false;
         }
 
@@ -67,7 +68,7 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
 
 
             try{
-                $res = $image->processProductModelPrototypeCategoryGroupPhoto($_FILES['file']['name'][$i], $fileName, $config['bucket'].'-fason', 'model-prototype-category');
+                $res = $image->processProductModelPrototypeCategoryGroupPhoto($_FILES['file']['name'][$i], $fileName, $config['bucket'].'-fason', 'model-prototype-macro-category');
             }catch(RedPandaAssetException $e){
                 $this->app->router->response()->raiseProcessingError();
                 return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
@@ -76,9 +77,9 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
             //unlink($tempFolder . $_FILES['file']['name'][$i]);
 
             if($res){
-                $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-category/".$fileName['name'];
-                $prodCatPhoto->imageUrl = $url;
-                $prodCatPhoto->update();
+                $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-macro-category/".$fileName['name'];
+                $prodMacroCatPhoto->imageUrl = $url;
+                $prodMacroCatPhoto->update();
             }
 
         }

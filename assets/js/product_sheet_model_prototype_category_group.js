@@ -43,7 +43,78 @@
                 bsModal.showOkBtn();
             });
         });
+    });
+
+    $(document).on('bs.product.sheet.model.cat.group.macro', function () {
+
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length < 1) {
+            new Alert({
+                type: "warning",
+                message: "Devi selezionare almeno unac categoria per poterla associare a una Macrocategoria"
+            }).open();
+            return false;
+        }
+
+        let cats = [];
+        $.each(selectedRows, function (k, v) {
+            cats.push(v.id);
+        });
+
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'ProductSheetModelPrototypeMacroCategoryGroup',
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            var select = $('#oldMacroCat');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res
+            });
+        });
+
+        let bsModal = new $.bsModal('Associa categoria a macrocategoria', {
+            body: `<p>Seleziona una categoria</p>
+                   <select id="oldMacroCat">
+                   <option disabled selected value>Seleziona un'opzione</option>
+                   </select>
+                   `
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const data = {
+                ids: cats,
+                macroCat: $('#oldMacroCat').val()
+            };
+            $.ajax({
+                method: 'put',
+                url: '/blueseal/xhr/ProductModelPrototypeMacroCategoryGroupAjaxManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+
 
     });
+
 
 })();
