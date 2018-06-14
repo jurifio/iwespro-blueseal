@@ -24,6 +24,10 @@
                                data-inner-setup="true">
                             <thead>
                                 <tr>
+                                    <th data-slug="id"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">id</th>
                                     <th data-slug="code"
                                         data-searchable="true"
                                         data-orderable="true"

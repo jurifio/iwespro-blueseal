@@ -102,6 +102,7 @@ class CProductModelListAjaxController extends AAjaxController
 
             $response['data'][$i]["DT_RowId"] = 'row__'.$val->id;
             $response['data'][$i]["DT_RowClass"] = 'colore';
+            $response['data'][$i]["id"] = $val->id;
             $response['data'][$i]['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'">'.$val->code.'</a><br />';
             $response['data'][$i]['code'].= '<span class="small">(<a data-toggle="tooltip" title="Usa come modello" data-placement="right" href="'.$modifica.'?modelId='.$val->id.'">Usa come modello</a>)</span><br />';
             $response['data'][$i]['name'] = $val->name;
