@@ -53,7 +53,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $image = $url . $photo;
             array_push($photoUrl, $image);
         }
-$groupimage=implode("-",$photoUrl);
+$groupimage=implode(",",$photoUrl);
 
         /** @var CRepo $editorialPlanDetailRepo */
         $editorialPlanDetailRepo = \Monkey::app()->repoFactory->create('EditorialPlanDetail');

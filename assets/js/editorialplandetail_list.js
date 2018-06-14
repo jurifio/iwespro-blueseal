@@ -147,13 +147,21 @@
                             break;
 
                     }
+                    var linkimg="";
+                    var link  =event.photoUrl.split(",");
+                    link.forEach(function(element) {
+                        linkimg=linkimg + '<br/><b>Immagine:</b><img width="20px" src="' + element + '">';
+                    });
                     element.find('.fc-title').append(bgRender + '<br/><b>Descrizione:</b>' + event.description +
                         '"<br/><b>Argomento:</b>"' + event.argumentName +
                         '"<br/><b>Piano Editoriale:</b>"' + event.titleEditorialPlan +
                         '"<br/><b>Media utilizzato:</b>"' + event.socialName +
                         '"<br/><b>Stato:</b>"' + event.status +
-                        '"<br/><b>Note:</b>"' + event.note +
-                        '"<br/><b>Immagine:</b><img width="20px" src="' + event.photoUrl + '"></div>');
+                        '"<br/><b>Note:</b>"' + event.note + linkimg+
+                        '</div>');
+
+
+                        //'"<br/><b>Immagine:</b><img width="20px" src="' + event.photoUrl + '"></div>');
                 },
                 editable: true,
                 selectable: true,
@@ -180,8 +188,8 @@
                     let bodyContent =
                         '<div class="col-md-3">' +
                         '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">'+
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"file\">Immagine Evento</label>' +
+                        '<div class=\"fallback\">' +
+                       // '<label for=\"file\">Immagine Evento</label>' +
                         '<input name="file" type="file" multiple />' +
                         '</div>' +
                         '</div>' +
@@ -530,18 +538,29 @@
                         okButton.off();
                     });
                     cancelButton.remove();
+                    var linkimg="";
+                    var link  =event.photoUrl.split(",");
+                    link.forEach(function(element) {
+                        linkimg=linkimg + '<br/><img width="150px" src="' + element + '">';
+                    });
+
+
+                    var photogroup="";
                     let bodyContent =
-                        '<div class="col-md-3">' +
+                        '<div class="col-md-3">' + linkimg+
                         '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">'+
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"file\">Immagine Evento</label>' +
-                        '<input name="file" type="file" value="' + photoUrl + '" multiple />' +
+                        '<div class=\"fallback\">' +
+                        //'<label for=\"file\">Immagine Evento'+linkimg+'</label>' +
+                        '<input name="file" type="file" multiple />' +
                         '</div>' +
                         '</div>' +
+
+                        '</form>';
                     $('#photoUrl').change(function() {
                         photogroup =$('#photoUrl').val();
                     });
                     body.html(bodyContent);
+
 
                     var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
                     var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
@@ -594,14 +613,14 @@
                         '<input  type="checkbox" id=\"isVisibleDescription\" class=\"form-control\"' +
                         'placeholder=\"Visible\" name=\"isVisibleDescription\" ">' +
                         '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
+                        '</div>' +  bodyContent +
+                      /*  '<div class=\"col-md-3\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"photoUrl\">Immagine Evento</label>' +
+                        '<label for=\"photoUrl\">Immagine Evento'+linkimg+'</label>' +
                         '<input id=\"photoUrl\" class=\"form-control\"' +
                         'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" value=\"' + photoUrl + '\">' +
                         '</div>' +
-                        '</div>' +
+                        '</div>' +*/
                         '<div class=\"col-md-3\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
@@ -707,6 +726,27 @@
                     });
                     bsModal2.addClass('modal-wide');
                     bsModal2.addClass('modal-high');
+                    let dropzone = new Dropzone("#dropzoneModal",{
+                        url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
+
+                        maxFilesize: 5,
+                        maxFiles: 100,
+                        parallelUploads: 10,
+                        acceptedFiles: "image/jpeg",
+                        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+                        uploadMultiple: true,
+                        sending: function(file, xhr, formData) {
+                        }
+                    });
+
+                    dropzone.on('addedfile',function(){
+                        okButton.attr("disabled", "disabled");
+                    });
+                    dropzone.on('queuecomplete',function(){
+                        okButton.removeAttr("disabled");
+                        $(document).trigger('bs.load.photo');
+                    });
+
                     if (isEventVisible == "1") {
                         $('#isEventVisible').prop('checked', true);
                     } else {
@@ -767,7 +807,7 @@
                                         editorialPlanDetailId: editorialPlanDetailId,
                                         argument: argument,
                                         description: description,
-                                        photoUrl: photoUrl,
+                                       // photoUrl: photoUrl,
                                         status: status,
                                         socialId: socialId,
                                         title: title,
@@ -846,7 +886,7 @@
                             description: $('#description').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
-                            photoUrl: $('#photoUrl').val(),
+                           // photoUrl: $('#photoUrl').val(),
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
@@ -861,6 +901,8 @@
 
 
                         };
+
+
                         $.ajax({
                             type: 'POST',
                             url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
@@ -881,6 +923,7 @@
                     });
 
 
+
                 },
 
                 eventDrop:
@@ -896,7 +939,7 @@
                         var isVisibleEditorialPlanArgument = event.isVisibleEditorialPlanArgument;
                         var description = event.description;
                         var isVisibleDescription = event.isVisibleDescription;
-                        var photoUrl = event.photoUrl;
+                    //    var photoUrl = event.photoUrl;
                         var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
                         var status = event.status;
                         switch (status) {
@@ -939,7 +982,7 @@
                                 isVisiblePhotoUrl: isVisiblePhotoUrl,
                                 description: description,
                                 isVisibleDescription: isVisibleDescription,
-                                photoUrl: photoUrl,
+                               // photoUrl: photoUrl,
                                 status: status,
                                 bodyEvent: bodyEvent,
                                 isVisibleBodyEvent: isVisibleBodyEvent,
@@ -1009,7 +1052,7 @@
                             isVisiblePhotoUrl: isVisiblePhotoUrl,
                             description: description,
                             isVisibleDescription: isVisibleDescription,
-                            photoUrl: photoUrl,
+                           // photoUrl: photoUrl,
                             status: status,
                             bodyEvent: bodyEvent,
                             isVisibleBodyEvent: isVisibleBodyEvent,

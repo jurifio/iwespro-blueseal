@@ -59,7 +59,7 @@ class CEditorialPlanDetailImageUploadAjaxManage extends AAjaxController
                 return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
             }
 
-            unlink($tempFolder . $_FILES['file']['name'][$i]);
+          //  unlink($tempFolder . $_FILES['file']['name'][$i]);
 
             if($res){
 

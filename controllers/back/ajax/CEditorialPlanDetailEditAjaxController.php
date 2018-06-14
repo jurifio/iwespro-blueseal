@@ -31,7 +31,8 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $note = $data['note'];
         $description = $data['description'];
         $isVisibleDescription = $data['isVisibleDescription'];
-        $photoUrl = $data['photoUrl'];
+       // $photoUrl = $data['photoUrl'];
+        $photoUrl = [];
         $isVisiblePhotoUrl = $data['isVisiblePhotoUrl'];
         $bodyEvent = $data['bodyEvent'];
         $isVisibleBodyEvent = $data['isVisibleBodyEvent'];
@@ -42,6 +43,18 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');
         $editorialPlanDetailId = $data['editorialPlanDetailId'];
         $notifyEmail = $data['notifyEmail'];
+        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/";
+        $files = glob($tempFolder . "*.jpg");
+        $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images";
+        foreach ($files as $jpg) {
+
+            $finalslash = strrpos($jpg, '/');
+            $photo = substr($jpg, $finalslash, 1000);
+            $photo = trim($photo);
+            $image = $url . $photo;
+            array_push($photoUrl, $image);
+        }
+        $groupimage=implode(",",$photoUrl);
 
         /* $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
          $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');*/
@@ -110,6 +123,15 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         // eseguo la commit sulla tabella;
 
         $editorialPlanDetail->update();
+        foreach ($photoUrl as $file) {
+            $finalslash = strrpos($file, '/');
+            $initialImage=$finalslash +1;
+            $photo = substr($file, $initialImage, 1000);
+            $photo = trim($photo);
+            $image =  $photo;
+
+            unlink($tempFolder . $image);
+        }
 
         $res = "Evento Azione  Piano modificato con successo!";
         /** @var ARepo $shopRepo */
