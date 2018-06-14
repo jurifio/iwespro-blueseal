@@ -4,7 +4,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
-use bamboo\domain\entities\CEditorialPlanSocial;
+use bamboo\domain\entities\CEditorialPlanArgument;
 use bamboo\domain\repositories\CEditorialPlanRepo;
 
 
@@ -37,7 +37,7 @@ class CEditorialPlanArgumentDelete extends AAjaxController
         $data  = $this->app->router->request()->getRequestData();
         $id = $data["id"];
         /** @var CRepo $editorialPlanArgument */
-        $editorialPlanArgument = \Monkey::app()->repoFactory->create('editorialArgumentSocial');
+        $editorialPlanArgument = \Monkey::app()->repoFactory->create('editorialPlanArgument');
 
         /** @var CEditorialPlanArgument $editorial */
         $editorial= $editorialPlanArgument->findOneBy(['id'=>$id]);
