@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs-manage-prototype-macro-category-photo",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Gestisci foto modello categorie",
+    title:"Gestisci foto modello macro categorie",
     placement:"bottom"
 };
 
