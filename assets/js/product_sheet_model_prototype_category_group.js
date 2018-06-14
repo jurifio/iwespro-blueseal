@@ -24,7 +24,8 @@
         bsModal.setOkEvent(function () {
             const data = {
                 catId: catId,
-                desc: $('#desc-cat-group').val()
+                desc: $('#desc-cat-group').val(),
+                field: 'desc'
             };
             $.ajax({
                 method: 'put',
@@ -38,7 +39,6 @@
                 bsModal.setOkEvent(function () {
                     bsModal.hide();
                     $.refreshDataTable();
-                    //window.location.reload();
                 });
                 bsModal.showOkBtn();
             });
@@ -114,6 +114,54 @@
         });
 
 
+    });
+
+
+
+    $(document).on('bs.product.sheet.model.cat.group.name', function () {
+
+
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length != 1) {
+            new Alert({
+                type: "warning",
+                message: "Puoi inserire un nome alla volta"
+            }).open();
+            return false;
+        }
+
+        let catId = selectedRows[0].id;
+
+        let bsModal = new $.bsModal('Inserisci il nuovo Nome', {
+            body: `<p>Nome</p>
+                   <input type="text" id="name-cat-group"> 
+                   `
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            const data = {
+                catId: catId,
+                name: $('#name-cat-group').val(),
+                field: 'name'
+            };
+            $.ajax({
+                method: 'put',
+                url: '/blueseal/xhr/ProductModelPrototypeCategoryGroupAjaxManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
     });
 
 
