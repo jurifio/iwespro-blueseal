@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\RedPandaException;
 use bamboo\domain\entities\CProductSheetModelPrototypeCategoryGroup;
+use bamboo\domain\entities\CProductSheetModelPrototypeMacroCategoryGroup;
 
 /**
  * Class CProductModelPrototypeMacroCategoryGroupAjaxManage
@@ -45,5 +46,31 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
 
         return 'Macrocategorie associate';
     }
+
+
+    /**
+     * @return string
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function post(){
+        $id = \Monkey::app()->router->request()->getRequestData('macroCatId');
+        $name = \Monkey::app()->router->request()->getRequestData('name');
+
+        if(empty($name)) return 'Inserisci un nome';
+
+        /** @var CRepo $pmcRepo */
+        $pmcRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
+
+        /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
+        $pmc = $pmcRepo->findOneBy(['id'=>$id]);
+        $pmc->name = $name;
+        $pmc->update();
+
+        return 'Il nome è stato cambiato con successo';
+
+    }
+
 
 }

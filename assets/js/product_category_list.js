@@ -42,6 +42,7 @@
                                                 '<li><strong>Associazioni con i Marketplace Discendenti: </strong><span>' + res.descendantMarketplaceAccountCategory + '</span></li>' +
                                                 '<li><strong>Associazioni con i Dizionari Discendenti: </strong><span>' + res.descendantDictionaryCategory + '</span></li>' +
                                                 '<li><strong>Associazioni con i Prodotti Discendenti: </strong><span>' + res.descendantProduct + '</span></li>' +
+                                                '<li><strong>Associazioni con i Modelli: </strong><span>' + res.psmp + '</span></li>' +
                                             '</ul>' +
                                         '</div>' +
                                     '</div>';

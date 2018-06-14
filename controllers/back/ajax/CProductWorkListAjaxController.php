@@ -75,7 +75,7 @@ class CProductWorkListAjaxController extends AAjaxController
                FROM Product p1
                  JOIN ProductDescriptionTranslation pdt1 ON p1.id = pdt1.productId AND p1.productVariantId = pdt1.productVariantId
                WHERE pdt1.marketplaceId = 1 AND pdt1.langId = 1) as pdtA ON pdtA.id = p.id AND pdtA.productVariantId = p.productVariantId
-            WHERE p.processing <> 'definito'
+            WHERE p.processing <> 'definito' AND p.productStatusId in (6,11)
             GROUP BY p.id, p.productVariantId";
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);

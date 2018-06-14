@@ -29,15 +29,27 @@ class CProductModelPrototypeCategoryGroupAjaxManage extends AAjaxController
     public function put()
     {
 
+        $field = \Monkey::app()->router->request()->getRequestData('field');
         $catId = \Monkey::app()->router->request()->getRequestData('catId');
-        $desc = \Monkey::app()->router->request()->getRequestData('desc');
 
         /** @var CProductSheetModelPrototypeCategoryGroup $catG */
         $catG = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findOneBy(['id'=>$catId]);
-        $catG->description = $desc;
+
+        switch ($field){
+            case 'name':
+                $name = \Monkey::app()->router->request()->getRequestData('name');
+                if(empty($name)) return 'Inserisci un nome';
+                $catG->name = $name;
+                break;
+            case 'desc':
+                $desc = \Monkey::app()->router->request()->getRequestData('desc');
+                $catG->description = $desc;
+                break;
+        }
+
         $catG->update();
 
-        return 'Descrizione inserita con successo';
+        return 'Categoria aggiornata con successo';
     }
 
 }
