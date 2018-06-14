@@ -19,6 +19,12 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  */
 class CEditorialPlanSocial extends AEntity
 {
+    const FACEBOOK = '#3A5896';
+    const TWITTER = '#d92d77';
+    const GOOGLE = '#fbbc05';
+    const INSTAGRAM = '#d92d77';
+
+
 	protected $entityTable = 'EditorialPlanSocial';
 	protected $primaryKeys = ['id'];
 }
