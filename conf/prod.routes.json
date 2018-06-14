@@ -2189,7 +2189,7 @@
         {
             "pattern": "/blueseal/editorial/argomento-aggiungi(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanSocialAddController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanArgumentAddController"
             },
             "filters": {},
             "translations": {},
