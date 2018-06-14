@@ -749,9 +749,13 @@
             $.ajax({
                 method: 'get',
                 url: '/blueseal/xhr/DetailModelGetDetailsFason',
-                data: dataG
+                data: dataG,
+                dataType: 'json'
             }).done(function (res1) {
-                let cats = JSON.parse(res1);
+
+                var cats = $.map(res1, function(value, index) {
+                    return [value];
+                });
 
                 var select_cat = $('.categ');
 
