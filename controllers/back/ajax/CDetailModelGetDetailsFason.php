@@ -63,6 +63,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
                 $macroCat = $sCat->productSheetModelPrototypeMacroCategoryGroup;
                 $macro[$i]['id'] = $macroCat->id;
                 $macro[$i]['name'] = $macroCat->name;
+                $macro[$i]['img'] = $macroCat->imageUrl;
                 $i++;
 
 
