@@ -599,7 +599,7 @@
                 '</select>' +
                 '</div>' +
                 '<div class="categ-modal">' +
-                '<label style="display: block" for="categ">Nome Modello:</label>' +
+                '<label style="display: block" for="categ">Macrocategoria:</label>' +
                 '<select class="categ" name="categ">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
@@ -642,7 +642,7 @@
                 '</select>' +
                 '</div>' +
                 '<div class="categ-modal">' +
-                '<label style="display: block" for="categ">Nome Modello:</label>' +
+                '<label style="display: block" for="categ">Macrocategoria:</label>' +
                 '<select class="categ" name="categ">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
