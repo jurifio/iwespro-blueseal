@@ -6,6 +6,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\CProductCategory;
+use bamboo\domain\entities\CProductSheetModelPrototype;
 use bamboo\domain\repositories\COrderRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 
@@ -41,6 +42,14 @@ class CProductCategoryController extends AAjaxController
                     $productCategory->descendantMarketplaceAccountCategory += $descendantProductCategory->marketplaceAccountCategory->count() ;
             if(!$descendantProductCategory->dictionaryCategory->isEmpty())
                     $productCategory->descendantDictionaryCategory += $descendantProductCategory->dictionaryCategory->count();
+        }
+
+        $url = \Monkey::app()->baseUrl(false).'/blueseal/prodotti/modelli/modifica?id=';
+
+        $productCategory->psmp = '';
+        /** @var CProductSheetModelPrototype $psm */
+        foreach ($productCategory->productSheetModelPrototype as $psm){
+            $productCategory->psmp .= "<a href='$url$psm->id' target='_blank'>$psm->id</a>".' | ';
         }
 
         return json_encode($productCategory);
