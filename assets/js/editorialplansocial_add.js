@@ -7,7 +7,7 @@
 })(jQuery);
 
 $(document).on('bs.newEditorialPlanSocial.save', function () {
-    let bsModal = new $.bsModal('Salva Mediae', {
+    let bsModal = new $.bsModal('Salva Medie', {
         body: '<div><p>Premere ok per Salvare il Media' +
         '</div>'
     });

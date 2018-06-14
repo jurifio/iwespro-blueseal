@@ -50,10 +50,10 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="titleArgument">Descrizione Argomento</label>
-                                                <textarea rows="10" id="titleArgument" class="form-control"
+                                                <label for="descriptionArgument">Descrizione Argomento</label>
+                                                <textarea rows="10" id="descriptionArgument" class="form-control"
                                                           placeholder="Inserisci il nome dell'argomento utilizzato"
-                                                          name="titleArgument"
+                                                          name="descriptionArgument"
                                                           required="required"></textarea>
                                             </div>
                                         </div>
@@ -80,7 +80,7 @@
                     data-class="btn btn-default"
                     data-rel="tooltip"
                     data-event="bs.newEditorialPlanArgument.save"
-                    data-title="Salva il media"
+                    data-title="Salva Argomento"
                     data-placement="bottom"
                     data-href="#"
             ></bs-toolbar-button>

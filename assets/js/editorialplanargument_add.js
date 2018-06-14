@@ -6,7 +6,7 @@
     })
 })(jQuery);
 
-$(document).on('bs.newEditorialArgumentSocial.save', function () {
+$(document).on('bs.newEditorialPlanArgument.save', function () {
     let bsModal = new $.bsModal('Salva Argomento', {
         body: '<div><p>Premere ok per Salvare l\'Argomento' +
         '</div>'
@@ -18,7 +18,7 @@ $(document).on('bs.newEditorialArgumentSocial.save', function () {
         const data = {
             titleArgument: $('#titleArgument').val(),
             type: $('#type').val(),
-            descriptionArgument:$('#descriptionArgument'),
+            descriptionArgument:$('#descriptionArgument').val(),
 
 
         };
