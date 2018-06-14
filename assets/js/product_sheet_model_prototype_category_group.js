@@ -76,6 +76,7 @@
             select.selectize({
                 valueField: 'id',
                 labelField: 'name',
+                searchField: 'name',
                 options: res
             });
         });
