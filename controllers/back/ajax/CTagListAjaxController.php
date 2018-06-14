@@ -34,6 +34,7 @@ class CTagListAjaxController extends AAjaxController
             $row = [];
             $row["DT_RowId"] = 'row__' . $val->id;
             $row["DT_RowClass"] = 'colore';
+            $row["id"] = $val->id;
             $row['slug'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editTagLink . '/'.$val->id.'" style="font-family:consolas">' . $val->slug . '</a>' : $val->slug;
             $row['sortingPriorityId'] = $val->sortingPriorityId;
             $row['isPublic'] = $val->isPublic == 1 ? 'Visibile' : 'Nascosto';

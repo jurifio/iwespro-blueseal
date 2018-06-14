@@ -23,6 +23,10 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>">
                             <thead>
                             <tr>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">id</th>
                                 <th data-slug="slug"
                                     data-searchable="true"
                                     data-orderable="true"
