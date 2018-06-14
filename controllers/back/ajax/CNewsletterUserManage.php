@@ -151,7 +151,7 @@ class CNewsletterUserManage extends AAjaxController
         }else{
             $to=$data['toEmailAddressTest'];
             $message=$data['preCompiledTemplate'];
-            str_replace('{emailunsuscriber}',$to,$message);
+            $message = str_replace('emailunsuscriber',$to,$message);
             $subject=$data['subject'];
             $fromEmailAddressId=$data['fromEmailAddressId'];
           //  if (ENV == 'dev') return false;
@@ -159,6 +159,7 @@ class CNewsletterUserManage extends AAjaxController
             $emailRepo = \Monkey::app()->repoFactory->create('Email');
             if (!is_array($to)) {
                 $to = [$to];
+
             }
             $emailRepo->newMail($fromEmailAddressId, $to, [], [], $subject, $message);
             $res="Test Inviato con successo";
