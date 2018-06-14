@@ -17,9 +17,7 @@ $(document).on('bs.newEditorialPlanSocial.save', function () {
 
         const data = {
             name: $('#name').val(),
-            iconSocial: $('#iconSocial').val(),
-
-
+            iconSocial: $('#type').val(),
         };
         $.ajax({
             method: 'post',

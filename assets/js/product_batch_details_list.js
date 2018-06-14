@@ -737,6 +737,9 @@
                 labelField: ['name'],
                 options: res
             });
+            $('.selectize-dropdown-content').css({
+                "max-height":"500px"
+            });
         });
 
         $('.gender').change(function () {
@@ -789,7 +792,6 @@
 
         });
 
-        //test
         $('.categ').change(function () {
 
             const dataC = {
@@ -828,24 +830,11 @@
                         }
                     }
                     });
-
-               // let mats = JSON.parse(res2);
-
-                /*$.each(mats, function (k, v) {
-                    $('.categ-spec')
-                        .append($("<option class='fason-category'></option>")
-                            .attr("value",v.id)
-                            .text(v.img + v.name));
-                })*/
             }).fail(function (res2) {
                 modal.writeBody('Errore grave');
             });
 
         });
-
-
-        //
-
 
 
         $('.categ-spec').change(function () {
@@ -1022,5 +1011,4 @@
             });
         });
     });
-
 })();
