@@ -556,6 +556,10 @@
 
     $(document).on('bs-product-model-insertIntoProducts-worker', function (e, element, button) {
 
+        $('.modal-body').css({
+            "max-height":"none"
+        });
+        
         let pId = '';
         let pVariantId = '';
         var type = 'model';
@@ -592,25 +596,25 @@
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal"' +
-                '<div class="gender-modal">' +
+                '<div class="gender-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="gender">Genere:</label>' +
                 '<select class="gender" name="gender">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
-                '<div class="categ-modal">' +
+                '<div class="categ-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="categ">Macrocategoria:</label>' +
                 '<select class="categ" name="categ">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
-                '<div class="categ-spec-modal">' +
+                '<div class="categ-spec-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="categ-spec">Nome Categoria:</label>' +
                 '<select class="categ-spec" name="categ-spec">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
-                '<div class="mat-modal">' +
+                '<div class="mat-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="mat">Materiali:</label>' +
                 '<select class="mat" name="mat">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
@@ -635,25 +639,25 @@
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal">' +
-                '<div class="gender-modal">' +
+                '<div class="gender-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="gender">Genere:</label>' +
                 '<select class="gender" name="gender">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
-                '<div class="categ-modal">' +
+                '<div class="categ-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="categ">Macrocategoria:</label>' +
                 '<select class="categ" name="categ">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
-                '<div class="categ-spec-modal">' +
+                '<div class="categ-spec-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="categ-spec">Nome Categoria:</label>' +
                 '<select class="categ-spec" name="categ-spec">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
                 '</select>' +
                 '</div>' +
-                '<div class="mat-modal">' +
+                '<div class="mat-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="mat">Materiali:</label>' +
                 '<select class="mat" name="mat">' +
                 '<option disabled selected value>Seleziona un\'opzione</option>' +
