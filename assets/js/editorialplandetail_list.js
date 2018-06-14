@@ -1157,26 +1157,6 @@
 
                     if (event.isEventVisible === "1") {
 
-                        let socialColor = '';
-                        switch (event.socialName){
-                            case 'Facebook':
-                                socialColor = '#3A5896';
-                                break;
-                            case 'Instagram':
-                                socialColor = '#d92d77';
-                                break;
-                            case 'Twitter':
-                                socialColor = '#d92d77';
-                                break;
-                            case 'Google':
-                                socialColor = '#fbbc05';
-                                break;
-                        }
-
-                        element.find('.fc-event, .fc-event-dot').css({
-                           "background-color":socialColor
-                        });
-
                         element.find('.fc-title').append(bgRender + visibleDescription + visibleArgument +
                             '"<br/><b>Piano Editoriale:</b>"' + event.titleEditorialPlan +
                             '"<br/><b>Media utilizzato:</b>"' + event.socialName +
