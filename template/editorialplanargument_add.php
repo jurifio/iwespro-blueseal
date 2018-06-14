@@ -23,15 +23,15 @@
                         <div class="col-md-12">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Aggiungi Media</h5>
+                                    <h5 class="m-t-10">Aggiungi Argomento </h5>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="name">Name</label>
-                                                <input id="name" class="form-control"
-                                                       placeholder="Inserisci il nome del media"
+                                                <label for="titleArgument">Nome Argomento</label>
+                                                <input id="titleArgument" class="form-control"
+                                                       placeholder="Inserisci il nome dell'argomento utilizzato"
                                                        name="titleArgument"
                                                        required="required">
                                             </div>
@@ -40,10 +40,21 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="type">Icona</label>
+                                                <label for="type">Tipo</label>
                                                 <input id="type" class="form-control"
-                                                       placeholder="Specificare il tipo" name="socialIcon"
+                                                       placeholder="Specificare il tipo" name="type"
                                                        required="required">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="titleArgument">Descrizione Argomento</label>
+                                                <textarea rows="10" id="titleArgument" class="form-control"
+                                                          placeholder="Inserisci il nome dell'argomento utilizzato"
+                                                          name="titleArgument"
+                                                          required="required"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -68,7 +79,7 @@
                     data-permission="AllShops"
                     data-class="btn btn-default"
                     data-rel="tooltip"
-                    data-event="bs.newEditorialPlanSocial.save"
+                    data-event="bs.newEditorialPlanArgument.save"
                     data-title="Salva il media"
                     data-placement="bottom"
                     data-href="#"

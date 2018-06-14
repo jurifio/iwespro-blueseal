@@ -188,9 +188,12 @@
                     let bodyContent =
                         '<div class="col-md-3">' +
                         '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">'+
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"file\">Immagine Evento</label>' +
                         '<div class=\"fallback\">' +
                        // '<label for=\"file\">Immagine Evento</label>' +
                         '<input name="file" type="file" multiple />' +
+                        '</div>' +
                         '</div>' +
                         '</div>' +
 
@@ -547,11 +550,14 @@
 
                     var photogroup="";
                     let bodyContent =
-                        '<div class="col-md-3">' + linkimg+
+                        '<div class="col-md-3">' +
                         '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">'+
+                        '<div class=\"form-group form-group-default selectize-enabled\">' +
+                        '<label for=\"file\">Immagine Evento'+linkimg+'</label>' +
                         '<div class=\"fallback\">' +
                         //'<label for=\"file\">Immagine Evento'+linkimg+'</label>' +
                         '<input name="file" type="file" multiple />' +
+                        '</div>' +
                         '</div>' +
                         '</div>' +
 
