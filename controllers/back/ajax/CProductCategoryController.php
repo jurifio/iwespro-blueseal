@@ -49,7 +49,9 @@ class CProductCategoryController extends AAjaxController
         $productCategory->psmp = '';
         /** @var CProductSheetModelPrototype $psm */
         foreach ($productCategory->productSheetModelPrototype as $psm){
-            $productCategory->psmp .= "<a href='$url$psm->id' target='_blank'>$psm->id</a>".' | ';
+            if($psm->isVisible == 1) {
+                $productCategory->psmp .= "<a href='$url$psm->id' target='_blank'>$psm->id</a>" . ' | ';
+            }
         }
 
         return json_encode($productCategory);
