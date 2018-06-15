@@ -56,19 +56,30 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
      */
     public function post(){
         $id = \Monkey::app()->router->request()->getRequestData('macroCatId');
-        $name = \Monkey::app()->router->request()->getRequestData('name');
-
-        if(empty($name)) return 'Inserisci un nome';
+        $type = \Monkey::app()->router->request()->getRequestData('type');
 
         /** @var CRepo $pmcRepo */
         $pmcRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
 
         /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
         $pmc = $pmcRepo->findOneBy(['id'=>$id]);
-        $pmc->name = $name;
+
+        switch ($type){
+            case 'name':
+                $name = \Monkey::app()->router->request()->getRequestData('name');
+                if(empty($name)) return 'Inserisci un nome';
+                $pmc->name = $name;
+                break;
+            case 'description':
+                $desc = \Monkey::app()->router->request()->getRequestData('desc');
+                if(empty($desc)) return 'Inserisci una descrizione';
+                $pmc->description = $desc;
+                break;
+        }
+
         $pmc->update();
 
-        return 'Il nome è stato cambiato con successo';
+        return 'La macrocategoria è stata aggionata con successo';
 
     }
 

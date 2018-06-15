@@ -64,13 +64,8 @@ class CDetailModelGetDetailsFason extends AAjaxController
                 $macro[$i]['id'] = $macroCat->id;
                 $macro[$i]['name'] = $macroCat->name;
                 $macro[$i]['img'] = $macroCat->imageUrl;
+                $macro[$i]['desc'] = $macroCat->description;
                 $i++;
-
-
-
-                //$catInfo[$i]['id'] = $sCat->id;
-                //$catInfo[$i]['name'] = $sCat->name;
-                //$i++;
             }
             return json_encode(array_unique($macro, SORT_REGULAR));
 
