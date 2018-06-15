@@ -735,6 +735,7 @@
                     });
                     bsModal2.addClass('modal-wide');
                     bsModal2.addClass('modal-high');
+                    let photoUrl1=[];
                     let dropzone = new Dropzone("#dropzoneModal",{
                         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
@@ -745,12 +746,12 @@
                         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
                         uploadMultiple: true,
                         sending: function(file, xhr, formData) {
+                            photoUrl1.push(file.name);
                         }
                     });
-
                     dropzone.on('addedfile',function(){
                         okButton.attr("disabled", "disabled");
-                        photoUrl.push(file.name);
+
                     });
                     dropzone.on('queuecomplete',function(){
                         okButton.removeAttr("disabled");
@@ -896,7 +897,7 @@
                             description: $('#description').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
-                            photoUrl: photoUrl,
+                            photoUrl: photoUrl1,
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
