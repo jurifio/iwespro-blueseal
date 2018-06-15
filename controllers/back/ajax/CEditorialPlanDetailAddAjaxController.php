@@ -52,8 +52,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $photo = trim($photo);
             $image = $url . $photo;
             array_push($photoUrl, $image);
+            $unlinkphoto =[];
+            array_push($unlinkphoto,$photo);
         }
-$groupimage=implode(",",$photoUrl);
+        $groupimage = implode(",", $photoUrl);
 
         /** @var CRepo $editorialPlanDetailRepo */
         $editorialPlanDetailRepo = \Monkey::app()->repoFactory->create('EditorialPlanDetail');
@@ -91,7 +93,7 @@ $groupimage=implode(",",$photoUrl);
 
             $editorialPlanDetailInsert->smartInsert();
 
-            foreach ($photoUrl as $file) {
+            foreach ($unlinkphoto as $file) {
                 unlink($tempFolder . $file);
             }
             $res = "Dettaglio Piano Editoriale inserito con successo!";
