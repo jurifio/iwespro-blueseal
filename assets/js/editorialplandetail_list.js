@@ -950,7 +950,7 @@
                         var isVisibleEditorialPlanArgument = event.isVisibleEditorialPlanArgument;
                         var description = event.description;
                         var isVisibleDescription = event.isVisibleDescription;
-                    //    var photoUrl = event.photoUrl;
+                      //  var photoUrl = event.photoUrl;
                         var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
                         var status = event.status;
                         switch (status) {
