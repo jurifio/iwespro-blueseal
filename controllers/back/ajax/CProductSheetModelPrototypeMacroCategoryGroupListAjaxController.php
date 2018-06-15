@@ -49,6 +49,7 @@ class CProductSheetModelPrototypeMacroCategoryGroupListAjaxController extends AA
             SELECT 
             pmcg.id,
             pmcg.name,
+            pmcg.description,
             pmcg.imageUrl
              FROM ProductSheetModelPrototypeMacroCategoryGroup pmcg";
 
@@ -66,6 +67,7 @@ class CProductSheetModelPrototypeMacroCategoryGroupListAjaxController extends AA
             $pmcg = $pmcgR->findOneBy(['id'=>$row['id']]);
             $row['id'] = $pmcg->id;
             $row['name'] = $pmcg->name;
+            $row['desc'] = $pmcg->description;
             $row['imageUrl'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $pmcg->imageUrl . '" /></a>';
 
 

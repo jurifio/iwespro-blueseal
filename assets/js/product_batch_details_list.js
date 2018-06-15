@@ -781,13 +781,24 @@
                         option: function (item, escape) {
                             let rendResCats = '';
 
-                            if(item.img == null){
+                            if(item.img == null && item.desc == null){
                                 rendResCats = '<div>' +
                                     escape(item.name) +
+                                    '</div>';
+                            } else if(item.img != null && item.desc == null){
+                                rendResCats = '<div>' +
+                                    escape(item.name) + ' | ' +
+                                    "<img style='width: 100px' src='" + escape(item.img) + "'>" +
+                                    '</div>';
+                            } else if (item.img == null && item.desc != null){
+                                rendResCats = '<div>' +
+                                    escape(item.name) + ' | ' +
+                                    escape(item.desc) +
                                     '</div>';
                             } else {
                                 rendResCats = '<div>' +
                                     escape(item.name) + ' | ' +
+                                    escape(item.desc) + ' | ' +
                                     "<img style='width: 100px' src='" + escape(item.img) + "'>" +
                                     '</div>';
                             }

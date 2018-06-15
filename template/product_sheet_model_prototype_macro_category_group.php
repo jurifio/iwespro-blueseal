@@ -38,6 +38,9 @@
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Nome</th>
+                                <th data-slug="desc"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Descrizione</th>
                                 <th data-slug="imageUrl"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Photo</th>
@@ -68,7 +71,7 @@
                 data-remote="bs.delete.category.research.fason"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Aggiungi/elimina categorie per fason">
+    <bs-toolbar-group data-group-label="Aggiungi/modifica nome e descrizione">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-pencil"
@@ -77,6 +80,16 @@
                 data-rel="tooltip"
                 data-event="bs.product.sheet.model.macro.cat.group.name"
                 data-title="Modifica nome"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-pencil-square"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.sheet.model.macro.cat.group.description"
+                data-title="Modifica descrizione"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
