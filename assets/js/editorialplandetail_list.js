@@ -134,10 +134,10 @@
                     let bgRender = "#ffffff";
                     switch (event.status) {
                         case "Bozza":
-                            bgRender = '<div style="background-color:darkblue>';
+                            bgRender = '<div style="background-color:yellow>';
                             break;
                         case "Approvata":
-                            bgRender = '<div style="background-color:darkorange">';
+                            bgRender = '<div style="background-color:orange">';
                             break;
                         case "Rifiutata":
                             bgRender = '<div style="background-color:red">';
