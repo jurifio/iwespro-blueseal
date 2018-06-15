@@ -19,6 +19,12 @@ use \bamboo\utils\time\STimeToolbox;
 class CEditorialPlanDetailAddAjaxController extends AAjaxController
 {
 
+    /**
+     * @return bool|string
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
     public function post()
     {
         $data = \Monkey::app()->router->request()->getRequestData();
@@ -35,7 +41,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $isVisibleNote = $data['isVisibleNote'];
         $description = $data['description'];
         $isVisibleDescription = $data['isVisibleDescription'];
-        $photoUrl = [];
+        $photoUrl = $data['photoUrl'];
+        $unlinkphoto =[];
         $status = $data['status'];
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
@@ -44,17 +51,26 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $notifyEmail = $data['notifyEmail'];
         $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/";
         $files = glob($tempFolder . "*.jpg");
-        $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images";
-        foreach ($files as $jpg) {
+        $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+        /*   foreach ($files as $jpg) {
 
-            $finalslash = strrpos($jpg, '/');
-            $photo = substr($jpg, $finalslash, 1000);
-            $photo = trim($photo);
-            $image = $url . $photo;
-            array_push($photoUrl, $image);
-            $unlinkphoto =[];
-            array_push($unlinkphoto,$photo);
+               $finalslash = strrpos($jpg, '/');
+               $photo = substr($jpg, $finalslash, 1000);
+               $photo = trim($photo);
+               $image = $url . $photo;
+               array_push($photoUrl, $image);
+
+               array_push($unlinkphoto,$photo);
+
+
+        }*/
+        foreach ($photoUrl as &$jpg) {
+
+            $jpg =$url.$jpg;
+
         }
+
+        /** @var array $groupimage */
         $groupimage = implode(",", $photoUrl);
 
         /** @var CRepo $editorialPlanDetailRepo */
@@ -93,7 +109,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
             $editorialPlanDetailInsert->smartInsert();
 
-            foreach ($unlinkphoto as $file) {
+            foreach ($photoUrl as $file) {
                 unlink($tempFolder . $file);
             }
             $res = "Dettaglio Piano Editoriale inserito con successo!";

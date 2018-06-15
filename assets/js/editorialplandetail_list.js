@@ -134,10 +134,10 @@
                     let bgRender = "#ffffff";
                     switch (event.status) {
                         case "Bozza":
-                            bgRender = '<div style="background-color:darkblue>';
+                            bgRender = '<div style="background-color:yellow>';
                             break;
                         case "Approvata":
-                            bgRender = '<div style="background-color:darkorange">';
+                            bgRender = '<div style="background-color:orange">';
                             break;
                         case "Rifiutata":
                             bgRender = '<div style="background-color:red">';
@@ -365,7 +365,7 @@
                         '</div>' +
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
                     });
-
+                    var photoUrl =[];
 
                     bsModal1.addClass('modal-wide');
                     bsModal1.addClass('modal-high');
@@ -376,6 +376,28 @@
                     $('#isVisibleNote').prop('checked', true);
                     $('#isVisibleBodyEvent').prop('checked', true);
                     $('#isVisiblePhotoUrl').prop('checked', true);
+                    let dropzone = new Dropzone("#dropzoneModal",{
+                        url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
+
+                        maxFilesize: 5,
+                        maxFiles: 100,
+                        parallelUploads: 10,
+                        acceptedFiles: "image/jpeg",
+                        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+                        uploadMultiple: true,
+                        sending: function(file, xhr, formData) {
+
+                        }
+                    });
+
+                    dropzone.on('addedfile',function(file){
+                        okButton.attr("disabled", "disabled");
+                        photoUrl.push( file.name);
+                    });
+                    dropzone.on('queuecomplete',function(){
+                        okButton.removeAttr("disabled");
+                        $(document).trigger('bs.load.photo');
+                    });
 
 
                     $.ajax({
@@ -432,7 +454,7 @@
                             description: $('#description').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
-                          //  photoUrl: photogroup,
+                            photoUrl: photoUrl,
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
@@ -464,26 +486,7 @@
                         });
 
                     });
-                    let dropzone = new Dropzone("#dropzoneModal",{
-                        url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
-                        maxFilesize: 5,
-                        maxFiles: 100,
-                        parallelUploads: 10,
-                        acceptedFiles: "image/jpeg",
-                        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
-                        uploadMultiple: true,
-                        sending: function(file, xhr, formData) {
-                        }
-                    });
-
-                    dropzone.on('addedfile',function(){
-                        okButton.attr("disabled", "disabled");
-                    });
-                    dropzone.on('queuecomplete',function(){
-                        okButton.removeAttr("disabled");
-                        $(document).trigger('bs.load.photo');
-                    });
 
 
                 },
@@ -732,6 +735,7 @@
                     });
                     bsModal2.addClass('modal-wide');
                     bsModal2.addClass('modal-high');
+                    let photoUrl1=[];
                     let dropzone = new Dropzone("#dropzoneModal",{
                         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
@@ -742,11 +746,12 @@
                         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
                         uploadMultiple: true,
                         sending: function(file, xhr, formData) {
+                            photoUrl1.push(file.name);
                         }
                     });
-
                     dropzone.on('addedfile',function(){
                         okButton.attr("disabled", "disabled");
+
                     });
                     dropzone.on('queuecomplete',function(){
                         okButton.removeAttr("disabled");
@@ -892,7 +897,7 @@
                             description: $('#description').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
-                           // photoUrl: $('#photoUrl').val(),
+                            photoUrl: photoUrl1,
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
@@ -945,7 +950,7 @@
                         var isVisibleEditorialPlanArgument = event.isVisibleEditorialPlanArgument;
                         var description = event.description;
                         var isVisibleDescription = event.isVisibleDescription;
-                    //    var photoUrl = event.photoUrl;
+                      //  var photoUrl = event.photoUrl;
                         var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
                         var status = event.status;
                         switch (status) {

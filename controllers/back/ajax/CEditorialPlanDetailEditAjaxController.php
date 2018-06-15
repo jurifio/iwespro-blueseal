@@ -31,8 +31,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $note = $data['note'];
         $description = $data['description'];
         $isVisibleDescription = $data['isVisibleDescription'];
-       // $photoUrl = $data['photoUrl'];
-        $photoUrl = [];
+        $photoUrl = $data['photoUrl'];
         $isVisiblePhotoUrl = $data['isVisiblePhotoUrl'];
         $bodyEvent = $data['bodyEvent'];
         $isVisibleBodyEvent = $data['isVisibleBodyEvent'];
@@ -45,14 +44,15 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $notifyEmail = $data['notifyEmail'];
         $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/";
         $files = glob($tempFolder . "*.jpg");
-        $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images";
-        foreach ($files as $jpg) {
+        $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+        foreach ($photoUrl as &$jpg) {
 
-            $finalslash = strrpos($jpg, '/');
+            /*$finalslash = strrpos($jpg, '/');
             $photo = substr($jpg, $finalslash, 1000);
             $photo = trim($photo);
             $image = $url . $photo;
-            array_push($photoUrl, $image);
+            array_push($photoUrl, $image);*/
+            $jpg =$url.$jpg;
         }
         $groupimage=implode(",",$photoUrl);
 
@@ -95,7 +95,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
         $editorialPlanDetail->isVisibleDescription = $isVisibleDescription;
         if (!empty($photoUrl)) {
-            $editorialPlanDetail->photoUrl = $photoUrl;
+            $editorialPlanDetail->photoUrl = $groupimage;
         }
 
         $editorialPlanDetail->isVisiblePhotoUrl = $isVisiblePhotoUrl;
@@ -124,13 +124,13 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
         $editorialPlanDetail->update();
         foreach ($photoUrl as $file) {
-            $finalslash = strrpos($file, '/');
+            /*$finalslash = strrpos($file, '/');
             $initialImage=$finalslash +1;
             $photo = substr($file, $initialImage, 1000);
             $photo = trim($photo);
-            $image =  $photo;
+            $image =  $photo;*/
 
-            unlink($tempFolder . $image);
+            unlink($tempFolder . $file);
         }
 
         $res = "Evento Azione  Piano modificato con successo!";
