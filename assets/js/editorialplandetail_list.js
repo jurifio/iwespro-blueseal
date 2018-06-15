@@ -1136,6 +1136,12 @@
 
 
                 },
+                eventMouseout: function (data, event, view) {
+                    $(this).css('z-index', 8);
+
+                    $('.tooltiptopicevent').remove();
+
+                },
 
             });
         } else {
