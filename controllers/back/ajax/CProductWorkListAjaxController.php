@@ -121,7 +121,12 @@ class CProductWorkListAjaxController extends AAjaxController
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
             $row['shop'] = '<span class="small">'.$product->getShops('<br />', true).'</span>';
             $row['hasDetails'] = (2 < $product->productSheetActual->count()) ? 'sì' : 'no';
-
+            $row['details'] = "";
+            foreach ($product->productSheetActual as $k => $v) {
+                if ($trans = $v->productDetail->productDetailTranslation->getFirst()) {
+                    $row['details'] .= '<span class="small">' . $trans->name . "</span><br />";
+                }
+            }
             /** @var CProductDescriptionTranslation $descT */
             $descT = $product->productDescriptionTranslation->findOneByKeys(['marketplaceId'=>1, 'langId'=>1]);
             $row['pDescTranslate'] = $descT->description;

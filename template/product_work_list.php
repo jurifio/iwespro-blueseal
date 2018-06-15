@@ -73,7 +73,11 @@
                                     data-orderable="true" class="center">Ha Dett.</th>
                                 <th data-slug="pDescTranslate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Dettagli</th>
+                                    data-orderable="true" class="center">Descrizione Dettagli</th>
+                                <th data-slug="details"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Dettagli
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
