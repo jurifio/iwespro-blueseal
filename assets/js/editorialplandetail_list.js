@@ -163,6 +163,7 @@
                     var link  =event.photoUrl.split(",");
                     link.forEach(function(element) {
                         linkimg=linkimg + ' <img width="80px" src="' + element + '">';
+
                     });
                     element.find('.fc-title').append(bgTitle +
                         '<b>' + event.argumentName +
@@ -1097,7 +1098,7 @@
                 }
                 ,
 
-                eventDoubleClick: function (event) {
+                doubleClick: function (event) {
                     if (confirm("Are you sure you want to remove it?")) {
                         var id = event.id;
                         $.ajax({
@@ -1110,8 +1111,31 @@
                             }
                         })
                     }
-                }
-                ,
+                } ,
+
+                eventMouseover: function (event) {
+                    var linkimg1="";
+                    var link  =event.photoUrl.split(",");
+                    link.forEach(function(element) {
+                        linkimg1=linkimg1 + ' <img width="150px" src="' + element + '">';
+
+                    });
+
+                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + ': ' + event.title + '</br>' + 'Argomento: ' + ': ' + event.argumentName + '</br>' + 'immagini: '  + linkimg1 +'</div>';
+
+
+                    $("body").append(tooltip);
+                    $(this).mouseover(function (e) {
+                        $(this).css('z-index', 10000);
+                        $('.tooltiptopicevent').fadeIn('500');
+                        $('.tooltiptopicevent').fadeTo('10', 1.9);
+                    }).mousemove(function (e) {
+                        $('.tooltiptopicevent').css('top', e.pageY + 10);
+                        $('.tooltiptopicevent').css('left', e.pageX + 20);
+                    });
+
+
+                },
 
             });
         } else {
