@@ -49,11 +49,10 @@ class CEditorialPlanDetailImageUploadAjaxManage extends AAjaxController
             }
 
             $fileName['name'] = explode('_', $_FILES['file']['name'][$i])[0];
-            $fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 
             try{
-                $res = $image->processProductCardsPhoto($_FILES['file']['name'][$i], $fileName, $config['bucket'].'-editorial', 'plandetail-images');
+                $res = $image->processImageEditorialUploadPhoto($_FILES['file']['name'][$i], $fileName, $config['bucket'].'-editorial', 'plandetail-images');
             }catch(RedPandaAssetException $e){
                 $this->app->router->response()->raiseProcessingError();
                 return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
@@ -63,7 +62,7 @@ class CEditorialPlanDetailImageUploadAjaxManage extends AAjaxController
 
             if($res){
 
-                $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/".$fileName['name'].'.'.$fileName['extension'];
+                $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/".$fileName['name'];
 
             }
 
