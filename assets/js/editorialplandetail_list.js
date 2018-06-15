@@ -1121,7 +1121,7 @@
 
                     });
 
-                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + ': ' + event.title + '</br>' + 'Argomento: ' + ': ' + event.argumentName + '</br>' +  + linkimg1 +'</div>';
+                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + ': ' + event.title + '</br>' + 'Argomento: ' + ': ' + event.argumentName + '</br>'   + linkimg1 +'</div>';
 
 
                     $("body").append(tooltip);
