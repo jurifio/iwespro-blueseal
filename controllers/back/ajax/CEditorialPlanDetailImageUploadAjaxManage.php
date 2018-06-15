@@ -68,7 +68,7 @@ class CEditorialPlanDetailImageUploadAjaxManage extends AAjaxController
 
         }
 
-        return true;
+        return $res;
     }
 
 }

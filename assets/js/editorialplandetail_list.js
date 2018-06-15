@@ -365,7 +365,7 @@
                         '</div>' +
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
                     });
-
+                    var photoUrl =[];
 
                     bsModal1.addClass('modal-wide');
                     bsModal1.addClass('modal-high');
@@ -376,6 +376,28 @@
                     $('#isVisibleNote').prop('checked', true);
                     $('#isVisibleBodyEvent').prop('checked', true);
                     $('#isVisiblePhotoUrl').prop('checked', true);
+                    let dropzone = new Dropzone("#dropzoneModal",{
+                        url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
+
+                        maxFilesize: 5,
+                        maxFiles: 100,
+                        parallelUploads: 10,
+                        acceptedFiles: "image/jpeg",
+                        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+                        uploadMultiple: true,
+                        sending: function(file, xhr, formData) {
+
+                        }
+                    });
+
+                    dropzone.on('addedfile',function(file){
+                        okButton.attr("disabled", "disabled");
+                        photoUrl.push( file.name);
+                    });
+                    dropzone.on('queuecomplete',function(){
+                        okButton.removeAttr("disabled");
+                        $(document).trigger('bs.load.photo');
+                    });
 
 
                     $.ajax({
@@ -432,7 +454,7 @@
                             description: $('#description').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
-                          //  photoUrl: photogroup,
+                            photoUrl: photoUrl,
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
@@ -464,26 +486,7 @@
                         });
 
                     });
-                    let dropzone = new Dropzone("#dropzoneModal",{
-                        url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
-                        maxFilesize: 5,
-                        maxFiles: 100,
-                        parallelUploads: 10,
-                        acceptedFiles: "image/jpeg",
-                        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
-                        uploadMultiple: true,
-                        sending: function(file, xhr, formData) {
-                        }
-                    });
-
-                    dropzone.on('addedfile',function(){
-                        okButton.attr("disabled", "disabled");
-                    });
-                    dropzone.on('queuecomplete',function(){
-                        okButton.removeAttr("disabled");
-                        $(document).trigger('bs.load.photo');
-                    });
 
 
                 },
@@ -747,6 +750,7 @@
 
                     dropzone.on('addedfile',function(){
                         okButton.attr("disabled", "disabled");
+                        photoUrl.push(file.name);
                     });
                     dropzone.on('queuecomplete',function(){
                         okButton.removeAttr("disabled");
@@ -892,7 +896,7 @@
                             description: $('#description').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
-                           // photoUrl: $('#photoUrl').val(),
+                            photoUrl: photoUrl,
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
