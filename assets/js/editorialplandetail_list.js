@@ -12,7 +12,7 @@
 
 
             $.each(ret.social, function (k, v,) {
-                $('#filterMedia').append('<div style ="background-color:'+ret.socialcolor[k]+';"><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</div>');
+                $('#filterMedia').append('<div style ="background-color:'+ret.socialcolor[k]+';"><i class="'+ret.socialicon[k]+'"><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</i></div>');
             });
 
 

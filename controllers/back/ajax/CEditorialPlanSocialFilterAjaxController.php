@@ -85,6 +85,7 @@ class CEditorialPlanSocialFilterAjaxController extends AAjaxController
         foreach ($editorialPlanSocial as $social) {
             $res["social"][$social->id] = $social->name;
             $res["socialcolor"][$social->id] = $social->color;
+            $res["socialicon"][$social->id] = $social->iconSocial;
 
         }
 
