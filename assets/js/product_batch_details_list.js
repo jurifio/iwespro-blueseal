@@ -579,6 +579,7 @@
         var i = 0;
         var row = [];
         let url = selectedRows[0].row_pCardUrl;
+        let dummyUrl = selectedRows[0].row_dummyUrl;
         let body = '';
         let visibleImg = '';
 
@@ -628,8 +629,13 @@
                 '</div>' +
                 '</div>' +
                 '<div class="col-md-6">' +
+                '<div class="col-md-12" style="margin-bottom: 10px">' +
                 '<p id="descriptionSheet"></p>' +
                 '<img id="imgVisible" class="' + visibleImg + '" width="100%" src="' + url + '" />' +
+                '</div>' +
+                '<div class="col-md-12">' +
+                '<img width="30%" id="dummy" src="' + dummyUrl + '" />' +
+                '</div>' +
                 '</div>';
         } else {
             body =
@@ -773,10 +779,20 @@
                     options: cats,
                     render: {
                         option: function (item, escape) {
-                            return '<div>' +
-                                escape(item.name) + ' | ' +
-                                "<img style='width: 100px' src='" + escape(item.img) + "'>" +
-                                '</div>';
+                            let rendResCats = '';
+
+                            if(item.img == null){
+                                rendResCats = '<div>' +
+                                    escape(item.name) +
+                                    '</div>';
+                            } else {
+                                rendResCats = '<div>' +
+                                    escape(item.name) + ' | ' +
+                                    "<img style='width: 100px' src='" + escape(item.img) + "'>" +
+                                    '</div>';
+                            }
+
+                            return rendResCats;
                         },
                         item: function (item, escape) {
                             return '<div>' +
@@ -784,6 +800,9 @@
                                 '</div>';
                         }
                     }
+                });
+                $('.selectize-dropdown-content').css({
+                    "max-height":"500px"
                 });
 
             }).fail(function (res1) {
@@ -817,11 +836,31 @@
                     options: result,
                     render: {
                         option: function (item, escape) {
-                            return '<div>' +
-                                escape(item.name) + ' | ' +
-                                escape(item.desc) + ' | ' +
+                            let rendResCatsSpec = '';
+
+                            if(item.img == null && item.desc == null){
+                                rendResCatsSpec = '<div>' +
+                                    escape(item.name) +
+                                    '</div>';
+                            } else if(item.img != null && item.desc == null){
+                                rendResCatsSpec = '<div>' +
+                                    escape(item.name) + ' | ' +
+                                    "<img style='width: 100px' src='" + escape(item.img) + "'>" +
+                                    '</div>';
+                            } else if (item.img == null && item.desc != null){
+                                rendResCatsSpec = '<div>' +
+                                    escape(item.name) + ' | ' +
+                                    escape(item.desc) +
+                                    '</div>';
+                            } else {
+                                rendResCatsSpec = '<div>' +
+                                    escape(item.name) + ' | ' +
+                                    escape(item.desc) + ' | ' +
                                 "<img style='width: 100px' src='" + escape(item.img) + "'>" +
-                                '</div>';
+                                    '</div>';
+                            }
+
+                            return rendResCatsSpec;
                         },
                         item: function (item, escape) {
                             return '<div>' +
@@ -830,6 +869,9 @@
                         }
                     }
                     });
+                $('.selectize-dropdown-content').css({
+                    "max-height":"500px"
+                });
             }).fail(function (res2) {
                 modal.writeBody('Errore grave');
             });
@@ -856,7 +898,10 @@
                         .append($("<option></option>")
                             .attr("value",v.id)
                             .text(v.name));
-                })
+                });
+                $('.selectize-dropdown-content').css({
+                    "max-height":"500px"
+                });
             }).fail(function (res2) {
                 modal.writeBody('Errore grave');
             });

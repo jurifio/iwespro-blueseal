@@ -103,6 +103,7 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
             $row['productCard'] = (!$product->getProductCardUrl() ? '-' :'<a href="#1" class="enlarge-your-img"><img width="50" src="' . $product->getProductCardUrl() . '" /></a>');
             $row['row_pCardUrl'] = (!$product->getProductCardUrl() ? '-' : $product->getProductCardUrl());
             $row['note'] = $pbr->note;
+            $row['row_dummyUrl'] = $product->getDummyPictureUrl();
 
             $datatable->setResponseDataSetRow($key,$row);
         }
