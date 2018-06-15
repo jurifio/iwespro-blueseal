@@ -54,6 +54,11 @@
                                     data-orderable="true"
                                     class="center">Icona
                                 </th>
+                                <th data-slug="color"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Colore
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

@@ -99,6 +99,10 @@
             "style.css": {
                 "path": "scheme://localdomain/assets/css/",
                 "options": ["screen,print"]
+            },
+            "fullcalendar.css": {
+                "path": "scheme://localdomain/assets/css/",
+                "options": ["screen,print"]
             }
         }
     },

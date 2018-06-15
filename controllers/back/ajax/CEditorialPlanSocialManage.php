@@ -36,6 +36,7 @@ class CEditorialPlanSocialManage extends AAjaxController
         $data = \Monkey::app()->router->request()->getRequestData();
         $name = $data['name'];
         $iconSocial = $data['iconSocial'];
+        $color =$data['color'];
 
 
         /** @var CRepo $editorialPlanSocialRepo */
@@ -54,6 +55,7 @@ class CEditorialPlanSocialManage extends AAjaxController
 
             $editorialPlanSocialInsert->name = $name;
             $editorialPlanSocialInsert->iconSocial = $iconSocial;
+            $editorialPlanSocialInsert->color = $color;
 
 
             // eseguo la commit sulla tabella;
@@ -92,6 +94,7 @@ class CEditorialPlanSocialManage extends AAjaxController
         }
         $name = $data["name"];
         $iconSocial =$data["iconSocial"];
+        $color =$data['color'];
 
 
         /** @var CRepo $editorialPlanSocialRepo */
@@ -101,6 +104,7 @@ class CEditorialPlanSocialManage extends AAjaxController
         $editorialPlanSocial = $editorialPlanSocialRepo->findOneBy(['id' => $id]);
         $editorialPlanSocial->name = $name;
         $editorialPlanSocial->iconSocial = $iconSocial;
+        $editorialPlanSocial->color = $color;
 
 
 

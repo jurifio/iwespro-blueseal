@@ -45,46 +45,47 @@ class CEditorialPlanSocialFilterAjaxController extends AAjaxController
         $pRepo = \Monkey::app()->repoFactory->create('Product');
 
         $allDepth = [];
-        foreach ($ids as $id){
+        foreach ($ids as $id) {
             $allDepth[] = $cm->categories()->nestedSet()->nodeDepthById($id);
         }
 
         $checkDepth = array_unique($allDepth);
 
-        if(count($checkDepth) != 1){
+        if (count($checkDepth) != 1) {
             return "no";
         }
 
 
         $prod = [];
-        foreach ($ids as $id){
+        foreach ($ids as $id) {
             /** @var CProductCategory $pc */
-            $pc = $pcRepo->findOneBy(['id'=>$id]);
+            $pc = $pcRepo->findOneBy(['id' => $id]);
             $fath = $pcRepo->fetchParent($id);
             $slug = $pc->getSlug();
 
-            $prod[$fath->slug.'-'.$slug.'-'.$pc->id] = $pRepo->getProductsByCategoryFullTreeFilters($id, $season, $photo, $shooting, $shops);
+            $prod[$fath->slug . '-' . $slug . '-' . $pc->id] = $pRepo->getProductsByCategoryFullTreeFilters($id, $season, $photo, $shooting, $shops);
         }
 
-        foreach ($prod as $key=>$val) {
+        foreach ($prod as $key => $val) {
             $res[$key] = $val->count();
         }
-
 
 
         return json_encode($res);
     }
 
-    public function get(){
-
+    public function get()
+    {
 
 
         /** @var CObjectCollection $editorialPlanSocial */
         $editorialPlanSocial = \Monkey::app()->repoFactory->create('editorialPlanSocial')->findAll();
 
         /** @var CEditorialPlanSocial $social */
-        foreach ($editorialPlanSocial as $social){
+        foreach ($editorialPlanSocial as $social) {
             $res["social"][$social->id] = $social->name;
+            $res["socialcolor"][$social->id] = $social->color;
+
         }
 
 

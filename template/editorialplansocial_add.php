@@ -40,9 +40,19 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="type">Icona</label>
-                                                <input id="type" class="form-control"
+                                                <label for="socialIcon">Icona</label>
+                                                <input id="socialIcon" class="form-control"
                                                        placeholder="Specificare il tipo" name="socialIcon"
+                                                       required="required">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="color">Colore</label>
+                                                <input id="color" class="form-control"
+                                                       placeholder="Specificare il tipo" name="color"
                                                        required="required">
                                             </div>
                                         </div>

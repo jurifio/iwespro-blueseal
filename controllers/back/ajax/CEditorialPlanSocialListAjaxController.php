@@ -17,7 +17,7 @@ class CEditorialPlanSocialListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "SELECT id, name, iconSocial  from EditorialPlanSocial  ";
+        $sql = "SELECT id, name, iconSocial,color  from EditorialPlanSocial  ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);

@@ -109,9 +109,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
             $editorialPlanDetailInsert->smartInsert();
 
-            foreach ($photoUrl as $file) {
+          /*  foreach ($photoUrl as $file) {
                 unlink($tempFolder . $file);
-            }
+            }*/
             $res = "Dettaglio Piano Editoriale inserito con successo!";
             /** @var ARepo $shopRepo */
             $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');

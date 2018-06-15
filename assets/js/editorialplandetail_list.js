@@ -1,4 +1,5 @@
 (function ($) {
+    var eventColor;
     var obj = null;
     $(document).ready(function () {
         $(this).trigger('bs.load.photo');
@@ -10,8 +11,8 @@
             let ret = JSON.parse(res);
 
 
-            $.each(ret.social, function (k, v) {
-                $('#filterMedia').append('<div><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</div>');
+            $.each(ret.social, function (k, v,) {
+                $('#filterMedia').append('<div style ="background-color:'+ret.socialcolor[k]+';"><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</div>');
             });
 
 
@@ -130,39 +131,52 @@
                 },
                 //obj that we get json result from ajax
                 events: obj,
+
                 eventRender: function (event, element) {
-                    let bgRender = "#ffffff";
+                    var bgRender = "#ffffff";
+                    var bgTitle = "#ffffff";
+
+                    eventColor="";
+                    bgTitle='<div style="background-color:'+event.color+';color:black;">';
                     switch (event.status) {
                         case "Bozza":
-                            bgRender = '<div style="background-color:yellow>';
+                            bgRender = '<div style="background-color:#f8bb00 ;color:black;">';
+
                             break;
                         case "Approvata":
-                            bgRender = '<div style="background-color:orange">';
+                            bgRender = '<div style="background-color:#fa6801 ;color:black;"">';
+
                             break;
                         case "Rifiutata":
-                            bgRender = '<div style="background-color:red">';
+                            bgRender = '<div style="background-color:#f22823 ;color:black;"">';
+
                             break;
                         case "Pubblicata":
-                            bgRender = '<div style="background-color:green">';
+                            bgRender = '<div style="background-color:#3e8f3e ;color:black;">';
+
                             break;
 
                     }
+
+
                     var linkimg="";
                     var link  =event.photoUrl.split(",");
                     link.forEach(function(element) {
-                        linkimg=linkimg + '<br/><b>Immagine:</b><img width="20px" src="' + element + '">';
+                        linkimg=linkimg + ' <img width="80px" src="' + element + '">';
                     });
-                    element.find('.fc-title').append(bgRender + '<br/><b>Descrizione:</b>' + event.description +
-                        '"<br/><b>Argomento:</b>"' + event.argumentName +
-                        '"<br/><b>Piano Editoriale:</b>"' + event.titleEditorialPlan +
-                        '"<br/><b>Media utilizzato:</b>"' + event.socialName +
-                        '"<br/><b>Stato:</b>"' + event.status +
-                        '"<br/><b>Note:</b>"' + event.note + linkimg+
+                    element.find('.fc-title').append(bgTitle +
+                        '<b>' + event.argumentName +
+                        ' | ' + event.titleEditorialPlan +
+                        ' | ' + event.socialName +
+                        ' | ' + event.status + '</b></div>' +bgRender +
+                        '<br><b>' + event.note + '</b><br>' + linkimg+
                         '</div>');
+
 
 
                         //'"<br/><b>Immagine:</b><img width="20px" src="' + event.photoUrl + '"></div>');
                 },
+                textColor:'black',
                 editable: true,
                 selectable: true,
                 selectable: true,
@@ -392,7 +406,10 @@
 
                     dropzone.on('addedfile',function(file){
                         okButton.attr("disabled", "disabled");
-                        photoUrl.push( file.name);
+                        let urlimage="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+                        let filename=file.name;
+                        let image =urlimage+file.name;
+                        photoUrl.push(image);
                     });
                     dropzone.on('queuecomplete',function(){
                         okButton.removeAttr("disabled");
@@ -746,7 +763,7 @@
                         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
                         uploadMultiple: true,
                         sending: function(file, xhr, formData) {
-                            photoUrl1.push(file.name);
+                            photoUrl.push(file.name);
                         }
                     });
                     dropzone.on('addedfile',function(){
@@ -818,7 +835,7 @@
                                         editorialPlanDetailId: editorialPlanDetailId,
                                         argument: argument,
                                         description: description,
-                                       // photoUrl: photoUrl,
+                                        photoUrl: photoUrl,
                                         status: status,
                                         socialId: socialId,
                                         title: title,
@@ -883,6 +900,7 @@
 
                     bsModal2.showCancelBtn();
                     bsModal2.setOkEvent(function () {
+
                         var isEvVisible = ($('#isEventVisible').is(":checked") ? "1" : "0");
                         var isVisEdPlanArg = ($('#isVisibleEditorialPlanArgument').is(":checked") ? "1" : "0");
                         var isVisDesc = ($('#isVisibleDescription').is(":checked") ? "1" : "0");
@@ -897,7 +915,7 @@
                             description: $('#description').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
-                            photoUrl: photoUrl1,
+                            photoUrl: photoUrl,
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
@@ -950,7 +968,7 @@
                         var isVisibleEditorialPlanArgument = event.isVisibleEditorialPlanArgument;
                         var description = event.description;
                         var isVisibleDescription = event.isVisibleDescription;
-                      //  var photoUrl = event.photoUrl;
+                        var photoUrl = event.photoUrl;
                         var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
                         var status = event.status;
                         switch (status) {
@@ -993,7 +1011,7 @@
                                 isVisiblePhotoUrl: isVisiblePhotoUrl,
                                 description: description,
                                 isVisibleDescription: isVisibleDescription,
-                               // photoUrl: photoUrl,
+                                photoUrl: photoUrl,
                                 status: status,
                                 bodyEvent: bodyEvent,
                                 isVisibleBodyEvent: isVisibleBodyEvent,
@@ -1063,7 +1081,7 @@
                             isVisiblePhotoUrl: isVisiblePhotoUrl,
                             description: description,
                             isVisibleDescription: isVisibleDescription,
-                           // photoUrl: photoUrl,
+                            photoUrl: photoUrl,
                             status: status,
                             bodyEvent: bodyEvent,
                             isVisibleBodyEvent: isVisibleBodyEvent,

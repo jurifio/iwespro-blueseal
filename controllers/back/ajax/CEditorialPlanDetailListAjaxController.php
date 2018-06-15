@@ -76,7 +76,12 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
             $data[$i]["note"] = $singleDetail->note;
             $data[$i]["isVisibleNote"] = $singleDetail->isVisibleNote;
             $data[$i]["socialId"] = $singleDetail->socialId;
+
+
+
+
             $data[$i]["socialName"] = $singleDetail->editorialPlanSocial->name;
+            $data[$i]["color"]=$singleDetail->editorialPlanSocial->color;
             $data[$i]['titleEditorialPlan'] = $editorialPlanName;
 
 

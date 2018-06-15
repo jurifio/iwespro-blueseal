@@ -37,7 +37,14 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         '<div class="col-xs-6>">' +
         '<label for="editorialPlanSocialIcon">icona </label>' +
         '<input autocomplete="on" type="text" id="editorialPlanSocialIcon" ' +
-        'class="form-control" name="editorialPlanSocialName" value="' + selectedRows[0].iconSocial + '">' +
+        'class="form-control" name="editorialPlanSocialIcon" value="' + selectedRows[0].iconSocial + '">' +
+        '</div>' +
+        '</div>'+
+        '<div class="row">' +
+            '<div class="col-xs-6>">' +
+        '<label for="editorialPlanSocialColor">Colore </label>' +
+        '<input autocomplete="on" type="text" id="editorialPlanSocialColor" ' +
+        'class="form-control" name="editorialPlanSocialColor" value="' + selectedRows[0].color + '">' +
         '</div>' +
         '</div>'
 
@@ -50,6 +57,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         let id = selectedRows[0].id;
         let name = $('#editorialPlanSocialName').val();
         let iconSocial = $('#editorialPlanSocialIcon').val();
+        let color = $('#editorialPlanSocialColor').val();
 
         $.ajax({
             method: "put",
@@ -58,6 +66,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
                 id: id,
                 name: name,
                 iconSocial:iconSocial,
+                color:color,
             }
         }).done(function (res) {
             bsModal.writeBody(res);
