@@ -1117,11 +1117,11 @@
                     var linkimg1="";
                     var link  =event.photoUrl.split(",");
                     link.forEach(function(element) {
-                        linkimg1=linkimg1 + ' <img width="150px" src="' + element + '">';
+                        linkimg1=linkimg1 + ' <img width="600px" src="' + element + '">';
 
                     });
 
-                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + ': ' + event.title + '</br>' + 'Argomento: ' + ': ' + event.argumentName + '</br>'   + linkimg1 +'</div>';
+                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + ': ' + event.title + '</br>' + 'testo: ' + ': ' + event.bodyEvent + '</br>'    + linkimg1 +'</div>';
 
 
                     $("body").append(tooltip);
