@@ -44,15 +44,15 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $notifyEmail = $data['notifyEmail'];
         $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "-plandetail/";
         $files = glob($tempFolder . "*.jpg");
-       /* $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+        $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
 
 
         foreach ($photoUrl as &$jpg) {
 
 
-            $jpg = $url . $jpg;
+            $jpg = $jpg;
         }
-        $groupimage=implode(",",$photoUrl);*/
+        $groupimage=implode(",",$photoUrl);
         /* $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
          $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');*/
 
@@ -92,7 +92,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
         $editorialPlanDetail->isVisibleDescription = $isVisibleDescription;
         if (!empty($photoUrl)) {
-            $editorialPlanDetail->photoUrl = $photoUrl;
+            $editorialPlanDetail->photoUrl = $groupimage;
         }
 
         $editorialPlanDetail->isVisiblePhotoUrl = $isVisiblePhotoUrl;
