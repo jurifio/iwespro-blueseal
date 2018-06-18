@@ -66,7 +66,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         }*/
         foreach ($photoUrl as &$jpg) {
 
-            $jpg =$url.$jpg;
+            $jpg =$jpg;
 
         }
 

@@ -1,7 +1,6 @@
 (function ($) {
     var eventColor;
     var obj = null;
-    var photoUrl1=[];
     $(document).ready(function () {
         $(this).trigger('bs.load.photo');
         createcalendar(obj, 1);
@@ -176,7 +175,7 @@
 
 
 
-                        //'"<br/><b>Immagine:</b><img width="20px" src="' + event.photoUrl + '"></div>');
+                    //'"<br/><b>Immagine:</b><img width="20px" src="' + event.photoUrl + '"></div>');
                 },
                 textColor:'black',
                 editable: true,
@@ -207,7 +206,7 @@
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"file\">Immagine Evento</label>' +
                         '<div class=\"fallback\">' +
-                       // '<label for=\"file\">Immagine Evento</label>' +
+                        // '<label for=\"file\">Immagine Evento</label>' +
                         '<input name="file" type="file" multiple />' +
                         '</div>' +
                         '</div>' +
@@ -272,19 +271,19 @@
                         'placeholder=\"Visible\" checked="true" name=\"isVisibleDescription\" ">' +
                         '</div>' +
                         '</div>' +
-                            bodyContent+
+                        bodyContent+
                         /*'<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
                         '<div class="fallback">'+
                         '<input name="photoUrl" id="photoUrl" type="file" multiple />' +
                         '</div>' +
                         '</form>'+*/
-                       /* '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"photoUrl\">Immagine Evento</label>' +
-                        '<input type=\"text\" id=\"photoUrl\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" ">' +
-                        '</div>' +
-                        '</div>' +*/
+                        /* '<div class=\"col-md-3\">' +
+                         '<div class=\"form-group form-group-default selectize-enabled\">' +
+                         '<label for=\"photoUrl\">Immagine Evento</label>' +
+                         '<input type=\"text\" id=\"photoUrl\" class=\"form-control\"' +
+                         'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" ">' +
+                         '</div>' +
+                         '</div>' +*/
                         '<div class=\"col-md-3\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
@@ -381,7 +380,7 @@
                         '</div>' +
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
                     });
-                  //  var photoUrl =[];
+                    var photoUrl =[];
 
                     bsModal1.addClass('modal-wide');
                     bsModal1.addClass('modal-high');
@@ -395,7 +394,7 @@
                     let dropzone = new Dropzone("#dropzoneModal",{
                         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
-                        maxFilesize: 500,
+                        maxFilesize: 5,
                         maxFiles: 100,
                         parallelUploads: 10,
                         acceptedFiles: "image/jpeg",
@@ -406,7 +405,7 @@
                         }
                     });
 
-                    dropzone.on('addedfile',function(file,photoUrl){
+                    dropzone.on('addedfile',function(file){
                         okButton.attr("disabled", "disabled");
                         let urlimage="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
                         let filename=file.name;
@@ -578,7 +577,7 @@
                         '<label for=\"file\">Immagine Evento'+linkimg+'</label>' +
                         '<div class=\"fallback\">' +
                         //'<label for=\"file\">Immagine Evento'+linkimg+'</label>' +
-                        '<input name="file" type="file" multiple />' +
+                        '<input name="file1" type="file" multiple />' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
@@ -642,13 +641,13 @@
                         'placeholder=\"Visible\" name=\"isVisibleDescription\" ">' +
                         '</div>' +
                         '</div>' +  bodyContent +
-                      /*  '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"photoUrl\">Immagine Evento'+linkimg+'</label>' +
-                        '<input id=\"photoUrl\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" value=\"' + photoUrl + '\">' +
-                        '</div>' +
-                        '</div>' +*/
+                        /*  '<div class=\"col-md-3\">' +
+                          '<div class=\"form-group form-group-default selectize-enabled\">' +
+                          '<label for=\"photoUrl\">Immagine Evento'+linkimg+'</label>' +
+                          '<input id=\"photoUrl\" class=\"form-control\"' +
+                          'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" value=\"' + photoUrl + '\">' +
+                          '</div>' +
+                          '</div>' +*/
                         '<div class=\"col-md-3\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
@@ -752,27 +751,28 @@
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + editorialPlanId + '\"/>' +
                         '<input type="hidden" id="editorialPlanDetailId" name="editorialPlanDetailId" value=\"' + editorialPlanDetailId + '\"/>'
                     });
+                    var photoUrl1 =[];
                     bsModal2.addClass('modal-wide');
                     bsModal2.addClass('modal-high');
-
                     let dropzone = new Dropzone("#dropzoneModal",{
                         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
-                        maxFilesize: 500,
+                        maxFilesize: 5,
                         maxFiles: 100,
                         parallelUploads: 10,
                         acceptedFiles: "image/jpeg",
                         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
                         uploadMultiple: true,
-                        sending: function(file, xhr, formData) {
+                        sending: function(file1, xhr, formData) {
+
                         }
                     });
-                    dropzone.on('addedfile',function(file,photoUrl){
+                    dropzone.on('addedfile',function(file1){
                         okButton.attr("disabled", "disabled");
-                        let urlimage="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
-                        let filename=file.name;
-                        let image =urlimage+filename;
-                        photoUrl.push(image);
+                        let urlimage1="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+                        let filename1=file1.name;
+                        let image1 =urlimage1+filename1;
+                        photoUrl1.push(image1);
 
                     });
                     dropzone.on('queuecomplete',function(){
@@ -905,6 +905,12 @@
 
                     bsModal2.showCancelBtn();
                     bsModal2.setOkEvent(function () {
+                        var photo;
+                        if(photoUrl1.length==0){
+                            photo=photoUrl;
+                        }else{
+                        photo=photoUrl1;
+                        }
 
                         var isEvVisible = ($('#isEventVisible').is(":checked") ? "1" : "0");
                         var isVisEdPlanArg = ($('#isVisibleEditorialPlanArgument').is(":checked") ? "1" : "0");
@@ -920,7 +926,7 @@
                             description: $('#description').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
-                            photoUrl: photoUrl,
+                            photoUrl: photo,
                             status: $('#status').val(),
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),

@@ -49,6 +49,7 @@ class CEditorialPlanDetailImageUploadAjaxManage extends AAjaxController
             }
 
             $fileName['name'] = explode('_', $_FILES['file']['name'][$i])[0];
+           // $fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 
             try{
