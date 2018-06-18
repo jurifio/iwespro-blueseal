@@ -1,6 +1,7 @@
 (function ($) {
     var eventColor;
     var obj = null;
+    var photoUrl1=[];
     $(document).ready(function () {
         $(this).trigger('bs.load.photo');
         createcalendar(obj, 1);
@@ -380,7 +381,7 @@
                         '</div>' +
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
                     });
-                    var photoUrl =[];
+                  //  var photoUrl =[];
 
                     bsModal1.addClass('modal-wide');
                     bsModal1.addClass('modal-high');
@@ -405,7 +406,7 @@
                         }
                     });
 
-                    dropzone.on('addedfile',function(file){
+                    dropzone.on('addedfile',function(file,photoUrl){
                         okButton.attr("disabled", "disabled");
                         let urlimage="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
                         let filename=file.name;
@@ -753,7 +754,7 @@
                     });
                     bsModal2.addClass('modal-wide');
                     bsModal2.addClass('modal-high');
-                    let photoUrl1=[];
+
                     let dropzone = new Dropzone("#dropzoneModal",{
                         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
