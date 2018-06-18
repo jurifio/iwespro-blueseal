@@ -410,7 +410,7 @@
                         okButton.attr("disabled", "disabled");
                         let urlimage="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
                         let filename=file.name;
-                        let image =urlimage+file.name;
+                        let image =urlimage+filename;
                         photoUrl.push(image);
                     });
                     dropzone.on('queuecomplete',function(){
@@ -767,7 +767,7 @@
                         sending: function(file, xhr, formData) {
                         }
                     });
-                    dropzone.on('addedfile',function(file){
+                    dropzone.on('addedfile',function(file,photoUrl){
                         okButton.attr("disabled", "disabled");
                         let urlimage="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
                         let filename=file.name;
