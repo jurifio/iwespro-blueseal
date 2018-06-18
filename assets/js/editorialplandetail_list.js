@@ -394,7 +394,7 @@
                     let dropzone = new Dropzone("#dropzoneModal",{
                         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
-                        maxFilesize: 5,
+                        maxFilesize: 500,
                         maxFiles: 100,
                         parallelUploads: 10,
                         acceptedFiles: "image/jpeg",
@@ -757,18 +757,21 @@
                     let dropzone = new Dropzone("#dropzoneModal",{
                         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
-                        maxFilesize: 5,
+                        maxFilesize: 500,
                         maxFiles: 100,
                         parallelUploads: 10,
                         acceptedFiles: "image/jpeg",
                         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
                         uploadMultiple: true,
                         sending: function(file, xhr, formData) {
-                            photoUrl.push(file.name);
                         }
                     });
-                    dropzone.on('addedfile',function(){
+                    dropzone.on('addedfile',function(file){
                         okButton.attr("disabled", "disabled");
+                        let urlimage="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+                        let filename=file.name;
+                        let image =urlimage+filename;
+                        photoUrl.push(image);
 
                     });
                     dropzone.on('queuecomplete',function(){

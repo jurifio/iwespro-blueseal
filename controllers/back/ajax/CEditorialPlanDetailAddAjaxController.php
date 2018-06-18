@@ -49,7 +49,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
         $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');
         $notifyEmail = $data['notifyEmail'];
-        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/";
+        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "-plandetail/";
         $files = glob($tempFolder . "*.jpg");
         $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
         /*   foreach ($files as $jpg) {

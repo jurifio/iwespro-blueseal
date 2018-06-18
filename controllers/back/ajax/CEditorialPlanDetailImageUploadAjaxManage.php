@@ -37,7 +37,7 @@ class CEditorialPlanDetailImageUploadAjaxManage extends AAjaxController
 
         \Monkey::app()->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
-        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
+        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder').'-plandetail'."/";
 
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
