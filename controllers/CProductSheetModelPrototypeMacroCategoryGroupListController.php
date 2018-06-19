@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
+use bamboo\domain\entities\CUser;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
@@ -32,10 +33,15 @@ class CProductSheetModelPrototypeMacroCategoryGroupListController extends ARestr
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_sheet_model_prototype_macro_category_group.php');
 
+        /** @var CUser $user */
+        $user = \Monkey::app()->getUser();
+
+        $fullPerm = $user->hasPermission('allShops');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'fullPerm' => $fullPerm,
             'sidebar' => $this->sidebar->build()
         ]);
     }

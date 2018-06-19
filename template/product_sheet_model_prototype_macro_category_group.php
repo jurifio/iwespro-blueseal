@@ -58,6 +58,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
+    <?php if($fullPerm): ?>
     <bs-toolbar-group data-group-label="Gestione foto">
         <bs-toolbar-button
                 data-remote="bs.model.prototype.macro.category.image.manage"
@@ -92,6 +93,7 @@
                 data-title="Modifica descrizione"
                 data-placement="bottom"
         ></bs-toolbar-button>
+        <?php endif; ?>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
