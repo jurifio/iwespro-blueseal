@@ -120,6 +120,9 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.product.namesMerge"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.product.details.new">
         </bs-toolbar-button>
         <bs-toolbar-button
