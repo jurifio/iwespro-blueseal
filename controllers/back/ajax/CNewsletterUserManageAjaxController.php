@@ -39,7 +39,7 @@ class CNewsletterUserManageAjaxController extends AAjaxController
 
             /** @var CNewsletterUser $newsUser */
             $newsUser = $nUR->findOneBy(['id'=>$id]);
-            $newsUser->gender = $sex;
+            $newsUser->genderNewsletterUser = $sex;
             $newsUser->update();
         }
 

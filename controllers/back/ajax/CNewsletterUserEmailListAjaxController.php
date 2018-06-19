@@ -30,8 +30,8 @@ class CNewsletterUserEmailListAjaxController extends AAjaxController
                   n.unsubscriptionDate,
                   ud.name,
                   ud.surname,
-                  n.gender as nuG,
-                  ud.gender
+                  ud.gender,
+                  n.genderNewsletterUser as nuG
 FROM NewsletterUser n left outer join UserEmail ue On n.userId =ue.userId
 left outer join UserDetails ud ON n.userId=ud.userId";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
