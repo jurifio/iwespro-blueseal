@@ -75,6 +75,11 @@
                                 <th data-slug="note"
                                     data-searchable="false"
                                     data-orderable="true" class="center">Note</th>
+                                <th data-slug="stock"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center">Taglie
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

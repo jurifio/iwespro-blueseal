@@ -49,7 +49,8 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
                   pb.name as brand,
                   concat(pse.name, ' ', pse.year) AS season,
                   pcg.name AS colorGroup,
-                  pv.description AS colorNameManufacturer
+                  pv.description AS colorNameManufacturer,
+                  psiz.name AS stock
             FROM ProductBatchDetails pbd
             JOIN Product p ON pbd.productVariantId = p.productVariantId AND p.id = pbd.productId
             JOIN ProductBrand pb ON p.productBrandId = pb.id
@@ -57,6 +58,9 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
             JOIN ProductVariant pv ON p.productVariantId = pv.id
             LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
             LEFT JOIN WorkCategorySteps wcs ON pbd.workCategoryStepsId = wcs.id
+            LEFT JOIN (ProductSku psk
+                JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
+                ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
             WHERE pbd.productBatchId = $productBatchId
         ";
 
@@ -113,6 +117,8 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
             $row['row_pCardUrl'] = (!$product->getProductCardUrl() ? '-' : $product->getProductCardUrl());
             $row['note'] = $pbr->note;
             $row['row_dummyUrl'] = $product->getDummyPictureUrl();
+            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$product->printId().'"></table>';
+
 
             $datatable->setResponseDataSetRow($key,$row);
         }
