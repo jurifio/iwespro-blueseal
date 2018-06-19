@@ -45,8 +45,17 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
                   pbd.productId,
                   pbd.productVariantId,
                   wcs.name as stepName,
-                  pbd.note
+                  pbd.note,
+                  pb.name as brand,
+                  concat(pse.name, ' ', pse.year) AS season,
+                  pcg.name AS colorGroup,
+                  pv.description AS colorNameManufacturer
             FROM ProductBatchDetails pbd
+            JOIN Product p ON pbd.productVariantId = p.productVariantId AND p.id = pbd.productId
+            JOIN ProductBrand pb ON p.productBrandId = pb.id
+            JOIN ProductSeason pse ON p.productSeasonId = pse.id
+            JOIN ProductVariant pv ON p.productVariantId = pv.id
+            LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
             LEFT JOIN WorkCategorySteps wcs ON pbd.workCategoryStepsId = wcs.id
             WHERE pbd.productBatchId = $productBatchId
         ";

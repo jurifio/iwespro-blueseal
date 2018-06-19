@@ -23,15 +23,15 @@ class CNewsletterUserEmailListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT
-  n.id,
-  n.email,
-  n.isActive as isActive ,
-  n.subscriptionDate,
-  n.unsubscriptionDate,
-  ud.name,
-  ud.surname
-
-
+                  n.id,
+                  n.email,
+                  n.isActive as isActive ,
+                  n.subscriptionDate,
+                  n.unsubscriptionDate,
+                  ud.name,
+                  ud.surname,
+                  n.gender as nuG,
+                  ud.gender
 FROM NewsletterUser n left outer join UserEmail ue On n.userId =ue.userId
 left outer join UserDetails ud ON n.userId=ud.userId";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);

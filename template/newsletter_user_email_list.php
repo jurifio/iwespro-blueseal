@@ -71,6 +71,17 @@
                                     data-orderable="true"
                                     class="center">Liste di Distribuzione
                                 </th>
+                                <th data-slug="nuG"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Sesso (Lista newsletter)
+                                </th>
+                                <th data-slug="gender"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Sesso (Lista utenti)
+                                </th>
+
 
 
 
@@ -94,7 +105,18 @@
                 data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-
+    <bs-toolbar-group data-group-label="Aggiorna il sesso dell'utente">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-venus-mars"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.newsletter.user.gender"
+                data-title="Assegna il sesso"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

@@ -43,14 +43,14 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Brand</th>
                                 <th data-slug="productName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Nome del prodotto</th>
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Nome del prodotto</th>
                                 <th data-slug="season"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione</th>
                                 <th data-slug="description"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Descrizione</th>
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Descrizione</th>
                                 <th data-slug="colorGroup"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Gruppo colore</th>
@@ -58,14 +58,14 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Colore produttore</th>
                                 <th data-slug="details"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Dettagli</th>
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Dettagli</th>
                                 <th data-slug="dummy"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Immagine</th>
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Immagine</th>
                                 <th data-slug="categoryId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Categorie</th>
+                                    data-orderable="true" class="center categoryFilterType">Categorie</th>
                                 <th data-slug="stepName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fase</th>
