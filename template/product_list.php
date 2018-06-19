@@ -304,6 +304,17 @@
                 data-remote="bs.product.addBatch"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Etichette personalizzate">
+        <bs-toolbar-button
+                data-remote="bs.product.tag.new.season"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.tag.new.brand"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.special.tag.custom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
