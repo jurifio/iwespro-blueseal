@@ -37,7 +37,7 @@ $(document).on('bs-editorialplan-delete', function (e, element, button) {
 
         $.ajax({
             method: "put",
-            url: "/blueseal/xhr/EditorialPlanDelete",
+            url: "/blueseal/xhr/EditorialPlanListAjaxController",
             data: {
                 id: id
             }

@@ -24,8 +24,6 @@ use bamboo\domain\repositories\CEditorialPlanRepo;
 class CEditorialPlanDelete extends AAjaxController
 {
 
-
-
     /**
      * @return mixed
      * @throws BambooException
@@ -36,6 +34,14 @@ class CEditorialPlanDelete extends AAjaxController
     public function put(){
         $data  = $this->app->router->request()->getRequestData();
         $id = $data["id"];
+        if (strlen($id)>10) {
+            $finalpositionId = strpos($id, '</a>');
+            $initialpositionId = strpos($id, '">');
+            $finalpositionId = $finalpositionId;
+            $initialpositionId = $initialpositionId + 2;
+            $lenghtposition = $finalpositionId - $initialpositionId;
+            $id = substr($id, $initialpositionId, $lenghtposition);
+        }
         /** @var CRepo $editorialPlan */
         $editorialPlan = \Monkey::app()->repoFactory->create('editorialPlan');
 

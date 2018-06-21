@@ -33,7 +33,7 @@ class CEditorialPlanListAjaxController extends AAjaxController
             /** @var CEditorialPlan $editorialPlan */
             $editorialPlan = $editorialPlanRepo->findOneBy(['id' => $row["id"] ]);
 
-            $row['id'] = '<a href="' . $opera . $editorialPlan->id . '" >' . $editorialPlan->id . '</a>';
+            $row['id'] = '<a href="' . $opera . $editorialPlan->id . '">' . $editorialPlan->id . '</a>';
 
 
             $datatable->setResponseDataSetRow($key,$row);
@@ -42,5 +42,26 @@ class CEditorialPlanListAjaxController extends AAjaxController
         }
 
         return $datatable->responseOut();
+    }
+    public function put(){
+        $data  = $this->app->router->request()->getRequestData();
+        $id = $data["id"];
+        if (strlen($id)>10) {
+            $finalpositionId = strpos($id, '</a>');
+            $initialpositionId = strpos($id, '">');
+            $finalpositionId = $finalpositionId;
+            $initialpositionId = $initialpositionId + 2;
+            $lenghtposition = $finalpositionId - $initialpositionId;
+            $id = substr($id, $initialpositionId, $lenghtposition);
+        }
+        /** @var CRepo $editorialPlan */
+        $editorialPlan = \Monkey::app()->repoFactory->create('editorialPlan');
+
+        /** @var CEditorialPlan $editorial */
+        $editorial= $editorialPlan->findOneBy(['id'=>$id]);
+        $editorial->delete();
+        $res = "Piano Editoriale Cancellato";
+        return $res;
+
     }
 }
