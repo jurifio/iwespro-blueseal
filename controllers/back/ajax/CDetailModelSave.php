@@ -1,6 +1,9 @@
 <?php
 namespace bamboo\controllers\back\ajax;
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CProductSheetActual;
+use bamboo\domain\entities\CProductSheetModelPrototype;
 
 /**
  * Class CProductListAjaxController
@@ -27,33 +30,136 @@ class CDetailModelSave extends AAjaxController
 
         $productPrototypeId = $get['Product_dataSheet'];
         $productDetails = $this->getDetails($get);
-        try {
-            \Monkey::app()->repoFactory->beginTransaction();
 
-            $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
-            if (!$pn) throw new BambooException('Non si può creare un modello con un nome prodotto inesistente');
-            $pnIt = $pn->findOneByKey('langId', 1);
-            $newProt = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
-            $newProt->productSheetPrototypeId = $productPrototypeId;
-            $newProt->name = $get['name'];
-            $newProt->code = $get['code'];
-            $newProt->productName = str_replace(' !', '', $pnIt->name);
-            $newProt->genderId = $get['genders'];
-            $newProt->categoryGroupId =  $get['prodCats'];
-            $newProt->materialId =  $get['materials'];
-            $newProt->note =  $get['note'];
-            $newId = $newProt->insert();
+        //IF IS MULTIPLE CREATION OR !
+        if(empty($get['modelIds'])){
+            try {
+                \Monkey::app()->repoFactory->beginTransaction();
 
-            $this->saveCats($get['categories'], $newId);
+                $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
+                if (!$pn) throw new BambooException('Non si può creare un modello con un nome prodotto inesistente');
+                $pnIt = $pn->findOneByKey('langId', 1);
+                $newProt = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
+                $newProt->productSheetPrototypeId = $productPrototypeId;
+                $newProt->name = $get['name'];
+                $newProt->code = $get['code'];
+                $newProt->productName = str_replace(' !', '', $pnIt->name);
 
-            $this->insertDetails($productDetails, $newId, $productPrototypeId);
-            \Monkey::app()->repoFactory->commit();
+                if(isset($get['genders'])){
+                   $newProt->genderId = $get['genders'];
+                }
 
-            return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newId]);
-        } catch (\Throwable $e) {
-            \Monkey::app()->repoFactory->rollback();
-            return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
+                if(isset($get['prodCats'])) {
+                    $newProt->categoryGroupId = $get['prodCats'];
+                }
+
+                if(isset($get['materials'])) {
+                    $newProt->materialId = $get['materials'];
+                }
+
+                if(isset($get['note'])) {
+                    $newProt->note = $get['note'];
+                }
+
+
+                $newId = $newProt->insert();
+
+                $this->saveCats($get['categories'], $newId);
+
+                $this->insertDetails($productDetails, $newId, $productPrototypeId);
+                \Monkey::app()->repoFactory->commit();
+
+                return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newId]);
+            } catch (\Throwable $e) {
+                \Monkey::app()->repoFactory->rollback();
+                return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
+            }
+        } else {
+            try {
+                $newIds = [];
+                \Monkey::app()->repoFactory->beginTransaction();
+
+                //Preparo l'inserimento
+                foreach ($get['modelIds'][0]['res'] as $model){
+
+                    $newName = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
+                    $newCode = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
+
+                    $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
+                    if (!$pn) throw new BambooException('Non si può creare un modello con un nome prodotto inesistente');
+                    $pnIt = $pn->findOneByKey('langId', 1);
+                    $newProt = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
+                    $newProt->productSheetPrototypeId = (!empty($productDetails) ? $productPrototypeId : $model['productSheetPrototypeId']);
+                    $newProt->name = $newName;
+                    $newProt->code = $newCode;
+                    $newProt->productName = str_replace(' !', '', $pnIt->name);
+                    $newProt->genderId = (!isset($get['genders']) ? $model['genderId'] : $get['genders']);
+                    $newProt->categoryGroupId =  (!isset($get['prodCats']) ? $model['categoryGroupId'] : $get['prodCats']);
+                    $newProt->materialId =  (!isset($get['materials']) ? $model['materialId'] : $get['materials']);
+                    $newProt->note =  (!isset($get['note']) ? $model['note'] : $get['note']);
+                    $newId = $newProt->insert();
+
+                    $newIds[] = $newId;
+
+                    //add cateogories
+                    $em = $this->rfc('ProductSheetModelPrototypeHasProductCategory');
+
+                    if(!empty($get['categories'])) {
+                        if (!is_array($get['categories'])) throw new \Exception('$cats must be an array');
+                        foreach ($get['categories'] as $v) {
+                            $cat = $em->getEmptyEntity();
+                            $cat->productSheetModelPrototypeId = $newId;
+                            $cat->productCategoryId = $v;
+                            $cat->insert();
+                        }
+                    } else {
+                        foreach ($model['categories'] as $v) {
+                            $cat = $em->getEmptyEntity();
+                            $cat->productSheetModelPrototypeId = $newId;
+                            $cat->productCategoryId = $v;
+                            $cat->insert();
+                        }
+                    }
+
+
+                    if(!empty($productDetails)){
+                        foreach ($productDetails as $k => $v) {
+                            $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+                            $newSheet->productSheetModelPrototypeId = $newId;
+                            $newSheet->productDetailLabelId = $k;
+                            $newSheet->productDetailId = $v;
+                            $newSheet->insert();
+                        }
+                    } else {
+                        /** @var CProductSheetModelPrototype $psmp */
+                        $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id'=>$model['id']]);
+
+                        /** @var CObjectCollection $psActualCollection */
+                        $psActualCollection = $psmp->productSheetModelActual;
+
+                        /** @var CProductSheetActual $psActual */
+                        foreach ($psActualCollection as $psActual){
+                            $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+                            $newSheet->productSheetModelPrototypeId = $newId;
+                            $newSheet->productDetailLabelId = $psActual->productDetailLabelId;
+                            $newSheet->productDetailId = $psActual->productDetailId;
+                            $newSheet->insert();
+                        }
+
+                    }
+
+
+                }
+                \Monkey::app()->repoFactory->commit();
+                return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds)]);
+
+            } catch (\Throwable $e) {
+                \Monkey::app()->repoFactory->rollback();
+                return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
+            }
         }
+
+
     }
 
     public function put()
@@ -123,6 +229,8 @@ class CDetailModelSave extends AAjaxController
             $newSheet->insert();
         }
     }
+
+
 
     /**
      * @param $cats

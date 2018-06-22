@@ -11,6 +11,18 @@
     <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
 
+    <?php
+    $col = '';
+    switch ($isMultiple){
+        case true:
+            $col = 'col-md-6';
+            break;
+        case false:
+            $col = 'col-md-12';
+            break;
+    }
+
+    ?>
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
             <div class="container-fluid container-fixed-lg bg-white">
@@ -37,12 +49,14 @@
                         <div class="col-md-12">
                             <h3 id="actionTitle">Aggiungi Nuovo</h3>
                         </div>
-                        <div class="col-md-6">
+                        <div class="<?php if($isMultiple){ echo 'col-md-12';} else {echo 'col-md-6';} ?>">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Informazioni di base</h5>
                                 </div>
                                 <div class="panel-body clearfix">
+                                    <!-- NOME -->
+                                    <?php if(!$isMultiple): ?>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default required">
@@ -55,6 +69,35 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <?php else: ?>
+                                    <div class="row <?php echo $col;?> distinct-option">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label for="find-name">Trova (NOME)</label>
+                                                <input autocomplete="off" type="text" id="find-name"
+                                                       class="form-control find-name" name="find-name"
+                                                       value=""
+                                                       required>
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label for="sub-name">Sostituisci (NOME)</label>
+                                                <input autocomplete="off" type="text" id="sub-name"
+                                                       class="form-control sub-name" name="sub-name"
+                                                       value=""
+                                                       required>
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <?php endif; ?>
+                                    <!-- /NOME -->
+
+                                    <!-- CODICE -->
+                                    <?php if(!$isMultiple): ?>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default required">
@@ -67,7 +110,35 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <?php else: ?>
+
+                                    <div class="row <?php echo $col;?> distinct-option">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label for="find-code">Trova (CODICE)</label>
+                                                <input autocomplete="off" type="text" id="find-code"
+                                                       class="form-control find-code" name="find-code"
+                                                       value=""
+                                                       required>
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label for="sub-code">Sostituisci (CODICE)</label>
+                                                <input autocomplete="off" type="text" id="sub-code"
+                                                       class="form-control sub-code" name="sub-code"
+                                                       value=""
+                                                       required>
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <?php endif; ?>
+                                    <!-- /CODICE -->
+
+                                    <div class="row <?php echo $col;?>">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default required">
                                                 <label for="name">Nome Prodotto</label>
@@ -78,7 +149,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row <?php echo $col;?>">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
                                                 <div class="JSON-cats" style="display: none"><?php echo $categories; ?></div>
@@ -90,8 +161,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- ON TEST -->
-                                    <div class="row">
+                                    <div class="row <?php echo $col;?>">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
                                                 <div class="JSON-gend" style="display: none"><?php echo $genders; ?></div>
@@ -104,7 +174,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
+                                    <div class="row <?php echo $col;?>">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
                                                 <div class="JSON-pcats" style="display: none"><?php echo $prodCats; ?></div>
@@ -117,7 +187,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
+                                    <div class="row <?php echo $col;?>">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
                                                 <div class="JSON-mat" style="display: none"><?php echo $materials; ?></div>
@@ -130,7 +200,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
+                                    <div class="row <?php echo $col;?>">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
                                                 <label for="model_note">Note</label>
@@ -138,12 +208,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- ON TEST -->
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="<?php if($isMultiple){ echo 'col-md-12';} else {echo 'col-md-6';} ?>">
+                            <p class="btn-success" style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px" id="hide-det">NASCONDI/MOSTRA SCHEDA PRODOTTO</p>
+                        </div>
+                        <div class="<?php if($isMultiple){ echo 'col-md-12';} else {echo 'col-md-6';} ?>" id="allDets" style="display: <?php if($isMultiple){ echo 'none';} else {echo 'block';} ?>">
                             <div style="display:none"
                                  id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>
 

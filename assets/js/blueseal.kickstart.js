@@ -292,6 +292,8 @@ $.initFormByGetData = function (params) {
         opt.fail(res);
     }).always(function (res) {
         opt.always(res);
+    }).success(function (res) {
+        opt.success(res);
     });
 };
 
@@ -642,9 +644,11 @@ $.bsModal = function (header, params) {
 
 
 (function ($) {
-
     $.fn.bsForm = function (method, params) {
+
         let self = this;
+
+        let valsMult = params.par;
 
         //impedisco la sovrapposizione di chiamate ajax
         if ('undefined' == typeof bsformSaving) bsformSaving = 0;
@@ -795,6 +799,7 @@ $.bsModal = function (header, params) {
                         });
 
                         opt['data'] = data;
+                        opt['data']['modelIds'] = valsMult;
                         //opt['data'] = formDataObject;
 
                         $.ajax({

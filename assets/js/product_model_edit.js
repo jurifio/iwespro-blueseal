@@ -6,10 +6,13 @@ var alertHtml = "" +
 
 var tagList = "";
 
+var defMult = '';
 $(document).on('bs.product.edit', function (e, element, button) {
-    $('#form-model').bsForm('save', {
-            url:'/blueseal/xhr/DetailModelSave',
-            onDone: function(res, method) {
+
+    let saveAll = function (isMult) {
+        $('#form-model').bsForm('save', {
+            url: '/blueseal/xhr/DetailModelSave',
+            onDone: function (res, method) {
                 var body = 'Oops! Metodo non pervenuto. Contatta l\'amministratore';
                 var location = false;
                 if ('ko' == res['status']) {
@@ -17,8 +20,12 @@ $(document).on('bs.product.edit', function (e, element, button) {
                 } else {
                     if ('POST' == method) {
                         body = 'Nuovo modello inserito.';
-                        location = window.location.pathname + '?id=' + res['productSheetModelPrototypeId'];
-                    }
+                        if(!isMult) {
+                            location = window.location.pathname + '?id=' + res['productSheetModelPrototypeId'];
+                        } else {
+                            location = '/blueseal/prodotti/modelli';
+                        }
+                        }
                     if ('PUT' == method) {
                         body = 'Modello aggiornato.';
                         location = window.location.href;
@@ -26,21 +33,60 @@ $(document).on('bs.product.edit', function (e, element, button) {
                 }
                 modal = new $.bsModal('Salvataggio del modello', {
                     body: body,
-                    okButtonEvent: function(){
+                    okButtonEvent: function () {
                         modal.hide();
                         if (false != location) window.location.replace(location);
                     }
                 });
             },
-            onFail: function(res, method) {
+            onFail: function (res, method) {
                 modal = new $.bsModal('Salvataggio del modello', {
                     body: res['message'],
-                    okButtonEvent: function(){
+                    okButtonEvent: function () {
                         modal.hide();
                     }
                 });
-            }
-    });
+            },
+            par: defMult
+        });
+    };
+
+
+    function saveAllData(val) {
+        defMult = val;
+    }
+
+    //---------
+    var mult = [];
+    if($_GET.all) {
+        if ('modelIds' in $_GET.all) {
+            var multPar = $_GET.all.modelIds;
+
+            $.initFormByGetData({
+                data: {
+                    multiple: multPar,
+                },
+                ajaxUrl: '/blueseal/xhr/DetailModel',
+                done: function () {
+                },
+                success: function (res) {
+                    mult.push({
+                        res
+                    });
+
+                    saveAllData(mult);
+                    saveAll(true);
+                }
+            });
+        } else {
+            saveAll(false)
+        }
+    } else {
+        saveAll(false)
+    }
+
+    //--------
+
 });
 
 $(document).ready(function () {
@@ -239,16 +285,27 @@ $(document).ready(function () {
 
 
     //init page
-    if (Object.keys($_GET.all).length) {
+    mainIf: if (Object.keys($_GET.all).length) {
         if ('string' == typeof $_GET.all.id) {
             var data = {id: $_GET.all.id};
             var action = 'edit';
         } else if ('string' == typeof $_GET.all.modelId) {
             var data = {id: $_GET.all.modelId};
             var action = 'byModel';
+        } else if ('string' == typeof $_GET.all.modelIds) {
+            //se copia multipla
+            var data = {id: $_GET.all.modelIds};
+            var action = 'byModels';
         }
 
         if ('undefined' != typeof data) {
+
+            if ('byModels' == action){
+                //prendo tutti i dettagli
+                $('#main-details').selectDetails();
+                break mainIf;
+            }
+
             $.initFormByGetData({
                 data: data,
                 ajaxUrl: '/blueseal/xhr/DetailModel',
@@ -324,4 +381,9 @@ $(document).ready(function () {
     } else {
         $('#main-details').selectDetails();
     }
+});
+
+
+$(document).on('click', '#hide-det', function () {
+    $('#allDets').toggle();
 });

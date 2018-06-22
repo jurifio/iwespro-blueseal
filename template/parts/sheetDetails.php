@@ -24,7 +24,7 @@
             $newObjCollection->reorderNumbersAndDates('order','true');
 
             foreach ($newObjCollection as $detaillabel): ?>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group form-group-default selectize-enabled">
                         <label
                             for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>

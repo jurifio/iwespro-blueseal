@@ -29,6 +29,13 @@ class CProductModelEditController extends CProductManageController
      */
     public function get()
     {
+        $par = \Monkey::app()->router->request()->getRequestData('modelIds');
+
+        $isMultiple = false;
+        if($par){
+            $isMultiple = true;
+        }
+
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_model_edit.php');
 
@@ -99,6 +106,7 @@ class CProductModelEditController extends CProductManageController
             'prodCats' => json_encode($prodCats),
             'materials' => json_encode($materials),
             'sidebar' => $this->sidebar->build(),
+            'isMultiple' => $isMultiple,
             'productDetails' => $productDetails
         ]);
     }

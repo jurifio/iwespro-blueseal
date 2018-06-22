@@ -92,7 +92,6 @@
             data-placement="bottom"
             data-href="/blueseal/prodotti/modelli/modifica"
         ></bs-toolbar-button>
-
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione visualizzazione elementi">
         <bs-toolbar-button
@@ -102,6 +101,18 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs-hide-model-prototype"
+                data-title="Nascondi elementi"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione massiva modelli">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-exchange"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-massive-copy-model-prototype"
                 data-title="Nascondi elementi"
                 data-placement="bottom"
         ></bs-toolbar-button>

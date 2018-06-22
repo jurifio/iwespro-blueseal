@@ -1118,3 +1118,22 @@ $(document).on('bs-hide-model-prototype', function () {
 
 
 });
+
+
+$(document).on('bs-massive-copy-model-prototype', function () {
+
+
+    let models = [];
+    let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+    //id-variantId in array
+    $.each(selectedRows, function (k, v) {
+        models.push(v.DT_RowId.split('__')[1]);
+    });
+
+    let url = `${window.location.href}/modifica?modelIds=${models.join('-')}`;
+
+    window.open(url, '_blank');
+
+
+});
