@@ -46,9 +46,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $status = $data['status'];
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
-        $startEventDate = STimeToolbox::DbFormattedDateTime($startEventDate, 'Y-m-d H:i:s');
-        //$endEventDate = STimeToolbox::DbFormattedDateTime($endEventDate, 'Y-m-d hh:mm:sm');
-        $endEventDate =date('Y-m-d H:i:s', strtotime($endEventDate));
+        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
+        $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');
         $notifyEmail = $data['notifyEmail'];
         $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "-plandetail/";
         $files = glob($tempFolder . "*.jpg");

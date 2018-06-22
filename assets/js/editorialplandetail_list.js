@@ -218,8 +218,8 @@
                     });
                     body.html(bodyContent);
 
-                    var start = $.fullCalendar.formatDate(start, "DD-MM-YYYYTHH:MM:SS");
-                    var end = $.fullCalendar.formatDate(end, "DD-MM-YYYTHH:MM:SS");
+                    var start = $.fullCalendar.formatDate(start, "DD-MM-YYYY HH:mm:ss");
+                    var end = $.fullCalendar.formatDate(end, "DD-MM-YYYY HH:mm:ss");
                     let bsModal1 = new $.bsModal('Invio', {
                         body: '<p>Inserisci un Evento per il Piano Editoriale</p>' +
                         '<div class=\"row\">' +
@@ -332,14 +332,14 @@
                         '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"startEventDate\">Data  Inizio Evento </label>' +
-                        '<input  type =\'datetime\' step="1"  id=\"startEventDate\" class=\"form-control\"' +
+                        '<input  type =\'datetime\'   id=\"startEventDate\" class=\"form-control\"' +
                         'placeholder=\"Inserisci la Data di Inizio del Dettaglio\" name=\"startEventDate\" value=\"' + start + '\" required=\"required\">' +
                         '</div>' +
                         '</div>' +
                         '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"endEventDate\">Data Fine Evento </label>' +
-                        '<input  type =\'datetime-local\' step="1"  id=\"EndEventDate\" class=\"form-control\"' +
+                        '<input  type =\'datetime-local\'  id=\"endEventDate\" class=\"form-control\"' +
                         'placeholder=\"Inserisci la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
                         '</div>' +
                         '</div>' +
@@ -464,9 +464,12 @@
                         var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
                         var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
                         var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
+                        start =$('#startEventDate').val();
+                        end = $('#endEventDate').val();
+
                         const data = {
                             title: $('#titleEvent').val(),
-                            start: start,
+                            start: start ,
                             end: end,
                             argument: $('#editorialPlanArgumentId').val(),
                             description: $('#description').val(),
@@ -589,8 +592,8 @@
                     body.html(bodyContent);
 
 
-                    var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-                    var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                    var start = $.fullCalendar.formatDate(event.start, "DD-MM-YYYY HH:mm:ss");
+                    var end = $.fullCalendar.formatDate(event.end, "DD-MM-YYYY HH:mm:ss");
                     let bsModal2 = new $.bsModal('Invio', {
                         body: '<p>Modifica l\'evento per il Piano Editoriale</p>' +
                         '<div class=\"row\">' +
@@ -918,9 +921,11 @@
                         var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
                         var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
                         var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
+                        start =$('#startEventDate').val();
+                        end = $('#endEventDate').val();
                         const data = {
                             title: $('#titleEvent').val(),
-                            start: start,
+                            start:start,
                             end: end,
                             argument: $('#editorialPlanArgumentId').val(),
                             description: $('#description').val(),
