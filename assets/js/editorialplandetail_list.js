@@ -708,7 +708,7 @@
                         '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"endEventDate\">Data Fine Evento </label>' +
-                        '<input  type =\'datetime\' id=\"EndEventDate\" class=\"form-control\"' +
+                        '<input  type =\'datetime\' id=\"endEventDate\" class=\"form-control\"' +
                         'placeholder=\"Modifica la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
                         '</div>' +
                         '</div>' +

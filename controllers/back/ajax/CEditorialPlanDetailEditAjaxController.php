@@ -38,21 +38,23 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $status = $data['status'];
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
-        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
-        $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');
+        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d H:i:s');
+        $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d H:i:s');
         $editorialPlanDetailId = $data['editorialPlanDetailId'];
         $notifyEmail = $data['notifyEmail'];
         $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "-plandetail/";
         $files = glob($tempFolder . "*.jpg");
         $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+        if(count($photoUrl)>1) {
 
+            foreach ($photoUrl as &$jpg) {
 
-        foreach ($photoUrl as &$jpg) {
-
-
-            $jpg = $jpg;
+                $jpg = $jpg;
+            }
+            $groupimage = implode(",", $photoUrl);
+        }else{
+            $groupimage =$photoUrl;
         }
-        $groupimage=implode(",",$photoUrl);
         /* $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
          $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');*/
 
