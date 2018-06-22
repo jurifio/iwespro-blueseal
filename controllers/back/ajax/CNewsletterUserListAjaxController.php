@@ -55,16 +55,17 @@ class CNewsletterUserListAjaxController extends AAjaxController
             if ($row['submissionDate']==""){
 
 
-                $row['id']=$newsletter->id;
+              //  $row['id']=$newsletter->id;
 
 
                 $row['id'] = '<a href="' . $opera . $newsletter->id . '">' . $newsletter->id . '</a>';
 
-            }
+
             if ($newsletter->id == $newsletter->newsletterCloneId){
                 $row['newsletterCloneId']="Newsletter Genitore";
             }else{
                 $row['newsletterCloneId']="Newsletter figlia di :".$newsletter->newsletterCloneId;
+            }
             }
             $datatable->setResponseDataSetRow($key,$row);
         }

@@ -218,8 +218,8 @@
                     });
                     body.html(bodyContent);
 
-                    var start = $.fullCalendar.formatDate(start, "DD-MM-YYYY hh:mm:ss");
-                    var end = $.fullCalendar.formatDate(end, "DD-MM-YYYY hh:mm:ss");
+                    var start = $.fullCalendar.formatDate(start, "DD-MM-YYYYTHH:MM:SS");
+                    var end = $.fullCalendar.formatDate(end, "DD-MM-YYYTHH:MM:SS");
                     let bsModal1 = new $.bsModal('Invio', {
                         body: '<p>Inserisci un Evento per il Piano Editoriale</p>' +
                         '<div class=\"row\">' +
@@ -332,14 +332,14 @@
                         '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"startEventDate\">Data  Inizio Evento </label>' +
-                        '<input  type =\'datetime-local\' id=\"startEventDate\" class=\"form-control\"' +
+                        '<input  type =\'datetime\' step="1"  id=\"startEventDate\" class=\"form-control\"' +
                         'placeholder=\"Inserisci la Data di Inizio del Dettaglio\" name=\"startEventDate\" value=\"' + start + '\" required=\"required\">' +
                         '</div>' +
                         '</div>' +
                         '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"endEventDate\">Data Fine Evento </label>' +
-                        '<input  type =\'datetime-local\' id=\"EndEventDate\" class=\"form-control\"' +
+                        '<input  type =\'datetime-local\' step="1"  id=\"EndEventDate\" class=\"form-control\"' +
                         'placeholder=\"Inserisci la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
                         '</div>' +
                         '</div>' +

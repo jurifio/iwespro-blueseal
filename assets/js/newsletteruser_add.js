@@ -551,6 +551,7 @@ $(document).on('bs.newNewsletterUser.sendTest', function () {
         } else {
             campaignDateFinishPost =  campaignDateFinishPost ;
         }
+        tinyMCE.triggerSave();
         const data = {
             typeOperation:typeOperation,
             name: $('#name').val(),
