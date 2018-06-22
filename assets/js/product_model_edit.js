@@ -302,7 +302,7 @@ $(document).ready(function () {
 
             if ('byModels' == action){
                 //prendo tutti i dettagli
-                $('#main-details').selectDetails();
+                $('#main-details').selectDetails(data.id, 'models');
                 break mainIf;
             }
 

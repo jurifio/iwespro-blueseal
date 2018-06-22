@@ -30,7 +30,11 @@
                             for="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"><?php echo $detaillabel->slug ?></label>
                         <select type="text"
                                 data-init-plugin="selectize"
-                                data-init-selection="<?php echo (array_key_exists($detaillabel->id, $actual)) ? $actual[$detaillabel->id] : '' ?>"
+                                data-init-selection="<?php
+                                if(!$correctMultiple) {
+                                    echo (array_key_exists($detaillabel->id, $actual)) ? $actual[$detaillabel->id] : '';
+                                }
+                                ?>"
                                 class="full-width <?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                 id="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
                                 name="<?php echo "ProductDetail_1_" . $detaillabel->id ?>"
