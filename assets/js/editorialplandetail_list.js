@@ -339,7 +339,7 @@
                         '<div class=\"col-md-6\">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"endEventDate\">Data Fine Evento </label>' +
-                        '<input  type =\'datetime-local\'  id=\"endEventDate\" class=\"form-control\"' +
+                        '<input  type =\'datetime\'  id=\"endEventDate\" class=\"form-control\"' +
                         'placeholder=\"Inserisci la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
                         '</div>' +
                         '</div>' +
@@ -464,7 +464,7 @@
                         var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
                         var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
                         var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
-                        start =$('#startEventDate').val();
+                        start = $('#startEventDate').val();
                         end = $('#endEventDate').val();
 
                         const data = {
