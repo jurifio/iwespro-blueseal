@@ -48,9 +48,9 @@
                             </div>
                             <div class="col-md-3" style="border: 1px solid #a7a7a752; margin: 7px">
                                 <div class="row">
-                                <div id='TypeCalendar' ><b>Tipo Lista: </b>
-                                <button class="btn btn-success" id="detailed">Dettagliata</button>
-                                <button class="btn btn-primary" id="sintetic">Sintetica</button>
+                                <div id='TypeCalendar' ><b>Tipo Lista: </b><br>
+                                    <button class="btn btn-success" id="detailed">Dettagliata<span id="appendDetailedChekbox"></span></button>
+                                    <button class="btn btn-primary" id="sintetic">Sintetica<span id="appendSinteticChekbox"></span></button>
                                 </div>
                                 </div>
                                 <div class="row">
