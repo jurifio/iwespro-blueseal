@@ -1,6 +1,8 @@
 tinymce.init({
     entity_encoding : "raw",
     selector: "textarea",
+    relative_urls : false,
+    allow_script_urls: true,
     height: 450,
     plugins: [
         "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak",
