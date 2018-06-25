@@ -44,6 +44,7 @@
                     <input type="hidden" id="ProductCategory_id" name="ProductCategory_id"
                            value="<?php echo implode(',', $value) ?>"/>
                     <input type="hidden" id="id" name="id" value="<?php ?>"/>
+                    <input type="hidden" id="isMultiple" value=""/>
 
                     <div class="row">
                         <div class="col-md-12">

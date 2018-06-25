@@ -63,14 +63,14 @@ class CProductModelListAjaxController extends AAjaxController
                    `pspg`.`name` AS `gendName`,
                    `pspm`.`name` AS `matName`
                   from (((((((((`ProductSheetModelPrototype` `p` 
-                  join `ProductSheetPrototype` `psp` on((`p`.`productSheetPrototypeId` = `psp`.`id`))) 
+                  left join `ProductSheetPrototype` `psp` on((`p`.`productSheetPrototypeId` = `psp`.`id`))) 
                   left join `ProductSheetModelActual` `a` on((`p`.`id` = `a`.`productSheetModelPrototypeId`))) 
-                  join `ProductDetailLabel` `pdl` on((`a`.`productDetailLabelId` = `pdl`.`id`))) 
+                  left join `ProductDetailLabel` `pdl` on((`a`.`productDetailLabelId` = `pdl`.`id`))) 
                   left join `ProductDetailLabelTranslation` `pdlt` on((`pdlt`.`productDetailLabelId` = `pdl`.`id`))) 
-                  join `ProductDetail` `pd` on((`pd`.`id` = `a`.`productDetailId`))) 
+                  left join `ProductDetail` `pd` on((`pd`.`id` = `a`.`productDetailId`))) 
                   left join `ProductDetailTranslation` `pdt` on((`pdt`.`productDetailId` = `pd`.`id`))) 
                   left join `ProductSheetModelPrototypeHasProductCategory` `php` on((`php`.`productSheetModelPrototypeId` = `p`.`id`))) 
-                  join `ProductCategory` `pc` on((`pc`.`id` = `php`.`productCategoryId`))) 
+                  left join `ProductCategory` `pc` on((`pc`.`id` = `php`.`productCategoryId`))) 
                   left join `ProductCategoryTranslation` `pct` on((`pct`.`productCategoryId` = `pc`.`id`))
                   left join `ProductSheetModelPrototypeCategoryGroup` `pspcg` ON `p`.`categoryGroupId` = `pspcg`.`id`
                   left join `ProductSheetModelPrototypeGender` `pspg` ON `p`.`genderId` = `pspg`.`id`

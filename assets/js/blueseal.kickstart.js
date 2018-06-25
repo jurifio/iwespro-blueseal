@@ -702,7 +702,7 @@ $.bsModal = function (header, params) {
                 let primaryField = $(self).data('primaryfield');
                 if ('undefined' != typeof primaryField) {
                     if ($(primaryField).length) {
-                        if ($(primaryField).val().length) return 'PUT';
+                        if ($(primaryField).val().length || $('#isMultiple').val() === 'mult') return 'PUT';
                     }
                 }
                 return 'POST';

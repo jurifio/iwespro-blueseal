@@ -29,10 +29,11 @@ class CProductModelEditController extends CProductManageController
      */
     public function get()
     {
-        $par = \Monkey::app()->router->request()->getRequestData('modelIds');
+        $parPostMultiple = \Monkey::app()->router->request()->getRequestData('modelIds');
+        $parUpdateMultiple = \Monkey::app()->router->request()->getRequestData('modifyModelIds');
 
         $isMultiple = false;
-        if($par){
+        if($parPostMultiple || $parUpdateMultiple){
             $isMultiple = true;
         }
 

@@ -113,7 +113,17 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs-massive-copy-model-prototype"
-                data-title="Nascondi elementi"
+                data-title="Copia massivamente gli elementi per differenza"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-cloud-upload"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-massive-update-model-prototype"
+                data-title="Aggiorna massivamente gli elementi per differenza"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

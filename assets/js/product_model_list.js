@@ -1137,3 +1137,21 @@ $(document).on('bs-massive-copy-model-prototype', function () {
 
 
 });
+
+$(document).on('bs-massive-update-model-prototype', function () {
+
+
+    let models = [];
+    let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+    //id-variantId in array
+    $.each(selectedRows, function (k, v) {
+        models.push(v.DT_RowId.split('__')[1]);
+    });
+
+    let url = `${window.location.href}/modifica?modifyModelIds=${models.join('-')}`;
+
+    window.open(url, '_blank');
+
+
+});

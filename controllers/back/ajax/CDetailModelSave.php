@@ -3,6 +3,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductSheetActual;
+use bamboo\domain\entities\CProductSheetModelActual;
 use bamboo\domain\entities\CProductSheetModelPrototype;
 
 /**
@@ -165,53 +166,122 @@ class CDetailModelSave extends AAjaxController
     public function put()
     {
         $get = $this->app->router->request()->getRequestData();
-        $id = $get['id'];
-        $pspid = $get['Product_dataSheet'];
 
-        $productDetails = $this->getDetails($get);
+        if(isset($get['id'])) {
+            $id = $get['id'];
+            $pspid = $get['Product_dataSheet'];
 
-        $prot = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $id]);
+            $productDetails = $this->getDetails($get);
 
-        try {
-            \Monkey::app()->repoFactory->beginTransaction();
+            $prot = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $id]);
 
-            //update model
+            try {
+                \Monkey::app()->repoFactory->beginTransaction();
 
-            $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
-            if (!$pn) throw new BambooException('Non si può aggiornare un modello con un nome prodotto inesistente');
-            $pnIt = $pn->findOneByKey('langId', 1);
-            $prot->name = $get['name'];
-            if ($get['code']) {
-                $prot->code = $get['code'];
+                //update model
+
+                $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
+                if (!$pn) throw new BambooException('Non si può aggiornare un modello con un nome prodotto inesistente');
+                $pnIt = $pn->findOneByKey('langId', 1);
+                $prot->name = $get['name'];
+                if ($get['code']) {
+                    $prot->code = $get['code'];
+                }
+                if ($get['productName']) {
+                    $prot->productName = str_replace(' !', '', $pnIt->name);
+                }
+
+                if (isset($get['genders'])) $prot->genderId = $get['genders'];
+
+
+                if (isset($get['prodCats'])) $prot->categoryGroupId = $get['prodCats'];
+
+                if (isset($get['materials'])) $prot->materialId = $get['materials'];
+
+                $prot->update();
+                //delete all details associated to this model
+                $psma = $prot->productSheetModelActual;
+                foreach ($psma as $v) {
+                    $v->delete();
+                }
+                //insert new details
+                $this->insertDetails($productDetails, $prot->id, $prot->productSheetPrototypeId);
+
+                $this->saveCats($get['categories'], $prot->id);
+                \Monkey::app()->repoFactory->commit();
+            } catch (\Throwable $e) {
+                \Monkey::app()->repoFactory->rollback();
+                return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
             }
-            if ($get['productName']) {
-                $prot->productName = str_replace(' !', '', $pnIt->name);
+            $res = ['status' => 'ok', 'productSheetModelPrototypeId' => $prot->id];
+            return json_encode($res);
+        } else {
+
+            try {
+                $newIds = [];
+
+                $productDetails = $this->getDetails($get);
+
+                \Monkey::app()->repoFactory->beginTransaction();
+
+                //Ciclo i modelli
+                foreach ($get['modelIds'][0]['res'] as $model) {
+
+
+                    /** @var CProductSheetModelPrototype $psmp */
+                    $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id'=>$model['id']]);
+
+                    $psmp->name = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
+                    $psmp->code = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
+                    if($get['Product_dataSheet'] != $model['productSheetPrototypeId']) $psmp->productSheetPrototypeId = $get['Product_dataSheet'];
+                    if(isset($get['productName'])) $psmp->productName = $get['productName'];
+                    if(isset($get['genders'])) $psmp->genderId = $get['genders'];
+                    if(isset($get['prodCats'])) $psmp->categoryGroupId = $get['prodCats'];
+                    if(isset($get['materials'])) $psmp->materialId = $get['materials'];
+                    if(isset($get['note'])) $psmp->note = $get['note'];
+                    $psmp->update();
+
+                    if($get['Product_dataSheet'] != $model['productSheetPrototypeId']) {
+                        $oldSheets = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId'=>$psmp->id]);
+
+                        /** @var CProductSheetModelActual $pshma */
+                        foreach ($oldSheets as $pshma){
+                            $pshma->delete();
+                        }
+
+                        if (!empty($productDetails)) {
+                            $this->insertDetails($productDetails, $psmp->id, $psmp->productSheetPrototypeId);
+                        } else {
+                            throw new \Exception("E' necessario scrivere dettagli");
+                        }
+                    } else {
+                        if (!empty($productDetails)) {
+                            $oldSheets = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId'=>$psmp->id]);
+
+                            /** @var CProductSheetModelActual $pshma */
+                            foreach ($oldSheets as $pshma){
+                                $pshma->delete();
+                            }
+
+                            $this->insertDetails($productDetails, $psmp->id, $psmp->productSheetPrototypeId);
+                        }
+                    }
+
+                    if(!empty($get['categories'])) {
+                        $this->saveCats($get['categories'], $psmp->id);
+                    }
+
+                    $newIds[] = $psmp->id;
+                }
+                \Monkey::app()->repoFactory->commit();
+                return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds)]);
+
+            } catch (\Throwable $e) {
+                \Monkey::app()->repoFactory->rollback();
+                return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
             }
 
-            if(isset($get['genders'])) $prot->genderId = $get['genders'];
-
-
-            if(isset($get['prodCats'])) $prot->categoryGroupId = $get['prodCats'];
-
-            if(isset($get['materials'])) $prot->materialId = $get['materials'];
-
-            $prot->update();
-            //delete all details associated to this model
-            $psma = $prot->productSheetModelActual;
-            foreach ($psma as $v) {
-                $v->delete();
-            }
-            //insert new details
-            $this->insertDetails($productDetails, $prot->id, $prot->productSheetPrototypeId);
-
-            $this->saveCats($get['categories'], $prot->id);
-            \Monkey::app()->repoFactory->commit();
-        } catch (\Throwable $e) {
-            \Monkey::app()->repoFactory->rollback();
-            return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
         }
-        $res = ['status' => 'ok', 'productSheetModelPrototypeId' => $prot->id];
-        return json_encode($res);
     }
 
     /**
@@ -267,4 +337,5 @@ class CDetailModelSave extends AAjaxController
         }
         return $productDetails;
     }
+
 }

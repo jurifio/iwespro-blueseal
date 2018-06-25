@@ -28,7 +28,11 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         }
                     if ('PUT' == method) {
                         body = 'Modello aggiornato.';
-                        location = window.location.href;
+                        if(!isMult) {
+                            location = window.location.href;
+                        } else {
+                            location = '/blueseal/prodotti/modelli';
+                        }
                     }
                 }
                 modal = new $.bsModal('Salvataggio del modello', {
@@ -61,6 +65,25 @@ $(document).on('bs.product.edit', function (e, element, button) {
     if($_GET.all) {
         if ('modelIds' in $_GET.all) {
             var multPar = $_GET.all.modelIds;
+
+            $.initFormByGetData({
+                data: {
+                    multiple: multPar,
+                },
+                ajaxUrl: '/blueseal/xhr/DetailModel',
+                done: function () {
+                },
+                success: function (res) {
+                    mult.push({
+                        res
+                    });
+
+                    saveAllData(mult);
+                    saveAll(true);
+                }
+            });
+        } else if('modifyModelIds' in $_GET.all) {
+            var multPar = $_GET.all.modifyModelIds;
 
             $.initFormByGetData({
                 data: {
@@ -296,6 +319,9 @@ $(document).ready(function () {
             //se copia multipla
             var data = {id: $_GET.all.modelIds};
             var action = 'byModels';
+        } else if ('string' == typeof $_GET.all.modifyModelIds){
+            var data = {id: $_GET.all.modifyModelIds};
+            var action = 'byModifyModels';
         }
 
         if ('undefined' != typeof data) {
@@ -303,6 +329,13 @@ $(document).ready(function () {
             if ('byModels' == action){
                 //prendo tutti i dettagli
                 $('#main-details').selectDetails(data.id, 'models');
+                break mainIf;
+            }
+
+            if ('byModifyModels' == action){
+                //prendo tutti i dettagli
+                $('#main-details').selectDetails(data.id, 'modifyModels');
+                $('#isMultiple').attr('value','mult');
                 break mainIf;
             }
 

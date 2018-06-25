@@ -52,7 +52,7 @@ class CGetDataSheet extends AAjaxController
             $productName = $product->productNameTranslation;
             if ($productName->count()) $Pname = $productName->getfirst()->name;
             $actual = $product->productSheetActual;
-        } else if($type && ('models' == $type)){
+        } else if($type && ('models' == $type || 'modifyModels' == $type)){
             $vs = explode('-', $value);
             $checkSheetArr = [];
             foreach ($vs as $v){
