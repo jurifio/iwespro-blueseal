@@ -1,6 +1,7 @@
 (function ($) {
     var eventColor;
     var obj = null;
+    var typeView=1;
     $(document).ready(function () {
         $(this).trigger('bs.load.photo');
         createcalendar(obj, 1);
@@ -76,6 +77,7 @@
         $('#appendDetailedChekbox').empty();
         $('#appendSinteticChekbox').empty();
         $('#appendDetailedChekbox').append('<i class="fa fa-check"></i>');
+        typeView=1;
 
         let checkedSocial = [];
         let checkedSocialName = [];
@@ -117,7 +119,7 @@
         $('#appendDetailedChekbox').empty();
         $('#appendSinteticChekbox').empty();
         $('#appendSinteticChekbox').append('<i class="fa fa-check"></i>');
-
+        typeView=2;
 
         let checkedSocial = [];
         let checkedSocialName = [];
@@ -136,7 +138,7 @@
         };
         $.ajax({
             method: 'POST',
-            url: '/blueseal/xhr/EditorialPlanDetailListSinteticAjaxController',
+            url: '/blueseal/xhr/EditorialPlanDetailListFullAjaxController',
             data: data
         }).success(function (data) {
 
@@ -251,13 +253,22 @@
                         linkimg=linkimg + ' <img width="80px" src="' + element + '">';
 
                     });
-                    element.find('.fc-title').append(bgTitle +
-                        '<b>' + event.argumentName +
-                        ' | ' + event.titleEditorialPlan +
-                        ' | ' + event.socialName +
-                        ' | ' + event.status + '</b></div>' +bgRender +
-                        '<br><b>' + event.note + '</b><br>' + linkimg+
-                        '</div>');
+                    if(typeView==1) {
+                        element.find('.fc-title').append(bgTitle +
+                            '<b>' + event.argumentName +
+                            ' | ' + event.titleEditorialPlan +
+                            ' | ' + event.socialName +
+                            ' | ' + event.status + '</b></div>' + bgRender +
+                            '<br><b>' + event.note + '</b><br>' + linkimg +
+                            '</div>');
+                    }else{
+                        element.find('.fc-title').append(bgTitle +
+                            '<b>' + event.argumentName +
+                            ' | ' + event.titleEditorialPlan +
+                            ' | ' + event.socialName +
+                            ' | ' + event.status +'</b><br>'+ bgRender +
+                            '<br></div>');
+                    }
 
 
 
