@@ -231,8 +231,8 @@ class CDetailModelSave extends AAjaxController
                     /** @var CProductSheetModelPrototype $psmp */
                     $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id'=>$model['id']]);
 
-                    $psmp->name = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
-                    $psmp->code = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
+                    if(isset($get['find-name']) && isset($get['sub-name'])) $psmp->name = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
+                    if(isset($get['find-code']) && isset($get['sub-code'])) $psmp->code = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
                     if($get['Product_dataSheet'] != $model['productSheetPrototypeId']) $psmp->productSheetPrototypeId = $get['Product_dataSheet'];
                     if(isset($get['productName'])) $psmp->productName = $get['productName'];
                     if(isset($get['genders'])) $psmp->genderId = $get['genders'];

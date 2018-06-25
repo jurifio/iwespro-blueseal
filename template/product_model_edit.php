@@ -73,23 +73,27 @@
                                     <?php else: ?>
                                     <div class="row <?php echo $col;?> distinct-option">
                                         <div class="col-md-6">
-                                            <div class="form-group form-group-default required">
+                                            <div class="form-group form-group-default <?php if(!$isUpdated) echo 'required'; ?>">
                                                 <label for="find-name">Trova (NOME)</label>
                                                 <input autocomplete="off" type="text" id="find-name"
                                                        class="form-control find-name" name="find-name"
                                                        value=""
-                                                       required>
+                                                    <?php if(!$isUpdated) echo 'required'; ?>>
+                                                <?php if(!$isUpdated): ?>
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group form-group-default required">
+                                            <div class="form-group form-group-default <?php if(!$isUpdated) echo 'required'; ?>">
                                                 <label for="sub-name">Sostituisci (NOME)</label>
                                                 <input autocomplete="off" type="text" id="sub-name"
                                                        class="form-control sub-name" name="sub-name"
                                                        value=""
-                                                       required>
+                                                    <?php if(!$isUpdated) echo 'required'; ?>>
+                                                <?php if(!$isUpdated): ?>
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -115,23 +119,27 @@
 
                                     <div class="row <?php echo $col;?> distinct-option">
                                         <div class="col-md-6">
-                                            <div class="form-group form-group-default required">
+                                            <div class="form-group form-group-default <?php if(!$isUpdated) echo 'required'; ?>">
                                                 <label for="find-code">Trova (CODICE)</label>
                                                 <input autocomplete="off" type="text" id="find-code"
                                                        class="form-control find-code" name="find-code"
                                                        value=""
-                                                       required>
-                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                    <?php if(!$isUpdated) echo 'required'; ?>>
+                                                <?php if(!$isUpdated): ?>
+                                                    <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group form-group-default required">
+                                            <div class="form-group form-group-default <?php if(!$isUpdated) echo 'required'; ?>">
                                                 <label for="sub-code">Sostituisci (CODICE)</label>
                                                 <input autocomplete="off" type="text" id="sub-code"
                                                        class="form-control sub-code" name="sub-code"
                                                        value=""
-                                                       required>
-                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                    <?php if(!$isUpdated) echo 'required'; ?>>
+                                                <?php if(!$isUpdated): ?>
+                                                    <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -141,12 +149,14 @@
 
                                     <div class="row <?php echo $col;?>">
                                         <div class="col-md-12">
-                                            <div class="form-group form-group-default required">
+                                            <div class="form-group form-group-default <?php if(!$isUpdated) echo 'required'; ?>">
                                                 <label for="name">Nome Prodotto</label>
                                                 <select id="productName"
                                                         class="form-control product_name" name="productName"
-                                                        required></select>
-                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                    <?php if(!$isUpdated) echo 'required'; ?>></select>
+                                                <?php if(!$isUpdated): ?>
+                                                    <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>

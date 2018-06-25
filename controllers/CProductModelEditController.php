@@ -33,8 +33,12 @@ class CProductModelEditController extends CProductManageController
         $parUpdateMultiple = \Monkey::app()->router->request()->getRequestData('modifyModelIds');
 
         $isMultiple = false;
+        $isUpdate = false;
+
         if($parPostMultiple || $parUpdateMultiple){
             $isMultiple = true;
+
+            if($parUpdateMultiple) $isUpdate = true;
         }
 
         $view = new VBase(array());
@@ -108,7 +112,8 @@ class CProductModelEditController extends CProductManageController
             'materials' => json_encode($materials),
             'sidebar' => $this->sidebar->build(),
             'isMultiple' => $isMultiple,
-            'productDetails' => $productDetails
+            'productDetails' => $productDetails,
+            'isUpdated' => $isUpdate
         ]);
     }
 }
