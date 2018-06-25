@@ -41,27 +41,31 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
 
         $sql = "
             SELECT pbd.id,
-                  concat(pbd.productId,'-',pbd.productVariantId) as productCode,
-                  pbd.productId,
-                  pbd.productVariantId,
-                  wcs.name as stepName,
-                  pbd.note,
-                  pb.name as brand,
-                  concat(pse.name, ' ', pse.year) AS season,
-                  pcg.name AS colorGroup,
-                  pv.description AS colorNameManufacturer,
-                  psiz.name AS stock
-            FROM ProductBatchDetails pbd
-            JOIN Product p ON pbd.productVariantId = p.productVariantId AND p.id = pbd.productId
-            JOIN ProductBrand pb ON p.productBrandId = pb.id
-            JOIN ProductSeason pse ON p.productSeasonId = pse.id
-            JOIN ProductVariant pv ON p.productVariantId = pv.id
-            LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
-            LEFT JOIN WorkCategorySteps wcs ON pbd.workCategoryStepsId = wcs.id
-            LEFT JOIN (ProductSku psk
-                JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
-                ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            WHERE pbd.productBatchId = $productBatchId
+                 concat(pbd.productId,'-',pbd.productVariantId) as productCode,
+                 pbd.productId,
+                 pbd.productVariantId,
+                 wcs.name as stepName,
+                 pbd.note,
+                 pb.name as brand,
+                 concat(pse.name, ' ', pse.year) AS season,
+                 pcg.name AS colorGroup,
+                 pv.description AS colorNameManufacturer,
+                 psiz.name AS stock,
+                 pc.id  AS categoryId
+           FROM ProductBatchDetails pbd
+           JOIN Product p ON pbd.productVariantId = p.productVariantId AND p.id = pbd.productId
+           JOIN ProductBrand pb ON p.productBrandId = pb.id
+           JOIN ProductSeason pse ON p.productSeasonId = pse.id
+           JOIN ProductVariant pv ON p.productVariantId = pv.id
+           LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
+           LEFT JOIN WorkCategorySteps wcs ON pbd.workCategoryStepsId = wcs.id
+           LEFT JOIN (ProductSku psk
+               JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
+               ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
+           LEFT JOIN (ProductHasProductCategory ppc
+                         JOIN ProductCategory pc ON ppc.productCategoryId = pc.id
+               ) ON (p.id, p.productVariantId) = (ppc.productId,ppc.productVariantId)
+           WHERE pbd.productBatchId = $productBatchId
         ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);

@@ -1132,7 +1132,16 @@
                     var linkimg1="";
                     var link  =event.photoUrl.split(",");
                     link.forEach(function(element) {
-                        linkimg1=linkimg1 + ' <img width="600px" src="' + element + '">';
+
+                        var view = $('#calendar').fullCalendar('getView');
+                        if (view.name == 'month') {
+                            linkimg1=linkimg1 + ' <img width="100px" src="' + element + '">';
+                        }else if(view.name == 'day') {
+                            linkimg1=linkimg1 + ' <img width="450px" src="' + element + '">';
+                        } else {
+                            linkimg1=linkimg1 + ' <img width="450px" src="' + element + '">';
+                        }
+
 
                     });
 
