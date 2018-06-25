@@ -130,4 +130,49 @@
         });
     });
 
+
+    $(document).on('bs.modify.name.product.sheet', function () {
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length != 1){
+            new Alert({
+                type: "warning",
+                message: "Puoi modificare il nome di una scheda alla volta"
+            }).open();
+            return false;
+        }
+
+        let bsModal = new $.bsModal('MODIFICA NOME SCHEDA', {
+            body: `
+        <p>Inserire il nuovo nome per la scheda</p>
+        <input type="text" id="updateName">
+        `
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const data = {
+                id: selectedRows[0].row_id,
+                name: $('#updateName').val()
+            };
+
+            $.ajax({
+                method: 'put',
+                url: '/blueseal/xhr/ProductSheetPrototypeNameOperation',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function () {
+                bsModal.setOkEvent(function () {
+                    $.refreshDataTable();
+                    bsModal.hide();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
 })();

@@ -89,7 +89,17 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.clone.product.sheet"
-                data-title="clona scheda"
+                data-title="Clona scheda"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-pencil"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.modify.name.product.sheet"
+                data-title="Modifica nome scheda prodotto"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
