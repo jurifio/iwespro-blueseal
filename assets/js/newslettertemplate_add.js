@@ -137,7 +137,7 @@ $(document).on('bs.newNewsletterTemplate.save', function () {
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
-
+        tinymce.activeEditor.save();
         tinyMCE.triggerSave();
        var template= $('#template').val();
         const data = {
