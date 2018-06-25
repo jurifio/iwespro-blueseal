@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-newslettertemplate-modify",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Cancella il Template",
+    title: "Modifica il Template",
     placement: "bottom",
     toggle: "modal"
 };
@@ -16,42 +16,17 @@ $(document).on('bs-newslettertemplate-modify', function (e, element, button) {
     let selectedRows = dataTable.rows('.selected').data();
 
 
-    if (selectedRows.length != 1) {
-        new Alert({
-            type: "warning",
-            message: "Devi selezionare un Template per modificarlo"
-        }).open();
-        return false;
-    }
+
 
     let newsletterTemplateId = selectedRows[0].id;
-    let bsModal = new $.bsModal('Modifica', {
-        body: '<p>Modifica il Template selezionato</p>'
-    });
+    var initial =newsletterTemplateId.indexOf("newsletter");
+    var initial =initial -1;
+    var templatelink = newsletterTemplateId.substr(initial,100 );
+    var final =templatelink.indexOf('">');
+    final=final -1;
+    var templatelinkdef =templatelink.substr(1,final);
 
 
-    bsModal.setOkEvent(function () {
+    location.href = templatelinkdef;
 
-        let id = selectedRows[0].id;
-
-
-        $.ajax({
-            method: "delete",
-            url: "/blueseal/xhr/NewsletterTemplateManage",
-            data: {
-                id: id
-            }
-        }).done(function (res) {
-            bsModal.writeBody(res);
-        }).fail(function (res) {
-            bsModal.writeBody(res);
-        }).always(function (res) {
-            bsModal.setOkEvent(function () {
-                window.location.reload();
-                bsModal.hide();
-                // window.location.reload();
-            });
-            bsModal.showOkBtn();
-        });
-    });
 });

@@ -79,8 +79,6 @@ class CNewsletterTemplateManage extends AAjaxController
         $id = $data['id'];
 
 
-
-
         /** @var CRepo $newsletterTemplateRepo */
         $newsletterTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate');
 

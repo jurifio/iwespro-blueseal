@@ -36,6 +36,14 @@ class CNewsletterTemplateDelete extends AAjaxController
     public function delete(){
         $data  = $this->app->router->request()->getRequestData();
         $id = $data["id"];
+        if (strlen($id)>10) {
+            $finalpositionId = strpos($id, '</a>');
+            $initialpositionId = strpos($id, '">');
+            $finalpositionId = $finalpositionId;
+            $initialpositionId = $initialpositionId + 2;
+            $lenghtposition = $finalpositionId - $initialpositionId;
+            $id = substr($id, $initialpositionId, $lenghtposition);
+        }
         /** @var CRepo $newsletterTemplate */
         $newsletterTemplate = \Monkey::app()->repoFactory->create('NewsletterTemplate');
 
