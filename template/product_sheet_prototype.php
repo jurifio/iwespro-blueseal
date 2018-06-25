@@ -82,6 +82,16 @@
         <bs-toolbar-button
                 data-remote="bs.insert.new.product.sheet.prototype"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-clone"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.clone.product.sheet"
+                data-title="clona scheda"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

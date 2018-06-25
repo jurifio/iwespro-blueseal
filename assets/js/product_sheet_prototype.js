@@ -84,4 +84,50 @@
         });
     });
 
+
+
+    $(document).on('bs.clone.product.sheet', function () {
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length != 1){
+            new Alert({
+                type: "warning",
+                message: "Puoi clonare una scheda alla volta"
+            }).open();
+            return false;
+        }
+
+        let bsModal = new $.bsModal('CLONA SCHEDA PRODOTTO', {
+            body: `
+        <p>Inserire il nuovo nome per il clone che si andrà a creare</p>
+        <input type="text" id="newName">
+        `
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const data = {
+                id: selectedRows[0].row_id,
+                newName: $('#newName').val()
+            };
+
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/ProductSheetModelPrototypeOperation',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function () {
+                bsModal.setOkEvent(function () {
+                    $.refreshDataTable();
+                    bsModal.hide();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
 })();
