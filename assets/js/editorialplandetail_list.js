@@ -29,6 +29,9 @@
 
         })
     });
+    $('#reload').on('click', function () {
+        location.reload();
+    });
     $('#search').on('click', function () {
         $('#calendar').fullCalendar('destroy');
 
@@ -51,6 +54,84 @@
         $.ajax({
             method: 'POST',
             url: '/blueseal/xhr/EditorialPlanDetailListFilteredAjaxController',
+            data: data
+        }).success(function (data) {
+
+            obj = JSON.parse(data);
+
+            var TypePermission = obj[0].allShops;
+            createcalendar(obj, TypePermission);
+
+
+        }).fail(function (data) {
+            alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+            alert("responseText: " + xhr.responseText);
+        }).always(function (data) {
+
+        });
+
+    });
+    $('#sintetic').on('click', function () {
+        $('#calendar').fullCalendar('destroy');
+
+
+        let checkedSocial = [];
+        let checkedSocialName = [];
+        $('#filterMedia input:checked').each(function (i) {
+            checkedSocial[i] = $(this).val();
+            checkedSocialName[i] = $(this).attr('name');
+        });
+
+
+        let url = window.location.href;
+        let id = url.substring(url.lastIndexOf('/') + 1);
+
+        const data = {
+            socialId: checkedSocial,
+            id: id
+        };
+        $.ajax({
+            method: 'POST',
+            url: '/blueseal/xhr/EditorialPlanDetailListSinteticAjaxController',
+            data: data
+        }).success(function (data) {
+
+            obj = JSON.parse(data);
+
+            var TypePermission = obj[0].allShops;
+            createcalendar(obj, TypePermission);
+
+
+        }).fail(function (data) {
+            alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+            alert("responseText: " + xhr.responseText);
+        }).always(function (data) {
+
+        });
+
+    });
+    $('#sintetic').on('click', function () {
+        $('#calendar').fullCalendar('destroy');
+
+
+        let checkedSocial = [];
+        let checkedSocialName = [];
+        $('#filterMedia input:checked').each(function (i) {
+            checkedSocial[i] = $(this).val();
+            checkedSocialName[i] = $(this).attr('name');
+        });
+
+
+        let url = window.location.href;
+        let id = url.substring(url.lastIndexOf('/') + 1);
+
+        const data = {
+            socialId: checkedSocial,
+            id: id
+        };
+        $.ajax({
+            method: 'POST',
+            url: '/blueseal/xhr/EditorialPlanDetailListFullAjaxController',
             data: data
         }).success(function (data) {
 
