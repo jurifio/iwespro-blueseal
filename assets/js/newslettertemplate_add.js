@@ -1,7 +1,10 @@
 tinymce.init({
     entity_encoding : "raw",
     selector: "textarea",
+    entity_encoding : "raw",
     relative_urls : false,
+    document_base_url : "https://www.pickyshop.com/",
+    convert_urls: false,
     allow_script_urls: true,
     height: 450,
     plugins: [
