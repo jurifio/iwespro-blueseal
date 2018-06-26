@@ -464,9 +464,9 @@
                         'class="full-width selectpicker"' +
                         'placeholder="Seleziona"' +
                         'data-init-plugin="selectize">' +
-                        '<option value="">Seleziona</option>' +
-                        '<option value="yesNotify">Invia la Notifica</option>' +
                         '<option value="notNotify">Non Inviare la Notifica</option>' +
+                        '<option value="yesNotify">Invia la Notifica</option>' +
+
                         '</select>' +
                         '</div>' +
                         '</div>' +
@@ -832,9 +832,8 @@
                         'class="full-width selectpicker"' +
                         'placeholder="Seleziona"' +
                         'data-init-plugin="selectize">' +
-                        '<option value="">Seleziona</option>' +
-                        '<option value="yesNotify">Invia la Notifica</option>' +
                         '<option value="notNotify">Non Inviare la Notifica</option>' +
+                        '<option value="yesNotify">Invia la Notifica</option>' +
                         '</select>' +
                         '</div>' +
                         '</div>' +
