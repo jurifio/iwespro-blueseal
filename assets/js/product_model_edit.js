@@ -420,3 +420,16 @@ $(document).ready(function () {
 $(document).on('click', '#hide-det', function () {
     $('#allDets').toggle();
 });
+
+$(document).on('change', '#copypast', function () {
+    if($('#copypast').is(':checked')){
+        $('#allDets').css({
+            "pointer-events":"none"
+        })
+    } else {
+        $('#allDets').css({
+            "pointer-events":"auto"
+        })
+    }
+
+});

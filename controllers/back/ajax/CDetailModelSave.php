@@ -123,30 +123,56 @@ class CDetailModelSave extends AAjaxController
                     }
 
 
-                    if(!empty($productDetails)){
-                        foreach ($productDetails as $k => $v) {
-                            $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
-                            $newSheet->productSheetModelPrototypeId = $newId;
-                            $newSheet->productDetailLabelId = $k;
-                            $newSheet->productDetailId = $v;
-                            $newSheet->insert();
+
+                    /** @var CProductSheetModelPrototype $psmp */
+                    $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id'=>$model['id']]);
+
+                    /** @var CObjectCollection $psActualCollection */
+                    $psActualCollection = $psmp->productSheetModelActual;
+
+                    if($get['Product_dataSheet'] == $model['productSheetPrototypeId']) {
+                        if (!empty($productDetails)) {
+
+
+                            //VECCHI
+                            /** @var CProductSheetModelActual $psActual */
+                            foreach ($psActualCollection as $psActual) {
+
+                                //se ne trovo uno con la stessa etichetta di un nuovo salto il foreach
+                                if (array_key_exists($psActual->productDetailLabelId, $productDetails)) continue;
+
+                                $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+                                $newSheet->productSheetModelPrototypeId = $newId;
+                                $newSheet->productDetailLabelId = $psActual->productDetailLabelId;
+                                $newSheet->productDetailId = $psActual->productDetailId;
+                                $newSheet->insert();
+                            }
+
+                            //NUOVI
+                            foreach ($productDetails as $k => $v) {
+                                $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+                                $newSheet->productSheetModelPrototypeId = $newId;
+                                $newSheet->productDetailLabelId = $k;
+                                $newSheet->productDetailId = $v;
+                                $newSheet->insert();
+                            }
+                        } else {
+                            /** @var CProductSheetActual $psActual */
+                            foreach ($psActualCollection as $psActual) {
+                                $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+                                $newSheet->productSheetModelPrototypeId = $newId;
+                                $newSheet->productDetailLabelId = $psActual->productDetailLabelId;
+                                $newSheet->productDetailId = $psActual->productDetailId;
+                                $newSheet->insert();
+                            }
+
                         }
                     } else {
-                        /** @var CProductSheetModelPrototype $psmp */
-                        $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id'=>$model['id']]);
-
-                        /** @var CObjectCollection $psActualCollection */
-                        $psActualCollection = $psmp->productSheetModelActual;
-
-                        /** @var CProductSheetActual $psActual */
-                        foreach ($psActualCollection as $psActual){
-                            $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
-                            $newSheet->productSheetModelPrototypeId = $newId;
-                            $newSheet->productDetailLabelId = $psActual->productDetailLabelId;
-                            $newSheet->productDetailId = $psActual->productDetailId;
-                            $newSheet->insert();
+                        if (!empty($productDetails)) {
+                            $this->insertDetails($productDetails, $newId, $newProt->productSheetPrototypeId);
+                        } else {
+                            throw new \Exception("E' necessario scrivere dettagli");
                         }
-
                     }
 
 
@@ -256,14 +282,27 @@ class CDetailModelSave extends AAjaxController
                         }
                     } else {
                         if (!empty($productDetails)) {
+
                             $oldSheets = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId'=>$psmp->id]);
 
+                            //VECCHI
                             /** @var CProductSheetModelActual $pshma */
-                            foreach ($oldSheets as $pshma){
-                                $pshma->delete();
+                            foreach ($oldSheets as $pshma) {
+
+                                //se ne trovo uno con la stessa etichetta di un nuovo salto il foreach
+                                if (array_key_exists($pshma->productDetailLabelId, $productDetails)){
+                                    $pshma->delete();
+                                }
                             }
 
-                            $this->insertDetails($productDetails, $psmp->id, $psmp->productSheetPrototypeId);
+                            //NUOVI
+                            foreach ($productDetails as $k => $v) {
+                                $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+                                $newSheet->productSheetModelPrototypeId = $psmp->id;
+                                $newSheet->productDetailLabelId = $k;
+                                $newSheet->productDetailId = $v;
+                                $newSheet->insert();
+                            }
                         }
                     }
 

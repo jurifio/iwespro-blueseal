@@ -226,6 +226,12 @@
                         <div class="<?php if($isMultiple){ echo 'col-md-12';} else {echo 'col-md-6';} ?>">
                             <p class="btn-success" style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px" id="hide-det">NASCONDI/MOSTRA SCHEDA PRODOTTO</p>
                         </div>
+                        <?php if($isMultiple): ?>
+                        <div class="col-md-12">
+                            <label>Copia completa</label>
+                            <input type="checkbox" id="copypast">
+                        </div>
+                        <?php endif; ?>
                         <div class="<?php if($isMultiple){ echo 'col-md-12';} else {echo 'col-md-6';} ?>" id="allDets" style="display: <?php if($isMultiple){ echo 'none';} else {echo 'block';} ?>">
                             <div style="display:none"
                                  id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>

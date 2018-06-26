@@ -1124,12 +1124,24 @@ $(document).on('bs-massive-copy-model-prototype', function () {
 
 
     let models = [];
+    let sheetP = [];
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 
     //id-variantId in array
     $.each(selectedRows, function (k, v) {
+        sheetP.push(v.prototypeId);
         models.push(v.DT_RowId.split('__')[1]);
     });
+
+    let uniqueSheet = [...new Set(sheetP)];
+
+    if(uniqueSheet.length != 1) {
+        new Alert({
+            type: "warning",
+            message: "Puoi utilizzare la copia massiva solo su schede con protipi coerenti"
+        }).open();
+        return false;
+    }
 
     let url = `${window.location.href}/modifica?modelIds=${models.join('-')}`;
 
@@ -1142,12 +1154,24 @@ $(document).on('bs-massive-update-model-prototype', function () {
 
 
     let models = [];
+    let sheetP = [];
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 
     //id-variantId in array
     $.each(selectedRows, function (k, v) {
+        sheetP.push(v.prototypeId);
         models.push(v.DT_RowId.split('__')[1]);
     });
+
+    let uniqueSheet = [...new Set(sheetP)];
+
+    if(uniqueSheet.length != 1) {
+        new Alert({
+            type: "warning",
+            message: "Puoi utilizzare l'update massiva solo su schede con protipi coerenti"
+        }).open();
+        return false;
+    }
 
     let url = `${window.location.href}/modifica?modifyModelIds=${models.join('-')}`;
 

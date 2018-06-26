@@ -108,6 +108,7 @@ class CProductModelListAjaxController extends AAjaxController
             $response['data'][$i]['name'] = $val->name;
             $response['data'][$i]['productName'] = $val->productName;
             $response['data'][$i]['prototypeName'] = $val->productSheetPrototype->name;
+            $response['data'][$i]['prototypeId'] = $val->productSheetPrototype->id;
             $cats = '<span class="small">';
             foreach ($val->productCategory as $cat) {
                 $cats.= $cat->getLocalizedName() . "<br />";
