@@ -113,7 +113,7 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs-massive-copy-model-prototype"
-                data-title="Copia massivamente gli elementi per differenza"
+                data-title="Clona massivamente"
                 data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
@@ -123,7 +123,7 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs-massive-update-model-prototype"
-                data-title="Aggiorna massivamente gli elementi per differenza"
+                data-title="Aggiorna massivamente"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

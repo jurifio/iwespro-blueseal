@@ -223,4 +223,46 @@
             })
         });
     });
+
+
+
+    $(document).on('bs.category.name.change', function () {
+        "use strict";
+        var tree = $(treeSelector).fancytree("getTree"),
+            node = tree.getActiveNode();
+        if (!node) {
+            return false;
+        }
+        var bsModal = new $.bsModal('Eliminazione Categoria',
+            {
+                body: `Inserire il nuovo nome da assegnare alla categoria di navigazione
+                <input type="text" id="newCatName">`
+            });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            var input = $('input#newCatName').val();
+            bsModal.hide();
+            bsModal.showLoader();
+            bsModal.hideCancelBtn();
+            bsModal.hideOkBtn();
+            $.ajax({
+                url: "/blueseal/xhr/CategoryTreeOperationController",
+                method: "put",
+                data: {
+                    newName: input,
+                    node: node.key,
+                }
+            }).done(function (res) {
+                bsModal.writeBody(res);
+                bsModal.showOkBtn();
+                window.location.reload();
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+                bsModal.showOkBtn();
+                return false;
+            })
+        });
+    });
 })(jQuery);
