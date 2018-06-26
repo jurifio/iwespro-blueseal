@@ -217,6 +217,8 @@ class CDetailModelSave extends AAjaxController
                     $prot->productName = str_replace(' !', '', $pnIt->name);
                 }
 
+                $prot->productSheetPrototypeId = $pspid;
+
                 if (isset($get['genders'])) $prot->genderId = $get['genders'];
 
 

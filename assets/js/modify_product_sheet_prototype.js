@@ -42,7 +42,7 @@
                     type: "success",
                     message: "Salvato"
                 }).open();
-                return false;
+                window.location.reload();
             }).fail(function (res) {
                 new Alert({
                     type: "Error",
