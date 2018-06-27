@@ -15,6 +15,7 @@
     /** CObjectCollection $details */
     /** @var \bamboo\domain\entities\CProductSheetPrototype $psp */
     $details = $psp->productDetailLabel;
+    $details->reorderNumbersAndDates('order');
     ?>
 
     <div class="page-content-wrapper">
@@ -76,7 +77,7 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.modify.product.sheet"
-                data-title="Crea un nuovo lotto"
+                data-title="Salva"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
