@@ -49,7 +49,8 @@ class CProductSlimListAjaxController extends AAjaxController
                   if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
-                                                            FROM ProductHasProductPhoto), 'sì', 'no')                 AS hasPhotos
+                                                            FROM ProductHasProductPhoto), 'sì', 'no')                 AS hasPhotos,
+                  psp.name as prodSheetPrototypeName
                 FROM `Product` `p`
                   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
                   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
@@ -62,6 +63,7 @@ class CProductSlimListAjaxController extends AAjaxController
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
                                 ON p.productVariantId = phs.productVariantId AND p.id = phs.productId
+                  LEFT JOIN ProductSheetPrototype psp ON p.productSheetPrototypeId = psp.id        
                 WHERE `pss`.`id` NOT IN (7, 8, 13)
                 GROUP BY p.id, p.productVariantId, s.id
                 ORDER BY `p`.`creationDate` DESC";
@@ -168,6 +170,8 @@ class CProductSlimListAjaxController extends AAjaxController
             $row["shooting"] = $sids;
             $row["doc_number"] = $ddtNumbers;
             $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
+            $row['prodSheetPrototypeName'] = $val->productSheetPrototype->name;
+            $row['pspRow_Id'] = $val->productSheetPrototypeId;
             $datatable->setResponseDataSetRow($key, $row);
         }
         return $datatable->responseOut();

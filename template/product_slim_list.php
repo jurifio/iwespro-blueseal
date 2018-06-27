@@ -91,6 +91,9 @@
                                     <th data-slug="hasPhotos"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Ha Foto
+                                    <th data-slug="prodSheetPrototypeName"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Nome prototipo
                                 </tr>
                             </thead>
                             <tbody>
@@ -189,6 +192,11 @@
             ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione etichette">
+        <bs-toolbar-button
+                data-remote="bs.product.main.label"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
