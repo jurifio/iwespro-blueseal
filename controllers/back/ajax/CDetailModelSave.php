@@ -2,6 +2,7 @@
 namespace bamboo\controllers\back\ajax;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CProductName;
 use bamboo\domain\entities\CProductSheetActual;
 use bamboo\domain\entities\CProductSheetModelActual;
 use bamboo\domain\entities\CProductSheetModelPrototype;
@@ -86,14 +87,42 @@ class CDetailModelSave extends AAjaxController
                     $newName = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
                     $newCode = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
 
-                    $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName(trim($get['productName']));
-                    if (!$pn) throw new BambooException('Non si può creare un modello con un nome prodotto inesistente');
-                    $pnIt = $pn->findOneByKey('langId', 1);
+                    if(isset($get['find-product-name']) && isset($get['sub-product-name'])) {
+                        //mi tiro fuori il nome composto e faccio lo stesso di prima -> ma se non c'è lo creoooo
+                        $newProductName = str_ireplace(trim($get['find-product-name']), trim($get['sub-product-name']), $model['productName']);
+                        $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName($newProductName);
+                        if (!$pn) {
+                            $exists = $this->isName($newProductName);
+
+                            if (!$exists) {
+                                $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+                                try {
+                                    /** @var CProductName $newProdName */
+                                    $newProdName = $pntRepo->insertName($newProductName);
+                                } catch (\Throwable $e) {
+                                    \Monkey::app()->repoFactory->rollback();
+                                    return "OOPS! Errore durante l'inserimento, che non è stato eseguito.<br />" . $e->getMessage();
+                                }
+                            }
+                        }
+                    }
+
                     $newProt = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->getEmptyEntity();
                     $newProt->productSheetPrototypeId = (!empty($productDetails) ? $productPrototypeId : $model['productSheetPrototypeId']);
                     $newProt->name = $newName;
                     $newProt->code = $newCode;
-                    $newProt->productName = str_replace(' !', '', $pnIt->name);
+
+                    if(isset($get['find-product-name']) && isset($get['sub-product-name'])){
+                        if($pn) {
+                            $pnIt = $pn->findOneByKey('langId', 1);
+                            $newProt->productName = str_replace(' !', '', $pnIt->name);
+                        } else {
+                            $newProt->productName = str_replace(' !', '', $newProdName->name);
+                        }
+                    } else {
+                        $newProt->productName = $model['productName'];
+                    }
+
                     $newProt->genderId = (!isset($get['genders']) ? $model['genderId'] : $get['genders']);
                     $newProt->categoryGroupId =  (!isset($get['prodCats']) ? $model['categoryGroupId'] : $get['prodCats']);
                     $newProt->materialId =  (!isset($get['materials']) ? $model['materialId'] : $get['materials']);
@@ -176,8 +205,8 @@ class CDetailModelSave extends AAjaxController
                     }
 
 
+                    \Monkey::app()->repoFactory->commit();
                 }
-                \Monkey::app()->repoFactory->commit();
                 return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds)]);
 
             } catch (\Throwable $e) {
@@ -262,7 +291,35 @@ class CDetailModelSave extends AAjaxController
                     if(isset($get['find-name']) && isset($get['sub-name'])) $psmp->name = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
                     if(isset($get['find-code']) && isset($get['sub-code'])) $psmp->code = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
                     if($get['Product_dataSheet'] != $model['productSheetPrototypeId']) $psmp->productSheetPrototypeId = $get['Product_dataSheet'];
-                    if(isset($get['productName'])) $psmp->productName = $get['productName'];
+
+                    if(isset($get['find-product-name']) && isset($get['sub-product-name'])) {
+                        //mi tiro fuori il nome composto e faccio lo stesso di prima -> ma se non c'è lo creoooo
+                        $newProductName = str_ireplace(trim($get['find-product-name']), trim($get['sub-product-name']), $model['productName']);
+                        $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName($newProductName);
+                        if (!$pn) {
+                            $exists = $this->isName($newProductName);
+
+                            if (!$exists) {
+                                $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+                                try {
+                                    /** @var CProductName $newProdName */
+                                    $newProdName = $pntRepo->insertName($newProductName);
+                                } catch (\Throwable $e) {
+                                    \Monkey::app()->repoFactory->rollback();
+                                    return "OOPS! Errore durante l'inserimento, che non è stato eseguito.<br />" . $e->getMessage();
+                                }
+                            }
+                        }
+
+                        if($pn) {
+                            $pnIt = $pn->findOneByKey('langId', 1);
+                            $psmp->productName = str_replace(' !', '', $pnIt->name);
+                        } else {
+                            $psmp->productName = str_replace(' !', '', $newProdName->name);
+                        }
+                    }
+
+
                     if(isset($get['genders'])) $psmp->genderId = $get['genders'];
                     if(isset($get['prodCats'])) $psmp->categoryGroupId = $get['prodCats'];
                     if(isset($get['materials'])) $psmp->materialId = $get['materials'];
@@ -313,8 +370,8 @@ class CDetailModelSave extends AAjaxController
                     }
 
                     $newIds[] = $psmp->id;
+                    \Monkey::app()->repoFactory->commit();
                 }
-                \Monkey::app()->repoFactory->commit();
                 return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds)]);
 
             } catch (\Throwable $e) {
@@ -377,6 +434,11 @@ class CDetailModelSave extends AAjaxController
             }
         }
         return $productDetails;
+    }
+
+    private function isName($name){
+        $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+        return $pn = $pntRepo->findByName($name);
     }
 
 }

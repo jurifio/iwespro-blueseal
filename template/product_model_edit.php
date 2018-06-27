@@ -147,6 +147,8 @@
                                     <?php endif; ?>
                                     <!-- /CODICE -->
 
+                                    <!-- PRODUCTNAME -->
+                                    <?php if(!$isMultiple): ?>
                                     <div class="row <?php echo $col;?>">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default <?php if(!$isUpdated) echo 'required'; ?>">
@@ -160,6 +162,31 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <?php else: ?>
+
+                                        <div class="row <?php echo $col;?> distinct-option">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label for="find-product-name">Trova (Product Name)</label>
+                                                    <input autocomplete="off" type="text" id="find-product-name"
+                                                           class="form-control find-product-name" name="find-product-name"
+                                                           value=""
+                                                        >
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label for="sub-product-name">Sostituisci (Product Name)</label>
+                                                    <input autocomplete="off" type="text" id="sub-product-name"
+                                                           class="form-control sub-product-name" name="sub-product-name"
+                                                           value=""
+                                                       >
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    <?php endif; ?>
+                                    <!-- /PRODUCTNAME -->
                                     <div class="row <?php echo $col;?>">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
