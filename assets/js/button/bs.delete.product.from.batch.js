@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-delete-product-from-batch",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Inserisci un nuovo nome prodotto",
+    title: "Elimina prodotti dal lotto",
     placement: "bottom"
 };
 

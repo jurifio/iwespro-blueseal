@@ -160,9 +160,11 @@
                 data-title="Termina la lavorazione sui prodotti selezionati"
                 data-placement="bottom"
         ></bs-toolbar-button>
+        <?php if($allShops): ?>
         <bs-toolbar-button
                 data-remote="bs.change.product.status.batch"
         ></bs-toolbar-button>
+        <?php endif; ?>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Notifica termine lotto">
         <bs-toolbar-button
@@ -182,6 +184,7 @@
                 data-target="_blank"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php if($allShops): ?>
     <bs-toolbar-group data-group-label="Elimina prodotti">
         <bs-toolbar-button
                 data-remote="bs.delete.product.from.batch"
@@ -192,6 +195,7 @@
                 data-remote="bs.note.product.batch"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php endif; ?>
 </bs-toolbar>
 </body>
 </html>

@@ -75,12 +75,12 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <?php endif; ?>
     <bs-toolbar-group data-group-label="Gestisci dati">
         <bs-toolbar-button
                 data-remote="bs.user.password.change"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php endif; ?>
 </bs-toolbar>
 </body>
 </html>

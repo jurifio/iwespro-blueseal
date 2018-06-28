@@ -32,6 +32,7 @@ class CProductBatchDetailsListController extends ARestrictedAccessRootController
 
         $user = \Monkey::app()->getUser();
         $isWorker = $user->hasPermission('worker');
+        $allShops = $user->hasPermission('allShops');
 
         $productBatchId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
@@ -46,7 +47,8 @@ class CProductBatchDetailsListController extends ARestrictedAccessRootController
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
             'productBatchId' => $productBatchId,
-            'isWorker' => $isWorker
+            'isWorker' => $isWorker,
+            'allShops' => $allShops
         ]);
     }
 }
