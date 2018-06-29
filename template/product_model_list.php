@@ -40,7 +40,7 @@
                                         data-orderable="true" class="center">Nome Prodotto</th>
                                     <th data-slug="prototypeName"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Nome Prototipo</th>
+                                        data-orderable="true" class="center">Scheda Prodotto</th>
                                     <th data-slug="categories"
                                         data-searchable="true"
                                         data-orderable="true" class="center categoryFilterType">Categorie</th>
