@@ -49,7 +49,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="dateCampaignFinish">Data Inizio Campagna</label>
+                                                <label for="dateCampaignFinish">Data Fine Campagna</label>
                                                 <input type="datetime-local" id="dateCampaignFinish" class="form-control"
                                                        placeholder="Inserisci la data di Fine Campagna" name="dateCampaignFinish"
                                                        required="required">

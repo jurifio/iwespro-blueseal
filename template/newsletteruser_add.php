@@ -37,7 +37,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteredField">Seleziona se Creare una Campagna o selezionarla</label>
+                                                <label for="filteredField">Seleziona per creare una campagna o utilizzarne una</label>
                                                 <select id="filteredField" name="filteredField"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona l\'opzione"

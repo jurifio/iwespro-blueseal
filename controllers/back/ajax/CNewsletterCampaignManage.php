@@ -64,7 +64,7 @@ class CNewsletterCampaignManage extends AAjaxController
 
             $newsletterCampaignInsert->smartInsert();
 
-            $res = "Campagna Newsletter inserita con successo!";
+            $res = "La campagna è stata creata con successo";
 
         }else{
             //Se hai trovato qualcosa allora restituitsci messaggio di errore

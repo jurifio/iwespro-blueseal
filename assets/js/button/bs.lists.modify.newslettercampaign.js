@@ -25,8 +25,8 @@ $(document).on('bs-newslettercampaign-edit', function (e, element, button) {
     }
 
     let newsletterCampaignId = selectedRows[0].id;
-    let bsModal = new $.bsModal('Invio', {
-        body: '<p>Invia La Newsletter selezionata</p>' +
+    let bsModal = new $.bsModal('Modifica Anagrafica campagna', {
+        body: '<p>Modifica la campagna</p>' +
         '<div class="row">' +
         '<div class="col-xs-6>">' +
         '<label for="campaignName">Nome Campagna</label>' +
@@ -73,7 +73,7 @@ $(document).on('bs-newslettercampaign-edit', function (e, element, button) {
             bsModal.writeBody(res);
         }).always(function (res) {
             bsModal.setOkEvent(function () {
-                window.location.reload();
+                $.refreshDataTable();
                 bsModal.hide();
                 // window.location.reload();
             });

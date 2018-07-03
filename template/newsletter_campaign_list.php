@@ -42,7 +42,8 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Id
+                                    class="center"
+                                    data-default-order="desc">Id
                                 </th>
                                 <th data-slug="name"
                                     data-searchable="true"
@@ -58,6 +59,11 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Data Fine Campagna
+                                </th>
+                                <th data-slug="events"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Eventi collegati
                                 </th>
                             </tr>
                             </thead>

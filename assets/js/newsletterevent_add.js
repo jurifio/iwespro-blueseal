@@ -48,7 +48,7 @@ $(document).on('bs.newNewsletterEvent.save', function () {
             bsModal.writeBody(res);
         }).always(function (res) {
             bsModal.setOkEvent(function () {
-                window.location.reload();
+                window.location.replace('/blueseal/newsletter-lista-eventi');
                 bsModal.hide();
                 // window.location.reload();
             });

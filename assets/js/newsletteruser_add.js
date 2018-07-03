@@ -492,10 +492,9 @@ $(document).on('bs.newNewsletterUser.save', function () {
             bsModal.writeBody(res);
         }).always(function (res) {
             bsModal.setOkEvent(function () {
-                window.location.reload();
+                window.location.replace('/blueseal/newsletter-user');
                 bsModal.hide();
-                // window.location.reload();
-            });
+                });
             bsModal.showOkBtn();
         });
     });

@@ -565,7 +565,7 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
             bsModal.writeBody(res);
         }).always(function (res) {
             bsModal.setOkEvent(function () {
-                window.location.reload();
+                window.location.replace('/blueseal/newsletter');
                 bsModal.hide();
                 // window.location.reload();
             });
