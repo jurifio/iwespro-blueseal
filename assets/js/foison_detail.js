@@ -3,8 +3,10 @@
 
     $(document).on('bs.foison.user.address.save', function () {
 
+        let foisonId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         
         const data = {
+            foisonId: foisonId,
              name: $('#foison_name').val(),
              surname: $('#foison_surname').val(),
              birthdate: $('#foison_birthdate').val(),

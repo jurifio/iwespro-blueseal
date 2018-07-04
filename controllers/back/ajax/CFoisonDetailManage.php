@@ -39,8 +39,11 @@ class CFoisonDetailManage extends AAjaxController
     {
         $data = \Monkey::app()->router->request()->getRequestData();
 
-        $user = \Monkey::app()->getUser();
-        $userId = $user->id;
+        $foisonId = $data['foisonId'];
+
+        /** @var CFoison $foison */
+        $foison = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$foisonId]);
+        $userId = $foison->userId;
 
         $name = $data["name"];
         $surname = $data["surname"];
