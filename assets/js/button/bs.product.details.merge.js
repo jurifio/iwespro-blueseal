@@ -157,6 +157,8 @@ $(document).on('bs-product-details.merge', function (e, element, button) {
         }
     );
 
+    modal.addClass('modal-wide');
+    modal.addClass('modal-high');
 
     $.ajax({
         url: '/blueseal/xhr/ProductDetailsMerge',
