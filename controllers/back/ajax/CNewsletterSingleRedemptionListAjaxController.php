@@ -39,7 +39,7 @@ class CNewsletterSingleRedemptionListAjaxController extends AAjaxController
                   JOIN Email e ON n.id = e.newsletterId
                   JOIN EmailRecipient er ON e.id = er.emailId
                   JOIN UserEmail ue ON er.emailId = er.emailId
-                  WHERE n.id = $newsletterId";
+                  WHERE n.id = ".$newsletterId;
 
         $datatable = new CDataTables($sql, ['Email'], $_GET, true);
 
