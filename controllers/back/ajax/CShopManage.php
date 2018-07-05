@@ -24,10 +24,10 @@ class CShopManage extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('id');
-        $shops = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         if (in_array($shopId, $shops)) {
             /** @var CShop $shop */
-            $shop = \Monkey::app()->repoFactory->create('Shop')->findOneByStringId($shopId);
+            $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopId);
             $shop->user;
             $shop->billingAddressBook;
             $shop->shippingAddressBook;
@@ -44,12 +44,14 @@ class CShopManage extends AAjaxController
     {
         try {
             $shopData = $this->app->router->request()->getRequestData('shop');
-            $shopsId = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+            $shopsId = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
             if (in_array($shopData['id'], $shopsId)) {
-                $shop = \Monkey::app()->repoFactory->create('Shop')->findOneByStringId($shopData['id']);
+                $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopData['id']);
                 $shop->title = $shopData['title'];
                 $shop->owner = $shopData['owner'];
                 $shop->referrerEmails = $shopData['referrerEmails'];
+                $shop->eloyApiKey = $shopData['eloyApiKey'];
+                $shop->secret =$shopData['secret'];
                 if ($this->app->getUser()->hasPermission('allShops')) {
                     $shop->currentSeasonMultiplier = $shopData['currentSeasonMultiplier'];
                     $shop->pastSeasonMultiplier = $shopData['pastSeasonMultiplier'];
@@ -87,14 +89,14 @@ class CShopManage extends AAjaxController
                 }
 
                 $x = $shop->update();
-                \Monkey::app()->repoFactory->commit();
+                $this->app->dbAdapter->commit();
                 return $x;
             } else {
                 $this->app->router->response()->raiseUnauthorized();
                 return 'Bad Request';
             }
         } catch (\Throwable $e) {
-            \Monkey::app()->repoFactory->rollback();
+            $this->app->dbAdapter->rollBack();
             throw $e;
         }
     }
@@ -113,8 +115,8 @@ class CShopManage extends AAjaxController
             }
         }
         if (!$ok) return null;
-        $addressBook = \Monkey::app()->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
-        if (is_null($addressBook)) $addressBook = \Monkey::app()->repoFactory->create('AddressBook')->getEmptyEntity();
+        $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
+        if (is_null($addressBook)) $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
         try {
             /** @var CAddressBook $addressBook */
             $addressBook->name = $addressBookData['name'] ?? null;
@@ -128,10 +130,9 @@ class CShopManage extends AAjaxController
             $addressBook->cellphone = $addressBookData['cellphone'] ?? null;
             $addressBook->province = $addressBookData['province'] ?? null;
             $addressBook->iban = $addressBookData['iban'] ?? null;
-            $addressBook->note = $addressBookData['note'] ?? null;
 
             if (!isset($addressBook->id)) {
-                $addressBookC = \Monkey::app()->repoFactory->create('AddressBook')->findOneBy(['checksum' => $addressBook->calculateChecksum()]);
+                $addressBookC = $this->app->repoFactory->create('AddressBook')->findOneBy(['checksum' => $addressBook->calculateChecksum()]);
                 if (!is_null($addressBookC)) $addressBook->id = $addressBookC->id;
             }
         } catch (\Throwable $e) {

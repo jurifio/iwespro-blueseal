@@ -1,3 +1,5 @@
+
+
 $(document).on('bs.shop.save', function () {
     let method;
     let data = {};
@@ -5,6 +7,8 @@ $(document).on('bs.shop.save', function () {
     data.title = $('#shop_title').val();
     data.owner = $('#shop_owner').val();
     data.referrerEmails = $('#shop_referrerEmails').val();
+    data.eloyApiKey = $('#shop_eloyApiKey').val();
+    data.secret = $('#shop_secret').val();
     data.currentSeasonMultiplier = $('#shop_currentSeasonMultiplier').val();
     data.pastSeasonMultiplier = $('#shop_pastSeasonMultiplier').val();
     data.saleMultiplier = $('#shop_saleMultiplier').val();
@@ -53,6 +57,7 @@ $(document).on('bs.shop.save', function () {
 });
 
 (function ($) {
+
     let params = $.decodeGetStringFromUrl(window.location.href);
     if (typeof params.id != 'undefined') {
         $.ajax({
@@ -66,6 +71,8 @@ $(document).on('bs.shop.save', function () {
             $('#shop_title').val(res.title);
             $('#shop_owner').val(res.owner);
             $('#shop_referrerEmails').val(res.referrerEmails);
+            $('#shop_eloyApiKey').val(res.eloyApiKey);
+            $('#shop_secret').val(res.secret);
             $('#shop_iban').val(res.iban);
             $('#shop_currentSeasonMultiplier').val(res.currentSeasonMultiplier);
             $('#shop_pastSeasonMultiplier').val(res.pastSeasonMultiplier);
@@ -80,6 +87,7 @@ $(document).on('bs.shop.save', function () {
             $('#shop_config_photoCost').val(res.config.photoCost);
             $('#shop_config_shootingTransportCost').val(res.config.shootingTransportCost);
             $('#shop_config_orderTransportCost').val(res.config.orderTransportCost);
+
 
             checkPermission('allShops')
                 .done(function () {
@@ -114,6 +122,13 @@ $(document).on('bs.shop.save', function () {
         });
     }
 })(jQuery);
+
+
+/**
+ * Generate new key and insert into input value
+ */
+
+
 
 function createGraphs(shop) {
     "use strict";
@@ -159,13 +174,13 @@ function createGraphs(shop) {
     let productChart = nv.models.lineChart();
 
     productChart
-            .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
-            .options({
-                duration: 300,
-                useInteractiveGuideline: true
-            })
-            .color(d3.scale.category10().range())
-        ;
+        .margin({top: 30, right: 60, bottom: 50, left: 70})  //Adjust chart margins to give the x-axis some breathing room.
+        .options({
+            duration: 300,
+            useInteractiveGuideline: true
+        })
+        .color(d3.scale.category10().range())
+    ;
 
     productChart.xAxis   //Chart x-axis settings
         .showMaxMin(false)
@@ -245,18 +260,17 @@ function readShipment(containerSelector) {
     let data = {};
     let element = $(containerSelector);
     data.id = element.find('#id').val();
-    data.name = encodeURIComponent(element.find('#name').val());
-    data.subject = encodeURIComponent(element.find('#subject').val());
-    data.address = encodeURIComponent(element.find('#address').val());
-    data.extra = encodeURIComponent(element.find('#extra').val());
-    data.city = encodeURIComponent(element.find('#city').val());
+    data.name = element.find('#name').val();
+    data.subject = element.find('#subject').val();
+    data.address = element.find('#address').val();
+    data.extra = element.find('#extra').val();
+    data.city = element.find('#city').val();
     data.countryId = element.find('#country').val();
     data.postcode = element.find('#postcode').val();
     data.phone = element.find('#phone').val();
     data.cellphone = element.find('#cellphone').val();
     data.province = element.find('#province').val();
     data.iban = element.find('#iban').val();
-    data.note = element.find('#note').val();
     return data;
 }
 
@@ -293,7 +307,6 @@ function appendShipment(data, containerSelector) {
                     element.find('#cellphone').val(data.cellphone);
                     element.find('#province').val(data.province);
                     element.find('#iban').val(data.iban);
-                    element.find('#note').val(data.note);
                 }
                 container.append(element);
             });
@@ -301,3 +314,27 @@ function appendShipment(data, containerSelector) {
     });
 }
 
+$(document).on('click', '#keygen', function(e){
+    e.preventDefault();
+    let k = generateUUID();
+    $( '#shop_eloyApiKey' ).val(k);
+});
+
+function generateUUID()
+{
+    let d = new Date().getTime();
+
+    if( window.performance && typeof window.performance.now === "function" )
+    {
+        d += performance.now();
+    }
+
+    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c)
+    {
+        let r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+
+    return uuid;
+}

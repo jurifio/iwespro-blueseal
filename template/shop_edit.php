@@ -112,7 +112,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default disabled">
                                                 <label for="shop_config_refusalRate_lastMonth">Refusal Rate Mese
-                                                    Precendente</label>
+                                                    Precedente</label>
                                                 <input id="shop_config_refusalRate_lastMonth" disabled="disabled"
                                                        autocomplete="off" type="number"
                                                        class="form-control" name="shop_config_refusalRate_lastMonth"
@@ -201,61 +201,88 @@
                                                        value=""/>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default">
+                                                <label for="shop_eloyApiKey">eloy Api Key</label>
+                                                <input id="shop_eloyApiKey" disabled="disabled"
+                                                       autocomplete="off" type="text"
+                                                       class="form-control"
+                                                       name="shop_eloyApiKey"
+                                                       value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default">
+                                                <label for="keygen">Generatore</label>
+                                                <button class="btn btn-default" id="keygen">Genera API Key</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default">
+                                                <label for="shop_secret">Secret</label>
+                                                <input id="shop_secret" disabled="disabled"
+                                                       autocomplete="off" type="text"
+                                                       class="form-control"
+                                                       name="shop_secret"
+                                                       value=""/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="panel panel-default clearfix">
-                                <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Statistiche</h5>
-                                </div>
-                                <div class="panel-body clearfix">
-                                    <div id="statisticGraphics">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <svg id="productGraph" height="400"></svg>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <svg id="orderGraph" height="400"></svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="panel panel-default clearfix">
-                                <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Informazioni di Fatturazione</h5>
-                                </div>
-                                <div class="panel-body clearfix" id="billingAddress">
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="panel panel-default clearfix">
-                                <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Indirizzi di Ritiro</h5>
-                                </div>
-                                <div class="panel-body clearfix" id="shippingAddresses">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default clearfix">
+                        <div class="panel-heading clearfix">
+                            <h5 class="m-t-10">Statistiche</h5>
+                        </div>
+                        <div class="panel-body clearfix">
+                            <div id="statisticGraphics">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <svg id="productGraph" height="400"></svg>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <svg id="orderGraph" height="400"></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default clearfix">
+                        <div class="panel-heading clearfix">
+                            <h5 class="m-t-10">Informazioni di Fatturazione</h5>
+                        </div>
+                        <div class="panel-body clearfix" id="billingAddress">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default clearfix">
+                        <div class="panel-heading clearfix">
+                            <h5 class="m-t-10">Indirizzi di Ritiro</h5>
+                        </div>
+                        <div class="panel-body clearfix" id="shippingAddresses">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
         </div>
     </div>
-    <?php include "parts/footer.php" ?>
+</div>
+<?php include "parts/footer.php" ?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
