@@ -6,7 +6,10 @@
                 "route": "CContent.home",
                 "cms": {
                     "description": "Immagine con testo",
-                    "content": ["captionTitle","captionText"],
+                    "content": [
+                        "captionTitle",
+                        "captionText"
+                    ],
                     "icon": "fa-file-image-o",
                     "media": "image"
                 },
@@ -71,8 +74,14 @@
                         "tag": "input",
                         "type": "radio",
                         "css": null,
-                        "values": ["editorial-black","editorial-white"],
-                        "prettyValues": ["Colore font nero","Colore font bianco"],
+                        "values": [
+                            "editorial-black",
+                            "editorial-white"
+                        ],
+                        "prettyValues": [
+                            "Colore font nero",
+                            "Colore font bianco"
+                        ],
                         "required": true
                     }
                 },
@@ -82,8 +91,34 @@
                         "tag": "select",
                         "type": null,
                         "css": "full-width",
-                        "values": [1,2,3,4,5,6,7,8,9,10,11,12],
-                        "prettyValues": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "values": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                        ],
+                        "prettyValues": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                        ],
                         "required": true
                     },
                     "md": {
@@ -91,8 +126,34 @@
                         "tag": "select",
                         "type": null,
                         "css": "full-width",
-                        "values": [1,2,3,4,5,6,7,8,9,10,11,12],
-                        "prettyValues": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "values": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                        ],
+                        "prettyValues": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                        ],
                         "required": true
                     },
                     "sm": {
@@ -100,8 +161,34 @@
                         "tag": "select",
                         "type": null,
                         "css": "full-width",
-                        "values": [1,2,3,4,5,6,7,8,9,10,11,12],
-                        "prettyValues": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "values": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                        ],
+                        "prettyValues": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                        ],
                         "required": true
                     },
                     "xs": {
@@ -109,8 +196,34 @@
                         "tag": "select",
                         "type": null,
                         "css": "full-width",
-                        "values": [1,2,3,4,5,6,7,8,9,10,11,12],
-                        "prettyValues": [1,2,3,4,5,6,7,8,9,10,11,12],
+                        "values": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                        ],
+                        "prettyValues": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                        ],
                         "required": true
                     }
                 },
@@ -269,9 +382,11 @@
                 "route": "CContent.catalog",
                 "cms": {
                     "description": "Toolbar catalogo",
-                    "content": ["title"],
+                    "content": [
+                        "title"
+                    ],
                     "icon": "fa-file-image-o",
-                    "media" : "image"
+                    "media": "image"
                 },
                 "text": {
                     "latestLabel": {
@@ -319,7 +434,6 @@
                         "required": true
                     },
                     "limit": {
-
                     }
                 },
                 "buttons": {},
@@ -333,9 +447,11 @@
                 "route": "CProductsummary.detail",
                 "cms": {
                     "description": "Pulsanti aggiunta carrello",
-                    "content": ["title"],
+                    "content": [
+                        "title"
+                    ],
                     "icon": "fa-file-image-o",
-                    "media" : "image"
+                    "media": "image"
                 },
                 "text": {
                     "mailtoLabel": {
@@ -365,6 +481,13 @@
                         "type": "text",
                         "css": "form-control",
                         "required": true
+                    },
+                    "whishListButton": {
+                        "label": "Testo per aggiungere alla Lista dei Desideri",
+                        "tag": "input",
+                        "type": "text",
+                        "css": "form-control",
+                        "required": true
                     }
                 },
                 "buttons": {},
@@ -378,9 +501,11 @@
                 "route": "CProductsummary.detail",
                 "cms": {
                     "description": "Scheda prodotto",
-                    "content": ["title"],
+                    "content": [
+                        "title"
+                    ],
                     "icon": "fa-file-image-o",
-                    "media" : "image"
+                    "media": "image"
                 },
                 "text": {
                     "skuLabel": {
@@ -458,9 +583,11 @@
                 "route": "CContent.catalog",
                 "cms": {
                     "description": "Griglia prodotti",
-                    "content": ["title"],
+                    "content": [
+                        "title"
+                    ],
                     "icon": "fa-file-image-o",
-                    "media" : "image"
+                    "media": "image"
                 },
                 "text": {
                     "title": {
