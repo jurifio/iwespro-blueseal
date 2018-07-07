@@ -28,6 +28,7 @@ class CProductDeleteToWishListAjaxController extends AAjaxController
         //prendo i dati passati in input
         $data = \Monkey::app()->router->request()->getRequestData();
         $product =$data['product'];
+        $status  =$data['status'];
         $currentUser = \Monkey::app()->getUser();
         $currentUserId = $currentUser->id;
 
@@ -37,7 +38,10 @@ class CProductDeleteToWishListAjaxController extends AAjaxController
 
         /** @var CWishListCheckItem $wishListCheckItem*/
         $wishListCheckItem = $wishListRepo->findOneBy(['id' => $product,'userId'=>$currentUserId]);
-        $wishListCheckItem->delete();
+        $wishListCheckItem->statusId=$status;
+        $now = date("Y-m-d H:i:s");
+        $wishListCheckItem->deleteDate = $now;
+        $wishListCheckItem->Update();
 
             $response = "Cancellazione Eseguita";
 

@@ -45,6 +45,9 @@ class CProductAddToWishListAjaxController extends AAjaxController
             $wishList->userId = $currentUserId;
             $wishList->productId = $product;
             $wishList->productVariantId = $productVariant;
+            $now = date("Y-m-d H:i:s");
+            $wishList->creationDate = $now;
+            $wishList->statusId ="1";
             $wishList->smartInsert();
 
             $response = "Inserimento Eseguito";

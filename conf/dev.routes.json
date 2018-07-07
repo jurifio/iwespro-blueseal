@@ -2411,6 +2411,20 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/blueseal/wishlist(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CWishListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

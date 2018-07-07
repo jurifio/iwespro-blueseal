@@ -19,18 +19,19 @@ class CNewsletterCampaignListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "SELECT n.id, 
-                        n.name,  
-                        n.dateCampaignStart, 
-                        n.dateCampaignFinish,
-                        group_concat(concat(ne.id,' | ',ne.name)) as events 
-                    from NewsletterCampaign n
-                    LEFT JOIN NewsletterEvent ne ON n.id = ne.newsletterCampaignId
-                    GROUP BY n.id
+        $sql = "SELECT
+  u.id,
+  ud.name as name,
+  ud.surname as surname,
+  u.email as email
+from User u
+  INNER  JOIN  UserDetails ud ON u.id = ud.userId
+  inner  JOIN  WishList W ON u.id = W.UserId
+GROUP BY  u.id
                     ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        /** @var CRepo $nCR */
+        /** @var CRepo $Wlist */
         $nCR = \Monkey::app()->repoFactory->create('NewsletterCampaign');
         $datatable->doAllTheThings(false);
 
