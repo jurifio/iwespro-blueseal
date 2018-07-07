@@ -29,7 +29,6 @@ class CProductAddToWishListAjaxController extends AAjaxController
         $data = \Monkey::app()->router->request()->getRequestData();
         $product =$data['product'];
         $productVariant =$data['productVariant'];
-        $size =$data['size'];
         $currentUser = \Monkey::app()->getUser();
         $currentUserId = $currentUser->id;
 
@@ -38,7 +37,7 @@ class CProductAddToWishListAjaxController extends AAjaxController
         $wishListRepo = \Monkey::app()->repoFactory->create('WishList');
 
         /** @var CWishListCheckItem $wishListCheckItem*/
-        $wishListCheckItem = $wishListRepo->findOneBy(['userId' => $currentUserId, 'productId'=>$product, 'productVariantId'=>$productVariant,'productSizeId'=>$size]);
+        $wishListCheckItem = $wishListRepo->findOneBy(['userId' => $currentUserId, 'productId'=>$product, 'productVariantId'=>$productVariant]);
         if(empty($wishListCheckItem)) {
 
 
@@ -46,7 +45,6 @@ class CProductAddToWishListAjaxController extends AAjaxController
             $wishList->userId = $currentUserId;
             $wishList->productId = $product;
             $wishList->productVariantId = $productVariant;
-            $wishList->productSizeId = $size;
             $wishList->smartInsert();
 
             $response = "Inserimento Eseguito";
