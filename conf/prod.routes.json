@@ -2361,7 +2361,7 @@
             ]
         },
         {
-            "pattern": "/blueseal/wishlist/media(/)?",
+            "pattern": "/blueseal/wishlist(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CWishListController"
             },
