@@ -25,9 +25,6 @@ class CNewsletterEventListAjaxController extends AAjaxController
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
-
-
-
         }
 
         return $datatable->responseOut();

@@ -50,9 +50,9 @@
                                     class="center">Derivata da
                                 </th>
                                 <th data-slug="name"
-                                         data-searchable="true"
-                                         data-orderable="true"
-                                         class="center">Nome Newsletter
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Nome Newsletter
                                 </th>
                                 <th data-slug="sendAddressDate"
                                     data-searchable="true"
@@ -80,9 +80,9 @@
                                     class="center">Template Utilizzato
                                 </th>
                                 <th data-slug="subject"
-                                         data-searchable="true"
-                                         data-orderable="true"
-                                         class="center">Oggetto
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Oggetto
                                 </th>
                                 <th data-slug="campaignId"
                                     data-searchable="true"
@@ -108,12 +108,12 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione">
         <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
+                data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
 
-            <bs-toolbar-button
-                    data-remote="bs.lists.create.newsletter"
-            ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.create.newsletter"
+        ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.lists.clone.newsletter"
         ></bs-toolbar-button>

@@ -97,9 +97,7 @@
                 data-remote="bs.lists.delete.newslettercampaign"
 
         ></bs-toolbar-button>
-
-
-    </bs-toolbar-group>
+</bs-toolbar-group>
 </bs-toolbar>
 </body>
-    </html><?php
+</html>
