@@ -508,6 +508,22 @@
             ]
         },
         {
+            "pattern": "/blueseal/newsletter-lista-inserzioni/:eventId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterInsertionListController"
+            },
+            "filters": {
+                "eventId": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/newsletter-lista-campagne(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterCampaignListController"

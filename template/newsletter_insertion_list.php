@@ -31,51 +31,30 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="newsletter_event_list"
-                               data-controller="NewsletterEventListAjaxController"
+                               data-datatable-name="newsletter_insertion_list"
+                               data-controller="NewsletterInsertionListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
-                               data-display-length="200">
+                               data-display-length="200"
+                               data-eventid="<?php echo $eventId; ?>">
                             <thead>
                             <tr>
-                                <th data-slug="linkId"
+                                <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Id
                                 </th>
-                                <th data-slug="eventName"
+                                <th data-slug="insertionName"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Evento Campagna
                                 </th>
-                                <th data-slug="campaignName"
+                                <th data-slug="eventName"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Campagna Associata
                                 </th>
-
-                                <th data-slug="emailSent"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Email Inviate
-                                </th>
-                                <th data-slug="emailDelivered"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Email Consegnate
-                                </th>
-                                <th data-slug="emailOpened"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Email Aperte
-                                </th>
-                                <th data-slug="emailClicked"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Email Cliccate
-                                </th>
-
                             </tr>
                             </thead>
                             <tbody>
@@ -93,18 +72,8 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione">
         <bs-toolbar-button
-                data-remote="bs.lists.generate.csv"
+                data-remote="bs.newsletter.insertion.add"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.create.newsletterevent"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.modify.newsletterevent"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.delete.newsletterevent"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
