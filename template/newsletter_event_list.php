@@ -36,7 +36,8 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
-                               data-display-length="200">
+                               data-display-length="200"
+                               data-campaignid="<?php echo $campaignId; ?>">
                             <thead>
                             <tr>
                                 <th data-slug="linkId"

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,7 +36,8 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteredField">Seleziona per creare una campagna o utilizzarne una</label>
+                                                <label for="filteredField">Seleziona per creare una campagna o
+                                                    utilizzarne una</label>
                                                 <select id="filteredField" name="filteredField"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona l\'opzione"
@@ -48,14 +48,17 @@
                                     </div>
                                     <div id="inputCampaign"></div>
                                     <div id="inputEvent"></div>
+                                    <div id="inputInsertion"></div>
 
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <br><br><br><p><br>
+                                            <br><br><br>
+                                            <p><br>
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="user">Nome Newsletter</label>
                                                 <input id="name" class="form-control"
-                                                 placeholder="Inserisci il nome della newsletter" name="name" required="required">
+                                                       placeholder="Inserisci il nome della newsletter" name="name"
+                                                       required="required">
                                             </div>
                                         </div>
                                     </div>
@@ -65,19 +68,13 @@
                                             <p><br><br>
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="dataDescription">Descrizione Newletter</label>
-                                                <input type="text" class="form-control" id="dataDescription" name="dataDescription" value="" />
+                                                <input type="text" class="form-control" id="dataDescription"
+                                                       name="dataDescription" value=""/>
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
-
                                 </div>
                             </div>
-
-
 
                         </div>
                         <div class="col-md-6">
@@ -91,7 +88,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="sendAddressDate">Data di Invio</label>
-                                                <input type="datetime-local" class="form-control" id="sendAddressDate" name="sendAddressDate" value="" />
+                                                <input type="datetime-local" class="form-control" id="sendAddressDate"
+                                                       name="sendAddressDate" value=""/>
                                             </div>
                                         </div>
                                     </div>
@@ -99,14 +97,16 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="fromEmailAddressId">no-reply@.pickyshop.com</label>
-                                                <input type="hidden" class="form-control" id="fromEmailAddressId" name="fromEmailAddressId" value="1" />
+                                                <input type="hidden" class="form-control" id="fromEmailAddressId"
+                                                       name="fromEmailAddressId" value="1"/>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterEmailListId">Seleziona il Segmento di Pubblico</label>
+                                                <label for="newsletterEmailListId">Seleziona il Segmento di
+                                                    Pubblico</label>
                                                 <select id="newsletterEmailListId" name="newsletterEmailListId"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
@@ -119,64 +119,41 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="subject">Oggetto</label>
-                                                <input type="text" class="form-control" id="subject" name="subject" value="" />
+                                                <input type="text" class="form-control" id="subject" name="subject"
+                                                       value=""/>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="newsletterTemplateId">Seleziona Il Template da Utilizzare</label>
+                                                <label for="newsletterTemplateId">Seleziona Il Template da
+                                                    Utilizzare</label>
                                                 <select id="newsletterTemplateId" name="NewsletterTemplateId"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
                                                 </select>
-
-                                            </div>                                            <p>
-                                        </div>
-                                    </div>
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                        <!--<div class="row">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="summernote-wrapper">
-                                                <label>Template Predefinito</label>
-                                                <textarea class="summer" id="preCompiledTemplate1" name="preCompiledTemplate1" data-json="PostTranslation.content" rows="100"></textarea>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
-
-                        </div>-->
+                        </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
 
-                                                <label>Template Predefinito</label>
-                                                <textarea  id="preCompiledTemplate1" name="preCompiledTemplate1"  data-json="PostTranslation.content" rows="100"></textarea>
-
+                                            <label>Template Predefinito</label>
+                                            <textarea id="preCompiledTemplate1" name="preCompiledTemplate1"
+                                                      data-json="PostTranslation.content" rows="100"></textarea>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
-
                         </div>
-
                 </form>
             </div>
         </div>
@@ -189,15 +166,15 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione NewsletterUser">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="AllShops"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-event="bs.newNewsletterUser.save"
-            data-title="Salva la  Newsletter"
-            data-placement="bottom"
-            data-href="#"
+                data-tag="a"
+                data-icon="fa-file-o fa-plus"
+                data-permission="AllShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.newNewsletterUser.save"
+                data-title="Salva la  Newsletter"
+                data-placement="bottom"
+                data-href="#"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"

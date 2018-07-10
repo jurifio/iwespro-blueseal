@@ -494,11 +494,13 @@
             ]
         },
         {
-            "pattern": "/blueseal/newsletter-lista-eventi(/)?",
+            "pattern": "/blueseal/newsletter-lista-eventi/:campaignId(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEventListController"
             },
-            "filters": {},
+            "filters": {
+                "campaignId": "[0-9]+"
+            },
             "translations": {},
             "methods": [
                 "GET",
@@ -594,11 +596,29 @@
             ]
         },
         {
-            "pattern": "/blueseal/newsletter/newsletter-evento-aggiungi(/)?",
+            "pattern": "/blueseal/newsletter/newsletter-evento-aggiungi/:campaignId(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEventAddController"
             },
-            "filters": {},
+            "filters": {
+                "campaignId": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/newsletter/newsletter-inserzione-aggiungi/:eventId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterInsertionAddController"
+            },
+            "filters": {
+                "eventId": "[A-Za-z0-9_-]+"
+            },
             "translations": {},
             "methods": [
                 "GET",
@@ -1454,7 +1474,7 @@
             ]
         },
         {
-            "pattern": "/blueseal/newsletter-user(/)?",
+            "pattern": "/blueseal/newsletter-user/(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserListController"
             },

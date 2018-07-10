@@ -18,16 +18,20 @@ class CNewsletterEventListAjaxController extends AAjaxController
 
     public function get()
     {
+
+        $campaignId = \Monkey::app()->router->request()->getRequestData('campaignid');
+
         $sql = "SELECT 
                       n.id as linkId, 
                       n.name as eventName , 
-                      N2.name as campaignName,  
+                      nc.name as campaignName,  
                       n.emailSent, 
                       n.emailDelivered, 
                       n.emailOpened, 
                       n.emailClicked 
                 FROM NewsletterEvent n
-                JOIN NewsletterCampaign N2 ON n.newsletterCampaignId = N2.id";
+                JOIN NewsletterCampaign nc ON n.newsletterCampaignId = nc.id
+                WHERE nc.id = $campaignId";
 
         $datatable = new CDataTables($sql, ['linkId'], $_GET, true);
 

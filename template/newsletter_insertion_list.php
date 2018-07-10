@@ -48,12 +48,12 @@
                                 <th data-slug="insertionName"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Evento Campagna
+                                    class="center">Nome inserzione
                                 </th>
                                 <th data-slug="eventName"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Campagna Associata
+                                    class="center">Nome Evento
                                 </th>
                             </tr>
                             </thead>
@@ -73,6 +73,12 @@
     <bs-toolbar-group data-group-label="Gestione">
         <bs-toolbar-button
                 data-remote="bs.newsletter.insertion.add"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.newsletter.insertion.modify"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.newsletter.insertion.delete"
         ></bs-toolbar-button>
 </bs-toolbar>
 </body>

@@ -19,7 +19,7 @@ class CNewsletterCampaignListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "SELECT n.id, 
+        $sql = "SELECT n.id as linkId, 
                         n.name,  
                         n.dateCampaignStart, 
                         n.dateCampaignFinish,
@@ -28,17 +28,19 @@ class CNewsletterCampaignListAjaxController extends AAjaxController
                     LEFT JOIN NewsletterEvent ne ON n.id = ne.newsletterCampaignId
                     GROUP BY n.id
                     ";
-        $datatable = new CDataTables($sql, ['id'], $_GET, true);
+        $datatable = new CDataTables($sql, ['linkId'], $_GET, true);
 
         /** @var CRepo $nCR */
         $nCR = \Monkey::app()->repoFactory->create('NewsletterCampaign');
         $datatable->doAllTheThings(false);
+        $url = $this->app->baseUrl(false).'/blueseal/newsletter-lista-eventi/';
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             /** @var CNewsletterCampaign $nc */
-            $nc = $nCR->findOneBy(['id'=>$row['id']]);
+            $nc = $nCR->findOneBy(['id'=>$row['linkId']]);
             $row['id'] = $nc->id;
+            $row['linkId'] = "<a href='". $url.$nc->id . "' target='_blank'>".$nc->id."</a>";
             $row['name'] = $nc->name;
             $row['dateCampaignStart'] = $nc->dateCampaignStart;
             $row['dateCampaignFinish'] = $nc->dateCampaignFinish;

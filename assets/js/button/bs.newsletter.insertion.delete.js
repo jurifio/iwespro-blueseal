@@ -1,16 +1,16 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-pencil",
+    icon: "fa-close",
     permission: "/admin/product/delete&&allShops",
-    event: "bs-newsletter-insertion-modify",
+    event: "bs-newsletter-insertion-delete",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Modifica un'inserzione",
+    title: "Elimina un'inserzione",
     placement: "bottom",
     toggle: "modal"
 };
 
-$(document).on('bs-newsletter-insertion-modify', function () {
+$(document).on('bs-newsletter-insertion-delete', function () {
 
     let selectedRows = $('.table').DataTable().rows('.selected').data();
     let insertionId = selectedRows[0].row_id;
@@ -18,26 +18,21 @@ $(document).on('bs-newsletter-insertion-modify', function () {
     if(selectedRows.length != 1){
         new Alert({
             type: "warning",
-            message: "Puoi modificare un'inserzione alla volta"
+            message: "Puoi eliminare un'inserzione alla volta"
         }).open();
         return false;
     }
 
     let bsModal = new $.bsModal('Modifica Inserzione', {
-        body: `<div>
-               <p>Inserire il nuovo nome dell'inserzione</p>
-               <input type="text" id="name-modify">
-               </div>`
+        body: `<p>Sicuro di voler eliminare l'inserzione?</p>`
     });
 
     bsModal.setOkEvent(function () {
 
-        let insName = $('#name-modify').val();
         $.ajax({
-            method: "put",
+            method: "delete",
             url: "/blueseal/xhr/NewsletterInsertionManage",
             data: {
-                name: insName,
                 insertionId: insertionId
             }
         }).done(function (res) {

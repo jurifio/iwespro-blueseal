@@ -21,25 +21,29 @@ class CNewsletterUserListAjaxController extends AAjaxController
     {
         $sql = "SELECT 
                  n.id, 
-                 n.newsletterCloneId as newsletterCloneId,
+                 n.newsletterCloneId AS newsletterCloneId,
                  n.name,
-                 E.address as fromEmailAddressId, 
+                 ea.address AS fromEmailAddressId, 
                  n.sendAddressDate,  
-                 o.submissionDate AS submissionDate,
-                 L.name as newsletterEmailListId, 
-                 T.name as templateName, 
+                 e.submissionDate AS submissionDate,
+                 nel.name AS newsletterEmailListId, 
+                 t.name AS templateName, 
                  n.subject, 
-                 C.name as campaignId  
+                 nc.name AS campaignId,
+                 ni.name as newsletterInsertionName,
+                 ne.name as eventName
+                 
                 FROM Newsletter n 
-                inner join   EmailAddress E ON n.fromEmailAddressId = E.id 
-                left outer join   Email o ON n.id=o.newsletterId
-                inner join NewsletterEmailList L ON n.newsletterEmailListId = L.id 
-                inner join NewsletterCampaign C ON n.newsletterCampaignId = C.id 
-                INNER join NewsletterTemplate T ON n.newsletterTemplateId = T.id  order by newsletterCloneId ASC ";
+                JOIN NewsletterInsertion ni ON n.newsletterInsertionId = ni.id
+                JOIN NewsletterEvent ne ON ni.newsletterEventId = ne.id
+                JOIN NewsletterCampaign nc ON nc.id = ne.newsletterCampaignId
+                INNER JOIN EmailAddress ea ON n.fromEmailAddressId = ea.id 
+                LEFT OUTER JOIN Email e ON n.id=e.newsletterId
+                INNER JOIN NewsletterEmailList nel ON n.newsletterEmailListId = nel.id 
+                INNER JOIN NewsletterTemplate t ON n.newsletterTemplateId = t.id  ORDER BY newsletterCloneId ASC ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
-
 
 
         /** @var CNewsletterRepo $newsletterRepo */
@@ -49,25 +53,28 @@ class CNewsletterUserListAjaxController extends AAjaxController
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
         $opera = $blueseal . "newsletter/modifica?newsletter=";
 
-        foreach ($datatable->getResponseSetData() as $key=>$row) {
+        foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var CNewsletter $newsletter */
-            $newsletter = $newsletterRepo->findOneBy(['id' => $row["id"] ]);
-            if ($row['submissionDate']==""){
-
-
-              //  $row['id']=$newsletter->id;
-
-
+            $newsletter = $newsletterRepo->findOneBy(['id' => $row["id"]]);
+            if ($row['submissionDate'] == "") {
                 $row['id'] = '<a href="' . $opera . $newsletter->id . '">' . $newsletter->id . '</a>';
+                $row['name'] = $newsletter->name;
+                $row['sendAddressDate'] = $newsletter->sendAddressDate;
+                $row['fromEmailAddressId'] = $newsletter->emailAddress->address;
+                $row['newsletterEmailListId'] = $newsletter->newsletterEmailList->name;
+                $row['templateName'] = $newsletter->newsletterTemplate->name;
+                $row['subject'] = $newsletter->subject;
+                $row['newsletterInsertionName'] = $newsletter->newsletterInsertion->name;
+                $row['eventName'] = $newsletter->newsletterInsertion->newsletterEvent->name;
+                $row['campaignId'] = $newsletter->newsletterInsertion->newsletterEvent->newsletterCampaign->name;
 
-
-            if ($newsletter->id == $newsletter->newsletterCloneId){
-                $row['newsletterCloneId']="Newsletter Genitore";
-            }else{
-                $row['newsletterCloneId']="Newsletter figlia di :".$newsletter->newsletterCloneId;
+                if ($newsletter->id == $newsletter->newsletterCloneId) {
+                    $row['newsletterCloneId'] = "Newsletter Genitore";
+                } else {
+                    $row['newsletterCloneId'] = "Newsletter figlia di :" . $newsletter->newsletterCloneId;
+                }
             }
-            }
-            $datatable->setResponseDataSetRow($key,$row);
+            $datatable->setResponseDataSetRow($key, $row);
         }
 
         return $datatable->responseOut();

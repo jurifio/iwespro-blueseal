@@ -22,15 +22,15 @@
                         <div class="col-md-12">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Aggiungi un Evento </h5>
+                                    <h5 class="m-t-10">Aggiungi una inserzione </h5>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="name">Nome Evento Campagna</label>
-                                                <input id="name" class="form-control"
-                                                       placeholder="Inserisci il nome dell'Evento" name="name"
+                                                <label for="nameInsertion">Nome Inserzione</label>
+                                                <input id="nameInsertion" class="form-control"
+                                                       placeholder="Inserisci il nome dell'Inserzione" name="nameInsertion"
                                                        required="required">
                                             </div>
                                         </div>
@@ -38,7 +38,7 @@
                                     <div class="row oldCampaign">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="campaignId">Seleziona la Campagna</label>
+                                                <label for="campaignId">Seleziona la campagna</label>
                                                 <select id="campaignId" name="campaignId"
                                                         class="full-width selectpicker"
                                                         data-init-plugin="selectize">
@@ -46,6 +46,19 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="row oldCampaign">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="event">Seleziona l'evento</label>
+                                                <select id="eventId" name="event"
+                                                        class="full-width selectpicker"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
 
                                 </div>
                             </div>
@@ -99,6 +112,25 @@
 
 
                             </div>
+
+                            <div class="panel panel-default clearfix">
+                                <div class="panel-heading clearfix">
+                                    <h5 class="m-t-10">Aggiungi una nuovo evento </h5>
+                                </div>
+                                <div class="panel-body clearfix">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="nameNewEvent">Nome Evento</label>
+                                                <input id="nameNewEvent"
+                                                       placeholder="Inserisci il nome della Campagna"
+                                                       name="nameNewEvent">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -117,8 +149,8 @@
                     data-permission="AllShops"
                     data-class="btn btn-default"
                     data-rel="tooltip"
-                    data-event="bs.newNewsletterEvent.save"
-                    data-title="Salva Evento Campagna"
+                    data-event="bs.newNewsletterInsertion.save"
+                    data-title="Salva Inserzione"
                     data-placement="bottom"
                     data-href="#"
             ></bs-toolbar-button>

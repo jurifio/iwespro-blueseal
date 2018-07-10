@@ -12,35 +12,23 @@ window.buttonSetup = {
 
 $(document).on('bs-newsletter-insertion-add', function (e, element, button) {
 
-    let bsModal = new $.bsModal('Aggiungi Inserzione', {
-        body: `<div>
-               <p>Inserire il nome dell'inserzione</p>
-               <input type="text" id="ins-name">
-               </div>`
-    });
+    let url = '/blueseal/newsletter/newsletter-inserzione-aggiungi/';
 
-    let eId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    let event = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
 
-    bsModal.setOkEvent(function () {
-
-        let insName = $('#ins-name').val();
-        $.ajax({
-            method: "post",
-            url: "/blueseal/xhr/NewsletterInsertionManage",
-            data: {
-                name: insName,
-                eventId: eId
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'NewsletterEvent',
+            condition: {
+                id: event
             }
-        }).done(function (res) {
-            bsModal.writeBody(res);
-        }).fail(function (res) {
-            bsModal.writeBody(res);
-        }).always(function (res) {
-            bsModal.setOkEvent(function () {
-                bsModal.hide();
-                $.refreshDataTable()
-            });
-            bsModal.showOkBtn();
-        });
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        window.open(url+res[0].newsletterCampaignId+'-'+event);
     });
+
+
 });

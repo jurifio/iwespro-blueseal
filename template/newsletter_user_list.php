@@ -89,7 +89,16 @@
                                     data-orderable="true"
                                     class="center">Campagna Associata
                                 </th>
-
+                                <th data-slug="eventName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Evento
+                                </th>
+                                <th data-slug="newsletterInsertionName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Inserzione
+                                </th>
 
                             </tr>
                             </thead>

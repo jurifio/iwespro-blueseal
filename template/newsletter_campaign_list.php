@@ -39,7 +39,7 @@
                                data-display-length="200">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+                                <th data-slug="linkId"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center"

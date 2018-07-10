@@ -183,6 +183,15 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                 'placeholder=\"Inserisci il nome dell\'Evento \" name=\"newsletterEventName\" required=\"required\">' +
                 '</div>' +
                 '</div>' +
+                '</div>' +
+                '<div class=\"row\">' +
+                '<div class=\"col-md-12\">' +
+                '<div class=\"form-group form-group-default selectize-enabled\">' +
+                '<label for=\"newsletterInsertionName\">Inserisci il nome dell\'inserzione </label>' +
+                '<input id=\"newsletterInsertionName\" class=\"form-control\"' +
+                'placeholder=\"Inserisci il nome dell\'Inserzione \" name=\"newsletterInsertionName\" required=\"required\">' +
+                '</div>' +
+                '</div>' +
                 '</div>'
             );
 
@@ -210,7 +219,6 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                 if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
                 select.selectize({
                     valueField: 'id',
-                    //labelField: 'name',
                     labelField: ['name','dateCampaignStart','dateCampaignFinish'],
                     searchField: ['name','dateCampaignStart','dateCampaignFinish'],
                     options: res2,
@@ -276,9 +284,12 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                     }
                 });
             });
+
+
             $("#campaignId").change(function () {
                 var selection = $(this).val();
                 $('#inputEvent').empty();
+                $('#inputInsertion').empty();
                 $("#inputEvent").append('<div class=\"row\">' +
                     ' <div class="col-md-12">' +
                     '<div class=\"form-group form-group-default selectize-enabled\">' +
@@ -306,75 +317,55 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                         searchField: 'name',
                         options: res2,
                     });
+
+                    $("#newsletterEventId").change(function () {
+                        var eventId = $(this).val();
+                        $('#inputInsertion').empty();
+                        $("#inputInsertion").append('<div class=\"row\">' +
+                            '<div class="col-md-12">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"newsletterEventId\">Seleziona l\'Inserzione</label><select id=\"newsletterInsertionId\" name=\"newsletterInsertionId\" class=\"full-width selectpicker\" placeholder=\"Selezione l\'inserzione\"' +
+                            'data-init-plugin=\"selectize\"></select>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>');
+
+                        $.ajax({
+                            method: 'GET',
+                            url: '/blueseal/xhr/GetTableContent',
+                            data: {
+                                table: 'NewsletterInsertion',
+                                condition: {newsletterEventId: eventId}
+                            },
+                            dataType: 'json'
+                        }).done(function (insertion) {
+                            var selectIns = $('#newsletterInsertionId');
+                            if (typeof (selectIns[0].selectize) != 'undefined') selectIns[0].selectize.destroy();
+                            selectIns.selectize({
+                                valueField: 'id',
+                                labelField: 'name',
+                                searchField: 'name',
+                                options: insertion,
+                            });
+                        });
+                    });
                 });
             });
 
-//fine jquery select
         }
 
     });
 
-    ///////////////////////////////////////////////////////////////////
-
-
-
-
-    /*  if (CKEDITOR.instances.preCompiledTemplate1) {
-          CKEDITOR.instances.preCompiledTemplate1.destroy();
-      }
-      CKEDITOR.replace( 'preCompiledTemplate1', {
-          height: 260,
-          width:1280,
-          startupMode:'source'
-
-      } );
-      /*function readSingleFile(e) {
-          var file = e.target.files[0];
-          if (!file) {
-              return;
-          }
-          var reader = new FileReader();
-          reader.onload = function(e) {
-              var contents = e.target.result;
-              displayContents(contents);
-          };
-          reader.readAsText(file);
-      }*/
     $("#newsletterTemplateId").change(function () {
-        //CKEDITOR.instances.preCompiledTemplate1.setData("");
-
-      /*  $("#preCompiledTemplate1").empty();
-        $('#preCompiledTemplate1').code('');*/
         var content1 = $(this).val();
-        //CKEDITOR.instances.preCompiledTemplate1.setData(content1);
-      // $('#preCompiledTemplate1').summernote('editor.pasteHTML', content1);
-        //var contentLessOccurence = content.indexOf('-');
-        //  var contentPreview = content.substring(5);
-        // $("#file-content").append(content);
         $("#preCompiledTemplate1").empty();
         $('#preCompiledTemplate1').code('');
-       // var content1 = $(this).val();
-        //CKEDITOR.instances.preCompiledTemplate1.setData(content1);
-       // $('#preCompiledTemplate1').html(content1);
         tinymce.get('preCompiledTemplate1').setContent(content1);
 
 
     });
 
-    /*function displayContents(contents) {
-        var element = document.getElementById('file-content');
-        element.innerHTML= contents;
-        $("#preCompiledTemplate1").val(contents);
-
-    }*/
-
-
-    /* document.getElementById('preCompiledTemplate1')
-         .addEventListener('change', readSingleFile, false);*/
     Pace.ignore(function () {
-
-
-
 
         $.ajax({
             method:'GET',
@@ -430,6 +421,8 @@ $(document).on('bs.newNewsletterUser.save', function () {
         let campaignDateStartPost=$('#dateCampaignStart').val();
         let campaignDateFinishPost=$('#dateCampaignFinish').val();
         let campaignEventNamePost=$('#newsletterEventName').val();
+        let newsletterInsertionId = $('#newsletterInsertionId').val();
+        let newsletterInsertionName = $('#newsletterInsertionName').val();
         let typeOperation="1";
         if (typeof campaignIdPost === "undefined") {
             campaignIdPost = "";
@@ -461,6 +454,16 @@ $(document).on('bs.newNewsletterUser.save', function () {
         } else {
             campaignDateFinishPost =  campaignDateFinishPost ;
         }
+        if (typeof newsletterInsertionId === "undefined") {
+            newsletterInsertionId = "";
+        } else {
+            newsletterInsertionId =  newsletterInsertionId ;
+        }
+        if (typeof newsletterInsertionName === "undefined") {
+            newsletterInsertionName = "";
+        } else {
+            newsletterInsertionName =  newsletterInsertionName ;
+        }
         tinyMCE.triggerSave();
         const data = {
             typeOperation:typeOperation,
@@ -472,15 +475,14 @@ $(document).on('bs.newNewsletterUser.save', function () {
             subject : $('#subject').val(),
             dataDescription : $('#dataDescription').val(),
             preCompiledTemplate :  $('#preCompiledTemplate1').val(),
-            //preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
             campaignName : campaignNamePost,
             campaignId : campaignIdPost,
             newsletterEventId: campaignEventIdPost,
             newsletterEventName: campaignEventNamePost,
             dateCampaignStart:campaignDateStartPost,
             dateCampaignFinish:campaignDateFinishPost,
-
-
+            newsletterInsertion: newsletterInsertionId,
+            newsletterInsertionName: newsletterInsertionName
         };
         $.ajax({
             method: 'post',
@@ -565,7 +567,6 @@ $(document).on('bs.newNewsletterUser.sendTest', function () {
             subject : $('#subject').val(),
             dataDescription : $('#dataDescription').val(),
             preCompiledTemplate :  $('#preCompiledTemplate1').val(),
-            //preCompiledTemplate : CKEDITOR.instances.preCompiledTemplate1.getData(),
             campaignName : campaignNamePost,
             campaignId : campaignIdPost,
             newsletterEventId: campaignEventIdPost,

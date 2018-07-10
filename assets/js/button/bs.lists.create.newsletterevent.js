@@ -2,10 +2,19 @@ window.buttonSetup = {
     tag: "a",
     icon: "fa-file-o fa-plus",
     permission: "/admin/product/delete&&allShops",
-    permission:"/admin/product/add&&allShops",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Aggiungi un nuovo Evento alla  Campagna Newsletter",
     placement:"bottom",
-    href:"/blueseal/newsletter/newsletter-evento-aggiungi",
+    event: "add-events"
 };
+
+
+$(document).on('add-events', function () {
+
+    let url = '/blueseal/newsletter/newsletter-evento-aggiungi/';
+
+    let campaign = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+
+    window.open(url+campaign);
+});
