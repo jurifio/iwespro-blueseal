@@ -39,10 +39,10 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
        $mDate = \Monkey::app()->router->request()->getRequestData('material');
 
 
-       $gender = explode(', ', $gDate);
-       $macroCat = explode(', ', $mCDate);
-       $cat = explode(', ', $cDate);
-       $material = explode(', ', $mDate);
+       $gender = explode("\n", $gDate);
+       $macroCat = explode("\n", $mCDate);
+       $cat = explode("\n", $cDate);
+       $material = explode("\n", $mDate);
 
        if (!empty($gDate)){
            /** @var CRepo $genPRepo */

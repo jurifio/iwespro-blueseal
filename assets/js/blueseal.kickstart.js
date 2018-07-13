@@ -570,6 +570,30 @@ $.bsModal = function (header, params) {
             let selPDS = $(productDataSheet).selectize();
             selPDS[0].selectize.setValue(prototypeId, true);
 
+            let checkMul = $('#pIDHidden');
+
+            if(checkMul !== undefined) {
+                checkMul.val(prototypeId);
+                $.ajax({
+                    method: 'GET',
+                    url: '/blueseal/xhr/DetailGetLabelForFind',
+                    data: {
+                        pid: prototypeId
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    let select = $('.findDetails');
+                    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                    select.selectize({
+                        valueField: 'id',
+                        labelField: 'slug',
+                        searchField: 'slug',
+                        options: res,
+                    });
+                });
+            }
+
+
             productDataSheet.on("change", function () {
                 $(self).selectDetails($(this).find("option:selected").val(), 'change');
             });

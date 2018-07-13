@@ -1,11 +1,18 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
+
 use bamboo\core\base\CObjectCollection;
+use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CProductDetail;
+use bamboo\domain\entities\CProductDetailLabel;
+use bamboo\domain\entities\CProductDetailTranslation;
 use bamboo\domain\entities\CProductName;
 use bamboo\domain\entities\CProductSheetActual;
 use bamboo\domain\entities\CProductSheetModelActual;
 use bamboo\domain\entities\CProductSheetModelPrototype;
+use bamboo\domain\repositories\CProductDetailRepo;
 
 /**
  * Class CProductListAjaxController
@@ -34,7 +41,7 @@ class CDetailModelSave extends AAjaxController
         $productDetails = $this->getDetails($get);
 
         //IF IS MULTIPLE CREATION OR !
-        if(empty($get['modelIds'])){
+        if (empty($get['modelIds'])) {
             try {
                 \Monkey::app()->repoFactory->beginTransaction();
 
@@ -47,19 +54,19 @@ class CDetailModelSave extends AAjaxController
                 $newProt->code = $get['code'];
                 $newProt->productName = str_replace(' !', '', $pnIt->name);
 
-                if(isset($get['genders'])){
-                   $newProt->genderId = $get['genders'];
+                if (isset($get['genders'])) {
+                    $newProt->genderId = $get['genders'];
                 }
 
-                if(isset($get['prodCats'])) {
+                if (isset($get['prodCats'])) {
                     $newProt->categoryGroupId = $get['prodCats'];
                 }
 
-                if(isset($get['materials'])) {
+                if (isset($get['materials'])) {
                     $newProt->materialId = $get['materials'];
                 }
 
-                if(isset($get['note'])) {
+                if (isset($get['note'])) {
                     $newProt->note = $get['note'];
                 }
 
@@ -82,12 +89,12 @@ class CDetailModelSave extends AAjaxController
                 \Monkey::app()->repoFactory->beginTransaction();
 
                 //Preparo l'inserimento
-                foreach ($get['modelIds'][0]['res'] as $model){
+                foreach ($get['modelIds'][0]['res'] as $model) {
 
                     $newName = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
                     $newCode = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
 
-                    if(isset($get['find-product-name']) && isset($get['sub-product-name'])) {
+                    if (isset($get['find-product-name']) && isset($get['sub-product-name'])) {
                         //mi tiro fuori il nome composto e faccio lo stesso di prima -> ma se non c'è lo creoooo
                         $newProductName = str_ireplace(trim($get['find-product-name']), trim($get['sub-product-name']), $model['productName']);
                         $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName($newProductName);
@@ -112,8 +119,8 @@ class CDetailModelSave extends AAjaxController
                     $newProt->name = $newName;
                     $newProt->code = $newCode;
 
-                    if(isset($get['find-product-name']) && isset($get['sub-product-name'])){
-                        if($pn) {
+                    if (isset($get['find-product-name']) && isset($get['sub-product-name'])) {
+                        if ($pn) {
                             $pnIt = $pn->findOneByKey('langId', 1);
                             $newProt->productName = str_replace(' !', '', $pnIt->name);
                         } else {
@@ -124,9 +131,9 @@ class CDetailModelSave extends AAjaxController
                     }
 
                     $newProt->genderId = (!isset($get['genders']) ? $model['genderId'] : $get['genders']);
-                    $newProt->categoryGroupId =  (!isset($get['prodCats']) ? $model['categoryGroupId'] : $get['prodCats']);
-                    $newProt->materialId =  (!isset($get['materials']) ? $model['materialId'] : $get['materials']);
-                    $newProt->note =  (!isset($get['note']) ? $model['note'] : $get['note']);
+                    $newProt->categoryGroupId = (!isset($get['prodCats']) ? $model['categoryGroupId'] : $get['prodCats']);
+                    $newProt->materialId = (!isset($get['materials']) ? $model['materialId'] : $get['materials']);
+                    $newProt->note = (!isset($get['note']) ? $model['note'] : $get['note']);
                     $newId = $newProt->insert();
 
                     $newIds[] = $newId;
@@ -134,7 +141,7 @@ class CDetailModelSave extends AAjaxController
                     //add cateogories
                     $em = $this->rfc('ProductSheetModelPrototypeHasProductCategory');
 
-                    if(!empty($get['categories'])) {
+                    if (!empty($get['categories'])) {
                         if (!is_array($get['categories'])) throw new \Exception('$cats must be an array');
                         foreach ($get['categories'] as $v) {
                             $cat = $em->getEmptyEntity();
@@ -152,16 +159,23 @@ class CDetailModelSave extends AAjaxController
                     }
 
 
-
                     /** @var CProductSheetModelPrototype $psmp */
-                    $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id'=>$model['id']]);
+                    $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $model['id']]);
 
                     /** @var CObjectCollection $psActualCollection */
                     $psActualCollection = $psmp->productSheetModelActual;
 
-                    if($get['Product_dataSheet'] == $model['productSheetPrototypeId']) {
+                    if ($get['Product_dataSheet'] == $model['productSheetPrototypeId']) {
                         if (!empty($productDetails)) {
 
+                            $detailsToChange = $this->getDetailToChange($get, $psmp);
+
+                            //mergio due array se definiti inserimenti
+                            if(!empty($detailsToChange)){
+                                foreach ($detailsToChange as $k=>$v) {
+                                    $productDetails[$k] = $v;
+                                }
+                            }
 
                             //VECCHI
                             /** @var CProductSheetModelActual $psActual */
@@ -186,12 +200,24 @@ class CDetailModelSave extends AAjaxController
                                 $newSheet->insert();
                             }
                         } else {
+
+                            //se non è cambiata e non è stato inserito nessun nuovo dettaglio
+                            $detailsToChange = $this->getDetailToChange($get, $psmp);
+
                             /** @var CProductSheetActual $psActual */
                             foreach ($psActualCollection as $psActual) {
+
+                                if(array_key_exists($psActual->productDetailLabelId, $detailsToChange)){
+                                    //se lo trovo nell'arry è custom e la prendo
+                                    $labelDetailInsert = $detailsToChange[$psActual->productDetailLabelId];
+                                } else {
+                                    $labelDetailInsert = $psActual->productDetailId;
+                                }
+
                                 $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
                                 $newSheet->productSheetModelPrototypeId = $newId;
                                 $newSheet->productDetailLabelId = $psActual->productDetailLabelId;
-                                $newSheet->productDetailId = $psActual->productDetailId;
+                                $newSheet->productDetailId = $labelDetailInsert;
                                 $newSheet->insert();
                             }
 
@@ -222,7 +248,7 @@ class CDetailModelSave extends AAjaxController
     {
         $get = $this->app->router->request()->getRequestData();
 
-        if(isset($get['id'])) {
+        if (isset($get['id'])) {
             $id = $get['id'];
             $pspid = $get['Product_dataSheet'];
 
@@ -286,13 +312,13 @@ class CDetailModelSave extends AAjaxController
 
 
                     /** @var CProductSheetModelPrototype $psmp */
-                    $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id'=>$model['id']]);
+                    $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $model['id']]);
 
-                    if(isset($get['find-name']) && isset($get['sub-name'])) $psmp->name = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
-                    if(isset($get['find-code']) && isset($get['sub-code'])) $psmp->code = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
-                    if($get['Product_dataSheet'] != $model['productSheetPrototypeId']) $psmp->productSheetPrototypeId = $get['Product_dataSheet'];
+                    if (isset($get['find-name']) && isset($get['sub-name'])) $psmp->name = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
+                    if (isset($get['find-code']) && isset($get['sub-code'])) $psmp->code = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
+                    if ($get['Product_dataSheet'] != $model['productSheetPrototypeId']) $psmp->productSheetPrototypeId = $get['Product_dataSheet'];
 
-                    if(isset($get['find-product-name']) && isset($get['sub-product-name'])) {
+                    if (isset($get['find-product-name']) && isset($get['sub-product-name'])) {
                         //mi tiro fuori il nome composto e faccio lo stesso di prima -> ma se non c'è lo creoooo
                         $newProductName = str_ireplace(trim($get['find-product-name']), trim($get['sub-product-name']), $model['productName']);
                         $pn = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findByName($newProductName);
@@ -311,7 +337,7 @@ class CDetailModelSave extends AAjaxController
                             }
                         }
 
-                        if($pn) {
+                        if ($pn) {
                             $pnIt = $pn->findOneByKey('langId', 1);
                             $psmp->productName = str_replace(' !', '', $pnIt->name);
                         } else {
@@ -320,17 +346,17 @@ class CDetailModelSave extends AAjaxController
                     }
 
 
-                    if(isset($get['genders'])) $psmp->genderId = $get['genders'];
-                    if(isset($get['prodCats'])) $psmp->categoryGroupId = $get['prodCats'];
-                    if(isset($get['materials'])) $psmp->materialId = $get['materials'];
-                    if(isset($get['note'])) $psmp->note = $get['note'];
+                    if (isset($get['genders'])) $psmp->genderId = $get['genders'];
+                    if (isset($get['prodCats'])) $psmp->categoryGroupId = $get['prodCats'];
+                    if (isset($get['materials'])) $psmp->materialId = $get['materials'];
+                    if (isset($get['note'])) $psmp->note = $get['note'];
                     $psmp->update();
 
-                    if($get['Product_dataSheet'] != $model['productSheetPrototypeId']) {
-                        $oldSheets = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId'=>$psmp->id]);
+                    if ($get['Product_dataSheet'] != $model['productSheetPrototypeId']) {
+                        $oldSheets = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $psmp->id]);
 
                         /** @var CProductSheetModelActual $pshma */
-                        foreach ($oldSheets as $pshma){
+                        foreach ($oldSheets as $pshma) {
                             $pshma->delete();
                         }
 
@@ -342,14 +368,23 @@ class CDetailModelSave extends AAjaxController
                     } else {
                         if (!empty($productDetails)) {
 
-                            $oldSheets = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId'=>$psmp->id]);
+                            $detailsToChange = $this->getDetailToChange($get, $psmp);
+
+                            //mergio due array se definiti inserimenti
+                            if(!empty($detailsToChange)){
+                                foreach ($detailsToChange as $k=>$v) {
+                                    $productDetails[$k] = $v;
+                                }
+                            }
+
+                            $oldSheets = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $psmp->id]);
 
                             //VECCHI
                             /** @var CProductSheetModelActual $pshma */
                             foreach ($oldSheets as $pshma) {
 
                                 //se ne trovo uno con la stessa etichetta di un nuovo salto il foreach
-                                if (array_key_exists($pshma->productDetailLabelId, $productDetails)){
+                                if (array_key_exists($pshma->productDetailLabelId, $productDetails)) {
                                     $pshma->delete();
                                 }
                             }
@@ -362,10 +397,33 @@ class CDetailModelSave extends AAjaxController
                                 $newSheet->productDetailId = $v;
                                 $newSheet->insert();
                             }
+                        } else {
+                            $detailsToChange = $this->getDetailToChange($get, $psmp);
+
+                            $oldSheets = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $psmp->id]);
+
+                            //VECCHI
+                            /** @var CProductSheetModelActual $pshma */
+                            foreach ($oldSheets as $pshma) {
+
+                                if (array_key_exists($pshma->productDetailLabelId, $detailsToChange)) {
+                                    $pshma->delete();
+                                }
+                            }
+
+                            //NUOVI
+                            foreach ($detailsToChange as $k => $v) {
+                                $newSheet = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->getEmptyEntity();
+                                $newSheet->productSheetModelPrototypeId = $psmp->id;
+                                $newSheet->productDetailLabelId = $k;
+                                $newSheet->productDetailId = $v;
+                                $newSheet->insert();
+                            }
+
                         }
                     }
 
-                    if(!empty($get['categories'])) {
+                    if (!empty($get['categories'])) {
                         $this->saveCats($get['categories'], $psmp->id);
                     }
 
@@ -399,7 +457,6 @@ class CDetailModelSave extends AAjaxController
     }
 
 
-
     /**
      * @param $cats
      * @param $modelId
@@ -426,7 +483,8 @@ class CDetailModelSave extends AAjaxController
     /**
      * @param $get
      */
-    private function getDetails($get) {
+    private function getDetails($get)
+    {
         $productDetails = [];
         foreach ($get as $k => $v) {
             if (false !== strpos($k, 'ProductDetail')) {
@@ -436,7 +494,63 @@ class CDetailModelSave extends AAjaxController
         return $productDetails;
     }
 
-    private function isName($name){
+    private function getDetailToChange($get, CProductSheetModelPrototype $psmp)
+    {
+        $productDetails = [];
+        foreach ($get as $k => $v) {
+            if (false !== strpos($k, 'find-detail')) {
+                if ($v) {
+                    $productDetails[] = $v;
+                } else {
+                    return false;
+                }
+            } else if (false !== strpos($k, 'sub-detail')) {
+                if ($v) {
+                    $productDetails[] = $v;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        $detailsSingleValues = array_chunk($productDetails, 3);
+
+
+        $res = [];
+       /** @var CRepo $pntrRepo */
+       $pntrRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
+       foreach ($detailsSingleValues as $singleDetailV){
+
+           //se l'array non ha 3 elementi non sono stati assegnati valori
+           if(count($singleDetailV) != 3) return [];
+
+           /** @var CProductSheetActual $sheetActual */
+           $sheetActual = $psmp->productSheetModelActual->findOneByKey('productDetailLabelId', $singleDetailV[0]);
+           $detailTrans = $sheetActual->productDetail->productDetailTranslation->getFirst()->name;
+
+           $newDetailName = str_ireplace($singleDetailV[1], $singleDetailV[2], $detailTrans);
+
+           //cerco se ne esiste una con lo stesso nom in italian
+           /** @var CProductDetailTranslation $existentLabel */
+           $existentLabel = $pntrRepo->findOneBy(['name'=>trim($newDetailName), 'langId'=>1]);
+           if(!is_null($existentLabel)){
+               $res[$singleDetailV[0]] = $existentLabel->productDetail->id;
+           } else {
+               //inserisco una nuova label
+               /** @var CProductDetailRepo $pdrepo */
+               $pdrepo = \Monkey::app()->repoFactory->create('ProductDetail');
+
+               /** @var CProductDetail $newOrFetchProductDetail */
+               $newOrFetchProductDetail = $pdrepo->fetchOrInsert($newDetailName);
+               $res[$singleDetailV[0]] = $newOrFetchProductDetail->id;
+           }
+       }
+
+        return $res;
+    }
+
+    private function isName($name)
+    {
         $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
         return $pn = $pntRepo->findByName($name);
     }
