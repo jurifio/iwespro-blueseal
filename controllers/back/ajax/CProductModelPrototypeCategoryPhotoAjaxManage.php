@@ -81,9 +81,8 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
                 }
 
             }
-
-            return true;
         }
 
+        return true;
     }
 }
