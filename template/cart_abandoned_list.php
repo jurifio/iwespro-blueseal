@@ -49,11 +49,6 @@
                                     data-orderable="true"
                                     class="center">Data Inserimento
                                 </th>
-                                <th data-slug="user"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Utente
-                                </th>
                                 <th data-slug="email"
                                     data-searchable="true"
                                     data-orderable="true"
