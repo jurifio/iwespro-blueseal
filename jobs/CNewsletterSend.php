@@ -3,7 +3,7 @@ namespace bamboo\blueseal\jobs;
 
 use bamboo\domain\entities\COrder;
 use bamboo\core\jobs\ACronJob;
-use bamboo\domain\repositories\CNewsletterRepo;
+use bamboo\domain\repositories\CCartAbandonedSendEmailRepo;
 
 /**
  * Class CNewsletterSend

@@ -60,7 +60,7 @@ class CNewsletterTemplateManage extends AAjaxController
 
             $newsletterTemplateInsert->smartInsert();
 
-            $res = "Newsletter inserita con successo!";
+            $res = "Template inserito con successo!";
 
         }else{
             //Se hai trovato qualcosa allora restituitsci messaggio di errore

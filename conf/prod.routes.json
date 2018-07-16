@@ -2373,6 +2373,20 @@
                 "DELETE",
                 "PUT"
             ]
+        },
+        {
+            "pattern": "/blueseal/cartabandoned(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

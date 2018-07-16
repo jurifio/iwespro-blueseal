@@ -2425,6 +2425,34 @@
                 "DELETE",
                 "PUT"
             ]
+        },
+        {
+            "pattern": "/blueseal/cartabandoned(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/cartabandoned/add-plan(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedPlanEmailSendController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }
