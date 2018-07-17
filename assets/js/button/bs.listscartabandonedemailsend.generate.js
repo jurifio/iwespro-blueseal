@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-eye",
+    icon: "fa-rocket",
     permission: "/admin/product/edit&&allShops",
     event: "bs-listscartabandonedemailsend-generate",
     class: "btn btn-default",
