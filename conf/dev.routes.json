@@ -499,7 +499,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEventListController"
             },
             "filters": {
-                "campaignId": "[0-9]+"
+                "campaignId": ":?[A-Za-z0-9_-]+"
             },
             "translations": {},
             "methods": [
@@ -515,7 +515,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterInsertionListController"
             },
             "filters": {
-                "eventId": "[0-9]+"
+                "eventId": ":?[A-Za-z0-9_-]+"
             },
             "translations": {},
             "methods": [
@@ -1474,11 +1474,13 @@
             ]
         },
         {
-            "pattern": "/blueseal/newsletter-user/(/)?",
+            "pattern": "/blueseal/newsletter-user/:insertionId(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserListController"
             },
-            "filters": {},
+            "filters": {
+                "insertionId": ":?[A-Za-z0-9_-]+"
+            },
             "translations": {},
             "methods": [
                 "GET"

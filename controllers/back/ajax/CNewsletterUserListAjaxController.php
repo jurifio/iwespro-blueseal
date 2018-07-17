@@ -19,6 +19,9 @@ class CNewsletterUserListAjaxController extends AAjaxController
 
     public function get()
     {
+
+        $insertionId = \Monkey::app()->router->request()->getRequestData('insertionid');
+
         $sql = "SELECT 
                  n.id, 
                  n.newsletterCloneId AS newsletterCloneId,
@@ -31,8 +34,8 @@ class CNewsletterUserListAjaxController extends AAjaxController
                  n.subject, 
                  nc.name AS campaignId,
                  ni.name as newsletterInsertionName,
-                 ne.name as eventName
-                 
+                 ne.name as eventName,
+                 ni.id as newsletterInsertionId
                 FROM Newsletter n 
                 JOIN NewsletterInsertion ni ON n.newsletterInsertionId = ni.id
                 JOIN NewsletterEvent ne ON ni.newsletterEventId = ne.id
@@ -40,8 +43,11 @@ class CNewsletterUserListAjaxController extends AAjaxController
                 INNER JOIN EmailAddress ea ON n.fromEmailAddressId = ea.id 
                 LEFT OUTER JOIN Email e ON n.id=e.newsletterId
                 INNER JOIN NewsletterEmailList nel ON n.newsletterEmailListId = nel.id 
-                INNER JOIN NewsletterTemplate t ON n.newsletterTemplateId = t.id  ORDER BY newsletterCloneId ASC ";
+                INNER JOIN NewsletterTemplate t ON n.newsletterTemplateId = t.id
+                ORDER BY newsletterCloneId ASC ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
+
+        if($insertionId !== ":insertionId") $datatable->addCondition('newsletterInsertionId', [$insertionId]);
 
         $datatable->doAllTheThings(true);
 

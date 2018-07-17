@@ -28,12 +28,14 @@ class CNewsletterEventListAjaxController extends AAjaxController
                       n.emailSent, 
                       n.emailDelivered, 
                       n.emailOpened, 
-                      n.emailClicked 
+                      n.emailClicked,
+                      nc.id as newsletterCampaignId
                 FROM NewsletterEvent n
-                JOIN NewsletterCampaign nc ON n.newsletterCampaignId = nc.id
-                WHERE nc.id = $campaignId";
+                JOIN NewsletterCampaign nc ON n.newsletterCampaignId = nc.id";
 
         $datatable = new CDataTables($sql, ['linkId'], $_GET, true);
+
+        if($campaignId !== ":campaignId") $datatable->addCondition('newsletterCampaignId', [$campaignId]);
 
         $datatable->doAllTheThings(false);
 

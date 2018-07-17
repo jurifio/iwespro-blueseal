@@ -23,24 +23,27 @@ class CNewsletterInsertionListAjaxController extends AAjaxController
         $sql = "SELECT 
             ni.id,
             ni.name as insertionName,
-            ne.name as eventName
+            ne.name as eventName,
+            ne.id as newsletterEId
         FROM NewsletterInsertion ni
-        JOIN NewsletterEvent ne ON ne.id = ni.newsletterEventId
-        WHERE newsletterEventId = $eventId";
+        JOIN NewsletterEvent ne ON ne.id = ni.newsletterEventId";
+
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
+
+        if($eventId !== ":eventId") $datatable->addCondition('newsletterEId', [$eventId]);
 
         $datatable->doAllTheThings(false);
 
         /** @var CNewsletterInsertionRepo $insertionRepo */
         $insertionRepo = \Monkey::app()->repoFactory->create('NewsletterInsertion');
 
-
+        $url = $this->app->baseUrl(false).'/blueseal/newsletter-user/';
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             /** @var CNewsletterInsertion $ins */
             $ins = $insertionRepo->findOneBy(['id' => $row["id"]]);
             $row['row_id'] = $ins->id;
-            $row['id'] = $ins->id;
+            $row['id'] = "<a href='". $url.$ins->id . "' target='_blank'>".$ins->id."</a>";
             $row['insertionName'] = $ins->name;
             $row['eventName'] = $ins->newsletterEvent->name;
 
