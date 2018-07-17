@@ -219,7 +219,7 @@ GROUP BY C.id";
             $cartAbandonedEmailSendRepo = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend');
             $cartAbandonedEmailsSend = $cartAbandonedEmailSendRepo->findBySql($sql);
             if (empty($cartAbandonedEmailsSend)) return;
-            //  $this->report('Starting', 'Cart Reinvite to send: ' . count($cartAbandonedEmailsSend));
+            // $this->report('Starting', 'Cart Reinvite to send: ' . count($cartAbandonedEmailsSend));
             foreach ($cartAbandonedEmailsSend as $cartAbandonedEmailSend) {
 
                 $idCartAbandonedEmailSend = $cartAbandonedEmailSend->id;
