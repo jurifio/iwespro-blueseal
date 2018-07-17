@@ -51,7 +51,7 @@ class CCartAbandonedEmailSendJobs extends ACronJob
   C.cartTypeId                                           AS carTypeId,
   C.lastUpdate                                           AS lastUpdate
 FROM Cart C
-WHERE C.userId ='17370' 
+WHERE C.userId <>'' 
       AND C.cartTypeId = 1 AND C.couponId IS NULL
 GROUP BY C.id";
 
