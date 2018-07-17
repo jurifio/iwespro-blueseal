@@ -11,7 +11,7 @@ window.buttonSetup = {
 };
 
 $(document).on('bs-listscartabandonedemailsend-generate', function () {
-    let bsModal = new $.bsModal('Salva La Pianificazione', {
+    let bsModal = new $.bsModal('Invio Immediato', {
         body: '<div><p>Conferma'+
         '</div>'
     });
