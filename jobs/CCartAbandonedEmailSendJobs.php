@@ -383,6 +383,8 @@ GROUP BY C.id";
                             </tr>
 							<!--fine sezione Coupon-->";
                     $cartAmount=number_format($cartAmount,2);
+
+                    $this->debug('Punto stop', 'Ok', 'Carrelli abbandonati');
                     if ($firstSentCheck == '0') {
                         try {
 
