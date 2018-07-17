@@ -43,7 +43,7 @@ FROM Cart C
   INNER JOIN CartLine Cl ON C.id = Cl.cartId
   INNER JOIN ProductPublicSku pps ON Cl.productId = pps.productId AND Cl.productVariantId = pps.productVariantId
   INNER JOIN Product p ON Cl.productId = p.id AND Cl.productVariantId = p.productVariantId
-  left JOIN  CartAbandonedEmailSend ca ON C.id = ca.cartId
+  left outer JOIN  CartAbandonedEmailSend ca ON C.id = ca.cartId
 
 WHERE C.userId <> ''
       AND C.cartTypeId = 1
