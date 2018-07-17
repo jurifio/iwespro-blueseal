@@ -223,6 +223,7 @@ GROUP BY C.id";
 
                 $asd = $cartAbandonedEmailSendRepo->cartAbandonedEmailSend($cartAbandonedEmailSend, ENV !== 'prod', true);
                 $this->report('Esito Invio: ' . $cartAbandonedEmailSend->id, $asd);
+                $this->debug('Esito Invio: ' . $cartAbandonedEmailSend->id, $asd);
             }
             $this->report('Ending', 'inviati tutti gli inviti al Completamento dei Carrelli abbandonati');
         }
