@@ -390,11 +390,13 @@ GROUP BY C.id";
                             $message= str_replace('{emailunsuscriber}', $emailUser, $message);
                             $message= str_replace('{cartRow}', $cartRow, $message);
                             $message = str_replace('{cartAmount}', $cartAmount, $message);
-                            $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
 
                             if ($selectMailCouponSend == "1" || $selectMailCouponSend == "4") {
                                 $message = str_replace('{cartRowCoupon}', $cartRowCoupon, $message);
-                            }else{
+                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                            }else {
+                                $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
+                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
                                 $message = str_replace('{cartRowCoupon}', '', $message);
                             }
                             /* @var CEmailRepo $emailRepo */
@@ -419,6 +421,8 @@ GROUP BY C.id";
                                 $message = str_replace('{cartRowCoupon}', $cartRowCoupon, $message);
                                 $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
                             }else{
+                                $cartTotalAmount =number_format($cartAmount,2). "+ SPESE SPEDIZIONE";
+                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
                                 $message = str_replace('{cartRowCoupon}', '', $message);
                             }
 
@@ -442,13 +446,14 @@ GROUP BY C.id";
                             $message = str_replace('{emailunsuscriber}', $emailUser, $message);
                             $message = str_replace('{cartRow}', $cartRow, $message);
                             $message = str_replace('{cartAmount}', $cartAmount, $message);
-                            $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
                             if ($selectMailCouponSend == "3" || $selectMailCouponSend == "4") {
                                 $message = str_replace('{cartRowCoupon}', $cartRowCoupon, $message);
-                            }else{
+                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                            }else {
+                                $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
+                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
                                 $message = str_replace('{cartRowCoupon}', '', $message);
                             }
-
                             /* @var CEmailRepo $emailRepo */
                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
                             $res = $emailRepo->newMail($from, [$emailUser], [], [], $subject, $message, null, null, null, 'mailGun', false);
