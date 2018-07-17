@@ -445,6 +445,8 @@ GROUP BY C.id";
 
                             if ($selectMailCouponSend == "1" || $selectMailCouponSend == "4") {
                                 $message = str_replace('{cartRowCoupon}', $cartRowCoupon, $message);
+                            }else{
+                                $message = str_replace('{cartRowCoupon}', '', $message);
                             }
                             /* @var CEmailRepo $emailRepo */
                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -466,6 +468,8 @@ GROUP BY C.id";
                             $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
                             if ($selectMailCouponSend == "2" || $selectMailCouponSend == "4") {
                                 $message = str_replace('{cartRowCoupon}', $cartRowCoupon, $message);
+                            }else{
+                                $message = str_replace('{cartRowCoupon}', '', $message);
                             }
 
                             /* @var CEmailRepo $emailRepo */
@@ -491,6 +495,8 @@ GROUP BY C.id";
                             $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
                             if ($selectMailCouponSend == "3" || $selectMailCouponSend == "4") {
                                 $message = str_replace('{cartRowCoupon}', $cartRowCoupon, $message);
+                            }else{
+                                $message = str_replace('{cartRowCoupon}', '', $message);
                             }
 
                             /* @var CEmailRepo $emailRepo */
@@ -519,6 +525,7 @@ GROUP BY C.id";
                             $message = str_replace('{cartRow}', $cartRow, $message);
                             $message = str_replace('{cartAmount}', $cartAmount, $message);
                             $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                            $message = str_replace('{cartRowCoupon}', '', $message);
 
                             /* @var CEmailRepo $emailRepo */
                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -539,6 +546,7 @@ GROUP BY C.id";
                             $message = str_replace('{cartRow}', $cartRow, $message);
                             $message = str_replace('{cartAmount}', $cartAmount, $message);
                             $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                            $message = str_replace('{cartRowCoupon}', '', $message);
 
                             /* @var CEmailRepo $emailRepo */
                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
