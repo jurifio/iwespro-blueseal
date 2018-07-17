@@ -162,7 +162,7 @@ GROUP BY C.id";
                         $couponGenerate->smartInsert();
                         $getcouponId = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['code' => $serial]);
                         $idCoupon = $getcouponId->id;
-
+                        $this->debug('controllo Job carrelli abbandonati','prima della Repo');
 
                         /** var CCartAbandonedEmailSendRepo $cartAbandonedEmailSendRepo */
                         $cartAbandonedEmailSendRepo = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->getEmptyEntity();
@@ -223,7 +223,7 @@ GROUP BY C.id";
 
                 $asd = $cartAbandonedEmailSendRepo->cartAbandonedEmailSend($cartAbandonedEmailSend, ENV !== 'prod', true);
                 $this->report('Esito Invio: ' . $cartAbandonedEmailSend->id, $asd);
-                $this->debug('Esito Invio: ' . $cartAbandonedEmailSend->id, $asd);
+
             }
             $this->report('Ending', 'inviati tutti gli inviti al Completamento dei Carrelli abbandonati');
         }
