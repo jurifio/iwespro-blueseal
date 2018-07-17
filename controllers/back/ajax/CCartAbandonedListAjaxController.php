@@ -27,6 +27,9 @@ use bamboo\core\events\AEventListener;
 class CCartAbandonedListAjaxController extends AAjaxController
 {
 
+    /**
+     *
+     */
     public function get()
     {
         $sql = "SELECT
@@ -40,6 +43,7 @@ FROM Cart C
   INNER JOIN CartLine Cl ON C.id = Cl.cartId
   INNER JOIN ProductPublicSku pps ON Cl.productId = pps.productId AND Cl.productVariantId = pps.productVariantId
   INNER JOIN Product p ON Cl.productId = p.id AND Cl.productVariantId = p.productVariantId
+  INNER JOIN  CartAbandonedEmailSend ca ON C.id = ca.cartId
 
 WHERE C.userId <> ''
       AND C.cartTypeId = 1
@@ -58,6 +62,7 @@ GROUP BY C.id";
             $cartsLine = \Monkey::app()->repoFactory->create('CartLine')->findBy(['cartId' => $row['id']]);
             $row['price'] = 0;
 
+
             foreach ($cartsLine as $cartLine) {
                 $productId = $cartLine->productId;
                 $productVariantId = $cartLine->productVariantId;
@@ -75,6 +80,23 @@ GROUP BY C.id";
 
                 }
 
+
+
+            }
+            /* @var $CCartAbandonedEmailSend $cartAbandonedEmailSend */
+            $cartAbandonedEmailSend=\Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['cartId'=>$row['id']]);
+            $row['send']='';
+            $firstSentCheck=$cartAbandonedEmailSend->firstSentCheck;
+            $secondSentCheck=$cartAbandonedEmailSend->secondSentCheck;
+            $thirdSentCheck=$cartAbandonedEmailSend->thirdSentCheck;
+                if($firstSentCheck=='0' && $secondSentCheck=='0' && $thirdSentCheck =='0' ) {
+                $row['send'] = "<span class=\"label label-warning\">Invii In Programmazione</span>";
+            }elseif($firstSentCheck=='1' && $secondSentCheck=='0' && $thirdSentCheck =='0' ){
+                $row['send']="<span class=\"label label-success\">Primo Invio Completato</span>";
+            }elseif($firstSentCheck=='1' && $secondSentCheck=='1' && $thirdSentCheck =='0' ){
+                $row['send']="<span class=\"label label-success\">Secondo Invio Completato</span>";
+            }else{
+                $row['send']="<span class=\"label label-success\">Terzo Invio Invio Completato</span>";
             }
 
 

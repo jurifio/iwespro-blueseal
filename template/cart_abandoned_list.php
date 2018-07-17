@@ -52,7 +52,12 @@
                                 <th data-slug="email"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">email
+                                    class="center">Email
+                                </th>
+                                <th data-slug="send"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Stato Invii
                                 </th>
                                 <th data-slug="price"
                                     data-searchable="true"
