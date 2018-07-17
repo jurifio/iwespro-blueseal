@@ -102,7 +102,7 @@ GROUP BY C.id";
   C.cartTypeId                                           AS carTypeId,
   C.lastUpdate                                           AS lastUpdate
 FROM Cart C
-WHERE C.userId ='17212'
+WHERE C.userId ='17370'
       AND C.cartTypeId = 1 AND C.couponId IS NULL
 GROUP BY C.id";
 
