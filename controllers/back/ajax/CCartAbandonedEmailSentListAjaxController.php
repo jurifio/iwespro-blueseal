@@ -24,7 +24,7 @@ use bamboo\utils\time\STimeToolbox;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\core\events\AEventListener;
 
-class CCartAbandonedListAjaxController extends AAjaxController
+class CCartAbandonedEmailSentListAjaxController extends AAjaxController
 {
 
     /**
@@ -43,6 +43,7 @@ FROM Cart C
   INNER JOIN CartLine Cl ON C.id = Cl.cartId
   INNER JOIN ProductPublicSku pps ON Cl.productId = pps.productId AND Cl.productVariantId = pps.productVariantId
   INNER JOIN Product p ON Cl.productId = p.id AND Cl.productVariantId = p.productVariantId
+   right JOIN  CartAbandonedEmailSend ca ON C.id = ca.cartId
 
 WHERE C.userId <> ''
       AND C.cartTypeId = 1
@@ -82,7 +83,21 @@ GROUP BY C.id";
 
 
             }
-
+            /* @var $CCartAbandonedEmailSend $cartAbandonedEmailSend */
+            $cartAbandonedEmailSend=\Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['cartId'=>$row['id']]);
+            $row['send']='';
+            $firstSentCheck=$cartAbandonedEmailSend->firstSentCheck;
+            $secondSentCheck=$cartAbandonedEmailSend->secondSentCheck;
+            $thirdSentCheck=$cartAbandonedEmailSend->thirdSentCheck;
+                if($firstSentCheck=='0' && $secondSentCheck=='0' && $thirdSentCheck =='0' ) {
+                $row['send'] = "<span class=\"label label-warning\">Invii In Programmazione</span>";
+            }elseif($firstSentCheck=='1' && $secondSentCheck=='0' && $thirdSentCheck =='0' ){
+                $row['send']="<span class=\"label label-success\">Primo Invio Completato</span>";
+            }elseif($firstSentCheck=='1' && $secondSentCheck=='1' && $thirdSentCheck =='0' ){
+                $row['send']="<span class=\"label label-success\">Secondo Invio Completato</span>";
+            }else{
+                $row['send']="<span class=\"label label-success\">Terzo Invio Invio Completato</span>";
+            }
 
 
             $row['price'] = "<span class=\"label label-warning\">" . SPriceToolbox::formatToEur($row['price'], true) . "</span>";

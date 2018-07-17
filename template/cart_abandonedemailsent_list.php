@@ -32,7 +32,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="wishlist_list"
-                               data-controller="CartAbandonedListAjaxController"
+                               data-controller="CartAbandonedEmailSentListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
@@ -53,6 +53,11 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Email
+                                </th>
+                                <th data-slug="send"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Stato Invii
                                 </th>
                                 <th data-slug="price"
                                     data-searchable="true"
