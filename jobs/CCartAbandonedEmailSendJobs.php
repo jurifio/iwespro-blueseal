@@ -100,8 +100,8 @@ GROUP BY C.id";
                       couponTypeId,
                       selectMailCouponSend
    FROM CartAbandonedEmailParam LIMIT 1";
-            /** @var CCartAbandonedEmailParam $cartAbandonedEmailParam */
-            $cartAbandonedEmailsParam = \Monkey::app()->repoFactory->create('CartAbandonedEmailParam')->findbySql($sqlCartAbandonedEmailParam);
+            /** @var CObjectCollection $cartAbandonedEmailParam */
+            $cartAbandonedEmailsParam = \Monkey::app()->repoFactory->create('CartAbandonedEmailParam')->findBySql($sqlCartAbandonedEmailParam);
             foreach($cartAbandonedEmailsParam as $cartAbandonedEmailParam) {
                 $firstTemplateId = $cartAbandonedEmailParam->firstTemplateId;
                 $firstEmailTemplate = $cartAbandonedEmailParam->firstEmailTemplate;
@@ -162,51 +162,51 @@ GROUP BY C.id";
                         $couponGenerate->smartInsert();
                         $getcouponId = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['code' => $serial]);
                         $idCoupon = $getcouponId->id;
-                        $this->debug('controllo Job carrelli abbandonati','prima della Repo');
 
-                        /** var CCartAbandonedEmailSendRepo $cartAbandonedEmailSendRepo */
-                        $cartAbandonedEmailSendRepo = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->getEmptyEntity();
-                        $cartAbandonedEmailSendRepo->cartId = $cartId;
-                        $cartAbandonedEmailSendRepo->userId = $customer;
-                        $cartAbandonedEmailSendRepo->firstTemplateId = $firstTemplateId;
-                        $cartAbandonedEmailSendRepo->firstEmailTemplate = $firstEmailTemplate;
+
+                        /** var CCartAbandonedEmailSend $cartAbandonedEmailSend */
+                        $cartAbandonedEmailSend = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->getEmptyEntity();
+                        $cartAbandonedEmailSend->cartId = $cartId;
+                        $cartAbandonedEmailSend->userId = $customer;
+                        $cartAbandonedEmailSend->firstTemplateId = $firstTemplateId;
+                        $cartAbandonedEmailSend->firstEmailTemplate = $firstEmailTemplate;
                         $firstEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $firstTimeEmailSendDay . ' Day  +' . $firstTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
-                        $cartAbandonedEmailSendRepo->firstTimeEmailSendDate = $firstEmailSendDate;
-                        $cartAbandonedEmailSendRepo->secondTemplateId = $secondTemplateId;
-                        $cartAbandonedEmailSendRepo->secondEmailTemplate = $secondEmailTemplate;
+                        $cartAbandonedEmailSend->firstTimeEmailSendDate = $firstEmailSendDate;
+                        $cartAbandonedEmailSend->secondTemplateId = $secondTemplateId;
+                        $cartAbandonedEmailSend->secondEmailTemplate = $secondEmailTemplate;
                         $secondEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $secondTimeEmailSendDay . ' Day  +' . $secondTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
-                        $cartAbandonedEmailSendRepo->secondTimeEmailSendDate = $secondEmailSendDate;
-                        $cartAbandonedEmailSendRepo->thirdTemplateId = $thirdTemplateId;
-                        $cartAbandonedEmailSendRepo->thirdEmailTemplate = $thirdEmailTemplate;
+                        $cartAbandonedEmailSend->secondTimeEmailSendDate = $secondEmailSendDate;
+                        $cartAbandonedEmailSend->thirdTemplateId = $thirdTemplateId;
+                        $cartAbandonedEmailSend->thirdEmailTemplate = $thirdEmailTemplate;
                         $thirdEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $thirdTimeEmailSendDay . ' Day  +' . $thirdTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
-                        $cartAbandonedEmailSendRepo->thirdTimeEmailSendDate = $thirdEmailSendDate;
-                        $cartAbandonedEmailSendRepo->couponId = $idCoupon;
-                        $cartAbandonedEmailSendRepo->couponTypeId = $couponTypeId;
-                        $cartAbandonedEmailSendRepo->selectMailCouponSend = $selectMailCouponSend;
-                        $cartAbandonedEmailSendRepo->smartInsert();
+                        $cartAbandonedEmailSend->thirdTimeEmailSendDate = $thirdEmailSendDate;
+                        $cartAbandonedEmailSend->couponId = $idCoupon;
+                        $cartAbandonedEmailSend->couponTypeId = $couponTypeId;
+                        $cartAbandonedEmailSend->selectMailCouponSend = $selectMailCouponSend;
+                        $cartAbandonedEmailSend->smartInsert();
                     }
 
 
                 } else {
-                    $cartAbandonedEmailSendRepo = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->getEmptyEntity();
-                    $cartAbandonedEmailSendRepo->cartId = $cartId;
-                    $cartAbandonedEmailSendRepo->userId = $customer;
-                    $cartAbandonedEmailSendRepo->firstTemplateId = $firstTemplateId;
-                    $cartAbandonedEmailSendRepo->firstEmailTemplate = $firstEmailTemplate;
+                    $cartAbandonedEmailSend = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->getEmptyEntity();
+                    $cartAbandonedEmailSend->cartId = $cartId;
+                    $cartAbandonedEmailSend->userId = $customer;
+                    $cartAbandonedEmailSend->firstTemplateId = $firstTemplateId;
+                    $cartAbandonedEmailSend->firstEmailTemplate = $firstEmailTemplate;
                     $firstEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $firstTimeEmailSendDay . ' Day  +' . $firstTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
-                    $cartAbandonedEmailSendRepo->firstTimeEmailSendDate = $firstEmailSendDate;
-                    $cartAbandonedEmailSendRepo->secondTemplateId = $secondTemplateId;
-                    $cartAbandonedEmailSendRepo->secondEmailTemplate = $secondEmailTemplate;
+                    $cartAbandonedEmailSend->firstTimeEmailSendDate = $firstEmailSendDate;
+                    $cartAbandonedEmailSend->secondTemplateId = $secondTemplateId;
+                    $cartAbandonedEmailSend->secondEmailTemplate = $secondEmailTemplate;
                     $secondEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $secondTimeEmailSendDay . ' Day  +' . $secondTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
-                    $cartAbandonedEmailSendRepo->secondTimeEmailSendDate = $secondEmailSendDate;
-                    $cartAbandonedEmailSendRepo->thirdTemplateId = $thirdTemplateId;
-                    $cartAbandonedEmailSendRepo->thirdEmailTemplate = $thirdEmailTemplate;
+                    $cartAbandonedEmailSend->secondTimeEmailSendDate = $secondEmailSendDate;
+                    $cartAbandonedEmailSend->thirdTemplateId = $thirdTemplateId;
+                    $cartAbandonedEmailSend->thirdEmailTemplate = $thirdEmailTemplate;
                     $thirdEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $thirdTimeEmailSendDay . ' Day  +' . $thirdTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
-                    $cartAbandonedEmailSendRepo->thirdTimeEmailSendDate = $thirdEmailSendDate;
-                    $cartAbandonedEmailSendRepo->couponId = '';
-                    $cartAbandonedEmailSendRepo->couponTypeId = '';
-                    $cartAbandonedEmailSendRepo->selectMailCouponSend = $selectMailCouponSend;
-                    $cartAbandonedEmailSendRepo->smartInsert();
+                    $cartAbandonedEmailSend->thirdTimeEmailSendDate = $thirdEmailSendDate;
+                    $cartAbandonedEmailSend->couponId = '';
+                    $cartAbandonedEmailSend->couponTypeId = '';
+                    $cartAbandonedEmailSend->selectMailCouponSend = $selectMailCouponSend;
+                    $cartAbandonedEmailSend->smartInsert();
 
 
                 }
@@ -221,7 +221,7 @@ GROUP BY C.id";
             $this->report('Starting', 'Cart Reinvite to send: ' . count($cartAbandonedEmailsSend));
             foreach ($cartAbandonedEmailsSend as $cartAbandonedEmailSend) {
 
-                $asd = $cartAbandonedEmailSendRepo->cartAbandonedEmailSend($cartAbandonedEmailSend, ENV !== 'prod', true);
+                $asd = $cartAbandonedEmailSendRepo->cartAbandonedEmailSend($cartAbandonedEmailSend, ENV !== 'dev', true);
                 $this->report('Esito Invio: ' . $cartAbandonedEmailSend->id, $asd);
 
             }
