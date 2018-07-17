@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-listscartabandonedemailsend-generate",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Esporta in CSV",
+    title: "Invia Email agli Utenti per i Carrelli Abbandonati",
     placement: "bottom",
     toggle: "modal"
 };
