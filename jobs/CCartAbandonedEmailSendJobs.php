@@ -3,18 +3,20 @@
 namespace bamboo\blueseal\jobs;
 
 use bamboo\domain\entities\CCartAbandonedEmailSend;
+use bamboo\domain\repositories\CCartAbandonedEmailSendRepo;
 use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\CCart;
-use bamboo\domain\entities\CCartAbandonedEmail;
 use bamboo\domain\entities\CCartAbandonedEmailParam;
 use bamboo\domain\entities\CCouponType;
 use bamboo\domain\entities\CCoupon;
 use bamboo\domain\entities\CCartLine;
 use bamboo\core\base\CSerialNumber;
+use bamboo\core\db\pandaorm\repositories\ARepo;
 
 use bamboo\core\jobs\ACronJob;
 use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProduct;
+use bamboo\core\events\AEventListener;
 
 
 /**
@@ -30,7 +32,7 @@ use bamboo\domain\entities\CProduct;
  * @date 10/07/2018
  * @since 1.0
  */
-class CCartAbandonedSendEmail extends ACronJob
+class CCartAbandonedEmailSendJobs extends ACronJob
 {
     /**
      * @param null $args
@@ -99,21 +101,23 @@ GROUP BY C.id";
                       selectMailCouponSend
    FROM CartAbandonedEmailParam LIMIT 1";
             /** @var CCartAbandonedEmailParam $cartAbandonedEmailParam */
-            $cartAbandonedEmailParam = \Monkey::app()->repoFactory->create('CartAbandonedEmailParam')->findbySql($sqlCartAbandonedEmailParam);
-            $firstTemplateId = $cartAbandonedEmailParam->firstTemplateId;
-            $firstEmailTemplate = $cartAbandonedEmailParam->firstEmailTemplate;
-            $firstTimeEmailSendDay = $cartAbandonedEmailParam->firstTimeEmailSendDay;
-            $firstTimeEmailSendHour = $cartAbandonedEmailParam->firstTimeEmailSendHour;
-            $secondTemplateId = $cartAbandonedEmailParam->secondTemplateId;
-            $secondEmailTemplate = $cartAbandonedEmailParam->secondEmailTemplate;
-            $secondTimeEmailSendDay = $cartAbandonedEmailParam->secondTimeEmailSendDay;
-            $secondTimeEmailSendHour = $cartAbandonedEmailParam->firstTimeEmailSendHour;
-            $thirdTemplateId = $cartAbandonedEmailParam->thirdTemplateId;
-            $thirdEmailTemplate = $cartAbandonedEmailParam->thirdEmailTemplate;
-            $thirdTimeEmailSendDay = $cartAbandonedEmailParam->thirdTimeEmailSendDay;
-            $thirdTimeEmailSendHour = $cartAbandonedEmailParam->thirdTimeEmailSendHour;
-            $couponTypeId = $cartAbandonedEmailParam->couponTypeId;
-            $selectMailCouponSend = $cartAbandonedEmailParam->selectMailCouponSend;
+            $cartAbandonedEmailsParam = \Monkey::app()->repoFactory->create('CartAbandonedEmailParam')->findbySql($sqlCartAbandonedEmailParam);
+            foreach($cartAbandonedEmailsParam as $cartAbandonedEmailParam) {
+                $firstTemplateId = $cartAbandonedEmailParam->firstTemplateId;
+                $firstEmailTemplate = $cartAbandonedEmailParam->firstEmailTemplate;
+                $firstTimeEmailSendDay = $cartAbandonedEmailParam->firstTimeEmailSendDay;
+                $firstTimeEmailSendHour = $cartAbandonedEmailParam->firstTimeEmailSendHour;
+                $secondTemplateId = $cartAbandonedEmailParam->secondTemplateId;
+                $secondEmailTemplate = $cartAbandonedEmailParam->secondEmailTemplate;
+                $secondTimeEmailSendDay = $cartAbandonedEmailParam->secondTimeEmailSendDay;
+                $secondTimeEmailSendHour = $cartAbandonedEmailParam->firstTimeEmailSendHour;
+                $thirdTemplateId = $cartAbandonedEmailParam->thirdTemplateId;
+                $thirdEmailTemplate = $cartAbandonedEmailParam->thirdEmailTemplate;
+                $thirdTimeEmailSendDay = $cartAbandonedEmailParam->thirdTimeEmailSendDay;
+                $thirdTimeEmailSendHour = $cartAbandonedEmailParam->thirdTimeEmailSendHour;
+                $couponTypeId = $cartAbandonedEmailParam->couponTypeId;
+                $selectMailCouponSend = $cartAbandonedEmailParam->selectMailCouponSend;
+            }
             /* @var CCartAbandonedSendEmailIfExist $cartAbandonedSendEmailIfExist */
             $cartAbandonedSendEmailIfExist = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['cartId' => $cartId]);
             if (empty($cartAbandonedSendEmailIfExist)) {
@@ -211,13 +215,13 @@ GROUP BY C.id";
             $sql = "SELECT * FROM CartAbandonedEmailSend WHERE DATE_FORMAT(now(),'%Y%m%d%H%i') = DATE_FORMAT(firstTimeEmailSendDate, '%Y%m%d%H%i') AND DATE_FORMAT(now(),'%Y%m%d%H%i') = DATE_FORMAT(secondTimeEmailSendDate
             , '%Y%m%d%H%i')  AND DATE_FORMAT(now(),'%Y%m%d%H%i') = DATE_FORMAT(thirdTimeEmailSendDate, '%Y%m%d%H%i')";
             /** @var CCartAbandonedEmailSendRepo $cartAbandonedEmailSendRepo */
-            $cartAbandonedEmailSendRepo = \Monkey::app()->repoFactory->create('CartAbandonedSendEmail');
+            $cartAbandonedEmailSendRepo = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend');
             $cartAbandonedEmailsSend = $cartAbandonedEmailSendRepo->findBySql($sql);
             if (empty($cartAbandonedEmailsSend)) return;
             $this->report('Starting', 'Cart Reinvite to send: ' . count($cartAbandonedEmailsSend));
             foreach ($cartAbandonedEmailsSend as $cartAbandonedEmailSend) {
 
-                $asd = $cartAbandonedEmailSendRepo->cartAbandonedSendEmail($cartAbandonedEmailSend, ENV !== 'prod', true);
+                $asd = $cartAbandonedEmailSendRepo->cartAbandonedEmailSend($cartAbandonedEmailSend, ENV !== 'prod', true);
                 $this->report('Esito Invio: ' . $cartAbandonedEmailSend->id, $asd);
             }
             $this->report('Ending', 'inviati tutti gli inviti al Completamento dei Carrelli abbandonati');
