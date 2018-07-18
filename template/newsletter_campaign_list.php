@@ -65,6 +65,11 @@
                                     data-orderable="true"
                                     class="center">Eventi collegati
                                 </th>
+                                <th data-slug="newsletterShop"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Mittente Campagna
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

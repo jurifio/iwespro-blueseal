@@ -96,9 +96,9 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="fromEmailAddressId">no-reply@.pickyshop.com</label>
+                                                <label for="fromEmailAddressId">Email Mittente</label>
                                                 <input type="hidden" class="form-control" id="fromEmailAddressId"
-                                                       name="fromEmailAddressId" value="1"/>
+                                                       name="fromEmailAddressId" value=""/>
                                             </div>
                                         </div>
                                     </div>

@@ -29,6 +29,17 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
+                                                <label for="nameShop">Mittente della campagna</label>
+                                                <select name="nameShop" id="nameShop">
+                                                    <option disabled selected value>Seleziona un mittente</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
                                                 <label for="name">Nome Campagna</label>
                                                 <input id="name" class="form-control"
                                                        placeholder="Inserisci il nome della Campagna" name="name"

@@ -23,9 +23,11 @@ class CNewsletterCampaignListAjaxController extends AAjaxController
                         n.name,  
                         n.dateCampaignStart, 
                         n.dateCampaignFinish,
-                        group_concat(concat(ne.id,' | ',ne.name)) as events 
+                        group_concat(concat(ne.id,' | ',ne.name)) as events,
+                        ns.name as newsletterShop
                     from NewsletterCampaign n
                     LEFT JOIN NewsletterEvent ne ON n.id = ne.newsletterCampaignId
+                    LEFT JOIN NewsletterShop ns ON ns.id = n.newsletterShopId
                     GROUP BY n.id
                     ";
         $datatable = new CDataTables($sql, ['linkId'], $_GET, true);
@@ -44,6 +46,7 @@ class CNewsletterCampaignListAjaxController extends AAjaxController
             $row['name'] = $nc->name;
             $row['dateCampaignStart'] = $nc->dateCampaignStart;
             $row['dateCampaignFinish'] = $nc->dateCampaignFinish;
+
             $evs = $nc->newsletterEvent;
 
             $allEvents = '';
@@ -53,6 +56,8 @@ class CNewsletterCampaignListAjaxController extends AAjaxController
             }
 
             $row['events'] = $allEvents;
+
+            $row["newsletterShop"] = is_null($nc->newsletterShop) ? '---' : $nc->newsletterShop->name;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

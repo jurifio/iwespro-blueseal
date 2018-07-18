@@ -1,9 +1,29 @@
 (function ($) {
 
-    Pace.ignore(function () {
+    $(document).ready(function () {
 
-    })
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'NewsletterShop'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select = $('#nameShop');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
+        });
+
+    });
 })(jQuery);
+
+
 
 $(document).on('bs.newNewsletterCampaign.save', function () {
     let bsModal = new $.bsModal('Salva Campagna', {
