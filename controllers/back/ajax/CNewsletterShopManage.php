@@ -1,5 +1,7 @@
 <?php
 namespace bamboo\controllers\back\ajax;
+use bamboo\domain\entities\CNewsletterCampaign;
+use bamboo\domain\entities\CNewsletterInsertion;
 
 /**
  * Class CNewsletterShopManage
@@ -18,6 +20,16 @@ class CNewsletterShopManage extends AAjaxController
 {
     public function get()
     {
+        $insertionId = \Monkey::app()->router->request()->getRequestData('insertionId');
+
+
+        /** @var CNewsletterInsertion $ins */
+        $ins = \Monkey::app()->repoFactory->create('newsletterInsertion')->findOneBy(["id"=>$insertionId]);
+
+        $res['campaignId'] = $ins->newsletterEvent->newsletterCampaign->id;
+        $res['eventId'] = $ins->newsletterEvent->id;
+
+        return json_encode($res);
 
     }
 }

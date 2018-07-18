@@ -283,6 +283,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                         }
                     }
                 });
+
             });
 
 
@@ -352,6 +353,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                 });
             });
 
+            let z = 3;
         }
 
     });
@@ -595,23 +597,5 @@ $(document).on('bs.newNewsletterUser.sendTest', function () {
     });
 });
 
-
-$(document).ready(function () {
-
-    $.ajax({
-        url: '/blueseal/xhr/NewsletterShopManage',
-        method: 'get',
-        dataType: 'json',
-        data: {
-
-        }
-    }).done(function(res) {
-        modal.writeBody(res.message);
-        dataTable.ajax.reload(false, null);
-    });
-
-    $('#fromEmailAddressId').val()
-
-});
 
 
