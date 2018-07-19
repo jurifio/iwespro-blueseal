@@ -129,6 +129,40 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 
 (function ($) {
 
+    $(document).ready(function () {
+
+        let insertionId = new URL(window.location.href).searchParams.get("insertionId");
+        if(insertionId !== ':insertionId' && insertionId !== null) {
+
+            $('.col-pres-c').show();
+            $.ajax({
+                url: '/blueseal/xhr/NewsletterShopManage',
+                method: 'get',
+                dataType: 'json',
+                data: {
+                    insertionId: insertionId
+                }
+            }).done(function(res) {
+                let prescamp = $('#pres-camp');
+                let presevent = $('#pres-event');
+                let presinse = $('#pres-inse');
+
+                prescamp.attr('data-spec',res.campaignId);
+                prescamp.val(res.campaignName);
+                presevent.attr('data-spec',res.eventId);
+                presevent.val(res.eventName);
+                presinse.attr('data-spec',insertionId);
+                presinse.val(res.insertionName);
+                $('#fromEmailAddressId').val(res.emailId);
+                $('#fromEmailAddress').val(res.email)
+            });
+        } else {
+            $('.col-pres-c').hide();
+        }
+
+    });
+
+
     var select = $('#filteredField');
     var newOptions = {
         'empty':'',
@@ -141,14 +175,23 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         var option = new Option(key, text);
         select.append($(option));
     });
+
+
     $("#filteredField").change(function () {
         var selection = $(this).val();
+        $('.col-pres-c').hide();
+        $('#pres-camp').val('').attr('data-spec','');
+        $('#pres-event').val('').attr('data-spec','');
+        $('#pres-inse').val('').attr('data-spec','');
+        $('#fromEmailAddressId').val('');
+        $('#fromEmailAddress').val('');
 
         if (selection == 'new') {
             $('#inputCampaign').empty();
             $('#inputEvent').empty();
 
-            $("#inputCampaign").append('<div class=\"row\">' +
+            $("#inputCampaign").append(
+                '<div class=\"row\">' +
                 '<div class=\"col-md-12\">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
                 '<label for=\"campaignName\">Inserisci il nome della Campagna </label>' +
@@ -157,6 +200,16 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                 '</div>' +
                 '</div>' +
                 '</div>'+
+                '<div class="row">' +
+                '<div class="col-md-12">' +
+                '<div class="form-group form-group-default selectize-enabled">' +
+                '<label for="nameShop">Mittente della campagna</label>' +
+                '<select name="nameShop" id="nameShop">' +
+                '<option disabled selected value>Seleziona un mittente</option>' +
+                '</select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
                 '<div class=\"row\">' +
                 '<div class=\"col-md-12\">' +
                 '<div class=\"form-group form-group-default selectize-enabled\">' +
@@ -195,7 +248,23 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                 '</div>'
             );
 
-
+            $.ajax({
+                method:'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'NewsletterShop'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select = $('#nameShop');
+                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'fromEmailAddressId',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: res2,
+                });
+            });
         } else {
             $('#inputCampaign').empty();
             $("#inputCampaign").append('<div class=\"row\">' +
@@ -286,9 +355,23 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 
             });
 
-
             $("#campaignId").change(function () {
+
                 var selection = $(this).val();
+
+                $.ajax({
+                    url: '/blueseal/xhr/NewsletterShopManage',
+                    method: 'get',
+                    dataType: 'json',
+                    data: {
+                        campaignId: selection
+                    }
+                }).done(function(emailInformation) {
+                    $('#fromEmailAddressId').val(emailInformation.emailId);
+                    $('#fromEmailAddress').val(emailInformation.email);
+                });
+
+
                 $('#inputEvent').empty();
                 $('#inputInsertion').empty();
                 $("#inputEvent").append('<div class=\"row\">' +
@@ -352,11 +435,30 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                     });
                 });
             });
-
-            let z = 3;
         }
 
+        $('#nameShop').change(function () {
+
+            let emailAddress = $(this).val();
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'EmailAddress',
+                    condition: {id: emailAddress}
+                },
+                dataType: 'json'
+            }).done(function (emailAddress) {
+                $('#fromEmailAddressId').val(emailAddress[0].id);
+                $('#fromEmailAddress').val(emailAddress[0].address);
+            });
+
+
+        });
     });
+
+
 
     $("#newsletterTemplateId").change(function () {
         var content1 = $(this).val();
@@ -417,14 +519,20 @@ $(document).on('bs.newNewsletterUser.save', function () {
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
-        let campaignIdPost=$('#campaignId').val();
-        let campaignNamePost = $('#campaignName').val();
-        let campaignEventIdPost=$('#newsletterEventId').val();
-        let campaignDateStartPost=$('#dateCampaignStart').val();
+
+        let prescamp = $('#pres-camp');
+        let presevent = $('#pres-event');
+        let presinse = $('#pres-inse');
+
+
+        let campaignIdPost = prescamp.attr('data-spec') === "" ? $('#campaignId').val() : prescamp.attr('data-spec');
+        let campaignNamePost = prescamp.val() === "" ? $('#campaignName').val() : prescamp.val();
+        let campaignEventIdPost = presevent.attr('data-spec') === "" ? $('#newsletterEventId').val() : presevent.attr('data-spec');
+        let campaignEventNamePost= presevent.val() === "" ? $('#newsletterEventName').val() : presevent.val();
+        let newsletterInsertionId = presinse.attr('data-spec') === "" ? $('#newsletterInsertionId').val() : presinse.attr('data-spec');
+        let newsletterInsertionName = presinse.val() === "" ? $('#newsletterInsertionName').val() : presinse.val();
+        let campaignDateStartPost = $('#dateCampaignStart').val();
         let campaignDateFinishPost=$('#dateCampaignFinish').val();
-        let campaignEventNamePost=$('#newsletterEventName').val();
-        let newsletterInsertionId = $('#newsletterInsertionId').val();
-        let newsletterInsertionName = $('#newsletterInsertionName').val();
         let typeOperation="1";
         if (typeof campaignIdPost === "undefined") {
             campaignIdPost = "";
@@ -496,7 +604,7 @@ $(document).on('bs.newNewsletterUser.save', function () {
             bsModal.writeBody(res);
         }).always(function (res) {
             bsModal.setOkEvent(function () {
-                window.location.replace('/blueseal/newsletter-user');
+                window.location.replace('/blueseal/dashboard');
                 bsModal.hide();
                 });
             bsModal.showOkBtn();

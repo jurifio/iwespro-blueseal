@@ -2,6 +2,7 @@
 namespace bamboo\controllers\back\ajax;
 use bamboo\domain\entities\CNewsletterCampaign;
 use bamboo\domain\entities\CNewsletterInsertion;
+use bamboo\domain\entities\CNewsletterShop;
 
 /**
  * Class CNewsletterShopManage
@@ -21,13 +22,36 @@ class CNewsletterShopManage extends AAjaxController
     public function get()
     {
         $insertionId = \Monkey::app()->router->request()->getRequestData('insertionId');
+        $campaignId = \Monkey::app()->router->request()->getRequestData('campaignId');
+        $newsletterShopId = \Monkey::app()->router->request()->getRequestData('newsletterShopId');
+        $res = null;
 
+        if($insertionId) {
+            /** @var CNewsletterInsertion $ins */
+            $ins = \Monkey::app()->repoFactory->create('NewsletterInsertion')->findOneBy(["id" => $insertionId]);
 
-        /** @var CNewsletterInsertion $ins */
-        $ins = \Monkey::app()->repoFactory->create('newsletterInsertion')->findOneBy(["id"=>$insertionId]);
+            $res['campaignId'] = $ins->newsletterEvent->newsletterCampaign->id;
+            $res['campaignName'] = $ins->newsletterEvent->newsletterCampaign->name;
+            $res['eventId'] = $ins->newsletterEvent->id;
+            $res['eventName'] = $ins->newsletterEvent->name;
+            $res['insertionName'] = $ins->name;
+            $res['emailId'] = $ins->newsletterEvent->newsletterCampaign->newsletterShop->fromEmailAddressId;
+            $res['email'] = $ins->newsletterEvent->newsletterCampaign->newsletterShop->emailAddress->address;
+        }
 
-        $res['campaignId'] = $ins->newsletterEvent->newsletterCampaign->id;
-        $res['eventId'] = $ins->newsletterEvent->id;
+        if($campaignId) {
+            /** @var CNewsletterCampaign $cam */
+            $cam = \Monkey::app()->repoFactory->create('NewsletterCampaign')->findOneBy(["id" => $campaignId]);
+            $res['emailId'] = $cam->newsletterShop->fromEmailAddressId;
+            $res['email'] = $cam->newsletterShop->emailAddress->address;
+        }
+
+        if($newsletterShopId) {
+            /** @var CNewsletterShop $shop */
+            $shop = \Monkey::app()->repoFactory->create('NewsletterShop')->findOneBy(["id" => $newsletterShopId]);
+            $res['emailId'] = $shop->fromEmailAddressId;
+            $res['email'] = $shop->emailAddress->address;
+        }
 
         return json_encode($res);
 

@@ -4,9 +4,11 @@ namespace bamboo\controllers\back\ajax;
 
 use Aws\DynamoDb\Model\Attribute;
 use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\core\email\CEmail;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooORMInvalidEntityException;
 use bamboo\core\exceptions\BambooORMReadOnlyException;
+use bamboo\domain\entities\CEmailAddress;
 use bamboo\domain\entities\CNewsletter;
 use bamboo\domain\entities\CNewsletterCampaign;
 use bamboo\domain\entities\CNewsletterEvent;
@@ -62,9 +64,12 @@ class CNewsletterUserManage extends AAjaxController
 
             if (empty($campaignId)) {
 
+                /** @var CEmailAddress $ea */
+                $ea = \Monkey::app()->repoFactory->create('EmailAddress')->findOneBy(['id'=>$fromEmailAddressId]);
                 /** @var CNewsletterCampaign $newsletterCampaignInsert */
                 $newsletterCampaignInsert = \Monkey::app()->repoFactory->create('NewsletterCampaign')->getEmptyEntity();
                 $newsletterCampaignInsert->name = $campaignName;
+                $newsletterCampaignInsert->newsletterShopId=$ea->newsletterShop->id;
                 $newsletterCampaignInsert->dateCampaignStart = $dateCampaignStart;
                 $newsletterCampaignInsert->dateCampaignFinish = $dateCampaignFinish;
                 $newsletterCampaignInsert->smartInsert();

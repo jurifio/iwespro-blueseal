@@ -33,6 +33,20 @@
                                     <h5 class="m-t-10">Crea Inserzione Newsletter</h5>
                                 </div>
                                 <div class="panel-body clearfix">
+
+                                    <div class="row col-pres-c">
+                                        <div class="col-md-12">
+                                            <p>Campagna preselezionata</p>
+                                            <input type="text" value="" disabled id="pres-camp" data-spec="">
+
+                                            <p>Evento preselezionato</p>
+                                            <input type="text" value="" id="pres-event" disabled data-spec="">
+
+                                            <p>Inserzione preselezionata</p>
+                                            <input type="text" value="" id="pres-inse" disabled data-spec="">
+                                        </div>
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -96,9 +110,11 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="fromEmailAddressId">Email Mittente</label>
+                                                <label for="fromEmailAddress">Email Mittente</label>
                                                 <input type="hidden" class="form-control" id="fromEmailAddressId"
                                                        name="fromEmailAddressId" value=""/>
+                                                <input type="text" class="form-control" id="fromEmailAddress"
+                                                       disabled name="fromEmailAddress" value=""/>
                                             </div>
                                         </div>
                                     </div>
