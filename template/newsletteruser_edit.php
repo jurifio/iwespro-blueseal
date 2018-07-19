@@ -30,56 +30,47 @@
                         <div class="col-md-6">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Modifica Inserzione Newsletter</h5>
+                                    <h5 class="m-t-10">Modifica Newsletter</h5>
                                     <input type ="hidden" name="newsletterId"
                                            id="newsletterId"
                                            value="<?php echo $newsletter->id;?>"/>
                                 </div>
                                 <div class="panel-body clearfix">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="filteredField">Seleziona se Creare una Campagna o selezionarla</label>
-                                                <select id="filteredField" name="filteredField"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Seleziona l\'opzione"
-                                                        data-init-plugin="selectize">
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div id="inputCampaign">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="campaignName">Campagna</label>
-                                                    <select id="campaignName" name="campaignName"  class="full-width selectpicker"
-                                                            placeholder="Seleziona la Lista"
-                                                            data-init-plugin="selectize">
-                                                        <option value="<?php echo $newsletterCampaign->id;?>"><?php echo $newsletterCampaign->name;?>
-                                                        </option>
-                                                    </select>
+                                                    <input type="hidden" id="campaignName" value="<?php echo $newsletterCampaign->id;?>">
+                                                    <p><?php echo $newsletterCampaign->name; ?></p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="dateCampaignStart">Data Inizio Campagna:<?php echo $newsletterCampaign->dateCampaignStart;?></label>
-                                                    <input type="datetime" name="dateCampaignStart" value="<?php echo $newsletterCampaign->dateCampaignStart;?>"/>
-
+                                                    <label>Data Inizio Campagna:</label>
+                                                    <p><?php echo $newsletterCampaign->dateCampaignStart;?></p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="dateCampaignFinish">Data Fine Campagna:<?php echo $newsletterCampaign->dateCampaignFinish;?></label>
-                                                    <input type="datetime" name="dateCampaignFinish" value="<?php echo $newsletterCampaign->dateCampaignFinish;?>"/>
-
+                                                    <label>Data Fine Campagna:</label>
+                                                    <p><?php echo $newsletterCampaign->dateCampaignFinish;?></p>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label>Mittente</label>
+                                                    <p><?php echo $newsletterCampaign->newsletterShop->name;?></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
 
 
                                     </div>
@@ -87,15 +78,9 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="newsletterEventName">Evento della Campagna</label>
-                                                    <select id="newsletterEventName" name="newsletterEventName"  class="full-width selectpicker"
-                                                            placeholder="Seleziona la Lista"
-                                                            data-init-plugin="selectize">
-                                                        <option value="<?php echo $newsletterEvent->id;?>"><?php echo $newsletterEvent->name;?>
-                                                        </option>
-
-
-                                                    </select>
+                                                    <label>Evento della Campagna</label>
+                                                    <input type="hidden" id="newsletterEventName" value="<?php $newsletterEvent->id;?>">
+                                                    <p><?php echo $newsletterEvent->name; ?></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,15 +129,18 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="sendAddressDate">Data di Invio</label>
-                                                <input type="datetime-local" class="form-control" id="sendAddressDate" name="sendAddressDate" value="<?php echo $newsletter->sendAddressDate;?>" />
+                                                <input type="datetime-local" class="form-control" id="sendAddressDate" name="sendAddressDate" value="<?php echo str_replace(" ", "T", $newsletter->sendAddressDate) ?>" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="fromEmailAddressId">no-reply@.pickyshop.com</label>
-                                                <input type="hidden" class="form-control" id="fromEmailAddressId" name="fromEmailAddressId" value="1" />
+                                                <label for="fromEmailAddressId">Mittente</label>
+                                                <input type="hidden" class="form-control" id="fromEmailAddressId" name="fromEmailAddressId"
+                                                       value="<?php
+                                                echo $newsletter->newsletterInsertion->newsletterEvent->newsletterCampaign->newsletterShop->fromEmailAddressId ?>" />
+                                                <p><?php echo $newsletter->newsletterInsertion->newsletterEvent->newsletterCampaign->newsletterShop->emailAddress->address ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -193,11 +181,8 @@
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
-
-
                                                 </select>
-
-                                            </div>                                            <p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div id="inputNewsletterTemplateId">
