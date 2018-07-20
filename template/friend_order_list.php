@@ -205,6 +205,18 @@
                     data-event="bs.remove.invoice"
             ></bs-toolbar-button>
         </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Gestisci Prezzo Friend">
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-exchange"
+                    data-permission="/admin/order/add"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-title="Gestisci il prezzo del friend"
+                    data-placement="bottom"
+                    data-event="bs.change.price.friend"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
     <?php endif; ?>
 </bs-toolbar>
 </body>

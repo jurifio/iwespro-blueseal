@@ -209,3 +209,48 @@ $(document).on('bs.remove.invoice', function () {
         }).open();
     }
 });
+
+
+$(document).on('bs.change.price.friend', function () {
+    let datatable = $('.table').DataTable();
+
+    let selectedRows = datatable.rows('.selected').data();
+
+    if(selectedRows.length !== 1){
+        new Alert({
+            type: "warning",
+            message: "Seleziona solo UNA riga"
+        }).open();
+        return false;
+    }
+
+    let bsModal = new $.bsModal('Cambia prezzo FRIENDS', {
+        body: `<p>Inserisci un nuovo prezzo</p>
+                <input type="number" id="newFriendsPrice" step="any">`
+    });
+
+    let orderCode = selectedRows[0].orderCode;
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+
+        $.ajax({
+            method: 'put',
+            url: '/blueseal/xhr/ChangePriceFriendAjaxController',
+            data: {
+                order: orderCode,
+                newPrice: $('#newFriendsPrice').val()
+            }
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                $.refreshDataTable();
+                bsModal.hide();
+                });
+            bsModal.showOkBtn();
+        });
+    });
+});
