@@ -1,0 +1,12 @@
+{
+    "destination": {
+        "engine": "mysql",
+        "host": "db",
+        "port": "3306",
+        "name": "cartechinishp",
+        "user": "cartechinishp",
+        "pass": "lwjGxt1y",
+        "charset": "utf8",
+        "options": {}
+    }
+}
