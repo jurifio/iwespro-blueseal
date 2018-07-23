@@ -1,12 +1,12 @@
 <?php
 
 
-namespace bamboo\blueseal\remote\readclientuser;
+namespace bamboo\blueseal\remote\readextdbtable;
 
 
 /**
- * Class CReadClientUser
- * @package bamboo\blueseal\remote\readclietuser
+ * Class CReadExtDbTable
+ * @package bamboo\blueseal\remote\readextdbtable
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -14,12 +14,11 @@ namespace bamboo\blueseal\remote\readclientuser;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 19/07/2018
+ * @date 23/07/2018
  * @since 1.0
  */
-class CReadClientUser extends AReadClientUser
+class CReadExtDbTable extends AReadExtDbTable
 {
 
-    
 
 }

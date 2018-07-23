@@ -1,7 +1,7 @@
 <?php
 
 
-namespace bamboo\blueseal\remote\readclientuser;
+namespace bamboo\blueseal\remote\readextdbtable;
 
 use bamboo\core\base\CConfig;
 use bamboo\core\db\pandaorm\adapter\CMySQLStandAloneAdapter;
@@ -9,8 +9,8 @@ use bamboo\core\exceptions\BambooConfigException;
 
 
 /**
- * Class AReadClientUser
- * @package bamboo\blueseal\remote\readclietuser
+ * Class AReadExtDbTable
+ * @package bamboo\blueseal\remote\readclientuser
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -18,10 +18,10 @@ use bamboo\core\exceptions\BambooConfigException;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 19/07/2018
+ * @date 23/07/2018
  * @since 1.0
  */
-class AReadClientUser
+class AReadExtDbTable
 {
 
 
@@ -32,7 +32,7 @@ class AReadClientUser
 
 
     /**
-     * AReadClientUser constructor.
+     * AReadExtDbTable constructor.
      * @param $shop
      * @throws BambooConfigException
      * @throws \bamboo\core\exceptions\BambooDBALException
@@ -60,7 +60,7 @@ class AReadClientUser
         $filePath = __DIR__ . '/config';
         $filePath .= '/' . strtolower($shop) . '.json';
 
-        if (!file_exists($filePath)) throw new BambooConfigException('Configuration not found for Importer: ' . $filePath);
+        if (!file_exists($filePath)) throw new BambooConfigException('Configuration not found in: ' . $filePath);
 
         $this->config = new CConfig($filePath);
         $this->config->load();
