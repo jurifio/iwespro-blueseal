@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="refresh" content="0;url=http://amministrazione.iwes.pro">
+    <meta http-equiv="refresh" content="0;url=http://crm.iwes.pro">
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
