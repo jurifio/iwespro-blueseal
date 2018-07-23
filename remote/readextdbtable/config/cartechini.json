@@ -8,5 +8,11 @@
         "pass": "lwjGxt1y",
         "charset": "utf8",
         "options": {}
-    }
+    },
+    "tables": [
+        {
+            "name": "User",
+            "mode": "full"
+        }
+    ]
 }

@@ -20,5 +20,8 @@ namespace bamboo\blueseal\remote\readextdbtable;
 class CReadExtDbTable extends AReadExtDbTable
 {
 
+    public function readTable($tablesName){
+
+    }
 
 }
