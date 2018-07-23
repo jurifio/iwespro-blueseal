@@ -51,6 +51,9 @@
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">id</th>
                                 <th data-slug="from"
                                     data-searchable="true"
                                     data-orderable="true" class="center">From</th>
