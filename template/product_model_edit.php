@@ -222,6 +222,8 @@
                                         </div>
                                     </div>
 
+
+                                    <?php if($isMultiple): ?>
                                     <div class="row <?php echo $col; ?>">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
@@ -235,6 +237,42 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row col-md-6 ?> distinct-option">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label for="find-prodCats">Trova (Categorie pre-impostate)</label>
+                                                <input autocomplete="off" type="text" id="find-prodCatse"
+                                                       class="form-control find-prodCats"
+                                                       name="find-prodCats"
+                                                       value=""
+                                                >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label for="sub-prodCats">Sostituisci (Categorie pre-impostate)</label>
+                                                <input autocomplete="off" type="text" id="sub-prodCats"
+                                                       class="form-control sub-prodCats" name="sub-prodCats"
+                                                       value=""
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php else: ?>
+                                        <div class="row <?php echo $col; ?>">
+                                            <div class="col-md-12">
+                                                <div class="form-group form-group-default">
+                                                    <div class="JSON-pcats"
+                                                         style="display: none"><?php echo $prodCats; ?></div>
+                                                    <label for="model_pcats">Categorie pre-impostate</label>
+                                                    <select type="text" class="form-control prodCats" name="prodCats"
+                                                            id="prodCats" value="">
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
 
                                     <div class="row <?php echo $col; ?>">
                                         <div class="col-md-12">

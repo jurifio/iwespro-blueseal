@@ -12,6 +12,8 @@ use bamboo\domain\entities\CProductName;
 use bamboo\domain\entities\CProductSheetActual;
 use bamboo\domain\entities\CProductSheetModelActual;
 use bamboo\domain\entities\CProductSheetModelPrototype;
+use bamboo\domain\entities\CProductSheetModelPrototypeCategoryGroup;
+use bamboo\domain\entities\CProductSheetModelPrototypeMacroCategoryGroup;
 use bamboo\domain\repositories\CProductDetailRepo;
 
 /**
@@ -131,7 +133,42 @@ class CDetailModelSave extends AAjaxController
                     }
 
                     $newProt->genderId = (!isset($get['genders']) ? $model['genderId'] : $get['genders']);
-                    $newProt->categoryGroupId = (!isset($get['prodCats']) ? $model['categoryGroupId'] : $get['prodCats']);
+
+
+
+
+                    if(isset($get['prodCats'])){
+                        $newProt->categoryGroupId = $get['prodCats'];
+                    } else if(!isset($get['prodCats']) && !isset($get['find-prodCats'])) {
+                        $newProt->categoryGroupId = $model['categoryGroupId'];
+                    } else if(!isset($get['prodCats']) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))){
+
+                        /** @var CRepo $exCatGroupRepo */
+                        $exCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
+                        /** @var CProductSheetModelPrototypeCategoryGroup $extCatGroup */
+                        $extCatGroup = $exCatGroupRepo->findOneBy(["id" => $model["categoryGroupId"]]);
+                        $exCGName = $extCatGroup->name;
+
+                        $newProdCats = str_ireplace($get['find-prodCats'], $get['sub-prodCats'], $exCGName);
+
+                        $changeCatGroup = $exCatGroupRepo->findOneBy([
+                            "name"=>$newProdCats]);
+
+                        if(!is_null($changeCatGroup)){
+                            $newProt->categoryGroupId = $changeCatGroup->id;
+                        } else {
+                            /** @var CProductSheetModelPrototypeCategoryGroup $newCategoryGroup */
+                            $newCategoryGroup = $exCatGroupRepo->getEmptyEntity();
+                            $newCategoryGroup->name =$newProdCats;
+                            $newCategoryGroup->macroCategoryGroupId = CProductSheetModelPrototypeMacroCategoryGroup::DEFAULT;
+                            $newCategoryGroup->smartInsert();
+
+                            $newProt->categoryGroupId = $newCategoryGroup->id;
+                        }
+
+                    }
+
+
                     $newProt->materialId = (!isset($get['materials']) ? $model['materialId'] : $get['materials']);
                     $newProt->note = (!isset($get['note']) ? $model['note'] : $get['note']);
                     $newId = $newProt->insert();
@@ -348,6 +385,35 @@ class CDetailModelSave extends AAjaxController
 
                     if (isset($get['genders'])) $psmp->genderId = $get['genders'];
                     if (isset($get['prodCats'])) $psmp->categoryGroupId = $get['prodCats'];
+
+                    if(isset($get['prodCats'])){
+                        $psmp->categoryGroupId = $get['prodCats'];
+                    } else if(!isset($get['prodCats']) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))){
+
+                        /** @var CRepo $exCatGroupRepo */
+                        $exCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
+                        /** @var CProductSheetModelPrototypeCategoryGroup $extCatGroup */
+                        $extCatGroup = $exCatGroupRepo->findOneBy(["id" => $model["categoryGroupId"]]);
+                        $exCGName = $extCatGroup->name;
+
+                        $newProdCats = str_ireplace($get['find-prodCats'], $get['sub-prodCats'], $exCGName);
+
+                        $changeCatGroup = $exCatGroupRepo->findOneBy([
+                            "name"=>$newProdCats]);
+
+                        if(!is_null($changeCatGroup)){
+                            $psmp->categoryGroupId = $changeCatGroup->id;
+                        } else {
+                            /** @var CProductSheetModelPrototypeCategoryGroup $newCategoryGroup */
+                            $newCategoryGroup = $exCatGroupRepo->getEmptyEntity();
+                            $newCategoryGroup->name =$newProdCats;
+                            $newCategoryGroup->macroCategoryGroupId = CProductSheetModelPrototypeMacroCategoryGroup::DEFAULT;
+                            $newCategoryGroup->smartInsert();
+
+                            $psmp->categoryGroupId = $newCategoryGroup->id;
+                        }
+
+                    }
                     if (isset($get['materials'])) $psmp->materialId = $get['materials'];
                     if (isset($get['note'])) $psmp->note = $get['note'];
                     $psmp->update();
