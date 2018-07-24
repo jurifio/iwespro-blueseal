@@ -135,7 +135,7 @@
 
         let bsModal = new $.bsModal('Inserisci il nuovo Nome', {
             body: `<p>Nome</p>
-                   <input type="text" id="name-cat-group"> 
+                   <input type="text" id="name-cat-group" style="width:70%"> 
                    `
         });
 
