@@ -27,13 +27,12 @@ class CReadExtDbTable extends AReadExtDbTable
     /**
      * @param $tableName
      * @param array $fields
-     * @param bool $full
-     * @return mixed
+     * @return array
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
-    public function readTables($tableName, array $fields, $full = false)
+    public function readTables($tableName, array $fields = [])
     {
-        $select = $full ? "*" : implode(',', $fields);
+        $select = empty($fields) ? "*" : implode(',', $fields);
         $sql = "
         SELECT  $select
         FROM `$this->dbName`.`$tableName`
@@ -50,7 +49,9 @@ class CReadExtDbTable extends AReadExtDbTable
      * @param array $remoteFields
      * @param array $remoteFieldsToSearch
      * @param string $localTable
-     * @param array $localFieldsToCheck
+     * @param array $localFields
+     * @param array $localFieldsToSearch
+     * @return int
      * @throws BambooException
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
@@ -59,11 +60,12 @@ class CReadExtDbTable extends AReadExtDbTable
                                array $remoteFields,
                                array $remoteFieldsToSearch,
                                string $localTable,
-                               array $localFieldsToCheck)
+                               array $localFields,
+                               array $localFieldsToSearch)
     {
 
         //Prendo i dati dalla tabella remota
-        $data = $this->readTables($remoteTable, $remoteFields);
+        $data = $this->readTables($remoteTable);
 
         //Vedo tutti i campi nella tabella locale
         $this->getTableFields($localTable);
@@ -72,29 +74,40 @@ class CReadExtDbTable extends AReadExtDbTable
         $table = \Monkey::app()->repoFactory->create($localTable);
 
         $countRemoteKeys = count($remoteFieldsToSearch);
-        $countLocalKeys = count($localFieldsToCheck);
+        $countLocalKeys = count($localFieldsToSearch);
 
-        if($countRemoteKeys != $countLocalKeys) throw new BambooException("The number of Local search keys in remote table must be identical to the number of Remote search keys");
+        if ($countRemoteKeys != $countLocalKeys) throw new BambooException("The number of Local search keys in remote table must be identical to the number of Remote search keys");
 
-        foreach ($data as $v){
+        $extRow = 0;
+        foreach ($data as $v) {
 
-            $keys = '';
+            $keys = [];
 
             for ($i = 0; $i < $countRemoteKeys; $i++) {
-                $keys .= '"'.$localFieldsToCheck[$i].'"'. ' => ' . '"'.$v[$remoteFieldsToSearch[$i]].'"'.','
-                ;
+                $keys[$localFieldsToSearch[$i]] = $v[$remoteFieldsToSearch[$i]];
             }
 
-            $a = json_decode($keys);
+            if(is_null($table->findOneBy($keys))) {
 
-            $extRow = $table->findOneBy([
-                $keys
-            ]);
+                $countLocalFields = count($localFields);
+                $countRemoteFields = count($remoteFields);
 
-            $z = 3;
+                $fields = [];
+                if($countLocalFields != $countRemoteFields) throw new BambooException("The number of Local fields in remote table must be identical to the number of Remote fields");
+
+                for ($y = 0; $y < $countLocalFields; $y++) {
+                    $fields[$localFields[$y]] = $v[$remoteFields[$y]];
+                }
+
+                //Se è nulla non l'ho trovata, quindi aggiorna
+                //$newInstance = $table->getEmptyEntity();
+
+            };
+
         }
 
+    return $extRow;
+    }
 
-      }
 
 }
