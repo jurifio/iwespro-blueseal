@@ -17,25 +17,43 @@ use bamboo\core\exceptions\BambooException;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 23/07/2018
+ * @date 24/07/2018
  * @since 1.0
  */
 class CReadExtDbTable extends AReadExtDbTable
 {
-
-
     /**
-     * @param $tableName
+     * @param $tablesName
      * @param array $fields
      * @return array
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
-    public function readTables($tableName, array $fields = [])
+    public function readTables($tablesName, array $fields = [])
     {
+        $join = "";
+        $firsTable = null;
+        $firstField = null;
+        $c = 0;
+        foreach ($tablesName as $table => $field){
+            $c++;
+            $lastTable = $table;
+            $lastField = $field;
+
+            //se è il primo mi salvo il campo su cui faccio la join e continua perché va sul FROM E NON SULLA JOIN
+            if($c === 1) {
+                $firstTable = $table;
+                $firstField = $field;
+            }
+
+            $join .= 'JOIN '. `$this->dbName` . `$table` . 'ON ' . `$table` . `$field` . ' = ' . `$lastTable` . `$lastField`;
+
+        }
+
         $select = empty($fields) ? "*" : implode(',', $fields);
         $sql = "
         SELECT  $select
-        FROM `$this->dbName`.`$tableName`
+        FROM `$this->dbName`.`$tablesName[0]`
+        JOIN 
          ";
 
         $data = $this->client->query($sql, [])->fetchAll();
@@ -45,68 +63,97 @@ class CReadExtDbTable extends AReadExtDbTable
 
     /**
      * @param bool $isEqual
-     * @param string $remoteTable
+     * @param array $remoteTables
      * @param array $remoteFields
      * @param array $remoteFieldsToSearch
      * @param string $localTable
      * @param array $localFields
      * @param array $localFieldsToSearch
-     * @return int
+     * @param array $external
+     * @return bool
      * @throws BambooException
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
+    // N.B. remoteTables and external must be an associative array with $key = tableName , $value = fieldKey --> esempio: User => id, UserDetails => userId
     public function insertData($isEqual = false,
-                               string $remoteTable,
+                               array $remoteTables,
                                array $remoteFields,
                                array $remoteFieldsToSearch,
                                string $localTable,
                                array $localFields,
-                               array $localFieldsToSearch)
+                               array $localFieldsToSearch,
+                               array $external
+)
     {
 
         //Prendo i dati dalla tabella remota
-        $data = $this->readTables($remoteTable);
+        $data = $this->readTables($remoteTables);
 
-        //Vedo tutti i campi nella tabella locale
-        $this->getTableFields($localTable);
+        //todo: ----> implementare la funzione isEqual
+        //$this->getTableFields($localTable);
 
         /** @var CRepo $table */
         $table = \Monkey::app()->repoFactory->create($localTable);
+
 
         $countRemoteKeys = count($remoteFieldsToSearch);
         $countLocalKeys = count($localFieldsToSearch);
 
         if ($countRemoteKeys != $countLocalKeys) throw new BambooException("The number of Local search keys in remote table must be identical to the number of Remote search keys");
 
-        $extRow = 0;
-        foreach ($data as $v) {
+        $countLocalFields = count($localFields);
+        $countRemoteFields = count($remoteFields);
 
-            $keys = [];
+        if($countLocalFields != $countRemoteFields) throw new BambooException("The number of Local fields in remote table must be identical to the number of Remote fields");
 
-            for ($i = 0; $i < $countRemoteKeys; $i++) {
-                $keys[$localFieldsToSearch[$i]] = $v[$remoteFieldsToSearch[$i]];
-            }
+        try {
+            \Monkey::app()->repoFactory->beginTransaction();
+            foreach ($data as $v) {
 
-            if(is_null($table->findOneBy($keys))) {
+                $keys = [];
 
-                $countLocalFields = count($localFields);
-                $countRemoteFields = count($remoteFields);
-
-                $fields = [];
-                if($countLocalFields != $countRemoteFields) throw new BambooException("The number of Local fields in remote table must be identical to the number of Remote fields");
-
-                for ($y = 0; $y < $countLocalFields; $y++) {
-                    $fields[$localFields[$y]] = $v[$remoteFields[$y]];
+                for ($i = 0; $i < $countRemoteKeys; $i++) {
+                    $keys[$localFieldsToSearch[$i]] = $v[$remoteFieldsToSearch[$i]];
                 }
 
-                //Se è nulla non l'ho trovata, quindi aggiorna
-                //$newInstance = $table->getEmptyEntity();
+                $exTable = $table->findOneBy($keys);
 
-            };
+                if (is_null($exTable)) {
 
+                    //Se è nulla non l'ho trovata, quindi aggiorna
+                    $newInstance = $table->getEmptyEntity();
+                    for ($y = 0; $y < $countLocalFields; $y++) {
+                        $newInstance->{$localFields[$y]} = $v[$remoteFields[$y]];
+                    }
+
+                    if (!empty($external)) {
+                        foreach ($external as $field => $value) {
+                            $newInstance->{$field} = $value;
+                        }
+                    }
+                    $newInstance->smartInsert();
+                } else {
+                    //todo implementare se esiste e è diverso allora -> aggiorna
+                    for ($y = 0; $y < $countLocalFields; $y++) {
+                        $exTable->{$localFields[$y]} = $v[$remoteFields[$y]];
+                    }
+
+                    if (!empty($external)) {
+                        foreach ($external as $field => $value) {
+                            $exTable->{$field} = $value;
+                        }
+                    }
+                    $exTable->update();
+                };
+
+            }
+            \Monkey::app()->repoFactory->commit();
+        } catch (\Throwable $e){
+            \Monkey::app()->repoFactory->rollback();
+            \Monkey::app()->applicationLog('ReadExtDbTable', 'Error', 'Rollback operation', $e);
         }
 
-    return $extRow;
+        return true;
     }
 
 
