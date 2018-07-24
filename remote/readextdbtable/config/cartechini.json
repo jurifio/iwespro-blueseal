@@ -1,7 +1,7 @@
 {
-    "destination": {
+    "origin": {
         "engine": "mysql",
-        "host": "db",
+        "host": "db.redpanda.clo.ud.it",
         "port": "3306",
         "name": "cartechinishp",
         "user": "cartechinishp",
