@@ -41,9 +41,6 @@ class CCartAbandonedEmailSendJobs extends ACronJob
      */
     public function run($args = null)
     {
-        /*creazione email Send*/
-
-
         $sql = "SELECT
   C.id                                                   AS id,
   C.creationDate                                         AS creationDate,
@@ -51,28 +48,33 @@ class CCartAbandonedEmailSendJobs extends ACronJob
   C.cartTypeId                                           AS carTypeId,
   C.lastUpdate                                           AS lastUpdate
 FROM Cart C
-WHERE C.userId <>'' 
+WHERE C.userId <>''
       AND C.cartTypeId = 1 AND C.couponId IS NULL
 GROUP BY C.id";
-
+//estraggo tutti i carrelli abbandonati
         /** @var CCartRepo $cartRepo */
         $cartRepo = \Monkey::app()->repoFactory->create('Cart');
         /** @var $listCart CObjectCollection */
         $listCart = $cartRepo->findBySql($sql);
+        //colleziono tutti i carrelli
         foreach ($listCart as $cart) {
             $cartPrice = 0;
             $customer = $cart->userId;
             $cartId = $cart->id;
+
+            // colleziono tutte le linee dei carrelli con il cartId1
             /** @var  $listCartLine CObjectCollection */
             $listCartLine = \Monkey::app()->repoFactory->create('CartLine')->findBy(['cartId' => $cartId]);
             foreach ($listCartLine as $line) {
                 $ProductId = $line->productId;
                 $ProductVariantId = $line->productVariantId;
                 $ProductSizeId = $line->productSizeId;
+                //ottengo tutti i prodotti dalla tabella ProductPublicSku
                 /** @var productPublicSkuRepo $productPublicSku */
                 $productPublicSku = \Monkey::app()->repoFactory->create('ProductPublicSku')->findOneBy(['productId' => $ProductId, 'productVariantId' => $ProductVariantId, 'productSizeId' => $ProductSizeId]);
                 $price = $productPublicSku->price;
                 $salePrice = $productPublicSku->salePrice;
+                // controllo se il prodotto è in saldo
                 /** @var $productIsOnSale CObjectCollection */
                 $productIsOnSale = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $ProductId, 'productVariantId' => $ProductVariantId]);
                 $isOnSale = $productIsOnSale->isOnSale;
@@ -83,6 +85,8 @@ GROUP BY C.id";
                     $cartPrice = $cartPrice + $price;
                 }
             }
+//seleziono tutti i parametri per la generazione delle email
+
             $lastUpdate = $cart->lastUpdate;
             $sqlCartAbandonedEmailParam = "SELECT id ,
                       name, 
@@ -100,7 +104,8 @@ GROUP BY C.id";
                       thirdTimeEmailSendHour,
                       couponTypeId,
                       selectMailCouponSend
-   FROM CartAbandonedEmailParam LIMIT 1";
+   FROM CartAbandonedEmailParam LIMIT 3";
+//collezione email Parametri
             /** @var CObjectCollection $cartAbandonedEmailParam */
             $cartAbandonedEmailsParam = \Monkey::app()->repoFactory->create('CartAbandonedEmailParam')->findBySql($sqlCartAbandonedEmailParam);
             foreach ($cartAbandonedEmailsParam as $cartAbandonedEmailParam) {
@@ -118,54 +123,93 @@ GROUP BY C.id";
                 $thirdTimeEmailSendHour = $cartAbandonedEmailParam->thirdTimeEmailSendHour;
                 $couponTypeId = $cartAbandonedEmailParam->couponTypeId;
                 $selectMailCouponSend = $cartAbandonedEmailParam->selectMailCouponSend;
-            }
-            /* @var CCartAbandonedSendEmailIfExist $cartAbandonedSendEmailIfExist */
-            $cartAbandonedSendEmailIfExist = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['cartId' => $cartId]);
-            if (empty($cartAbandonedSendEmailIfExist)) {
-                if ($couponTypeId <> '0') {
-                    /** var CCouponType $couponType */
-                    $couponType = \Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id' => $couponTypeId]);
-                    $couponName = $couponType->name;
-                    $amount = $couponType->amount;
-                    $amountType = $couponType->amountType;
-                    $validity = $couponType->validity;
-                    $validForCartTotal = $couponType->validForCartTotal;
-                    $hasFreeShipping = $couponType->hasFreeShipping;
-                    $hasFreeReturn = $couponType->hasFreeReturn;
+                /* @var CCartAbandonedSendEmailIfExist $cartAbandonedSendEmailIfExist */
+                $cartAbandonedSendEmailIfExist = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['cartId' => $cartId, 'couponTypeId' => $couponTypeId]);
+                if (empty($cartAbandonedSendEmailIfExist)) {
 
-                    if ($validForCartTotal <= $cartPrice) {
-                        /**var CCoupon $couponGenerate
-                         *
-                         *
-                         */
-                        $couponGenerate = \Monkey::app()->repoFactory->create('Coupon')->getEmptyEntity();
-                        $couponGenerate->couponTypeId = $couponTypeId;
+                    if ($couponTypeId <> '0') {
+                        /** var CCouponType $couponType */
+                        $couponType = \Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id' => $couponTypeId]);
+                        $couponName = $couponType->name;
+                        $amount = $couponType->amount;
+                        $amountType = $couponType->amountType;
+                        $validity = $couponType->validity;
+                        $validForCartTotal = $couponType->validForCartTotal;
+                        $hasFreeShipping = $couponType->hasFreeShipping;
+                        $hasFreeReturn = $couponType->hasFreeReturn;
 
-                        $serial = new CSerialNumber();
-                        $serial->generate();
-                        /*  @var CCoupon $couponFind */
+                        if ($validForCartTotal <= $cartPrice) {
+                            /**var CCoupon $couponGenerate
+                             *
+                             *
+                             */
+                            $couponGenerate = \Monkey::app()->repoFactory->create('Coupon')->getEmptyEntity();
+                            $couponGenerate->couponTypeId = $couponTypeId;
 
-                        $couponGenerate->code = $serial->__toString();
-                        $issueDate = new \DateTime();
-                        $validUntil = new \DateInterval($validity);
-                        $validThru = $issueDate->add($validUntil);
+                            $serial = new CSerialNumber();
+                            $serial->generate();
+                            /*  @var CCoupon $couponFind */
 
-                        $couponGenerate->issueDate = date('Y-m-d H:i:s');
-                        $couponGenerate->validThru = date_format($validThru, 'Y-m-d H:i:s');
-                        if ($amountType == "P") {
-                            $amountCart = $cartPrice / 100 * $amount;
-                        } else {
-                            $amountCart = $amount;
+                            $couponGenerate->code = $serial->__toString();
+                            $issueDate = new \DateTime();
+                            $validUntil = new \DateInterval($validity);
+                            $validThru = $issueDate->add($validUntil);
+
+                            $couponGenerate->issueDate = date('Y-m-d H:i:s');
+                            $couponGenerate->validThru = date_format($validThru, 'Y-m-d H:i:s');
+                            if ($amountType == "P") {
+                                $amountCart = $cartPrice / 100 * $amount;
+                            } else {
+                                $amountCart = $amount;
+                            }
+                            $couponGenerate->amount = $amountCart;
+                            $couponGenerate->userId = $customer;
+                            $couponGenerate->valid = "1";
+                            $couponGenerate->smartInsert();
+                            $getcouponId = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['code' => $serial]);
+                            $idCoupon = $getcouponId->id;
+
+
+                            /** var CCartAbandonedEmailSend $cartAbandonedEmailSend */
+                            $cartAbandonedEmailSend = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->getEmptyEntity();
+                            $cartAbandonedEmailSend->cartId = $cartId;
+                            $cartAbandonedEmailSend->userId = $customer;
+                            $cartAbandonedEmailSend->firstTemplateId = $firstTemplateId;
+                            $cartAbandonedEmailSend->firstEmailTemplate = $firstEmailTemplate;
+                            $firstEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $firstTimeEmailSendDay . ' Day  +' . $firstTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
+                            $cartAbandonedEmailSend->firstTimeEmailSendDate = $firstEmailSendDate;
+                            $cartAbandonedEmailSend->secondTemplateId = $secondTemplateId;
+                            $cartAbandonedEmailSend->secondEmailTemplate = $secondEmailTemplate;
+                            $secondEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $secondTimeEmailSendDay . ' Day  +' . $secondTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
+                            $cartAbandonedEmailSend->secondTimeEmailSendDate = $secondEmailSendDate;
+                            $cartAbandonedEmailSend->thirdTemplateId = $thirdTemplateId;
+                            $cartAbandonedEmailSend->thirdEmailTemplate = $thirdEmailTemplate;
+                            $thirdEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $thirdTimeEmailSendDay . ' Day  +' . $thirdTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
+                            $cartAbandonedEmailSend->thirdTimeEmailSendDate = $thirdEmailSendDate;
+                            $cartAbandonedEmailSend->couponId = $idCoupon;
+                            $cartAbandonedEmailSend->couponTypeId = $couponTypeId;
+                            $cartAbandonedEmailSend->selectMailCouponSend = $selectMailCouponSend;
+                            if ($selectMailCouponSend == "1") {
+                                $cartAbandonedEmailSend->firstSentCheck = "0";
+                                $cartAbandonedEmailSend->secondSentCheck = "1";
+                                $cartAbandonedEmailSend->thirdSentCheck = "1";
+                            } else if ($selectMailCouponSend == "2") {
+                                $cartAbandonedEmailSend->firstSentCheck = "1";
+                                $cartAbandonedEmailSend->secondSentCheck = "0";
+                                $cartAbandonedEmailSend->thirdSentCheck = "1";
+
+
+                            } else {
+                                $cartAbandonedEmailSend->firstSentCheck = "1";
+                                $cartAbandonedEmailSend->secondSentCheck = "1";
+                                $cartAbandonedEmailSend->thirdSentCheck = "0";
+
+                            }
+                            $cartAbandonedEmailSend->smartInsert();
                         }
-                        $couponGenerate->amount = $amountCart;
-                        $couponGenerate->userId = $customer;
-                        $couponGenerate->valid = "1";
-                        $couponGenerate->smartInsert();
-                        $getcouponId = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['code' => $serial]);
-                        $idCoupon = $getcouponId->id;
 
 
-                        /** var CCartAbandonedEmailSend $cartAbandonedEmailSend */
+                    } else {
                         $cartAbandonedEmailSend = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->getEmptyEntity();
                         $cartAbandonedEmailSend->cartId = $cartId;
                         $cartAbandonedEmailSend->userId = $customer;
@@ -181,37 +225,32 @@ GROUP BY C.id";
                         $cartAbandonedEmailSend->thirdEmailTemplate = $thirdEmailTemplate;
                         $thirdEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $thirdTimeEmailSendDay . ' Day  +' . $thirdTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
                         $cartAbandonedEmailSend->thirdTimeEmailSendDate = $thirdEmailSendDate;
-                        $cartAbandonedEmailSend->couponId = $idCoupon;
-                        $cartAbandonedEmailSend->couponTypeId = $couponTypeId;
+                        $cartAbandonedEmailSend->couponId = '';
+                        $cartAbandonedEmailSend->couponTypeId = '';
                         $cartAbandonedEmailSend->selectMailCouponSend = $selectMailCouponSend;
+                        if ($selectMailCouponSend == "1") {
+                            $cartAbandonedEmailSend->firstSentCheck = "0";
+                            $cartAbandonedEmailSend->secondSentCheck = "1";
+                            $cartAbandonedEmailSend->thirdSentCheck = "1";
+                        } else if ($selectMailCouponSend == "2") {
+                            $cartAbandonedEmailSend->firstSentCheck = "1";
+                            $cartAbandonedEmailSend->secondSentCheck = "0";
+                            $cartAbandonedEmailSend->thirdSentCheck = "1";
+
+
+                        } else {
+                            $cartAbandonedEmailSend->firstSentCheck = "1";
+                            $cartAbandonedEmailSend->secondSentCheck = "1";
+                            $cartAbandonedEmailSend->thirdSentCheck = "0";
+
+                        }
                         $cartAbandonedEmailSend->smartInsert();
+
+
                     }
-
-
-                } else {
-                    $cartAbandonedEmailSend = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->getEmptyEntity();
-                    $cartAbandonedEmailSend->cartId = $cartId;
-                    $cartAbandonedEmailSend->userId = $customer;
-                    $cartAbandonedEmailSend->firstTemplateId = $firstTemplateId;
-                    $cartAbandonedEmailSend->firstEmailTemplate = $firstEmailTemplate;
-                    $firstEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $firstTimeEmailSendDay . ' Day  +' . $firstTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
-                    $cartAbandonedEmailSend->firstTimeEmailSendDate = $firstEmailSendDate;
-                    $cartAbandonedEmailSend->secondTemplateId = $secondTemplateId;
-                    $cartAbandonedEmailSend->secondEmailTemplate = $secondEmailTemplate;
-                    $secondEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $secondTimeEmailSendDay . ' Day  +' . $secondTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
-                    $cartAbandonedEmailSend->secondTimeEmailSendDate = $secondEmailSendDate;
-                    $cartAbandonedEmailSend->thirdTemplateId = $thirdTemplateId;
-                    $cartAbandonedEmailSend->thirdEmailTemplate = $thirdEmailTemplate;
-                    $thirdEmailSendDate = date('Y-m-d H:i:s', strtotime('+' . $thirdTimeEmailSendDay . ' Day  +' . $thirdTimeEmailSendHour . 'Hour', strtotime($lastUpdate)));
-                    $cartAbandonedEmailSend->thirdTimeEmailSendDate = $thirdEmailSendDate;
-                    $cartAbandonedEmailSend->couponId = '';
-                    $cartAbandonedEmailSend->couponTypeId = '';
-                    $cartAbandonedEmailSend->selectMailCouponSend = $selectMailCouponSend;
-                    $cartAbandonedEmailSend->smartInsert();
-
-
                 }
             }
+
 
             $sql = "SELECT * FROM CartAbandonedEmailSend WHERE DATE_FORMAT(now(),'%Y%m%d%H%i') >= DATE_FORMAT(firstTimeEmailSendDate, '%Y%m%d%H%i') AND DATE_FORMAT(now(),'%Y%m%d%H%i') >= DATE_FORMAT(secondTimeEmailSendDate
             , '%Y%m%d%H%i')  AND DATE_FORMAT(now(),'%Y%m%d%H%i') >= DATE_FORMAT(thirdTimeEmailSendDate, '%Y%m%d%H%i')";
@@ -219,7 +258,7 @@ GROUP BY C.id";
             $cartAbandonedEmailSendRepo = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend');
             $cartAbandonedEmailsSend = $cartAbandonedEmailSendRepo->findBySql($sql);
             if (empty($cartAbandonedEmailsSend)) return;
-            // $this->report('Starting', 'Cart Reinvite to send: ' . count($cartAbandonedEmailsSend));
+//  $this->report('Starting', 'Cart Reinvite to send: ' . count($cartAbandonedEmailsSend));
             foreach ($cartAbandonedEmailsSend as $cartAbandonedEmailSend) {
 
                 $idCartAbandonedEmailSend = $cartAbandonedEmailSend->id;
@@ -244,7 +283,7 @@ GROUP BY C.id";
                 $from = 'no-reply@pickyshop.com';
                 $subject = 'Completa il tuo Ordine';
                 $cartLineFind = \Monkey::app()->repoFactory->create('CartLine')->findby(['cartId' => $cartId]);
-                $cartAmount =0;
+                $cartAmount = 0;
                 $cartRow = "";
                 foreach ($cartLineFind as $cartLine) {
                     $productId = $cartLine->productId;
@@ -262,7 +301,7 @@ GROUP BY C.id";
                     $dummyPicture = $isOnSaleFind->dummyPicture;
                     $productBrandFind = \Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id' => $productBrand]);
                     $productBrand = $productBrandFind->name;
-                    $cartAmount =$cartAmount+$price;
+                    $cartAmount = $cartAmount + $price;
                     $cartRowLine = "<!--riga carrello-->
 <tr>
                     <td valign=\"top\" align=\"center\" class=\"lh-3\"
@@ -341,11 +380,11 @@ GROUP BY C.id";
                     $couponTypeFind = \Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id' => $couponTypeId]);
                     $amountType = $couponTypeFind->amountType;
                     $amount = $couponTypeFind->amount;
-                    $hasFreeShipping=$couponTypeFind->hasFreeShipping;
-                    if($hasFreeShipping=="1"){
-                        $cartTotalAmount= number_format($cartAmount,2)." + SPEDIZIONE GRATUITA";
-                    }else{
-                        $cartTotalAmount =number_format($cartAmount,2). "+ SPESE SPEDIZIONE";
+                    $hasFreeShipping = $couponTypeFind->hasFreeShipping;
+                    if ($hasFreeShipping == "1") {
+                        $cartTotalAmount = number_format($cartAmount, 2) . " + SPEDIZIONE GRATUITA";
+                    } else {
+                        $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
 
                     }
                     $couponFind = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['id' => $couponId]);
@@ -354,127 +393,124 @@ GROUP BY C.id";
                         $couponFirstRow = "Abbiamo riservato Per TE un Coupon del " . $amount . "% di sconto che potrai utilizzare per completare l'ordine!";
                     } else {
                         $couponFirstRow = "Abbiamo riservato Per TE un Coupon del valore di " . $amount . "€ di  sconto che potrai utilizzare per completare l'ordine!";
+
+
                     }
+                    $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
 
-                    $cartRowCoupon = "<!--inizio sezione coupon-->
-							<tr>
-                                <td valign=\"top\" align=\"left\" class=\"lh-3\"
-                                    style=\"padding: 5px 20px; margin: 0px; line-height: 1; font-size: 16px; font-family: Times New Roman, Times, serif;\">
-                                    <span style=\"font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;color:#000000; line-height:0.5;\">
-                                      " . $couponFirstRow . "
-                                    </span>
-                                </td>
-                            </tr>
-							<tr>
-                                <td valign=\"top\" align=\"left\" class=\"lh-3\"
-                                    style=\"padding: 5px 20px; margin: 0px; line-height: 1; font-size: 16px; font-family: Times New Roman, Times, serif;\">
-                                    <span style=\"font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;color:#000000; line-height:0.5;\">
-                                     " . $code . "
-                                    </span>
-                                </td>
-                            </tr>
-							<tr>
-                                <td valign=\"top\" align=\"left\" class=\"lh-3\"
-                                    style=\"padding: 5px 20px; margin: 0px; line-height: 1; font-size: 16px; font-family: Times New Roman, Times, serif;\">
-                                    <span style=\"font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;color:#000000; line-height:0.5;\">
-                                       Inserisci il coupon nell'area riservata del tuo carrello.
-                                    </span>
-                                </td>
-                            </tr>
-							<!--fine sezione Coupon-->";
-                    $cartAmount=number_format($cartAmount,2);
+                    $cartAmount = number_format($cartAmount, 2);
+                    $ordercheck = \Monkey::app()->repoFactory->create('Order')->findOneBy(['cartId' => $cartId]);
+                    if (empty($ordercheck)) {
+                        if ($firstSentCheck == '0') {
+                            try {
 
-                    $this->debug('Punto stop', 'Ok', 'Carrelli abbandonati');
-                    if ($firstSentCheck == '0') {
-                        try {
+                                $message = str_replace('{nome}', $userDetail, $firstEmailTemplate);
+                                $message = str_replace('{emailunsuscriber}', $emailUser, $message);
+                                $message = str_replace('{cartRow}', $cartRow, $message);
+                                $message = str_replace('{cartAmount}', $cartAmount, $message);
 
-                            $message= str_replace('{nome}', $userDetail, $firstEmailTemplate);
-                            $message= str_replace('{emailunsuscriber}', $emailUser, $message);
-                            $message= str_replace('{cartRow}', $cartRow, $message);
-                            $message = str_replace('{cartAmount}', $cartAmount, $message);
+                                if ($selectMailCouponSend == "1" || $selectMailCouponSend == "4") {
+                                    $message = str_replace('{couponFirstRow}', $couponFirstRow, $message);
+                                    $message = str_replace('{code}', $code, $message);
+                                    $message = str_replace('{couponLastRow}', $couponLastRow, $message);
+                                    $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                                } else {
+                                    $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
+                                    $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                                    $message = str_replace('{couponFirstRow}', '', $message);
+                                    $message = str_replace('{code}', '', $message);
+                                    $message = str_replace('{couponLastRow}', '', $message);
+                                }
+                                /* @var CEmailRepo $emailRepo */
+                                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                                $res = $emailRepo->newMail($from, [$emailUser], [], [], $subject, $message, null, null, null, 'mailGun', false);
+                                /* @var CCartAbandonedEmailSend $cartAbandonedEmailSentUpdate */
+                                $cartAbandonedEmailSentUpdate = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['id' => $idCartAbandonedEmailSend]);
+                                $cartAbandonedEmailSentUpdate->firstSentCheck = "1";
+                                $cartAbandonedEmailSentUpdate->update();
 
-                            if ($selectMailCouponSend == "1" || $selectMailCouponSend == "4") {
-                                $message = str_replace('{cartRowCoupon}', $cartRowCoupon, $message);
-                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
-                            }else {
-                                $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
-                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
-                                $message = str_replace('{cartRowCoupon}', '', $message);
+                            } catch (\Throwable $e) {
+                                $res = false;
                             }
-                            /* @var CEmailRepo $emailRepo */
-                            $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                            $res = $emailRepo->newMail($from, [$emailUser], [], [], $subject, $message, null, null, null, 'mailGun', false);
-                            /* @var CCartAbandonedEmailSend $cartAbandonedEmailSentUpdate */
-                            $cartAbandonedEmailSentUpdate = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['id' => $idCartAbandonedEmailSend]);
-                            $cartAbandonedEmailSentUpdate->firstSentCheck = "1";
-                            $cartAbandonedEmailSentUpdate->update();
+                        } elseif ($secondSentCheck == '0') {
+                            try {
+                                $message = str_replace('{nome}', $userDetail, $secondEmailTemplate);
+                                $message = str_replace('{emailunsuscriber}', $emailUser, $message);
+                                $message = str_replace('{cartRow}', $cartRow, $message);
+                                $message = str_replace('{cartAmount}', $cartAmount, $message);
 
-                        } catch (\Throwable $e) {
-                            $res = false;
-                        }
-                    } elseif ($secondSentCheck == '0') {
-                        try {
-                            $message=str_replace('{nome}', $userDetail, $secondEmailTemplate);
-                            $message=  str_replace('{emailunsuscriber}', $emailUser, $message);
-                            $message= str_replace('{cartRow}', $cartRow, $message);
-                            $message = str_replace('{cartAmount}', $cartAmount, $message);
+                                if ($selectMailCouponSend == "2" || $selectMailCouponSend == "4") {
+                                    $message = str_replace('{couponFirstRow}', $couponFirstRow, $message);
+                                    $message = str_replace('{couponLastRow}', $couponLastRow, $message);
+                                    $message = str_replace('{code}', $code, $message);
+                                    $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                                } else {
+                                    $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
+                                    $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                                    $message = str_replace('{couponFirstRow}', '', $message);
+                                    $message = str_replace('{couponLastRow}', '', $message);
+                                    $message = str_replace('{code}', '', $message);
+                                }
 
-                            if ($selectMailCouponSend == "2" || $selectMailCouponSend == "4") {
-                                $message = str_replace('{cartRowCoupon}', $cartRowCoupon, $message);
-                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
-                            }else{
-                                $cartTotalAmount =number_format($cartAmount,2). "+ SPESE SPEDIZIONE";
-                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
-                                $message = str_replace('{cartRowCoupon}', '', $message);
+                                /* @var CEmailRepo $emailRepo */
+                                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                                $res = $emailRepo->newMail($from, [$emailUser], [], [], $subject, $message, null, null, null, 'mailGun', false);
+
+                                /* @var CCartAbandonedEmailSend $cartAbandonedEmailSentUpdate */
+                                $cartAbandonedEmailSentUpdate = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['id' => $idCartAbandonedEmailSend]);
+                                $cartAbandonedEmailSentUpdate->secondSentCheck = "1";
+                                $cartAbandonedEmailSentUpdate->update();
+
+
+                            } catch (\Throwable $e) {
+                                $res = false;
                             }
 
-                            /* @var CEmailRepo $emailRepo */
-                            $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                            $res = $emailRepo->newMail($from, [$emailUser], [], [], $subject, $message, null, null, null, 'mailGun', false);
+                        } elseif ($thirdSentCheck == '0') {
+                            try {
+                                $message = str_replace('{nome}', $userDetail, $thirdEmailTemplate);
+                                $message = str_replace('{emailunsuscriber}', $emailUser, $message);
+                                $message = str_replace('{cartRow}', $cartRow, $message);
+                                $message = str_replace('{cartAmount}', $cartAmount, $message);
+                                if ($selectMailCouponSend == "3" || $selectMailCouponSend == "4") {
+                                    $message = str_replace('{couponFirstRow}', $couponFirstRow, $message);
+                                    $message = str_replace('{code}', $code, $message);
+                                    $message = str_replace('{couponLastRow}', $couponLastRow, $message);
+                                    $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                                } else {
+                                    $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
+                                    $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
+                                    $message = str_replace('{couponFirstRow}', '', $message);
+                                    $message = str_replace('{code}', '', $message);
+                                    $message = str_replace('{couponLastRow}', '', $message);
+                                }
+                                /* @var CEmailRepo $emailRepo */
+                                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                                $res = $emailRepo->newMail($from, [$emailUser], [], [], $subject, $message, null, null, null, 'mailGun', false);
 
-                            /* @var CCartAbandonedEmailSend $cartAbandonedEmailSentUpdate */
-                            $cartAbandonedEmailSentUpdate = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['id' => $idCartAbandonedEmailSend]);
-                            $cartAbandonedEmailSentUpdate->secondSentCheck = "1";
-                            $cartAbandonedEmailSentUpdate->update();
+                                /* @var CCartAbandonedEmailSend $cartAbandonedEmailSentUpdate */
+                                $cartAbandonedEmailSentUpdate = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['id' => $idCartAbandonedEmailSend]);
+                                $cartAbandonedEmailSentUpdate->thirdSentCheck = "1";
+                                $cartAbandonedEmailSentUpdate->update();
 
 
-                        } catch (\Throwable $e) {
-                            $res = false;
-                        }
-
-                    } elseif ($thirdSentCheck == '0') {
-                        try {
-                            $message = str_replace('{nome}', $userDetail, $thirdEmailTemplate);
-                            $message = str_replace('{emailunsuscriber}', $emailUser, $message);
-                            $message = str_replace('{cartRow}', $cartRow, $message);
-                            $message = str_replace('{cartAmount}', $cartAmount, $message);
-                            if ($selectMailCouponSend == "3" || $selectMailCouponSend == "4") {
-                                $message = str_replace('{cartRowCoupon}', $cartRowCoupon, $message);
-                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
-                            }else {
-                                $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
-                                $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
-                                $message = str_replace('{cartRowCoupon}', '', $message);
+                            } catch (\Throwable $e) {
+                                $res = false;
                             }
-                            /* @var CEmailRepo $emailRepo */
-                            $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                            $res = $emailRepo->newMail($from, [$emailUser], [], [], $subject, $message, null, null, null, 'mailGun', false);
-
-                            /* @var CCartAbandonedEmailSend $cartAbandonedEmailSentUpdate */
-                            $cartAbandonedEmailSentUpdate = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['id' => $idCartAbandonedEmailSend]);
-                            $cartAbandonedEmailSentUpdate->thirdSentCheck = "1";
-                            $cartAbandonedEmailSentUpdate->update();
-
-
-                        } catch (\Throwable $e) {
-                            $res = false;
+                        } else {
+                            $res = "Tutte le email per i carrelli abbandonati sono stati inviati per questo utente";
                         }
                     } else {
-                        $res = "Tutte le email per i carrelli abbandonati sono stati inviati per questo utente";
+                        $couponInvalidate = \Monkey::app()->repoFactory->create('Coupon')->findBy(['userId' => $userId, 'CouponTypeId' => $couponTypeId]);
+                        foreach ($couponInvalidate as $invalidate) {
+                            $invalidate->valid = 0;
+                            $invalidate->update();
+                        }
+
                     }
                 } else {
 
-                    $cartTotalAmount =number_format($cartAmount,2). "+ SPESE SPEDIZIONE";
+                    $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
                     if ($firstSentCheck == '0') {
                         try {
                             $message = str_replace('{nome}', $userDetail, $firstEmailTemplate);
@@ -482,7 +518,9 @@ GROUP BY C.id";
                             $message = str_replace('{cartRow}', $cartRow, $message);
                             $message = str_replace('{cartAmount}', $cartAmount, $message);
                             $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
-                            $message = str_replace('{cartRowCoupon}', '', $message);
+                            $message = str_replace('{couponFirstRow}', '', $message);
+                            $message = str_replace('{code}', '', $message);
+                            $message = str_replace('{couponLastRow}', '', $message);
 
                             /* @var CEmailRepo $emailRepo */
                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -503,8 +541,9 @@ GROUP BY C.id";
                             $message = str_replace('{cartRow}', $cartRow, $message);
                             $message = str_replace('{cartAmount}', $cartAmount, $message);
                             $message = str_replace('{cartTotalAmount}', $cartTotalAmount, $message);
-                            $message = str_replace('{cartRowCoupon}', '', $message);
-
+                            $message = str_replace('{couponFirstRow}', '', $message);
+                            $message = str_replace('{code}', '', $message);
+                            $message = str_replace('{couponLastRow}', '', $message);
 
                             /* @var CEmailRepo $emailRepo */
                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -526,7 +565,9 @@ GROUP BY C.id";
                             $message = str_replace('{emailunsuscriber}', $emailUser, $message);
                             $message = str_replace('{cartRow}', $cartRow, $message);
                             $message = str_replace('{cartAmount}', $cartAmount, $message);
-                            $message = str_replace('{cartRowCoupon}', '', $message);
+                            $message = str_replace('{couponFirstRow}', '', $message);
+                            $message = str_replace('{code}', '', $message);
+                            $message = str_replace('{couponLastRow}', '', $message);
 
                             /* @var CEmailRepo $emailRepo */
                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -549,9 +590,9 @@ GROUP BY C.id";
             }
 
 
-
-
-
         }
     }
+
+
 }
+

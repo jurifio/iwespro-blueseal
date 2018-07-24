@@ -46,7 +46,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="firstTimeEmailSendDay">Inserisci i Giorni da trascorrere  prima di eseguire il
+                                                <label for="firstTimeEmailSendDay">Inserisci i Giorni da trascorrere
+                                                    prima di eseguire il
                                                     Primo Invio dal Carello abbandonato</label>
                                                 <input id="firstTimeEmailSendDay" class="form-control"
                                                        placeholder="Inserisci dopo quanti giorni deve essere inviata la  prima mail"
@@ -55,7 +56,8 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="firstTimeEmailSendHour">Inserisci le ore da trascorrere del prima di eseguire il
+                                                <label for="firstTimeEmailSendHour">Inserisci le ore da trascorrere del
+                                                    prima di eseguire il
                                                     Primo Invio dal Carrelo Abbandonato</label>
                                                 <input id="firstTimeEmailSendHour" class="form-control"
                                                        placeholder="Inserisci dopo quante ore deve essere inviata la  prima mail name="
@@ -77,7 +79,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="secondTimeEmailSendDay">Inserisci i Giorni da trascorrere prima di eseguire il
+                                                <label for="secondTimeEmailSendDay">Inserisci i Giorni da trascorrere
+                                                    prima di eseguire il
                                                     Secondo Invio dal Carello abbandonato</label>
                                                 <input id="secondTimeEmailSendDay" class="form-control"
                                                        placeholder="Inserisci dopo quanti giorni deve essere inviata la  secondas mail"
@@ -86,8 +89,9 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="secondTimeEmailSendHour">Inserisci le ore da trascorrere prima di eseguire il
-                                                    Secondo Invio dal Carrelo Abbandonato</label>
+                                                <label for="secondTimeEmailSendHour">Inserisci le ore da trascorrere
+                                                    prima di eseguire il
+                                                    Secondo Invio dal Carrello Abbandonato</label>
                                                 <input id="secondTimeEmailSendHour" class="form-control"
                                                        placeholder="Inserisci dopo quante ore deve essere inviata la  seconda mail name="
                                                        secondTimeEmailSendHour" required="required">
@@ -108,7 +112,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="thirdTimeEmailSendDay">Inserisci i Giorni da trascorrere prima di eseguire il
+                                                <label for="thirdTimeEmailSendDay">Inserisci i Giorni da trascorrere
+                                                    prima di eseguire il
                                                     Terzo Invio dal Carello abbandonato</label>
                                                 <input id="thirdTimeEmailSendDay" class="form-control"
                                                        placeholder="Inserisci dopo quanti giorni deve essere inviata la terza mail"
@@ -117,8 +122,9 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="thirdTimeEmailSendHour">Inserisci le ore da trascorrere prima di eseguire il
-                                                    Terzo Invio dal Carrelo Abbandonato</label>
+                                                <label for="thirdTimeEmailSendHour">Inserisci le ore da trascorrere
+                                                    prima di eseguire il
+                                                    Terzo Invio dal Carrello Abbandonato</label>
                                                 <input id="thirdTimeEmailSendHour" class="form-control"
                                                        placeholder="Inserisci dopo quante ore deve essere inviata la  terza mail name="
                                                        thirdTimeEmailSendHour" required="required">
@@ -129,12 +135,12 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="generateCoupon">Genera il Coupon</label>
+                                                <label for="generateCoupon">Vuoi Genera il Coupon per il Primo Invio</label>
                                                 <select id="generateCoupon" name="generateCoupon"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
                                                 <option value=""></option>
-                                                 <option value=""></option>
+                                                <option value=""></option>
                                                 <option value="1">Si</option>
                                                 <option value="2">No</option>
                                                 data-init-plugin="selectize"
@@ -144,6 +150,44 @@
                                         <div id="selectemaildiv"></div>
                                     </div>
                                     <div id="coupondiv">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="generateCoupon2">Vuoi Generare il Coupon per il secondo invio</label>
+                                                <select id="generateCoupon2" name="generateCoupon2"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Lista"
+                                                <option value=""></option>
+                                                <option value=""></option>
+                                                <option value="1">Si</option>
+                                                <option value="2">No</option>
+                                                data-init-plugin="selectize"
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="selectemaildiv2"></div>
+                                    </div>
+                                    <div id="coupondiv2">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="generateCoupon3">Vuoi Generare il Coupon per il terzo invio</label>
+                                                <select id="generateCoupon3" name="generateCoupon3"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Lista"
+                                                <option value=""></option>
+                                                <option value=""></option>
+                                                <option value="1">Si</option>
+                                                <option value="2">No</option>
+                                                data-init-plugin="selectize"
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="selectemaildiv3"></div>
+                                    </div>
+                                    <div id="coupondiv3">
                                     </div>
                                 </div>
                             </div>

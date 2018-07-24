@@ -13,6 +13,10 @@ window.buttonSetup = {
 $(document).on('bs-listscartabandonedemailparam-delete', function () {
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
+    let bsModal = new $.bsModal('Cancella La Pianificazione', {
+        body: '<div><p>Conferma'+
+        '</div>'
+    });
 
 
     if (selectedRows.length != 1) {
