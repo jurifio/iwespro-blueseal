@@ -44,15 +44,15 @@ class CReadExtDbTable extends AReadExtDbTable
 
             $tableForJoin = array_keys($tFields)[1];
 
-            for ($countFieldJoin = 1; $countFieldJoin < $sumFields+1; $countFieldJoin++) {
-                if($countFieldJoin === 1 && $sumFields !== 1) {
-                    $join .= $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin-1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin-1] . ' AND ';
+            for ($countFieldJoin = 1; $countFieldJoin < $sumFields + 1; $countFieldJoin++) {
+                if ($countFieldJoin === 1 && $sumFields !== 1) {
+                    $join .= $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin - 1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin - 1] . ' AND ';
                 } else if ($countFieldJoin < $sumFields && $sumFields !== 1) {
-                    $join .= $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin-1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin-1] . ' AND ';
-                } else if($countFieldJoin === $sumFields && $sumFields !== 1) {
-                    $join .= $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin-1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin-1];
-                } else if($sumFields === 1){
-                    $join .= $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin-1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin-1];
+                    $join .= $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin - 1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin - 1] . ' AND ';
+                } else if ($countFieldJoin === $sumFields && $sumFields !== 1) {
+                    $join .= $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin - 1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin - 1];
+                } else if ($sumFields === 1) {
+                    $join .= $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin - 1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin - 1];
                 }
             }
         }
@@ -79,7 +79,6 @@ class CReadExtDbTable extends AReadExtDbTable
 
         }
 
-
         $sql = "
         SELECT  $select
         FROM `$this->dbName`.`$tableFrom`
@@ -105,7 +104,44 @@ class CReadExtDbTable extends AReadExtDbTable
      * @throws BambooException
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
-    // N.B. remoteTables and external must be an associative array with $key = tableName , $value = fieldKey --> esempio: User => id, UserDetails => userId
+    /*
+     *ESEMPIO: $table->insertData(
+    false,
+    ['User',
+        'UserDetails'=>[
+            'Self'=>[
+                'userId'
+            ],
+            'User'=>[
+                'id'
+            ]
+        ],
+        'UserEmail'=> [
+            'Self'=>[
+                'userId'
+            ],
+            'UserDetails'=>[
+                'userId'
+            ]
+        ]
+    ],
+    ['email', 'isActive','name','surname','birthDate'],
+    ['email'],
+    ['User'=>[
+        'id'=>2,
+        'langId'=>0
+        ],
+     'UserEmail'=>[
+         'address'=>'lorella@iwes.it'
+        ]
+    ],
+    'NewsletterExternalUser',
+    ['email', 'isActive','name','surname','birthDate'],
+    ['email'],
+    ['externalShopId' => 1]
+
+);
+     */
     public function insertData($isEqual = false,
                                array $remoteTables,
                                array $remoteFields,
