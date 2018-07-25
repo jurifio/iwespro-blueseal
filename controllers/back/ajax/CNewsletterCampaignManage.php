@@ -35,40 +35,35 @@ class CNewsletterCampaignManage extends AAjaxController
         $name = $data['name'];
         $dateCampaignStart = $data['dateCampaignStart'];
         $dateCampaignFinish = $data['dateCampaignFinish'];
+        $nameShop = $data["nameShop"];
 
-
-
+        if(empty($name) || empty($nameShop)) return "Inserisci tutti i campi";
 
 
         /** @var CRepo $newsletterCampaignRepo */
         $newsletterCampaignRepo = \Monkey::app()->repoFactory->create('NewsletterCampaign');
 
         /** @var CNewsletterCampaign $newsletterCampaign*/
-        $newsletterCampaignRepo = $newsletterCampaignRepo->findOneBy(['name' => $name]);
+        $newsletterCampaign = $newsletterCampaignRepo->findOneBy(['name' => $name]);
 
 
         if (empty($newsletterCampaign)){
             //se la variabile non è istanziata inserisci in db
 
             /** @var CNewsletterCampaign $newsletterCampaignInsert   */
-            $newsletterCampaignInsert = \Monkey::app()->repoFactory->create('NewsletterCampaign')->getEmptyEntity();
-            //popolo la tabella
+            $newsletterCampaignInsert = $newsletterCampaignRepo->getEmptyEntity();
 
             $newsletterCampaignInsert->name = $name ;
             $newsletterCampaignInsert->dateCampaignStart = $dateCampaignStart;
             $newsletterCampaignInsert->dateCampaignFinish = $dateCampaignFinish;
-
-
-
-            // eseguo la commit sulla tabella;
-
+            $newsletterCampaignInsert->newsletterShopId = $nameShop;
             $newsletterCampaignInsert->smartInsert();
 
             $res = "La campagna è stata creata con successo";
 
-        }else{
-            //Se hai trovato qualcosa allora restituitsci messaggio di errore
+        } else {
             $res = "Esiste già un Campagna Newsletter  con lo stesso nome";
+
         }
 
         return $res;

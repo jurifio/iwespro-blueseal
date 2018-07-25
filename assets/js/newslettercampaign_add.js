@@ -38,7 +38,7 @@ $(document).on('bs.newNewsletterCampaign.save', function () {
             name: $('#name').val(),
             dateCampaignStart: $('#dateCampaignStart').val(),
             dateCampaignFinish: $('#dateCampaignFinish').val(),
-
+            nameShop: $('#nameShop').val(),
         };
         $.ajax({
             method: 'post',
