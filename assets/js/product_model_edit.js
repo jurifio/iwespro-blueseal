@@ -19,11 +19,14 @@ $(document).on('bs.product.edit', function (e, element, button) {
                     body = 'OOPS! Modello non aggiornato!<br />' + res['message'];
                 } else {
                     if ('POST' == method) {
-                        body = 'Nuovo modello inserito.';
                         if (!isMult) {
+                            body = 'Nuovo modello inserito.';
                             location = window.location.pathname + '?id=' + res['productSheetModelPrototypeId'];
                         } else {
-                            location = '/blueseal/prodotti/modelli';
+                            if('new' == res['status']){
+                                body = res["message"];
+                                location = '/blueseal/prodotti/modelli';
+                            }
                         }
                     }
                     if ('PUT' == method) {
@@ -31,7 +34,10 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         if (!isMult) {
                             location = window.location.href;
                         } else {
-                            location = '/blueseal/prodotti/modelli';
+                            if('updated' == res['status']){
+                                body = res["message"];
+                                location = '/blueseal/prodotti/modelli';
+                            }
                         }
                     }
                 }

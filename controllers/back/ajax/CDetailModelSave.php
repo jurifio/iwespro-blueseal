@@ -86,13 +86,14 @@ class CDetailModelSave extends AAjaxController
                 return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
             }
         } else {
-            try {
-                $newIds = [];
-                \Monkey::app()->repoFactory->beginTransaction();
 
-                //Preparo l'inserimento
-                foreach ($get['modelIds'][0]['res'] as $model) {
+            $newIds = [];
+            $mes = [];
 
+            //Preparo l'inserimento
+            foreach ($get['modelIds'][0]['res'] as $model) {
+                try {
+                    \Monkey::app()->repoFactory->beginTransaction();
                     $newName = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
                     $newCode = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
 
@@ -135,13 +136,11 @@ class CDetailModelSave extends AAjaxController
                     $newProt->genderId = (!isset($get['genders']) ? $model['genderId'] : $get['genders']);
 
 
-
-
-                    if(isset($get['prodCats'])){
+                    if (isset($get['prodCats'])) {
                         $newProt->categoryGroupId = $get['prodCats'];
-                    } else if(!isset($get['prodCats']) && !isset($get['find-prodCats'])) {
+                    } else if (!isset($get['prodCats']) && !isset($get['find-prodCats'])) {
                         $newProt->categoryGroupId = $model['categoryGroupId'];
-                    } else if(!isset($get['prodCats']) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))){
+                    } else if (!isset($get['prodCats']) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))) {
 
                         /** @var CRepo $exCatGroupRepo */
                         $exCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
@@ -152,14 +151,14 @@ class CDetailModelSave extends AAjaxController
                         $newProdCats = str_ireplace($get['find-prodCats'], $get['sub-prodCats'], $exCGName);
 
                         $changeCatGroup = $exCatGroupRepo->findOneBy([
-                            "name"=>$newProdCats]);
+                            "name" => $newProdCats]);
 
-                        if(!is_null($changeCatGroup)){
+                        if (!is_null($changeCatGroup)) {
                             $newProt->categoryGroupId = $changeCatGroup->id;
                         } else {
                             /** @var CProductSheetModelPrototypeCategoryGroup $newCategoryGroup */
                             $newCategoryGroup = $exCatGroupRepo->getEmptyEntity();
-                            $newCategoryGroup->name =$newProdCats;
+                            $newCategoryGroup->name = $newProdCats;
                             $newCategoryGroup->macroCategoryGroupId = CProductSheetModelPrototypeMacroCategoryGroup::DEFAULT;
                             $newCategoryGroup->smartInsert();
 
@@ -208,8 +207,8 @@ class CDetailModelSave extends AAjaxController
                             $detailsToChange = $this->getDetailToChange($get, $psmp);
 
                             //mergio due array se definiti inserimenti
-                            if(!empty($detailsToChange)){
-                                foreach ($detailsToChange as $k=>$v) {
+                            if (!empty($detailsToChange)) {
+                                foreach ($detailsToChange as $k => $v) {
                                     $productDetails[$k] = $v;
                                 }
                             }
@@ -244,7 +243,7 @@ class CDetailModelSave extends AAjaxController
                             /** @var CProductSheetActual $psActual */
                             foreach ($psActualCollection as $psActual) {
 
-                                if(array_key_exists($psActual->productDetailLabelId, $detailsToChange)){
+                                if (array_key_exists($psActual->productDetailLabelId, $detailsToChange)) {
                                     //se lo trovo nell'arry è custom e la prendo
                                     $labelDetailInsert = $detailsToChange[$psActual->productDetailLabelId];
                                 } else {
@@ -269,13 +268,15 @@ class CDetailModelSave extends AAjaxController
 
 
                     \Monkey::app()->repoFactory->commit();
-                }
-                return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds)]);
 
-            } catch (\Throwable $e) {
-                \Monkey::app()->repoFactory->rollback();
-                return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
+                } catch (\Throwable $e) {
+                    \Monkey::app()->repoFactory->rollback();
+                    $mes[] = $e->getMessage();
+                }
             }
+            return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds), 'message' => json_encode($mes)]);
+
+
         }
 
 
@@ -337,17 +338,17 @@ class CDetailModelSave extends AAjaxController
             return json_encode($res);
         } else {
 
-            try {
-                $newIds = [];
+            $mes = [];
+            $newIds = [];
 
-                $productDetails = $this->getDetails($get);
-
-                \Monkey::app()->repoFactory->beginTransaction();
-
-                //Ciclo i modelli
-                foreach ($get['modelIds'][0]['res'] as $model) {
+            $productDetails = $this->getDetails($get);
 
 
+            //Ciclo i modelli
+
+            foreach ($get['modelIds'][0]['res'] as $model) {
+                try {
+                    \Monkey::app()->repoFactory->beginTransaction();
                     /** @var CProductSheetModelPrototype $psmp */
                     $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $model['id']]);
 
@@ -386,9 +387,9 @@ class CDetailModelSave extends AAjaxController
                     if (isset($get['genders'])) $psmp->genderId = $get['genders'];
                     if (isset($get['prodCats'])) $psmp->categoryGroupId = $get['prodCats'];
 
-                    if(isset($get['prodCats'])){
+                    if (isset($get['prodCats'])) {
                         $psmp->categoryGroupId = $get['prodCats'];
-                    } else if(!isset($get['prodCats']) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))){
+                    } else if (!isset($get['prodCats']) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))) {
 
                         /** @var CRepo $exCatGroupRepo */
                         $exCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
@@ -399,14 +400,14 @@ class CDetailModelSave extends AAjaxController
                         $newProdCats = str_ireplace($get['find-prodCats'], $get['sub-prodCats'], $exCGName);
 
                         $changeCatGroup = $exCatGroupRepo->findOneBy([
-                            "name"=>$newProdCats]);
+                            "name" => $newProdCats]);
 
-                        if(!is_null($changeCatGroup)){
+                        if (!is_null($changeCatGroup)) {
                             $psmp->categoryGroupId = $changeCatGroup->id;
                         } else {
                             /** @var CProductSheetModelPrototypeCategoryGroup $newCategoryGroup */
                             $newCategoryGroup = $exCatGroupRepo->getEmptyEntity();
-                            $newCategoryGroup->name =$newProdCats;
+                            $newCategoryGroup->name = $newProdCats;
                             $newCategoryGroup->macroCategoryGroupId = CProductSheetModelPrototypeMacroCategoryGroup::DEFAULT;
                             $newCategoryGroup->smartInsert();
 
@@ -437,8 +438,8 @@ class CDetailModelSave extends AAjaxController
                             $detailsToChange = $this->getDetailToChange($get, $psmp);
 
                             //mergio due array se definiti inserimenti
-                            if(!empty($detailsToChange)){
-                                foreach ($detailsToChange as $k=>$v) {
+                            if (!empty($detailsToChange)) {
+                                foreach ($detailsToChange as $k => $v) {
                                     $productDetails[$k] = $v;
                                 }
                             }
@@ -495,13 +496,12 @@ class CDetailModelSave extends AAjaxController
 
                     $newIds[] = $psmp->id;
                     \Monkey::app()->repoFactory->commit();
+                } catch (\Throwable $e) {
+                    \Monkey::app()->repoFactory->rollback();
+                    $mes[] = $e->getMessage();
                 }
-                return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds)]);
-
-            } catch (\Throwable $e) {
-                \Monkey::app()->repoFactory->rollback();
-                return json_encode(['status' => "ko", 'message' => $e->getMessage()]);
             }
+            return json_encode(['status' => 'updated', 'productSheetModelPrototypeId' => json_encode($newIds),  'message' => json_encode($mes)]);
 
         }
     }
@@ -583,34 +583,34 @@ class CDetailModelSave extends AAjaxController
 
 
         $res = [];
-       /** @var CRepo $pntrRepo */
-       $pntrRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
-       foreach ($detailsSingleValues as $singleDetailV){
+        /** @var CRepo $pntrRepo */
+        $pntrRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
+        foreach ($detailsSingleValues as $singleDetailV) {
 
-           //se l'array non ha 3 elementi non sono stati assegnati valori
-           if(count($singleDetailV) != 3) return [];
+            //se l'array non ha 3 elementi non sono stati assegnati valori
+            if (count($singleDetailV) != 3) return [];
 
-           /** @var CProductSheetActual $sheetActual */
-           $sheetActual = $psmp->productSheetModelActual->findOneByKey('productDetailLabelId', $singleDetailV[0]);
-           $detailTrans = $sheetActual->productDetail->productDetailTranslation->getFirst()->name;
+            /** @var CProductSheetActual $sheetActual */
+            $sheetActual = $psmp->productSheetModelActual->findOneByKey('productDetailLabelId', $singleDetailV[0]);
+            $detailTrans = $sheetActual->productDetail->productDetailTranslation->getFirst()->name;
 
-           $newDetailName = str_ireplace($singleDetailV[1], $singleDetailV[2], $detailTrans);
+            $newDetailName = str_ireplace($singleDetailV[1], $singleDetailV[2], $detailTrans);
 
-           //cerco se ne esiste una con lo stesso nom in italian
-           /** @var CProductDetailTranslation $existentLabel */
-           $existentLabel = $pntrRepo->findOneBy(['name'=>trim($newDetailName), 'langId'=>1]);
-           if(!is_null($existentLabel)){
-               $res[$singleDetailV[0]] = $existentLabel->productDetail->id;
-           } else {
-               //inserisco una nuova label
-               /** @var CProductDetailRepo $pdrepo */
-               $pdrepo = \Monkey::app()->repoFactory->create('ProductDetail');
+            //cerco se ne esiste una con lo stesso nom in italian
+            /** @var CProductDetailTranslation $existentLabel */
+            $existentLabel = $pntrRepo->findOneBy(['name' => trim($newDetailName), 'langId' => 1]);
+            if (!is_null($existentLabel)) {
+                $res[$singleDetailV[0]] = $existentLabel->productDetail->id;
+            } else {
+                //inserisco una nuova label
+                /** @var CProductDetailRepo $pdrepo */
+                $pdrepo = \Monkey::app()->repoFactory->create('ProductDetail');
 
-               /** @var CProductDetail $newOrFetchProductDetail */
-               $newOrFetchProductDetail = $pdrepo->fetchOrInsert($newDetailName);
-               $res[$singleDetailV[0]] = $newOrFetchProductDetail->id;
-           }
-       }
+                /** @var CProductDetail $newOrFetchProductDetail */
+                $newOrFetchProductDetail = $pdrepo->fetchOrInsert($newDetailName);
+                $res[$singleDetailV[0]] = $newOrFetchProductDetail->id;
+            }
+        }
 
         return $res;
     }
