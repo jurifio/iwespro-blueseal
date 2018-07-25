@@ -171,7 +171,7 @@
                                                 <label for="generateCoupon3">Vuoi Genera il Coupon per il Terzo Invio</label>
                                                 <select id="generateCoupon3" name="generateCoupon3"
                                                         class="full-width selectpicker"
-                                                        placeholder="Seleziona"
+                                                        placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize"
                                                 <option value=""></option>
                                                 <option value=""></option>

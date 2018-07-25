@@ -87,33 +87,33 @@ $(document).ready(function () {
                 P7D1 = 'selected="selected"';
                 break;
         }
-        var validForCartTotal1=$('#validForCartTotal1').val();
-        var hasFreeShipping1=$('#hasFreeShipping1').val();
-        var hasFreeReturn1=$('#hasFreeReturn1').val();
-        var hasFreeShippingYes1='';
-        var hasFreeShippingNo1='';
-        var hasFreeReturnYes1='';
-        var hasFreeReturnNo1='';
-            if (hasFreeShipping1=='1'){
-            hasFreeShippingYes1='selected="selected"';
-            hasFreeShippingNo1='';
-        }else{
-            hasFreeShippingYes1='';
-            hasFreeShippingNo1='selected="selected"';
+        var validForCartTotal1 = $('#validForCartTotal1').val();
+        var hasFreeShipping1 = $('#hasFreeShipping1').val();
+        var hasFreeReturn1 = $('#hasFreeReturn1').val();
+        var hasFreeShippingYes1 = '';
+        var hasFreeShippingNo1 = '';
+        var hasFreeReturnYes1 = '';
+        var hasFreeReturnNo1 = '';
+        if (hasFreeShipping1 == '1') {
+            hasFreeShippingYes1 = 'selected="selected"';
+            hasFreeShippingNo1 = '';
+        } else {
+            hasFreeShippingYes1 = '';
+            hasFreeShippingNo1 = 'selected="selected"';
         }
-        if (hasFreeReturn1=='1'){
-            hasFreeReturnYes1='selected="selected"';
-            hasFreeReturnNo1='';
-        }else{
-            hasFreeReturnYes1='';
-            hasFreeReturnNo1='selected="selected"';
+        if (hasFreeReturn1 == '1') {
+            hasFreeReturnYes1 = 'selected="selected"';
+            hasFreeReturnNo1 = '';
+        } else {
+            hasFreeReturnYes1 = '';
+            hasFreeReturnNo1 = 'selected="selected"';
         }
 
         $("#coupondiv").append(`<div class="row">
            <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled" >
-                                                <label for="typeCoupon">Tipo di Coupon</label>
+                                                <label for="typeCoupon">Tipo Coupon</label>
                                                 <select id="typeCoupon" name="typeCoupon"
                                                         class="full-width selectpicker"
                                                         required="required"
@@ -128,17 +128,16 @@ $(document).ready(function () {
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="amount">Inserisci l'importo o la percentuale</label>
+                                                <label for="amount">Importo Coupon</label>
                                                 <input id="amount" class="form-control"
                                                        placeholder="Inserisci l'importo o la percentuale"
                                                        name="amount" required="required"
                                                         value="${amount1}">
                                             </div>
                                         </div>
-                                             
-                                     <div class="col-md-2">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="validity">Validità dalla Generazione</label>
+                                                <label for="validity">Scadenza Coupon</label>
                                                 <select id="validity" name="validity"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona il tempo di Validità"
@@ -152,10 +151,9 @@ $(document).ready(function () {
                                                 </select>
                                             </div>
                                         </div>
-                                       
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="validForCartTotal">Inserisci  il minimo importo di Spesa</label>
+                                                <label for="validForCartTotal">Spesa</label>
                                                 <input id="validForCartTotal" class="form-control" 
                                                        placeholder="Inserisci  il minimo importo di Spesa"
                                                        name="validForCartTotal" required="required"
@@ -164,7 +162,7 @@ $(document).ready(function () {
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="freeShipping">Spedizione Gratuita</label>
+                                                <label for="freeShipping">Spedizione gratuita</label>
                                                 <select id="freeShipping" name="freeShipping"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona"
@@ -177,7 +175,7 @@ $(document).ready(function () {
                                                 </select>
                                             </div>
                                         </div>
-                                         <div class="col-md-2">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="freeReturn">Reso Gratuito</label>
                                                 <select id="freeReturn" name="freeReturn"
@@ -236,33 +234,33 @@ $(document).ready(function () {
                 P7D2 = 'selected="selected"';
                 break;
         }
-        var validForCartTotal2=$('#validForCartTotal2').val();
-        var hasFreeShipping2=$('#hasFreeShipping2').val();
-        var hasFreeReturn2=$('#hasFreeReturn2').val();
-        var hasFreeShippingYes2='';
-        var hasFreeShippingNo2='';
-        var hasFreeReturnYes2='';
-        var hasFreeReturnNo2='';
-        if (hasFreeShipping2=='1'){
-            hasFreeShippingYes2='selected="selected"';
-            hasFreeShippingNo2='';
-        }else{
-            hasFreeShippingYes2='';
-            hasFreeShippingNo2='selected="selected"';
+        var validForCartTotal2 = $('#validForCartTotal2').val();
+        var hasFreeShipping2 = $('#hasFreeShipping2').val();
+        var hasFreeReturn2 = $('#hasFreeReturn2').val();
+        var hasFreeShippingYes2 = '';
+        var hasFreeShippingNo2 = '';
+        var hasFreeReturnYes2 = '';
+        var hasFreeReturnNo2 = '';
+        if (hasFreeShipping2 == '1') {
+            hasFreeShippingYes2 = 'selected="selected"';
+            hasFreeShippingNo2 = '';
+        } else {
+            hasFreeShippingYes2 = '';
+            hasFreeShippingNo2 = 'selected="selected"';
         }
-        if (hasFreeReturn2=='1'){
-            hasFreeReturnYes2='selected="selected"';
-            hasFreeReturnNo2='';
-        }else{
-            hasFreeReturnYes2='';
-            hasFreeReturnNo2='selected="selected"';
+        if (hasFreeReturn2 == '1') {
+            hasFreeReturnYes2 = 'selected="selected"';
+            hasFreeReturnNo2 = '';
+        } else {
+            hasFreeReturnYes2 = '';
+            hasFreeReturnNo2 = 'selected="selected"';
         }
 
         $("#coupondiv2").append(`<div class="row">
             <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="typeCoupon2">Tipo di Coupon</label>
+                                                <label for="typeCoupon2">Tipo Coupon</label>
                                                 <select id="typeCoupon2" name="typeCoupon2"
                                                         class="full-width selectpicker"
                                                         required="required"
@@ -277,17 +275,16 @@ $(document).ready(function () {
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="amount">Inserisci l'importo o la percentuale</label>
+                                                <label for="amount">Importo Coupon</label>
                                                 <input id="amount2" class="form-control"
                                                        placeholder="Inserisci l'importo o la percentuale"
                                                        name="amount2" required="required"
                                                        value="${amount2}">
                                             </div>
                                         </div>
-                                             
-                                     <div class="col-md-2">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="validity2">Validità dalla Generazione</label>
+                                                <label for="validity2">Scadenza Coupon</label>
                                                 <select id="validity2" name="validity2"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona il tempo di Validità"
@@ -301,10 +298,9 @@ $(document).ready(function () {
                                                 </select>
                                             </div>
                                         </div>
-                                       
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="validForCartTotal2">Inserisci  il minimo importo di Spesa</label>
+                                                <label for="validForCartTotal2">Spesa</label>
                                                 <input id="validForCartTotal2" class="form-control" 
                                                        placeholder="Inserisci  il minimo importo di Spesa"
                                                        name="validForCartTotal2" required="required"
@@ -326,7 +322,7 @@ $(document).ready(function () {
                                                 </select>
                                             </div>
                                         </div>
-                                         <div class="col-md-2">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="freeReturn2">Reso Gratuito</label>
                                                 <select id="freeReturn2" name="freeReturn2"
@@ -385,33 +381,33 @@ $(document).ready(function () {
                 P7D3 = 'selected="selected"';
                 break;
         }
-        var validForCartTotal3=$('#validForCartTotal3').val();
-        var hasFreeShipping3=$('#hasFreeShipping3').val();
-        var hasFreeReturn3=$('#hasFreeReturn3').val();
-        var hasFreeShippingYes3='';
-        var hasFreeShippingNo3='';
-        var hasFreeReturnYes3='';
-        var hasFreeReturnNo3='';
-        if (hasFreeShipping3=='1'){
-            hasFreeShippingYes3='selected="selected"';
-            hasFreeShippingNo3='';
-        }else{
-            hasFreeShippingYes3='';
-            hasFreeShippingNo3='selected="selected"';
+        var validForCartTotal3 = $('#validForCartTotal3').val();
+        var hasFreeShipping3 = $('#hasFreeShipping3').val();
+        var hasFreeReturn3 = $('#hasFreeReturn3').val();
+        var hasFreeShippingYes3 = '';
+        var hasFreeShippingNo3 = '';
+        var hasFreeReturnYes3 = '';
+        var hasFreeReturnNo3 = '';
+        if (hasFreeShipping3 == '1') {
+            hasFreeShippingYes3 = 'selected="selected"';
+            hasFreeShippingNo3 = '';
+        } else {
+            hasFreeShippingYes3 = '';
+            hasFreeShippingNo3 = 'selected="selected"';
         }
-        if (hasFreeReturn3=='1'){
-            hasFreeReturnYes3='selected="selected"';
-            hasFreeReturnNo3='';
-        }else{
-            hasFreeReturnYes3='';
-            hasFreeReturnNo3='selected="selected"';
+        if (hasFreeReturn3 == '1') {
+            hasFreeReturnYes3 = 'selected="selected"';
+            hasFreeReturnNo3 = '';
+        } else {
+            hasFreeReturnYes3 = '';
+            hasFreeReturnNo3 = 'selected="selected"';
         }
 
         $("#coupondiv3").append(`<div class="row">
            <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled" >
-                                                <label for="typeCoupon3">Tipo di Coupon</label>
+                                                <label for="typeCoupon3">Tipo Coupon</label>
                                                 <select id="typeCoupon3" name="typeCoupon3"
                                                         class="full-width selectpicker"
                                                         required="required"
@@ -426,7 +422,7 @@ $(document).ready(function () {
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="amount3">Inserisci l'importo o la percentuale</label>
+                                                <label for="amount3">Importo Coupon</label>
                                                 <input id="amount3" class="form-control"
                                                        placeholder="Inserisci l'importo o la percentuale"
                                                        name="amount3" required="required"
@@ -436,7 +432,7 @@ $(document).ready(function () {
                                              
                                      <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="validity3">Validità dalla Generazione</label>
+                                                <label for="validity3">Scadenza Coupon</label>
                                                 <select id="validity3" name="validity3"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona il tempo di Validità"
@@ -451,9 +447,9 @@ $(document).ready(function () {
                                             </div>
                                         </div>
                                        
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="validForCartTotal3">Inserisci  il minimo importo di Spesa</label>
+                                                <label for="validForCartTotal3">Spesa</label>
                                                 <input id="validForCartTotal3" class="form-control" 
                                                        placeholder="Inserisci  il minimo importo di Spesa"
                                                        name="validForCartTotal3" required="required"
@@ -823,12 +819,12 @@ $(document).on('bs.newPlanSendEmail.save', function () {
         var hasFreeReturn = $('#freeReturn').val();
         var hasFreeReturn2 = $('#freeReturn2').val();
         var hasFreeReturn3 = $('#freeReturn3').val();
-        var cartIdEmailParam1= $('#cartIdEmailParam1').val();
-        var cartIdEmailParam2= $('#cartIdEmailParam2').val();
-        var cartIdEmailParam3= $('#cartIdEmailParam3').val();
-        var couponTypeId1=$('#couponTypeId1').val();
-        var couponTypeId2=$('#couponTypeId2').val();
-        var couponTypeId3=$('#couponTypeId3').val();
+        var cartIdEmailParam1 = $('#cartIdEmailParam1').val();
+        var cartIdEmailParam2 = $('#cartIdEmailParam2').val();
+        var cartIdEmailParam3 = $('#cartIdEmailParam3').val();
+        var couponTypeId1 = $('#couponTypeId1').val();
+        var couponTypeId2 = $('#couponTypeId2').val();
+        var couponTypeId3 = $('#couponTypeId3').val();
 
         const data = {
             generateCoupon: generateCoupon,
@@ -862,12 +858,12 @@ $(document).on('bs.newPlanSendEmail.save', function () {
             hasFreeReturn: hasFreeReturn,
             hasFreeReturn2: hasFreeReturn2,
             hasFreeReturn3: hasFreeReturn3,
-            cartIdEmailParam1:cartIdEmailParam1,
-            cartIdEmailParam2:cartIdEmailParam2,
-            cartIdEmailParam3:cartIdEmailParam3,
-            couponTypeId1:couponTypeId1,
-            couponTypeId2:couponTypeId2,
-            couponTypeId3:couponTypeId3
+            cartIdEmailParam1: cartIdEmailParam1,
+            cartIdEmailParam2: cartIdEmailParam2,
+            cartIdEmailParam3: cartIdEmailParam3,
+            couponTypeId1: couponTypeId1,
+            couponTypeId2: couponTypeId2,
+            couponTypeId3: couponTypeId3
 
         };
         $.ajax({
