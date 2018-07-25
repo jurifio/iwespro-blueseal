@@ -67,11 +67,12 @@ $("#generateCoupon").change(function () {
                                                         class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Seleziona il tipo di Coupon"
+                                                        data-init-plugin="selectize"
                                                          <option value=""></option>
                                                           <option value=""></option>
                                                 <option value="P">Importo Percentuale</option>
                                                 <option value="F">Importo Fisso</option>
-                                                data-init-plugin="selectize"
+                                                
                                                 </select>
                                             </div>
                                         </div>
@@ -90,13 +91,14 @@ $("#generateCoupon").change(function () {
                                                 <select id="validity" name="validity"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona il tempo di Validità"
+                                                        data-init-plugin="selectize"
                                                         required="required"
                                                          <option value=""></option>
                                                           <option value=""></option>
                                                 <option value="P1Y">Un Anno</option>
                                                 <option value="P1M">Un Mese</option>
                                                 <option value="P7D">Una settimana</option>
-                                                data-init-plugin="selectize"
+                                                
                                                 </select>
                                             </div>
                                         </div>
@@ -116,11 +118,12 @@ $("#generateCoupon").change(function () {
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona"
                                                         required="required"
+                                                        data-init-plugin="selectize"
                                                          <option value=""></option>
                                                  <option value=""></option>
                                                 <option value="1">Si</option>
-                                                <option value="2">No</option>
-                                                data-init-plugin="selectize"
+                                                <option value="0">No</option>
+                                                
                                                 </select>
                                             </div>
                                         </div>
@@ -131,11 +134,12 @@ $("#generateCoupon").change(function () {
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona"
                                                         required="required"
+                                                        data-init-plugin="selectize"
                                                          <option value=""></option>
                                                  <option value=""></option>
                                                 <option value="1">Si</option>
-                                                <option value="2">No</option>
-                                                data-init-plugin="selectize"
+                                                <option value="0">No</option>
+                                                
                                                 </select>
                                             </div>
                                         </div>
@@ -162,11 +166,12 @@ $("#generateCoupon2").change(function () {
                                                         class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Seleziona il tipo di Coupon"
+                                                         data-init-plugin="selectize"
                                                          <option value=""></option>
                                                           <option value=""></option>
                                                 <option value="P">Importo Percentuale</option>
                                                 <option value="F">Importo Fisso</option>
-                                                data-init-plugin="selectize"
+                                               
                                                 </select>
                                             </div>
                                         </div>
@@ -186,12 +191,13 @@ $("#generateCoupon2").change(function () {
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona il tempo di Validità"
                                                         required="required"
+                                                         data-init-plugin="selectize"
                                                          <option value=""></option>
                                                           <option value=""></option>
                                                 <option value="P1Y">Un Anno</option>
                                                 <option value="P1M">Un Mese</option>
                                                 <option value="P7D">Una settimana</option>
-                                                data-init-plugin="selectize"
+                                               
                                                 </select>
                                             </div>
                                         </div>
@@ -211,11 +217,12 @@ $("#generateCoupon2").change(function () {
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona"
                                                         required="required"
+                                                         data-init-plugin="selectize"
                                                          <option value=""></option>
                                                  <option value=""></option>
                                                 <option value="1">Si</option>
-                                                <option value="2">No</option>
-                                                data-init-plugin="selectize"
+                                                <option value="0">No</option>
+                                               
                                                 </select>
                                             </div>
                                         </div>
@@ -226,11 +233,12 @@ $("#generateCoupon2").change(function () {
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona"
                                                         required="required"
+                                                        data-init-plugin="selectize"
                                                          <option value=""></option>
                                                  <option value=""></option>
                                                 <option value="1">Si</option>
-                                                <option value="2">No</option>
-                                                data-init-plugin="selectize"
+                                                <option value="0">No</option>
+                                                
                                                 </select>
                                             </div>
                                         </div>
@@ -257,11 +265,12 @@ $("#generateCoupon3").change(function () {
                                                         class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Seleziona il tipo di Coupon"
+                                                        data-init-plugin="selectize"
                                                          <option value=""></option>
                                                           <option value=""></option>
                                                 <option value="P">Importo Percentuale</option>
                                                 <option value="F">Importo Fisso</option>
-                                                data-init-plugin="selectize"
+                                               
                                                 </select>
                                             </div>
                                         </div>
@@ -281,12 +290,13 @@ $("#generateCoupon3").change(function () {
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona il tempo di Validità"
                                                         required="required"
+                                                        data-init-plugin="selectize"
                                                          <option value=""></option>
                                                           <option value=""></option>
                                                 <option value="P1Y">Un Anno</option>
                                                 <option value="P1M">Un Mese</option>
                                                 <option value="P7D">Una settimana</option>
-                                                data-init-plugin="selectize"
+                                                
                                                 </select>
                                             </div>
                                         </div>
@@ -306,11 +316,12 @@ $("#generateCoupon3").change(function () {
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona"
                                                         required="required"
+                                                        data-init-plugin="selectize"
                                                          <option value=""></option>
                                                  <option value=""></option>
                                                 <option value="1">Si</option>
-                                                <option value="2">No</option>
-                                                data-init-plugin="selectize"
+                                                <option value="0">No</option>
+                                                
                                                 </select>
                                             </div>
                                         </div>
@@ -321,11 +332,12 @@ $("#generateCoupon3").change(function () {
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona"
                                                         required="required"
+                                                        data-init-plugin="selectize"
                                                          <option value=""></option>
                                                  <option value=""></option>
                                                 <option value="1">Si</option>
-                                                <option value="2">No</option>
-                                                data-init-plugin="selectize"
+                                                <option value="0">No</option>
+                                               
                                                 </select>
                                             </div>
                                         </div>

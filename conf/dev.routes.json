@@ -2492,6 +2492,20 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/blueseal/cartabandoned/edit-plan(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedPlanEmailSendEditController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

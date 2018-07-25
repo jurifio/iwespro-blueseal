@@ -33,7 +33,7 @@
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="firstTemplateId">Seleziona Il Template da Utilizzare per il
                                                     Primo Invio</label>
@@ -44,7 +44,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="firstTimeEmailSendDay">Inserisci i Giorni da trascorrere
                                                     prima di eseguire il
@@ -64,9 +64,27 @@
                                                        firstTimeEmailSendHour" required="required">
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="generateCoupon">Vuoi Genera il Coupon per il Primo Invio</label>
+                                                <select id="generateCoupon" name="generateCoupon"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona"
+                                                        data-init-plugin="selectize"
+                                                <option value=""></option>
+                                                <option value=""></option>
+                                                <option value="1">Si</option>
+                                                <option value="2">No</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div id="selectemaildiv"></div>
+                                <div id="coupondiv">
+                                </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="secondTemplateId">Seleziona Il Template da Utilizzare per il
                                                     Secondo Invio</label>
@@ -77,7 +95,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="secondTimeEmailSendDay">Inserisci i Giorni da trascorrere
                                                     prima di eseguire il
@@ -87,7 +105,7 @@
                                                        name="secondTimeEmailSendDay" required="required">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="secondTimeEmailSendHour">Inserisci le ore da trascorrere
                                                     prima di eseguire il
@@ -97,9 +115,27 @@
                                                        secondTimeEmailSendHour" required="required">
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="generateCoupon2">Vuoi Genera il Coupon per il Secondo Invio</label>
+                                                <select id="generateCoupon2" name="generateCoupon2"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona"
+                                                        data-init-plugin="selectize"
+                                                <option value=""></option>
+                                                <option value=""></option>
+                                                <option value="1">Si</option>
+                                                <option value="2">No</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="selectemaildiv2"></div>
+                                    <div id="coupondiv2">
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="thirdTemplateId">Seleziona Il Template da Utilizzare per il
                                                     Terzo Invio</label>
@@ -110,7 +146,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="thirdTimeEmailSendDay">Inserisci i Giorni da trascorrere
                                                     prima di eseguire il
@@ -120,7 +156,7 @@
                                                        name="thirdTimeEmailSendDay" required="required">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="thirdTimeEmailSendHour">Inserisci le ore da trascorrere
                                                     prima di eseguire il
@@ -130,63 +166,23 @@
                                                        thirdTimeEmailSendHour" required="required">
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="generateCoupon">Vuoi Genera il Coupon per il Primo Invio</label>
-                                                <select id="generateCoupon" name="generateCoupon"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Seleziona la Lista"
-                                                <option value=""></option>
-                                                <option value=""></option>
-                                                <option value="1">Si</option>
-                                                <option value="2">No</option>
-                                                data-init-plugin="selectize"
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div id="selectemaildiv"></div>
-                                    </div>
-                                    <div id="coupondiv">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="generateCoupon2">Vuoi Generare il Coupon per il secondo invio</label>
-                                                <select id="generateCoupon2" name="generateCoupon2"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Seleziona la Lista"
-                                                <option value=""></option>
-                                                <option value=""></option>
-                                                <option value="1">Si</option>
-                                                <option value="2">No</option>
-                                                data-init-plugin="selectize"
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div id="selectemaildiv2"></div>
-                                    </div>
-                                    <div id="coupondiv2">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="generateCoupon3">Vuoi Generare il Coupon per il terzo invio</label>
+                                                <label for="generateCoupon3">Vuoi Genera il Coupon per il Terzo Invio</label>
                                                 <select id="generateCoupon3" name="generateCoupon3"
                                                         class="full-width selectpicker"
-                                                        placeholder="Seleziona la Lista"
+                                                        placeholder="Seleziona"
+                                                        data-init-plugin="selectize"
                                                 <option value=""></option>
                                                 <option value=""></option>
                                                 <option value="1">Si</option>
                                                 <option value="2">No</option>
-                                                data-init-plugin="selectize"
+
                                                 </select>
                                             </div>
                                         </div>
-                                        <div id="selectemaildiv3"></div>
                                     </div>
+                                    <div id="selectemaildiv3"></div>
                                     <div id="coupondiv3">
                                     </div>
                                 </div>
