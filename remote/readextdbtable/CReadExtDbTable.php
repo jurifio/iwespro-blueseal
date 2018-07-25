@@ -28,41 +28,63 @@ class CReadExtDbTable extends AReadExtDbTable
      * @return array
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
-    public function readTables($tablesName, array $fields = [])
+    public function readTables($tablesName, $remoteWhere, array $fields = [])
     {
-        $join = "";
+
         $firsTable = null;
         $firstField = null;
         $c = 0;
-        foreach ($tablesName as $table => $field){
+        $join = '';
+        foreach ($tablesName as $table => $tFields) {
             $c++;
+            if ($c == 1) continue;
+            $join .= " JOIN ";
 
-            //se è il primo mi salvo il campo su cui faccio la join e continua perché va sul FROM E NON SULLA JOIN
-            if($c === 1) {
-                $firstTable = $table;
-                $firstField = $field;
-                continue;
+            $sumFields = count($tFields["Self"]);
+
+            $tableForJoin = array_keys($tFields)[1];
+
+            for ($countFieldJoin = 1; $countFieldJoin < $sumFields+1; $countFieldJoin++) {
+                if($countFieldJoin === 1 && $sumFields !== 1) {
+                    $join .= $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin-1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin-1] . ' AND ';
+                } else if ($countFieldJoin < $sumFields && $sumFields !== 1) {
+                    $join .= $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin-1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin-1] . ' AND ';
+                } else if($countFieldJoin === $sumFields && $sumFields !== 1) {
+                    $join .= $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin-1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin-1];
+                } else if($sumFields === 1){
+                    $join .= $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' . $table . '.' . $tFields['Self'][$countFieldJoin-1] . ' = ' . $this->dbName . '.' . $tableForJoin . '.' . $tFields[$tableForJoin][$countFieldJoin-1];
+                }
             }
-
-            if($c === 2) {
-                $join .= 'JOIN ' . $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' . $table . '.' . $field . ' = ' . $this->dbName . '.' . $firstTable . '.' . $firstField;
-                $lastTable = $table;
-                $lastField = $field;
-                continue;
-            }
-
-            $join .= ' JOIN ' . $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' .  $table . '.' . $field . ' = ' . $this->dbName . '.' . $lastTable . '.' . $lastField;
-
-            $lastTable = $table;
-            $lastField = $field;
         }
 
+
         $select = empty($fields) ? "*" : implode(',', $fields);
-        $tableFrom = current(array_keys($tablesName));
+        $tableFrom = $tablesName[0];
+
+        $sum = $this->countAssociativeArrayElements($remoteWhere);
+        $count = 0;
+        $countKeyTable = 0;
+        $where = 'WHERE ';
+        foreach ($remoteWhere as $tableN) {
+            $tbName = array_keys($remoteWhere)[$countKeyTable];
+            $countKeyTable++;
+            foreach ($tableN as $condition => $val) {
+                $count++;
+                if ($count === $sum) {
+                    $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '"';
+                } else {
+                    $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '" AND ';
+                }
+            }
+
+        }
+
+
         $sql = "
         SELECT  $select
         FROM `$this->dbName`.`$tableFrom`
         $join
+        $where 
          ";
 
         $data = $this->client->query($sql, [])->fetchAll();
@@ -88,15 +110,16 @@ class CReadExtDbTable extends AReadExtDbTable
                                array $remoteTables,
                                array $remoteFields,
                                array $remoteFieldsToSearch,
+                               array $remoteWhere,
                                string $localTable,
                                array $localFields,
                                array $localFieldsToSearch,
                                array $external
-)
+    )
     {
 
         //Prendo i dati dalla tabella remota
-        $data = $this->readTables($remoteTables);
+        $data = $this->readTables($remoteTables, $remoteWhere);
 
         //todo: ----> implementare la funzione isEqual
         //$this->getTableFields($localTable);
@@ -113,7 +136,7 @@ class CReadExtDbTable extends AReadExtDbTable
         $countLocalFields = count($localFields);
         $countRemoteFields = count($remoteFields);
 
-        if($countLocalFields != $countRemoteFields) throw new BambooException("The number of Local fields in remote table must be identical to the number of Remote fields");
+        if ($countLocalFields != $countRemoteFields) throw new BambooException("The number of Local fields in remote table must be identical to the number of Remote fields");
 
         try {
             \Monkey::app()->repoFactory->beginTransaction();
@@ -157,12 +180,24 @@ class CReadExtDbTable extends AReadExtDbTable
 
             }
             \Monkey::app()->repoFactory->commit();
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
             \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->applicationLog('ReadExtDbTable', 'Error', 'Rollback operation', $e);
         }
 
         return true;
+    }
+
+    private function countAssociativeArrayElements(array $arr)
+    {
+
+        $sum = 0;
+        foreach ($arr as $val) {
+            $sum = $sum + count($val);
+        }
+
+        return $sum;
+
     }
 
 
