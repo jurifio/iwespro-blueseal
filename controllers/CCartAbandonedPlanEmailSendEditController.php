@@ -38,7 +38,9 @@ class CCartAbandonedPlanEmailSendEditController extends ARestrictedAccessRootCon
         foreach($cartAbandonedEmailParam as $cartAbandonedEmailParams){
             $i=$i+1;
             $collectCartAbandonedEmailParam[$i]['firstTemplateId']=$cartAbandonedEmailParams->firstTemplateId;
+            $collectTemplate=\Monkey::app()->repoFactory->create('NewsletterTemplate')->findOneBy(['id'=>$cartAbandonedEmailParams->firstTemplateId]);
             $collectCartAbandonedEmailParam[$i]['id']=$cartAbandonedEmailParams->id;
+            $collectCartAbandonedEmailParam[$i]['templateName']=$collectTemplate->name;
             $collectCartAbandonedEmailParam[$i]['firstTemplateId']=$cartAbandonedEmailParams->firstTemplateId;
             $collectCartAbandonedEmailParam[$i]['firstTimeEmailSendDay']=$cartAbandonedEmailParams->firstTimeEmailSendDay;
             $collectCartAbandonedEmailParam[$i]['firstTimeEmailSendHour']=$cartAbandonedEmailParams->firstTimeEmailSendHour;

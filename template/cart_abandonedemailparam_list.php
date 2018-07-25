@@ -91,6 +91,12 @@
         <bs-toolbar-button
                 data-remote="bs.listscartabandonedemailparam.delete"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.listscartabandonedemailparam.start"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.listscartabandonedemailparam.stop"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
