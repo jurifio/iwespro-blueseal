@@ -36,24 +36,33 @@ class CReadExtDbTable extends AReadExtDbTable
         $c = 0;
         foreach ($tablesName as $table => $field){
             $c++;
-            $lastTable = $table;
-            $lastField = $field;
 
             //se è il primo mi salvo il campo su cui faccio la join e continua perché va sul FROM E NON SULLA JOIN
             if($c === 1) {
                 $firstTable = $table;
                 $firstField = $field;
+                continue;
             }
 
-            $join .= 'JOIN '. `$this->dbName` . `$table` . 'ON ' . `$table` . `$field` . ' = ' . `$lastTable` . `$lastField`;
+            if($c === 2) {
+                $join .= 'JOIN ' . $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' . $table . '.' . $field . ' = ' . $this->dbName . '.' . $firstTable . '.' . $firstField;
+                $lastTable = $table;
+                $lastField = $field;
+                continue;
+            }
 
+            $join .= ' JOIN ' . $this->dbName . '.' . $table . ' ON ' . $this->dbName . '.' .  $table . '.' . $field . ' = ' . $this->dbName . '.' . $lastTable . '.' . $lastField;
+
+            $lastTable = $table;
+            $lastField = $field;
         }
 
         $select = empty($fields) ? "*" : implode(',', $fields);
+        $tableFrom = current(array_keys($tablesName));
         $sql = "
         SELECT  $select
-        FROM `$this->dbName`.`$tablesName[0]`
-        JOIN 
+        FROM `$this->dbName`.`$tableFrom`
+        $join
          ";
 
         $data = $this->client->query($sql, [])->fetchAll();
