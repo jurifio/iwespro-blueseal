@@ -21,12 +21,24 @@
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-12 alert-container closed"></div>
+                    <?php  if($job=='1'){
+                      echo '<span class="text-green">Il Job è Attivo</span>';
+                    } else{
+                        echo'<span class="text-red">Il Job è Fermo</span>';
+                    }
 
+                    ?>
+                </div>
+            </div>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
                 </div>
             </div>
+
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">

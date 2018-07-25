@@ -27,10 +27,13 @@ class CCartAbandonedEmailParamListController extends ARestrictedAccessRootContro
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/cart_abandonedemailparam_list.php');
+        $checkJob=\Monkey::app()->repoFactory->create('Job')->findOneBy(['id'=>'86']);
+        $job=$checkJob->isActive;
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'job' => $job,
             'sidebar' => $this->sidebar->build()
         ]);
     }
