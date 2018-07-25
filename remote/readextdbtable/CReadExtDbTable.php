@@ -64,20 +64,23 @@ class CReadExtDbTable extends AReadExtDbTable
         $sum = $this->countAssociativeArrayElements($remoteWhere);
         $count = 0;
         $countKeyTable = 0;
-        $where = 'WHERE ';
-        foreach ($remoteWhere as $tableN) {
-            $tbName = array_keys($remoteWhere)[$countKeyTable];
-            $countKeyTable++;
-            foreach ($tableN as $condition => $val) {
-                $count++;
-                if ($count === $sum) {
-                    $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '"';
-                } else {
-                    $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '" AND ';
-                }
-            }
 
-        }
+        if (!empty($remoteWhere)) {
+            $where = 'WHERE ';
+            foreach ($remoteWhere as $tableN) {
+                $tbName = array_keys($remoteWhere)[$countKeyTable];
+                $countKeyTable++;
+                foreach ($tableN as $condition => $val) {
+                    $count++;
+                    if ($count === $sum) {
+                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '"';
+                    } else {
+                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '" AND ';
+                    }
+                }
+
+            }
+        } else $where = '';
 
         $sql = "
         SELECT  $select
