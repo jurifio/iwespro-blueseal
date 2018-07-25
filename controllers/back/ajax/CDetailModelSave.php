@@ -88,7 +88,7 @@ class CDetailModelSave extends AAjaxController
         } else {
 
             $newIds = [];
-            $mes = [];
+            $mes = '';
 
             //Preparo l'inserimento
             foreach ($get['modelIds'][0]['res'] as $model) {
@@ -271,7 +271,7 @@ class CDetailModelSave extends AAjaxController
 
                 } catch (\Throwable $e) {
                     \Monkey::app()->repoFactory->rollback();
-                    $mes[] = $e->getMessage();
+                    $mes .= '<br><br>'.$e->getMessage();
                 }
             }
             return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds), 'message' => json_encode($mes)]);
@@ -338,7 +338,7 @@ class CDetailModelSave extends AAjaxController
             return json_encode($res);
         } else {
 
-            $mes = [];
+            $mes = '';
             $newIds = [];
 
             $productDetails = $this->getDetails($get);
@@ -498,7 +498,7 @@ class CDetailModelSave extends AAjaxController
                     \Monkey::app()->repoFactory->commit();
                 } catch (\Throwable $e) {
                     \Monkey::app()->repoFactory->rollback();
-                    $mes[] = $e->getMessage();
+                    $mes .= '<br><br>' .$e->getMessage();
                 }
             }
             return json_encode(['status' => 'updated', 'productSheetModelPrototypeId' => json_encode($newIds),  'message' => json_encode($mes)]);
