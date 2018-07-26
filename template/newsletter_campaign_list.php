@@ -6,8 +6,8 @@
  * Time: 16:35
  */
 ?>
-    <!DOCTYPE html>
-    <html>
+<!DOCTYPE html>
+<html>
 <head>
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
@@ -89,20 +89,21 @@
         <bs-toolbar-button
                 data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
-
         <bs-toolbar-button
                 data-remote="bs.lists.create.newslettercampaign"
         ></bs-toolbar-button>
-
         <bs-toolbar-button
                 data-remote="bs.lists.modify.newslettercampaign"
-
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.lists.delete.newslettercampaign"
-
         ></bs-toolbar-button>
-</bs-toolbar-group>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Aggiorna dati DB">
+        <bs-toolbar-button
+                data-remote="bs.update.external.user.table"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
