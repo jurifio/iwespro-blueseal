@@ -154,8 +154,9 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                 presinse.attr('data-spec',insertionId);
                 presinse.val(res.insertionName);
                 $('#fromEmailAddressId').val(res.emailId);
-                $('#fromEmailAddress').val(res.email)
-            });
+                $('#fromEmailAddress').val(res.email);
+                $('#newsletterShopId').val(res.id);
+             });
         } else {
             $('.col-pres-c').hide();
         }
@@ -369,6 +370,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                 }).done(function(emailInformation) {
                     $('#fromEmailAddressId').val(emailInformation.emailId);
                     $('#fromEmailAddress').val(emailInformation.email);
+                    $('#newsletterShopId').val(emailInformation.id);
                 });
 
 

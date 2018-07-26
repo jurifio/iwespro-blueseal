@@ -37,6 +37,7 @@ class CNewsletterShopManage extends AAjaxController
             $res['insertionName'] = $ins->name;
             $res['emailId'] = $ins->newsletterEvent->newsletterCampaign->newsletterShop->fromEmailAddressId;
             $res['email'] = $ins->newsletterEvent->newsletterCampaign->newsletterShop->emailAddress->address;
+            $res['id'] = $ins->newsletterEvent->newsletterCampaign->newsletterShop->id;
         }
 
         if($campaignId) {
@@ -44,6 +45,7 @@ class CNewsletterShopManage extends AAjaxController
             $cam = \Monkey::app()->repoFactory->create('NewsletterCampaign')->findOneBy(["id" => $campaignId]);
             $res['emailId'] = $cam->newsletterShop->fromEmailAddressId;
             $res['email'] = $cam->newsletterShop->emailAddress->address;
+            $res['id'] = $cam->newsletterShop->id;
         }
 
         if($newsletterShopId) {

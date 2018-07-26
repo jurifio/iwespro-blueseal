@@ -129,6 +129,7 @@
                                                         data-init-plugin="selectize">
                                                 </select>
                                             </div>
+                                            <input type="hidden" id="newsletterShopId">
                                         </div>
                                     </div>
                                     <div class="row">
