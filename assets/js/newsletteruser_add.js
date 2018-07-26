@@ -156,7 +156,28 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                 $('#fromEmailAddressId').val(res.emailId);
                 $('#fromEmailAddress').val(res.email);
                 $('#newsletterShopId').val(res.id);
+
+                let newsletterShop = $('#newsletterShopId').val();
+                $.ajax({
+                    method:'GET',
+                    url: '/blueseal/xhr/GetTableContent',
+                    data: {
+                        table: 'NewsletterEmailList',
+                        condition: {newsletterShopId: newsletterShop}
+                    },
+                    dataType: 'json'
+                }).done(function (res2) {
+                    let selectnews = $('#newsletterEmailListId');
+                    if(typeof (selectnews[0].selectize) != 'undefined') selectnews[0].selectize.destroy();
+                    selectnews.selectize({
+                        valueField: 'id',
+                        labelField: 'name',
+                        searchField: 'name',
+                        options: res2,
+                    });
+                });
              });
+
         } else {
             $('.col-pres-c').hide();
         }
@@ -436,6 +457,26 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                         });
                     });
                 });
+
+                let newsletterShop = $('#newsletterShopId').val();
+                $.ajax({
+                    method:'GET',
+                    url: '/blueseal/xhr/GetTableContent',
+                    data: {
+                        table: 'NewsletterEmailList',
+                        condition: {newsletterShopId: newsletterShop}
+                    },
+                    dataType: 'json'
+                }).done(function (res2) {
+                    let selectN = $('#newsletterEmailListId');
+                    if(typeof (selectN[0].selectize) != 'undefined') selectN[0].selectize.destroy();
+                    selectN.selectize({
+                        valueField: 'id',
+                        labelField: 'name',
+                        searchField: 'name',
+                        options: res2,
+                    });
+                });
             });
         }
 
@@ -454,6 +495,38 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
             }).done(function (emailAddress) {
                 $('#fromEmailAddressId').val(emailAddress[0].id);
                 $('#fromEmailAddress').val(emailAddress[0].address);
+
+                $.ajax({
+                    method:'GET',
+                    url: '/blueseal/xhr/GetTableContent',
+                    data: {
+                        table: 'NewsletterShop',
+                        condition: {fromEmailAddressId: $('#fromEmailAddressId').val()}
+                    },
+                    dataType: 'json'
+                }).done(function (newslShop) {
+                    $('#newsletterShopId').val(newslShop[0].id);
+
+                    $.ajax({
+                        method:'GET',
+                        url: '/blueseal/xhr/GetTableContent',
+                        data: {
+                            table: 'NewsletterEmailList',
+                            condition: {newsletterShopId: $('#newsletterShopId').val()}
+                        },
+                        dataType: 'json'
+                    }).done(function (res) {
+                        let selectnews = $('#newsletterEmailListId');
+                        if(typeof (selectnews[0].selectize) != 'undefined') selectnews[0].selectize.destroy();
+                        selectnews.selectize({
+                            valueField: 'id',
+                            labelField: 'name',
+                            searchField: 'name',
+                            options: res,
+                        });
+                    });
+                });
+
             });
 
 
@@ -473,23 +546,6 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 
     Pace.ignore(function () {
 
-        $.ajax({
-            method:'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'NewsletterEmailList'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            var select = $('#newsletterEmailListId');
-            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
-                options: res2,
-            });
-        });
         $.ajax({
             method:'GET',
             url: '/blueseal/xhr/GetTableContent',
