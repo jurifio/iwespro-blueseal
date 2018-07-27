@@ -24,7 +24,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                             location = window.location.pathname + '?id=' + res['productSheetModelPrototypeId'];
                         } else {
                             if('new' == res['status']){
-                                body = res["message"];
+                                body = res['productSheetModelPrototypeId'] + '</br>' + res["message"];
                                 location = '/blueseal/prodotti/modelli';
                             }
                         }
@@ -35,7 +35,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                             location = window.location.href;
                         } else {
                             if('updated' == res['status']){
-                                body = res["message"];
+                                body = res['productSheetModelPrototypeId'] + '</br>' + res["message"];
                                 location = '/blueseal/prodotti/modelli';
                             }
                         }
