@@ -24,9 +24,11 @@ class CNewsletterInsertionListAjaxController extends AAjaxController
             ni.id,
             ni.name as insertionName,
             ne.name as eventName,
-            ne.id as newsletterEId
+            ne.id as newsletterEId,
+            nc.name as newsletterCampaignName
         FROM NewsletterInsertion ni
-        JOIN NewsletterEvent ne ON ne.id = ni.newsletterEventId";
+        JOIN NewsletterEvent ne ON ne.id = ni.newsletterEventId
+        JOIN NewsletterCampaign nc ON ne.newsletterCampaignId = nc.id";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -46,6 +48,7 @@ class CNewsletterInsertionListAjaxController extends AAjaxController
             $row['id'] = "<a href='". $url.$ins->id . "' target='_blank'>".$ins->id."</a>";
             $row['insertionName'] = $ins->name;
             $row['eventName'] = $ins->newsletterEvent->name;
+            $row['newsletterCampaignName'] = $ins->newsletterEvent->newsletterCampaign->name;
 
             $datatable->setResponseDataSetRow($key,$row);
 
