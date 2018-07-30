@@ -46,7 +46,6 @@ class CUpdateExternalUsersTable extends AAjaxController
      */
     private function updateCartechini($newsletterShopId){
         $readExternalDb = new CReadExtDbTable($newsletterShopId);
-
         $ins = $readExternalDb->insertData(
             false,
             ['User',
@@ -63,6 +62,7 @@ class CUpdateExternalUsersTable extends AAjaxController
             ['email'],
             [
                 'User'=>[
+                    'id'=>1,
                     'isActive'=>1
                 ]
             ],
