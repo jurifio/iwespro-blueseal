@@ -69,7 +69,7 @@ class CUpdateExternalUsersTable extends AAjaxController
             'NewsletterExternalUser',
             ['email', 'isActive','name','surname','birthDate'],
             ['email'],
-            ['externalShopId' => 1]
+            ['externalShopId' => 2]
         );
 
         if($ins) return 'Lista aggiornata correttamente';
