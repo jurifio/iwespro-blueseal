@@ -55,10 +55,10 @@
                                     data-orderable="true"
                                     class="center">Nome Evento
                                 </th>
-                                <th data-slug="eventName"
+                                <th data-slug="newsletterCampaignName"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">NewsletterCampaignName
+                                    class="center">Campagna
                                 </th>
                             </tr>
                             </thead>
