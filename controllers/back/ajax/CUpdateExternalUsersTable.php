@@ -29,7 +29,7 @@ class CUpdateExternalUsersTable extends AAjaxController
 
         $newsletterShopId = \Monkey::app()->router->request()->getRequestData('newsletterShopId');
 
-        if($newsletterShopId === 2){
+        if($newsletterShopId == 2){
             $ins = $this->updateCartechini($newsletterShopId);
         } else {
             return false;
