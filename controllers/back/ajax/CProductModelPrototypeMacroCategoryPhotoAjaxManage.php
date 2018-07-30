@@ -36,19 +36,12 @@ class CProductModelPrototypeMacroCategoryPhotoAjaxManage extends AAjaxController
      */
     public function post()
     {
-        $macroCatId = \Monkey::app()->router->request()->getRequestData('macroCatId');
+        $macroCatIds = \Monkey::app()->router->request()->getRequestData('macroCatIds');
 
 
         /** @var CRepo $prodMacroCatGroupRepo */
         $prodMacroCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
-        /** @var CProductSheetModelPrototypeMacroCategoryGroup $prodMacroCatPhoto */
-        $prodMacroCatPhoto = $prodMacroCatGroupRepo->findOneBy([
-            'id'=>$macroCatId
-        ]);
 
-        if(is_null($prodMacroCatPhoto)){
-            return false;
-        }
 
         \Monkey::app()->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
@@ -77,9 +70,16 @@ class CProductModelPrototypeMacroCategoryPhotoAjaxManage extends AAjaxController
             //unlink($tempFolder . $_FILES['file']['name'][$i]);
 
             if($res){
+                $macroIds = explode(',', $macroCatIds);
                 $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-macro-category/".$fileName['name'];
-                $prodMacroCatPhoto->imageUrl = $url;
-                $prodMacroCatPhoto->update();
+                foreach ($macroIds as $macroCatId) {
+                    /** @var CProductSheetModelPrototypeMacroCategoryGroup $prodMacroCatPhoto */
+                    $prodMacroCatPhoto = $prodMacroCatGroupRepo->findOneBy([
+                        'id'=>$macroCatId
+                    ]);
+                    $prodMacroCatPhoto->imageUrl = $url;
+                    $prodMacroCatPhoto->update();
+                }
             }
 
         }

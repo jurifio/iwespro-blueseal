@@ -40,7 +40,7 @@
                     <input type="hidden" id="ProductCategory_id" class="required" data-form-label = "Categorie" name="ProductCategory_id"
                            value="<?php echo implode(',', $value) ?>"/>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">
@@ -219,7 +219,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="disableBlank">
                                 <div class="panel panel-default clearfix">
                                     <div class="panel-heading clearfix">
@@ -230,7 +230,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="disableBlank disablePrice">
                                 <?php if (!$allShops && !$worker): ?>
                                     <div class="row">

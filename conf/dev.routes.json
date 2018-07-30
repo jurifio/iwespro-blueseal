@@ -1441,7 +1441,6 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterGroupEmailListController"
             },
             "filters": {
-
             },
             "translations": {},
             "methods": [
@@ -1656,7 +1655,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/modelli/schede-prodotto(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetPrototypeListController"
@@ -1666,7 +1666,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/modelli/modifica-schede-prodotto/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CModifyProductSheetPrototypeListController"
@@ -1678,7 +1679,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/modelli/category-group(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetModelPrototypeCategoryGroupListController"
@@ -1688,7 +1690,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/modelli/macro-category-group(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetModelPrototypeMacroCategoryGroupListController"
@@ -1698,7 +1701,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementsEditController"
@@ -2103,7 +2107,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/work/foison/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonDetailController"
@@ -2176,7 +2181,8 @@
             "methods": [
                 "GET"
             ]
-        }, {
+        },
+        {
             "pattern": "/blueseal/work/lotti/dettagli-brand/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBrandBatchDetailsListController"
@@ -2188,7 +2194,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/work/lotti/brands/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBrandBatchDetailsListController"
@@ -2200,7 +2207,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/work/lotti/traduzione-nomi/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNameTranslationListController"
@@ -2451,7 +2459,8 @@
             "methods": [
                 "GET"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/message/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMessageDetailListController"
@@ -2462,6 +2471,112 @@
             "translations": {},
             "methods": [
                 "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/wishlist(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CWishListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/cartabandoned(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/cartabandoned/add-plan(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedPlanEmailSendController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/cartabandoned/emailparam(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedEmailParamListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/cartabandoned/emailsent(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedEmailSentListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/administration-link(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CAdministrationLinkController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/gallery-link(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CGalleryLinkController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/cartabandoned/edit-plan(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedPlanEmailSendEditController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
             ]
         }
     ]

@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\db\pandaorm\repositories\CRepo;
@@ -35,29 +36,20 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
      */
     public function post()
     {
-        $catId = \Monkey::app()->router->request()->getRequestData('catId');
-
+        $cats = \Monkey::app()->router->request()->getRequestData('cats');
 
         /** @var CRepo $prodCatGroupRepo */
         $prodCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
-        /** @var CProductSheetModelPrototypeCategoryGroup $prodCatPhoto */
-        $prodCatPhoto = $prodCatGroupRepo->findOneBy([
-            'id'=>$catId
-        ]);
-
-        if(is_null($prodCatPhoto)){
-            return false;
-        }
 
         \Monkey::app()->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
-        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
+        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "/";
 
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
         $numPhoto = count($_FILES['file']['name']);
 
-        for($i = 0; $i < $numPhoto; $i++){
+        for ($i = 0; $i < $numPhoto; $i++) {
             if (!move_uploaded_file($_FILES['file']['tmp_name'][$i], $tempFolder . $_FILES['file']['name'][$i])) {
                 throw new RedPandaException('Cannot move the uploaded Files');
             }
@@ -66,24 +58,31 @@ class CProductModelPrototypeCategoryPhotoAjaxManage extends AAjaxController
             //$fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 
-            try{
-                $res = $image->processProductModelPrototypeCategoryGroupPhoto($_FILES['file']['name'][$i], $fileName, $config['bucket'].'-fason', 'model-prototype-category');
-            }catch(RedPandaAssetException $e){
+            try {
+                $res = $image->processProductModelPrototypeCategoryGroupPhoto($_FILES['file']['name'][$i], $fileName, $config['bucket'] . '-fason', 'model-prototype-category');
+            } catch (RedPandaAssetException $e) {
                 $this->app->router->response()->raiseProcessingError();
                 return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
             }
 
             //unlink($tempFolder . $_FILES['file']['name'][$i]);
 
-            if($res){
-                $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-category/".$fileName['name'];
-                $prodCatPhoto->imageUrl = $url;
-                $prodCatPhoto->update();
-            }
+            if ($res) {
+                $catIds = explode(',', $cats);
+                $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-category/" . $fileName['name'];
+                foreach ($catIds as $catId) {
+                    /** @var CProductSheetModelPrototypeCategoryGroup $productCategoryGroup */
+                    $productCategoryGroup = $prodCatGroupRepo->findOneBy([
+                        'id' => $catId
+                    ]);
+                    $productCategoryGroup->imageUrl = $url;
+                    $productCategoryGroup->update();
 
+                }
+
+            }
         }
 
         return true;
     }
-
 }

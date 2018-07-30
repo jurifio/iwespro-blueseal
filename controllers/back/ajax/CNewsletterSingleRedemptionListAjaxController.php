@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -24,10 +25,10 @@ class CNewsletterSingleRedemptionListAjaxController extends AAjaxController
     {
         $newsletterId = \Monkey::app()->router->request()->getRequestData('newsletterid');
 
-        $sql = "  SELECT 
+        $sql = " SELECT 
                         er.emailId as emailId,
                         er.emailAddressId as emailAddressId,
-                        ue.address as Email,
+                        ea.address as Email,
                         er.responseDate as responseDate,
                         er.queuedTime as queuedTime,
                         er.sentTime as sentTime,
@@ -35,11 +36,10 @@ class CNewsletterSingleRedemptionListAjaxController extends AAjaxController
                         er.firstOpenTime as firstOpenTime,
                         er.firstClickTime as firstClickTime,
                         er.lastClickTime as lastClickTime
-                  FROM Newsletter n
-                  JOIN Email e ON n.id = e.newsletterId
-                  JOIN EmailRecipient er ON e.id = er.emailId
-                  JOIN UserEmail ue ON er.emailId = er.emailId
-                  WHERE n.id = $newsletterId";
+                  FROM EmailRecipient er
+                  JOIN Email e ON er.emailId = e.id
+                  JOIN EmailAddress ea ON er.emailAddressId = ea.id
+                  WHERE e.newsletterId = " . $newsletterId . " AND typeTo = 'TO'";
 
         $datatable = new CDataTables($sql, ['Email'], $_GET, true);
 
@@ -47,7 +47,7 @@ class CNewsletterSingleRedemptionListAjaxController extends AAjaxController
 
 
        /* $blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        $url = $blueseal . "newsletter-redemption/single-redemption?newsletterId=";*/
+        $url = $blueseal . "newsletter - redemption / single - redemption ? newsletterId = ";*/
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 

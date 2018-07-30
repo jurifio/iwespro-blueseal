@@ -18,19 +18,19 @@ $(document).on('bs-new-batch-product-add', function () {
         body: `
         <div>
             <div>
-                 <p>Inserisci uno o più generi separati da ", "</p>
+                 <p>Inserisci uno o più generi separati da 'a capo'</p>
                  <textarea style="width: 400px; height: 150px" id="gender"></textarea>
             </div>
             <div>
-                 <p>Inserisci una o più macrocategorie separate da ", "</p>
+                 <p>Inserisci una o più macrocategorie separate da 'a capo'</p>
                  <textarea style="width: 400px; height: 150px" id="macro-cat"></textarea>
             </div>
             <div>
-                 <p>Inserisci una o più categorie separati da ", "</p>
+                 <p>Inserisci una o più categorie separati da 'a capo'</p>
                  <textarea style="width: 400px; height: 150px" id="cat"></textarea>
             </div>
             <div>
-                 <p>Inserisci uno o più materiali separati da ", "</p>
+                 <p>Inserisci uno o più materiali separati da 'a capo'</p>
                  <textarea style="width: 400px; height: 150px" id="material"></textarea>
             </div>
         </div>

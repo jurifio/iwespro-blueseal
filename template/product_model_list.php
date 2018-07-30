@@ -21,7 +21,8 @@
                                data-datatable-name="product_model_list"
                                data-controller="ProductModelListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
-                               data-inner-setup="true">
+                               data-inner-setup="true"
+                               data-length-menu-setup="50, 100, 250, 1000, 1500, 2000">
                             <thead>
                                 <tr>
                                     <th data-slug="id"

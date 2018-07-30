@@ -120,6 +120,7 @@ class CEmailListAjaxController extends AAjaxController
                 }
             }
 
+            $row['id'] = $email->id;
             $row['from'] = $email->fromEmailAddress->getPrettyEmailAddress();
             $row['to'] = str_replace(',','<br />',$row['to']);
             $row['cc'] = str_replace(',','<br />',$row['cc']);

@@ -39,10 +39,10 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
        $mDate = \Monkey::app()->router->request()->getRequestData('material');
 
 
-       $gender = explode(', ', $gDate);
-       $macroCat = explode(', ', $mCDate);
-       $cat = explode(', ', $cDate);
-       $material = explode(', ', $mDate);
+       $gender = explode("\n", $gDate);
+       $macroCat = explode("\n", $mCDate);
+       $cat = explode("\n", $cDate);
+       $material = explode("\n", $mDate);
 
        if (!empty($gDate)){
            /** @var CRepo $genPRepo */
@@ -53,7 +53,7 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
 
                if(is_null($extistent)){
                    $genP = $genPRepo->getEmptyEntity();
-                   $genP->name = ucfirst($val);
+                   $genP->name = trim(ucfirst($val));
                    $genP->smartInsert();
                }
 
@@ -69,7 +69,7 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
 
                 if(is_null($extistent)){
                     $mCatP = $mCCatRepo->getEmptyEntity();
-                    $mCatP->name = ucfirst($val);
+                    $mCatP->name = trim(ucfirst($val));
                     $mCatP->smartInsert();
                 }
 
@@ -86,7 +86,7 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
 
                 if (is_null($extistent)) {
                     $catP = $catCRepo->getEmptyEntity();
-                    $catP->name = $val;
+                    $catP->name = trim($val);
                     $catP->smartInsert();
                 }
 
@@ -103,7 +103,7 @@ class CProductSheetModelPrototypeForFason extends AAjaxController
 
                 if (is_null($extistent)) {
                     $matP = $matRepo->getEmptyEntity();
-                    $matP->name = $val;
+                    $matP->name = trim($val);
                     $matP->smartInsert();
                 }
 

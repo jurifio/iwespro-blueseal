@@ -20,7 +20,7 @@ $(document).on('bs-manage-prototype-category-photo', function () {
 
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-    if(selectedRows.length != 1) {
+    if(selectedRows.length < 1) {
         new Alert({
             type: "warning",
             message: "Puoi inserire un'immagine alla volta"
@@ -28,7 +28,10 @@ $(document).on('bs-manage-prototype-category-photo', function () {
         return false;
     }
 
-    let catId = selectedRows[0].id;
+    let cats = [];
+    $.each(selectedRows, function (k, v) {
+        cats.push(v.id);
+    });
 
     let bsModal = $('#bsModal');
 
@@ -63,7 +66,7 @@ $(document).on('bs-manage-prototype-category-photo', function () {
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
         uploadMultiple: true,
         sending: function(file, xhr, formData) {
-            formData.append("catId", catId);
+            formData.append("cats", cats);
         }
     });
 
