@@ -62,7 +62,6 @@ class CUpdateExternalUsersTable extends AAjaxController
             ['email'],
             [
                 'User'=>[
-                    'id'=>2,
                     'isActive'=>1
                 ]
             ],
