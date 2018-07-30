@@ -40,7 +40,7 @@ class CEmailDispatcher extends AEventListener
             $args = $e->getEventData();
 
             //vedo se è una newsletter esterna o interna
-            $newsletterId = $args['newsletterId'];
+            $newsletterId = $args[7];
             /** @var CNewsletter $newsletter */
             $newsletter = \Monkey::app()->repoFactory->create('Newsletter')->findOneBy(['id' => $newsletterId]);
             $newsletterShopId = $newsletter->newsletterCampaign->newsletterShop->id;
