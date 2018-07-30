@@ -19,25 +19,35 @@ use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
  */
 class CUpdateExternalUsersTable extends AAjaxController
 {
+
+    /**
+     * @return bool|string
+     * @throws \bamboo\core\exceptions\BambooDBALException
+     * @throws \bamboo\core\exceptions\BambooException
+     */
     public function post(){
 
         $newsletterShopId = \Monkey::app()->router->request()->getRequestData('newsletterShopId');
 
         if($newsletterShopId === 1){
-            $this->updateCartechini($newsletterShopId);
+            $ins = $this->updateCartechini($newsletterShopId);
+        } else {
+            return false;
         }
 
+        return $ins;
     }
 
     /**
      * @param $newsletterShopId
+     * @return bool|string
      * @throws \bamboo\core\exceptions\BambooDBALException
      * @throws \bamboo\core\exceptions\BambooException
      */
     private function updateCartechini($newsletterShopId){
         $readExternalDb = new CReadExtDbTable($newsletterShopId);
 
-        $readExternalDb->insertData(
+        $ins = $readExternalDb->insertData(
             false,
             ['User',
                 'UserDetails'=>[
@@ -53,14 +63,18 @@ class CUpdateExternalUsersTable extends AAjaxController
             ['email'],
             [
                 'User'=>[
-                'isActive'=>1
-            ]
+                    'isActive'=>1
+                ]
             ],
             'NewsletterExternalUser',
             ['email', 'isActive','name','surname','birthDate'],
             ['email'],
             ['externalShopId' => 1]
         );
+
+        if($ins) return 'Lista aggiornata correttamente';
+
+        return $ins;
 
     }
 }

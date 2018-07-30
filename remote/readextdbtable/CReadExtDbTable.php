@@ -222,6 +222,7 @@ class CReadExtDbTable extends AReadExtDbTable
         } catch (\Throwable $e) {
             \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->applicationLog('ReadExtDbTable', 'Error', 'Rollback operation', $e);
+            return $e->getMessage();
         }
 
         return true;
