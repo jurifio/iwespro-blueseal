@@ -31,8 +31,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="newsletter_redemption_list"
-                               data-controller="NewsletterRedemptionListAjaxController"
+                               data-datatable-name="newsletter_external_redemption_list"
+                               data-controller="NewsletterExternalRedemptionListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
@@ -140,14 +140,6 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Esportazione">
-        <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.newsletterRedemption.send"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

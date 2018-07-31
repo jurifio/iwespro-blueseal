@@ -2,14 +2,13 @@
 
 namespace bamboo\controllers\back\ajax;
 
-use Aws\CloudFormation\Enum\StackStatus;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\utils\time\STimeToolbox;
 
 
 /**
- * Class CNewsletterRedemptionListAjaxController
+ * Class CNewsletterExternalRedemptionListAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -18,10 +17,10 @@ use bamboo\utils\time\STimeToolbox;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 15/02/2018
+ * @date 31/07/2018
  * @since 1.0
  */
-class CNewsletterRedemptionListAjaxController extends AAjaxController
+class CNewsletterExternalRedemptionListAjaxController extends AAjaxController
 {
     public function get()
     {
@@ -30,7 +29,7 @@ class CNewsletterRedemptionListAjaxController extends AAjaxController
                   n.id                                                                     AS newsletterId,
                   n.newsletterCloneId                                                      AS newsletterCloneId,
                   n.name                                                                   AS newsletterName,
-                  count(DISTINCT er.emailAddressId)                                        AS emailAddressCount,
+                  count(DISTINCT er.newsletterExternalUserId)                              AS emailAddressCount,
                   count(CASE er.emailStatusId WHEN 1 THEN 1 ELSE NULL END)                 AS emailPending,
                   count(CASE er.emailStatusId WHEN 2 THEN 1 ELSE NULL END)                 AS emailNotQueued,
                   count(CASE er.emailStatusId WHEN 3 THEN 1 ELSE NULL END)                 AS emailAccepted,
@@ -47,8 +46,8 @@ class CNewsletterRedemptionListAjaxController extends AAjaxController
                   round(count(er.firstClickTime) * 100 / count(er.sentTime),0)             AS clickedPercent,
                   n.id
                 FROM Newsletter n
-                  JOIN Email e ON n.id = e.newsletterId
-                  JOIN EmailRecipient er ON e.id = er.emailId
+                  JOIN ExternalEmail e ON n.id = e.newsletterId
+                  JOIN EmailExternalRecipient er ON e.id = er.emailId
                   GROUP  BY n.id ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);

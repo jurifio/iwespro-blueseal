@@ -1414,6 +1414,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/newsletter-external-redemption(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterExternalRedemptionListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/newsletter-redemption-grouped(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionGroupedListController"
