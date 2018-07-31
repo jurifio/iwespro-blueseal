@@ -48,20 +48,20 @@ class CUpdateExternalUsersTable extends AAjaxController
         $readExternalDb = new CReadExtDbTable($newsletterShopId);
         $ins = $readExternalDb->insertData(
             false,
-            ['User',
-                'UserDetails'=>[
+            ['Newsletter',
+                'UserDetails-Left'=>[
                     'Self'=>[
                         'userId'
                     ],
-                    'User'=>[
-                        'id'
+                    'Newsletter'=>[
+                        'userId'
                     ]
                 ]
             ],
             ['email', 'isActive','name','surname','birthDate'],
             ['email'],
             [
-                'User'=>[
+                'Newsletter'=>[
                     'isActive'=>1
                 ]
             ],

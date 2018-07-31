@@ -38,7 +38,13 @@ class CReadExtDbTable extends AReadExtDbTable
         foreach ($tablesName as $table => $tFields) {
             $c++;
             if ($c == 1) continue;
-            $join .= " JOIN ";
+
+            if(explode('-', $table)[1] === 'Left'){
+                $join .= " LEFT JOIN ";
+                $table = explode('-', $table)[0];
+            } else {
+                $join .= " JOIN ";
+            }
 
             $sumFields = count($tFields["Self"]);
 
