@@ -60,11 +60,7 @@ class CUpdateExternalUsersTable extends AAjaxController
             ],
             ['email', 'isActive','name','surname','birthDate'],
             ['email'],
-            [
-                'Newsletter'=>[
-                    'isActive'=>1
-                ]
-            ],
+            [],
             'NewsletterExternalUser',
             ['email', 'isActive','name','surname','birthDate'],
             ['email'],
