@@ -39,6 +39,21 @@
                                data-display-length="200">
                             <thead>
                             <tr>
+                                <th data-slug="campaignName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Campagna
+                                </th>
+                                <th data-slug="eventName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Evento
+                                </th>
+                                <th data-slug="insertionName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Inserzione
+                                </th>
                                 <th data-slug="newsletterId"
                                     data-searchable="true"
                                     data-orderable="true"

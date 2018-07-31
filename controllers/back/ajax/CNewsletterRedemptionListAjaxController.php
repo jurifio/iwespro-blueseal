@@ -45,8 +45,14 @@ class CNewsletterRedemptionListAjaxController extends AAjaxController
                   round(count(er.sentTime) * 100 / count(e.id),2)                          AS sentPercent,
                   round(count(er.firstOpenTime) * 100 / count(er.sentTime),0)              AS openedPercent,
                   round(count(er.firstClickTime) * 100 / count(er.sentTime),0)             AS clickedPercent,
-                  n.id
+                  n.id,
+                  ni.name as insertionName,
+                  ne.name as eventName,
+                  nc.name as campaignName
                 FROM Newsletter n
+                  JOIN NewsletterInsertion ni ON n.newsletterInsertionId = ni.id
+                  JOIN NewsletterEvent ne ON ni.newsletterEventId = ne.id
+                  JOIN NewsletterCampaign nc ON ne.newsletterCampaignId = nc.id
                   JOIN Email e ON n.id = e.newsletterId
                   JOIN EmailRecipient er ON e.id = er.emailId
                   GROUP  BY n.id ";

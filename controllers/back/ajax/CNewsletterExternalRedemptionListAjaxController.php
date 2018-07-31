@@ -48,7 +48,7 @@ class CNewsletterExternalRedemptionListAjaxController extends AAjaxController
                   ns.name as shopName,
                   ni.name as insertionName,
                   ne.name as eventName,
-                  nc.name as campaignname
+                  nc.name as campaignName
                 FROM Newsletter n
                   JOIN NewsletterInsertion ni ON n.newsletterInsertionId = ni.id
                   JOIN NewsletterEvent ne ON ni.newsletterEventId = ne.id
