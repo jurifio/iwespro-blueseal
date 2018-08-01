@@ -149,26 +149,29 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         });
 
 
-        $.ajax({
-            method:'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'NewsletterResendCriterion',
-            },
-            dataType: 'json'
-        }).done(function (send) {
+        if(document.getElementById(resend) != null){
+            $.ajax({
+                method:'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'NewsletterResendCriterion',
+                },
+                dataType: 'json'
+            }).done(function (send) {
 
-            var select = $('#resend');
-            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
-                options: send,
+                var select = $('#resend');
+                if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: send,
+                });
+                let selectedSend = $('#resendSel').val();
+                $('#resend').selectize()[0].selectize.setValue(selectedSend);
             });
-            let selectedSend = $('#resendSel').val();
-            $('#resend').selectize()[0].selectize.setValue(selectedSend);
-        });
+        }
+
 
 
     });
