@@ -54,15 +54,10 @@ class CNewsletterUserEditController extends ARestrictedAccessRootController
         $newsletterTemplateStatus =$repoNewsletterTemplate->findAll();
         $newsletterTemplate =\Monkey::app()->repoFactory->create('NewsletterTemplate')->findOne([$newsletterTemplateId]);
 
-
-
-
-
-
-
-
-
-
+        $isClone = false;
+        if($newsletter->id !== $newsletter->newsletterCloneId){
+            $isClone = true;
+        }
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
@@ -71,6 +66,7 @@ class CNewsletterUserEditController extends ARestrictedAccessRootController
             'newsletterCampaign' => $newsletterCampaign,
             'newsletterEmailList' => $newsletterEmailList,
             'newsletterTemplate' => $newsletterTemplate,
+            'isClone' => $isClone,
             'page'=>$this->page,
             'sidebar'=> $this->sidebar->build(),
 

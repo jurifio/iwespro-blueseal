@@ -43,18 +43,18 @@ class CEmailDispatcher extends AEventListener
             $newsletterId = $args[7];
             /** @var CNewsletter $newsletter */
             $newsletter = \Monkey::app()->repoFactory->create('Newsletter')->findOneBy(['id' => $newsletterId]);
-            $newsletterShopId = $newsletter->newsletterCampaign->newsletterShop->id;
+            //$newsletterShopId = $newsletter->newsletterCampaign->newsletterShop->id;
 
-            switch ($newsletterShopId) {
-                case CNewsletterShop::PICKY:
-                    /** @var CEmailRepo $emailRepo */
-                    $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                    $emailRepo->newMail(...$args);
-                    break;
-                default:
-                    /** @var CExternalEmailRepo $externalEmailRepo */
-                    $externalEmailRepo = \Monkey::app()->repoFactory->create('ExternalEmail');
-                    $externalEmailRepo->newExternalMail(...$args);
+            $isExternal = $newsletter->isExternal();
+
+            if(!$isExternal){
+                /** @var CEmailRepo $emailRepo */
+                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                $emailRepo->newMail(...$args);
+            } else {
+                /** @var CExternalEmailRepo $externalEmailRepo */
+                $externalEmailRepo = \Monkey::app()->repoFactory->create('ExternalEmail');
+                $externalEmailRepo->newExternalMail(...$args);
             }
 
         } catch (\Throwable $e) {

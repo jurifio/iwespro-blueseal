@@ -165,6 +165,26 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <?php if($isClone): ?>
+                                    <div>
+                                        <div class="row">
+                                            <col-md-12>
+                                                <div id="sel-sub-operation">
+                                                    <input type="hidden" id="resendSel" value="<?php echo $newsletter->newsletterResendCriterionId ?>">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="resend">Seleziona una operazione</label>
+                                                        <select id="resend">
+                                                            <option disabled selected value>Seleziona un'opzione</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </col-md-12>
+                                        </div>
+                                    </div>
+                                    <?php endif; ?>
+
+
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
