@@ -58,6 +58,7 @@ class CNewsletterClone extends AAjaxController
         $newsletterCloneNewsletterCampaignId = $newsletter->newsletterCampaignId;
         $newsletterCloneCampaignId = $newsletter->campaignId;
         $newsletterCloneEventId = $newsletter->newsletterEventId;
+        $newsletterCloneInsertionId = $newsletter->newsletterInsertionId;
         $newsletterCloneName = "Copia di " . $newsletter->name;
         /** @var CNewsletterUser $newsletterUserInsert */
         $newsletterUserInsert = \Monkey::app()->repoFactory->create('Newsletter')->getEmptyEntity();
@@ -74,6 +75,7 @@ class CNewsletterClone extends AAjaxController
         $newsletterUserInsert->newsletterCampaignId = $newsletterCloneNewsletterCampaignId;
         $newsletterUserInsert->CampaignId = $newsletterCloneCampaignId;
         $newsletterUserInsert->newsletterEventId = $newsletterCloneEventId;
+        $newsletterUserInsert->newsletterInsertionId = $newsletterCloneInsertionId;
         $newsletterUserInsert->newsletterCloneId = $value;
         // eseguo la commit sulla tabella;
 
