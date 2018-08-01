@@ -39,6 +39,21 @@
                                data-display-length="200">
                             <thead>
                             <tr>
+                                <th data-slug="campaignName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Campagna
+                                </th>
+                                <th data-slug="eventName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Evento
+                                </th>
+                                <th data-slug="insertionName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Inserzione
+                                </th>
                                 <th data-slug="newsletterId"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -85,10 +100,15 @@
                                     data-orderable="true"
                                     class="center">Email Non Consegnate
                                 </th>
-                                <th data-slug="sendingTime"
+                                <th data-slug="emailOpened"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Tempo d'invio
+                                    class="center">Email Aperte
+                                </th>
+                                <th data-slug="emailClicked"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email Cliccate
                                 </th>
                                 <th data-slug="openTimeSinceSent"
                                     data-searchable="true"
