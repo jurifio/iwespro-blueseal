@@ -149,7 +149,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         });
 
 
-        if(document.getElementById(resend) != null){
+        if(document.getElementById("resend") !== null){
             $.ajax({
                 method:'GET',
                 url: '/blueseal/xhr/GetTableContent',
@@ -269,7 +269,11 @@ $(document).on('bs.newNewsletterUser.save', function () {
 
           var content = $('#preCompiledTemplate1').val();
 
+        let newsletterResendCriterion = '';
 
+        if(document.getElementById("resend") !== null) {
+            newsletterResendCriterion = $('#resend').val();
+        }
 
         const data = {
             newsletterId: $('#newsletterId').val(),
@@ -285,7 +289,7 @@ $(document).on('bs.newNewsletterUser.save', function () {
             newsletterEventId: campaignEventIdPost,
             dateCampaignStart:campaignDateStartPost,
             dateCampaignFinish:campaignDateFinishPost,
-            newsletterResendCriterion: $('#resend').val()
+            newsletterResendCriterion: newsletterResendCriterion
 
         };
         $.ajax({
