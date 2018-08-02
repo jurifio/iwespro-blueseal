@@ -128,6 +128,11 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione categorie">
+        <bs-toolbar-button
+                data-remote="bs.product.sheet.model.prototype.category.change"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
