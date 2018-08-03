@@ -459,9 +459,11 @@ $(document).on('click', '#add-change-details', function () {
                    value="">
         </div>
         <div class="text-center col-md-3">
-        <p class="btn-success remove-change-detail"
-                   style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px"
-                   id="remove-${num}">ELIMINA DETTAGLIO</p>
+        <p class="btn-success remove-change-detail" style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px" id="remove-${num}">ELIMINA DETTAGLIO</p>
+        <div style="display: block">
+             <label for="delDetail-${num}">Cancella il dettaglio nel clone</label>
+             <input id="delDetail-${num}" name="delDetail-${num}" class="delDetail" data-labelid="" type="checkbox">
+        </div>
         </div>
     </div>
     `);
@@ -486,6 +488,15 @@ $(document).on('click', '#add-change-details', function () {
     });
 });
 
+$(document).on('click', '.delDetail', function () {
+    if ($(this).is(':checked')) {
+        $('#find-detail-value-'+$(this).attr('id').split('-')[1]).val('Elimina').prop('disabled',true);
+        $('#sub-detail-value-'+$(this).attr('id').split('-')[1]).val('Elimina').prop('disabled',true);
+    } else {
+        $('#find-detail-value-'+$(this).attr('id').split('-')[1]).val('').prop('disabled',false);
+        $('#sub-detail-value-'+$(this).attr('id').split('-')[1]).val('').prop('disabled',false);
+    }
+});
 
 $(document).on('click', '.remove-change-detail', function () {
     let sectionToRemove = $(this).attr('id').split('-')[1];
@@ -498,6 +509,7 @@ $(document).on('change', '.findDetails', function () {
     let label = $(this).val();
     let url = new URL(window.location.href);
     let psmp = url.searchParams.get("modelIds");
+    let position = $(this).attr('id').split('-')[2];
 
     if(psmp == null) psmp = url.searchParams.get("modifyModelIds");
 
@@ -511,6 +523,7 @@ $(document).on('change', '.findDetails', function () {
         }
     }).done(function (res) {
         $(`#sectedDetailsList-${num}`).empty().append(res);
+        $(`#delDetail-${position}`).attr('name', 'delDetail-'+label);
     });
 });
 

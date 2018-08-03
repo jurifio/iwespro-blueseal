@@ -355,7 +355,12 @@
                                     <p class="btn-success remove-change-detail"
                                        style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px"
                                        id="remove-0">ELIMINA DETTAGLIO</p>
+                                        <div style="display: block">
+                                            <label for="delDetail-0">Cancella il dettaglio nel clone</label>
+                                            <input id="delDetail-0" name="delDetail-0" data-labelid="" class="delDetail" type="checkbox">
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                             <div>

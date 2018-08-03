@@ -205,6 +205,7 @@ class CDetailModelSave extends AAjaxController
                         if (!empty($productDetails)) {
 
                             $detailsToChange = $this->getDetailToChange($get, $psmp);
+                            $detToDel = $this->getDetailToDel($get);
 
                             //mergio due array se definiti inserimenti
                             if (!empty($detailsToChange)) {
@@ -216,6 +217,7 @@ class CDetailModelSave extends AAjaxController
                             //VECCHI
                             /** @var CProductSheetModelActual $psActual */
                             foreach ($psActualCollection as $psActual) {
+                                if(in_array($psActual->productDetailLabelId, $detToDel)) continue;
 
                                 //se ne trovo uno con la stessa etichetta di un nuovo salto il foreach
                                 if (array_key_exists($psActual->productDetailLabelId, $productDetails)) continue;
@@ -239,9 +241,11 @@ class CDetailModelSave extends AAjaxController
 
                             //se non è cambiata e non è stato inserito nessun nuovo dettaglio
                             $detailsToChange = $this->getDetailToChange($get, $psmp);
-
+                            $detToDel = $this->getDetailToDel($get);
                             /** @var CProductSheetActual $psActual */
                             foreach ($psActualCollection as $psActual) {
+
+                                if(in_array($psActual->productDetailLabelId, $detToDel)) continue;
 
                                 if (array_key_exists($psActual->productDetailLabelId, $detailsToChange)) {
                                     //se lo trovo nell'arry è custom e la prendo
@@ -256,7 +260,6 @@ class CDetailModelSave extends AAjaxController
                                 $newSheet->productDetailId = $labelDetailInsert;
                                 $newSheet->insert();
                             }
-
                         }
                     } else {
                         if (!empty($productDetails)) {
@@ -436,6 +439,7 @@ class CDetailModelSave extends AAjaxController
                         if (!empty($productDetails)) {
 
                             $detailsToChange = $this->getDetailToChange($get, $psmp);
+                            $detToDel = $this->getDetailToDel($get);
 
                             //mergio due array se definiti inserimenti
                             if (!empty($detailsToChange)) {
@@ -451,7 +455,7 @@ class CDetailModelSave extends AAjaxController
                             foreach ($oldSheets as $pshma) {
 
                                 //se ne trovo uno con la stessa etichetta di un nuovo salto il foreach
-                                if (array_key_exists($pshma->productDetailLabelId, $productDetails)) {
+                                if (array_key_exists($pshma->productDetailLabelId, $productDetails) || in_array($pshma->productDetailLabelId, $detToDel)) {
                                     $pshma->delete();
                                 }
                             }
@@ -466,6 +470,7 @@ class CDetailModelSave extends AAjaxController
                             }
                         } else {
                             $detailsToChange = $this->getDetailToChange($get, $psmp);
+                            $detToDel = $this->getDetailToDel($get);
 
                             $oldSheets = \Monkey::app()->repoFactory->create('ProductSheetModelActual')->findBy(['productSheetModelPrototypeId' => $psmp->id]);
 
@@ -473,7 +478,7 @@ class CDetailModelSave extends AAjaxController
                             /** @var CProductSheetModelActual $pshma */
                             foreach ($oldSheets as $pshma) {
 
-                                if (array_key_exists($pshma->productDetailLabelId, $detailsToChange)) {
+                                if (array_key_exists($pshma->productDetailLabelId, $detailsToChange) || in_array($pshma->productDetailLabelId, $detToDel)) {
                                     $pshma->delete();
                                 }
                             }
@@ -579,6 +584,8 @@ class CDetailModelSave extends AAjaxController
             }
         }
 
+
+
         $detailsSingleValues = array_chunk($productDetails, 3);
 
 
@@ -589,6 +596,8 @@ class CDetailModelSave extends AAjaxController
 
             //se l'array non ha 3 elementi non sono stati assegnati valori
             if (count($singleDetailV) != 3) return [];
+
+            if($singleDetailV[1] === 'Elimina' && $singleDetailV[2] ==='Elimina') continue;
 
             /** @var CProductSheetActual $sheetActual */
             $sheetActual = $psmp->productSheetModelActual->findOneByKey('productDetailLabelId', $singleDetailV[0]);
@@ -613,6 +622,20 @@ class CDetailModelSave extends AAjaxController
         }
 
         return $res;
+    }
+
+    private function getDetailToDel($get){
+        $detToDel = [];
+        foreach ($get as $k => $v) {
+            if (false !== strpos($k, 'delDetail')) {
+                if ($v) {
+                    $detToDel[] = explode('-', $k)[1];
+                } else {
+                    return false;
+                }
+            }
+        }
+        return $detToDel;
     }
 
     private function isName($name)
