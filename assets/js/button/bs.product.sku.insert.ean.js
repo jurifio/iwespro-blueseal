@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-address-book",
-    permission:"/admin/product/edit&&allShops",
+    permission:"/admin/product/edit",
     event:"bs-product-main-label",
     class:"btn btn-default",
     rel:"tooltip",
