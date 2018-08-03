@@ -199,6 +199,11 @@
                 data-remote="bs.product.main.label"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="EAN">
+        <bs-toolbar-button
+                data-remote="bs.product.sku.insert.ean"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
