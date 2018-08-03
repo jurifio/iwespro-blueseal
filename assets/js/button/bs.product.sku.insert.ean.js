@@ -1,8 +1,8 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-address-book",
+    icon:"fa-file-text-o",
     permission:"/admin/product/edit",
-    event:"bs-product-main-label",
+    event:"bs-ean-update",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Gestisci etichette",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs-product-main-label', function () {
+$(document).on('bs-ean-update', function () {
 
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 
