@@ -3,15 +3,12 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\base\CObjectCollection;
-use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\domain\entities\CProductSheetModelPrototypeCategoryGroup;
 use bamboo\domain\entities\CProductSheetModelPrototypeGender;
 use bamboo\domain\entities\CProductSheetModelPrototypeMacroCategoryGroup;
 use bamboo\domain\entities\CProductSheetModelPrototypeMaterial;
 use bamboo\ecommerce\views\VBase;
-use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
 
 /**
  * Class CProductListController
@@ -27,55 +24,72 @@ use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
  */
 class CProductModelCategoryController extends ARestrictedAccessRootController
 {
+
     protected $fallBack = "blueseal";
     protected $pageSlug = "product_model_manage_list";
 
     public function get()
     {
 
-        /** @var CRepo $psmpRepo */
-        $psmpRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype');
-        /** @var CRepo $psmpcgRepo */
-        $psmpcgRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
-
         //Catch gender
         $gendRes = [];
         /** @var CObjectCollection $genders */
-        $genders = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeGender')->findAll();
+        //$genders = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeGender')->findAll();
+        $genders = \Monkey::app()->dbAdapter->query('
+                                                        SELECT id, name
+                                                        FROM ProductSheetModelPrototypeGender',[])->fetchAll();
+        //$genders->reorder('name');
         /** @var CProductSheetModelPrototypeGender $gender */
         foreach ($genders as $gender){
-            $gendRes[$gender->id]['count'] = $psmpRepo->findBy(['genderId'=>$gender->id])->count();
-            $gendRes[$gender->id]['name'] = $gender->name;
+
+            //$gendRes[$gender['id']]['count'] = $psmpRepo->findBy(['genderId'=>$gender["id"]])->count();
+            $gendRes[$gender['id']]['count'] = \Monkey::app()->dbAdapter->selectCount('ProductSheetModelPrototype', ['genderId'=>$gender["id"]]);
+            $gendRes[$gender['id']]['name'] = $gender['name'];
         }
 
         //Catch macrocategory
         $macroCatRes = [];
         /** @var CObjectCollection $macros */
-        $macros = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup')->findAll();
+        //$macros = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup')->findAll();
+        $macros = \Monkey::app()->dbAdapter->query('
+                                                        SELECT id, name
+                                                        FROM ProductSheetModelPrototypeMacroCategoryGroup',[])->fetchAll();
+        //$macros->reorder('name');
         /** @var CProductSheetModelPrototypeMacroCategoryGroup $macro */
         foreach ($macros as $macro){
-            $macroCatRes[$macro->id]['count'] = $psmpcgRepo->findBy(['macroCategoryGroupId'=>$macro->id])->count();
-            $macroCatRes[$macro->id]['name'] = $macro->name;
+            //$macroCatRes[$macro['id']]['count'] = $psmpcgRepo->findBy(['macroCategoryGroupId'=>$macro['id']])->count();
+            $macroCatRes[$macro['id']]['count'] = \Monkey::app()->dbAdapter->selectCount('ProductSheetModelPrototypeCategoryGroup', ['macroCategoryGroupId'=>$macro["id"]]);
+            $macroCatRes[$macro['id']]['name'] = $macro['name'];
         }
 
         //Catch categoryGroup
         $catGroupRes = [];
         /** @var CObjectCollection $catsGroup */
-        $catsGroup = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findAll();
+        //$catsGroup = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findAll();
+        $catsGroup = \Monkey::app()->dbAdapter->query('
+                                                        SELECT id, name
+                                                        FROM ProductSheetModelPrototypeCategoryGroup',[])->fetchAll();
+        //$catsGroup->reorder('name');
         /** @var CProductSheetModelPrototypeCategoryGroup $catGroup */
         foreach ($catsGroup as $catGroup){
-            $catGroupRes[$catGroup->id]['count'] = $psmpRepo->findBy(['categoryGroupId'=>$catGroup->id])->count();
-            $catGroupRes[$catGroup->id]['name'] = $catGroup->name;
+            //$catGroupRes[$catGroup['id']]['count'] = $psmpRepo->findBy(['categoryGroupId'=>$catGroup['id']])->count();
+            $catGroupRes[$catGroup['id']]['count'] = \Monkey::app()->dbAdapter->selectCount('ProductSheetModelPrototype', ['categoryGroupId'=>$catGroup["id"]]);
+            $catGroupRes[$catGroup['id']]['name'] = $catGroup['name'];
         }
 
         //Catch material
         $matRes = [];
         /** @var CObjectCollection $mats */
-        $mats = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMaterial')->findAll();
+        //$mats = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMaterial')->findAll();
+        $mats = \Monkey::app()->dbAdapter->query('
+                                                        SELECT id, name
+                                                        FROM ProductSheetModelPrototypeMaterial',[])->fetchAll();
+        //$mats->reorder('name');
         /** @var CProductSheetModelPrototypeMaterial $mat */
         foreach ($mats as $mat){
-            $matRes[$mat->id]['count'] = $psmpRepo->findBy(['materialId'=>$mat->id])->count();
-            $matRes[$mat->id]['name'] = $mat->name;
+            //$matRes[$mat['id']]['count'] = $psmpRepo->findBy(['materialId'=>$mat['id']])->count();
+            $matRes[$mat['id']]['count'] = \Monkey::app()->dbAdapter->selectCount('ProductSheetModelPrototype', ['materialId'=>$mat["id"]]);
+            $matRes[$mat['id']]['name'] = $mat['name'];
         }
 
 
