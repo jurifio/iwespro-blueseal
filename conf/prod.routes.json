@@ -1615,6 +1615,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/modelli/lista-gestione-cat(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelCategoryController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/modelli/modifica(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelEditController"
