@@ -36,12 +36,12 @@ class CPrestashopDumpProductImageCombination extends AAjaxController
     public function post()
     {
 
-        // \Monkey::app()->vendorLibraries->load('prestashop');
+         \Monkey::app()->vendorLibraries->load('prestashop');
 
         define('DEBUG', true);
         define('PS_SHOP_PATH', 'http://iwes.shop/');
         define('PS_WS_AUTH_KEY', 'PWTA3F211GSY6APTTCJDP2Y3UHHYFSVW');
-        require_once "PSWebServiceLibrary.php";
+        //require_once "PSWebServiceLibrary.php";
 
         $key = 'PWTA3F211GSY6APTTCJDP2Y3UHHYFSVW'; //your key here
         // $url = 'http://iwes.shop/api/products?output_format=JSON'; // change the base url
@@ -487,7 +487,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
             $my_save_dir = '/media/sf_sites/PickyshopNew/tmp/';
 
         }else{
-            $my_save_dir = '/data/www/iwes/production/sites/pickyshop/tmp/';
+            $my_save_dir = '/data/www/iwes/production/sites/pickyshop/temp/';
         }
         $filename = basename($url_to_image);
         $complete_save_loc = $my_save_dir . $filename;
@@ -499,7 +499,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
             $image->save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         }else{
-            $image->save_to = '/data/www/iwes/production/sites/pickyshop/tmp/';
+            $image->save_to = '/data/www/iwes/production/sites/pickyshop/temp/';
         }
 
 
@@ -516,7 +516,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
 
 // change the local path where image has been downloaded "presta-api" is my local folder from where i run API script
         if(ENV=='prod') {
-            $img_path = '/data/www/iwes/production/sites/pickyshop/tmp' . $image_name;
+            $img_path = '/data/www/iwes/production/sites/pickyshop/temp' . $image_name;
         }else{
             $img_path='/media/sf_sites/PickyshopNew/tmp/'. $image_name;
         }
