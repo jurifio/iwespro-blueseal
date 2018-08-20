@@ -55,29 +55,43 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
     public function post(){
-        $id = \Monkey::app()->router->request()->getRequestData('macroCatId');
+
         $type = \Monkey::app()->router->request()->getRequestData('type');
 
         /** @var CRepo $pmcRepo */
         $pmcRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
 
-        /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
-        $pmc = $pmcRepo->findOneBy(['id'=>$id]);
-
         switch ($type){
             case 'name':
+                $id = \Monkey::app()->router->request()->getRequestData('macroCatId');
+                /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
+                $pmc = $pmcRepo->findOneBy(['id'=>$id]);
                 $name = \Monkey::app()->router->request()->getRequestData('name');
                 if(empty($name)) return 'Inserisci un nome';
                 $pmc->name = $name;
+                $pmc->update();
                 break;
             case 'description':
+                $id = \Monkey::app()->router->request()->getRequestData('macroCatId');
+                /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
+                $pmc = $pmcRepo->findOneBy(['id'=>$id]);
                 $desc = \Monkey::app()->router->request()->getRequestData('desc');
                 if(empty($desc)) return 'Inserisci una descrizione';
                 $pmc->description = $desc;
+                $pmc->update();
+                break;
+            case 'find-sub-name':
+                $sub = \Monkey::app()->router->request()->getRequestData('sub_name');
+                $find = \Monkey::app()->router->request()->getRequestData('find_name');
+                $ids = \Monkey::app()->router->request()->getRequestData('macroCatIds');
+                foreach($ids as $id) {
+                    /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
+                    $pmc = $pmcRepo->findOneBy(['id'=>$id]);
+                    $pmc->name = str_ireplace($find, $sub, $pmc->name);
+                    $pmc->update();
+                }
                 break;
         }
-
-        $pmc->update();
 
         return 'La macrocategoria è stata aggionata con successo';
 

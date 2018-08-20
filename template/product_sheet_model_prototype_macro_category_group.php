@@ -82,6 +82,16 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
+                data-icon="fa-pencil"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.sheet.model.macro.cat.group.name.find.sub"
+                data-title="Trova e sostituisce"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
                 data-icon="fa-pencil-square"
                 data-permission="/admin/product/add"
                 data-class="btn btn-default"
