@@ -37,7 +37,8 @@ class CProductModelCategoryController extends ARestrictedAccessRootController
         //$genders = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeGender')->findAll();
         $genders = \Monkey::app()->dbAdapter->query('
                                                         SELECT id, name
-                                                        FROM ProductSheetModelPrototypeGender',[])->fetchAll();
+                                                        FROM ProductSheetModelPrototypeGender
+                                                        ORDER BY name',[])->fetchAll();
         //$genders->reorder('name');
         /** @var CProductSheetModelPrototypeGender $gender */
         foreach ($genders as $gender){
@@ -53,7 +54,8 @@ class CProductModelCategoryController extends ARestrictedAccessRootController
         //$macros = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup')->findAll();
         $macros = \Monkey::app()->dbAdapter->query('
                                                         SELECT id, name
-                                                        FROM ProductSheetModelPrototypeMacroCategoryGroup',[])->fetchAll();
+                                                        FROM ProductSheetModelPrototypeMacroCategoryGroup
+                                                        ORDER BY name',[])->fetchAll();
         //$macros->reorder('name');
         /** @var CProductSheetModelPrototypeMacroCategoryGroup $macro */
         foreach ($macros as $macro){
@@ -68,7 +70,8 @@ class CProductModelCategoryController extends ARestrictedAccessRootController
         //$catsGroup = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findAll();
         $catsGroup = \Monkey::app()->dbAdapter->query('
                                                         SELECT id, name
-                                                        FROM ProductSheetModelPrototypeCategoryGroup',[])->fetchAll();
+                                                        FROM ProductSheetModelPrototypeCategoryGroup
+                                                        ORDER BY name',[])->fetchAll();
         //$catsGroup->reorder('name');
         /** @var CProductSheetModelPrototypeCategoryGroup $catGroup */
         foreach ($catsGroup as $catGroup){
@@ -83,7 +86,8 @@ class CProductModelCategoryController extends ARestrictedAccessRootController
         //$mats = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMaterial')->findAll();
         $mats = \Monkey::app()->dbAdapter->query('
                                                         SELECT id, name
-                                                        FROM ProductSheetModelPrototypeMaterial',[])->fetchAll();
+                                                        FROM ProductSheetModelPrototypeMaterial
+                                                        ORDER BY name',[])->fetchAll();
         //$mats->reorder('name');
         /** @var CProductSheetModelPrototypeMaterial $mat */
         foreach ($mats as $mat){
