@@ -487,7 +487,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
             $my_save_dir = '/media/sf_sites/PickyshopNew/tmp/';
 
         }else{
-            $my_save_dir = '/home/iwesshop/public_html/tmp/';
+            $my_save_dir = '/data/www/iwes/production/sites/pickyshop/tmp/';
         }
         $filename = basename($url_to_image);
         $complete_save_loc = $my_save_dir . $filename;
@@ -495,11 +495,11 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
 
 
         $image->source = $data['picture'];
-        if(ENV=='dev') {
+        if(ENV=='prod') {
             $image->save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         }else{
-            $image->save_to = '/home/iwesshop/public_html/tmp/';
+            $image->save_to = '/data/www/iwes/production/sites/pickyshop/tmp/';
         }
 
 
@@ -516,7 +516,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
 
 // change the local path where image has been downloaded "presta-api" is my local folder from where i run API script
         if(ENV=='prod') {
-            $img_path = '/home/iwesshop/public_html/tmp/' . $image_name;
+            $img_path = '/data/www/iwes/production/sites/pickyshop/tmp' . $image_name;
         }else{
             $img_path='/media/sf_sites/PickyshopNew/tmp/'. $image_name;
         }
