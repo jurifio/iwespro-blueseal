@@ -534,7 +534,10 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
 //curl_setopt($ch, CURLOPT_PUT, true); To edit a picture
         $img_path="/data/www/iwes/production/sites/pickyshop/temp/7-5885-001-1124.jpg";
         curl_setopt($ch, CURLOPT_USERPWD, PS_WS_AUTH_KEY.':');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, array('image'=>"@".$img_path.";type=image/jpeg"));
+       // curl_setopt($ch, CURLOPT_POSTFIELDS, array('image'=>"@".$img_path.";type=image/jpeg"));
+        $cfile = curl_file_create($img_path,'image/jpg','image');
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $cfile);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 
