@@ -42,10 +42,13 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">siteId
+                                    class="center">id
                                 </th>
-
-
+                                <th data-slug="shopId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">shopId
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

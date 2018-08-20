@@ -5,6 +5,7 @@ use bamboo\ecommerce\views\VBase;
 use bamboo\core\asset\CAssetCollection;
 use bamboo\core\router\CInternalRequest;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\domain\entities\CSiteApi;
 
 
 /**
