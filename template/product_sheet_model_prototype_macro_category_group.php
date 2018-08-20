@@ -64,12 +64,9 @@
                 data-remote="bs.model.prototype.macro.category.image.manage"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Aggiungi/elimina categorie per fason">
+    <bs-toolbar-group data-group-label="Aggiungi categorie per fason">
         <bs-toolbar-button
                 data-remote="bs.details.research.fason"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.delete.category.research.fason"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Aggiungi/modifica nome e descrizione">

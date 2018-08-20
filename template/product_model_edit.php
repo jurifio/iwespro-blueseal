@@ -417,9 +417,6 @@
         <bs-toolbar-button
                 data-remote="bs.details.research.fason"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.delete.category.research.fason"
-        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Aggiungi nuova tipo scheda prodotto">
         <bs-toolbar-button
