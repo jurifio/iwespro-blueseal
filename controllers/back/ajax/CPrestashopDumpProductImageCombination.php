@@ -515,7 +515,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
 
 
 // change the local path where image has been downloaded "presta-api" is my local folder from where i run API script
-        if(ENV=='dev') {
+        if(ENV=='prod') {
             $img_path = '/home/iwesshop/public_html/tmp/presta-api/images/' . $image_name;
         }else{
             $img_path='/media/sf_sites/PickyshopNew/tmp/presta-api/images/'. $image_name;
