@@ -499,7 +499,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
             $image->save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         }else{
-            $image->save_to = '/data/www/iwes/production/sites/pickyshop/temp/';
+            $image->save_to = '/data/www/iwes/production/sites/pickyshop/tmp/';
         }
 
 
@@ -516,7 +516,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
 
 // change the local path where image has been downloaded "presta-api" is my local folder from where i run API script
         if(ENV=='prod') {
-            $img_path = '/data/www/iwes/production/sites/pickyshop/temp' . $image_name;
+            $img_path = '/data/www/iwes/production/sites/pickyshop/tmp' . $image_name;
         }else{
             $img_path='/media/sf_sites/PickyshopNew/tmp/'. $image_name;
         }
@@ -532,7 +532,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true);
 //curl_setopt($ch, CURLOPT_PUT, true); To edit a picture
-        $img_path="/data/www/iwes/production/sites/pickyshop/temp/7-5885-001-1124.jpg";
+        $img_path="/data/www/iwes/production/sites/pickyshop/tmp/7-5885-001-1124.jpg";
         curl_setopt($ch, CURLOPT_USERPWD, PS_WS_AUTH_KEY.':');
        // curl_setopt($ch, CURLOPT_POSTFIELDS, array('image'=>"@".$img_path.";type=image/jpeg"));
         $cfile = curl_file_create($img_path,'image/jpg','image');
