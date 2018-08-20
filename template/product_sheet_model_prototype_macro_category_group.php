@@ -82,7 +82,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-pencil"
+                data-icon="fa-arrow-h"
                 data-permission="/admin/product/add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
