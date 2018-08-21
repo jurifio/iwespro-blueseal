@@ -63,12 +63,14 @@ class CProductBatchListAjaxController extends AAjaxController
                   wk.name as workCategory,
                   pb.documentId,
                   pb.description as descr,
-                  pb.workCategoryId
+                  pb.workCategoryId,
+                  wpl.name as workPriceListName
             FROM ProductBatch pb
             LEFT JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
             LEFT JOIN WorkCategory wk ON cd.workCategoryId = wk.id
             LEFT JOIN Contracts c ON cd.contractId = c.id
             LEFT JOIN Foison f ON c.foisonId = f.id
+            LEFT JOIN WorkPriceList wpl ON pb.workPriceListId = wpl.id
         ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
@@ -197,6 +199,7 @@ class CProductBatchListAjaxController extends AAjaxController
 
 
             $row['workCategoryId'] = $cat->name;
+            $row['workPriceListName'] = is_null($pbr->workPriceList) ? '' : $pbr->workPriceList->name;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

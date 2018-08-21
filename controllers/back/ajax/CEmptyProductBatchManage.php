@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\repositories\CProductBatchDetailsRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
+use bamboo\domain\repositories\CWorkPriceListRepo;
 
 
 /**
@@ -26,6 +27,8 @@ class CEmptyProductBatchManage extends AAjaxController
     {
         $d = \Monkey::app()->router->request()->getRequestData('desc');
         $workCat = \Monkey::app()->router->request()->getRequestData('workCat');
+        $wpl = \Monkey::app()->router->request()->getRequestData('wpl');
+        $wcps = \Monkey::app()->router->request()->getRequestData('wcp');
 
         if(!empty($d)){
 
@@ -37,6 +40,17 @@ class CEmptyProductBatchManage extends AAjaxController
             $pb->paid = 0;
             $pb->description = $d;
             $pb->workCategoryId = $workCat;
+
+            if(!$wcps) {
+                $pb->workPriceListId = $wpl;
+            } else {
+
+                /** @var CWorkPriceListRepo $workPriceListRepo */
+                $workPriceListRepo = \Monkey::app()->repoFactory->create('WorkPriceList');
+                $ids = $workPriceListRepo->insertNewPrice($wcps, $workCat, 1);
+                $pb->workPriceListId = $ids[0];
+            }
+
             $pb->smartInsert();
 
 

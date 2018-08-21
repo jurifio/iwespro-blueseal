@@ -24,9 +24,9 @@ class CWorkCategory extends AEntity
 {
 
     const NORM = 1;
-    const BRAND = 2;
-    const NAME_ENG = 3;
-    const NAME_DTC = 4;
+    const BRAND = 3;
+    const NAME_ENG = 4;
+    const NAME_DTC = 5;
 
     const SLUG_EMPTY_NORM = 'prodotti';
     const SLUG_EMPTY_BRAND = 'brands';

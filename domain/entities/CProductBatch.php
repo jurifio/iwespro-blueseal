@@ -24,6 +24,7 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * @property CObjectCollection $productBrand
  * @property CObjectCollection $productBatchHasProductBrand
  * @property CObjectCollection $productBatchHasProductName
+ * @property CWorkPriceList $workPriceList
  *
  */
 class CProductBatch extends AEntity

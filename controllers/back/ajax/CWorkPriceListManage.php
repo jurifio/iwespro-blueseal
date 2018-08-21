@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CWorkPriceList;
 use bamboo\domain\repositories\CWorkCategoryRepo;
+use bamboo\domain\repositories\CWorkPriceListRepo;
 
 
 /**
@@ -22,7 +23,7 @@ use bamboo\domain\repositories\CWorkCategoryRepo;
 class CWorkPriceListManage extends AAjaxController
 {
     /**
-     * @return string
+     * @return bool|string
      */
     public function post()
     {
@@ -32,23 +33,11 @@ class CWorkPriceListManage extends AAjaxController
         $cat = $data['cat'];
         $wcps = $data['wcp'];
 
-        /** @var CRepo $workPriceListRepo */
+        /** @var CWorkPriceListRepo $workPriceListRepo */
         $workPriceListRepo = \Monkey::app()->repoFactory->create('WorkPriceList');
+        if($workPriceListRepo->insertNewPrice($wcps, $cat, 1)) return 'Listino inserito con successo';
 
-        foreach ($wcps as $wcp) {
-            /** @var CWorkPriceList $newWcp */
-            $newWcp = $workPriceListRepo->getEmptyEntity();
-            $newWcp->name = $wcp['name'];
-            $newWcp->price = $wcp['price'];
-            $newWcp->start_date = $wcp['start'];
-            $newWcp->end_date = $wcp['end'];
-            $newWcp->active = 1;
-            $newWcp->workCategoryId = $cat;
-            $newWcp->smartInsert();
-        }
-
-        return 'Listino inserito con successo';
-
+        return false;
 
     }
 

@@ -83,6 +83,9 @@
                                 <th data-slug="workCategoryId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Categoria</th>
+                                <th data-slug="workPriceListName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Prezzo</th>
                             </tr>
                             </thead>
                             <tbody>

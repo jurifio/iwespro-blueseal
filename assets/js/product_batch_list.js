@@ -1,7 +1,8 @@
 ;(function () {
 
     $(document).on('bs.empty.product.batch', function () {
-
+        let i = 0;
+        let index = [];
 
         $.ajax({
             method: 'GET',
@@ -26,15 +27,101 @@
                     <p>Seleziona la categoria alla quale assocerai il lotto</p>
                     <select id="workCat"></select>
                     <p style="font-weight: bold">Inserisci una descrizione</p>
-                    <input type="text" id="prodBatchDescription">`
+                    <input type="text" id="prodBatchDescription">
+                    <div>
+                    <p style="margin-top: 30px">------FACOLTATIVO------</p>
+                    <p>Vuoi associare un listino al lotto? O Crearne uno nuovo? (Se ne crei uno nuovo ed è composto da più livelli, il lotto verrà associato al primo inserito.)</p>
+                    <select id="wpl">
+                    <option disabled selected value>Seleziona un'opzione</option>
+                    </select>
+                    </div>
+                    <div id="addWorkPrice" style="margin-top: 30px">
+</div>
+`
         });
+
+        $("#workCat").on("change", function () {
+
+            let workId = $(this).val();
+            $.ajax({
+                method:'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'WorkPriceList',
+                    condition: {
+                        'workCategoryId': workId
+                    }
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                let select = $('#wpl').empty();
+                $.each(res, function (k,v) {
+                    select.append(`<option value="${v.id}">${v.name}</option>`);
+                });
+                select.append("<option value='new'>Nuovo..</option>")
+            })
+        });
+
+        $('#wpl').on('change', function () {
+            if($(this).val() === "new"){
+                $('#addWorkPrice').empty().append(` 
+            <strong>INSERISCI UN NUOVO LISTINO</strong>
+            <div style="margin-bottom: 10px" id="addRow">
+            </div>
+            <button id="addPriceLevel">AGGIUNGI LISTINO</button>`)
+            } else {
+                $('#addWorkPrice').empty();
+            }
+        });
+
+        $(document).on('click', '#addPriceLevel', function () {
+                i++;
+                index.push(i);
+
+                $('#addRow')
+                    .append(
+                        `<div id="formDetail-${i}" style="margin-bottom: 15px">
+                        <strong class="col-md-12">Listino livello ${i}</strong>
+                        <input placeholder="Nome Listino" type="text" id="name-${i}" name="name-${i}" class="col-md-6">
+                        <input placeholder="Prezzo" type="text" id="price-${i}" name="price-${i}" class="col-md-6">
+                        <input placeholder="Data inizio" type="datetime-local" id="start-${i}" name="start-${i}" class="col-md-6">
+                        <input placeholder="Data fine" type="datetime-local" id="end-${i}" name="end-${i}" class="col-md-6">
+                        <button id="removeDetail" data-id="${i}" style="margin-top: 10px">Rimuovi dettaglio</button>
+                    </div>`
+                    );
+            });
+
+        $(document)
+            .on('click','#removeDetail',function() {
+                let id =  $(this).attr('data-id');
+                $(`#formDetail-${id}`).remove();
+
+                let z = index.indexOf(parseInt(id));
+                if(z !== -1) {
+                    index.splice(z, 1);
+                }
+            });
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
+            let wcp = [];
+            if(index !== []) {
+                $.each(index, function (k, v) {
 
+                    wcp.push({
+                        name: $(`#name-${v}`).val(),
+                        price: $(`#price-${v}`).val(),
+                        start: $(`#start-${v}`).val(),
+                        end: $(`#end-${v}`).val()
+                    });
+
+                });
+            }
             const dataDesc = {
+                wpl: $('#wpl').val(),
                 desc: $('#prodBatchDescription').val(),
-                workCat: $('#workCat').val()
+                workCat: $('#workCat').val(),
+                wcp: wcp
             };
 
             $.ajax({

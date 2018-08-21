@@ -45,6 +45,12 @@
                 "parentKeys": ["id"],
                 "childKeys" : ["productBatchId"],
                 "type" : "OneToMany"
+            },{
+                "name" : "workPriceList",
+                "entity" : "WorkPriceList",
+                "parentKeys": ["workPriceListId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
             }
         ]
     }
