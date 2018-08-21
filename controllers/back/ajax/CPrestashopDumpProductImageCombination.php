@@ -487,7 +487,7 @@ ORDER BY `p`.`id` ASC";
             $my_save_dir = '/media/sf_sites/PickyshopNew/tmp/';
 
         }else{
-            $my_save_dir = '/home/iwesshop/public_html/tmp/images/';
+            $my_save_dir = '/home/iwesshop/public_html/tmp/';
         }
         $filename = basename($url_to_image);
         $complete_save_loc = $my_save_dir . $filename;
@@ -499,7 +499,7 @@ ORDER BY `p`.`id` ASC";
             $image->save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         }else{
-            $image->save_to = '/home/iwesshop/public_html/tmp/images/';
+            $image->save_to = '/home/iwesshop/public_html/tmp/';
         }
 
 
@@ -516,9 +516,9 @@ ORDER BY `p`.`id` ASC";
 
 // change the local path where image has been downloaded "presta-api" is my local folder from where i run API script
         if(ENV=='dev') {
-            $img_path = '/data/www/iwes/production/sites/pickyshop/tmp/images' . $image_name;
+            $img_path = '/data/www/iwes/production/sites/pickyshop/tmp/' . $image_name;
         }else{
-            $img_path='/media/sf_sites/PickyshopNew/tmp/presta-api/images/'. $image_name;
+            $img_path='/media/sf_sites/PickyshopNew/tmp/'. $image_name;
         }
 
 
