@@ -36,12 +36,12 @@ class CPrestashopDumpProductImageCombination extends AAjaxController
     public function post()
     {
 
-         \Monkey::app()->vendorLibraries->load('prestashop');
+        // \Monkey::app()->vendorLibraries->load('prestashop');
 
         define('DEBUG', true);
         define('PS_SHOP_PATH', 'http://iwes.shop/');
         define('PS_WS_AUTH_KEY', 'PWTA3F211GSY6APTTCJDP2Y3UHHYFSVW');
-        //require_once "PSWebServiceLibrary.php";
+        require_once "PSWebServiceLibrary.php";
 
         $key = 'PWTA3F211GSY6APTTCJDP2Y3UHHYFSVW'; //your key here
         // $url = 'http://iwes.shop/api/products?output_format=JSON'; // change the base url
@@ -304,7 +304,7 @@ ORDER BY `p`.`id` ASC";
         $size=\Monkey::app()->repoFactory->create('ProductSizeGroupHasProductSize')->findBy(['productSizeGroupId'=>$productSizeGroup]);
         foreach ($size as $sizes) {
 
-                $this->add_combination($data, $sizes->productSizeId, $product->id);
+            $this->add_combination($data, $sizes->productSizeId, $product->id);
 
         }
         return (int) $product->id;
@@ -317,7 +317,7 @@ ORDER BY `p`.`id` ASC";
             $xml = $webService->get(array('url' => PS_SHOP_PATH . 'api/combinations?schema=blank'));
 
             $combination = $xml->children()->children();
-$productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->findOneBy(['productId'=>$data['productId'],'productVariantId'=>$data['productVariantId'],'productSizeId'=>$sizeId]);
+            $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->findOneBy(['productId'=>$data['productId'],'productVariantId'=>$data['productVariantId'],'productSizeId'=>$sizeId]);
 
             $combination->associations->product_option_values->product_option_values[0]->id =$sizeId;
             $combination->reference = $data["reference"];
@@ -335,7 +335,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
             }else{
                 $combination->price=$data['price'];
                 $combination->quantity =$data['quantity'];
-              }
+            }
 
 
             $combination->show_price = 1;
@@ -487,7 +487,7 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
             $my_save_dir = '/media/sf_sites/PickyshopNew/tmp/';
 
         }else{
-            $my_save_dir = '/data/www/iwes/production/sites/pickyshop/temp/';
+            $my_save_dir = '/home/iwesshop/public_html/tmp/images/';
         }
         $filename = basename($url_to_image);
         $complete_save_loc = $my_save_dir . $filename;
@@ -495,11 +495,11 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
 
 
         $image->source = $data['picture'];
-        if(ENV=='prod') {
+        if(ENV=='dev') {
             $image->save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         }else{
-            $image->save_to = '/data/www/iwes/production/sites/pickyshop/tmp/';
+            $image->save_to = '/home/iwesshop/public_html/tmp/images/';
         }
 
 
@@ -515,10 +515,10 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
 
 
 // change the local path where image has been downloaded "presta-api" is my local folder from where i run API script
-        if(ENV=='prod') {
-            $img_path = '/data/www/iwes/production/sites/pickyshop/tmp' . $image_name;
+        if(ENV=='dev') {
+            $img_path = '/data/www/iwes/production/sites/pickyshop/tmp/images' . $image_name;
         }else{
-            $img_path='/media/sf_sites/PickyshopNew/tmp/'. $image_name;
+            $img_path='/media/sf_sites/PickyshopNew/tmp/presta-api/images/'. $image_name;
         }
 
 
@@ -532,12 +532,9 @@ $productCombination =\Monkey::app()->repoFactory->create('ProductPublicSku')->fi
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true);
 //curl_setopt($ch, CURLOPT_PUT, true); To edit a picture
-        $img_path="/data/www/iwes/production/sites/pickyshop/tmp/7-5885-001-1124.jpg";
-        curl_setopt($ch, CURLOPT_USERPWD, PS_WS_AUTH_KEY.':');
-       // curl_setopt($ch, CURLOPT_POSTFIELDS, array('image'=>"@".$img_path.";type=image/jpeg"));
-        $cfile = curl_file_create($img_path,'image/jpg','image');
 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $cfile);
+        curl_setopt($ch, CURLOPT_USERPWD, PS_WS_AUTH_KEY.':');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, array('image'=>"@".$img_path.";type=image/jpeg"));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 
