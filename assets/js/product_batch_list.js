@@ -24,10 +24,15 @@
 
         let bsModal = new $.bsModal('Nuovo lotto', {
             body: `<p>Crea un lotto vuoto</p>
+                    <div>
                     <p>Seleziona la categoria alla quale assocerai il lotto</p>
                     <select id="workCat"></select>
-                    <p style="font-weight: bold">Inserisci una descrizione</p>
-                    <input type="text" id="prodBatchDescription">
+                    </div>
+                    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
+                    <p style="font-weight: bold">Inserisci un nome e una descrizione</p>
+                    <input placeholder="Titolo" type="text" id="prodBatchName"style="margin-bottom: 10px">
+                    <textarea placeholder="Descrizione" id="prodBatchDescription"></textarea>
+                    </div>
                     <div>
                     <p style="margin-top: 30px">------  FACOLTATIVO  ------</p>
                     <div style="display: block">
@@ -119,7 +124,7 @@
 
             let aWpl = false;
             if($('#assWpl').is(':checked')){
-                aWpl = false;
+                aWpl = true;
             }
             let wcp = [];
             if(index !== []) {
@@ -139,6 +144,7 @@
                 mp: mp,
                 wpl: $('#wpl').val(),
                 desc: $('#prodBatchDescription').val(),
+                name: $('#prodBatchName').val(),
                 workCat: $('#workCat').val(),
                 wcp: wcp
             };
@@ -154,7 +160,7 @@
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
                     bsModal.hide();
-                    $.refreshDataTable();
+                    window.location.reload();
                 });
                 bsModal.showOkBtn();
             });

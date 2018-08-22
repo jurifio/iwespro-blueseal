@@ -35,16 +35,28 @@ class CMarketplaceWorkController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/marketplace_work.php');
 
         $interestIds = [];
+        $unallowedProductBatch = null;
         /** @var CUser $user */
         $user = \Monkey::app()->getUser();
+        $permission = null;
         if($user->hasPermission('allShops')){
+            $permission = true;
+        } else if($user->hasPermission('worker')){
+            $permission = false;
+        }
+        if($permission){
             $wcs = \Monkey::app()->dbAdapter->query('SELECT id from WorkCategory', [])->fetchAll();
             foreach ($wcs as $wc) {
                 $interestIds[] = (int)$wc["id"];
             }
-        } else if ($user->hasPermission('worker')) {
+        } else {
             $interestIds = $user->foison->getInterestId();
             $noInterstIds = $user->foison->nonInterestId();
+            $rowUIds = implode(',', $noInterstIds);
+            $uQuery = "SELECT *
+        FROM ProductBatch pb
+        WHERE pb.marketplace = 1 and pb.workCategoryId in ($rowUIds)";
+            $unallowedProductBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findBySql($uQuery);
        }
 
         $rowIds = implode(',', $interestIds);
@@ -54,13 +66,8 @@ class CMarketplaceWorkController extends ARestrictedAccessRootController
         /** @var CObjectCollection $productsBatch */
         $productsBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findBySql($query);
 
-        $rowUIds = implode(',', $noInterstIds);
-        $uQuery = "SELECT *
-        FROM ProductBatch pb
-        WHERE pb.marketplace = 1 and pb.workCategoryId in ($rowUIds)";
-        $unallowedProductBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findBySql($uQuery);
-
         return $view->render([
+            'permission' => $permission,
             'productBatch' => $productsBatch,
             'unallowedProductBatch'=>$unallowedProductBatch,
             'app' => new CRestrictedAccessWidgetHelper($this->app),

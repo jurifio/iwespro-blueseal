@@ -29,10 +29,10 @@
                                         <div class="caption">
                                             <h4><?php echo $pb->name; ?></h4>
                                             <p><?php echo $pb->description ?></p>
-                                            <p>Qty: <?php echo count($pb->getElements()) ?>
+                                            <p>Qty: <?php echo count($pb->getElements()) == 0 ? '<strong>Coming soon</strong>' : "<strong>".count($pb->getElements())."</strong>" ?>
                                             <br>
-                                                Prezzo unitario: <?php echo $pb->workPriceList->price ?>Euro<br>
-                                                Prezzo totale: <?php echo $pb->workPriceList->price*count($pb->getElements())?>Euro
+                                                Prezzo unitario: <?php echo "<strong>".$pb->workPriceList->price . "€</strong>" ?><br>
+                                                Prezzo totale: <?php echo count($pb->getElements()) == 0 ? '<strong>Coming soon</strong>' : "<strong>".$pb->workPriceList->price*count($pb->getElements()) ."€</strong>"?>
                                             </p>
 
                                             <a href="#" class="btn btn-info btn-xs" role="button">Prenota</a> <a href="#" class="btn btn-default btn-xs" role="button">Rifiuta</a>
@@ -43,6 +43,7 @@
                             </div><!--/row-->
                         </div><!--/container -->
 
+                        <?php if(!$permission): ?>
                         <div class="container">
                             <div class="row">
                                 <h4>LOTTI NON PRENOTABILI</h4>
@@ -55,12 +56,11 @@
                                             <div class="caption">
                                                 <h4><?php echo $upb->name; ?></h4>
                                                 <p><?php echo $upb->description ?></p>
-                                                <p>Qty: <?php echo count($upb->getElements()) ?>
+                                                <p>Qty: <?php echo count($pb->getElements()) == 0 ? '<strong>Coming soon</strong>' : "<strong>".count($upb->getElements())."</strong>" ?>
                                                     <br>
-                                                    Prezzo unitario: <?php echo $upb->workPriceList->price ?>Euro<br>
-                                                    Prezzo totale: <?php echo $upb->workPriceList->price*count($upb->getElements())?>Euro
+                                                    Prezzo unitario: <?php echo "<strong>".$upb->workPriceList->price . "€</strong>" ?><br>
+                                                    Prezzo totale: <?php echo count($upb->getElements()) == 0 ? '<strong>Coming soon</strong>' : "<strong>".$upb->workPriceList->price*count($upb->getElements()) ."€</strong>"?>
                                                 </p>
-
                                                 <button class="btn btn-info btn-xs" disabled>Prenota</button> <button class="btn btn-default btn-xs" disabled>Rifiuta</button>
                                             </div>
                                         </div>
@@ -68,6 +68,7 @@
                                 <?php endforeach; ?>
                             </div><!--/row-->
                         </div><!--/container -->
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

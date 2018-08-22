@@ -35,6 +35,9 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
+                                <th data-slug="name"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Titolo</th>
                                 <th data-slug="descr"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Descrizione</th>

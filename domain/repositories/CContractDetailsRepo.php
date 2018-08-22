@@ -49,7 +49,7 @@ class CContractDetailsRepo extends ARepo
         /** @var CContractDetails $cD */
         $cD = $this->getEmptyEntity();
         $cD->workCategoryId = $workCategoryId;
-        $cD->workPriceListId = $workPriceListType === 'f' ?: $workListPriceId;
+        if($workPriceListType === 'f') $cD->workPriceListId = $workListPriceId;
         $cD->contractId = $contractId;
         $cD->contractDetailName = $contractDetailName;
         $cD->dailyQty = $qty;
@@ -61,8 +61,8 @@ class CContractDetailsRepo extends ARepo
         $category = $cD->workCategory->name;
         $contractCod = $cD->id;
         $nameContract = $cD->contractDetailName;
-        $workPriceList = $cD->workPriceList->name;
-        $workPriceListUnityPrice = $cD->workPriceList->price;
+        $workPriceList = $workPriceListType === 'f' ? $cD->workPriceList->name : 'Non definito';
+        $workPriceListUnityPrice = $workPriceListType === 'f' ? $cD->workPriceList->price : 'Non definito';
         $dailyQty = $cD->dailyQty;
         $note = $cD->note;
         $url = \Monkey::app()->baseUrl(false) . "/blueseal/work/contratti/".$cD->contractId;
@@ -92,7 +92,7 @@ class CContractDetailsRepo extends ARepo
         Iwes
         ";
 
-        $mRepo->newMail($from, [$to], [], [], $subject, $body);
+        if(ENV == 'prod') $mRepo->newMail($from, [$to], [], [], $subject, $body);
 
         return true;
     }
@@ -124,7 +124,7 @@ class CContractDetailsRepo extends ARepo
                 Gianluca Cartechini<br />
                 Iwes";
 
-            $mailRepo->newMail('gianluca@iwes.it', [$to], [], ['gianluca@iwes.it'], 'Conferma di accettazione contratto', $body);
+            if(ENV == 'prod') $mailRepo->newMail('gianluca@iwes.it', [$to], [], ['gianluca@iwes.it'], 'Conferma di accettazione contratto', $body);
 
             return true;
         } else {

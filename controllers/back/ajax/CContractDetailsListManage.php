@@ -48,7 +48,7 @@ class CContractDetailsListManage extends AAjaxController
         $qty = $data["qty"];
         $note = $data["note"];
 
-        if(empty($workCategoryId) || empty($workPriceListId) || empty($contractId) || empty($contractDetailName)){
+        if(empty($workCategoryId) || empty($contractId) || empty($contractDetailName)){
             $res = "Inserisci tutti i dati";
             return $res;
         }

@@ -63,6 +63,7 @@ class CProductBatchListAjaxController extends AAjaxController
                   wk.name as workCategory,
                   pb.documentId,
                   pb.description as descr,
+                  pb.name as name,
                   pb.workCategoryId,
                   wpl.name as workPriceListName,
                   pb.marketplace        
@@ -173,6 +174,8 @@ class CProductBatchListAjaxController extends AAjaxController
             $row["documentId"] = $pbr->documentId;
             $row["foisonEmail"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->contracts->foison->email);
             $row["descr"] = $pbr->description;
+            $row["name"] = $pbr->name;
+
 
             /** @var CObjectCollection $elems */
             $elems = $pbr->getElements();

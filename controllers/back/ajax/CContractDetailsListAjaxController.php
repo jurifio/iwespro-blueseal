@@ -43,7 +43,7 @@ class CContractDetailsListAjaxController extends AAjaxController
                   cd.accepted
             FROM ContractDetails cd
             JOIN WorkCategory wk ON cd.workCategoryId = wk.id
-            JOIN WorkPriceList wpl ON cd.workPriceListId = wpl.id
+            LEFT JOIN WorkPriceList wpl ON cd.workPriceListId = wpl.id
             JOIN Contracts c ON cd.contractId = c.id
             WHERE c.id = $idContract
         ";
@@ -64,7 +64,7 @@ class CContractDetailsListAjaxController extends AAjaxController
             $row["contractDetailName"] = $contractDetails->contractDetailName;
             $row["categoryName"] = $contractDetails->workCategory->name;
             $row["contractName"] = $contractDetails->contracts->name;
-            $row["priceListName"] = $contractDetails->workPriceList->name;
+            $row["priceListName"] = is_null($contractDetails->workPriceListId) ? 'Indefinito' : $contractDetails->workPriceList->name;
             $row["dailyQty"] = ($contractDetails->dailyQty == 0 ? "Non definita" : $contractDetails->dailyQty);
             $row["note"] = $contractDetails->note;
             $row["accepted"] = ($contractDetails->accepted == 0 ? "In attesa di risposta" : "Accettato");

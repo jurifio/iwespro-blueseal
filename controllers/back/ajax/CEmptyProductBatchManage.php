@@ -26,6 +26,7 @@ class CEmptyProductBatchManage extends AAjaxController
     public function post()
     {
         $d = \Monkey::app()->router->request()->getRequestData('desc');
+        $name = \Monkey::app()->router->request()->getRequestData('name');
         $mp = \Monkey::app()->router->request()->getRequestData('mp');
         $aWpl = \Monkey::app()->router->request()->getRequestData('aWpl');
         $workCat = \Monkey::app()->router->request()->getRequestData('workCat');
@@ -41,6 +42,7 @@ class CEmptyProductBatchManage extends AAjaxController
             $pb = $pbRepo->getEmptyEntity();
             $pb->paid = 0;
             $pb->description = $d;
+            $pb->name = $name;
             $pb->workCategoryId = $workCat;
 
 
