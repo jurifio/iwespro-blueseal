@@ -22,20 +22,22 @@
                                 <h4>LOTTI PRENOTABILI</h4>
                                 <?php
                                 /** @var \bamboo\domain\entities\CProductBatch $pb */
-                                foreach ($productBatch as $pb): ?>
+                                foreach ($productBatch as $pb):
+                                    $el = count($pb->getElements());
+                                    ?>
                                 <div class="col-xs-18 col-sm-6 col-md-3">
                                     <div class="thumbnail">
                                         <img src="http://placehold.it/500x250/EEE">
                                         <div class="caption">
                                             <h4><?php echo $pb->name; ?></h4>
                                             <p><?php echo $pb->description ?></p>
-                                            <p>Qty: <?php echo count($pb->getElements()) == 0 ? '<strong>Coming soon</strong>' : "<strong>".count($pb->getElements())."</strong>" ?>
+                                            <p>Qty: <?php echo $el == 0 ? '<strong>Coming soon</strong>' : "<strong>".$el."</strong>" ?>
                                             <br>
                                                 Prezzo unitario: <?php echo "<strong>".$pb->workPriceList->price . "€</strong>" ?><br>
-                                                Prezzo totale: <?php echo count($pb->getElements()) == 0 ? '<strong>Coming soon</strong>' : "<strong>".$pb->workPriceList->price*count($pb->getElements()) ."€</strong>"?>
+                                                Prezzo totale: <?php echo $el == 0 ? '<strong>Coming soon</strong>' : "<strong>".$pb->workPriceList->price*$el ."€</strong>"?>
                                             </p>
 
-                                            <a href="#" class="btn btn-info btn-xs" role="button">Prenota</a> <a href="#" class="btn btn-default btn-xs" role="button">Rifiuta</a>
+                                            <button class="btn btn-info btn-xs" <?php if($el === 0) echo 'disabled' ?>>Prenota</button> <button class="btn btn-default btn-xs" <?php if($el === 0) echo 'disabled'; ?>>Rifiuta</button>
                                         </div>
                                     </div>
                                 </div>
@@ -49,17 +51,19 @@
                                 <h4>LOTTI NON PRENOTABILI</h4>
                                 <?php
                                 /** @var \bamboo\domain\entities\CProductBatch $upb */
-                                foreach ($unallowedProductBatch as $upb): ?>
+                                foreach ($unallowedProductBatch as $upb):
+                                    $uEl = count($upb->getElements());
+                                    ?>
                                     <div disabled class="col-xs-18 col-sm-6 col-md-3">
                                         <div class="thumbnail">
                                             <img src="http://placehold.it/500x250/EEE">
                                             <div class="caption">
                                                 <h4><?php echo $upb->name; ?></h4>
                                                 <p><?php echo $upb->description ?></p>
-                                                <p>Qty: <?php echo count($pb->getElements()) == 0 ? '<strong>Coming soon</strong>' : "<strong>".count($upb->getElements())."</strong>" ?>
+                                                <p>Qty: <?php echo $uEl == 0 ? '<strong>Coming soon</strong>' : "<strong>".$uEl."</strong>" ?>
                                                     <br>
                                                     Prezzo unitario: <?php echo "<strong>".$upb->workPriceList->price . "€</strong>" ?><br>
-                                                    Prezzo totale: <?php echo count($upb->getElements()) == 0 ? '<strong>Coming soon</strong>' : "<strong>".$upb->workPriceList->price*count($upb->getElements()) ."€</strong>"?>
+                                                    Prezzo totale: <?php echo $uEl == 0 ? '<strong>Coming soon</strong>' : "<strong>".$upb->workPriceList->price*$uEl ."€</strong>"?>
                                                 </p>
                                                 <button class="btn btn-info btn-xs" disabled>Prenota</button> <button class="btn btn-default btn-xs" disabled>Rifiuta</button>
                                             </div>
