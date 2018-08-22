@@ -27,7 +27,7 @@
                 "entity" : "ProductBatch",
                 "parentKeys": ["id"],
                 "childKeys" : ["contractDetailsId"],
-                "type" : "OneToOne"
+                "type" : "OneToMany"
             }
         ]
     }

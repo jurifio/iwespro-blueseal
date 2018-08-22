@@ -173,4 +173,46 @@
         });
 
     });
+    $(document).on('bs-contract-close', function () {
+
+        let selectedRows = $('.dataTable').DataTable().rows('.selected').data();
+
+        if (selectedRows.count() != 1) {
+            new Alert({
+                type: "warning",
+                message: "Chiudi un contratto alla volta!"
+            }).open();
+            return false;
+        }
+
+        let id = selectedRows[0].row_id;
+
+        let bsModal = new $.bsModal('Chiudi contratto', {
+            body: `Desideri chiudere definitivamente il contratto?`
+        });
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            const data = {
+                contractId: id,
+            };
+            $.ajax({
+                method: 'put',
+                url: '/blueseal/xhr/ContractsManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    $.refreshDataTable();
+                    bsModal.hide();
+                    //window.location.reload();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
 })();

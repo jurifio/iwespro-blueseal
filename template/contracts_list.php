@@ -56,6 +56,9 @@
                                 <th data-slug="acceptedDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data di accettazione</th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -80,7 +83,17 @@
                 data-event="bs-contract-add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Assegna utente a Foison"
+                data-title="Crea contratto"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-window-close"
+                data-permission="/admin/content/add"
+                data-event="bs-contract-close"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Chiudi un contratto"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

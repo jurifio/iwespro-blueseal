@@ -48,7 +48,8 @@ class CContractsListAjaxController extends AAjaxController
                   F.email as foisonEmail,
                   C.accepted,
                   C.acceptedDate,
-                  F.userId
+                  F.userId,
+                  C.isActive
             FROM Foison F
             JOIN Contracts C ON F.id = C.foisonId
         ";
@@ -72,6 +73,7 @@ class CContractsListAjaxController extends AAjaxController
 
             /** @var CContracts $contracts */
             $contracts = $contractsRepo->findOneBy(['id'=>$row["id"]]);
+            $row["row_id"] = $contracts->id;
             $row["id"] = "<a href='".$url.$row["id"]."' target='_blank'>".$contracts->id."</a>";
             $row["contractName"] = $contracts->name;
             $row["contractDescription"] = $contracts->description;
@@ -80,6 +82,7 @@ class CContractsListAjaxController extends AAjaxController
             $row["foisonEmail"] = $contracts->foison->email;
             $row["accepted"] = ($contracts->accepted == 1 ? "SI" : "NO");
             $row["acceptedDate"] = $contracts->acceptedDate;
+            $row["isActive"] = $contracts->isActive == 0 ? "Non attivo" : "Attivo";
 
             $datatable->setResponseDataSetRow($key,$row);
         }
