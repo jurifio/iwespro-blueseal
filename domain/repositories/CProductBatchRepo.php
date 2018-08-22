@@ -7,6 +7,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
+use bamboo\domain\entities\CUser;
 use bamboo\domain\entities\CWorkCategory;
 use bamboo\domain\entities\CWorkCategorySteps;
 
@@ -191,5 +192,4 @@ class CProductBatchRepo extends ARepo
 
         return $correct;
     }
-
 }

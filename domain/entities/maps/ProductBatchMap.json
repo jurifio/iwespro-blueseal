@@ -51,6 +51,12 @@
                 "parentKeys": ["workPriceListId"],
                 "childKeys" : ["id"],
                 "type" : "OneToOne"
+            },{
+                "name" : "workCategory",
+                "entity" : "WorkCategory",
+                "parentKeys": ["workCategoryId"],
+                "childKeys" : ["id"],
+                "type" : "OneToOne"
             }
         ]
     }

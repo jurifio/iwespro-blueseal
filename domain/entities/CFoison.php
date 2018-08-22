@@ -58,4 +58,8 @@ class CFoison extends AEntity
         return array_diff($allCategory, $iIds);
     }
 
+    public function getContract() {
+        return $this->contracts->findOneByKey('isActive',1);
+    }
+
 }

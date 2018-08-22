@@ -67,6 +67,7 @@ class CMarketplaceWorkController extends ARestrictedAccessRootController
         $productsBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findBySql($query);
 
         return $view->render([
+            'user'=>$user,
             'permission' => $permission,
             'productBatch' => $productsBatch,
             'unallowedProductBatch'=>$unallowedProductBatch,

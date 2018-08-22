@@ -2,7 +2,6 @@
 
 namespace bamboo\domain\entities;
 
-use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
 
 /**
@@ -15,17 +14,8 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 15/03/2018
+ * @date 22/08/2018
  * @since 1.0
- *
- * @property CContractDetails $contractDetails
- * @property CObjectCollection $productBatchDetails
- * @property CDocument $document
- * @property CObjectCollection $productBrand
- * @property CObjectCollection $productBatchHasProductBrand
- * @property CObjectCollection $productBatchHasProductName
- * @property CWorkPriceList $workPriceList
- *
  */
 class CProductBatch extends AEntity
 {
@@ -33,9 +23,6 @@ class CProductBatch extends AEntity
     protected $primaryKeys = ['id'];
 
     public function isComplete(){
-
-        $workCategory = $this->contractDetails->workCategory->id;
-
 
         $elems = $this->getElements();
 
@@ -105,5 +92,14 @@ class CProductBatch extends AEntity
         }
 
         return $elems;
+    }
+
+    /**
+     * @param CUser $user
+     * @return mixed
+     */
+    public function getContractDetailFromUnassignedProductBatch(CUser $user) {
+        /** @var CContractDetails $cD */
+        return $user->foison->getContract()->contractDetails->findOneByKey("workCategoryId", $this->workCategoryId);
     }
 }

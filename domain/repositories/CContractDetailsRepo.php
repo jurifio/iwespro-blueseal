@@ -49,7 +49,11 @@ class CContractDetailsRepo extends ARepo
         /** @var CContractDetails $cD */
         $cD = $this->getEmptyEntity();
         $cD->workCategoryId = $workCategoryId;
+
+        if($workPriceListType === 'v') $cD->isVariable = 1;
+
         if($workPriceListType === 'f') $cD->workPriceListId = $workListPriceId;
+
         $cD->contractId = $contractId;
         $cD->contractDetailName = $contractDetailName;
         $cD->dailyQty = $qty;
