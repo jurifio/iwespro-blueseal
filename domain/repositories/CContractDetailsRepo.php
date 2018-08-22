@@ -44,12 +44,12 @@ class CContractDetailsRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function createNewContractDetail($contractId, $workCategoryId, $workListPriceId, $contractDetailName, $qty, $note){
+    public function createNewContractDetail($workPriceListType, $contractId, $workCategoryId, $workListPriceId, $contractDetailName, $qty, $note){
 
         /** @var CContractDetails $cD */
         $cD = $this->getEmptyEntity();
         $cD->workCategoryId = $workCategoryId;
-        $cD->workPriceListId = $workListPriceId;
+        $cD->workPriceListId = $workPriceListType === 'f' ?: $workListPriceId;
         $cD->contractId = $contractId;
         $cD->contractDetailName = $contractDetailName;
         $cD->dailyQty = $qty;

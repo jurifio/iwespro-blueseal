@@ -40,6 +40,7 @@ class CContractDetailsListManage extends AAjaxController
     public function post()
     {
         $data = \Monkey::app()->router->request()->getRequestData();
+        $workPriceListType = $data["workPriceListType"];
         $workCategoryId = $data["workCategoryId"];
         $workPriceListId = $data["workPriceListId"];
         $contractId = $data["contractId"];
@@ -55,7 +56,7 @@ class CContractDetailsListManage extends AAjaxController
         /** @var CContractDetailsRepo $contractDetailRepo */
         $contractDetailRepo = \Monkey::app()->repoFactory->create('ContractDetails');
 
-        if($contractDetailRepo->createNewContractDetail($contractId, $workCategoryId, $workPriceListId, $contractDetailName, $qty, $note)){
+        if($contractDetailRepo->createNewContractDetail($workPriceListType,$contractId, $workCategoryId, $workPriceListId, $contractDetailName, $qty, $note)){
             $res = "Contratto creato con successo";
         };
 

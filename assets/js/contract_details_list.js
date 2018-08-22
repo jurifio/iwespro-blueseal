@@ -27,7 +27,11 @@
                 'title="workCategory" name="workCategory" id="workCategory">\n' +
                 '</select>'+
             '</div>' +
-            '<div class="form-group form-group-default required">' +
+            '<div>' +
+                '<p>Scegli se il dettaglio del contratto dev\'essere fisso o variabile</p>' +
+                '<select id="workPriceListType"><option value="f">Fisso</option><option value="v">Variabile</option></select>' +
+            '</div>' +
+            '<div id="wpl" class="form-group form-group-default required">' +
                 '<select class="full-width selectpicker"\n id="workPriceList"' +
                 'placeholder="Seleziona il listino corretto" tabindex="-1"\n' +
                 'title="workPriceList" name="workPriceList" id="workPriceList">\n' +
@@ -71,12 +75,24 @@
         });
 
 
+        $('#workPriceListType').on('change', function () {
+
+            let wk = $("#wpl");
+            if($(this).val() === 'v'){
+                wk.hide();
+            } else {
+                wk.show();
+            }
+
+        });
+
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             let url = window.location.href;
             let contractId = url.substring(url.lastIndexOf('/') + 1);
             const data = {
+                workPriceListType: $('#workPriceListType').val(),
                 workCategoryId: $('#workCategory').val(),
                 workPriceListId: $('#workPriceList').val(),
                 contractId: contractId,
