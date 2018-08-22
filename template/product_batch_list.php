@@ -86,6 +86,9 @@
                                 <th data-slug="workPriceListName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Prezzo</th>
+                                <th data-slug="marketplace"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Visibile nel marketplace</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -170,6 +173,18 @@
                 data-rel="tooltip"
                 data-event="bs.accept.product.batch"
                 data-title="Accetta il lotto"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Lotto">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-check-square"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.batch.valutation"
+                data-title="Valuta il lotto"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

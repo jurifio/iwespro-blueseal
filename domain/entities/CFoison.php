@@ -21,9 +21,41 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * @property CUser $user
  * @property CObjectCollection $contracts
  * @property CAddressBook $addressBook
+ * @property CObjectCollection $foisonHasInterest*
  */
 class CFoison extends AEntity
 {
     protected $entityTable = 'Foison';
     protected $primaryKeys = ['id'];
+
+    /**
+     * @return array
+     */
+    public function getInterestId()
+    {
+        /** @var CObjectCollection $interests */
+        $interests = $this->foisonHasInterest;
+        $ids = [];
+        /** @var CFoisonHasInterest $interest */
+        foreach ($interests as $interest) {
+            $ids[] = $interest->workCategoryId;
+        }
+        return $ids;
+    }
+
+    public function nonInterestId(){
+        /** @var CObjectCollection $wId */
+        $wId = \Monkey::app()->repoFactory->create('WorkCategory')->findAll();
+
+        $allCategory = [];
+        /** @var CWorkCategory $workCategory */
+        foreach ($wId as $workCategory)
+        {
+            $allCategory[] = $workCategory->id;
+        }
+
+        $iIds = $this->getInterestId();
+        return array_diff($allCategory, $iIds);
+    }
+
 }

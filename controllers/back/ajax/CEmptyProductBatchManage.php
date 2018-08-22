@@ -26,6 +26,8 @@ class CEmptyProductBatchManage extends AAjaxController
     public function post()
     {
         $d = \Monkey::app()->router->request()->getRequestData('desc');
+        $mp = \Monkey::app()->router->request()->getRequestData('mp');
+        $aWpl = \Monkey::app()->router->request()->getRequestData('aWpl');
         $workCat = \Monkey::app()->router->request()->getRequestData('workCat');
         $wpl = \Monkey::app()->router->request()->getRequestData('wpl');
         $wcps = \Monkey::app()->router->request()->getRequestData('wcp');
@@ -41,14 +43,18 @@ class CEmptyProductBatchManage extends AAjaxController
             $pb->description = $d;
             $pb->workCategoryId = $workCat;
 
-            if(!$wcps) {
-                $pb->workPriceListId = $wpl;
-            } else {
 
-                /** @var CWorkPriceListRepo $workPriceListRepo */
-                $workPriceListRepo = \Monkey::app()->repoFactory->create('WorkPriceList');
-                $ids = $workPriceListRepo->insertNewPrice($wcps, $workCat, 1);
-                $pb->workPriceListId = $ids[0];
+            if($aWpl) {
+                if (!$wcps) {
+                    $pb->workPriceListId = $wpl;
+                } else {
+                    /** @var CWorkPriceListRepo $workPriceListRepo */
+                    $workPriceListRepo = \Monkey::app()->repoFactory->create('WorkPriceList');
+                    $ids = $workPriceListRepo->insertNewPrice($wcps, $workCat, 1);
+                    $pb->workPriceListId = $ids[0];
+                }
+
+                $pb->marketplace = $mp ? 1 : 0;
             }
 
             $pb->smartInsert();

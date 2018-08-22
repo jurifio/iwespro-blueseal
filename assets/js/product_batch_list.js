@@ -29,14 +29,22 @@
                     <p style="font-weight: bold">Inserisci una descrizione</p>
                     <input type="text" id="prodBatchDescription">
                     <div>
-                    <p style="margin-top: 30px">------FACOLTATIVO------</p>
+                    <p style="margin-top: 30px">------  FACOLTATIVO  ------</p>
+                    <div style="display: block">
+                    <input id="assWpl" type="checkbox">
+                    <label for="assWpl">Associa listino</label>
+                    </div>
                     <p>Vuoi associare un listino al lotto? O Crearne uno nuovo? (Se ne crei uno nuovo ed è composto da più livelli, il lotto verrà associato al primo inserito.)</p>
+                    <div style="display: block">
+                    <input id="mp" type="checkbox">
+                    <label for="mp">Marketplace</label>
+                    </div>
                     <select id="wpl">
                     <option disabled selected value>Seleziona un'opzione</option>
                     </select>
                     </div>
                     <div id="addWorkPrice" style="margin-top: 30px">
-</div>
+                    </div>
 `
         });
 
@@ -104,6 +112,15 @@
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
+            let mp = false;
+            if($('#mp').is(':checked')){
+                mp = true;
+            }
+
+            let aWpl = false;
+            if($('#assWpl').is(':checked')){
+                aWpl = false;
+            }
             let wcp = [];
             if(index !== []) {
                 $.each(index, function (k, v) {
@@ -118,6 +135,8 @@
                 });
             }
             const dataDesc = {
+                aWpl: aWpl,
+                mp: mp,
                 wpl: $('#wpl').val(),
                 desc: $('#prodBatchDescription').val(),
                 workCat: $('#workCat').val(),
@@ -613,6 +632,50 @@
             $.ajax({
                 method: 'post',
                 url: '/blueseal/xhr/UnfitProductBatchManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
+    $(document).on('bs.product.batch.valutation', function () {
+
+        let productsBatch = [];
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length != 1)
+        {
+            new Alert({
+                type: "warning",
+                message: "Valuta un lotto alla volta"
+            }).open();
+            return false;
+        }
+
+        let bsModal = new $.bsModal('Valutazione del lotto', {
+            body: `<p>Inserisci un voto(puoi utilizzare numeri con la virgola)</p>
+                   <input type="number" min="0" value="0" step="0.01" id="rank">`
+        });
+
+
+        const data = {
+            ranking: $('#rank'),
+        };
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/RankProductBatch',
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);

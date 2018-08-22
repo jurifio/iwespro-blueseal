@@ -2144,6 +2144,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/work/marketplace(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceWorkController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/work/contratti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CContractsListController"
