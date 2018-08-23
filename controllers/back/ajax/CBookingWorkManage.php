@@ -5,6 +5,7 @@ use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CEmailRepo;
+use bamboo\utils\time\SDateToolbox;
 
 
 /**
@@ -35,15 +36,29 @@ class CBookingWorkManage extends AAjaxController
         /** @var CProductBatch $pb */
         $pb = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$pbId]);
 
+
+        $eWd = $pb->estimatedWorkDays;
+
         $cDId = $pb->getContractDetailFromUnassignedProductBatch($user)->id;
+        $date = new \DateTime();
         $pb->contractDetailsId = $cDId;
         $pb->marketplace = 0;
+        $pb->confirmationDate = date_format($date, 'Y-m-d H:i:s');
+        $pb->scheduledDelivery = SDateToolbox::GetDateAfterAddedDays(null, $eWd)->format('Y-m-d 23:59:59');
         $pb->update();
 
+
+        /** @var CContractDetails $contractDetails */
+        $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBY(['id'=>$cDId]);
+
+        $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
+
+        $sectionalRepo = \Monkey::app()->repoFactory->create('Sectional');
+        $pb->sectional = $sectionalRepo->createNewSectionalCode($sectionalCodeId);
+        $pb->update();
         $foison = $user->foison;
         $foison->activeProductBatch = $pb->id;
         $foison->update();
-
         if(ENV == 'prod'){
             /** @var CEmailRepo $mail */
             $mail = \Monkey::app()->repoFactory->create('Email');
