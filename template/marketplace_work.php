@@ -24,17 +24,16 @@
                                 foreach ($productBatch as $pb):
                                     $el = count($pb->getElements());
 
-                                    if($permission){
-                                        $rPrice = $pb->workPriceList->price;
+                                    if ($permission) {
+                                        $rPrice = $pb->unitPrice;
                                     } else {
                                         /** @var \bamboo\domain\entities\CContractDetails $cD */
                                         $cD = $pb->getContractDetailFromUnassignedProductBatch($user);
-                                        if($cD){
+                                        if ($cD) {
                                             $cDFixOrVar = $cD->isVariable;
-                                            $rPrice = $cDFixOrVar == 1 ? $pb->workPriceList->price : $cD->workPriceList->price;
+                                            $rPrice = $cDFixOrVar == 1 ? $pb->unitPrice : $cD->workPriceList->price;
                                         }
                                     }
-
                                     ?>
                                     <div class="col-xs-18 col-sm-6 col-md-3">
                                         <div class="thumbnail">
@@ -50,12 +49,12 @@
                                                     <br>
                                                     Prezzo
                                                     totale: <?php echo $el == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $rPrice * $el . "€</strong>" ?>
+                                                    <br>
+                                                    Giorni stimati di
+                                                    lavoro: <?php echo "<strong>" . $pb->estimatedWorkDays . "</strong>"; ?>
                                                 </p>
-                                                <button class="btn btn-info btn-xs" <?php if ($el === 0) echo 'disabled' ?>>
+                                                <button class="btn btn-info btn-xs acceptPB <?php echo $pb->id;?>" <?php if ($el === 0 || $hasOpenedProductBatch || $foisonStatus != 2 ) echo 'disabled' ?> data-pbId="<?php echo $pb->id;?>">
                                                     Prenota
-                                                </button>
-                                                <button class="btn btn-default btn-xs" <?php if ($el === 0) echo 'disabled'; ?>>
-                                                    Rifiuta
                                                 </button>
                                             </div>
                                         </div>
@@ -74,7 +73,7 @@
                                         $uEl = count($upb->getElements());
                                         ?>
                                         <div disabled class="col-xs-18 col-sm-6 col-md-3">
-                                            <div class="thumbnail">
+                                            <div class="thumbnail" id="thumbnail-<?php echo $pb->id;?>">
                                                 <img src="http://placehold.it/500x250/EEE">
                                                 <div class="caption">
                                                     <h4><?php echo $upb->name; ?></h4>
@@ -83,13 +82,12 @@
                                                         Qty: <?php echo $uEl == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $uEl . "</strong>" ?>
                                                         <br>
                                                         Prezzo
-                                                        unitario: <?php echo "<strong>" . $upb->workPriceList->price . "€</strong>" ?>
+                                                        unitario: <?php echo "<strong>" . $upb->unitPrice . "€</strong>" ?>
                                                         <br>
                                                         Prezzo
-                                                        totale: <?php echo $uEl == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $upb->workPriceList->price * $uEl . "€</strong>" ?>
+                                                        totale: <?php echo $uEl == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $upb->unitPrice * $uEl . "€</strong>" ?>
                                                     </p>
                                                     <button class="btn btn-info btn-xs" disabled>Prenota</button>
-                                                    <button class="btn btn-default btn-xs" disabled>Rifiuta</button>
                                                 </div>
                                             </div>
                                         </div>

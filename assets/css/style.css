@@ -1042,3 +1042,11 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     margin-bottom: 10px;
     border: 7px solid #fff;
 }
+
+/** flex utility */
+.align-center-column-direction{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

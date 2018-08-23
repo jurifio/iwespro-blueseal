@@ -25,95 +25,28 @@
         let bsModal = new $.bsModal('Nuovo lotto', {
             body: `<p>Crea un lotto vuoto</p>
                     <div>
-                    <p>Seleziona la categoria alla quale assocerai il lotto</p>
-                    <select id="workCat"></select>
+                        <p>Seleziona la categoria alla quale assocerai il lotto</p>
+                        <select id="workCat"></select>
                     </div>
-                    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
-                    <p style="font-weight: bold">Inserisci un nome e una descrizione</p>
-                    <input placeholder="Titolo" type="text" id="prodBatchName"style="margin-bottom: 10px">
-                    <textarea placeholder="Descrizione" id="prodBatchDescription"></textarea>
+                    <div class="align-center-column-direction">
+                        <p style="font-weight: bold">Inserisci un nome e una descrizione</p>
+                        <input placeholder="Titolo" type="text" id="prodBatchName"style="margin-bottom: 10px">
+                        <textarea placeholder="Descrizione" id="prodBatchDescription"></textarea>
+                    </div>
+                    <div class="align-center-column-direction">
+                        <label><strong>Giorni di lavoro</strong></label>
+                        <input type="number" id="deliveryTime" name="deliveryTime">
                     </div>
                     <div>
-                    <p style="margin-top: 30px">------  FACOLTATIVO  ------</p>
-                    <div style="display: block">
-                    <input id="assWpl" type="checkbox">
-                    <label for="assWpl">Associa listino</label>
-                    </div>
-                    <p>Vuoi associare un listino al lotto? O Crearne uno nuovo? (Se ne crei uno nuovo ed è composto da più livelli, il lotto verrà associato al primo inserito.)</p>
-                    <div style="display: block">
-                    <input id="mp" type="checkbox">
-                    <label for="mp">Marketplace</label>
-                    </div>
-                    <select id="wpl">
-                    <option disabled selected value>Seleziona un'opzione</option>
-                    </select>
-                    </div>
-                    <div id="addWorkPrice" style="margin-top: 30px">
-                    </div>
-`
-        });
-
-        $("#workCat").on("change", function () {
-
-            let workId = $(this).val();
-            $.ajax({
-                method:'GET',
-                url: '/blueseal/xhr/GetTableContent',
-                data: {
-                    table: 'WorkPriceList',
-                    condition: {
-                        'workCategoryId': workId
-                    }
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                let select = $('#wpl').empty();
-                $.each(res, function (k,v) {
-                    select.append(`<option value="${v.id}">${v.name}</option>`);
-                });
-                select.append("<option value='new'>Nuovo..</option>")
-            })
-        });
-
-        $('#wpl').on('change', function () {
-            if($(this).val() === "new"){
-                $('#addWorkPrice').empty().append(` 
-            <strong>INSERISCI UN NUOVO LISTINO</strong>
-            <div style="margin-bottom: 10px" id="addRow">
-            </div>
-            <button id="addPriceLevel">AGGIUNGI LISTINO</button>`)
-            } else {
-                $('#addWorkPrice').empty();
-            }
-        });
-
-        $(document).on('click', '#addPriceLevel', function () {
-                i++;
-                index.push(i);
-
-                $('#addRow')
-                    .append(
-                        `<div id="formDetail-${i}" style="margin-bottom: 15px">
-                        <strong class="col-md-12">Listino livello ${i}</strong>
-                        <input placeholder="Nome Listino" type="text" id="name-${i}" name="name-${i}" class="col-md-6">
-                        <input placeholder="Prezzo" type="text" id="price-${i}" name="price-${i}" class="col-md-6">
-                        <input placeholder="Data inizio" type="datetime-local" id="start-${i}" name="start-${i}" class="col-md-6">
-                        <input placeholder="Data fine" type="datetime-local" id="end-${i}" name="end-${i}" class="col-md-6">
-                        <button id="removeDetail" data-id="${i}" style="margin-top: 10px">Rimuovi dettaglio</button>
+                        <p style="margin-top: 30px; font-weight: bold">------  FACOLTATIVO  ------</p>
+                        <input id="mp" type="checkbox">
+                        <label for="mp">Pubblicare sul Marketplace?</label>
+                            <div style="display: block">
+                                <input id="unitPrice" type="text" step="0.01" min="0">
+                                <label for="unitPrice">Assegna un prezzo unitario</label>
+                            </div>
                     </div>`
-                    );
-            });
-
-        $(document)
-            .on('click','#removeDetail',function() {
-                let id =  $(this).attr('data-id');
-                $(`#formDetail-${id}`).remove();
-
-                let z = index.indexOf(parseInt(id));
-                if(z !== -1) {
-                    index.splice(z, 1);
-                }
-            });
+        });
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
@@ -122,31 +55,13 @@
                 mp = true;
             }
 
-            let aWpl = false;
-            if($('#assWpl').is(':checked')){
-                aWpl = true;
-            }
-            let wcp = [];
-            if(index !== []) {
-                $.each(index, function (k, v) {
-
-                    wcp.push({
-                        name: $(`#name-${v}`).val(),
-                        price: $(`#price-${v}`).val(),
-                        start: $(`#start-${v}`).val(),
-                        end: $(`#end-${v}`).val()
-                    });
-
-                });
-            }
             const dataDesc = {
-                aWpl: aWpl,
                 mp: mp,
-                wpl: $('#wpl').val(),
+                unitPrice: $('#unitPrice').val(),
                 desc: $('#prodBatchDescription').val(),
                 name: $('#prodBatchName').val(),
                 workCat: $('#workCat').val(),
-                wcp: wcp
+                deliveryTime: $("#deliveryTime").val()
             };
 
             $.ajax({

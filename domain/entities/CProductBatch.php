@@ -2,6 +2,7 @@
 
 namespace bamboo\domain\entities;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
 
 /**
@@ -99,7 +100,7 @@ class CProductBatch extends AEntity
      * @return mixed
      */
     public function getContractDetailFromUnassignedProductBatch(CUser $user) {
-        /** @var CContractDetails $cD */
-        return $user->foison->getContract()->contractDetails->findOneByKey("workCategoryId", $this->workCategoryId);
+        return $user->foison->getContract()->contractDetails->findOneByKeys(["workCategoryId"=> $this->workCategoryId]);
+
     }
 }

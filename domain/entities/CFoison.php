@@ -62,4 +62,26 @@ class CFoison extends AEntity
         return $this->contracts->findOneByKey('isActive',1);
     }
 
+
+    public function hasOpenedProductBatch(){
+
+        $cDs = $this->getContract()->contractDetails;
+
+        /** @var CContractDetails $contractDetail */
+        foreach ($cDs as $contractDetail) {
+
+            /** @var CObjectCollection $pbS */
+            $pbS = $contractDetail->productBatch;
+
+            /** @var CProductBatch $pb */
+            foreach ($pbS as $pb) {
+                if ($pb->closingDate == 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 }

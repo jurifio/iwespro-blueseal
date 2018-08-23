@@ -78,7 +78,7 @@ class CContractsManage extends AAjaxController
         /** @var CEmailRepo $mail */
         $mail = \Monkey::app()->repoFactory->create('Email');
         $foisonMail = $foison->email;
-        $mail->newMail('gianluca@iwes.it', [$foisonMail], [], [], "Contratto creato con successo", $body);
+        if(ENV == 'prod') $mail->newMail('gianluca@iwes.it', [$foisonMail], [], [], "Contratto creato con successo", $body);
 
         return $res;
     }

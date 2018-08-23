@@ -146,10 +146,15 @@ class CProductBatchDetailsRepo extends ARepo
                     }
 
                     if((isset($ext) && !$ext) || $pbd->count() == 0) {
+                        /** @var CWorkCategoryStepsRepo $catStepsRepo */
+                        $catStepsRepo = \Monkey::app()->repoFactory->create('WorkCategorySteps');
+
+                        $categoryStepId = $catStepsRepo->getFirstStepsFromCategoryId($pb->workCategoryId)->id;
                         $pBD = $this->getEmptyEntity();
                         $pBD->productid = $pId;
                         $pBD->productVariantId = $pVId;
                         $pBD->productBatchId = $pb->id;
+                        $pBD->workCategoryStepsId = $categoryStepId;
                         $pBD->smartInsert();
                     }
                 }

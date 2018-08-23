@@ -25,15 +25,14 @@ class CEmptyProductBatchManage extends AAjaxController
 
     public function post()
     {
+        $unitPrice = \Monkey::app()->router->request()->getRequestData('unitPrice');
         $d = \Monkey::app()->router->request()->getRequestData('desc');
         $name = \Monkey::app()->router->request()->getRequestData('name');
         $mp = \Monkey::app()->router->request()->getRequestData('mp');
-        $aWpl = \Monkey::app()->router->request()->getRequestData('aWpl');
         $workCat = \Monkey::app()->router->request()->getRequestData('workCat');
-        $wpl = \Monkey::app()->router->request()->getRequestData('wpl');
-        $wcps = \Monkey::app()->router->request()->getRequestData('wcp');
+        $deliveryTime = \Monkey::app()->router->request()->getRequestData('deliveryTime');
 
-        if(!empty($d)){
+        if(!empty($d) || !empty($name) || !empty($deliveryDate) || !empty($unitPrice)){
 
             /** @var CProductBatchRepo $pbRepo */
             $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
@@ -42,27 +41,16 @@ class CEmptyProductBatchManage extends AAjaxController
             $pb = $pbRepo->getEmptyEntity();
             $pb->paid = 0;
             $pb->description = $d;
+            $pb->estimatedWorkDays = $deliveryTime;
             $pb->name = $name;
             $pb->workCategoryId = $workCat;
-
-
-            if($aWpl) {
-                if (!$wcps) {
-                    $pb->workPriceListId = $wpl;
-                } else {
-                    /** @var CWorkPriceListRepo $workPriceListRepo */
-                    $workPriceListRepo = \Monkey::app()->repoFactory->create('WorkPriceList');
-                    $ids = $workPriceListRepo->insertNewPrice($wcps, $workCat, 1);
-                    $pb->workPriceListId = $ids[0];
-                }
-
-                $pb->marketplace = $mp ? 1 : 0;
-            }
+            $pb->unitPrice = $unitPrice;
+            if($mp) $pb->marketplace = 1;
 
             $pb->smartInsert();
 
 
-        } else return "Inserisci una descrizione";
+        } else return "Inserisci i dati necessari";
 
         return true;
     }

@@ -48,6 +48,7 @@ class CContractsRepo extends ARepo
             $contract->foisonId = $foison->id;
             $contract->name = $name;
             $contract->description = $description;
+            $contract->isActive = 1;
             $contract->smartInsert();
             \Monkey::app()->repoFactory->commit();
         } catch (\Throwable $e){

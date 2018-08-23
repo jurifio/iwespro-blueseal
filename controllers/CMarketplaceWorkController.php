@@ -66,8 +66,12 @@ class CMarketplaceWorkController extends ARestrictedAccessRootController
         /** @var CObjectCollection $productsBatch */
         $productsBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findBySql($query);
 
+        $hasOpenedProductBatch = $user->foison->hasOpenedProductBatch();
+        $foisonStatus = $user->foison->foisonStatusId;
         return $view->render([
             'user'=>$user,
+            'foisonStatus'=>$foisonStatus,
+            'hasOpenedProductBatch' => $hasOpenedProductBatch,
             'permission' => $permission,
             'productBatch' => $productsBatch,
             'unallowedProductBatch'=>$unallowedProductBatch,

@@ -86,9 +86,6 @@
                                 <th data-slug="workCategoryId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Categoria</th>
-                                <th data-slug="workPriceListName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Prezzo</th>
                                 <th data-slug="marketplace"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Visibile nel marketplace</th>
