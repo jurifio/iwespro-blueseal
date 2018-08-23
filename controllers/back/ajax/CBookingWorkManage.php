@@ -39,17 +39,28 @@ class CBookingWorkManage extends AAjaxController
 
         $eWd = $pb->estimatedWorkDays;
 
-        $cDId = $pb->getContractDetailFromUnassignedProductBatch($user)->id;
+        /** @var CContractDetails $cD */
+        $cD = $pb->getContractDetailFromUnassignedProductBatch($user);
         $date = new \DateTime();
-        $pb->contractDetailsId = $cDId;
+        $pb->contractDetailsId = $cD->id;
         $pb->marketplace = 0;
         $pb->confirmationDate = date_format($date, 'Y-m-d H:i:s');
         $pb->scheduledDelivery = SDateToolbox::GetDateAfterAddedDays(null, $eWd)->format('Y-m-d 23:59:59');
         $pb->update();
 
+        $items = count($pb->getElements());
+        $type = $cD->isVariable;
+
+        if($type == 0){
+            $newPrice = $pb->contractDetails->workPriceList->price*$items;
+        } elseif ($type == 1) {
+            $newPrice = $pb->unitPrice*$items;
+        }
+        $pb->value = $newPrice;
+        $pb->update();
 
         /** @var CContractDetails $contractDetails */
-        $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBY(['id'=>$cDId]);
+        $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBY(['id'=>$cD->id]);
 
         $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
 

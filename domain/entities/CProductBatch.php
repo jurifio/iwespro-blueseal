@@ -17,6 +17,10 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @date 22/08/2018
  * @since 1.0
+ *
+ *
+ * @property CContractDetails $contractDetails
+ *
  */
 class CProductBatch extends AEntity
 {

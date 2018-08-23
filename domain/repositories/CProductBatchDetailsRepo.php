@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\domain\repositories;
 
 use bamboo\core\base\CObjectCollection;
@@ -32,7 +33,8 @@ class CProductBatchDetailsRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function createNewProductBatchDetails(CProductBatch $productBatch, $products, $added = false){
+    public function createNewProductBatchDetails(CProductBatch $productBatch, $products, $added = false)
+    {
 
         /** @var CWorkCategoryStepsRepo $catStepsRepo */
         $catStepsRepo = \Monkey::app()->repoFactory->create('WorkCategorySteps');
@@ -42,7 +44,7 @@ class CProductBatchDetailsRepo extends ARepo
         $categoryStepId = $categoryStep->id;
 
 
-        if($added){
+        if ($added) {
             /** @var CObjectCollection $prBDet */
             $prBDet = $productBatch->productBatchDetails;
             $count = 0;
@@ -50,15 +52,15 @@ class CProductBatchDetailsRepo extends ARepo
             $isAdded = false;
         }
 
-        foreach ($products as $productId){
-            $pId = explode('-',$productId)[0];
-            $pVId = explode('-',$productId)[1];
+        foreach ($products as $productId) {
+            $pId = explode('-', $productId)[0];
+            $pVId = explode('-', $productId)[1];
 
-            if($added) {
+            if ($added) {
                 /** @var CProductBatchDetails $ext */
                 $ext = $prBDet->findOneByKeys(['productId' => $pId, 'productVariantId' => $pVId]);
 
-                if(!$ext){
+                if (!$ext) {
                     $pBD = $this->getEmptyEntity();
                     $pBD->productid = $pId;
                     $pBD->productVariantId = $pVId;
@@ -71,7 +73,7 @@ class CProductBatchDetailsRepo extends ARepo
                 }
             }
 
-            if(!$added) {
+            if (!$added) {
                 $pBD = $this->getEmptyEntity();
                 $pBD->productid = $pId;
                 $pBD->productVariantId = $pVId;
@@ -81,7 +83,7 @@ class CProductBatchDetailsRepo extends ARepo
             }
         }
 
-        if($isAdded){
+        if ($isAdded) {
             $price = $productBatch->contractDetails->workPriceList->price;
             $newNum = $extNum + $count;
             $newValue = $newNum * $price;
@@ -100,12 +102,13 @@ class CProductBatchDetailsRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function goToNextStep($id){
+    public function goToNextStep($id)
+    {
 
         /** @var CProductBatchDetails $pbd */
-        $pbd = \Monkey::app()->repoFactory->create('ProductBatchDetails')->findOneBy(['id'=>$id]);
+        $pbd = \Monkey::app()->repoFactory->create('ProductBatchDetails')->findOneBy(['id' => $id]);
 
-        if(!is_null($pbd->workCategorySteps->rgt)) {
+        if (!is_null($pbd->workCategorySteps->rgt)) {
             $pbd->workCategoryStepsId = ($pbd->workCategorySteps->rgt);
             $pbd->update();
         }
@@ -122,11 +125,12 @@ class CProductBatchDetailsRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function insertProductInEmptyProductBatch(int $batchId, array $products) {
+    public function insertProductInEmptyProductBatch(int $batchId, array $products)
+    {
         /** @var CProductBatch $pb */
-        $pb = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$batchId]);
+        $pb = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id' => $batchId]);
 
-        if(!is_null($pb)){
+        if (!is_null($pb)) {
 
             /** @var CObjectCollection $pbd */
             $pbd = $pb->productBatchDetails;
@@ -134,18 +138,18 @@ class CProductBatchDetailsRepo extends ARepo
             $notContr = is_null($pb->contractDetailsId);
 
 
-            if($pbd->count() == 0 || ($pbd->count() > 0 && $notContr)) {
+            if ($pbd->count() == 0 || ($pbd->count() > 0 && $notContr)) {
 
                 foreach ($products as $productId) {
                     $pId = explode('-', $productId)[0];
                     $pVId = explode('-', $productId)[1];
 
-                    if($pbd->count() > 0){
+                    if ($pbd->count() > 0) {
                         /** @var CProductBatchDetails $ext */
-                        $ext = $pbd->findOneByKeys(['productId'=>$pId,'productVariantId'=>$pVId]);
+                        $ext = $pbd->findOneByKeys(['productId' => $pId, 'productVariantId' => $pVId]);
                     }
 
-                    if((isset($ext) && !$ext) || $pbd->count() == 0) {
+                    if ((isset($ext) && !$ext) || $pbd->count() == 0) {
                         /** @var CWorkCategoryStepsRepo $catStepsRepo */
                         $catStepsRepo = \Monkey::app()->repoFactory->create('WorkCategorySteps');
 
@@ -167,20 +171,21 @@ class CProductBatchDetailsRepo extends ARepo
         return true;
     }
 
-    public function deleteProductFromBatch(int $productBatchId, array $products, $emptyBatch = false){
+    public function deleteProductFromBatch(int $productBatchId, array $products, $emptyBatch = false)
+    {
 
         foreach ($products as $productId) {
             $pId = explode('-', $productId)[0];
             $pVId = explode('-', $productId)[1];
 
             /** @var CProductBatchDetails $pbd */
-            $pbd = $this->findOneBy(['productId'=>$pId, 'productVariantId'=>$pVId, 'productBatchId'=>$productBatchId]);
+            $pbd = $this->findOneBy(['productId' => $pId, 'productVariantId' => $pVId, 'productBatchId' => $productBatchId]);
             $pbd->delete();
         }
 
-        if(!$emptyBatch){
+        if (!$emptyBatch) {
             /** @var CProductBatch $pb */
-            $pb = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId]);
+            $pb = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id' => $productBatchId]);
 
             /** @var CObjectCollection $pbds */
             $pbds = $pb->productBatchDetails;
