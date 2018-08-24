@@ -23,7 +23,7 @@
                             <label for="searchGender">Cerca Genders</label>
                             <input type="text" id="searchGender">
                             <?php foreach ($gendRes as $genderId => $numGP): ?>
-                                <div><input class="sg" type="checkbox" data-searchgender="<?php echo $numGP['name']. "(". $numGP['count'] .")" ?>" name="<?php echo $genderId ?>" value="<?php echo $genderId ?>" /> <p class="sg" data-searchname="<?php echo $numGP['name'] ."(". $numGP['count'] .")" ?>" style="display: inline"><?php echo $numGP['name'] . "(". $numGP['count'] .")"; ?></p> </div>
+                                <div><input class="sg" type="checkbox" data-searchgender="<?php echo $numGP['name']. "(". $numGP['count'] .")" ?>" name="<?php echo $genderId ?>" value="<?php echo $genderId ?>" /> <p class="sg" data-searchgender="<?php echo $numGP['name'] ."(". $numGP['count'] .")" ?>" style="display: inline"><?php echo $numGP['name'] . "(". $numGP['count'] .")"; ?></p> </div>
                             <?php endforeach; ?>
                         </div>
                         </div>
