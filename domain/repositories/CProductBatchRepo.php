@@ -216,6 +216,18 @@ class CProductBatchRepo extends ARepo
         return $productBatch->timingRank;
     }
 
+    public function qualityRank(CProductBatch $productBatch) {
+        $nPb = count($productBatch->getElements());
+        $nNpb = count($productBatch->getNormalizedElements());
+
+        $productBatch->qualityRank = $nNpb/$nPb*10;
+        $productBatch->update();
+
+        return $productBatch->qualityRank;
+    }
+
+
+
     public function duplicateProductBatchFromCancelled(CProductBatch $productBatch) {
 
         $normalizedProducts = $productBatch->getNormalizedElements();

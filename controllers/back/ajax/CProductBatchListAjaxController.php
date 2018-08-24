@@ -135,25 +135,37 @@ class CProductBatchListAjaxController extends AAjaxController
 
             } else {
                 if($pbr->contractDetails->workCategory->id != CWorkCategory::NAME_ENG && $pbr->contractDetails->workCategory->id != CWorkCategory::NAME_DTC ){
-                    $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                    //$row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+
+                    if($pbr->isUnassigned == 1 && $isWorker && !$allShop){
+                        $row["id"] = $pbr->id;
+                    } else {
+                        $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                    }
                 } else if($pbr->contractDetails->workCategory->id == CWorkCategory::NAME_ENG || $pbr->contractDetails->workCategory->id == CWorkCategory::NAME_DTC) {
 
-                    /** @var CObjectCollection $pBatchNames */
-                    $pBatchNames = $pbr->getElements();
-                    $pLangId = $pBatchNames->getFirst()->langId;
-                    $par = [];
-                    /** @var CProductBatchHasProductName $pName */
-                    foreach ($pBatchNames as $pName){
+                    if($pbr->isUnassigned == 1 && $isWorker && !$allShop){
+                        $row["id"] = $pbr->id;
+                    } else {
+                        /** @var CObjectCollection $pBatchNames */
+                        $pBatchNames = $pbr->getElements();
+                        $pLangId = $pBatchNames->getFirst()->langId;
+                        $par = [];
+                        /** @var CProductBatchHasProductName $pName */
+                        foreach ($pBatchNames as $pName){
 
-                        /** @var CProductName $pn */
-                        $pn = $pNameRepo->findOneBy(['name'=>$pName->productName, 'langId'=>1]);
+                            /** @var CProductName $pn */
+                            $pn = $pNameRepo->findOneBy(['name'=>$pName->productName, 'langId'=>1]);
 
-                        $par[] = $pn->id;
+                            $par[] = $pn->id;
+                        }
+                        $parUrl = http_build_query($par, 'id_');
+
+
+                        $row["id"] = '<a href="'.$blueseal.$pbr->contractDetails->workCategory->slug.'/'.$pLangId.'?'.$parUrl.'" target="_blank">'.$pbr->id.'</a>';
                     }
-                    $parUrl = http_build_query($par, 'id_');
 
 
-                    $row["id"] = '<a href="'.$blueseal.$pbr->contractDetails->workCategory->slug.'/'.$pLangId.'?'.$parUrl.'" target="_blank">'.$pbr->id.'</a>';
                 }
 
             }

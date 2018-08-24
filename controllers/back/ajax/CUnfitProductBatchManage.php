@@ -60,6 +60,13 @@ class CUnfitProductBatchManage extends AAjaxController
            $pBatch->unfitDate = date('Y-m-d H:i:s');
            $pBatch->update();
 
+           $pBatchRepo->qualityRank($pBatch);
+
+
+           if($pBatch->isUnassigned == 1) {
+               $pBatchRepo->duplicateProductBatchFromCancelled($pBatch);
+           }
+
            $mailRepo->newMail('gianluca@iwes.it', [$pb['fason']], [], [], "Prodotti non idonei", $body);
 
        }
