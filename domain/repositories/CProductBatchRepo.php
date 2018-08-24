@@ -10,6 +10,8 @@ use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\entities\CWorkCategory;
 use bamboo\domain\entities\CWorkCategorySteps;
+use bamboo\utils\time\SDateToolbox;
+use bamboo\utils\time\STimeToolbox;
 
 /**
  * Class CProductBatchRepo
@@ -192,4 +194,55 @@ class CProductBatchRepo extends ARepo
 
         return $correct;
     }
+
+    /**
+     * @param CProductBatch $productBatch
+     * @return int|mixed
+     * @throws BambooException
+     * @throws \Exception
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function timingRank(CProductBatch $productBatch) : int {
+
+        $tolleranceClosing = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($productBatch->scheduledDelivery), 5)->format('Y-m-d 23:59:59');
+        if($productBatch->requestClosingDate <= $productBatch->scheduledDelivery) {
+            $productBatch->timingRank = 10;
+        } else if ($productBatch->requestClosingDate <= $tolleranceClosing && $productBatch->requestClosingDate > $productBatch->scheduledDelivery) {
+            $productBatch->timingRank = 2;
+        }
+
+        $productBatch->update();
+        return $productBatch->timingRank;
+    }
+
+    public function duplicateProductBatchFromCancelled(CProductBatch $productBatch) {
+
+        $normalizedProducts = $productBatch->getNormalizedElements();
+        /** @var CSectionalRepo $sRepo */
+        $sRepo = \Monkey::app()->repoFactory->create('Sectional');
+
+        /** @var CProductBatch $newPB */
+        $newPB = $this->getEmptyEntity();
+        $newPB->name = $productBatch->name;
+        $newPB->description = $productBatch->description;
+        $newPB->sectional = $sRepo->createNewSectionalCode($productBatch->workCategory->sectionalCodeId);
+        $newPB->value = count($normalizedProducts) * $productBatch->unitPrice;
+        $newPB->workCategoryId = $productBatch->workCategoryId;
+        $newPB->marketplace = 1;
+        $newPB->estimatedWorkDays = $this->recalculateEstimatedWorkDay($productBatch);
+        $newPB->unitPrice = $productBatch->unitPrice;
+        $newPB->smartInsert();
+
+
+    }
+
+    private function recalculateEstimatedWorkDay(CProductBatch $pb){
+        $oldNumberElems = count($pb->getElements());
+        $newNumberElems = count($pb->getNormalizedElements());
+        $oldDay = $pb->estimatedWorkDays;
+
+        return ceil($oldDay * $newNumberElems / $oldNumberElems);
+    }
+
 }

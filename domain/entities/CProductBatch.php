@@ -20,6 +20,7 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  *
  * @property CContractDetails $contractDetails
+ * @property CWorkCategory $workCategory
  *
  */
 class CProductBatch extends AEntity
@@ -97,6 +98,38 @@ class CProductBatch extends AEntity
         }
 
         return $elems;
+    }
+
+    public function getNormalizedElements(){
+
+        $elems = null;
+        $workCategory = null;
+        $nElem = [];
+
+        if(is_null($this->contractDetailsId)){
+            $workCategory = $this->workCategoryId;
+        } else {
+            $workCategory = $this->contractDetails->workCategory->id;
+        }
+
+        switch ($workCategory){
+            case CWorkCategory::NORM:
+                $elems = $this->productBatchDetails;
+                break;
+            case CWorkCategory::BRAND:
+                $elems = $this->productBatchHasProductBrand;
+                break;
+            case CWorkCategory::NAME_ENG:
+            case CWorkCategory::NAME_DTC:
+                $elems = $this->productBatchHasProductName;
+                break;
+        }
+
+        foreach ($elems as $elem) {
+            if(is_null($elem->workCategorySteps->rgt)) $nElem[] = $elem;
+        }
+
+        return $nElem;
     }
 
     /**

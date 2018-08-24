@@ -52,7 +52,7 @@ class CProductBatchDetailsManage extends AAjaxController
     {
         $ids = \Monkey::app()->router->request()->getRequestData('ids');
 
-        if(empty($ids)){
+        if (empty($ids)) {
             $res = "[error on php procedure]- Non sono stati passati gli id. Contattare l'assistenza tecnica";
             return $res;
         }
@@ -60,23 +60,22 @@ class CProductBatchDetailsManage extends AAjaxController
         /** @var CProductBatchDetailsRepo $pbDRepo */
         $pbDRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
 
-        foreach ($ids as $id){
+        foreach ($ids as $id) {
 
             /** @var CProductBatchDetails $pbd */
-            $pbd = $pbDRepo->findOneBy(['id'=>$id]);
+            $pbd = $pbDRepo->findOneBy(['id' => $id]);
 
             $catToChange = $pbd->workCategoryStepsId;
 
             $pbDRepo->goToNextStep($id);
 
-
-            if($catToChange == CProductBatchDetails::UNFIT_NORM){
+            if ($catToChange == CProductBatchDetails::UNFIT_NORM) {
 
 
                 /** @var CProductBatch $pb */
                 $pb = $pbd->productBatch;
 
-                if($pb->isValid() == 'ok'){
+                if ($pb->isValid() == 'ok') {
                     $pb->isFixed = 1;
                     $pb->unfitDate = date('Y-m-d H:i:s');
                     $pb->update();
@@ -89,46 +88,63 @@ class CProductBatchDetailsManage extends AAjaxController
     }
 
     /**
+     * @return string
      * @throws BambooException
+     * @throws \Exception
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function get(){
+    public function get()
+    {
 
         $isComplete = true;
 
         $productBatchId = \Monkey::app()->router->request()->getRequestData('productBatchId');
 
-        /** @var CProductBatch $productBatch */
-        $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId]);
+        /** @var CProductBatchRepo $productBatchRepo */
+        $productBatchRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
+        /** @var CProductBatch $productBatch */
+        $productBatch = $productBatchRepo->findOneBy(['id' => $productBatchId]);
 
         $elems = $productBatch->getElements();
 
-        foreach ($elems as $elem){
-            if(!is_null($elem->workCategorySteps->rgt)){
+        foreach ($elems as $elem) {
+            if (!is_null($elem->workCategorySteps->rgt)) {
                 $isComplete = false;
             }
         }
 
 
-        if($isComplete){
-            /** @var CUser $user */
-            $user = \Monkey::app()->getUser();
-            $name = $user->getFullName();
-            $email = $user->getEmail();
+        if ($isComplete) {
 
-            /** @var CEmailRepo $emailRepo */
-            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+            if (ENV == 'prod') {
+                /** @var CUser $user */
+                $user = \Monkey::app()->getUser();
+                $name = $user->getFullName();
+                $email = $user->getEmail();
 
-            $subject = "Termine del lotto n. ".$productBatchId;
+                /** @var CEmailRepo $emailRepo */
+                $emailRepo = \Monkey::app()->repoFactory->create('Email');
 
-            $body = "Il Foison ".$name."(". $email .")"." chiede la revisione del lotto n. ".$productBatchId." per presunto fine lavoro";
+                $subject = "Termine del lotto n. " . $productBatchId;
+
+                $body = "Il Foison " . $name . "(" . $email . ")" . " chiede la revisione del lotto n. " . $productBatchId . " per presunto fine lavoro";
 
 
-            $emailRepo->newMail('gianluca@iwes.it', ['gianluca@iwes.it'], [], [], $subject, $body);
+                $emailRepo->newMail('gianluca@iwes.it', ['gianluca@iwes.it'], [], [], $subject, $body);
+            }
 
-            $res = "Mail inviata con successo";
+            $date = new \DateTime();
+            $productBatch->requestClosingDate = date_format($date, 'Y-m-d H:i:s');
+            $productBatch->update();
+
+            if(is_null($productBatch->unfitDate)) {
+                $timingRank = $productBatchRepo->timingRank($productBatch);
+            }
+
+            $res = "La mail per richiedere la revisione del lotto è stata inviata. Il QualityRank ottenuto nello specifico lott è pari a $timingRank";
+
 
         } else {
             $res = "Non hai completato tutte le normalizzazioni";
@@ -144,13 +160,14 @@ class CProductBatchDetailsManage extends AAjaxController
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function put(){
+    public function put()
+    {
         $ids = \Monkey::app()->router->request()->getRequestData('prod');
         $catId = \Monkey::app()->router->request()->getRequestData('cat');
         $pb = \Monkey::app()->router->request()->getRequestData('pb');
         $workType = \Monkey::app()->router->request()->getRequestData('workType');
 
-        switch ($workType){
+        switch ($workType) {
             case 'normalizzazione-prodotti':
                 $this->updStepNorm($catId, $ids);
                 break;
@@ -174,17 +191,18 @@ class CProductBatchDetailsManage extends AAjaxController
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    private function updStepNorm($catId, $ids){
-        foreach ($ids as $id){
+    private function updStepNorm($catId, $ids)
+    {
+        foreach ($ids as $id) {
             /** @var CProductBatchDetails $pd */
-            $pd = \Monkey::app()->repoFactory->create('ProductBatchDetails')->findOneBy(['id'=>$id]);
+            $pd = \Monkey::app()->repoFactory->create('ProductBatchDetails')->findOneBy(['id' => $id]);
 
             $pd->workCategoryStepsId = $catId;
             $pd->update();
 
             /** @var CProductBatch $pb */
             $pba = $pd->productBatch;
-            if($catId == CProductBatchDetails::UNFIT_NORM){
+            if ($catId == CProductBatchDetails::UNFIT_NORM) {
                 $pba->isFixed = 0;
                 $pba->update();
             }
@@ -202,16 +220,17 @@ class CProductBatchDetailsManage extends AAjaxController
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    private function updStepBrand($catId, $ids, $pb){
-        foreach ($ids as $id){
+    private function updStepBrand($catId, $ids, $pb)
+    {
+        foreach ($ids as $id) {
             /** @var CProductBatchHasProductBrand $pbhpb */
-            $pbhpb = \Monkey::app()->repoFactory->create('ProductBatchHasProductBrand')->findOneBy(['productBrandId'=>$id, 'productBatchId'=>$pb]);
+            $pbhpb = \Monkey::app()->repoFactory->create('ProductBatchHasProductBrand')->findOneBy(['productBrandId' => $id, 'productBatchId' => $pb]);
 
             $pbhpb->workCategoryStepsId = $catId;
             $pbhpb->update();
         }
 
-        if($catId == CProductBatchHasProductBrand::UNFIT_BRAND){
+        if ($catId == CProductBatchHasProductBrand::UNFIT_BRAND) {
             /** @var CProductBatch $pba */
             $pba = $pbhpb->productBatch;
             $pba->isFixed = 0;
@@ -230,17 +249,18 @@ class CProductBatchDetailsManage extends AAjaxController
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    private function updStepNameTrans($catId, $names, $lang){
-        foreach ($names as $name){
+    private function updStepNameTrans($catId, $names, $lang)
+    {
+        foreach ($names as $name) {
             /** @var CProductBatchHasProductName $pbhpn */
-            $pbhpn = \Monkey::app()->repoFactory->create('ProductBatchHasProductName')->findOneBy(['productName'=>$name, 'langId'=>$lang]);
+            $pbhpn = \Monkey::app()->repoFactory->create('ProductBatchHasProductName')->findOneBy(['productName' => $name, 'langId' => $lang]);
 
             $pbhpn->workCategoryStepsId = $catId;
             $pbhpn->update();
         }
 
-        if((($lang == 2 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG))
-            || ($lang == 3 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC)){
+        if ((($lang == 2 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG))
+            || ($lang == 3 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC)) {
             /** @var CProductBatch $pba */
             $pba = $pbhpn->productBatch;
             $pba->isFixed = 0;
