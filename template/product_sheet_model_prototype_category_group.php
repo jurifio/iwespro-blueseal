@@ -105,6 +105,18 @@
                 data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestisci dati">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-arrows-h"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.sheet.model.cat.group.name.find.sub"
+                data-title="Trova e sostituisce"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

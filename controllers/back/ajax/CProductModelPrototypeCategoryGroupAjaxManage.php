@@ -52,4 +52,19 @@ class CProductModelPrototypeCategoryGroupAjaxManage extends AAjaxController
         return 'Categoria aggiornata con successo';
     }
 
+    public function post(){
+
+        $pcRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
+        $sub = \Monkey::app()->router->request()->getRequestData('sub_name');
+        $find = \Monkey::app()->router->request()->getRequestData('find_name');
+        $ids = \Monkey::app()->router->request()->getRequestData('ids');
+        foreach($ids as $id) {
+            $pmc = $pcRepo->findOneBy(['id'=>$id]);
+            $pmc->name = str_ireplace($find, $sub, $pmc->name);
+            $pmc->update();
+        }
+
+        return "Categorie aggiornate";
+    }
+
 }

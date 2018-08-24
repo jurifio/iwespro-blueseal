@@ -164,5 +164,61 @@
         });
     });
 
+    $(document).on('bs.product.sheet.model.cat.group.name.find.sub', function () {
+
+
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length < 1) {
+            new Alert({
+                type: "warning",
+                message: "seleziona almeno una riga"
+            }).open();
+            return false;
+        }
+
+        let ids = [];
+        selectedRows.each(function (k, v) {
+            ids.push(k.id)
+        });
+
+        let bsModal = new $.bsModal('Trova/sostituisci', {
+            body: `
+            <div>
+                <p>Trova</p>
+                <input type="text" id="find-name"> 
+            </div>
+            <div>
+                <p>Sostituisci</p>
+                <input type="text" id="sub-name"> 
+            </div>`
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            const data = {
+                ids: ids,
+                find_name: $('#find-name').val(),
+                sub_name: $('#sub-name').val()
+            };
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/ProductModelPrototypeCategoryGroupAjaxManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                    //window.location.reload();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
 
 })();
