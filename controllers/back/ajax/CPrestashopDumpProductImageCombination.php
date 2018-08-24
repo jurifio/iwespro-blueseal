@@ -57,7 +57,7 @@ SELECT
   p.productVariantId                                                             AS productVariantId,
   shp.shopId                                                                     AS id_supplier,
   p.productBrandId                                                               AS id_manufacturer,
-  pb.slug                                                                 AS name_manufacturer,
+  pb.slug                                                                        AS name_manufacturer,
   phpc.productCategoryId                                                         AS id_category_default,
   shp.price                                                                      AS price,
   '53'                                                                           AS id_tax_rules_group,
