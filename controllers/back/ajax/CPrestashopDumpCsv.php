@@ -35,7 +35,7 @@ class CPrestashopDumpCsv extends AAjaxController
      */
     public function post()
     {
- ini_set('memory_limit', '2048M' );
+        ini_set('memory_limit', '2048M');
         /**
          * @var $db CMySQLAdapter
          */
@@ -68,7 +68,7 @@ class CPrestashopDumpCsv extends AAjaxController
         }
         $category_csv = fopen($save_to . 'psz6_category.csv', 'w');
 
-        fputcsv($category_csv, array('id_category', 'id_parent', 'id_shop_default', 'level_depth', 'nleft', 'nright', 'active', 'date_add', 'date_upd', 'position', 'is_root_category'),';');
+        fputcsv($category_csv, array('id_category', 'id_parent', 'id_shop_default', 'level_depth', 'nleft', 'nright', 'active', 'date_add', 'date_upd', 'position', 'is_root_category'), ';');
         $res_category = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $i = 0;
         foreach ($res_category as $value_category) {
@@ -86,7 +86,7 @@ class CPrestashopDumpCsv extends AAjaxController
                     $i,
                     $value_category['is_root_category']));
             foreach ($data_category as $row_category) {
-                fputcsv($category_csv, $row_category,';');
+                fputcsv($category_csv, $row_category, ';');
             }
 
 
@@ -113,7 +113,7 @@ ORDER BY (rght-lft) DESC";
         }
         $category_lang_csv = fopen($save_to . 'psz6_category_lang.csv', 'w');
 
-        fputcsv($category_lang_csv, array('id_category', 'id_shop', 'id_lang', 'name', 'description', 'link_rewrite', 'meta_title', 'meta_keywords', 'meta_description'),';');
+        fputcsv($category_lang_csv, array('id_category', 'id_shop', 'id_lang', 'name', 'description', 'link_rewrite', 'meta_title', 'meta_keywords', 'meta_description'), ';');
         $res_category_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $i = 0;
         foreach ($res_category_lang as $value_category_lang) {
@@ -135,7 +135,7 @@ ORDER BY (rght-lft) DESC";
                     $value_category_lang['meta_keywords'],
                     $value_category_lang['meta_description']));
             foreach ($data_category_lang as $row_category_lang) {
-                fputcsv($category_lang_csv, $row_category_lang,';');
+                fputcsv($category_lang_csv, $row_category_lang, ';');
             }
 
 
@@ -154,7 +154,7 @@ FROM ProductSizeMacroGroup psmg
         }
         $attribute_group_csv = fopen($save_to . 'psz6_attribute_group.csv', 'w');
 
-        fputcsv($attribute_group_csv, array('id_attribute_group', 'is_color_group', 'group_type', 'position'),';');
+        fputcsv($attribute_group_csv, array('id_attribute_group', 'is_color_group', 'group_type', 'position'), ';');
         $res_attribute_group = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $m = 0;
         foreach ($res_attribute_group as $value_attribute_group) {
@@ -165,7 +165,7 @@ FROM ProductSizeMacroGroup psmg
                     $value_attribute_group['group_type'],
                     $m));
             foreach ($data_attribute_group as $row_attribute_group) {
-                fputcsv($attribute_group_csv, $row_attribute_group,';');
+                fputcsv($attribute_group_csv, $row_attribute_group, ';');
             }
 
 
@@ -182,7 +182,7 @@ FROM ProductSizeMacroGroup psmg
         }
         $attribute_group_lang_csv = fopen($save_to . 'psz6_attribute_group_lang.csv', 'w');
 
-        fputcsv($attribute_group_lang_csv, array('id_attribute_group', 'id_lang', 'name', 'public_name'),';');
+        fputcsv($attribute_group_lang_csv, array('id_attribute_group', 'id_lang', 'name', 'public_name'), ';');
         $res_attribute_group_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -196,7 +196,7 @@ FROM ProductSizeMacroGroup psmg
                         $value_attribute_group_lang['name']));
 
                 foreach ($data_attribute_group_lang as $row_attribute_group_lang) {
-                    fputcsv($attribute_group_lang_csv, $row_attribute_group_lang,';');
+                    fputcsv($attribute_group_lang_csv, $row_attribute_group_lang, ';');
 
                 }
             }
@@ -212,7 +212,7 @@ FROM ProductSizeMacroGroup psmg
         }
         $attribute_group_shop_csv = fopen($save_to . 'psz6_attribute_group_shop.csv', 'w');
 
-        fputcsv($attribute_group_shop_csv, array('id_attribute_group', 'id_shop'),';');
+        fputcsv($attribute_group_shop_csv, array('id_attribute_group', 'id_shop'), ';');
         $res_attribute_group_shop = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -223,7 +223,7 @@ FROM ProductSizeMacroGroup psmg
                     $z));
 
             foreach ($data_attribute_group_shop as $row_attribute_group_shop) {
-                fputcsv($attribute_group_shop_csv, $row_attribute_group_shop,';');
+                fputcsv($attribute_group_shop_csv, $row_attribute_group_shop, ';');
 
             }
 
@@ -244,7 +244,7 @@ JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,p
         }
         $attribute_csv = fopen($save_to . 'psz6_attribute.csv', 'w');
 
-        fputcsv($attribute_csv, array('id_attribute', 'id_attribute_group', 'color', 'position'),';');
+        fputcsv($attribute_csv, array('id_attribute', 'id_attribute_group', 'color', 'position'), ';');
         $res_attribute = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -257,7 +257,7 @@ JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,p
                     $value_attribute['position']));
 
             foreach ($data_attribute as $row_attribute) {
-                fputcsv($attribute_csv, $row_attribute,';');
+                fputcsv($attribute_csv, $row_attribute, ';');
 
             }
 
@@ -278,7 +278,7 @@ JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,p
         }
         $attribute_shop_csv = fopen($save_to . 'psz6_attribute.csv', 'w');
 
-        fputcsv($attribute_shop_csv, array('id_attribute', 'id_shop'),';');
+        fputcsv($attribute_shop_csv, array('id_attribute', 'id_shop'), ';');
         $res_attribute_shop = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -289,7 +289,7 @@ JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,p
                     '1',));
 
             foreach ($data_attribute_shop as $row_attribute_shop) {
-                fputcsv($attribute_shop_csv, $row_attribute_shop,';');
+                fputcsv($attribute_shop_csv, $row_attribute_shop, ';');
 
             }
 
@@ -309,7 +309,7 @@ JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,p
         }
         $attribute_lang_csv = fopen($save_to . 'psz6_attribute_lang.csv', 'w');
 
-        fputcsv($attribute_lang_csv, array('id_attribute', 'id_lang', 'name'),';');
+        fputcsv($attribute_lang_csv, array('id_attribute', 'id_lang', 'name'), ';');
         $res_attribute_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -321,7 +321,7 @@ JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,p
                         $value_attribute_lang['name']));
 
                 foreach ($data_attribute_lang as $row_attribute_lang) {
-                    fputcsv($attribute_lang_csv, $row_attribute_lang,';');
+                    fputcsv($attribute_lang_csv, $row_attribute_lang, ';');
 
                 }
             }
@@ -338,7 +338,7 @@ FROM ProductDetailLabel pdl";
         }
         $feature_csv = fopen($save_to . 'psz6_feature.csv', 'w');
 
-        fputcsv($feature_csv, array('id_feature', 'position'),';');
+        fputcsv($feature_csv, array('id_feature', 'position'), ';');
         $res_feature = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -367,7 +367,7 @@ FROM ProductDetailLabelTranslation pdlt";
         }
         $feature_lang_csv = fopen($save_to . 'psz6_feature_lang.csv', 'w');
 
-        fputcsv($feature_lang_csv, array('id_feature', 'id_lang', 'name'),';');
+        fputcsv($feature_lang_csv, array('id_feature', 'id_lang', 'name'), ';');
         $res_feature_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -386,7 +386,7 @@ FROM ProductDetailLabelTranslation pdlt";
                     $value_feature_lang['name']));
 
             foreach ($data_feature_lang as $row_feature_lang) {
-                fputcsv($feature_lang_csv, $row_feature_lang,';');
+                fputcsv($feature_lang_csv, $row_feature_lang, ';');
 
             }
 
@@ -405,7 +405,7 @@ FROM ProductSheetActual psa";
         }
         $feature_value_csv = fopen($save_to . 'psz6_feature_value.csv', 'w');
 
-        fputcsv($feature_value_csv, array('id_feature_value', 'id_feature', 'custom'),';');
+        fputcsv($feature_value_csv, array('id_feature_value', 'id_feature', 'custom'), ';');
         $res_feature_value = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -435,7 +435,7 @@ FROM ProductDetailTranslation pdt";
         }
         $feature_value_lang_csv = fopen($save_to . 'psz6_feature_value_lang.csv', 'w');
 
-        fputcsv($feature_value_lang_csv, array('id_feature_value', 'id_lang', 'name'),';');
+        fputcsv($feature_value_lang_csv, array('id_feature_value', 'id_lang', 'name'), ';');
         $res_feature_value_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -455,7 +455,7 @@ FROM ProductDetailTranslation pdt";
                     $value_feature_value_lang['value']));
 
             foreach ($data_feature_value_lang as $row_feature_value_lang) {
-                fputcsv($feature_value_lang_csv, $row_feature_value_lang,';');
+                fputcsv($feature_value_lang_csv, $row_feature_value_lang, ';');
 
             }
 
@@ -512,10 +512,10 @@ SELECT
   concat(p.id,'-',p.productVariantId)                                            AS name,
   concat(p.id,'-',p.productVariantId)                                            AS description,
   'both'                                                                         AS visibility,
-  '0' as cache_is_pack,
-  '0' as cache_has_attachments,
-  '0' as is_virtual,
-  '0' as cache_default_attribute,
+  '0' AS cache_is_pack,
+  '0' AS cache_has_attachments,
+  '0' AS is_virtual,
+  '0' AS cache_default_attribute,
   '0'                                                                            AS additional_shipping_cost,
   concat(p.id,'-',p.productVariantId)                                            AS short_description,
   date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_add,
@@ -574,7 +574,29 @@ ORDER BY `p`.`id` ASC
         if (file_exists($save_to . 'psz6_product_lang.csv')) {
             unlink($save_to . 'psz6_product_lang.csv');
         }
+
         $product_lang_csv = fopen($save_to . 'psz6_product_lang.csv', 'w');
+
+
+        if (file_exists($save_to . 'psz6_product_attribute.csv')) {
+            unlink($save_to . 'psz6_product_attribute.csv');
+        }
+        $product_attribute_csv = fopen($save_to . 'psz6_product_attribute.csv', 'w');
+
+
+        if (file_exists($save_to . 'psz6_product_attribute_combination.csv')) {
+            unlink($save_to . 'psz6_product_attribute_combination.csv');
+        }
+        $product_attribute_combination_csv = fopen($save_to . 'psz6_product_attribute_combination.csv', 'w');
+        if (file_exists($save_to . 'psz6_product_attribute_shop.csv')) {
+            unlink($save_to . 'psz6_product_attribute_shop.csv');
+        }
+        $product_attribute_shop_csv = fopen($save_to . 'psz6_product_attribute_shop.csv', 'w');
+
+        if (file_exists($save_to . 'psz6_feature_product.csv')) {
+            unlink($save_to . 'psz6_feature_product.csv');
+        }
+        $feature_product_csv = fopen($save_to . 'psz6_feature_product.csv', 'w');
 
         fputcsv($product_csv, array('id_product',
             'id_supplier',
@@ -627,7 +649,7 @@ ORDER BY `p`.`id` ASC
             'date_upd',
             'advanced_stock_management',
             'pack_stock_type',
-            'state'),';');
+            'state'), ';');
 
         fputcsv($product_lang_csv, array('id_product',
             'id_shop',
@@ -642,12 +664,56 @@ ORDER BY `p`.`id` ASC
             'available_now',
             'available_later',
             'delivery_on_stock',
-            'delivery_out_stock'),';');
+            'delivery_out_stock'), ';');
+
+        fputcsv($product_attribute_csv, array('id_product_attribute',
+            'id__product',
+            'reference',
+            'supplier_reference',
+            'location',
+            'ean13',
+            'isbn',
+            'upc',
+            'wholesale_price',
+            'price',
+            'ecotax',
+            'quantity',
+            'weight',
+            'unit_price_impact',
+            'default_on',
+            'minimal_quantity',
+            'low_stock_threshold',
+            'low_stock_alert',
+            'available_date'
+        ), ';');
+
+        fputcsv($product_attribute_shop_csv, array(
+            'id_product',
+            'id_product_attribute',
+            'id_shop',
+            'wholesale_price',
+            'price',
+            'ecotax',
+            'weight',
+            'unit_price_impact',
+            'default_on',
+            'minimal_quantity',
+            'low_stock_threshold',
+            'low_stock_alert',
+            'available_date'
+        ), ';');
+        fputcsv($product_attribute_combination_csv, array('id_attribute', 'id_product_attribute'), ';');
+
+
+        fputcsv($feature_product_csv, array('id_feature',
+            'id_product',
+            'id_feature_value'),';');
 
 
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-
-        $p = '0';
+        $w = 0;
+        $p = 0;
+        $z = 0;
         foreach ($res_product as $value_product) {
             $p = $p + 1;
 
@@ -752,20 +818,113 @@ ORDER BY `p`.`id` ASC
                     'Delivered in 10-15 Days'
                 ));
 
+            $res_product_attribute = \Monkey::app()->repoFactory->create('ProductPublicSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+
+            $lock_default_on = 0;
+            foreach ($res_product_attribute as $value_product_attribute) {
+                $w = $w + 1;
+                $productSizeId_attribute_combination = $value_product_attribute->productSizeId;
+                $quantity_attribute_combination = $value_product_attribute->stockQty;
+                if (($quantity_attribute_combination >= 0) && ($lock_default_on == 0)) {
+                    $default_on = '1';
+                    $lock_default_on = 1;
+                } else {
+                    $default_on = '';
+                }
+                $price_attribute_combination = $value_product_attribute->price;
+                $salePrice_attribute_combination = $value_product_attribute->salePrice;
+                if ($value_product['on_sale'] == '1') {
+                    $price = $salePrice_attribute_combination;
+                } else {
+                    $price = $price_attribute_combination;
+                }
+                if ($quantity_attribute_combination >= 1) {
+                    $available_date = date("Y-m-d");
+
+                } else {
+                    $available_date = '';
+                }
+                $data_product_attribute = array(
+                    array($w,
+                        $p,
+                        $value_product['reference'] . '-' . $productSizeId_attribute_combination,
+                        $value_product['supplier_reference'],
+                        '',
+                        $value_product['ean13'],
+                        $value_product['isbn'],
+                        $value_product['upc'],
+                        $value_product['wholesale_price'],
+                        $price,
+                        $value_product['ecotax'],
+                        $quantity_attribute_combination,
+                        $value_product['weight'],
+                        '',
+                        $default_on,
+                        $value_product['minimal_quantity'],
+                        $value_product['low_stock_threshold'],
+                        $value_product['low_stock_alert'],
+                        $available_date));
+                foreach ($data_product_attribute as $row_product_attribute) {
+                    fputcsv($product_attribute_csv, $row_product_attribute, ';');
+                }
+
+                $data_product_attribute_shop = array(
+                    array($w,
+                        $p,
+                        '1',
+                        $value_product['wholesale_price'],
+                        $price,
+                        $value_product['ecotax'],
+                        $value_product['weight'],
+                        '',
+                        $default_on,
+                        $value_product['minimal_quantity'],
+                        $value_product['low_stock_threshold'],
+                        $value_product['low_stock_alert'],
+                        $available_date));
+                foreach ($data_product_attribute_shop as $row_product_attribute_shop) {
+                    fputcsv($product_attribute_shop_csv, $row_product_attribute_shop, ';');
+                }
+                $data_product_attribute_combination = array(
+                    array($w,
+                        $productSizeId_attribute_combination)
+                );
+                foreach ($data_product_attribute_combination as $row_product_attribute_combination) {
+                    fputcsv($product_attribute_combination_csv, $row_product_attribute_combination, ';');
+
+                }
+            }
+
 
             foreach ($data_product as $row_product) {
-                fputcsv($product_csv, $row_product,';');
+                fputcsv($product_csv, $row_product, ';');
 
             }
 
             foreach ($data_product_lang as $row_product_lang) {
-                fputcsv($product_lang_csv, $row_product_lang,';');
+                fputcsv($product_lang_csv, $row_product_lang, ';');
 
             }
+           $feature_product=\Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
+            foreach ($feature_product as $value_feature_product){
+                $z=$z+1;
+                $data_feature_product=array(
+                    array($value_feature_product->productDetailLabelId,
+                          $p,
+                          $value_feature_product->productDetailId));
+            }
+            foreach($data_feature_product as $row_feature_product){
+                fputcsv($feature_product_csv,$row_feature_product,';');
+            }
+
 
         }
         fclose($product_csv);
         fclose($product_lang_csv);
+        fclose($product_attribute_csv);
+        fclose($product_attribute_combination_csv);
+        fclose($product_attribute_shop_csv);
+        fclose($feature_product_csv);
 
 
         $res = 'esportazione eseguita';
