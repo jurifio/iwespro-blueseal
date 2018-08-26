@@ -939,8 +939,9 @@ ORDER BY `p`.`id` ASC
             foreach($data_feature_product as $row_feature_product){
                 fputcsv($feature_product_csv,$row_feature_product,';');
             }
-            $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId as productPhotoId, pp.name as name from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
-join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId where p.id='".$value_product['productId']. "' and p.productVariantId='".$value_product['productVariantId']."'";
+            $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId, pp.name as image, pb.slug  as slug from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
+join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
+join ProductBrand pb on p.productBrandId = pb.id  where p.id='".$value_product['productId']. "' and p.productVariantId='".$value_product['productVariantId']."'";
             $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
             //$image_product=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
             $a=1;
@@ -958,8 +959,9 @@ join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVar
             foreach($data_image as $row_image_product){
                 fputcsv($image_csv,$row_image_product,';');
             }
-            $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId as productPhotoId, pp.name as name from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
-join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId where p.id='".$value_product['productId']. "' and p.productVariantId='".$value_product['productVariantId']."'";
+            $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId, pp.name as image, pb.slug  as slug from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
+join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
+join ProductBrand pb on p.productBrandId = pb.id  where p.id='".$value_product['productId']. "' and p.productVariantId='".$value_product['productVariantId']."'";
             $image_product_link = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
             //$image_product_link=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
             $data_image_link=[];
@@ -972,7 +974,7 @@ join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVar
                             $p,
                             $a,
                             '1',
-                            $value_image_product_link['name']));
+                            'https://iwes.s3.amazonaws.com/'.$value_image_product_link['slug'].'/'.$value_image_product_link['image']));
                 }
                 foreach ($data_image_link as $row_image_product_link) {
                     fputcsv($image_link_csv, $row_image_product_link, ';');
