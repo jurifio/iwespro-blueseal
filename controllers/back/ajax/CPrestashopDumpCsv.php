@@ -608,6 +608,16 @@ ORDER BY `p`.`id` ASC
         }
         $image_link_csv = fopen($save_to . 'psz6_image_link.csv', 'w');
 
+        if (file_exists($save_to . 'psz6_image_lang.csv')) {
+            unlink($save_to . 'psz6_image_lang.csv');
+        }
+        $image_lang_csv = fopen($save_to . 'psz6_image_lang.csv', 'w');
+
+        if (file_exists($save_to . 'psz6_image_shop.csv')) {
+            unlink($save_to . 'psz6_image_shop.csv');
+        }
+        $image_shop_csv = fopen($save_to . 'psz6_image_shop.csv', 'w');
+
         fputcsv($product_csv, array('id_product',
             'id_supplier',
             'id_manufacturer',
@@ -717,18 +727,25 @@ ORDER BY `p`.`id` ASC
 
         fputcsv($feature_product_csv, array('id_feature',
             'id_product',
-            'id_feature_value'),';');
+            'id_feature_value'), ';');
 
         fputcsv($image_csv, array('id_image',
             'id_product',
             'position',
-            'cover'),';');
+            'cover'), ';');
 
         fputcsv($image_link_csv, array('id_image',
             'id_product',
             'position',
             'cover',
-            'link'),';');
+            'link'), ';');
+        fputcsv($image_lang_csv, array('id_image',
+            'id_lang',
+            'legend'), ';');
+        fputcsv($image_shop_csv, array('id_product',
+            'id_image',
+            'id_shop',
+            'cover'), ';');
 
 
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
@@ -736,9 +753,9 @@ ORDER BY `p`.`id` ASC
         $p = 0;
         $z = 0;
         $k = 0;
-        $u =0;
-        $a=0;
-        $b=0;
+        $u = 0;
+        $a = 0;
+        $b = 0;
 
         foreach ($res_product as $value_product) {
             $p = $p + 1;
@@ -844,6 +861,20 @@ ORDER BY `p`.`id` ASC
                     'Delivered in 10-15 Days'
                 ));
 
+
+            $data_image_lang = array(
+                array($p,
+                    '1',
+                    $value_product['product_id'] . "-" . $value_product['productVariantId']),
+                array($p,
+                    '2',
+                    $value_product['product_id'] . "-" . $value_product['productVariantId']),
+                array($p,
+                    '3',
+                    $value_product['product_id'] . "-" . $value_product['productVariantId'])
+            );
+
+
             $res_product_attribute = \Monkey::app()->repoFactory->create('ProductPublicSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
 
             $lock_default_on = 0;
@@ -931,60 +962,75 @@ ORDER BY `p`.`id` ASC
                 fputcsv($product_lang_csv, $row_product_lang, ';');
 
             }
-           $feature_product=\Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
-            foreach ($feature_product as $value_feature_product){
-                $z=$z+1;
-                $data_feature_product=array(
+            foreach ($data_image_lang as $row_image_lang) {
+                fputcsv($image_lang_csv, $row_image_lang, ';');
+
+            }
+            $feature_product = \Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+            foreach ($feature_product as $value_feature_product) {
+                $z = $z + 1;
+                $data_feature_product = array(
                     array($value_feature_product->productDetailLabelId,
-                          $p,
-                          $value_feature_product->productDetailId));
+                        $p,
+                        $value_feature_product->productDetailId));
             }
-            foreach($data_feature_product as $row_feature_product){
-                fputcsv($feature_product_csv,$row_feature_product,';');
+            foreach ($data_feature_product as $row_feature_product) {
+                fputcsv($feature_product_csv, $row_feature_product, ';');
             }
-            $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId, pp.name as image, pb.slug  as slug, pp.order as position from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
-join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
-join ProductBrand pb on p.productBrandId = pb.id  ";
+            $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
+JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
+JOIN ProductBrand pb ON p.productBrandId = pb.id  WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";
             $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            //$image_product=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
-$a=0;
-            $data_image=[];
-            foreach ($image_product as $value_image_product){
-                $k=$k+1;
-                $a=$a+1;
+            $a = 0;
+            $data_image = [];
+            foreach ($image_product as $value_image_product) {
+                $k = $k + 1;
+                $a = $a + 1;
                 $data_image = array(
-                    array($value_image_product['productPhotoId'],
-                          $p,
+                    array($p,
+                        $p,
                         $value_image_product['position'],
-                          '1'));
+                        '1'));
+                $data_image_shop = array(
+                    array($p,
+                        $p,
+                        '1',
+                        '1'));
             }
 
-            foreach($data_image as $row_image_product){
-                fputcsv($image_csv,$row_image_product,';');
+            foreach ($data_image as $row_image_product) {
+                fputcsv($image_csv, $row_image_product, ';');
             }
-            $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId, pp.name as image, pb.slug  as slug, pp.order as position from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
-join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
-join ProductBrand pb on p.productBrandId = pb.id ";
+
+            foreach ($data_image_shop as $row_image_shop) {
+                fputcsv($image_shop_csv, $row_image_shop, ';');
+            }
+            $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
+JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
+JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";
             $image_product_link = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            //$image_product_link=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
-            $data_image_link=[];
-            $b=0;
-                foreach ($image_product_link as $value_image_product_link) {
-                    $u = $u + 1;
-                    $b = $b + 1;
-                    $data_image_link = array(
-                        array($value_image_product_link['productPhotoId'],
-                            $p,
-                            $value_image_product_link['position'],
-                            '1',
-                            'https://iwes.s3.amazonaws.com/'.$value_image_product_link['slug'].'/'.$value_image_product_link['image']));
-                }
-                foreach ($data_image_link as $row_image_product_link) {
-                    fputcsv($image_link_csv, $row_image_product_link, ';');
-                }
+
+            $data_image_link = [];
+            $b = 0;
+            foreach ($image_product_link as $value_image_product_link) {
+                $u = $u + 1;
+                $b = $b + 1;
+                $data_image_link = array(
+                    array($p,
+                        $p,
+                        $value_image_product_link['position'],
+                        '1',
+                        'https://iwes.s3.amazonaws.com/' . $value_image_product_link['slug'] . '/' . $value_image_product_link['image']));
+            }
+
+            foreach ($data_image_link as $row_image_product_link) {
+                fputcsv($image_link_csv, $row_image_product_link, ';');
+            }
 
 
         }
+        fclose($image_lang_csv);
+        fclose($image_shop_csv);
         fclose($image_csv);
         fclose($image_link_csv);
         fclose($product_csv);
@@ -993,10 +1039,65 @@ join ProductBrand pb on p.productBrandId = pb.id ";
         fclose($product_attribute_combination_csv);
         fclose($product_attribute_shop_csv);
         fclose($feature_product_csv);
+        $exportToPrestashopsv = "export_" . date("Y-m-d") . ".zip";
+        $filename = $exportToPrestashopsv;
+
+
+
+
+
+        $files_to_zip = array(
+            $save_to . 'psz6_category_lang.csv',
+            $save_to . 'psz6_$attribute_group.csv',
+            $save_to . 'psz6_$attribute_group_lang.csv',
+           );
+
+            //if true, good; if false, zip creation failed
+           $this->create_zip($files_to_zip, $save_to.'my-archive.zip');
 
 
         $res = 'esportazione eseguita';
         return $res;
+    }
+    function create_zip($files = array(),$destination = '',$overwrite = true) {
+        //if the zip file already exists and overwrite is false, return false
+        if(file_exists($destination) && !$overwrite) { return false; }
+        //vars
+        $valid_files = array();
+        //if files were passed in...
+        if(is_array($files)) {
+            //cycle through each file
+            foreach($files as $file) {
+                //make sure the file exists
+                if(file_exists($file)) {
+                    $valid_files[] = $file;
+                }
+            }
+        }
+        //if we have good files...
+        if(count($valid_files)) {
+            //create the archive
+            $zip = new \ZipArchive();
+            if($zip->open($destination,$overwrite ? \ZipArchive::OVERWRITE : \ZipArchive::CREATE) !== true) {
+                return false;
+            }
+            //add the files
+            foreach($valid_files as $file) {
+                $zip->addFile($file,$file);
+            }
+            //debug
+            //echo 'The zip archive contains ',$zip->numFiles,' files with a status of ',$zip->status;
+
+            //close the zip -- done!
+            $zip->close();
+
+            //check to make sure the file exists
+            return file_exists($destination);
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }
