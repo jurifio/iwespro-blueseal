@@ -944,7 +944,7 @@ ORDER BY `p`.`id` ASC
             }
             $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId, pp.name as image, pb.slug  as slug, pp.order as position from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
 join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
-join ProductBrand pb on p.productBrandId = pb.id  where p.id='".$value_product['productId']. "' and p.productVariantId='".$value_product['productVariantId']."'";
+join ProductBrand pb on p.productBrandId = pb.id  ";
             $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
             //$image_product=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
 $a=0;
@@ -964,7 +964,7 @@ $a=0;
             }
             $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId, pp.name as image, pb.slug  as slug, pp.order as position from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
 join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
-join ProductBrand pb on p.productBrandId = pb.id  where p.id='".$value_product['productId']. "' and p.productVariantId='".$value_product['productVariantId']."'";
+join ProductBrand pb on p.productBrandId = pb.id ";
             $image_product_link = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
             //$image_product_link=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
             $data_image_link=[];
@@ -975,8 +975,8 @@ join ProductBrand pb on p.productBrandId = pb.id  where p.id='".$value_product['
                     $data_image_link = array(
                         array($value_image_product_link['productPhotoId'],
                             $p,
-                            '1',
                             $value_image_product_link['position'],
+                            '1',
                             'https://iwes.s3.amazonaws.com/'.$value_image_product_link['slug'].'/'.$value_image_product_link['image']));
                 }
                 foreach ($data_image_link as $row_image_product_link) {
