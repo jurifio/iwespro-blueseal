@@ -1040,16 +1040,67 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($product_attribute_shop_csv);
         fclose($feature_product_csv);
         $exportToPrestashopsv = "export_" . date("Y-m-d") . ".zip";
-        $filename = $exportToPrestashopsv;
+        $zipName = $exportToPrestashopsv;
+        $zip = new \ZipArchive();
+        if ($zip->open($save_to . '/' . $zipName, \ZipArchive::CREATE) !== TRUE) {
+            throw  new \Exception('Ops. problemi');
+        }
+        $zip->addFromString('psz6_attribute.csv', file_get_contents($save_to . 'psz6_attribute.csv'));
+        $zip->addFromString('psz6_attribute_group.csv', file_get_contents($save_to . 'psz6_attribute_group.csv'));
+        $zip->addFromString('psz6_attribute_group_lang.csv', file_get_contents($save_to . 'psz6_attribute_group_lang.csv'));
+        $zip->addFromString('psz6_attribute_group_shop.csv', file_get_contents($save_to . 'psz6_attribute_group_shop.csv'));
+        $zip->addFromString('psz6_attribute_lang.csv', file_get_contents($save_to . 'psz6_attribute_lang.csv'));
+        $zip->addFromString('psz6_category.csv', file_get_contents($save_to . 'psz6_category.csv'));
+        $zip->addFromString('psz6_category_lang.csv', file_get_contents($save_to . 'psz6_category_lang.csv'));
+        $zip->addFromString('psz6_feature_lang.csv', file_get_contents($save_to . 'psz6_feature.csv'));
+        $zip->addFromString('psz6_category.csv', file_get_contents($save_to . 'psz6_feature_lang.csv'));
+        $zip->addFromString('psz6_feature_product.csv', file_get_contents($save_to . 'psz6_feature_product.csv'));
+        $zip->addFromString('psz6_feature_value.csv', file_get_contents($save_to . 'psz6_feature_value.csv'));
+        $zip->addFromString('psz6_feature_value_lang.csv', file_get_contents($save_to . 'psz6_feature_value_lang.csv'));
+        $zip->addFromString('psz6_image.csv', file_get_contents($save_to . 'psz6_image.csv'));
+        $zip->addFromString('psz6_image_lang.csv', file_get_contents($save_to . 'psz6_image_lang.csv'));
+        $zip->addFromString('psz6_image_link.csv', file_get_contents($save_to . 'psz6_image_link.csv'));
+        $zip->addFromString('psz6_image_shop.csv', file_get_contents($save_to . 'psz6_image_shop.csv'));
+        $zip->addFromString('psz6_product.csv', file_get_contents($save_to . 'psz6_product.csv'));
+        $zip->addFromString('psz6_product_attribute.csv', file_get_contents($save_to . 'psz6_product_attribute.csv'));
+        $zip->addFromString('psz6_product_attribute_combination.csv', file_get_contents($save_to . 'psz6_product_attribute_combination.csv'));
+        $zip->addFromString('psz6_product_attribute_shop.csv', file_get_contents($save_to . 'psz6_product_attribute_shop.csv'));
+        $zip->addFromString('psz6_product_lang.csv', file_get_contents($save_to . 'psz6_product_lang.csv'));
+        $zip->close();
+        $ftp_server="ftp.iwes.shop";
+        $ftp_user_name="iwesshop";
+        $ftp_user_pass="XtUWicJUrEXv";
+        $file = $save_to.$zipName;//tobe uploaded
+        $remote_file = "/public_html/tmp/";
+
+        $ftp_url = "ftp://".$ftp_user_name.":".$ftp_user_pass."@"
+            .$ftp_server.$remote_file.$zipName;
+        $errorMsg = '';
+        $fileToSend=$file;
+// ------- Upload file through FTP ---------------
+
+            $ch = curl_init();
+            $fp = fopen ($fileToSend, "r");
+            // we upload a TXT file
+            curl_setopt($ch, CURLOPT_URL, $ftp_url);
+            curl_setopt($ch, CURLOPT_UPLOAD, 1);
+            curl_setopt($ch, CURLOPT_INFILE, $fp);
+            // set size of the file, which isn't _mandatory_ but
+            // helps libcurl to do extra error checking on the upload.
+            curl_setopt($ch, CURLOPT_INFILESIZE, filesize($fileToSend));
+            $res = curl_exec ($ch);
+            $errorMsg = curl_error($ch);
+            $errorNumber = curl_errno($ch);
+            curl_close ($ch);
 
 
 
 
-       shell_exec( 'cd '.$save_to );
-       shell_exec('zip -r '.$filename.' psz6_attribute.csv psz6_attribute_group.csv psz6_attribute_group_lang.csv psz6_attribute_group_shop.csv
-       psz6_attribute_lang.csv psz6_category.csv psz6_category_lang.csv psz6_feature.csv psz6_feature_lang.csv psz6_feature_product.csv psz6_feature_value.csv
-       psz6_feature_value_lang.csv psz6_image.csv psz6_image_lang.csv psz6_image_link.csv psz6_image_shop.csv psz6_product.csv psz6_product_attribute.csv psz6_product_attribute_combination.csv
-        psz6_product_attribute_shop.csv psz6_product_lang.csv' );
+        /* exec( 'cd '.$save_to );
+         exec('zip -r '.$filename.' psz6_attribute.csv psz6_attribute_group.csv psz6_attribute_group_lang.csv psz6_attribute_group_shop.csv
+         psz6_attribute_lang.csv psz6_category.csv psz6_category_lang.csv psz6_feature.csv psz6_feature_lang.csv psz6_feature_product.csv psz6_feature_value.csv
+         psz6_feature_value_lang.csv psz6_image.csv psz6_image_lang.csv psz6_image_link.csv psz6_image_shop.csv psz6_product.csv psz6_product_attribute.csv psz6_product_attribute_combination.csv
+          psz6_product_attribute_shop.csv psz6_product_lang.csv' );*/
 
 
 
