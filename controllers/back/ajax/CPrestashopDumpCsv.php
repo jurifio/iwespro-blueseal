@@ -737,6 +737,9 @@ ORDER BY `p`.`id` ASC
         $z = 0;
         $k = 0;
         $u =0;
+        $a=0;
+        $b=0;
+
         foreach ($res_product as $value_product) {
             $p = $p + 1;
 
@@ -944,7 +947,7 @@ join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVar
 join ProductBrand pb on p.productBrandId = pb.id  where p.id='".$value_product['productId']. "' and p.productVariantId='".$value_product['productVariantId']."'";
             $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
             //$image_product=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
-            $a=1;
+
             $data_image=[];
             foreach ($image_product as $value_image_product){
                 $k=$k+1;
@@ -965,14 +968,13 @@ join ProductBrand pb on p.productBrandId = pb.id  where p.id='".$value_product['
             $image_product_link = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
             //$image_product_link=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
             $data_image_link=[];
-                $b = 1;
                 foreach ($image_product_link as $value_image_product_link) {
                     $u = $u + 1;
                     $b = $b + 1;
                     $data_image_link = array(
                         array($value_image_product_link['productPhotoId'],
                             $p,
-                            $a,
+                            $b,
                             '1',
                             'https://iwes.s3.amazonaws.com/'.$value_image_product_link['slug'].'/'.$value_image_product_link['image']));
                 }
