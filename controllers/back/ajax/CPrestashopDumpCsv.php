@@ -1045,59 +1045,17 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
 
 
 
+       shell_exec( 'cd '.$save_to );
+       shell_exec('zip -r '.$filename.' psz6_attribute.csv psz6_attribute_group.csv psz6_attribute_group_lang.csv psz6_attribute_group_shop.csv
+       psz6_attribute_lang.csv psz6_category.csv psz6_category_lang.csv psz6_feature.csv psz6_feature_lang.csv psz6_feature_product.csv psz6_feature_value.csv
+       psz6_feature_value_lang.csv psz6_image.csv psz6_image_lang.csv psz6_image_link.csv psz6_image_shop.csv psz6_product.csv psz6_product_attribute.csv psz6_product_attribute_combination.csv
+        psz6_product_attribute_shop.csv psz6_product_lang.csv' );
 
-        $files_to_zip = array(
-            $save_to . 'psz6_category_lang.csv',
-            $save_to . 'psz6_$attribute_group.csv',
-            $save_to . 'psz6_$attribute_group_lang.csv',
-           );
-
-            //if true, good; if false, zip creation failed
-           $this->create_zip($files_to_zip, $save_to.'my-archive.zip');
 
 
         $res = 'esportazione eseguita';
         return $res;
     }
-    function create_zip($files = array(),$destination = '',$overwrite = true) {
-        //if the zip file already exists and overwrite is false, return false
-        if(file_exists($destination) && !$overwrite) { return false; }
-        //vars
-        $valid_files = array();
-        //if files were passed in...
-        if(is_array($files)) {
-            //cycle through each file
-            foreach($files as $file) {
-                //make sure the file exists
-                if(file_exists($file)) {
-                    $valid_files[] = $file;
-                }
-            }
-        }
-        //if we have good files...
-        if(count($valid_files)) {
-            //create the archive
-            $zip = new \ZipArchive();
-            if($zip->open($destination,$overwrite ? \ZipArchive::OVERWRITE : \ZipArchive::CREATE) !== true) {
-                return false;
-            }
-            //add the files
-            foreach($valid_files as $file) {
-                $zip->addFile($file,$file);
-            }
-            //debug
-            //echo 'The zip archive contains ',$zip->numFiles,' files with a status of ',$zip->status;
 
-            //close the zip -- done!
-            $zip->close();
-
-            //check to make sure the file exists
-            return file_exists($destination);
-        }
-        else
-        {
-            return false;
-        }
-    }
 
 }
