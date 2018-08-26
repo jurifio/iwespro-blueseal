@@ -939,14 +939,17 @@ ORDER BY `p`.`id` ASC
             foreach($data_feature_product as $row_feature_product){
                 fputcsv($feature_product_csv,$row_feature_product,';');
             }
-            $image_product=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
+            $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId as productPhotoId, pp.name as name from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
+join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId where p.id='".$value_product['productId']. "' and p.productVariantId='".$value_product['productVariantId']."'";
+            $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+            //$image_product=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
             $a=1;
             $data_image=[];
             foreach ($image_product as $value_image_product){
                 $k=$k+1;
                 $a=$a+1;
                 $data_image = array(
-                    array($value_image_product->productPhotoId,
+                    array($value_image_product['productPhotoId'],
                           $p,
                           $a,
                           '1'));
@@ -955,19 +958,21 @@ ORDER BY `p`.`id` ASC
             foreach($data_image as $row_image_product){
                 fputcsv($image_csv,$row_image_product,';');
             }
-
-            $image_product_link=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
+            $sql="select p.id as productId, p.productVariantId as productVariantId, phpp.productPhotoId as productPhotoId, pp.name as name from ProductHasProductPhoto phpp join ProductPhoto pp on phpp.productPhotoId = pp.id
+join Product p on phpp.productId = p.id AND phpp.productVariantId = p.productVariantId where p.id='".$value_product['productId']. "' and p.productVariantId='".$value_product['productVariantId']."'";
+            $image_product_link = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+            //$image_product_link=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
             $data_image_link=[];
                 $b = 1;
                 foreach ($image_product_link as $value_image_product_link) {
                     $u = $u + 1;
                     $b = $b + 1;
                     $data_image_link = array(
-                        array($value_image_product_link->productPhotoId,
+                        array($value_image_product_link['productPhotoId'],
                             $p,
                             $a,
                             '1',
-                            $value_image_product_link->ProductPhoto->name));
+                            $value_image_product_link['name']));
                 }
                 foreach ($data_image_link as $row_image_product_link) {
                     fputcsv($image_link_csv, $row_image_product_link, ';');
