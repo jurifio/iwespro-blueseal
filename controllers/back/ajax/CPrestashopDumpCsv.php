@@ -1147,9 +1147,9 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
             $errorMsg = curl_error($ch);
             $errorNumber = curl_errno($ch);
             curl_close ($ch);
-if (file_exists($exportToPrestashopsv)) {
+if (file_exists($save_to.$exportToPrestashopsv)) {
 
-    unlink($exportToPrestashopsv);
+    unlink($save_to.$exportToPrestashopsv);
 }
 
         /* exec( 'cd '.$save_to );
