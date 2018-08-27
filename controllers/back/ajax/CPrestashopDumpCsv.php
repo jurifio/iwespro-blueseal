@@ -1064,7 +1064,9 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         $exportToPrestashopsv = "export_" . date("Y-m-d") . ".tar";
         $zipName = $save_to.$exportToPrestashopsv;
         $pharfiletounlink= $save_to.$exportToPrestashopsv.".gz";
-        unlink($pharfiletounlink);
+        if (file_exists($pharfiletounlink)) {
+            unlink($pharfiletounlink);
+        }
         $pharfile=$exportToPrestashopsv.".gz";
 
 
@@ -1145,9 +1147,10 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
             $errorMsg = curl_error($ch);
             $errorNumber = curl_errno($ch);
             curl_close ($ch);
+if (file_exists($exportToPrestashopsv)) {
 
-
-unlink($exportToPrestashopsv);
+    unlink($exportToPrestashopsv);
+}
 
         /* exec( 'cd '.$save_to );
          exec('zip -r '.$filename.' psz6_attribute.csv psz6_attribute_group.csv psz6_attribute_group_lang.csv psz6_attribute_group_shop.csv
