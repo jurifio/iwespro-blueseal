@@ -1058,6 +1058,10 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($product_attribute_shop_csv);
         fclose($feature_product_csv);
         $exportToPrestashopcsv = "export_" . date("Y-m-d") . ".tar";
+        if (file_exists($save_to.$exportToPrestashopcsv)) {
+            unlink($save_to.$exportToPrestashopcsv);
+        }
+
         $zipName = $save_to.$exportToPrestashopcsv;
         $pharfiletounlink= $save_to.$exportToPrestashopcsv.".gz";
         if (file_exists($pharfiletounlink)) {
