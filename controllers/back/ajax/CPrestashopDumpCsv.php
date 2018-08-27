@@ -3,6 +3,7 @@
 namespace bamboo\controllers\back\ajax;
 
 
+use bamboo\core\utils\zip\ZipArchive;
 use PrestaShopWebservice;
 use PrestaShopWebserviceException;
 use bamboo\controllers\back\ajax\CPrestashopGetImage;
@@ -10,7 +11,7 @@ use bamboo\controllers\back\ajax\CPrestashopGetImage;
 use bamboo\core\exceptions\BambooConfigException;
 use bamboo\core\base\CObjectCollection;
 use bamboo\utils\time\STimeToolbox;
-use bamboo\core\utils\zip\zip;
+
 
 /**
  * Class CPrestashopAlignCategory
@@ -1063,8 +1064,8 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($feature_product_csv);
         $exportToPrestashopsv = "export_" . date("Y-m-d") . ".zip";
         $zipName = $exportToPrestashopsv;
-        $zip = new \bamboo\core\utils\zip\ZipArchive();
-        if ($zip->open($save_to . '/' . $zipName, \bamboo\core\utils\zip\ZipArchive::CREATE) !== TRUE) {
+        $zip = new ZipArchive();
+        if ($zip->open($save_to . '/' . $zipName, \ZipArchive::CREATE) !== TRUE) {
             throw  new \Exception('Ops. problemi');
         }
         $zip->addFromString('psz6_attribute.csv', file_get_contents($save_to . 'psz6_attribute.csv'));
