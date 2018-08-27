@@ -39,6 +39,25 @@ class CPrestashopDumpCsv extends AAjaxController
         /**
          * @var $db CMySQLAdapter
          */
+
+        /*** popolamento tabella */
+$product=\Monkey::app()->repoFactory->create('Product')->findby(['productStatusId'=>'6']);
+ foreach ($product as $val){
+     $producthasprestashop=\Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId'=>$val->id,'productVariantId'=>$val->productVariantId]);
+     if(!empty($producthasprestashop)) {
+         $producthasprestashop->productId = $val->id;
+         $producthasprestashop->productVariantId = $val->productVariantId;
+         $producthasprestashop->status='2';
+         $producthasprestashop->update();
+     }else{
+         $producthasprestashopinsert=\Monkey::app()->repoFactory->create('PrestashopHasProduct')->getEmptyEntity();
+         $producthasprestashopinsert->productId = $val->id;
+         $producthasprestashopinsert->productVariantId = $val->productVariantId;
+         $producthasprestashopinsert->status='0';
+         $producthasprestashopinsert->smartInsert();
+     }
+ }
+
         /*** estrazione dati  categorie*/
 
         $sql = " SELECT `id`                                            AS id_category,
@@ -466,6 +485,7 @@ FROM ProductDetailTranslation pdt";
         $sql = "
 
 SELECT
+  php.prestaId                                                                   AS prestaId,
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
   p.id                                                                           AS  productId,
   p.productVariantId                                                             AS productVariantId,
@@ -556,13 +576,14 @@ FROM `Product` `p`
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
+  JOIN  PrestashopHasProduct php ON p.id = php.productId  and p.productVariantId =php.productVariantId
   LEFT JOIN (
       ProductHasShooting phs
       JOIN Shooting shoot ON phs.shootingId = shoot.id
       LEFT JOIN Document doc ON shoot.friendDdt = doc.id)
     ON p.productVariantId = phs.productVariantId AND p.id = phs.productId
   LEFT JOIN ProductSheetPrototype psp ON p.productSheetPrototypeId = psp.id
-WHERE `pss`.`id` NOT IN (7, 8, 13) AND `p`.`qty` > 0
+WHERE `pss`.`id` NOT IN (7, 8, 13) AND `p`.`qty` > 0 AND p.productStatusId='6'
 GROUP BY product_id
 ORDER BY `p`.`id` ASC
 ";
@@ -758,8 +779,8 @@ ORDER BY `p`.`id` ASC
         $b = 0;
 
         foreach ($res_product as $value_product) {
-            $p = $p + 1;
-
+           // $p = $p + 1;
+$p=$value_product['prestaId'];
             $data_product = array(
                 array($p,
                     $value_product['id_supplier'],
