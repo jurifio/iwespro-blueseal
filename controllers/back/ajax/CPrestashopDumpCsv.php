@@ -1057,13 +1057,13 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($product_attribute_combination_csv);
         fclose($product_attribute_shop_csv);
         fclose($feature_product_csv);
-        $exportToPrestashopsv = "export_" . date("Y-m-d") . ".tar";
-        $zipName = $save_to.$exportToPrestashopsv;
-        $pharfiletounlink= $save_to.$exportToPrestashopsv.".gz";
+        $exportToPrestashopcsv = "export_" . date("Y-m-d") . ".tar";
+        $zipName = $save_to.$exportToPrestashopcsv;
+        $pharfiletounlink= $save_to.$exportToPrestashopcsv.".gz";
         if (file_exists($pharfiletounlink)) {
             unlink($pharfiletounlink);
         }
-        $pharfile=$exportToPrestashopsv.".gz";
+        $pharfile=$exportToPrestashopcsv.".gz";
 
 
         $phar = new \PharData($zipName);
@@ -1145,10 +1145,10 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
             $errorMsg = curl_error($ch);
             $errorNumber = curl_errno($ch);
             curl_close ($ch);
-if (file_exists($save_to.$exportToPrestashopsv)) {
+/*if (file_exists($save_to.$exportToPrestashopcsv)) {
 
-    unlink($save_to.$exportToPrestashopsv);
-}
+    unlink($save_to.$exportToPrestashopcsv);
+}*/
 
         /* exec( 'cd '.$save_to );
          exec('zip -r '.$filename.' psz6_attribute.csv psz6_attribute_group.csv psz6_attribute_group_lang.csv psz6_attribute_group_shop.csv
