@@ -1063,8 +1063,8 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($feature_product_csv);
         $exportToPrestashopsv = "export_" . date("Y-m-d") . ".zip";
         $zipName = $exportToPrestashopsv;
-        $zip = new \ZipArchive();
-        if ($zip->open($save_to . '/' . $zipName, \ZipArchive::CREATE) !== TRUE) {
+        $zip = new \bamboo\core\utils\zip\ZipArchive();
+        if ($zip->open($save_to . '/' . $zipName, \bamboo\core\utils\zip\ZipArchive::CREATE) !== TRUE) {
             throw  new \Exception('Ops. problemi');
         }
         $zip->addFromString('psz6_attribute.csv', file_get_contents($save_to . 'psz6_attribute.csv'));
