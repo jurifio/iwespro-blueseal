@@ -296,7 +296,7 @@ JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,p
         if (file_exists($save_to . 'psz6_attribute_shop.csv')) {
             unlink($save_to . 'psz6_attribute_shop.csv');
         }
-        $attribute_shop_csv = fopen($save_to . 'psz6_attribute.csv', 'w');
+        $attribute_shop_csv = fopen($save_to . 'psz6_attribute_shop.csv', 'w');
 
         fputcsv($attribute_shop_csv, array('id_attribute', 'id_shop'), ';');
         $res_attribute_shop = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
@@ -564,7 +564,8 @@ SELECT
   '3' AS pack_stock_type,
   '0'                                                                            AS depend_on_stock,
   '0'                                                                            AS Warehouse,
-  '1' AS state
+  '1' AS state,
+  php.status as status
 
 FROM `Product` `p`
   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
@@ -572,19 +573,12 @@ FROM `Product` `p`
   JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
   JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
   JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
-  JOIN `ProductSeason` `ps` ON `p`.`productSeasonId` = `ps`.`id`
   JOIN  `ProductPublicSku` S3 ON  (`p`.`id`, `p`.`productVariantId`) = (`S3`.`productId`, `S3`.`productVariantId`)
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   JOIN  PrestashopHasProduct php ON p.id = php.productId  and p.productVariantId =php.productVariantId
-  LEFT JOIN (
-      ProductHasShooting phs
-      JOIN Shooting shoot ON phs.shootingId = shoot.id
-      LEFT JOIN Document doc ON shoot.friendDdt = doc.id)
-    ON p.productVariantId = phs.productVariantId AND p.id = phs.productId
-  LEFT JOIN ProductSheetPrototype psp ON p.productSheetPrototypeId = psp.id
-WHERE `pss`.`id` NOT IN (7, 8, 13) AND `p`.`qty` > 0 AND p.productStatusId='6'
+WHERE  `p`.`qty` > 0 AND p.productStatusId='6'
 GROUP BY product_id
 ORDER BY `p`.`id` ASC
 ";
@@ -691,7 +685,8 @@ ORDER BY `p`.`id` ASC
             'date_upd',
             'advanced_stock_management',
             'pack_stock_type',
-            'state'), ';');
+            'state',
+            'status'), ';');
 
         fputcsv($product_lang_csv, array('id_product',
             'id_shop',
@@ -834,7 +829,8 @@ $p=$value_product['prestaId'];
                     $value_product['date_upd'],
                     $value_product['advanced_stock_management'],
                     $value_product['pack_stock_type'],
-                    $value_product['state']));
+                    $value_product['state'],
+                    $value_product['status']));
 
             $data_product_lang = array(
                 array($p,
@@ -1072,6 +1068,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
 
         $phar = new \PharData($zipName);
         $phar->addFile($save_to . 'psz6_attribute.csv', 'psz6_attribute.csv');
+        $phar->addFile($save_to . 'psz6_attribute_shop.csv', 'psz6_attribute_shop.csv');
         $phar->addFile($save_to .'psz6_attribute_group.csv',  'psz6_attribute_group.csv');
         $phar->addFile($save_to .'psz6_attribute_group_lang.csv',  'psz6_attribute_group_lang.csv');
         $phar->addFile($save_to .'psz6_attribute_group_shop.csv',  'psz6_attribute_group_shop.csv');
@@ -1098,6 +1095,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
             $compressed = $phar->compress(\Phar::GZ);
             if (file_exists($compressed->getPath())) {
                 unlink($save_to.'psz6_attribute.csv');
+                unlink($save_to.'psz6_attribute_shop.csv');
                 unlink($save_to.'psz6_attribute_group.csv');
                 unlink($save_to.'psz6_attribute_group_lang.csv');
                 unlink($save_to.'psz6_attribute_group_shop.csv');
