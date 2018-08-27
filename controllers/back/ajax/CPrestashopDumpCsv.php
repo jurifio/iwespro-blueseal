@@ -10,6 +10,7 @@ use bamboo\controllers\back\ajax\CPrestashopGetImage;
 use bamboo\core\exceptions\BambooConfigException;
 use bamboo\core\base\CObjectCollection;
 use bamboo\utils\time\STimeToolbox;
+use bamboo\core\utils\zip\zip;
 
 /**
  * Class CPrestashopAlignCategory
