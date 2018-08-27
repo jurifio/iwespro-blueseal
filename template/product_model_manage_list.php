@@ -22,6 +22,7 @@
                         <div id="checkGender" class="collapse">
                             <label for="searchGender">Cerca Genders</label>
                             <input type="text" id="searchGender">
+                            <button id="gndBtn">Cerca</button>
                             <?php foreach ($gendRes as $genderId => $numGP): ?>
                                 <div><input class="sg" type="checkbox" data-searchgender="<?php echo $numGP['name']. "(". $numGP['count'] .")" ?>" name="<?php echo $genderId ?>" value="<?php echo $genderId ?>" /> <p class="sg" data-searchgender="<?php echo $numGP['name'] ."(". $numGP['count'] .")" ?>" style="display: inline"><?php echo $numGP['name'] . "(". $numGP['count'] .")"; ?></p> </div>
                             <?php endforeach; ?>
@@ -33,6 +34,7 @@
                             <div id="checkMacroCatGroup" class="collapse">
                                 <label for="searchMacroCategory">Cerca Macro Categoria</label>
                                 <input type="text" id="searchMacroCategory">
+                                <button id="mcrBtn">Cerca</button>
                                 <?php foreach ($macroCatRes as $macroCatiD => $numMCP): ?>
                                     <div><input class="smcg" type="checkbox" data-searchmacrocategory="<?php echo $numMCP['name'] . "(". $numMCP['count'] .")" ?>" name="<?php echo $macroCatiD ?>" value="<?php echo $macroCatiD ?>" /> <p class="smcg" data-searchmacrocategory="<?php echo $numMCP['name'] . "(". $numMCP['count'] .")" ?>" style="display:inline;"><?php echo $numMCP['name'] . "(". $numMCP['count'] .")"; ?></p></div>
                                 <?php endforeach; ?>
@@ -44,6 +46,7 @@
                             <div id="checkCatGroup" class="collapse">
                                 <label for="searchCategory">Cerca Categoria</label>
                                 <input type="text" id="searchCategory">
+                                <button id="crBtn">Cerca</button>
                                 <?php foreach ($catGroupRes as $catGroupId => $numCP): ?>
                                     <div><input class="sc" type="checkbox" data-searchcategory="<?php echo $numCP['name'] . "(". $numCP['count'] .")"; ?>" name="<?php echo $catGroupId ?>" value="<?php echo $catGroupId ?>" /><p class="sc" data-searchcategory="<?php echo $numCP['name'] . "(". $numCP['count'] .")"; ?>" style="display:inline;"> <?php echo $numCP['name'] . "(". $numCP['count'] .")"; ?> </p></div>
                                 <?php endforeach; ?>
@@ -55,6 +58,7 @@
                             <div id="checkMaterial" class="collapse">
                                 <label for="searchMaterial">Cerca Materiali</label>
                                 <input type="text" id="searchMaterial">
+                                <button id="mBtn">Cerca</button>
                                 <?php foreach ($matRes as $matId => $numMP): ?>
                                     <div><input class="sm" type="checkbox" data-searchmaterial="<?php echo $numMP['name'] . "(". $numMP['count'] .")"; ?>" name="<?php echo $matId ?>" value="<?php echo $matId ?>" /> <p class="sm" data-searchmaterial="<?php echo $numMP['name'] . "(". $numMP['count'] .")"; ?>" style="display:inline;"><?php echo $numMP['name'] . "(". $numMP['count'] .")"; ?> </p></div>
                                 <?php endforeach; ?>
