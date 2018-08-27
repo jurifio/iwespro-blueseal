@@ -3,7 +3,6 @@
 namespace bamboo\controllers\back\ajax;
 
 
-use bamboo\core\utils\zip\ZipArchive;
 use PrestaShopWebservice;
 use PrestaShopWebserviceException;
 use bamboo\controllers\back\ajax\CPrestashopGetImage;
@@ -1062,44 +1061,75 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($product_attribute_combination_csv);
         fclose($product_attribute_shop_csv);
         fclose($feature_product_csv);
-        $exportToPrestashopsv = "export_" . date("Y-m-d") . ".zip";
-        $zipName = $exportToPrestashopsv;
-        $zip = New ZipArchive();
-        if ($zip->open($save_to . '/' . $zipName, ZipArchive::CREATE) !== TRUE) {
-            throw  new \Exception('Ops. problemi');
+        $exportToPrestashopsv = "export_" . date("Y-m-d") . ".tar";
+        $zipName = $save_to.$exportToPrestashopsv;
+        $pharfiletounlink= $save_to.$exportToPrestashopsv.".gz";
+        unlink($pharfiletounlink);
+        $pharfile=$exportToPrestashopsv.".gz";
+
+
+        $phar = new \PharData($zipName);
+        $phar->addFile($save_to . 'psz6_attribute.csv', 'psz6_attribute.csv');
+        $phar->addFile($save_to .'psz6_attribute_group.csv',  'psz6_attribute_group.csv');
+        $phar->addFile($save_to .'psz6_attribute_group_lang.csv',  'psz6_attribute_group_lang.csv');
+        $phar->addFile($save_to .'psz6_attribute_group_shop.csv',  'psz6_attribute_group_shop.csv');
+        $phar->addFile($save_to .'psz6_attribute_lang.csv',  'psz6_attribute_lang.csv');
+        $phar->addFile($save_to .'psz6_category.csv',  'psz6_category.csv');
+        $phar->addFile($save_to .'psz6_category_lang.csv',  'psz6_category_lang.csv');
+        $phar->addFile($save_to .'psz6_feature.csv', 'psz6_feature.csv');
+        $phar->addFile($save_to .'psz6_feature_lang.csv',  'psz6_feature_lang.csv');
+        $phar->addFile($save_to .'psz6_feature_product.csv',  'psz6_feature_product.csv');
+        $phar->addFile($save_to .'psz6_feature_value.csv',  'psz6_feature_value.csv');
+        $phar->addFile($save_to .'psz6_feature_value_lang.csv',  'psz6_feature_value_lang.csv');
+        $phar->addFile($save_to .'psz6_image.csv',  'psz6_image.csv');
+        $phar->addFile($save_to . 'psz6_image_lang.csv', 'psz6_image_lang.csv');
+        $phar->addFile($save_to .'psz6_image_link.csv', 'psz6_image_link.csv');
+        $phar->addFile($save_to .'psz6_image_shop.csv',  'psz6_image_shop.csv');
+        $phar->addFile($save_to .'psz6_product.csv',  'psz6_product.csv');
+        $phar->addFile($save_to .'psz6_product_attribute.csv',  'psz6_product_attribute.csv');
+        $phar->addFile($save_to .'psz6_product_attribute_combination.csv',  'psz6_product_attribute_combination.csv');
+        $phar->addFile($save_to .'psz6_product_attribute_shop.csv',  'psz6_product_attribute_shop.csv');
+        $phar->addFile($save_to .'psz6_product_lang.csv',  'psz6_product_lang.csv');
+
+        if ($phar->count() > 0) {
+            /** @var \PharData $compressed */
+            $compressed = $phar->compress(\Phar::GZ);
+            if (file_exists($compressed->getPath())) {
+                unlink($save_to.'psz6_attribute.csv');
+                unlink($save_to.'psz6_attribute_group.csv');
+                unlink($save_to.'psz6_attribute_group_lang.csv');
+                unlink($save_to.'psz6_attribute_group_shop.csv');
+                unlink($save_to.'psz6_attribute_lang.csv');
+                unlink($save_to.'psz6_category.csv');
+                unlink($save_to.'psz6_category_lang.csv');
+                unlink($save_to.'psz6_feature.csv');
+                unlink($save_to.'psz6_feature_lang.csv');
+                unlink($save_to.'psz6_feature_product.csv');
+                unlink($save_to.'psz6_feature_value.csv');
+                unlink($save_to.'psz6_feature_value_lang.csv');
+                unlink($save_to.'psz6_image.csv');
+                unlink($save_to.'psz6_image_lang.csv');
+                unlink($save_to.'psz6_image_link.csv');
+                unlink($save_to.'psz6_image_shop.csv');
+                unlink($save_to.'psz6_product.csv');
+                unlink($save_to.'psz6_product_attribute.csv');
+                unlink($save_to.'psz6_product_attribute_combination.csv');
+                unlink($save_to.'psz6_product_attribute_shop.csv');
+                unlink($save_to.'psz6_product_lang.csv');
+
+
+            }
+
         }
-        $zip->addFromString('psz6_attribute.csv', file_get_contents($save_to . 'psz6_attribute.csv'));
-        $zip->addFromString('psz6_attribute_group.csv', file_get_contents($save_to . 'psz6_attribute_group.csv'));
-        $zip->addFromString('psz6_attribute_group_lang.csv', file_get_contents($save_to . 'psz6_attribute_group_lang.csv'));
-        $zip->addFromString('psz6_attribute_group_shop.csv', file_get_contents($save_to . 'psz6_attribute_group_shop.csv'));
-        $zip->addFromString('psz6_attribute_lang.csv', file_get_contents($save_to . 'psz6_attribute_lang.csv'));
-        $zip->addFromString('psz6_category.csv', file_get_contents($save_to . 'psz6_category.csv'));
-        $zip->addFromString('psz6_category_lang.csv', file_get_contents($save_to . 'psz6_category_lang.csv'));
-        $zip->addFromString('psz6_feature_lang.csv', file_get_contents($save_to . 'psz6_feature.csv'));
-        $zip->addFromString('psz6_category.csv', file_get_contents($save_to . 'psz6_feature_lang.csv'));
-        $zip->addFromString('psz6_feature_product.csv', file_get_contents($save_to . 'psz6_feature_product.csv'));
-        $zip->addFromString('psz6_feature_value.csv', file_get_contents($save_to . 'psz6_feature_value.csv'));
-        $zip->addFromString('psz6_feature_value_lang.csv', file_get_contents($save_to . 'psz6_feature_value_lang.csv'));
-        $zip->addFromString('psz6_image.csv', file_get_contents($save_to . 'psz6_image.csv'));
-        $zip->addFromString('psz6_image_lang.csv', file_get_contents($save_to . 'psz6_image_lang.csv'));
-        $zip->addFromString('psz6_image_link.csv', file_get_contents($save_to . 'psz6_image_link.csv'));
-        $zip->addFromString('psz6_image_shop.csv', file_get_contents($save_to . 'psz6_image_shop.csv'));
-        $zip->addFromString('psz6_product.csv', file_get_contents($save_to . 'psz6_product.csv'));
-        $zip->addFromString('psz6_product_attribute.csv', file_get_contents($save_to . 'psz6_product_attribute.csv'));
-        $zip->addFromString('psz6_product_attribute_combination.csv', file_get_contents($save_to . 'psz6_product_attribute_combination.csv'));
-        $zip->addFromString('psz6_product_attribute_shop.csv', file_get_contents($save_to . 'psz6_product_attribute_shop.csv'));
-        $zip->addFromString('psz6_product_lang.csv', file_get_contents($save_to . 'psz6_product_lang.csv'));
-        $zip->close();
+
         $ftp_server="ftp.iwes.shop";
         $ftp_user_name="iwesshop";
         $ftp_user_pass="XtUWicJUrEXv";
-        $file = $save_to.$zipName;//tobe uploaded
         $remote_file = "/public_html/tmp/";
 
-        $ftp_url = "ftp://".$ftp_user_name.":".$ftp_user_pass."@"
-            .$ftp_server.$remote_file.$zipName;
+        $ftp_url = "ftp://".$ftp_user_name.":".$ftp_user_pass."@".$ftp_server.$remote_file.$pharfile;
         $errorMsg = '';
-        $fileToSend=$file;
+        $fileToSend= $save_to.$pharfile;
 // ------- Upload file through FTP ---------------
 
             $ch = curl_init();
@@ -1117,7 +1147,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
             curl_close ($ch);
 
 
-
+unlink($exportToPrestashopsv);
 
         /* exec( 'cd '.$save_to );
          exec('zip -r '.$filename.' psz6_attribute.csv psz6_attribute_group.csv psz6_attribute_group_lang.csv psz6_attribute_group_shop.csv
