@@ -44,9 +44,6 @@
                         <div class="col-md-3">
                             <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#checkCatGroup">CATEGORIE</button>
                             <div id="checkCatGroup" class="collapse">
-                                <label for="searchCategory">Cerca Categoria</label>
-                                <input type="text" id="searchCategory">
-                                <button id="crBtn">Cerca</button>
                                 <?php foreach ($catGroupRes as $catGroupId => $numCP): ?>
                                     <div><input class="sc" type="checkbox" data-searchcategory="<?php echo $numCP['name'] . "(". $numCP['count'] .")"; ?>" name="<?php echo $catGroupId ?>" value="<?php echo $catGroupId ?>" /><p class="sc" data-searchcategory="<?php echo $numCP['name'] . "(". $numCP['count'] .")"; ?>" style="display:inline;"> <?php echo $numCP['name'] . "(". $numCP['count'] .")"; ?> </p></div>
                                 <?php endforeach; ?>

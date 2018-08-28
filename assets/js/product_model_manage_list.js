@@ -15,13 +15,6 @@
         });
     });
 
-    $("#crBtn").on('click', function () {
-        let searchTerm = $.trim($("#searchCategory").val());
-        $('.sc').each(function() {
-                if(searchTerm.length < 1) { $(this).show() } else {$(this).toggle($(this).filter('[data-searchcategory*="' + searchTerm + '"]').length > 0);}
-        });
-    });
-
     $("#mBtn").on('click', function () {
         let searchTerm = $.trim($("#searchMaterial").val());
         $('.sm').each(function() {
