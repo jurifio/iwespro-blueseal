@@ -50,8 +50,8 @@ class CProductSheetModelPrototypeMacroCategoryGroupListAjaxController extends AA
             pmcg.id,
             pmcg.name,
             pmcg.description,
-            pmcg.imageUrl
-             FROM ProductSheetModelPrototypeMacroCategoryGroup pmcg";
+            if((isnull(pmcg.imageUrl)), 'no', 'sì') as image
+            FROM ProductSheetModelPrototypeMacroCategoryGroup pmcg";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -68,7 +68,7 @@ class CProductSheetModelPrototypeMacroCategoryGroupListAjaxController extends AA
             $row['id'] = $pmcg->id;
             $row['name'] = $pmcg->name;
             $row['desc'] = $pmcg->description;
-            $row['imageUrl'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $pmcg->imageUrl . '" /></a>';
+            $row['image'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $pmcg->imageUrl . '" /></a>';
 
 
             $datatable->setResponseDataSetRow($key,$row);

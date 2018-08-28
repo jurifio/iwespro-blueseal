@@ -41,9 +41,9 @@
                                 <th data-slug="description"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Descrizione</th>
-                                <th data-slug="imageUrl"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Photo</th>
+                                <th data-slug="image"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Photo</th>
                                 <th data-slug="macroName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Macrocategoria</th>

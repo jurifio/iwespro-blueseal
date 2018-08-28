@@ -49,7 +49,7 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
               catG.id,
               catG.name,
               catG.description,
-              catG.imageUrl,
+              if((isnull(catG.imageUrl)), 'no', 'sì') as image,
               catMacroG.id as macroId,
               catMacroG.name as macroName
             FROM ProductSheetModelPrototypeCategoryGroup catG
@@ -72,7 +72,7 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
             $row['id'] = $cat->id;
             $row['name'] = $cat->name;
             $row['description'] = $cat->description;
-            $row['imageUrl'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $cat->imageUrl . '" /></a>';
+            $row['image'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $cat->imageUrl . '" /></a>';
             $row['macroName'] = (is_null($cat->macroCategoryGroupId) ? '-' : $cat->productSheetModelPrototypeMacroCategoryGroup->name);
 
             $datatable->setResponseDataSetRow($key,$row);
