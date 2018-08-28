@@ -41,6 +41,7 @@ class CProductSheetModelPrototypeManage extends AAjaxController
             $psmp = $psmpRepo->findOneBy(['id'=>$id]);
 
             $psmp->isVisible = 0;
+            $psmp->categoryGroupId = null;
             $psmp->update();
         }
 

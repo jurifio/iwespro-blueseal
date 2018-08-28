@@ -55,15 +55,18 @@
 
         let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-        if(selectedRows.length != 1) {
+        if(selectedRows.length < 1) {
             new Alert({
                 type: "warning",
-                message: "Puoi inserire una descrizione alla volta"
+                message: "Non hai selezionato niente"
             }).open();
             return false;
         }
 
-        let macroCatId = selectedRows[0].id;
+        let macroCatId = [];
+        selectedRows.each(function (k) {
+           macroCatId.push(k.id);
+        });
 
         let bsModal = new $.bsModal('Inserisci la nuova descrizione', {
             body: `<p>Descrizione</p>

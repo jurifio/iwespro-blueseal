@@ -33,22 +33,24 @@ class CProductModelPrototypeCategoryGroupAjaxManage extends AAjaxController
         $field = \Monkey::app()->router->request()->getRequestData('field');
         $catId = \Monkey::app()->router->request()->getRequestData('catId');
 
-        /** @var CProductSheetModelPrototypeCategoryGroup $catG */
-        $catG = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findOneBy(['id'=>$catId]);
-
         switch ($field){
             case 'name':
+                /** @var CProductSheetModelPrototypeCategoryGroup $catG */
+                $catG = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findOneBy(['id'=>$catId]);
                 $name = \Monkey::app()->router->request()->getRequestData('name');
                 if(empty($name)) return 'Inserisci un nome';
                 $catG->name = $name;
+                $catG->update();
                 break;
             case 'desc':
-                $desc = \Monkey::app()->router->request()->getRequestData('desc');
-                $catG->description = $desc;
+                foreach ($catId as $cat) {
+                    $catG = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findOneBy(['id'=>$cat]);
+                    $desc = \Monkey::app()->router->request()->getRequestData('desc');
+                    $catG->description = $desc;
+                    $catG->update();
+                }
                 break;
         }
-
-        $catG->update();
 
         return 'Categoria aggiornata con successo';
     }

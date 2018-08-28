@@ -72,13 +72,15 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
                 $pmc->update();
                 break;
             case 'description':
-                $id = \Monkey::app()->router->request()->getRequestData('macroCatId');
-                /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
-                $pmc = $pmcRepo->findOneBy(['id'=>$id]);
+                $ids = \Monkey::app()->router->request()->getRequestData('macroCatId');
                 $desc = \Monkey::app()->router->request()->getRequestData('desc');
-                if(empty($desc)) return 'Inserisci una descrizione';
-                $pmc->description = $desc;
-                $pmc->update();
+                if (empty($desc)) return 'Inserisci una descrizione';
+                foreach ($ids as $id) {
+                    /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
+                    $pmc = $pmcRepo->findOneBy(['id' => $id]);
+                    $pmc->description = $desc;
+                    $pmc->update();
+                }
                 break;
             case 'find-sub-name':
                 $sub = \Monkey::app()->router->request()->getRequestData('sub_name');

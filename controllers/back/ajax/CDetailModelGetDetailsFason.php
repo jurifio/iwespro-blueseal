@@ -31,16 +31,16 @@ class CDetailModelGetDetailsFason extends AAjaxController
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
 
             /** @var CObjectCollection $psmpS1 */
-            $psmpS1 = $psmp->findBy(['genderId'=>$genderId]);
+            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ?',[$genderId])->fetchAll();
 
-            if($psmpS1->isEmpty()){
+            if(empty($psmpS1)){
                 return false;
             } else {
                 $cats = [];
 
                 /** @var CProductSheetModelPrototype $val */
                 foreach ($psmpS1 as $val){
-                    $cats[] = $val->categoryGroupId;
+                    $cats[] = $val["categoryGroupId"];
                 }
 
             }
@@ -49,12 +49,12 @@ class CDetailModelGetDetailsFason extends AAjaxController
 
             /** @var CRepo $catRepo */
             $catRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
-            $catInfo = [];
             $i = 0;
 
             $macro = [];
             foreach ($catsU as $cat){
                 /** @var CProductSheetModelPrototypeCategoryGroup $sCat */
+                //$sCat = \Monkey::app()->dbAdapter->query('SELECT FROM ProductSheetModelPrototypeMacroCategoryGroup');
                 $sCat = $catRepo->findOneBy(['id'=>$cat]);
 
                 //prendo la macro corrispondente
