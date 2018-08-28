@@ -175,7 +175,8 @@ FROM ProductSizeMacroGroup psmg
         $attribute_group_csv = fopen($save_to . 'psz6_attribute_group.csv', 'w');
 
         fputcsv($attribute_group_csv, array('id_attribute_group', 'is_color_group', 'group_type', 'position'), ';');
-        $res_attribute_group = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        fputcsv($attribute_group_csv, array('1', '0', 'select', '1'), ';');
+        /*$res_attribute_group = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $m = 0;
         foreach ($res_attribute_group as $value_attribute_group) {
             $m = $m + 1;
@@ -189,7 +190,7 @@ FROM ProductSizeMacroGroup psmg
             }
 
 
-        }
+        }*/
         fclose($attribute_group_csv);
 
         /** caricamento  traduzioni gruppi attributi  */
@@ -203,7 +204,10 @@ FROM ProductSizeMacroGroup psmg
         $attribute_group_lang_csv = fopen($save_to . 'psz6_attribute_group_lang.csv', 'w');
 
         fputcsv($attribute_group_lang_csv, array('id_attribute_group', 'id_lang', 'name', 'public_name'), ';');
-        $res_attribute_group_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        fputcsv($attribute_group_lang_csv, array('1', '1', 'Size', 'Size'), ';');
+        fputcsv($attribute_group_lang_csv, array('1', '2', 'Taglie', 'Taglie'), ';');
+        fputcsv($attribute_group_lang_csv, array('1', '3', 'Größe', 'Größe'), ';');
+       /* $res_attribute_group_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
         foreach ($res_attribute_group_lang as $value_attribute_group_lang) {
@@ -220,7 +224,7 @@ FROM ProductSizeMacroGroup psmg
 
                 }
             }
-        }
+        }*/
         fclose($attribute_group_lang_csv);
         /** caricamento  gruppi attributi shop  */
         $sql = "SELECT psmg.id  AS id_attribute_group
@@ -233,7 +237,8 @@ FROM ProductSizeMacroGroup psmg
         $attribute_group_shop_csv = fopen($save_to . 'psz6_attribute_group_shop.csv', 'w');
 
         fputcsv($attribute_group_shop_csv, array('id_attribute_group', 'id_shop'), ';');
-        $res_attribute_group_shop = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        fputcsv($attribute_group_shop_csv, array('1', '1'), ';');
+        /*$res_attribute_group_shop = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
         foreach ($res_attribute_group_shop as $value_attribute_group_shop) {
@@ -247,24 +252,23 @@ FROM ProductSizeMacroGroup psmg
 
             }
 
-        }
+        }*/
         fclose($attribute_group_shop_csv);
 
         /**  esportazione attributi */
-        $sql = "SELECT psghps.productSizeId AS id_attribute ,
-   psmg.id AS id_attribute_group,
-  S.name AS name,
-  '' AS color,
-  psghps.position AS position FROM ProductSizeGroupHasProductSize psghps
-JOIN ProductSizeMacroGroup psmg ON psmg.id =psghps.productSizeGroupId
-JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,position  ASC";
+        $sql = "SELECT S.id AS id_attribute ,
+       '1' as id_attribute_group,
+       S.name AS name,
+       '' AS color,
+       psghps.position AS position FROM ProductSizeGroupHasProductSize psghps
+  JOIN ProductSize S ON psghps.productSizeId = S.id  group by id_attribute ORDER  BY id_attribute,position  ASC";
 
         if (file_exists($save_to . 'psz6_attribute.csv')) {
             unlink($save_to . 'psz6_attribute.csv');
         }
         $attribute_csv = fopen($save_to . 'psz6_attribute.csv', 'w');
 
-        fputcsv($attribute_csv, array('id_attribute', 'id_attribute_group', 'color', 'position'), ';');
+        fputcsv($attribute_csv, array('id_attribute', 'id_attribute_group', 'color', 'position'), ';','"');
         $res_attribute = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -285,13 +289,12 @@ JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,p
         fclose($attribute_csv);
 
         /**  esportazione  attributi  negozio */
-        $sql = "SELECT psghps.productSizeId AS id_attribute ,
-   psmg.id AS id_attribute_group,
-  S.name AS name,
-  '' AS color,
-  psghps.position AS position FROM ProductSizeGroupHasProductSize psghps
-JOIN ProductSizeMacroGroup psmg ON psmg.id =psghps.productSizeGroupId
-JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,position  ASC";
+        $sql = "SELECT S.id AS id_attribute ,
+       '1' as id_attribute_group,
+       S.name AS name,
+       '' AS color,
+       psghps.position AS position FROM ProductSizeGroupHasProductSize psghps
+  JOIN ProductSize S ON psghps.productSizeId = S.id  group by id_attribute ORDER  BY id_attribute,position  ASC";
 
         if (file_exists($save_to . 'psz6_attribute_shop.csv')) {
             unlink($save_to . 'psz6_attribute_shop.csv');
@@ -316,13 +319,12 @@ JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,p
         }
         fclose($attribute_shop_csv);
         /**  esportazione  attributi  traduzioni */
-        $sql = "SELECT psghps.productSizeId AS id_attribute ,
-   psmg.id AS id_attribute_group,
-  S.name AS name,
-  '' AS color,
-  psghps.position AS position FROM ProductSizeGroupHasProductSize psghps
-JOIN ProductSizeMacroGroup psmg ON psmg.id =psghps.productSizeGroupId
-JOIN ProductSize S ON psghps.productSizeId = S.id ORDER  BY id_attribute_group,position  ASC";
+        $sql = "SELECT S.id AS id_attribute ,
+       '1' as id_attribute_group,
+       S.name AS name,
+       '' AS color,
+       psghps.position AS position FROM ProductSizeGroupHasProductSize psghps
+  JOIN ProductSize S ON psghps.productSizeId = S.id  group by id_attribute ORDER  BY id_attribute,position  ASC";
 
         if (file_exists($save_to . 'psz6_attribute_lang.csv')) {
             unlink($save_to . 'psz6_attribute_lang.csv');
@@ -369,7 +371,7 @@ FROM ProductDetailLabel pdl";
                     $value_feature['position']));
 
             foreach ($data_feature as $row_feature) {
-                fputcsv($feature_csv, $row_feature);
+                fputcsv($feature_csv, $row_feature, ';');
 
             }
 
@@ -437,7 +439,7 @@ FROM ProductSheetActual psa";
                     '0'));
 
             foreach ($data_feature_value as $row_feature_value) {
-                fputcsv($feature_value_csv, $row_feature_value);
+                fputcsv($feature_value_csv, $row_feature_value, ';');
 
             }
 
@@ -1160,9 +1162,10 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
          psz6_feature_value_lang.csv psz6_image.csv psz6_image_lang.csv psz6_image_link.csv psz6_image_shop.csv psz6_product.csv psz6_product_attribute.csv psz6_product_attribute_combination.csv
           psz6_product_attribute_shop.csv psz6_product_lang.csv' );*/
 
+        $response = http_get("http://iwes.shop/alignpresta.php/", array("timeout"=>1), $info);
+        $res = print_r($info);
 
-
-        $res = 'esportazione eseguita';
+        //$res = 'esportazione eseguita';
         return $res;
     }
 
