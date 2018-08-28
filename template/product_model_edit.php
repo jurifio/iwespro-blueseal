@@ -226,9 +226,9 @@
                                     <?php if($isMultiple): ?>
                                     <div class="row <?php echo $col; ?>">
                                         <div class="col-md-12">
+                                            <label>Cerca Categoria modello</label>
+                                            <input type="text" id="prodCat">
                                             <div class="form-group form-group-default">
-                                                <div class="JSON-pcats"
-                                                     style="display: none"><?php echo $prodCats; ?></div>
                                                 <label for="model_pcats">Categorie pre-impostate</label>
                                                 <select type="text" class="form-control prodCats" name="prodCats"
                                                         id="prodCats" value="">
@@ -261,9 +261,9 @@
                                     <?php else: ?>
                                         <div class="row <?php echo $col; ?>">
                                             <div class="col-md-12">
+                                                <div class="JSON-pcats"
+                                                    style="display: none"><?php echo $prodCats; ?></div>
                                                 <div class="form-group form-group-default">
-                                                    <div class="JSON-pcats"
-                                                         style="display: none"><?php echo $prodCats; ?></div>
                                                     <label for="model_pcats">Categorie pre-impostate</label>
                                                     <select type="text" class="form-control prodCats" name="prodCats"
                                                             id="prodCats" value="">

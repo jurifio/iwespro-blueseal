@@ -279,21 +279,53 @@ $(document).ready(function () {
         }
     });
 
-    $("#prodCats").selectize({
-        valueField: 'id',
-        labelField: 'name',
-        searchField: 'name',
-        maxItems: 1,
-        options: JSON.parse($('.JSON-pcats').html()),
-        create: false,
-        render: {
-            option: function (item, escape) {
-                return '<div>' +
-                    escape(item.name) +
-                    '</div>';
+    if('string' == typeof $_GET.all.id) {
+        $("#prodCats").selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            maxItems: 1,
+            options: JSON.parse($('.JSON-pcats').html()),
+            create: false,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        escape(item.name) +
+                        '</div>';
+                }
             }
-        }
-    });
+        });
+    }else {
+        $(document).on('keypress', '#prodCat', function (e) {
+            elem = $(e.target);
+            if (13 == e.charCode) {
+                e.preventDefault();
+            }
+            let val = elem.val();
+            if (3 < val.length) {
+                let query = elem.val();
+                $.ajax({
+                    url: '/blueseal/xhr/GetProductCatsByAnyString',
+                    type: 'GET',
+                    data: {
+                        search: query,
+                    },
+                    dataType: 'json'
+                }).done(function (res){
+                    $('#prodCats').empty();
+                    $.each(res, function (k, v) {
+                        $('#prodCats').append(
+                            `<option value="${k}">${v}</option>`
+                        );
+                    });
+                });
+            } else {
+                $('#prodCats').empty();
+            }
+        });
+
+    }
+
 
     $("#materials").selectize({
         valueField: 'id',
