@@ -41,6 +41,9 @@
                                 <th data-slug="desc"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Descrizione</th>
+                                <th data-slug="category"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Ass. Categorie</th>
                                 <th data-slug="image"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Photo</th>
@@ -64,9 +67,19 @@
                 data-remote="bs.model.prototype.macro.category.image.manage"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Aggiungi categorie per fason">
+    <bs-toolbar-group data-group-label="Aggiungi/elimina">
         <bs-toolbar-button
                 data-remote="bs.details.research.fason"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-trash"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.sheet.delete.model.macro.cat.group"
+                data-title="Elimina macrocategorie"
+                data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Aggiungi/modifica nome e descrizione">

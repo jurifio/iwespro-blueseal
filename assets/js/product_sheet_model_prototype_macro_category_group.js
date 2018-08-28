@@ -154,4 +154,50 @@
         });
     });
 
+    $(document).on('bs.product.sheet.delete.model.macro.cat.group', function () {
+
+
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length < 1) {
+            new Alert({
+                type: "warning",
+                message: "Non hai selezionato nessuna riga"
+            }).open();
+            return false;
+        }
+
+        let macroCatId = [];
+        selectedRows.each(function (k, v) {
+            macroCatId.push(k.id)
+        });
+
+        let bsModal = new $.bsModal('ELIMINA', {
+            body: `<p>Procedere con l'eliminazione delle macro categorie?</p> 
+                   `
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            const data = {
+                macroCatId: macroCatId
+            };
+            $.ajax({
+                method: 'delete',
+                url: '/blueseal/xhr/ProductModelPrototypeMacroCategoryGroupAjaxManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
 })();

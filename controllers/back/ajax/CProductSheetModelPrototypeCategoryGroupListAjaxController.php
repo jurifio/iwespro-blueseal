@@ -49,11 +49,14 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
               catG.id,
               catG.name,
               catG.description,
+              if((count(pmp.id) = 0), 'v', count(pmp.id)) as models,
               if((isnull(catG.imageUrl)), 'no', 'sì') as image,
               catMacroG.id as macroId,
               catMacroG.name as macroName
             FROM ProductSheetModelPrototypeCategoryGroup catG
-            LEFT JOIN ProductSheetModelPrototypeMacroCategoryGroup catMacroG ON catG.macroCategoryGroupId = catMacroG.id 
+            LEFT JOIN ProductSheetModelPrototypeMacroCategoryGroup catMacroG ON catG.macroCategoryGroupId = catMacroG.id
+            LEFT JOIN ProductSheetModelPrototype pmp ON catG.id = pmp.categoryGroupId
+            GROUP BY catG.id
         ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
@@ -72,6 +75,7 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
             $row['id'] = $cat->id;
             $row['name'] = $cat->name;
             $row['description'] = $cat->description;
+            $row['models'] = $cat->productSheetModelPrototype->count();
             $row['image'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $cat->imageUrl . '" /></a>';
             $row['macroName'] = (is_null($cat->macroCategoryGroupId) ? '-' : $cat->productSheetModelPrototypeMacroCategoryGroup->name);
 

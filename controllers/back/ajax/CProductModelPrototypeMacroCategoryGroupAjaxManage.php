@@ -97,5 +97,29 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
 
     }
 
+    public function delete(){
+
+        $macroCatIds = \Monkey::app()->router->request()->getRequestData('macroCatId');
+
+        $del = '';
+        $undel = '';
+        /** @var CRepo $macroCatR */
+        $macroCatR = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
+
+        foreach ($macroCatIds as $macroCatId){
+
+            /** @var CProductSheetModelPrototypeMacroCategoryGroup $macroCat */
+            $macroCat = $macroCatR->findOneBy(['id'=>$macroCatId]);
+
+            if($macroCat->productSheetModelPrototypeCategoryGroup->count() === 0) {
+                $del .= $macroCat->id . "-" . $macroCat->name . "<br>";
+                $macroCat->delete();
+            } else {
+                $undel .= $macroCat->id . "-" . $macroCat->name . "<br>";
+            }
+        }
+
+        return "Cancellate:<br> $del <br> Non cancellate:<br> $undel";
+    }
 
 }

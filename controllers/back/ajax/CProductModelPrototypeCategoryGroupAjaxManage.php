@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\RedPandaException;
 use bamboo\domain\entities\CProductSheetModelPrototypeCategoryGroup;
 
@@ -67,4 +68,29 @@ class CProductModelPrototypeCategoryGroupAjaxManage extends AAjaxController
         return "Categorie aggiornate";
     }
 
+
+    public function delete(){
+
+        $catIds = \Monkey::app()->router->request()->getRequestData('catId');
+
+        $del = '';
+        $undel = '';
+        /** @var CRepo $catR */
+        $catR = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
+
+        foreach ($catIds as $catId){
+
+            /** @var CProductSheetModelPrototypeCategoryGroup $cat */
+            $cat = $catR->findOneBy(['id'=>$catId]);
+
+            if($cat->productSheetModelPrototype->count() === 0) {
+                $del .= $cat->id . "-" . $cat->name . "<br>";
+                $cat->delete();
+            } else {
+                $undel .= $cat->id . "-" . $cat->name . "<br>";
+            }
+        }
+
+        return "Cancellate:<br> $del <br> Non cancellate:<br> $undel";
+    }
 }

@@ -20,6 +20,8 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  *
  * @property CProductSheetModelPrototypeMacroCategoryGroup $productSheetModelPrototypeMacroCategoryGroup
+ * @property CObjectCollection $productSheetModelPrototype
+ *
  *
  */
 class CProductSheetModelPrototypeCategoryGroup extends AEntity

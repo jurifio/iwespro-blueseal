@@ -50,8 +50,11 @@ class CProductSheetModelPrototypeMacroCategoryGroupListAjaxController extends AA
             pmcg.id,
             pmcg.name,
             pmcg.description,
+            if((count(psmpcg.id) = 0), 'v', count(psmpcg.id)) as category,
             if((isnull(pmcg.imageUrl)), 'no', 'sì') as image
-            FROM ProductSheetModelPrototypeMacroCategoryGroup pmcg";
+            FROM ProductSheetModelPrototypeMacroCategoryGroup pmcg
+            LEFT JOIN ProductSheetModelPrototypeCategoryGroup psmpcg ON pmcg.id = psmpcg.macroCategoryGroupId
+            GROUP BY pmcg.id";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -68,6 +71,7 @@ class CProductSheetModelPrototypeMacroCategoryGroupListAjaxController extends AA
             $row['id'] = $pmcg->id;
             $row['name'] = $pmcg->name;
             $row['desc'] = $pmcg->description;
+            $row['category'] = $pmcg->productSheetModelPrototypeCategoryGroup->count();
             $row['image'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $pmcg->imageUrl . '" /></a>';
 
 
