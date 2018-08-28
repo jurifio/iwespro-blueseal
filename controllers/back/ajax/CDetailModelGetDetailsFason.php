@@ -32,12 +32,8 @@ class CDetailModelGetDetailsFason extends AAjaxController
         if ($step == 1) {
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
 
-            $psmpS1 = \Monkey::app()->cacheService->getCache("misc")->get("AllModelCategory-$genderId");
-            if (!$psmpS1) {
-                $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ?', [$genderId])->fetchAll();
-                if (empty($psmpS1)) return false;
-                $this->app->cacheService->getCache("misc")->set("AllModelCategory-$genderId", $psmpS1, 13000);
-            }
+            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ?', [$genderId])->fetchAll();
+            if (empty($psmpS1)) return false;
 
 
             $cats = [];
@@ -66,7 +62,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
             $macroCategId = \Monkey::app()->router->request()->getRequestData('macroCategId');
 
-            $psmpS2 = \Monkey::app()->cacheService->getCache("misc")->get("AllModelCategory-$genderId");
+            $psmpS2 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ?', [$genderId])->fetchAll();
 
             if (empty($psmpS2)) {
                 return false;
