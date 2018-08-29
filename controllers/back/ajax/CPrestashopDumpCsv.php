@@ -635,11 +635,16 @@ ORDER BY `p`.`id` ASC
         if (file_exists($save_to . 'psz6_category_product.csv')) {
             unlink($save_to . 'psz6_category_product.csv');
         }
+
         $category_product_csv = fopen($save_to . 'psz6_category_product.csv', 'w');
 
 
         if (file_exists($save_to . 'psz6_product.csv')) {
             unlink($save_to . 'psz6_product.csv');
+        }
+        $product_shop_csv = fopen($save_to . 'psz6_product_shop.csv', 'w');
+        if (file_exists($save_to . 'psz6_product_shop.csv')) {
+            unlink($save_to . 'psz6_product_shop.csv');
         }
         $product_csv = fopen($save_to . 'psz6_product.csv', 'w');
         if (file_exists($save_to . 'psz6_product_lang.csv')) {
@@ -693,6 +698,39 @@ ORDER BY `p`.`id` ASC
             unlink($save_to . 'psz6_stock_available.csv');
         }
         $stock_available_csv = fopen($save_to . 'psz6_stock_available.csv', 'w');
+
+fputcsv($product_shop_csv,array(    'id_product',
+                                    'id_shop',
+                                    'id_category_Default',
+                                    'id_tax_rules_group',
+                                    'on_sale',
+                                    'online_only',
+                                    'ecotax',
+                                    'minimal_quantity',
+                                    'low_stock_threshold',
+                                   'low_stock_alert',
+                                    'price',
+                                    'wholesale_price',
+                                    'unity',
+                                    'unit_price_ratio',
+                                    'additional_shipping_cost',
+                                    'customizable',
+                                    'text_fields',
+                                    'active',
+                                    'redirect_type',
+                                    'id_type_redirected',
+                                    'available_for_order',
+                                    'available_date',
+                                    'show_condition',
+                                    'condition',
+                                    'show_price',
+                                    'indexed',
+                                    'visibility',
+                                    'cache_default_attribute',
+                                    'advanced_stock_management',
+                                    'date_add',
+                                    'date_upd',
+                                    'pack_stock_type'),';');
 
         fputcsv($product_csv, array('id_product',
             'id_supplier',
@@ -827,7 +865,7 @@ ORDER BY `p`.`id` ASC
             'id_image',
             'id_shop',
             'cover'), ';');
-        fputcsv($stock_available_csv,array('id_stock_available','id_product','id_product_attribute','id_shop', 'id_shop_group','quantity','phisical_quantity','reserved_quantity','depends_on_stock','out_of_stock'));
+        fputcsv($stock_available_csv,array('id_stock_available','id_product','id_product_attribute','id_shop', 'id_shop_group','quantity','phisical_quantity','reserved_quantity','depends_on_stock','out_of_stock'),';');
 
 
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
@@ -900,6 +938,42 @@ $p=$value_product['prestaId'];
                     $value_product['pack_stock_type'],
                     $value_product['state'],
                     $value_product['status']));
+
+            $data_product_shop = array(
+                array($p,
+                    $value_product['id_shop_default'],
+                    $value_product['id_category_default'],
+                    $value_product['id_tax_rules_group'],
+                    $value_product['on_sale'],
+                    $value_product['online_only'],
+                    $value_product['ecotax'],
+                    $value_product['minimal_quantity'],
+                    $value_product['low_stock_threshold'],
+                    $value_product['low_stock_alert'],
+                    $value_product['price'],
+                    $value_product['wholesale_price'],
+                    $value_product['unity'],
+                    $value_product['unit_price_ratio'],
+                    $value_product['additional_shipping_cost'],
+                    $value_product['customizable'],
+                    $value_product['uploadable_files'],
+                    $value_product['text_fields'],
+                    $value_product['active'],
+                    $value_product['redirect_type'],
+                    $value_product['id_type_redirected'],
+                    $value_product['available_for_order'],
+                    $value_product['available_date'],
+                    $value_product['show_condition'],
+                    $value_product['condition'],
+                    $value_product['show_price'],
+                    $value_product['indexed'],
+                    $value_product['visibility'],
+                    $value_product['cache_default_attribute'],
+                    $value_product['advanced_stock_management'],
+                    $value_product['date_add'],
+                    $value_product['date_upd'],
+                    $value_product['pack_stock_type'],
+                    $value_product['state']));
 
             $data_product_lang = array(
                 array($p,
@@ -1074,6 +1148,10 @@ $data_category_product =array(
                 fputcsv($product_csv, $row_product, ';');
 
             }
+            foreach ($data_product_shop as $row_product_shop) {
+                fputcsv($product_shop_csv, $row_product_shop, ';');
+
+            }
 
             foreach ($data_product_lang as $row_product_lang) {
                 fputcsv($product_lang_csv, $row_product_lang, ';');
@@ -1151,6 +1229,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($image_csv);
         fclose($image_link_csv);
         fclose($product_csv);
+        fclose($product_shop_csv);
         fclose($product_lang_csv);
         fclose($product_attribute_csv);
         fclose($product_attribute_combination_csv);
@@ -1194,6 +1273,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         $phar->addFile($save_to .'psz6_image_link.csv', 'psz6_image_link.csv');
         $phar->addFile($save_to .'psz6_image_shop.csv',  'psz6_image_shop.csv');
         $phar->addFile($save_to .'psz6_product.csv',  'psz6_product.csv');
+        $phar->addFile($save_to .'psz6_product_shop.csv',  'psz6_product_shop.csv');
         $phar->addFile($save_to .'psz6_product_attribute.csv',  'psz6_product_attribute.csv');
         $phar->addFile($save_to .'psz6_product_attribute_combination.csv',  'psz6_product_attribute_combination.csv');
         $phar->addFile($save_to .'psz6_product_attribute_shop.csv',  'psz6_product_attribute_shop.csv');
@@ -1227,6 +1307,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
                 unlink($save_to.'psz6_product_attribute.csv');
                 unlink($save_to.'psz6_product_attribute_combination.csv');
                 unlink($save_to.'psz6_product_attribute_shop.csv');
+                unlink($save_to.'psz6_product_lang.csv');
                 unlink($save_to.'psz6_product_lang.csv');
 
 
