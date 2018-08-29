@@ -35,15 +35,15 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
+                                <th data-slug="workCategoryId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Categoria</th>
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Titolo</th>
                                 <th data-slug="descr"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Descrizione</th>
-                                <th data-slug="workCategory"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Lavorazione</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data di creazione</th>
@@ -83,12 +83,15 @@
                                 <th data-slug="documentId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura</th>
-                                <th data-slug="workCategoryId"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Categoria</th>
                                 <th data-slug="marketplace"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Visibile nel marketplace</th>
+                                <th data-slug="timingRank"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Timing Rank</th>
+                                <th data-slug="qualityRank"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">qualityRank</th>
                             </tr>
                             </thead>
                             <tbody>

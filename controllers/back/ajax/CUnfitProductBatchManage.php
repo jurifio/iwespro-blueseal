@@ -67,7 +67,10 @@ class CUnfitProductBatchManage extends AAjaxController
                $pBatchRepo->duplicateProductBatchFromCancelled($pBatch);
            }
 
-           $mailRepo->newMail('gianluca@iwes.it', [$pb['fason']], [], [], "Prodotti non idonei", $body);
+           if(ENV == 'prod'){
+               $mailRepo->newMail('gianluca@iwes.it', [$pb['fason']], [], [], "Prodotti non idonei", $body);
+           }
+
 
        }
 

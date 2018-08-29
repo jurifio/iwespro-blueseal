@@ -67,7 +67,9 @@ class CProductBatchListAjaxController extends AAjaxController
                   pb.workCategoryId,
                   pb.marketplace,
                   pb.requestClosingDate,
-                  pb.isUnassigned        
+                  pb.isUnassigned,
+                  pb.timingRank,
+                  pb.qualityRank      
             FROM ProductBatch pb
             LEFT JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
             LEFT JOIN WorkCategory wk ON cd.workCategoryId = wk.id
@@ -103,12 +105,15 @@ class CProductBatchListAjaxController extends AAjaxController
             /** @var CProductBatch $pbr */
             $pbr = $pbrRepo->findOneBy(['id'=>$row["id"]]);
 
-            if($pbr->unfitDate != 0 && $pbr->closingDate == 0 && $pbr->isFixed == 0){
+            if($pbr->unfitDate != 0 && $pbr->closingDate == 0 && $pbr->isFixed == 0 && $pbr->isUnassigned == 0){
                 $row["DT_RowClass"] = "red";
             } else if($pbr->unfitDate != 0 && $pbr->closingDate == 0 && $pbr->isFixed == 1){
                 $row["DT_RowClass"] = "green";
-            } else if($pbr->isUnassigned == 1) {
+            } else if($pbr->isUnassigned == 1 && $pbr->unfitDate == 0) {
                 $row["DT_RowClass"] = "brown";
+            } else if($pbr->isUnassigned == 1 && $pbr->unfitDate != 0){
+                $row["DT_RowClass"] = "brown text-red";
+
             }
 
             $row["row_id"] = $pbr->id;
@@ -184,7 +189,6 @@ class CProductBatchListAjaxController extends AAjaxController
 
 
             $row["numberOfProduct"] = count($pbr->getElements());
-            $row["workCategory"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->workCategory->name);
             $row["documentId"] = $pbr->documentId;
             $row["foisonEmail"] = (is_null($pbr->contractDetailsId) ? 'Undefined' : $pbr->contractDetails->contracts->foison->email);
             $row["descr"] = $pbr->description;
@@ -219,6 +223,8 @@ class CProductBatchListAjaxController extends AAjaxController
             $row['requestClosingDate'] = $pbr->requestClosingDate;
             $row['workCategoryId'] = $cat->name;
             $row['marketplace'] = $pbr->marketplace == 1 ? 'Visibile' : 'Nascosto';
+            $row['timingRank'] = $pbr->timingRank;
+            $row['qualityRank'] = $pbr->qualityRank;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

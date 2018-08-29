@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\domain\repositories;
 
 use bamboo\core\base\CObjectCollection;
@@ -7,6 +8,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
+use bamboo\domain\entities\CProductBatchHasProductName;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\entities\CWorkCategory;
 use bamboo\domain\entities\CWorkCategorySteps;
@@ -35,11 +37,12 @@ class CProductBatchRepo extends ARepo
      * @param $products
      * @return \bamboo\core\db\pandaorm\entities\AEntity|CProductBatch
      */
-    public function createNewProductBatch($scheduledDelivery, $value, $contractDetailsId, $products){
+    public function createNewProductBatch($scheduledDelivery, $value, $contractDetailsId, $products)
+    {
 
         try {
             /** @var CContractDetails $contractDetails */
-            $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBY(['id'=>$contractDetailsId]);
+            $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBY(['id' => $contractDetailsId]);
 
             $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
 
@@ -54,10 +57,11 @@ class CProductBatchRepo extends ARepo
             $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCodeId);
             $productBatch->smartInsert();
 
-        /** @var CProductBatchDetailsRepo $productBatchDetailsRepo */
-        $productBatchDetailsRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
-        $productBatchDetailsRepo->createNewProductBatchDetails($productBatch, $products);
-        } catch (\Throwable $e){}
+            /** @var CProductBatchDetailsRepo $productBatchDetailsRepo */
+            $productBatchDetailsRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
+            $productBatchDetailsRepo->createNewProductBatchDetails($productBatch, $products);
+        } catch (\Throwable $e) {
+        }
 
         return $productBatch;
     }
@@ -70,12 +74,13 @@ class CProductBatchRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function closeProductBatch($id){
+    public function closeProductBatch($id)
+    {
 
         /** @var CProductBatch $productBatch */
-        $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$id]);
+        $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id' => $id]);
 
-        if($productBatch->closingDate == 0) {
+        if ($productBatch->closingDate == 0) {
             $productBatch->closingDate = date('Y-m-d H:i:s');
             $productBatch->update();
         }
@@ -83,11 +88,12 @@ class CProductBatchRepo extends ARepo
         return true;
     }
 
-    public function calculateProductBatchCost($productBatch){
+    public function calculateProductBatchCost($productBatch)
+    {
 
-        if(is_numeric($productBatch)){
+        if (is_numeric($productBatch)) {
             /** @var CProductBatch $pB */
-            $pB = $this->findOneBy(['id'=>$productBatch]);
+            $pB = $this->findOneBy(['id' => $productBatch]);
         }
 
         $numberOfProducts = count($pB->getElements());
@@ -106,11 +112,12 @@ class CProductBatchRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function acceptProductBatch($id){
+    public function acceptProductBatch($id)
+    {
 
-        $pB = $this->findOneBy(['id'=>$id]);
+        $pB = $this->findOneBy(['id' => $id]);
 
-        if($pB->confirmationDate !=0){
+        if ($pB->confirmationDate != 0) {
             return false;
         }
         $date = new \DateTime();
@@ -130,10 +137,11 @@ class CProductBatchRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function associateProductBatch($productBatch, $scheduledDelivery, $value, $contractDetailsId){
+    public function associateProductBatch($productBatch, $scheduledDelivery, $value, $contractDetailsId)
+    {
 
         /** @var CContractDetails $contractDetails */
-        $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBy(['id'=>$contractDetailsId]);
+        $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBy(['id' => $contractDetailsId]);
 
         $sectionalCodeId = $contractDetails->workCategory->sectionalCodeId;
 
@@ -158,7 +166,7 @@ class CProductBatchRepo extends ARepo
         /** @var CObjectCollection $elems */
         $elems = $productBatch->getElements();
 
-        foreach ($elems as $elem){
+        foreach ($elems as $elem) {
             $elem->workCategoryStepsId = $initStep->id;
             $elem->update();
         }
@@ -167,28 +175,28 @@ class CProductBatchRepo extends ARepo
     }
 
 
-    public function checkRightLanguage($pbId, $langId){
+    public function checkRightLanguage($pbId, $langId)
+    {
 
         /** @var CProductBatch $pb */
-        $pb = $this->findOneBy(['id'=>$pbId]);
+        $pb = $this->findOneBy(['id' => $pbId]);
 
-        if(is_null($pb)) return false;
+        if (is_null($pb)) return false;
 
 
-
-        if(is_null($pb->contractDetailsId)){
+        if (is_null($pb->contractDetailsId)) {
             $wk = $pb->workCategoryId;
         } else {
             $wk = $pb->contractDetails->workCategory->id;
         }
 
         $correct = false;
-        switch ($langId){
+        switch ($langId) {
             case 2:
-                if($wk == CWorkCategory::NAME_ENG) $correct = true;
+                if ($wk == CWorkCategory::NAME_ENG) $correct = true;
                 break;
             case 3:
-                if($wk == CWorkCategory::NAME_DTC) $correct = true;
+                if ($wk == CWorkCategory::NAME_DTC) $correct = true;
                 break;
         }
 
@@ -203,10 +211,11 @@ class CProductBatchRepo extends ARepo
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function timingRank(CProductBatch $productBatch) : int {
+    public function timingRank(CProductBatch $productBatch): int
+    {
 
         $tolleranceClosing = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($productBatch->scheduledDelivery), 5)->format('Y-m-d 23:59:59');
-        if($productBatch->requestClosingDate <= $productBatch->scheduledDelivery) {
+        if ($productBatch->requestClosingDate <= $productBatch->scheduledDelivery) {
             $productBatch->timingRank = 10;
         } else if ($productBatch->requestClosingDate <= $tolleranceClosing && $productBatch->requestClosingDate > $productBatch->scheduledDelivery) {
             $productBatch->timingRank = 2;
@@ -216,21 +225,28 @@ class CProductBatchRepo extends ARepo
         return $productBatch->timingRank;
     }
 
-    public function qualityRank(CProductBatch $productBatch) {
+    public function qualityRank(CProductBatch $productBatch)
+    {
         $nPb = count($productBatch->getElements());
         $nNpb = count($productBatch->getNormalizedElements());
 
-        $productBatch->qualityRank = $nNpb/$nPb*10;
+        $productBatch->qualityRank = round($nNpb / $nPb * 10, 2);
         $productBatch->update();
 
         return $productBatch->qualityRank;
     }
 
+    /**
+     * @param CProductBatch $productBatch
+     * @return bool
+     * @throws BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function duplicateProductBatchFromCancelled(CProductBatch $productBatch)
+    {
 
-
-    public function duplicateProductBatchFromCancelled(CProductBatch $productBatch) {
-
-        $normalizedProducts = $productBatch->getNormalizedElements();
+        $normalized = $productBatch->getNormalizedElements();
         /** @var CSectionalRepo $sRepo */
         $sRepo = \Monkey::app()->repoFactory->create('Sectional');
 
@@ -239,17 +255,54 @@ class CProductBatchRepo extends ARepo
         $newPB->name = $productBatch->name;
         $newPB->description = $productBatch->description;
         $newPB->sectional = $sRepo->createNewSectionalCode($productBatch->workCategory->sectionalCodeId);
-        $newPB->value = count($normalizedProducts) * $productBatch->unitPrice;
+        $newPB->value = count($normalized) * $productBatch->unitPrice;
         $newPB->workCategoryId = $productBatch->workCategoryId;
         $newPB->marketplace = 1;
         $newPB->estimatedWorkDays = $this->recalculateEstimatedWorkDay($productBatch);
         $newPB->unitPrice = $productBatch->unitPrice;
         $newPB->smartInsert();
 
+        switch ($newPB->workCategoryId) {
+            case CWorkCategory::NORM:
+                /** @var CProductBatchDetailsRepo $pbdR */
+                $pbdR = \Monkey::app()->repoFactory->create('ProductBatchDetails');
+                $products = [];
+                foreach ($normalized as $n) {
+                    $products[] = $n->productId . '-' . $n->productVariantId;
+                }
+
+                $pbdR->insertProductInEmptyProductBatch($newPB->id, $products);
+                break;
+            case CWorkCategory::BRAND:
+                /** @var CProductBatchHasProductBrandRepo $pbR */
+                $pbR = \Monkey::app()->repoFactory->create('ProductBatchHasProductBrand');
+                $brandIds = [];
+                foreach ($normalized as $n) {
+                    $brandIds[] = $n->productBrandId;
+                }
+
+                $pbR->insertNewProductBrand($newPB->id, $brandIds);
+                break;
+            case CWorkCategory::NAME_ENG:
+            case CWorkCategory::NAME_DTC:
+                /** @var CProductBatchHasProductNameRepo $pnR */
+                $pnR = \Monkey::app()->repoFactory->create('ProductBatchHasProductName');
+                $langId = $normalized[0]->langId;
+                $productNames = [];
+                foreach ($normalized as $n) {
+                    $productNames[] = $n->productName;
+                }
+
+                $pnR->insertNewProductNameFromCopy($newPB, $productNames, $langId);
+                break;
+        }
+
+        return true;
 
     }
 
-    private function recalculateEstimatedWorkDay(CProductBatch $pb){
+    private function recalculateEstimatedWorkDay(CProductBatch $pb)
+    {
         $oldNumberElems = count($pb->getElements());
         $newNumberElems = count($pb->getNormalizedElements());
         $oldDay = $pb->estimatedWorkDays;

@@ -4,6 +4,8 @@ namespace bamboo\domain\entities;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
+use bamboo\domain\repositories\CWorkCategoryRepo;
+use bamboo\domain\repositories\CWorkCategoryStepsRepo;
 
 /**
  * Class CProductBatch
@@ -43,9 +45,11 @@ class CProductBatch extends AEntity
     public function isValid(){
 
         $unfitElement = [];
-
         $elems = $this->getElements();
 
+        /** @var CWorkCategoryStepsRepo $wksR */
+        $wksR = \Monkey::app()->repoFactory->create('WorkCategorySteps');
+/** @var CProductBatchDetails $elem */
         foreach ($elems as $elem){
 
             switch ($elem->workCategoryStepsId){
@@ -65,6 +69,12 @@ class CProductBatch extends AEntity
                     ' | Lotto: '.$elem->productBatchId.
                     ' | Brand: '.$elem->productName;
                     break;
+            }
+
+            if($wksR->getFirstStepsFromCategoryId($elem->productBatch->workCategoryId)->id == $elem->workCategoryStepsId){
+
+                $unfitElement[] = 'Elemento non normalizzato --> id: '.$elem->id.
+                    ' | Lotto: '.$elem->productBatchId;
             }
         }
 

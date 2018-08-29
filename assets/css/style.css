@@ -1006,6 +1006,10 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     background-color:#e4dad7;
 }
 
+.text-red{
+    color: red;
+}
+
 
 .legenda{
     display: flex;
