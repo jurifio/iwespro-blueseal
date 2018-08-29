@@ -642,11 +642,11 @@ ORDER BY `p`.`id` ASC
         if (file_exists($save_to . 'psz6_product.csv')) {
             unlink($save_to . 'psz6_product.csv');
         }
-        $product_shop_csv = fopen($save_to . 'psz6_product_shop.csv', 'w');
+        $product_csv = fopen($save_to . 'psz6_product.csv', 'w');
         if (file_exists($save_to . 'psz6_product_shop.csv')) {
             unlink($save_to . 'psz6_product_shop.csv');
         }
-        $product_csv = fopen($save_to . 'psz6_product.csv', 'w');
+        $product_shop_csv = fopen($save_to . 'psz6_product_shop.csv', 'w');
         if (file_exists($save_to . 'psz6_product_lang.csv')) {
             unlink($save_to . 'psz6_product_lang.csv');
         }
