@@ -156,7 +156,6 @@ $product=\Monkey::app()->repoFactory->create('Product')->findby(['productStatusI
 
 
         }
-        fclose($category_shop_csv);
 
         /****** estrazione dati lingua categorie **/
 
