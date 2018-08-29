@@ -48,7 +48,7 @@ $product=\Monkey::app()->repoFactory->create('Product')->findby(['productStatusI
      if(!empty($producthasprestashop)) {
          $producthasprestashop->productId = $val->id;
          $producthasprestashop->productVariantId = $val->productVariantId;
-         $producthasprestashop->status='2';
+         $producthasprestashop->status='1';
          $producthasprestashop->update();
      }else{
          $producthasprestashopinsert=\Monkey::app()->repoFactory->create('PrestashopHasProduct')->getEmptyEntity();
@@ -724,7 +724,8 @@ ORDER BY `p`.`id` ASC
             'minimal_quantity',
             'low_stock_threshold',
             'low_stock_alert',
-            'available_date'
+            'available_date',
+            'status'
         ), ';');
 
         fputcsv($product_attribute_shop_csv, array(
@@ -740,7 +741,8 @@ ORDER BY `p`.`id` ASC
             'minimal_quantity',
             'low_stock_threshold',
             'low_stock_alert',
-            'available_date'
+            'available_date',
+            'status'
         ), ';');
         fputcsv($product_attribute_combination_csv, array('id_attribute', 'id_product_attribute'), ';');
 
@@ -942,7 +944,8 @@ $p=$value_product['prestaId'];
                         $value_product['minimal_quantity'],
                         $value_product['low_stock_threshold'],
                         $value_product['low_stock_alert'],
-                        $available_date));
+                        $available_date,
+                        $value_product['status']));
                 foreach ($data_product_attribute as $row_product_attribute) {
                     fputcsv($product_attribute_csv, $row_product_attribute, ';');
                 }
@@ -960,7 +963,8 @@ $p=$value_product['prestaId'];
                         $value_product['minimal_quantity'],
                         $value_product['low_stock_threshold'],
                         $value_product['low_stock_alert'],
-                        $available_date));
+                        $available_date,
+                        $value_product['status']));
                 foreach ($data_product_attribute_shop as $row_product_attribute_shop) {
                     fputcsv($product_attribute_shop_csv, $row_product_attribute_shop, ';');
                 }
@@ -1164,8 +1168,8 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
          psz6_feature_value_lang.csv psz6_image.csv psz6_image_lang.csv psz6_image_link.csv psz6_image_shop.csv psz6_product.csv psz6_product_attribute.csv psz6_product_attribute_combination.csv
           psz6_product_attribute_shop.csv psz6_product_lang.csv' );*/
 
-        $response = http_get("http://iwes.shop/alignpresta.php/", array("timeout"=>1), $info);
-        $res = print_r($info);
+       /* $response = http_get("http://iwes.shop/alignpresta.php/", array("timeout"=>1), $info);
+        $res = print_r($info);*/
 
         //$res = 'esportazione eseguita';
         return $res;
