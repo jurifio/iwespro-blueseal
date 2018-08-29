@@ -112,6 +112,51 @@ $product=\Monkey::app()->repoFactory->create('Product')->findby(['productStatusI
 
         }
         fclose($category_csv);
+        /*** estrazione dati  categorie shop */
+
+        $sql = " SELECT `id`                                            AS id_category,
+         (SELECT   id FROM ProductCategory t2
+                      WHERE t2.lft < t1.lft AND t2.rght > t1.rght
+                      ORDER BY t2.rght-t1.rght ASC LIMIT 1)
+                                                                    AS id_parent, 
+               '1'                                                  AS id_shop_default,
+                depth                                               AS level_depth,
+                lft                                                 AS nleft,
+                rght                                                AS nright, 
+                '1'                                                 AS active,
+                DATE_FORMAT(now(),'%Y-%m-%d %H:%m:%s')              AS date_add,
+                DATE_FORMAT(now(),'%Y-%m-%d %H:%m:%s')              AS date_upd,
+                '0'                                                 AS is_root_category
+                FROM ProductCategory t1
+                ORDER BY (rght-lft) DESC ";
+        if (ENV == 'dev') {
+
+            $save_to = '/media/sf_sites/PickyshopNew/tmp/';
+
+        } else {
+            $save_to = '/data/www/iwes/production/sites/pickyshop/temp/';
+        }
+        if (file_exists($save_to . 'psz6_category_shop.csv')) {
+            unlink($save_to . 'psz6_category_shop.csv');
+        }
+        $category_shop_csv = fopen($save_to . 'psz6_category_shop.csv', 'w');
+
+        fputcsv($category_shop_csv, array('id_category', 'id_shop', 'position'), ';');
+        $res_category_shop = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $i = 0;
+        foreach ($res_category_shop as $value_category_shop) {
+            $i = $i + 1;
+            $data_category_shop = array(
+                array($value_category_shop['id_category'],
+                    '1',
+                    '1'));
+            foreach ($data_category_shop as $row_category_shop) {
+                fputcsv($category_shop_csv, $row_category_shop, ';');
+            }
+
+
+        }
+        fclose($category_shop_csv);
 
         /****** estrazione dati lingua categorie **/
 
@@ -585,6 +630,15 @@ GROUP BY product_id
 ORDER BY `p`.`id` ASC
 ";
 
+
+
+
+        if (file_exists($save_to . 'psz6_category_product.csv')) {
+            unlink($save_to . 'psz6_category_product.csv');
+        }
+        $category_product_csv = fopen($save_to . 'psz6_category_product.csv', 'w');
+
+
         if (file_exists($save_to . 'psz6_product.csv')) {
             unlink($save_to . 'psz6_product.csv');
         }
@@ -745,6 +799,7 @@ ORDER BY `p`.`id` ASC
             'status'
         ), ';');
         fputcsv($product_attribute_combination_csv, array('id_attribute', 'id_product_attribute'), ';');
+        fputcsv($category_product_csv, array('id_category', 'id_product','position'), ';');
 
 
         fputcsv($feature_product_csv, array('id_feature',
@@ -771,6 +826,7 @@ ORDER BY `p`.`id` ASC
 
 
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $category_prev="";
         $w = 0;
         $p = 0;
         $z = 0;
@@ -778,6 +834,7 @@ ORDER BY `p`.`id` ASC
         $u = 0;
         $a = 0;
         $b = 0;
+        $t = 0;
 
         foreach ($res_product as $value_product) {
            // $p = $p + 1;
@@ -897,6 +954,18 @@ $p=$value_product['prestaId'];
                     '3',
                     $value_product['product_id'] . "-" . $value_product['productVariantId'])
             );
+            if($category_prev==$value_product['id_category_default']){
+                $t++;
+            }else{
+                $t=0;
+            }
+$data_category_product =array(
+    array($value_product['id_category_default'],
+        $p,
+        $t));
+            foreach($data_category_product as $row_category_product){
+                fputcsv($category_product_csv, $row_category_product, ';');
+            }
 
 
             $res_product_attribute = \Monkey::app()->repoFactory->create('ProductPublicSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
@@ -1065,6 +1134,9 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($product_attribute_combination_csv);
         fclose($product_attribute_shop_csv);
         fclose($feature_product_csv);
+        fclose($category_shop_csv);
+        fclose($category_product_csv);
+
         $exportToPrestashopcsv = "export_" . date("Y-m-d") . ".tar";
         if (file_exists($save_to.$exportToPrestashopcsv)) {
             unlink($save_to.$exportToPrestashopcsv);
@@ -1080,12 +1152,14 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
 
         $phar = new \PharData($zipName);
         $phar->addFile($save_to . 'psz6_attribute.csv', 'psz6_attribute.csv');
+        $phar->addFile($save_to . 'psz6_category_shop.csv', 'psz6_category_shop.csv');
         $phar->addFile($save_to . 'psz6_attribute_shop.csv', 'psz6_attribute_shop.csv');
         $phar->addFile($save_to .'psz6_attribute_group.csv',  'psz6_attribute_group.csv');
         $phar->addFile($save_to .'psz6_attribute_group_lang.csv',  'psz6_attribute_group_lang.csv');
         $phar->addFile($save_to .'psz6_attribute_group_shop.csv',  'psz6_attribute_group_shop.csv');
         $phar->addFile($save_to .'psz6_attribute_lang.csv',  'psz6_attribute_lang.csv');
         $phar->addFile($save_to .'psz6_category.csv',  'psz6_category.csv');
+        $phar->addFile($save_to . 'psz6_category_product.csv', 'psz6_category_product.csv');
         $phar->addFile($save_to .'psz6_category_lang.csv',  'psz6_category_lang.csv');
         $phar->addFile($save_to .'psz6_feature.csv', 'psz6_feature.csv');
         $phar->addFile($save_to .'psz6_feature_lang.csv',  'psz6_feature_lang.csv');
@@ -1109,8 +1183,10 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
                 unlink($save_to.'psz6_attribute.csv');
                 unlink($save_to.'psz6_attribute_shop.csv');
                 unlink($save_to.'psz6_attribute_group.csv');
+                unlink($save_to.'psz6_category_shop.csv');
                 unlink($save_to.'psz6_attribute_group_lang.csv');
                 unlink($save_to.'psz6_attribute_group_shop.csv');
+                unlink($save_to.'psz6_category_product.csv');
                 unlink($save_to.'psz6_attribute_lang.csv');
                 unlink($save_to.'psz6_category.csv');
                 unlink($save_to.'psz6_category_lang.csv');
