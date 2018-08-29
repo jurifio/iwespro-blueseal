@@ -609,7 +609,7 @@ SELECT
   '0'                                                                            AS advanced_stock_management,
   '3' AS pack_stock_type,
   '0'                                                                            AS depend_on_stock,
-  '0'                                                                            AS Warehouse,
+  '1'                                                                            AS Warehouse,
   '1' AS state,
   php.status as status
 
@@ -688,6 +688,11 @@ ORDER BY `p`.`id` ASC
             unlink($save_to . 'psz6_image_shop.csv');
         }
         $image_shop_csv = fopen($save_to . 'psz6_image_shop.csv', 'w');
+
+        if (file_exists($save_to . 'psz6_stock_available.csv')) {
+            unlink($save_to . 'psz6_stock_available.csv');
+        }
+        $stock_available_csv = fopen($save_to . 'psz6_stock_available.csv', 'w');
 
         fputcsv($product_csv, array('id_product',
             'id_supplier',
@@ -822,6 +827,7 @@ ORDER BY `p`.`id` ASC
             'id_image',
             'id_shop',
             'cover'), ';');
+        fputcsv($stock_available_csv,array('id_stock_available','id_product','id_product_attribute','id_shop', 'id_shop_group','quantity','phisical_quantity','reserved_quantity','depends_on_stock','out_of_stock'));
 
 
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
@@ -834,6 +840,7 @@ ORDER BY `p`.`id` ASC
         $a = 0;
         $b = 0;
         $t = 0;
+        $n = 0;
 
         foreach ($res_product as $value_product) {
            // $p = $p + 1;
@@ -972,13 +979,14 @@ $data_category_product =array(
             $lock_default_on = 0;
             foreach ($res_product_attribute as $value_product_attribute) {
                 $w = $w + 1;
+                $n=$n+1;
                 $productSizeId_attribute_combination = $value_product_attribute->productSizeId;
                 $quantity_attribute_combination = $value_product_attribute->stockQty;
                 if (($quantity_attribute_combination >= 0) && ($lock_default_on == 0)) {
                     $default_on = '1';
                     $lock_default_on = 1;
                 } else {
-                    $default_on = '';
+                    $default_on = '0';
                 }
                 $price_attribute_combination = $value_product_attribute->price;
                 $salePrice_attribute_combination = $value_product_attribute->salePrice;
@@ -991,7 +999,7 @@ $data_category_product =array(
                     $available_date = date("Y-m-d");
 
                 } else {
-                    $available_date = '';
+                    $available_date = '2018-08-01';
                 }
                 $data_product_attribute = array(
                     array($w,
@@ -1014,8 +1022,23 @@ $data_category_product =array(
                         $value_product['low_stock_alert'],
                         $available_date,
                         $value_product['status']));
+
+                $data_stock_available = array(
+                    array($n,
+                        $p,
+                        $w,
+                        $value_product['id_shop_default'],
+                        '1',
+                        $quantity_attribute_combination,
+                        $quantity_attribute_combination,
+                        $quantity_attribute_combination,
+                        '0',
+                        '0'));
                 foreach ($data_product_attribute as $row_product_attribute) {
                     fputcsv($product_attribute_csv, $row_product_attribute, ';');
+                }
+                foreach ($data_stock_available as $row_stock_available) {
+                    fputcsv($stock_available_csv, $row_stock_available, ';');
                 }
 
                 $data_product_attribute_shop = array(
@@ -1152,6 +1175,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         $phar = new \PharData($zipName);
         $phar->addFile($save_to . 'psz6_attribute.csv', 'psz6_attribute.csv');
         $phar->addFile($save_to . 'psz6_category_shop.csv', 'psz6_category_shop.csv');
+        $phar->addFile($save_to . 'psz6_stock_available.csv', 'psz6_stock_available.csv');
         $phar->addFile($save_to . 'psz6_attribute_shop.csv', 'psz6_attribute_shop.csv');
         $phar->addFile($save_to .'psz6_attribute_group.csv',  'psz6_attribute_group.csv');
         $phar->addFile($save_to .'psz6_attribute_group_lang.csv',  'psz6_attribute_group_lang.csv');
@@ -1180,6 +1204,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
             $compressed = $phar->compress(\Phar::GZ);
             if (file_exists($compressed->getPath())) {
                 unlink($save_to.'psz6_attribute.csv');
+                unlink($save_to.'psz6_stock_available.csv');
                 unlink($save_to.'psz6_attribute_shop.csv');
                 unlink($save_to.'psz6_attribute_group.csv');
                 unlink($save_to.'psz6_category_shop.csv');
@@ -1246,7 +1271,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
        /* $response = http_get("http://iwes.shop/alignpresta.php/", array("timeout"=>1), $info);
         $res = print_r($info);*/
 
-        //$res = 'esportazione eseguita';
+        $res = 'esportazione eseguita';
         return $res;
     }
 
