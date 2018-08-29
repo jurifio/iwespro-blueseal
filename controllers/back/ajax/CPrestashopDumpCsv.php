@@ -1308,7 +1308,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
                 unlink($save_to.'psz6_product_attribute_combination.csv');
                 unlink($save_to.'psz6_product_attribute_shop.csv');
                 unlink($save_to.'psz6_product_lang.csv');
-                unlink($save_to.'psz6_product_lang.csv');
+                unlink($save_to.'psz6_product_shop.csv');
 
 
             }
