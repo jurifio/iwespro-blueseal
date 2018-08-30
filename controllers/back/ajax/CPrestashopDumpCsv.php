@@ -247,7 +247,7 @@ $sql ="select phpc.productCategoryId as id_category,
         foreach ($res_brand as $value_brand) {
             $date_brand = date('Y-m-d H:i:s:');
             $data_brand = array(
-                array($value_brand->id_manufacturer,
+                array($value_brand->id,
                     $value_brand->slug,
                     $date_brand,
                     $date_brand,
@@ -267,7 +267,7 @@ $sql ="select phpc.productCategoryId as id_category,
         $res_brand_lang = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
         foreach ($res_brand_lang as $value_brand_lang) {
             $data_brand_lang = array(
-                array($value_brand_lang->id_manufacturer,
+                array($value_brand_lang->id,
                     1,
                     $value_brand_lang->description,
                     $value_brand_lang->short_description,
@@ -275,7 +275,7 @@ $sql ="select phpc.productCategoryId as id_category,
                     $value_brand_lang->keywords,
                     $value_brand_lang->meta_description),
 
-                array($value_brand_lang->id_manufacturer,
+                array($value_brand_lang->id,
                     2,
                     $value_brand_lang->description,
                     $value_brand_lang->short_description,
@@ -283,7 +283,7 @@ $sql ="select phpc.productCategoryId as id_category,
                     $value_brand_lang->keywords,
                     $value_brand_lang->meta_description),
 
-                array($value_brand_lang->id_manufacturer,
+                array($value_brand_lang->id,
                     3,
                     $value_brand_lang->description,
                     $value_brand_lang->short_description,
@@ -305,7 +305,7 @@ $sql ="select phpc.productCategoryId as id_category,
         foreach ($res_brand_shop as $value_brand_shop) {
 
             $data_brand_shop = array(
-                array($value_brand_shop->id_manufacturer,
+                array($value_brand_shop->id,
                     '1'));
         }
         foreach ($data_brand_shop as $row_brand_shop) {
@@ -351,7 +351,7 @@ $sql ="select phpc.productCategoryId as id_category,
                     $value_supplier_lang->meta_title,
                     $value_supplier_lang->keywords,
                     $value_supplier_lang->meta_description),
-                array($value_supplier_lang->id_supplier,
+                array($value_supplier_lang->id,
                     2,
                     $value_supplier_lang->description,
                     $value_supplier_lang->meta_title,
