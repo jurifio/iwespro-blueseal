@@ -53,6 +53,9 @@
                                 <th data-slug="confirmationDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data di conferma lotto</th>
+                                <th data-slug="requestClosingDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data richiesta chiusura</th>
                                 <th data-slug="closingDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data di chiusura</th>

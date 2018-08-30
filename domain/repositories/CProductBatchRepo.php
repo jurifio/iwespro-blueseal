@@ -78,14 +78,21 @@ class CProductBatchRepo extends ARepo
     public function closeProductBatch($id)
     {
 
-        /** @var CProductBatchRepo $productBatchRepo */
+        /** @var CProductBatch $productBatch */
         $productBatch = $this->findOneBy(['id' => $id]);
 
         if ($productBatch->closingDate == 0) {
             $productBatch->closingDate = date('Y-m-d H:i:s');
             $productBatch->update();
 
-            $this->qualityRank($productBatch);
+            $foison = $productBatch->contractDetails->contracts->foison;
+            $foison->activeProductBatch = null;
+            $foison->update();
+
+            if(is_null($productBatch->unfitDate)) $this->qualityRank($productBatch);
+            /** @var CFoison $foison */
+            $foison = $productBatch->contractDetails->contracts->foison;
+            $foison->totalRank(true);
         }
 
         return true;
@@ -239,10 +246,6 @@ class CProductBatchRepo extends ARepo
         }
 
         $productBatch->update();
-
-        /** @var CFoison $foison */
-        $foison = $productBatch->contractDetails->contracts->foison;
-        $foison->totalRank(true);
 
         return $productBatch->qualityRank;
     }

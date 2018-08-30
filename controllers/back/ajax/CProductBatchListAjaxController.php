@@ -116,11 +116,16 @@ class CProductBatchListAjaxController extends AAjaxController
 
             }
 
+            if ($pbr->id == 51) {
+                $a = 8;
+            }
             $row["row_id"] = $pbr->id;
 
             $row["id"] = (((is_null($pbr->confirmationDate) && !$allShop) || (is_null($pbr->contractDetailsId))) ? $pbr->id :'<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>');
 
-            if(((is_null($pbr->confirmationDate) && !$allShop) )){
+            if((!is_null($pbr->closingDate) && !$allShop) || ((is_null($pbr->confirmationDate) && !$allShop))) {
+                $row["id"] = $pbr->id;
+            } else if(((is_null($pbr->confirmationDate) && !$allShop))){
                 $row["id"] = $pbr->id;
             } else if(is_null($pbr->contractDetailsId)) {
 

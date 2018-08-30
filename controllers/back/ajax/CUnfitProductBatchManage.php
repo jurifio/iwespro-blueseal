@@ -55,21 +55,30 @@ class CUnfitProductBatchManage extends AAjaxController
                $unfitProduct .= $val.'<br>';
            }
 
-           $body = "I seguenti prodotti non sono idonei:<br>
-                    $unfitProduct";
-
-           $pBatch->unfitDate = date('Y-m-d H:i:s');
-           $pBatch->update();
 
            if(is_null($pBatch->unfitDate)){
                $pBatchRepo->qualityRank($pBatch);
            }
 
+           $pBatch->unfitDate = date('Y-m-d H:i:s');
+           $pBatch->update();
+
+
+
            if($pBatch->isUnassigned == 1) {
                $pBatchRepo->duplicateProductBatchFromCancelled($pBatch);
+
+               /** @var CFoison $foison */
+               $foison = $pBatch->contractDetails->contracts->foison;
+               $foison->totalRank(true);
+
            }
 
-           if(ENV == 'prod'){
+           if(ENV == 'prod' && $pBatch->isUnassigned == 0){
+               $body = "I seguenti prodotti non sono idonei:<br>
+                    $unfitProduct";
+
+
                $mailRepo->newMail('gianluca@iwes.it', [$pb['fason']], [], [], "Prodotti non idonei", $body);
            }
 

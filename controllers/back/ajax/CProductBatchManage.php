@@ -145,25 +145,28 @@ class CProductBatchManage extends AAjaxController
             $pbRepo->closeProductBatch($id);
         }
 
-        /** @var CEmailRepo $mailRepo */
-        $mailRepo = \Monkey::app()->repoFactory->create('Email');
-        foreach ($emails as $email){
+        if(ENV == 'prod') {
+            /** @var CEmailRepo $mailRepo */
+            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+            foreach ($emails as $email) {
 
-            /** @var CFoison $foison */
-            $foison = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['email' => $email]);
-            $foisonFullName = $foison->user->getFullName();
-            $url = \Monkey::app()->baseUrl(false) . "/blueseal/work/lotti";
+                /** @var CFoison $foison */
+                $foison = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['email' => $email]);
+                $foisonFullName = $foison->user->getFullName();
+                $url = \Monkey::app()->baseUrl(false) . "/blueseal/work/lotti";
 
-            $body = "Gentilissimo Sig. $foisonFullName<br /><br />
-            Prego prendere nota che il lotto è stato confermato, proceda pure ad emettere fattura ed inserirla nel portale al seguente link: $url
-            <br /><br />
-            Cordiali saluti<br />
-            Iwes
-            ";
+                $body = "Gentilissimo Sig. $foisonFullName<br /><br />
+                Prego prendere nota che il lotto è stato confermato, proceda pure ad emettere fattura ed inserirla nel portale al seguente link: $url
+                <br /><br />
+                Cordiali saluti<br />
+                Iwes
+                ";
 
-            $mailRepo->newMail('gianluca@iwes.it', [$email], [], [], "Lotto confermato e chiuso con successo", $body);
+                $mailRepo->newMail('gianluca@iwes.it', [$email], [], [], "Lotto confermato e chiuso con successo", $body);
 
+            }
         }
+
 
         $res = "Lotti chiusi con successo";
 
