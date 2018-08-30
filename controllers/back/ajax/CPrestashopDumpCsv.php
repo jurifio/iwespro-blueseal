@@ -263,33 +263,33 @@ $sql ="select phpc.productCategoryId as id_category,
             unlink($save_to . 'psz6_manufacturer_lang.csv');
         }
         $manufacturer_lang_csv = fopen($save_to . 'psz6_manufacturer_lang.csv', 'w');
-        fputcsv($manufacturer_lang_csv, array('id_manufacturer', 'name', 'id_lang', 'description', 'short_description', 'meta_title', 'meta_keywords', 'meta_description'), ";");
+        fputcsv($manufacturer_lang_csv, array('id_manufacturer', 'id_lang', 'description', 'short_description', 'meta_title', 'meta_keywords', 'meta_description'), ";");
         $res_brand_lang = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
         foreach ($res_brand_lang as $value_brand_lang) {
             $data_brand_lang = array(
                 array($value_brand_lang->id,
                     1,
-                    $value_brand_lang->description,
-                    $value_brand_lang->short_description,
-                    $value_brand_lang->meta_title,
-                    $value_brand_lang->keywords,
-                    $value_brand_lang->meta_description),
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name),
 
                 array($value_brand_lang->id,
                     2,
-                    $value_brand_lang->description,
-                    $value_brand_lang->short_description,
-                    $value_brand_lang->meta_title,
-                    $value_brand_lang->keywords,
-                    $value_brand_lang->meta_description),
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name),
 
                 array($value_brand_lang->id,
                     3,
-                    $value_brand_lang->description,
-                    $value_brand_lang->short_description,
-                    $value_brand_lang->meta_title,
-                    $value_brand_lang->keywords,
-                    $value_brand_lang->meta_description));
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name));
         }
         foreach ($data_brand_lang as $row_brand_lang) {
             fputcsv($manufacturer_lang_csv, $row_brand_lang, ';');
@@ -347,23 +347,23 @@ $sql ="select phpc.productCategoryId as id_category,
             $data_supplier_lang = array(
                 array($value_supplier_lang->id,
                     1,
-                    $value_supplier_lang->description,
-                    $value_supplier_lang->meta_title,
-                    $value_supplier_lang->keywords,
-                    $value_supplier_lang->meta_description),
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title),
                 array($value_supplier_lang->id,
                     2,
-                    $value_supplier_lang->description,
-                    $value_supplier_lang->meta_title,
-                    $value_supplier_lang->keywords,
-                    $value_supplier_lang->meta_description),
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title),
 
                 array($value_supplier_lang->id,
                     3,
-                    $value_supplier_lang->description,
-                    $value_supplier_lang->meta_title,
-                    $value_supplier_lang->keywords,
-                    $value_supplier_lang->meta_description),);
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title));
         }
         foreach ($data_supplier_lang as $row_supplier_lang) {
             fputcsv($supplier_lang_csv, $row_supplier_lang, ';');
