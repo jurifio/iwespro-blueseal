@@ -1134,8 +1134,9 @@ $data_category_product =array(
                     fputcsv($product_attribute_shop_csv, $row_product_attribute_shop, ';');
                 }
                 $data_product_attribute_combination = array(
-                    array($w,
-                        $productSizeId_attribute_combination)
+                    array($productSizeId_attribute_combination,
+                        $w
+                        )
                 );
                 foreach ($data_product_attribute_combination as $row_product_attribute_combination) {
                     fputcsv($product_attribute_combination_csv, $row_product_attribute_combination, ';');
