@@ -143,7 +143,7 @@ class CProductBatchDetailsManage extends AAjaxController
                 $timingRank = $productBatchRepo->timingRank($productBatch);
             }
 
-            $res = "La mail per richiedere la revisione del lotto è stata inviata. Il QualityRank ottenuto nello specifico lott è pari a $timingRank";
+            $res = "La mail per richiedere la revisione del lotto è stata inviata. Il Timing-rank ottenuto nello specifico lotto è pari a $timingRank";
 
 
         } else {

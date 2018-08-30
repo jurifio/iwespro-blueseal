@@ -61,7 +61,12 @@ class CCloseExpiredProductBatch extends ACronJob
             if ($now > $tolleranceClosing) {
                 $productBatch->timingRank = 0;
                 $productBatch->isUnassigned = 1;
+                $productBatch->closingDate = date_format(new \DateTime(), 'Y-m-d H:i:s');
                 $productBatch->update();
+
+                $foison = $productBatch->contractDetails->contracts->foison;
+                $foison->activeProductBatch = null;
+                $foison->update();
 
                 if (ENV == 'prod') {
                     $pBid = $productBatch->id;

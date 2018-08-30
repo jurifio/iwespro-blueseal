@@ -4,6 +4,7 @@ namespace bamboo\domain\entities;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
+use bamboo\utils\time\SDateToolbox;
 
 /**
  * Class CFoison
@@ -63,25 +64,84 @@ class CFoison extends AEntity
     }
 
 
+    /**
+     * @return bool
+     */
     public function hasOpenedProductBatch(){
 
-        $cDs = $this->getContract()->contractDetails;
+        if(is_null($this->activeProductBatch)) return false;
+        return true;
+    }
 
-        /** @var CContractDetails $contractDetail */
-        foreach ($cDs as $contractDetail) {
+    /**
+     * @param null $months
+     * @return array
+     */
+    public function getClosedTimeRanchProductBatch($months = null)
+    {
+        $initDate = SDateToolbox::removeOrAddMonthsFromDate(null, $months, '-');
 
-            /** @var CObjectCollection $pbS */
-            $pbS = $contractDetail->productBatch;
+        $contracts = $this->contracts;
+        $pbArray = [];
 
-            /** @var CProductBatch $pb */
-            foreach ($pbS as $pb) {
-                if ($pb->closingDate == 0) {
-                    return true;
+
+        /** @var CContracts $contract */
+        foreach ($contracts as $contract) {
+
+            /** @var CObjectCollection $contractDetails */
+            $contractDetails = $contract->contractDetails;
+
+            /** @var CContractDetails $contractDetail */
+            foreach ($contractDetails as $contractDetail) {
+
+                /** @var CObjectCollection $pbs */
+                $pbs = $contractDetail->productBatch;
+
+                /** @var CProductBatch $pb */
+                foreach ($pbs as $pb) {
+                    if(!is_null($pb->closingDate) && $pb->closingDate >= $initDate && !is_null($pb->timingRank) && (!is_null($pb->qualityRank) || !is_null($pb->operatorRankIwes))) {
+                        $pbArray[] = $pb;
+                    }
                 }
+
             }
         }
 
-        return false;
+        return $pbArray;
     }
 
+    /**
+     * @param bool $update
+     * @return float|int
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function totalRank($update = false){
+
+        $pbs = $this->getClosedTimeRanchProductBatch(3);
+
+        $avgs = [];
+
+        /** @var CProductBatch $pb */
+        foreach ($pbs as $pb) {
+            $qualityRank = is_null($pb->operatorRankIwes) ? $pb->qualityRank : $pb->operatorRankIwes;
+            $avgs[] = ($qualityRank + $pb->timingRank) / 2;
+        }
+
+        $sumAvg = 0;
+        foreach ($avgs as $avg){
+            $sumAvg += $avg;
+
+        }
+
+        $allAvg = round($sumAvg/count($avgs) ,2);
+        if($update) {
+            $this->rank = $allAvg;
+            $this->update();
+        }
+
+        return $allAvg;
+
+    }
 }

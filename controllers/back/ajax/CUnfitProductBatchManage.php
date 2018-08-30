@@ -2,6 +2,7 @@
 
 namespace bamboo\controllers\back\ajax;
 use bamboo\core\base\CObjectCollection;
+use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\repositories\CEmailRepo;
@@ -60,8 +61,9 @@ class CUnfitProductBatchManage extends AAjaxController
            $pBatch->unfitDate = date('Y-m-d H:i:s');
            $pBatch->update();
 
-           $pBatchRepo->qualityRank($pBatch);
-
+           if(is_null($pBatch->unfitDate)){
+               $pBatchRepo->qualityRank($pBatch);
+           }
 
            if($pBatch->isUnassigned == 1) {
                $pBatchRepo->duplicateProductBatchFromCancelled($pBatch);

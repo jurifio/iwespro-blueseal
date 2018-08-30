@@ -6,6 +6,7 @@ use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CContractDetails;
+use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CProductBatchHasProductName;
@@ -77,12 +78,14 @@ class CProductBatchRepo extends ARepo
     public function closeProductBatch($id)
     {
 
-        /** @var CProductBatch $productBatch */
-        $productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id' => $id]);
+        /** @var CProductBatchRepo $productBatchRepo */
+        $productBatch = $this->findOneBy(['id' => $id]);
 
         if ($productBatch->closingDate == 0) {
             $productBatch->closingDate = date('Y-m-d H:i:s');
             $productBatch->update();
+
+            $this->qualityRank($productBatch);
         }
 
         return true;
@@ -229,12 +232,21 @@ class CProductBatchRepo extends ARepo
     {
         $nPb = count($productBatch->getElements());
         $nNpb = count($productBatch->getNormalizedElements());
+        $qRank = round($nNpb / $nPb * 10, 2);
+        $productBatch->qualityRank = $qRank;
+        if($productBatch->timingRank == 10 and $qRank <= 6) {
+            $productBatch->timingRank = $qRank;
+        }
 
-        $productBatch->qualityRank = round($nNpb / $nPb * 10, 2);
         $productBatch->update();
+
+        /** @var CFoison $foison */
+        $foison = $productBatch->contractDetails->contracts->foison;
+        $foison->totalRank(true);
 
         return $productBatch->qualityRank;
     }
+
 
     /**
      * @param CProductBatch $productBatch
