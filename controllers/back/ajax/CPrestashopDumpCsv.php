@@ -42,6 +42,11 @@ class CPrestashopDumpCsv extends AAjaxController
          */
 /*********************   preparazione tabella di collegamento  ****************************************************//////
         /*** popolamento tabella */
+
+        $sql="delete from PrestashopHasProduct";
+        $res_delete = \Monkey::app()->dbAdapter->query($sql,[]);
+        $sql="alter table PrestashopHasProduct AUTO_INCREMENT=1";
+        $res_delete = \Monkey::app()->dbAdapter->query($sql,[]);
         $product = \Monkey::app()->repoFactory->create('Product')->findby(['productStatusId' => '6']);
         foreach ($product as $val) {
             $producthasprestashop = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
@@ -215,26 +220,28 @@ ORDER BY id_category,(rght-lft) DESC";
 
 /*** esportazione prodotti appartenenti a più categorie  *****/
 
-$sql ="select phpc.productCategoryId as id_category,
-             pap.prestaid as id_product, '0' as position
-             from ProductHasProductCategory phpc join PrestashopHasProduct pap on phpc.productId =pap.productId and phpc.productVariantId =pap.productVariantId order by id_category";
+
         if (file_exists($save_to . 'psz6_category_product.csv')) {
             unlink($save_to . 'psz6_category_product.csv');
         }
         $category_product_csv = fopen($save_to . 'psz6_category_product.csv', 'w');
-
+        $sql ="select phpc.productCategoryId as id_category,
+             pap.prestaId as id_product, '0' as position
+             from ProductHasProductCategory phpc join PrestashopHasProduct pap on phpc.productId =pap.productId and phpc.productVariantId = pap.productVariantId order by id_category";
         fputcsv($category_product_csv, array('id_category', 'id_product', 'position'), ';');
         $res_category_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_category_product as $value_category_product) {
-            $data_category_product = (array(
+            $data_cat_product = array(
                 array($value_category_product['id_category'],
                     $value_category_product['id_product'],
-                    0)
-            ));
+                    '0'));
+
+
+            foreach ($data_cat_product as $row_cat_product) {
+                fputcsv($category_product_csv, $row_cat_product, ';');
+            }
         }
-        foreach($data_category_product as $row_category_product){
-        fputcsv($category_product_csv,$row_category_product,';');
-        }
+
 
 /************* Sezione brand e produttori*******************************************************************************************/
         /***** esportazione Brand ****/
@@ -252,9 +259,10 @@ $sql ="select phpc.productCategoryId as id_category,
                     $date_brand,
                     $date_brand,
                     '1'));
-        }
-        foreach ($data_brand as $row_brand) {
-            fputcsv($manufacturer_csv, $row_brand, ';');
+
+            foreach ($data_brand as $row_brand) {
+                fputcsv($manufacturer_csv, $row_brand, ';');
+            }
         }
 
         fclose($manufacturer_csv);
@@ -290,9 +298,10 @@ $sql ="select phpc.productCategoryId as id_category,
                     $value_brand_lang->name,
                     $value_brand_lang->name,
                     $value_brand_lang->name));
-        }
-        foreach ($data_brand_lang as $row_brand_lang) {
-            fputcsv($manufacturer_lang_csv, $row_brand_lang, ';');
+
+            foreach ($data_brand_lang as $row_brand_lang) {
+                fputcsv($manufacturer_lang_csv, $row_brand_lang, ';');
+            }
         }
         fclose($manufacturer_lang_csv);
         /***** esportazione Brand shop ****/
@@ -307,9 +316,10 @@ $sql ="select phpc.productCategoryId as id_category,
             $data_brand_shop = array(
                 array($value_brand_shop->id,
                     '1'));
-        }
-        foreach ($data_brand_shop as $row_brand_shop) {
-            fputcsv($manufacturer_shop_csv, $row_brand_shop, ';');
+
+            foreach ($data_brand_shop as $row_brand_shop) {
+                fputcsv($manufacturer_shop_csv, $row_brand_shop, ';');
+            }
         }
 
         fclose($manufacturer_shop_csv);
@@ -331,9 +341,10 @@ $sql ="select phpc.productCategoryId as id_category,
                     $date_supplier,
                     $date_supplier,
                     $value_supplier->isActive));
-        }
-        foreach ($data_supplier as $row_supplier) {
-            fputcsv($supplier_csv, $row_supplier, ';');
+
+            foreach ($data_supplier as $row_supplier) {
+                fputcsv($supplier_csv, $row_supplier, ';');
+            }
         }
         fclose($supplier_csv);
         /***** esportazione Supplier language ****/
@@ -364,9 +375,10 @@ $sql ="select phpc.productCategoryId as id_category,
                     $value_supplier_lang->title,
                     $value_supplier_lang->title,
                     $value_supplier_lang->title));
-        }
-        foreach ($data_supplier_lang as $row_supplier_lang) {
-            fputcsv($supplier_lang_csv, $row_supplier_lang, ';');
+
+            foreach ($data_supplier_lang as $row_supplier_lang) {
+                fputcsv($supplier_lang_csv, $row_supplier_lang, ';');
+            }
         }
         fclose($supplier_lang_csv);
         /***** esportazione Supplier shop ****/
@@ -381,9 +393,10 @@ $sql ="select phpc.productCategoryId as id_category,
             $data_supplier_shop = array(
                 array($value_supplier_shop->id,
                     '1'));
-        }
-        foreach ($data_supplier_shop as $row_supplier_shop) {
-            fputcsv($supplier_shop_csv, $row_supplier_shop, ';');
+
+            foreach ($data_supplier_shop as $row_supplier_shop) {
+                fputcsv($supplier_shop_csv, $row_supplier_shop, ';');
+            }
         }
         fclose($supplier_shop_csv);
 
@@ -988,8 +1001,7 @@ ORDER BY `p`.`id` ASC
             'minimal_quantity',
             'low_stock_threshold',
             'low_stock_alert',
-            'available_date',
-            'status'
+            'available_date'
         ), ';');
 
         fputcsv($product_attribute_shop_csv, array(
@@ -1241,18 +1253,17 @@ ORDER BY `p`.`id` ASC
                         $value_product['ean13'],
                         $value_product['isbn'],
                         $value_product['upc'],
-                        $value_product['wholesale_price'],
+                        $price,
                         $price,
                         $value_product['ecotax'],
                         $quantity_attribute_combination,
                         $value_product['weight'],
-                        '',
+                        '0.000000',
                         $default_on,
                         $value_product['minimal_quantity'],
                         $value_product['low_stock_threshold'],
                         $value_product['low_stock_alert'],
-                        $available_date,
-                        $value_product['status']));
+                        $available_date));
 
                 $data_stock_available = array(
                     array($n,
@@ -1276,7 +1287,7 @@ ORDER BY `p`.`id` ASC
                     array($w,
                         $p,
                         '1',
-                        $value_product['wholesale_price'],
+                        $price,
                         $price,
                         $value_product['ecotax'],
                         $value_product['weight'],
@@ -1349,14 +1360,15 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id  WHERE p.id='" . $value_product
                         $p,
                         '1',
                         '1'));
-            }
 
-            foreach ($data_image as $row_image_product) {
-                fputcsv($image_csv, $row_image_product, ';');
-            }
 
-            foreach ($data_image_shop as $row_image_shop) {
-                fputcsv($image_shop_csv, $row_image_shop, ';');
+                foreach ($data_image as $row_image_product) {
+                    fputcsv($image_csv, $row_image_product, ';');
+                }
+
+                foreach ($data_image_shop as $row_image_shop) {
+                    fputcsv($image_shop_csv, $row_image_shop, ';');
+                }
             }
             $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
 JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
@@ -1395,6 +1407,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($feature_product_csv);
         fclose($category_shop_csv);
         fclose($category_product_csv);
+        fclose($stock_available_csv);
 
         $exportToPrestashopcsv = "export_" . date("Y-m-d") . ".tar";
         if (file_exists($save_to . $exportToPrestashopcsv)) {
@@ -1491,7 +1504,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         $remote_file = "/public_html/tmp/";
 
         $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $pharfile;
-        $errorMsg = '';
+        $errorMsg = 'ftp fail connect';
         $fileToSend = $save_to . $pharfile;
 // ------- Upload file through FTP ---------------
 
