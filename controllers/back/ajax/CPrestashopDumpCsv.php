@@ -1304,18 +1304,6 @@ $finalquantitycombination=$finalquantitycombination+$quantity_attribute_combinat
                         $quantity_attribute_combination,
                         '0',
                         '0'));
-                $data_stock_available = array(
-                    array($n+1,
-                        $p,
-                        '0',
-                        $value_product['id_shop_default'],
-                        '1',
-                        $finalquantitycombination,
-                        $finalquantitycombination,
-                        $finalquantitycombination,
-                        '0',
-                        '0')
-                    );
 
 
 
