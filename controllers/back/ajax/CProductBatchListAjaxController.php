@@ -173,7 +173,7 @@ class CProductBatchListAjaxController extends AAjaxController
                         $parUrl = http_build_query($par, 'id_');
 
 
-                        $row["id"] = '<a href="'.$blueseal.$pbr->contractDetails->workCategory->slug.'/'.$pLangId.'?'.$parUrl.'" target="_blank">'.$pbr->id.'</a>';
+                        $row["id"] = '<a href="'.$blueseal.$pbr->contractDetails->workCategory->slug.'/'.$pLangId.'?' . 'pbId=' . $pbr->id . '&' .$parUrl.'" target="_blank">'.$pbr->id.'</a>';
                     }
 
 

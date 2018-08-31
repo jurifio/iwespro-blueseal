@@ -139,9 +139,7 @@ class CProductBatchDetailsManage extends AAjaxController
             $productBatch->requestClosingDate = date_format($date, 'Y-m-d H:i:s');
             $productBatch->update();
 
-            if(is_null($productBatch->unfitDate)) {
-                $timingRank = $productBatchRepo->timingRank($productBatch);
-            }
+            $productBatchRepo->timingRank($productBatch);
 
             $res = "La mail per richiedere la revisione del lotto è stata inviata. Il Timing-rank ottenuto nello specifico lotto è pari a $productBatch->timingRank";
 

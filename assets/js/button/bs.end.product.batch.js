@@ -17,8 +17,8 @@ window.buttonSetup = {
             body: '<p>Notificare via mail la fine della normalizzazione dei prodotti?</p>'
         });
 
-        let url = window.location.href;
-        let productBatchId = url.substring(url.lastIndexOf('/') + 1);
+        let urlParams = new URLSearchParams(window.location.search);
+        let productBatchId = urlParams.get('pbId') == null ? window.location.href.substring(window.location.href.lastIndexOf('/') + 1) : urlParams.get('pbId');
 
         const data = {
             productBatchId: productBatchId

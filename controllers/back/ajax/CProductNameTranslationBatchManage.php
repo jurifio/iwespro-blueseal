@@ -43,8 +43,10 @@ class CProductNameTranslationBatchManage extends AAjaxController
 
             $catToChange = $pbhpn->workCategoryStepsId;
 
-            $pbhpn->workCategoryStepsId = $pbhpn->workCategorySteps->rgt;
-            $pbhpn->update();
+            if(!is_null($pbhpn->workCategorySteps->rgt)) {
+                $pbhpn->workCategoryStepsId = $pbhpn->workCategorySteps->rgt;
+                $pbhpn->update();
+            }
 
 
             if((($lang == 2 && $catToChange == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG))

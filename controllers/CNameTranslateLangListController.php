@@ -26,6 +26,7 @@ class CNameTranslateLangListController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
+        $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/name_lang_list.php');
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
 
@@ -49,6 +50,7 @@ class CNameTranslateLangListController extends ARestrictedAccessRootController
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'langId' => $langId,
+            'allShops'=>$allShops,
             'page'=>$this->page,
             'urlAll'=>$urlAll,
             'urlTrans'=>$urlTrans,

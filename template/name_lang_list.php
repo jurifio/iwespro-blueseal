@@ -71,6 +71,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
+    <?php if($allShops): ?>
     <bs-toolbar-group data-group-label="Visualizzazione nomi">
         <bs-toolbar-button
             data-tag="a"
@@ -115,6 +116,7 @@
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php endif; ?>
     <bs-toolbar-group data-group-label="Termina lavorazione sul prodotto">
         <bs-toolbar-button
                 data-tag="a"
@@ -126,8 +128,15 @@
                 data-title="Termina la lavorazione sui prodotti selezionati"
                 data-placement="bottom"
         ></bs-toolbar-button>
+        <?php if($allShops): ?>
         <bs-toolbar-button
                 data-remote="bs.change.product.status.batch"
+        ></bs-toolbar-button>
+        <?php endif; ?>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Notifica termine lotto">
+        <bs-toolbar-button
+                data-remote="bs.end.product.batch"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
