@@ -880,6 +880,12 @@ ORDER BY `p`.`id` ASC
         }
         $stock_available_csv = fopen($save_to . 'psz6_stock_available.csv', 'w');
 
+
+        if (file_exists($save_to . 'psz6_stock_mvt.csv')) {
+            unlink($save_to . 'psz6_stock_mvt.csv');
+        }
+        $stock_mvt_csv = fopen($save_to . 'psz6_stock_mvt.csv', 'w');
+
         fputcsv($product_shop_csv, array('id_product',
             'id_shop',
             'id_category_Default',
@@ -1046,6 +1052,7 @@ ORDER BY `p`.`id` ASC
             'id_shop',
             'cover'), ';');
         fputcsv($stock_available_csv, array('id_stock_available', 'id_product', 'id_product_attribute', 'id_shop', 'id_shop_group', 'quantity', 'phisical_quantity', 'reserved_quantity', 'depends_on_stock', 'out_of_stock'), ';');
+        fputcsv($stock_mvt_csv, array('id_stock_mvt', 'id_stock', 'id_order', 'id_supply_order', 'id_stock_mvt_reason', 'id_employee', 'employee_lastname', 'employee_firstname', 'physical_quantity', 'date_add','sign','price_te','last_wa','current_wa','referer'), ';');
 
 
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
@@ -1059,6 +1066,7 @@ ORDER BY `p`.`id` ASC
         $b = 0;
         $t = 0;
         $n = 0;
+        $mvt=0;
 
         foreach ($res_product as $value_product) {
             // $p = $p + 1;
@@ -1223,6 +1231,7 @@ ORDER BY `p`.`id` ASC
             foreach ($res_product_attribute as $value_product_attribute) {
                 $w = $w + 1;
                 $n = $n + 1;
+                $mvt =$mvt +1;
                 $productSizeId_attribute_combination = $value_product_attribute->productSizeId;
                 $quantity_attribute_combination = $value_product_attribute->stockQty;
                 if (($quantity_attribute_combination >= 0) && ($lock_default_on == 0)) {
@@ -1276,11 +1285,32 @@ ORDER BY `p`.`id` ASC
                         $quantity_attribute_combination,
                         '0',
                         '0'));
+
+
+                $data_stock_mvt = array(
+                    array($mvt,
+                        $n,
+                        '',
+                        '',
+                        '11',
+                        '1',
+                        'Cartechini',
+                        'Gianluca',
+                        $quantity_attribute_combination,
+                        date("Y-m-d H:i:s"),
+                        '1',
+                        '0.000000',
+                        '0.000000',
+                        '0.000000',
+                       ''));
                 foreach ($data_product_attribute as $row_product_attribute) {
                     fputcsv($product_attribute_csv, $row_product_attribute, ';');
                 }
                 foreach ($data_stock_available as $row_stock_available) {
                     fputcsv($stock_available_csv, $row_stock_available, ';');
+                }
+                foreach ($data_stock_mvt as $row_stock_mvt) {
+                    fputcsv($stock_mvt_csv, $row_stock_mvt, ';');
                 }
 
                 $data_product_attribute_shop = array(
@@ -1408,6 +1438,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         fclose($category_shop_csv);
         fclose($category_product_csv);
         fclose($stock_available_csv);
+        fclose($stock_mvt_csv);
 
         $exportToPrestashopcsv = "export_" . date("Y-m-d") . ".tar";
         if (file_exists($save_to . $exportToPrestashopcsv)) {
@@ -1423,6 +1454,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
 
 
         $phar = new \PharData($zipName);
+        $phar->addFile($save_to . 'psz6_stock_mvt.csv', 'psz6_stock_mvt.csv');
         $phar->addFile($save_to . 'psz6_attribute.csv', 'psz6_attribute.csv');
         $phar->addFile($save_to . 'psz6_manufacturer.csv', 'psz6_manufacturer.csv');
         $phar->addFile($save_to . 'psz6_manufacturer_lang.csv', 'psz6_manufacturer_lang.csv');
@@ -1492,6 +1524,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
                 unlink($save_to . 'psz6_supplier.csv');
                 unlink($save_to . 'psz6_supplier_lang.csv');
                 unlink($save_to . 'psz6_supplier_shop.csv');
+                unlink($save_to . 'psz6_stock_mvt.csv');
 
 
             }
