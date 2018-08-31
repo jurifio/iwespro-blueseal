@@ -1067,6 +1067,7 @@ ORDER BY `p`.`id` ASC
         $t = 0;
         $n = 0;
         $mvt=0;
+        $finalquantitycombination=0;
 
         foreach ($res_product as $value_product) {
             // $p = $p + 1;
@@ -1290,7 +1291,7 @@ ORDER BY `p`.`id` ASC
                         '0.000000',
                         '0.000000',
                         ''));
-
+$finalquantitycombination=$finalquantitycombination+$quantity_attribute_combination;
                 $data_stock_available = array(
                     array($n,
                         $p,
@@ -1313,6 +1314,21 @@ ORDER BY `p`.`id` ASC
                 }
                 foreach ($data_stock_available as $row_stock_available) {
                     fputcsv($stock_available_csv, $row_stock_available, ';');
+                }
+                $n=$n+1;
+                $data_stock_available_total=array(
+                  array($n,
+                      $p,
+                       '0',
+                      $value_product['id_shop_default'],
+                      '1',
+                      $finalquantitycombination,
+                      $finalquantitycombination,
+                      $finalquantitycombination,
+                      '0',
+                      '0'));
+                foreach ($data_stock_available_total as $row_stock_available_total){
+                    fputcsv($stock_available_csv, $row_stock_available_total, ';');
                 }
 
 
