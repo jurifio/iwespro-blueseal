@@ -1274,19 +1274,6 @@ ORDER BY `p`.`id` ASC
                         $value_product['low_stock_alert'],
                         $available_date));
 
-                $data_stock_available = array(
-                    array($n,
-                        $p,
-                        $w,
-                        $value_product['id_shop_default'],
-                        '1',
-                        $quantity_attribute_combination,
-                        $quantity_attribute_combination,
-                        $quantity_attribute_combination,
-                        '0',
-                        '0'));
-
-
                 $data_stock_mvt = array(
                     array($mvt,
                         $n,
@@ -1302,16 +1289,32 @@ ORDER BY `p`.`id` ASC
                         '0.000000',
                         '0.000000',
                         '0.000000',
-                       ''));
+                        ''));
+
+                $data_stock_available = array(
+                    array($n,
+                        $p,
+                        $w,
+                        $value_product['id_shop_default'],
+                        '1',
+                        $quantity_attribute_combination,
+                        $quantity_attribute_combination,
+                        $quantity_attribute_combination,
+                        '0',
+                        '0'));
+
+
+
                 foreach ($data_product_attribute as $row_product_attribute) {
                     fputcsv($product_attribute_csv, $row_product_attribute, ';');
-                }
-                foreach ($data_stock_available as $row_stock_available) {
-                    fputcsv($stock_available_csv, $row_stock_available, ';');
                 }
                 foreach ($data_stock_mvt as $row_stock_mvt) {
                     fputcsv($stock_mvt_csv, $row_stock_mvt, ';');
                 }
+                foreach ($data_stock_available as $row_stock_available) {
+                    fputcsv($stock_available_csv, $row_stock_available, ';');
+                }
+
 
                 $data_product_attribute_shop = array(
                     array($w,
