@@ -32,6 +32,7 @@ class CProductBrandBatchDetailsListController extends ARestrictedAccessRootContr
 
         $productBatchId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
+        $superUser = \Monkey::app()->getUser()->hasPermission('allShops');
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_brand_batch_details_list.php');
@@ -39,6 +40,7 @@ class CProductBrandBatchDetailsListController extends ARestrictedAccessRootContr
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'allShops' => $superUser,
             'sidebar' => $this->sidebar->build(),
             'productBatchId' => $productBatchId
         ]);

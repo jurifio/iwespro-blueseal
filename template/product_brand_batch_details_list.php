@@ -81,9 +81,11 @@
         <bs-toolbar-button
                 data-remote="bs.end.product.batch"
         ></bs-toolbar-button>
+        <?php if($allShops) : ?>
         <bs-toolbar-button
                 data-remote="bs.change.product.status.batch"
         ></bs-toolbar-button>
+        <?php endif;?>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

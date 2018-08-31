@@ -570,7 +570,6 @@
 
     $(document).on('bs.product.batch.valutation', function () {
 
-        let productsBatch = [];
         let selectedRows = $('.table').DataTable().rows('.selected').data();
 
         if(selectedRows.length != 1)
@@ -587,16 +586,15 @@
                    <input type="number" min="0" value="0" step="0.01" id="rank">`
         });
 
-
-        const data = {
-            ranking: $('#rank'),
-        };
-
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
+            const data = {
+                pb: selectedRows[0].row_id,
+                ranking: $('#rank').val(),
+            };
             $.ajax({
-                method: 'post',
-                url: '/blueseal/xhr/RankProductBatch',
+                method: 'put',
+                url: '/blueseal/xhr/RankProductBatchAjaxController',
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);

@@ -11,7 +11,7 @@
         });
 
         let bsModal = new $.bsModal('Conferma Normalizzazione Prodotti', {
-            body: '<p>Confermi la fine della procedura di normalizzazione per i prodotti selezionati?</p>'
+            body: '<p>Confermi la fine della procedura di normalizzazione per i BRAND selezionati?</p>'
         });
 
         bsModal.showCancelBtn();

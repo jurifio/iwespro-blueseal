@@ -5,6 +5,9 @@ use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CProductBatchHasProductBrand;
+use bamboo\domain\entities\CWorkCategory;
+use bamboo\domain\repositories\CWorkCategoryRepo;
+use bamboo\domain\repositories\CWorkCategoryStepsRepo;
 
 /**
  * Class CEmptyProductBrandBatchManage
@@ -32,6 +35,9 @@ class CEmptyProductBrandBatchManage extends AAjaxController
        /** @var CRepo $phpbRepo */
        $phpbRepo = \Monkey::app()->repoFactory->create('ProductBatchHasProductBrand');
 
+       /** @var CWorkCategoryStepsRepo $wksr */
+        $wksr = \Monkey::app()->repoFactory->create('WorkCategorySteps');
+
        foreach ($brandIds as $brandId){
 
            /** @var CProductBatchHasProductBrand $ext */
@@ -43,6 +49,7 @@ class CEmptyProductBrandBatchManage extends AAjaxController
            $phpb = $phpbRepo->getEmptyEntity();
            $phpb->productBatchId = $batchId;
            $phpb->productBrandId = $brandId;
+           $phpb->workCategoryStepsId = $wksr->getFirstStepsFromCategoryId(CWorkCategory::BRAND)->id;
            $phpb->smartInsert();
        }
 
@@ -93,8 +100,10 @@ class CEmptyProductBrandBatchManage extends AAjaxController
 
             $catToChange = $pbhpb->workCategoryStepsId;
 
-            $pbhpb->workCategoryStepsId = $pbhpb->workCategorySteps->rgt;
-            $pbhpb->update();
+            if(!is_null($pbhpb->workCategorySteps->rgt)) {
+                $pbhpb->workCategoryStepsId = $pbhpb->workCategorySteps->rgt;
+                $pbhpb->update();
+            }
 
 
             if($catToChange == CProductBatchHasProductBrand::UNFIT_BRAND){

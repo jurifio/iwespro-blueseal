@@ -89,12 +89,15 @@
                                 <th data-slug="marketplace"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Visibile nel marketplace</th>
+                                <th data-slug="operatorRankIwes"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">ORI</th>
                                 <th data-slug="timingRank"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Timing Rank</th>
                                 <th data-slug="qualityRank"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">qualityRank</th>
+                                    data-orderable="true" class="center">QualityRank</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -182,11 +185,12 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php if($allShops) : ?>
     <bs-toolbar-group data-group-label="Lotto">
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-check-square"
-                data-permission="worker"
+                data-icon="fa-sort-numeric-asc"
+                data-permission="allShops"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.product.batch.valutation"
@@ -194,6 +198,7 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php endif; ?>
 </bs-toolbar>
 </body>
 </html>

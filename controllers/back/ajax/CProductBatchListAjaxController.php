@@ -68,6 +68,7 @@ class CProductBatchListAjaxController extends AAjaxController
                   pb.marketplace,
                   pb.requestClosingDate,
                   pb.isUnassigned,
+                  pb.operatorRankIwes,
                   pb.timingRank,
                   pb.qualityRank      
             FROM ProductBatch pb
@@ -200,6 +201,7 @@ class CProductBatchListAjaxController extends AAjaxController
             $row["name"] = $pbr->name;
 
 
+
             /** @var CObjectCollection $elems */
             $elems = $pbr->getElements();
 
@@ -228,6 +230,7 @@ class CProductBatchListAjaxController extends AAjaxController
             $row['requestClosingDate'] = $pbr->requestClosingDate;
             $row['workCategoryId'] = $cat->name;
             $row['marketplace'] = $pbr->marketplace == 1 ? 'Visibile' : 'Nascosto';
+            $row['operatorRankIwes'] = $pbr->operatorRankIwes;
             $row['timingRank'] = $pbr->timingRank;
             $row['qualityRank'] = $pbr->qualityRank;
 
