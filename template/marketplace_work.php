@@ -53,7 +53,7 @@
                                                     Giorni stimati di
                                                     lavoro: <?php echo "<strong>" . $pb->estimatedWorkDays . "</strong>"; ?>
                                                 </p>
-                                                <button class="btn btn-info btn-xs acceptPB <?php echo $pb->id;?>" <?php if ($el === 0 || $hasOpenedProductBatch || $foisonStatus != 2 ) echo 'disabled' ?> data-pbId="<?php echo $pb->id;?>">
+                                                <button class="btn btn-info btn-xs acceptPB <?php echo $pb->id;?>" <?php if ($foisonRank < \bamboo\domain\entities\CFoison::MININUM_RANK || $el === 0 || $hasOpenedProductBatch || $foisonStatus != 2 ) echo 'disabled' ?> data-pbId="<?php echo $pb->id;?>">
                                                     Prenota
                                                 </button>
                                             </div>
