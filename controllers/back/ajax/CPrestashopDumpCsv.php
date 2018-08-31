@@ -1302,7 +1302,19 @@ $finalquantitycombination=$finalquantitycombination+$quantity_attribute_combinat
                         $quantity_attribute_combination,
                         $quantity_attribute_combination,
                         '0',
-                        '0'));
+                        '0'),
+                    array($n+1,
+                        $p,
+                        '0',
+                        $value_product['id_shop_default'],
+                        '1',
+                        $finalquantitycombination,
+                        $finalquantitycombination,
+                        $finalquantitycombination,
+                        '0',
+                        '0')
+                    );
+
 
 
 
@@ -1315,21 +1327,8 @@ $finalquantitycombination=$finalquantitycombination+$quantity_attribute_combinat
                 foreach ($data_stock_available as $row_stock_available) {
                     fputcsv($stock_available_csv, $row_stock_available, ';');
                 }
-                $n=$n+1;
-                $data_stock_available_total=array(
-                  array($n,
-                      $p,
-                       '0',
-                      $value_product['id_shop_default'],
-                      '1',
-                      $finalquantitycombination,
-                      $finalquantitycombination,
-                      $finalquantitycombination,
-                      '0',
-                      '0'));
-                foreach ($data_stock_available_total as $row_stock_available_total){
-                    fputcsv($stock_available_csv, $row_stock_available_total, ';');
-                }
+
+
 
 
                 $data_product_attribute_shop = array(
