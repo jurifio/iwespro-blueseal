@@ -1329,7 +1329,7 @@ $finalquantitycombination=$finalquantitycombination+$quantity_attribute_combinat
                 foreach ($data_stock_available as $row_stock_available) {
                     fputcsv($stock_available_csv, $row_stock_available, ';');
                 }
-                fputcsv($stock_available_csv, $n+1,$p,'0', $value_product['id_shop_default'],'1',$finalquantitycombination,$finalquantitycombination,'0','0','0');
+                fputcsv($stock_available_csv,array( $n+1,$p,'0', $value_product['id_shop_default'],'1',$finalquantitycombination,$finalquantitycombination,'0','0','0'),";");
 
 
                 $data_product_attribute_shop = array(
