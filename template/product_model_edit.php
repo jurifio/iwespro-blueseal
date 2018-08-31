@@ -239,11 +239,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row col-md-6 ?> distinct-option">
+                                    <div class="row col-md-6 distinct-option">
                                         <div class="col-md-6">
                                             <div class="form-group form-group-default">
                                                 <label for="find-prodCats">Trova (Categorie pre-impostate)</label>
-                                                <input autocomplete="off" type="text" id="find-prodCatse"
+                                                <input autocomplete="off" type="text" id="find-prodCats"
                                                        class="form-control find-prodCats"
                                                        name="find-prodCats"
                                                        value=""
@@ -258,8 +258,38 @@
                                                        value=""
                                                 >
                                             </div>
+                                            <div>
+                                                <label for="keepcatphoto">Mantieni la foto della categoria</label>
+                                                <input type="checkbox" id="keepcatphoto" name="keepcatphoto">
+                                            </div>
                                         </div>
                                     </div>
+                                        <div class="row col-md-6 distinct-option">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label for="find-macroCat">Trova (Macrocategorie)</label>
+                                                    <input autocomplete="off" type="text" id="find-macroCat"
+                                                           class="form-control find-macroCat"
+                                                           name="find-macroCat"
+                                                           value=""
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label for="sub-macroCat">Sostituisci (Macrocategorie)</label>
+                                                    <input autocomplete="off" type="text" id="sub-macroCat"
+                                                           class="form-control sub-macroCat" name="sub-macroCat"
+                                                           value=""
+                                                    >
+                                                </div>
+                                                <div>
+                                                    <label for="keepmacrocatphoto">Mantieni la foto della macrocategoria</label>
+                                                    <input type="checkbox" id="keepmacrocatphoto" name="keepmacrocatphoto">
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     <?php else: ?>
                                         <div class="row <?php echo $col; ?>">
                                             <div class="col-md-12">

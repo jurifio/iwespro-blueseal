@@ -296,7 +296,7 @@ $(document).ready(function () {
             }
         });
     }else {
-        $(document).on('keypress', '#prodCat', function (e) {
+        $(document).on('keyup', '#prodCat', function (e) {
             elem = $(e.target);
             if (13 == e.charCode) {
                 e.preventDefault();
