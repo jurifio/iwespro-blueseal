@@ -1067,7 +1067,7 @@ ORDER BY `p`.`id` ASC
         $t = 0;
         $n = 0;
         $mvt=0;
-        $finalquantitycombination=0;
+
 
         foreach ($res_product as $value_product) {
             // $p = $p + 1;
@@ -1229,6 +1229,7 @@ ORDER BY `p`.`id` ASC
             $res_product_attribute = \Monkey::app()->repoFactory->create('ProductPublicSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
 
             $lock_default_on = 0;
+            $finalquantitycombination=0;
             foreach ($res_product_attribute as $value_product_attribute) {
                 $w = $w + 1;
                 $n = $n + 1;
@@ -1302,7 +1303,8 @@ $finalquantitycombination=$finalquantitycombination+$quantity_attribute_combinat
                         $quantity_attribute_combination,
                         $quantity_attribute_combination,
                         '0',
-                        '0'),
+                        '0'));
+                $data_stock_available = array(
                     array($n+1,
                         $p,
                         '0',
@@ -1327,8 +1329,7 @@ $finalquantitycombination=$finalquantitycombination+$quantity_attribute_combinat
                 foreach ($data_stock_available as $row_stock_available) {
                     fputcsv($stock_available_csv, $row_stock_available, ';');
                 }
-
-
+                fputcsv($stock_available_csv, $n+1,$p,'0', $value_product['id_shop_default'],'1',$finalquantitycombination,$finalquantitycombination,'0','0','0');
 
 
                 $data_product_attribute_shop = array(
