@@ -1215,13 +1215,13 @@ ORDER BY `p`.`id` ASC
             $data_image_lang = array(
                 array($p,
                     '1',
-                    $value_product['product_id'] . "-" . $value_product['productVariantId']),
+                    $value_product['reference']),
                 array($p,
                     '2',
-                    $value_product['product_id'] . "-" . $value_product['productVariantId']),
+                    $value_product['reference']),
                 array($p,
                     '3',
-                    $value_product['product_id'] . "-" . $value_product['productVariantId'])
+                    $value_product['reference'])
             );
 
             $prod = $value_product['prestaId'];
