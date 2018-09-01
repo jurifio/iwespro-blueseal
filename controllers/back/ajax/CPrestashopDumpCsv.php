@@ -40,13 +40,13 @@ class CPrestashopDumpCsv extends AAjaxController
         /**
          * @var $db CMySQLAdapter
          */
-/*********************   preparazione tabella di collegamento  ****************************************************//////
+        /*********************   preparazione tabella di collegamento  ****************************************************//////
         /*** popolamento tabella */
 
-        $sql="delete from PrestashopHasProduct";
-        $res_delete = \Monkey::app()->dbAdapter->query($sql,[]);
-        $sql="alter table PrestashopHasProduct AUTO_INCREMENT=1";
-        $res_delete = \Monkey::app()->dbAdapter->query($sql,[]);
+        $sql = "DELETE FROM PrestashopHasProduct";
+        $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
+        $sql = "ALTER TABLE PrestashopHasProduct AUTO_INCREMENT=1";
+        $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
         $product = \Monkey::app()->repoFactory->create('Product')->findby(['productStatusId' => '6']);
         foreach ($product as $val) {
             $producthasprestashop = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
@@ -64,7 +64,7 @@ class CPrestashopDumpCsv extends AAjaxController
             }
         }
 
-/***********************sezione categorie***********************************************************************************/
+        /***********************sezione categorie***********************************************************************************/
         /*** estrazione dati  categorie*/
 
         $sql = " SELECT `id`                                            AS id_category,
@@ -99,10 +99,10 @@ class CPrestashopDumpCsv extends AAjaxController
         $i = 0;
         foreach ($res_category as $value_category) {
             $i = $i + 1;
-            if ($value_category['id_category']=="1"){
-                $is_root_category='1';
-            }else{
-                $is_root_category=$value_category['id_category'];
+            if ($value_category['id_category'] == "1") {
+                $is_root_category = '1';
+            } else {
+                $is_root_category = $value_category['id_category'];
             }
             $data_category = array(
                 array($value_category['id_category'],
@@ -123,9 +123,6 @@ class CPrestashopDumpCsv extends AAjaxController
 
         }
         fclose($category_csv);
-
-
-
 
 
         /*** estrazione dati  categorie shop */
@@ -195,9 +192,9 @@ ORDER BY id_category,(rght-lft) DESC";
         $category_lang_csv = fopen($save_to . 'psz6_category_lang.csv', 'w');
 
         fputcsv($category_lang_csv, array('id_category', 'id_shop', 'id_lang', 'name', 'description', 'link_rewrite', 'meta_title', 'meta_keywords', 'meta_description'), ';');
-        fputcsv($category_lang_csv, array('1','1','1','Home','Home','home','Home','Home','Home',),';');
-        fputcsv($category_lang_csv, array('1','1','2','Home','Home','home','Home','Home','Home',),';');
-        fputcsv($category_lang_csv, array('1','1','3','Home','Home','home','Home','Home','Home',),';');
+        fputcsv($category_lang_csv, array('1', '1', '1', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
+        fputcsv($category_lang_csv, array('1', '1', '2', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
+        fputcsv($category_lang_csv, array('1', '1', '3', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
         $res_category_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $i = 0;
         foreach ($res_category_lang as $value_category_lang) {
@@ -226,16 +223,16 @@ ORDER BY id_category,(rght-lft) DESC";
         }
         fclose($category_lang_csv);
 
-/*** esportazione prodotti appartenenti a più categorie  *****/
+        /*** esportazione prodotti appartenenti a più categorie  *****/
 
 
         if (file_exists($save_to . 'psz6_category_product.csv')) {
             unlink($save_to . 'psz6_category_product.csv');
         }
         $category_product_csv = fopen($save_to . 'psz6_category_product.csv', 'w');
-        $sql ="select phpc.productCategoryId as id_category,
-             pap.prestaId as id_product, '0' as position
-             from ProductHasProductCategory phpc join PrestashopHasProduct pap on phpc.productId =pap.productId and phpc.productVariantId = pap.productVariantId order by id_category";
+        $sql = "SELECT phpc.productCategoryId AS id_category,
+             pap.prestaId AS id_product, '0' AS position
+             FROM ProductHasProductCategory phpc JOIN PrestashopHasProduct pap ON phpc.productId =pap.productId AND phpc.productVariantId = pap.productVariantId ORDER BY id_category";
         fputcsv($category_product_csv, array('id_category', 'id_product', 'position'), ';');
         $res_category_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_category_product as $value_category_product) {
@@ -251,7 +248,7 @@ ORDER BY id_category,(rght-lft) DESC";
         }
 
 
-/************* Sezione brand e produttori*******************************************************************************************/
+        /************* Sezione brand e produttori*******************************************************************************************/
         /***** esportazione Brand ****/
         if (file_exists($save_to . 'psz6_manufacturer.csv')) {
             unlink($save_to . 'psz6_manufacturer.csv');
@@ -500,7 +497,7 @@ FROM ProductSizeMacroGroup psmg
        S.name AS name,
        '' AS color
 
- from  ProductSize S order by id_attribute";
+ FROM  ProductSize S ORDER BY id_attribute";
 
         if (file_exists($save_to . 'psz6_attribute.csv')) {
             unlink($save_to . 'psz6_attribute.csv');
@@ -588,8 +585,8 @@ FROM ProductSizeMacroGroup psmg
             }
         }
         fclose($attribute_lang_csv);
- /****** sezione feature label caratteristiche
-        /**  esportazione caratteristiche etichetta */
+        /****** sezione feature label caratteristiche
+         * /**  esportazione caratteristiche etichetta */
         $sql = "SELECT pdl.id AS id_feature ,
    pdl.order AS position
 FROM ProductDetailLabel pdl";
@@ -634,11 +631,11 @@ FROM ProductDetailLabelTranslation pdlt";
 
         foreach ($res_feature_lang as $value_feature_lang) {
             $z = '1';
-            if($value_feature_lang['id_lang']=="2"){
-                $LAN='1';
-            }elseif($value_feature_lang['id_lang']=="1"){
-                $LAN='2';
-            }else {
+            if ($value_feature_lang['id_lang'] == "2") {
+                $LAN = '1';
+            } elseif ($value_feature_lang['id_lang'] == "1") {
+                $LAN = '2';
+            } else {
                 $LAN = '3';
             }
             $data_feature_lang = array(
@@ -721,7 +718,7 @@ FROM ProductDetailTranslation pdt";
 
         }
         fclose($feature_value_lang_csv);
-/****** SEZIONE PRODOTTI *//////
+        /****** SEZIONE PRODOTTI *//////
         /** esportazione prodotti */
         $sql = "
 
@@ -822,9 +819,6 @@ WHERE  `p`.`qty` > 0 AND p.productStatusId='6'
 GROUP BY product_id
 ORDER BY `p`.`id` ASC
 ";
-
-
-
 
 
         if (file_exists($save_to . 'psz6_product.csv')) {
@@ -1037,7 +1031,6 @@ ORDER BY `p`.`id` ASC
         fputcsv($product_attribute_combination_csv, array('id_attribute', 'id_product_attribute'), ';');
 
 
-
         fputcsv($feature_product_csv, array('id_feature',
             'id_product',
             'id_feature_value'), ';');
@@ -1060,7 +1053,7 @@ ORDER BY `p`.`id` ASC
             'id_shop',
             'cover'), ';');
         fputcsv($stock_available_csv, array('id_stock_available', 'id_product', 'id_product_attribute', 'id_shop', 'id_shop_group', 'quantity', 'phisical_quantity', 'reserved_quantity', 'depends_on_stock', 'out_of_stock'), ';');
-        fputcsv($stock_mvt_csv, array('id_stock_mvt', 'id_stock', 'id_order', 'id_supply_order', 'id_stock_mvt_reason', 'id_employee', 'employee_lastname', 'employee_firstname', 'physical_quantity', 'date_add','sign','price_te','last_wa','current_wa','referer'), ';');
+        fputcsv($stock_mvt_csv, array('id_stock_mvt', 'id_stock', 'id_order', 'id_supply_order', 'id_stock_mvt_reason', 'id_employee', 'employee_lastname', 'employee_firstname', 'physical_quantity', 'date_add', 'sign', 'price_te', 'last_wa', 'current_wa', 'referer'), ';');
 
 
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
@@ -1074,14 +1067,10 @@ ORDER BY `p`.`id` ASC
         $b = 0;
         $t = 0;
         $n = 0;
-        $mvt=0;
+        $mvt = 0;
         foreach ($res_product as $value_product) {
             // $p = $p + 1;
             $p = $value_product['prestaId'];
-
-
-
-
 
 
             $data_product = array(
@@ -1236,7 +1225,7 @@ ORDER BY `p`.`id` ASC
                     $value_product['product_id'] . "-" . $value_product['productVariantId'])
             );
 
-            $prod=$value_product['prestaId'];
+            $prod = $value_product['prestaId'];
 
             $res_product_attribute = \Monkey::app()->repoFactory->create('ProductPublicSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
 
@@ -1244,10 +1233,10 @@ ORDER BY `p`.`id` ASC
             foreach ($res_product_attribute as $value_product_attribute) {
                 $w = $w + 1;
 
-                    $n = $n + 1;
+                $n = $n + 1;
 
 
-                $mvt =$mvt +1;
+                $mvt = $mvt + 1;
                 $productSizeId_attribute_combination = $value_product_attribute->productSizeId;
                 $quantity_attribute_combination = $value_product_attribute->stockQty;
                 if (($quantity_attribute_combination >= 0) && ($lock_default_on == 0)) {
@@ -1272,7 +1261,7 @@ ORDER BY `p`.`id` ASC
                 $data_product_attribute = array(
                     array($w,
                         $p,
-                        $value_product['reference'] ,
+                        $value_product['reference'],
                         $value_product['supplier_reference'],
                         '',
                         $value_product['ean13'],
@@ -1321,10 +1310,6 @@ ORDER BY `p`.`id` ASC
                         '0'));
 
 
-
-
-
-
                 foreach ($data_product_attribute as $row_product_attribute) {
                     fputcsv($product_attribute_csv, $row_product_attribute, ';');
                 }
@@ -1333,15 +1318,12 @@ ORDER BY `p`.`id` ASC
                 }
                 foreach ($data_stock_available as $row_stock_available) {
 
-                        fputcsv($stock_available_csv, $row_stock_available, ';');
+                    fputcsv($stock_available_csv, $row_stock_available, ';');
 
-                      //  fputcsv($stock_available_csv, array($n, $p, '0', $value_product['id_shop_default'], '0', $finalquantitycombination, $finalquantitycombination, '0', '0', '0'), ";");
+                    //  fputcsv($stock_available_csv, array($n, $p, '0', $value_product['id_shop_default'], '0', $finalquantitycombination, $finalquantitycombination, '0', '0', '0'), ";");
 
 
                 }
-
-
-
 
 
                 $data_product_attribute_shop = array(
@@ -1375,9 +1357,6 @@ ORDER BY `p`.`id` ASC
             }
 
 
-
-
-
             foreach ($data_product as $row_product) {
                 fputcsv($product_csv, $row_product, ';');
 
@@ -1397,17 +1376,17 @@ ORDER BY `p`.`id` ASC
             }
 
 
-           /* $feature_product = \Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
-            foreach ($feature_product as $value_feature_product) {
-                $z = $z + 1;
-                $data_feature_product = array(
-                    array($value_feature_product->productDetailLabelId,
-                        $p,
-                        $value_feature_product->productDetailId));
-            }
-            foreach ($data_feature_product as $row_feature_product) {
-                fputcsv($feature_product_csv, $row_feature_product, ';');
-            }*/
+            /* $feature_product = \Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+             foreach ($feature_product as $value_feature_product) {
+                 $z = $z + 1;
+                 $data_feature_product = array(
+                     array($value_feature_product->productDetailLabelId,
+                         $p,
+                         $value_feature_product->productDetailId));
+             }
+             foreach ($data_feature_product as $row_feature_product) {
+                 fputcsv($feature_product_csv, $row_feature_product, ';');
+             }*/
             $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
 JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
 JOIN ProductBrand pb ON p.productBrandId = pb.id  WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";
@@ -1461,13 +1440,13 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
 
 
         }
-        $sql="
-            select  php.prestaId as ProductId ,
-            sum(pps.stockQty) as quantity
-            from ProductPublicSku pps join PrestashopHasProduct php on pps.productId=php.productId and pps.productVariantId =php.productVariantId GROUP by pps.ProductId";
-        $res_quantity_stock=\Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-        foreach($res_quantity_stock as $value_quantity_stock){
-            $n=$n+1;
+        $sql = "
+            SELECT  php.prestaId AS ProductId ,
+            sum(pps.stockQty) AS quantity
+            FROM ProductPublicSku pps JOIN PrestashopHasProduct php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId GROUP BY pps.ProductId";
+        $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        foreach ($res_quantity_stock as $value_quantity_stock) {
+            $n = $n + 1;
             $data_quantity_stock_available = array(
                 array($n,
                     $value_quantity_stock['ProductId'],
@@ -1479,24 +1458,25 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
                     $value_quantity_stock['quantity'],
                     '0',
                     '0'));
-            foreach ($data_quantity_stock_available as $row_quantity_stock_available){
-                fputcsv($stock_available_csv,  $row_quantity_stock_available, ';');
+            foreach ($data_quantity_stock_available as $row_quantity_stock_available) {
+                fputcsv($stock_available_csv, $row_quantity_stock_available, ';');
             }
         }
 
-        $sql="select php.prestaId as prestaId, psa.productDetailLabelId as productDetailLabelId, psa.productDetailId as productDetailId 
-              from  PrestashopHasProduct php 
-              join ProductSheetActual psa on php.productId=psa.productId and php.productVariantId =psa.productVariantId";
-        $res_feature_product=\Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $sql = "SELECT php.prestaId AS prestaId, psa.productDetailLabelId AS productDetailLabelId, psa.productDetailId AS productDetailId 
+              FROM  PrestashopHasProduct php 
+              JOIN ProductSheetActual psa ON php.productId=psa.productId AND php.productVariantId =psa.productVariantId";
+        $res_feature_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_feature_product as $value_feature_product) {
             $z = $z + 1;
             $data_feature_product = array(
                 array($value_feature_product['productDetailLabelId'],
                     $value_feature_product['prestaId'],
                     $value_feature_product['productDetailId']));
-        }
-        foreach ($data_feature_product as $row_feature_product) {
-            fputcsv($feature_product_csv, $row_feature_product, ';');
+
+            foreach ($data_feature_product as $row_feature_product) {
+                fputcsv($feature_product_csv, $row_feature_product, ';');
+            }
         }
 
         fclose($image_lang_csv);
