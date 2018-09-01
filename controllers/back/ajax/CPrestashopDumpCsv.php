@@ -99,6 +99,11 @@ class CPrestashopDumpCsv extends AAjaxController
         $i = 0;
         foreach ($res_category as $value_category) {
             $i = $i + 1;
+            if ($value_category['id_category']=="1"){
+                $is_root_category='1';
+            }else{
+                $is_root_category=$value_category['id_category'];
+            }
             $data_category = array(
                 array($value_category['id_category'],
                     $value_category['id_parent'],
@@ -190,6 +195,9 @@ ORDER BY id_category,(rght-lft) DESC";
         $category_lang_csv = fopen($save_to . 'psz6_category_lang.csv', 'w');
 
         fputcsv($category_lang_csv, array('id_category', 'id_shop', 'id_lang', 'name', 'description', 'link_rewrite', 'meta_title', 'meta_keywords', 'meta_description'), ';');
+        fputcsv($category_lang_csv, array('1','1','1','Home','Home','home','Home','Home','Home',),';');
+        fputcsv($category_lang_csv, array('1','1','2','Home','Home','home','Home','Home','Home',),';');
+        fputcsv($category_lang_csv, array('1','1','3','Home','Home','home','Home','Home','Home',),';');
         $res_category_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $i = 0;
         foreach ($res_category_lang as $value_category_lang) {
@@ -1305,7 +1313,7 @@ ORDER BY `p`.`id` ASC
                         $p,
                         $w,
                         $value_product['id_shop_default'],
-                        '1',
+                        '0',
                         $quantity_attribute_combination,
                         $quantity_attribute_combination,
                         $quantity_attribute_combination,
@@ -1327,7 +1335,7 @@ ORDER BY `p`.`id` ASC
 
                         fputcsv($stock_available_csv, $row_stock_available, ';');
 
-                      //  fputcsv($stock_available_csv, array($n, $p, '0', $value_product['id_shop_default'], '1', $finalquantitycombination, $finalquantitycombination, '0', '0', '0'), ";");
+                      //  fputcsv($stock_available_csv, array($n, $p, '0', $value_product['id_shop_default'], '0', $finalquantitycombination, $finalquantitycombination, '0', '0', '0'), ";");
 
 
                 }
@@ -1463,7 +1471,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
                     $value_quantity_stock['ProductId'],
                     '0',
                     '1',
-                    '1',
+                    '0',
                     $value_quantity_stock['quantity'],
                     $value_quantity_stock['quantity'],
                     $value_quantity_stock['quantity'],
@@ -1504,7 +1512,7 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
 
         $phar = new \PharData($zipName);
         $phar->addFile($save_to . 'psz6_stock_mvt.csv', 'psz6_stock_mvt.csv');
-        $phar->addFile($save_to . 'psz6_attribute.csv', 'psz6_attribute.csv');
+        $phar->addFile($save_to . 'psz6_attribute.csv', 'psz6_attribute.csv'); //V
         $phar->addFile($save_to . 'psz6_manufacturer.csv', 'psz6_manufacturer.csv');
         $phar->addFile($save_to . 'psz6_manufacturer_lang.csv', 'psz6_manufacturer_lang.csv');
         $phar->addFile($save_to . 'psz6_manufacturer_shop.csv', 'psz6_manufacturer_shop.csv');
@@ -1513,11 +1521,11 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
         $phar->addFile($save_to . 'psz6_supplier_shop.csv', 'psz6_supplier_shop.csv');
         $phar->addFile($save_to . 'psz6_category_shop.csv', 'psz6_category_shop.csv');
         $phar->addFile($save_to . 'psz6_stock_available.csv', 'psz6_stock_available.csv');
-        $phar->addFile($save_to . 'psz6_attribute_shop.csv', 'psz6_attribute_shop.csv');
-        $phar->addFile($save_to . 'psz6_attribute_group.csv', 'psz6_attribute_group.csv');
-        $phar->addFile($save_to . 'psz6_attribute_group_lang.csv', 'psz6_attribute_group_lang.csv');
-        $phar->addFile($save_to . 'psz6_attribute_group_shop.csv', 'psz6_attribute_group_shop.csv');
-        $phar->addFile($save_to . 'psz6_attribute_lang.csv', 'psz6_attribute_lang.csv');
+        $phar->addFile($save_to . 'psz6_attribute_shop.csv', 'psz6_attribute_shop.csv'); //V
+        $phar->addFile($save_to . 'psz6_attribute_group.csv', 'psz6_attribute_group.csv'); //V
+        $phar->addFile($save_to . 'psz6_attribute_group_lang.csv', 'psz6_attribute_group_lang.csv'); //V
+        $phar->addFile($save_to . 'psz6_attribute_group_shop.csv', 'psz6_attribute_group_shop.csv'); //V
+        $phar->addFile($save_to . 'psz6_attribute_lang.csv', 'psz6_attribute_lang.csv'); //V
         $phar->addFile($save_to . 'psz6_category.csv', 'psz6_category.csv');
         $phar->addFile($save_to . 'psz6_category_product.csv', 'psz6_category_product.csv');
         $phar->addFile($save_to . 'psz6_category_lang.csv', 'psz6_category_lang.csv');
