@@ -1395,7 +1395,9 @@ ORDER BY `p`.`id` ASC
                 fputcsv($image_lang_csv, $row_image_lang, ';');
 
             }
-            $feature_product = \Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+
+
+           /* $feature_product = \Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
             foreach ($feature_product as $value_feature_product) {
                 $z = $z + 1;
                 $data_feature_product = array(
@@ -1405,7 +1407,7 @@ ORDER BY `p`.`id` ASC
             }
             foreach ($data_feature_product as $row_feature_product) {
                 fputcsv($feature_product_csv, $row_feature_product, ';');
-            }
+            }*/
             $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
 JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
 JOIN ProductBrand pb ON p.productBrandId = pb.id  WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";
@@ -1481,6 +1483,22 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
                 fputcsv($stock_available_csv,  $row_quantity_stock_available, ';');
             }
         }
+
+        $sql="select php.prestaId as prestaId, psa.productDetailLabelId as productDetailLabelId, psa.productDetailId as productDetailId 
+              from  PrestashopHasProduct php 
+              join ProductSheetActual psa on php.productId=psa.productId and php.productVariantId =psa.productVariantId";
+        $res_feature_product=\Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        foreach ($res_feature_product as $value_feature_product) {
+            $z = $z + 1;
+            $data_feature_product = array(
+                array($value_feature_product['productDetailLabelId'],
+                    $value_feature_product['prestaId'],
+                    $value_feature_product['productDetailId']));
+        }
+        foreach ($data_feature_product as $row_feature_product) {
+            fputcsv($feature_product_csv, $row_feature_product, ';');
+        }
+
         fclose($image_lang_csv);
         fclose($image_shop_csv);
         fclose($image_csv);
