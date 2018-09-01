@@ -1333,7 +1333,7 @@ ORDER BY `p`.`id` ASC
                         $price,
                         $value_product['ecotax'],
                         $value_product['weight'],
-                        '',
+                        '0.000000',
                         $default_on,
                         $value_product['minimal_quantity'],
                         $value_product['low_stock_threshold'],
