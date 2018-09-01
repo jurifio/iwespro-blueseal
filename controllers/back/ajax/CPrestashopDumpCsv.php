@@ -1067,11 +1067,15 @@ ORDER BY `p`.`id` ASC
         $t = 0;
         $n = 0;
         $mvt=0;
-
-
         foreach ($res_product as $value_product) {
             // $p = $p + 1;
             $p = $value_product['prestaId'];
+
+
+
+
+
+
             $data_product = array(
                 array($p,
                     $value_product['id_supplier'],
@@ -1224,15 +1228,17 @@ ORDER BY `p`.`id` ASC
                     $value_product['product_id'] . "-" . $value_product['productVariantId'])
             );
 
-
+            $prod=$value_product['prestaId'];
 
             $res_product_attribute = \Monkey::app()->repoFactory->create('ProductPublicSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
 
             $lock_default_on = 0;
-            $finalquantitycombination=0;
             foreach ($res_product_attribute as $value_product_attribute) {
                 $w = $w + 1;
-                $n = $n + 1;
+
+                    $n = $n + 1;
+
+
                 $mvt =$mvt +1;
                 $productSizeId_attribute_combination = $value_product_attribute->productSizeId;
                 $quantity_attribute_combination = $value_product_attribute->stockQty;
@@ -1292,7 +1298,8 @@ ORDER BY `p`.`id` ASC
                         '0.000000',
                         '0.000000',
                         ''));
-$finalquantitycombination=$finalquantitycombination+$quantity_attribute_combination;
+
+
                 $data_stock_available = array(
                     array($n,
                         $p,
@@ -1308,6 +1315,8 @@ $finalquantitycombination=$finalquantitycombination+$quantity_attribute_combinat
 
 
 
+
+
                 foreach ($data_product_attribute as $row_product_attribute) {
                     fputcsv($product_attribute_csv, $row_product_attribute, ';');
                 }
@@ -1315,8 +1324,15 @@ $finalquantitycombination=$finalquantitycombination+$quantity_attribute_combinat
                     fputcsv($stock_mvt_csv, $row_stock_mvt, ';');
                 }
                 foreach ($data_stock_available as $row_stock_available) {
-                    fputcsv($stock_available_csv, $row_stock_available, ';');
+
+                        fputcsv($stock_available_csv, $row_stock_available, ';');
+
+                      //  fputcsv($stock_available_csv, array($n, $p, '0', $value_product['id_shop_default'], '1', $finalquantitycombination, $finalquantitycombination, '0', '0', '0'), ";");
+
+
                 }
+
+
 
 
 
@@ -1347,8 +1363,11 @@ $finalquantitycombination=$finalquantitycombination+$quantity_attribute_combinat
                     fputcsv($product_attribute_combination_csv, $row_product_attribute_combination, ';');
 
                 }
+
             }
-            fputcsv($stock_available_csv,array( $n+1,$p,'0', $value_product['id_shop_default'],'1',$finalquantitycombination,$finalquantitycombination,'0','0','0'),";");
+
+
+
 
 
             foreach ($data_product as $row_product) {
@@ -1431,6 +1450,28 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
             }
 
 
+        }
+        $sql="
+            select  php.prestaId as ProductId ,
+            sum(pps.stockQty) as quantity
+            from ProductPublicSku pps join PrestashopHasProduct php on pps.productId=php.productId and pps.productVariantId =php.productVariantId GROUP by pps.ProductId";
+        $res_quantity_stock=\Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        foreach($res_quantity_stock as $value_quantity_stock){
+            $n=$n+1;
+            $data_quantity_stock_available = array(
+                array($n,
+                    $value_quantity_stock['ProductId'],
+                    '0',
+                    '1',
+                    '1',
+                    $value_quantity_stock['quantity'],
+                    $value_quantity_stock['quantity'],
+                    $value_quantity_stock['quantity'],
+                    '0',
+                    '0'));
+            foreach ($data_quantity_stock_available as $row_quantity_stock_available){
+                fputcsv($stock_available_csv,  $row_quantity_stock_available, ';');
+            }
         }
         fclose($image_lang_csv);
         fclose($image_shop_csv);
