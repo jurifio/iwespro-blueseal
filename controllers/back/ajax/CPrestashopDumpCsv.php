@@ -1025,8 +1025,7 @@ ORDER BY `p`.`id` ASC
             'minimal_quantity',
             'low_stock_threshold',
             'low_stock_alert',
-            'available_date',
-            'status'
+            'available_date'
         ), ';');
         fputcsv($product_attribute_combination_csv, array('id_attribute', 'id_product_attribute'), ';');
 
@@ -1327,8 +1326,8 @@ ORDER BY `p`.`id` ASC
 
 
                 $data_product_attribute_shop = array(
-                    array($w,
-                        $p,
+                    array($p,
+                        $w,
                         '1',
                         $price,
                         $price,
@@ -1339,8 +1338,7 @@ ORDER BY `p`.`id` ASC
                         $value_product['minimal_quantity'],
                         $value_product['low_stock_threshold'],
                         $value_product['low_stock_alert'],
-                        $available_date,
-                        $value_product['status']));
+                        $available_date));
                 foreach ($data_product_attribute_shop as $row_product_attribute_shop) {
                     fputcsv($product_attribute_shop_csv, $row_product_attribute_shop, ';');
                 }
