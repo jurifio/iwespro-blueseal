@@ -1212,8 +1212,6 @@ ORDER BY `p`.`id` ASC
                 ));
 
 
-
-
             $prod = $value_product['prestaId'];
 
             $res_product_attribute = \Monkey::app()->repoFactory->create('ProductPublicSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
@@ -1360,7 +1358,6 @@ ORDER BY `p`.`id` ASC
             }
 
 
-
             /* $feature_product = \Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
              foreach ($feature_product as $value_feature_product) {
                  $z = $z + 1;
@@ -1372,15 +1369,15 @@ ORDER BY `p`.`id` ASC
              foreach ($data_feature_product as $row_feature_product) {
                  fputcsv($feature_product_csv, $row_feature_product, ';');
              }*/
-        /*    $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
-JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
-JOIN ProductBrand pb ON p.productBrandId = pb.id  WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";*/
-           $sql="select php.prestaId as productId,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order as position, if(LOCATE('-001-1124',pp.name),1,0) as cover
-from PrestashopHasProduct php join ProductHasProductPhoto phpp on php.productId =phpp.productId and php.productVariantId = php.productVariantId
-join  Product p on php.productId = p.id AND php.productVariantId = p.productVariantId
-  join ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
-join ProductBrand pb on p.productBrandId = pb.id
-join ProductPhoto pp on phpp.productPhotoId = pp.id WHERE  LOCATE('-1124',pp.name) and p.qty>1 and p.productStatusId=6  and p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId']."'  order by productId";
+            /*    $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
+    JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
+    JOIN ProductBrand pb ON p.productBrandId = pb.id  WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";*/
+            $sql = "SELECT php.prestaId AS productId,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(LOCATE('-001-1124',pp.name),1,0) AS cover
+FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = php.productVariantId
+JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
+  JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
+JOIN ProductBrand pb ON p.productBrandId = pb.id
+JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124',pp.name) AND p.qty>1 AND p.productStatusId=6  AND p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "'  ORDER BY productId";
             $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
             $a = 0;
             $data_image = [];
@@ -1425,15 +1422,15 @@ join ProductPhoto pp on phpp.productPhotoId = pp.id WHERE  LOCATE('-1124',pp.nam
             /*$sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
 JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
 JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";*/
-           $sql=" select php.prestaId as productId,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order as position, if(LOCATE('-001-1124',pp.name),1,0) as cover
-from PrestashopHasProduct php join ProductHasProductPhoto phpp on php.productId =phpp.productId and php.productVariantId = php.productVariantId
-join  Product p on php.productId = p.id AND php.productVariantId = p.productVariantId
-  join ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
-join ProductBrand pb on p.productBrandId = pb.id
-join ProductPhoto pp on phpp.productPhotoId = pp.id WHERE  LOCATE('-1124',pp.name) and p.qty>1 and p.productStatusId=6  and p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId']."'  order by productId";
+            $sql = " SELECT php.prestaId AS productId,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(LOCATE('-001-1124',pp.name),1,0) AS cover
+FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = php.productVariantId
+JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
+  JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
+JOIN ProductBrand pb ON p.productBrandId = pb.id
+JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124',pp.name) AND p.qty>1 AND p.productStatusId=6  AND p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "'  ORDER BY productId";
             $image_product_link = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
-            $data_image_link = [];
+
             $b = 0;
             foreach ($image_product_link as $value_image_product_link) {
                 $u = $u + 1;
@@ -1443,13 +1440,13 @@ join ProductPhoto pp on phpp.productPhotoId = pp.id WHERE  LOCATE('-1124',pp.nam
                         $value_image_product_link['productId'],
                         $value_image_product_link['position'],
                         $value_image_product_link['cover'],
-                        $value_image_product_link['cover'],));
-            }
+                        $value_image_product_link['picture'],));
 
-            foreach ($data_image_link as $row_image_product_link) {
-                fputcsv($image_link_csv, $row_image_product_link, ';');
-            }
 
+                foreach ($data_image_link as $row_image_product_link) {
+                    fputcsv($image_link_csv, $row_image_product_link, ';');
+                }
+            }
 
         }
         $sql = "
