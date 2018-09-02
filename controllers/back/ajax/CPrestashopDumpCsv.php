@@ -1212,6 +1212,18 @@ ORDER BY `p`.`id` ASC
                 ));
 
 
+            $data_image_lang = array(
+                array($p,
+                    '1',
+                    $value_product['reference']),
+                array($p,
+                    '2',
+                    $value_product['reference']),
+                array($p,
+                    '3',
+                    $value_product['reference'])
+            );
+
             $prod = $value_product['prestaId'];
 
             $res_product_attribute = \Monkey::app()->repoFactory->create('ProductPublicSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
@@ -1356,6 +1368,10 @@ ORDER BY `p`.`id` ASC
                 fputcsv($product_lang_csv, $row_product_lang, ';');
 
             }
+            foreach ($data_image_lang as $row_image_lang) {
+                fputcsv($image_lang_csv, $row_image_lang, ';');
+
+            }
 
 
             /* $feature_product = \Monkey::app()->repoFactory->create('ProductSheetActual')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
@@ -1369,71 +1385,58 @@ ORDER BY `p`.`id` ASC
              foreach ($data_feature_product as $row_feature_product) {
                  fputcsv($feature_product_csv, $row_feature_product, ';');
              }*/
-            /*    $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
-    JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
-    JOIN ProductBrand pb ON p.productBrandId = pb.id  WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";*/
-
-            /*$sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
+            $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
 JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
-JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";*/
+JOIN ProductBrand pb ON p.productBrandId = pb.id  WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-1124.jpg%'";
+            $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+            $a = 0;
+            $data_image = [];
+            foreach ($image_product as $value_image_product) {
+                $k = $k + 1;
+                $a = $a + 1;
+                $data_image = array(
+                    array($p,
+                        $p,
+                        $value_image_product['position'],
+                        '1'));
+                $data_image_shop = array(
+                    array($p,
+                        $p,
+                        '1',
+                        '1'));
 
 
-        }
+                foreach ($data_image as $row_image_product) {
+                    fputcsv($image_csv, $row_image_product, ';');
+                }
 
-        $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) as reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(LOCATE('-001-1124',pp.name),1,0) AS cover
-FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = php.productVariantId
-JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
-  JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
-JOIN ProductBrand pb ON p.productBrandId = pb.id
-JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124',pp.name) AND p.qty>1 AND p.productStatusId=6    ORDER BY productId";
-        $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-        $a = 0;
-        foreach ($image_product as $value_image_product) {
-            $k = $k + 1;
-            $a = $a + 1;
-            $data_image = array(
-                array($k,
-                    $value_image_product['productId'],
-                    $value_image_product['position'],
-                    $value_image_product['cover']));
-            $data_image_shop = array(
-                array($value_image_product['productId'],
-                    $k,
-                    '1',
-                    $value_image_product['cover']));
-            $data_image_lang = array(
-                array($k,
-                    '1',
-                    $value_image_product['reference']),
-                array($k,
-                    '2',
-                    $value_image_product['reference']),
-                array($k,
-                    '3',
-                    $value_image_product['reference'])
-            );
-            $data_image_link = array(
-                array($k,
-                    $value_image_product['productId'],
-                    $value_image_product['position'],
-                    $value_image_product['cover'],
-                    $value_image_product['picture'],));
+                foreach ($data_image_shop as $row_image_shop) {
+                    fputcsv($image_shop_csv, $row_image_shop, ';');
+                }
+            }
+            $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
+JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
+JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-1124.jpg%'";
+            $image_product_link = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
-
-            foreach ($data_image as $row_image_product) {
-                fputcsv($image_csv, $row_image_product, ';');
+            $data_image_link = [];
+            $b = 0;
+            foreach ($image_product_link as $value_image_product_link) {
+                $u = $u + 1;
+                $b = $b + 1;
+                $data_image_link = array(
+                    array($p,
+                        $p,
+                        $value_image_product_link['position'],
+                        '1',
+                        'https://iwes.s3.amazonaws.com/' . $value_image_product_link['slug'] . '/' . $value_image_product_link['image']));
             }
 
-            foreach ($data_image_shop as $row_image_shop) {
-                fputcsv($image_shop_csv, $row_image_shop, ';');
-            }
-            foreach ($data_image_lang as $row_image_lang) {
-                fputcsv($image_lang_csv, $row_image_lang, ';');
-
-            }
             foreach ($data_image_link as $row_image_product_link) {
                 fputcsv($image_link_csv, $row_image_product_link, ';');
             }
+
+
         }
         $sql = "
             SELECT  php.prestaId AS ProductId ,
