@@ -1372,7 +1372,7 @@ ORDER BY `p`.`id` ASC
             /*    $sql = "SELECT p.id AS productId, p.productVariantId AS productVariantId, phpp.productPhotoId, pp.name AS image, pb.slug  AS slug, pp.order AS position FROM ProductHasProductPhoto phpp JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
     JOIN Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
     JOIN ProductBrand pb ON p.productBrandId = pb.id  WHERE p.id='" . $value_product['productId'] . "' AND p.productVariantId='" . $value_product['productVariantId'] . "' AND pp.name LIKE '%-001-1124%'";*/
-            $sql = "SELECT php.prestaId AS productId,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(LOCATE('-001-1124',pp.name),1,0) AS cover
+            $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) as reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(LOCATE('-001-1124',pp.name),1,0) AS cover
 FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = php.productVariantId
 JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
@@ -1396,13 +1396,13 @@ JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124',pp.nam
                 $data_image_lang = array(
                     array($k,
                         '1',
-                        $value_product['reference']),
+                        $value_image_product['reference']),
                     array($k,
                         '2',
-                        $value_product['reference']),
+                        $value_image_product['reference']),
                     array($k,
                         '3',
-                        $value_product['reference'])
+                        $value_image_product['reference'])
                 );
                 $data_image_link = array(
                     array($k,
