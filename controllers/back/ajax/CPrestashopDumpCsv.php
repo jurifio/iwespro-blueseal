@@ -1396,7 +1396,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 array($k,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                   'null'));
+                    $value_image_product['cover'],));
             $data_image_shop = array(
                 array($value_image_product['productId'],
                     $k,
@@ -1417,7 +1417,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 array($k,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    'null',
+                    $value_image_product['cover'],
                     $value_image_product['picture'],));
 
 
