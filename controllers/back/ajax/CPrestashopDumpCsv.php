@@ -1424,6 +1424,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
             foreach ($data_image as $row_image_product) {
                 fputcsv($image_csv, $row_image_product, ';');
             }
+            //caricamento immagini
 
             foreach ($data_image_shop as $row_image_shop) {
                 fputcsv($image_shop_csv, $row_image_shop, ';');
