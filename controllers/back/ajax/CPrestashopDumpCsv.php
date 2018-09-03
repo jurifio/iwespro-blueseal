@@ -1380,28 +1380,23 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
 
         }
 
-        $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) as reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order=1,1,0) AS cover
+        $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) as reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
 FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0  group by picture  ORDER BY productId";
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0  group by picture  ORDER BY productId asc";
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $a = 0;
-        $checkcover=$image_product[0]['productId'];
         foreach ($image_product as $value_image_product) {
             $k = $k + 1;
             $a = $a + 1;
-            if($checkcover==$value_image_product['productId']){
-                $cover=1;
-            }else{
-                $cover=0;
-            }
+
             $data_image = array(
                 array($k,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover']));
+                   ''));
             $data_image_shop = array(
                 array($value_image_product['productId'],
                     $k,
@@ -1422,7 +1417,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 array($k,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover'],
+                    '',
                     $value_image_product['picture'],));
 
 
