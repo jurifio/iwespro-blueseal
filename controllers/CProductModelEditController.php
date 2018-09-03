@@ -70,17 +70,6 @@ class CProductModelEditController extends CProductManageController
             $iGend++;
         }
 
-        //prodCat
-        $prodCat = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findAll();
-        $prodCats = [];
-        $iCat = 0;
-        foreach ($prodCat as $cat){
-            $prodCats[$iCat] = [];
-            $prodCats[$iCat]['id'] = $cat->id;
-            $prodCats[$iCat]['name'] = $cat->name;
-            $iCat++;
-        }
-
         //material
         $material = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMaterial')->findAll();
         $materials = [];
@@ -108,7 +97,6 @@ class CProductModelEditController extends CProductManageController
             'page' => $this->page,
             'categories' => json_encode($categories),
             'genders' => json_encode($genders),
-            'prodCats' => json_encode($prodCats),
             'materials' => json_encode($materials),
             'sidebar' => $this->sidebar->build(),
             'isMultiple' => $isMultiple,

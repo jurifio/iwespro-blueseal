@@ -161,7 +161,7 @@ class CDetailModelSave extends AAjaxController
                             /** @var CProductSheetModelPrototypeCategoryGroup $newCategoryGroup */
                             $newCategoryGroup = $exCatGroupRepo->getEmptyEntity();
                             $newCategoryGroup->name = $newProdCats;
-                            if($get["keepcatphoto"] == "on") $newCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->imageUrl;
+                            if(isset($get["keepcatphoto"]) && $get["keepcatphoto"] == "on") $newCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->imageUrl;
                             $newCategoryGroup->macroCategoryGroupId = CProductSheetModelPrototypeMacroCategoryGroup::DEFAULT;
                             $newCategoryGroup->smartInsert();
 
@@ -182,7 +182,7 @@ class CDetailModelSave extends AAjaxController
                                     /** @var CProductSheetModelPrototypeMacroCategoryGroup $newMacroCategoryGroup */
                                     $newMacroCategoryGroup = $exMacroCatGroupRepo->getEmptyEntity();
                                     $newMacroCategoryGroup->name = $newMacroProdCats;
-                                    if ($get["keepmacrocatphoto"] == "on") $newMacroCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->imageUrl;
+                                    if (isset($get["keepmacrocatphoto"]) && $get["keepmacrocatphoto"] == "on") $newMacroCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->imageUrl;
                                     $newMacroCategoryGroup->smartInsert();
 
                                     $newCategoryGroup->macroCategoryGroupId = $newMacroCategoryGroup->id;
@@ -436,7 +436,7 @@ class CDetailModelSave extends AAjaxController
                             /** @var CProductSheetModelPrototypeCategoryGroup $newCategoryGroup */
                             $newCategoryGroup = $exCatGroupRepo->getEmptyEntity();
                             $newCategoryGroup->name = $newProdCats;
-                            if($get["keepcatphoto"] == "on") $newCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->imageUrl;
+                            if(isset($get["keepcatphoto"]) && $get["keepcatphoto"] == "on") $newCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->imageUrl;
                             $newCategoryGroup->macroCategoryGroupId = CProductSheetModelPrototypeMacroCategoryGroup::DEFAULT;
                             $newCategoryGroup->smartInsert();
 
@@ -457,7 +457,7 @@ class CDetailModelSave extends AAjaxController
                                     /** @var CProductSheetModelPrototypeMacroCategoryGroup $newMacroCategoryGroup */
                                     $newMacroCategoryGroup = $exMacroCatGroupRepo->getEmptyEntity();
                                     $newMacroCategoryGroup->name = $newMacroProdCats;
-                                    if ($get["keepmacrocatphoto"] == "on") $newMacroCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->imageUrl;
+                                    if (isset($get["keepmacrocatphoto"]) && $get["keepmacrocatphoto"] == "on") $newMacroCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->imageUrl;
                                     $newMacroCategoryGroup->smartInsert();
 
                                     $newCategoryGroup->macroCategoryGroupId = $newMacroCategoryGroup->id;
