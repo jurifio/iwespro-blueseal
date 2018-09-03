@@ -70,7 +70,8 @@ class CProductBatchListAjaxController extends AAjaxController
                   pb.isUnassigned,
                   pb.operatorRankIwes,
                   pb.timingRank,
-                  pb.qualityRank      
+                  pb.qualityRank,
+                  pb.tolleranceDelivery
             FROM ProductBatch pb
             LEFT JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
             LEFT JOIN WorkCategory wk ON cd.workCategoryId = wk.id
@@ -232,6 +233,7 @@ class CProductBatchListAjaxController extends AAjaxController
             $row['marketplace'] = $pbr->marketplace == 1 ? 'Visibile' : 'Nascosto';
             $row['operatorRankIwes'] = $pbr->operatorRankIwes;
             $row['timingRank'] = $pbr->timingRank;
+            $row['tolleranceDelivery'] = $pbr->tolleranceDelivery;
             $row['qualityRank'] = $pbr->qualityRank;
 
             $datatable->setResponseDataSetRow($key,$row);

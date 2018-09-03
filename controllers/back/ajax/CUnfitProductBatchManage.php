@@ -8,6 +8,8 @@ use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
+use bamboo\utils\time\SDateToolbox;
+use bamboo\utils\time\STimeToolbox;
 
 
 /**
@@ -26,6 +28,8 @@ use bamboo\domain\repositories\CProductBatchRepo;
 class CUnfitProductBatchManage extends AAjaxController
 {
     /**
+     * @return string
+     * @throws \Exception
      * @throws \bamboo\core\exceptions\BambooException
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
@@ -44,7 +48,7 @@ class CUnfitProductBatchManage extends AAjaxController
 
         $unfitProduct = '';
         /** @var CProductBatch $pBatch */
-        $pBatch = $pBatchRepo->findOneBy(['id' => $pb['batch']]);
+        $pBatch = $pBatchRepo->findOneBy(['id' => $pb]);
 
         $res = $pBatch->isValid();
 
@@ -57,6 +61,20 @@ class CUnfitProductBatchManage extends AAjaxController
 
         if (is_null($pBatch->unfitDate)) {
             $pBatchRepo->qualityRank($pBatch);
+        }
+
+
+        $nowObject = new \DateTime();
+        $now = $nowObject->format('Y-m-d H:i:s');
+
+        if(!empty($dayPlus)) {
+            if ($now <= $pBatch->scheduledDelivery) {
+                $newDeliver = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($pBatch->scheduledDelivery), $dayPlus)->format('Y-m-d 23:59:59');
+                $pBatch->scheduledDelivery = $newDeliver;
+                $pBatch->tolleranceDelivery = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($newDeliver), 5)->format('Y-m-d 23:59:59');
+            } elseif ($now > $pBatch->scheduledDelivery && $now <= $pBatch->tolleranceDelivery) {
+                $pBatch->tolleranceDelivery = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($pBatch->tolleranceDelivery), $dayPlus)->format('Y-m-d 23:59:59');
+            }
         }
 
         $pBatch->unfitDate = date('Y-m-d H:i:s');
@@ -75,8 +93,6 @@ class CUnfitProductBatchManage extends AAjaxController
         if (ENV == 'prod' && $pBatch->isUnassigned == 0) {
             $body = "I seguenti prodotti non sono idonei:<br>
                     $unfitProduct";
-
-
             $mailRepo->newMail('gianluca@iwes.it', [$pb['fason']], [], [], "Prodotti non idonei", $body);
         }
 

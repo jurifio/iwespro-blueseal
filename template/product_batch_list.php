@@ -50,6 +50,9 @@
                                 <th data-slug="scheduledDelivery"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data prevista consegna</th>
+                                <th data-slug="tolleranceDelivery"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data prevista consegna con tolleranza</th>
                                 <th data-slug="confirmationDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data di conferma lotto</th>
