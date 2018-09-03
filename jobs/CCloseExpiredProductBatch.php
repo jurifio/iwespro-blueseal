@@ -57,8 +57,7 @@ class CCloseExpiredProductBatch extends ACronJob
 
         /** @var CProductBatch $productBatch */
         foreach ($pB as $productBatch) {
-            $tolleranceClosing = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($productBatch->scheduledDelivery), 5)->format('Y-m-d 23:59:59');
-            if ($now > $tolleranceClosing) {
+            if ($now > $productBatch->tolleranceDelivery) {
                 $productBatch->timingRank = 0;
                 $productBatch->isUnassigned = 1;
                 $productBatch->closingDate = date_format(new \DateTime(), 'Y-m-d H:i:s');

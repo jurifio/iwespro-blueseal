@@ -6,6 +6,7 @@ use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CEmailRepo;
 use bamboo\utils\time\SDateToolbox;
+use bamboo\utils\time\STimeToolbox;
 
 
 /**
@@ -37,7 +38,7 @@ class CBookingWorkManage extends AAjaxController
         $pb = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$pbId]);
 
 
-        $eWd = $pb->estimatedWorkDays;
+        $schedDelivery = SDateToolbox::GetDateAfterAddedDays(null, $pb->estimatedWorkDays)->format('Y-m-d 23:59:59');
 
         /** @var CContractDetails $cD */
         $cD = $pb->getContractDetailFromUnassignedProductBatch($user);
@@ -45,7 +46,8 @@ class CBookingWorkManage extends AAjaxController
         $pb->contractDetailsId = $cD->id;
         $pb->marketplace = 0;
         $pb->confirmationDate = date_format($date, 'Y-m-d H:i:s');
-        $pb->scheduledDelivery = SDateToolbox::GetDateAfterAddedDays(null, $eWd)->format('Y-m-d 23:59:59');
+        $pb->scheduledDelivery = $schedDelivery;
+        $pb->tolleranceDelivery = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($schedDelivery), 5)->format('Y-m-d 23:59:59');
         $pb->update();
 
         $items = count($pb->getElements());

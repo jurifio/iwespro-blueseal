@@ -532,24 +532,54 @@
         let productsBatch = [];
         let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-        $.each(selectedRows, function (k, v) {
-            productsBatch.push({
-                batch: v.row_id,
-                fason: v.foisonEmail
-            })
-        });
+        if(selectedRows.length != 1){
+            new Alert({
+                type: "warning",
+                message: "Correggi un lotto alla volta"
+            }).open();
+            return false;
+        }
+
+        let productBatch = selectedRows[0].row_id;
 
         let bsModal = new $.bsModal('LOTTO NON IDONEO', {
-            body: '<p>Inviare la notifica al Fason per "lotto non idoneo"?</p>'
+            body: `
+            <p class="operationType"></p>
+            <div class="addDay">
+            <label for="dayDeliver">Inserisci i giorni da aggiungere</label>
+            <input type="number" min="1" step="0" id="dayDeliver">
+            </div>            
+`
         });
 
 
-        const data = {
-            pB: productsBatch
-        };
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'ProductBatch',
+                condition: {
+                    id: productBatch
+                },
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            if(res[0].isUnassigned == 1){
+                $('.operationType').html('Lotto tolto al fason perchè scaduto. Verrà duplicato e reimmesso nel marketplace');
+                $('.addDay').hide();
+            } else {
+                $('.operationType').html('Gli errori verranno trasmessi al fason con relativo calcolo di rank.<br>Puoi scegliere di aggiungere dei giorni che verranno aggiunti per permette all\'utente di chiudere il lotto');
+            }
+        });
+
+
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
+            const data = {
+                pB: productBatch,
+                dayPlus: $('#dayDeliver').val(),
+            };
             $.ajax({
                 method: 'post',
                 url: '/blueseal/xhr/UnfitProductBatchManage',

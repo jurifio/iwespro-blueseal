@@ -101,7 +101,7 @@ class CFoison extends AEntity
 
                 /** @var CProductBatch $pb */
                 foreach ($pbs as $pb) {
-                    if($pb->id == 54) true;
+
                     if(!is_null($pb->closingDate) && $pb->closingDate >= $initDate && !is_null($pb->timingRank) && (!is_null($pb->qualityRank) || !is_null($pb->operatorRankIwes))) {
                         $pbArray[] = $pb;
                     }
@@ -129,7 +129,14 @@ class CFoison extends AEntity
         /** @var CProductBatch $pb */
         foreach ($pbs as $pb) {
             $qualityRank = is_null($pb->operatorRankIwes) ? $pb->qualityRank : $pb->operatorRankIwes;
-            $avgs[] = ($qualityRank + $pb->timingRank) / 2;
+
+            if($pb->timingRank == 10 and $qualityRank <= 6) {
+                $timingPonderateRank = $qualityRank;
+            } else {
+                $timingPonderateRank = $pb->timingRank;
+            }
+
+            $avgs[] = ($qualityRank + $timingPonderateRank) / 2;
         }
 
         $sumAvg = 0;

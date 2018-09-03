@@ -241,9 +241,6 @@ class CProductBatchRepo extends ARepo
         $nNpb = count($productBatch->getNormalizedElements());
         $qRank = round($nNpb / $nPb * 10, 2);
         $productBatch->qualityRank = $qRank;
-        if($productBatch->timingRank == 10 and $qRank <= 6) {
-            $productBatch->timingRank = $qRank;
-        }
 
         $productBatch->update();
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace bamboo\controllers\back\ajax;
+
 use bamboo\core\base\CObjectCollection;
 use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductBatch;
@@ -32,60 +33,55 @@ class CUnfitProductBatchManage extends AAjaxController
     public function post()
     {
 
-       $pbs = \Monkey::app()->router->request()->getRequestData('pB');
+        $pb = \Monkey::app()->router->request()->getRequestData('pB');
+        $dayPlus = \Monkey::app()->router->request()->getRequestData('dayPlus');
 
-       /** @var CProductBatchRepo $pBatchRepo */
-       $pBatchRepo = \Monkey::app()->repoFactory->create('ProductBatch');
+        /** @var CProductBatchRepo $pBatchRepo */
+        $pBatchRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
-       /** @var CEmailRepo $mailRepo */
-       $mailRepo = \Monkey::app()->repoFactory->create('Email');
+        /** @var CEmailRepo $mailRepo */
+        $mailRepo = \Monkey::app()->repoFactory->create('Email');
 
-       foreach ($pbs as $pb){
+        $unfitProduct = '';
+        /** @var CProductBatch $pBatch */
+        $pBatch = $pBatchRepo->findOneBy(['id' => $pb['batch']]);
 
-           unset($res, $body, $unfitProduct);
-           $unfitProduct = '';
-           /** @var CProductBatch $pBatch */
-           $pBatch = $pBatchRepo->findOneBy(['id'=>$pb['batch']]);
+        $res = $pBatch->isValid();
 
-           $res = $pBatch->isValid();
+        if ($res === 'ok') return "I componenti del lotto sembrano essere normalizzati correttamente";
 
-           if($res === 'ok') continue;
-
-           foreach ($res as $val){
-               $unfitProduct .= $val.'<br>';
-           }
+        foreach ($res as $val) {
+            $unfitProduct .= $val . '<br>';
+        }
 
 
-           if(is_null($pBatch->unfitDate)){
-               $pBatchRepo->qualityRank($pBatch);
-           }
+        if (is_null($pBatch->unfitDate)) {
+            $pBatchRepo->qualityRank($pBatch);
+        }
 
-           $pBatch->unfitDate = date('Y-m-d H:i:s');
-           $pBatch->update();
+        $pBatch->unfitDate = date('Y-m-d H:i:s');
+        $pBatch->update();
 
 
+        if ($pBatch->isUnassigned == 1) {
+            $pBatchRepo->duplicateProductBatchFromCancelled($pBatch);
 
-           if($pBatch->isUnassigned == 1) {
-               $pBatchRepo->duplicateProductBatchFromCancelled($pBatch);
+            /** @var CFoison $foison */
+            $foison = $pBatch->contractDetails->contracts->foison;
+            $foison->totalRank(true);
 
-               /** @var CFoison $foison */
-               $foison = $pBatch->contractDetails->contracts->foison;
-               $foison->totalRank(true);
+        }
 
-           }
-
-           if(ENV == 'prod' && $pBatch->isUnassigned == 0){
-               $body = "I seguenti prodotti non sono idonei:<br>
+        if (ENV == 'prod' && $pBatch->isUnassigned == 0) {
+            $body = "I seguenti prodotti non sono idonei:<br>
                     $unfitProduct";
 
 
-               $mailRepo->newMail('gianluca@iwes.it', [$pb['fason']], [], [], "Prodotti non idonei", $body);
-           }
+            $mailRepo->newMail('gianluca@iwes.it', [$pb['fason']], [], [], "Prodotti non idonei", $body);
+        }
 
 
-       }
-
-       return 'Notifiche inviate con successo';
+        return 'Notifiche inviate con successo';
 
     }
 
