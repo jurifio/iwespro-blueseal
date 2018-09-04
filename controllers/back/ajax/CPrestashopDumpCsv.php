@@ -49,18 +49,21 @@ class CPrestashopDumpCsv extends AAjaxController
         $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
         $product = \Monkey::app()->repoFactory->create('Product')->findby(['productStatusId' => '6']);
         foreach ($product as $val) {
-            $producthasprestashop = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
-            if (!empty($producthasprestashop)) {
-                $producthasprestashop->productId = $val->id;
-                $producthasprestashop->productVariantId = $val->productVariantId;
-                $producthasprestashop->status = '1';
-                $producthasprestashop->update();
-            } else {
-                $producthasprestashopinsert = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->getEmptyEntity();
-                $producthasprestashopinsert->productId = $val->id;
-                $producthasprestashopinsert->productVariantId = $val->productVariantId;
-                $producthasprestashopinsert->status = '0';
-                $producthasprestashopinsert->smartInsert();
+            if ($val->qty > 0) {
+                $producthasprestashop = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $val->id, 'productVariantId' => $val->productVariantId]);
+
+                if (!empty($producthasprestashop)) {
+                    $producthasprestashop->productId = $val->id;
+                    $producthasprestashop->productVariantId = $val->productVariantId;
+                    $producthasprestashop->status = '1';
+                    $producthasprestashop->update();
+                } else {
+                    $producthasprestashopinsert = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->getEmptyEntity();
+                    $producthasprestashopinsert->productId = $val->id;
+                    $producthasprestashopinsert->productVariantId = $val->productVariantId;
+                    $producthasprestashopinsert->status = '0';
+                    $producthasprestashopinsert->smartInsert();
+                }
             }
         }
 
@@ -720,9 +723,7 @@ FROM ProductDetailTranslation pdt";
         fclose($feature_value_lang_csv);
         /****** SEZIONE PRODOTTI *//////
         /** esportazione prodotti */
-        $sql = "
-
-SELECT
+        $sql = "SELECT
   php.prestaId                                                                   AS prestaId,
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
   p.id                                                                           AS  productId,
@@ -747,7 +748,6 @@ SELECT
   FORMAT(shp.price/100*70 ,2)                                                    AS wholesale_price,
   '0'                                                                             AS unity,
   '0.000000'  AS unit_price_ratio,
-  '0' AS additional_shipping_cost,
   concat(p.id,'-',p.productVariantId)                                            AS reference,
   concat(p.id,'-',p.productVariantId)                                            AS supplier_reference,
   ''                                                                             AS location,
@@ -758,11 +758,7 @@ SELECT
   '2'  AS out_of_stock,
   '0'  AS additional_delivery_times,
   '0' AS quantity_discount,
-  '0' AS customizable,
-  '0' AS uploadable_files,
   '0' AS text_fields,
-  '1' AS active,
-
   if (p.isOnSale=1,format((shp.price - shp.salePrice),2),format(shp.price,2))    AS discount_amount,
   ''                                                                             AS discount_percent,
   '2018-01-01'                                                                   AS discount_from,
@@ -782,7 +778,6 @@ SELECT
   '2018-01-01'                                                                   AS available_date,
   '1'                                                                            AS indexed,
   '0'                                                                            AS customizable,
-  '0'                                                                            AS text_fields,
   '0'                                                                            AS uploadable_files,
   '1'                                                                            AS active,
   '404'                                                                          AS redirect_type,
@@ -790,7 +785,6 @@ SELECT
   '1'                                                                            AS show_condition,
   'new'                                                                          AS`condition`,
   '1'                                                                            AS show_price,
-  '3'                                                                            AS pack_stock_type,
   '1'                                                                            AS showPrice,
   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',p.id,'-',p.productVariantId,'-001-1124.jpg')   AS picture,
   concat(p.id,'-',p.productVariantId)                                            AS imageAlt,
@@ -1380,12 +1374,12 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
 
         }
 
-        $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) as reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
+        $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
 FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0  group by picture  ORDER BY productId asc";
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0  GROUP BY picture  ORDER BY productId ASC";
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $a = 0;
         foreach ($image_product as $value_image_product) {
@@ -1631,7 +1625,6 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
 
 //close connection
         curl_close($ch);
-
 
 
         $res = 'esportazione eseguita';
