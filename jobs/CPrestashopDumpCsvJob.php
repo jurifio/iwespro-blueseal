@@ -48,10 +48,11 @@ class CPrestashopDumpCsvJob extends ACronJob
         /*********************   preparazione tabella di collegamento  ****************************************************//////
         /*** popolamento tabella */
 
-        $sql = "DELETE FROM PrestashopHasProduct";
-        $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
-        $sql = "ALTER TABLE PrestashopHasProduct AUTO_INCREMENT=1";
-        $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
+        /*   $sql = "DELETE FROM PrestashopHasProduct";
+           $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
+           $sql = "ALTER TABLE PrestashopHasProduct AUTO_INCREMENT=1";
+           $res_delete = \Monkey::app()->dbAdapter->query($sql, []);*/
+
         $sql="SELECT
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
   p.id                                                                           AS  productId,
@@ -157,6 +158,7 @@ ORDER BY `p`.`id` ASC";
                 $producthasprestashopinsert->smartInsert();
             }
         }
+
 
         /***********************sezione categorie***********************************************************************************/
         /*** estrazione dati  categorie*/
@@ -814,9 +816,7 @@ FROM ProductDetailTranslation pdt";
         fclose($feature_value_lang_csv);
         /****** SEZIONE PRODOTTI *//////
         /** esportazione prodotti */
-        $sql = "
-
-SELECT
+        $sql = "SELECT
   php.prestaId                                                                   AS prestaId,
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
   p.id                                                                           AS  productId,
@@ -841,7 +841,6 @@ SELECT
   FORMAT(shp.price/100*70 ,2)                                                    AS wholesale_price,
   '0'                                                                             AS unity,
   '0.000000'  AS unit_price_ratio,
-  '0' AS additional_shipping_cost,
   concat(p.id,'-',p.productVariantId)                                            AS reference,
   concat(p.id,'-',p.productVariantId)                                            AS supplier_reference,
   ''                                                                             AS location,
@@ -852,12 +851,8 @@ SELECT
   '2'  AS out_of_stock,
   '0'  AS additional_delivery_times,
   '0' AS quantity_discount,
-  '0' AS customizable,
-  '0' AS uploadable_files,
   '0' AS text_fields,
-  '1' AS active,
-
-  if (p.isOnSale=1,format((shp.price - shp.salePrice),2),format(shp.price,2))    AS discount_amount,
+  if (p.isOnSale=1,format((shp.price - shp.salePrice),2),'0.00')    AS discount_amount,
   ''                                                                             AS discount_percent,
   '2018-01-01'                                                                   AS discount_from,
   '2018-01-01'                                                                   AS discount_to,
@@ -876,7 +871,6 @@ SELECT
   '2018-01-01'                                                                   AS available_date,
   '1'                                                                            AS indexed,
   '0'                                                                            AS customizable,
-  '0'                                                                            AS text_fields,
   '0'                                                                            AS uploadable_files,
   '1'                                                                            AS active,
   '404'                                                                          AS redirect_type,
@@ -884,7 +878,6 @@ SELECT
   '1'                                                                            AS show_condition,
   'new'                                                                          AS`condition`,
   '1'                                                                            AS show_price,
-  '3'                                                                            AS pack_stock_type,
   '1'                                                                            AS showPrice,
   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',p.id,'-',p.productVariantId,'-001-1124.jpg')   AS picture,
   concat(p.id,'-',p.productVariantId)                                            AS imageAlt,
@@ -910,7 +903,7 @@ FROM `Product` `p`
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   JOIN  PrestashopHasProduct php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6'
-GROUP BY product_id
+GROUP BY p.id,p.productVariantId
 ORDER BY `p`.`id` ASC
 ";
 
@@ -1474,23 +1467,43 @@ JOIN ProductBrand pb ON p.productBrandId = pb.id WHERE p.id='" . $value_product[
 
         }
 
-        $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) as reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
+        $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
 FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0  group by picture  ORDER BY productId asc";
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0  GROUP BY picture  ORDER BY productId ASC";
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $a = 0;
         foreach ($image_product as $value_image_product) {
             $k = $k + 1;
             $a = $a + 1;
+            $prestashopHasProductImage=\Monkey::app()->repoFactory->create('PrestashopHasProductImage')->findOneBy(['idImage'=>$k]);
+            if(empty($prestashopHasProductImage)){
+                $prestashopHasProductImageInsert=\Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
+                $prestashopHasProductImageInsert->prestaId=$value_image_product['productId'];
+                $prestashopHasProductImageInsert->position=$value_image_product['position'];
+                $prestashopHasProductImageInsert->picture=$value_image_product['picture'];
+                $prestashopHasProductImageInsert->cover=$value_image_product['cover'];
+                $prestashopHasProductImageInsert->status='0';
+                $prestashopHasProductImageInsert->smartInsert();
+
+            }else{
+                $prestashopHasProductImage->prestaId=$value_image_product['productId'];
+                $prestashopHasProductImage->position=$value_image_product['position'];
+                $prestashopHasProductImage->picture=$value_image_product['picture'];
+                $prestashopHasProductImage->cover=$value_image_product['cover'];
+                $prestashopHasProductImage->status='1';
+                $prestashopHasProductImage->update();
+
+
+            }
 
             $data_image = array(
                 array($k,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover'],));
+                    $value_image_product['cover']));
             $data_image_shop = array(
                 array($value_image_product['productId'],
                     $k,
@@ -1512,7 +1525,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                     $value_image_product['productId'],
                     $value_image_product['position'],
                     $value_image_product['cover'],
-                    $value_image_product['picture'],));
+                    $value_image_product['picture']));
 
 
             foreach ($data_image as $row_image_product) {
@@ -1725,6 +1738,10 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
 
 //close connection
         curl_close($ch);
+        $sql = "UPDATE PrestashopHasProduct set status='1' where status='0'";
+        \Monkey::app()->dbAdapter->query($sql, []);
+        $sql = "UPDATE PrestashopHasProductImage set status='1' where status='0'";
+        \Monkey::app()->dbAdapter->query($sql, []);
         $res="esportazione eseguita file ".$pharfile."  finita alle ore ".date('Y-m-d H:i:s');
         $this->report('Exporting to Prestashop ',$res,$res);
 
