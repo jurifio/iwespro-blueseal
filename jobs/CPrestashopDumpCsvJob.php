@@ -1636,7 +1636,8 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
 
 //close connection
         curl_close($ch);
-
+        $res="esportazione eseguita file ".$pharfile."  finita alle ore ".date('Y-m-d H:i:s');
+        $this->report('Exporting to Prestashop ',$res,$res);
 
 
         $res = 'esportazione eseguita';
