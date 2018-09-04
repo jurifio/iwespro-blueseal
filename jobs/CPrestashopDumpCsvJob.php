@@ -48,10 +48,10 @@ class CPrestashopDumpCsvJob extends ACronJob
         /*********************   preparazione tabella di collegamento  ****************************************************//////
         /*** popolamento tabella */
 
-        /*   $sql = "DELETE FROM PrestashopHasProduct";
+           $sql = "DELETE FROM PrestashopHasProduct";
            $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
            $sql = "ALTER TABLE PrestashopHasProduct AUTO_INCREMENT=1";
-           $res_delete = \Monkey::app()->dbAdapter->query($sql, []);*/
+           $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
 
         $sql="SELECT
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
