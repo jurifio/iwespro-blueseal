@@ -1,0 +1,22 @@
+{
+    "entity": {
+        "name": "FoisonSubscribeRequest",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "workCategory",
+                "entity" : "WorkCategory",
+                "parentKeys": ["id"],
+                "childKeys" : ["id"],
+                "joinOn" :
+                {
+                    "table": "FoisonSubscribeRequestHasWorkCategory",
+                    "childKeys": ["workCategoryId"],
+                    "parentKeys" : ["foisonSubscribeRequestId"]
+                },
+                "type" : "ManyToMany"
+            }
+        ]
+    }
+}
