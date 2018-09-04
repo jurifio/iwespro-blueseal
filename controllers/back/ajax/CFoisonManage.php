@@ -70,7 +70,7 @@ class CFoisonManage extends AAjaxController
          $email = $user->getEmail();
          $createdFaison = $foisonRepo->assignUser($name, $surname, $email, $userId);
 
-         if($createdFaison){
+         if(is_object($createdFaison)){
              $res = "Utente associato con successo";
          } else {
              $res = "Utente non associato, contattare il reparto tecnico";

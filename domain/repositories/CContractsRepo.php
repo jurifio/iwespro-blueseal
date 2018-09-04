@@ -39,7 +39,7 @@ class CContractsRepo extends ARepo
      * @return \bamboo\core\db\pandaorm\entities\AEntity|CContracts|bool
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
-    public function createNewContract(CFoison $foison, $name, $description) {
+    public function createNewContract(CFoison $foison, $name, $description, $isActive = 1, $accepted = 1) {
 
         try{
             \Monkey::app()->repoFactory->beginTransaction();
@@ -48,7 +48,8 @@ class CContractsRepo extends ARepo
             $contract->foisonId = $foison->id;
             $contract->name = $name;
             $contract->description = $description;
-            $contract->isActive = 1;
+            $contract->accepted = $accepted;
+            $contract->isActive = $isActive;
             $contract->smartInsert();
             \Monkey::app()->repoFactory->commit();
         } catch (\Throwable $e){
@@ -57,5 +58,25 @@ class CContractsRepo extends ARepo
         }
 
         return $contract;
+    }
+
+
+    public function getFullTextContract($body, $data){
+
+        $body = preg_replace_callback('/{{(\w+)}}/', function($match) use($data) {
+            return $data[$match[1]];
+        }, $body );
+
+        return $body;
+    }
+
+
+    public function insertTextContract($contractId, $pdf) {
+        /** @var CContracts $contract */
+        $contract = $this->findOneBy(["id"=>$contractId]);
+        $contract->contractFile = $pdf;
+        $contract->update();
+
+        return true;
     }
 }

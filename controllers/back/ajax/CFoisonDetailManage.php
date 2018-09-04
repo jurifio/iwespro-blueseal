@@ -55,7 +55,11 @@ class CFoisonDetailManage extends AAjaxController
         $postalCode = $data["postalCode"];
         $country = $data["country"];
         $phone = $data["phone"];
+        $password = $data["password"];
 
+        $user = $foison->user;
+        $user->password = password_hash($password, PASSWORD_BCRYPT);
+        $user->update();
         /** @var CUserAddressRepo $userAddressRepo */
         $userAddressRepo = \Monkey::app()->repoFactory->create('UserAddress');
 

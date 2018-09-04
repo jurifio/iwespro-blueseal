@@ -17,6 +17,7 @@ class CGetTableContent extends AAjaxController
         'Carrier',
         'Lang',
         'Country',
+        'ContractText',
         'City',
         'Currency',
         'ProductCategory',

@@ -23,6 +23,9 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  */
 class CContracts extends AEntity
 {
+
+    CONST DEFAULT_CONTRACT_NAME_REQUEST_FASON = "Condizioni generali per il contratto del Fason: ";
+
     protected $entityTable = 'Contracts';
     protected $primaryKeys = ['id'];
 }

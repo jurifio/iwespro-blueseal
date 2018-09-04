@@ -74,7 +74,7 @@ class CContractsListAjaxController extends AAjaxController
             /** @var CContracts $contracts */
             $contracts = $contractsRepo->findOneBy(['id'=>$row["id"]]);
             $row["row_id"] = $contracts->id;
-            $row["id"] = "<a href='".$url.$row["id"]."' target='_blank'>".$contracts->id."</a>";
+            $row["id"] = $contracts->isActive == 1 ? "<a href='".$url.$row["id"]."' target='_blank'>".$contracts->id."</a>" : $contracts->id;
             $row["contractName"] = $contracts->name;
             $row["contractDescription"] = $contracts->description;
             $row["foisonName"] = $contracts->foison->name;

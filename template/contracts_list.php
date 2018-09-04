@@ -74,6 +74,18 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="Gestione Contratti">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-check"
+                data-permission="worker"
+                data-event="bs-contract-accept"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Accetta le condizioni generali del contratto"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
     <?php if($allShops):?>
     <bs-toolbar-group data-group-label="Gestione Contratti">
         <bs-toolbar-button

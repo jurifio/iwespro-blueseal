@@ -3,6 +3,7 @@ namespace bamboo\domain\repositories;
 
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CRbacRole;
 
 /**
@@ -25,14 +26,15 @@ class CFoisonRepo extends ARepo
      * @param $surname
      * @param $email
      * @param $userId
-     * @return bool
+     * @return CFoison
      */
-    public function assignUser($name, $surname, $email, $userId){
+    public function assignUser($name, $surname, $email, $userId) : CFoison{
         $faison = $this->getEmptyEntity();
         $faison->name = $name;
         $faison->surname = $surname;
         $faison->email = $email;
         $faison->userId = $userId;
+        $faison->foisonStatusId = 1;
         $faison->smartInsert();
 
         /** @var CRepo $uhbrRepo */
@@ -45,7 +47,7 @@ class CFoisonRepo extends ARepo
         $uhbr->smartInsert();
 
 
-        return true;
+        return $faison;
 
     }
 }

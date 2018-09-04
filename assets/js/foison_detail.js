@@ -17,7 +17,8 @@
              city: $('#city').val(),
              postalCode: $('#postcode').val(),
              country: $('#country').val(),
-             phone: $('#foison_phone').val()
+             phone: $('#foison_phone').val(),
+             password: $('#password').val()
         };
 
             $.ajax({

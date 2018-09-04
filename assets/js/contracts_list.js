@@ -215,4 +215,66 @@
             });
         });
     });
+
+
+    $(document).on('bs-contract-accept', function () {
+
+        let selectedRows = $('.dataTable').DataTable().rows('.selected').data();
+
+        if (selectedRows.count() != 1) {
+            new Alert({
+                type: "warning",
+                message: "Firma un contratto alla volta!"
+            }).open();
+            return false;
+        }
+
+        let id = selectedRows[0].row_id;
+
+        let bsModal = new $.bsModal('Firma il contratto', {
+            body: `<div id="contract">
+                      <div class="pre-scrollable" id="textC"></div>
+                   </div>`
+        });
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/SingleContractManage',
+            data: {
+               idC: id
+            }
+        }).done(function (res) {
+            $('#textC').append('<p>'+res+'</p>')
+        });
+
+        bsModal.addClass('modal-wide');
+        bsModal.addClass('modal-high');
+
+        bsModal.showCancelBtn();
+        bsModal.setOkLabel('Accetta e stampa');
+        bsModal.setOkEvent(function () {
+
+
+            const data = {
+                idC: id,
+                textContract: $('#textC').html()
+            };
+            $.ajax({
+                method: 'put',
+                url: '/blueseal/xhr/SingleContractManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    $.refreshDataTable();
+                    bsModal.hide();
+                    //window.location.reload();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
 })();

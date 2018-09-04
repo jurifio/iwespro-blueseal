@@ -54,6 +54,12 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default required">
+                                                        <label for="password">Password</label>
+                                                        <input placeholder="Reimposta password" id="password" autocomplete="off" type="text" class="form-control" name="password" value="" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default required">
                                                         <label for="foison_fiscal_code">Codice Fiscale</label>
                                                         <input id="foison_fiscal_code" autocomplete="off" type="text" class="form-control" name="foison_fiscal_code" value="<?php echo $foison->user->userDetails->fiscalCode; ?>" />
                                                     </div>
