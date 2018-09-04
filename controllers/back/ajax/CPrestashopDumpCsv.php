@@ -43,10 +43,10 @@ class CPrestashopDumpCsv extends AAjaxController
         /*********************   preparazione tabella di collegamento  ****************************************************//////
         /*** popolamento tabella */
 
-        $sql = "DELETE FROM PrestashopHasProduct";
+     /*   $sql = "DELETE FROM PrestashopHasProduct";
         $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "ALTER TABLE PrestashopHasProduct AUTO_INCREMENT=1";
-        $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
+        $res_delete = \Monkey::app()->dbAdapter->query($sql, []);*/
 
         $sql="SELECT
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
@@ -1473,12 +1473,32 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         foreach ($image_product as $value_image_product) {
             $k = $k + 1;
             $a = $a + 1;
+            $prestashopHasProductImage=\Monkey::app()->repoFactory->create('PrestashopHasProductImage')->findOneBy(['idImage'=>$k]);
+            if(empty($prestashopHasProductImage)){
+              $prestashopHasProductImageInsert=\Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
+              $prestashopHasProductImageInsert->prestaId=$value_image_product['productId'];
+              $prestashopHasProductImageInsert->position=$value_image_product['position'];
+              $prestashopHasProductImageInsert->picture=$value_image_product['picture'];
+              $prestashopHasProductImageInsert->cover=$value_image_product['cover'];
+              $prestashopHasProductImageInsert->status='0';
+              $prestashopHasProductImageInsert->smartInsert();
+
+            }else{
+                $prestashopHasProductImage->prestaId=$value_image_product['productId'];
+                $prestashopHasProductImage->position=$value_image_product['position'];
+                $prestashopHasProductImage->picture=$value_image_product['picture'];
+                $prestashopHasProductImage->cover=$value_image_product['cover'];
+                $prestashopHasProductImage->status='1';
+                $prestashopHasProductImage->update();
+
+
+            }
 
             $data_image = array(
                 array($k,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover'],));
+                    $value_image_product['cover']));
             $data_image_shop = array(
                 array($value_image_product['productId'],
                     $k,
@@ -1500,7 +1520,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                     $value_image_product['productId'],
                     $value_image_product['position'],
                     $value_image_product['cover'],
-                    $value_image_product['picture'],));
+                    $value_image_product['picture']));
 
 
             foreach ($data_image as $row_image_product) {
