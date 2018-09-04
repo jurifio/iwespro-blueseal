@@ -1733,6 +1733,10 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
 
 //close connection
         curl_close($ch);
+        $sql = "UPDATE PrestashopHasProduct set status='1' where status='0'";
+        \Monkey::app()->dbAdapter->query($sql, []);
+        $sql = "UPDATE PrestashopHasProductImage set status='1' where status='1'";
+        \Monkey::app()->dbAdapter->query($sql, []);
 
 
         $res = 'esportazione eseguita';
