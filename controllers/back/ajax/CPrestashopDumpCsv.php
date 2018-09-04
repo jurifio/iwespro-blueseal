@@ -135,7 +135,7 @@ FROM `Product` `p`
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6'
 GROUP BY p.id,p.productVariantId
 ORDER BY `p`.`id` ASC";
-        $product = \Monkey::app()->dbAdapter->query($sql, []);
+        $product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($product as $val) {
 
                 $producthasprestashop = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $val['productId'], 'productVariantId' => $val['productVariantId']]);
