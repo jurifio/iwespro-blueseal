@@ -22,6 +22,12 @@ use bamboo\core\exceptions\BambooException;
  */
 class CReadExtDbTable extends AReadExtDbTable
 {
+
+    CONST MAX = "MAX";
+    CONST MIN = "MIN";
+    CONST SUM = "SUM";
+    CONST COUNT = "COUNT";
+
     /**
      * @param $tablesName
      * @param array $fields
@@ -30,6 +36,23 @@ class CReadExtDbTable extends AReadExtDbTable
      */
     public function readTables($tablesName, $remoteWhere, array $fields = [])
     {
+        if(!empty($fields) && $this->isAssoc($fields)){
+            /*
+             *
+             *
+             * $fields = [
+             * "id_product_attribute" => "MAX",
+             * "id_product" => "null"
+             * ]
+             *
+             */
+            $finalFields = [];
+            foreach ($fields as $field => $option) {
+                if($option !== "null"){
+                    $finalFields[] = $option."(".$field.")";
+                } else $finalFields[] = $field;
+            }
+        }
 
         $firsTable = null;
         $firstField = null;
@@ -258,6 +281,11 @@ class CReadExtDbTable extends AReadExtDbTable
 
         return $sum;
 
+    }
+
+    protected function isAssoc($arr)
+    {
+        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
 

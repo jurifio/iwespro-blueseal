@@ -257,7 +257,7 @@ class CPrestashopDumpCsv extends AAjaxController
   '0'  AS additional_delivery_times,
   '0' AS quantity_discount,
   '0' AS text_fields,
-  if (p.isOnSale=1,format((shp.price - shp.salePrice),2),'0.00')    AS discount_amount,
+  if (p.isOnSale=1,format((shp.price - shp.salePrice),2),'0.00')                 AS discount_amount,
   ''                                                                             AS discount_percent,
   '2018-01-01'                                                                   AS discount_from,
   '2018-01-01'                                                                   AS discount_to,
@@ -911,7 +911,7 @@ FROM ProductSizeMacroGroup psmg
                   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
                   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
                   JOIN  PrestashopHasProduct php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
-                WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2) 
+               
                 GROUP BY p.id,p.productVariantId
                 ORDER BY `p`.`id` ASC";
 
