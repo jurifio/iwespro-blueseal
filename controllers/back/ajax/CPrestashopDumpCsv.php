@@ -43,10 +43,10 @@ class CPrestashopDumpCsv extends AAjaxController
         /*********************   preparazione tabella di collegamento  ****************************************************//////
         /*** popolamento tabella */
 
-       $sql = "DELETE FROM PrestashopHasProduct";
+      /* $sql = "DELETE FROM PrestashopHasProduct";
         $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "ALTER TABLE PrestashopHasProduct AUTO_INCREMENT=1";
-        $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
+        $res_delete = \Monkey::app()->dbAdapter->query($sql, []);*/
 
         $sql="SELECT
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
@@ -1724,12 +1724,12 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         /* $response = http_get("http://iwes.shop/alignpresta.php/", array("timeout"=>1), $info);
          $res = print_r($info);*/
 
-        $url = 'https://iwes.shop/alignpresta.php';
+      /*  $url = 'https://iwes.shop/alignpresta.php';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
+        $result = curl_exec($ch);*/
 
 //close connection
         curl_close($ch);

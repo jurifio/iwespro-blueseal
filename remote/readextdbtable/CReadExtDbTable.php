@@ -39,7 +39,12 @@ class CReadExtDbTable extends AReadExtDbTable
             $c++;
             if ($c == 1) continue;
 
-            if(explode('-', $table)[1] === 'Left'){
+            $isLeftJoin = false;
+            if (strpos($table, 'Left') !== false) {
+                $isLeftJoin = true;
+            }
+
+            if($isLeftJoin && explode('-', $table)[1] === 'Left'){
                 $join .= " LEFT JOIN ";
                 $table = explode('-', $table)[0];
             } else {
@@ -78,10 +83,19 @@ class CReadExtDbTable extends AReadExtDbTable
                 $countKeyTable++;
                 foreach ($tableN as $condition => $val) {
                     $count++;
-                    if ($count === $sum) {
-                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '"';
+                    $findType = "";
+                    if(is_array($val)) {
+                        $findType = " in ";
+                        $trueValue = "(".implode(', ', $val).")";
                     } else {
-                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '" AND ';
+                        $findType = " = ";
+                        $trueValue = "'" . $val . "'";
+                    }
+
+                    if ($count === $sum) {
+                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . $findType . $trueValue;
+                    } else {
+                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . $findType . $trueValue . ' AND ';
                     }
                 }
 
