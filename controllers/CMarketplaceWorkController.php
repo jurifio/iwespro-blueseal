@@ -59,12 +59,16 @@ class CMarketplaceWorkController extends ARestrictedAccessRootController
             $unallowedProductBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findBySql($uQuery);
        }
 
-        $rowIds = implode(',', $interestIds);
-        $query = "SELECT *
+        $productsBatch = null;
+        if(!empty($interestIds)){
+            $rowIds = implode(',', $interestIds);
+            $query = "SELECT *
         FROM ProductBatch pb
         WHERE pb.marketplace = 1 and pb.workCategoryId in ($rowIds)";
-        /** @var CObjectCollection $productsBatch */
-        $productsBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findBySql($query);
+            /** @var CObjectCollection $productsBatch */
+            $productsBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findBySql($query);
+        }
+
 
         $hasOpenedProductBatch = $user->foison->hasOpenedProductBatch();
         $foisonStatus = $user->foison->foisonStatusId;

@@ -32,6 +32,9 @@ class CDownloadFileFromDb
             case 'InvoiceBin':
                 $res = $this->getInvoiceBin($table, $field, $value);
                 break;
+            case 'Contracts':
+                $res = $this->getContractsBin($table, $field, $value);
+                break;
             default:
                 $res = [];
                 $res['bin'] = \Monkey::app()->repoFactory->create($table)->findOneBy([$field => $value])->fetch()->bin;
@@ -46,6 +49,8 @@ class CDownloadFileFromDb
      * @param $table
      * @param $field
      * @param $value
+     * @return array
+     * @throws BambooRoutingException
      */
     public function getInvoiceBin($table, $field, $value)
     {
@@ -59,6 +64,29 @@ class CDownloadFileFromDb
         if (!$user->hasShop($ib->document->shopAddressBook->shop->id)) throw new BambooRoutingException('NotAuthorized');
         }
 
+
+        $res['bin'] = $ib->bin;
+        $finfo = new \finfo(FILEINFO_MIME);
+        $res['mime'] = $finfo->buffer($res['bin']);
+        return $res;
+    }
+
+    /**
+     * @param $table
+     * @param $field
+     * @param $value
+     * @return array
+     * @throws BambooRoutingException
+     */
+    public function getContractsBin($table, $field, $value)
+    {
+        $res = [];
+        $user = \Monkey::app()->getUser();
+
+        $ib = \Monkey::app()->repoFactory->create($table)->findOneBy([$field => $value]);
+
+        if (!$ib) throw new BambooRoutingException('File Not Found');
+        if(!$user->hasPermission("worker")) throw new BambooRoutingException('NotAuthorized');
 
         $res['bin'] = $ib->bin;
         $finfo = new \finfo(FILEINFO_MIME);

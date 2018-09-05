@@ -2,6 +2,7 @@
 
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\blueseal\business\CDownloadFileFromDb;
 use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CFoison;
 use bamboo\domain\repositories\CContractsRepo;
@@ -56,10 +57,10 @@ class CSingleContractManage extends AAjaxController
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('IWES SNC');
-        $pdf->SetTitle('Contract');
-        $pdf->SetSubject('Contract');
-        $pdf->SetKeywords('Contract');
+        $pdf->SetAuthor("IWES SNC");
+        $pdf->SetTitle("Contratto n. $idC");
+        $pdf->SetSubject("Contratto n. $idC");
+        $pdf->SetKeywords("Contratto n. $idC");
 
         // set default header data
         $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 021', PDF_HEADER_STRING);
@@ -102,13 +103,21 @@ class CSingleContractManage extends AAjaxController
 
         // ---------------------------------------------------------
         \Monkey::app()->router->response()->setContentType('application/pdf');
-        $contract = $pdf->Output('spedizione_.pdf', 'S');
+        $contractText = $pdf->Output('spedizione_.pdf', 'S');
         /** @var CContractsRepo $cR */
         $cR = \Monkey::app()->repoFactory->create('Contracts');
-        $cR->insertTextContract($idC, $contract);
+        $contract = $cR->insertTextContract($idC, $contractText);
+
+        //Contract update
+        $contract->accepted = 1;
+        $nowObject = new \DateTime();
+        $now = $nowObject->format('Y-m-d H:i:s');
+        $contract->acceptedDate = $now;
+        $contract->isActive = 1;
+        $contract->update();
 
 
-
+        return $contract->id;
     }
 
 }

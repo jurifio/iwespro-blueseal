@@ -21,45 +21,49 @@
                                 <h4>LOTTI PRENOTABILI</h4>
                                 <?php
                                 /** @var \bamboo\domain\entities\CProductBatch $pb */
-                                foreach ($productBatch as $pb):
-                                    $el = count($pb->getElements());
+                                if(!is_null($productBatch)){
+                                    foreach ($productBatch as $pb):
+                                        $el = count($pb->getElements());
 
-                                    if ($permission) {
-                                        $rPrice = $pb->unitPrice;
-                                    } else {
-                                        /** @var \bamboo\domain\entities\CContractDetails $cD */
-                                        $cD = $pb->getContractDetailFromUnassignedProductBatch($user);
-                                        if ($cD) {
-                                            $cDFixOrVar = $cD->isVariable;
-                                            $rPrice = $cDFixOrVar == 1 ? $pb->unitPrice : $cD->workPriceList->price;
+                                        if ($permission) {
+                                            $rPrice = $pb->unitPrice;
+                                        } else {
+                                            /** @var \bamboo\domain\entities\CContractDetails $cD */
+                                            $cD = $pb->getContractDetailFromUnassignedProductBatch($user);
+                                            if ($cD) {
+                                                $cDFixOrVar = $cD->isVariable;
+                                                $rPrice = $cDFixOrVar == 1 ? $pb->unitPrice : $cD->workPriceList->price;
+                                            }
                                         }
-                                    }
-                                    ?>
-                                    <div class="col-xs-18 col-sm-6 col-md-3">
-                                        <div class="thumbnail">
-                                            <img src="http://placehold.it/500x250/EEE">
-                                            <div class="caption">
-                                                <h4><?php echo $pb->name; ?></h4>
-                                                <p><?php echo $pb->description ?></p>
-                                                <p>
-                                                    Qty: <?php echo $el == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $el . "</strong>" ?>
-                                                    <br>
-                                                    Prezzo
-                                                    unitario: <?php echo "<strong>" . $rPrice . "€</strong>" ?>
-                                                    <br>
-                                                    Prezzo
-                                                    totale: <?php echo $el == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $rPrice * $el . "€</strong>" ?>
-                                                    <br>
-                                                    Giorni stimati di
-                                                    lavoro: <?php echo "<strong>" . $pb->estimatedWorkDays . "</strong>"; ?>
-                                                </p>
-                                                <button class="btn btn-info btn-xs acceptPB <?php echo $pb->id;?>" <?php if ($foisonRank < \bamboo\domain\entities\CFoison::MININUM_RANK || $el === 0 || $hasOpenedProductBatch || $foisonStatus != 2 ) echo 'disabled' ?> data-pbId="<?php echo $pb->id;?>">
-                                                    Prenota
-                                                </button>
+                                        ?>
+                                        <div class="col-xs-18 col-sm-6 col-md-3">
+                                            <div class="thumbnail">
+                                                <img src="http://placehold.it/500x250/EEE">
+                                                <div class="caption">
+                                                    <h4><?php echo $pb->name; ?></h4>
+                                                    <p><?php echo $pb->description ?></p>
+                                                    <p>
+                                                        Qty: <?php echo $el == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $el . "</strong>" ?>
+                                                        <br>
+                                                        Prezzo
+                                                        unitario: <?php echo "<strong>" . $rPrice . "€</strong>" ?>
+                                                        <br>
+                                                        Prezzo
+                                                        totale: <?php echo $el == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $rPrice * $el . "€</strong>" ?>
+                                                        <br>
+                                                        Giorni stimati di
+                                                        lavoro: <?php echo "<strong>" . $pb->estimatedWorkDays . "</strong>"; ?>
+                                                    </p>
+                                                    <button class="btn btn-info btn-xs acceptPB <?php echo $pb->id;?>" <?php if ($foisonRank < \bamboo\domain\entities\CFoison::MININUM_RANK || $el === 0 || $hasOpenedProductBatch) echo 'disabled' ?> data-pbId="<?php echo $pb->id;?>">
+                                                        Prenota
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <?php endforeach; ?>
+                                <?php
+                                    endforeach;
+                                }
+                                ?>
                             </div><!--/row-->
                         </div><!--/container -->
 
@@ -73,7 +77,7 @@
                                         $uEl = count($upb->getElements());
                                         ?>
                                         <div disabled class="col-xs-18 col-sm-6 col-md-3">
-                                            <div class="thumbnail" id="thumbnail-<?php echo $pb->id;?>">
+                                            <div class="thumbnail" id="thumbnail>">
                                                 <img src="http://placehold.it/500x250/EEE">
                                                 <div class="caption">
                                                     <h4><?php echo $upb->name; ?></h4>

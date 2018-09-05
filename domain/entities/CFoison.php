@@ -23,6 +23,9 @@ use bamboo\utils\time\SDateToolbox;
  * @property CObjectCollection $contracts
  * @property CAddressBook $addressBook
  * @property CObjectCollection $foisonHasInterest*
+ * @property CObjectCollection $workCategory
+ *
+ *
  */
 class CFoison extends AEntity
 {
@@ -41,7 +44,9 @@ class CFoison extends AEntity
         $ids = [];
         /** @var CFoisonHasInterest $interest */
         foreach ($interests as $interest) {
-            $ids[] = $interest->workCategoryId;
+            if($interest->foisonStatusId == 2 OR $interest->foisonStatusId == 3){
+                $ids[] = $interest->workCategoryId;
+            }
         }
         return $ids;
     }
@@ -81,7 +86,9 @@ class CFoison extends AEntity
      */
     public function getClosedTimeRanchProductBatch($months = null)
     {
-        $initDate = SDateToolbox::removeOrAddMonthsFromDate(null, $months, '-');
+        if(!is_null($months)) {
+            $initDate = SDateToolbox::removeOrAddMonthsFromDate(null, $months, '-');
+        } else $initDate = 0;
 
         $contracts = $this->contracts;
         $pbArray = [];
@@ -144,14 +151,12 @@ class CFoison extends AEntity
             $sumAvg += $avg;
 
         }
-
         $allAvg = round($sumAvg/count($avgs) ,2);
         if($update) {
             $this->rank = $allAvg;
             $this->update();
         }
-
         return $allAvg;
-
     }
+
 }

@@ -34,7 +34,6 @@ class CFoisonRepo extends ARepo
         $faison->surname = $surname;
         $faison->email = $email;
         $faison->userId = $userId;
-        $faison->foisonStatusId = 1;
         $faison->smartInsert();
 
         /** @var CRepo $uhbrRepo */

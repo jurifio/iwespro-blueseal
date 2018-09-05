@@ -74,9 +74,9 @@ class CContractsRepo extends ARepo
     public function insertTextContract($contractId, $pdf) {
         /** @var CContracts $contract */
         $contract = $this->findOneBy(["id"=>$contractId]);
-        $contract->contractFile = $pdf;
+        $contract->bin = $pdf;
         $contract->update();
 
-        return true;
+        return $contract;
     }
 }

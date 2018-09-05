@@ -47,6 +47,9 @@
                                 <th data-slug="iban"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Iban</th>
+                                <th data-slug="interestName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Categorie</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -264,7 +264,8 @@
                 url: '/blueseal/xhr/SingleContractManage',
                 data: data
             }).done(function (res) {
-                bsModal.writeBody(res);
+                bsModal.writeBody('Documento generato con successo');
+                window.open(`/blueseal/download-contracts/${res}?type=Contracts`, '_blank');
             }).fail(function (res) {
                 bsModal.writeBody('Errore grave');
             }).always(function (res) {

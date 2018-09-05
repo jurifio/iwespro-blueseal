@@ -95,6 +95,7 @@ class CFoisonSubscribeRequestInterest extends AAjaxController
                 $foisonInterest = $foisonInterestRepo->getEmptyEntity();
                 $foisonInterest->foisonId = $foison->id;
                 $foisonInterest->workCategoryId = $idInterest;
+                $foisonInterest->foisonStatusId = 1;
                 $foisonInterest->smartInsert();
             }
 

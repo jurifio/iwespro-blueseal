@@ -28,6 +28,18 @@
                 "parentKeys": ["id"],
                 "childKeys" : ["foisonId"],
                 "type" : "OneToMany"
+            },{
+                "name" : "workCategory",
+                "entity" : "WorkCategory",
+                "parentKeys": ["id"],
+                "childKeys" : ["id"],
+                "joinOn" :
+                {
+                    "table": "FoisonHasInterest",
+                    "childKeys": ["workCategoryId"],
+                    "parentKeys" : ["foisonId"]
+                },
+                "type" : "ManyToMany"
             }
         ]
     }

@@ -36,9 +36,12 @@ class CFoisonListAjaxController extends AAjaxController
                   F.name,
                   F.surname,
                   F.email,
-                  B.iban
+                  B.iban,
+                  wc.interestName
             FROM Foison F
             LEFT JOIN AddressBook B ON F.foisonAddressBookId = B.id
+            LEFT JOIN FoisonHasInterest fhi ON F.id = fhi.foisonId
+            LEFT JOIN WorkCategory wc ON fhi.workCategoryId = wc.id
         ";
 
 
@@ -70,7 +73,13 @@ class CFoisonListAjaxController extends AAjaxController
             $row["surname"] = $foison->surname;
             $row["email"] = $foison->email;
             $row["iban"] = (empty($foison->addressBook->iban) ? '-' : $foison->addressBook->iban);
+            $workCategories = "";
 
+            foreach ($foison->workCategory as $workCategory){
+                $workCategories .= $workCategory->interestName . "<br>";
+            }
+
+            $row["interestName"] = $workCategories;
             $datatable->setResponseDataSetRow($key,$row);
         }
 
