@@ -44,6 +44,9 @@
                                 <th data-slug="descr"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Descrizione</th>
+                                <th data-slug="estimatedWorkDays"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Giorni di lavoro stimati</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data di creazione</th>

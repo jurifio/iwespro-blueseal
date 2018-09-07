@@ -1,9 +1,11 @@
 <?php
 namespace bamboo\domain\repositories;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CFoison;
+use bamboo\domain\entities\CFoisonHasInterest;
 use bamboo\domain\entities\CRbacRole;
 
 /**
@@ -48,5 +50,37 @@ class CFoisonRepo extends ARepo
 
         return $faison;
 
+    }
+
+    public function checkStatusForEachWorkCategory($id)
+    {
+
+        /** @var CFoison $foison */
+        $foison = $this->findOneBy(["id"=>$id]);
+        /** @var CObjectCollection $allPB */
+        $allPB = $foison->getClosedTimeRanchProductBatch();
+
+        /** @var CObjectCollection $interests */
+        $interests = $foison->foisonHasInterest;
+
+        //Prendo interessi
+        /** @var CFoisonHasInterest $interest */
+        foreach ($interests as $interest) {
+
+            //Prendo i lotti relativi a quelli interess
+            /** @var CObjectCollection $allPbForCat */
+            $allPbForCat = $allPB->findByKey("workCategoryId",$interest->workCategoryId);
+            //Se ne sono tre e rispettano lo standard passo la categoria a regualar altrimenti no!
+            if(count($allPbForCat) == 3) {
+                $rank = $foison->totalRank(false, $allPbForCat);
+
+                if($rank > 6){
+                    $interest->foisonStatusId = 2;
+                    $interest->update();
+                }
+            }
+        }
+
+        return true;
     }
 }

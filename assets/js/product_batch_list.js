@@ -385,6 +385,8 @@
                 labelField: ['name'],
                 options: res
             });
+        }).fail(function (res) {
+            bsModal.writeBody(res);
         });
 
         let bsModal = new $.bsModal('Assegna un lotto', {
@@ -410,15 +412,7 @@
             'title="contractDetails" name="contractDetails" id="contractDetails">\n' +
             '</select>' +
             '</div>' +
-            '<div>' +
-            '<p id="prodBatchValue">Valore</p>' +
-            '<p id="prodSectional">Sezionale</p>' +
-            '<button id="costWork" name="costWork">Anteprima costo e sezionale</button>' +
-            '</div>' +
-            '<div class="form-group form-group-default required">' +
-            '<label>Data di Consegna</label>' +
-            '<input type="date" id="deliveryDate" name="deliveryDate">' +
-            '</div>'
+            '<div>'
         });
 
         //setto i contratti a seconda del foison
@@ -426,12 +420,9 @@
             let foisonId = $('#foison').val();
             $.ajax({
                 method:'GET',
-                url: '/blueseal/xhr/GetTableContent',
+                url: '/blueseal/xhr/ContractsManage',
                 data: {
-                    table: 'Contracts',
-                    condition: {
                         foisonId: foisonId
-                    },
                 },
                 dataType: 'json'
             }).done(function (res) {

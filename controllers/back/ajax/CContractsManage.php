@@ -56,7 +56,6 @@ class CContractsManage extends AAjaxController
         /** @var CFoison $foison */
         $foison = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$foisonId]);
 
-        if($foison->getContract()) return "Il Fason ha un contratto in essere";
         /** @var CContractsRepo $contractsRepo */
         $contractsRepo = \Monkey::app()->repoFactory->create('Contracts');
 
@@ -119,6 +118,27 @@ class CContractsManage extends AAjaxController
         $contract->isActive = 0;
         $contract->update();
         return "Contratto chiuso con successo";
+    }
+
+    public function get(){
+
+        $fId = \Monkey::app()->router->request()->getRequestData('foisonId');
+
+        /** @var CFoisonRepo $foisonRepo */
+        $foisonRepo = \Monkey::app()->repoFactory->create('Foison');
+
+        /** @var CFoison $foison */
+        $foison = $foisonRepo->findOneBy(["id"=>$fId]);
+
+        $contracts = $foison->getContract();
+        $r = [];
+        $x = 0;
+        foreach ($contracts as $contract){
+            $r[$x]['id'] = $contract->id;
+            $r[$x]['name'] = $contract->name;
+            $x++;
+        }
+return json_encode($r);
     }
 
 }

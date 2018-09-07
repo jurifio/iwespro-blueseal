@@ -52,8 +52,11 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
         $productBatchId = $data["productBatchId"];
         $foisonId = $data["foisonId"];
         $contractDetailsId = $data["contractDetailsId"];
-        $deliveryDate = $data["deliveryDate"];
 
+
+        /** @var CFoison $fason*/
+        $fason = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$foisonId]);
+        if(!is_null($fason->activeProductBatch)) return "il fason ha gia un lotto";
 
         /** @var CProductBatchRepo $pbRepo */
         $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
@@ -63,29 +66,19 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
 
         if(!is_null($pb->contractDetailsId)) return 'Il lotto che stai associando è gia di un\'altro Fason';
 
-        $elems = $pb->getElements();
-        $numP = $elems->count();
-
-
-        //Costo
-        /** @var CContractDetails $contractDetails */
-        $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBy(['id'=>$contractDetailsId]);;
-        $unitPrice = $contractDetails->workPriceList->price;
-        $value = $unitPrice * $numP;
-
         /** @var CProductBatch $pBatch */
-        $pBatch = $pbRepo->associateProductBatch($pb, $deliveryDate, $value, $contractDetailsId);
+        $pBatch = $pbRepo->associateProductBatch($pb, $contractDetailsId);
         if(is_object($pBatch)){
-
+            $fason->activeProductBatch = $pBatch->id;
+            $fason->update();
             /** @var CEmailRepo $mailRepo */
             $mailRepo = \Monkey::app()->repoFactory->create('Email');
 
-            /** @var CFoison $fason*/
-            $fason = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$foisonId]);
 
             $name = $fason->user->getFullName();
             $to = $fason->email;
             $batchId = $pBatch->id;
+
 
 
             $body = "Gentilissimo sig. $name,<br />

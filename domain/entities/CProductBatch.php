@@ -4,6 +4,7 @@ namespace bamboo\domain\entities;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
+use bamboo\core\exceptions\BambooException;
 use bamboo\domain\repositories\CWorkCategoryRepo;
 use bamboo\domain\repositories\CWorkCategoryStepsRepo;
 
@@ -30,71 +31,74 @@ class CProductBatch extends AEntity
     protected $entityTable = 'ProductBatch';
     protected $primaryKeys = ['id'];
 
-    public function isComplete(){
+    public function isComplete()
+    {
 
         $elems = $this->getElements();
 
         foreach ($elems as $elem) {
-            if(!is_null($elem->workCategorySteps->rgt)) return false;
+            if (!is_null($elem->workCategorySteps->rgt)) return false;
         }
 
         return true;
 
     }
 
-    public function isValid(){
+    public function isValid()
+    {
 
         $unfitElement = [];
         $elems = $this->getElements();
 
         /** @var CWorkCategoryStepsRepo $wksR */
         $wksR = \Monkey::app()->repoFactory->create('WorkCategorySteps');
-/** @var CProductBatchDetails $elem */
-        foreach ($elems as $elem){
+        /** @var CProductBatchDetails $elem */
+        foreach ($elems as $elem) {
 
-            switch ($elem->workCategoryStepsId){
+            switch ($elem->workCategoryStepsId) {
                 case CProductBatchDetails::UNFIT_NORM:
-                    $unfitElement[] = 'id: '.$elem->id.
-                        ' | Lotto: '.$elem->productBatchId.
-                        ' | Prodotto: '.$elem->productId.'-'.$elem->productVariantId;
+                    $unfitElement[] = 'id: ' . $elem->id .
+                        ' | Lotto: ' . $elem->productBatchId .
+                        ' | Prodotto: ' . $elem->productId . '-' . $elem->productVariantId;
                     break;
                 case CProductBatchHasProductBrand::UNFIT_BRAND:
                     $unfitElement[] =
-                        ' | Lotto: '.$elem->productBatchId.
-                        ' | Brand: '.$elem->productBrandId;
+                        ' | Lotto: ' . $elem->productBatchId .
+                        ' | Brand: ' . $elem->productBrandId;
                     break;
                 case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG:
                 case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC:
-                $unfitElement[] =
-                    ' | Lotto: '.$elem->productBatchId.
-                    ' | Brand: '.$elem->productName;
+                    $unfitElement[] =
+                        ' | Lotto: ' . $elem->productBatchId .
+                        ' | Brand: ' . $elem->productName;
                     break;
             }
 
-            if($wksR->getFirstStepsFromCategoryId($elem->productBatch->workCategoryId)->id == $elem->workCategoryStepsId){
+            if ($wksR->getFirstStepsFromCategoryId($elem->productBatch->workCategoryId)->id == $elem->workCategoryStepsId) {
 
-                $unfitElement[] = 'Elemento non normalizzato --> id: '.$elem->id.
-                    ' | Lotto: '.$elem->productBatchId;
+                $unfitElement[] = 'Elemento non normalizzato --> id: ' . $elem->id .
+                    ' | Lotto: ' . $elem->productBatchId;
             }
         }
 
-        if(empty($unfitElement)) return 'ok';
+        if (empty($unfitElement)) return 'ok';
 
         return $unfitElement;
     }
 
-    public function getElements(){
+    public function getElements()
+    {
 
         $elems = null;
         $workCategory = null;
 
-        if(is_null($this->contractDetailsId)){
+        if (is_null($this->contractDetailsId)) {
             $workCategory = $this->workCategoryId;
         } else {
             $workCategory = $this->contractDetails->workCategory->id;
         }
 
-        switch ($workCategory){
+        switch ($workCategory) {
             case CWorkCategory::NORM:
                 $elems = $this->productBatchDetails;
                 break;
@@ -110,19 +114,20 @@ class CProductBatch extends AEntity
         return $elems;
     }
 
-    public function getNormalizedElements(){
+    public function getNormalizedElements()
+    {
 
         $elems = null;
         $workCategory = null;
         $nElem = [];
 
-        if(is_null($this->contractDetailsId)){
+        if (is_null($this->contractDetailsId)) {
             $workCategory = $this->workCategoryId;
         } else {
             $workCategory = $this->contractDetails->workCategory->id;
         }
 
-        switch ($workCategory){
+        switch ($workCategory) {
             case CWorkCategory::NORM:
                 $elems = $this->productBatchDetails;
                 break;
@@ -136,7 +141,7 @@ class CProductBatch extends AEntity
         }
 
         foreach ($elems as $elem) {
-            if(is_null($elem->workCategorySteps->rgt)) $nElem[] = $elem;
+            if (is_null($elem->workCategorySteps->rgt)) $nElem[] = $elem;
         }
 
         return $nElem;
@@ -146,8 +151,21 @@ class CProductBatch extends AEntity
      * @param CUser $user
      * @return mixed
      */
-    public function getContractDetailFromUnassignedProductBatch(CUser $user) {
-        return $user->foison->getContract()->contractDetails->findOneByKeys(["workCategoryId"=> $this->workCategoryId]);
+    public function getContractDetailFromUnassignedProductBatch(CUser $user)
+    {
+        $i = 0;
+        $contractDetails = null;
+        /** @var CObjectCollection $contracts */
+        $contracts = $user->foison->getContract();
+        /** @var CContracts $contract */
+        foreach ($contracts as $contract) {
+            $contractDetails = $contract->contractDetails->findOneByKeys(["workCategoryId" => $this->workCategoryId]);
+
+            if(!is_null($contractDetails)) $i++;
+        }
+
+        if($i > 1) return false;
+        return $contractDetails;
 
     }
 }

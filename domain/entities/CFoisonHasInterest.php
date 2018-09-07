@@ -21,5 +21,5 @@ use bamboo\core\db\pandaorm\entities\AEntity;
 class CFoisonHasInterest extends AEntity
 {
     protected $entityTable = 'FoisonHasInterest';
-    protected $primaryKeys = ['workCategoryId', 'foisonId','foisonStatusId'];
+    protected $primaryKeys = ['foisonId','workCategoryId'];
 }

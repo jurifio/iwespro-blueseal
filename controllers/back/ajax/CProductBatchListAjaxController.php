@@ -71,7 +71,8 @@ class CProductBatchListAjaxController extends AAjaxController
                   pb.operatorRankIwes,
                   pb.timingRank,
                   pb.qualityRank,
-                  pb.tolleranceDelivery
+                  pb.tolleranceDelivery,
+                  pb.estimatedWorkDays
             FROM ProductBatch pb
             LEFT JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
             LEFT JOIN WorkCategory wk ON cd.workCategoryId = wk.id
@@ -235,6 +236,7 @@ class CProductBatchListAjaxController extends AAjaxController
             $row['timingRank'] = $pbr->timingRank;
             $row['tolleranceDelivery'] = $pbr->tolleranceDelivery;
             $row['qualityRank'] = $pbr->qualityRank;
+            $row['estimatedWorkDays'] = $pbr->estimatedWorkDays;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

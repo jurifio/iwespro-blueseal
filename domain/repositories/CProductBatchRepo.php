@@ -93,6 +93,9 @@ class CProductBatchRepo extends ARepo
             /** @var CFoison $foison */
             $foison = $productBatch->contractDetails->contracts->foison;
             $foison->totalRank(true);
+
+            $fR = \Monkey::app()->repoFactory->create('Foison');
+            $fR->checkStatusForEachWorkCategory($foison->id);
         }
 
         return true;
@@ -139,16 +142,18 @@ class CProductBatchRepo extends ARepo
 
     /**
      * @param $productBatch
-     * @param $scheduledDelivery
      * @param $value
      * @param $contractDetailsId
      * @return CProductBatch
      * @throws BambooException
+     * @throws \Exception
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function associateProductBatch($productBatch, $scheduledDelivery, $value, $contractDetailsId)
+    public function associateProductBatch($productBatch, $contractDetailsId)
     {
+        $schedDelivery = SDateToolbox::GetDateAfterAddedDays(null, $productBatch->estimatedWorkDays)->format('Y-m-d 23:59:59');
+
 
         /** @var CContractDetails $contractDetails */
         $contractDetails = \Monkey::app()->repoFactory->create('ContractDetails')->findOneBy(['id' => $contractDetailsId]);
@@ -157,12 +162,14 @@ class CProductBatchRepo extends ARepo
 
         /** @var CSectionalRepo $sectionalRepo */
         $sectionalRepo = \Monkey::app()->repoFactory->create('Sectional');
-
+        $date = new \DateTime();
         /** @var CProductBatch $productBatch */
-        $productBatch->scheduledDelivery = $scheduledDelivery;
-        $productBatch->value = $value;
+        $productBatch->scheduledDelivery = $schedDelivery;
         $productBatch->contractDetailsId = $contractDetailsId;
         $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCodeId);
+        $productBatch->marketplace = 0;
+        $productBatch->confirmationDate = date_format($date, 'Y-m-d H:i:s');
+        $productBatch->tolleranceDelivery = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($schedDelivery), 5)->format('Y-m-d 23:59:59');
         $productBatch->update();
 
         /** @var CWorkCategoryStepsRepo $catStR */
@@ -180,6 +187,17 @@ class CProductBatchRepo extends ARepo
             $elem->workCategoryStepsId = $initStep->id;
             $elem->update();
         }
+
+        $items = count($elems);
+        $type = $contractDetails->isVariable;
+
+        if($type == 0){
+            $newPrice = $productBatch->contractDetails->workPriceList->price*$items;
+        } elseif ($type == 1) {
+            $newPrice = $productBatch->unitPrice*$items;
+        }
+        $productBatch->value = $newPrice;
+        $productBatch->update();
 
         return $productBatch;
     }
@@ -266,7 +284,7 @@ class CProductBatchRepo extends ARepo
         $newPB = $this->getEmptyEntity();
         $newPB->name = $productBatch->name;
         $newPB->description = $productBatch->description;
-        $newPB->sectional = $sRepo->createNewSectionalCode($productBatch->workCategory->sectionalCodeId);
+        //$newPB->sectional = $sRepo->createNewSectionalCode($productBatch->workCategory->sectionalCodeId);
         $newPB->value = count($normalized) * $productBatch->unitPrice;
         $newPB->workCategoryId = $productBatch->workCategoryId;
         $newPB->marketplace = 1;

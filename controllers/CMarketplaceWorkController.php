@@ -71,11 +71,9 @@ class CMarketplaceWorkController extends ARestrictedAccessRootController
 
 
         $hasOpenedProductBatch = $user->foison->hasOpenedProductBatch();
-        $foisonStatus = $user->foison->foisonStatusId;
         $foisonRank = $user->foison->rank;
         return $view->render([
             'user'=>$user,
-            'foisonStatus'=>$foisonStatus,
             'foisonRank'=>$foisonRank,
             'hasOpenedProductBatch' => $hasOpenedProductBatch,
             'permission' => $permission,
