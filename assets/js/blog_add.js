@@ -96,3 +96,7 @@ $(document).on('bs.save.post', function(a,b,c) {
 
 	bsModal.modal();
 });
+
+$(document).on("change", "#chooseBlog", function () {
+	$("#blogId").val($(this).val());
+});

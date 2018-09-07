@@ -26,10 +26,16 @@ class CBlogPostAddController extends ARestrictedAccessRootController
             if ($status->show) $statuses[$status->id] = $status->name;
         }
 
+        $blogs = [];
+        foreach (\Monkey::app()->repoFactory->create('Blog')->findAll() as $blog){
+            $blogs[$blog->id] = $blog->name;
+        }
+
 	    $defaultImage = '/assets/bs-dummy-16-9.png';
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
+            'blogs' => $blogs,
             'page'=>$this->page,
             'user'=>$this->app->getUser(),
             'cats'=>$cats,
