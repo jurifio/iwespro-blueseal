@@ -3,6 +3,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CFoison;
+use bamboo\domain\entities\CFoisonHasInterest;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CFoisonRepo;
 
@@ -73,11 +74,22 @@ class CFoisonListAjaxController extends AAjaxController
             $row["surname"] = $foison->surname;
             $row["email"] = $foison->email;
             $row["iban"] = (empty($foison->addressBook->iban) ? '-' : $foison->addressBook->iban);
+            $row["totalRank"] = $foison->totalRank();
             $workCategories = "";
 
-            foreach ($foison->workCategory as $workCategory){
-                $workCategories .= $workCategory->interestName . "<br>";
+            /** @var CFoisonHasInterest $interests */
+            $interests = $foison->foisonHasInterest;
+
+            $allPB = $foison->getClosedTimeRanchProductBatch();
+
+            /** @var CFoisonHasInterest $interest */
+            foreach ($interests as $interest) {
+                $allPbForCat = $allPB->findByKey("workCategoryId",$interest->workCategoryId);
+                $workCategories .= $interest->workCategory->name . ":<br> 
+                                Stato: " . "<strong>" . $interest->foisonStatus->name . "</strong><br> 
+                                Rank: " . "<strong>" . $foison->totalRank(false, $allPbForCat) . "</strong><br><br>";
             }
+
 
             $row["interestName"] = $workCategories;
             $datatable->setResponseDataSetRow($key,$row);

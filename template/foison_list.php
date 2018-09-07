@@ -50,6 +50,9 @@
                                 <th data-slug="interestName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Categorie</th>
+                                <th data-slug="totalRank"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Rank totale</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -58,7 +58,9 @@ class CFoisonDetailManage extends AAjaxController
         $password = $data["password"];
 
         $user = $foison->user;
-        $user->password = password_hash($password, PASSWORD_BCRYPT);
+
+        if(!empty($password)) $user->password = password_hash($password, PASSWORD_BCRYPT);
+
         $user->update();
         /** @var CUserAddressRepo $userAddressRepo */
         $userAddressRepo = \Monkey::app()->repoFactory->create('UserAddress');

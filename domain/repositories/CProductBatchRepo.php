@@ -94,6 +94,7 @@ class CProductBatchRepo extends ARepo
             $foison = $productBatch->contractDetails->contracts->foison;
             $foison->totalRank(true);
 
+            /** @var CFoisonRepo $fR */
             $fR = \Monkey::app()->repoFactory->create('Foison');
             $fR->checkStatusForEachWorkCategory($foison->id);
         }
@@ -111,10 +112,15 @@ class CProductBatchRepo extends ARepo
 
         $numberOfProducts = count($pB->getElements());
 
-        $unitPrice = $pB->contractDetails->workPriceList->price;
-        $cost = $unitPrice * $numberOfProducts;
+        $type = $pB->contractDetails->isVariable;
 
-        return $cost;
+        if($type == 0){
+            $newPrice = $pB->contractDetails->workPriceList->price*$numberOfProducts;
+        } elseif ($type == 1) {
+            $newPrice = $pB->unitPrice*$numberOfProducts;
+        }
+
+        return $newPrice;
 
     }
 

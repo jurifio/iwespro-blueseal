@@ -61,7 +61,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default required">
                                                         <label for="foison_fiscal_code">Codice Fiscale</label>
-                                                        <input id="foison_fiscal_code" autocomplete="off" type="text" class="form-control" name="foison_fiscal_code" value="<?php echo $foison->user->userDetails->fiscalCode; ?>" />
+                                                        <input id="foison_fiscal_code" autocomplete="off" type="text" class="form-control" name="foison_fiscal_code" value="<?php echo $userAddress->fiscalCode; ?>" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -103,13 +103,11 @@
                                                         <label for="country">Paese</label>
                                                         <select id="country" name="country">
                                                             <?php
-                                                            if(is_null($userAddress)) {
+
                                                                 foreach ($country as $c) { ?>
                                                                     <option value="<?php echo $c->id ?>"><?php echo $c->name; ?></option>
-                                                                <?php }
-                                                            } else { ?>
-                                                                <option value="<?php echo $userAddress->countryId ?>"><?php echo $userAddress->country->name; ?></option>
-                                                            <?php } ?>
+                                                            <?php }
+                                                            ?>
 
 
                                                         </select>

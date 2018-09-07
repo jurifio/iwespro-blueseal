@@ -52,6 +52,13 @@ class CFoisonRepo extends ARepo
 
     }
 
+    /**
+     * @param $id
+     * @return bool
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
     public function checkStatusForEachWorkCategory($id)
     {
 
@@ -76,8 +83,10 @@ class CFoisonRepo extends ARepo
 
                 if($rank > 6){
                     $interest->foisonStatusId = 2;
-                    $interest->update();
+                } else {
+                    $interest->foisonStatusId = 3;
                 }
+                $interest->update();
             }
         }
 

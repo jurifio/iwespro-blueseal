@@ -36,7 +36,9 @@ class CGetTableContent extends AAjaxController
         'ShipmentFault',
         'ProductSheetModelPrototypeGender',
         'ProductSheetModelPrototypeCategoryGroup',
-        'ProductSheetModelPrototypeMaterial'
+        'ProductSheetModelPrototypeMaterial',
+        'Foison',
+        'UserAddress'
     ];
 
     public function get()

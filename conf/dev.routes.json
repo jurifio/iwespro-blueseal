@@ -1984,19 +1984,6 @@
             ]
         },
         {
-            "pattern": "/blueseal/download-contracts/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadContracts"
-            },
-            "filters": {
-                "id": "[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
             "pattern": "/blueseal/distinte(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillListController"
@@ -2136,17 +2123,6 @@
             "pattern": "/blueseal/work/foison(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/foison-sub-request(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonSubRequestListController"
             },
             "filters": {},
             "translations": {},
