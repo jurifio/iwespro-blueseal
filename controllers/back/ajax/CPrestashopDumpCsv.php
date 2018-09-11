@@ -201,6 +201,10 @@ class CPrestashopDumpCsv extends AAjaxController
         if (file_exists($save_to . 'psz6_feature.csv')) {
             unlink($save_to . 'psz6_feature.csv');
         }
+        $feature_shop_csv = fopen($save_to . 'psz6_feature_shop.csv', 'w');
+        if (file_exists($save_to . 'psz6_feature_shop.csv')) {
+            unlink($save_to . 'psz6_feature_shop.csv');
+        }
         $feature_csv = fopen($save_to . 'psz6_feature.csv', 'w');
         if (file_exists($save_to . 'psz6_feature_lang.csv')) {
             unlink($save_to . 'psz6_feature_lang.csv');
@@ -719,6 +723,7 @@ FROM ProductSizeMacroGroup psmg
         FROM ProductDetailLabel pdl";
 
         fputcsv($feature_csv, array('id_feature', 'position'), ';');
+        fputcsv($feature_shop_csv,array('id_feature','id_shop'));
         $res_feature = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
         foreach ($res_feature as $value_feature) {
@@ -727,8 +732,17 @@ FROM ProductSizeMacroGroup psmg
                 array($value_feature['id_feature'],
                     $value_feature['position']));
 
+
+                $data_feature_shop = array(
+                    array($value_feature['id_feature'],
+                        1));
             foreach ($data_feature as $row_feature) {
                 fputcsv($feature_csv, $row_feature, ';');
+
+            }
+
+                foreach ($data_feature_shop as $row_feature_shop) {
+                    fputcsv($feature_shop_csv, $row_feature_shop, ';');
 
             }
 
@@ -1625,6 +1639,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         fclose($attribute_shop_csv);
         fclose($attribute_lang_csv);
         fclose($feature_csv);
+        fclose($feature_shop_csv);
         fclose($feature_lang_csv);
         fclose($feature_value_csv);
         fclose($feature_value_lang_csv);
@@ -1678,6 +1693,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         $phar->addFile($save_to . 'psz6_category.csv', 'psz6_category.csv');
         $phar->addFile($save_to . 'psz6_category_product.csv', 'psz6_category_product.csv');
         $phar->addFile($save_to . 'psz6_category_lang.csv', 'psz6_category_lang.csv');
+        $phar->addFile($save_to . 'psz6_feature_shop.csv', 'psz6_feature_shop.csv');
         $phar->addFile($save_to . 'psz6_feature.csv', 'psz6_feature.csv');
         $phar->addFile($save_to . 'psz6_feature_lang.csv', 'psz6_feature_lang.csv');
         $phar->addFile($save_to . 'psz6_feature_product.csv', 'psz6_feature_product.csv');
@@ -1710,6 +1726,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 unlink($save_to . 'psz6_category.csv');
                 unlink($save_to . 'psz6_category_lang.csv');
                 unlink($save_to . 'psz6_feature.csv');
+                unlink($save_to . 'psz6_feature_shop.csv');
                 unlink($save_to . 'psz6_feature_lang.csv');
                 unlink($save_to . 'psz6_feature_product.csv');
                 unlink($save_to . 'psz6_feature_value.csv');
