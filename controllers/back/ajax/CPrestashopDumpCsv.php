@@ -1096,7 +1096,7 @@ FROM ProductSizeMacroGroup psmg
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
         //connessione db prestahop
-        $pConnection = new CReadExtDbTable(1);
+        $pConnection = new CReadExtDbTable(3);
 
         //afferro il massimo attribute id da assegnare poi ai nuovi prodotti
         $maxAttributeId = $pConnection->readTables(
