@@ -1306,16 +1306,16 @@ FROM ProductSizeMacroGroup psmg
                     $rightSku = $pConnection->readTables(
                         ['psz6_product_attribute',
                             'psz6_product_attribute_combination' => [
-                                'self' => 'id_product_attribute',
-                                'psz6_product_attribute' => 'id_product_attribute'
+                                'Self' => ['id_product_attribute'],
+                                'psz6_product_attribute' => ['id_product_attribute']
                             ],
                             'psz6_attribute' => [
-                                'self' => 'id_attribute',
-                                'psz6_product_attribute_combination' => 'id_attribute'
+                                'Self' => ['id_attribute'],
+                                'psz6_product_attribute_combination' => ['id_attribute']
                             ],
                             'psz6_attribute_lang' => [
-                                'self' => 'id_attribute',
-                                'psz6_product_attribute_combination' => 'id_attribute'
+                                'Self' => 'id_attribute',
+                                'psz6_product_attribute_combination' => ['id_attribute']
                             ]
                         ],
                         [
