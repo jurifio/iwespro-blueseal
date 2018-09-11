@@ -257,7 +257,7 @@ class CPrestashopDumpCsv extends AAjaxController
   '0'  AS additional_delivery_times,
   '0' AS quantity_discount,
   '0' AS text_fields,
-  if (p.isOnSale=1,format((shp.price - shp.salePrice),2),'0.00')                 AS discount_amount,
+  if (p.isOnSale=1,format((shp.price - shp.salePrice),2),'0.00')    AS discount_amount,
   ''                                                                             AS discount_percent,
   '2018-01-01'                                                                   AS discount_from,
   '2018-01-01'                                                                   AS discount_to,
@@ -292,8 +292,8 @@ class CPrestashopDumpCsv extends AAjaxController
   '0'                                                                            AS advanced_stock_management,
   '3' AS pack_stock_type,
   '0'                                                                            AS depend_on_stock,
-  '1'                                                                            AS Warehouse
-  
+  '1'                                                                            AS Warehouse,
+  '1'  AS state
   
 
 FROM `Product` `p`
@@ -306,7 +306,7 @@ FROM `Product` `p`
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
-
+  WHERE p.qty>0 AND p.productStatusId=6
   GROUP BY p.id,p.productVariantId 
   ORDER BY `p`.`id` ASC";
 
@@ -880,7 +880,7 @@ FROM ProductSizeMacroGroup psmg
                 '1'                                                                            AS indexed,
                 '0'                                                                            AS customizable,
                 '0'                                                                            AS uploadable_files,
-                if(p.productStatusId=6,1,0 )                                                   AS active,
+                '1'                                                                            AS active,
                 '404'                                                                          AS redirect_type,
                 '0'                                                                            AS id_type_redirected,
                 '1'                                                                            AS show_condition,
@@ -911,7 +911,7 @@ FROM ProductSizeMacroGroup psmg
                   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
                   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
                   JOIN  PrestashopHasProduct php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
-               
+                WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2) 
                 GROUP BY p.id,p.productVariantId
                 ORDER BY `p`.`id` ASC";
 
@@ -1095,6 +1095,16 @@ FROM ProductSizeMacroGroup psmg
         $mvt = 0;
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
+        //connessione db prestahop
+        $pConnection = new CReadExtDbTable(1);
+
+        //afferro il massimo attribute id da assegnare poi ai nuovi prodotti
+        $maxAttributeId = $pConnection->readTables(
+            ['psz6_product_attribute'],
+            [],
+            ["id_product_attribute" => "MAX"]
+        );
+
         foreach ($res_product as $value_product) {
 
 
@@ -1242,7 +1252,7 @@ FROM ProductSizeMacroGroup psmg
                     $value_product['product_id'],
                     $value_product['product_id'],
                     'in Stock',
-                    'Current supply. Ordering availlable',
+                    'Current supply. Ordering available',
                     'Delivered in 3-4 Days',
                     'Delivered in 10-15 Days'
                 ));
@@ -1250,15 +1260,79 @@ FROM ProductSizeMacroGroup psmg
 // popolamento prodotti attributi
 
 
+//se lo stato è 0 lo cerco, mi assicuro che non lo trovo e lo inserico - se lo stato è 2 lo cerco lo ag
+            if ($value_product['status'] == 0) {
+
+                $findExtProdAttr = $pConnection->readTables(
+                    ['psz6_product_attribute'],
+                    ["psz6_product_attribute" =>
+                        [
+                            "id_product" => $p
+                        ]
+                    ],
+                    []
+                );
+                //Se è vuoto è proprio vero che non esiste e quindi sarebbe proprio il caso di inserirlo
+                $exist = false;
+                if (empty($findExtProdAttr)){
+                    if(is_null($maxAttributeId[0]["MAX(id_product_attribute)"])) {
+                        $w = 0;
+                        $maxAttributeId[0]["MAX(id_product_attribute)"] = "is the end";
+                    }
+                } else {
+                    $exist = true;
+                }
+            }
 
 
-
-
-            $res_product_attribute = \Monkey::app()->repoFactory->create('ProductPublicSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+            $res_product_attribute = \Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
 
             $lock_default_on = 0;
+
+
             foreach ($res_product_attribute as $value_product_attribute) {
-                $w = $w + 1;
+                if (!$exist) {
+                    $w = $w + 1;
+                } else {
+
+                    /**
+                     * select *
+                     * from psz6_product_attribute pa
+                     * join psz6_product_attribute_combination pac ON pa.id_product_attribute = pac.id_product_attribute
+                     * join psz6_attribute a ON a.id_attribute = pac.id_attribute
+                     * join psz6_attribute_lang al ON al.id_attribute = pac.id_attribute
+                     * where pa.id_product = 8827 && al.id_lang = 3
+                     */
+                    $rightSku = $pConnection->readTables(
+                        ['psz6_product_attribute',
+                            'psz6_product_attribute_combination' => [
+                                'self' => 'id_product_attribute',
+                                'psz6_product_attribute' => 'id_product_attribute'
+                            ],
+                            'psz6_attribute' => [
+                                'self' => 'id_attribute',
+                                'psz6_product_attribute_combination' => 'id_attribute'
+                            ],
+                            'psz6_attribute_lang' => [
+                                'self' => 'id_attribute',
+                                'psz6_product_attribute_combination' => 'id_attribute'
+                            ]
+                        ],
+                        [
+                            "psz6_product_attribute" =>
+                                [
+                                    "id_product" => $p
+                                ],
+                            'psz6_attribute_lang' => [
+                                'id_lang' => 2,
+                                'name' => $value_product_attribute->productSize->name
+                            ]
+                        ],
+                        []
+                    );
+
+                    $w = $rightSku["id_product_attribute"];
+                }
 
                 $n = $n + 1;
 
@@ -1294,7 +1368,7 @@ FROM ProductSizeMacroGroup psmg
                         $value_product['reference'],
                         $value_product['supplier_reference'],
                         '',
-                        $value_product['ean13'],
+                        $value_product_attribute->ean,
                         $value_product['isbn'],
                         $value_product['upc'],
                         $price,
@@ -1401,8 +1475,8 @@ FROM ProductSizeMacroGroup psmg
 
             }
 
-
         }
+
 
         /** sezione immagini */
 

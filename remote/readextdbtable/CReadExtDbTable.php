@@ -50,7 +50,9 @@ class CReadExtDbTable extends AReadExtDbTable
             foreach ($fields as $field => $option) {
                 if($option !== "null"){
                     $finalFields[] = $option."(".$field.")";
-                } else $finalFields[] = $field;
+                } else if($option == "null"){
+                    $finalFields[] = $field;
+                }
             }
         }
 
@@ -92,7 +94,7 @@ class CReadExtDbTable extends AReadExtDbTable
         }
 
 
-        $select = empty($fields) ? "*" : implode(',', $fields);
+        $select = empty($fields) ? "*" : implode(',', $finalFields);
         $tableFrom = $tablesName[0];
 
         $sum = $this->countAssociativeArrayElements($remoteWhere);
