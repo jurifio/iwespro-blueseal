@@ -348,7 +348,7 @@ FROM `Product` `p`
 
 
         fputcsv($category_csv, array('id_category', 'id_parent', 'id_shop_default', 'level_depth', 'nleft', 'nright', 'active', 'date_add', 'date_upd', 'position', 'is_root_category'), ';');
-        fputcsv($category_csv, array('id_category', 'id_shop', 'position'), ';');
+        fputcsv($category_shop_csv, array('id_category', 'id_shop', 'position'), ';');
         $res_category = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $i = 0;
         foreach ($res_category as $value_category) {
