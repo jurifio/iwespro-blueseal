@@ -198,12 +198,12 @@ class CPrestashopDumpCsv extends AAjaxController
             unlink($save_to . 'psz6_attribute_lang.csv');
         }
         $attribute_lang_csv = fopen($save_to . 'psz6_attribute_lang.csv', 'w');
-        if (file_exists($save_to . 'psz6_feature.csv')) {
-            unlink($save_to . 'psz6_feature.csv');
-        }
-        $feature_shop_csv = fopen($save_to . 'psz6_feature_shop.csv', 'w');
         if (file_exists($save_to . 'psz6_feature_shop.csv')) {
             unlink($save_to . 'psz6_feature_shop.csv');
+        }
+        $feature_shop_csv = fopen($save_to . 'psz6_feature_shop.csv', 'w');
+        if (file_exists($save_to . 'psz6_feature.csv')) {
+            unlink($save_to . 'psz6_feature.csv');
         }
         $feature_csv = fopen($save_to . 'psz6_feature.csv', 'w');
         if (file_exists($save_to . 'psz6_feature_lang.csv')) {
