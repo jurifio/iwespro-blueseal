@@ -1125,6 +1125,54 @@ FROM ProductSizeMacroGroup psmg
             $p = $value_product['prestaId'];
 
 
+            $finalProductStatus = null;
+
+
+            if ($value_product['status'] == 0) {
+
+                $findExtProdAttr = $pConnection->readTables(
+                    ['psz6_product_attribute'],
+                    ["psz6_product_attribute" =>
+                        [
+                            "id_product" => $p
+                        ]
+                    ],
+                    []
+                );
+                //Se è vuoto è proprio vero che non esiste e quindi sarebbe proprio il caso di inserirlo
+                $exist = false;
+                if (empty($findExtProdAttr)){
+                    if(is_null($maxAttributeId[0]["MAX(id_product_attribute)"])) {
+                        $w = 0;
+                        $maxAttributeId[0]["MAX(id_product_attribute)"] = "is the end";
+                    }
+                    $finalProductStatus = 0;
+                } else {
+                    $exist = true;
+                    $finalProductStatus = 2;
+                    \Monkey::app()->applicationLog('PrestaDumpCSv', 'alert', 'Product founded', "Product with prestashopId $p WAS founded even if has status = 0");
+                }
+            } else if ($value_product['status'] == 2){
+                $findExtProdAttr = $pConnection->readTables(
+                    ['psz6_product_attribute'],
+                    ["psz6_product_attribute" =>
+                        [
+                            "id_product" => $p
+                        ]
+                    ],
+                    []
+                );
+
+                $exist = false;
+                if (empty($findExtProdAttr)){
+                    $finalProductStatus = 0;
+                    \Monkey::app()->applicationLog('PrestaDumpCSv', 'alert', 'Product not founded', "Product with prestashopId $p WAS NOT founded even if has status = 2");
+                } else {
+                    $exist = true;
+                    $finalProductStatus = 2;
+                }
+            }
+
 // popolamento array tabella prodotti
             $data_product = array(
                 array($p,
@@ -1180,7 +1228,7 @@ FROM ProductSizeMacroGroup psmg
                     $value_product['advanced_stock_management'],
                     $value_product['pack_stock_type'],
                     $value_product['state'],
-                    $value_product['status']));
+                    $finalProductStatus));
 
 
             //popolamento array prodotti shop
@@ -1275,28 +1323,7 @@ FROM ProductSizeMacroGroup psmg
 
 
 //se lo stato è 0 lo cerco, mi assicuro che non lo trovo e lo inserico - se lo stato è 2 lo cerco lo ag
-            if ($value_product['status'] == 0) {
 
-                $findExtProdAttr = $pConnection->readTables(
-                    ['psz6_product_attribute'],
-                    ["psz6_product_attribute" =>
-                        [
-                            "id_product" => $p
-                        ]
-                    ],
-                    []
-                );
-                //Se è vuoto è proprio vero che non esiste e quindi sarebbe proprio il caso di inserirlo
-                $exist = false;
-                if (empty($findExtProdAttr)){
-                    if(is_null($maxAttributeId[0]["MAX(id_product_attribute)"])) {
-                        $w = 0;
-                        $maxAttributeId[0]["MAX(id_product_attribute)"] = "is the end";
-                    }
-                } else {
-                    $exist = true;
-                }
-            }
 
 
             $res_product_attribute = \Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
