@@ -1290,25 +1290,25 @@ ORDER BY `p`.`id` ASC LIMIT 10";
             //popolamento array lingua prodotti
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'2']);
             foreach ($res_product_lang as $value_product_lang) {
-                if (empty($value_product_lang['name'])) {
+                if ($value_product_lang->name=='') {
                     $name_product_lang = $value_product['brand_name']." ".$value_product['product_id']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
                 } else {
-                    $name_product_lang = $value_product['brand_name']." ".$value_product_lang['name']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
+                    $name_product_lang = $value_product['brand_name']." ".$value_product_lang->name. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
                 }
-                if ($value_product_lang['langId'] == 2) {
+                if ($value_product_lang->langId == 2) {
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
                     $product_available = "Delivered in 3-4 Days";
                     $product_not_available = "Delivered in 10-15 Days";
 
 
-                } elseif ($value_product_lang['langId'] == 1) {
+                } elseif ($value_product_lang->langId == 1) {
                     $in_stock = "in Vendita";
                     $current_supply = 'In magazzino. ordinabile';
                     $product_available = 'Consegna in 3-4 Giorni Lavorati';
                     $product_not_available = 'Consegna  in 10-15 lavorativi';
 
-                } elseif ($value_product_lang['langId'] == 3) {
+                } elseif ($value_product_lang->langId == 3) {
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
                     $product_available = "Delivered in 3-4 Days";
@@ -1346,25 +1346,25 @@ ORDER BY `p`.`id` ASC LIMIT 10";
         }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'] , 'langId'=>'1']);
             foreach ($res_product_lang as $value_product_lang) {
-                if (empty($value_product_lang['name'])) {
+                if ($value_product_lang->name=='') {
                     $name_product_lang = $value_product['brand_name']." ".$value_product['product_id']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
                 } else {
-                    $name_product_lang = $value_product['brand_name']." ".$value_product_lang['name']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
+                    $name_product_lang = $value_product['brand_name']." ".$value_product_lang->name. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
                 }
-                if ($value_product_lang['langId'] == 2) {
+                if ($value_product_lang->langId == 2) {
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
                     $product_available = "Delivered in 3-4 Days";
                     $product_not_available = "Delivered in 10-15 Days";
 
 
-                } elseif ($value_product_lang['langId'] == 1) {
+                } elseif ($value_product_lang->langId == 1) {
                     $in_stock = "in Vendita";
                     $current_supply = 'In magazzino. ordinabile';
                     $product_available = 'Consegna in 3-4 Giorni Lavorati';
                     $product_not_available = 'Consegna  in 10-15 lavorativi';
 
-                } elseif ($value_product_lang['langId'] == 3) {
+                } elseif ($value_product_lang->langId == 3) {
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
                     $product_available = "Delivered in 3-4 Days";
@@ -1402,25 +1402,25 @@ ORDER BY `p`.`id` ASC LIMIT 10";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'3']);
             foreach ($res_product_lang as $value_product_lang) {
-                if (empty($value_product_lang['name'])) {
+                if ($value_product_lang->name=='') {
                     $name_product_lang = $value_product['brand_name']." ".$value_product['product_id']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
                 } else {
-                    $name_product_lang = $value_product['brand_name']." ".$value_product_lang['name']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
+                    $name_product_lang = $value_product['brand_name']." ".$value_product_lang->name. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
                 }
-                if ($value_product_lang['langId'] == 2) {
+                if ($value_product_lang->langId == 2) {
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
                     $product_available = "Delivered in 3-4 Days";
                     $product_not_available = "Delivered in 10-15 Days";
 
 
-                } elseif ($value_product_lang['langId'] == 1) {
+                } elseif ($value_product_lang->langId == 1) {
                     $in_stock = "in Vendita";
                     $current_supply = 'In magazzino. ordinabile';
                     $product_available = 'Consegna in 3-4 Giorni Lavorati';
                     $product_not_available = 'Consegna  in 10-15 lavorativi';
 
-                } elseif ($value_product_lang['langId'] == 3) {
+                } elseif ($value_product_lang->langId == 3) {
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
                     $product_available = "Delivered in 3-4 Days";
