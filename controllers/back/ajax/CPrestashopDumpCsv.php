@@ -1288,7 +1288,7 @@ ORDER BY `p`.`id` ASC LIMIT 10";
                     $value_product['state']));
 
             //popolamento array lingua prodotti
-            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId='=>2]);
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId='=>'2']);
             foreach ($res_product_lang as $value_product_lang) {
                 if (empty($value_product_lang['name'])) {
                     $name_product_lang = $value_product['brand_name']." ".$value_product['product_id']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
@@ -1344,7 +1344,7 @@ ORDER BY `p`.`id` ASC LIMIT 10";
 
             }
         }
-            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId='=>1]);
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'] , 'langId='=>'1']);
             foreach ($res_product_lang as $value_product_lang) {
                 if (empty($value_product_lang['name'])) {
                     $name_product_lang = $value_product['brand_name']." ".$value_product['product_id']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
@@ -1400,7 +1400,7 @@ ORDER BY `p`.`id` ASC LIMIT 10";
 
                 }
             }
-            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId='=>3]);
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId='=>'3']);
             foreach ($res_product_lang as $value_product_lang) {
                 if (empty($value_product_lang['name'])) {
                     $name_product_lang = $value_product['brand_name']." ".$value_product['product_id']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
