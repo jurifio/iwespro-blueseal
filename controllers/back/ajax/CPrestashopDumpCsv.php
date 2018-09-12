@@ -1366,7 +1366,7 @@ FROM ProductSizeMacroGroup psmg
                                 'psz6_product_attribute_combination' => ['id_attribute']
                             ],
                             'psz6_attribute_lang' => [
-                                'Self' => 'id_attribute',
+                                'Self' => ['id_attribute'],
                                 'psz6_product_attribute_combination' => ['id_attribute']
                             ]
                         ],
