@@ -850,95 +850,99 @@ FROM ProductSizeMacroGroup psmg
         /** esportazione prodotti */
         //query prodotti non esportati
         $sql = "SELECT
-                php.prestaId                                                                   AS prestaId,
-                concat(`p`.`id`,'-',p.productVariantId)                                        AS product_id,
-                p.id                                                                           AS  productId,
-                p.productVariantId                                                             AS productVariantId,
-                shp.shopId                                                                     AS id_supplier,
-                p.productBrandId                                                               AS id_manufacturer,
-                phpc.productCategoryId                                                         AS id_category_default,
-                pb.slug                                                                        AS name_manufacturer,
-                '1'                                                                            AS id_shop_default,
-                '53'                                                                           AS id_tax_rules_group,
-                if(p.isOnSale=1,'1','0')                                                       AS `on_sale`,
-                '0'                                                                            AS online_only,
-                S2.barcode                                                                     AS ean13,
-                ''                                                                             AS isbn,
-                ''                                                                             AS upc,
-                '0.000000'                                                                     AS ecotax,
-                `p`.`qty`                                                                      AS quantity,
-                '1'                                                                            AS minimal_quantity,
-                '1'                                                                            AS low_stock_threshold,
-                '0'                                                                            AS low_stock_alert,
-                S3.price                                                                       AS price,
-                FORMAT(shp.price/100*70 ,2)                                                    AS wholesale_price,
-                '0'                                                                            AS unity,
-                '0.000000'                                                                     AS unit_price_ratio,
-                concat(p.id,'-',p.productVariantId)                                            AS reference,
-                concat(p.id,'-',p.productVariantId)                                            AS supplier_reference,
-                ''                                                                             AS location,
-                '0.000000'                                                                     AS width,
-                '0.000000'                                                                     AS height,
-                '0.000000'                                                                     AS depth,
-                '0.000000'                                                                     AS weight,
-                '2'                                                                            AS out_of_stock,
-                '0'                                                                            AS additional_delivery_times,
-                '0'                                                                            AS quantity_discount,
-                '0'                                                                            AS text_fields,
-                if (p.isOnSale=1,format((shp.price - shp.salePrice),2),'0.00')                 AS discount_amount,
-                ''                                                                             AS discount_percent,
-                '2018-01-01'                                                                   AS discount_from,
-                '2018-01-01'                                                                   AS discount_to,
-                concat(p.id,'-',p.productVariantId)                                            AS name,
-                concat(p.id,'-',p.productVariantId)                                            AS description,
-                'both'                                                                         AS visibility,
-                '0'                                                                            AS cache_is_pack,
-                '0'                                                                            AS cache_has_attachments,
-                '0'                                                                            AS is_virtual,
-                '0'                                                                            AS cache_default_attribute,
-                '0'                                                                            AS additional_shipping_cost,
-                concat(p.id,'-',p.productVariantId)                                            AS short_description,
-                date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_add,
-                date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_upd,
-                '1'                                                                            AS available_for_order,
-                '2018-01-01'                                                                   AS available_date,
-                '1'                                                                            AS indexed,
-                '0'                                                                            AS customizable,
-                '0'                                                                            AS uploadable_files,
-                '1'                                                                            AS active,
-                '404'                                                                          AS redirect_type,
-                '0'                                                                            AS id_type_redirected,
-                '1'                                                                            AS show_condition,
-                'new'                                                                          AS`condition`,
-                '1'                                                                            AS show_price,
-                '1'                                                                            AS showPrice,
-                concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',p.id,'-',p.productVariantId,'-001-1124.jpg')
-                                                                                               AS picture,
-                concat(p.id,'-',p.productVariantId)                                            AS imageAlt,
-                '1'                                                                            AS deleteImage,
-                ''                                                                             AS feature,
-                '1'                                                                            AS idshop,
-                '0'                                                                            AS advanced_stock_management,
-                '3'                                                                            AS pack_stock_type,
-                '0'                                                                            AS depend_on_stock,
-                '1'                                                                            AS Warehouse,
-                '1'                                                                            AS state,
-                php.status                                                                     AS status
+  php.prestaId                                                                   AS prestaId,
+  concat(`p`.`id`,'-',p.productVariantId)                                        AS product_id,
+  p.id                                                                           AS  productId,
+  p.productVariantId                                                             AS productVariantId,
+  shp.shopId                                                                     AS id_supplier,
+  p.productBrandId                                                               AS id_manufacturer,
+  phpc.productCategoryId                                                         AS id_category_default,
+  pb.slug                                                                        AS name_manufacturer,
+  '1'                                                                            AS id_shop_default,
+  '53'                                                                           AS id_tax_rules_group,
+  if(p.isOnSale=1,'1','0')                                                       AS `on_sale`,
+  '0'                                                                            AS online_only,
+  S2.barcode                                                                     AS ean13,
+  ''                                                                             AS isbn,
+  ''                                                                             AS upc,
+  '0.000000'                                                                     AS ecotax,
+  `p`.`qty`                                                                      AS quantity,
+  '1'                                                                            AS minimal_quantity,
+  '1'                                                                            AS low_stock_threshold,
+  '0'                                                                            AS low_stock_alert,
+  S3.price                                                                       AS price,
+  FORMAT(shp.price/100*70 ,2)                                                    AS wholesale_price,
+  '0'                                                                            AS unity,
+  '0.000000'                                                                     AS unit_price_ratio,
+  concat(p.id,'-',p.productVariantId)                                            AS reference,
+  concat(p.id,'-',p.productVariantId)                                           AS name,
+  dp.itemno                                                                      AS supplier_reference,
+  ''                                                                             AS location,
+  '0.000000'                                                                     AS width,
+  '0.000000'                                                                     AS height,
+  '0.000000'                                                                     AS depth,
+  '0.000000'                                                                     AS weight,
+  '2'                                                                            AS out_of_stock,
+  '0'                                                                            AS additional_delivery_times,
+  '0'                                                                            AS quantity_discount,
+  '0'                                                                            AS text_fields,
+  if (p.isOnSale=1,format((shp.price - shp.salePrice),2),'0.00')                 AS discount_amount,
+  ''                                                                             AS discount_percent,
+  '2018-01-01'                                                                   AS discount_from,
+  '2018-01-01'                                                                   AS discount_to,
+  concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)           AS productName,
+  concat(p.id,'-',p.productVariantId)                                            AS description,
+  'both'                                                                         AS visibility,
+  '0'                                                                            AS cache_is_pack,
+  '0'                                                                            AS cache_has_attachments,
+  '0'                                                                            AS is_virtual,
+  '0'                                                                            AS cache_default_attribute,
+  '0'                                                                            AS additional_shipping_cost,
+  concat(p.id,'-',p.productVariantId)                                            AS short_description,
+  date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_add,
+  date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_upd,
+  '1'                                                                            AS available_for_order,
+  '2018-01-01'                                                                   AS available_date,
+  '1'                                                                            AS indexed,
+  '0'                                                                            AS customizable,
+  '0'                                                                            AS uploadable_files,
+  '1'                                                                            AS active,
+  '404'                                                                          AS redirect_type,
+  '0'                                                                            AS id_type_redirected,
+  '1'                                                                            AS show_condition,
+  'new'                                                                          AS`condition`,
+  '1'                                                                            AS show_price,
+  '1'                                                                            AS showPrice,
+  concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',p.id,'-',p.productVariantId,'-001-1124.jpg')
+                                                                                 AS picture,
+  concat(p.id,'-',p.productVariantId)                                            AS imageAlt,
+  '1'                                                                            AS deleteImage,
+  ''                                                                             AS feature,
+  '1'                                                                            AS idshop,
+  '0'                                                                            AS advanced_stock_management,
+  '3'                                                                            AS pack_stock_type,
+  '0'                                                                            AS depend_on_stock,
+  '1'                                                                            AS Warehouse,
+  '1'                                                                            AS state,
+  php.status                                                                     AS status
 
-                FROM `Product` `p`
-                  JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
-                  JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
-                  JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
-                  JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
-                  JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
-                  JOIN  `ProductPublicSku` S3 ON  (`p`.`id`, `p`.`productVariantId`) = (`S3`.`productId`, `S3`.`productVariantId`)
-                  JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
-                  JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
-                  JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
-                  JOIN  PrestashopHasProduct php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
-                WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2) 
-                GROUP BY p.id,p.productVariantId
-                ORDER BY `p`.`id` ASC LIMIT 10";
+FROM `Product` `p`
+  JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
+  JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
+  JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
+  JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
+  JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
+  JOIN  `ProductPublicSku` S3 ON  (`p`.`id`, `p`.`productVariantId`) = (`S3`.`productId`, `S3`.`productVariantId`)
+  JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
+  JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
+  JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
+  JOIN  PrestashopHasProduct php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
+  JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
+  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
+  JOIN ProductName pn ON p.id = pn.id
+WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2)
+GROUP BY p.id,p.productVariantId
+ORDER BY `p`.`id` ASC LIMIT 10";
 
 
 
@@ -1292,7 +1296,7 @@ FROM ProductSizeMacroGroup psmg
                     $value_product['product_id'],
                     $value_product['product_id'],
                     $value_product['product_id'],
-                    $value_product['product_id'],
+                    $value_product['productName'],
                     $value_product['product_id'],
                     'in stock',
                     'Current supply. Ordering available',
@@ -1307,7 +1311,7 @@ FROM ProductSizeMacroGroup psmg
                     $value_product['product_id'],
                     $value_product['product_id'],
                     $value_product['product_id'],
-                    $value_product['product_id'],
+                    $value_product['productName'],
                     $value_product['product_id'],
                     'in Vendita',
                     'In magazzino. ordinabile',
@@ -1322,7 +1326,7 @@ FROM ProductSizeMacroGroup psmg
                     $value_product['product_id'],
                     $value_product['product_id'],
                     $value_product['product_id'],
-                    $value_product['product_id'],
+                    $value_product['productName'],
                     $value_product['product_id'],
                     'in Stock',
                     'Current supply. Ordering available',
