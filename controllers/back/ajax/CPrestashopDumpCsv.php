@@ -1383,7 +1383,7 @@ FROM ProductSizeMacroGroup psmg
                         []
                     );
 
-                    $w = $rightSku["id_product_attribute"];
+                    $w = $rightSku[0]["id_product_attribute"];
                 }
 
                 $n = $n + 1;
