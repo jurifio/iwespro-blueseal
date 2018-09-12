@@ -875,7 +875,7 @@ FROM ProductSizeMacroGroup psmg
   '0'                                                                            AS unity,
   '0.000000'                                                                     AS unit_price_ratio,
   concat(p.id,'-',p.productVariantId)                                            AS reference,
-  concat(p.id,'-',p.productVariantId)                                           AS name,
+  concat(p.id,'-',p.productVariantId)                                            AS name,
   dp.itemno                                                                      AS supplier_reference,
   ''                                                                             AS location,
   '0.000000'                                                                     AS width,
@@ -890,7 +890,9 @@ FROM ProductSizeMacroGroup psmg
   ''                                                                             AS discount_percent,
   '2018-01-01'                                                                   AS discount_from,
   '2018-01-01'                                                                   AS discount_to,
-  concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)           AS productName,
+  concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)                AS productName,
+  pb.name                                                                        AS brand_name, 
+  dp.var                                                                         AS color_supplier,
   concat(p.id,'-',p.productVariantId)                                            AS description,
   'both'                                                                         AS visibility,
   '0'                                                                            AS cache_is_pack,
@@ -1156,8 +1158,8 @@ ORDER BY `p`.`id` ASC LIMIT 10";
                 );
                 //Se è vuoto è proprio vero che non esiste e quindi sarebbe proprio il caso di inserirlo
                 $exist = false;
-                if (empty($findExtProdAttr)){
-                    if(is_null($maxAttributeId[0]["MAX(id_product_attribute)"])) {
+                if (empty($findExtProdAttr)) {
+                    if (is_null($maxAttributeId[0]["MAX(id_product_attribute)"])) {
                         $w = 0;
                         $maxAttributeId[0]["MAX(id_product_attribute)"] = "is the end";
                     }
@@ -1167,7 +1169,7 @@ ORDER BY `p`.`id` ASC LIMIT 10";
                     $finalProductStatus = 2;
                     \Monkey::app()->applicationLog('PrestaDumpCSv', 'alert', 'Product founded', "Product with prestashopId $p WAS founded even if has status = 0");
                 }
-            } else if ($value_product['status'] == 2){
+            } else if ($value_product['status'] == 2) {
                 $findExtProdAttr = $pConnection->readTables(
                     ['psz6_product_attribute'],
                     ["psz6_product_attribute" =>
@@ -1179,7 +1181,7 @@ ORDER BY `p`.`id` ASC LIMIT 10";
                 );
 
                 $exist = false;
-                if (empty($findExtProdAttr)){
+                if (empty($findExtProdAttr)) {
                     $finalProductStatus = 0;
                     \Monkey::app()->applicationLog('PrestaDumpCSv', 'alert', 'Product not founded', "Product with prestashopId $p WAS NOT founded even if has status = 2");
                 } else {
@@ -1286,53 +1288,174 @@ ORDER BY `p`.`id` ASC LIMIT 10";
                     $value_product['state']));
 
             //popolamento array lingua prodotti
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId='=>2]);
+            foreach ($res_product_lang as $value_product_lang) {
+                if (empty($value_product_lang['name'])) {
+                    $name_product_lang = $value_product['brand_name']." ".$value_product['product_id']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
+                } else {
+                    $name_product_lang = $value_product['brand_name']." ".$value_product_lang['name']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
+                }
+                if ($value_product_lang['langId'] == 2) {
+                    $in_stock = "'in stock'";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+
+
+                } elseif ($value_product_lang['langId'] == 1) {
+                    $in_stock = "in Vendita";
+                    $current_supply = 'In magazzino. ordinabile';
+                    $product_available = 'Consegna in 3-4 Giorni Lavorati';
+                    $product_not_available = 'Consegna  in 10-15 lavorativi';
+
+                } elseif ($value_product_lang['langId'] == 3) {
+                    $in_stock = "in stock";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+                } else {
+                    $in_stock = "in stock";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+                }
+
+
+                $valuelang =1;
 
             $data_product_lang = array(
                 array($p,
                     '1',
-                    '1',
+                    $valuelang,
+                    $name_product_lang,
+                    $name_product_lang,
                     $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['productName'],
-                    $value_product['product_id'],
-                    'in stock',
-                    'Current supply. Ordering available',
-                    'Delivered in 3-4 Days',
-                    'Delivered in 10-15 Days'
-                ),
-                array($p,
-                    '1',
-                    '2',
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['productName'],
-                    $value_product['product_id'],
-                    'in Vendita',
-                    'In magazzino. ordinabile',
-                    'Consegna in 3-4 Giorni Lavorati',
-                    'Consegna  in 10-15 lavorativi'
-                ),
-                array($p,
-                    '1',
-                    '3',
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['product_id'],
-                    $value_product['productName'],
-                    $value_product['product_id'],
-                    'in Stock',
-                    'Current supply. Ordering available',
-                    'Delivered in 3-4 Days',
-                    'Delivered in 10-15 Days'
+                    $name_product_lang,
+                    $name_product_lang,
+                    $name_product_lang,
+                    $name_product_lang,
+                    $in_stock,
+                    $current_supply,
+                    $product_available,
+                    $product_not_available
                 ));
+            foreach ($data_product_lang as $row_product_lang) {
+                fputcsv($product_lang_csv, $row_product_lang, ';');
+
+            }
+        }
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId='=>1]);
+            foreach ($res_product_lang as $value_product_lang) {
+                if (empty($value_product_lang['name'])) {
+                    $name_product_lang = $value_product['brand_name']." ".$value_product['product_id']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
+                } else {
+                    $name_product_lang = $value_product['brand_name']." ".$value_product_lang['name']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
+                }
+                if ($value_product_lang['langId'] == 2) {
+                    $in_stock = "'in stock'";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+
+
+                } elseif ($value_product_lang['langId'] == 1) {
+                    $in_stock = "in Vendita";
+                    $current_supply = 'In magazzino. ordinabile';
+                    $product_available = 'Consegna in 3-4 Giorni Lavorati';
+                    $product_not_available = 'Consegna  in 10-15 lavorativi';
+
+                } elseif ($value_product_lang['langId'] == 3) {
+                    $in_stock = "in stock";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+                } else {
+                    $in_stock = "in stock";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+                }
+
+
+                $valuelang =2;
+
+                $data_product_lang = array(
+                    array($p,
+                        '1',
+                        $valuelang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $value_product['product_id'],
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $in_stock,
+                        $current_supply,
+                        $product_available,
+                        $product_not_available
+                    ));
+                foreach ($data_product_lang as $row_product_lang) {
+                    fputcsv($product_lang_csv, $row_product_lang, ';');
+
+                }
+            }
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId='=>3]);
+            foreach ($res_product_lang as $value_product_lang) {
+                if (empty($value_product_lang['name'])) {
+                    $name_product_lang = $value_product['brand_name']." ".$value_product['product_id']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
+                } else {
+                    $name_product_lang = $value_product['brand_name']." ".$value_product_lang['name']. " ". $value_product['color_supplier']." ".$value_product['supplier_reference'];
+                }
+                if ($value_product_lang['langId'] == 2) {
+                    $in_stock = "'in stock'";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+
+
+                } elseif ($value_product_lang['langId'] == 1) {
+                    $in_stock = "in Vendita";
+                    $current_supply = 'In magazzino. ordinabile';
+                    $product_available = 'Consegna in 3-4 Giorni Lavorati';
+                    $product_not_available = 'Consegna  in 10-15 lavorativi';
+
+                } elseif ($value_product_lang['langId'] == 3) {
+                    $in_stock = "in stock";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+                } else {
+                    $in_stock = "in stock";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+                }
+
+
+                $valuelang =3;
+
+                $data_product_lang = array(
+                    array($p,
+                        '1',
+                        $valuelang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $value_product['product_id'],
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $in_stock,
+                        $current_supply,
+                        $product_available,
+                        $product_not_available
+                    ));
+                foreach ($data_product_lang as $row_product_lang) {
+                    fputcsv($product_lang_csv, $row_product_lang, ';');
+
+                }
+            }
 
 // popolamento prodotti attributi
 
@@ -1526,10 +1649,7 @@ ORDER BY `p`.`id` ASC LIMIT 10";
 
             }
 
-            foreach ($data_product_lang as $row_product_lang) {
-                fputcsv($product_lang_csv, $row_product_lang, ';');
 
-            }
 
         }
 
