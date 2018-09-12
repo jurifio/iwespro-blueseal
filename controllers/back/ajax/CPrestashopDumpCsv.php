@@ -870,7 +870,7 @@ FROM ProductSizeMacroGroup psmg
                 '1'                                                                            AS minimal_quantity,
                 '1'                                                                            AS low_stock_threshold,
                 '0'                                                                            AS low_stock_alert,
-                shp.price                                                                      AS price,
+                S3.price                                                                       AS price,
                 FORMAT(shp.price/100*70 ,2)                                                    AS wholesale_price,
                 '0'                                                                            AS unity,
                 '0.000000'                                                                     AS unit_price_ratio,
