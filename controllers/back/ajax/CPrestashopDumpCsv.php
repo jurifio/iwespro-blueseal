@@ -137,6 +137,11 @@ class CPrestashopDumpCsv extends AAjaxController
         }
         $category_shop_csv = fopen($save_to . 'psz6_category_shop.csv', 'w');
 
+        if (file_exists($save_to . 'psz6_category_group.csv')) {
+            unlink($save_to . 'psz6_category_group.csv');
+        }
+        $category_group_csv = fopen($save_to . 'psz6_category_group.csv', 'w');
+
         if (file_exists($save_to . 'psz6_supplier.csv')) {
             unlink($save_to . 'psz6_supplier.csv');
         }
@@ -380,6 +385,9 @@ FROM `Product` `p`
                 array($value_category['id_category'],
                     1,
                     $i));
+            $data_category_group = array(
+                array($value_category['id_category'],
+                    1));
 
 
             foreach ($data_category as $row_category) {
@@ -387,6 +395,9 @@ FROM `Product` `p`
             }
             foreach ($data_category_shop as $row_category_shop) {
                 fputcsv($category_shop_csv, $row_category_shop, ';');
+            }
+            foreach ($data_category_group as $row_category_group) {
+                fputcsv($category_group_csv, $row_category_group, ';');
             }
 
 
@@ -1640,6 +1651,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         fclose($category_csv);
         fclose($category_lang_csv);
         fclose($category_shop_csv);
+        fclose($category_group_csv);
         fclose($manufacturer_csv);
         fclose($manufacturer_lang_csv);
         fclose($manufacturer_shop_csv);
@@ -1698,6 +1710,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         $phar->addFile($save_to . 'psz6_supplier_lang.csv', 'psz6_supplier_lang.csv');
         $phar->addFile($save_to . 'psz6_supplier_shop.csv', 'psz6_supplier_shop.csv');
         $phar->addFile($save_to . 'psz6_category_shop.csv', 'psz6_category_shop.csv');
+        $phar->addFile($save_to . 'psz6_category_group.csv', 'psz6_category_group.csv');
         $phar->addFile($save_to . 'psz6_stock_available.csv', 'psz6_stock_available.csv');
         $phar->addFile($save_to . 'psz6_attribute_shop.csv', 'psz6_attribute_shop.csv'); //V
         $phar->addFile($save_to . 'psz6_attribute_group.csv', 'psz6_attribute_group.csv'); //V
@@ -1736,6 +1749,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 unlink($save_to . 'psz6_attribute_group_lang.csv');
                 unlink($save_to . 'psz6_attribute_group_shop.csv');
                 unlink($save_to . 'psz6_category_product.csv');
+                unlink($save_to . 'psz6_category_group.csv');
                 unlink($save_to . 'psz6_attribute_lang.csv');
                 unlink($save_to . 'psz6_category.csv');
                 unlink($save_to . 'psz6_category_lang.csv');
@@ -1795,7 +1809,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         curl_close($ch);
         /****sezione per lancio allineamento script su server prestashop*/
 
-        /*  $url = 'https://iwes.shop/alignpresta.php';
+          $url = 'https://iwes.shop/alignpresta.php';
           $ch = curl_init();
           curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
           curl_setopt($ch, CURLOPT_URL, $url);
@@ -1804,7 +1818,19 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
 
 
           curl_close($ch);
-          */
+
+        $url = 'https://iwes.shop/alignImage.php';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+
+
+        curl_close($ch);
+
+
+
 
 
         /**** aggiornamento stato tabella PrestashopHasProduct e  PrestashopHasProductImage  **/
