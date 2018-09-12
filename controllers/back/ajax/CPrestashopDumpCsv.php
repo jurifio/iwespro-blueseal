@@ -1533,8 +1533,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         //popolamento aggiornamento tabella PrestashopHasProductImage
 
         foreach ($image_product as $value_image_product) {
-            $prestashopHasProductImage = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->findOneBy(['prestaId' => $value_image_product['productId']]);
-            if (empty($prestashopHasProductImage)) {
+
                 $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
                 $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
                 $prestashopHasProductImageInsert->position = $value_image_product['position'];
@@ -1542,7 +1541,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 $prestashopHasProductImageInsert->cover = $value_image_product['cover'];
                 $prestashopHasProductImageInsert->status = '0';
                 $prestashopHasProductImageInsert->smartInsert();
-            }
+
             // popolamento array immagini con id sequenziale
 
             $data_image = array(
