@@ -312,7 +312,7 @@ FROM `Product` `p`
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   WHERE p.qty>0 AND p.productStatusId=6
   GROUP BY p.id,p.productVariantId 
-  ORDER BY `p`.`id` ASC";
+  ORDER BY `p`.`id` ASC LIMIT 10";
 
 
         /**** esportazione prodotti su ProductHasPrestashop******/
@@ -927,7 +927,7 @@ FROM ProductSizeMacroGroup psmg
                   JOIN  PrestashopHasProduct php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
                 WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2) 
                 GROUP BY p.id,p.productVariantId
-                ORDER BY `p`.`id` ASC";
+                ORDER BY `p`.`id` ASC LIMIT 10";
 
 
 
@@ -1526,16 +1526,14 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0  GROUP BY picture  ORDER BY productId ASC";
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.status = 0 GROUP BY picture  ORDER BY productId ASC";
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $a = 0;
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
 
         foreach ($image_product as $value_image_product) {
-            $k = $k + 1;
-            $a = $a + 1;
-            $prestashopHasProductImage = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->findOneBy(['idImage' => $k]);
+            $prestashopHasProductImage = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->findOneBy(['prestaId' => $value_image_product['productId']]);
             if (empty($prestashopHasProductImage)) {
                 $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
                 $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
@@ -1544,21 +1542,11 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 $prestashopHasProductImageInsert->cover = $value_image_product['cover'];
                 $prestashopHasProductImageInsert->status = '0';
                 $prestashopHasProductImageInsert->smartInsert();
-
-            } else {
-                $prestashopHasProductImage->prestaId = $value_image_product['productId'];
-                $prestashopHasProductImage->position = $value_image_product['position'];
-                $prestashopHasProductImage->picture = $value_image_product['picture'];
-                $prestashopHasProductImage->cover = $value_image_product['cover'];
-                $prestashopHasProductImage->status = '1';
-                $prestashopHasProductImage->update();
-
-
             }
             // popolamento array immagini con id sequenziale
 
             $data_image = array(
-                array($k,
+                array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
                     $value_image_product['cover']));
@@ -1567,24 +1555,24 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
 
             $data_image_shop = array(
                 array($value_image_product['productId'],
-                    $k,
+                    $prestashopHasProductImageInsert->idImage,
                     '1',
                     $value_image_product['cover']));
             $data_image_lang = array(
-                array($k,
+                array($prestashopHasProductImageInsert->idImage,
                     '1',
                     $value_image_product['reference']),
-                array($k,
+                array($prestashopHasProductImageInsert->idImage,
                     '2',
                     $value_image_product['reference']),
-                array($k,
+                array($prestashopHasProductImageInsert->idImage,
                     '3',
                     $value_image_product['reference'])
             );
 
             //popolameto array image con link a amazon
             $data_image_link = array(
-                array($k,
+                array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
                     $value_image_product['cover'],
