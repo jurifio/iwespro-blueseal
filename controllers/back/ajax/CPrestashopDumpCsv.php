@@ -1838,6 +1838,10 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
+        $sql = "UPDATE PrestashopHasProduct SET status='1' WHERE status='2'";
+        \Monkey::app()->dbAdapter->query($sql, []);
+        $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='2'";
+        \Monkey::app()->dbAdapter->query($sql, []);
 
 
         $res = 'esportazione eseguita';
