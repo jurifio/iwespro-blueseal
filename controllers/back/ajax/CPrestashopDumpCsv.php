@@ -317,7 +317,7 @@ FROM `Product` `p`
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   WHERE p.qty>0 AND p.productStatusId=6
   GROUP BY p.id,p.productVariantId 
-  ORDER BY `p`.`id` ASC LIMIT 10";
+  ORDER BY `p`.`id` ASC ";
 
 
         /**** esportazione prodotti su ProductHasPrestashop******/
@@ -944,7 +944,7 @@ FROM `Product` `p`
   JOIN ProductName pn ON p.id = pn.id
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2)
 GROUP BY p.id,p.productVariantId
-ORDER BY `p`.`id` ASC LIMIT 10";
+ORDER BY `p`.`id` ASC ";
 
 
 
