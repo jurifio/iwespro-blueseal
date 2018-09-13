@@ -315,6 +315,9 @@ FROM `Product` `p`
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
+  JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
+ left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
+ left JOIN ProductName pn ON p.id = pn.id
   WHERE p.qty>0 AND p.productStatusId=6
   GROUP BY p.id,p.productVariantId 
   ORDER BY `p`.`id` ASC ";
@@ -940,8 +943,8 @@ FROM `Product` `p`
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   JOIN  PrestashopHasProduct php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
-  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
-  JOIN ProductName pn ON p.id = pn.id
+ left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
+  left JOIN ProductName pn ON p.id = pn.id
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2)
 GROUP BY p.id,p.productVariantId
 ORDER BY `p`.`id` ASC ";
