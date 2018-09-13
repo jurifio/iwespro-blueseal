@@ -1288,8 +1288,9 @@ ORDER BY `p`.`id` ASC ";
                     $value_product['state']));
 
             //popolamento array lingua prodotti
+
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'2']);
-           if (empty($res_product_lang)) {
+           if ($res_product_lang->isEmpty()) {
                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
                $in_stock = "in stock";
                $current_supply = "Current supply. Ordering available";
@@ -1353,7 +1354,7 @@ ORDER BY `p`.`id` ASC ";
                }
            }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
-            if (empty($res_product_lang)) {
+            if ($res_product_lang->isEmpty()) {
                 $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
                 $in_stock = "in Vendita";
                 $current_supply = 'In magazzino. ordinabile';
@@ -1419,7 +1420,7 @@ ORDER BY `p`.`id` ASC ";
                 }
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'3']);
-            if (empty($res_product_lang)) {
+            if ($res_product_lang->isEmpty()) {
                 $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
