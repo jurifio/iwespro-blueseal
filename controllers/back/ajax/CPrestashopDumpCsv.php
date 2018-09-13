@@ -38,6 +38,7 @@ class CPrestashopDumpCsv extends AAjaxController
     public function post()
     {
         ini_set('memory_limit', '2048M');
+        set_time_limit(0);
 
 
         /* $sql = "DELETE FROM PrestashopHasProduct";
