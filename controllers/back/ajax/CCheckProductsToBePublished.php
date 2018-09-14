@@ -1,6 +1,6 @@
 <?php
 namespace bamboo\controllers\back\ajax;
-
+use bamboo\domain\repositories\CPrestashopHasProductRepo;
 
 
 /**
@@ -36,9 +36,6 @@ class CCheckProductsToBePublished extends AAjaxController
             $product->productStatusId = 6;
 
             $count += $product->update();
-            /** @var CPrestashopHasProductRepo $phpR */
-            $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
-            $phpR->updateProductStatus($product['id'], $product["productVariantId"]);
         }
         return json_encode(
             [
@@ -67,10 +64,6 @@ class CCheckProductsToBePublished extends AAjaxController
                                 ]);
                             $product->productStatusId = $get['productStatusId'];
                             $count += $product->update();
-
-                            /** @var CPrestashopHasProductRepo $phpR */
-                            $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
-                            $phpR->updateProductStatus($v['id'], $v["productVariantId"]);
                         }
                         \Monkey::app()->repoFactory->commit();
                     } catch (\Throwable $e) {
