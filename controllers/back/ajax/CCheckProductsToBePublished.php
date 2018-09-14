@@ -1,6 +1,6 @@
 <?php
 namespace bamboo\controllers\back\ajax;
-use bamboo\domain\repositories\CPrestashopHasProductRepo;
+
 
 
 /**
