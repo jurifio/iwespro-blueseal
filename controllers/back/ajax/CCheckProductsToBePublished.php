@@ -1,5 +1,7 @@
 <?php
 namespace bamboo\controllers\back\ajax;
+use bamboo\domain\repositories\CPrestashopHasProductRepo;
+
 
 /**
  * Class CCheckProductsToBePublished
@@ -32,6 +34,7 @@ class CCheckProductsToBePublished extends AAjaxController
         $count = 0;
         foreach ($products as $product) {
             $product->productStatusId = 6;
+
             $count += $product->update();
         }
         return json_encode(

@@ -72,13 +72,15 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
                 $pmc->update();
                 break;
             case 'description':
-                $id = \Monkey::app()->router->request()->getRequestData('macroCatId');
-                /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
-                $pmc = $pmcRepo->findOneBy(['id'=>$id]);
+                $ids = \Monkey::app()->router->request()->getRequestData('macroCatId');
                 $desc = \Monkey::app()->router->request()->getRequestData('desc');
-                if(empty($desc)) return 'Inserisci una descrizione';
-                $pmc->description = $desc;
-                $pmc->update();
+                if (empty($desc)) return 'Inserisci una descrizione';
+                foreach ($ids as $id) {
+                    /** @var CProductSheetModelPrototypeMacroCategoryGroup $pmc */
+                    $pmc = $pmcRepo->findOneBy(['id' => $id]);
+                    $pmc->description = $desc;
+                    $pmc->update();
+                }
                 break;
             case 'find-sub-name':
                 $sub = \Monkey::app()->router->request()->getRequestData('sub_name');
@@ -97,5 +99,29 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
 
     }
 
+    public function delete(){
+
+        $macroCatIds = \Monkey::app()->router->request()->getRequestData('macroCatId');
+
+        $del = '';
+        $undel = '';
+        /** @var CRepo $macroCatR */
+        $macroCatR = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
+
+        foreach ($macroCatIds as $macroCatId){
+
+            /** @var CProductSheetModelPrototypeMacroCategoryGroup $macroCat */
+            $macroCat = $macroCatR->findOneBy(['id'=>$macroCatId]);
+
+            if($macroCat->productSheetModelPrototypeCategoryGroup->count() === 0) {
+                $del .= $macroCat->id . "-" . $macroCat->name . "<br>";
+                $macroCat->delete();
+            } else {
+                $undel .= $macroCat->id . "-" . $macroCat->name . "<br>";
+            }
+        }
+
+        return "Cancellate:<br> $del <br> Non cancellate:<br> $undel";
+    }
 
 }

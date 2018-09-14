@@ -1,0 +1,7 @@
+{
+    "entity": {
+        "name": "SiteApi",
+        "keys": ["id"],
+        "cacheable" : "false"
+    }
+}

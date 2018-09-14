@@ -97,6 +97,8 @@ class CDetailModelSave extends AAjaxController
                     $newName = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
                     $newCode = str_ireplace($get['find-code'], $get['sub-code'], $model['code']);
 
+                    /** @var CProductSheetModelPrototype $psmp */
+                    $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $model['id']]);
                     if (isset($get['find-product-name']) && isset($get['sub-product-name'])) {
                         //mi tiro fuori il nome composto e faccio lo stesso di prima -> ma se non c'è lo creoooo
                         $newProductName = str_ireplace(trim($get['find-product-name']), trim($get['sub-product-name']), $model['productName']);
@@ -136,11 +138,11 @@ class CDetailModelSave extends AAjaxController
                     $newProt->genderId = (!isset($get['genders']) ? $model['genderId'] : $get['genders']);
 
 
-                    if (isset($get['prodCats'])) {
+                    if (isset($get['prodCats']) && !empty($get["prodCats"])) {
                         $newProt->categoryGroupId = $get['prodCats'];
-                    } else if (!isset($get['prodCats']) && !isset($get['find-prodCats'])) {
+                    } else if ((!isset($get['prodCats']) || empty($get["prodCats"])) && !isset($get['find-prodCats'])) {
                         $newProt->categoryGroupId = $model['categoryGroupId'];
-                    } else if (!isset($get['prodCats']) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))) {
+                    } else if ((!isset($get['prodCats']) || empty($get["prodCats"])) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))) {
 
                         /** @var CRepo $exCatGroupRepo */
                         $exCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
@@ -159,8 +161,35 @@ class CDetailModelSave extends AAjaxController
                             /** @var CProductSheetModelPrototypeCategoryGroup $newCategoryGroup */
                             $newCategoryGroup = $exCatGroupRepo->getEmptyEntity();
                             $newCategoryGroup->name = $newProdCats;
+                            if(isset($get["keepcatphoto"]) && $get["keepcatphoto"] == "on") $newCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->imageUrl;
                             $newCategoryGroup->macroCategoryGroupId = CProductSheetModelPrototypeMacroCategoryGroup::DEFAULT;
                             $newCategoryGroup->smartInsert();
+
+                            if (isset($get['find-macroCat']) && isset($get['sub-macroCat'])) {
+                                /** @var CRepo $exMacroCatGroupRepo */
+                                $exMacroCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
+                                /** @var CProductSheetModelPrototypeMacroCategoryGroup $extMacroCatGroup */
+                                $extMacroCatGroup = $exMacroCatGroupRepo->findOneBy(["id" => $psmp->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->id]);
+                                $exMCGName = $extMacroCatGroup->name;
+
+                                $newMacroProdCats = str_ireplace($get['find-macroCat'], $get['sub-macroCat'], $exMCGName);
+                                $changeMacroCatGroup = $exMacroCatGroupRepo->findOneBy([
+                                    "name" => $newMacroProdCats]);
+                                if (!is_null($changeMacroCatGroup)) {
+                                    $newCategoryGroup->macroCategoryGroupId = $changeMacroCatGroup->id;
+                                    $newCategoryGroup->update();
+                                } else {
+                                    /** @var CProductSheetModelPrototypeMacroCategoryGroup $newMacroCategoryGroup */
+                                    $newMacroCategoryGroup = $exMacroCatGroupRepo->getEmptyEntity();
+                                    $newMacroCategoryGroup->name = $newMacroProdCats;
+                                    if (isset($get["keepmacrocatphoto"]) && $get["keepmacrocatphoto"] == "on") $newMacroCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->imageUrl;
+                                    $newMacroCategoryGroup->smartInsert();
+
+                                    $newCategoryGroup->macroCategoryGroupId = $newMacroCategoryGroup->id;
+                                    $newCategoryGroup->update();
+                                }
+                            }
+
 
                             $newProt->categoryGroupId = $newCategoryGroup->id;
                         }
@@ -194,9 +223,6 @@ class CDetailModelSave extends AAjaxController
                         }
                     }
 
-
-                    /** @var CProductSheetModelPrototype $psmp */
-                    $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $model['id']]);
 
                     /** @var CObjectCollection $psActualCollection */
                     $psActualCollection = $psmp->productSheetModelActual;
@@ -388,11 +414,10 @@ class CDetailModelSave extends AAjaxController
 
 
                     if (isset($get['genders'])) $psmp->genderId = $get['genders'];
-                    if (isset($get['prodCats'])) $psmp->categoryGroupId = $get['prodCats'];
 
-                    if (isset($get['prodCats'])) {
+                    if (isset($get['prodCats']) && !empty($get["prodCats"])) {
                         $psmp->categoryGroupId = $get['prodCats'];
-                    } else if (!isset($get['prodCats']) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))) {
+                    } else if ((!isset($get['prodCats']) || empty($get["prodCats"])) && (isset($get['find-prodCats']) && isset($get['sub-prodCats']))) {
 
                         /** @var CRepo $exCatGroupRepo */
                         $exCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
@@ -411,13 +436,41 @@ class CDetailModelSave extends AAjaxController
                             /** @var CProductSheetModelPrototypeCategoryGroup $newCategoryGroup */
                             $newCategoryGroup = $exCatGroupRepo->getEmptyEntity();
                             $newCategoryGroup->name = $newProdCats;
+                            if(isset($get["keepcatphoto"]) && $get["keepcatphoto"] == "on") $newCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->imageUrl;
                             $newCategoryGroup->macroCategoryGroupId = CProductSheetModelPrototypeMacroCategoryGroup::DEFAULT;
                             $newCategoryGroup->smartInsert();
+
+                            if (isset($get['find-macroCat']) && isset($get['sub-macroCat'])) {
+                                /** @var CRepo $exMacroCatGroupRepo */
+                                $exMacroCatGroupRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup');
+                                /** @var CProductSheetModelPrototypeMacroCategoryGroup $extMacroCatGroup */
+                                $extMacroCatGroup = $exMacroCatGroupRepo->findOneBy(["id" => $psmp->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->id]);
+                                $exMCGName = $extMacroCatGroup->name;
+
+                                $newMacroProdCats = str_ireplace($get['find-macroCat'], $get['sub-macroCat'], $exMCGName);
+                                $changeMacroCatGroup = $exMacroCatGroupRepo->findOneBy([
+                                    "name" => $newMacroProdCats]);
+                                if (!is_null($changeMacroCatGroup)) {
+                                    $newCategoryGroup->macroCategoryGroupId = $changeMacroCatGroup->id;
+                                    $newCategoryGroup->update();
+                                } else {
+                                    /** @var CProductSheetModelPrototypeMacroCategoryGroup $newMacroCategoryGroup */
+                                    $newMacroCategoryGroup = $exMacroCatGroupRepo->getEmptyEntity();
+                                    $newMacroCategoryGroup->name = $newMacroProdCats;
+                                    if (isset($get["keepmacrocatphoto"]) && $get["keepmacrocatphoto"] == "on") $newMacroCategoryGroup->imageUrl = $psmp->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->imageUrl;
+                                    $newMacroCategoryGroup->smartInsert();
+
+                                    $newCategoryGroup->macroCategoryGroupId = $newMacroCategoryGroup->id;
+                                    $newCategoryGroup->update();
+                                }
+                            }
 
                             $psmp->categoryGroupId = $newCategoryGroup->id;
                         }
 
                     }
+
+
                     if (isset($get['materials'])) $psmp->materialId = $get['materials'];
                     if (isset($get['note'])) $psmp->note = $get['note'];
                     $psmp->update();

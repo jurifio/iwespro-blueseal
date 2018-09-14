@@ -788,7 +788,7 @@
                             } else if(item.img != null && item.desc == null){
                                 rendResCats = '<div>' +
                                     escape(item.name) + ' | ' +
-                                    "<img style='width: 100px' src='" + escape(item.img) + "'>" +
+                                    "<img style='width: 50px' src='" + escape(item.img) + "'>" +
                                     '</div>';
                             } else if (item.img == null && item.desc != null){
                                 rendResCats = '<div>' +
@@ -799,7 +799,7 @@
                                 rendResCats = '<div>' +
                                     escape(item.name) + ' | ' +
                                     escape(item.desc) + ' | ' +
-                                    "<img style='width: 100px' src='" + escape(item.img) + "'>" +
+                                    "<img style='width: 50px' src='" + escape(item.img) + "'>" +
                                     '</div>';
                             }
 
@@ -856,7 +856,7 @@
                             } else if(item.img != null && item.desc == null){
                                 rendResCatsSpec = '<div>' +
                                     escape(item.name) + ' | ' +
-                                    "<img style='width: 100px' src='" + escape(item.img) + "'>" +
+                                    "<img style='width: 50px' src='" + escape(item.img) + "'>" +
                                     '</div>';
                             } else if (item.img == null && item.desc != null){
                                 rendResCatsSpec = '<div>' +
@@ -867,7 +867,7 @@
                                 rendResCatsSpec = '<div>' +
                                     escape(item.name) + ' | ' +
                                     escape(item.desc) + ' | ' +
-                                "<img style='width: 100px' src='" + escape(item.img) + "'>" +
+                                "<img style='width: 50px' src='" + escape(item.img) + "'>" +
                                     '</div>';
                             }
 

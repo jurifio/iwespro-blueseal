@@ -1,0 +1,12 @@
+{
+    "origin": {
+        "engine": "mysql",
+        "host": "iwes.shop",
+        "port": "3306",
+        "name": "iwesshop_pres848",
+        "user": "iwesshop_pres848",
+        "pass": "@5pM5S)Mn8",
+        "charset": "utf8",
+        "options": {}
+    }
+}

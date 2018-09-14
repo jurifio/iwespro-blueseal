@@ -90,6 +90,9 @@ class CProductPriceEdit extends AAjaxController
                     $shp->insert();
 
                     $shp = $shpRepo->findOneBy(['productId' => $get['id'], 'productVariantId' => $get['productVariantId'], 'shopId' => $v['shopId']]);
+                    /** @var CPrestashopHasProductRepo $phpR */
+                    $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+                    $phpR->updateProductStatus($get['id'], $get["productVariantId"]);
                 }
                 //$shp->updatePrices($v['value'], $v['price'], (array_key_exists('salePrice', $v) ? $v['salePrice'] : 0));
                 $skuRepo->updateSkusPrices($shp->productId, $shp->productVariantId, $shp->shopId, $shp->value, $shp->price, $shp->salePrice);

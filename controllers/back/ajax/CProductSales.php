@@ -47,9 +47,14 @@ class CProductSales extends AAjaxController
             try {
                 /** @var CProduct $product */
                 $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+                /** @var CPrestashopHasProductRepo $phpR */
+                $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+                $phpR->updateProductStatus($v['id'], $v["productVariantId"]);
                 foreach ($product->shopHasProduct as $shopHasProduct) {
                     $shopHasProduct->salePrice = floor($shopHasProduct->price / 100 * (100 - $percent));
                     $shopHasProduct->update();
+
+
                 }
 
                 foreach ($product->productSku as $productSku) {
@@ -77,6 +82,9 @@ class CProductSales extends AAjaxController
     {
         foreach ($rows as $v) {
             $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            /** @var CPrestashopHasProductRepo $phpR */
+            $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+            $phpR->updateProductStatus($v['id'], $v["productVariantId"]);
             try {
                 $product->isOnSale = $isSale;
                 $product->update();

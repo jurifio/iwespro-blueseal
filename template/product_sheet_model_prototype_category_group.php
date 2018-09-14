@@ -41,9 +41,12 @@
                                 <th data-slug="description"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Descrizione</th>
-                                <th data-slug="imageUrl"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Photo</th>
+                                <th data-slug="models"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Modelli</th>
+                                <th data-slug="image"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Photo</th>
                                 <th data-slug="macroName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Macrocategoria</th>
@@ -103,6 +106,28 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-trash"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.sheet.delete.model.cat.group"
+                data-title="Elimina categorie"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestisci dati">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-arrows-h"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.product.sheet.model.cat.group.name.find.sub"
+                data-title="Trova e sostituisce"
+                data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

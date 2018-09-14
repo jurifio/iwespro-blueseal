@@ -22,6 +22,12 @@ use bamboo\core\exceptions\BambooException;
  */
 class CReadExtDbTable extends AReadExtDbTable
 {
+
+    CONST MAX = "MAX";
+    CONST MIN = "MIN";
+    CONST SUM = "SUM";
+    CONST COUNT = "COUNT";
+
     /**
      * @param $tablesName
      * @param array $fields
@@ -30,6 +36,25 @@ class CReadExtDbTable extends AReadExtDbTable
      */
     public function readTables($tablesName, $remoteWhere, array $fields = [])
     {
+        if(!empty($fields) && $this->isAssoc($fields)){
+            /*
+             *
+             *
+             * $fields = [
+             * "id_product_attribute" => "MAX",
+             * "id_product" => "null"
+             * ]
+             *
+             */
+            $finalFields = [];
+            foreach ($fields as $field => $option) {
+                if($option !== "null"){
+                    $finalFields[] = $option."(".$field.")";
+                } else if($option == "null"){
+                    $finalFields[] = $field;
+                }
+            }
+        }
 
         $firsTable = null;
         $firstField = null;
@@ -39,7 +64,12 @@ class CReadExtDbTable extends AReadExtDbTable
             $c++;
             if ($c == 1) continue;
 
-            if(explode('-', $table)[1] === 'Left'){
+            $isLeftJoin = false;
+            if (strpos($table, 'Left') !== false) {
+                $isLeftJoin = true;
+            }
+
+            if($isLeftJoin && explode('-', $table)[1] === 'Left'){
                 $join .= " LEFT JOIN ";
                 $table = explode('-', $table)[0];
             } else {
@@ -64,7 +94,7 @@ class CReadExtDbTable extends AReadExtDbTable
         }
 
 
-        $select = empty($fields) ? "*" : implode(',', $fields);
+        $select = empty($fields) ? "*" : implode(',', $finalFields);
         $tableFrom = $tablesName[0];
 
         $sum = $this->countAssociativeArrayElements($remoteWhere);
@@ -78,10 +108,19 @@ class CReadExtDbTable extends AReadExtDbTable
                 $countKeyTable++;
                 foreach ($tableN as $condition => $val) {
                     $count++;
-                    if ($count === $sum) {
-                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '"';
+                    $findType = "";
+                    if(is_array($val)) {
+                        $findType = " in ";
+                        $trueValue = "(".implode(', ', $val).")";
                     } else {
-                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . ' = "' . $val . '" AND ';
+                        $findType = " = ";
+                        $trueValue = "'" . $val . "'";
+                    }
+
+                    if ($count === $sum) {
+                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . $findType . $trueValue;
+                    } else {
+                        $where .= $this->dbName . '.' . $tbName . '.' . $condition . $findType . $trueValue . ' AND ';
                     }
                 }
 
@@ -244,6 +283,11 @@ class CReadExtDbTable extends AReadExtDbTable
 
         return $sum;
 
+    }
+
+    protected function isAssoc($arr)
+    {
+        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
 

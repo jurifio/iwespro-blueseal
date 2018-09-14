@@ -4,9 +4,11 @@ namespace bamboo\domain\entities;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
+use bamboo\core\db\pandaorm\entities\IEntity;
+use bamboo\utils\price\SPriceToolbox;
 
 /**
- * Class CProductSheetModelPrototypeCategoryGroup
+ * Class CCart
  * @package bamboo\domain\entities
  *
  * @author Iwes Team <it@iwes.it>
@@ -15,17 +17,16 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 10/05/2018
+ * @date 19/07/2018
  * @since 1.0
- *
- *
- * @property CProductSheetModelPrototypeMacroCategoryGroup $productSheetModelPrototypeMacroCategoryGroup
- * @property CObjectCollection $productSheetModelPrototype
- *
- *
  */
-class CProductSheetModelPrototypeCategoryGroup extends AEntity
+class CSite extends AEntity
 {
-    protected $entityTable = 'ProductSheetModelPrototypeCategoryGroup';
+    protected $entityTable = 'SiteApi';
     protected $primaryKeys = ['id'];
+
+    /**
+     * @return float
+     */
+
 }

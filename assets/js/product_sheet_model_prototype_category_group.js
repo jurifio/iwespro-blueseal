@@ -4,15 +4,19 @@
 
         let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-        if(selectedRows.length != 1) {
+        if(selectedRows.length < 1) {
             new Alert({
                 type: "warning",
-                message: "Puoi inserire una descrizione alla volta"
+                message: "Non hai selezionato niente"
             }).open();
             return false;
         }
 
-        let catId = selectedRows[0].id;
+        let catId = [];
+        selectedRows.each(function (k) {
+            catId.push(k.id);
+        });
+
 
         let bsModal = new $.bsModal('Inserisci descrizione', {
             body: `<p>Descrizione</p>
@@ -164,5 +168,105 @@
         });
     });
 
+    $(document).on('bs.product.sheet.model.cat.group.name.find.sub', function () {
 
+
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length < 1) {
+            new Alert({
+                type: "warning",
+                message: "seleziona almeno una riga"
+            }).open();
+            return false;
+        }
+
+        let ids = [];
+        selectedRows.each(function (k, v) {
+            ids.push(k.id)
+        });
+
+        let bsModal = new $.bsModal('Trova/sostituisci', {
+            body: `
+            <div>
+                <p>Trova</p>
+                <input type="text" id="find-name"> 
+            </div>
+            <div>
+                <p>Sostituisci</p>
+                <input type="text" id="sub-name"> 
+            </div>`
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            const data = {
+                ids: ids,
+                find_name: $('#find-name').val(),
+                sub_name: $('#sub-name').val()
+            };
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/ProductModelPrototypeCategoryGroupAjaxManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                    //window.location.reload();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
+    $(document).on('bs.product.sheet.delete.model.cat.group', function () {
+
+
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length < 1) {
+            new Alert({
+                type: "warning",
+                message: "Non hai selezionato nessuna riga"
+            }).open();
+            return false;
+        }
+
+        let catId = [];
+        selectedRows.each(function (k, v) {
+            catId.push(k.id)
+        });
+
+        let bsModal = new $.bsModal('ELIMINA', {
+            body: `<p>Procedere con l'eliminazione delle categorie?</p> 
+                   `
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            const data = {
+                catId: catId
+            };
+            $.ajax({
+                method: 'delete',
+                url: '/blueseal/xhr/ProductModelPrototypeCategoryGroupAjaxManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
 })();
