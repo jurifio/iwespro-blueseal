@@ -158,7 +158,7 @@ class CFoison extends AEntity
             $sumAvg += $avg;
 
         }
-        $allAvg = round($sumAvg / count($avgs), 2);
+        $allAvg = count($avgs) === 0 ? 0 : round($sumAvg / count($avgs), 2);
         if ($update) {
             $this->rank = $allAvg;
             $this->update();

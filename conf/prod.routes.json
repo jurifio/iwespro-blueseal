@@ -964,6 +964,36 @@
             ]
         },
         {
+            "pattern": "/blueseal/work/blog(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CWorkBlogPostListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
+        },
+        {
+            "pattern": "/blueseal/work/blog/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CWorkBlogPostViewController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
+        },
+        {
             "pattern": "/blueseal/blog/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostAddController"
@@ -2298,6 +2328,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/work/foison-sub-request(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonSubRequestListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/work/foison/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonDetailController"
@@ -2305,6 +2346,17 @@
             "filters": {
                 "id": "[0-9]+"
             },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/work/marketplace(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceWorkController"
+            },
+            "filters": {},
             "translations": {},
             "methods": [
                 "GET"
@@ -2351,7 +2403,19 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchDetailsListController"
             },
             "filters": {
-                "cat": "[0-9]+",
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/work/lotti/prodotti/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBatchDetailsListController"
+            },
+            "filters": {
                 "id": "[0-9]+"
             },
             "translations": {},
@@ -2391,20 +2455,6 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNameTranslationListController"
             },
             "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/lotti/prodotti/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBatchDetailsListController"
-            },
-            "filters": {
-                "cat": "[0-9]+",
                 "id": "[0-9]+"
             },
             "translations": {},

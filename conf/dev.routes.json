@@ -2161,6 +2161,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/work/foison-sub-request(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonSubRequestListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/work/foison/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonDetailController"
