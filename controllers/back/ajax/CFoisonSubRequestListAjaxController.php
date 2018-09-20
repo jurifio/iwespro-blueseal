@@ -48,6 +48,7 @@ class CFoisonSubRequestListAjaxController extends AAjaxController
             FROM FoisonSubscribeRequest fsr
             JOIN FoisonSubscribeRequestHasWorkCategory fsrhwk ON fsr.id = fsrhwk.foisonSubscribeRequestId
             JOIN WorkCategory wc ON fsrhwk.workCategoryId = wc.id
+            GROUP BY fsr.id
         ";
 
 
