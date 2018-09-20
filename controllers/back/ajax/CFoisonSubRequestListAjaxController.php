@@ -42,7 +42,8 @@ class CFoisonSubRequestListAjaxController extends AAjaxController
                    fsr.phone,
                    fsr.email,
                    fsr.actualWorkPosition,
-                   fsr.language
+                   fsr.language,
+                   group_concat(wc.interestName) as foisonInterest
                   
             FROM FoisonSubscribeRequest fsr
             JOIN FoisonSubscribeRequestHasWorkCategory fsrhwk ON fsr.id = fsrhwk.foisonSubscribeRequestId
