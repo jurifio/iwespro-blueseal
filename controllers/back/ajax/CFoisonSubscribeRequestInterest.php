@@ -127,7 +127,7 @@ class CFoisonSubscribeRequestInterest extends AAjaxController
             /** @var CEmailRepo $emailRepo */
             $emailRepo = \Monkey::app()->repoFactory->create('Email');
             $subject = "Conferma creazione utente e accettazione competenze";
-            $linkContractDetailAccept = "www.pickyshop.com";
+            $linkContractDetailAccept = $url = \Monkey::app()->baseUrl(false) . "/blueseal/work/contratti/".$contract->id;
             $pw = $user['pw'];
             $linkUser = "www.pickyshop.com/blueseal/work/foison/$foison->id";
             $body = "Salve,<br>Le comunichiamo con piacere che il contratto con n. $contract->id è stato accettato.

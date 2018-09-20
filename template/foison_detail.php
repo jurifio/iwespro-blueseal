@@ -61,7 +61,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default required">
                                                         <label for="foison_fiscal_code">Codice Fiscale</label>
-                                                        <input id="foison_fiscal_code" autocomplete="off" type="text" class="form-control" name="foison_fiscal_code" value="<?php echo $userAddress->fiscalCode; ?>" />
+                                                        <input id="foison_fiscal_code" autocomplete="off" type="text" class="form-control" name="foison_fiscal_code" value="<?php echo !is_null($userAddress) ? $userAddress->fiscalCode : ''; ?>" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -75,7 +75,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default required">
                                                         <label for="address">Indirizzo</label>
-                                                        <input id="address" autocomplete="off" type="text" class="form-control" name="address" value="<?php if(!is_null($userAddress)) echo $userAddress->address; ?>" />
+                                                        <input id="address" autocomplete="off" type="text" class="form-control" name="address" value="<?php if(!is_null($userAddress)) echo !is_null($userAddress) ? $userAddress->address : ''; ?>" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -83,7 +83,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default required">
                                                         <label for="province">Provincia</label>
-                                                        <input id="province" autocomplete="off" type="text" class="form-control" name="province" value="<?php if(!is_null($userAddress))  echo $userAddress->province; ?>" />
+                                                        <input id="province" autocomplete="off" type="text" class="form-control" name="province" value="<?php if(!is_null($userAddress))  echo !is_null($userAddress) ? $userAddress->province : ''; ?>" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
