@@ -85,7 +85,7 @@ class CFoisonSubscribeRequestInterest extends AAjaxController
             /** @var CFoisonRepo $foisonRepo */
             $foisonRepo = \Monkey::app()->repoFactory->create('Foison');
             /** @var CFoison $foison */
-            $foison = $foisonRepo->assignUser($user->userDetails->name, $user->userDetails->surname, $user->email, $user->id);
+            $foison = $foisonRepo->assignUser($user['user']->userDetails->name, $user['user']->userDetails->surname, $user['user']->email, $user['user']->id);
 
 
             //Interest population
@@ -126,7 +126,7 @@ class CFoisonSubscribeRequestInterest extends AAjaxController
 
             /** @var CEmailRepo $emailRepo */
             $emailRepo = \Monkey::app()->repoFactory->create('Email');
-            $subject = "Conferma creazione utente e accettazioe competenze";
+            $subject = "Conferma creazione utente e accettazione competenze";
             $linkContractDetailAccept = "www.pickyshop.com";
             $pw = $user['pw'];
             $linkUser = "www.pickyshop.com/blueseal/work/foison/$foison->id";
