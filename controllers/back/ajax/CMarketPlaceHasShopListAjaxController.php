@@ -7,6 +7,7 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CNewsletterEvent;
 use bamboo\domain\entities\CNewsletterUser;
+use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
 
 
 /**
@@ -38,7 +39,8 @@ class CMarketPlaceHasShopListAjaxController extends AAjaxController
                       s.name as shopName , 
                       ma.name as markeplaceName,  
                       mhs.typeSync as typeSync,
-                      mhs.imgMarketPlace as imgMarketPlace
+                      mhs.imgMarketPlace as imgMarketPlace,
+                      mhs.prestashopId as prestashopId
                       
                 FROM MarketplaceHasShop mhs 
                 inner join Marketplace ma on mhs.marketPlaceId=ma.id

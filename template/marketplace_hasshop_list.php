@@ -56,6 +56,11 @@
                                     data-orderable="true"
                                     class="center">Immagine
                                 </th>
+                                <th data-slug="prestashopId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Prestashop Id
+                                </th>
 
                             </tr>
                             </thead>
