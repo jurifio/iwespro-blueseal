@@ -42,7 +42,7 @@ class CCleanUserSessions extends ACronJob
         } else{
 	        $userSessionId = $us;
         }
-        $res = $this->app->dbAdapter->delete('UserSessionHasOrder',['userSessionId'=>$userSessionId]);
+        $res = $this->app->dbAdapter->delete('UserSessionHasCart',['userSessionId'=>$userSessionId]);
         $res = $this->app->dbAdapter->delete('UserSession',['id'=>$userSessionId]);
         return $res>0;
     }
