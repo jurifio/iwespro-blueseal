@@ -349,7 +349,7 @@ FROM `Product` `p`
         /***********************sezione categorie***********************************************************************************/
         /*** estrazione dati  categorie e categorie shop*/
 
-        $sql = " SELECT `id`                                            AS id_category,
+        $sql = "SELECT `id`                                            AS id_category,
          (SELECT   id FROM ProductCategory t2
                       WHERE t2.lft < t1.lft AND t2.rght > t1.rght
                       ORDER BY t2.rght-t1.rght ASC LIMIT 1)
