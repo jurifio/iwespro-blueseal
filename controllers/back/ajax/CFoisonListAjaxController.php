@@ -85,9 +85,12 @@ class CFoisonListAjaxController extends AAjaxController
             /** @var CFoisonHasInterest $interest */
             foreach ($interests as $interest) {
                 $allPbForCat = $allPB->findByKey("workCategoryId",$interest->workCategoryId);
+
+                $r = !empty($allPbForCat) ?  "<strong>" . $foison->totalRank(false, $allPbForCat) . "</strong><br><br>" : "0";
+
                 $workCategories .= $interest->workCategory->name . ":<br> 
                                 Stato: " . "<strong>" . $interest->foisonStatus->name . "</strong><br> 
-                                Rank: " . "<strong>" . $foison->totalRank(false, $allPbForCat) . "</strong><br><br>";
+                                Rank: " . $r;
             }
 
 
