@@ -16,7 +16,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed">
-
+                        <h2>BETA VERSION | 1.0</h2>
                     </div>
                 </div>
             </div>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php";?>
+<?php include "parts/sidebar.php"; ?>
 <div class="page-container">
-    <?php include "parts/header.php";?>
+    <?php include "parts/header.php"; ?>
     <?php include "parts/operations.php" ?>
 
     <div class="page-content-wrapper">
@@ -16,7 +16,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed">
-
+                        <h2>BETA VERSION | 1.0</h2>
                     </div>
                 </div>
             </div>
@@ -34,31 +34,40 @@
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Id</th>
+                                    data-orderable="true" class="center">Id
+                                </th>
                                 <th data-slug="fName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Nome</th>
+                                    data-orderable="true" class="center">Nome
+                                </th>
                                 <th data-slug="address"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Indirizzo</th>
+                                    data-orderable="true" class="center">Indirizzo
+                                </th>
                                 <th data-slug="birthday"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data di nascita</th>
+                                    data-orderable="true" class="center">Data di nascita
+                                </th>
                                 <th data-slug="phone"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Telefono</th>
+                                    data-orderable="true" class="center">Telefono
+                                </th>
                                 <th data-slug="email"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Email</th>
+                                    data-orderable="true" class="center">Email
+                                </th>
                                 <th data-slug="actualWorkPosition"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Posizione lavorativa attuale</th>
+                                    data-orderable="true" class="center">Posizione lavorativa attuale
+                                </th>
                                 <th data-slug="language"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Lingue</th>
+                                    data-orderable="true" class="center">Lingue
+                                </th>
                                 <th data-slug="foisonInterest"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Interessi</th>
+                                    data-orderable="true" class="center">Interessi
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -69,7 +78,7 @@
             </div>
         </div>
     </div>
-    <?php include "parts/footer.php"?>
+    <?php include "parts/footer.php" ?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>

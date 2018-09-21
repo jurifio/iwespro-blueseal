@@ -12,7 +12,7 @@
     <?php include "parts/operations.php" ?>
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
-
+            <h2 style="text-align: center">BETA VERSION | 1.0</h2>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
