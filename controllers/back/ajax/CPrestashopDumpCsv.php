@@ -420,9 +420,9 @@ class CPrestashopDumpCsv extends AAjaxController
         $marketplaceHasShop = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findAll();
         foreach ($marketplaceHasShop as $iwes_shops) {
 
-        $data_iwes_shop= array(
-            array($iwes_shops->prestashopId,
-           ));
+            $data_iwes_shop= array(
+                array($iwes_shops->prestashopId,
+                ));
             foreach ($data_iwes_shop as $row_iwes_shop) {
                 fputcsv($iwes_shop_csv, $row_iwes_shop, ';');
             }
@@ -430,13 +430,13 @@ class CPrestashopDumpCsv extends AAjaxController
         }
 
 
-            /**
-             * @var $db CMySQLAdapter
-             */
-            /*********************   preparazione tabella di collegamento  ****************************************************//////
-            /*** popolamento tabella */
+        /**
+         * @var $db CMySQLAdapter
+         */
+        /*********************   preparazione tabella di collegamento  ****************************************************//////
+        /*** popolamento tabella */
 
-            $sql = "SELECT
+        $sql = "SELECT
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
   p.id                                                                           AS  productId,
   p.productVariantId                                                             AS productVariantId,
@@ -525,29 +525,29 @@ FROM `Product` `p`
  LEFT JOIN ProductName pn ON p.id = pn.id
   WHERE p.qty>0 AND p.productStatusId=6
   GROUP BY p.id,p.productVariantId 
-  ORDER BY `p`.`id` ASC ";
+  ORDER BY `p`.`id` ASC limit 10 ";
 
 
-            /**** esportazione prodotti su ProductHasPrestashop******/
-            $product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            foreach ($product as $val) {
+        /**** esportazione prodotti su ProductHasPrestashop******/
+        $product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        foreach ($product as $val) {
 
-                $producthasprestashop = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $val['productId'], 'productVariantId' => $val['productVariantId']]);
+            $producthasprestashop = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $val['productId'], 'productVariantId' => $val['productVariantId']]);
 
-                if (empty($producthasprestashop)) {
-                    $producthasprestashopinsert = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->getEmptyEntity();
-                    $producthasprestashopinsert->productId = $val['productId'];
-                    $producthasprestashopinsert->productVariantId = $val['productVariantId'];
-                    $producthasprestashopinsert->status = '0';
-                    $producthasprestashopinsert->smartInsert();
-                }
+            if (empty($producthasprestashop)) {
+                $producthasprestashopinsert = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->getEmptyEntity();
+                $producthasprestashopinsert->productId = $val['productId'];
+                $producthasprestashopinsert->productVariantId = $val['productVariantId'];
+                $producthasprestashopinsert->status = '0';
+                $producthasprestashopinsert->smartInsert();
             }
+        }
 
 
-            /***********************sezione categorie***********************************************************************************/
-            /*** estrazione dati  categorie e categorie shop*/
+        /***********************sezione categorie***********************************************************************************/
+        /*** estrazione dati  categorie e categorie shop*/
 
-            $sql = " SELECT `id`                                            AS id_category,
+        $sql = " SELECT `id`                                            AS id_category,
          (SELECT   id FROM ProductCategory t2
                       WHERE t2.lft < t1.lft AND t2.rght > t1.rght
                       ORDER BY t2.rght-t1.rght ASC LIMIT 1)
@@ -564,55 +564,55 @@ FROM `Product` `p`
                 ORDER BY id_category,(rght-lft) DESC ";
 
 
-            $res_category = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            $i = 0;
-            foreach ($res_category as $value_category) {
-                $i = $i + 1;
-                if ($value_category['id_category'] == "1") {
-                    $is_root_category = '1';
-                } else {
-                    $is_root_category = $value_category['id_category'];
-                }
-                $data_category = array(
-                    array($value_category['id_category'],
-                        $value_category['id_parent'],
-                        '1',
-                        $value_category['level_depth'],
-                        $value_category['nleft'],
-                        $value_category['nright'],
-                        $value_category['active'],
-                        $value_category['date_add'],
-                        $value_category['date_upd'],
-                        $i,
-                        $is_root_category));
+        $res_category = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $i = 0;
+        foreach ($res_category as $value_category) {
+            $i = $i + 1;
+            if ($value_category['id_category'] == "1") {
+                $is_root_category = '1';
+            } else {
+                $is_root_category = $value_category['id_category'];
+            }
+            $data_category = array(
+                array($value_category['id_category'],
+                    $value_category['id_parent'],
+                    '1',
+                    $value_category['level_depth'],
+                    $value_category['nleft'],
+                    $value_category['nright'],
+                    $value_category['active'],
+                    $value_category['date_add'],
+                    $value_category['date_upd'],
+                    $i,
+                    $is_root_category));
 
 
-                $data_category_shop = array(
-                    array($value_category['id_category'],
-                        '1',
-                        $i));
-                $data_category_group = array(
-                    array($value_category['id_category'],
-                        1));
+            $data_category_shop = array(
+                array($value_category['id_category'],
+                    '1',
+                    $i));
+            $data_category_group = array(
+                array($value_category['id_category'],
+                    1));
 
 
-                foreach ($data_category as $row_category) {
-                    fputcsv($category_csv, $row_category, ';');
-                }
-                foreach ($data_category_shop as $row_category_shop) {
-                    fputcsv($category_shop_csv, $row_category_shop, ';');
-                }
-                foreach ($data_category_group as $row_category_group) {
-                    fputcsv($category_group_csv, $row_category_group, ';');
-                }
-
-
+            foreach ($data_category as $row_category) {
+                fputcsv($category_csv, $row_category, ';');
+            }
+            foreach ($data_category_shop as $row_category_shop) {
+                fputcsv($category_shop_csv, $row_category_shop, ';');
+            }
+            foreach ($data_category_group as $row_category_group) {
+                fputcsv($category_group_csv, $row_category_group, ';');
             }
 
 
-            /****** estrazione dati lingua categorie **/
+        }
 
-            $sql = "SELECT t1.id  AS id_category,
+
+        /****** estrazione dati lingua categorie **/
+
+        $sql = "SELECT t1.id  AS id_category,
        '1' AS id_shop_default,
        pct.langId AS id_lang,
        pct.name AS name,
@@ -627,199 +627,199 @@ FROM ProductCategory t1
 ORDER BY id_category,(rght-lft) DESC";
 
 
-            fputcsv($category_lang_csv, array('1', '1', '1', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
-            fputcsv($category_lang_csv, array('1', '1', '2', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
-            fputcsv($category_lang_csv, array('1', '1', '3', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
-            $res_category_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            $i = 0;
-            foreach ($res_category_lang as $value_category_lang) {
-                if ($value_category_lang['id_lang'] == '1') {
-                    $id_lang = '2';
-                } elseif ($value_category_lang['id_lang'] == '2') {
-                    $id_lang = '1';
-                } else {
-                    $id_lang = $value_category_lang['id_lang'];
-                }
-                $data_category_lang = array(
-                    array($value_category_lang['id_category'],
-                        $value_category_lang['id_shop_default'],
-                        $id_lang,
-                        $value_category_lang['name'],
-                        $value_category_lang['description'],
-                        $value_category_lang['link_rewrite'],
-                        $value_category_lang['meta_title'],
-                        $value_category_lang['meta_keywords'],
-                        $value_category_lang['meta_description']));
-                foreach ($data_category_lang as $row_category_lang) {
-                    fputcsv($category_lang_csv, $row_category_lang, ';');
-                }
-
-
+        fputcsv($category_lang_csv, array('1', '1', '1', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
+        fputcsv($category_lang_csv, array('1', '1', '2', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
+        fputcsv($category_lang_csv, array('1', '1', '3', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
+        $res_category_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $i = 0;
+        foreach ($res_category_lang as $value_category_lang) {
+            if ($value_category_lang['id_lang'] == '1') {
+                $id_lang = '2';
+            } elseif ($value_category_lang['id_lang'] == '2') {
+                $id_lang = '1';
+            } else {
+                $id_lang = $value_category_lang['id_lang'];
+            }
+            $data_category_lang = array(
+                array($value_category_lang['id_category'],
+                    $value_category_lang['id_shop_default'],
+                    $id_lang,
+                    $value_category_lang['name'],
+                    $value_category_lang['description'],
+                    $value_category_lang['link_rewrite'],
+                    $value_category_lang['meta_title'],
+                    $value_category_lang['meta_keywords'],
+                    $value_category_lang['meta_description']));
+            foreach ($data_category_lang as $row_category_lang) {
+                fputcsv($category_lang_csv, $row_category_lang, ';');
             }
 
 
-            /*** esportazione prodotti appartenenti a più categorie  *****/
+        }
 
 
-            $sql = "SELECT phpc.productCategoryId AS id_category,
+        /*** esportazione prodotti appartenenti a più categorie  *****/
+
+
+        $sql = "SELECT phpc.productCategoryId AS id_category,
              pap.prestaId AS id_product, '0' AS position
              FROM ProductHasProductCategory phpc JOIN PrestashopHasProduct pap ON phpc.productId =pap.productId AND phpc.productVariantId = pap.productVariantId ORDER BY id_category";
 
-            $res_category_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            foreach ($res_category_product as $value_category_product) {
-                $data_cat_product = array(
-                    array($value_category_product['id_category'],
-                        $value_category_product['id_product'],
-                        '0'));
+        $res_category_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        foreach ($res_category_product as $value_category_product) {
+            $data_cat_product = array(
+                array($value_category_product['id_category'],
+                    $value_category_product['id_product'],
+                    '0'));
 
 
-                foreach ($data_cat_product as $row_cat_product) {
-                    fputcsv($category_product_csv, $row_cat_product, ';');
-                }
+            foreach ($data_cat_product as $row_cat_product) {
+                fputcsv($category_product_csv, $row_cat_product, ';');
             }
+        }
 
 
-            /************* Sezione brand e produttori*******************************************************************************************/
-            /***** esportazione Brand ****/
+        /************* Sezione brand e produttori*******************************************************************************************/
+        /***** esportazione Brand ****/
 
 
-            $res_brand = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
-            foreach ($res_brand as $value_brand) {
-                $date_brand = date('Y-m-d H:i:s:');
-                $data_brand = array(
-                    array($value_brand->id,
-                        $value_brand->slug,
-                        $date_brand,
-                        $date_brand,
-                        '1'));
+        $res_brand = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
+        foreach ($res_brand as $value_brand) {
+            $date_brand = date('Y-m-d H:i:s:');
+            $data_brand = array(
+                array($value_brand->id,
+                    $value_brand->slug,
+                    $date_brand,
+                    $date_brand,
+                    '1'));
 
-                foreach ($data_brand as $row_brand) {
-                    fputcsv($manufacturer_csv, $row_brand, ';');
-                }
+            foreach ($data_brand as $row_brand) {
+                fputcsv($manufacturer_csv, $row_brand, ';');
             }
+        }
 
 
-            /***** esportazione Brand language ****/
+        /***** esportazione Brand language ****/
 
 
-            $res_brand_lang = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
-            foreach ($res_brand_lang as $value_brand_lang) {
-                $data_brand_lang = array(
-                    array($value_brand_lang->id,
-                        1,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name),
+        $res_brand_lang = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
+        foreach ($res_brand_lang as $value_brand_lang) {
+            $data_brand_lang = array(
+                array($value_brand_lang->id,
+                    1,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name),
 
-                    array($value_brand_lang->id,
-                        2,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name),
+                array($value_brand_lang->id,
+                    2,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name),
 
-                    array($value_brand_lang->id,
-                        3,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name,
-                        $value_brand_lang->name));
+                array($value_brand_lang->id,
+                    3,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name,
+                    $value_brand_lang->name));
 
-                foreach ($data_brand_lang as $row_brand_lang) {
-                    fputcsv($manufacturer_lang_csv, $row_brand_lang, ';');
-                }
+            foreach ($data_brand_lang as $row_brand_lang) {
+                fputcsv($manufacturer_lang_csv, $row_brand_lang, ';');
             }
+        }
 
-            /***** esportazione Brand shop ****/
+        /***** esportazione Brand shop ****/
 
-            $res_brand_shop = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
-            foreach ($res_brand_shop as $value_brand_shop) {
+        $res_brand_shop = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
+        foreach ($res_brand_shop as $value_brand_shop) {
 
-                $data_brand_shop = array(
-                    array($value_brand_shop->id,
-                        '1'));
+            $data_brand_shop = array(
+                array($value_brand_shop->id,
+                    '1'));
 
-                foreach ($data_brand_shop as $row_brand_shop) {
-                    fputcsv($manufacturer_shop_csv, $row_brand_shop, ';');
-                }
+            foreach ($data_brand_shop as $row_brand_shop) {
+                fputcsv($manufacturer_shop_csv, $row_brand_shop, ';');
             }
+        }
 
 
-            /******************************************* sezione Supplier Fornitori Shop*******************************************************************************/
+        /******************************************* sezione Supplier Fornitori Shop*******************************************************************************/
 
-            /***** esportazione Supplier ****/
+        /***** esportazione Supplier ****/
 
 
-            $res_supplier = \Monkey::app()->repoFactory->create('Shop')->findAll();
-            foreach ($res_supplier as $value_supplier) {
-                $date_supplier = date('Y-m-d H:i:s:');
-                $data_supplier = array(
-                    array($value_supplier->id,
-                        $value_supplier->title,
-                        $date_supplier,
-                        $date_supplier,
-                        $value_supplier->isActive));
+        $res_supplier = \Monkey::app()->repoFactory->create('Shop')->findAll();
+        foreach ($res_supplier as $value_supplier) {
+            $date_supplier = date('Y-m-d H:i:s:');
+            $data_supplier = array(
+                array($value_supplier->id,
+                    $value_supplier->title,
+                    $date_supplier,
+                    $date_supplier,
+                    $value_supplier->isActive));
 
-                foreach ($data_supplier as $row_supplier) {
-                    fputcsv($supplier_csv, $row_supplier, ';');
-                }
+            foreach ($data_supplier as $row_supplier) {
+                fputcsv($supplier_csv, $row_supplier, ';');
             }
+        }
 
-            /***** esportazione Supplier language ****/
+        /***** esportazione Supplier language ****/
 
 
-            $res_supplier_lang = \Monkey::app()->repoFactory->create('Shop')->findAll();
-            foreach ($res_supplier_lang as $value_supplier_lang) {
-                $data_supplier_lang = array(
-                    array($value_supplier_lang->id,
-                        1,
-                        $value_supplier_lang->title,
-                        $value_supplier_lang->title,
-                        $value_supplier_lang->title,
-                        $value_supplier_lang->title),
-                    array($value_supplier_lang->id,
-                        2,
-                        $value_supplier_lang->title,
-                        $value_supplier_lang->title,
-                        $value_supplier_lang->title,
-                        $value_supplier_lang->title),
+        $res_supplier_lang = \Monkey::app()->repoFactory->create('Shop')->findAll();
+        foreach ($res_supplier_lang as $value_supplier_lang) {
+            $data_supplier_lang = array(
+                array($value_supplier_lang->id,
+                    1,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title),
+                array($value_supplier_lang->id,
+                    2,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title),
 
-                    array($value_supplier_lang->id,
-                        3,
-                        $value_supplier_lang->title,
-                        $value_supplier_lang->title,
-                        $value_supplier_lang->title,
-                        $value_supplier_lang->title));
+                array($value_supplier_lang->id,
+                    3,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title,
+                    $value_supplier_lang->title));
 
-                foreach ($data_supplier_lang as $row_supplier_lang) {
-                    fputcsv($supplier_lang_csv, $row_supplier_lang, ';');
-                }
+            foreach ($data_supplier_lang as $row_supplier_lang) {
+                fputcsv($supplier_lang_csv, $row_supplier_lang, ';');
             }
+        }
 
-            /***** esportazione Supplier shop ****/
+        /***** esportazione Supplier shop ****/
 
 
-            $res_supplier_shop = \Monkey::app()->repoFactory->create('Shop')->findAll();
-            foreach ($res_supplier_shop as $value_supplier_shop) {
+        $res_supplier_shop = \Monkey::app()->repoFactory->create('Shop')->findAll();
+        foreach ($res_supplier_shop as $value_supplier_shop) {
 
-                $data_supplier_shop = array(
-                    array($value_supplier_shop->id,
-                        '1'));
+            $data_supplier_shop = array(
+                array($value_supplier_shop->id,
+                    '1'));
 
-                foreach ($data_supplier_shop as $row_supplier_shop) {
-                    fputcsv($supplier_shop_csv, $row_supplier_shop, ';');
-                }
+            foreach ($data_supplier_shop as $row_supplier_shop) {
+                fputcsv($supplier_shop_csv, $row_supplier_shop, ';');
             }
+        }
 
 
-            /****************** sezione attributi *********************************/
+        /****************** sezione attributi *********************************/
 
-            /** caricamento gruppi attributi  */
-            $sql = "SELECT psmg.id  AS id_attribute_group,
+        /** caricamento gruppi attributi  */
+        $sql = "SELECT psmg.id  AS id_attribute_group,
         '0' AS is_color_group,
         'select' AS group_type,
         'name' AS name
@@ -827,30 +827,30 @@ FROM ProductSizeMacroGroup psmg
   ";
 
 
-            fputcsv($attribute_group_csv, array('1', '0', 'select', '1'), ';');
-            fputcsv($attribute_group_csv, array('2', '0', 'select', '2'), ';');
+        fputcsv($attribute_group_csv, array('1', '0', 'select', '1'), ';');
+        fputcsv($attribute_group_csv, array('2', '0', 'select', '2'), ';');
 
 
-            /** caricamento  traduzioni gruppi attributi  */
+        /** caricamento  traduzioni gruppi attributi  */
 
 
-            fputcsv($attribute_group_lang_csv, array('1', '1', 'Size', 'Size'), ';');
-            fputcsv($attribute_group_lang_csv, array('1', '2', 'Taglie', 'Taglie'), ';');
-            fputcsv($attribute_group_lang_csv, array('1', '3', 'Größe', 'Größe'), ';');
-            fputcsv($attribute_group_lang_csv, array('2', '1', 'Color', 'Color'), ';');
-            fputcsv($attribute_group_lang_csv, array('2', '2', 'Colore', 'Colore'), ';');
-            fputcsv($attribute_group_lang_csv, array('2', '3', 'Farben', 'Farben'), ';');
+        fputcsv($attribute_group_lang_csv, array('1', '1', 'Size', 'Size'), ';');
+        fputcsv($attribute_group_lang_csv, array('1', '2', 'Taglie', 'Taglie'), ';');
+        fputcsv($attribute_group_lang_csv, array('1', '3', 'Größe', 'Größe'), ';');
+        fputcsv($attribute_group_lang_csv, array('2', '1', 'Color', 'Color'), ';');
+        fputcsv($attribute_group_lang_csv, array('2', '2', 'Colore', 'Colore'), ';');
+        fputcsv($attribute_group_lang_csv, array('2', '3', 'Farben', 'Farben'), ';');
 
 
-            /** caricamento  gruppi attributi shop  */
+        /** caricamento  gruppi attributi shop  */
 
 
-            fputcsv($attribute_group_shop_csv, array('1', '1'), ';');
-            fputcsv($attribute_group_shop_csv, array('2', '1'), ';');
+        fputcsv($attribute_group_shop_csv, array('1', '1'), ';');
+        fputcsv($attribute_group_shop_csv, array('2', '1'), ';');
 
 
-            /**  esportazione attributi taglie */
-            $sql = "SELECT S.id AS id_attribute ,
+        /**  esportazione attributi taglie */
+        $sql = "SELECT S.id AS id_attribute ,
        '1' AS id_attribute_group,
        S.name AS name,
        '' AS color
@@ -858,194 +858,194 @@ FROM ProductSizeMacroGroup psmg
  FROM  ProductSize S ORDER BY id_attribute";
 
 
-            $res_attribute = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $res_attribute = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
-            foreach ($res_attribute as $value_attribute) {
-                $z = '1';
-                $data_attribute = array(
-                    array($value_attribute['id_attribute'],
-                        $value_attribute['id_attribute_group'],
-                        '',
-                        $value_attribute['id_attribute']));
+        foreach ($res_attribute as $value_attribute) {
+            $z = '1';
+            $data_attribute = array(
+                array($value_attribute['id_attribute'],
+                    $value_attribute['id_attribute_group'],
+                    '',
+                    $value_attribute['id_attribute']));
 
-                foreach ($data_attribute as $row_attribute) {
-                    fputcsv($attribute_csv, $row_attribute, ';');
-
-                }
+            foreach ($data_attribute as $row_attribute) {
+                fputcsv($attribute_csv, $row_attribute, ';');
 
             }
 
+        }
 
-            /**  esportazione  attributi  negozio */
-            $sql = "SELECT S.id AS id_attribute ,
+
+        /**  esportazione  attributi  negozio */
+        $sql = "SELECT S.id AS id_attribute ,
          '1' AS id_attribute_group,
           S.name AS name,
           '' AS color
           FROM  ProductSize S ORDER BY id_attribute";
 
 
-            $res_attribute_shop = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $res_attribute_shop = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
-            foreach ($res_attribute_shop as $value_attribute_shop) {
-                $z = '1';
-                $data_attribute_shop = array(
-                    array($value_attribute_shop['id_attribute'],
-                        '1',));
+        foreach ($res_attribute_shop as $value_attribute_shop) {
+            $z = '1';
+            $data_attribute_shop = array(
+                array($value_attribute_shop['id_attribute'],
+                    '1',));
 
-                foreach ($data_attribute_shop as $row_attribute_shop) {
-                    fputcsv($attribute_shop_csv, $row_attribute_shop, ';');
-
-                }
+            foreach ($data_attribute_shop as $row_attribute_shop) {
+                fputcsv($attribute_shop_csv, $row_attribute_shop, ';');
 
             }
 
-            /**  esportazione  attributi  traduzioni */
-            $sql = "SELECT S.id AS id_attribute ,
+        }
+
+        /**  esportazione  attributi  traduzioni */
+        $sql = "SELECT S.id AS id_attribute ,
         '1' AS id_attribute_group,
         S.name AS name,
         '' AS color
         FROM  ProductSize S ORDER BY id_attribute";
 
 
-            $res_attribute_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $res_attribute_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
-            foreach ($res_attribute_lang as $value_attribute_lang) {
-                for ($y = 1; $y <= 3; $y++) {
-                    $data_attribute_lang = array(
-                        array($value_attribute_lang['id_attribute'],
-                            $y,
-                            $value_attribute_lang['name']));
+        foreach ($res_attribute_lang as $value_attribute_lang) {
+            for ($y = 1; $y <= 3; $y++) {
+                $data_attribute_lang = array(
+                    array($value_attribute_lang['id_attribute'],
+                        $y,
+                        $value_attribute_lang['name']));
 
-                    foreach ($data_attribute_lang as $row_attribute_lang) {
-                        fputcsv($attribute_lang_csv, $row_attribute_lang, ';');
+                foreach ($data_attribute_lang as $row_attribute_lang) {
+                    fputcsv($attribute_lang_csv, $row_attribute_lang, ';');
 
-                    }
                 }
             }
+        }
 
-            /****** sezione feature label caratteristiche
-             * /**  esportazione caratteristiche etichetta */
-            $sql = "SELECT pdl.id AS id_feature ,
+        /****** sezione feature label caratteristiche
+         * /**  esportazione caratteristiche etichetta */
+        $sql = "SELECT pdl.id AS id_feature ,
         pdl.order AS position
         FROM ProductDetailLabel pdl";
 
 
-            $res_feature = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $res_feature = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
-            foreach ($res_feature as $value_feature) {
-                $z = '1';
-                $data_feature = array(
-                    array($value_feature['id_feature'],
-                        $value_feature['position']));
+        foreach ($res_feature as $value_feature) {
+            $z = '1';
+            $data_feature = array(
+                array($value_feature['id_feature'],
+                    $value_feature['position']));
 
 
-                $data_feature_shop = array(
-                    array($value_feature['id_feature'],
-                        1));
-                foreach ($data_feature as $row_feature) {
-                    fputcsv($feature_csv, $row_feature, ';');
-
-                }
-
-                foreach ($data_feature_shop as $row_feature_shop) {
-                    fputcsv($feature_shop_csv, $row_feature_shop, ';');
-
-                }
+            $data_feature_shop = array(
+                array($value_feature['id_feature'],
+                    1));
+            foreach ($data_feature as $row_feature) {
+                fputcsv($feature_csv, $row_feature, ';');
 
             }
 
-            /**  esportazione caratteristiche etichetta lingua */
-            $sql = "SELECT pdlt.productDetailLabelId AS id_feature ,
+            foreach ($data_feature_shop as $row_feature_shop) {
+                fputcsv($feature_shop_csv, $row_feature_shop, ';');
+
+            }
+
+        }
+
+        /**  esportazione caratteristiche etichetta lingua */
+        $sql = "SELECT pdlt.productDetailLabelId AS id_feature ,
         pdlt.langId AS id_lang,
         pdlt.name AS name
         FROM ProductDetailLabelTranslation pdlt";
 
 
-            $res_feature_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $res_feature_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
-            foreach ($res_feature_lang as $value_feature_lang) {
-                $z = '1';
-                if ($value_feature_lang['id_lang'] == "2") {
-                    $LAN = '1';
-                } elseif ($value_feature_lang['id_lang'] == "1") {
-                    $LAN = '2';
-                } else {
-                    $LAN = '3';
-                }
-                $data_feature_lang = array(
-                    array($value_feature_lang['id_feature'],
-                        $LAN,
-                        $value_feature_lang['name']));
-                foreach ($data_feature_lang as $row_feature_lang) {
-                    fputcsv($feature_lang_csv, $row_feature_lang, ';');
-
-                }
+        foreach ($res_feature_lang as $value_feature_lang) {
+            $z = '1';
+            if ($value_feature_lang['id_lang'] == "2") {
+                $LAN = '1';
+            } elseif ($value_feature_lang['id_lang'] == "1") {
+                $LAN = '2';
+            } else {
+                $LAN = '3';
+            }
+            $data_feature_lang = array(
+                array($value_feature_lang['id_feature'],
+                    $LAN,
+                    $value_feature_lang['name']));
+            foreach ($data_feature_lang as $row_feature_lang) {
+                fputcsv($feature_lang_csv, $row_feature_lang, ';');
 
             }
 
+        }
 
-            /**  esportazione caratteristiche valore*/
-            $sql = "SELECT psa.productDetailId  AS id_feature_value ,
+
+        /**  esportazione caratteristiche valore*/
+        $sql = "SELECT psa.productDetailId  AS id_feature_value ,
         psa.productDetailLabelId AS id_feature,
         '0' AS custom
         FROM ProductSheetActual psa";
 
 
-            $res_feature_value = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $res_feature_value = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
-            foreach ($res_feature_value as $value_feature_value) {
+        foreach ($res_feature_value as $value_feature_value) {
 
-                $data_feature_value = array(
-                    array($value_feature_value['id_feature_value'],
-                        $value_feature_value['id_feature'],
-                        '0'));
+            $data_feature_value = array(
+                array($value_feature_value['id_feature_value'],
+                    $value_feature_value['id_feature'],
+                    '0'));
 
-                foreach ($data_feature_value as $row_feature_value) {
-                    fputcsv($feature_value_csv, $row_feature_value, ';');
-
-                }
+            foreach ($data_feature_value as $row_feature_value) {
+                fputcsv($feature_value_csv, $row_feature_value, ';');
 
             }
 
-            /**  esportazione caratteristiche valore lingua */
-            $sql = "SELECT pdt.productDetailId AS id_feature_value ,
+        }
+
+        /**  esportazione caratteristiche valore lingua */
+        $sql = "SELECT pdt.productDetailId AS id_feature_value ,
         pdt.langId AS id_lang,
         pdt.name AS value
         FROM ProductDetailTranslation pdt";
 
 
-            $res_feature_value_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $res_feature_value_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
-            foreach ($res_feature_value_lang as $value_feature_value_lang) {
-                $z = '1';
-                if ($value_feature_value_lang['id_lang'] == '1') {
-                    $id_lang = '2';
-                } elseif ($value_feature_value_lang['id_lang'] == '2') {
-                    $id_lang = '1';
-                } else {
-                    $id_lang = $value_feature_value_lang['id_lang'];
-                }
-                $data_feature_value_lang = array(
-                    array(
-                        $value_feature_value_lang['id_feature_value'],
-                        $id_lang,
-                        $value_feature_value_lang['value']));
+        foreach ($res_feature_value_lang as $value_feature_value_lang) {
+            $z = '1';
+            if ($value_feature_value_lang['id_lang'] == '1') {
+                $id_lang = '2';
+            } elseif ($value_feature_value_lang['id_lang'] == '2') {
+                $id_lang = '1';
+            } else {
+                $id_lang = $value_feature_value_lang['id_lang'];
+            }
+            $data_feature_value_lang = array(
+                array(
+                    $value_feature_value_lang['id_feature_value'],
+                    $id_lang,
+                    $value_feature_value_lang['value']));
 
-                foreach ($data_feature_value_lang as $row_feature_value_lang) {
-                    fputcsv($feature_value_lang_csv, $row_feature_value_lang, ';');
-
-                }
+            foreach ($data_feature_value_lang as $row_feature_value_lang) {
+                fputcsv($feature_value_lang_csv, $row_feature_value_lang, ';');
 
             }
 
-            /****** SEZIONE PRODOTTI *//////
-            /** esportazione prodotti */
-            //query prodotti non esportati
-            $sql = "SELECT
+        }
+
+        /****** SEZIONE PRODOTTI *//////
+        /** esportazione prodotti */
+        //query prodotti non esportati
+        $sql = "SELECT
   php.prestaId                                                                   AS prestaId,
   concat(`p`.`id`,'-',p.productVariantId)                                        AS product_id,
   p.id                                                                           AS  productId,
@@ -1139,190 +1139,223 @@ FROM `Product` `p`
  LEFT  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   LEFT JOIN ProductName pn ON p.id = pn.id
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status IN (0,2)
-GROUP BY p.id,p.productVariantId
-ORDER BY `p`.`id` ASC ";
+GROUP BY p.id,p.productVariantId 
+ORDER BY `p`.`id` ASC  limit 10";
 
 
-            $w = 0;
+        $w = 0;
 
-            $z = 0;
-            $k = 0;
+        $z = 0;
+        $k = 0;
 
-            $n = 0;
-            $mvt = 0;
-            $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $n = 0;
+        $mvt = 0;
+        $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
-            //connessione db prestahop
-            $pConnection = new CReadExtDbTable(3);
+        //connessione db prestahop
+        $pConnection = new CReadExtDbTable(3);
 
-            //afferro il massimo attribute id da assegnare poi ai nuovi prodotti
-            $maxAttributeId = $pConnection->readTables(
-                ['psz6_product_attribute'],
-                [],
-                ["id_product_attribute" => "MAX"]
-            );
+        //afferro il massimo attribute id da assegnare poi ai nuovi prodotti
+        $maxAttributeId = $pConnection->readTables(
+            ['psz6_product_attribute'],
+            [],
+            ["id_product_attribute" => "MAX"]
+        );
 
-            foreach ($res_product as $value_product) {
-
-
-                $p = $value_product['prestaId'];
+        foreach ($res_product as $value_product) {
 
 
-                $finalProductStatus = null;
+            $p = $value_product['prestaId'];
 
 
-                if ($value_product['status'] == 0) {
+            $finalProductStatus = null;
 
-                    $findExtProdAttr = $pConnection->readTables(
-                        ['psz6_product_attribute'],
-                        ["psz6_product_attribute" =>
-                            [
-                                "id_product" => $p
-                            ]
-                        ],
-                        []
-                    );
-                    //Se è vuoto è proprio vero che non esiste e quindi sarebbe proprio il caso di inserirlo
-                    $exist = false;
-                    if (empty($findExtProdAttr)) {
-                        if (is_null($maxAttributeId[0]["MAX(id_product_attribute)"])) {
-                            $w = 0;
-                            $maxAttributeId[0]["MAX(id_product_attribute)"] = "is the end";
-                        }
-                        $finalProductStatus = 0;
-                    } else {
-                        $exist = true;
-                        $finalProductStatus = 2;
-                        \Monkey::app()->applicationLog('PrestaDumpCSv', 'alert', 'Product founded', "Product with prestashopId $p WAS founded even if has status = 0");
+
+            if ($value_product['status'] == 0) {
+
+                $findExtProdAttr = $pConnection->readTables(
+                    ['psz6_product_attribute'],
+                    ["psz6_product_attribute" =>
+                        [
+                            "id_product" => $p
+                        ]
+                    ],
+                    []
+                );
+                //Se è vuoto è proprio vero che non esiste e quindi sarebbe proprio il caso di inserirlo
+                $exist = false;
+                if (empty($findExtProdAttr)) {
+                    if (is_null($maxAttributeId[0]["MAX(id_product_attribute)"])) {
+                        $w = 0;
+                        $maxAttributeId[0]["MAX(id_product_attribute)"] = "is the end";
                     }
-                } else if ($value_product['status'] == 2) {
-                    $findExtProdAttr = $pConnection->readTables(
-                        ['psz6_product_attribute'],
-                        ["psz6_product_attribute" =>
-                            [
-                                "id_product" => $p
-                            ]
-                        ],
-                        []
-                    );
-
-                    $exist = false;
-                    if (empty($findExtProdAttr)) {
-                        $finalProductStatus = 0;
-                        \Monkey::app()->applicationLog('PrestaDumpCSv', 'alert', 'Product not founded', "Product with prestashopId $p WAS NOT founded even if has status = 2");
-                    } else {
-                        $exist = true;
-                        $finalProductStatus = 2;
-                    }
+                    $finalProductStatus = 0;
+                } else {
+                    $exist = true;
+                    $finalProductStatus = 2;
+                    \Monkey::app()->applicationLog('PrestaDumpCSv', 'alert', 'Product founded', "Product with prestashopId $p WAS founded even if has status = 0");
                 }
+            } else if ($value_product['status'] == 2) {
+                $findExtProdAttr = $pConnection->readTables(
+                    ['psz6_product_attribute'],
+                    ["psz6_product_attribute" =>
+                        [
+                            "id_product" => $p
+                        ]
+                    ],
+                    []
+                );
+
+                $exist = false;
+                if (empty($findExtProdAttr)) {
+                    $finalProductStatus = 0;
+                    \Monkey::app()->applicationLog('PrestaDumpCSv', 'alert', 'Product not founded', "Product with prestashopId $p WAS NOT founded even if has status = 2");
+                } else {
+                    $exist = true;
+                    $finalProductStatus = 2;
+                }
+            }
 
 // popolamento array tabella prodotti
-                $data_product = array(
+            $data_product = array(
+                array($p,
+                    $value_product['id_supplier'],
+                    $value_product['id_manufacturer'],
+                    $value_product['id_category_default'],
+                    $value_product['id_shop_default'],
+                    $value_product['id_tax_rules_group'],
+                    $value_product['on_sale'],
+                    $value_product['online_only'],
+                    $value_product['ean13'],
+                    $value_product['isbn'],
+                    $value_product['upc'],
+                    $value_product['ecotax'],
+                    $value_product['quantity'],
+                    $value_product['minimal_quantity'],
+                    $value_product['low_stock_threshold'],
+                    $value_product['low_stock_alert'],
+                    $value_product['price'],
+                    $value_product['wholesale_price'],
+                    $value_product['unity'],
+                    $value_product['unit_price_ratio'],
+                    $value_product['additional_shipping_cost'],
+                    $value_product['reference'],
+                    $value_product['supplier_reference'],
+                    $value_product['location'],
+                    $value_product['width'],
+                    $value_product['height'],
+                    $value_product['depth'],
+                    $value_product['weight'],
+                    $value_product['out_of_stock'],
+                    $value_product['additional_delivery_times'],
+                    $value_product['quantity_discount'],
+                    $value_product['customizable'],
+                    $value_product['uploadable_files'],
+                    $value_product['text_fields'],
+                    $value_product['active'],
+                    $value_product['redirect_type'],
+                    $value_product['id_type_redirected'],
+                    $value_product['available_for_order'],
+                    $value_product['available_date'],
+                    $value_product['show_condition'],
+                    $value_product['condition'],
+                    $value_product['show_price'],
+                    $value_product['indexed'],
+                    $value_product['visibility'],
+                    $value_product['cache_is_pack'],
+                    $value_product['cache_has_attachments'],
+                    $value_product['is_virtual'],
+                    $value_product['cache_default_attribute'],
+                    $value_product['date_add'],
+                    $value_product['date_upd'],
+                    $value_product['advanced_stock_management'],
+                    $value_product['pack_stock_type'],
+                    $value_product['state'],
+                    $finalProductStatus));
+
+
+            //popolamento array prodotti shop
+
+
+            $data_product_shop = array(
+                array($p,
+                    $value_product['id_shop_default'],
+                    $value_product['id_category_default'],
+                    $value_product['id_tax_rules_group'],
+                    $value_product['on_sale'],
+                    $value_product['online_only'],
+                    $value_product['ecotax'],
+                    $value_product['minimal_quantity'],
+                    $value_product['low_stock_threshold'],
+                    $value_product['low_stock_alert'],
+                    $value_product['price'],
+                    $value_product['wholesale_price'],
+                    $value_product['unity'],
+                    $value_product['unit_price_ratio'],
+                    $value_product['additional_shipping_cost'],
+                    $value_product['customizable'],
+                    $value_product['uploadable_files'],
+                    $value_product['text_fields'],
+                    $value_product['active'],
+                    $value_product['redirect_type'],
+                    $value_product['id_type_redirected'],
+                    $value_product['available_for_order'],
+                    $value_product['available_date'],
+                    $value_product['show_condition'],
+                    $value_product['condition'],
+                    $value_product['show_price'],
+                    $value_product['indexed'],
+                    $value_product['visibility'],
+                    $value_product['cache_default_attribute'],
+                    $value_product['advanced_stock_management'],
+                    $value_product['date_add'],
+                    $value_product['date_upd'],
+                    $value_product['pack_stock_type'],
+                    $value_product['state']));
+
+            //popolamento array lingua prodotti
+
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '2']);
+            if ($res_product_lang->isEmpty()) {
+                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                $in_stock = "in stock";
+                $current_supply = "Current supply. Ordering available";
+                $product_available = "Delivered in 3-4 Days";
+                $product_not_available = "Delivered in 10-15 Days";
+                $valuelang = 1;
+
+                $data_product_lang = array(
                     array($p,
-                        $value_product['id_supplier'],
-                        $value_product['id_manufacturer'],
-                        $value_product['id_category_default'],
-                        $value_product['id_shop_default'],
-                        $value_product['id_tax_rules_group'],
-                        $value_product['on_sale'],
-                        $value_product['online_only'],
-                        $value_product['ean13'],
-                        $value_product['isbn'],
-                        $value_product['upc'],
-                        $value_product['ecotax'],
-                        $value_product['quantity'],
-                        $value_product['minimal_quantity'],
-                        $value_product['low_stock_threshold'],
-                        $value_product['low_stock_alert'],
-                        $value_product['price'],
-                        $value_product['wholesale_price'],
-                        $value_product['unity'],
-                        $value_product['unit_price_ratio'],
-                        $value_product['additional_shipping_cost'],
-                        $value_product['reference'],
-                        $value_product['supplier_reference'],
-                        $value_product['location'],
-                        $value_product['width'],
-                        $value_product['height'],
-                        $value_product['depth'],
-                        $value_product['weight'],
-                        $value_product['out_of_stock'],
-                        $value_product['additional_delivery_times'],
-                        $value_product['quantity_discount'],
-                        $value_product['customizable'],
-                        $value_product['uploadable_files'],
-                        $value_product['text_fields'],
-                        $value_product['active'],
-                        $value_product['redirect_type'],
-                        $value_product['id_type_redirected'],
-                        $value_product['available_for_order'],
-                        $value_product['available_date'],
-                        $value_product['show_condition'],
-                        $value_product['condition'],
-                        $value_product['show_price'],
-                        $value_product['indexed'],
-                        $value_product['visibility'],
-                        $value_product['cache_is_pack'],
-                        $value_product['cache_has_attachments'],
-                        $value_product['is_virtual'],
-                        $value_product['cache_default_attribute'],
-                        $value_product['date_add'],
-                        $value_product['date_upd'],
-                        $value_product['advanced_stock_management'],
-                        $value_product['pack_stock_type'],
-                        $value_product['state'],
-                        $finalProductStatus));
+                        '1',
+                        $valuelang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $value_product['product_id'],
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $in_stock,
+                        $current_supply,
+                        $product_available,
+                        $product_not_available
+                    ));
+                foreach ($data_product_lang as $row_product_lang) {
+                    fputcsv($product_lang_csv, $row_product_lang, ';');
 
+                }
+            } else {
+                foreach ($res_product_lang as $value_product_lang) {
 
-                //popolamento array prodotti shop
+                    $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
 
-
-                $data_product_shop = array(
-                    array($p,
-                        $value_product['id_shop_default'],
-                        $value_product['id_category_default'],
-                        $value_product['id_tax_rules_group'],
-                        $value_product['on_sale'],
-                        $value_product['online_only'],
-                        $value_product['ecotax'],
-                        $value_product['minimal_quantity'],
-                        $value_product['low_stock_threshold'],
-                        $value_product['low_stock_alert'],
-                        $value_product['price'],
-                        $value_product['wholesale_price'],
-                        $value_product['unity'],
-                        $value_product['unit_price_ratio'],
-                        $value_product['additional_shipping_cost'],
-                        $value_product['customizable'],
-                        $value_product['uploadable_files'],
-                        $value_product['text_fields'],
-                        $value_product['active'],
-                        $value_product['redirect_type'],
-                        $value_product['id_type_redirected'],
-                        $value_product['available_for_order'],
-                        $value_product['available_date'],
-                        $value_product['show_condition'],
-                        $value_product['condition'],
-                        $value_product['show_price'],
-                        $value_product['indexed'],
-                        $value_product['visibility'],
-                        $value_product['cache_default_attribute'],
-                        $value_product['advanced_stock_management'],
-                        $value_product['date_add'],
-                        $value_product['date_upd'],
-                        $value_product['pack_stock_type'],
-                        $value_product['state']));
-
-                //popolamento array lingua prodotti
-
-                $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '2']);
-                if ($res_product_lang->isEmpty()) {
-                    $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
                     $product_available = "Delivered in 3-4 Days";
                     $product_not_available = "Delivered in 10-15 Days";
+
                     $valuelang = 1;
+
 
                     $data_product_lang = array(
                         array($p,
@@ -1344,48 +1377,49 @@ ORDER BY `p`.`id` ASC ";
                         fputcsv($product_lang_csv, $row_product_lang, ';');
 
                     }
-                } else {
-                    foreach ($res_product_lang as $value_product_lang) {
-
-                        $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
-
-                        $in_stock = "in stock";
-                        $current_supply = "Current supply. Ordering available";
-                        $product_available = "Delivered in 3-4 Days";
-                        $product_not_available = "Delivered in 10-15 Days";
-
-                        $valuelang = 1;
-
-
-                        $data_product_lang = array(
-                            array($p,
-                                '1',
-                                $valuelang,
-                                $name_product_lang,
-                                $name_product_lang,
-                                $value_product['product_id'],
-                                $name_product_lang,
-                                $name_product_lang,
-                                $name_product_lang,
-                                $name_product_lang,
-                                $in_stock,
-                                $current_supply,
-                                $product_available,
-                                $product_not_available
-                            ));
-                        foreach ($data_product_lang as $row_product_lang) {
-                            fputcsv($product_lang_csv, $row_product_lang, ';');
-
-                        }
-                    }
                 }
-                $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '1']);
-                if ($res_product_lang->isEmpty()) {
-                    $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+            }
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '1']);
+            if ($res_product_lang->isEmpty()) {
+                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                $in_stock = "in Vendita";
+                $current_supply = 'In magazzino. ordinabile';
+                $product_available = 'Consegna in 3-4 Giorni Lavorati';
+                $product_not_available = 'Consegna  in 10-15 lavorativi';
+                $valuelang = 2;
+
+                $data_product_lang = array(
+                    array($p,
+                        '1',
+                        $valuelang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $value_product['product_id'],
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $in_stock,
+                        $current_supply,
+                        $product_available,
+                        $product_not_available
+                    ));
+                foreach ($data_product_lang as $row_product_lang) {
+                    fputcsv($product_lang_csv, $row_product_lang, ';');
+
+                }
+            } else {
+                foreach ($res_product_lang as $value_product_lang) {
+
+                    $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+
+
                     $in_stock = "in Vendita";
                     $current_supply = 'In magazzino. ordinabile';
                     $product_available = 'Consegna in 3-4 Giorni Lavorati';
                     $product_not_available = 'Consegna  in 10-15 lavorativi';
+
+
                     $valuelang = 2;
 
                     $data_product_lang = array(
@@ -1408,49 +1442,49 @@ ORDER BY `p`.`id` ASC ";
                         fputcsv($product_lang_csv, $row_product_lang, ';');
 
                     }
-                } else {
-                    foreach ($res_product_lang as $value_product_lang) {
-
-                        $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
-
-
-                        $in_stock = "in Vendita";
-                        $current_supply = 'In magazzino. ordinabile';
-                        $product_available = 'Consegna in 3-4 Giorni Lavorati';
-                        $product_not_available = 'Consegna  in 10-15 lavorativi';
-
-
-                        $valuelang = 2;
-
-                        $data_product_lang = array(
-                            array($p,
-                                '1',
-                                $valuelang,
-                                $name_product_lang,
-                                $name_product_lang,
-                                $value_product['product_id'],
-                                $name_product_lang,
-                                $name_product_lang,
-                                $name_product_lang,
-                                $name_product_lang,
-                                $in_stock,
-                                $current_supply,
-                                $product_available,
-                                $product_not_available
-                            ));
-                        foreach ($data_product_lang as $row_product_lang) {
-                            fputcsv($product_lang_csv, $row_product_lang, ';');
-
-                        }
-                    }
                 }
-                $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '3']);
-                if ($res_product_lang->isEmpty()) {
-                    $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+            }
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '3']);
+            if ($res_product_lang->isEmpty()) {
+                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                $in_stock = "in stock";
+                $current_supply = "Current supply. Ordering available";
+                $product_available = "Delivered in 3-4 Days";
+                $product_not_available = "Delivered in 10-15 Days";
+                $valuelang = 3;
+
+                $data_product_lang = array(
+                    array($p,
+                        '1',
+                        $valuelang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $value_product['product_id'],
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $name_product_lang,
+                        $in_stock,
+                        $current_supply,
+                        $product_available,
+                        $product_not_available
+                    ));
+                foreach ($data_product_lang as $row_product_lang) {
+                    fputcsv($product_lang_csv, $row_product_lang, ';');
+
+                }
+            } else {
+                foreach ($res_product_lang as $value_product_lang) {
+
+                    $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+
+
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
                     $product_available = "Delivered in 3-4 Days";
                     $product_not_available = "Delivered in 10-15 Days";
+
+
                     $valuelang = 3;
 
                     $data_product_lang = array(
@@ -1473,42 +1507,8 @@ ORDER BY `p`.`id` ASC ";
                         fputcsv($product_lang_csv, $row_product_lang, ';');
 
                     }
-                } else {
-                    foreach ($res_product_lang as $value_product_lang) {
-
-                        $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
-
-
-                        $in_stock = "in stock";
-                        $current_supply = "Current supply. Ordering available";
-                        $product_available = "Delivered in 3-4 Days";
-                        $product_not_available = "Delivered in 10-15 Days";
-
-
-                        $valuelang = 3;
-
-                        $data_product_lang = array(
-                            array($p,
-                                '1',
-                                $valuelang,
-                                $name_product_lang,
-                                $name_product_lang,
-                                $value_product['product_id'],
-                                $name_product_lang,
-                                $name_product_lang,
-                                $name_product_lang,
-                                $name_product_lang,
-                                $in_stock,
-                                $current_supply,
-                                $product_available,
-                                $product_not_available
-                            ));
-                        foreach ($data_product_lang as $row_product_lang) {
-                            fputcsv($product_lang_csv, $row_product_lang, ';');
-
-                        }
-                    }
                 }
+            }
 
 // popolamento prodotti attributi
 
@@ -1516,312 +1516,312 @@ ORDER BY `p`.`id` ASC ";
 //se lo stato è 0 lo cerco, mi assicuro che non lo trovo e lo inserico - se lo stato è 2 lo cerco lo ag
 
 
-                $res_product_attribute = \Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+            $res_product_attribute = \Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
 
-                $lock_default_on = 0;
+            $lock_default_on = 0;
 
 
-                foreach ($res_product_attribute as $value_product_attribute) {
-                    if (!$exist) {
-                        $w = $w + 1;
-                    } else {
+            foreach ($res_product_attribute as $value_product_attribute) {
+                if (!$exist) {
+                    $w = $w + 1;
+                } else {
 
-                        /**
-                         * select *
-                         * from psz6_product_attribute pa
-                         * join psz6_product_attribute_combination pac ON pa.id_product_attribute = pac.id_product_attribute
-                         * join psz6_attribute a ON a.id_attribute = pac.id_attribute
-                         * join psz6_attribute_lang al ON al.id_attribute = pac.id_attribute
-                         * where pa.id_product = 8827 && al.id_lang = 3
-                         */
-                        $rightSku = $pConnection->readTables(
-                            ['psz6_product_attribute',
-                                'psz6_product_attribute_combination' => [
-                                    'Self' => ['id_product_attribute'],
-                                    'psz6_product_attribute' => ['id_product_attribute']
-                                ],
-                                'psz6_attribute' => [
-                                    'Self' => ['id_attribute'],
-                                    'psz6_product_attribute_combination' => ['id_attribute']
-                                ],
-                                'psz6_attribute_lang' => [
-                                    'Self' => ['id_attribute'],
-                                    'psz6_product_attribute_combination' => ['id_attribute']
-                                ]
+                    /**
+                     * select *
+                     * from psz6_product_attribute pa
+                     * join psz6_product_attribute_combination pac ON pa.id_product_attribute = pac.id_product_attribute
+                     * join psz6_attribute a ON a.id_attribute = pac.id_attribute
+                     * join psz6_attribute_lang al ON al.id_attribute = pac.id_attribute
+                     * where pa.id_product = 8827 && al.id_lang = 3
+                     */
+                    $rightSku = $pConnection->readTables(
+                        ['psz6_product_attribute',
+                            'psz6_product_attribute_combination' => [
+                                'Self' => ['id_product_attribute'],
+                                'psz6_product_attribute' => ['id_product_attribute']
                             ],
-                            [
-                                "psz6_product_attribute" =>
-                                    [
-                                        "id_product" => $p
-                                    ],
-                                'psz6_attribute_lang' => [
-                                    'id_lang' => 2,
-                                    'name' => $value_product_attribute->productSize->name
-                                ]
+                            'psz6_attribute' => [
+                                'Self' => ['id_attribute'],
+                                'psz6_product_attribute_combination' => ['id_attribute']
                             ],
-                            []
-                        );
+                            'psz6_attribute_lang' => [
+                                'Self' => ['id_attribute'],
+                                'psz6_product_attribute_combination' => ['id_attribute']
+                            ]
+                        ],
+                        [
+                            "psz6_product_attribute" =>
+                                [
+                                    "id_product" => $p
+                                ],
+                            'psz6_attribute_lang' => [
+                                'id_lang' => 2,
+                                'name' => $value_product_attribute->productSize->name
+                            ]
+                        ],
+                        []
+                    );
 
-                        $w = $rightSku[0]["id_product_attribute"];
-                    }
+                    $w = $rightSku[0]["id_product_attribute"];
+                }
 
-                    $n = $n + 1;
-
-
-                    $mvt = $mvt + 1;
-                    $productSizeId_attribute_combination = $value_product_attribute->productSizeId;
-                    $quantity_attribute_combination = $value_product_attribute->stockQty;
-                    if (($quantity_attribute_combination >= 0) && ($lock_default_on == 0)) {
-                        $default_on = '1';
-                        $lock_default_on = 1;
-                    } else {
-                        $default_on = '0';
-                    }
-                    $price_attribute_combination = $value_product_attribute->price;
-                    $salePrice_attribute_combination = $value_product_attribute->salePrice;
-                    if ($value_product['on_sale'] == '1') {
-                        $price = $salePrice_attribute_combination;
-                    } else {
-                        $price = $price_attribute_combination;
-                    }
-                    if ($quantity_attribute_combination >= 1) {
-                        $available_date = date("Y-m-d");
-
-                    } else {
-                        $available_date = '2018-08-01';
-                    }
+                $n = $n + 1;
 
 
-                    //popolamento array prodotti attributi
-                    $data_product_attribute = array(
-                        array($w,
-                            $p,
-                            $value_product['reference'],
-                            $value_product['supplier_reference'],
-                            '',
-                            $value_product_attribute->ean,
-                            $value_product['isbn'],
-                            $value_product['upc'],
-                            $price,
-                            $price,
-                            $value_product['ecotax'],
-                            $quantity_attribute_combination,
-                            $value_product['weight'],
-                            '0.000000',
-                            $default_on,
-                            $value_product['minimal_quantity'],
-                            $value_product['low_stock_threshold'],
-                            $value_product['low_stock_alert'],
-                            $available_date));
+                $mvt = $mvt + 1;
+                $productSizeId_attribute_combination = $value_product_attribute->productSizeId;
+                $quantity_attribute_combination = $value_product_attribute->stockQty;
+                if (($quantity_attribute_combination >= 0) && ($lock_default_on == 0)) {
+                    $default_on = '1';
+                    $lock_default_on = 1;
+                } else {
+                    $default_on = '0';
+                }
+                $price_attribute_combination = $value_product_attribute->price;
+                $salePrice_attribute_combination = $value_product_attribute->salePrice;
+                if ($value_product['on_sale'] == '1') {
+                    $price = $salePrice_attribute_combination;
+                } else {
+                    $price = $price_attribute_combination;
+                }
+                if ($quantity_attribute_combination >= 1) {
+                    $available_date = date("Y-m-d");
+
+                } else {
+                    $available_date = '2018-08-01';
+                }
+
+
+                //popolamento array prodotti attributi
+                $data_product_attribute = array(
+                    array($w,
+                        $p,
+                        $value_product['reference'],
+                        $value_product['supplier_reference'],
+                        '',
+                        $value_product_attribute->ean,
+                        $value_product['isbn'],
+                        $value_product['upc'],
+                        $price,
+                        $price,
+                        $value_product['ecotax'],
+                        $quantity_attribute_combination,
+                        $value_product['weight'],
+                        '0.000000',
+                        $default_on,
+                        $value_product['minimal_quantity'],
+                        $value_product['low_stock_threshold'],
+                        $value_product['low_stock_alert'],
+                        $available_date));
 // popoplamento array movimenti magazzino
-                    $data_stock_mvt = array(
-                        array($mvt,
-                            $n,
-                            '',
-                            '',
-                            '11',
-                            '1',
-                            'Cartechini',
-                            'Gianluca',
-                            $quantity_attribute_combination,
-                            date("Y-m-d H:i:s"),
-                            '1',
-                            '0.000000',
-                            '0.000000',
-                            '0.000000',
-                            ''));
+                $data_stock_mvt = array(
+                    array($mvt,
+                        $n,
+                        '',
+                        '',
+                        '11',
+                        '1',
+                        'Cartechini',
+                        'Gianluca',
+                        $quantity_attribute_combination,
+                        date("Y-m-d H:i:s"),
+                        '1',
+                        '0.000000',
+                        '0.000000',
+                        '0.000000',
+                        ''));
 
 // popolamento array stock prodotti per combinazioni
-                    $data_stock_available = array(
-                        array($n,
-                            $p,
-                            $w,
-                            $value_product['id_shop_default'],
-                            '0',
-                            $quantity_attribute_combination,
-                            $quantity_attribute_combination,
-                            $quantity_attribute_combination,
-                            '0',
-                            '0'));
+                $data_stock_available = array(
+                    array($n,
+                        $p,
+                        $w,
+                        $value_product['id_shop_default'],
+                        '0',
+                        $quantity_attribute_combination,
+                        $quantity_attribute_combination,
+                        $quantity_attribute_combination,
+                        '0',
+                        '0'));
 
 
-                    foreach ($data_product_attribute as $row_product_attribute) {
-                        fputcsv($product_attribute_csv, $row_product_attribute, ';');
-                    }
-                    foreach ($data_stock_mvt as $row_stock_mvt) {
-                        fputcsv($stock_mvt_csv, $row_stock_mvt, ';');
-                    }
-                    foreach ($data_stock_available as $row_stock_available) {
+                foreach ($data_product_attribute as $row_product_attribute) {
+                    fputcsv($product_attribute_csv, $row_product_attribute, ';');
+                }
+                foreach ($data_stock_mvt as $row_stock_mvt) {
+                    fputcsv($stock_mvt_csv, $row_stock_mvt, ';');
+                }
+                foreach ($data_stock_available as $row_stock_available) {
 
-                        fputcsv($stock_available_csv, $row_stock_available, ';');
+                    fputcsv($stock_available_csv, $row_stock_available, ';');
 
 
-                    }
+                }
 
 // popolamento array prodotti attributi shop
-                    $data_product_attribute_shop = array(
-                        array($p,
-                            $w,
-                            '1',
-                            $price,
-                            $price,
-                            $value_product['ecotax'],
-                            $value_product['weight'],
-                            '0.000000',
-                            $default_on,
-                            $value_product['minimal_quantity'],
-                            $value_product['low_stock_threshold'],
-                            $value_product['low_stock_alert'],
-                            $available_date));
-                    foreach ($data_product_attribute_shop as $row_product_attribute_shop) {
-                        fputcsv($product_attribute_shop_csv, $row_product_attribute_shop, ';');
-                    }
-
-
-                    // popolamento array chiavi attributo prodotto attributo
-                    $data_product_attribute_combination = array(
-                        array($productSizeId_attribute_combination,
-                            $w
-                        )
-                    );
-                    foreach ($data_product_attribute_combination as $row_product_attribute_combination) {
-                        fputcsv($product_attribute_combination_csv, $row_product_attribute_combination, ';');
-
-                    }
-
+                $data_product_attribute_shop = array(
+                    array($p,
+                        $w,
+                        '1',
+                        $price,
+                        $price,
+                        $value_product['ecotax'],
+                        $value_product['weight'],
+                        '0.000000',
+                        $default_on,
+                        $value_product['minimal_quantity'],
+                        $value_product['low_stock_threshold'],
+                        $value_product['low_stock_alert'],
+                        $available_date));
+                foreach ($data_product_attribute_shop as $row_product_attribute_shop) {
+                    fputcsv($product_attribute_shop_csv, $row_product_attribute_shop, ';');
                 }
 
 
-                foreach ($data_product as $row_product) {
-                    fputcsv($product_csv, $row_product, ';');
+                // popolamento array chiavi attributo prodotto attributo
+                $data_product_attribute_combination = array(
+                    array($productSizeId_attribute_combination,
+                        $w
+                    )
+                );
+                foreach ($data_product_attribute_combination as $row_product_attribute_combination) {
+                    fputcsv($product_attribute_combination_csv, $row_product_attribute_combination, ';');
 
                 }
-                foreach ($data_product_shop as $row_product_shop) {
-                    fputcsv($product_shop_csv, $row_product_shop, ';');
-
-                }
-
 
             }
 
 
-            /** sezione immagini */
+            foreach ($data_product as $row_product) {
+                fputcsv($product_csv, $row_product, ';');
 
-            $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
+            }
+            foreach ($data_product_shop as $row_product_shop) {
+                fputcsv($product_shop_csv, $row_product_shop, ';');
+
+            }
+
+
+        }
+
+
+        /** sezione immagini */
+
+        $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
 FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.status = 0 GROUP BY picture  ORDER BY productId ASC";
-            $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            $a = 0;
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.status = 0 GROUP BY picture  ORDER BY productId ASC ";
+        $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $a = 0;
 
-            //popolamento aggiornamento tabella PrestashopHasProductImage
+        //popolamento aggiornamento tabella PrestashopHasProductImage
 
-            foreach ($image_product as $value_image_product) {
+        foreach ($image_product as $value_image_product) {
 
-                $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
-                $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
-                $prestashopHasProductImageInsert->position = $value_image_product['position'];
-                $prestashopHasProductImageInsert->picture = $value_image_product['picture'];
-                $prestashopHasProductImageInsert->cover = $value_image_product['cover'];
-                $prestashopHasProductImageInsert->status = '0';
-                $prestashopHasProductImageInsert->smartInsert();
+            $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
+            $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
+            $prestashopHasProductImageInsert->position = $value_image_product['position'];
+            $prestashopHasProductImageInsert->picture = $value_image_product['picture'];
+            $prestashopHasProductImageInsert->cover = $value_image_product['cover'];
+            $prestashopHasProductImageInsert->status = '0';
+            $prestashopHasProductImageInsert->smartInsert();
 
-                // popolamento array immagini con id sequenziale
+            // popolamento array immagini con id sequenziale
 
-                $data_image = array(
-                    array($prestashopHasProductImageInsert->idImage,
-                        $value_image_product['productId'],
-                        $value_image_product['position'],
-                        $value_image_product['cover']));
+            $data_image = array(
+                array($prestashopHasProductImageInsert->idImage,
+                    $value_image_product['productId'],
+                    $value_image_product['position'],
+                    $value_image_product['cover']));
 
-                //popolamento array immagini shop
+            //popolamento array immagini shop
 
-                $data_image_shop = array(
-                    array($value_image_product['productId'],
-                        $prestashopHasProductImageInsert->idImage,
-                        '1',
-                        $value_image_product['cover']));
-                $data_image_lang = array(
-                    array($prestashopHasProductImageInsert->idImage,
-                        '1',
-                        $value_image_product['reference']),
-                    array($prestashopHasProductImageInsert->idImage,
-                        '2',
-                        $value_image_product['reference']),
-                    array($prestashopHasProductImageInsert->idImage,
-                        '3',
-                        $value_image_product['reference'])
-                );
+            $data_image_shop = array(
+                array($value_image_product['productId'],
+                    $prestashopHasProductImageInsert->idImage,
+                    '1',
+                    $value_image_product['cover']));
+            $data_image_lang = array(
+                array($prestashopHasProductImageInsert->idImage,
+                    '1',
+                    $value_image_product['reference']),
+                array($prestashopHasProductImageInsert->idImage,
+                    '2',
+                    $value_image_product['reference']),
+                array($prestashopHasProductImageInsert->idImage,
+                    '3',
+                    $value_image_product['reference'])
+            );
 
-                //popolameto array image con link a amazon
-                $data_image_link = array(
-                    array($prestashopHasProductImageInsert->idImage,
-                        $value_image_product['productId'],
-                        $value_image_product['position'],
-                        $value_image_product['cover'],
-                        $value_image_product['picture']));
+            //popolameto array image con link a amazon
+            $data_image_link = array(
+                array($prestashopHasProductImageInsert->idImage,
+                    $value_image_product['productId'],
+                    $value_image_product['position'],
+                    $value_image_product['cover'],
+                    $value_image_product['picture']));
 
 
-                foreach ($data_image as $row_image_product) {
-                    fputcsv($image_csv, $row_image_product, ';');
-                }
-                //caricamento immagini
-
-                foreach ($data_image_shop as $row_image_shop) {
-                    fputcsv($image_shop_csv, $row_image_shop, ';');
-                }
-                foreach ($data_image_lang as $row_image_lang) {
-                    fputcsv($image_lang_csv, $row_image_lang, ';');
-
-                }
-                foreach ($data_image_link as $row_image_product_link) {
-                    fputcsv($image_link_csv, $row_image_product_link, ';');
-                }
+            foreach ($data_image as $row_image_product) {
+                fputcsv($image_csv, $row_image_product, ';');
             }
+            //caricamento immagini
+
+            foreach ($data_image_shop as $row_image_shop) {
+                fputcsv($image_shop_csv, $row_image_shop, ';');
+            }
+            foreach ($data_image_lang as $row_image_lang) {
+                fputcsv($image_lang_csv, $row_image_lang, ';');
+
+            }
+            foreach ($data_image_link as $row_image_product_link) {
+                fputcsv($image_link_csv, $row_image_product_link, ';');
+            }
+        }
 
 // popolamento stock magazzino quantità totali per prodotto
-            $sql = "
+        $sql = "
             SELECT  php.prestaId AS ProductId ,
             sum(pps.stockQty) AS quantity
             FROM ProductPublicSku pps JOIN PrestashopHasProduct php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId GROUP BY pps.ProductId";
-            $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            foreach ($res_quantity_stock as $value_quantity_stock) {
-                $n = $n + 1;
-                $data_quantity_stock_available = array(
-                    array($n,
-                        $value_quantity_stock['ProductId'],
-                        '0',
-                        '1',
-                        '0',
-                        $value_quantity_stock['quantity'],
-                        $value_quantity_stock['quantity'],
-                        $value_quantity_stock['quantity'],
-                        '0',
-                        '0'));
-                foreach ($data_quantity_stock_available as $row_quantity_stock_available) {
-                    fputcsv($stock_available_csv, $row_quantity_stock_available, ';');
-                }
+        $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        foreach ($res_quantity_stock as $value_quantity_stock) {
+            $n = $n + 1;
+            $data_quantity_stock_available = array(
+                array($n,
+                    $value_quantity_stock['ProductId'],
+                    '0',
+                    '1',
+                    '0',
+                    $value_quantity_stock['quantity'],
+                    $value_quantity_stock['quantity'],
+                    $value_quantity_stock['quantity'],
+                    '0',
+                    '0'));
+            foreach ($data_quantity_stock_available as $row_quantity_stock_available) {
+                fputcsv($stock_available_csv, $row_quantity_stock_available, ';');
             }
-            /****** sezione caratteristiche prodotto *****/
-            $sql = "SELECT php.prestaId AS prestaId, psa.productDetailLabelId AS productDetailLabelId, psa.productDetailId AS productDetailId 
+        }
+        /****** sezione caratteristiche prodotto *****/
+        $sql = "SELECT php.prestaId AS prestaId, psa.productDetailLabelId AS productDetailLabelId, psa.productDetailId AS productDetailId 
                 FROM  PrestashopHasProduct php 
                 JOIN ProductSheetActual psa ON php.productId=psa.productId AND php.productVariantId =psa.productVariantId";
 
 
-            $res_feature_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            foreach ($res_feature_product as $value_feature_product) {
-                $z = $z + 1;
-                $data_feature_product = array(
-                    array($value_feature_product['productDetailLabelId'],
-                        $value_feature_product['prestaId'],
-                        $value_feature_product['productDetailId']));
+        $res_feature_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        foreach ($res_feature_product as $value_feature_product) {
+            $z = $z + 1;
+            $data_feature_product = array(
+                array($value_feature_product['productDetailLabelId'],
+                    $value_feature_product['prestaId'],
+                    $value_feature_product['productDetailId']));
 
-                foreach ($data_feature_product as $row_feature_product) {
-                    fputcsv($feature_product_csv, $row_feature_product, ';');
-                }
+            foreach ($data_feature_product as $row_feature_product) {
+                fputcsv($feature_product_csv, $row_feature_product, ';');
             }
+        }
 
         fclose($category_csv);
         fclose($category_lang_csv);
@@ -1912,6 +1912,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         $phar->addFile($save_to . 'psz6_product_attribute_combination.csv', 'psz6_product_attribute_combination.csv');
         $phar->addFile($save_to . 'psz6_product_attribute_shop.csv', 'psz6_product_attribute_shop.csv');
         $phar->addFile($save_to . 'psz6_product_lang.csv', 'psz6_product_lang.csv');
+        $phar->addFile($save_to . 'iwes_shop.csv', 'iwes_shop.csv');
 
         if ($phar->count() > 0) {
             /** @var \PharData $compressed */
@@ -1952,6 +1953,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 unlink($save_to . 'psz6_supplier_lang.csv');
                 unlink($save_to . 'psz6_supplier_shop.csv');
                 unlink($save_to . 'psz6_stock_mvt.csv');
+                unlink($save_to . 'iwes_shop.csv');
 
 
             }
@@ -1985,28 +1987,28 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         curl_close($ch);
         /****sezione per lancio allineamento script su server prestashop*/
 
-       /* $url = 'https://iwes.shop/alignpresta.php';
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
+        /* $url = 'https://iwes.shop/alignpresta.php';
+         $ch = curl_init();
+         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
+         curl_setopt($ch, CURLOPT_URL, $url);
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         $result = curl_exec($ch);
 
 
-        curl_close($ch);
+         curl_close($ch);
 
-      /*  $url = 'https://iwes.shop/alignImage.php';
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-
-
-        curl_close($ch);
+       /*  $url = 'https://iwes.shop/alignImage.php';
+         $ch = curl_init();
+         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
+         curl_setopt($ch, CURLOPT_URL, $url);
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         $result = curl_exec($ch);
 
 
-        /**** aggiornamento stato tabella PrestashopHasProduct e  PrestashopHasProductImage  **/
+         curl_close($ch);
+
+
+         /**** aggiornamento stato tabella PrestashopHasProduct e  PrestashopHasProductImage  **/
         $sql = "UPDATE PrestashopHasProduct SET status='1' WHERE status='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='0'";
