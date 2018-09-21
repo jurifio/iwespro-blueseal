@@ -238,6 +238,7 @@ class CPrestashopDumpCsvJob extends ACronJob
         /*********************   preparazione tabella di collegamento  ****************************************************//////
         /*** popolamento tabella */
 
+
         $sql = "SELECT
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
   p.id                                                                           AS  productId,
