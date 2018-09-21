@@ -131,7 +131,7 @@ class CPrestashopDumpCsv extends AAjaxController
             unlink($save_to . 'psz6_manufacturer_shop.csv');
         }
         $manufacturer_shop_csv = fopen($save_to . 'psz6_manufacturer_shop.csv', 'w');
-
+        fputcsv($manufacturer_shop_csv, array('id_manufacturer', 'id_shop'), ";");
 
         if (file_exists($save_to . 'psz6_category_shop.csv')) {
             unlink($save_to . 'psz6_category_shop.csv');
@@ -226,210 +226,6 @@ class CPrestashopDumpCsv extends AAjaxController
         }
         $feature_value_lang_csv = fopen($save_to . 'psz6_feature_value_lang.csv', 'w');
 
-        if (file_exists($save_to . 'iwes_shop.csv')) {
-            unlink($save_to . 'iwes_shop.csv');
-        }
-        $iwes_shop_csv = fopen($save_to . 'iwes_shop.csv', 'w');
-
-
-
-        /** INTESTAZIOPNE COLONNE FILE CSV */
-        fputcsv($attribute_csv, array('id_attribute', 'id_attribute_group', 'color', 'position'), ';', '"');
-        fputcsv($attribute_group_csv, array('id_attribute_group', 'is_color_group', 'group_type', 'position'), ';');
-        fputcsv($attribute_group_lang_csv, array('id_attribute_group', 'id_lang', 'name', 'public_name'), ';');
-        fputcsv($attribute_group_shop_csv, array('id_attribute_group', 'id_shop'), ';');
-        fputcsv($attribute_lang_csv, array('id_attribute', 'id_lang', 'name'), ';');
-        fputcsv($attribute_shop_csv, array('id_attribute', 'id_shop'), ';');
-        fputcsv($category_csv, array('id_category', 'id_parent', 'id_shop_default', 'level_depth', 'nleft', 'nright', 'active', 'date_add', 'date_upd', 'position', 'is_root_category'), ';');
-        fputcsv($category_group_csv, array('id_category', 'id_group'), ';');
-        fputcsv($category_lang_csv, array('id_category', 'id_shop', 'id_lang', 'name', 'description', 'link_rewrite', 'meta_title', 'meta_keywords', 'meta_description'), ';');
-        fputcsv($category_product_csv, array('id_category', 'id_product', 'position'), ';');
-        fputcsv($category_shop_csv, array('id_category', 'id_shop', 'position'), ';');
-        fputcsv($feature_csv, array('id_feature', 'position'), ';');
-        fputcsv($feature_lang_csv, array('id_feature', 'id_lang', 'name'), ';');
-        fputcsv($feature_product_csv, array('id_feature', 'id_product', 'id_feature_value'), ';');
-        fputcsv($feature_shop_csv, array('id_feature', 'id_shop'));
-        fputcsv($feature_value_csv, array('id_feature_value', 'id_feature', 'custom'), ';');
-        fputcsv($feature_value_lang_csv, array('id_feature_value', 'id_lang', 'name'), ';');
-        fputcsv($image_csv, array('id_image',
-            'id_product',
-            'position',
-            'cover'), ';');
-        fputcsv($image_lang_csv, array('id_image',
-            'id_lang',
-            'legend'), ';');
-        fputcsv($image_link_csv, array('id_image',
-            'id_product',
-            'position',
-            'cover',
-            'link'), ';');
-        fputcsv($image_shop_csv, array('id_product',
-            'id_image',
-            'id_shop',
-            'cover'), ';');
-
-        fputcsv($manufacturer_csv, array('id_manufacturer', 'name', 'date_add', 'date_upd', 'active'), ";");
-        fputcsv($manufacturer_lang_csv, array('id_manufacturer', 'id_lang', 'description', 'short_description', 'meta_title', 'meta_keywords', 'meta_description'), ";");
-        fputcsv($manufacturer_shop_csv, array('id_manufacturer', 'id_shop'), ";");
-        fputcsv($product_csv, array('id_product',
-            'id_supplier',
-            'id_manufacturer',
-            'id_category_default',
-            'id_shop_default',
-            'id_tax_rules_group',
-            'on_sale',
-            'online_only',
-            'ean13',
-            'isbn',
-            'upc',
-            'ecotax',
-            'quantity',
-            'minimal_quantity',
-            'low_stock_threshold',
-            'low_stock_alert',
-            'price',
-            'wholesale_price',
-            'unity',
-            'unit_price_ratio',
-            'additional_shipping_cost',
-            'reference',
-            'supplier_reference',
-            'location',
-            'width',
-            'height',
-            'depth',
-            'weight',
-            'out_of_stock',
-            'addtitional_delivery_times',
-            'quantity_discount',
-            'customizable',
-            'uploadable_files',
-            'text_fields',
-            'active',
-            'redirect_type',
-            'id_type_redirected',
-            'available_for_order',
-            'available_date',
-            'show_condition',
-            'condition',
-            'show_price',
-            'indexed',
-            'visibility',
-            'cache_is_pack',
-            'cache_has_attachments',
-            'is_virtual',
-            'cache_default_attribute',
-            'date_add',
-            'date_upd',
-            'advanced_stock_management',
-            'pack_stock_type',
-            'state',
-            'status'), ';');
-        fputcsv($product_attribute_csv, array('id_product_attribute',
-            'id__product',
-            'reference',
-            'supplier_reference',
-            'location',
-            'ean13',
-            'isbn',
-            'upc',
-            'wholesale_price',
-            'price',
-            'ecotax',
-            'quantity',
-            'weight',
-            'unit_price_impact',
-            'default_on',
-            'minimal_quantity',
-            'low_stock_threshold',
-            'low_stock_alert',
-            'available_date'
-        ), ';');
-        fputcsv($product_attribute_combination_csv, array('id_attribute', 'id_product_attribute'), ';');
-        fputcsv($product_attribute_shop_csv, array(
-            'id_product',
-            'id_product_attribute',
-            'id_shop',
-            'wholesale_price',
-            'price',
-            'ecotax',
-            'weight',
-            'unit_price_impact',
-            'default_on',
-            'minimal_quantity',
-            'low_stock_threshold',
-            'low_stock_alert',
-            'available_date'
-        ), ';');
-        fputcsv($product_lang_csv, array('id_product',
-            'id_shop',
-            'id_lang',
-            'description',
-            'description_short',
-            'link_rewrite',
-            'meta_description',
-            'meta_keywords',
-            'meta_title',
-            'name',
-            'available_now',
-            'available_later',
-            'delivery_on_stock',
-            'delivery_out_stock'), ';');
-        fputcsv($product_shop_csv, array('id_product',
-            'id_shop',
-            'id_category_Default',
-            'id_tax_rules_group',
-            'on_sale',
-            'online_only',
-            'ecotax',
-            'minimal_quantity',
-            'low_stock_threshold',
-            'low_stock_alert',
-            'price',
-            'wholesale_price',
-            'unity',
-            'unit_price_ratio',
-            'additional_shipping_cost',
-            'customizable',
-            'text_fields',
-            'active',
-            'redirect_type',
-            'id_type_redirected',
-            'available_for_order',
-            'available_date',
-            'show_condition',
-            'condition',
-            'show_price',
-            'indexed',
-            'visibility',
-            'cache_default_attribute',
-            'advanced_stock_management',
-            'date_add',
-            'date_upd',
-            'pack_stock_type'), ';');
-        fputcsv($stock_available_csv, array('id_stock_available', 'id_product', 'id_product_attribute', 'id_shop', 'id_shop_group', 'quantity', 'phisical_quantity', 'reserved_quantity', 'depends_on_stock', 'out_of_stock'), ';');
-        fputcsv($stock_mvt_csv, array('id_stock_mvt', 'id_stock', 'id_order', 'id_supply_order', 'id_stock_mvt_reason', 'id_employee', 'employee_lastname', 'employee_firstname', 'physical_quantity', 'date_add', 'sign', 'price_te', 'last_wa', 'current_wa', 'referer'), ';');
-        fputcsv($supplier_csv, array('id_supplier', 'name', 'date_add', 'date_upd', 'active'), ";");
-        fputcsv($supplier_lang_csv, array('id_supplier', 'id_lang', 'description', 'meta_title', 'meta_keywords', 'meta_description'), ";");
-        fputcsv($supplier_shop_csv, array('id_supplier', 'id_shop'), ";");
-        fputcsv($iwes_shop_csv, array('id_shop'), ";");
-        /***** fine intestazioni **/
-
-        /** selezione shop        */
-
-        $marketplaceHasShop = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findAll();
-        foreach ($marketplaceHasShop as $iwes_shops) {
-
-            $data_iwes_shop= array(
-                array($iwes_shops->prestashopId,
-                ));
-            foreach ($data_iwes_shop as $row_iwes_shop) {
-                fputcsv($iwes_shop_csv, $row_iwes_shop, ';');
-            }
-
-        }
-
-
         /**
          * @var $db CMySQLAdapter
          */
@@ -507,7 +303,7 @@ class CPrestashopDumpCsv extends AAjaxController
   '3' AS pack_stock_type,
   '0'                                                                            AS depend_on_stock,
   '1'                                                                            AS Warehouse,
-  '1'                                                                            AS state
+  '1'  AS state
   
 
 FROM `Product` `p`
@@ -521,8 +317,8 @@ FROM `Product` `p`
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
- LEFT  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
- LEFT JOIN ProductName pn ON p.id = pn.id
+ left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
+ left JOIN ProductName pn ON p.id = pn.id
   WHERE p.qty>0 AND p.productStatusId=6
   GROUP BY p.id,p.productVariantId 
   ORDER BY `p`.`id` ASC limit 10 ";
@@ -564,6 +360,8 @@ FROM `Product` `p`
                 ORDER BY id_category,(rght-lft) DESC ";
 
 
+        fputcsv($category_csv, array('id_category', 'id_parent', 'id_shop_default', 'level_depth', 'nleft', 'nright', 'active', 'date_add', 'date_upd', 'position', 'is_root_category'), ';');
+        fputcsv($category_shop_csv, array('id_category', 'id_shop', 'position'), ';');
         $res_category = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $i = 0;
         foreach ($res_category as $value_category) {
@@ -576,7 +374,7 @@ FROM `Product` `p`
             $data_category = array(
                 array($value_category['id_category'],
                     $value_category['id_parent'],
-                    '1',
+                    $value_category['id_shop_default'],
                     $value_category['level_depth'],
                     $value_category['nleft'],
                     $value_category['nright'],
@@ -589,7 +387,7 @@ FROM `Product` `p`
 
             $data_category_shop = array(
                 array($value_category['id_category'],
-                    '1',
+                    1,
                     $i));
             $data_category_group = array(
                 array($value_category['id_category'],
@@ -627,6 +425,7 @@ FROM ProductCategory t1
 ORDER BY id_category,(rght-lft) DESC";
 
 
+        fputcsv($category_lang_csv, array('id_category', 'id_shop', 'id_lang', 'name', 'description', 'link_rewrite', 'meta_title', 'meta_keywords', 'meta_description'), ';');
         fputcsv($category_lang_csv, array('1', '1', '1', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
         fputcsv($category_lang_csv, array('1', '1', '2', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
         fputcsv($category_lang_csv, array('1', '1', '3', 'Home', 'Home', 'home', 'Home', 'Home', 'Home',), ';');
@@ -664,7 +463,7 @@ ORDER BY id_category,(rght-lft) DESC";
         $sql = "SELECT phpc.productCategoryId AS id_category,
              pap.prestaId AS id_product, '0' AS position
              FROM ProductHasProductCategory phpc JOIN PrestashopHasProduct pap ON phpc.productId =pap.productId AND phpc.productVariantId = pap.productVariantId ORDER BY id_category";
-
+        fputcsv($category_product_csv, array('id_category', 'id_product', 'position'), ';');
         $res_category_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_category_product as $value_category_product) {
             $data_cat_product = array(
@@ -682,7 +481,7 @@ ORDER BY id_category,(rght-lft) DESC";
         /************* Sezione brand e produttori*******************************************************************************************/
         /***** esportazione Brand ****/
 
-
+        fputcsv($manufacturer_csv, array('id_manufacturer', 'name', 'date_add', 'date_upd', 'active'), ";");
         $res_brand = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
         foreach ($res_brand as $value_brand) {
             $date_brand = date('Y-m-d H:i:s:');
@@ -701,7 +500,7 @@ ORDER BY id_category,(rght-lft) DESC";
 
         /***** esportazione Brand language ****/
 
-
+        fputcsv($manufacturer_lang_csv, array('id_manufacturer', 'id_lang', 'description', 'short_description', 'meta_title', 'meta_keywords', 'meta_description'), ";");
         $res_brand_lang = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
         foreach ($res_brand_lang as $value_brand_lang) {
             $data_brand_lang = array(
@@ -753,7 +552,7 @@ ORDER BY id_category,(rght-lft) DESC";
 
         /***** esportazione Supplier ****/
 
-
+        fputcsv($supplier_csv, array('id_supplier', 'name', 'date_add', 'date_upd', 'active'), ";");
         $res_supplier = \Monkey::app()->repoFactory->create('Shop')->findAll();
         foreach ($res_supplier as $value_supplier) {
             $date_supplier = date('Y-m-d H:i:s:');
@@ -771,7 +570,7 @@ ORDER BY id_category,(rght-lft) DESC";
 
         /***** esportazione Supplier language ****/
 
-
+        fputcsv($supplier_lang_csv, array('id_supplier', 'id_lang', 'description', 'meta_title', 'meta_keywords', 'meta_description'), ";");
         $res_supplier_lang = \Monkey::app()->repoFactory->create('Shop')->findAll();
         foreach ($res_supplier_lang as $value_supplier_lang) {
             $data_supplier_lang = array(
@@ -802,7 +601,7 @@ ORDER BY id_category,(rght-lft) DESC";
 
         /***** esportazione Supplier shop ****/
 
-
+        fputcsv($supplier_shop_csv, array('id_supplier', 'id_shop'), ";");
         $res_supplier_shop = \Monkey::app()->repoFactory->create('Shop')->findAll();
         foreach ($res_supplier_shop as $value_supplier_shop) {
 
@@ -827,6 +626,7 @@ FROM ProductSizeMacroGroup psmg
   ";
 
 
+        fputcsv($attribute_group_csv, array('id_attribute_group', 'is_color_group', 'group_type', 'position'), ';');
         fputcsv($attribute_group_csv, array('1', '0', 'select', '1'), ';');
         fputcsv($attribute_group_csv, array('2', '0', 'select', '2'), ';');
 
@@ -834,6 +634,7 @@ FROM ProductSizeMacroGroup psmg
         /** caricamento  traduzioni gruppi attributi  */
 
 
+        fputcsv($attribute_group_lang_csv, array('id_attribute_group', 'id_lang', 'name', 'public_name'), ';');
         fputcsv($attribute_group_lang_csv, array('1', '1', 'Size', 'Size'), ';');
         fputcsv($attribute_group_lang_csv, array('1', '2', 'Taglie', 'Taglie'), ';');
         fputcsv($attribute_group_lang_csv, array('1', '3', 'Größe', 'Größe'), ';');
@@ -845,6 +646,7 @@ FROM ProductSizeMacroGroup psmg
         /** caricamento  gruppi attributi shop  */
 
 
+        fputcsv($attribute_group_shop_csv, array('id_attribute_group', 'id_shop'), ';');
         fputcsv($attribute_group_shop_csv, array('1', '1'), ';');
         fputcsv($attribute_group_shop_csv, array('2', '1'), ';');
 
@@ -858,6 +660,7 @@ FROM ProductSizeMacroGroup psmg
  FROM  ProductSize S ORDER BY id_attribute";
 
 
+        fputcsv($attribute_csv, array('id_attribute', 'id_attribute_group', 'color', 'position'), ';', '"');
         $res_attribute = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -885,6 +688,7 @@ FROM ProductSizeMacroGroup psmg
           FROM  ProductSize S ORDER BY id_attribute";
 
 
+        fputcsv($attribute_shop_csv, array('id_attribute', 'id_shop'), ';');
         $res_attribute_shop = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -909,6 +713,7 @@ FROM ProductSizeMacroGroup psmg
         FROM  ProductSize S ORDER BY id_attribute";
 
 
+        fputcsv($attribute_lang_csv, array('id_attribute', 'id_lang', 'name'), ';');
         $res_attribute_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -932,7 +737,8 @@ FROM ProductSizeMacroGroup psmg
         pdl.order AS position
         FROM ProductDetailLabel pdl";
 
-
+        fputcsv($feature_csv, array('id_feature', 'position'), ';');
+        fputcsv($feature_shop_csv,array('id_feature','id_shop'));
         $res_feature = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
         foreach ($res_feature as $value_feature) {
@@ -964,6 +770,7 @@ FROM ProductSizeMacroGroup psmg
         FROM ProductDetailLabelTranslation pdlt";
 
 
+        fputcsv($feature_lang_csv, array('id_feature', 'id_lang', 'name'), ';');
         $res_feature_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
@@ -994,7 +801,7 @@ FROM ProductSizeMacroGroup psmg
         '0' AS custom
         FROM ProductSheetActual psa";
 
-
+        fputcsv($feature_value_csv, array('id_feature_value', 'id_feature', 'custom'), ';');
         $res_feature_value = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
         foreach ($res_feature_value as $value_feature_value) {
@@ -1018,6 +825,7 @@ FROM ProductSizeMacroGroup psmg
         FROM ProductDetailTranslation pdt";
 
 
+        fputcsv($feature_value_lang_csv, array('id_feature_value', 'id_lang', 'name'), ';');
         $res_feature_value_lang = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
         foreach ($res_feature_value_lang as $value_feature_value_lang) {
@@ -1136,11 +944,181 @@ FROM `Product` `p`
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   JOIN  PrestashopHasProduct php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
- LEFT  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
-  LEFT JOIN ProductName pn ON p.id = pn.id
-WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status IN (0,2)
-GROUP BY p.id,p.productVariantId 
-ORDER BY `p`.`id` ASC  limit 10";
+ left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
+  left JOIN ProductName pn ON p.id = pn.id
+WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2)
+GROUP BY p.id,p.productVariantId
+ORDER BY `p`.`id` ASC limit 10 ";
+
+
+
+
+
+        fputcsv($product_shop_csv, array('id_product',
+            'id_shop',
+            'id_category_Default',
+            'id_tax_rules_group',
+            'on_sale',
+            'online_only',
+            'ecotax',
+            'minimal_quantity',
+            'low_stock_threshold',
+            'low_stock_alert',
+            'price',
+            'wholesale_price',
+            'unity',
+            'unit_price_ratio',
+            'additional_shipping_cost',
+            'customizable',
+            'text_fields',
+            'active',
+            'redirect_type',
+            'id_type_redirected',
+            'available_for_order',
+            'available_date',
+            'show_condition',
+            'condition',
+            'show_price',
+            'indexed',
+            'visibility',
+            'cache_default_attribute',
+            'advanced_stock_management',
+            'date_add',
+            'date_upd',
+            'pack_stock_type'), ';');
+
+        fputcsv($product_csv, array('id_product',
+            'id_supplier',
+            'id_manufacturer',
+            'id_category_default',
+            'id_shop_default',
+            'id_tax_rules_group',
+            'on_sale',
+            'online_only',
+            'ean13',
+            'isbn',
+            'upc',
+            'ecotax',
+            'quantity',
+            'minimal_quantity',
+            'low_stock_threshold',
+            'low_stock_alert',
+            'price',
+            'wholesale_price',
+            'unity',
+            'unit_price_ratio',
+            'additional_shipping_cost',
+            'reference',
+            'supplier_reference',
+            'location',
+            'width',
+            'height',
+            'depth',
+            'weight',
+            'out_of_stock',
+            'addtitional_delivery_times',
+            'quantity_discount',
+            'customizable',
+            'uploadable_files',
+            'text_fields',
+            'active',
+            'redirect_type',
+            'id_type_redirected',
+            'available_for_order',
+            'available_date',
+            'show_condition',
+            'condition',
+            'show_price',
+            'indexed',
+            'visibility',
+            'cache_is_pack',
+            'cache_has_attachments',
+            'is_virtual',
+            'cache_default_attribute',
+            'date_add',
+            'date_upd',
+            'advanced_stock_management',
+            'pack_stock_type',
+            'state',
+            'status'), ';');
+
+        fputcsv($product_lang_csv, array('id_product',
+            'id_shop',
+            'id_lang',
+            'description',
+            'description_short',
+            'link_rewrite',
+            'meta_description',
+            'meta_keywords',
+            'meta_title',
+            'name',
+            'available_now',
+            'available_later',
+            'delivery_on_stock',
+            'delivery_out_stock'), ';');
+
+        fputcsv($product_attribute_csv, array('id_product_attribute',
+            'id__product',
+            'reference',
+            'supplier_reference',
+            'location',
+            'ean13',
+            'isbn',
+            'upc',
+            'wholesale_price',
+            'price',
+            'ecotax',
+            'quantity',
+            'weight',
+            'unit_price_impact',
+            'default_on',
+            'minimal_quantity',
+            'low_stock_threshold',
+            'low_stock_alert',
+            'available_date'
+        ), ';');
+
+        fputcsv($product_attribute_shop_csv, array(
+            'id_product',
+            'id_product_attribute',
+            'id_shop',
+            'wholesale_price',
+            'price',
+            'ecotax',
+            'weight',
+            'unit_price_impact',
+            'default_on',
+            'minimal_quantity',
+            'low_stock_threshold',
+            'low_stock_alert',
+            'available_date'
+        ), ';');
+        fputcsv($product_attribute_combination_csv, array('id_attribute', 'id_product_attribute'), ';');
+
+
+        fputcsv($feature_product_csv, array('id_feature',
+            'id_product',
+            'id_feature_value'), ';');
+
+        fputcsv($image_csv, array('id_image',
+            'id_product',
+            'position',
+            'cover'), ';');
+
+        fputcsv($image_link_csv, array('id_image',
+            'id_product',
+            'position',
+            'cover',
+            'link'), ';');
+        fputcsv($image_lang_csv, array('id_image',
+            'id_lang',
+            'legend'), ';');
+        fputcsv($image_shop_csv, array('id_product',
+            'id_image',
+            'id_shop',
+            'cover'), ';');
+        fputcsv($stock_available_csv, array('id_stock_available', 'id_product', 'id_product_attribute', 'id_shop', 'id_shop_group', 'quantity', 'phisical_quantity', 'reserved_quantity', 'depends_on_stock', 'out_of_stock'), ';');
+        fputcsv($stock_mvt_csv, array('id_stock_mvt', 'id_stock', 'id_order', 'id_supply_order', 'id_stock_mvt_reason', 'id_employee', 'employee_lastname', 'employee_firstname', 'physical_quantity', 'date_add', 'sign', 'price_te', 'last_wa', 'current_wa', 'referer'), ';');
 
 
         $w = 0;
@@ -1315,7 +1293,7 @@ ORDER BY `p`.`id` ASC  limit 10";
 
             //popolamento array lingua prodotti
 
-            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '2']);
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'2']);
             if ($res_product_lang->isEmpty()) {
                 $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
                 $in_stock = "in stock";
@@ -1344,7 +1322,7 @@ ORDER BY `p`.`id` ASC  limit 10";
                     fputcsv($product_lang_csv, $row_product_lang, ';');
 
                 }
-            } else {
+            }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
                     $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
@@ -1379,7 +1357,7 @@ ORDER BY `p`.`id` ASC  limit 10";
                     }
                 }
             }
-            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '1']);
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
             if ($res_product_lang->isEmpty()) {
                 $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
                 $in_stock = "in Vendita";
@@ -1408,7 +1386,7 @@ ORDER BY `p`.`id` ASC  limit 10";
                     fputcsv($product_lang_csv, $row_product_lang, ';');
 
                 }
-            } else {
+            }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
                     $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
@@ -1418,6 +1396,7 @@ ORDER BY `p`.`id` ASC  limit 10";
                     $current_supply = 'In magazzino. ordinabile';
                     $product_available = 'Consegna in 3-4 Giorni Lavorati';
                     $product_not_available = 'Consegna  in 10-15 lavorativi';
+
 
 
                     $valuelang = 2;
@@ -1444,7 +1423,7 @@ ORDER BY `p`.`id` ASC  limit 10";
                     }
                 }
             }
-            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '3']);
+            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'3']);
             if ($res_product_lang->isEmpty()) {
                 $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
                 $in_stock = "in stock";
@@ -1473,7 +1452,7 @@ ORDER BY `p`.`id` ASC  limit 10";
                     fputcsv($product_lang_csv, $row_product_lang, ';');
 
                 }
-            } else {
+            }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
                     $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
@@ -1483,6 +1462,7 @@ ORDER BY `p`.`id` ASC  limit 10";
                     $current_supply = "Current supply. Ordering available";
                     $product_available = "Delivered in 3-4 Days";
                     $product_not_available = "Delivered in 10-15 Days";
+
 
 
                     $valuelang = 3;
@@ -1514,6 +1494,7 @@ ORDER BY `p`.`id` ASC  limit 10";
 
 
 //se lo stato è 0 lo cerco, mi assicuro che non lo trovo e lo inserico - se lo stato è 2 lo cerco lo ag
+
 
 
             $res_product_attribute = \Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
@@ -1702,6 +1683,7 @@ ORDER BY `p`.`id` ASC  limit 10";
             }
 
 
+
         }
 
 
@@ -1712,7 +1694,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.status = 0 GROUP BY picture  ORDER BY productId ASC ";
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.status = 0 GROUP BY picture  ORDER BY productId ASC";
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $a = 0;
 
@@ -1858,7 +1840,6 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         fclose($category_product_csv);
         fclose($stock_available_csv);
         fclose($stock_mvt_csv);
-        fclose($iwes_shop_csv);
 
 
         /********************* operazioni di crezione archivio per trasferimento*******/
@@ -1912,7 +1893,6 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         $phar->addFile($save_to . 'psz6_product_attribute_combination.csv', 'psz6_product_attribute_combination.csv');
         $phar->addFile($save_to . 'psz6_product_attribute_shop.csv', 'psz6_product_attribute_shop.csv');
         $phar->addFile($save_to . 'psz6_product_lang.csv', 'psz6_product_lang.csv');
-        $phar->addFile($save_to . 'iwes_shop.csv', 'iwes_shop.csv');
 
         if ($phar->count() > 0) {
             /** @var \PharData $compressed */
@@ -1953,7 +1933,6 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 unlink($save_to . 'psz6_supplier_lang.csv');
                 unlink($save_to . 'psz6_supplier_shop.csv');
                 unlink($save_to . 'psz6_stock_mvt.csv');
-                unlink($save_to . 'iwes_shop.csv');
 
 
             }
@@ -1987,28 +1966,31 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         curl_close($ch);
         /****sezione per lancio allineamento script su server prestashop*/
 
-        /* $url = 'https://iwes.shop/alignpresta.php';
-         $ch = curl_init();
-         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
-         curl_setopt($ch, CURLOPT_URL, $url);
-         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-         $result = curl_exec($ch);
+        $url = 'https://iwes.shop/alignpresta.php';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
 
 
-         curl_close($ch);
+        curl_close($ch);
 
-       /*  $url = 'https://iwes.shop/alignImage.php';
-         $ch = curl_init();
-         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
-         curl_setopt($ch, CURLOPT_URL, $url);
-         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-         $result = curl_exec($ch);
-
-
-         curl_close($ch);
+        $url = 'https://iwes.shop/alignImage.php';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
 
 
-         /**** aggiornamento stato tabella PrestashopHasProduct e  PrestashopHasProductImage  **/
+        curl_close($ch);
+
+
+
+
+
+        /**** aggiornamento stato tabella PrestashopHasProduct e  PrestashopHasProductImage  **/
         $sql = "UPDATE PrestashopHasProduct SET status='1' WHERE status='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='0'";
