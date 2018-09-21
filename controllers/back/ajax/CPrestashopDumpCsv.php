@@ -1985,7 +1985,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         curl_close($ch);
         /****sezione per lancio allineamento script su server prestashop*/
 
-        $url = 'https://iwes.shop/alignpresta.php';
+       /* $url = 'https://iwes.shop/alignpresta.php';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
         curl_setopt($ch, CURLOPT_URL, $url);
