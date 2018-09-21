@@ -391,7 +391,11 @@ FROM `Product` `p`
                     $i));
             $data_category_group = array(
                 array($value_category['id_category'],
-                    1));
+                    1),
+                array($value_category['id_category'],
+                    2),
+               array($value_category['id_category'],
+                    3));
 
 
             foreach ($data_category as $row_category) {
