@@ -1858,6 +1858,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         fclose($category_product_csv);
         fclose($stock_available_csv);
         fclose($stock_mvt_csv);
+        fclose($iwes_shop_csv);
 
 
         /********************* operazioni di crezione archivio per trasferimento*******/
