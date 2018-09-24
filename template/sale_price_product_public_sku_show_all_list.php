@@ -41,6 +41,9 @@
                                 <th data-slug="on_sale"
                                     data-searchable="true"
                                     data-orderable="true" class="center">In saldo</th>
+                                <th data-slug="dirPrice"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Prezzo da importatore</th>
                                 <th data-slug="p_price"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Prezzo</th>

@@ -40,12 +40,18 @@ class CSalePriceProductPublicSkuAllListAjaxControllerUtility extends AAjaxContro
   ps1.price as p_price,
   ps1.salePrice as p_sale_price,
   p.isOnSale as on_sale,
-  s.name as shopName
+  s.name as shopName,
+  dPr.dirPrice
 FROM ProductPublicSku ps1
   JOIN ProductSize ps on ps1.productSizeId = ps.id
   JOIN Product p ON ps1.productId = p.id AND ps1.productVariantId = p.productVariantId
   JOIN ShopHasProduct shp ON p.id = shp.productId AND p.productVariantId = shp.productVariantId
-  JOIN Shop s ON shp.shopId = s.id";
+  JOIN Shop s ON shp.shopId = s.id
+  LEFT JOIN (
+    SELECT dp.productId dirtyProductId, dp.productVariantId dirtyVariantId, ds.productSizeId dirtySizeId, ds.price dirPrice
+    FROM DirtyProduct dp
+    JOIN DirtySku ds ON ds.dirtyProductId = dp.id
+  ) dPr ON dPr.dirtyProductId = ps1.productId AND dPr.dirtyVariantId = ps1.productVariantId AND dPr.dirtySizeId = ps1.productSizeId";
 
         $datatable = new CDataTables($sql, ['productId','productVariantId','size'], $_GET, true);
 
