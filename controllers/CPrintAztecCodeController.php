@@ -42,14 +42,10 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
 
             $barcodeInt = $product->getBarcodeInt();
 
-            if(is_string($barcodeInt)){
-                $product->aztecCode = base64_encode($product->printId().'__'.$product->productBrand->name.' - '.$product->itemno.' - '.$product->productVariant->name.' - '.$barcodeInt);
-            } else if($barcodeInt == false){
-                $product->aztecCode = base64_encode($product->printId().'__'.$product->productBrand->name.' - '.$product->itemno.' - '.$product->productVariant->name);
-            }
-
+            $product->aztecCode = base64_encode($product->printId().'__'.$product->productBrand->name.' - '.$product->itemno.' - '.$product->productVariant->name);
 
             $products[] = $product;
+
         }
 
         $temp = \Monkey::app()->router->request()->getRequestData('tmp');
@@ -62,6 +58,7 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'aztecFactoryEndpoint'=> $aztecFactoryEndpoint,
+            'barcodeInt' => $barcodeInt,
             'products' => $products,
             'shop' => null,
             'page' => $this->page,
