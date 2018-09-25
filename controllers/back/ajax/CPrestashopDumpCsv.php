@@ -1584,7 +1584,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
                         $value_product['reference'],
                         $value_product['supplier_reference'],
                         '',
-                        $value_product_attribute->ean,
+                        $value_product['supplier_reference']."-".$value_product_attribute->productSizeId,
                         $value_product['isbn'],
                         $value_product['upc'],
                         $price,
