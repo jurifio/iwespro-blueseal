@@ -1143,7 +1143,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
             [],
             ["id_product_attribute" => "MAX"]
         );
-
+$eanproduct=9999999999999;
         foreach ($res_product as $value_product) {
 
 
@@ -1584,7 +1584,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
                         $value_product['reference'],
                         $value_product['supplier_reference'],
                         '',
-                        $value_product['supplier_reference']."-".$value_product_attribute->productSizeId,
+                        $eanproduct-1,
                         $value_product['isbn'],
                         $value_product['upc'],
                         $price,
