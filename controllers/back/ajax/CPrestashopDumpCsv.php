@@ -1143,7 +1143,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
             [],
             ["id_product_attribute" => "MAX"]
         );
-$eanproduct=9999999999999;
+$eanproduct=99999999999910;
         foreach ($res_product as $value_product) {
 
 
@@ -1509,6 +1509,7 @@ $eanproduct=9999999999999;
             foreach ($res_product_attribute as $value_product_attribute) {
                 if (!$exist) {
                     $w = $w + 1;
+                    $eanproduct+1;
                 } else {
 
                     /**
@@ -1673,7 +1674,7 @@ $eanproduct=9999999999999;
                     fputcsv($product_attribute_combination_csv, $row_product_attribute_combination, ';');
 
                 }
-                $eanproduct-1;
+
             }
 
 
