@@ -951,7 +951,7 @@ FROM `Product` `p`
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   left JOIN ProductName pn ON p.id = pn.id
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2)
-GROUP BY p.id,p.productVariantId
+GROUP BY p.id,p.productVariantId and S2.shopId in(44,3)
 ORDER BY `p`.`id` ASC limit 10 ";
 
 
