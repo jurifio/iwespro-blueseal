@@ -1584,7 +1584,7 @@ $eanproduct=9999999999999;
                         $value_product['reference'],
                         $value_product['supplier_reference'],
                         '',
-                        $eanproduct-1,
+                        $eanproduct,
                         $value_product['isbn'],
                         $value_product['upc'],
                         $price,
@@ -1673,7 +1673,7 @@ $eanproduct=9999999999999;
                     fputcsv($product_attribute_combination_csv, $row_product_attribute_combination, ';');
 
                 }
-
+                $eanproduct-1;
             }
 
 
