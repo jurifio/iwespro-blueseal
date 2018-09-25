@@ -1124,7 +1124,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
         fputcsv($stock_available_csv, array('id_stock_available', 'id_product', 'id_product_attribute', 'id_shop', 'id_shop_group', 'quantity', 'phisical_quantity', 'reserved_quantity', 'depends_on_stock', 'out_of_stock'), ';');
         fputcsv($stock_mvt_csv, array('id_stock_mvt', 'id_stock', 'id_order', 'id_supply_order', 'id_stock_mvt_reason', 'id_employee', 'employee_lastname', 'employee_firstname', 'physical_quantity', 'date_add', 'sign', 'price_te', 'last_wa', 'current_wa', 'referer'), ';');
 
-
+        $eanproduct=99999999999910;
         $w = 0;
 
         $z = 0;
@@ -1143,7 +1143,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
             [],
             ["id_product_attribute" => "MAX"]
         );
-$eanproduct=99999999999910;
+
         foreach ($res_product as $value_product) {
 
 
