@@ -376,7 +376,7 @@ FROM `Product` `p`
             if ($value_category['id_category'] == "1") {
                 $is_root_category = '1';
             } else {
-                $is_root_category = $value_category['id_category'];
+                $is_root_category = 0;
             }
             $data_category = array(
                 array($value_category['id_category'],
