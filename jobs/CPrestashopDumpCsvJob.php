@@ -2021,5 +2021,5 @@ if ($current_productId != $value_image_product['productId']){
         return $res;
     }
 
-
+/* porcoDio*/
 }
