@@ -450,12 +450,12 @@ ORDER BY id_category,(rght-lft) DESC";
                 array($value_category_lang['id_category'],
                     $value_category_lang['id_shop_default'],
                     $id_lang,
-                    $value_category_lang['name'],
-                    $value_category_lang['description'],
+                    htmlentities($value_category_lang['name'], ENT_QUOTES | ENT_IGNORE, "UTF-8"),
+                    htmlentities($value_category_lang['description'], ENT_QUOTES | ENT_IGNORE, "UTF-8"),
                     $value_category_lang['link_rewrite'],
-                    $value_category_lang['meta_title'],
-                    $value_category_lang['meta_keywords'],
-                    $value_category_lang['meta_description']));
+                    htmlentities($value_category_lang['meta_title'], ENT_QUOTES | ENT_IGNORE, "UTF-8"),
+                    htmlentities($value_category_lang['meta_keywords'], ENT_QUOTES | ENT_IGNORE, "UTF-8"),
+                    htmlentities($value_category_lang['meta_description'], ENT_QUOTES | ENT_IGNORE, "UTF-8")));
             foreach ($data_category_lang as $row_category_lang) {
                 fputcsv($category_lang_csv, $row_category_lang, ';');
             }
