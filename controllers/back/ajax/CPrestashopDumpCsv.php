@@ -321,7 +321,7 @@ FROM `Product` `p`
  left JOIN ProductName pn ON p.id = pn.id
   WHERE p.qty>0 AND p.productStatusId=6 and dp.shopId='1'
   GROUP BY p.id,p.productVariantId 
-  ORDER BY `p`.`id` ASC limit 10 ";
+  ORDER BY `p`.`id`  ";
 
 
         /**** esportazione prodotti su ProductHasPrestashop******/
