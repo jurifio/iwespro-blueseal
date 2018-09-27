@@ -373,7 +373,7 @@ FROM `Product` `p`
         $i = 0;
         foreach ($res_category as $value_category) {
             $i = $i + 1;
-            if ($value_category['id_category'] == "1") {
+            if ($value_category['id_category'] === 1) {
                 $is_root_category = '1';
             } else {
                 $is_root_category = 0;
@@ -729,7 +729,7 @@ FROM ProductSizeMacroGroup psmg
                 $data_attribute_lang = array(
                     array($value_attribute_lang['id_attribute'],
                         $y,
-                        $value_attribute_lang['name']));
+                        htmlentities($value_attribute_lang['name'], ENT_QUOTES | ENT_IGNORE, "UTF-8")));
 
                 foreach ($data_attribute_lang as $row_attribute_lang) {
                     fputcsv($attribute_lang_csv, $row_attribute_lang, ';');
@@ -1211,7 +1211,7 @@ ORDER BY `p`.`id` ASC ";
                     $value_product['id_tax_rules_group'],
                     $value_product['on_sale'],
                     $value_product['online_only'],
-                    $value_product['ean13'],
+                    '',
                     $value_product['isbn'],
                     $value_product['upc'],
                     $value_product['ecotax'],
@@ -1227,10 +1227,10 @@ ORDER BY `p`.`id` ASC ";
                     $value_product['reference'],
                     $value_product['supplier_reference'],
                     $value_product['location'],
-                    $value_product['width'],
-                    $value_product['height'],
-                    $value_product['depth'],
-                    $value_product['weight'],
+                    '45',
+                    '27',
+                    '20',
+                    '1',
                     $value_product['out_of_stock'],
                     $value_product['additional_delivery_times'],
                     $value_product['quantity_discount'],
@@ -1302,7 +1302,7 @@ ORDER BY `p`.`id` ASC ";
 
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'2']);
             if ($res_product_lang->isEmpty()) {
-                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES | ENT_IGNORE, "UTF-8");
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
@@ -1332,7 +1332,7 @@ ORDER BY `p`.`id` ASC ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                    htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES | ENT_IGNORE, "UTF-8");
 
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
@@ -1366,7 +1366,7 @@ ORDER BY `p`.`id` ASC ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
             if ($res_product_lang->isEmpty()) {
-                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES | ENT_IGNORE, "UTF-8");
                 $in_stock = "in Vendita";
                 $current_supply = 'In magazzino. ordinabile';
                 $product_available = 'Consegna in 3-4 Giorni Lavorati';
@@ -1396,7 +1396,7 @@ ORDER BY `p`.`id` ASC ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                    htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES | ENT_IGNORE, "UTF-8");
 
 
                     $in_stock = "in Vendita";
@@ -1432,7 +1432,7 @@ ORDER BY `p`.`id` ASC ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'3']);
             if ($res_product_lang->isEmpty()) {
-                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES | ENT_IGNORE, "UTF-8");
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
@@ -1462,7 +1462,7 @@ ORDER BY `p`.`id` ASC ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                    htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES | ENT_IGNORE, "UTF-8");
 
 
                     $in_stock = "in stock";
@@ -1587,7 +1587,7 @@ ORDER BY `p`.`id` ASC ";
                         $value_product['reference'],
                         $value_product['supplier_reference'],
                         '',
-                        $value_product_attribute->ean,
+                        '',
                         $value_product['isbn'],
                         $value_product['upc'],
                         $price,
@@ -1627,8 +1627,8 @@ ORDER BY `p`.`id` ASC ";
                         $value_product['id_shop_default'],
                         '0',
                         $quantity_attribute_combination,
-                        $quantity_attribute_combination,
-                        $quantity_attribute_combination,
+                        '0',
+                        '0',
                         '0',
                         '0'));
 
@@ -1654,7 +1654,7 @@ ORDER BY `p`.`id` ASC ";
                         $price,
                         $price,
                         $value_product['ecotax'],
-                        $value_product['weight'],
+                        '1',
                         '0.000000',
                         $default_on,
                         $value_product['minimal_quantity'],
