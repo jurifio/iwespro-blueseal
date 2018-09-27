@@ -1588,8 +1588,8 @@ ORDER BY `p`.`id` ASC ";
                 $data_product_attribute = array(
                     array($w,
                         $p,
-                        $value_product['reference'],
-                        $value_product['supplier_reference'],
+                        $value_product['reference'].'-'.$productSizeId_attribute_combination ,
+                        $value_product['supplier_reference'].'-'.$productSizeId_attribute_combination ,
                         '',
                         '',
                         $value_product['isbn'],
