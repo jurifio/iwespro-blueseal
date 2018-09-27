@@ -1706,7 +1706,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         $a = 0;
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
-
+$current_productId=0;
         foreach ($image_product as $value_image_product) {
 
             $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
@@ -1718,12 +1718,16 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
             $prestashopHasProductImageInsert->smartInsert();
 
             // popolamento array immagini con id sequenziale
-
+if ($current_productId != $value_image_product['productId']){
+    $cover='1';
+}else{
+    $cover='';
+}
             $data_image = array(
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover']));
+                    $cover));
 
             //popolamento array immagini shop
 
@@ -1731,7 +1735,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 array($value_image_product['productId'],
                     $prestashopHasProductImageInsert->idImage,
                     '1',
-                    $value_image_product['cover']));
+                    $cover));
             $data_image_lang = array(
                 array($prestashopHasProductImageInsert->idImage,
                     '1',
@@ -1749,7 +1753,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover'],
+                    $cover,
                     $value_image_product['picture']));
 
 
@@ -1768,6 +1772,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
             foreach ($data_image_link as $row_image_product_link) {
                 fputcsv($image_link_csv, $row_image_product_link, ';');
             }
+            $current_productId=$value_image_product['productId'];
         }
 
 // popolamento stock magazzino quantità totali per prodotto
