@@ -144,6 +144,12 @@
             data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Associa a MarketPlace Prestashop">
+        <bs-toolbar-button
+
+                data-remote="bs.product.marketplaceprestashop.publish"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

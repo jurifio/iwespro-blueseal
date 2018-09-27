@@ -1215,7 +1215,7 @@ ORDER BY `p`.`id` ASC ";
                     $value_product['id_tax_rules_group'],
                     $value_product['on_sale'],
                     $value_product['online_only'],
-                    $value_product['ean13'],
+                    '',
                     $value_product['isbn'],
                     $value_product['upc'],
                     $value_product['ecotax'],
