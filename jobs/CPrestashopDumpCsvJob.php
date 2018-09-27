@@ -398,7 +398,11 @@ FROM `Product` `p`
                     $i));
             $data_category_group = array(
                 array($value_category['id_category'],
-                    1));
+                    1),
+                array($value_category['id_category'],
+                    2),
+               array($value_category['id_category'],
+                    3));
 
 
             foreach ($data_category as $row_category) {
@@ -1211,7 +1215,7 @@ ORDER BY `p`.`id` ASC ";
                     $value_product['id_tax_rules_group'],
                     $value_product['on_sale'],
                     $value_product['online_only'],
-                    '',
+                    $value_product['ean13'],
                     $value_product['isbn'],
                     $value_product['upc'],
                     $value_product['ecotax'],

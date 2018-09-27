@@ -319,7 +319,7 @@ FROM `Product` `p`
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
  left JOIN ProductName pn ON p.id = pn.id
-  WHERE p.qty>0 AND p.productStatusId=6
+  WHERE p.qty>0 AND p.productStatusId=6 and dp.shopId='1'
   GROUP BY p.id,p.productVariantId 
   ORDER BY `p`.`id` ASC limit 10 ";
 
@@ -398,6 +398,9 @@ FROM `Product` `p`
                     3));
 
 
+
+
+
             foreach ($data_category as $row_category) {
                 fputcsv($category_csv, $row_category, ';');
             }
@@ -447,12 +450,12 @@ ORDER BY id_category,(rght-lft) DESC";
                 array($value_category_lang['id_category'],
                     $value_category_lang['id_shop_default'],
                     $id_lang,
-                    $value_category_lang['name'],
-                    $value_category_lang['description'],
+                    htmlentities($value_category_lang['name'], ENT_QUOTES),
+                    htmlentities($value_category_lang['description'], ENT_QUOTES),
                     $value_category_lang['link_rewrite'],
-                    $value_category_lang['meta_title'],
-                    $value_category_lang['meta_keywords'],
-                    $value_category_lang['meta_description']));
+                    htmlentities($value_category_lang['meta_title'], ENT_QUOTES),
+                    htmlentities($value_category_lang['meta_keywords'], ENT_QUOTES),
+                    htmlentities($value_category_lang['meta_description'], ENT_QUOTES)));
             foreach ($data_category_lang as $row_category_lang) {
                 fputcsv($category_lang_csv, $row_category_lang, ';');
             }
@@ -726,7 +729,7 @@ FROM ProductSizeMacroGroup psmg
                 $data_attribute_lang = array(
                     array($value_attribute_lang['id_attribute'],
                         $y,
-                        $value_attribute_lang['name']));
+                       htmlentities($value_attribute_lang['name'], ENT_QUOTES)));
 
                 foreach ($data_attribute_lang as $row_attribute_lang) {
                     fputcsv($attribute_lang_csv, $row_attribute_lang, ';');
@@ -950,9 +953,9 @@ FROM `Product` `p`
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   left JOIN ProductName pn ON p.id = pn.id
-WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2)
-GROUP BY p.id,p.productVariantId and S2.shopId in(44,3)
-ORDER BY `p`.`id` ASC limit 10 ";
+WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2) and dp.shopId='1'
+GROUP BY p.id,p.productVariantId 
+ORDER BY `p`.`id` ";
 
 
 
@@ -1124,7 +1127,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
         fputcsv($stock_available_csv, array('id_stock_available', 'id_product', 'id_product_attribute', 'id_shop', 'id_shop_group', 'quantity', 'phisical_quantity', 'reserved_quantity', 'depends_on_stock', 'out_of_stock'), ';');
         fputcsv($stock_mvt_csv, array('id_stock_mvt', 'id_stock', 'id_order', 'id_supply_order', 'id_stock_mvt_reason', 'id_employee', 'employee_lastname', 'employee_firstname', 'physical_quantity', 'date_add', 'sign', 'price_te', 'last_wa', 'current_wa', 'referer'), ';');
 
-        $eanproduct=99999999999910;
+        
         $w = 0;
 
         $z = 0;
@@ -1224,10 +1227,10 @@ ORDER BY `p`.`id` ASC limit 10 ";
                     $value_product['reference'],
                     $value_product['supplier_reference'],
                     $value_product['location'],
-                    $value_product['width'],
-                    $value_product['height'],
-                    $value_product['depth'],
-                    $value_product['weight'],
+                     '45',
+                    '27',
+                    '20',
+                    '1',
                     $value_product['out_of_stock'],
                     $value_product['additional_delivery_times'],
                     $value_product['quantity_discount'],
@@ -1299,7 +1302,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
 
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'2']);
             if ($res_product_lang->isEmpty()) {
-                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES );
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
@@ -1329,7 +1332,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                      htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES );
 
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
@@ -1363,7 +1366,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
             if ($res_product_lang->isEmpty()) {
-                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES);
                 $in_stock = "in Vendita";
                 $current_supply = 'In magazzino. ordinabile';
                 $product_available = 'Consegna in 3-4 Giorni Lavorati';
@@ -1393,7 +1396,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                   htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES);
 
 
                     $in_stock = "in Vendita";
@@ -1429,7 +1432,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'3']);
             if ($res_product_lang->isEmpty()) {
-                $name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                   htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES);
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
@@ -1459,7 +1462,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    $name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'];
+                   htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES);
 
 
                     $in_stock = "in stock";
@@ -1509,7 +1512,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
             foreach ($res_product_attribute as $value_product_attribute) {
                 if (!$exist) {
                     $w = $w + 1;
-                    $eanproduct+1;
+                    
                 } else {
 
                     /**
@@ -1585,7 +1588,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
                         $value_product['reference'],
                         $value_product['supplier_reference'],
                         '',
-                        $eanproduct,
+                        '',
                         $value_product['isbn'],
                         $value_product['upc'],
                         $price,
@@ -1625,8 +1628,8 @@ ORDER BY `p`.`id` ASC limit 10 ";
                         $value_product['id_shop_default'],
                         '0',
                         $quantity_attribute_combination,
-                        $quantity_attribute_combination,
-                        $quantity_attribute_combination,
+                        '0',
+                        '0',
                         '0',
                         '0'));
 
@@ -1652,7 +1655,7 @@ ORDER BY `p`.`id` ASC limit 10 ";
                         $price,
                         $price,
                         $value_product['ecotax'],
-                        $value_product['weight'],
+                        '1',
                         '0.000000',
                         $default_on,
                         $value_product['minimal_quantity'],
@@ -1704,7 +1707,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
         $a = 0;
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
-
+$current_productId=0;
         foreach ($image_product as $value_image_product) {
 
             $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
@@ -1716,12 +1719,16 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
             $prestashopHasProductImageInsert->smartInsert();
 
             // popolamento array immagini con id sequenziale
-
+if ($current_productId != $value_image_product['productId']){
+    $cover='1';
+}else{
+    $cover='';
+}
             $data_image = array(
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover']));
+                    $cover));
 
             //popolamento array immagini shop
 
@@ -1729,7 +1736,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 array($value_image_product['productId'],
                     $prestashopHasProductImageInsert->idImage,
                     '1',
-                    $value_image_product['cover']));
+                     $cover));
             $data_image_lang = array(
                 array($prestashopHasProductImageInsert->idImage,
                     '1',
@@ -1747,7 +1754,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover'],
+                    $cover,
                     $value_image_product['picture']));
 
 
@@ -1766,6 +1773,7 @@ FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId 
             foreach ($data_image_link as $row_image_product_link) {
                 fputcsv($image_link_csv, $row_image_product_link, ';');
             }
+$current_productId=$value_image_product['productId'];
         }
 
 // popolamento stock magazzino quantità totali per prodotto
