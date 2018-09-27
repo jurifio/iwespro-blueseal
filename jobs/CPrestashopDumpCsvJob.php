@@ -326,7 +326,7 @@ FROM `Product` `p`
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
  left JOIN ProductName pn ON p.id = pn.id
-  WHERE p.qty>0 AND p.productStatusId=6
+  WHERE p.qty>0 AND p.productStatusId=6 AND dp.shopId='1'
   GROUP BY p.id,p.productVariantId 
   ORDER BY `p`.`id` ASC ";
 
@@ -953,7 +953,7 @@ FROM `Product` `p`
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   left JOIN ProductName pn ON p.id = pn.id
-WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2)
+WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2) AND dp.shopId='1'
 GROUP BY p.id,p.productVariantId
 ORDER BY `p`.`id` ASC ";
 
