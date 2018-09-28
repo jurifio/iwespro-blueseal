@@ -42,7 +42,7 @@ $(document).on('bs-product-marketplaceprestashop-publish', function (e, element,
 
     Pace.ignore(function () {
         $.ajax({
-            url: '/blueseal/xhr/MarketplaceProductManageController',
+            url: '/blueseal/xhr/MarketplaceProductPrestashopManageController',
             type: "get"
         }).done(function (response) {
             okButton.show();
@@ -76,7 +76,7 @@ $(document).on('bs-product-marketplaceprestashop-publish', function (e, element,
                     };
                     body.html('<img src="/assets/img/ajax-loader.gif" />');
                     $.ajax({
-                        url: '/blueseal/xhr/MarketplaceProductManageController',
+                        url: '/blueseal/xhr/MarketplaceProductPrestashopManageController',
                         type: "POST",
                         data: data
                     }).done(function () {
