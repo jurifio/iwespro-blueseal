@@ -57,7 +57,7 @@ class CMarketplaceProductPrestashopManageController extends AAjaxController
             $rows = $this->app->dbAdapter->query($query, [$marketplaceHasShop->marketplaceId, $marketplaceHasShop->id])->fetchAll(\PDO::FETCH_COLUMN, 0);
         }
         /** @var CMarketplaceHasProductAssociateRepo $marketplaceHasProductAssociateRepo */
-        $marketplaceHasProductAssociateRepo = \Monkey::app()->repoFactory->create('MarketPlaceHasProductAssociate');
+        $marketplaceHasProductAssociateRepo = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
         \Monkey::app()->repoFactory->beginTransaction();
         foreach ($rows as $row) {

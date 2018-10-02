@@ -54,7 +54,7 @@ from ((((((((`Product` `p` join `ProductStatus` `ps` on((`p`.`productStatusId` =
   join `ProductHasProductCategory` `phpc` on(((`p`.`id` = `phpc`.`productId`) and (`p`.`productVariantId` = `phpc`.`productVariantId`))))
   left join ((`MarketplaceAccountHasProduct` `mahp` join `MarketplaceAccount` `ma` on(((`ma`.`marketplaceId` = `mahp`.`marketplaceId`) and (`ma`.`id` = `mahp`.`marketplaceAccountId`))))
     join `Marketplace` `m` on((`m`.`id` = `ma`.`marketplaceId`))) on(((`mahp`.`productId` = `p`.`id`) and (`mahp`.`productVariantId` = `p`.`productVariantId`)))
-  left join ((`MarketPlaceHasProductAssociate` `mphpa` join `MarketplaceHasShop` `mpahs` on(((`mphpa`.`marketplaceId` = `mpahs`.`marketplaceId`) )))
+  left join ((`MarketplaceHasProductAssociate` `mphpa` join `MarketplaceHasShop` `mpahs` on(((`mphpa`.`marketplaceId` = `mpahs`.`marketplaceId`) )))
     join `Marketplace` `q` on((`q`.`id` = `mpahs`.`marketplaceId`))) on(((`mphpa`.`productId` = `p`.`id`) and (`mphpa`.`productVariantId` = `p`.`productVariantId`)))
 
 )
@@ -135,7 +135,7 @@ $shopsfilter=implode(', ', $shopsId);
             $row['category'] = $product->getLocalizedProductCategories('<br>');
             $row['creationDate'] = $product->creationDate;
             $rowtablemarketplace="";
-            $resmarketplaceHasProductAssociate=\Monkey::app()->repoFactory->create('MarketPlaceHasProductAssociate')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
+            $resmarketplaceHasProductAssociate=\Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
             if(null == $resmarketplaceHasProductAssociate){
                 $row['associatePrestashopMarketPlace']='non associato';
                 $row['typePrice']='non applicato';
@@ -143,7 +143,7 @@ $shopsfilter=implode(', ', $shopsId);
                 $row['status']='non associato';
             }else{
                $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price,mphs.imgMarketPlace as icon
-                                          FROM Marketplace m join MarketPlaceHasProductAssociate mphpa
+                                          FROM Marketplace m join MarketplaceHasProductAssociate mphpa
                                           on mphpa.marketplaceId =m.id
                                            join Shop s on mphpa.shopId=s.id
                                            join MarketplaceHasShop mphs on mphpa.marketPlaceHasShopId=mphs.id

@@ -337,13 +337,14 @@ FROM `Product` `p`
                 $producthasprestashopinsert = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->getEmptyEntity();
                 $producthasprestashopinsert->productId = $val['productId'];
                 $producthasprestashopinsert->productVariantId = $val['productVariantId'];
-                $producthasprestashopinsert->shopId =$val['shopId'];
+                $producthasprestashopinsert->shopId =$val['prestashopId'];
                 $producthasprestashopinsert->marketplaceId='99';
                 $producthasprestashopinsert->typeRetouchPrice='0';
                 $producthasprestashopinsert->amount='0';
                 $producthasprestashopinsert->prestashopId=$val['prestashopId'];
                 $producthasprestashopinsert->statusPublished=0;
-                $producthasprestashopinsert->marketPlacheHasShopId=$val['marketplaceHasShopId'];
+                $producthasprestashopinsert->marketPlaceHasShopId=$val['marketplaceHasShopId'];
+                $producthasprestashopinsert->price=$val['price'];
                 $producthasprestashopinsert->smartInsert();
             }
         }
@@ -959,7 +960,7 @@ FROM `Product` `p`
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
-  JOIN  MarketPlaceHasProductAssociate php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
+  JOIN  MarketplaceHasProductAssociate php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   left JOIN ProductName pn ON p.id = pn.id
@@ -1709,7 +1710,7 @@ ORDER BY `p`.`id` ";
         /** sezione immagini */
 
         $sql = "SELECT php.id AS productId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
-FROM MarketPlaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
+FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
@@ -1791,7 +1792,7 @@ $current_productId=$value_image_product['productId'];
         $sql = "
             SELECT  php.id AS ProductId ,php.prestashopId,
             sum(pps.stockQty) AS quantity
-            FROM ProductPublicSku pps JOIN MarketPlaceHasProductAssociate php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId GROUP BY pps.ProductId";
+            FROM ProductPublicSku pps JOIN MarketplaceHasProductAssociate php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId GROUP BY pps.ProductId";
         $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_quantity_stock as $value_quantity_stock) {
             $n = $n + 1;
@@ -2015,11 +2016,11 @@ $current_productId=$value_image_product['productId'];
 
 
         /**** aggiornamento stato tabella PrestashopHasProduct e  PrestashopHasProductImage  **/
-        $sql = "UPDATE MarketPlaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='0'";
+        $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
-        $sql = "UPDATE MarketPlaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2'";
+        $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
