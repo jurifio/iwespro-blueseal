@@ -947,7 +947,7 @@ FROM ProductSizeMacroGroup psmg
   '0'                                                                            AS depend_on_stock,
   '1'                                                                            AS Warehouse,
   '1'                                                                            AS state,
-  php.status                                                                     AS status
+  php.statusPublished                                                                     AS status
 
 FROM `Product` `p`
   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
@@ -964,7 +964,7 @@ FROM `Product` `p`
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   left JOIN ProductName pn ON p.id = pn.id
   left join MarketplaceHasShop mpas on php.shopId=mpas.shopId
-WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2) 
+WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2) 
 GROUP BY p.id,p.productVariantId 
 ORDER BY `p`.`id` ";
 
@@ -1713,7 +1713,7 @@ FROM MarketPlaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.status = 0 GROUP BY picture  ORDER BY productId ASC";
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.statusPublished = 0 GROUP BY picture  ORDER BY productId ASC";
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $a = 0;
 
