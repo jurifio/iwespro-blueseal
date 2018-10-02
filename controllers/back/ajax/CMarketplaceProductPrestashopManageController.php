@@ -1,6 +1,6 @@
 <?php
 namespace bamboo\controllers\back\ajax;
-use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
+use bamboo\domain\repositories\CMarketplaceHasProductAssociateRepo;
 
 /**
  * Class CMarketplaceProductPrestashopManageController
@@ -22,11 +22,14 @@ class CMarketplaceProductPrestashopManageController extends AAjaxController
         $response = [];
         $sql="select mphs.id as id, mphs.shopId as shopId, 
                      mphs.marketPlaceId as marketPlaceId,
-                     `m`.`name` as marketPlaceName from MarketplaceHasShop mphs join Marketplace m on mphs.marketPlaceId = m.id";
+                     mphs.prestashopId as prestashopId,
+                     `m`.`name` as marketPlaceName,
+                      s.`name` as shopName from MarketplaceHasShop mphs join Marketplace m on mphs.marketPlaceId = m.id
+                     join Shop s on mphs.shopId=s.id";
        //$marketPlaces= \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ( $marketPlaces= \Monkey::app()->dbAdapter->query($sql, [])->fetchAll() as $marketPlace) {
 
-            $response[] = ['id' => $marketPlace['id'],'shopId' => $marketPlace['shopId'], 'name' => $marketPlace['marketPlaceName'], 'marketplaceId' => $marketPlace['marketPlaceId']];
+            $response[] = ['id' => $marketPlace['id'],'shopId' => $marketPlace['shopId'], 'name' => $marketPlace['marketPlaceName'], 'marketplaceId' => $marketPlace['marketPlaceId'], 'shopname'=>$marketPlace['shopName'],'prestashopId'=>$marketPlace['prestashopId']];
         }
 
         return json_encode($response);
@@ -34,9 +37,14 @@ class CMarketplaceProductPrestashopManageController extends AAjaxController
 
     public function post()
     {
-        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
-        $modifier = $this->app->router->request()->getRequestData('modifier');
-        $cpc = $this->app->router->request()->getRequestData('cpc');
+        $marketplaceHasShop = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOne([$this->app->router->request()->getRequestData('account')]);
+        $shopId=$marketplaceHasShop->shopId;
+        $marketPlaceId=$marketplaceHasShop->marketplaceId;
+        $prestashopId=$marketplaceHasShop->prestashopId;
+        $marketplaceHasShopId=$marketplaceHasShop->id;
+        $amount = $this->app->router->request()->getRequestData('amount');
+        $typeRetouchPrice = $this->app->router->request()->getRequestData('typeRetouchPrice');
+
         $i = 0;
         $rows = $this->app->router->request()->getRequestData('rows');
         if ($rows == 'all') {
@@ -44,12 +52,12 @@ class CMarketplaceProductPrestashopManageController extends AAjaxController
                       FROM vProductSortingView v 
                       WHERE (product, variant) NOT IN (
                         SELECT DISTINCT m.productId, m.productVariantId 
-                        FROM MarketplaceAccountHasProduct m 
-                        WHERE m.marketplaceId = ? AND m.marketplaceAccountId = ? )";
-            $rows = $this->app->dbAdapter->query($query, [$marketplaceAccount->marketplaceId, $marketplaceAccount->id])->fetchAll(\PDO::FETCH_COLUMN, 0);
+                        FROM MarketPlaceHasProductAssociate m 
+                        WHERE m.marketplaceId = ? AND m.shopId = ? )";
+            $rows = $this->app->dbAdapter->query($query, [$marketplaceHasShop->marketplaceId, $marketplaceHasShop->id])->fetchAll(\PDO::FETCH_COLUMN, 0);
         }
-        /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
-        $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+        /** @var CMarketplaceHasProductAssociateRepo $marketplaceHasProductAssociateRepo */
+        $marketplaceHasProductAssociateRepo = \Monkey::app()->repoFactory->create('MarketPlaceHasProductAssociate');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
         \Monkey::app()->repoFactory->beginTransaction();
         foreach ($rows as $row) {
@@ -58,7 +66,7 @@ class CMarketplaceProductPrestashopManageController extends AAjaxController
 
                 set_time_limit(6);
                 $product = $productRepo->findOneByStringId($row);
-                $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product, $marketplaceAccount, $cpc, $modifier);
+                $marketplaceHasProductAssociate = $marketplaceHasProductAssociateRepo->addProductToMarketPlacePrestaShop($product,  $shopId, $marketPlaceId,$prestashopId,$typeRetouchPrice,$amount,$marketplaceHasShopId);
                 $i++;
                 \Monkey::app()->repoFactory->commit();
             } catch

@@ -34,6 +34,7 @@ $(document).on('bs-product-marketplaceprestashop-publish', function (e, element,
 
     $.each(selectedRows, function (k, v) {
         getVarsArray.push(v.DT_RowId);
+
     });
 
 
@@ -48,17 +49,27 @@ $(document).on('bs-product-marketplaceprestashop-publish', function (e, element,
             okButton.show();
             let accounts = JSON.parse(response);
             let html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
-                '<label for="accountId">Marketplace Account</label>' +
+                '<label for="marketPlaceId">Marketplace Account</label>' +
                 '<select class="full-width" placeholder="Seleziona l\'account" ' +
-                'data-init-plugin="selectize" title="" name="accountId" id="accountId" required>' +
+                'data-init-plugin="selectize" title="" name="marketPlaceId" id="marketPlaceId" required>' +
                 '<option value=""></option>';
             for(let account of accounts) {
-                html+='<option value="'+account.id+'" data-has-cpc="'+account.cpc+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
+                html+='<option value="'+account.id+'">'+account.shopname+' - '+account.name+'</option>';
             }
             html+='</select>';
             html+='</div>';
-            html+='<div class="form-group form-group-default"><label for="modifier">Modificatore</label><input id="modifier" type="text" value="0" aria-label="modifier"/></div>';
-            html+='<div style="display:none" class="form-group form-group-default"><label for="cpc">CPC</label><input id="cpc" type="text" value="0" aria-label="modifier"/></div>';
+            html+=  '<div class="form-group form-group-default selectize-enabled full-width">' +
+                '<label for="typeRetouchPrice">Modifica Prezzo</label>' +
+                '<select class="full-width" placeholder="Seleziona l\'account" ' +
+                'data-init-plugin="selectize" title="" name="typeRetouchPrice" id="typeRetouchPrice" required>' +
+                '<option value="1">Percentuale +</option>'+
+                '<option value="2">Percentuale -</option>'+
+                '<option value="3">Fisso +</option>'+
+                '<option value="4">Fisso -</option>';
+            html+='</select>';
+            html+='</div>';
+            html+='<div class="form-group form-group-default"><label for="amount">Importo</label><input id="amount" type="text" value="0" aria-label="amount"/></div>';
+
 
             body.html($(html));
 
@@ -70,9 +81,9 @@ $(document).on('bs-product-marketplaceprestashop-publish', function (e, element,
                     });
                     let data = {
                         rows: getVarsArray,
-                        account: $('#accountId').val(),
-                        modifier: $('#modifier').val(),
-                        cpc: $('#cpc').val()
+                        account: $('#marketPlaceId').val(),
+                        amount: $('#amount').val(),
+                        typeRetouchPrice: $('#typeRetouchPrice').val()
                     };
                     body.html('<img src="/assets/img/ajax-loader.gif" />');
                     $.ajax({
@@ -94,12 +105,4 @@ $(document).on('bs-product-marketplaceprestashop-publish', function (e, element,
     bsModal.modal();
 });
 
-$(document).on('change','#accountId',function() {
-    //window.x = $(this);
-    $('#modifier').val($(this).find(':selected').data('modifier'));
-    if($(this).find(':selected').data('hasCpc')) {
-        $("#cpc").parent().show();
-    } else {
-        $("#cpc").parent().hide();
-    }
-});
+

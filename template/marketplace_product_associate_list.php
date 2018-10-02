@@ -54,13 +54,11 @@
                                     <th data-slug="fee"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Fee</th>
-                                    <th data-slug="marketplaceAccountName"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Marketplaces</th>
                                     <th data-slug="associatePrestashopMarketPlace"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Prestashop marketPlace</th>
-                                    <th data-slug="typePrice"
+
+                                    <th data-slug="price"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Prezzo</th>
                                     <th data-slug="status"
