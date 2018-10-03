@@ -338,7 +338,7 @@ FROM `Product` `p`
                 $producthasprestashopinsert->productId = $val['productId'];
                 $producthasprestashopinsert->productVariantId = $val['productVariantId'];
                 $producthasprestashopinsert->shopId =$val['prestashopId'];
-                $producthasprestashopinsert->marketplaceId='99';
+                $producthasprestashopinsert->marketplaceId='3';
                 $producthasprestashopinsert->typeRetouchPrice='0';
                 $producthasprestashopinsert->amount='0';
                 $producthasprestashopinsert->prestashopId=$val['prestashopId'];

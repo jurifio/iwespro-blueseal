@@ -141,6 +141,7 @@ $shopsfilter=implode(', ', $shopsId);
                 $row['typePrice']='non applicato';
                 $row['price']='non calcolato';
                 $row['status']='non associato';
+
             }else{
                $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price,mphs.imgMarketPlace as icon
                                           FROM Marketplace m join MarketplaceHasProductAssociate mphpa
