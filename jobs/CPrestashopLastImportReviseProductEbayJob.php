@@ -22,7 +22,7 @@ use bamboo\core\events\AEventListener;
 
 
 /**
- * Class CPrestashopLastImportReviseProductJob
+ * Class CPrestashopLastImportReviseProducEbaytJob
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -34,7 +34,7 @@ use bamboo\core\events\AEventListener;
  * @date 04/10/2018
  * @since 1.0
  */
-class CPrestashopLastImportReviseProductJob extends ACronJob
+class CPrestashopLastImportReviseProductEbayJob extends ACronJob
 {
     /**
      * @param null $args
@@ -79,7 +79,7 @@ class CPrestashopLastImportReviseProductJob extends ACronJob
 
 
 
-        $res="Cancellazione Prodotti   finita alle ore ".date('Y-m-d H:i:s');
+        $res="Aggiornamento Prodotti ebay  finito alle ore ".date('Y-m-d H:i:s');
         $this->report('Clean Prestashop Product Quantity o ',$res,$res);
 
 
