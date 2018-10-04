@@ -62,7 +62,7 @@ class CPrestashopCloseProductEbayJob extends ACronJob
 
         curl_close($ch);
 
-        $url = 'https://iwes.shop/modules/fastbay1/ajax/fastbay1SyncCron.php?s=1&mp=101&token=be8124d84d1ba9e36cc84434373b38f8&close=1';
+        $url = 'https://iwes.shop/modules/fastbay1/ajax/fastbay1SyncCron.php?s=1&mp=101&token=be8124d84d1ba9e36cc84434373b38f8&revisezero=1';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
         curl_setopt($ch, CURLOPT_URL, $url);
