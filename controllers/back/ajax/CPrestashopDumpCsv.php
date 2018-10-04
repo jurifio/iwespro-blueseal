@@ -1989,6 +1989,7 @@ $current_productId=$value_image_product['productId'];
         $errorMsg = curl_error($ch);
         $errorNumber = curl_errno($ch);
         curl_close($ch);
+
         /****sezione per lancio allineamento script su server prestashop*/
 
         $url = 'https://iwes.shop/alignpresta.php';

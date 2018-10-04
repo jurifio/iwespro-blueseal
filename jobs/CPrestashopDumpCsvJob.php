@@ -42,7 +42,6 @@ class CPrestashopDumpCsvJob extends ACronJob
      */
     public function run($args = null)
     {
-
         ini_set('memory_limit', '2048M');
         set_time_limit(0);
 
@@ -238,9 +237,10 @@ class CPrestashopDumpCsvJob extends ACronJob
         /*********************   preparazione tabella di collegamento  ****************************************************//////
         /*** popolamento tabella */
 
-
         $sql = "SELECT
   concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
+  dp.shopId                                                                     as `prestashopId`,
+  mphas.id                                                                      as `marketplaceHasShopId`, 
   p.id                                                                           AS  productId,
   p.productVariantId                                                             AS productVariantId,
   shp.shopId                                                                     AS id_supplier,
@@ -326,22 +326,30 @@ FROM `Product` `p`
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
  left JOIN ProductName pn ON p.id = pn.id
-  WHERE p.qty>0 AND p.productStatusId=6 AND dp.shopId='1'
+  left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
+  WHERE p.qty>0 AND p.productStatusId=6 and mphas.typeSync='0'
   GROUP BY p.id,p.productVariantId 
-  ORDER BY `p`.`id` ASC ";
+  ORDER BY `p`.`id`";
 
 
         /**** esportazione prodotti su ProductHasPrestashop******/
         $product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($product as $val) {
 
-            $producthasprestashop = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $val['productId'], 'productVariantId' => $val['productVariantId']]);
+            $producthasprestashop = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->findOneBy(['productId' => $val['productId'], 'productVariantId' => $val['productVariantId']]);
 
             if (empty($producthasprestashop)) {
-                $producthasprestashopinsert = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->getEmptyEntity();
+                $producthasprestashopinsert = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->getEmptyEntity();
                 $producthasprestashopinsert->productId = $val['productId'];
                 $producthasprestashopinsert->productVariantId = $val['productVariantId'];
-                $producthasprestashopinsert->status = '0';
+                $producthasprestashopinsert->shopId =$val['prestashopId'];
+                $producthasprestashopinsert->marketplaceId='3';
+                $producthasprestashopinsert->typeRetouchPrice='0';
+                $producthasprestashopinsert->amount='0';
+                $producthasprestashopinsert->prestashopId=$val['prestashopId'];
+                $producthasprestashopinsert->statusPublished=0;
+                $producthasprestashopinsert->marketPlaceHasShopId=$val['marketplaceHasShopId'];
+                $producthasprestashopinsert->price=$val['price'];
                 $producthasprestashopinsert->smartInsert();
             }
         }
@@ -350,7 +358,7 @@ FROM `Product` `p`
         /***********************sezione categorie***********************************************************************************/
         /*** estrazione dati  categorie e categorie shop*/
 
-        $sql = "SELECT `id`                                            AS id_category,
+        $sql = " SELECT `id`                                            AS id_category,
          (SELECT   id FROM ProductCategory t2
                       WHERE t2.lft < t1.lft AND t2.rght > t1.rght
                       ORDER BY t2.rght-t1.rght ASC LIMIT 1)
@@ -373,10 +381,10 @@ FROM `Product` `p`
         $i = 0;
         foreach ($res_category as $value_category) {
             $i = $i + 1;
-            if ($value_category['id_category'] === 1) {
+            if ($value_category['id_category'] == "1") {
                 $is_root_category = '1';
             } else {
-                $is_root_category = 0;
+                $is_root_category = $value_category['id_category'];
             }
             $data_category = array(
                 array($value_category['id_category'],
@@ -401,8 +409,11 @@ FROM `Product` `p`
                     1),
                 array($value_category['id_category'],
                     2),
-               array($value_category['id_category'],
+                array($value_category['id_category'],
                     3));
+
+
+
 
 
             foreach ($data_category as $row_category) {
@@ -865,7 +876,8 @@ FROM ProductSizeMacroGroup psmg
         /** esportazione prodotti */
         //query prodotti non esportati
         $sql = "SELECT
-  php.prestaId                                                                   AS prestaId,
+  php.id                                                                   AS prestaId,
+  php.shopId                                                               as prestashopId,
   concat(`p`.`id`,'-',p.productVariantId)                                        AS product_id,
   p.id                                                                           AS  productId,
   p.productVariantId                                                             AS productVariantId,
@@ -941,7 +953,7 @@ FROM ProductSizeMacroGroup psmg
   '0'                                                                            AS depend_on_stock,
   '1'                                                                            AS Warehouse,
   '1'                                                                            AS state,
-  php.status                                                                     AS status
+  php.statusPublished                                                                     AS status
 
 FROM `Product` `p`
   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
@@ -953,13 +965,14 @@ FROM `Product` `p`
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
-  JOIN  PrestashopHasProduct php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
+  JOIN  MarketplaceHasProductAssociate php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   left JOIN ProductName pn ON p.id = pn.id
-WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.status in (0,2) AND dp.shopId='1'
-GROUP BY p.id,p.productVariantId
-ORDER BY `p`.`id` ASC ";
+  left join MarketplaceHasShop mpas on php.shopId=mpas.shopId
+WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2) 
+GROUP BY p.id,p.productVariantId 
+ORDER BY `p`.`id` ";
 
 
 
@@ -1211,7 +1224,7 @@ ORDER BY `p`.`id` ASC ";
                     $value_product['id_supplier'],
                     $value_product['id_manufacturer'],
                     $value_product['id_category_default'],
-                    $value_product['id_shop_default'],
+                    $value_product['prestashopId'],
                     $value_product['id_tax_rules_group'],
                     $value_product['on_sale'],
                     $value_product['online_only'],
@@ -1268,7 +1281,7 @@ ORDER BY `p`.`id` ASC ";
 
             $data_product_shop = array(
                 array($p,
-                    $value_product['id_shop_default'],
+                    $value_product['prestashopId'],
                     $value_product['id_category_default'],
                     $value_product['id_tax_rules_group'],
                     $value_product['on_sale'],
@@ -1315,7 +1328,7 @@ ORDER BY `p`.`id` ASC ";
 
                 $data_product_lang = array(
                     array($p,
-                        '1',
+                        $value_product['prestashopId'],
                         $valuelang,
                         $name_product_lang,
                         $name_product_lang,
@@ -1348,7 +1361,7 @@ ORDER BY `p`.`id` ASC ";
 
                     $data_product_lang = array(
                         array($p,
-                            '1',
+                            $value_product['prestashopId'],
                             $valuelang,
                             $name_product_lang,
                             $name_product_lang,
@@ -1379,7 +1392,7 @@ ORDER BY `p`.`id` ASC ";
 
                 $data_product_lang = array(
                     array($p,
-                        '1',
+                        $value_product['prestashopId'],
                         $valuelang,
                         $name_product_lang,
                         $name_product_lang,
@@ -1414,7 +1427,7 @@ ORDER BY `p`.`id` ASC ";
 
                     $data_product_lang = array(
                         array($p,
-                            '1',
+                            $value_product['prestashopId'],
                             $valuelang,
                             $name_product_lang,
                             $name_product_lang,
@@ -1445,7 +1458,7 @@ ORDER BY `p`.`id` ASC ";
 
                 $data_product_lang = array(
                     array($p,
-                        '1',
+                        $value_product['prestashopId'],
                         $valuelang,
                         $name_product_lang,
                         $name_product_lang,
@@ -1480,7 +1493,7 @@ ORDER BY `p`.`id` ASC ";
 
                     $data_product_lang = array(
                         array($p,
-                            '1',
+                            $value_product['prestashopId'],
                             $valuelang,
                             $name_product_lang,
                             $name_product_lang,
@@ -1516,6 +1529,7 @@ ORDER BY `p`.`id` ASC ";
             foreach ($res_product_attribute as $value_product_attribute) {
                 if (!$exist) {
                     $w = $w + 1;
+
                 } else {
 
                     /**
@@ -1589,9 +1603,9 @@ ORDER BY `p`.`id` ASC ";
                     array($w,
                         $p,
                         $value_product['reference'].'-'.$productSizeId_attribute_combination ,
-                        $value_product['supplier_reference'] ,
+                        $value_product['supplier_reference'],
                         '',
-                        $value_product['productVariantId'].'-'.$productSizeId_attribute_combination,
+                        $value_product['productVariantId'].'-'.$productSizeId_attribute_combination ,
                         $value_product['isbn'],
                         $value_product['upc'],
                         $price,
@@ -1628,7 +1642,7 @@ ORDER BY `p`.`id` ASC ";
                     array($n,
                         $p,
                         $w,
-                        $value_product['id_shop_default'],
+                        $value_product['prestashopId'],
                         '0',
                         $quantity_attribute_combination,
                         '0',
@@ -1654,7 +1668,7 @@ ORDER BY `p`.`id` ASC ";
                 $data_product_attribute_shop = array(
                     array($p,
                         $w,
-                        '1',
+                        $value_product['prestashopId'],
                         $price,
                         $price,
                         $value_product['ecotax'],
@@ -1700,17 +1714,17 @@ ORDER BY `p`.`id` ASC ";
 
         /** sezione immagini */
 
-        $sql = "SELECT php.prestaId AS productId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
-FROM PrestashopHasProduct php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
+        $sql = "SELECT php.id AS productId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
+FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.status = 0 GROUP BY picture  ORDER BY productId ASC";
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.statusPublished = 0 GROUP BY picture  ORDER BY productId ASC";
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $a = 0;
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
-$current_productId=0;
+        $current_productId=0;
         foreach ($image_product as $value_image_product) {
 
             $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
@@ -1722,11 +1736,11 @@ $current_productId=0;
             $prestashopHasProductImageInsert->smartInsert();
 
             // popolamento array immagini con id sequenziale
-if ($current_productId != $value_image_product['productId']){
-    $cover='1';
-}else{
-    $cover='';
-}
+            if ($current_productId != $value_image_product['productId']){
+                $cover='1';
+            }else{
+                $cover='';
+            }
             $data_image = array(
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
@@ -1781,9 +1795,9 @@ if ($current_productId != $value_image_product['productId']){
 
 // popolamento stock magazzino quantità totali per prodotto
         $sql = "
-            SELECT  php.prestaId AS ProductId ,
+            SELECT  php.id AS ProductId ,php.prestashopId,
             sum(pps.stockQty) AS quantity
-            FROM ProductPublicSku pps JOIN PrestashopHasProduct php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId GROUP BY pps.ProductId";
+            FROM ProductPublicSku pps JOIN MarketplaceHasProductAssociate php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId GROUP BY pps.ProductId";
         $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_quantity_stock as $value_quantity_stock) {
             $n = $n + 1;
@@ -1791,7 +1805,7 @@ if ($current_productId != $value_image_product['productId']){
                 array($n,
                     $value_quantity_stock['ProductId'],
                     '0',
-                    '1',
+                    $value_quantity_stock['prestashopId'],
                     '0',
                     $value_quantity_stock['quantity'],
                     $value_quantity_stock['quantity'],
@@ -1980,6 +1994,7 @@ if ($current_productId != $value_image_product['productId']){
         $errorMsg = curl_error($ch);
         $errorNumber = curl_errno($ch);
         curl_close($ch);
+
         /****sezione per lancio allineamento script su server prestashop*/
 
         $url = 'https://iwes.shop/alignpresta.php';
@@ -2007,11 +2022,11 @@ if ($current_productId != $value_image_product['productId']){
 
 
         /**** aggiornamento stato tabella PrestashopHasProduct e  PrestashopHasProductImage  **/
-        $sql = "UPDATE PrestashopHasProduct SET status='1' WHERE status='0'";
+        $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
-        $sql = "UPDATE PrestashopHasProduct SET status='1' WHERE status='2'";
+        $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
