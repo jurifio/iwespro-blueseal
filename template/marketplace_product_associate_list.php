@@ -51,19 +51,14 @@
                                     <th data-slug="dummy"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Immagine</th>
-                                    <th data-slug="fee"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Fee</th>
                                     <th data-slug="associatePrestashopMarketPlace"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Prestashop marketPlace</th>
-
                                     <th data-slug="price"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Prezzo</th>
                                     <th data-slug="status"
                                         data-searchable="true"
-                                        data-is-visible="false"
                                         data-orderable="true" class="center">Stato</th>
                                     <th data-slug="creationDate"
                                         data-searchable="true"

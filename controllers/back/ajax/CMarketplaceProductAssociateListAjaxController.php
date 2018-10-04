@@ -44,8 +44,7 @@ select concat(`p`.`id`,'-',`p`.`productVariantId`) AS `code`,
        if(isnull(mphpa.marketplaceId),'non associato',
           concat(if(mphpa.typeRetouchPrice=1,'importo','percentuale'), ' ',mphpa.amount)
        ) as  typePrice,
-       if(isnull(`mahp`.`marketplaceAccountId`),
-          '',concat_ws(',',if((`mahp`.`isToWork` = 0),'lavorato',''),if((`mahp`.`hasError` = 1),'errore',''),if((`mahp`.`isDeleted` = 1),'cancellato',''))) AS `status`
+      '' as status
 from ((((((((`Product` `p` join `ProductStatus` `ps` on((`p`.`productStatusId` = `ps`.`id`)))
   join `ShopHasProduct` `shp` on(((`p`.`id` = `shp`.`productId`) and (`p`.`productVariantId` = `shp`.`productVariantId`))))
   join `Shop` `s` on((`s`.`id` = `shp`.`shopId`))) join `ProductSeason` `pss` on((`pss`.`id` = `p`.`productSeasonId`)))
@@ -89,7 +88,9 @@ where (((`ps`.`isReady` = 1) and (`p`.`qty` > 0)) or (`m`.`id` is not null))";
                     $marketplaceHasProduct->marketplaceAccount->marketplace->name . ' - ' .
                     $marketplaceHasProduct->marketplaceAccount->name .
                     (empty ($marketplaceHasProduct->marketplaceProductId) ? "" : ' (' . $marketplaceHasProduct->marketplaceProductId . ')</span>');
-
+              //  $row['status'] = $marketplaceHasProduct->isToWork == 0 ? "lavorato" : "".",<br>".
+               // $marketplaceHasProduct->hasError == 1 ? "errore" : "".",<br>".
+               // $marketplaceHasProduct->isDeleted == 1 ? "cancellato" : "";
                 $row['fee'] = $marketplaceHasProduct->fee;
             }
             /** @var CProduct $product */
@@ -125,7 +126,7 @@ where (((`ps`.`isReady` = 1) and (`p`.`qty` > 0)) or (`m`.`id` is not null))";
                 $tr .= "<td>" . $sums['stock'] . "</td>";
             }
             $row["stock"] = '<table class="nested-table"><thead><tr>' . $th . "</tr></thead><tbody>" . $tr . "</tbody></table>";
-$shopsfilter=implode(', ', $shopsId);
+            $shopsfilter=implode(', ', $shopsId);
             $row['shop'] = implode(', ', $shops);
             $row['dummy'] = '<img width="50" src="' . $product->getDummyPictureUrl() . '" />' . $imgs . '<br />';
             $row['itemno'] = '<span class="small">';
@@ -140,10 +141,8 @@ $shopsfilter=implode(', ', $shopsId);
                 $row['associatePrestashopMarketPlace']='non associato';
                 $row['typePrice']='non applicato';
                 $row['price']='non calcolato';
-                $row['status']='non associato';
-
             }else{
-               $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price,mphs.imgMarketPlace as icon
+                $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price,mphs.imgMarketPlace as icon
                                           FROM Marketplace m join MarketplaceHasProductAssociate mphpa
                                           on mphpa.marketplaceId =m.id
                                            join Shop s on mphpa.shopId=s.id
@@ -153,6 +152,7 @@ $shopsfilter=implode(', ', $shopsId);
                                               mphpa.productVariantId = ? 
                                             ORDER BY m.`name`", [$product->id, $product->productVariantId])->fetchAll();
                 $imgMarketPlacePath=\Monkey::app()->baseUrl(FALSE)."/images/imgorder/";
+
                 foreach ($resmarketplacearray as $marketplaces) {
                     switch($marketplaces['typeRetouchPrice']){
                         case 1:
@@ -170,6 +170,9 @@ $shopsfilter=implode(', ', $shopsId);
                         case 4:
                             $typeRetouchPrice="prezzo scontato di Euro ".$marketplaces['amount'];
                             break;
+                        default:
+                            $typeRetouchPrice="non applicato ";
+                            break;
 
                     }
 
@@ -177,20 +180,26 @@ $shopsfilter=implode(', ', $shopsId);
                     $rowtablemarketplace .= "<tr><td><img width='80' src='".$imgMarketPlacePath.$marketplaces['icon']."'</img></td><td>".$marketplaces['nameShop'] ."-". $marketplaces['name'] . "</td><td>".$typeRetouchPrice."</td><td>".$marketplaces['price'] . "</td></tr>";
                 }
                 $row["associatePrestashopMarketPlace"] = '<table class="nested-table"><thead><th colspan="2">MarketPlace</th><th>Tipo ricalcolo</th><th>Prezzo Ricalcolato</th></thead><tbody>' . $rowtablemarketplace . '</tbody></table>';
-                switch($resmarketplaceHasProductAssociate->statusPublished){
-                    case 0:
-                        $row['status']='In Attesa di Pubblicazione';
-                        break;
-                    case 1:
-                        $row['status']='Pubblicato';
-                        break;
-                    case 2:
-                        $row['status']='Allineamento Programmato';
-                        break;
-                    case 3:
-                        $row['status']='Cancellato';
-                        break;
-                }
+              if(null==$resmarketplaceHasProductAssociate->statusPublished){
+                  $row['status']='Da Lavorare';
+              }else {
+                  switch ($resmarketplaceHasProductAssociate->statusPublished) {
+                      case 0:
+                          $row['status'] = 'In Attesa di Pubblicazione';
+                          break;
+                      case 1:
+                          $row['status'] = 'Pubblicato';
+                          break;
+                      case 2:
+                          $row['status'] = 'Allineamento Programmato';
+                          break;
+                      case 3:
+                          $row['status'] = 'Cancellato';
+                          break;
+                      default:
+                          $row['status'] = 'da Lavorare';
+                  }
+              }
             }
             $resprice=\Monkey::app()->repoFactory->create('ProductPublicSku')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
             $row['price']=$resprice->price;
