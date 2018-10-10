@@ -322,7 +322,7 @@ FROM `Product` `p`
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
  left JOIN ProductName pn ON p.id = pn.id
   left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
-  WHERE p.qty>0 AND p.productStatusId=6 and mphas.typeSync='0'
+  WHERE p.qty>0 AND p.productStatusId=6 and mphas.typeSync='0' and S3.price>0
   GROUP BY p.id,p.productVariantId 
   ORDER BY `p`.`id`";
 
@@ -965,7 +965,7 @@ FROM `Product` `p`
  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   left JOIN ProductName pn ON p.id = pn.id
   left join MarketplaceHasShop mpas on php.shopId=mpas.shopId
-WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2) 
+WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2)  and S3.price > 0
 GROUP BY p.id,p.productVariantId 
 ORDER BY `p`.`id` ";
 
