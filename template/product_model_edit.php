@@ -224,46 +224,46 @@
 
 
                                     <?php if($isMultiple): ?>
-                                    <div class="row <?php echo $col; ?>">
-                                        <div class="col-md-12">
-                                            <div class="col-md-6">
-                                            <label>Cerca Categoria modello</label>
-                                            <input type="text" id="prodCat">
-                                            </div>
-                                            <div class="form-group col-md-6 form-group-default">
-                                                <label for="model_pcats">Categorie pre-impostate</label>
-                                                <select type="text" class="form-control prodCats" name="prodCats"
-                                                        id="prodCats" value="">
-                                                </select>
+                                        <div class="row <?php echo $col; ?>">
+                                            <div class="col-md-12">
+                                                <div class="col-md-6">
+                                                    <label>Cerca Categoria modello</label>
+                                                    <input type="text" id="prodCat">
+                                                </div>
+                                                <div class="form-group col-md-6 form-group-default">
+                                                    <label for="model_pcats">Categorie pre-impostate</label>
+                                                    <select type="text" class="form-control prodCats" name="prodCats"
+                                                            id="prodCats" value="">
+                                                    </select>
 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row col-md-6 distinct-option">
-                                        <div class="col-md-6">
-                                            <div class="form-group form-group-default">
-                                                <label for="find-prodCats">Trova (Categorie pre-impostate)</label>
-                                                <input autocomplete="off" type="text" id="find-prodCats"
-                                                       class="form-control find-prodCats"
-                                                       name="find-prodCats"
-                                                       value=""
-                                                >
+                                        <div class="row col-md-6 distinct-option">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label for="find-prodCats">Trova (Categorie pre-impostate)</label>
+                                                    <input autocomplete="off" type="text" id="find-prodCats"
+                                                           class="form-control find-prodCats"
+                                                           name="find-prodCats"
+                                                           value=""
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label for="sub-prodCats">Sostituisci (Categorie pre-impostate)</label>
+                                                    <input autocomplete="off" type="text" id="sub-prodCats"
+                                                           class="form-control sub-prodCats" name="sub-prodCats"
+                                                           value=""
+                                                    >
+                                                </div>
+                                                <div>
+                                                    <label for="keepcatphoto">Mantieni la foto della categoria</label>
+                                                    <input type="checkbox" id="keepcatphoto" name="keepcatphoto">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group form-group-default">
-                                                <label for="sub-prodCats">Sostituisci (Categorie pre-impostate)</label>
-                                                <input autocomplete="off" type="text" id="sub-prodCats"
-                                                       class="form-control sub-prodCats" name="sub-prodCats"
-                                                       value=""
-                                                >
-                                            </div>
-                                            <div>
-                                                <label for="keepcatphoto">Mantieni la foto della categoria</label>
-                                                <input type="checkbox" id="keepcatphoto" name="keepcatphoto">
-                                            </div>
-                                        </div>
-                                    </div>
                                         <div class="row col-md-6 distinct-option">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
@@ -294,12 +294,7 @@
                                         <div class="row <?php echo $col; ?>">
                                             <div class="col-md-12">
                                                 <div class="JSON-pcats"
-                                                    style="display: none">
-                                                    <?php  if ($prodCats==null){
-                                                        '';
-                                                    }else{
-                                                        echo $prodCats;
-                                                    } ?></div>
+                                                     style="display: none"><?php echo $prodCats; ?></div>
                                                 <div class="form-group form-group-default">
                                                     <label for="model_pcats">Categorie pre-impostate</label>
                                                     <select type="text" class="form-control prodCats" name="prodCats"
@@ -362,49 +357,49 @@
                             echo 'block';
                         } ?>">
                             <?php if ($isMultiple): ?>
-                            <input type="hidden" id="pIDHidden">
-                            <div class="new-c-det">
-                                <div class="row finding distinct-option" id="finding-0" data-number="0">
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default">
-                                            <label for="find-detail-0">Seleziona etichetta</label>
-                                            <select class="form-control findDetails" name="find-detail-0"
-                                                    id="find-detail-0">
-                                            </select>
+                                <input type="hidden" id="pIDHidden">
+                                <div class="new-c-det">
+                                    <div class="row finding distinct-option" id="finding-0" data-number="0">
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default">
+                                                <label for="find-detail-0">Seleziona etichetta</label>
+                                                <select class="form-control findDetails" name="find-detail-0"
+                                                        id="find-detail-0">
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <p id="sectedDetailsList-0"></p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p id="sectedDetailsList-0"></p>
+                                        <div class="form-group form-group-default col-md-3">
+                                            <label for="find-detail-value-0">Trova (Dettaglio)</label>
+                                            <input autocomplete="off" type="text" id="find-detail-value-0"
+                                                   class="form-control" name="find-detail-value-0"
+                                                   value="">
                                         </div>
-                                    </div>
-                                    <div class="form-group form-group-default col-md-3">
-                                        <label for="find-detail-value-0">Trova (Dettaglio)</label>
-                                        <input autocomplete="off" type="text" id="find-detail-value-0"
-                                               class="form-control" name="find-detail-value-0"
-                                               value="">
-                                    </div>
-                                    <div class="form-group form-group-default col-md-3">
-                                        <label for="sub-detail-value-0">Sostituisci (Dettaglio)</label>
-                                        <input autocomplete="off" type="text" id="sub-detail-value-0"
-                                               class="form-control" name="sub-detail-value-0"
-                                               value="">
-                                    </div>
-                                    <div class="text-center col-md-3">
-                                    <p class="btn-success remove-change-detail"
-                                       style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px"
-                                       id="remove-0">ELIMINA DETTAGLIO</p>
-                                        <div style="display: block">
-                                            <label for="delDetail-0">Cancella il dettaglio nel clone</label>
-                                            <input id="delDetail-0" name="delDetail-0" data-labelid="" class="delDetail" type="checkbox">
+                                        <div class="form-group form-group-default col-md-3">
+                                            <label for="sub-detail-value-0">Sostituisci (Dettaglio)</label>
+                                            <input autocomplete="off" type="text" id="sub-detail-value-0"
+                                                   class="form-control" name="sub-detail-value-0"
+                                                   value="">
                                         </div>
-                                    </div>
+                                        <div class="text-center col-md-3">
+                                            <p class="btn-success remove-change-detail"
+                                               style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px"
+                                               id="remove-0">ELIMINA DETTAGLIO</p>
+                                            <div style="display: block">
+                                                <label for="delDetail-0">Cancella il dettaglio nel clone</label>
+                                                <input id="delDetail-0" name="delDetail-0" data-labelid="" class="delDetail" type="checkbox">
+                                            </div>
+                                        </div>
 
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <p class="btn-success"
-                                   style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px"
-                                   id="add-change-details">AGGIUNGI DETTAGLIO</p>
-                            </div>
+                                <div>
+                                    <p class="btn-success"
+                                       style="display: inline-block; cursor: pointer; padding: 5px; border-radius: 7px"
+                                       id="add-change-details">AGGIUNGI DETTAGLIO</p>
+                                </div>
                             <?php endif; ?>
                             <div style="display:none"
                                  id="productDetailsStorage"><?php echo json_encode($productDetails); ?></div>

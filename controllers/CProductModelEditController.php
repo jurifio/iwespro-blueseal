@@ -102,6 +102,8 @@ class CProductModelEditController extends CProductManageController
             'isMultiple' => $isMultiple,
             'productDetails' => $productDetails,
             'isUpdated' => $isUpdate
+
+
         ]);
     }
 }
