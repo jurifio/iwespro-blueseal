@@ -1608,6 +1608,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/marketplace/associate(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasProductAssociateListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/marketplace/lista-marketplace-shop(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasShopListController"
