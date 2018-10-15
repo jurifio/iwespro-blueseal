@@ -87,7 +87,7 @@ class CProductModelEditController extends CProductManageController
 
             $prodCats[$iprodCat]=[];
             $prodCats[$iprodCat]['id']=$prodC->id;
-            $prodCats[$iprodCat]['name']=$prodC->name;
+            $prodCats[$iprodCat]['name'] = trim($this->app->categoryManager->categories()->getStringPath($prodC->id," "));
 
 
         }
