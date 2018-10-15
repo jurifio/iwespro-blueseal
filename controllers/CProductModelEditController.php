@@ -80,7 +80,7 @@ class CProductModelEditController extends CProductManageController
             $materials[$iMat]['name'] = $mat->name;
             $iMat++;
         }
-        $ProdCat=\Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup')->findAll();
+        $ProdCat=\Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup')->findAll();
         $prodCats=[];
         $iprodCat=0;
         foreach ($ProdCat as $pcat){
