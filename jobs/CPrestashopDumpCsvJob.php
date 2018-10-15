@@ -484,8 +484,8 @@ ORDER BY id_category,(rght-lft) DESC";
 
 
         $sql = "SELECT phpc.productCategoryId AS id_category,
-             pap.prestaId AS id_product, '0' AS position
-             FROM ProductHasProductCategory phpc JOIN PrestashopHasProduct pap ON phpc.productId =pap.productId AND phpc.productVariantId = pap.productVariantId ORDER BY id_category";
+             pap.id AS id_product, '0' AS position
+             FROM ProductHasProductCategory phpc JOIN MarketplaceHasProductAssociate pap ON phpc.productId =pap.productId AND phpc.productVariantId = pap.productVariantId ORDER BY id_category";
         fputcsv($category_product_csv, array('id_category', 'id_product', 'position'), ';');
         $res_category_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_category_product as $value_category_product) {
