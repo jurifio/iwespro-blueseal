@@ -20,7 +20,7 @@ use bamboo\domain\entities\CShipment;
  */
 class CGlsItalyHandler extends ACarrierHandler
 {
-
+    
     protected $config = [
         'endpoint' => 'https://weblabeling.gls-italy.com/IlsWebService.asmx',
         'SedeGls' => 'MC',

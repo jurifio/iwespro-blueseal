@@ -294,7 +294,12 @@
                                         <div class="row <?php echo $col; ?>">
                                             <div class="col-md-12">
                                                 <div class="JSON-pcats"
-                                                    style="display: none"><?php echo $prodCats; ?></div>
+                                                    style="display: none">
+                                                    <?php  if ($prodCats==null){
+                                                        '';
+                                                    }else{
+                                                        echo $prodCats;
+                                                    } ?></div>
                                                 <div class="form-group form-group-default">
                                                     <label for="model_pcats">Categorie pre-impostate</label>
                                                     <select type="text" class="form-control prodCats" name="prodCats"
