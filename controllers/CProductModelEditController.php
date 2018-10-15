@@ -83,11 +83,11 @@ class CProductModelEditController extends CProductManageController
         $ProdCat=\Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup')->findAll();
         $prodCats=[];
         $iprodCat=0;
-        foreach ($ProdCat as $prodC){
+        foreach ($ProdCat as $pcat){
 
             $prodCats[$iprodCat]=[];
-            $prodCats[$iprodCat]['id']=$prodC->id;
-            $prodCats[$iprodCat]['name'] = trim($this->app->categoryManager->categories()->getStringPath($prodC->id," "));
+            $prodCats[$iprodCat]['id']=$pcat->id;
+            $prodCats[$iprodCat]['name'] =$pcat->name;
 
 
         }
