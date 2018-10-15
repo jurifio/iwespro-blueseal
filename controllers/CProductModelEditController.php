@@ -80,7 +80,17 @@ class CProductModelEditController extends CProductManageController
             $materials[$iMat]['name'] = $mat->name;
             $iMat++;
         }
+        $ProdCat=\Monkey::app()->repoFactory->create('ProductSheetModelPrototypeMacroCategoryGroup')->findAll();
+        $prodCats=[];
+        $iprodCat=0;
+        foreach ($ProdCat as $prodC){
 
+            $prodCats[$iprodCat]=[];
+            $prodCats[$iprodCat]['id']=$prodC->id;
+            $prodCats[$iprodCat]['name']=$prodC->name;
+
+
+        }
 
 
         foreach ($productDetailsCollection as $detail) {
@@ -101,7 +111,8 @@ class CProductModelEditController extends CProductManageController
             'sidebar' => $this->sidebar->build(),
             'isMultiple' => $isMultiple,
             'productDetails' => $productDetails,
-            'isUpdated' => $isUpdate
+            'isUpdated' => $isUpdate,
+            'prodCats'=>json_encode($prodCats)
 
 
         ]);
