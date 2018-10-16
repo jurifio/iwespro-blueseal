@@ -1809,8 +1809,8 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                     $value_quantity_stock['prestashopId'],
                     '0',
                     $value_quantity_stock['quantity'],
-                    $value_quantity_stock['quantity'],
-                    $value_quantity_stock['quantity'],
+                   '0',
+                    '0',
                     '0',
                     '0'));
             foreach ($data_quantity_stock_available as $row_quantity_stock_available) {
