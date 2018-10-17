@@ -56,6 +56,7 @@ class CProductBatchRepo extends ARepo
             $productBatch->value = $value;
             $productBatch->contractDetailsId = $contractDetailsId;
             $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCodeId);
+            $productBatch->isUnassigned = 0;
             $productBatch->smartInsert();
 
             /** @var CProductBatchDetailsRepo $productBatchDetailsRepo */
@@ -174,6 +175,7 @@ class CProductBatchRepo extends ARepo
         $productBatch->contractDetailsId = $contractDetailsId;
         $productBatch->sectional = $sectionalRepo->createNewSectionalCode($sectionalCodeId);
         $productBatch->marketplace = 0;
+        $productBatch->isUnassigned = 0;
         $productBatch->confirmationDate = date_format($date, 'Y-m-d H:i:s');
         $productBatch->tolleranceDelivery = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($schedDelivery), 5)->format('Y-m-d 23:59:59');
         $productBatch->update();

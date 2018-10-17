@@ -48,6 +48,7 @@ class CBookingWorkManage extends AAjaxController
         $pb->confirmationDate = date_format($date, 'Y-m-d H:i:s');
         $pb->scheduledDelivery = $schedDelivery;
         $pb->tolleranceDelivery = SDateToolbox::GetDateAfterAddedDays(STimeToolbox::GetDateTime($schedDelivery), 5)->format('Y-m-d 23:59:59');
+        $pb->isUnassigned = 0;
         $pb->update();
 
         $items = count($pb->getElements());
