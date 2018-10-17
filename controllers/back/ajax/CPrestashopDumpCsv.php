@@ -460,12 +460,12 @@ ORDER BY id_category,(rght-lft) DESC";
                 array($value_category_lang['id_category'],
                     $value_category_lang['id_shop_default'],
                     $id_lang,
-                    htmlentities($value_category_lang['name'], ENT_QUOTES),
-                    htmlentities($value_category_lang['description'], ENT_QUOTES),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',htmlentities($value_category_lang['name'], ENT_QUOTES)),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',htmlentities($value_category_lang['description'], ENT_QUOTES)),
                     $value_category_lang['link_rewrite'],
-                    htmlentities($value_category_lang['meta_title'], ENT_QUOTES),
-                    htmlentities($value_category_lang['meta_keywords'], ENT_QUOTES),
-                    htmlentities($value_category_lang['meta_description'], ENT_QUOTES)));
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',htmlentities($value_category_lang['meta_title'], ENT_QUOTES)),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',htmlentities($value_category_lang['meta_keywords'], ENT_QUOTES)),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',htmlentities($value_category_lang['meta_description'], ENT_QUOTES))));
             foreach ($data_category_lang as $row_category_lang) {
                 fputcsv($category_lang_csv, $row_category_lang, ';');
             }
@@ -1314,7 +1314,7 @@ ORDER BY `p`.`id` ";
 
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'2']);
             if ($res_product_lang->isEmpty()) {
-                str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES ));
+                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES )));
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
@@ -1325,13 +1325,13 @@ ORDER BY `p`.`id` ";
                     array($p,
                         $value_product['prestashopId'],
                         $valuelang,
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
                         $value_product['product_id'],
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
                         $in_stock,
                         $current_supply,
                         $product_available,
@@ -1344,7 +1344,7 @@ ORDER BY `p`.`id` ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES ));
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES )));
 
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
@@ -1358,13 +1358,13 @@ ORDER BY `p`.`id` ";
                         array($p,
                             $value_product['prestashopId'],
                             $valuelang,
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
                             $value_product['product_id'],
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
                             $in_stock,
                             $current_supply,
                             $product_available,
@@ -1378,7 +1378,7 @@ ORDER BY `p`.`id` ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
             if ($res_product_lang->isEmpty()) {
-                str_replace("'"," ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES));
+                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES)));
                 $in_stock = "in Vendita";
                 $current_supply = 'In magazzino. ordinabile';
                 $product_available = 'Consegna in 3-4 Giorni Lavorati';
@@ -1389,13 +1389,13 @@ ORDER BY `p`.`id` ";
                     array($p,
                         $value_product['prestashopId'],
                         $valuelang,
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
                         $value_product['product_id'],
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
                         $in_stock,
                         $current_supply,
                         $product_available,
@@ -1408,7 +1408,7 @@ ORDER BY `p`.`id` ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES));
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES)));
 
 
                     $in_stock = "in Vendita";
@@ -1424,13 +1424,13 @@ ORDER BY `p`.`id` ";
                         array($p,
                             $value_product['prestashopId'],
                             $valuelang,
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
                             $value_product['product_id'],
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",$name_product_lang)),
                             $in_stock,
                             $current_supply,
                             $product_available,
@@ -1444,7 +1444,7 @@ ORDER BY `p`.`id` ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'3']);
             if ($res_product_lang->isEmpty()) {
-                str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES));
+                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES)));
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
@@ -1455,13 +1455,13 @@ ORDER BY `p`.`id` ";
                     array($p,
                         $value_product['prestashopId'],
                         $valuelang,
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
                         $value_product['product_id'],
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
-                        str_replace("'"," ",$name_product_lang),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                        iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
                         $in_stock,
                         $current_supply,
                         $product_available,
@@ -1474,7 +1474,7 @@ ORDER BY `p`.`id` ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES));
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES)));
 
 
                     $in_stock = "in stock";
@@ -1490,13 +1490,13 @@ ORDER BY `p`.`id` ";
                         array($p,
                             $value_product['prestashopId'],
                             $valuelang,
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
                             $value_product['product_id'],
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
-                            str_replace("'"," ",$name_product_lang),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",$name_product_lang)),
                             $in_stock,
                             $current_supply,
                             $product_available,
