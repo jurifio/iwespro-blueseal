@@ -1992,7 +1992,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         curl_close($ch);
 
         /****sezione per lancio allineamento script su server prestashop*/
-/*
+
         $url = 'https://iwes.shop/alignpresta.php';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
@@ -2011,7 +2011,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         $result = curl_exec($ch);
 
 
-        curl_close($ch);*/
+        curl_close($ch);
 
 
 
