@@ -40,6 +40,7 @@ class CManageProductSkuEan extends AAjaxController
     foreach ($psC as $ps){
         $r[$c]['sizeId'] = $ps->productSizeId;
         $r[$c]['sizeName'] = $ps->productSize->name;
+        $r[$c]['ean'] = $ps->ean;
         $c++;
     }
 

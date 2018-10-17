@@ -39,7 +39,7 @@ $(document).on('bs-ean-update', function () {
         data: dataG
     }).done(function (data) {
         $.each(data, function (k, v) {
-            insert += `<div><label style="margin-right: 10px" for="ean">Taglia: ${v['sizeName']}</label><input type="text" data-sizeId="${v['sizeId']}" class="ean"></div>`;
+            insert += `<div><label style="margin-right: 10px" for="ean">Taglia: ${v['sizeName']}</label><input type="text" data-sizeId="${v['sizeId']}" value="${v['ean']}" class="ean"></div>`;
         });
 
         $("#size").append(insert);
