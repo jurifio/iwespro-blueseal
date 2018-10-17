@@ -808,7 +808,7 @@ FROM ProductSizeMacroGroup psmg
             $data_feature_lang = array(
                 array($value_feature_lang['id_feature'],
                     $LAN,
-                    $value_feature_lang['name']));
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',$value_feature_lang['name'])));
             foreach ($data_feature_lang as $row_feature_lang) {
                 fputcsv($feature_lang_csv, $row_feature_lang, ';');
 
