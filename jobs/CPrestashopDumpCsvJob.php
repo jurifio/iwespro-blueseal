@@ -259,9 +259,9 @@ class CPrestashopDumpCsvJob extends ACronJob
   '1'                                                                            AS minimal_quantity,
   '1'                                                                            AS low_stock_threshold,
   '0'                                                                            AS low_stock_alert,
-  if (p.isOnSale=1,format(S3.salePrice,2),format(S3.price,2))        AS price,
+ if (p.isOnSale=1,format(S3.salePrice*0.8196,2),format(S3.price*0.8196,2))                 AS price,
   
-  FORMAT(shp.price/100*70 ,2)                                                    AS wholesale_price,
+  FORMAT(S3.price/100*70 ,2)                                                    AS wholesale_price,
   '0'                                                                             AS unity,
   '0.000000'  AS unit_price_ratio,
   concat(p.id,'-',p.productVariantId)                                            AS reference,
@@ -898,8 +898,8 @@ FROM ProductSizeMacroGroup psmg
   '1'                                                                            AS minimal_quantity,
   '1'                                                                            AS low_stock_threshold,
   '0'                                                                            AS low_stock_alert,
-  if (p.isOnSale=1,format(S3.salePrice,2),format(S3.price,2))    AS price,
-  FORMAT(shp.price/100*70 ,2)                                                    AS wholesale_price,
+  if (p.isOnSale=1,format(S3.salePrice*0.8196,2),format(S3.price*0.8196,2))                 AS price,                  
+  FORMAT((S3.price/100)*70 ,2)                                                    AS wholesale_price,
   '0'                                                                            AS unity,
   '0.000000'                                                                     AS unit_price_ratio,
   concat(p.id,'-',p.productVariantId)                                            AS reference,
@@ -2031,6 +2031,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
+
 
         $res="esportazione eseguita file ".$pharfile."  finita alle ore ".date('Y-m-d H:i:s');
         $this->report('Exporting to Prestashop ',$res,$res);
