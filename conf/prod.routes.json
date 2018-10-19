@@ -1674,6 +1674,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/modelli/support(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelListSupportController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/modelli/lista-gestione-cat(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelCategoryController"
