@@ -256,7 +256,7 @@ class CPrestashopDumpCsv extends AAjaxController
   '0'                                                                            AS low_stock_alert,
  if (p.isOnSale=1,format(S3.salePrice*0.8196,2),format(S3.price*0.8196,2))                 AS price,
   
-  FORMAT(S3.price/100*70 ,2)                                                    AS wholesale_price,
+  '0.000000'                                                   AS wholesale_price,
   '0'                                                                             AS unity,
   '0.000000'  AS unit_price_ratio,
   concat(p.id,'-',p.productVariantId)                                            AS reference,
@@ -894,7 +894,7 @@ FROM ProductSizeMacroGroup psmg
   '1'                                                                            AS low_stock_threshold,
   '0'                                                                            AS low_stock_alert,
   if (p.isOnSale=1,format(S3.salePrice*0.8196,2),format(S3.price*0.8196,2))                 AS price,                  
-  FORMAT((S3.price/100)*70 ,2)                                                    AS wholesale_price,
+  '0.000000'                                                   AS wholesale_price,
   '0'                                                                            AS unity,
   '0.000000'                                                                     AS unit_price_ratio,
   concat(p.id,'-',p.productVariantId)                                            AS reference,
