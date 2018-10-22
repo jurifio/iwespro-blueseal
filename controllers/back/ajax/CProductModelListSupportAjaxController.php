@@ -43,7 +43,7 @@ class CProductModelListSupportAjaxController extends AAjaxController
         $datatable->doAllTheThings();
 
         $psmpR = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype');
-
+        $modifica = $this->app->baseUrl(false)."/blueseal/prodotti/modelli/modifica";
         foreach ($datatable->getResponseSetData() as $key=>$row) {
             
             $val = $psmpR->findOne([$row['id']]);
@@ -52,6 +52,8 @@ class CProductModelListSupportAjaxController extends AAjaxController
             $row["DT_RowId"] = 'row__'.$val->id;
             $row["id"] = $val->id;
             $row['code'] = $val->code;
+            $row['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$modifica.'?id='.$val->id.'">'.$val->code.'</a><br />';
+            $row['code'].= '<span class="small">(<a data-toggle="tooltip" title="Usa come modello" data-placement="right" href="'.$modifica.'?modelId='.$val->id.'">Usa come modello</a>)</span><br />';
             $row['name'] = $val->name;
             $row['productName'] = $val->productName;
             $row['prototypeName'] = $val->productSheetPrototype->name;
