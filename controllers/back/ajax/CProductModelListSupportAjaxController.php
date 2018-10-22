@@ -48,8 +48,8 @@ class CProductModelListSupportAjaxController extends AAjaxController
             
             $val = $psmpR->findOne([$row['id']]);
 
+
             $row["DT_RowId"] = 'row__'.$val->id;
-            $row["DT_RowClass"] = 'colore';
             $row["id"] = $val->id;
             $row['code'] = $val->code;
             $row['name'] = $val->name;

@@ -74,7 +74,7 @@ class CProductModelListAjaxController extends AAjaxController
                   left join `ProductCategoryTranslation` `pct` on((`pct`.`productCategoryId` = `pc`.`id`))
                   left join `ProductSheetModelPrototypeCategoryGroup` `pspcg` ON `p`.`categoryGroupId` = `pspcg`.`id`
                   left join `ProductSheetModelPrototypeGender` `pspg` ON `p`.`genderId` = `pspg`.`id`
-                  left join `ProductSheetModelPrototypeMaterial` `pspm` ON `p`.`genderId` = `pspm`.`id`
+                  left join `ProductSheetModelPrototypeMaterial` `pspm` ON `p`.`materialId` = `pspm`.`id`
                   )
                   where ((`pct`.`langId` = 1) and (`pdt`.`langId` = 1) AND `p`.`isVisible` = 1) group by `p`.`id`";
 

@@ -36,7 +36,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         } else {
                             if('updated' == res['status']){
                                 body = res['productSheetModelPrototypeId'] + '</br>' + res["message"];
-                                location = '/blueseal/prodotti/modelli';
+                                location = '/blueseal/prodotti/modelli/support';
                             }
                         }
                     }

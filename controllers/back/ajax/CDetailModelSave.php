@@ -29,6 +29,8 @@ use bamboo\domain\repositories\CProductDetailRepo;
  * @since ${VERSION}
  */
 class CDetailModelSave extends AAjaxController
+/** fixme | Quando c'è tempo testare l'orm per l'aggiornamento della tabella di supporto e verficare se impiega troppo tempo */
+
 {
     public function get()
     {
@@ -72,14 +74,15 @@ class CDetailModelSave extends AAjaxController
                     $newProt->note = $get['note'];
                 }
 
-
                 $newId = $newProt->insert();
+
+
 
                 $this->saveCats($get['categories'], $newId);
 
                 $this->insertDetails($productDetails, $newId, $productPrototypeId);
+                $this->alignSupportAfterInsert($newId);
                 \Monkey::app()->repoFactory->commit();
-
                 return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => $newId]);
             } catch (\Throwable $e) {
                 \Monkey::app()->repoFactory->rollback();
@@ -298,6 +301,7 @@ class CDetailModelSave extends AAjaxController
 
                     \Monkey::app()->repoFactory->commit();
 
+                    $this->alignSupportAfterInsert($newId);
                 } catch (\Throwable $e) {
                     \Monkey::app()->repoFactory->rollback();
                     $mes .= '<br><br>'.$e->getMessage();
@@ -307,6 +311,41 @@ class CDetailModelSave extends AAjaxController
 
 
         }
+
+    }
+
+    private function alignSupportAfterInsert($protId){
+
+        $sql = "INSERT INTO ProductSheetModelPrototypeSupport (id, modelCode, modelName, productName, prototypeName, categoryName, details, catGroupName, gendName, matName)
+          SELECT * FROM (
+          SELECT `p`.`id` AS `id`,
+                 `p`.`code` AS `code`,
+                 `p`.`name` AS `name`,
+                 `p`.`productName` AS `productName`,
+                 `psp`.`name` AS `prototypeName`,
+                 group_concat(DISTINCT `pct`.`name` SEPARATOR ',') AS `categories`,
+                 group_concat(DISTINCT concat(`pdlt`.`name`,': ', `pdt`.`name`) SEPARATOR ', ') AS `labels`,
+                 `pspcg`.`name` AS `catGroupName`,
+                 `pspg`.`name` AS `gendName`,
+                 `pspm`.`name` AS `matName`
+          FROM (((((((((`ProductSheetModelPrototype` `p`
+            LEFT JOIN `ProductSheetPrototype` `psp` ON((`p`.`productSheetPrototypeId` = `psp`.`id`)))
+            LEFT JOIN `ProductSheetModelActual` `a` ON((`p`.`id` = `a`.`productSheetModelPrototypeId`)))
+            LEFT JOIN `ProductDetailLabel` `pdl` ON((`a`.`productDetailLabelId` = `pdl`.`id`)))
+            LEFT JOIN `ProductDetailLabelTranslation` `pdlt` ON((`pdlt`.`productDetailLabelId` = `pdl`.`id`)))
+            LEFT JOIN `ProductDetail` `pd` ON((`pd`.`id` = `a`.`productDetailId`)))
+            LEFT JOIN `ProductDetailTranslation` `pdt` ON((`pdt`.`productDetailId` = `pd`.`id`)))
+            LEFT JOIN `ProductSheetModelPrototypeHasProductCategory` `php` ON((`php`.`productSheetModelPrototypeId` = `p`.`id`)))
+            LEFT JOIN `ProductCategory` `pc` ON((`pc`.`id` = `php`.`productCategoryId`)))
+            LEFT JOIN `ProductCategoryTranslation` `pct` ON((`pct`.`productCategoryId` = `pc`.`id`))
+            LEFT JOIN `ProductSheetModelPrototypeCategoryGroup` `pspcg` ON `p`.`categoryGroupId` = `pspcg`.`id`
+            LEFT JOIN `ProductSheetModelPrototypeGender` `pspg` ON `p`.`genderId` = `pspg`.`id`
+            LEFT JOIN `ProductSheetModelPrototypeMaterial` `pspm` ON `p`.`materialId` = `pspm`.`id`
+          )
+          WHERE ((`pct`.`langId` = 1) AND (`pdt`.`langId` = 1) AND `p`.`isVisible` = 1 AND `p`.id = ?) GROUP BY `p`.`id`) t1";
+
+
+        \Monkey::app()->dbAdapter->query($sql, [$protId]);
 
 
     }
@@ -358,6 +397,7 @@ class CDetailModelSave extends AAjaxController
                 $this->insertDetails($productDetails, $prot->id, $prot->productSheetPrototypeId);
 
                 $this->saveCats($get['categories'], $prot->id);
+                $this->alignSupportAfterUdate($prot->id);
                 \Monkey::app()->repoFactory->commit();
             } catch (\Throwable $e) {
                 \Monkey::app()->repoFactory->rollback();
@@ -473,6 +513,7 @@ class CDetailModelSave extends AAjaxController
 
                     if (isset($get['materials'])) $psmp->materialId = $get['materials'];
                     if (isset($get['note'])) $psmp->note = $get['note'];
+
                     $psmp->update();
 
                     if ($get['Product_dataSheet'] != $model['productSheetPrototypeId']) {
@@ -553,6 +594,7 @@ class CDetailModelSave extends AAjaxController
                     }
 
                     $newIds[] = $psmp->id;
+                    $this->alignSupportAfterUdate($psmp->id);
                     \Monkey::app()->repoFactory->commit();
                 } catch (\Throwable $e) {
                     \Monkey::app()->repoFactory->rollback();
@@ -562,6 +604,53 @@ class CDetailModelSave extends AAjaxController
             return json_encode(['status' => 'updated', 'productSheetModelPrototypeId' => json_encode($newIds),  'message' => json_encode($mes)]);
 
         }
+    }
+
+    private function alignSupportAfterUdate($protId){
+
+        $sql = "UPDATE ProductSheetModelPrototypeSupport,
+
+  ( SELECT `p`.`id` AS `id`,
+           `p`.`code` AS `code`,
+           `p`.`name` AS `name`,
+           `p`.`productName` AS `productName`,
+           `psp`.`name` AS `prototypeName`,
+           group_concat(DISTINCT `pct`.`name` SEPARATOR ',') AS `categories`,
+           group_concat(DISTINCT concat(`pdlt`.`name`,': ', `pdt`.`name`) SEPARATOR ', ') AS `labels`,
+           `pspcg`.`name` AS `catGroupName`,
+           `pspg`.`name` AS `gendName`,
+           `pspm`.`name` AS `matName`
+    FROM (((((((((`ProductSheetModelPrototype` `p`
+      LEFT JOIN `ProductSheetPrototype` `psp` ON((`p`.`productSheetPrototypeId` = `psp`.`id`)))
+      LEFT JOIN `ProductSheetModelActual` `a` ON((`p`.`id` = `a`.`productSheetModelPrototypeId`)))
+      LEFT JOIN `ProductDetailLabel` `pdl` ON((`a`.`productDetailLabelId` = `pdl`.`id`)))
+      LEFT JOIN `ProductDetailLabelTranslation` `pdlt` ON((`pdlt`.`productDetailLabelId` = `pdl`.`id`)))
+      LEFT JOIN `ProductDetail` `pd` ON((`pd`.`id` = `a`.`productDetailId`)))
+      LEFT JOIN `ProductDetailTranslation` `pdt` ON((`pdt`.`productDetailId` = `pd`.`id`)))
+      LEFT JOIN `ProductSheetModelPrototypeHasProductCategory` `php` ON((`php`.`productSheetModelPrototypeId` = `p`.`id`)))
+      LEFT JOIN `ProductCategory` `pc` ON((`pc`.`id` = `php`.`productCategoryId`)))
+      LEFT JOIN `ProductCategoryTranslation` `pct` ON((`pct`.`productCategoryId` = `pc`.`id`))
+      LEFT JOIN `ProductSheetModelPrototypeCategoryGroup` `pspcg` ON `p`.`categoryGroupId` = `pspcg`.`id`
+      LEFT JOIN `ProductSheetModelPrototypeGender` `pspg` ON `p`.`genderId` = `pspg`.`id`
+      LEFT JOIN `ProductSheetModelPrototypeMaterial` `pspm` ON `p`.`materialId` = `pspm`.`id`
+    )
+    WHERE ((`pct`.`langId` = 1) AND (`pdt`.`langId` = 1) AND `p`.`isVisible` = 1 AND `p`.id = $protId)) t1
+SET
+  ProductSheetModelPrototypeSupport.modelCode = `t1`.`code`,
+  ProductSheetModelPrototypeSupport.modelName = `t1`.`name`,
+  ProductSheetModelPrototypeSupport.productName = `t1`.`productName`,
+  ProductSheetModelPrototypeSupport.prototypeName = `t1`.`prototypeName`,
+  ProductSheetModelPrototypeSupport.categoryName = `t1`.categories,
+  ProductSheetModelPrototypeSupport.details = `t1`.labels,
+  ProductSheetModelPrototypeSupport.catGroupName = `t1`.`catGroupName`,
+  ProductSheetModelPrototypeSupport.gendName = `t1`.`gendName`,
+  ProductSheetModelPrototypeSupport.matName = `t1`.`matName`
+WHERE ProductSheetModelPrototypeSupport.id = $protId;";
+
+
+        \Monkey::app()->dbAdapter->query($sql, []);
+
+
     }
 
     /**

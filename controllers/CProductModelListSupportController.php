@@ -23,11 +23,11 @@ class CProductModelListSupportController extends ARestrictedAccessRootController
     protected $fallBack = "blueseal";
     protected $pageSlug = "product_model_list_support";
 
+
     public function get()
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_model_list_support.php');
-
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
