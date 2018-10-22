@@ -233,9 +233,9 @@ class CPrestashopDumpCsv extends AAjaxController
         /*** popolamento tabella */
 
         $sql = "SELECT
-  concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
-  dp.shopId                                                                     as `prestashopId`,
-  mphas.id                                                                      as `marketplaceHasShopId`, 
+  php.id                                                                         AS prestaId,
+  php.shopId                                                                     AS prestashopId,
+  concat(`p`.`id`,'-',p.productVariantId)                                        AS product_id,
   p.id                                                                           AS  productId,
   p.productVariantId                                                             AS productVariantId,
   shp.shopId                                                                     AS id_supplier,
@@ -254,33 +254,38 @@ class CPrestashopDumpCsv extends AAjaxController
   '1'                                                                            AS minimal_quantity,
   '1'                                                                            AS low_stock_threshold,
   '0'                                                                            AS low_stock_alert,
- if (p.isOnSale=1,format(S3.salePrice*0.8196,2),format(S3.price*0.8196,2))                 AS price,
-  
-  '0.000000'                                                   AS wholesale_price,
-  '0'                                                                             AS unity,
-  '0.000000'  AS unit_price_ratio,
+  S3.price * 0.22 as vatprice,
+  S3.price as full_price,
+  IF(`p`.isOnSale=1,'prezzo pieno','saldo') as tipoprezzo,
+  format(IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice *0.22),S3.price-(S3.price*0.22) ) ,2)     AS price,
+  '0'                                                   AS wholesale_price,
+  '0'                                                                            AS unity,
+  '0.000000'                                                                     AS unit_price_ratio,
   concat(p.id,'-',p.productVariantId)                                            AS reference,
-  concat(p.id,'-',p.productVariantId)                                            AS supplier_reference,
+  concat(p.id,'-',p.productVariantId)                                            AS `name`,
+  dp.itemno                                                                      AS supplier_reference,
   ''                                                                             AS location,
-  '0.000000'                                                                      AS width,
-  '0.000000'                                                                      AS height,
-  '0.000000'                                                                      AS depth,
-  '0.000000'                                                                      AS weight,
-  '2'  AS out_of_stock,
-  '0'  AS additional_delivery_times,
-  '0' AS quantity_discount,
-  '0' AS text_fields,
-  if (p.isOnSale=1,format((S3.price - S3.salePrice),2),'0.00')    AS discount_amount,
+  '0.000000'                                                                     AS width,
+  '0.000000'                                                                     AS height,
+  '0.000000'                                                                     AS depth,
+  '0.000000'                                                                     AS weight,
+  '2'                                                                            AS out_of_stock,
+  '0'                                                                            AS additional_delivery_times,
+  '0'                                                                            AS quantity_discount,
+  '0'                                                                            AS text_fields,
+  '0'                AS discount_amount,
   ''                                                                             AS discount_percent,
   '2018-01-01'                                                                   AS discount_from,
   '2018-01-01'                                                                   AS discount_to,
-  concat(p.id,'-',p.productVariantId)                                            AS name,
+  concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)                AS productName,
+  pb.name                                                                        AS brand_name,
+  dp.var                                                                         AS color_supplier,
   concat(p.id,'-',p.productVariantId)                                            AS description,
   'both'                                                                         AS visibility,
-  '0' AS cache_is_pack,
-  '0' AS cache_has_attachments,
-  '0' AS is_virtual,
-  '0' AS cache_default_attribute,
+  '0'                                                                            AS cache_is_pack,
+  '0'                                                                            AS cache_has_attachments,
+  '0'                                                                            AS is_virtual,
+  '0'                                                                            AS cache_default_attribute,
   '0'                                                                            AS additional_shipping_cost,
   concat(p.id,'-',p.productVariantId)                                            AS short_description,
   date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_add,
@@ -297,17 +302,18 @@ class CPrestashopDumpCsv extends AAjaxController
   'new'                                                                          AS`condition`,
   '1'                                                                            AS show_price,
   '1'                                                                            AS showPrice,
-  concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',p.id,'-',p.productVariantId,'-001-1124.jpg')   AS picture,
+  concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',p.id,'-',p.productVariantId,'-001-1124.jpg')
+    AS picture,
   concat(p.id,'-',p.productVariantId)                                            AS imageAlt,
   '1'                                                                            AS deleteImage,
   ''                                                                             AS feature,
   '1'                                                                            AS idshop,
   '0'                                                                            AS advanced_stock_management,
-  '3' AS pack_stock_type,
+  '3'                                                                            AS pack_stock_type,
   '0'                                                                            AS depend_on_stock,
   '1'                                                                            AS Warehouse,
-  '1'  AS state
-  
+  '1'                                                                            AS state,
+  php.statusPublished                                                                     AS status
 
 FROM `Product` `p`
   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
@@ -319,13 +325,14 @@ FROM `Product` `p`
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
+  JOIN  MarketplaceHasProductAssociate php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
- left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
- left JOIN ProductName pn ON p.id = pn.id
-  left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
-  WHERE p.qty>0 AND p.productStatusId=6 and mphas.typeSync='0' and S3.price>0
-  GROUP BY p.id,p.productVariantId 
-  ORDER BY `p`.`id`";
+  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
+  left JOIN ProductName pn ON p.id = pn.id
+  left join MarketplaceHasShop mpas on php.shopId=mpas.shopId
+WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2)  and S3.price > 0
+GROUP BY p.id,p.productVariantId
+ORDER BY `p`.`id`";
 
 
         /**** esportazione prodotti su ProductHasPrestashop******/
@@ -345,7 +352,11 @@ FROM `Product` `p`
                 $producthasprestashopinsert->prestashopId=$val['prestashopId'];
                 $producthasprestashopinsert->statusPublished=0;
                 $producthasprestashopinsert->marketPlaceHasShopId=$val['marketplaceHasShopId'];
-                $producthasprestashopinsert->price=$val['price'];
+                if ($val['price']==0){
+                    $producthasprestashopinsert->price=$val['full_price']-$val['vat_price'];
+                }else {
+                    $producthasprestashopinsert->price = $val['price'];
+                }
                 $producthasprestashopinsert->smartInsert();
             }
         }
@@ -893,12 +904,15 @@ FROM ProductSizeMacroGroup psmg
   '1'                                                                            AS minimal_quantity,
   '1'                                                                            AS low_stock_threshold,
   '0'                                                                            AS low_stock_alert,
-  if (p.isOnSale=1,format(S3.salePrice*0.8196,2),format(S3.price*0.8196,2))                 AS price,                  
-  '0.000000'                                                   AS wholesale_price,
+  S3.price * 0.22 as vatprice,
+  S3.price as full_price,
+  IF(`p`.isOnSale=1,'prezzo pieno','saldo') as tipoprezzo,
+  format(IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice *0.22),S3.price-(S3.price*0.22) ) ,2)     AS price,
+  '0'                                                   AS wholesale_price,
   '0'                                                                            AS unity,
   '0.000000'                                                                     AS unit_price_ratio,
   concat(p.id,'-',p.productVariantId)                                            AS reference,
-  concat(p.id,'-',p.productVariantId)                                            AS name,
+  concat(p.id,'-',p.productVariantId)                                            AS `name`,
   dp.itemno                                                                      AS supplier_reference,
   ''                                                                             AS location,
   '0.000000'                                                                     AS width,
@@ -909,12 +923,12 @@ FROM ProductSizeMacroGroup psmg
   '0'                                                                            AS additional_delivery_times,
   '0'                                                                            AS quantity_discount,
   '0'                                                                            AS text_fields,
-  if (p.isOnSale=1,format((S3.price - S3.salePrice),2),'0.00')                 AS discount_amount,
+  '0'                AS discount_amount,
   ''                                                                             AS discount_percent,
   '2018-01-01'                                                                   AS discount_from,
   '2018-01-01'                                                                   AS discount_to,
   concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)                AS productName,
-  pb.name                                                                        AS brand_name, 
+  pb.name                                                                        AS brand_name,
   dp.var                                                                         AS color_supplier,
   concat(p.id,'-',p.productVariantId)                                            AS description,
   'both'                                                                         AS visibility,
@@ -939,7 +953,7 @@ FROM ProductSizeMacroGroup psmg
   '1'                                                                            AS show_price,
   '1'                                                                            AS showPrice,
   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',p.id,'-',p.productVariantId,'-001-1124.jpg')
-                                                                                 AS picture,
+    AS picture,
   concat(p.id,'-',p.productVariantId)                                            AS imageAlt,
   '1'                                                                            AS deleteImage,
   ''                                                                             AS feature,
@@ -963,11 +977,11 @@ FROM `Product` `p`
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   JOIN  MarketplaceHasProductAssociate php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
- left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
+  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   left JOIN ProductName pn ON p.id = pn.id
   left join MarketplaceHasShop mpas on php.shopId=mpas.shopId
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2)  and S3.price > 0
-GROUP BY p.id,p.productVariantId 
+GROUP BY p.id,p.productVariantId
 ORDER BY `p`.`id` ";
 
 
@@ -1213,8 +1227,15 @@ ORDER BY `p`.`id` ";
                     $finalProductStatus = 2;
                 }
             }
-
+$priceProduct=0;
 // popolamento array tabella prodotti
+            if ($value_product['price']==0){
+                $priceProduct=$value_product['full_price']-$value_product['vat_price'];
+            }else {
+                $priceProduct->$value_product['price'];
+            }
+
+
             $data_product = array(
                 array($p,
                     $value_product['id_supplier'],
@@ -1232,7 +1253,7 @@ ORDER BY `p`.`id` ";
                     $value_product['minimal_quantity'],
                     $value_product['low_stock_threshold'],
                     $value_product['low_stock_alert'],
-                    $value_product['price'],
+                    $priceProduct,
                     $value_product['wholesale_price'],
                     $value_product['unity'],
                     $value_product['unit_price_ratio'],
@@ -1286,7 +1307,7 @@ ORDER BY `p`.`id` ";
                     $value_product['minimal_quantity'],
                     $value_product['low_stock_threshold'],
                     $value_product['low_stock_alert'],
-                    $value_product['price'],
+                    $priceProduct,
                     $value_product['wholesale_price'],
                     $value_product['unity'],
                     $value_product['unit_price_ratio'],
@@ -1579,14 +1600,14 @@ ORDER BY `p`.`id` ";
                 } else {
                     $default_on = '0';
                 }
-                $price_attribute_combination = $value_product_attribute->price;
-                $salePrice_attribute_combination = $value_product_attribute->salePrice;
+                $price_attribute_combination = $value_product_attribute->price-($value_product_attribute->price*0.22);
+                $salePrice_attribute_combination = $value_product_attribute->salePrice-($value_product_attribute->price*0.22);
                 if ($value_product['on_sale'] == '1') {
                     $price = $salePrice_attribute_combination;
                 } else {
                     $price = $price_attribute_combination;
                 }
-                if ($quantity_attribute_combination >= 1) {
+                if ($quantity_attribute_combination > 0) {
                     $available_date = date("Y-m-d");
 
                 } else {
@@ -1604,7 +1625,7 @@ ORDER BY `p`.`id` ";
                         $value_product['productVariantId'].'-'.$productSizeId_attribute_combination ,
                         $value_product['isbn'],
                         $value_product['upc'],
-                        $price,
+                        '0.000000',
                         $price,
                         $value_product['ecotax'],
                         $quantity_attribute_combination,
@@ -1665,7 +1686,7 @@ ORDER BY `p`.`id` ";
                     array($p,
                         $w,
                         $value_product['prestashopId'],
-                        $price,
+                        '0.000000',
                         $price,
                         $value_product['ecotax'],
                         '1',
@@ -1710,7 +1731,7 @@ ORDER BY `p`.`id` ";
 
         /** sezione immagini */
 
-        $sql = "SELECT php.id AS productId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
+        $sql = "SELECT php.id AS productId, php.shopId as shopId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
 FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
@@ -1741,15 +1762,15 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $cover));
+                    $value_image_product['cover']));
 
             //popolamento array immagini shop
 
             $data_image_shop = array(
                 array($value_image_product['productId'],
                     $prestashopHasProductImageInsert->idImage,
-                    '1',
-                    $cover));
+                    $value_image_product['shopId'],
+                    $value_image_product['cover']));
             $data_image_lang = array(
                 array($prestashopHasProductImageInsert->idImage,
                     '1',
@@ -1767,7 +1788,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $cover,
+                    $value_image_product['cover'],
                     $value_image_product['picture']));
 
 
