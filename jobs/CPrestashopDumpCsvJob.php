@@ -1611,7 +1611,7 @@ ORDER BY `p`.`id` ";
                 } else {
                     $price = $price_attribute_combination;
                 }
-                if ($quantity_attribute_combination > 0) {
+                if ($quantity_attribute_combination >=1) {
                     $available_date = date("Y-m-d");
 
                 } else {
@@ -1766,7 +1766,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover']));
+                    $cover));
 
             //popolamento array immagini shop
 
@@ -1774,7 +1774,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($value_image_product['productId'],
                     $prestashopHasProductImageInsert->idImage,
                     $value_image_product['shopId'],
-                    $value_image_product['cover']));
+                    $cover));
             $data_image_lang = array(
                 array($prestashopHasProductImageInsert->idImage,
                     '1',
@@ -1792,7 +1792,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover'],
+                    $cover,
                     $value_image_product['picture']));
 
 
@@ -2051,6 +2051,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
+
 
 
         $res="esportazione eseguita file ".$pharfile."  finita alle ore ".date('Y-m-d H:i:s');

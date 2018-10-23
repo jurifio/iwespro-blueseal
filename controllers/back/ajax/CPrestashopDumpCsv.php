@@ -1226,7 +1226,7 @@ ORDER BY `p`.`id` ";
                     $finalProductStatus = 2;
                 }
             }
-$priceProduct=0;
+            $priceProduct=0;
 // popolamento array tabella prodotti
             if ($value_product['price']==0){
                 $priceProduct=$value_product['full_price']-$value_product['vatfullprice'];
@@ -1606,7 +1606,7 @@ $priceProduct=0;
                 } else {
                     $price = $price_attribute_combination;
                 }
-                if ($quantity_attribute_combination > 0) {
+                if ($quantity_attribute_combination >=1) {
                     $available_date = date("Y-m-d");
 
                 } else {
@@ -1761,7 +1761,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover']));
+                    $cover));
 
             //popolamento array immagini shop
 
@@ -1769,7 +1769,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($value_image_product['productId'],
                     $prestashopHasProductImageInsert->idImage,
                     $value_image_product['shopId'],
-                    $value_image_product['cover']));
+                    $cover));
             $data_image_lang = array(
                 array($prestashopHasProductImageInsert->idImage,
                     '1',
@@ -1787,7 +1787,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover'],
+                    $cover,
                     $value_image_product['picture']));
 
 
