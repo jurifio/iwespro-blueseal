@@ -1231,7 +1231,7 @@ $priceProduct=0;
             if ($value_product['price']==0){
                 $priceProduct=$value_product['full_price']-$value_product['vatprice'];
             }else {
-                $priceProduct->$value_product['price'];
+                $priceProduct=$value_product['price'];
             }
 
 
