@@ -1234,7 +1234,7 @@ ORDER BY `p`.`id` ";
             $priceProduct=0;
 // popolamento array tabella prodotti
             if ($value_product['price']==0){
-                $priceProduct=$value_product['full_price']-$value_product['vatprice'];
+                $priceProduct=$value_product['full_price']-$value_product['vatfullprice'];
             }else {
                 $priceProduct=$value_product['price'];
             }
