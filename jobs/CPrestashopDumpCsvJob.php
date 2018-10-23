@@ -238,104 +238,101 @@ class CPrestashopDumpCsvJob extends ACronJob
         /*** popolamento tabella */
 
         $sql = "SELECT
-  php.id                                                                         AS prestaId,
-  php.shopId                                                                     AS prestashopId,
-  concat(`p`.`id`,'-',p.productVariantId)                                        AS product_id,
-  p.id                                                                           AS  productId,
-  p.productVariantId                                                             AS productVariantId,
-  shp.shopId                                                                     AS id_supplier,
-  p.productBrandId                                                               AS id_manufacturer,
-  phpc.productCategoryId                                                         AS id_category_default,
-  pb.slug                                                                        AS name_manufacturer,
-  '1'                                                                            AS id_shop_default,
-  '53'                                                                           AS id_tax_rules_group,
-  if(p.isOnSale=1,'1','0')                                                       AS `on_sale`,
-  '0'                                                                            AS online_only,
-  S2.barcode                                                                     AS ean13,
-  ''                                                                             AS isbn,
-  ''                                                                             AS upc,
-  '0.000000'                                                                     AS ecotax,
-  `p`.`qty`                                                                      AS quantity,
-  '1'                                                                            AS minimal_quantity,
-  '1'                                                                            AS low_stock_threshold,
-  '0'                                                                            AS low_stock_alert,
-  S3.price * 0.22 as vatprice,
-  S3.price as full_price,
-  IF(`p`.isOnSale=1,'prezzo pieno','saldo') as tipoprezzo,
-  format(IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice *0.22),S3.price-(S3.price*0.22) ) ,2)     AS price,
-  '0'                                                   AS wholesale_price,
-  '0'                                                                            AS unity,
-  '0.000000'                                                                     AS unit_price_ratio,
-  concat(p.id,'-',p.productVariantId)                                            AS reference,
-  concat(p.id,'-',p.productVariantId)                                            AS `name`,
-  dp.itemno                                                                      AS supplier_reference,
-  ''                                                                             AS location,
-  '0.000000'                                                                     AS width,
-  '0.000000'                                                                     AS height,
-  '0.000000'                                                                     AS depth,
-  '0.000000'                                                                     AS weight,
-  '2'                                                                            AS out_of_stock,
-  '0'                                                                            AS additional_delivery_times,
-  '0'                                                                            AS quantity_discount,
-  '0'                                                                            AS text_fields,
-  '0'                AS discount_amount,
-  ''                                                                             AS discount_percent,
-  '2018-01-01'                                                                   AS discount_from,
-  '2018-01-01'                                                                   AS discount_to,
-  concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)                AS productName,
-  pb.name                                                                        AS brand_name,
-  dp.var                                                                         AS color_supplier,
-  concat(p.id,'-',p.productVariantId)                                            AS description,
-  'both'                                                                         AS visibility,
-  '0'                                                                            AS cache_is_pack,
-  '0'                                                                            AS cache_has_attachments,
-  '0'                                                                            AS is_virtual,
-  '0'                                                                            AS cache_default_attribute,
-  '0'                                                                            AS additional_shipping_cost,
-  concat(p.id,'-',p.productVariantId)                                            AS short_description,
-  date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_add,
-  date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_upd,
-  '1'                                                                            AS available_for_order,
-  '2018-01-01'                                                                   AS available_date,
-  '1'                                                                            AS indexed,
-  '0'                                                                            AS customizable,
-  '0'                                                                            AS uploadable_files,
-  '1'                                                                            AS active,
-  '404'                                                                          AS redirect_type,
-  '0'                                                                            AS id_type_redirected,
-  '1'                                                                            AS show_condition,
-  'new'                                                                          AS`condition`,
-  '1'                                                                            AS show_price,
-  '1'                                                                            AS showPrice,
-  concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',p.id,'-',p.productVariantId,'-001-1124.jpg')
-    AS picture,
-  concat(p.id,'-',p.productVariantId)                                            AS imageAlt,
-  '1'                                                                            AS deleteImage,
-  ''                                                                             AS feature,
-  '1'                                                                            AS idshop,
-  '0'                                                                            AS advanced_stock_management,
-  '3'                                                                            AS pack_stock_type,
-  '0'                                                                            AS depend_on_stock,
-  '1'                                                                            AS Warehouse,
-  '1'                                                                            AS state,
-  php.statusPublished                                                                     AS status
+        concat(`p`.`id`,'-',p.productVariantId)                                        AS `product_id`,
+        dp.shopId                                                                     as `prestashopId`,
+        mphas.id                                                                      as `marketplaceHasShopId`,
+        p.id                                                                           AS  productId,
+        p.productVariantId                                                             AS productVariantId,
+        shp.shopId                                                                     AS id_supplier,
+        p.productBrandId                                                               AS id_manufacturer,
+        phpc.productCategoryId                                                         AS id_category_default,
+        pb.slug                                                                        AS name_manufacturer,
+        '1'                                                                            AS id_shop_default,
+        '53'                                                                           AS id_tax_rules_group,
+        if(p.isOnSale=1,'1','0')                                                       AS `on_sale`,
+        '0'                                                                            AS online_only,
+        S2.barcode                                                                     AS ean13,
+        ''                                                                             AS isbn,
+        ''                                                                             AS upc,
+        '0.000000'                                                                     AS ecotax,
+        `p`.`qty`                                                                      AS quantity,
+        '1'                                                                            AS minimal_quantity,
+        '1'                                                                            AS low_stock_threshold,
+        '0'                                                                            AS low_stock_alert,
+        S3.price * 0.22 as vatfullprice,
+        S3.price as full_price,
+        S3.salePrice as salePrice,
+        S3.salePrice *0.22 as vatsaleprice,
+        IF(`p`.isOnSale=1,'saldo','prezzoPieno') as tipoprezzo,
+        format(IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice * 0.22),S3.price-(S3.price * 0.22) ),2)     AS price,
+        '0'                                                   AS wholesale_price,
+        '0'                                                                             AS unity,
+        '0.000000'  AS unit_price_ratio,
+        concat(p.id,'-',p.productVariantId)                                            AS reference,
+        concat(p.id,'-',p.productVariantId)                                            AS supplier_reference,
+        ''                                                                             AS location,
+        '0.000000'                                                                      AS width,
+        '0.000000'                                                                      AS height,
+        '0.000000'                                                                      AS depth,
+        '0.000000'                                                                      AS weight,
+        '2'  AS out_of_stock,
+        '0'  AS additional_delivery_times,
+        '0' AS quantity_discount,
+        '0' AS text_fields,
+        '0'                                                                           AS discount_amount,
+        ''                                                                             AS discount_percent,
+        '2018-01-01'                                                                   AS discount_from,
+        '2018-01-01'                                                                   AS discount_to,
+        concat(p.id,'-',p.productVariantId)                                            AS name,
+        concat(p.id,'-',p.productVariantId)                                            AS description,
+        'both'                                                                         AS visibility,
+        '0' AS cache_is_pack,
+        '0' AS cache_has_attachments,
+        '0' AS is_virtual,
+        '0' AS cache_default_attribute,
+        '0'                                                                            AS additional_shipping_cost,
+        concat(p.id,'-',p.productVariantId)                                            AS short_description,
+        date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_add,
+        date_format(NOW(),'%Y-%m-%d %H:%i:%s')                                         AS date_upd,
+        '1'                                                                            AS available_for_order,
+        '2018-01-01'                                                                   AS available_date,
+        '1'                                                                            AS indexed,
+        '0'                                                                            AS customizable,
+        '0'                                                                            AS uploadable_files,
+        '1'                                                                            AS active,
+        '404'                                                                          AS redirect_type,
+        '0'                                                                            AS id_type_redirected,
+        '1'                                                                            AS show_condition,
+        'new'                                                                          AS`condition`,
+        '1'                                                                            AS show_price,
+        '1'                                                                            AS showPrice,
+        concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',p.id,'-',p.productVariantId,'-001-1124.jpg')   AS picture,
+        concat(p.id,'-',p.productVariantId)                                            AS imageAlt,
+        '1'                                                                            AS deleteImage,
+        ''                                                                             AS feature,
+        '1'                                                                            AS idshop,
+        '0'                                                                            AS advanced_stock_management,
+        '3' AS pack_stock_type,
+        '0'                                                                            AS depend_on_stock,
+        '1'                                                                            AS Warehouse,
+        '1'  AS state
+
 
 FROM `Product` `p`
-  JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
-  JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
-  JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
-  JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
-  JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
-  JOIN  `ProductPublicSku` S3 ON  (`p`.`id`, `p`.`productVariantId`) = (`S3`.`productId`, `S3`.`productVariantId`)
-  JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
-  JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
-  JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
-  JOIN  MarketplaceHasProductAssociate php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
-  JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
-  left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
-  left JOIN ProductName pn ON p.id = pn.id
-  left join MarketplaceHasShop mpas on php.shopId=mpas.shopId
-WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2)  and S3.price > 0
+        JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
+        JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
+        JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
+        JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
+        JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
+        JOIN  `ProductPublicSku` S3 ON  (`p`.`id`, `p`.`productVariantId`) = (`S3`.`productId`, `S3`.`productVariantId`)
+        JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
+        JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
+        JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
+        JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
+        left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
+        left JOIN ProductName pn ON p.id = pn.id
+        left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
+WHERE p.qty>0 AND p.productStatusId=6 and mphas.typeSync='0' and S3.price>0
 GROUP BY p.id,p.productVariantId
 ORDER BY `p`.`id`";
 
@@ -358,7 +355,7 @@ ORDER BY `p`.`id`";
                 $producthasprestashopinsert->statusPublished=0;
                 $producthasprestashopinsert->marketPlaceHasShopId=$val['marketplaceHasShopId'];
                 if ($val['price']==0){
-                    $producthasprestashopinsert->price=$val['full_price']-$val['vat_price'];
+                    $producthasprestashopinsert->price=$val['full_price']-$val['vatfullprice'];
                 }else {
                     $producthasprestashopinsert->price = $val['price'];
                 }
@@ -909,9 +906,11 @@ FROM ProductSizeMacroGroup psmg
   '1'                                                                            AS minimal_quantity,
   '1'                                                                            AS low_stock_threshold,
   '0'                                                                            AS low_stock_alert,
-  S3.price * 0.22 as vatprice,
-  S3.price as full_price,
-  IF(`p`.isOnSale=1,'prezzo pieno','saldo') as tipoprezzo,
+  S3.price * 0.22 as vatfullprice,
+        S3.price as full_price,
+        S3.salePrice as salePrice,
+        S3.salePrice *0.22 as vatsaleprice,
+  IF(`p`.isOnSale=1,'saldo','prezzopieno') as tipoprezzo,
   format(IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice *0.22),S3.price-(S3.price*0.22) ) ,2)     AS price,
   '0'                                                   AS wholesale_price,
   '0'                                                                            AS unity,
@@ -1235,7 +1234,7 @@ ORDER BY `p`.`id` ";
             $priceProduct=0;
 // popolamento array tabella prodotti
             if ($value_product['price']==0){
-                $priceProduct=$value_product['full_price']-$value_product['vat_price'];
+                $priceProduct=$value_product['full_price']-$value_product['vatprice'];
             }else {
                 $priceProduct->$value_product['price'];
             }
@@ -1606,7 +1605,7 @@ ORDER BY `p`.`id` ";
                     $default_on = '0';
                 }
                 $price_attribute_combination = $value_product_attribute->price-($value_product_attribute->price*0.22);
-                $salePrice_attribute_combination = $value_product_attribute->salePrice-($value_product_attribute->price*0.22);
+                $salePrice_attribute_combination = $value_product_attribute->salePrice-($value_product_attribute->salePrice*0.22);
                 if ($value_product['on_sale'] == '1') {
                     $price = $salePrice_attribute_combination;
                 } else {
