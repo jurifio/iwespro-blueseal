@@ -311,7 +311,7 @@ class CPrestashopDumpCsv extends AAjaxController
         '3' AS pack_stock_type,
         '0'                                                                            AS depend_on_stock,
         '1'                                                                            AS Warehouse,
-        translation.name                                                               as nametranslation,
+        Translation.`name`                                                               as nametranslation,
         '1'  AS state
 
 
@@ -965,7 +965,7 @@ FROM ProductSizeMacroGroup psmg
   '0'                                                                            AS depend_on_stock,
   '1'                                                                            AS Warehouse,
   '1'                                                                            AS state,
-  translation.name                                                               AS nametranslation,
+  Translation.name                                                               AS nametranslation,
   php.statusPublished                                                                     AS status
 
 FROM `Product` `p`
