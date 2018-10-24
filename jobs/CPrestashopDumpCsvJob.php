@@ -264,7 +264,7 @@ class CPrestashopDumpCsvJob extends ACronJob
         S3.salePrice as salePrice,
         S3.salePrice *0.22 as vatsaleprice,
         IF(`p`.isOnSale=1,'saldo','prezzoPieno') as tipoprezzo,
-        format(IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice * 0.22),S3.price-(S3.price * 0.22) ),2)     AS price,
+        format(IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice / 1.22),S3.price-(S3.price / 1.22) ),2)     AS price,
         '0'                                                   AS wholesale_price,
         '0'                                                                             AS unity,
         '0.000000'  AS unit_price_ratio,
@@ -315,6 +315,7 @@ class CPrestashopDumpCsvJob extends ACronJob
         '3' AS pack_stock_type,
         '0'                                                                            AS depend_on_stock,
         '1'                                                                            AS Warehouse,
+        translation.name                                                               as nametranslation,
         '1'  AS state
 
 
@@ -329,6 +330,7 @@ FROM `Product` `p`
         JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
         JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
         JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
+        join ProductNameTranslation Translation ON p.id = Translation.productId AND p.productVariantId = Translation.productVariantId
         left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
         left JOIN ProductName pn ON p.id = pn.id
         left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
@@ -911,7 +913,7 @@ FROM ProductSizeMacroGroup psmg
         S3.salePrice as salePrice,
         S3.salePrice *0.22 as vatsaleprice,
   IF(`p`.isOnSale=1,'saldo','prezzopieno') as tipoprezzo,
-  format(IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice *0.22),S3.price-(S3.price*0.22) ) ,2)     AS price,
+  format(IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice /1.22),S3.price-(S3.price/1.22) ) ,2)     AS price,
   '0'                                                   AS wholesale_price,
   '0'                                                                            AS unity,
   '0.000000'                                                                     AS unit_price_ratio,
@@ -967,6 +969,7 @@ FROM ProductSizeMacroGroup psmg
   '0'                                                                            AS depend_on_stock,
   '1'                                                                            AS Warehouse,
   '1'                                                                            AS state,
+  translation.name                                                               AS nametranslation,
   php.statusPublished                                                                     AS status
 
 FROM `Product` `p`
@@ -979,6 +982,7 @@ FROM `Product` `p`
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
   JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
+  join  ProductNameTranslation Translation ON p.id = Translation.productId AND p.productVariantId = Translation.productVariantId
   JOIN  MarketplaceHasProductAssociate php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
   JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
   left  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
@@ -1340,7 +1344,7 @@ ORDER BY `p`.`id` ";
 
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'2']);
             if ($res_product_lang->isEmpty()) {
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES )));
+                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['nametranslation'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
@@ -1370,7 +1374,7 @@ ORDER BY `p`.`id` ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES )));
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['nametranslation'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
 
                     $in_stock = "in stock";
                     $current_supply = "Current supply. Ordering available";
@@ -1404,7 +1408,7 @@ ORDER BY `p`.`id` ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
             if ($res_product_lang->isEmpty()) {
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'"," ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES)));
+                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['nametranslation'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
                 $in_stock = "in Vendita";
                 $current_supply = 'In magazzino. ordinabile';
                 $product_available = 'Consegna in 3-4 Giorni Lavorati';
@@ -1434,7 +1438,7 @@ ORDER BY `p`.`id` ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES)));
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['nametranslation'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
 
 
                     $in_stock = "in Vendita";
@@ -1470,7 +1474,7 @@ ORDER BY `p`.`id` ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'3']);
             if ($res_product_lang->isEmpty()) {
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['product_id'] . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES)));
+                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['nametranslation'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
@@ -1500,7 +1504,7 @@ ORDER BY `p`.`id` ";
             }else {
                 foreach ($res_product_lang as $value_product_lang) {
 
-                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product_lang->name . " " . $value_product['color_supplier'] . " " . $value_product['supplier_reference'], ENT_QUOTES)));
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['nametranslation'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
 
 
                     $in_stock = "in stock";
@@ -1630,7 +1634,7 @@ ORDER BY `p`.`id` ";
                         $value_product['isbn'],
                         $value_product['upc'],
                         '0.000000',
-                        $price,
+                        '.0.000000',
                         $value_product['ecotax'],
                         $quantity_attribute_combination,
                         $value_product['weight'],
@@ -1691,7 +1695,7 @@ ORDER BY `p`.`id` ";
                         $w,
                         $value_product['prestashopId'],
                         '0.000000',
-                        $price,
+                        '0.000000',
                         $value_product['ecotax'],
                         '1',
                         '0.000000',
