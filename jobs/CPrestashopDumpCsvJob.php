@@ -1630,7 +1630,7 @@ ORDER BY `p`.`id` ";
                         $value_product['reference'].'-'.$productSizeId_attribute_combination ,
                         $value_product['supplier_reference'],
                         '',
-                        $value_product['ean'],
+                        $value_product['ean13'],
                         $value_product['isbn'],
                         $value_product['upc'],
                         '0.000000',
