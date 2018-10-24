@@ -1760,7 +1760,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover']));
+                    $value_image_product['position']));
 
             //popolamento array immagini shop
 
@@ -1768,7 +1768,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($value_image_product['productId'],
                     $prestashopHasProductImageInsert->idImage,
                     $value_image_product['shopId'],
-                    $value_image_product['cover']));
+                    $value_image_product['position']));
             $data_image_lang = array(
                 array($prestashopHasProductImageInsert->idImage,
                     '1',
@@ -1786,7 +1786,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $value_image_product['cover'],
+                    $value_image_product['position'],
                     $value_image_product['picture']));
 
 
