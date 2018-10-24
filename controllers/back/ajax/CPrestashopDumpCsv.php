@@ -1604,8 +1604,8 @@ ORDER BY `p`.`id` ";
                 } else {
                     $default_on = '0';
                 }
-                $price_attribute_combination = $value_product_attribute->price-($value_product_attribute->price*0.22);
-                $salePrice_attribute_combination = $value_product_attribute->salePrice-($value_product_attribute->salePrice*0.22);
+                $price_attribute_combination = $value_product_attribute->price-($value_product_attribute->price/1.22);
+                $salePrice_attribute_combination = $value_product_attribute->salePrice-($value_product_attribute->salePrice/1.22);
                 if ($value_product['on_sale'] == '1') {
                     $price = $salePrice_attribute_combination;
                 } else {
@@ -1740,7 +1740,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.statusPublished in (0,2) GROUP BY picture  ORDER BY productId ASC";
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.statusPublished in (0,2) GROUP BY picture  ORDER BY productId,position ASC";
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         $a = 0;
 
@@ -1757,16 +1757,12 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
             $prestashopHasProductImageInsert->smartInsert();
 
             // popolamento array immagini con id sequenziale
-            if ($current_productId != $value_image_product['productId']){
-                $cover='1';
-            }else{
-                $cover='';
-            }
+
             $data_image = array(
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $cover));
+                    $value_image_product['cover']));
 
             //popolamento array immagini shop
 
@@ -1774,7 +1770,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($value_image_product['productId'],
                     $prestashopHasProductImageInsert->idImage,
                     $value_image_product['shopId'],
-                    $cover));
+                    $value_image_product['cover']));
             $data_image_lang = array(
                 array($prestashopHasProductImageInsert->idImage,
                     '1',
@@ -1792,7 +1788,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 array($prestashopHasProductImageInsert->idImage,
                     $value_image_product['productId'],
                     $value_image_product['position'],
-                    $cover,
+                    $value_image_product['cover'],
                     $value_image_product['picture']));
 
 
