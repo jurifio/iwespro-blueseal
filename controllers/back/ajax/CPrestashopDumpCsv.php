@@ -1334,12 +1334,11 @@ ORDER BY `p`.`id` ";
                     $value_product['state']));
 
             //popolamento array lingua prodotti
-            $res_product_title=\Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
-            $title=$res_product_title->name;
+
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'2']);
             if ($res_product_lang->isEmpty()) {
 
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " ".$title. " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
+                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
@@ -1403,7 +1402,7 @@ ORDER BY `p`.`id` ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
             if ($res_product_lang->isEmpty()) {
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " ".$title. " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
+                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] .  " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
                 $in_stock = "in Vendita";
                 $current_supply = 'In magazzino. ordinabile';
                 $product_available = 'Consegna in 3-4 Giorni Lavorati';
@@ -1469,7 +1468,7 @@ ORDER BY `p`.`id` ";
             }
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'3']);
             if ($res_product_lang->isEmpty()) {
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] . " ".$title. " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
+                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'"," ",htmlentities($name_product_lang = $value_product['brand_name'] .  " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES )));
                 $in_stock = "in stock";
                 $current_supply = "Current supply. Ordering available";
                 $product_available = "Delivered in 3-4 Days";
