@@ -1338,7 +1338,7 @@ ORDER BY `p`.`id` ";
                     $value_product['state']));
 
             //popolamento array lingua prodotti
-            $res_product_title=\Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
+            $res_product_title=\Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'1']);
             $title=$res_product_title->name;
             $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>'2']);
             if ($res_product_lang->isEmpty()) {
