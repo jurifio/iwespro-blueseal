@@ -13,7 +13,7 @@ use bamboo\domain\repositories\CShootingRepo;
 
 
 /**
- * Class CSizeMacroGroupListAjaxController
+ * Class CShootingAcceptProductListAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -22,7 +22,7 @@ use bamboo\domain\repositories\CShootingRepo;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 23/03/2018
+ * @date 25/10/2018
  * @since 1.0
  */
 class CShootingAcceptProductListAjaxController extends AAjaxController
@@ -39,34 +39,36 @@ class CShootingAcceptProductListAjaxController extends AAjaxController
         $allShops = $user->hasPermission('allShops');
 
         $sql = "SELECT
-                  `p`.`id`                                             AS `id`,
-                  `p`.`productVariantId`                               AS `productVariantId`,
-                  concat(`p`.`id`, '-', `p`.`productVariantId`)        AS `code`,
-                  `pb`.`name`                                          AS `brand`,
-                  concat(`p`.`itemno`, ' # ', `pv`.`name`)             AS `cpf`,
-                  shp.extId                                            AS `externalId`,
-                  `s`.`id`                                             AS `shopId`,
-                  `s`.`title`                                          AS `shop`,
-                  concat(phs.shootingId)                               AS shooting,
-                  concat(doc.number)                                   AS doc_number,
-                  `p`.`creationDate`                                   AS `creationDate`,
-                  `pss`.`name`                                         AS `status`
-                FROM `Product` `p`
-                  JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
-                  JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
-                  JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
-                  JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
-                  JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
-                  LEFT JOIN (
-                    ProductHasShooting phs 
-                      JOIN Shooting shoot ON phs.shootingId = shoot.id
-                        LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId
-                GROUP BY p.id, p.productVariantId, s.id
-                ORDER BY `p`.`creationDate` DESC
+  `p`.`id`                                             AS `id`,
+  `p`.`productVariantId`                               AS `productVariantId`,
+  concat(`p`.`id`, '-', `p`.`productVariantId`)        AS `code`,
+  `pb`.`name`                                          AS `brand`,
+  concat(`p`.`itemno`, ' # ', `pv`.`name`)             AS `cpf`,
+  `s`.`id`                                             AS `shopId`,
+  `s`.`title`                                          AS `shop`,
+  concat(phs.shootingId)                               AS shooting,
+  concat(doc.number)                                   AS doc_number,
+  `p`.`creationDate`                                   AS `creationDate`,
+  concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, '')) AS externalId,
+  `pss`.`name`                                         AS `status`
+FROM `Product` `p`
+  JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
+  LEFT JOIN (DirtyProduct dp
+    JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
+    ON (shp.productId,shp.productVariantId,shp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
+  JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
+  JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
+  JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
+  JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
+  LEFT JOIN (
+      ProductHasShooting phs
+      JOIN Shooting shoot ON phs.shootingId = shoot.id
+      LEFT JOIN Document doc ON shoot.friendDdt = doc.id)
+    ON p.productVariantId = phs.productVariantId AND p.id = phs.productId
+ORDER BY `p`.`creationDate` DESC
                ";
 
-        $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
+        $datatable = new CDataTables($sql, ['id', 'productVariantId', 'shopId'], $_GET, true);
         $datatable->addCondition('shopId', $shopsIds);
         if (!$allShops) $datatable->addLikeCondition('status', 'Fuso', true);
 
