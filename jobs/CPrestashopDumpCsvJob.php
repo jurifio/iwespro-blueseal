@@ -42,6 +42,7 @@ class CPrestashopDumpCsvJob extends ACronJob
      */
     public function run($args = null)
     {
+
         set_time_limit(0);
         ini_set('memory_limit', '2048M');
 
@@ -50,7 +51,6 @@ class CPrestashopDumpCsvJob extends ACronJob
           $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
           $sql = "ALTER TABLE PrestashopHasProduct AUTO_INCREMENT=1";
           $res_delete = \Monkey::app()->dbAdapter->query($sql, []);*/
-
         /******* apertura e creazione file csv per espostazione********/
 
         if (ENV == 'dev') {
@@ -1606,8 +1606,8 @@ ORDER BY `p`.`id` ";
                 } else {
                     $default_on = '0';
                 }
-                $price_attribute_combination = $value_product_attribute->price-($value_product_attribute->price/1.22);
-                $salePrice_attribute_combination = $value_product_attribute->salePrice-($value_product_attribute->salePrice/1.22);
+                $price_attribute_combination = $value_product_attribute->price-($value_product_attribute->price*22/122);
+                $salePrice_attribute_combination = $value_product_attribute->salePrice-($value_product_attribute->salePrice*22/122);
                 if ($value_product['on_sale'] == '1') {
                     $price = $salePrice_attribute_combination;
                 } else {
@@ -1628,7 +1628,7 @@ ORDER BY `p`.`id` ";
                         $value_product['reference'].'-'.$productSizeId_attribute_combination ,
                         $value_product['supplier_reference'],
                         '',
-                        $value_product['ean13'],
+                        $value_product_attribute->ean,
                         $value_product['isbn'],
                         $value_product['upc'],
                         '0.000000',
@@ -2049,8 +2049,6 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
-
-
 
 
 
