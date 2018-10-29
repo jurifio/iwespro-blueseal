@@ -52,7 +52,7 @@ class CManageProductSkuAutomaticEan extends AAjaxController
 
             /** @var CProductSku $sku */
             foreach ($skus as $sku){
-                if(!is_null($sku->ean) && $sku->ean != 0 ){
+                if(!is_null($sku->ean)){
                   continue;
                 }
 

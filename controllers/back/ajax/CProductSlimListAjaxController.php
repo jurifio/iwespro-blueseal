@@ -3,7 +3,9 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\controllers\api\classes\products;
 use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CProductSku;
 use bamboo\domain\entities\CShooting;
 use bamboo\domain\repositories\CDocumentRepo;
 
@@ -183,6 +185,16 @@ ORDER BY `p`.`creationDate` DESC";
                 $ean .= $sku->ean . '</br>';
             }
             $row["ean"] = $ean;
+            /** @var CProductSku $sku */
+            $complete = true;
+            foreach ($val->productSku as $sku){
+                if(is_null($sku->ean)) $complete = false;
+            }
+
+            if(!$complete){
+                $row["DT_RowClass"] = "red";
+            }
+
             $datatable->setResponseDataSetRow($key, $row);
         }
         return $datatable->responseOut();
