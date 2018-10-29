@@ -28,7 +28,7 @@ class CProductEanUploadAjaxManage extends AAjaxController
 
     public function post()
     {
-        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolderCsv').'/eancsv'."/";
+        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolderCsv')."/";
 
         if (!move_uploaded_file($_FILES['file']['tmp_name'][0], $tempFolder . $_FILES['file']['name'][0])) {
             throw new RedPandaException('Cannot move the uploaded Files');
