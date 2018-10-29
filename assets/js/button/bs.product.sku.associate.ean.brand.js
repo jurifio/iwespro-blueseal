@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-file-text-o",
+    icon:"fa-cogs",
     permission:"/admin/product/edit",
     event:"bs-product-sku-associate-ean-brand",
     class:"btn btn-default",
