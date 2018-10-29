@@ -29,44 +29,49 @@ class CProductSlimListAjaxController extends AAjaxController
         $allShops = $user->hasPermission('allShops');
 
         $sql = "SELECT
-                  `p`.`id`                                             AS `id`,
-                  `p`.`productVariantId`                               AS `productVariantId`,
-                  concat(`p`.`id`, '-', `p`.`productVariantId`)        AS `code`,
-                  `pb`.`name`                                          AS `brand`,
-                  concat(`p`.`itemno`, ' # ', `pv`.`name`)             AS `cpf`,
-                  shp.extId                                            AS `externalId`,
-                  concat(`ps`.`name`, ' ', `ps`.`year`)                AS `season`,
-                  `s`.`id`                                             AS `shopId`,
-                  `s`.`title`                                          AS `shop`,
-                  if((`p`.`qty` > 0), 'disponibile', 'mancante')       AS `stock`,
-                  `p`.`creationDate`                                   AS `creationDate`,
-                  `pss`.`name`                                         AS `status`,
-                  shp.price                                            AS price,
-                  shp.salePrice                                        AS salePrice,
-                  shp.value                                            AS value,
-                  concat(phs.shootingId)                               AS shooting,
-                  concat(doc.number)                                   AS doc_number,
-                  if((p.id, p.productVariantId) IN (SELECT
-                                                              ProductHasProductPhoto.productId,
-                                                              ProductHasProductPhoto.productVariantId
-                                                            FROM ProductHasProductPhoto), 'sì', 'no')                 AS hasPhotos,
-                  psp.name as prodSheetPrototypeName
-                FROM `Product` `p`
-                  JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
-                  JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
-                  JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
-                  JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
-                  JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
-                  JOIN `ProductSeason` `ps` ON `p`.`productSeasonId` = `ps`.`id`
-                  LEFT JOIN (
-                    ProductHasShooting phs 
-                      JOIN Shooting shoot ON phs.shootingId = shoot.id
-                        LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId
-                  LEFT JOIN ProductSheetPrototype psp ON p.productSheetPrototypeId = psp.id        
-                WHERE `pss`.`id` NOT IN (7, 8, 13)
-                GROUP BY p.id, p.productVariantId, s.id
-                ORDER BY `p`.`creationDate` DESC";
+  `p`.`id`                                             AS `id`,
+  `p`.`productVariantId`                               AS `productVariantId`,
+  concat(`p`.`id`, '-', `p`.`productVariantId`)        AS `code`,
+  `pb`.`name`                                          AS `brand`,
+  concat(`p`.`itemno`, ' # ', `pv`.`name`)             AS `cpf`,
+  concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, ''))                                           AS `externalId`,
+  concat(`ps`.`name`, ' ', `ps`.`year`)                AS `season`,
+  `s`.`id`                                             AS `shopId`,
+  `s`.`title`                                          AS `shop`,
+  if((`p`.`qty` > 0), 'disponibile', 'mancante')       AS `stock`,
+  `p`.`creationDate`                                   AS `creationDate`,
+  `pss`.`name`                                         AS `status`,
+  shp.price                                            AS price,
+  shp.salePrice                                        AS salePrice,
+  shp.value                                            AS value,
+  concat(phs.shootingId)                               AS shooting,
+  concat(doc.number)                                   AS doc_number,
+  if((p.id, p.productVariantId) IN (SELECT
+                                      ProductHasProductPhoto.productId,
+                                      ProductHasProductPhoto.productVariantId
+                                    FROM ProductHasProductPhoto), 'sì', 'no')                 AS hasPhotos,
+  psp.name as prodSheetPrototypeName,
+  if(count(DISTINCT ps1.ean) = count(DISTINCT ps1.productSizeId), 'si', 'no') AS ean
+FROM `Product` `p`
+  JOIN ProductSku ps1 ON p.id = ps1.productId AND p.productVariantId = ps1.productVariantId
+  JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
+  JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
+  JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
+  JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
+  JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
+  JOIN `ProductSeason` `ps` ON `p`.`productSeasonId` = `ps`.`id`
+  LEFT JOIN (
+      ProductHasShooting phs
+      JOIN Shooting shoot ON phs.shootingId = shoot.id
+      LEFT JOIN Document doc ON shoot.friendDdt = doc.id)
+    ON p.productVariantId = phs.productVariantId AND p.id = phs.productId
+  LEFT JOIN ProductSheetPrototype psp ON p.productSheetPrototypeId = psp.id
+  LEFT JOIN (DirtyProduct dp
+    JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
+    ON (shp.productId,shp.productVariantId,shp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
+WHERE `pss`.`id` NOT IN (7, 8)
+GROUP BY p.id, p.productVariantId, s.id
+ORDER BY `p`.`creationDate` DESC";
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
         $datatable->addCondition('shopId', $shopsIds);
@@ -172,6 +177,12 @@ class CProductSlimListAjaxController extends AAjaxController
             $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
             $row['prodSheetPrototypeName'] = $val->productSheetPrototype->name;
             $row['pspRow_Id'] = $val->productSheetPrototypeId;
+            $skus = $val->productSku;
+            $ean = '';
+            foreach ($skus as $sku){
+                $ean .= $sku->ean . '</br>';
+            }
+            $row["ean"] = $ean;
             $datatable->setResponseDataSetRow($key, $row);
         }
         return $datatable->responseOut();

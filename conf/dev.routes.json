@@ -731,6 +731,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/lista-ean(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductEanListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/lista-macrogruppi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeMacroGroupSimpleListController"
