@@ -69,6 +69,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Associato a Brand
                                 </th>
+                                <th data-slug="shopId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Associato a Shop
+                                </th>
                                 <!--<th class="center">Gruppo Taglie</th>-->
                                 <th data-slug="dateImport"
                                     data-searchable="false"

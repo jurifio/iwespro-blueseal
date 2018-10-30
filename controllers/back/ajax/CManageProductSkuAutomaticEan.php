@@ -1,6 +1,7 @@
 <?php
 
 namespace bamboo\controllers\back\ajax;
+
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
@@ -37,9 +38,10 @@ class CManageProductSkuAutomaticEan extends AAjaxController
     {
 
         $brandId = \Monkey::app()->router->request()->getRequestData('p');
+        $shopId = \Monkey::app()->router->request()->getRequestData('s');
 
         /** @var CObjectCollection $products */
-        $products = \Monkey::app()->repoFactory->create('Product')->findBy(["productBrandId" => $brandId ]);
+        $products = \Monkey::app()->repoFactory->create('Product')->findBy(["productBrandId" => $brandId]);
 
         /** @var CRepo $eanrepo */
         $eanrepo = \Monkey::app()->repoFactory->create('ProductEan');
@@ -51,26 +53,30 @@ class CManageProductSkuAutomaticEan extends AAjaxController
             $skus = $product->productSku;
 
             /** @var CProductSku $sku */
-            foreach ($skus as $sku){
-                if(!is_null($sku->ean)){
-                  continue;
-                }
+            foreach ($skus as $sku) {
+                if ($shopId == $sku->shopId) {
+                    if (!is_null($sku->ean)) {
+                        continue;
+                    }
 
-                if($sku->stockQty == 0) continue;
+                    if ($sku->stockQty == 0) {
+                        continue;
+                    }
+                    $eanuse = $eanrepo->findOneBy(['used' => 0]);
+                    if (null == $eanuse) {
+                        throw new BambooException('Tutti i codici Sono Stati Assegnati devi rigenerare altri codici');
+                    } else {
+                        $sku->ean = $eanuse->ean;
+                        $sku->update();
 
-                $eanuse = $eanrepo->findOneBy(['used' => 0]);
-                if (null == $eanuse) {
-                    throw new BambooException('Tutti i codici Sono Stati Assegnati devi rigenerare altri codici');
-                } else {
-                    $sku->ean = $eanuse->ean;
-                    $sku->update();
-
-                    $eanuse->productId = $sku->productId;
-                    $eanuse->productVariantId = $sku->productVariantId;
-                    $eanuse->productSizeId = $sku->productSizeId;
-                    $eanuse->used = 1;
-                    $eanuse->brandAssociate = $brandId;
-                    $eanuse->update();
+                        $eanuse->productId = $sku->productId;
+                        $eanuse->productVariantId = $sku->productVariantId;
+                        $eanuse->productSizeId = $sku->productSizeId;
+                        $eanuse->used = 1;
+                        $eanuse->brandAssociate = $brandId;
+                        $eanuse->shopId =$shopId;
+                        $eanuse->update();
+                    }
                 }
             }
         }

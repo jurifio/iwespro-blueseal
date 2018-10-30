@@ -16,11 +16,21 @@ $(document).on('bs-product-sku-associate-ean-brand', function () {
 
     let bsModal = new $.bsModal('Assegna codice Ean', {
         body: `<p>Associa il brand</p>
+                 <div class="row">
                  <div class="col-md-12">
                 <div class="form-group form-group-default selectize-enabled"> 
-                <label for="Brand" >Seleziona il Brand </label><select id="brand" name="brand" class="full-width selectpicker" placeholder="Selezione il Brand"
+                <label for="brand" >Seleziona il Brand </label><select id="brand" name="brand" class="full-width selectpicker" placeholder="Selezione il Brand"
                 data-init-plugin="selectize"></select> 
                  </div> 
+                </div>
+                </div>
+                                 <div class="row">
+                 <div class="col-md-12">
+                <div class="form-group form-group-default selectize-enabled"> 
+                <label for="shop" >Seleziona lo Shop </label><select id="shop" name="shop" class="full-width selectpicker" placeholder="Selezione lo Shop"
+                data-init-plugin="selectize"></select> 
+                 </div> 
+                </div>
                 </div>
                 `
     });
@@ -41,17 +51,36 @@ $(document).on('bs-product-sku-associate-ean-brand', function () {
             options: res2,
         });
     });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Shop'
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#shop');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'title',
+            searchField: 'title',
+            options: res2,
+        });
+    });
 
 
 
 
     bsModal.setOkEvent(function () {
         let brand=$('#brand').val();
+        let shop=$('#shop').val();
         $.ajax({
             method: 'post',
             url: '/blueseal/xhr/ManageProductSkuAutomaticEan',
             data: {
                 p:brand,
+                s:shop
             }
         }).done(function (res) {
             bsModal.writeBody(res);

@@ -2,9 +2,13 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\base\CObjectCollection;
+use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CProductEan;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductSku;
+use bamboo\domain\entities\CShop;
+use bamboo\domain\entities\CProductBrand;
 use bamboo\domain\repositories\CDocumentRepo;
 
 /**
@@ -32,7 +36,8 @@ class CProductEanListAjaxController extends AAjaxController
                         concat(pe.productId,'-',pe.productVariantId,'-',productSizeId) as code,
                         pe.usedForParent as usedForParent,
                         if(pe.used=0,'Non Utilizzato','Utilizzato') as used,
-                        if(pe.brandAssociate=0,'Non Associato','Associato a Brand') as brandAssociate,
+                        if(pe.brandAssociate=0,'Non Associato',pe.brandAssociate) as brandAssociate,
+                        if(pe.shopId=null,'Non Associato',pe.shopId) as shopId,
                         pe.dateImport as dateImport,
                         pe.fileImported as fileImported
                         from ProductEan pe
@@ -41,13 +46,32 @@ class CProductEanListAjaxController extends AAjaxController
 
 
         $datatable->doAllTheThings(true);
+        /** @var CRepo $nshopRepo  */
+        $nshopRepo=\Monkey::app()->repoFactory->create('Shop');
+        /** @var CRepo $nbrandRepo  */
+        $nbrandRepo=\Monkey::app()->repoFactory->create('ProductBrand');
 
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
-           $row['used']="<b>".$row['used']."</b>";
+            $row['used']="<b>".$row['used']."</b>";
             $row['dateImport']=date('w',strtotime($row['dateImport']));
             $row['fileImported']="<b>".$row['fileImported']."</b>";
+            /** @var CShop $shop */
+            $shop = $nshopRepo->findOneBy(['id'=>$row['shopId']]);
+            if(null==$shop){
+                $row['shopId']="non Assegnato";
+            }else {
+                $row['shopId'] = $shop->title;
+            }
+            /** @var CProductBrand $brand */
+            $brand = $nbrandRepo->findOneBy(['id'=>$row['brandAssociate']]);
+            if(null==$brand){
+                $row['brandAssociate']="non Assegnato";
+            } else {
+                $row['brandAssociate'] = $brand->name;
+            }
+            $datatable->setResponseDataSetRow($key,$row);
 
             }
 
