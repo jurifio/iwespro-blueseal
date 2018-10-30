@@ -38,7 +38,6 @@ class CPrestashopDumpCsv extends AAjaxController
      */
     public function post()
     {
-
         set_time_limit(0);
         ini_set('memory_limit', '2048M');
 
@@ -48,6 +47,7 @@ class CPrestashopDumpCsv extends AAjaxController
           $sql = "ALTER TABLE PrestashopHasProduct AUTO_INCREMENT=1";
           $res_delete = \Monkey::app()->dbAdapter->query($sql, []);*/
         /******* apertura e creazione file csv per espostazione********/
+
 
         if (ENV == 'dev') {
 
