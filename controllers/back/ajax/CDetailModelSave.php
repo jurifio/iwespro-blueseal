@@ -304,7 +304,7 @@ class CDetailModelSave extends AAjaxController
                     $this->alignSupportAfterInsert($newId);
                 } catch (\Throwable $e) {
                     \Monkey::app()->repoFactory->rollback();
-                    $mes .= '<br><br>'.$e->getMessage();
+                    $mes .= "<br><br><strong>$psmpErrId</strong>$errore";
                 }
             }
             return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds), 'message' => json_encode($mes)]);

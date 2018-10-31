@@ -331,7 +331,7 @@ FROM `Product` `p`
         left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
 WHERE p.qty>0 AND p.productStatusId=6 and mphas.typeSync='0' and S3.price>0 
 GROUP BY p.id,p.productVariantId
-ORDER BY `p`.`id`";
+ORDER BY `p`.`id` limit 5";
 
 
         /**** esportazione prodotti su ProductHasPrestashop******/
@@ -750,7 +750,7 @@ FROM ProductSizeMacroGroup psmg
                 $data_attribute_lang = array(
                     array($value_attribute_lang['id_attribute'],
                         $y,
-                        htmlentities($value_attribute_lang['name'], ENT_QUOTES)));
+                        $value_attribute_lang['name']));
 
                 foreach ($data_attribute_lang as $row_attribute_lang) {
                     fputcsv($attribute_lang_csv, $row_attribute_lang, ';');
@@ -983,7 +983,7 @@ FROM `Product` `p`
   left join MarketplaceHasShop mpas on php.shopId=mpas.shopId
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2)  and S3.price > 0 
 GROUP BY p.id,p.productVariantId
-ORDER BY `p`.`id` ";
+ORDER BY `p`.`id`  limit 5 ";
 
 
 

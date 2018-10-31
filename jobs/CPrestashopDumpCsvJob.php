@@ -755,7 +755,7 @@ FROM ProductSizeMacroGroup psmg
                 $data_attribute_lang = array(
                     array($value_attribute_lang['id_attribute'],
                         $y,
-                        htmlentities($value_attribute_lang['name'], ENT_QUOTES)));
+                        $value_attribute_lang['name']));
 
                 foreach ($data_attribute_lang as $row_attribute_lang) {
                     fputcsv($attribute_lang_csv, $row_attribute_lang, ';');
