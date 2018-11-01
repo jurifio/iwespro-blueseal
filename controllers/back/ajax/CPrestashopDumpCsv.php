@@ -331,7 +331,7 @@ FROM `Product` `p`
         left join MarketplaceHasShop mphas on dp.shopId =mphas.shopId
 WHERE p.qty>0 AND p.productStatusId=6 and mphas.typeSync='0' and S3.price>0 
 GROUP BY p.id,p.productVariantId
-ORDER BY `p`.`id` limit 5";
+ORDER BY `p`.`id`";
 
 
         /**** esportazione prodotti su ProductHasPrestashop******/
@@ -983,7 +983,7 @@ FROM `Product` `p`
   left join MarketplaceHasShop mpas on php.shopId=mpas.shopId
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2)  and S3.price > 0 
 GROUP BY p.id,p.productVariantId
-ORDER BY `p`.`id`  limit 5 ";
+ORDER BY `p`.`id`";
 
 
 
