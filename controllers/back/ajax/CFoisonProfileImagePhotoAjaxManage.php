@@ -57,8 +57,9 @@ class CFoisonProfileImagePhotoAjaxManage extends AAjaxController
             if (!move_uploaded_file($_FILES['file']['tmp_name'][$i], $tempFolder . $_FILES['file']['name'][$i])) {
                 throw new RedPandaException('Cannot move the uploaded Files');
             }
-
-            $fileName['name'] = explode('_', $_FILES['file']['name'][$i])[0];
+            /** @var CFoison $foison */
+            $foison = $foisonRepo->findOneBy(['foisonId' => $foisonId]);
+            $fileName['name'] = $foison->userId . '_' . $foison->name . '_' . $foison->surname;
             //$fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 
@@ -74,8 +75,6 @@ class CFoisonProfileImagePhotoAjaxManage extends AAjaxController
             if ($res) {
                 $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-category/" . $fileName['name'];
 
-                /** @var CFoison $foison */
-                $foison = $foisonRepo->findOneBy(['foisonId' => $foisonId]);
                 $foison->profileImageUrl = $url;
                 $foison->update();
             }

@@ -45,7 +45,7 @@ $(document).on('bs-manage-foison-image-photo', function () {
 
     body.html(bodyContent);
     let dropzone = new Dropzone("#dropzoneModal",{
-        url: "/blueseal/xhr/ProductModelPrototypeCategoryPhotoAjaxManage",
+        url: "/blueseal/xhr/FoisonProfileImagePhotoAjaxManage",
         maxFilesize: 5,
         maxFiles: 1,
         parallelUploads: 1,

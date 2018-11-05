@@ -146,6 +146,9 @@
             data-title="Salva"
             data-placement="bottom"
             ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.foison.profile.image.manage"
+        ></bs-toolbar-button>
 </bs-toolbar>
 </body>
 </html>
