@@ -86,10 +86,19 @@
                 data-remote="bs.user.password.change"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <?php endif; ?>
     <bs-toolbar-group data-group-label="Gestisci imm profilo">
-    <?php endif; ?><bs-toolbar-button
+    <bs-toolbar-button
             data-remote="bs.foison.profile.image.manage"
     ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestisci curriculum">
+        <bs-toolbar-button
+                data-remote="bs.foison.curriculum.manage"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.foison.curriculum.download"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

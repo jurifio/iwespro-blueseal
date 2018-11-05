@@ -149,6 +149,9 @@
         <bs-toolbar-button
                 data-remote="bs.foison.profile.image.manage"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.foison.curriculum.manage"
+        ></bs-toolbar-button>
 </bs-toolbar>
 </body>
 </html>

@@ -30,10 +30,10 @@ class CDownloadContracts extends ARestrictedAccessRootController
 
             if (!$i) throw new BambooRoutingException('File Not Found');
             if ($i->bin) {
-                $download = new CDownloadFileFromDb('Contracts', 'id', $filters['id']);
+                $download = new CDownloadFileFromDb($type, 'id', $filters['id']);
                 $ret = $download->getFile();
             } else if (!$i->bin){
-                $ret = "Non è associato nessun Contratto";
+                $ret = "Non è associato nessun file";
             }
             echo $ret;
         } catch (BambooRoutingException $e) {

@@ -33,6 +33,7 @@ class CDownloadFileFromDb
                 $res = $this->getInvoiceBin($table, $field, $value);
                 break;
             case 'Contracts':
+            case 'Foison':
                 $res = $this->getContractsBin($table, $field, $value);
                 break;
             default:

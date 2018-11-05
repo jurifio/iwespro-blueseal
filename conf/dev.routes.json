@@ -2064,6 +2064,19 @@
             ]
         },
         {
+            "pattern": "/blueseal/download-contracts/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadContracts"
+            },
+            "filters": {
+                "id": "[A-Za-z0-9_-]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/distinte(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillListController"

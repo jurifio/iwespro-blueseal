@@ -59,7 +59,7 @@ class CFoisonProfileImagePhotoAjaxManage extends AAjaxController
             }
             /** @var CFoison $foison */
             $foison = $foisonRepo->findOneBy(['id' => $foisonId]);
-            $fileName['name'] = $foison->userId . '_' . $foison->name . '_' . $foison->surname . '.' . explode('.', $_FILES['file']['name'][$i])[1];;
+            $fileName['name'] = $foison->userId . '_' . $foison->name . '_' . $foison->surname . '.' . explode('.', $_FILES['file']['name'][$i])[1];
             //$fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 
