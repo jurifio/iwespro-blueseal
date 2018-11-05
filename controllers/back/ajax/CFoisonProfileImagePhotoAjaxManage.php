@@ -58,8 +58,8 @@ class CFoisonProfileImagePhotoAjaxManage extends AAjaxController
                 throw new RedPandaException('Cannot move the uploaded Files');
             }
             /** @var CFoison $foison */
-            $foison = $foisonRepo->findOneBy(['foisonId' => $foisonId]);
-            $fileName['name'] = $foison->userId . '_' . $foison->name . '_' . $foison->surname;
+            $foison = $foisonRepo->findOneBy(['id' => $foisonId]);
+            $fileName['name'] = $foison->userId . '_' . $foison->name . '_' . $foison->surname . '.' . explode('.', $_FILES['file']['name'][$i])[1];;
             //$fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 
