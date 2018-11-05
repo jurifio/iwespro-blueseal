@@ -304,6 +304,8 @@ class CDetailModelSave extends AAjaxController
                     $this->alignSupportAfterInsert($newId);
                 } catch (\Throwable $e) {
                     \Monkey::app()->repoFactory->rollback();
+                    $psmpErrId = $psmp->id;
+                    $errore = $e->getMessage();
                     $mes .= "<br><br><strong>$psmpErrId</strong>$errore";
                 }
             }
