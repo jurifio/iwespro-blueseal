@@ -70,7 +70,7 @@ class CFoisonProfileImagePhotoAjaxManage extends AAjaxController
                 return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
             }
 
-            //unlink($tempFolder . $_FILES['file']['name'][$i]);
+            unlink($tempFolder . $_FILES['file']['name'][$i]);
 
             if ($res) {
                 $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-category/" . $fileName['name'];
@@ -78,6 +78,7 @@ class CFoisonProfileImagePhotoAjaxManage extends AAjaxController
                 $foison->profileImageUrl = $url;
                 $foison->update();
             }
+
         }
 
         return true;
