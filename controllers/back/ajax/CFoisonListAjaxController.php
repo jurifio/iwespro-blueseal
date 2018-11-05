@@ -69,6 +69,7 @@ class CFoisonListAjaxController extends AAjaxController
             /** @var CFoison $foison */
             $foison = $foisonRepo->findOneBy(['id'=>$row["id"]]);
             $row["DT_RowId"] = 'row__' . $foison->user->printId();
+            $row["Row_foison_id"] = $foison->id;
             $row["id"] = '<a href=" '.$url.$foison->id.' " target="_blank"> '.$foison->id.' </a>';
             $row["name"] = $foison->name;
             $row["surname"] = $foison->surname;

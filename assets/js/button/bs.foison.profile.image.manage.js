@@ -18,8 +18,27 @@ $(document).ready(function() {
 $(document).on('bs-manage-foison-image-photo', function () {
 
 
-    let foisonId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    let val = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
 
+    let foisonId = null;
+    let selectedRows = null;
+
+    if(val == 'foison'){
+
+        selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length > 1 || selectedRows.length == 0){
+            new Alert({
+                type: "warning",
+                message: "Seleziona solo un foison"
+            }).open();
+            return false;
+        }
+
+        foisonId = selectedRows[0].Row_foison_id;
+    } else {
+        foisonId = val;
+    }
     let bsModal = $('#bsModal');
 
     let header = bsModal.find('.modal-header h4');
