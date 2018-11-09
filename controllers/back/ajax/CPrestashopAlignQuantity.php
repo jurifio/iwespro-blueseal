@@ -227,6 +227,8 @@ ORDER BY `p`.`id`";
 
             }
                     }
+        $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2'";
+        \Monkey::app()->dbAdapter->query($sql, []);
                     $res="Allineamento Stock Eseguito";
         return $res;
     }
