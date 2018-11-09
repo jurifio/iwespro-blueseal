@@ -209,8 +209,8 @@ ORDER BY `p`.`id`";
             $stmtUpdateStockAvailable->execute();
             $res_product_attribute=\Monkey::app()->repoFactory->create('productPublicSku')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
             foreach($res_product_attribute as $value_attribute){
-                $stockQty=$value_attribute['stockQty'];
-                $reference=$value_attribute['productId']."-".$value_attribute['productVariantId']."-".$value_attribute['productSizeId'];
+                $stockQty=$value_attribute->stockQty;
+                $reference=$value_attribute->productId."-".$value_attribute->productVariantId."-".$value_attribute->productSizeId;
                 $stmtUpdateProductAttribute=$db_con->prepare("UPDATE psz6_product_attribute set quantity=".$stockQty." 
                 and reference='".$reference."'");
                 $stmtUpdateProductAttribute->execute();
