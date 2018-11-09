@@ -171,6 +171,9 @@
         <bs-toolbar-button
                 data-remote="bs.order.filterToSend"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.order.remote.pickup"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

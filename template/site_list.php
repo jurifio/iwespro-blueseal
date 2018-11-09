@@ -77,6 +77,9 @@
         <bs-toolbar-button
                 data-remote="bs.listcategory.create"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.quantity.update"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
