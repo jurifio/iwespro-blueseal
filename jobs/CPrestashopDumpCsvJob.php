@@ -987,7 +987,8 @@ FROM `Product` `p`
   left JOIN ProductName pn ON p.id = pn.id
   left join MarketplaceHasShop mpas on php.shopId=mpas.shopId
 WHERE  `p`.`qty` > 0 AND p.productStatusId='6' AND php.statusPublished in (0,2)  and S3.price > 0 
-ORDER BY `p`.`id` ";
+GROUP BY p.id,p.productVariantId
+ORDER BY `p`.`id`";
 
 
 

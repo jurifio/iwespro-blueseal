@@ -22,45 +22,37 @@ class CMarketplaceProductAssociateListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "SELECT mphpa.id as id,
-       concat(`mphpa`.`id`,'-',`mphpa`.`productVariantId`) AS `code`,
+        $sql="SELECT p.id as id,
+       concat(`p`.`id`,'-',`p`.`productVariantId`) AS `code`,
        s.name as  shop,
        pb.name as brand,
        phpc.productCategoryId as category,
        `p`.`itemno` AS `itemno`,
-       'porcodio' as stock,
+       '' as stock,
        pss.name   as season,
        '' as dummy,
-       mphpa.productId as productId,
-       mphpa.productVariantId as productVariantId,
-       mphpa.shopId as shopId,
-       mphpa.marketplaceId as marketplaceId,
-       mphpa.typeRetouchPrice as typeRetoutchPrice,
-       mphpa.amount as amount,
-       mphpa.prestashopId as presthopId,
-       mphpa.statusPublished as status,
-       mphpa.marketPlaceHasShopId as marketPlaceHasShopId,
-       mphpa.dateAdd as dateAdd,
-       mphpa.dateUpd as dateUpd,
-       mphpa.price as price,
+       p.id as productId,
+       p.productVariantId as productVariantId,
+       shp.shopId as shopId,
+
+
        p.creationDate as creationDate,
        '' as associatePrestashopMarketPlace
-       
 
 
-from MarketplaceHasProductAssociate mphpa
-  join Product p on mphpa.productId =p.id and mphpa.productVariantId=p.productVariantId
-  join ShopHasProduct shp on mphpa.productId=shp.productId and mphpa.productVariantId =shp.productVariantId
+
+from Product p
+
+  join ShopHasProduct shp on p.id=shp.productId and p.productVariantId =shp.productVariantId
   join Shop s on s.id =shp.shopId
   join ProductSeason pss on pss.id =p.productSeasonId
   join ProductHasProductPhoto PHPP ON p.id = PHPP.productId AND p.productVariantId = PHPP.productVariantId
   join ProductBrand pb on p.productBrandId =pb.id
   join `ProductHasProductCategory` `phpc` on  p.`id` = `phpc`.`productId` and `p`.`productVariantId` = `phpc`.`productVariantId`
-  join MarketplaceHasShop mphs on mphpa.marketplaceId=mphs.marketplaceId
-  join Marketplace m on mphpa.marketplaceId = m.id
+
   join `ProductStatus` `ps` on((`p`.`productStatusId` = `ps`.`id`))
 
-where (((`ps`.`isReady` = 1) and (`p`.`qty` > 0)) or (`m`.`id` is not null))
+where (((`ps`.`isReady` = 1) and (`p`.`qty` > 0)))
 group by productId, productVariantId";
 
 
@@ -98,8 +90,9 @@ group by productId, productVariantId";
                 $row['associatePrestashopMarketPlace']='non associato';
                 $row['typePrice']='non applicato';
                 $row['price']='non calcolato';
+                $row['status']='non lavorato';
             }else{
-                $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price,mphs.imgMarketPlace as icon
+                $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price,mphs.imgMarketPlace as icon, mphpa.statusPublished as statusPublished
                                           FROM Marketplace m join MarketplaceHasProductAssociate mphpa
                                           on mphpa.marketplaceId =m.id
                                            join Shop s on mphpa.shopId=s.id
@@ -132,32 +125,31 @@ group by productId, productVariantId";
                             break;
 
                     }
+                    switch ($marketplaces['statusPublished']) {
+                        case 0:
+                            $status = 'In Attesa di Pubblicazione';
+                            break;
+                        case 1:
+                            $status = 'Pubblicato';
+                            break;
+                        case 2:
+                            $status = 'Allineamento Programmato';
+                            break;
+                        case 3:
+                            $status = 'Cancellato';
+                            break;
+                        default:
+                            $status = 'da Lavorare';
+                    }
 
 
                     $rowtablemarketplace .= "<tr><td><img width='80' src='".$imgMarketPlacePath.$marketplaces['icon']."'</img></td><td>".$marketplaces['nameShop'] ."-". $marketplaces['name'] . "</td><td>".$typeRetouchPrice."</td><td>".$marketplaces['price'] . "</td></tr>";
                 }
                 $row["associatePrestashopMarketPlace"] = '<table class="nested-table"><thead><th colspan="2">MarketPlace</th><th>Tipo ricalcolo</th><th>Prezzo Ricalcolato</th></thead><tbody>' . $rowtablemarketplace . '</tbody></table>';
-                if(null==$resmarketplaceHasProductAssociate->statusPublished){
-                    $row['status']='Da Lavorare';
-                }else {
-                    switch ($resmarketplaceHasProductAssociate->statusPublished) {
-                        case 0:
-                            $row['status'] = 'In Attesa di Pubblicazione';
-                            break;
-                        case 1:
-                            $row['status'] = 'Pubblicato';
-                            break;
-                        case 2:
-                            $row['status'] = 'Allineamento Programmato';
-                            break;
-                        case 3:
-                            $row['status'] = 'Cancellato';
-                            break;
-                        default:
-                            $row['status'] = 'da Lavorare';
-                    }
+                $row["status"]=$status;
+
                 }
-            }
+
             $resprice=\Monkey::app()->repoFactory->create('ProductPublicSku')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
             $row['price']=$resprice->price;
 
