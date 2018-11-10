@@ -23,7 +23,7 @@ class CMarketplaceProductAssociateListAjaxController extends AAjaxController
     public function get()
     {
         $sql="SELECT p.id as id,
-       concat(`p`.`id`,'-',`p`.`productVariantId`) AS `code`,
+       concat(`pps`.`productId`,'-',`pps`.`productVariantId`) AS `code`,
        s.name as  shop,
        pb.name as brand,
        phpc.productCategoryId as category,
@@ -31,8 +31,8 @@ class CMarketplaceProductAssociateListAjaxController extends AAjaxController
        '' as stock,
        pss.name   as season,
        '' as dummy,
-       p.id as productId,
-       p.productVariantId as productVariantId,
+       pps.productId as productId,
+       pps.productVariantId as productVariantId,
        shp.shopId as shopId,
 
 
@@ -41,18 +41,20 @@ class CMarketplaceProductAssociateListAjaxController extends AAjaxController
 
 
 
-from Product p
+from ProductPublicSku pps
+  join ProductSku psk on pps.productId=psk.productId and pps.productVariantId=psk.productVariantId
 
-  join ShopHasProduct shp on p.id=shp.productId and p.productVariantId =shp.productVariantId
+  join ShopHasProduct shp on pps.productId=shp.productId and pps.productVariantId =shp.productVariantId
   join Shop s on s.id =shp.shopId
+  join Product p on pps.productId=p.id and pps.productVariantId=p.productVariantId
   join ProductSeason pss on pss.id =p.productSeasonId
-  join ProductHasProductPhoto PHPP ON p.id = PHPP.productId AND p.productVariantId = PHPP.productVariantId
+  join ProductHasProductPhoto PHPP ON pps.productId = PHPP.productId AND pps.productVariantId = PHPP.productVariantId
   join ProductBrand pb on p.productBrandId =pb.id
-  join `ProductHasProductCategory` `phpc` on  p.`id` = `phpc`.`productId` and `p`.`productVariantId` = `phpc`.`productVariantId`
+  join `ProductHasProductCategory` `phpc` on  pps.`productId` = `phpc`.`productId` and `pps`.`productVariantId` = `phpc`.`productVariantId`
 
   join `ProductStatus` `ps` on((`p`.`productStatusId` = `ps`.`id`))
 
-where (((`ps`.`isReady` = 1) and (`p`.`qty` > 0)))
+where (`p`.`qty` > 0)
 group by productId, productVariantId";
 
 
