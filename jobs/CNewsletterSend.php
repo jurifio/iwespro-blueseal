@@ -39,29 +39,30 @@ class CNewsletterSend extends ACronJob
         /** @var CNewsletter $newsletter */
         foreach ($newsletters as $newsletter) {
 
-            if($newsletter->newsletterCampaign->newsletterShop->id == 2){
-                $readExternalDb = new CReadExtDbTable(2);
-                $readExternalDb->insertData(
-                    false,
-                    ['Newsletter',
-                        'UserDetails-Left'=>[
-                            'Self'=>[
-                                'userId'
-                            ],
-                            'Newsletter'=>[
-                                'userId'
-                            ]
+            $newsletterShopId = $newsletter->newsletterCampaign->newsletterShop->id;
+            $fieldName = $newsletterShopId != 2 ? 'NewsletterUser' : 'Newsletter';
+            $readExternalDb = new CReadExtDbTable($newsletterShopId);
+            $readExternalDb->insertData(
+                false,
+                [$fieldName,
+                    'UserDetails-Left'=>[
+                        'Self'=>[
+                            'userId'
+                        ],
+                        $fieldName=>[
+                            'userId'
                         ]
-                    ],
-                    ['email', 'isActive','name','surname','birthDate'],
-                    ['email'],
-                    [],
-                    'NewsletterExternalUser',
-                    ['email', 'isActive','name','surname','birthDate'],
-                    ['email'],
-                    ['externalShopId' => 2]
-                );
-            }
+                    ]
+                ],
+                ['email', 'isActive','name','surname','birthDate'],
+                ['email'],
+                [],
+                'NewsletterExternalUser',
+                ['email', 'isActive','name','surname','birthDate'],
+                ['email', ['externalShopId' => $newsletterShopId]],
+                ['externalShopId' => $newsletterShopId]
+            );
+
 
             $asd = $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod',true);
 
