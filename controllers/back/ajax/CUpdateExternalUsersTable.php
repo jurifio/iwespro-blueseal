@@ -29,7 +29,7 @@ class CUpdateExternalUsersTable extends AAjaxController
 
         $newsletterShopId = \Monkey::app()->router->request()->getRequestData('newsletterShopId');
 
-        $newsletterShop = \Monkey::app()->repoFactory->create('NewsletterShop')->findOneBy(['id'=>$newsletterShopId]);
+        //$newsletterShop = \Monkey::app()->repoFactory->create('NewsletterShop')->findOneBy(['id'=>$newsletterShopId]);
 
         $fieldName = $newsletterShopId != 2 ? 'NewsletterUser' : 'Newsletter';
 
@@ -47,12 +47,12 @@ class CUpdateExternalUsersTable extends AAjaxController
                 ]
             ],
             ['email', 'isActive','name','surname','birthDate'],
-            ['email', $newsletterShop->shopId],
+            ['email'],
             [],
             'NewsletterExternalUser',
             ['email', 'isActive','name','surname','birthDate'],
-            ['email', 'externalShopId'],
-            ['externalShopId' => $newsletterShop->shopId]
+            ['email', ['externalShopId' => $newsletterShopId]],
+            ['externalShopId' => $newsletterShopId]
         );
 
         if($ins) return 'Lista aggiornata correttamente';

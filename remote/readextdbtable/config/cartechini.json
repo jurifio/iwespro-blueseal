@@ -1,7 +1,7 @@
 {
     "origin": {
         "engine": "mysql",
-        "host": "db",
+        "host": "5.189.152.89",
         "port": "3306",
         "name": "cartechinishp",
         "user": "cartechinishp",

@@ -213,10 +213,10 @@ class CReadExtDbTable extends AReadExtDbTable
         $table = \Monkey::app()->repoFactory->create($localTable);
 
 
-        $countRemoteKeys = count($remoteFieldsToSearch);
+        //$countRemoteKeys = count($remoteFieldsToSearch);
         $countLocalKeys = count($localFieldsToSearch);
 
-        if ($countRemoteKeys != $countLocalKeys) throw new BambooException("The number of Local search keys in remote table must be identical to the number of Remote search keys");
+        //if ($countRemoteKeys != $countLocalKeys) throw new BambooException("The number of Local search keys in remote table must be identical to the number of Remote search keys");
 
         $countLocalFields = count($localFields);
         $countRemoteFields = count($remoteFields);
@@ -229,8 +229,13 @@ class CReadExtDbTable extends AReadExtDbTable
 
                 $keys = [];
 
-                for ($i = 0; $i < $countRemoteKeys; $i++) {
-                    $keys[$localFieldsToSearch[$i]] = $v[$remoteFieldsToSearch[$i]];
+                for ($i = 0; $i < $countLocalKeys; $i++) {
+
+                    if(is_array($localFieldsToSearch[$i])){
+                        $keys[key($localFieldsToSearch[$i])] = $localFieldsToSearch[$i][key($localFieldsToSearch[$i])];
+                    } else {
+                        $keys[$localFieldsToSearch[$i]] = $v[$remoteFieldsToSearch[$i]];
+                    }
                 }
 
                 $exTable = $table->findOneBy($keys);
