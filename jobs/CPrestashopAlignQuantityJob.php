@@ -225,10 +225,12 @@ ORDER BY `p`.`id`";
                 while ($rowGetProductAttribute = $stmtGetProductAttribute->fetch(PDO::FETCH_ASSOC)) {
                     $product_stockAttribute=$rowGetProductAttribute['id_product_attribute'];
                     $product_stock=$rowGetProductAttribute['id_product'];
-                }
-                $stmtUpdateAttributeStockAvailable=$db_con->prepare("UPDATE psz6_stock_available set quantity=".$stockQty."
+                    $stmtUpdateAttributeStockAvailable=$db_con->prepare("UPDATE psz6_stock_available set quantity=".$stockQty."
                  where id_product=".$product_stock." and id_product_attribute=".$product_stockAttribute);
-                $stmtUpdateAttributeStockAvailable->execute();
+                    $stmtUpdateAttributeStockAvailable->execute();
+
+                }
+
 
             }
         }
