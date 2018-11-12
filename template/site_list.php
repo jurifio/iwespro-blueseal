@@ -80,6 +80,9 @@
         <bs-toolbar-button
                 data-remote="bs.quantity.update"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.insert.productprestashop"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

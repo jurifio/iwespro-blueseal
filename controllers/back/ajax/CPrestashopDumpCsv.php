@@ -1093,7 +1093,7 @@ ORDER BY `p`.`id`";
             'delivery_out_stock'), ';');
 
         fputcsv($product_attribute_csv, array('id_product_attribute',
-            'id__product',
+            'id_product',
             'reference',
             'supplier_reference',
             'location',
