@@ -14,7 +14,7 @@ use bamboo\core\base\CSerialNumber;
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\domain\repositories\CEmailRepo;
 use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
-use pdo;
+use PDO;
 use prepare;
 
 use bamboo\core\jobs\ACronJob;
@@ -36,7 +36,7 @@ use bamboo\core\events\AEventListener;
  * @date 10/07/2018
  * @since 1.0
  */
-class CPrestashopDumpCsvJob extends ACronJob
+class CPrestashopInsertNewProductJob extends ACronJob
 {
     /**
      * @param null $args
