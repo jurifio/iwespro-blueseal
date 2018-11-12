@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CMarketplaceHasProductAssociate;
 use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\repositories\CProductSkuRepo;
 
@@ -62,6 +63,18 @@ class CSalePriceProductPublicSkuAllListModify extends AAjaxController
                     }
                     $singleSku->update();
                 }
+                /** @var CMarketplaceHasProductAssociateRepo $MarketplaceHasProductAssociateRepoRepo */
+                $marketplaceHasProductAssociateRepo = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate');
+
+                /** @var CObjectCollection $productPublicMarketPlaceAssociateSkus */
+                $productPublicMarketPlaceAssociateSkus = $marketplaceHasProductAssociateRepo->findBy(['productId' => $pId, 'productVariantId' => $pVID]);
+
+                /** @var CProductPublicSku $productPublicMarketPlaceAssociateSku */
+                foreach ($productPublicMarketPlaceAssociateSkus as $productPublicMarketPlaceAssociateSku){
+                    $productPublicMarketPlaceAssociateSku->statusPublished=3;
+                    $productPublicMarketPlaceAssociateSku->update();
+                }
+
             }
 
             $res = "Prezzi aggiornati!!";
