@@ -1,23 +1,31 @@
 <?php
 
-namespace bamboo\controllers\back\ajax;
+namespace bamboo\blueseal\jobs;
 
-
+use bamboo\domain\entities\CCartAbandonedEmailSend;
+use bamboo\domain\repositories\CCartAbandonedEmailSendRepo;
+use bamboo\domain\entities\COrder;
+use bamboo\domain\entities\CCart;
+use bamboo\domain\entities\CCartAbandonedEmailParam;
+use bamboo\domain\entities\CCouponType;
+use bamboo\domain\entities\CCoupon;
+use bamboo\domain\entities\CCartLine;
+use bamboo\core\base\CSerialNumber;
+use bamboo\core\db\pandaorm\repositories\ARepo;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
-use PrestaShopWebservice;
-use PrestaShopWebserviceException;
-use bamboo\controllers\back\ajax\CPrestashopGetImage;
-use PDO;
+use pdo;
 use prepare;
 
-use bamboo\core\exceptions\BambooConfigException;
-use bamboo\core\base\CObjectCollection;
-use bamboo\utils\time\STimeToolbox;
+use bamboo\core\jobs\ACronJob;
+use bamboo\domain\entities\CProductPublicSku;
+use bamboo\domain\entities\CProduct;
+use bamboo\core\events\AEventListener;
 
 
 /**
- * Class CPrestashopInsertNewProduct
- * @package bamboo\controllers\back\ajax
+ * Class CCartAbandonedSendEmail
+ * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -25,21 +33,18 @@ use bamboo\utils\time\STimeToolbox;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 10/11/2018
+ * @date 10/07/2018
  * @since 1.0
  */
-class CPrestashopInsertNewProduct extends AAjaxController
+class CPrestashopDumpCsvJob extends ACronJob
 {
-
-
     /**
-     * @return string
-     *
+     * @param null $args
      * @throws \bamboo\core\exceptions\BambooDBALException
-     * @throws \bamboo\core\exceptions\BambooException
      */
-    public function post()
+    public function run($args = null)
     {
+
         set_time_limit(0);
         ini_set('memory_limit', '2048M');
 
@@ -965,47 +970,47 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         $res_feature_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_feature_product as $value_feature_product) {
 
-        $stmtFeatureProduct = $db_con->prepare("INSERT INTO psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) 
+            $stmtFeatureProduct = $db_con->prepare("INSERT INTO psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) 
                                                    VALUES ('" . $value_feature_product['productDetailLabelId'] . "','" .$value_feature_product['prestaId'] . "','" . $value_feature_product['productDetailId'] . "')");
 
-        $stmtFeatureProduct->execute();
-    }
+            $stmtFeatureProduct->execute();
+        }
 
-            fclose($image_single_link_csv);
-            /*****  trasferimento ftp ******/
-            $ftp_server = "ftp.iwes.shop";
-            $ftp_user_name = "iwesshop";
-            $ftp_user_pass = "XtUWicJUrEXv";
-            $remote_file = "/public_html/tmp/";
+        fclose($image_single_link_csv);
+        /*****  trasferimento ftp ******/
+        $ftp_server = "ftp.iwes.shop";
+        $ftp_user_name = "iwesshop";
+        $ftp_user_pass = "XtUWicJUrEXv";
+        $remote_file = "/public_html/tmp/";
 
-            $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $image_single_link_csv;
-            $errorMsg = 'ftp fail connect';
-            $fileToSend = $save_to . "psz6_image_single_link.csv";
+        $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $image_single_link_csv;
+        $errorMsg = 'ftp fail connect';
+        $fileToSend = $save_to . "psz6_image_single_link.csv";
 // ------- Upload file through FTP ---------------
 
-            $ch = curl_init();
-            $fp = fopen($fileToSend, "r");
-            // we upload a TXT file
-            curl_setopt($ch, CURLOPT_URL, $ftp_url);
-            curl_setopt($ch, CURLOPT_UPLOAD, 1);
-            curl_setopt($ch, CURLOPT_INFILE, $fp);
-            // set size of the file, which isn't _mandatory_ but
-            // helps libcurl to do extra error checking on the upload.
-            curl_setopt($ch, CURLOPT_INFILESIZE, filesize($fileToSend));
-            $res = curl_exec($ch);
-            $errorMsg = curl_error($ch);
-            $errorNumber = curl_errno($ch);
-            curl_close($ch);
+        $ch = curl_init();
+        $fp = fopen($fileToSend, "r");
+        // we upload a TXT file
+        curl_setopt($ch, CURLOPT_URL, $ftp_url);
+        curl_setopt($ch, CURLOPT_UPLOAD, 1);
+        curl_setopt($ch, CURLOPT_INFILE, $fp);
+        // set size of the file, which isn't _mandatory_ but
+        // helps libcurl to do extra error checking on the upload.
+        curl_setopt($ch, CURLOPT_INFILESIZE, filesize($fileToSend));
+        $res = curl_exec($ch);
+        $errorMsg = curl_error($ch);
+        $errorNumber = curl_errno($ch);
+        curl_close($ch);
 
-            $url = 'https://iwes.shop/alignSingleImage.php';
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
+        $url = 'https://iwes.shop/alignSingleImage.php';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
 
 
-            curl_close($ch);
+        curl_close($ch);
 
         $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
@@ -1013,15 +1018,13 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         \Monkey::app()->dbAdapter->query($sql, []);
 
 
+        $res="esportazione Nuovi Prodotti eseguita file psz6_image_single_link.csv  finita alle ore ".date('Y-m-d H:i:s');
+        $this->report('Exporting to Prestashop ',$res,$res);
 
-            $res = "Allineamento Stock Eseguito";
-            return $res;
-        }
+
+
+        return $res;
+    }
+
 
 }
-
-          
-
-
-
-
