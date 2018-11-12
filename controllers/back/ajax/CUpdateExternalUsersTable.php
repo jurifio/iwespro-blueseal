@@ -55,7 +55,7 @@ class CUpdateExternalUsersTable extends AAjaxController
             ['externalShopId' => $newsletterShopId]
         );
 
-        if($ins) return 'Lista aggiornata correttamente';
+        if(is_bool($ins)) return 'Lista aggiornata correttamente';
 
         return $ins;
     }
