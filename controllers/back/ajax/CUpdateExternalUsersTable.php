@@ -29,47 +29,34 @@ class CUpdateExternalUsersTable extends AAjaxController
 
         $newsletterShopId = \Monkey::app()->router->request()->getRequestData('newsletterShopId');
 
-        if($newsletterShopId == 2){
-            $ins = $this->updateCartechini($newsletterShopId);
-        } else {
-            return false;
-        }
+        $newsletterShop = \Monkey::app()->repoFactory->create('NewsletterShop')->findOneBy(['id'=>$newsletterShopId]);
 
-        return $ins;
-    }
+        $fieldName = $newsletterShopId != 2 ? 'NewsletterUser' : 'Newsletter';
 
-    /**
-     * @param $newsletterShopId
-     * @return bool|string
-     * @throws \bamboo\core\exceptions\BambooDBALException
-     * @throws \bamboo\core\exceptions\BambooException
-     */
-    private function updateCartechini($newsletterShopId){
         $readExternalDb = new CReadExtDbTable($newsletterShopId);
         $ins = $readExternalDb->insertData(
             false,
-            ['Newsletter',
+            [$fieldName,
                 'UserDetails-Left'=>[
                     'Self'=>[
                         'userId'
                     ],
-                    'Newsletter'=>[
+                    $fieldName=>[
                         'userId'
                     ]
                 ]
             ],
             ['email', 'isActive','name','surname','birthDate'],
-            ['email'],
+            ['email', $newsletterShop->shopId],
             [],
             'NewsletterExternalUser',
             ['email', 'isActive','name','surname','birthDate'],
-            ['email'],
-            ['externalShopId' => 2]
+            ['email', 'externalShopId'],
+            ['externalShopId' => $newsletterShop->shopId]
         );
 
         if($ins) return 'Lista aggiornata correttamente';
 
         return $ins;
-
     }
 }

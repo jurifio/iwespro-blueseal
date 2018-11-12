@@ -144,11 +144,12 @@ class CReadExtDbTable extends AReadExtDbTable
      * @param array $remoteTables
      * @param array $remoteFields
      * @param array $remoteFieldsToSearch
+     * @param array $remoteWhere
      * @param string $localTable
      * @param array $localFields
      * @param array $localFieldsToSearch
      * @param array $external
-     * @return bool
+     * @return bool|string
      * @throws BambooException
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
@@ -266,7 +267,7 @@ class CReadExtDbTable extends AReadExtDbTable
             \Monkey::app()->repoFactory->commit();
         } catch (\Throwable $e) {
             \Monkey::app()->repoFactory->rollback();
-            \Monkey::app()->applicationLog('ReadExtDbTable', 'Error', 'Rollback operation', $e);
+            \Monkey::app()->applicationLog('ReadExtDbTable', 'Error', 'Rollback operation', $e->getMessage());
             return $e->getMessage();
         }
 
