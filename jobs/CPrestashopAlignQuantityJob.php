@@ -205,7 +205,8 @@ ORDER BY `p`.`id`";
             $productId=$value_product['productId'];
             $productVariantId=$value_product['productVariantId'];
             $quantity_product = $value_product['quantity'];
-            $stmtUpdateProduct = $db_con->prepare("UPDATE psz6_product SET quantity=" . $quantity_product . "
+            $price=$value_product['price'];
+            $stmtUpdateProduct = $db_con->prepare("UPDATE psz6_product SET quantity=" . $quantity_product . ",  price='".$price."'
              WHERE id_product=" . $p);
             $stmtUpdateProduct->execute();
 
