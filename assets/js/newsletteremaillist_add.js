@@ -470,6 +470,24 @@
             });
         });
 
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'NewsletterShop'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var selectShop = $('#newsletterShopId');
+            if (typeof (selectShop[0].selectize) != 'undefined') selectShop[0].selectize.destroy();
+            selectShop.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2,
+            });
+        });
+
     });
 })(jQuery);
 
@@ -490,6 +508,15 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
         let filterIsActive = $('#filterIsActive').val();
         let filterOrderDateStart = $('#filterOrderDateStart').val();
         let filterOrderDateFinish = $('#filterOrderDateFinish').val();
+        let shopId = $('#newsletterShopId').val();
+
+        if(shopId == null){
+            new Alert({
+                type: "warning",
+                message: "Non hai selezionato lo shop"
+            }).open();
+            return false;
+        }
         if (typeof filterGender === "undefined") {
             filterGender = "";
 
@@ -553,7 +580,7 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
             sql: filterGender + ' ' + filterAge + ' ' + filterCity + ' ' + filterCountry + ' ' + filterQuery + ' ' + filterIsActive + ' ' + filterOrderDateExclude + groupby,
             newsletterGroupId: $('#newsletterGroupId').val(),
             criterium:filterQuery1,
-
+            shopId: shopId
         };
         $.ajax({
             method: 'post',
