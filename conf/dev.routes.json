@@ -601,7 +601,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEventAddController"
             },
             "filters": {
-                "campaignId": "[0-9]+"
+                "campaignId": ":?[A-Za-z0-9_-]+"
             },
             "translations": {},
             "methods": [
@@ -617,7 +617,7 @@
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterInsertionAddController"
             },
             "filters": {
-                "eventId": "[A-Za-z0-9_-]+"
+                "eventId": ":?[A-Za-z0-9_-]+"
             },
             "translations": {},
             "methods": [

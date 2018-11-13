@@ -454,27 +454,27 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                                 searchField: 'name',
                                 options: insertion,
                             });
-                        });
-                    });
-                });
 
-                let newsletterShop = $('#newsletterShopId').val();
-                $.ajax({
-                    method:'GET',
-                    url: '/blueseal/xhr/GetTableContent',
-                    data: {
-                        table: 'NewsletterEmailList',
-                        condition: {newsletterShopId: newsletterShop}
-                    },
-                    dataType: 'json'
-                }).done(function (res2) {
-                    let selectN = $('#newsletterEmailListId');
-                    if(typeof (selectN[0].selectize) != 'undefined') selectN[0].selectize.destroy();
-                    selectN.selectize({
-                        valueField: 'id',
-                        labelField: 'name',
-                        searchField: 'name',
-                        options: res2,
+                            let newsletterShop = $('#newsletterShopId').val();
+                            $.ajax({
+                                method:'GET',
+                                url: '/blueseal/xhr/GetTableContent',
+                                data: {
+                                    table: 'NewsletterEmailList',
+                                    condition: {newsletterShopId: newsletterShop}
+                                },
+                                dataType: 'json'
+                            }).done(function (res2) {
+                                let selectN = $('#newsletterEmailListId');
+                                if(typeof (selectN[0].selectize) != 'undefined') selectN[0].selectize.destroy();
+                                selectN.selectize({
+                                    valueField: 'id',
+                                    labelField: 'name',
+                                    searchField: 'name',
+                                    options: res2,
+                                });
+                            });
+                        });
                     });
                 });
             });
