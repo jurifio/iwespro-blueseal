@@ -44,18 +44,17 @@
                                             </div>
                                         </div>
 
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="newsletterShopId">Seleziona lo shop
-                                                    </label>
-                                                    <select id="newsletterShopId" name="newsletterShopId"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Seleziona lo shop"
-                                                            data-init-plugin="selectize">
-                                                    </select>
-                                                </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="newsletterShopId">Seleziona lo shop
+                                                </label>
+                                                <select id="newsletterShopId" name="newsletterShopId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona lo shop"
+                                                        data-init-plugin="selectize">
+                                                </select>
                                             </div>
+                                        </div>
 
                                         <div class="row">
                                             <div class="col-md-12">

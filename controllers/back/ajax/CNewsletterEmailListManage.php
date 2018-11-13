@@ -81,7 +81,7 @@ class CNewsletterEmailListManage extends AAjaxController
                 $newsletterEmailListInsert->sql = $sql;
                 $newsletterEmailListInsert->criterium = $criterium;
                 $newsletterEmailListInsert->newsletterGroupId = $newsletterGroupId;
-                $newsletterEmailList->newsletterShopId = $shopId;
+                $newsletterEmailListInsert->newsletterShopId = $shopId;
                 // eseguo la commit sulla tabella;
 
                 $newsletterEmailListInsert->smartInsert();

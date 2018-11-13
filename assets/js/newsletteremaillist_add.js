@@ -510,13 +510,6 @@ $(document).on('bs.newNewsletterEmailList.save', function () {
         let filterOrderDateFinish = $('#filterOrderDateFinish').val();
         let shopId = $('#newsletterShopId').val();
 
-        if(shopId == null){
-            new Alert({
-                type: "warning",
-                message: "Non hai selezionato lo shop"
-            }).open();
-            return false;
-        }
         if (typeof filterGender === "undefined") {
             filterGender = "";
 
