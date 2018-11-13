@@ -213,7 +213,7 @@ ORDER BY `p`.`id`";
                 $stockQty=$value_attribute->stockQty;
                 $ean=$value_attribute->ean;
                 $reference=$value_attribute->productId."-".$value_attribute->productVariantId."-".$value_attribute->productSizeId;
-                $stmtUpdateProductAttribute=$db_con->prepare("UPDATE psz6_product_attribute set quantity=".$stockQty.", ean='".$ean."' 
+                $stmtUpdateProductAttribute=$db_con->prepare("UPDATE psz6_product_attribute set quantity=".$stockQty." 
                 and reference='".$reference."'");
                 $stmtUpdateProductAttribute->execute();
                 $stmtUpdateProductEan=$db_con->prepare("UPDATE psz6_product_attribute set ean13='".$ean."' where reference ='".$reference."'" );
