@@ -208,13 +208,16 @@ ORDER BY `p`.`id`";
             $stmtUpdateStockAvailable =$db_con->prepare("UPDATE psz6_stock_available set quantity=".$quantity_product." 
              where id_product_attribute=0 and id_product=".$p);
             $stmtUpdateStockAvailable->execute();
-            $res_product_attribute=\Monkey::app()->repoFactory->create('productPublicSku')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
+            $res_product_attribute=\Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
             foreach($res_product_attribute as $value_attribute){
                 $stockQty=$value_attribute->stockQty;
+                $ean=$value_attribute->ean;
                 $reference=$value_attribute->productId."-".$value_attribute->productVariantId."-".$value_attribute->productSizeId;
-                $stmtUpdateProductAttribute=$db_con->prepare("UPDATE psz6_product_attribute set quantity=".$stockQty." 
+                $stmtUpdateProductAttribute=$db_con->prepare("UPDATE psz6_product_attribute set quantity=".$stockQty.", ean='".$ean."' 
                 and reference='".$reference."'");
                 $stmtUpdateProductAttribute->execute();
+                $stmtUpdateProductEan=$db_con->prepare("UPDATE psz6_product_attribute set ean='".$ean."' where reference ='".$reference."'" );
+                $stmtUpdateProductEan->execute();
                 $stmtGetProductAttribute=$db_con->prepare("select id_product_attribute, id_product from psz6_product_attribute
  where reference='".$reference."'");
                 $stmtGetProductAttribute->execute();
