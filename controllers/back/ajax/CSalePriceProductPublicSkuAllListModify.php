@@ -71,7 +71,7 @@ class CSalePriceProductPublicSkuAllListModify extends AAjaxController
 
                 /** @var CProductPublicSku $productPublicMarketPlaceAssociateSku */
                 foreach ($productPublicMarketPlaceAssociateSkus as $productPublicMarketPlaceAssociateSku){
-                    $productPublicMarketPlaceAssociateSku->statusPublished=3;
+                    $productPublicMarketPlaceAssociateSku->statusPublished=2;
                     $productPublicMarketPlaceAssociateSku->update();
                 }
 
