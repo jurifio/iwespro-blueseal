@@ -52,6 +52,7 @@ class CSpecialTagsManageAjaxController extends AAjaxController
         $data = \Monkey::app()->router->request()->getRequestData();
         $productIds = $data['p'];
         $tag = $data['tag'];
+        $pos = $data['pos'];
 
         if(empty($tag)) return 'Devi selezionare un tag';
 
@@ -67,9 +68,12 @@ class CSpecialTagsManageAjaxController extends AAjaxController
             /** @var CProductHasTag $extPht */
             $extPht = $phtRepo->findOneBy(['productId'=>$product->id, 'productVariantId'=>$product->productVariantId, 'tagId'=>$tag]);
 
-            if(!is_null($extPht)) continue;
-
-            \Monkey::app()->dbAdapter->insert('ProductHasTag',['productId'=>$product->id,'productVariantId'=>$product->productVariantId,'tagId'=>$tag],false,true);
+            if(!is_null($extPht)) {
+                $extPht->position = $pos;
+                $extPht->update();
+            } else {
+                \Monkey::app()->dbAdapter->insert('ProductHasTag', ['productId' => $product->id, 'productVariantId' => $product->productVariantId, 'tagId' => $tag, 'position' => $pos], false, true);
+            }
         }
 
         return 'Special tag inserita con successo';

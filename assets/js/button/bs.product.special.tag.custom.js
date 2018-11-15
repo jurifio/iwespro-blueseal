@@ -51,22 +51,58 @@ $(document).on('bs-product-tag-new-custom', function () {
                 <option disabled selected value>Seleziona tag speciale</option>
                 </select>
                 <p>Operazione da effettuare:</p>
-                <select id="typec">
+                <select id="selPos">
                 <option disabled selected value>Seleziona un\'opzione</option>
                 <option id="add" value="add">Aggiungi</option>
                 <option id="del" value="del">Rimuovi</option>
-                </select>`
+                </select>
+                <div id="operation">
+                </div>`
     });
+
+    $('#selPos').change(function() {
+        if($('#selPos option:selected').val() == 'add') {
+            $('#operation').append(
+                `<p>Seleziona la posizione</p>
+            <select id="selectPos"></select>    
+            `
+            );
+
+            $.ajax({
+                url: '/blueseal/xhr/getTableContent',
+                method: 'GET',
+                data: {
+                    table: 'TagPosition',
+                },
+                dataType: 'json'
+            }).done(function (resPosition) {
+                var tagPosition = $('#selectPos');
+                if(typeof (tagPosition[0].selectize) != 'undefined') tagPosition[0].selectize.destroy();
+                tagPosition.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: resPosition,
+                });
+            });
+        } else {
+            $('#operation').empty()
+        }
+    });
+
+
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
 
-        let type = $('#typec').val();
+        let type = $('#selPos').val();
+        let pos = $('#selectPos').val();
 
         if(type === 'add'){
             const data = {
                 p: products,
-                tag: $('#specialtags').val()
+                tag: $('#specialtags').val(),
+                pos: pos
             };
             $.ajax({
                 method: 'post',
