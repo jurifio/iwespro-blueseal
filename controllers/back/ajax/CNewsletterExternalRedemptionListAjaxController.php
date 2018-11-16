@@ -35,7 +35,7 @@ class CNewsletterExternalRedemptionListAjaxController extends AAjaxController
                   count(CASE WHEN er.emailStatusId in (3,4,6,7) THEN 1 ELSE NULL END)                 AS emailAccepted,
                   count(CASE WHEN er.emailStatusId in (4,6,7) THEN 1 ELSE NULL END)                 AS emailDelivered,
                   count(CASE er.emailStatusId WHEN 5 THEN 1 ELSE NULL END)                 AS emailDropped,
-                  count(CASE er.emailStatusId WHEN 6 THEN 1 ELSE NULL END)                 AS emailOpened,
+                  count(CASE WHEN er.emailStatusId in (6,7) THEN 1 ELSE NULL END)                 AS emailOpened,
                   count(CASE er.emailStatusId WHEN 7 THEN 1 ELSE NULL END)                 AS emailClicked,
                   #round(AVG(TIMESTAMPDIFF(SECOND, er.queuedTime, er.sentTime)),0)          AS sendingTime,
                   round(AVG(TIMESTAMPDIFF(SECOND, er.sentTime, er.firstOpenTime)),0)       AS openTimeSinceSent,
