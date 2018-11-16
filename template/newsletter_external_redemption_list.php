@@ -95,6 +95,11 @@
                                     data-orderable="true"
                                     class="center">Email Accettate
                                 </th>
+                                <th data-slug="emailNotDelivered"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Email Accettate e non inviate
+                                </th>
                                 <th data-slug="emailDelivered"
                                     data-searchable="true"
                                     data-orderable="true"
