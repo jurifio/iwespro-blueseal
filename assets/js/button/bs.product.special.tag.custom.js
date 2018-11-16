@@ -17,7 +17,7 @@ $(document).on('bs-product-tag-new-custom', function () {
 
     let selectedRows = dataTable.rows('.selected').data();
 
-    if (selectedRows.length != 1) {
+    if (selectedRows.length < 1) {
         new Alert({
             type: "warning",
             message: "Devi selezionare almeno un prodotto"
