@@ -1,6 +1,6 @@
 <?php /** @var $app \bamboo\core\theming\CRestrictedAccessWidgetHelper */ ?>
-<meta http-equiv="content-type" content="text/html;charset=ISO-8;charset=UTF-8"/>
-<meta charset="utf-8;ISO-8859-1"/>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+<meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <link rel="icon" type="image/x-icon" sizes="32x32" href="/assets/img/favicon32.png"/>
 <link rel="icon" type="image/x-icon" sizes="256x256" href="/assets/img/favicon256.png"/>
