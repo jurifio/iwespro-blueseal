@@ -54,7 +54,7 @@ class CPrestashopDumpCsv extends AAjaxController
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/data/www/iwes/production/sites/pickyshop/temp-prestashop/';
+            $save_to = '/home/pickyshop/public_html/temp-prestashop/';
         }
         if (file_exists($save_to . 'psz6_category.csv')) {
             unlink($save_to . 'psz6_category.csv');

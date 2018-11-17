@@ -183,7 +183,7 @@ ORDER BY `p`.`id` ASC";
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/data/www/iwes/production/sites/pickyshop/temp/';
+            $save_to = '/home/pickyshop/public_html/temp/';
         }
         if (file_exists($save_to . 'psz6_category.csv')) {
             unlink($save_to . 'psz6_category.csv');
@@ -243,7 +243,7 @@ ORDER BY `p`.`id` ASC";
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/data/www/iwes/production/sites/pickyshop/temp/';
+            $save_to = '/home/pickyshop/public_html/temp/';
         }
         if (file_exists($save_to . 'psz6_category_shop.csv')) {
             unlink($save_to . 'psz6_category_shop.csv');

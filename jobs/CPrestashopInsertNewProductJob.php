@@ -53,7 +53,7 @@ class CPrestashopInsertNewProductJob extends ACronJob
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/data/www/iwes/production/sites/pickyshop/temp-prestashop/';
+            $save_to = '/home/pickyshop/public_html/temp-prestashop/';
         }
         if (file_exists($save_to . 'psz6_image_single_link.csv')) {
             unlink($save_to . 'psz6_image_single_link.csv');
@@ -89,7 +89,7 @@ class CPrestashopInsertNewProductJob extends ACronJob
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/data/www/iwes/production/sites/pickyshop/temp-prestashop/';
+            $save_to = '/home/pickyshop/public_html/temp-prestashop/';
         }
 
         $stmtLastIdImageProduct = $db_con->prepare("SELECT max(id_image) AS maxIdImageProduct FROM psz6_image");
