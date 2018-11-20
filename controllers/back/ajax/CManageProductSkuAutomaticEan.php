@@ -59,9 +59,9 @@ class CManageProductSkuAutomaticEan extends AAjaxController
                         continue;
                     }
 
-                    if ($sku->stockQty == 0) {
+                    /*if ($sku->stockQty == 0) {
                         continue;
-                    }
+                    }*/
                     $eanuse = $eanrepo->findOneBy(['used' => 0]);
                     if (null == $eanuse) {
                         throw new BambooException('Tutti i codici Sono Stati Assegnati devi rigenerare altri codici');
