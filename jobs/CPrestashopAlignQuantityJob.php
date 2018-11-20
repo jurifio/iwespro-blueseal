@@ -77,7 +77,7 @@ class CPrestashopAlignQuantityJob extends ACronJob
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/home/pickyshop/public_htmltemp-prestashop/';
+            $save_to = '/home/pickyshop/public_html/temp-prestashop/';
         }
 
         /**
