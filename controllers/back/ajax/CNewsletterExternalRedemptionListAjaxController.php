@@ -33,6 +33,7 @@ class CNewsletterExternalRedemptionListAjaxController extends AAjaxController
                   count(CASE er.emailStatusId WHEN 1 THEN 1 ELSE NULL END)                 AS emailPending,
                   count(CASE er.emailStatusId WHEN 2 THEN 1 ELSE NULL END)                 AS emailNotQueued,
                   count(CASE WHEN er.emailStatusId in (3,4,6,7) THEN 1 ELSE NULL END)                 AS emailAccepted,
+                  count(CASE WHEN er.emailStatusId in (3) AND er.emailStatusId not in (4,5,6,7) THEN 1 ELSE NULL END)                 AS emailNotDelivered,
                   count(CASE WHEN er.emailStatusId in (4,6,7) THEN 1 ELSE NULL END)                 AS emailDelivered,
                   count(CASE er.emailStatusId WHEN 5 THEN 1 ELSE NULL END)                 AS emailDropped,
                   count(CASE WHEN er.emailStatusId in (6,7) THEN 1 ELSE NULL END)                 AS emailOpened,
