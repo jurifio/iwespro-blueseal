@@ -214,7 +214,7 @@ ORDER BY `p`.`id`";
                 $ean=$value_attribute->ean;
                 $reference=$value_attribute->productId."-".$value_attribute->productVariantId."-".$value_attribute->productSizeId;
                 if($ean==null){
-            $res_product_ean=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['ProductId'=>$value_attribute->productId,'productVariantId'=>$value_attribute->productVarianId,'productSizeId'=>$value_attribute->productSizeId]);
+            $res_product_ean=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['ProductId'=>$value_attribute->productId,'productVariantId'=>$value_attribute->productVariantId,'productSizeId'=>$value_attribute->productSizeId]);
             if($res_product_ean!=null){
                 $ean=$res_product_ean->ean;
             }else{
