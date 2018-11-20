@@ -516,7 +516,7 @@ ORDER BY `p`.`id` ASC";
 
 // change the local path where image has been downloaded "presta-api" is my local folder from where i run API script
         if(ENV=='dev') {
-            $img_path = '/data/www/iwes/production/sites/pickyshop/tmp/' . $image_name;
+            $img_path = '/home/pickyshop/public_html/tmp/' . $image_name;
         }else{
             $img_path='/media/sf_sites/PickyshopNew/tmp/'. $image_name;
         }
