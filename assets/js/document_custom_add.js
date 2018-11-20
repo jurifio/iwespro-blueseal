@@ -186,7 +186,8 @@
                 $.ajax({
                     url: '#',
                     method: 'post',
-                    contentType: 'multipart/form-data',
+                    cache: false,
+                    contentType: false,
                     processData: false,
                     data: form
                 }).done(function() {
