@@ -23,10 +23,11 @@ use bamboo\domain\repositories\CProductSkuRepo;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 29/10/2018
+ * @date 21/11/2018
  * @since 1.0
+ *
  */
-class CManageProductSkuAutomaticEan extends AAjaxController
+class CManageProductSkuParentEan extends AAjaxController
 {
     /**
      * @throws BambooException
@@ -40,23 +41,19 @@ class CManageProductSkuAutomaticEan extends AAjaxController
         $brandId = \Monkey::app()->router->request()->getRequestData('p');
         $shopId = \Monkey::app()->router->request()->getRequestData('s');
 
+
         /** @var CObjectCollection $products */
-        $products = \Monkey::app()->repoFactory->create('Product')->findBy(["productBrandId" => $brandId]);
-
-        /** @var CRepo $eanrepo */
-        $eanrepo = \Monkey::app()->repoFactory->create('ProductEan');
-
+        $sql="select p.id as productId,p.productVariantId as productVariantId from Product P join ProductSku ps on p.id=ps.productId and p.productVariantId=ps.productVariantId
+          where ps.shopId=".$shopId. " and p.productBrandId=".$brandId."   group by productId,productVariantId";
+        $products = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
         /** @var CProduct $product */
         foreach ($products as $product) {
 
-            /** @var CObjectCollection $skus */
-            $skus = $product->productSku;
+            /** @var CRepo $eanrepo */
+            $eanrepo = \Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'productSizeId'=>0,'used'=>1,'BrandAssociate'=>$brandId,'shopId'=>$shopId]);
 
-            /** @var CProductSku $sku */
-            foreach ($skus as $sku) {
-                if ($shopId == $sku->shopId) {
-                    if (!is_null($sku->ean)) {
+                    if (!is_null($eanrepo)) {
                         continue;
                     }
 
@@ -64,26 +61,22 @@ class CManageProductSkuAutomaticEan extends AAjaxController
                         continue;
                     }*/
                     $eanuse = $eanrepo->findOneBy(['used' => 0]);
-                    if (null == $eanuse) {
-                        throw new BambooException('Tutti i codici Sono Stati Assegnati devi rigenerare altri codici');
-                    } else {
-                        $sku->ean = $eanuse->ean;
-                        $sku->update();
 
-                        $eanuse->productId = $sku->productId;
-                        $eanuse->productVariantId = $sku->productVariantId;
-                        $eanuse->productSizeId = $sku->productSizeId;
+
+                        $eanuse->productId = $product['productId'];
+                        $eanuse->productVariantId = $product['productVariantId'];
+                        $eanuse->productSizeId = 0;
                         $eanuse->used = 1;
                         $eanuse->brandAssociate = $brandId;
                         $eanuse->shopId =$shopId;
                         $eanuse->update();
                     }
-                }
-            }
-        }
+
+
+
 
         return "Fatto";
 
-
     }
+
 }
