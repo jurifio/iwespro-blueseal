@@ -194,14 +194,20 @@ ORDER BY `p`.`id`";
 
 
         foreach ($res_product as $value_product) {
+            $eanproductparent=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['productId'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
 
+            if(!is_null($eanproductparent)) {
+                $ean13product=$eanproductparent->ean;
+            }else{
+                $ean13product='';
+            }
 
             $p = $value_product['prestaId'];
             $productId=$value_product['productId'];
             $productVariantId=$value_product['productVariantId'];
             $quantity_product = $value_product['quantity'];
             $price=$value_product['price'];
-            $stmtUpdateProduct = $db_con->prepare("UPDATE psz6_product SET quantity=" . $quantity_product . ",  price='".$price."'
+            $stmtUpdateProduct = $db_con->prepare("UPDATE psz6_product SET quantity=" . $quantity_product . ",  price='".$price."',  ean13='".$ean13product."'
              WHERE id_product=" . $p);
             $stmtUpdateProduct->execute();
 

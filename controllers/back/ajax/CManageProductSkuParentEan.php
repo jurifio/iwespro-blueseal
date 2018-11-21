@@ -44,6 +44,7 @@ class CManageProductSkuParentEan extends AAjaxController
 
         /** @var CObjectCollection $products */
         $sql="select p.id as productId, p.productVariantId as productVariantId from Product p join ProductSku ps on p.id=ps.productId and p.productVariantId=ps.productVariantId
+join MarketplaceHasProductAssociate mhpa on p.id =mhpa.productId and p.productVariantId and mhpa.productVariantId
           where ps.shopId=".$shopId. " and p.productBrandId=".$brandId."   group by productId,productVariantId";
         $products = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
@@ -51,7 +52,7 @@ class CManageProductSkuParentEan extends AAjaxController
         foreach ($products as $product) {
 
             /** @var CRepo $eanrepo */
-            $eanrepo = \Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'productSizeId'=>0,'used'=>1,'BrandAssociate'=>$brandId,'shopId'=>$shopId]);
+            $eanrepo = \Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'productSizeId'=>0,'used'=>1]);
 
                     if (!is_null($eanrepo)) {
                         continue;
@@ -60,16 +61,24 @@ class CManageProductSkuParentEan extends AAjaxController
                     /*if ($sku->stockQty == 0) {
                         continue;
                     }*/
-                    $eanuse = $eanrepo->findOneBy(['used' => 0]);
+                    $eanuse = \Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['used' => 0]);
 
 
                         $eanuse->productId = $product['productId'];
                         $eanuse->productVariantId = $product['productVariantId'];
                         $eanuse->productSizeId = 0;
                         $eanuse->used = 1;
+                        $eanuse->usedForParent=1;
                         $eanuse->brandAssociate = $brandId;
                         $eanuse->shopId =$shopId;
                         $eanuse->update();
+
+                        $eanupdateProduct=\Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId']]);
+                        if(!is_null($eanupdateProduct)) {
+                            $eanupdateProduct->statusPublished = 2;
+                            $eanupdateProduct->update();
+                        }
+
                     }
 
 
