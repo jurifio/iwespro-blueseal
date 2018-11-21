@@ -43,7 +43,7 @@ class CManageProductSkuParentEan extends AAjaxController
 
 
         /** @var CObjectCollection $products */
-        $sql="select p.id as productId,p.productVariantId as productVariantId from Product P join ProductSku ps on p.id=ps.productId and p.productVariantId=ps.productVariantId
+        $sql="select p.id as productId, p.productVariantId as productVariantId from Product p join ProductSku ps on p.id=ps.productId and p.productVariantId=ps.productVariantId
           where ps.shopId=".$shopId. " and p.productBrandId=".$brandId."   group by productId,productVariantId";
         $products = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
