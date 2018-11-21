@@ -217,4 +217,3 @@
 </bs-toolbar>
 </body>
 </html>
-bs-product-sku-associate-eanparent-brand
