@@ -47,7 +47,7 @@ class CProductHasProductCategory extends AAjaxController
                             true
                         );
                             /** @var CPrestashopHasProductRepo $phpR */
-                            $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+                            $phpR = \Monkey::app()->repoFactory->create('MarketPlaceHasProductAssociate');
                             $phpR->updateProductStatus($v['id'], $v["productVariantId"]);
 
                     }

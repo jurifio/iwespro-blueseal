@@ -83,7 +83,7 @@ class CProductSales extends AAjaxController
         foreach ($rows as $v) {
             $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
             /** @var CPrestashopHasProductRepo $phpR */
-            $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+            $phpR = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate');
             $phpR->updateProductStatus($v['id'], $v["productVariantId"]);
             try {
                 $product->isOnSale = $isSale;

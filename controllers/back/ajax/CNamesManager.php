@@ -145,7 +145,7 @@ class CNamesManager extends AAjaxController
             foreach ($oldCodes as $v) {
                 list($id, $productVariantId) = explode('-', $v);
                 $pntRepo->updateProductName($id, $productVariantId, $new);
-                $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+                $phpR = \Monkey::app()->repoFactory->create('MarketPlaceHasProductAssociate');
                 $phpR->updateProductStatus($id, $productVariantId);
 
             }
