@@ -232,10 +232,7 @@ $eanproductparent=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy([
                         $ean='';
                     }
                 }
-                $stmtUpdateProductAttribute=$db_con->prepare("UPDATE psz6_product_attribute set quantity=".$stockQty." 
-                and reference='".$reference."'");
-                $stmtUpdateProductAttribute->execute();
-                $stmtUpdateProductEan=$db_con->prepare("UPDATE psz6_product_attribute set ean13='".$ean."' where reference ='".$reference."'" );
+                $stmtUpdateProductEan=$db_con->prepare("UPDATE psz6_product_attribute  set quantity=".$stockQty." , ean13='".$ean."' where reference ='".$reference."'" );
                 $stmtUpdateProductEan->execute();
                 $stmtGetProductAttribute=$db_con->prepare("select id_product_attribute, id_product from psz6_product_attribute
  where reference='".$reference."'");
