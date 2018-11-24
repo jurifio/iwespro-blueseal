@@ -1,7 +1,6 @@
 <?php
 namespace bamboo\controllers\back\ajax;
 use bamboo\domain\entities\CProduct;
-use bamboo\domain\entities\CMarketplaceHasProductAssociate;
 
 /**
  * Class CProductListAjaxController
@@ -47,12 +46,10 @@ class CProductSales extends AAjaxController
             \Monkey::app()->repoFactory->beginTransaction();
             try {
                 /** @var CProduct $product */
-                $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-                $phpR = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-                if (!empty($phpR)) {
-                        $phpR->statusPublished = 2;
-                        $phpR->update();
-                }
+                $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+                /** @var CPrestashopHasProductRepo $phpR */
+                $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+                $phpR->updateProductStatus($v['id'], $v["productVariantId"]);
                 foreach ($product->shopHasProduct as $shopHasProduct) {
                     $shopHasProduct->salePrice = floor($shopHasProduct->price / 100 * (100 - $percent));
                     $shopHasProduct->update();
@@ -84,21 +81,10 @@ class CProductSales extends AAjaxController
     private function set($rows, $isSale)
     {
         foreach ($rows as $v) {
-            $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
             /** @var CPrestashopHasProductRepo $phpR */
-            $phpR = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
-              if (!empty($phpR)) {
-                  try {
-                      $phpR->statusPublished = 2;
-                      $phpR->update();
-                  } catch (\Throwable $e) {
-                      if ($isSale == 1) {
-                          return "OOPS! Non riesco a impostare il prodotto in saldo e  l' aggiornamento per la  modifica perchè non è presente nei prodotti  di esportazione per il marketplace :<br/>!" . $e->getMessage();
-                      } else {
-                          return "OOPS! Non riesco a impostare il prodotto con prezzo pieno e  l' aggiornamento per la  modifica perchè non è presente nei prodotti  di esportazione per il marketplace :<br/>!" . $e->getMessage();
-                      }
-                  }
-              }
+            $phpR = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+            $phpR->updateProductStatus($v['id'], $v["productVariantId"]);
             try {
                 $product->isOnSale = $isSale;
                 $product->update();
