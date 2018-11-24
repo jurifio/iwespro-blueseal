@@ -84,7 +84,7 @@ class CProductSales extends AAjaxController
     private function set($rows, $isSale)
     {
         foreach ($rows as $v) {
-            $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+            $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
             /** @var CPrestashopHasProductRepo $phpR */
             $phpR = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
               if (!empty($phpR)) {
