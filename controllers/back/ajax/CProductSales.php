@@ -47,7 +47,7 @@ class CProductSales extends AAjaxController
             \Monkey::app()->repoFactory->beginTransaction();
             try {
                 /** @var CProduct $product */
-                $product = \Monkey::app()->repoFactory->create('Product')->findOne(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
+                $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                 $phpR = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->findOneBy(['productId' => $v['id'], 'productVariantId' => $v['productVariantId']]);
                 if (!empty($phpR)) {
                         $phpR->statusPublished = 2;
