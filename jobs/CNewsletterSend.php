@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\blueseal\jobs;
 
 use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
@@ -29,44 +30,45 @@ class CNewsletterSend extends ACronJob
      */
     public function run($args = null)
     {
-        $sql = "Select * from Newsletter where DATE_FORMAT(now(),'%Y%m%d%H%i') = DATE_FORMAT(sendAddressDate, '%Y%m%d%H%i')";
+        $sql = "SELECT * FROM Newsletter WHERE DATE_FORMAT(now(),'%Y%m%d%H%i') = DATE_FORMAT(sendAddressDate, '%Y%m%d%H%i')";
         /** @var CNewsletterRepo $newslettersRepo */
         $newslettersRepo = \Monkey::app()->repoFactory->create('Newsletter');
         $newsletters = $newslettersRepo->findBySql($sql);
-        if(empty($newsletters)) return;
-        $this->report('Starting','Newsletters to send: '.count($newsletters));
+        if (empty($newsletters)) return;
+        $this->report('Starting', 'Newsletters to send: ' . count($newsletters));
 
         /** @var CNewsletter $newsletter */
         foreach ($newsletters as $newsletter) {
 
-            $newsletterShopId = $newsletter->newsletterCampaign->newsletterShop->id;
-            $fieldName = $newsletterShopId != 2 ? 'NewsletterUser' : 'Newsletter';
-            $readExternalDb = new CReadExtDbTable($newsletterShopId);
-            $readExternalDb->insertData(
-                false,
-                [$fieldName,
-                    'UserDetails-Left'=>[
-                        'Self'=>[
-                            'userId'
-                        ],
-                        $fieldName=>[
-                            'userId'
+            if ($newsletter->newsletterInsertion->newsletterEvent->newsletterCampaign->newsletterShopId != 1) {
+                $newsletterShopId = $newsletter->newsletterCampaign->newsletterShop->id;
+                $fieldName = $newsletterShopId != 2 ? 'NewsletterUser' : 'Newsletter';
+                $readExternalDb = new CReadExtDbTable($newsletterShopId);
+                $readExternalDb->insertData(
+                    false,
+                    [$fieldName,
+                        'UserDetails-Left' => [
+                            'Self' => [
+                                'userId'
+                            ],
+                            $fieldName => [
+                                'userId'
+                            ]
                         ]
-                    ]
-                ],
-                ['email', 'isActive','name','surname','birthDate'],
-                ['email'],
-                [],
-                'NewsletterExternalUser',
-                ['email', 'isActive','name','surname','birthDate'],
-                ['email', ['externalShopId' => $newsletterShopId]],
-                ['externalShopId' => $newsletterShopId]
-            );
+                    ],
+                    ['email', 'isActive', 'name', 'surname', 'birthDate'],
+                    ['email'],
+                    [],
+                    'NewsletterExternalUser',
+                    ['email', 'isActive', 'name', 'surname', 'birthDate'],
+                    ['email', ['externalShopId' => $newsletterShopId]],
+                    ['externalShopId' => $newsletterShopId]
+                );
+            }
 
+            $asd = $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod', true);
 
-            $asd = $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod',true);
-
-            $this->report('Esito Invio: '.$newsletter->id, $asd);
+            $this->report('Esito Invio: ' . $newsletter->id, $asd);
         }
         $this->report('Ending', 'inviate tutte le newsletter');
     }
