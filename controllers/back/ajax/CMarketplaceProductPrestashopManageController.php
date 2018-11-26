@@ -66,7 +66,7 @@ class CMarketplaceProductPrestashopManageController extends AAjaxController
 
                 set_time_limit(6);
                 $product = $productRepo->findOneByStringId($row);
-                $marketplaceHasProductAssociate = $marketplaceHasProductAssociateRepo->addProductToMarketPlacePrestaShop($product,  $shopId, $marketPlaceId,$prestashopId,$typeRetouchPrice,$amount,$marketplaceHasShopId);
+                $marketplaceHasProductAssociate = $marketplaceHasProductAssociateRepo->addProductToMarketPlacePrestaShop($product, $shopId, $marketPlaceId,$prestashopId,$typeRetouchPrice,$amount,$marketplaceHasShopId);
                 $i++;
                 \Monkey::app()->repoFactory->commit();
             } catch

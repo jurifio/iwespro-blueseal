@@ -62,8 +62,18 @@ group by productId, productVariantId";
 
         $datatable->doAllTheThings('true');
         foreach ($datatable->getResponseSetData() as $key => $row) {
+           $resproductFindEan=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['productId'=>$row['productId'],'productVariantId'=>$row['productVariantId'],'productSizeId'=>'0','used'=>'1','usedForParent'=>'1'])  ;
+            if($resproductFindEan!=null){
+                $row["ean"] = $resproductFindEan->ean;
+
+            }else{
+                $row["ean"]='Ean non presente';
+            }
             $product = \Monkey::app()->repoFactory->create('Product')->findOne([$row['productId'], $row['productVariantId']]);
             $row['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
+
+
+
             $row["DT_RowId"] = $product->printId();
             if ($product->productPhoto->count() > 3) $imgs = '<br><i class="fa fa-check" aria-hidden="true"></i>';
             else $imgs = "";
@@ -93,6 +103,7 @@ group by productId, productVariantId";
                 $row['typePrice']='non applicato';
                 $row['price']='non calcolato';
                 $row['status']='non lavorato';
+
             }else{
                 $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price,mphs.imgMarketPlace as icon, mphpa.statusPublished as statusPublished
                                           FROM Marketplace m join MarketplaceHasProductAssociate mphpa

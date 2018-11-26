@@ -30,6 +30,11 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center"
                                         data-default-order="desc">Codice</th>
+                                    <th data-slug="ean"
+                                        data-required="true"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center"
+                                       >ean</th>
                                     <th data-slug="shop"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Shop</th>

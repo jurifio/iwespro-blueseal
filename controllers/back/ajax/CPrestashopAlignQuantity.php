@@ -207,6 +207,7 @@ ORDER BY `p`.`id`";
             $productVariantId=$value_product['productVariantId'];
             $quantity_product = $value_product['quantity'];
             $price=$value_product['price'];
+            round($price,1,PHP_ROUND_HALF_DOWN);
             $stmtUpdateProduct = $db_con->prepare("UPDATE psz6_product SET quantity=" . $quantity_product . ",  price='".$price."',  ean13='".$ean13product."'
              WHERE id_product=" . $p);
             $stmtUpdateProduct->execute();
