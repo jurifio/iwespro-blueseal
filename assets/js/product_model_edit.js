@@ -25,7 +25,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         } else {
                             if('new' == res['status']){
                                 body = res['productSheetModelPrototypeId'] + '</br>' + res["message"];
-                                location = '/blueseal/prodotti/modelli';
+                                location = '/blueseal/prodotti/modelli/support';
                             }
                         }
                     }
@@ -70,42 +70,43 @@ $(document).on('bs.product.edit', function (e, element, button) {
     var mult = [];
     if ($_GET.all) {
         if ('modelIds' in $_GET.all) {
-            var multPar = $_GET.all.modelIds;
+            var multPar = $('#ids').val();
 
-            $.initFormByGetData({
+            $.ajax({
+                type: "POST",
+                url: '/blueseal/xhr/DetailModel',
                 data: {
-                    multiple: multPar,
-                },
-                ajaxUrl: '/blueseal/xhr/DetailModel',
-                done: function () {
-                },
-                success: function (res) {
-                    mult.push({
-                        res
-                    });
-
-                    saveAllData(mult);
-                    saveAll(true);
+                    multiple: multPar
                 }
+            }).done(function(response) {
+            }).fail(function(response) {
+            }).success(function (res) {
+                mult.push({
+                    res
+                });
+
+                saveAllData(mult);
+                saveAll(true);
             });
+
         } else if ('modifyModelIds' in $_GET.all) {
-            var multPar = $_GET.all.modifyModelIds;
+            var multPar = $('#ids').val();
 
-            $.initFormByGetData({
+            $.ajax({
+                type: "POST",
+                url: '/blueseal/xhr/DetailModel',
                 data: {
-                    multiple: multPar,
-                },
-                ajaxUrl: '/blueseal/xhr/DetailModel',
-                done: function () {
-                },
-                success: function (res) {
-                    mult.push({
-                        res
-                    });
-
-                    saveAllData(mult);
-                    saveAll(true);
+                    multiple: multPar
                 }
+            }).done(function(response) {
+            }).fail(function(response) {
+            }).success(function (res) {
+                mult.push({
+                    res
+                });
+
+                saveAllData(mult);
+                saveAll(true);
             });
         } else {
             saveAll(false)
@@ -354,10 +355,10 @@ $(document).ready(function () {
             var action = 'byModel';
         } else if ('string' == typeof $_GET.all.modelIds) {
             //se copia multipla
-            var data = {id: $_GET.all.modelIds};
+            var data = {id: $('#ids').val()};
             var action = 'byModels';
         } else if ('string' == typeof $_GET.all.modifyModelIds) {
-            var data = {id: $_GET.all.modifyModelIds};
+            var data = {id: $('#ids').val()};
             var action = 'byModifyModels';
         }
 

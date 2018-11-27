@@ -29,6 +29,8 @@ class CProductModelEditController extends CProductManageController
      */
     public function get()
     {
+        $ids = \Monkey::app()->cacheService->getCache('misc')->get('idsModels');
+        \Monkey::app()->cacheService->getCache('misc')->delete('idsModels');
         $parPostMultiple = \Monkey::app()->router->request()->getRequestData('modelIds');
         $parUpdateMultiple = \Monkey::app()->router->request()->getRequestData('modifyModelIds');
 
@@ -102,6 +104,8 @@ class CProductModelEditController extends CProductManageController
         }
         unset($productDetailsCollection);
 
+        $countM = count(json_decode($ids));
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
@@ -112,9 +116,22 @@ class CProductModelEditController extends CProductManageController
             'isMultiple' => $isMultiple,
             'productDetails' => $productDetails,
             'isUpdated' => $isUpdate,
-            'prodCats'=>json_encode($prodCats)
-
-
+            'prodCats'=>json_encode($prodCats),
+            'ids'=>$ids,
+            'countM'=>$countM
         ]);
+    }
+
+    /**
+     * @return string|void
+     * @throws \Exception
+     * @throws \bamboo\core\exceptions\RedPandaDBALException
+     * @throws \bamboo\core\exceptions\RedPandaORMException
+     */
+    public function post(){
+        $ids = \Monkey::app()->router->request()->getRequestData('ids');
+
+        \Monkey::app()->cacheService->getCache('misc')->set('idsModels', $ids);
+
     }
 }

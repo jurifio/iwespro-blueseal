@@ -29,7 +29,7 @@ use bamboo\domain\repositories\CProductDetailRepo;
  * @since ${VERSION}
  */
 class CDetailModelSave extends AAjaxController
-/** fixme | Quando c'è tempo testare l'orm per l'aggiornamento della tabella di supporto e verficare se impiega troppo tempo */
+    /** fixme | Quando c'è tempo testare l'orm per l'aggiornamento della tabella di supporto e verficare se impiega troppo tempo */
 
 {
     public function get()
@@ -93,8 +93,9 @@ class CDetailModelSave extends AAjaxController
             $newIds = [];
             $mes = '';
 
+            $modelIdsJson = json_decode($get['modelIds'][0]['res'], true);
             //Preparo l'inserimento
-            foreach ($get['modelIds'][0]['res'] as $model) {
+            foreach ($modelIdsJson as $model) {
                 try {
                     \Monkey::app()->repoFactory->beginTransaction();
                     $newName = str_ireplace($get['find-name'], $get['sub-name'], $model['name']);
@@ -414,10 +415,10 @@ class CDetailModelSave extends AAjaxController
 
             $productDetails = $this->getDetails($get);
 
+            $modelIdsJson = json_decode($get['modelIds'][0]['res'], true);
 
             //Ciclo i modelli
-
-            foreach ($get['modelIds'][0]['res'] as $model) {
+            foreach ($modelIdsJson as $model) {
                 try {
                     \Monkey::app()->repoFactory->beginTransaction();
                     /** @var CProductSheetModelPrototype $psmp */

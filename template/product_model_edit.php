@@ -31,7 +31,10 @@
                 </div>
             </div>
 
+            <input type="hidden" id="ids" value=<?php echo $ids; ?>>
+
             <div class="container-fluid">
+                <p>Stai modificando <?php echo $countM; ?> modelli</p>
                 <form id="form-model" enctype="multipart/form-data" role="form" action="" method="post"
                       data-primaryfield="#id"
                       autocomplete="off" class="form">
@@ -416,7 +419,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </input>
     </div>
     <?php include "parts/footer.php"; ?>
 </div>

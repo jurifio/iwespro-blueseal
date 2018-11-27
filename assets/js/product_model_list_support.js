@@ -1119,7 +1119,6 @@ $(document).on('bs-hide-model-prototype', function () {
 
 });
 
-
 $(document).on('bs-massive-copy-model-prototype', function () {
 
 
@@ -1146,6 +1145,127 @@ $(document).on('bs-massive-copy-model-prototype', function () {
     let url = `/blueseal/prodotti/modelli/modifica?modelIds=${models.join('-')}`;
 
     window.open(url, '_blank');
+
+
+});
+
+$(document).on('bs-massive-update-copy-model-prototype', function () {
+
+
+    let bsModal = new $.bsModal('Inserisci i filtri', {
+        body:
+        `
+        <div>
+        <div>
+        <label for="id">Id</label>
+        <input class="vFilt" type="text" id="id">
+        </div>
+        
+        <div>
+        <label for="modelCode">Codice</label>
+        <input class="vFilt" type="text" id="modelCode">
+        </div>
+        
+        <div>
+        <label for="modelName">Nome Modello</label>
+        <input class="vFilt" type="text" id="modelName">
+        </div>
+        
+        <div>
+        <label for="productName">Nome Prodotto</label>
+        <input class="vFilt" type="text" id="productName">
+        </div>
+        
+        <div>
+        <label for="prototypeName">Scheda Prodotto</label>
+        <input class="vFilt" type="text" id="prototypeName">
+        </div>
+        
+        <div>
+        <label for="categoryName">Categorie</label>
+        <input class="vFilt" type="text" id="categoryName">
+        </div>
+        
+        <div>
+        <label for="details">Dettagli</label>
+        <input class="vFilt" type="text" id="details">
+        </div>
+        
+        <div>
+        <label for="catGroupName">Categorie Preimpostate</label>
+        <input class="vFilt" type="text" id="catGroupName">
+        </div>
+        
+        <div>
+        <label for="gendName">Genere</label>
+        <input class="vFilt" type="text" id="gendName">
+        </div>
+        
+        <div>
+        <label for="matName">Materiale</label>
+        <input class="vFilt" type="text" id="matName">
+        </div>
+        
+        <div>
+        <select id="opType">
+        <option disabled selected value>Seleziona un'opzione</option>
+        <option value="update">Aggiorna</option>
+        <option value="clone">Clona</option>
+        </select>
+        </div>
+        
+        </div>
+        `
+    });
+
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+
+        let values = [];
+        $('.vFilt').each(function () {
+            let id = $(this).attr('id');
+            let val = $(this).val();
+            values.push({
+                [id]: val
+            })
+        });
+
+        let type = $('#opType').val();
+
+        const data = {
+            values: values,
+        };
+
+        $.ajax({
+            method: 'get',
+            url: '/blueseal/xhr/ProductModelSupportMassiveWork',
+            data: data
+        }).done(function (res) {
+
+            switch (type){
+                case 'update':
+                    $.post( "/blueseal/prodotti/modelli/modifica?modifyModelIds=1", { ids: res }, function () {
+                        window.open('/blueseal/prodotti/modelli/modifica?modifyModelIds=1');
+                    } );
+                    break;
+                case 'clone':
+                    $.post( "/blueseal/prodotti/modelli/modifica?modelIds=1", { ids: res }, function () {
+                        window.open('/blueseal/prodotti/modelli/modifica?modelIds=1');
+                    } );
+            }
+
+
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.hide();
+                $.refreshDataTable();
+            });
+            bsModal.showOkBtn();
+        });
+    });
 
 
 });

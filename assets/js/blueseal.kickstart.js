@@ -555,8 +555,13 @@ $.bsModal = function (header, params) {
         type = (type) ? type : '';
         value = (value) ? value : '';
 
+        let ajaxCall = "GET";
+        if(type == 'models' || type == 'modifyModels') {
+            ajaxCall = "POST"
+        }
+
         $.ajax({
-            type: "GET",
+            type: ajaxCall,
             url: "/blueseal/xhr/GetDataSheet",
             data: {
                 value: value,

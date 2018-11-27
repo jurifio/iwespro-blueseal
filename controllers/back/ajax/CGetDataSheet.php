@@ -53,20 +53,22 @@ class CGetDataSheet extends AAjaxController
             if ($productName->count()) $Pname = $productName->getfirst()->name;
             $actual = $product->productSheetActual;
         } else if($type && ('models' == $type || 'modifyModels' == $type)){
-            $vs = explode('-', $value);
+
             $checkSheetArr = [];
+
+            $vs = json_decode($value, true);
+
             foreach ($vs as $v){
-                $productSheetModelPrototype = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $v]);
+                $productSheetModelPrototype = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $v['id']]);
                 $checkSheetArr[] = $productSheetModelPrototype->productSheetPrototype->id;
             }
 
             $check = array_unique($checkSheetArr);
 
             if(count($check) !== 1){
-                $productSheetPrototype = \Monkey::app()->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
-                $actual = [];
+                return '<p style="color: orangered">SCHEDE PRODOTTO NON COERENTI</p>';
             } else {
-                $productSheetModelPrototype = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $vs[0]]);
+                $productSheetModelPrototype = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $vs[0]['id']]);
                 $productSheetPrototype = $productSheetModelPrototype->productSheetPrototype;
                 $Pname= ($productSheetModelPrototype->productName) ? $productSheetModelPrototype->productName : '';
                 $actual = $productSheetModelPrototype->productSheetModelActual;
@@ -112,6 +114,10 @@ class CGetDataSheet extends AAjaxController
         ]);
     }
 
+    /**
+     * @return string
+     * @throws \bamboo\core\exceptions\RedPandaDBALException
+     */
     public function post()
     {
         return $this->get();
