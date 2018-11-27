@@ -215,9 +215,9 @@ $res="";
                  pfvn.id_lang=2 and pfv.id_feature=4657 and pfvn.value ='".$color."'))");
             $stmtUpdateProduct->execute();
            if(!$stmtUpdateProduct->execute()) {
-               $stmtUpdateProduct = $db_con->prepare("INSERT INTO  psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES ('4657'," . $p .
+               $stmtUpdateProductReserved = $db_con->prepare("INSERT INTO  psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES ('4657'," . $p .
                    ",'77165')");
-                   $stmtUpdateProduct->execute();
+                   $stmtUpdateProductReserved->execute();
                    }
 
             }
