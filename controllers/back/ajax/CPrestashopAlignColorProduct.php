@@ -213,12 +213,14 @@ $res="";
                 $stmtUpdateProduct = $db_con->prepare("INSERT INTO  psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES ('4657'," . $p .
                     ",(select pfv.id_feature_value from psz6_feature_value pfv inner join psz6_feature_value_lang pfvn on pfv.id_feature_value=pfvn.id_feature_value where
                  pfvn.id_lang=2 and pfv.id_feature=4657 and pfvn.value ='".$color."'))");
-            $stmtUpdateProduct->execute();
+
            if(!$stmtUpdateProduct->execute()) {
                $stmtUpdateProductReserved = $db_con->prepare("INSERT INTO  psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES ('4657'," . $p .
                    ",'77165')");
                    $stmtUpdateProductReserved->execute();
-                   }
+                   }else{
+               $stmtUpdateProduct->execute();
+           }
 
             }
 
