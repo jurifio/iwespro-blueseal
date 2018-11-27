@@ -199,7 +199,7 @@ ORDER BY `p`.`id`";
 
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
-
+$res="";
         foreach ($res_product as $value_product) {
 
 
@@ -213,11 +213,11 @@ ORDER BY `p`.`id`";
                 $stmtUpdateProduct = $db_con->prepare("INSERT INTO  psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES ('4657'," . $p .
                     ",(select pfv.id_feature_value from psz6_feature_value pfv inner join psz6_feature_value_lang pfvn on pfv.id_feature_value=pfvn.id_feature_value where
                  pfvn.id_lang=2 and pfv.id_feature=4657 and pfvn.value ='" . trim($color) . "'))");
-                $res="<br>"."INSERT INTO  psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES ('4657'," . $p .
+                $res.="<br>"."INSERT INTO  psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES ('4657'," . $p .
                     ",(select pfv.id_feature_value from psz6_feature_value pfv inner join psz6_feature_value_lang pfvn on pfv.id_feature_value=pfvn.id_feature_value where
                  pfvn.id_lang=2 and pfv.id_feature=4657 and pfvn.value ='" . trim($color) . "'))"."<br>";
                 $stmtUpdateProduct->execute();
-
+return $res;
             }
 
         $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2'";
