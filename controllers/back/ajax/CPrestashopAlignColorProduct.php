@@ -43,7 +43,8 @@ class CPrestashopAlignColorProduct extends AAjaxController
     {
         set_time_limit(0);
         ini_set('memory_limit', '2048M');
-
+        $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='2' WHERE statusPublished='1'";
+        \Monkey::app()->dbAdapter->query($sql, []);
 
         /* $sql = "DELETE FROM PrestashopHasProduct";
           $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
@@ -220,7 +221,7 @@ ORDER BY `p`.`id`";
 
         $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
-                    $res="Allineamento Stock Eseguito";
+                    $res="Inserimento Colori Prodotto Variante Eseguito";
         return $res;
     }
 }
