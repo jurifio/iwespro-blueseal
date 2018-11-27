@@ -209,19 +209,12 @@ ORDER BY `p`.`id`";
             $quantity_product = $value_product['quantity'];
             $reference =$value_product['productId']."-".$value_product['productVariantId'];
            $color=$value_product['color'];
-            try {
+
                 $stmtUpdateProduct = $db_con->prepare("INSERT INTO  psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES ('4657'," . $p .
                     ",(select pfv.id_feature_value from psz6_feature_value pfv inner join psz6_feature_value_lang pfvn on pfv.id_feature_value=pfvn.id_feature_value where
-                 pfvn.id_lang=2 and pfv.id_feature=4657 and pfvn.value ='" . $color . "'))");
+                 pfvn.id_lang=2 and pfv.id_feature=4657 and pfvn.value ='" . trim($color) . "'))");
 
                 $stmtUpdateProduct->execute();
-            }catch(BambooException $e) {
-              $query="INSERT INTO  psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES ('4657'," . $p .
-                  ",(select pfv.id_feature_value from psz6_feature_value pfv inner join psz6_feature_value_lang pfvn on pfv.id_feature_value=pfvn.id_feature_value where
-                 pfvn.id_lang=2 and pfv.id_feature=4657 and pfvn.value ='" . $color . "'))";
-                $this->error($query, $e->getMessage());
-            }
-
 
             }
 
