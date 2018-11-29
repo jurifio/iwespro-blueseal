@@ -44,7 +44,7 @@ class CFoisonCurriculumAjaxManage extends AAjaxController
         $foison = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$foisonId]);
         $cont = file_get_contents($_FILES['file']['tmp_name'][0]);
 
-        $foison->curriculum = $cont;
+        $foison->bin = $cont;
         $foison->update();
 
         return true;

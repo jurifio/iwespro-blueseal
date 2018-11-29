@@ -73,7 +73,7 @@ class CFoisonProfileImagePhotoAjaxManage extends AAjaxController
             unlink($tempFolder . $_FILES['file']['name'][$i]);
 
             if ($res) {
-                $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/model-prototype-category/" . $fileName['name'];
+                $url = "https://iwes-fason.s3-eu-west-1.amazonaws.com/profile-image/" . $fileName['name'];
 
                 $foison->profileImageUrl = $url;
                 $foison->update();

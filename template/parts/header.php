@@ -1,3 +1,4 @@
+<?php $imgUser = $app->user()->getProfileImage(); ?>
 <div style="display:none">
     <img src="/assets/img/blueseal_logo_symbol_black.png" />
 </div>
@@ -34,9 +35,9 @@
     <div class="pull-left sm-table">
         <div class="header-inner">
             <?php if($app->user()->hasPermission('allShops') ): ?>
-            <div id="sessionMonitor">
-                <table class="mini-traffic-display">
-                   <thead>
+                <div id="sessionMonitor">
+                    <table class="mini-traffic-display">
+                        <thead>
                         <tr>
                             <th>Minuti</th>
                             <th>Sessioni</th>
@@ -45,8 +46,8 @@
                             <th>Job Attivi</th>
                             <th>Coda Eventi</th>
                         </tr>
-                   </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <tr>
                             <td>1</td>
                             <td><span id="s1"></span></td>
@@ -55,9 +56,9 @@
                             <td><span id="ja"></span></td>
                             <td><span id="eq"></span></td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
             <?php endif; ?>
         </div>
     </div>
@@ -74,7 +75,7 @@
                 <span class="text-master"><?php echo $app->user()->userDetails->surname?></span>
             </div>
             <div class="thumbnail-wrapper d32 circular inline m-t-5">
-                <img src="/assets/img/profiles/default.jpg" alt="" data-src="/assets/img/profiles/default.jpg" data-src-retina="/assets/img/profiles/default.jpg" width="55" height="55">
+                <img src="<?php echo $imgUser; ?>" alt="<?php echo $imgUser; ?>" data-src="<?php echo $imgUser; ?>" data-src-retina="<?php echo $imgUser; ?>" width="55" height="55">
             </div>
             <div class="pull-left p-r-10 p-t-10 fs-14 font-heading">
                 &nbsp;<a href="<?php echo $app->urlFor('blueseal/logout') ?>"><span class="semi-bold">Esci</span></a>
