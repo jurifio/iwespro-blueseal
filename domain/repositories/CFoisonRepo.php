@@ -81,10 +81,12 @@ class CFoisonRepo extends ARepo
             if(count($allPbForCat) == 3) {
                 $rank = $foison->totalRank(false, $allPbForCat);
 
-                if($rank > 6){
+                if($rank >= 8){
                     $interest->foisonStatusId = 2;
-                } else {
+                } else if ($rank >=6 AND $rank < 8) {
                     $interest->foisonStatusId = 3;
+                } else {
+                    $interest->foisonStatusId = 4;
                 }
                 $interest->update();
             }
