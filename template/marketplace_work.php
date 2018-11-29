@@ -111,19 +111,6 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
 
-    <bs-toolbar-group data-group-label="Gestione Foison">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-plus"
-                data-permission="allShops"
-                data-event="bs-foison-add"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Assegna utente a Foison"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-
 </bs-toolbar>
 </body>
 </html>
