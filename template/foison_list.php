@@ -53,6 +53,9 @@
                                 <th data-slug="totalRank"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Rank totale</th>
+                                <th data-slug="statusProfile"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Stato Profilo</th>
                             </tr>
                             </thead>
                             <tbody>

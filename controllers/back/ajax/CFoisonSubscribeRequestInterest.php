@@ -132,7 +132,7 @@ class CFoisonSubscribeRequestInterest extends AAjaxController
             $linkUser = "www.pickyshop.com/blueseal/work/foison/$foison->id";
             $body = "Salve,<br>Le comunichiamo con piacere che il contratto con n. $contract->id è stato accettato.
                         <br>Le categorie d'interesse che Le abbiamo impostato sono: $interestForEmail.
-                        <br><br>Prima di inizare ad accetare i lotti deve accettare il contratto al seguente link: $linkContractDetailAccept
+                        <br><br>Prima di inizare ad accettare i lotti deve accettare il contratto al seguente link: $linkContractDetailAccept
                         <br><br>Puo effettuare l'accesso utilizzando le seguenti credenziali:
                         <br>Username: $foison->email
                         <br>Password: $pw

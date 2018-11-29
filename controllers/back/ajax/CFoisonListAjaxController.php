@@ -5,6 +5,7 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CFoisonHasInterest;
 use bamboo\domain\entities\CUser;
+use bamboo\domain\entities\CUserAddress;
 use bamboo\domain\repositories\CFoisonRepo;
 
 
@@ -96,6 +97,33 @@ class CFoisonListAjaxController extends AAjaxController
 
 
             $row["interestName"] = $workCategories;
+
+            $userAddress = $foison->user->userAddress;
+
+            $incomplete = false;
+            if($userAddress->isEmpty()) {
+                $incomplete = true;
+            } else {
+                /** @var CUserAddress $usAddr */
+                $usAddr = $userAddress->getFirst();
+
+                if(
+                    empty($usAddr->address) ||
+                    empty($usAddr->province) ||
+                    empty($usAddr->city) ||
+                    empty($usAddr->postcode) ||
+                    empty($usAddr->countryId) ||
+                    empty($usAddr->phone) ||
+                    empty($usAddr->fiscalCode) ||
+                    empty($foison->addressBook->province) ||
+                    empty($foison->addressBook->countryId) ||
+                    empty($foison->addressBook->iban) ||
+                    empty($foison->addressBook->phone)
+                ) {
+                    $incomplete = true;
+                }
+            }
+            $row["statusProfile"] = $incomplete ? '<strong><p style="color: red">PROFILO INCOMPLETO</p></strong>' : '<strong><p style="color: green">PROFILO COMPLETO</p> </strong>';
             $datatable->setResponseDataSetRow($key,$row);
         }
 

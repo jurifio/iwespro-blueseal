@@ -90,10 +90,10 @@ class CUnfitProductBatchManage extends AAjaxController
 
         }
 
-        if (ENV == 'prod' && $pBatch->isUnassigned == 0) {
+        if (ENV == 'prod' && ($pBatch->isUnassigned == 0 || is_null($pBatch->isUnassigned))) {
             $body = "I seguenti prodotti non sono idonei:<br>
                     $unfitProduct";
-            $mailRepo->newMail('gianluca@iwes.it', [$pb['fason']], [], [], "Prodotti non idonei", $body);
+            $mailRepo->newMail('gianluca@iwes.it', [$pBatch->contractDetails->contracts->foison->email], [], [], "Prodotti non idonei", $body);
         }
 
 

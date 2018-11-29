@@ -30,6 +30,9 @@ class CRankProductBatchAjaxController extends AAjaxController
         $prBt->operatorRankIwes = $rank;
         $prBt->update();
 
+        $prBt->contractDetails->contracts->foison->totalRank(true);
+
+
         return "ORI inserito con successo";
     }
 

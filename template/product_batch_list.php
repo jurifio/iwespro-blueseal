@@ -34,7 +34,8 @@
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Id</th>
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Id</th>
                                 <th data-slug="workCategoryId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Categoria</th>

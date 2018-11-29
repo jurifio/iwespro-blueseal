@@ -166,4 +166,5 @@ class CFoison extends AEntity
         return $allAvg;
     }
 
+
 }

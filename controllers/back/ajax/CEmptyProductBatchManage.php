@@ -45,6 +45,7 @@ class CEmptyProductBatchManage extends AAjaxController
             $pb->name = $name;
             $pb->workCategoryId = $workCat;
             $pb->unitPrice = $unitPrice;
+            $pb->isUnassigned = 0;
             if($mp != "false") $pb->marketplace = 1;
 
             $pb->smartInsert();

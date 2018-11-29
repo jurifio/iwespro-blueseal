@@ -64,6 +64,8 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
         /** @var CProductBatch $pb */
         $pb = $pbRepo->findOneBy(['id'=>$productBatchId]);
 
+        $content = $pb->getElements();
+        if($content->isEmpty()) return 'Non puoi associare un lotto vuoto';
         if(!is_null($pb->contractDetailsId)) return 'Il lotto che stai associando è gia di un\'altro Fason';
 
         /** @var CProductBatch $pBatch */

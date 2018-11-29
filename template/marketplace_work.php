@@ -35,10 +35,11 @@
                                                 $rPrice = $cDFixOrVar == 1 ? $pb->unitPrice : $cD->workPriceList->price;
                                             }
                                         }
+                                        $pb->workCategory
                                         ?>
                                         <div class="col-xs-18 col-sm-6 col-md-3">
                                             <div class="thumbnail">
-                                                <img src="http://placehold.it/500x250/EEE">
+                                                <img src="/assets/img/<?php echo $pb->workCategory->imgUrl; ?>.jpg">
                                                 <div class="caption">
                                                     <h4><?php echo $pb->name; ?></h4>
                                                     <p><?php echo $pb->description ?></p>
@@ -78,7 +79,7 @@
                                         ?>
                                         <div disabled class="col-xs-18 col-sm-6 col-md-3">
                                             <div class="thumbnail" id="thumbnail>">
-                                                <img src="http://placehold.it/500x250/EEE">
+                                                <img src="assets/img/<?php echo $pb->workCategory->imgUrl; ?>.jpg">
                                                 <div class="caption">
                                                     <h4><?php echo $upb->name; ?></h4>
                                                     <p><?php echo $upb->description ?></p>
