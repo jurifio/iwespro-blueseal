@@ -36,9 +36,12 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id</th>
-                                <th data-slug="productCode"
+                                <th data-slug="productId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Prodotto</th>
+                                    data-orderable="true" class="center">Id Prodotto</th>
+                                <th data-slug="productVariantId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Variante del prodotto</th>
                                 <th data-slug="brand"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Brand</th>
@@ -76,7 +79,7 @@
                                     data-searchable="false"
                                     data-orderable="true" class="center">Note</th>
                                 <th data-slug="stock"
-                                    data-searchable="true"
+                                    data-searchable="false"
                                     data-orderable="false"
                                     class="center">Taglie
                                 </th>

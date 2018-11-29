@@ -41,7 +41,6 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
 
         $sql = "
             SELECT pbd.id,
-                 concat(pbd.productId,'-',pbd.productVariantId) as productCode,
                  pbd.productId,
                  pbd.productVariantId,
                  wcs.name as stepName,
@@ -50,7 +49,6 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
                  concat(pse.name, ' ', pse.year) AS season,
                  pcg.name AS colorGroup,
                  pv.description AS colorNameManufacturer,
-                 psiz.name AS stock,
                  pc.id  AS categoryId
            FROM ProductBatchDetails pbd
            JOIN Product p ON pbd.productVariantId = p.productVariantId AND p.id = pbd.productId
@@ -59,9 +57,6 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
            JOIN ProductVariant pv ON p.productVariantId = pv.id
            LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
            LEFT JOIN WorkCategorySteps wcs ON pbd.workCategoryStepsId = wcs.id
-           LEFT JOIN (ProductSku psk
-               JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
-               ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
            LEFT JOIN (ProductHasProductCategory ppc
                          JOIN ProductCategory pc ON ppc.productCategoryId = pc.id
                ) ON (p.id, p.productVariantId) = (ppc.productId,ppc.productVariantId)
@@ -85,6 +80,10 @@ class CProductBatchDetailsListAjaxController extends AAjaxController
             $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$pbr->productId, 'productVariantId'=>$pbr->productVariantId]);
 
             $row["DT_RowId"] = $product->printId();
+
+            $row["productId"] = $product->id;
+            $row["productVariantId"] = $product->productVariantId;
+
             $row["work_category"] = $pbr->productBatch->contractDetails->workCategory->id;
             $row["id"] = $pbr->id;
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';

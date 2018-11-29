@@ -32,9 +32,12 @@
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
-                                <th data-slug="DT_RowId"
+                                <th data-slug="id"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Code</th>
+                                    data-orderable="true" class="center">Id</th>
+                                <th data-slug="productVariantId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Variante</th>
                                 <th data-slug="productStatus"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stato</th>
@@ -48,11 +51,11 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione</th>
                                 <th data-slug="productCard"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Foto scheda</th>
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Foto scheda</th>
                                 <th data-slug="productBatchNumber"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Lotto</th>
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Lotto</th>
                                 <th data-slug="categoryId"
                                     data-searchable="true"
                                     data-orderable="true" class="center categoryFilterType">Categorie</th>
@@ -72,8 +75,8 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Ha Dett.</th>
                                 <th data-slug="pDescTranslate"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Descrizione Dettagli</th>
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Descrizione Dettagli</th>
                                 <th data-slug="details"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Dettagli

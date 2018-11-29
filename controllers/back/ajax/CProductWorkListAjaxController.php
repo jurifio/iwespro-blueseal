@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -31,37 +32,29 @@ class CProductWorkListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "
-            SELECT concat(p.id, '-', p.productVariantId) as DT_RowId,
+            SELECT 
               p.id,
               p.productVariantId,
-                   ps.name as productStatus,
+              ps.name AS productStatus,
               p.dummyPicture,
-                   pb.name as productBrand,
-                   pse.name as productSeason,
-                   if((p.id, p.productVariantId) IN (SELECT
-                                                       ProductCardPhoto.productId,
-                                                       ProductCardPhoto.productVariantId
-                                                     FROM ProductCardPhoto), 'sì', 'no')                 AS productCard,
+              pb.name AS productBrand,
+              pse.name AS productSeason,
+                   
             
-                   if((pbd.productBatchId) IN (SELECT pbd.productBatchId
-                                               FROM ProductBatch pb1), group_concat(pbd.productBatchId), 0)                 AS productBatchNumber,
             
-              #group_concat(pbd.productBatchId) as productBatchNumber,
                    pc.id                                                                                             AS categoryId,
                    pv.description                                                                                    AS colorNameManufacturer,
                    pcg.name                                                                                          AS colorGroup,
-                   concat(s.id,'-',s.name) as Shop,
+                   concat(s.id,'-',s.name) AS Shop,
                    if(((SELECT count(0)
                         FROM ProductSheetActual
                         WHERE ((ProductSheetActual.productId = p.id) AND
-                               (ProductSheetActual.productVariantId = p.productVariantId))) > 2), 'sì', 'no')    AS hasDetails,
-              pdtA.description as pDescTranslate
+                               (ProductSheetActual.productVariantId = p.productVariantId))) > 2), 'sì', 'no')    AS hasDetails
             FROM Product p
-              LEFT JOIN ProductCardPhoto pcp ON p.id = pcp.productId AND p.productVariantId = p.productVariantId
+              
               JOIN ProductStatus ps ON p.productStatusId = ps.id
               JOIN ProductBrand pb ON p.productBrandId = pb.id
               JOIN ProductSeason pse ON p.productSeasonId = pse.id
-              LEFT JOIN ProductBatchDetails pbd ON p.id = pbd.productId AND p.productVariantId = pbd.productVariantId
               LEFT JOIN (ProductHasProductCategory ppc
                 JOIN ProductCategory pc ON ppc.productCategoryId = pc.id
                 ) ON (p.id, p.productVariantId) = (ppc.productId,ppc.productVariantId)
@@ -70,13 +63,7 @@ class CProductWorkListAjaxController extends AAjaxController
               JOIN ShopHasProduct sp
                 ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
               JOIN Shop s ON s.id = sp.shopId
-              LEFT JOIN
-              (SELECT p1.id, p1.productVariantId, pdt1.description
-               FROM Product p1
-                 JOIN ProductDescriptionTranslation pdt1 ON p1.id = pdt1.productId AND p1.productVariantId = pdt1.productVariantId
-               WHERE pdt1.marketplaceId = 1 AND pdt1.langId = 1) as pdtA ON pdtA.id = p.id AND pdtA.productVariantId = p.productVariantId
-            WHERE p.processing <> 'definito' AND p.productStatusId in (6,11)
-            GROUP BY p.id, p.productVariantId";
+            WHERE p.processing <> 'definito' AND p.productStatusId IN (6,11)";
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
 
@@ -88,26 +75,28 @@ class CProductWorkListAjaxController extends AAjaxController
         /** @var CProductRepo $productRepo */
         $productRepo = \Monkey::app()->repoFactory->create('Product');
 
-        foreach ($datatable->getResponseSetData() as $key=>$row) {
+        foreach ($datatable->getResponseSetData() as $key => $row) {
 
             /** @var CProduct $product */
             $product = $productRepo->findOneBy($row);
 
             $row["DT_RowId"] = $product->printId();
+            $row['productId'] = $product->id;
+            $row['productVariantId'] = $product->productVariantId;
             $row['productStatus'] = $product->productStatus->name;
             $row['dummyPicture'] = '<img width="50" src="' . $product->getDummyPictureUrl() . '" />';
             $row['productBrand'] = $product->productBrand->name;
             $row['productSeason'] = $product->productSeason->name;
-            $row['productCard'] = (!$product->getProductCardUrl() ? '-' :'<a href="#1" class="enlarge-your-img"><img width="50" src="' . $product->getProductCardUrl() . '" /></a>');
+            $row['productCard'] = (!$product->getProductCardUrl() ? '-' : '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $product->getProductCardUrl() . '" /></a>');
 
             /** @var CObjectCollection $pbds */
-            $pbds = $pbdRepo->findBy(['productId'=>$product->id, 'productVariantId'=>$product->productVariantId]);
+            $pbds = $pbdRepo->findBy(['productId' => $product->id, 'productVariantId' => $product->productVariantId]);
 
             $pbdsIds = "";
-            if(!$pbds->isEmpty()){
+            if (!$pbds->isEmpty()) {
                 /** @var CProductBatchDetails $pbd */
-                foreach ($pbds as $pbd){
-                    $pbdsIds .= $pbd->productBatchId.', ';
+                foreach ($pbds as $pbd) {
+                    $pbdsIds .= $pbd->productBatchId . ', ';
                 }
             } else {
                 $pbdsIds = 0;
@@ -119,7 +108,7 @@ class CProductWorkListAjaxController extends AAjaxController
             $row['productName'] = $product->productNameTranslation->getFirst() ? $product->productNameTranslation->getFirst()->name : "";
             $row['colorNameManufacturer'] = $product->productVariant->description;
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
-            $row['shop'] = '<span class="small">'.$product->getShops('<br />', true).'</span>';
+            $row['shop'] = '<span class="small">' . $product->getShops('<br />', true) . '</span>';
             $row['hasDetails'] = (2 < $product->productSheetActual->count()) ? 'sì' : 'no';
             $row['details'] = "";
             foreach ($product->productSheetActual as $k => $v) {
@@ -128,10 +117,10 @@ class CProductWorkListAjaxController extends AAjaxController
                 }
             }
             /** @var CProductDescriptionTranslation $descT */
-            $descT = $product->productDescriptionTranslation->findOneByKeys(['marketplaceId'=>1, 'langId'=>1]);
-            $row['pDescTranslate'] = $descT->description;
+            $descT = $product->productDescriptionTranslation->findOneByKeys(['marketplaceId' => 1, 'langId' => 1]);
+            $row['pDescTranslate'] = $descT ? $descT->description : '';
 
-            $datatable->setResponseDataSetRow($key,$row);
+            $datatable->setResponseDataSetRow($key, $row);
         }
 
 
