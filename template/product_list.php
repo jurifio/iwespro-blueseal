@@ -101,7 +101,8 @@
                                 </th>
                                 <th data-slug="status"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Stato
+                                    data-orderable="true"
+                                    class="center">Stato
                                 </th>
                                 <th data-slug="mup"
                                     data-searchable="true"
