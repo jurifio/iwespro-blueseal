@@ -119,9 +119,6 @@ class CProductBatchListAjaxController extends AAjaxController
 
             }
 
-            if ($pbr->id == 51) {
-                $a = 8;
-            }
             $row["row_id"] = $pbr->id;
 
             $row["id"] = (((is_null($pbr->confirmationDate) && !$allShop) || (is_null($pbr->contractDetailsId))) ? $pbr->id :'<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>');
@@ -142,6 +139,13 @@ class CProductBatchListAjaxController extends AAjaxController
                     case CWorkCategory::NAME_ENG:
                     case CWorkCategory::NAME_DTC:
                         $row["id"] = '<a href="'.$url.CWorkCategory::SLUG_EMPTY_TRANS.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
+                    case CWorkCategory::TXT_FAS:
+                    case CWorkCategory::TXT_FAS_BLOG:
+                    case CWorkCategory::TXT_INFL:
+                    case CWorkCategory::TXT_PRT:
+                    case CWorkCategory::TXT_BRAND:
+                        $row["id"] = '<a href="'.$url.$pbr->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
                         break;
                 }
 

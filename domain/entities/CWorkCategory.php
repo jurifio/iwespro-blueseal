@@ -22,11 +22,15 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  */
 class CWorkCategory extends AEntity
 {
-
     const NORM = 1;
-    const BRAND = 3;
-    const NAME_ENG = 4;
-    const NAME_DTC = 5;
+    const BRAND = 2;
+    const NAME_ENG = 3;
+    const NAME_DTC = 4;
+    const TXT_FAS = 5;
+    const TXT_FAS_BLOG = 6;
+    const TXT_INFL = 7;
+    const TXT_PRT = 8;
+    const TXT_BRAND = 9;
 
     const SLUG_EMPTY_NORM = 'prodotti';
     const SLUG_EMPTY_BRAND = 'brands';

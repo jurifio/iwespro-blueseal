@@ -32,7 +32,7 @@ class CFoison extends AEntity
     protected $entityTable = 'Foison';
     protected $primaryKeys = ['id'];
 
-    CONST MININUM_RANK = 6;
+    CONST MININUM_RANK = 7;
 
     /**
      * @return array

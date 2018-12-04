@@ -2549,6 +2549,30 @@
             ]
         },
         {
+            "pattern": "/blueseal/work/text-manage(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkTextManageListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/work/lotti/text-manage/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkFasonTextManageListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/messages(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMessageListController"

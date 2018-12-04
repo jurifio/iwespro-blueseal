@@ -83,7 +83,7 @@ class CFoisonRepo extends ARepo
 
                 if($rank >= 8){
                     $interest->foisonStatusId = 2;
-                } else if ($rank >=6 AND $rank < 8) {
+                } else if ($rank >=7 AND $rank < 8) {
                     $interest->foisonStatusId = 3;
                 } else {
                     $interest->foisonStatusId = 4;

@@ -24,6 +24,8 @@ use bamboo\domain\repositories\CWorkCategoryStepsRepo;
  *
  * @property CContractDetails $contractDetails
  * @property CWorkCategory $workCategory
+ * @property CProductBatchTextManage $productBatchTextManage
+ *
  *
  */
 class CProductBatch extends AEntity
@@ -52,7 +54,7 @@ class CProductBatch extends AEntity
 
         /** @var CWorkCategoryStepsRepo $wksR */
         $wksR = \Monkey::app()->repoFactory->create('WorkCategorySteps');
-        /** @var CProductBatchDetails $elem */
+
         foreach ($elems as $elem) {
 
             switch ($elem->workCategoryStepsId) {
@@ -70,7 +72,11 @@ class CProductBatch extends AEntity
                 case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC:
                     $unfitElement[] =
                         ' | Lotto: ' . $elem->productBatchId .
-                        ' | Brand: ' . $elem->productName;
+                        ' | Name: ' . $elem->productName;
+                    break;
+                case $elem->getUnfitStep():
+                    $unfitElement[] =
+                        ' | Lotto: ' . $elem->productBatchId;
                     break;
             }
 
@@ -109,6 +115,17 @@ class CProductBatch extends AEntity
             case CWorkCategory::NAME_DTC:
                 $elems = $this->productBatchHasProductName;
                 break;
+            case CWorkCategory::TXT_FAS:
+            case CWorkCategory::TXT_FAS_BLOG:
+            case CWorkCategory::TXT_INFL:
+            case CWorkCategory::TXT_PRT:
+            case CWorkCategory::TXT_BRAND:
+                $elems = new CObjectCollection();
+                $productBatchTextManage = $this->productBatchTextManage;
+                if(!is_null($productBatchTextManage)){
+                    $elems->add($productBatchTextManage);
+                }
+                break;
         }
 
         return $elems;
@@ -137,6 +154,14 @@ class CProductBatch extends AEntity
             case CWorkCategory::NAME_ENG:
             case CWorkCategory::NAME_DTC:
                 $elems = $this->productBatchHasProductName;
+                break;
+            case CWorkCategory::TXT_FAS:
+            case CWorkCategory::TXT_FAS_BLOG:
+            case CWorkCategory::TXT_INFL:
+            case CWorkCategory::TXT_PRT:
+            case CWorkCategory::TXT_BRAND:
+                $elems = new CObjectCollection();
+                $elems->add($this->productBatchTextManage);
                 break;
         }
 

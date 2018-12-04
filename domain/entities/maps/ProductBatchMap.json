@@ -57,6 +57,12 @@
                 "parentKeys": ["workCategoryId"],
                 "childKeys" : ["id"],
                 "type" : "OneToOne"
+            },{
+                "name" : "productBatchTextManage",
+                "entity" : "ProductBatchTextManage",
+                "parentKeys": ["id"],
+                "childKeys" : ["productBatchId"],
+                "type" : "OneToOne"
             }
         ]
     }
