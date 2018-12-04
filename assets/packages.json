@@ -135,10 +135,6 @@
             "blueseal.ui.js": {
                 "path": "scheme://localdomain/assets/js/",
                 "options": ["defer"]
-            },
-            "jquery.numpad.js": {
-                "path": "scheme://localdomain/assets/js/",
-                "options": ["defer"]
             }
         },
         "ui": {
