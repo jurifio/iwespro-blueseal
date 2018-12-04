@@ -81,7 +81,7 @@ class CProductWorkTextManageImagePhotoAjaxManage extends AAjaxController
                 throw new RedPandaException('Cannot move the uploaded Files');
             }
 
-            $fileName['name'] = $productBatchId . '.' . $productBatchTextManage->id . '.' . explode('.', $_FILES['file']['name'][$i])[1];
+            $fileName['name'] = $productBatchId . '.' . $productBatchTextManage->id . '.' .  $_FILES['file']['name'][$i];
             //$fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 

@@ -49,7 +49,7 @@
                             </div>
                             <div>
                                 <p>Inserisci il testo</p>
-                                <textarea id="fasonTxt" style="width:500px" placeholder="Inserisci il testo (max <?php echo $pbtm->charMin; ?>" rows="10"><?php echo is_null($pbtm->descriptionFason) ? '' : $pbtm->descriptionFason; ?></textarea>
+                                <textarea id="fasonTxt" style="width:500px" placeholder="Inserisci il testo (max <?php echo $pbtm->charMin; ?>)" rows="10"><?php echo is_null($pbtm->descriptionFason) ? '' : $pbtm->descriptionFason; ?></textarea>
                             </div>
                             <div>
                                 <strong>Carica una o più foto e salva o salva e basta</strong>
@@ -58,7 +58,18 @@
                             <div id="photoSect">
                             </div>
                         </div>
+
                         <div class="col-md-6">
+                            <?php
+                            if(!$photos->isEmpty()):
+                                /** @var \bamboo\domain\entities\CProductBatchTextManagePhoto $photo */
+                                foreach ($photos as $photo): ?>
+                                <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" style="width: 600px;"
+                                <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" download>
+                            <?php
+                                endforeach;
+                            endif;
+                            ?>
                             <p>Note:</p>
                             <p><?php echo $pbtm->note; ?></p>
                         </div>

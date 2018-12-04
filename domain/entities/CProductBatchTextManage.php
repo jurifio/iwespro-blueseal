@@ -23,6 +23,7 @@ use bamboo\domain\repositories\CWorkCategoryStepsRepo;
  *
  * @property CWorkCategorySteps $workCategorySteps
  * @property CProductBatch $productBatch
+ * @property CObjectCollection $productBatchTextManagePhoto
  *
  */
 class CProductBatchTextManage extends AEntity

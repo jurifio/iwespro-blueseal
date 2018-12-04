@@ -17,6 +17,13 @@
                 "parentKeys": ["productBatchId"],
                 "childKeys" : ["id"],
                 "type" : "OneToOne"
+            },
+            {
+                "name" : "productBatchTextManagePhoto",
+                "entity" : "ProductBatchTextManagePhoto",
+                "parentKeys": ["id"],
+                "childKeys" : ["productBatchTextManageId"],
+                "type" : "OneToMany"
             }
         ]
     }
