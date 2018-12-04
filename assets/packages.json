@@ -74,7 +74,7 @@
             },
             "titatoggle-dist-min.css": {
                 "path": "https://raw.githubusercontent.com/kleinejan/titatoggle/master/dist/",
-                "options": ["screen"]
+                "options": ["screen,print"]
             }
         },
         "tables": {
