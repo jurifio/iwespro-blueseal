@@ -42,6 +42,13 @@
                 '<input type="text" id="contractDetailName" name="contractDetailName">' +
             '</div>' +
             '<div class="form-group form-group-default required">' +
+            '<label for="foisonStatus">Status del contratto</label>' +
+            '<select id="foisonStatus" name="foisonStatus">' +
+                '<option value="1">Startup</option>' +
+                '<option value="2">Regular</option>' +
+            '</select>' +
+            '</div>' +
+            '<div class="form-group form-group-default required">' +
                 '<label for="qty">Quantità giornaliera</label>' +
                 '<input type="text" id="qty" name="qty">' +
             '</div>' +
@@ -98,7 +105,8 @@
                 contractId: contractId,
                 contractDetailName: $('#contractDetailName').val(),
                 qty: $('#qty').val(),
-                note: $('#note').val()
+                note: $('#note').val(),
+                foisonStatus: $('#foisonStatus').val()
             };
                 $.ajax({
                     method: 'post',
