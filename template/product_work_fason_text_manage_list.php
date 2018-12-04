@@ -67,8 +67,9 @@
                                 /** @var \bamboo\domain\entities\CProductBatchTextManagePhoto $photo */
                                 foreach ($photosOrigin as $photo): ?>
                                 <div style="margin-bottom: 60px; display: flex; flex-direction: column">
-                                <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" style="width: 600px;">
-                                <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" target="_blank" download>Apri immagine</a>
+                                <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" target="_blank" download>
+                                    <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" style="width: 600px;">
+                                </a>
                                 </div>
                                     <?php
                                 endforeach;
@@ -83,8 +84,9 @@
                                 /** @var \bamboo\domain\entities\CProductBatchTextManagePhoto $photo */
                                 foreach ($photosDestination as $photo): ?>
                                     <div style="margin-bottom: 60px; display: flex; flex-direction: column">
-                                        <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" style="width: 600px;">
-                                        <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" target="_blank" download>Apri immagine</a>
+                                        <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/post-worked-image/<?php echo $photo->imageName; ?>" target="_blank" download>
+                                            <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/post-worked-image/<?php echo $photo->imageName; ?>" style="width: 600px;">
+                                        </a>
                                     </div>
                                 <?php
                                 endforeach;
