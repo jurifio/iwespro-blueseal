@@ -27,9 +27,10 @@
                     dictDefaultMessage: "Trascina qui le foto",
                     uploadMultiple: true,
                     sending: function(file, xhr, formData) {
-                        formData.append("productBatchId", $('#productBatch').val());
+                        formData.append("productBatchId", $('#productBatchId').val());
                         formData.append("theme", $('#theme').val());
                         formData.append("description", $('#description').val());
+                        formData.append("txt", $('#fasonTxt').val());
                     }
                 });
 
