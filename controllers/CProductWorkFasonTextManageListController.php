@@ -39,7 +39,8 @@ class CProductWorkFasonTextManageListController extends ARestrictedAccessRootCon
         $pbtm = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$pbtmId])->productBatchTextManage;
 
 
-        $photos = $pbtm->productBatchTextManagePhoto->findByKey('isDummy', 1);
+        $photosOrigin = $pbtm->productBatchTextManagePhoto->findByKey('isDummy', 1);
+        $photosDestination = $pbtm->productBatchTextManagePhoto->findByKey('isDummy', 0);
 
         $isWorker = \Monkey::app()->getUser()->hasPermission('worker');
         $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
@@ -51,7 +52,8 @@ class CProductWorkFasonTextManageListController extends ARestrictedAccessRootCon
             'pbtm' => $pbtm,
             'isWorker' => $isWorker,
             'allShops' => $allShops,
-            'photos' => $photos
+            'photosOrigin' => $photosOrigin,
+            'photosDestination' => $photosDestination
         ]);
     }
 }

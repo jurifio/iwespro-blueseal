@@ -24,7 +24,8 @@
                                 <h2>BETA VERSION | 1.0</h2>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="row">
+                        <div class="col-md-4">
                             <strong style="<?php if($pbtm->workCategorySteps->id == $pbtm->getUnfitStep()) echo 'color: red'; ?>"><?php
                                 if($pbtm->workCategorySteps->id == $pbtm->getUnfitStep() && $pbtm->productBatch->unfitDate == 0){
                                     echo 'IN VERIFICA, NON MODIFICARE!';
@@ -59,17 +60,39 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <strong>IMMAGINI DI ORIGINE</strong>
                             <?php
-                            if(!$photos->isEmpty()):
+                            if(count($photosOrigin) != 0):
                                 /** @var \bamboo\domain\entities\CProductBatchTextManagePhoto $photo */
-                                foreach ($photos as $photo): ?>
-                                <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" style="width: 600px;"
-                                <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" download>
-                            <?php
+                                foreach ($photosOrigin as $photo): ?>
+                                <div style="margin-bottom: 60px; display: flex; flex-direction: column">
+                                <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" style="width: 600px;">
+                                <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" target="_blank" download>Apri immagine</a>
+                                </div>
+                                    <?php
                                 endforeach;
                             endif;
                             ?>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>IMMAGINI DI DESTINAZIONE</strong>
+                            <?php
+                            if(count($photosDestination) != 0):
+                                /** @var \bamboo\domain\entities\CProductBatchTextManagePhoto $photo */
+                                foreach ($photosDestination as $photo): ?>
+                                    <div style="margin-bottom: 60px; display: flex; flex-direction: column">
+                                        <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" style="width: 600px;">
+                                        <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" target="_blank" download>Apri immagine</a>
+                                    </div>
+                                <?php
+                                endforeach;
+                            endif;
+                            ?>
+                        </div>
+                        </div>
+                        <div class="row">
                             <p>Note:</p>
                             <p><?php echo $pbtm->note; ?></p>
                         </div>

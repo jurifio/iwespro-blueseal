@@ -33,12 +33,7 @@
                     }
                 });
 
-                dropzone.on('addedfile',function(){
-                    okButton.attr("disabled", "disabled");
-                });
                 dropzone.on('queuecomplete',function(){
-
-                    okButton.removeAttr("disabled");
                     $(document).trigger('bs.load.photo');
                 });
             } else {
