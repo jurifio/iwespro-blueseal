@@ -19,7 +19,7 @@
         });
 
         dropzoneInterationPost.on('queuecomplete', function () {
-            $(document).trigger('bs.load.photo');
+            window.location.reload();
         });
 
         let dropzoneLike = new Dropzone("#dropzoneModalLike", {
@@ -37,7 +37,7 @@
         });
 
         dropzoneLike.on('queuecomplete', function () {
-            $(document).trigger('bs.load.photo');
+            window.location.reload();
         });
 
         let dropzonePost = new Dropzone("#dropzoneModalPost", {
@@ -55,7 +55,7 @@
         });
 
         dropzonePost.on('queuecomplete', function () {
-            $(document).trigger('bs.load.photo');
+            window.location.reload();
         });
 
     });
