@@ -88,6 +88,9 @@
                                         </form>
                                     </div>
                                 </div>
+                                <div class="saveDiv">
+                                    <button id="save">Salva</button>
+                                </div>
                             </div>
 
                             <div class="col-md-4">
