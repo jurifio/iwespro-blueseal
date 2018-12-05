@@ -34,7 +34,7 @@
                 });
 
                 dropzone.on('queuecomplete',function(){
-                    $(document).trigger('bs.load.photo');
+                        window.location.href = '/blueseal/work/lotti';
                 });
             } else {
                // $('#photo').val(this.checked);
