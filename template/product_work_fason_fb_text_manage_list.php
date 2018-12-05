@@ -57,11 +57,12 @@
                                               rows="10"><?php echo is_null($pbtm->descriptionFason) ? '' : $pbtm->descriptionFason; ?></textarea>
                                 </div>
                                 <div id="photoSect">
-                                    <div style="margin-bottom: 100px">
+                                    <div style="margin-bottom: 100px; margin-top: 40px">
                                         <strong>Foto interazione con il post (1080 x 1080)</strong>
                                         <form id="dropzoneModalInterationPost" class="dropzone"
                                               enctype="multipart/form-data"
-                                              name="dropzonePhotoInterationPost" action="POST">
+                                              name="dropzonePhotoInterationPost" action="POST"
+                                        style="width:60%">
                                             <div class="fallback">
                                                 <input name="file" type="file" multiple/>
                                             </div>
@@ -71,17 +72,19 @@
                                     <div style="margin-bottom: 100px">
                                         <strong>Foto like sulla pagina (1200 x 444)</strong>
                                         <form id="dropzoneModalLike" class="dropzone" enctype="multipart/form-data"
-                                              name="dropzonePhotoLike" action="POST">
+                                              name="dropzonePhotoLike" action="POST"
+                                              style="width:60%">
                                             <div class="fallback">
                                                 <input name="file" type="file" multiple/>
                                             </div>
                                         </form>
                                     </div>
 
-                                    <div style="margin-bottom: 100px">
+                                    <div style="margin-bottom: 30px">
                                         <strong>Foto post sul diario (1200 x 900)</strong>
                                         <form id="dropzoneModalPost" class="dropzone" enctype="multipart/form-data"
-                                              name="dropzonePhotoPost" action="POST">
+                                              name="dropzonePhotoPost" action="POST"
+                                              style="width:60%">
                                             <div class="fallback">
                                                 <input name="file" type="file" multiple/>
                                             </div>
@@ -89,12 +92,14 @@
                                     </div>
                                 </div>
                                 <div class="saveDiv">
-                                    <button id="save">Salva</button>
+                                    <button id="save" class="btn btn-success">Salva</button>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
-                                <strong>IMMAGINI DI ORIGINE</strong>
+                                <div style="margin-bottom: 40px">
+                                    <strong>IMMAGINI GREZZE</strong>
+                                </div>
                                 <?php
                                 if (count($photosOrigin) != 0):
                                     /** @var \bamboo\domain\entities\CProductBatchTextManagePhoto $photo */
@@ -103,7 +108,7 @@
                                             <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>"
                                                target="_blank" download>
                                                 <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>"
-                                                     style="width: 600px;">
+                                                     style="width: 50%;">
                                             </a>
                                         </div>
                                     <?php
@@ -113,8 +118,10 @@
                             </div>
 
                             <div class="col-md-4">
-                                <strong>IMMAGINI DI DESTINAZIONE</strong>
-                                <?php
+                                <div style="margin-bottom: 40px">
+                                <strong>IMMAGINI DI ELABORATE</strong>
+                                </div>
+                                    <?php
                                 if (count($photosDestination) != 0):
                                     /** @var \bamboo\domain\entities\CProductBatchTextManagePhoto $photo */
                                     foreach ($photosDestination as $photo): ?>
@@ -131,7 +138,7 @@
                                             <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/post-worked-image/<?php echo $photo->imageName; ?>"
                                                target="_blank" download>
                                                 <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/post-worked-image/<?php echo $photo->imageName; ?>"
-                                                     style="width: 600px;">
+                                                     style="width: 50%;">
                                             </a>
                                         </div>
                                     <?php
