@@ -145,6 +145,7 @@ class CProductBatchListAjaxController extends AAjaxController
                     case CWorkCategory::TXT_INFL:
                     case CWorkCategory::TXT_PRT:
                     case CWorkCategory::TXT_BRAND:
+                    case CWorkCategory::TXT_FB:
                         $row["id"] = '<a href="'.$url.$pbr->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
                         break;
                 }

@@ -56,7 +56,7 @@ class CProductBatch extends AEntity
         $wksR = \Monkey::app()->repoFactory->create('WorkCategorySteps');
 
         foreach ($elems as $elem) {
-
+            /** fixme: vedere se elem è una istanza di textmanage */
             switch ($elem->workCategoryStepsId) {
                 case CProductBatchDetails::UNFIT_NORM:
                     $unfitElement[] = 'id: ' . $elem->id .
@@ -120,6 +120,7 @@ class CProductBatch extends AEntity
             case CWorkCategory::TXT_INFL:
             case CWorkCategory::TXT_PRT:
             case CWorkCategory::TXT_BRAND:
+            case CWorkCategory::TXT_FB:
                 $elems = new CObjectCollection();
                 $productBatchTextManage = $this->productBatchTextManage;
                 if(!is_null($productBatchTextManage)){
@@ -160,6 +161,7 @@ class CProductBatch extends AEntity
             case CWorkCategory::TXT_INFL:
             case CWorkCategory::TXT_PRT:
             case CWorkCategory::TXT_BRAND:
+            case CWorkCategory::TXT_FB:
                 $elems = new CObjectCollection();
                 $elems->add($this->productBatchTextManage);
                 break;

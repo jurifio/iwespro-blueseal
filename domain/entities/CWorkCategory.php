@@ -31,6 +31,7 @@ class CWorkCategory extends AEntity
     const TXT_INFL = 7;
     const TXT_PRT = 8;
     const TXT_BRAND = 9;
+    const TXT_FB = 10;
 
     const SLUG_EMPTY_NORM = 'prodotti';
     const SLUG_EMPTY_BRAND = 'brands';
