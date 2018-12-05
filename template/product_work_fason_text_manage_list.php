@@ -53,7 +53,7 @@
                                 <textarea id="fasonTxt" style="width:500px" placeholder="Inserisci il testo (max <?php echo $pbtm->charMin; ?>)" rows="10"><?php echo is_null($pbtm->descriptionFason) ? '' : $pbtm->descriptionFason; ?></textarea>
                             </div>
                             <div>
-                                <strong>Carica una o più foto e salva o salva e basta</strong>
+                                <strong>Carica una o più foto (il salvataggio avverrà automaticamente dopo il caricamento della foto) o salva senza caricare foto.</strong>
                                 <input type="checkbox" id="photo">
                             </div>
                             <div id="photoSect">

@@ -35,6 +35,7 @@
                 });
 
                 dropzone.on('queuecomplete',function(){
+                    window.location.reload();
                     $(document).trigger('bs.load.photo');
                 });
             } else {
