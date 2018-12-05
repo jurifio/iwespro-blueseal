@@ -15,12 +15,21 @@
             sending: function (file, xhr, formData) {
                 formData.append("productBatchId", $('#productBatchId').val());
                 formData.append("type", 'interationPost');
+            },
+            success: function(file, response){
+                let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
+
+                new Alert({
+                    type: type,
+                    message: response
+                }).open();
+
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 3000);
             }
         });
 
-        dropzoneInterationPost.on('queuecomplete', function () {
-            window.location.reload();
-        });
 
         let dropzoneLike = new Dropzone("#dropzoneModalLike", {
             url: "/blueseal/xhr/ProductWorkFasonFbTextManageImagePhotoAjaxManage",
@@ -33,11 +42,20 @@
             sending: function (file, xhr, formData) {
                 formData.append("productBatchId", $('#productBatchId').val());
                 formData.append("type", 'pageLike');
-            }
-        });
+            },
+            success: function(file, response){
 
-        dropzoneLike.on('queuecomplete', function () {
-            window.location.reload();
+                let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
+
+                new Alert({
+                    type: type,
+                    message: response
+                }).open();
+
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 3000);
+            }
         });
 
         let dropzonePost = new Dropzone("#dropzoneModalPost", {
@@ -51,11 +69,19 @@
             sending: function (file, xhr, formData) {
                 formData.append("productBatchId", $('#productBatchId').val());
                 formData.append("type", 'newPost');
-            }
-        });
+            },
+            success: function(file, response){
+                let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
 
-        dropzonePost.on('queuecomplete', function () {
-            window.location.reload();
+                new Alert({
+                    type: type,
+                    message: response
+                }).open();
+
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 3000);
+            }
         });
 
     });

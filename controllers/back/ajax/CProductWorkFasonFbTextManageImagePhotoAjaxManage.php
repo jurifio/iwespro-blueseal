@@ -86,11 +86,11 @@ class CProductWorkFasonFbTextManageImagePhotoAjaxManage extends AAjaxController
                 $productBatchTextManagePhoto->isDummy = 0;
                 $productBatchTextManagePhoto->smartInsert();
             } else {
-                return 'L\'immagine non possiede le corrette dimensioni';
+                return 'Err: L\'immagine non possiede le corrette dimensioni';
             }
 
         }
 
-        return 'Il testo è stato inserito con successo';
+        return 'Immagine inserita con successo';
     }
 }
