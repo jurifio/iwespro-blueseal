@@ -174,6 +174,48 @@ class CProductBatch extends AEntity
         return $nElem;
     }
 
+    public function getNotNormalizedElements()
+    {
+
+        $elems = null;
+        $workCategory = null;
+        $nElem = [];
+
+        if (is_null($this->contractDetailsId)) {
+            $workCategory = $this->workCategoryId;
+        } else {
+            $workCategory = $this->contractDetails->workCategory->id;
+        }
+
+        switch ($workCategory) {
+            case CWorkCategory::NORM:
+                $elems = $this->productBatchDetails;
+                break;
+            case CWorkCategory::BRAND:
+                $elems = $this->productBatchHasProductBrand;
+                break;
+            case CWorkCategory::NAME_ENG:
+            case CWorkCategory::NAME_DTC:
+                $elems = $this->productBatchHasProductName;
+                break;
+            case CWorkCategory::TXT_FAS:
+            case CWorkCategory::TXT_FAS_BLOG:
+            case CWorkCategory::TXT_INFL:
+            case CWorkCategory::TXT_PRT:
+            case CWorkCategory::TXT_BRAND:
+            case CWorkCategory::TXT_FB:
+                $elems = new CObjectCollection();
+                $elems->add($this->productBatchTextManage);
+                break;
+        }
+
+        foreach ($elems as $elem) {
+            if (!is_null($elem->workCategorySteps->rgt)) $nElem[] = $elem;
+        }
+
+        return $nElem;
+    }
+
     /**
      * @param CUser $user
      * @return mixed

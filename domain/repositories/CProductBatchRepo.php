@@ -10,6 +10,8 @@ use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CProductBatchHasProductName;
+use bamboo\domain\entities\CProductBatchTextManage;
+use bamboo\domain\entities\CProductBatchTextManagePhoto;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\entities\CWorkCategory;
 use bamboo\domain\entities\CWorkCategorySteps;
@@ -284,7 +286,7 @@ class CProductBatchRepo extends ARepo
     public function duplicateProductBatchFromCancelled(CProductBatch $productBatch)
     {
 
-        $normalized = $productBatch->getNormalizedElements();
+        $notNormalized = $productBatch->getNotNormalizedElements();
         /** @var CSectionalRepo $sRepo */
         $sRepo = \Monkey::app()->repoFactory->create('Sectional');
 
@@ -293,7 +295,7 @@ class CProductBatchRepo extends ARepo
         $newPB->name = $productBatch->name;
         $newPB->description = $productBatch->description;
         //$newPB->sectional = $sRepo->createNewSectionalCode($productBatch->workCategory->sectionalCodeId);
-        $newPB->value = count($normalized) * $productBatch->unitPrice;
+        $newPB->value = count($notNormalized) * $productBatch->unitPrice;
         $newPB->workCategoryId = $productBatch->workCategoryId;
         $newPB->marketplace = 1;
         $newPB->estimatedWorkDays = $this->recalculateEstimatedWorkDay($productBatch);
@@ -305,7 +307,7 @@ class CProductBatchRepo extends ARepo
                 /** @var CProductBatchDetailsRepo $pbdR */
                 $pbdR = \Monkey::app()->repoFactory->create('ProductBatchDetails');
                 $products = [];
-                foreach ($normalized as $n) {
+                foreach ($notNormalized as $n) {
                     $products[] = $n->productId . '-' . $n->productVariantId;
                 }
 
@@ -315,7 +317,7 @@ class CProductBatchRepo extends ARepo
                 /** @var CProductBatchHasProductBrandRepo $pbR */
                 $pbR = \Monkey::app()->repoFactory->create('ProductBatchHasProductBrand');
                 $brandIds = [];
-                foreach ($normalized as $n) {
+                foreach ($notNormalized as $n) {
                     $brandIds[] = $n->productBrandId;
                 }
 
@@ -325,13 +327,38 @@ class CProductBatchRepo extends ARepo
             case CWorkCategory::NAME_DTC:
                 /** @var CProductBatchHasProductNameRepo $pnR */
                 $pnR = \Monkey::app()->repoFactory->create('ProductBatchHasProductName');
-                $langId = $normalized[0]->langId;
+                $langId = $notNormalized[0]->langId;
                 $productNames = [];
-                foreach ($normalized as $n) {
+                foreach ($notNormalized as $n) {
                     $productNames[] = $n->productName;
                 }
 
                 $pnR->insertNewProductNameFromCopy($newPB, $productNames, $langId);
+                break;
+            case CWorkCategory::TXT_FAS:
+            case CWorkCategory::TXT_FAS_BLOG:
+            case CWorkCategory::TXT_INFL:
+            case CWorkCategory::TXT_PRT:
+            case CWorkCategory::TXT_BRAND:
+            case CWorkCategory::TXT_FB:
+                $oldPhotos = $productBatch->productBatchTextManage->productBatchTextManagePhoto->isEmpty() ? null : $productBatch->productBatchTextManage->productBatchTextManagePhoto->findByKey('isDummy', 1);
+
+                /** @var CProductBatchTextManageRepo $pbtmR */
+                $pbtmR = \Monkey::app()->repoFactory->create('ProductBatchTextManage');
+
+                /** @var CProductBatchTextManage $newProductBatchTextManage */
+                $newProductBatchTextManage = $pbtmR->insertNewProductBatchTextManage($newPB, $productBatch->theme, $productBatch->description);
+
+                /** @var CProductBatchTextManagePhotoRepo $pbtmpR */
+                $pbtmpR = \Monkey::app()->repoFactory->create('ProductBatchTextManagePhoto');
+
+                if(!is_null($oldPhotos)) {
+                    /** @var CProductBatchTextManagePhoto $photo */
+                    foreach ($oldPhotos as $photo) {
+                        $pbtmpR->insertNewProductBatchTextManagePhoto($newProductBatchTextManage->id, $photo->imageName, 1);
+                    }
+                }
+
                 break;
         }
 
