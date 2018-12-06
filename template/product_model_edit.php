@@ -25,6 +25,13 @@
     ?>
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
+            <img id="loadImage" src="/assets/resources/images/AjaxLoader.gif" style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    display: none;
+">
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
