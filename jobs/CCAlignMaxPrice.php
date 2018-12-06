@@ -4,7 +4,7 @@ namespace bamboo\blueseal\jobs;
 use bamboo\core\jobs\ACronJob;
 
 /**
- * Class CCAlignMaxPrice
+ * Class CAlignMaxPrice
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -16,7 +16,7 @@ use bamboo\core\jobs\ACronJob;
  * @date 06/12/2018
  * @since 1.0
  */
-class CCAlignMaxPrice extends ACronJob
+class CAlignMaxPrice extends ACronJob
 {
     /**
      * @param null $args
