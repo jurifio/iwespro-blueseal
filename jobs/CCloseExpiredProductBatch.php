@@ -57,7 +57,7 @@ class CCloseExpiredProductBatch extends ACronJob
 
         /** @var CProductBatch $productBatch */
         foreach ($pB as $productBatch) {
-            if ($now > $productBatch->tolleranceDelivery AND !is_null($productBatch->requestClosingDate)) {
+            if ($now > $productBatch->tolleranceDelivery AND is_null($productBatch->requestClosingDate)) {
                 $productBatch->timingRank = 0;
                 $productBatch->isUnassigned = 1;
                 $productBatch->closingDate = date_format(new \DateTime(), 'Y-m-d H:i:s');
