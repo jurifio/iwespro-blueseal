@@ -144,9 +144,7 @@ class CProductListAjaxController extends AAjaxController
 
             $row['details'] = "";
             foreach ($val->productSheetActual as $k => $v) {
-                if (!is_null($v->productDetail)) {
-                    $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
-                }else{
+                if (!is_null($v->productDetail) && !$v->productDetail->productDetailTranslation->isEmpty()) {
                     $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
                 }
             }
