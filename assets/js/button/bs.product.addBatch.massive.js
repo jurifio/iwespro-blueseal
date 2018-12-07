@@ -19,19 +19,19 @@ window.buttonSetup = {
                     <p>Inserisci i codici</p>
                     <textarea id="codePr" style="width: 70%; height: 150px;"></textarea>
                     <p>Inserisci prodotti sprovvisti di scheda Prodotto</p>
-                    <select name="optionPr" id="optionPr">
-                    <option value="1">Si</option>
-                    <option value="2">No</option>
-                    </select>`
+                    <input  type="checkbox" id="optionPr" class="form-control"
+                        placeholder="Visible" checked="true" name=optionPr"/>`
+
 
         });
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
+            var option = ($('#optionPr').is(":checked") ? "1" : "2");
             const data = {
                 batch: $('#pBatch').val(),
                 products: $('#codePr').val(),
-                option:$('#optionPr').val(),
+                option:option,
 
             };
             $.ajax({
