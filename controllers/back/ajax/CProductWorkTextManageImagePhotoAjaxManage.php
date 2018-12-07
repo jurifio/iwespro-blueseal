@@ -59,7 +59,8 @@ class CProductWorkTextManageImagePhotoAjaxManage extends AAjaxController
             $productBatch->workCategoryId != 6 &&
             $productBatch->workCategoryId != 7 &&
             $productBatch->workCategoryId != 8 &&
-            $productBatch->workCategoryId != 9) return 'Il lotto che stai cercando di assegnare non fa parte della categoria di lavorazione corretta';
+            $productBatch->workCategoryId != 9 &&
+            $productBatch->workCategoryId != 10) return 'Il lotto che stai cercando di assegnare non fa parte della categoria di lavorazione corretta';
 
 
         /** @var CProductBatchTextManageRepo $productbatchTextManageRepo */
@@ -81,7 +82,7 @@ class CProductWorkTextManageImagePhotoAjaxManage extends AAjaxController
                 throw new RedPandaException('Cannot move the uploaded Files');
             }
 
-            $fileName['name'] = $productBatchId . '.' . $productBatchTextManage->id . '.' . explode('.', $_FILES['file']['name'][$i])[1];
+            $fileName['name'] = $productBatchId . '.' . $productBatchTextManage->id . '.' .  $_FILES['file']['name'][$i];
             //$fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 

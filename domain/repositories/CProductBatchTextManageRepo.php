@@ -56,6 +56,9 @@ class CProductBatchTextManageRepo extends ARepo
             case 9:
                 $charMin = CProductBatchTextManage::CHARMIN_BRAND_DESCRIPTION;
                 break;
+            case 10:
+                $charMin = CProductBatchTextManage::CHARMIN_FB;
+                break;
         }
 
         /** @var CProductBatchTextManage $productBatchTextManage */

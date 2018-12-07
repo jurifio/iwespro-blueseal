@@ -8,6 +8,7 @@ use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CUser;
+use bamboo\domain\entities\CUserDetails;
 use bamboo\domain\repositories\CFoisonRepo;
 use bamboo\domain\repositories\CProductSizeGroupRepo;
 use bamboo\domain\repositories\CProductSizeRepo;
@@ -56,8 +57,22 @@ class CFoisonDetailManage extends AAjaxController
         $country = $data["country"];
         $phone = $data["phone"];
         $password = $data["password"];
+        $birthDate = $data["birthdate"];
 
-        $user = $foison->user;
+        $foison->name = $name;
+        $foison->surname = $surname;
+        $foison->update();
+
+    $user = $foison->user;
+
+        /** @var CUserDetails $userDetail */
+        $userDetail = $user->userDetails;
+        $userDetail->name = $name;
+        $userDetail->surname = $surname;
+        $userDetail->birthDate = $birthDate;
+        $userDetail->phone = $phone;
+        $userDetail->fiscalCode = $fiscalCode;
+        $userDetail->update();
 
         if(!empty($password)) $user->password = password_hash($password, PASSWORD_BCRYPT);
 

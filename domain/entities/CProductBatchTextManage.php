@@ -23,6 +23,7 @@ use bamboo\domain\repositories\CWorkCategoryStepsRepo;
  *
  * @property CWorkCategorySteps $workCategorySteps
  * @property CProductBatch $productBatch
+ * @property CObjectCollection $productBatchTextManagePhoto
  *
  */
 class CProductBatchTextManage extends AEntity
@@ -35,6 +36,7 @@ class CProductBatchTextManage extends AEntity
     const CHARMIN_INFLUENCER = 100;
     const CHARMIN_PRODUCT_DESCRIPTION = 100;
     const CHARMIN_BRAND_DESCRIPTION = 100;
+    const CHARMIN_FB = 100;
 
     public function getUnfitStep() : int {
 
@@ -54,6 +56,9 @@ class CProductBatchTextManage extends AEntity
                 break;
             case 9:
                 $unfit = 28;
+                break;
+            case 10:
+                $unfit = 31;
                 break;
 
         }

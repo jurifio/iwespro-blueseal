@@ -33,13 +33,8 @@
                     }
                 });
 
-                dropzone.on('addedfile',function(){
-                    okButton.attr("disabled", "disabled");
-                });
                 dropzone.on('queuecomplete',function(){
-
-                    okButton.removeAttr("disabled");
-                    $(document).trigger('bs.load.photo');
+                        window.location.href = '/blueseal/work/lotti';
                 });
             } else {
                // $('#photo').val(this.checked);

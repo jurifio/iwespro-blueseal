@@ -24,7 +24,8 @@
                                 <h2>BETA VERSION | 1.0</h2>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="row">
+                        <div class="col-md-4">
                             <strong style="<?php if($pbtm->workCategorySteps->id == $pbtm->getUnfitStep()) echo 'color: red'; ?>"><?php
                                 if($pbtm->workCategorySteps->id == $pbtm->getUnfitStep() && $pbtm->productBatch->unfitDate == 0){
                                     echo 'IN VERIFICA, NON MODIFICARE!';
@@ -49,16 +50,51 @@
                             </div>
                             <div>
                                 <p>Inserisci il testo</p>
-                                <textarea id="fasonTxt" style="width:500px" placeholder="Inserisci il testo (max <?php echo $pbtm->charMin; ?>" rows="10"><?php echo is_null($pbtm->descriptionFason) ? '' : $pbtm->descriptionFason; ?></textarea>
+                                <textarea id="fasonTxt" style="width:500px" placeholder="Inserisci il testo (max <?php echo $pbtm->charMin; ?>)" rows="10"><?php echo is_null($pbtm->descriptionFason) ? '' : $pbtm->descriptionFason; ?></textarea>
                             </div>
                             <div>
-                                <strong>Carica una o più foto e salva o salva e basta</strong>
+                                <strong>Carica una o più foto (il salvataggio avverrà automaticamente dopo il caricamento della foto) o salva senza caricare foto.</strong>
                                 <input type="checkbox" id="photo">
                             </div>
                             <div id="photoSect">
                             </div>
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-md-4">
+                            <strong>IMMAGINI DI ORIGINE</strong>
+                            <?php
+                            if(count($photosOrigin) != 0):
+                                /** @var \bamboo\domain\entities\CProductBatchTextManagePhoto $photo */
+                                foreach ($photosOrigin as $photo): ?>
+                                <div style="margin-bottom: 60px; display: flex; flex-direction: column">
+                                <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" target="_blank" download>
+                                    <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/dummy-image/<?php echo $photo->imageName; ?>" style="width: 600px;">
+                                </a>
+                                </div>
+                                    <?php
+                                endforeach;
+                            endif;
+                            ?>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>IMMAGINI DI DESTINAZIONE</strong>
+                            <?php
+                            if(count($photosDestination) != 0):
+                                /** @var \bamboo\domain\entities\CProductBatchTextManagePhoto $photo */
+                                foreach ($photosDestination as $photo): ?>
+                                    <div style="margin-bottom: 60px; display: flex; flex-direction: column">
+                                        <a href="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/post-worked-image/<?php echo $photo->imageName; ?>" target="_blank" download>
+                                            <img src="https://iwes-fason.s3-eu-west-1.amazonaws.com/text-manage-photo/post-worked-image/<?php echo $photo->imageName; ?>" style="width: 600px;">
+                                        </a>
+                                    </div>
+                                <?php
+                                endforeach;
+                            endif;
+                            ?>
+                        </div>
+                        </div>
+                        <div class="row">
                             <p>Note:</p>
                             <p><?php echo $pbtm->note; ?></p>
                         </div>

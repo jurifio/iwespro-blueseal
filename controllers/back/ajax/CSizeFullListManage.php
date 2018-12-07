@@ -41,8 +41,7 @@ class CSizeFullListManage extends AAjaxController
         } else {
 
             //Slugghifica una string (es. toglie spazi vuoti)
-            $s = new CSlugify();
-            $slug = $s->slugify($slug);
+            $slug = trim($slug);
 
             /** @var CProductSize $productSizeRepo */
             $productSizeRepo = \Monkey::app()->repoFactory->create('ProductSize')->getEmptyEntity();

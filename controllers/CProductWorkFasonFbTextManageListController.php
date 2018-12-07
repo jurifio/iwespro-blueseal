@@ -6,7 +6,7 @@ use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
- * Class CProductWorkFasonTextManageListController
+ * Class CProductWorkFasonFbTextManageListController
  * @package bamboo\blueseal\controllers
  *
  * @author Iwes Team <it@iwes.it>
@@ -15,13 +15,13 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 03/12/2018
+ * @date 05/12/2018
  * @since 1.0
  */
-class CProductWorkFasonTextManageListController extends ARestrictedAccessRootController
+class CProductWorkFasonFbTextManageListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "product_work_fason_text_manage_list";
+    protected $pageSlug = "product_work_fason_fb_text_manage_list";
 
     /**
      * @return string
@@ -31,7 +31,7 @@ class CProductWorkFasonTextManageListController extends ARestrictedAccessRootCon
     {
 
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_work_fason_text_manage_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/product_work_fason_fb_text_manage_list.php');
 
         $pbtmId = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
 

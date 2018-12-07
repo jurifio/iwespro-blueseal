@@ -5,7 +5,9 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CContractDetails;
+use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CFoison;
+use bamboo\domain\entities\CFoisonHasInterest;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
 use bamboo\domain\entities\CUser;
@@ -45,6 +47,7 @@ class CContractDetailsListManage extends AAjaxController
         $workPriceListId = $data["workPriceListId"];
         $contractId = $data["contractId"];
         $contractDetailName = $data["contractDetailName"];
+        $foisonStatus = $data["foisonStatus"];
         $qty = $data["qty"];
         $note = $data["note"];
 
@@ -53,8 +56,19 @@ class CContractDetailsListManage extends AAjaxController
             return $res;
         }
 
+        /** @var CContracts $contract */
+        $contract = \Monkey::app()->repoFactory->create('Contracts')->findOneBy(['id' => $contractId]);
+
+        /** @var CFoisonHasInterest $foisonHasInterest */
+        $foisonHasInterest = \Monkey::app()->repoFactory->create('FoisonHasInterest')->getEmptyEntity();
+        $foisonHasInterest->foisonId = $contract->foison->id;
+        $foisonHasInterest->workCategoryId = $workCategoryId;
+        $foisonHasInterest->foisonStatusId = $foisonStatus;
+        $foisonHasInterest->smartInsert();
+
         /** @var CContractDetailsRepo $contractDetailRepo */
         $contractDetailRepo = \Monkey::app()->repoFactory->create('ContractDetails');
+
 
         if($contractDetailRepo->createNewContractDetail($workPriceListType,$contractId, $workCategoryId, $workPriceListId, $contractDetailName, $qty, $note)){
             $res = "Contratto creato con successo";

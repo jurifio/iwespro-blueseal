@@ -1,78 +1,117 @@
 ;(function () {
 
+    Dropzone.autoDiscover = false;
     $(document).ready(function () {
 
 
-        //set initial state.
-        $('#photo').val(this.checked);
-        $('#photoSect').empty().append(`<button id="save">Salva</button>`);
+        let dropzoneInterationPost = new Dropzone("#dropzoneModalInterationPost", {
+            url: "/blueseal/xhr/ProductWorkFasonFbTextManageImagePhotoAjaxManage",
+            maxFilesize: 5,
+            maxFiles: 1,
+            parallelUploads: 1,
+            acceptedFiles: "image/*",
+            dictDefaultMessage: "Trascina qui le foto per l'interazione sui post",
+            uploadMultiple: true,
+            sending: function (file, xhr, formData) {
+                formData.append("productBatchId", $('#productBatchId').val());
+                formData.append("type", 'interationPost');
+            },
+            success: function(file, response){
+                let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
 
-        $('#photo').change(function() {
-            if(this.checked) {
-                $('#photoSect').empty().append(`
-                 <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
-                       name="dropzonePhoto" action="POST">
-                     <div class="fallback">
-                         <input name="file" type="file" multiple/>
-                     </div>
-                 </form>
-                `);
+                new Alert({
+                    type: type,
+                    message: response
+                }).open();
 
-                let dropzone = new Dropzone("#dropzoneModal",{
-                    url: "/blueseal/xhr/ProductWorkFasonTextManageImagePhotoAjaxManage",
-                    maxFilesize: 5,
-                    maxFiles: 5,
-                    parallelUploads: 5,
-                    acceptedFiles: "image/*",
-                    dictDefaultMessage: "Trascina qui le foto",
-                    uploadMultiple: true,
-                    sending: function(file, xhr, formData) {
-                        formData.append("productBatchId", $('#productBatchId').val());
-                        formData.append("theme", $('#theme').val());
-                        formData.append("description", $('#description').val());
-                        formData.append("txt", $('#fasonTxt').val());
-                    }
-                });
-
-                dropzone.on('queuecomplete',function(){
+                window.setTimeout(function () {
                     window.location.reload();
-                    $(document).trigger('bs.load.photo');
-                });
-            } else {
-               // $('#photo').val(this.checked);
-                $('#photoSect').empty().append(`<button id="save">Salva</button>`);
+                }, 3000);
             }
+        });
 
+
+        let dropzoneLike = new Dropzone("#dropzoneModalLike", {
+            url: "/blueseal/xhr/ProductWorkFasonFbTextManageImagePhotoAjaxManage",
+            maxFilesize: 5,
+            maxFiles: 1,
+            parallelUploads: 1,
+            acceptedFiles: "image/*",
+            dictDefaultMessage: "Trascina qui le foto per il like sulla pagina",
+            uploadMultiple: true,
+            sending: function (file, xhr, formData) {
+                formData.append("productBatchId", $('#productBatchId').val());
+                formData.append("type", 'pageLike');
+            },
+            success: function(file, response){
+
+                let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
+
+                new Alert({
+                    type: type,
+                    message: response
+                }).open();
+
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 3000);
+            }
+        });
+
+        let dropzonePost = new Dropzone("#dropzoneModalPost", {
+            url: "/blueseal/xhr/ProductWorkFasonFbTextManageImagePhotoAjaxManage",
+            maxFilesize: 5,
+            maxFiles: 1,
+            parallelUploads: 1,
+            acceptedFiles: "image/*",
+            dictDefaultMessage: "Trascina qui le foto il post sul diario",
+            uploadMultiple: true,
+            sending: function (file, xhr, formData) {
+                formData.append("productBatchId", $('#productBatchId').val());
+                formData.append("type", 'newPost');
+            },
+            success: function(file, response){
+                let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
+
+                new Alert({
+                    type: type,
+                    message: response
+                }).open();
+
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 3000);
+            }
         });
 
     });
 
     $(document).on('click', '#save', function () {
-            const data = {
-                productBatchId: $('#productBatchId').val(),
-                txt: $('#fasonTxt').val()
-            };
-                $.ajax({
-                    method: 'post',
-                    url: '/blueseal/xhr/ProductWorkBatchFasonTextManageAjaxController',
-                    data: data
-                }).done(function (res) {
-                    new Alert({
-                        type: "success",
-                        message: res
-                    }).open();
+        const data = {
+            productBatchId: $('#productBatchId').val(),
+            txt: $('#fasonTxt').val()
+        };
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/ProductWorkBatchFasonTextManageAjaxController',
+            data: data
+        }).done(function (res) {
+            new Alert({
+                type: "success",
+                message: res
+            }).open();
 
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 5000);
-                }).fail(function (res) {
-                    new Alert({
-                        type: "error",
-                        message: "Errore"
-                    }).open();
-                    return false;
-                })
-        });
+            setTimeout(function () {
+                window.location.reload();
+            }, 5000);
+        }).fail(function (res) {
+            new Alert({
+                type: "error",
+                message: "Errore"
+            }).open();
+            return false;
+        })
+    });
 
     $(document).on('bs.end.text.manage', function () {
 

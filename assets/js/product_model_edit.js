@@ -13,6 +13,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
         $('#form-model').bsForm('save', {
             url: '/blueseal/xhr/DetailModelSave',
             onDone: function (res, method) {
+                $('#loadImage').hide();
                 var body = 'Oops! Metodo non pervenuto. Contatta l\'amministratore';
                 var location = false;
                 if ('ko' == res['status']) {
@@ -67,6 +68,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
     }
 
     //---------
+    $('#loadImage').show();
     var mult = [];
     if ($_GET.all) {
         if ('modelIds' in $_GET.all) {
