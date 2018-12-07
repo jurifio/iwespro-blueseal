@@ -63,12 +63,13 @@ class CMassiveProductBatchManage extends AAjaxController
             $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($pCode[0]);
 
             if(!is_null($product)){
-
-                if($this->checkAvaiable($product) !== 'ok'){
-                    $resFinal[$product->printId()] = $this->checkAvaiable($product);
-                    $count = 0;
-                    continue;
-                }
+        if ($option=="2") {
+            if ($this->checkAvaiable($product) !== 'ok') {
+                $resFinal[$product->printId()] = $this->checkAvaiable($product);
+                $count = 0;
+                continue;
+            }
+        }
 
                 $count++;
                 $resFinal[$product->printId()] = $pCode[0].'-'.$count;
@@ -104,14 +105,12 @@ class CMassiveProductBatchManage extends AAjaxController
         if($product->productStatusId == 7 || $product->productStatusId == 8 || $product->productStatusId == 12) $notAvaiable['Stato-'.$product->productStatus->name] = 1;
 
     if (is_null($product->productCardPhoto)) $notAvaiable['Scheda_prodotto'] = 1;
-if($option=='1') {
-    return 'ok';
-        } else {
+
     if (empty($notAvaiable)) return 'ok';
 
     return $notAvaiable;
 }
-}
+
 
 
     /**
