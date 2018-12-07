@@ -17,7 +17,13 @@ window.buttonSetup = {
             body: ` <p>N. lotto</p>
                     <input type="number" min="0" id="pBatch">
                     <p>Inserisci i codici</p>
-                    <textarea id="codePr" style="width: 70%; height: 150px;"></textarea>`
+                    <textarea id="codePr" style="width: 70%; height: 150px;"></textarea>
+                    <p>Inserisci prodotti sprovvisti di scheda Prodotto</p>
+                    <select name="optionPr" id="optionPr">
+                    <option value="1">Si</option>
+                    <option value="2">No</option>
+                    </select>`
+
         });
 
         bsModal.showCancelBtn();
@@ -25,6 +31,8 @@ window.buttonSetup = {
             const data = {
                 batch: $('#pBatch').val(),
                 products: $('#codePr').val(),
+                option:$('#optionPr').val(),
+
             };
             $.ajax({
                 method: 'post',

@@ -32,16 +32,21 @@ class CMassiveProductBatchManage extends AAjaxController
      */
     public function post()
     {
+        // ottengo i prodotti e il lotto
         $strProducts = \Monkey::app()->router->request()->getRequestData('products');
         $pBatch = \Monkey::app()->router->request()->getRequestData('batch');
+        $option =\Monkey::app()->router->request()->getRequestData('option');
 
         if(empty($strProducts) || empty($pBatch)) return false;
-
+           //cerco il lotto
         $pbext = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(["id"=>$pBatch]);
-
+        // se non lo trovo restituisco falso
         if(is_null($pbext)) return false;
 
+        //inizializzo l'array dei prodotti
+
         $allProducts = [];
+        //converto il testo prodotti stringa in un array
         $productids = explode("\n", $strProducts);
 
         $not = [];
@@ -87,9 +92,10 @@ class CMassiveProductBatchManage extends AAjaxController
 
     /**
      * @param CProduct $product
+     * @var $option
      * @return array|bool
      */
-    private function checkAvaiable(CProduct $product) {
+    private function checkAvaiable(CProduct $product, $option) {
 
         $notAvaiable = [];
 
@@ -97,12 +103,15 @@ class CMassiveProductBatchManage extends AAjaxController
 
         if($product->productStatusId == 7 || $product->productStatusId == 8 || $product->productStatusId == 12) $notAvaiable['Stato-'.$product->productStatus->name] = 1;
 
-        if(is_null($product->productCardPhoto)) $notAvaiable['Scheda_prodotto'] = 1;
+    if (is_null($product->productCardPhoto)) $notAvaiable['Scheda_prodotto'] = 1;
+if($option=='1') {
+    return 'ok';
+        } else {
+    if (empty($notAvaiable)) return 'ok';
 
-       if(empty($notAvaiable)) return 'ok';
-
-       return $notAvaiable;
-    }
+    return $notAvaiable;
+}
+}
 
 
     /**
