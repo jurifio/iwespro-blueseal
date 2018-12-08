@@ -62,7 +62,7 @@
                                     <th data-slug="price"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Prezzo</th>
-                                    <th data-slug="status"
+                                    <th data-slug="statusPublished"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>
                                     <th data-slug="creationDate"

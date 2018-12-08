@@ -102,7 +102,7 @@ group by productId, productVariantId";
                 $row['associatePrestashopMarketPlace']='non associato';
                 $row['typePrice']='non applicato';
                 $row['price']='non calcolato';
-                $row['status']='non lavorato';
+                $row['statusPublished']='non lavorato';
 
             }else{
                 $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price,mphs.imgMarketPlace as icon, mphpa.statusPublished as statusPublished
@@ -159,7 +159,7 @@ group by productId, productVariantId";
                     $rowtablemarketplace .= "<tr><td><img width='80' src='".$imgMarketPlacePath.$marketplaces['icon']."'</img></td><td>".$marketplaces['nameShop'] ."-". $marketplaces['name'] . "</td><td>".$typeRetouchPrice."</td><td>".$marketplaces['price'] . "</td></tr>";
                 }
                 $row["associatePrestashopMarketPlace"] = '<table class="nested-table"><thead><th colspan="2">MarketPlace</th><th>Tipo ricalcolo</th><th>Prezzo Ricalcolato</th></thead><tbody>' . $rowtablemarketplace . '</tbody></table>';
-                $row["status"]=$status;
+                $row["statusPublished"]=$status;
 
                 }
 
