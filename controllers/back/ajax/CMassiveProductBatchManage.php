@@ -93,7 +93,7 @@ class CMassiveProductBatchManage extends AAjaxController
 
     /**
      * @param CProduct $product
-     * @var $option
+     * @param  $option
      * @return array|bool
      */
     private function checkAvaiable(CProduct $product, $option) {
