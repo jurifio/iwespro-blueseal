@@ -65,7 +65,7 @@ class CMassiveProductBatchManage extends AAjaxController
             if(!is_null($product)){
 
             if ($this->checkAvaiable($product, $option) !== 'ok') {
-                $resFinal[$product->printId()] = $this->checkAvaiable($product);
+                $resFinal[$product->printId()] = $this->checkAvaiable($product, $option);
                 $count = 0;
                 continue;
             }
