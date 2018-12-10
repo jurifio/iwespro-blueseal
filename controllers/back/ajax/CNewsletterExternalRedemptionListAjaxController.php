@@ -29,6 +29,7 @@ class CNewsletterExternalRedemptionListAjaxController extends AAjaxController
                   n.id                                                                     AS newsletterId,
                   n.newsletterCloneId                                                      AS newsletterCloneId,
                   n.name                                                                   AS newsletterName,
+                  n.sendAddressDate                                                                   AS sendAddressDate,
                   count(DISTINCT er.newsletterExternalUserId)                              AS emailAddressCount,
                   count(CASE er.emailStatusId WHEN 1 THEN 1 ELSE NULL END)                 AS emailPending,
                   count(CASE er.emailStatusId WHEN 2 THEN 1 ELSE NULL END)                 AS emailNotQueued,

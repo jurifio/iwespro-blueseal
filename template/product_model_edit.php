@@ -32,6 +32,7 @@
     z-index: 9999;
     display: none;
 ">
+            <p id="modifiedRows"></p>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>

@@ -59,6 +59,11 @@
                                     data-orderable="true"
                                     class="center">Id
                                 </th>
+                                <th data-slug="sendAddressDate"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Data invio
+                                </th>
                                 <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true"

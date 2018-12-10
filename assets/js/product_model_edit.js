@@ -7,6 +7,7 @@ var alertHtml = "" +
 var tagList = "";
 
 var defMult = '';
+
 $(document).on('bs.product.edit', function (e, element, button) {
 
     let saveAll = function (isMult) {
@@ -14,6 +15,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
             url: '/blueseal/xhr/DetailModelSave',
             onDone: function (res, method) {
                 $('#loadImage').hide();
+                clearInterval(interval);
                 var body = 'Oops! Metodo non pervenuto. Contatta l\'amministratore';
                 var location = false;
                 if ('ko' == res['status']) {
@@ -72,6 +74,23 @@ $(document).on('bs.product.edit', function (e, element, button) {
     var mult = [];
     if ($_GET.all) {
         if ('modelIds' in $_GET.all) {
+            let now = new Date().toISOString();
+            var interval = null;
+            Pace.ignore(function () {
+                interval = setInterval(function () {
+                    $.ajax({
+                        type: "GET",
+                        url: '/blueseal/xhr/DetailModelCountRow',
+                        data: {
+                            time: now,
+                            type: 'add'
+                        }
+                    }).success(function (res) {
+                        $('#modifiedRows').empty().append(res);
+                    })
+                }, 2000);
+            });
+
             var multPar = $('#ids').val();
 
             $.ajax({
@@ -93,6 +112,23 @@ $(document).on('bs.product.edit', function (e, element, button) {
 
         } else if ('modifyModelIds' in $_GET.all) {
             var multPar = $('#ids').val();
+
+            let now = new Date().toISOString();
+            var interval = null;
+            Pace.ignore(function () {
+                interval = setInterval(function () {
+                    $.ajax({
+                        type: "GET",
+                        url: '/blueseal/xhr/DetailModelCountRow',
+                        data: {
+                            time: now,
+                            type: 'update'
+                        }
+                    }).success(function (res) {
+                        $('#modifiedRows').empty().append(res);
+                    })
+                }, 2000);
+            });
 
             $.ajax({
                 type: "POST",
@@ -118,7 +154,6 @@ $(document).on('bs.product.edit', function (e, element, button) {
     }
 
     //--------
-
 });
 
 $(document).ready(function () {
