@@ -553,7 +553,7 @@ $(document).on('change', '.findDetails', function () {
         method: 'GET',
         url: '/blueseal/xhr/DetailGetLabelDetailForFind',
         data: {
-            psmp: psmp,
+            psmp: $('#ids').val(),
             label: label
         }
     }).done(function (res) {

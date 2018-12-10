@@ -29,32 +29,34 @@ class CDetailGetLabelDetailForFind extends AAjaxController
         $label = \Monkey::app()->router->request()->getRequestData('label');
         $psmpIdsString = \Monkey::app()->router->request()->getRequestData('psmp');
 
-        $psmpIds = explode('-', $psmpIdsString);
+        $idsJon = json_decode($psmpIdsString, true);
 
         /** @var CRepo $psmpRepo */
         $psmpRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype');
 
         $res = '';
-        foreach ($psmpIds as $psmpId){
+        foreach ($idsJon as $idJson) {
 
-            /** @var CProductSheetModelPrototype $psmp */
-            $psmp = $psmpRepo->findOneBy(['id'=>$psmpId]);
+            foreach ($idJson as $idModel) {
+                /** @var CProductSheetModelPrototype $psmp */
+                $psmp = $psmpRepo->findOneBy(['id'=>$idModel]);
 
-            /** @var CObjectCollection $prodSheetActual */
-            $prodSheetActual = $psmp->productSheetModelActual;
+                /** @var CObjectCollection $prodSheetActual */
+                $prodSheetActual = $psmp->productSheetModelActual;
 
 
 
-            /** @var CProductSheetModelActual $psma */
-            $psma = $prodSheetActual->findOneByKey('productDetailLabelId', $label);
+                /** @var CProductSheetModelActual $psma */
+                $psma = $prodSheetActual->findOneByKey('productDetailLabelId', $label);
 
-            if(!$psma){
-                $val = "Etichetta non associata a nulla";
-            } else {
-                $val = $psma->productDetail->productDetailTranslation->getFirst()->name;
+                if(!$psma){
+                    $val = "Etichetta non associata a nulla";
+                } else {
+                    $val = $psma->productDetail->productDetailTranslation->getFirst()->name;
+                }
+
+                $res .= '<strong>Modello:</strong> ' . $psmp->code . '| <strong>Valore etichetta:</strong> ' . $val . '<br>';
             }
-
-            $res .= '<strong>Modello:</strong> ' . $psmp->code . '| <strong>Valore etichetta:</strong> ' . $val . '<br>';
         }
 
         return $res;
