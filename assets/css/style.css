@@ -1425,3 +1425,9 @@ table.mini-traffic-display th, table.mini-traffic-display td {
 .btn-loadmore {
     padding: 50px 0;
 }
+
+#elaProgres {
+    color: black;
+    text-align: center;
+    margin-top: 2%;
+}

@@ -93,7 +93,8 @@ class CDetailModelSave extends AAjaxController
             $newIds = [];
             $mes = '';
 
-            $modelIdsJson = json_decode($get['modelIds'][0]['res'], true);
+            $modelIdsJson = json_decode($get['modelIds'][0]['response'], true);
+
             //Preparo l'inserimento
             foreach ($modelIdsJson as $model) {
                 try {
@@ -307,10 +308,10 @@ class CDetailModelSave extends AAjaxController
                     \Monkey::app()->repoFactory->rollback();
                     $psmpErrId = $psmp->id;
                     $errore = $e->getMessage();
-                    $mes .= "<br><br><strong>$psmpErrId</strong>$errore";
+                    $mes .= '<br><br>'.$psmpErrId . ': '.$errore;
                 }
             }
-            return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds), 'message' => json_encode($mes)]);
+            return json_encode(['status' => 'new', 'productSheetModelPrototypeId' => json_encode($newIds), 'message' => json_encode($mes), 'count' => count($modelIdsJson)]);
 
 
         }
@@ -415,7 +416,7 @@ class CDetailModelSave extends AAjaxController
 
             $productDetails = $this->getDetails($get);
 
-            $modelIdsJson = json_decode($get['modelIds'][0]['res'], true);
+            $modelIdsJson = json_decode($get['modelIds'][0]['response'], true);
 
             //Ciclo i modelli
             foreach ($modelIdsJson as $model) {
@@ -604,7 +605,7 @@ class CDetailModelSave extends AAjaxController
                     $mes .= '<br><br>' .$e->getMessage();
                 }
             }
-            return json_encode(['status' => 'updated', 'productSheetModelPrototypeId' => json_encode($newIds),  'message' => json_encode($mes)]);
+            return json_encode(['status' => 'updated', 'productSheetModelPrototypeId' => json_encode($newIds),  'message' => json_encode($mes), 'count' => count($modelIdsJson)]);
 
         }
     }

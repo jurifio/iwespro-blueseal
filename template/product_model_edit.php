@@ -25,14 +25,15 @@
     ?>
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
-            <img id="loadImage" src="/assets/resources/images/AjaxLoader.gif" style="
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    display: none;
-">
-            <p id="modifiedRows"></p>
+            <div id="elaProgres">
+                <p id="modifiedRows">Elaborati: 0/<?php echo $countM; ?></p>
+            </div>
+            <div style="text-align: center;">
+                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#mexage">Messaggi</button>
+                <div id="mexage" class="collapse">
+
+                </div>
+            </div>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
@@ -42,7 +43,7 @@
             <input type="hidden" id="ids" value=<?php echo $ids; ?>>
 
             <div class="container-fluid">
-                <p>Stai modificando <?php echo $countM; ?> modelli</p>
+                <input type="hidden" id="totalProduct" value="<?php echo $countM; ?>">
                 <form id="form-model" enctype="multipart/form-data" role="form" action="" method="post"
                       data-primaryfield="#id"
                       autocomplete="off" class="form">
@@ -234,7 +235,7 @@
                                     </div>
 
 
-                                    <?php if($isMultiple): ?>
+                                    <?php if ($isMultiple): ?>
                                         <div class="row <?php echo $col; ?>">
                                             <div class="col-md-12">
                                                 <div class="col-md-6">
@@ -263,7 +264,8 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
-                                                    <label for="sub-prodCats">Sostituisci (Categorie pre-impostate)</label>
+                                                    <label for="sub-prodCats">Sostituisci (Categorie
+                                                        pre-impostate)</label>
                                                     <input autocomplete="off" type="text" id="sub-prodCats"
                                                            class="form-control sub-prodCats" name="sub-prodCats"
                                                            value=""
@@ -295,8 +297,10 @@
                                                     >
                                                 </div>
                                                 <div>
-                                                    <label for="keepmacrocatphoto">Mantieni la foto della macrocategoria</label>
-                                                    <input type="checkbox" id="keepmacrocatphoto" name="keepmacrocatphoto">
+                                                    <label for="keepmacrocatphoto">Mantieni la foto della
+                                                        macrocategoria</label>
+                                                    <input type="checkbox" id="keepmacrocatphoto"
+                                                           name="keepmacrocatphoto">
                                                 </div>
                                             </div>
                                         </div>
@@ -400,7 +404,8 @@
                                                id="remove-0">ELIMINA DETTAGLIO</p>
                                             <div style="display: block">
                                                 <label for="delDetail-0">Cancella il dettaglio nel clone</label>
-                                                <input id="delDetail-0" name="delDetail-0" data-labelid="" class="delDetail" type="checkbox">
+                                                <input id="delDetail-0" name="delDetail-0" data-labelid=""
+                                                       class="delDetail" type="checkbox">
                                             </div>
                                         </div>
 
@@ -427,48 +432,48 @@
                     </div>
                 </form>
             </div>
-        </input>
+            </input>
+        </div>
+        <?php include "parts/footer.php"; ?>
     </div>
-    <?php include "parts/footer.php"; ?>
-</div>
-<?php include "parts/bsmodal.php"; ?>
-<?php include "parts/alert.php"; ?>
-<bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione prodotti">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-floppy-o"
-                data-permission="/admin/product/add"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs.product.edit"
-                data-title="Salva"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione Nomi Prodotti">
-        <bs-toolbar-button
-                data-remote="bs.product.name.insert"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione Dettagli">
-        <bs-toolbar-button
-                data-remote="bs.product.details.new"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Aggiungi/elimina categorie per fason">
-        <bs-toolbar-button
-                data-remote="bs.details.research.fason"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Aggiungi nuova tipo scheda prodotto">
-        <bs-toolbar-button
-                data-remote="bs.insert.new.product.sheet.prototype"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.modify.model.prototype.category.group"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-</bs-toolbar>
+    <?php include "parts/bsmodal.php"; ?>
+    <?php include "parts/alert.php"; ?>
+    <bs-toolbar class="toolbar-definition">
+        <bs-toolbar-group data-group-label="Gestione prodotti">
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-floppy-o"
+                    data-permission="/admin/product/add"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-event="bs.product.edit"
+                    data-title="Salva"
+                    data-placement="bottom"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Gestione Nomi Prodotti">
+            <bs-toolbar-button
+                    data-remote="bs.product.name.insert"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Gestione Dettagli">
+            <bs-toolbar-button
+                    data-remote="bs.product.details.new"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Aggiungi/elimina categorie per fason">
+            <bs-toolbar-button
+                    data-remote="bs.details.research.fason"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Aggiungi nuova tipo scheda prodotto">
+            <bs-toolbar-button
+                    data-remote="bs.insert.new.product.sheet.prototype"
+            ></bs-toolbar-button>
+            <bs-toolbar-button
+                    data-remote="bs.modify.model.prototype.category.group"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
+    </bs-toolbar>
 </body>
 </html>

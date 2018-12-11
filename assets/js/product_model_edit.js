@@ -14,8 +14,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
         $('#form-model').bsForm('save', {
             url: '/blueseal/xhr/DetailModelSave',
             onDone: function (res, method) {
-                $('#loadImage').hide();
-                clearInterval(interval);
+
                 var body = 'Oops! Metodo non pervenuto. Contatta l\'amministratore';
                 var location = false;
                 if ('ko' == res['status']) {
@@ -26,7 +25,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                             body = 'Nuovo modello inserito.';
                             location = window.location.pathname + '?id=' + res['productSheetModelPrototypeId'];
                         } else {
-                            if('new' == res['status']){
+                            if ('new' == res['status']) {
                                 body = res['productSheetModelPrototypeId'] + '</br>' + res["message"];
                                 location = '/blueseal/prodotti/modelli/support';
                             }
@@ -37,7 +36,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         if (!isMult) {
                             location = window.location.href;
                         } else {
-                            if('updated' == res['status']){
+                            if ('updated' == res['status']) {
                                 body = res['productSheetModelPrototypeId'] + '</br>' + res["message"];
                                 location = '/blueseal/prodotti/modelli/support';
                             }
@@ -70,82 +69,134 @@ $(document).on('bs.product.edit', function (e, element, button) {
     }
 
     //---------
-    $('#loadImage').show();
     var mult = [];
     if ($_GET.all) {
         if ('modelIds' in $_GET.all) {
-            let now = new Date().toISOString();
-            var interval = null;
-            Pace.ignore(function () {
-                interval = setInterval(function () {
-                    $.ajax({
-                        type: "GET",
-                        url: '/blueseal/xhr/DetailModelCountRow',
-                        data: {
-                            time: now,
-                            type: 'add'
+
+            let multPar = $('#ids').val();
+
+            let arrids = JSON.parse(multPar);
+            let results = [];
+
+            while (arrids.length) {
+                results.push(arrids.splice(0, 100));
+            }
+
+            let elabor = 0;
+
+            $.each(results, function (k, v) {
+
+                let multPartial = JSON.stringify(v);
+
+                $.ajax({
+                    type: "POST",
+                    url: '/blueseal/xhr/DetailModel',
+                    data: {
+                        multiple: multPartial
+                    }
+                }).done(function (response) {
+                    mult = [];
+                    mult.push({
+                        response
+                    });
+
+                    let data = {};
+                    //let formDataObject = new FormData();
+
+                    $('#form-model').find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
+                        if ('undefined' != typeof $(this).attr('name')) {
+
+                            if ("" != $(this).val()) {
+                                data[$(this).attr('name')] = $(this).val();
+                                //formDataObject.append($(this).attr('name'), $(this).val());
+                            }
                         }
-                    }).success(function (res) {
-                        $('#modifiedRows').empty().append(res);
-                    })
-                }, 2000);
-            });
+                    });
 
-            var multPar = $('#ids').val();
 
-            $.ajax({
-                type: "POST",
-                url: '/blueseal/xhr/DetailModel',
-                data: {
-                    multiple: multPar
-                }
-            }).done(function(response) {
-            }).fail(function(response) {
-            }).success(function (res) {
-                mult.push({
-                    res
+                    data['modelIds'] = mult;
+
+                    $.ajax({
+                        type: "post",
+                        url: '/blueseal/xhr/DetailModelSave',
+                        dataType: 'JSON',
+                        data: data
+                    }).done(function (response) {
+                        elabor = elabor + response['count'];
+                        $('#modifiedRows').empty().append(
+                            'Elaborati: ' + elabor + '/' + $('#totalProduct').val()
+                        );
+                        $('#mexage').append(`<div>${response['message']}</div>`);
+                    });
+
+                }).fail(function (response) {
+                }).success(function (res) {
                 });
-
-                saveAllData(mult);
-                saveAll(true);
             });
 
         } else if ('modifyModelIds' in $_GET.all) {
-            var multPar = $('#ids').val();
+            let multPar = $('#ids').val();
 
-            let now = new Date().toISOString();
-            var interval = null;
-            Pace.ignore(function () {
-                interval = setInterval(function () {
-                    $.ajax({
-                        type: "GET",
-                        url: '/blueseal/xhr/DetailModelCountRow',
-                        data: {
-                            time: now,
-                            type: 'update'
+            let arrids = JSON.parse(multPar);
+            let results = [];
+
+            while (arrids.length) {
+                results.push(arrids.splice(0, 100));
+            }
+
+            let elabor = 0;
+
+            $.each(results, function (k, v) {
+
+                let multPartial = JSON.stringify(v);
+
+                $.ajax({
+                    type: "POST",
+                    url: '/blueseal/xhr/DetailModel',
+                    data: {
+                        multiple: multPartial
+                    }
+                }).done(function (response) {
+                    mult = [];
+                    mult.push({
+                        response
+                    });
+
+                    let data = {};
+                    //let formDataObject = new FormData();
+
+                    $('#form-model').find('input:not([type=file],[type=radio],[type=checkbox]), textarea, select').each(function () {
+                        if ('undefined' != typeof $(this).attr('name')) {
+
+                            if ("" != $(this).val()) {
+                                data[$(this).attr('name')] = $(this).val();
+                                //formDataObject.append($(this).attr('name'), $(this).val());
+                            }
                         }
-                    }).success(function (res) {
-                        $('#modifiedRows').empty().append(res);
-                    })
-                }, 2000);
-            });
+                    });
 
-            $.ajax({
-                type: "POST",
-                url: '/blueseal/xhr/DetailModel',
-                data: {
-                    multiple: multPar
-                }
-            }).done(function(response) {
-            }).fail(function(response) {
-            }).success(function (res) {
-                mult.push({
-                    res
+
+                    data['modelIds'] = mult;
+
+                    $.ajax({
+                        type: "put",
+                        url: '/blueseal/xhr/DetailModelSave',
+                        dataType: 'JSON',
+                        data: data
+                    }).done(function (response) {
+                        elabor = elabor + response['count'];
+                        $('#modifiedRows').empty().append(
+                            'Elaborati: ' + elabor + '/' + $('#totalProduct').val()
+                        );
+                        $('#mexage').append(`<div>${response['message']}</div>`);
+                    });
+
+                }).fail(function (response) {
+                }).success(function (res) {
                 });
-
-                saveAllData(mult);
-                saveAll(true);
             });
+
+
         } else {
             saveAll(false)
         }
@@ -317,7 +368,7 @@ $(document).ready(function () {
         }
     });
 
-    if('string' == typeof $_GET.all.id) {
+    if ('string' == typeof $_GET.all.id) {
         $("#prodCats").selectize({
             valueField: 'id',
             labelField: 'name',
@@ -333,7 +384,7 @@ $(document).ready(function () {
                 }
             }
         });
-    }else {
+    } else {
         $(document).on('keyup', '#prodCat', function (e) {
             elem = $(e.target);
             if (13 == e.charCode) {
@@ -349,7 +400,7 @@ $(document).ready(function () {
                         search: query,
                     },
                     dataType: 'json'
-                }).done(function (res){
+                }).done(function (res) {
                     $('#prodCats').empty();
                     $.each(res, function (k, v) {
                         $('#prodCats').append(
@@ -560,11 +611,11 @@ $(document).on('click', '#add-change-details', function () {
 
 $(document).on('click', '.delDetail', function () {
     if ($(this).is(':checked')) {
-        $('#find-detail-value-'+$(this).attr('id').split('-')[1]).val('Elimina').prop('disabled',true);
-        $('#sub-detail-value-'+$(this).attr('id').split('-')[1]).val('Elimina').prop('disabled',true);
+        $('#find-detail-value-' + $(this).attr('id').split('-')[1]).val('Elimina').prop('disabled', true);
+        $('#sub-detail-value-' + $(this).attr('id').split('-')[1]).val('Elimina').prop('disabled', true);
     } else {
-        $('#find-detail-value-'+$(this).attr('id').split('-')[1]).val('').prop('disabled',false);
-        $('#sub-detail-value-'+$(this).attr('id').split('-')[1]).val('').prop('disabled',false);
+        $('#find-detail-value-' + $(this).attr('id').split('-')[1]).val('').prop('disabled', false);
+        $('#sub-detail-value-' + $(this).attr('id').split('-')[1]).val('').prop('disabled', false);
     }
 });
 
@@ -581,7 +632,7 @@ $(document).on('change', '.findDetails', function () {
     let psmp = url.searchParams.get("modelIds");
     let position = $(this).attr('id').split('-')[2];
 
-    if(psmp == null) psmp = url.searchParams.get("modifyModelIds");
+    if (psmp == null) psmp = url.searchParams.get("modifyModelIds");
 
     let num = $(this).attr('id').split('-')[2];
     $.ajax({
@@ -593,10 +644,9 @@ $(document).on('change', '.findDetails', function () {
         }
     }).done(function (res) {
         $(`#sectedDetailsList-${num}`).empty().append(res);
-        $(`#delDetail-${position}`).attr('name', 'delDetail-'+label);
+        $(`#delDetail-${position}`).attr('name', 'delDetail-' + label);
     });
 });
-
 
 
 $(document).on('change', '#copypast', function () {
