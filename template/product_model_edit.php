@@ -30,7 +30,7 @@
             </div>
             <div style="text-align: center;">
                 <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#mexage">Messaggi</button>
-                <div id="mexage" class="collapse">
+                <div id="mexage" class="collapse in">
 
                 </div>
             </div>
