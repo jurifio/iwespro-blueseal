@@ -747,7 +747,9 @@ WHERE ProductSheetModelPrototypeSupport.id = $protId;";
 
             /** @var CProductSheetActual $sheetActual */
             $sheetActual = $psmp->productSheetModelActual->findOneByKey('productDetailLabelId', $singleDetailV[0]);
-            $detailTrans = $sheetActual->productDetail->productDetailTranslation->getFirst()->name;
+            if($sheetActual){
+                $detailTrans = $sheetActual->productDetail->productDetailTranslation->getFirst()->name;
+            } else continue;
 
             $newDetailName = str_ireplace($singleDetailV[1], $singleDetailV[2], $detailTrans);
 

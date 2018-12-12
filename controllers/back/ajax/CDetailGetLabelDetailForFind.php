@@ -35,9 +35,13 @@ class CDetailGetLabelDetailForFind extends AAjaxController
         $psmpRepo = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype');
 
         $res = '';
+        $c = 0;
         foreach ($idsJon as $idJson) {
 
             foreach ($idJson as $idModel) {
+                if($c == 10) break 2;
+
+                $c++;
                 /** @var CProductSheetModelPrototype $psmp */
                 $psmp = $psmpRepo->findOneBy(['id'=>$idModel]);
 

@@ -1155,7 +1155,13 @@ $(document).on('bs-massive-update-copy-model-prototype', function () {
     let bsModal = new $.bsModal('Inserisci i filtri', {
         body:
         `
-        <div>
+        <div style="
+           display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 56%;
+    margin: 0 auto;">
         <div>
         <label for="id">Id</label>
         <input class="vFilt" type="text" id="id">

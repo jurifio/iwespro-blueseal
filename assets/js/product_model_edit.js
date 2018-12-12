@@ -10,6 +10,20 @@ var defMult = '';
 
 $(document).on('bs.product.edit', function (e, element, button) {
 
+    let err = false;
+    $.each($('.obb'), function () {
+       if($(this).val() == ''){
+           new Alert({
+               type: "danger",
+               message: "Hai lasciato vuoto qualche dettaglio"
+           }).open();
+           err = true;
+       }
+    });
+
+    if(err) return false;
+
+    $('#mainLoader').show();
     let saveAll = function (isMult) {
         $('#form-model').bsForm('save', {
             url: '/blueseal/xhr/DetailModelSave',
@@ -83,6 +97,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
             }
 
             let elabor = 0;
+            let worked = null;
 
             $.each(results, function (k, v) {
 
@@ -113,6 +128,11 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         }
                     });
 
+                    $('#form-model').find('input[type=checkbox]:checked').each(function () {
+                        if (typeof $(this).attr('name') == 'undefined') return;
+                        data[$(this).attr('name')] = $(this).val();
+                        //formDataObject.append($(this).attr('name'), $(this).val());
+                    });
 
                     data['modelIds'] = mult;
 
@@ -123,10 +143,13 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         data: data
                     }).done(function (response) {
                         elabor = elabor + response['count'];
+                        worked = Math.trunc(elabor * 100 / parseInt($('#totalProduct').val()));
                         $('#modifiedRows').empty().append(
-                            'Elaborati: ' + elabor + '/' + $('#totalProduct').val()
+                            worked + '%'
                         );
                         $('#mexage').append(`<div>${response['message']}</div>`);
+
+                        if(worked == 100) $('#mainLoader').hide();
                     });
 
                 }).fail(function (response) {
@@ -145,6 +168,7 @@ $(document).on('bs.product.edit', function (e, element, button) {
             }
 
             let elabor = 0;
+            let worked = null;
 
             $.each(results, function (k, v) {
 
@@ -175,6 +199,12 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         }
                     });
 
+                    $('#form-model').find('input[type=checkbox]:checked').each(function () {
+                        if (typeof $(this).attr('name') == 'undefined') return;
+                        data[$(this).attr('name')] = $(this).val();
+                        //formDataObject.append($(this).attr('name'), $(this).val());
+                    });
+
 
                     data['modelIds'] = mult;
 
@@ -185,10 +215,13 @@ $(document).on('bs.product.edit', function (e, element, button) {
                         data: data
                     }).done(function (response) {
                         elabor = elabor + response['count'];
+                        worked = Math.trunc(elabor * 100 / parseInt($('#totalProduct').val()));
                         $('#modifiedRows').empty().append(
-                            'Elaborati: ' + elabor + '/' + $('#totalProduct').val()
+                            worked + '%'
                         );
                         $('#mexage').append(`<div>${response['message']}</div>`);
+
+                        if(worked == 100) $('#mainLoader').hide();
                     });
 
                 }).fail(function (response) {
@@ -645,6 +678,8 @@ $(document).on('change', '.findDetails', function () {
     }).done(function (res) {
         $(`#sectedDetailsList-${num}`).empty().append(res);
         $(`#delDetail-${position}`).attr('name', 'delDetail-' + label);
+        $(`#find-detail-value-${position}`).addClass('obb');
+        $(`#sub-detail-value-${position}`).addClass('obb');
     });
 });
 

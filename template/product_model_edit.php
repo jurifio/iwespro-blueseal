@@ -26,7 +26,13 @@
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
             <div id="elaProgres">
-                <p id="modifiedRows">Elaborati: 0/<?php echo $countM; ?></p>
+                <div id="mainLoader">
+                <div id="loaderdiv">
+                    <img src="/assets/img/blueseal_loader.gif" style="width: 20%"/>
+                    <p id="modifiedRows" style="font-size: 30px; color: #00bcff;"></p>
+                </div>
+                </div>
+                <p>Totale elementi: <?php echo $countM; ?></p>
             </div>
             <div style="text-align: center;">
                 <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#mexage">Messaggi</button>
