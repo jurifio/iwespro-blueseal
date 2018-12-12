@@ -24,7 +24,7 @@ use bamboo\domain\entities\CProductSheetPrototypeHasProductDetailLabel;
  */
 class CDetailGetLabelDetailForFind extends AAjaxController
 {
-    public function get()
+    public function post()
     {
         $label = \Monkey::app()->router->request()->getRequestData('label');
         $psmpIdsString = \Monkey::app()->router->request()->getRequestData('psmp');

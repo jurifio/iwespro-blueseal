@@ -636,7 +636,7 @@ $(document).on('change', '.findDetails', function () {
 
     let num = $(this).attr('id').split('-')[2];
     $.ajax({
-        method: 'GET',
+        method: 'post',
         url: '/blueseal/xhr/DetailGetLabelDetailForFind',
         data: {
             psmp: $('#ids').val(),
