@@ -34,13 +34,11 @@ class CMarketplaceProductAssociateListAjaxController extends AAjaxController
        pps.productId as productId,
        pps.productVariantId as productVariantId,
        shp.shopId as shopId,
-       
+       MAHP.statusPublished as statusPublished,
 
 
        p.creationDate as creationDate,
-       '' as associatePrestashopMarketPlace,
-       
-       '' as statusPublished
+       '' as associatePrestashopMarketPlace
 
 
 
@@ -54,6 +52,7 @@ from ProductPublicSku pps
   join ProductHasProductPhoto PHPP ON pps.productId = PHPP.productId AND pps.productVariantId = PHPP.productVariantId
   join ProductBrand pb on p.productBrandId =pb.id
   join `ProductHasProductCategory` `phpc` on  pps.`productId` = `phpc`.`productId` and `pps`.`productVariantId` = `phpc`.`productVariantId`
+  left  outer join `MarketplaceHasProductAssociate` MAHP ON p.id = MAHP.productId AND p.productVariantId = MAHP.productVariantId
 
   join `ProductStatus` `ps` on((`p`.`productStatusId` = `ps`.`id`))
 
