@@ -115,7 +115,7 @@ group by productId, productVariantId";
                                               mphpa.productVariantId = ? 
                                             ORDER BY m.`name`", [$product->id, $product->productVariantId])->fetchAll();
                 $imgMarketPlacePath=\Monkey::app()->baseUrl(FALSE)."/images/imgorder/";
-
+$status='';
                 foreach ($resmarketplacearray as $marketplaces) {
                     switch($marketplaces['typeRetouchPrice']){
                         case 1:
@@ -143,7 +143,7 @@ group by productId, productVariantId";
                             $status = 'In Attesa di Pubblicazione';
                             break;
                         case 1:
-                            $status = 'Pubblicato';
+                            $status = 'Esportato';
                             break;
                         case 2:
                             $status = 'Allineamento Programmato';
