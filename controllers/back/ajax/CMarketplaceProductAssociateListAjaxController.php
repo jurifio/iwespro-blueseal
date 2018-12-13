@@ -34,6 +34,7 @@ class CMarketplaceProductAssociateListAjaxController extends AAjaxController
        pps.productId as productId,
        pps.productVariantId as productVariantId,
        shp.shopId as shopId,
+       '' as stato,
 
 
        p.creationDate as creationDate,
@@ -115,7 +116,7 @@ group by productId, productVariantId";
                                               mphpa.productVariantId = ? 
                                             ORDER BY m.`name`", [$product->id, $product->productVariantId])->fetchAll();
                 $imgMarketPlacePath=\Monkey::app()->baseUrl(FALSE)."/images/imgorder/";
-$status='';
+$status=$row['stato'];
                 foreach ($resmarketplacearray as $marketplaces) {
                     switch($marketplaces['typeRetouchPrice']){
                         case 1:
