@@ -136,12 +136,23 @@ $q=0;
              $prestashopHasProductImageInsert->smartInsert();
 
             $cover=$value_image_product['position'];
-            $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
+            if ($cover!=1) {
+                $cover = null;
+                $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
+                                                   VALUES ('" . $q . "',
+                                                           '" . $value_image_product['productId'] . "',
+                                                           '" . $value_image_product['position'] . "',
+                                                           null");
+                $stmtInsertImage->execute();
+            }else{
+                $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $value_image_product['position'] . "',
                                                            '" . $value_image_product['position'] . "')");
-            $stmtInsertImage->execute();
+                $stmtInsertImage->execute();
+
+            }
             if ($cover!=1) {
                 $cover = null;
                 $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
