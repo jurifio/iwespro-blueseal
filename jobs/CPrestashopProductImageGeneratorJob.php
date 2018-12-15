@@ -141,8 +141,7 @@ $q=0;
                 $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
-                                                           '" . $value_image_product['position'] . "',
-                                                           null");
+                                                           '" . $value_image_product['position'] . "', null)");
                 $stmtInsertImage->execute();
             }else{
                 $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
