@@ -143,12 +143,17 @@ $q=0;
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $value_image_product['position'] . "', null)");
                 $stmtInsertImage->execute();
-            }else{
+            }else{/*
                 $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $value_image_product['position'] . "',
                                                            '" . $value_image_product['position'] . "')");
+                $stmtInsertImage->execute();*/
+                $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
+                                                   VALUES ('" . $q . "',
+                                                           '" . $value_image_product['productId'] . "',
+                                                           '" . $value_image_product['position'] . "', null)");
                 $stmtInsertImage->execute();
 
             }
