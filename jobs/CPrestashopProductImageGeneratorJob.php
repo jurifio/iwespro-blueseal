@@ -124,14 +124,15 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         $w = 0;
         $q = 0;
         foreach ($image_product as $value_image_product) {
-            $stmtProductExist = $db_con->prepare('SELECT id_product FROM psz6_product WHERE id_product=' . $value_image_product['productId']);
+           /* $stmtProductExist = $db_con->prepare('SELECT id_product FROM psz6_product WHERE id_product=' . $value_image_product['productId']);
             $stmtProductExist->execute();
             $user = $stmtProductExist->fetchAll();
 
-            if ($user !== false) {
+            if ($user !== false) {*/
+
+    $q=$q+1;
 
 
-                $q = $q + 1;
                 if ($current_productId == $value_image_product['productId']) {
                     $w = $w + 1;
                 } else {
@@ -161,7 +162,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $w . "',
-                                                           '" . $w . "')");
+                                                           '" . '1' . "')");
                     $stmtInsertImage->execute();
                     /*$stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`)
                                                        VALUES ('" . $q . "',
@@ -206,16 +207,14 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                     array($q,
                         $value_image_product['productId'],
                         $w,
-                        $w,
+                        $cover,
                         $value_image_product['picture']));
 
                 foreach ($data_image_multiple_link as $row_image_product_link) {
                     fputcsv($image_multiple_link_csv, $row_image_product_link, ';');
                 }
 
-            } else {
-                continue;
-            }
+
         }
 
 
