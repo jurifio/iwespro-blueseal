@@ -135,7 +135,7 @@ $q=0;
             $prestashopHasProductImageInsert->status = '0';
              $prestashopHasProductImageInsert->smartInsert();
 
-            $cover=$value_image_product['position'];
+           /* $cover=$value_image_product['position'];
             if ($cover!=1) {
                 $cover = null;
                 $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
@@ -149,7 +149,7 @@ $q=0;
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $value_image_product['position'] . "',
                                                            '" . $value_image_product['position'] . "')");
-                $stmtInsertImage->execute();*/
+                $stmtInsertImage->execute();
                 $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
@@ -189,7 +189,7 @@ $q=0;
                                                    VALUES ('" . $q . "',
                                                            '3',
                                                            '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
+            $stmtInsertImageLang->execute();*/
             $data_image_multiple_link = array(
                 array($q,
                     $value_image_product['productId'],
@@ -233,12 +233,12 @@ $q=0;
         $errorNumber = curl_errno($ch);
         curl_close($ch);
 
-        $url = 'https://iwes.shop/alignMultipleImage.php';
+       /* $url = 'https://iwes.shop/alignMultipleImage.php';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
+        $result = curl_exec($ch);*/
 
 
         curl_close($ch);
