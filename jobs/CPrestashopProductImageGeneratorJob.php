@@ -121,40 +121,48 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         $a = 0;
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
-        $current_productId = 0;
-
-$q=0;
+        $current_productId = null;
+        $w=0;
+        $q=0;
         foreach ($image_product as $value_image_product) {
+
             $q = $q + 1;
-             $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
+            if ($current_productId==$value_image_product['productId']){
+                $w=$w+1;
+            } else{
+                $w=1;
+                $current_productId=$value_image_product['productId'];
+
+            }
+            $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
              $prestashopHasProductImageInsert->idImage=$q;
              $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
-             $prestashopHasProductImageInsert->position = $value_image_product['position'];
+             $prestashopHasProductImageInsert->position = $w;
              $prestashopHasProductImageInsert->picture = $value_image_product['picture'];
              $prestashopHasProductImageInsert->cover = $value_image_product['cover'];
             $prestashopHasProductImageInsert->status = '0';
              $prestashopHasProductImageInsert->smartInsert();
 
-           /* $cover=$value_image_product['position'];
+            $cover=$w;
             if ($cover!=1) {
                 $cover = null;
                 $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
-                                                           '" . $value_image_product['position'] . "', null)");
+                                                           '" . $w . "', null)");
                 $stmtInsertImage->execute();
-            }else{/*
+            }else{
                 $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
-                                                           '" . $value_image_product['position'] . "',
-                                                           '" . $value_image_product['position'] . "')");
+                                                           '" . $w . "',
+                                                           '" . $w . "')");
                 $stmtInsertImage->execute();
-                $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
+                /*$stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`)
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $value_image_product['position'] . "', null)");
-                $stmtInsertImage->execute();
+                $stmtInsertImage->execute();*/
 
             }
             if ($cover!=1) {
@@ -189,12 +197,12 @@ $q=0;
                                                    VALUES ('" . $q . "',
                                                            '3',
                                                            '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();*/
+            $stmtInsertImageLang->execute();
             $data_image_multiple_link = array(
                 array($q,
                     $value_image_product['productId'],
-                    $value_image_product['position'],
-                    $value_image_product['position'],
+                    $w,
+                    $w,
                     $value_image_product['picture']));
 
             foreach ($data_image_multiple_link as $row_image_product_link) {
@@ -233,12 +241,12 @@ $q=0;
         $errorNumber = curl_errno($ch);
         curl_close($ch);
 
-       /* $url = 'https://iwes.shop/alignMultipleImage.php';
+        $url = 'https://iwes.shop/alignMultipleImage.php';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);*/
+        $result = curl_exec($ch);
 
 
         curl_close($ch);
