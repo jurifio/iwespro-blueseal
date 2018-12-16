@@ -93,7 +93,6 @@ class CPrestashopProductImageGeneratorJob extends ACronJob
         }
 
 
-
         /**
          * @var $db CMySQLAdapter
          */
@@ -108,111 +107,116 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  GROUP BY picture  ORDER BY productId,position ASC";
-       \Monkey::app()->dbAdapter->query('truncate table PrestashopHasProductImage',[]);
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name) AND p.productStatusId=6 AND p.qty>0  GROUP BY picture  ORDER BY productId,position ASC";
+        \Monkey::app()->dbAdapter->query('truncate table PrestashopHasProductImage', []);
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-        $stmttruncate_psz6_image=$db_con->prepare("truncate table psz6_image");
+        $stmttruncate_psz6_image = $db_con->prepare("truncate table psz6_image");
         $stmttruncate_psz6_image->execute();
-        $stmttruncate_psz6_image_shop=$db_con->prepare("truncate table psz6_image_shop");
+        $stmttruncate_psz6_image_shop = $db_con->prepare("truncate table psz6_image_shop");
         $stmttruncate_psz6_image_shop->execute();
-        $stmttruncate_psz6_image_lang=$db_con->prepare("truncate table psz6_image_lang");
+        $stmttruncate_psz6_image_lang = $db_con->prepare("truncate table psz6_image_lang");
         $stmttruncate_psz6_image_lang->execute();
 
         $a = 0;
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
         $current_productId = null;
-        $w=0;
-        $q=0;
+        $w = 0;
+        $q = 0;
         foreach ($image_product as $value_image_product) {
+            $stmtProductExist = $db_con->prepare('SELECT id_product FROM psz6_product WHERE id_product=' . $value_image_product['productId']);
+            $stmtProductExist->execute();
+            $user = $stmtProductExist->fetchAll();
 
-            $q = $q + 1;
-            if ($current_productId==$value_image_product['productId']){
-                $w=$w+1;
-            } else{
-                $w=1;
-                $current_productId=$value_image_product['productId'];
+            if ($user !== false) {
 
-            }
-            $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
-             $prestashopHasProductImageInsert->idImage=$q;
-             $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
-             $prestashopHasProductImageInsert->position = $w;
-             $prestashopHasProductImageInsert->picture = $value_image_product['picture'];
-             $prestashopHasProductImageInsert->cover = $value_image_product['cover'];
-            $prestashopHasProductImageInsert->status = '0';
-             $prestashopHasProductImageInsert->smartInsert();
 
-            $cover=$w;
-            if ($cover!=1) {
-                $cover = null;
-                $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
+                $q = $q + 1;
+                if ($current_productId == $value_image_product['productId']) {
+                    $w = $w + 1;
+                } else {
+                    $w = 1;
+                    $current_productId = $value_image_product['productId'];
+
+                }
+                $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
+                $prestashopHasProductImageInsert->idImage = $q;
+                $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
+                $prestashopHasProductImageInsert->position = $w;
+                $prestashopHasProductImageInsert->picture = $value_image_product['picture'];
+                $prestashopHasProductImageInsert->cover = $value_image_product['cover'];
+                $prestashopHasProductImageInsert->status = '0';
+                $prestashopHasProductImageInsert->smartInsert();
+
+                $cover = $w;
+                if ($cover != 1) {
+                    $cover = null;
+                    $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
-                                                           '" . $w . "', null)");
-                $stmtInsertImage->execute();
-            }else{
-                $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
+                                                           '" . $w . "', NULL)");
+                    $stmtInsertImage->execute();
+                } else {
+                    $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
                                                    VALUES ('" . $q . "',
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $w . "',
                                                            '" . $w . "')");
-                $stmtInsertImage->execute();
-                /*$stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`)
-                                                   VALUES ('" . $q . "',
-                                                           '" . $value_image_product['productId'] . "',
-                                                           '" . $value_image_product['position'] . "', null)");
-                $stmtInsertImage->execute();*/
+                    $stmtInsertImage->execute();
+                    /*$stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`)
+                                                       VALUES ('" . $q . "',
+                                                               '" . $value_image_product['productId'] . "',
+                                                               '" . $value_image_product['position'] . "', null)");
+                    $stmtInsertImage->execute();*/
 
-            }
-            if ($cover!=1) {
-                $cover = null;
-                $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
+                }
+                if ($cover != 1) {
+                    $cover = null;
+                    $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
                                                    VALUES ('" . $value_image_product['productId'] . "',
                                                            '" . $q . "',
-                                                           '" . $value_image_product['shopId'] . "',null)");
-                $stmtInsertImageShop->execute();
-            }else{
-                $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
+                                                           '" . $value_image_product['shopId'] . "',NULL)");
+                    $stmtInsertImageShop->execute();
+                } else {
+                    $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
                                                    VALUES ('" . $value_image_product['productId'] . "',
                                                            '" . $q . "',
                                                            '" . $value_image_product['shopId'] . "',
                                                             '" . $cover . "')");
-                $stmtInsertImageShop->execute();
-            }
+                    $stmtInsertImageShop->execute();
+                }
 
 
-
-            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '1',
                                                            '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
-            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                $stmtInsertImageLang->execute();
+                $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '2',
                                                            '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
-            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                $stmtInsertImageLang->execute();
+                $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '3',
                                                            '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
-            $data_image_multiple_link = array(
-                array($q,
-                    $value_image_product['productId'],
-                    $w,
-                    $w,
-                    $value_image_product['picture']));
+                $stmtInsertImageLang->execute();
+                $data_image_multiple_link = array(
+                    array($q,
+                        $value_image_product['productId'],
+                        $w,
+                        $w,
+                        $value_image_product['picture']));
 
-            foreach ($data_image_multiple_link as $row_image_product_link) {
-                fputcsv($image_multiple_link_csv, $row_image_product_link, ';');
+                foreach ($data_image_multiple_link as $row_image_product_link) {
+                    fputcsv($image_multiple_link_csv, $row_image_product_link, ';');
+                }
+
+            } else {
+                continue;
             }
-
-
         }
-
-
 
 
         fclose($image_multiple_link_csv);
@@ -257,9 +261,8 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         \Monkey::app()->dbAdapter->query($sql, []);
 
 
-        $res="Allineamento immagini prodotti eseguita file psz6_image_multiple_link.csv  finita alle ore ".date('Y-m-d H:i:s');
-        $this->report('Align image Product Pickyshop  to Prestashop ',$res,$res);
-
+        $res = "Allineamento immagini prodotti eseguita file psz6_image_multiple_link.csv  finita alle ore " . date('Y-m-d H:i:s');
+        $this->report('Align image Product Pickyshop  to Prestashop ', $res, $res);
 
 
         return $res;
