@@ -122,6 +122,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
         $current_productId = null;
+        $w = 0;
 
         foreach ($image_product as $value_image_product) {
            /* $stmtProductExist = $db_con->prepare('SELECT id_product FROM psz6_product WHERE id_product=' . $value_image_product['productId']);
@@ -133,8 +134,13 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
     $q=$q+1;
 
 
-
-              /*  $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
+                if ($current_productId == $value_image_product['productId']) {
+                    $w = $w + 1;
+                } else {
+                    $w = 1;
+                    $current_productId = $value_image_product['productId'];
+                }
+              /*  $prestashopHasProductImageInsert = \Monkey::apKp()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
                 $prestashopHasProductImageInsert->idImage = $q;
                 $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
                 $prestashopHasProductImageInsert->position = $value_image_product['position'];
@@ -143,7 +149,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 $prestashopHasProductImageInsert->status = '0';
                 $prestashopHasProductImageInsert->smartInsert();*/
 
-              $w=$value_image_product['position'];
+
               $cover=$value_image_product['position'];
 
                 if ($cover != 1) {
