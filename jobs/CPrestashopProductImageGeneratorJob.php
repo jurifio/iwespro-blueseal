@@ -101,28 +101,28 @@ class CPrestashopProductImageGeneratorJob extends ACronJob
 
 
         /*** immagini   */
+        $stmtLastIdImageProduct = $db_con->prepare("SELECT max(id_image) AS maxIdImageProduct FROM psz6_image");
+        $stmtLastIdImageProduct->execute();
+        $id_lastImage = $stmtLastIdImageProduct->fetch();
+        $q = $id_lastImage[0];
+
+
 
         $sql = "SELECT php.id AS productId, php.shopId AS shopId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
 FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
   JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name) AND p.productStatusId=6 AND p.qty>0  GROUP BY picture  ORDER BY productId,position ASC";
-        \Monkey::app()->dbAdapter->query('truncate table PrestashopHasProductImage', []);
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  and  php.id >999 AND p.productStatusId=6 AND p.qty>0  GROUP BY picture  ORDER BY productId,position ASC";
+
         $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-        $stmttruncate_psz6_image = $db_con->prepare("truncate table psz6_image");
-        $stmttruncate_psz6_image->execute();
-        $stmttruncate_psz6_image_shop = $db_con->prepare("truncate table psz6_image_shop");
-        $stmttruncate_psz6_image_shop->execute();
-        $stmttruncate_psz6_image_lang = $db_con->prepare("truncate table psz6_image_lang");
-        $stmttruncate_psz6_image_lang->execute();
+
 
         $a = 0;
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
         $current_productId = null;
-        $w = 0;
-        $q = 0;
+
         foreach ($image_product as $value_image_product) {
            /* $stmtProductExist = $db_con->prepare('SELECT id_product FROM psz6_product WHERE id_product=' . $value_image_product['productId']);
             $stmtProductExist->execute();
@@ -133,23 +133,19 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
     $q=$q+1;
 
 
-                if ($current_productId == $value_image_product['productId']) {
-                    $w = $w + 1;
-                } else {
-                    $w = 1;
-                    $current_productId = $value_image_product['productId'];
 
-                }
-                $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
+              /*  $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
                 $prestashopHasProductImageInsert->idImage = $q;
                 $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
-                $prestashopHasProductImageInsert->position = $w;
+                $prestashopHasProductImageInsert->position = $value_image_product['position'];
                 $prestashopHasProductImageInsert->picture = $value_image_product['picture'];
                 $prestashopHasProductImageInsert->cover = $value_image_product['cover'];
                 $prestashopHasProductImageInsert->status = '0';
-                $prestashopHasProductImageInsert->smartInsert();
+                $prestashopHasProductImageInsert->smartInsert();*/
 
-                $cover = $w;
+              $w=$value_image_product['position'];
+              $cover=$value_image_product['position'];
+
                 if ($cover != 1) {
                     $cover = null;
                     $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
