@@ -56,7 +56,7 @@
                                                         lavoro: <?php echo "<strong>" . $pb->estimatedWorkDays . "</strong>"; ?>
                                                     </p>
                                                     <?php
-                                                        $statusB = $user->foison->foisonHasInterest->findOneByKey('workCategoryId',$pb->workCategoryId)->foisonStatusId;
+                                                        if(!is_null($user->foison)) $statusB = $user->foison->foisonHasInterest->findOneByKey('workCategoryId',$pb->workCategoryId)->foisonStatusId;
                                                     ?>
                                                     <button class="btn btn-info btn-xs acceptPB <?php echo $pb->id;?>" <?php if ($foisonRank < \bamboo\domain\entities\CFoison::MININUM_RANK || $statusB == 1 || $statusB == 4 || $statusB == 5 || $el === 0 || $hasOpenedProductBatch) echo 'disabled' ?> data-pbId="<?php echo $pb->id;?>">
                                                         Prenota
