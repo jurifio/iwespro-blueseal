@@ -221,7 +221,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         $ftp_user_pass = "XtUWicJUrEXv";
         $remote_file = "/public_html/tmp/";
 
-        $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file ;
+        $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file.$image_multiple_link_csv ;
         $errorMsg = 'ftp fail connect';
         $fileToSend = $save_to . "psz6_image_multiple_link.csv";
 // ------- Upload file through FTP ---------------
@@ -250,10 +250,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         curl_close($ch);
 
-        $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='0'";
-        \Monkey::app()->dbAdapter->query($sql, []);
-        $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='0'";
-        \Monkey::app()->dbAdapter->query($sql, []);
+
 
 
         $res = "Allineamento immagini prodotti eseguita file psz6_image_multiple_link.csv  finita alle ore " . date('Y-m-d H:i:s');
