@@ -571,7 +571,6 @@ $.bsModal = function (header, params) {
             }
 
             let elabor = 0;
-            let worked = null;
 
             $.each(results, function (k, v) {
 
@@ -675,7 +674,6 @@ $.bsModal = function (header, params) {
                 type: ajaxCall,
                 url: "/blueseal/xhr/GetDataSheet",
                 data: {
-                    sheetId: sheetId,
                     value: value,
                     type: type,
                     code: opt.productCode
