@@ -136,6 +136,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
                 if ($current_productId == $value_image_product['productId']) {
                     $w = $w + 1;
+
                 } else {
                     $w = 1;
                     $current_productId = $value_image_product['productId'];
@@ -220,31 +221,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         }
 
 
-        fclose($image_multiple_link_csv);
-        /*****  trasferimento ftp ******/
-        $ftp_server = "ftp.iwes.shop";
-        $ftp_user_name = "iwesshop";
-        $ftp_user_pass = "XtUWicJUrEXv";
-        $remote_file = "/public_html/tmp/";
 
-        $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file.$image_multiple_link_csv ;
-        $errorMsg = 'ftp fail connect';
-        $fileToSend = $save_to . "psz6_image_multiple_link.csv";
-// ------- Upload file through FTP ---------------
-
-        $ch = curl_init();
-        $fp = fopen($fileToSend, "r");
-        // we upload a TXT file
-        curl_setopt($ch, CURLOPT_URL, $ftp_url);
-        curl_setopt($ch, CURLOPT_UPLOAD, 1);
-        curl_setopt($ch, CURLOPT_INFILE, $fp);
-        // set size of the file, which isn't _mandatory_ but
-        // helps libcurl to do extra error checking on the upload.
-        curl_setopt($ch, CURLOPT_INFILESIZE, filesize($fileToSend));
-        $res = curl_exec($ch);
-        $errorMsg = curl_error($ch);
-        $errorNumber = curl_errno($ch);
-        curl_close($ch);
 
         $url = 'https://iwes.shop/alignMultipleImage.php';
         $ch = curl_init();
