@@ -54,26 +54,14 @@ class CGetDataSheet extends AAjaxController
             $actual = $product->productSheetActual;
         } else if($type && ('models' == $type || 'modifyModels' == $type)){
 
-            $checkSheetArr = [];
+            $sheetId = \Monkey::app()->router->request()->getRequestData('sheetId');
 
-            $vs = json_decode($value, true);
+            $productSheetModelPrototype = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $sheetId]);
+            $productSheetPrototype = $productSheetModelPrototype->productSheetPrototype;
+            $Pname= ($productSheetModelPrototype->productName) ? $productSheetModelPrototype->productName : '';
+            $actual = $productSheetModelPrototype->productSheetModelActual;
+            $isCorrectMultiple = true;
 
-            foreach ($vs as $v){
-                $productSheetModelPrototype = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $v['id']]);
-                $checkSheetArr[] = $productSheetModelPrototype->productSheetPrototype->id;
-            }
-
-            $check = array_unique($checkSheetArr);
-
-            if(count($check) !== 1){
-                return '<p style="color: orangered">SCHEDE PRODOTTO NON COERENTI</p>';
-            } else {
-                $productSheetModelPrototype = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $vs[0]['id']]);
-                $productSheetPrototype = $productSheetModelPrototype->productSheetPrototype;
-                $Pname= ($productSheetModelPrototype->productName) ? $productSheetModelPrototype->productName : '';
-                $actual = $productSheetModelPrototype->productSheetModelActual;
-                $isCorrectMultiple = true;
-            }
 
         } else {
             $productSheetPrototype = \Monkey::app()->repoFactory->create('ProductSheetPrototype')->findOneBy(['name' => 'Generica']);
