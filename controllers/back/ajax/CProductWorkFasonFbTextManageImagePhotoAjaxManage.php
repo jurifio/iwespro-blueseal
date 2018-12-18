@@ -20,7 +20,7 @@ use bamboo\core\utils\amazonPhotoManager\ImageManager;
 use bamboo\core\utils\amazonPhotoManager\S3Manager;
 
 /**
- * Class CProductWorkFasonTextManageImagePhotoAjaxManage
+ * Class CProductWorkFasonFbTextManageImagePhotoAjaxManage
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -29,7 +29,7 @@ use bamboo\core\utils\amazonPhotoManager\S3Manager;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 04/12/2018
+ * @date 18/12/2018
  * @since 1.0
  */
 class CProductWorkFasonFbTextManageImagePhotoAjaxManage extends AAjaxController
@@ -45,11 +45,12 @@ class CProductWorkFasonFbTextManageImagePhotoAjaxManage extends AAjaxController
     {
         $productBatchId = \Monkey::app()->router->request()->getRequestData('productBatchId');
         $type = \Monkey::app()->router->request()->getRequestData('type');
+        $pbTmId = \Monkey::app()->router->request()->getRequestData('pbTmId');
 
 
 
         /** @var CProductBatchTextManage $productBatchTextManage */
-        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId])->productBatchTextManage;
+        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatchTextManage')->findOneBy(['id'=>$pbTmId]);
 
         \Monkey::app()->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');

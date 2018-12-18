@@ -62,7 +62,7 @@
                 "entity" : "ProductBatchTextManage",
                 "parentKeys": ["id"],
                 "childKeys" : ["productBatchId"],
-                "type" : "OneToOne"
+                "type" : "OneToMany"
             }
         ]
     }

@@ -92,7 +92,7 @@ class CProductBatchRepo extends ARepo
             $foison->activeProductBatch = null;
             $foison->update();
 
-            if(is_null($productBatch->unfitDate)) $this->qualityRank($productBatch);
+            if (is_null($productBatch->unfitDate)) $this->qualityRank($productBatch);
             /** @var CFoison $foison */
             $foison = $productBatch->contractDetails->contracts->foison;
             $foison->totalRank(true);
@@ -117,10 +117,10 @@ class CProductBatchRepo extends ARepo
 
         $type = $pB->contractDetails->isVariable;
 
-        if($type == 0){
-            $newPrice = $pB->contractDetails->workPriceList->price*$numberOfProducts;
+        if ($type == 0) {
+            $newPrice = $pB->contractDetails->workPriceList->price * $numberOfProducts;
         } elseif ($type == 1) {
-            $newPrice = $pB->unitPrice*$numberOfProducts;
+            $newPrice = $pB->unitPrice * $numberOfProducts;
         }
 
         return $newPrice;
@@ -201,10 +201,10 @@ class CProductBatchRepo extends ARepo
         $items = count($elems);
         $type = $contractDetails->isVariable;
 
-        if($type == 0){
-            $newPrice = $productBatch->contractDetails->workPriceList->price*$items;
+        if ($type == 0) {
+            $newPrice = $productBatch->contractDetails->workPriceList->price * $items;
         } elseif ($type == 1) {
-            $newPrice = $productBatch->unitPrice*$items;
+            $newPrice = $productBatch->unitPrice * $items;
         }
         $productBatch->value = $newPrice;
         $productBatch->update();
@@ -341,21 +341,26 @@ class CProductBatchRepo extends ARepo
             case CWorkCategory::TXT_PRT:
             case CWorkCategory::TXT_BRAND:
             case CWorkCategory::TXT_FB:
-                $oldPhotos = $productBatch->productBatchTextManage->productBatchTextManagePhoto->isEmpty() ? null : $productBatch->productBatchTextManage->productBatchTextManagePhoto->findByKey('isDummy', 1);
 
                 /** @var CProductBatchTextManageRepo $pbtmR */
                 $pbtmR = \Monkey::app()->repoFactory->create('ProductBatchTextManage');
 
-                /** @var CProductBatchTextManage $newProductBatchTextManage */
-                $newProductBatchTextManage = $pbtmR->insertNewProductBatchTextManage($newPB, $productBatch->theme, $productBatch->description);
 
-                /** @var CProductBatchTextManagePhotoRepo $pbtmpR */
-                $pbtmpR = \Monkey::app()->repoFactory->create('ProductBatchTextManagePhoto');
+                /** @var CProductBatchTextManage $n */
+                foreach ($notNormalized as $n) {
+                    /** @var CProductBatchTextManage $newProductBatchTextManage */
+                    $newProductBatchTextManage = $pbtmR->insertNewProductBatchTextManage($newPB, $n->theme, $n->description);
 
-                if(!is_null($oldPhotos)) {
-                    /** @var CProductBatchTextManagePhoto $photo */
-                    foreach ($oldPhotos as $photo) {
-                        $pbtmpR->insertNewProductBatchTextManagePhoto($newProductBatchTextManage->id, $photo->imageName, 1);
+                    $oldPhotos = $n->productBatchTextManagePhoto->isEmpty() ? null : $n->productBatchTextManagePhoto->findByKey('isDummy', 1);
+
+                    /** @var CProductBatchTextManagePhotoRepo $pbtmpR */
+                    $pbtmpR = \Monkey::app()->repoFactory->create('ProductBatchTextManagePhoto');
+
+                    if (!is_null($oldPhotos)) {
+                        /** @var CProductBatchTextManagePhoto $photo */
+                        foreach ($oldPhotos as $photo) {
+                            $pbtmpR->insertNewProductBatchTextManagePhoto($newProductBatchTextManage->id, $photo->imageName, 1);
+                        }
                     }
                 }
 

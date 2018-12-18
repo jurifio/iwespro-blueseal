@@ -35,12 +35,8 @@ class CProductWorkFasonFbTextManageListController extends ARestrictedAccessRootC
 
         $pbtmId = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
 
-        /** @var CProductBatchTextManage $pbtm */
-        $pbtm = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$pbtmId])->productBatchTextManage;
-
-
-        $photosOrigin = $pbtm->productBatchTextManagePhoto->findByKey('isDummy', 1);
-        $photosDestination = $pbtm->productBatchTextManagePhoto->findByKey('isDummy', 0);
+        /** @var CObjectCollection $pbtm */
+        $pbtms = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$pbtmId])->productBatchTextManage;
 
         $isWorker = \Monkey::app()->getUser()->hasPermission('worker');
         $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
@@ -49,11 +45,9 @@ class CProductWorkFasonFbTextManageListController extends ARestrictedAccessRootC
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
-            'pbtm' => $pbtm,
+            'pbtms' => $pbtms,
             'isWorker' => $isWorker,
-            'allShops' => $allShops,
-            'photosOrigin' => $photosOrigin,
-            'photosDestination' => $photosDestination
+            'allShops' => $allShops
         ]);
     }
 }

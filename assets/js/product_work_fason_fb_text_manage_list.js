@@ -4,92 +4,49 @@
     $(document).ready(function () {
 
 
-        let dropzoneInterationPost = new Dropzone("#dropzoneModalInterationPost", {
-            url: "/blueseal/xhr/ProductWorkFasonFbTextManageImagePhotoAjaxManage",
-            maxFilesize: 5,
-            maxFiles: 1,
-            parallelUploads: 1,
-            acceptedFiles: "image/*",
-            dictDefaultMessage: "Trascina qui le foto per l'interazione sui post",
-            uploadMultiple: true,
-            sending: function (file, xhr, formData) {
-                formData.append("productBatchId", $('#productBatchId').val());
-                formData.append("type", 'interationPost');
-            },
-            success: function(file, response){
-                let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
+        $('.dropzone').each(function () {
 
-                new Alert({
-                    type: type,
-                    message: response
-                }).open();
+            let dictDefaultMessage = $(this).attr('data-textmessagearea');
+            let type = $(this).attr('data-typeajax');
 
-                window.setTimeout(function () {
-                    window.location.reload();
-                }, 3000);
-            }
-        });
+            let dropzoneInterationPost = new Dropzone(`#${$(this).attr('id')}`, {
+                url: "/blueseal/xhr/ProductWorkFasonFbTextManageImagePhotoAjaxManage",
+                maxFilesize: 5,
+                maxFiles: 1,
+                parallelUploads: 1,
+                acceptedFiles: "image/*",
+                dictDefaultMessage: dictDefaultMessage,
+                uploadMultiple: true,
+                sending: function (file, xhr, formData) {
+                    let activePTM = $('#mainBatchDiv').find('.active').attr('id');
+                    formData.append("productBatchId", window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
+                    formData.append("type", type);
+                    formData.append("pbTmId", activePTM);
+                },
+                success: function(file, response){
+                    let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
 
+                    new Alert({
+                        type: type,
+                        message: response
+                    }).open();
 
-        let dropzoneLike = new Dropzone("#dropzoneModalLike", {
-            url: "/blueseal/xhr/ProductWorkFasonFbTextManageImagePhotoAjaxManage",
-            maxFilesize: 5,
-            maxFiles: 1,
-            parallelUploads: 1,
-            acceptedFiles: "image/*",
-            dictDefaultMessage: "Trascina qui le foto per il like sulla pagina",
-            uploadMultiple: true,
-            sending: function (file, xhr, formData) {
-                formData.append("productBatchId", $('#productBatchId').val());
-                formData.append("type", 'pageLike');
-            },
-            success: function(file, response){
+                    window.setTimeout(function () {
+                        window.location.reload();
+                    }, 3000);
+                }
+            });
 
-                let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
-
-                new Alert({
-                    type: type,
-                    message: response
-                }).open();
-
-                window.setTimeout(function () {
-                    window.location.reload();
-                }, 3000);
-            }
-        });
-
-        let dropzonePost = new Dropzone("#dropzoneModalPost", {
-            url: "/blueseal/xhr/ProductWorkFasonFbTextManageImagePhotoAjaxManage",
-            maxFilesize: 5,
-            maxFiles: 1,
-            parallelUploads: 1,
-            acceptedFiles: "image/*",
-            dictDefaultMessage: "Trascina qui le foto il post sul diario",
-            uploadMultiple: true,
-            sending: function (file, xhr, formData) {
-                formData.append("productBatchId", $('#productBatchId').val());
-                formData.append("type", 'newPost');
-            },
-            success: function(file, response){
-                let type = response.substring(0,3) === 'Err' ? 'warning' : 'success';
-
-                new Alert({
-                    type: type,
-                    message: response
-                }).open();
-
-                window.setTimeout(function () {
-                    window.location.reload();
-                }, 3000);
-            }
         });
 
     });
 
-    $(document).on('click', '#save', function () {
+    $(document).on('click', '.saveB', function () {
+        let textManageId = $(this).attr('id').split('-')[1];
         const data = {
-            productBatchId: $('#productBatchId').val(),
-            txt: $('#fasonTxt').val()
+            productBatchId: window.location.href.substring(window.location.href.lastIndexOf('/') + 1),
+            productBatchTextManageId: textManageId,
+            txt: $(`#fasonTxt-${textManageId}`).val()
         };
         $.ajax({
             method: 'post',
@@ -115,7 +72,7 @@
 
     $(document).on('bs.end.text.manage', function () {
 
-        let productBatchId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        let activePTM = $('#mainBatchDiv').find('.active').attr('id');
 
         let bsModal = new $.bsModal('Conferma Normalizzazione Prodotti', {
             body: '<p>Confermi la fine della procedura di normalizzazione?</p>'
@@ -124,7 +81,7 @@
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {
-                batchId: productBatchId,
+                textManage: activePTM,
                 type: 'fasonOperation'
             };
             $.ajax({
@@ -149,8 +106,9 @@
 
     $(document).on('bs.status.text.manage', function () {
 
-        let workCategoryId = $('#workCategoryId').val();
-        let productBatchId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        let workCategoryId = $('.workCategoryId').val();
+
+        let activePTM = $('#mainBatchDiv').find('.active').attr('id');
 
         let bsModal = new $.bsModal('Cambia stato della lavorazione', {
             body: `<div>
@@ -181,7 +139,7 @@
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {
-                batchId: productBatchId,
+                textManage: activePTM,
                 step: $('#categories').val(),
                 type: 'masterOperation'
             };
@@ -207,7 +165,7 @@
 
     $(document).on('bs.note.text.manage', function () {
 
-        let productBatchId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        let activePTM = $('#mainBatchDiv').find('.active').attr('id');
 
         let bsModal = new $.bsModal('Aggiungi una nota per i prodotti selezionati', {
             body: `<p>Inserisci/accoda/sovrascrivi una nuova nota</p>
@@ -222,7 +180,7 @@
         bsModal.setOkEvent(function () {
 
             const data = {
-                batchId: productBatchId,
+                textManage: activePTM,
                 note: $('#newNote').val(),
                 type: $('#type').val()
             };

@@ -34,14 +34,14 @@ class CProductBatchTextManageAjaxController extends AAjaxController
     public function put()
     {
 
-        $batchId = \Monkey::app()->router->request()->getRequestData('batchId');
+        $productBatchTextManageId = \Monkey::app()->router->request()->getRequestData('textManage');
         $note = \Monkey::app()->router->request()->getRequestData('note');
         $type = \Monkey::app()->router->request()->getRequestData('type');
 
         if (empty($note)) return 'Inserisci il testo della nota';
 
         /** @var CProductBatchTextManage $productBatchTextManage */
-        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id' => $batchId])->productBatchTextManage;
+        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatchTextManage')->findOneBy(['id' => $productBatchTextManageId]);
 
 
         if ($type == 's' || is_null($productBatchTextManage->note)) {

@@ -24,7 +24,7 @@ use bamboo\domain\repositories\CWorkCategoryStepsRepo;
  *
  * @property CContractDetails $contractDetails
  * @property CWorkCategory $workCategory
- * @property CProductBatchTextManage $productBatchTextManage
+ * @property CObjectCollection $productBatchTextManage
  *
  *
  */
@@ -122,9 +122,12 @@ class CProductBatch extends AEntity
             case CWorkCategory::TXT_BRAND:
             case CWorkCategory::TXT_FB:
                 $elems = new CObjectCollection();
-                $productBatchTextManage = $this->productBatchTextManage;
-                if(!is_null($productBatchTextManage)){
-                    $elems->add($productBatchTextManage);
+                $productBatchTextManageColl = $this->productBatchTextManage;
+                if(!$productBatchTextManageColl->isEmpty()){
+                    /** @var CProductBatchTextManage $productBatchTextManage */
+                    foreach ($productBatchTextManageColl as $productBatchTextManage){
+                        $elems->add($productBatchTextManage);
+                    }
                 }
                 break;
         }
@@ -163,7 +166,13 @@ class CProductBatch extends AEntity
             case CWorkCategory::TXT_BRAND:
             case CWorkCategory::TXT_FB:
                 $elems = new CObjectCollection();
-                $elems->add($this->productBatchTextManage);
+                $productBatchTextManageColl = $this->productBatchTextManage;
+                if(!$productBatchTextManageColl->isEmpty()){
+                    /** @var CProductBatchTextManage $productBatchTextManage */
+                    foreach ($productBatchTextManageColl as $productBatchTextManage){
+                        $elems->add($productBatchTextManage);
+                    }
+                }
                 break;
         }
 
@@ -205,7 +214,13 @@ class CProductBatch extends AEntity
             case CWorkCategory::TXT_BRAND:
             case CWorkCategory::TXT_FB:
                 $elems = new CObjectCollection();
-                $elems->add($this->productBatchTextManage);
+                $productBatchTextManageColl = $this->productBatchTextManage;
+                if(!$productBatchTextManageColl->isEmpty()){
+                    /** @var CProductBatchTextManage $productBatchTextManage */
+                    foreach ($productBatchTextManageColl as $productBatchTextManage){
+                        $elems->add($productBatchTextManage);
+                    }
+                }
                 break;
         }
 

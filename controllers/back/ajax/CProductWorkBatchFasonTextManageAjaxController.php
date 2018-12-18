@@ -35,13 +35,13 @@ class CProductWorkBatchFasonTextManageAjaxController extends AAjaxController
      */
     public function post()
     {
-        $productBatchId = \Monkey::app()->router->request()->getRequestData('productBatchId');
+        $productBatchTextManageId = \Monkey::app()->router->request()->getRequestData('productBatchTextManageId');
         $txt = \Monkey::app()->router->request()->getRequestData('txt');
 
         if(empty($txt)) return 'Non hai inserito nessun testo';
 
         /** @var CProductBatchTextManage $productBatchTextManage */
-        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId])->productBatchTextManage;
+        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatchTextManage')->findOneBy(['id'=>$productBatchTextManageId]);
         $productBatchTextManage->descriptionFason = $txt;
         $productBatchTextManage->update();
 
@@ -59,13 +59,13 @@ class CProductWorkBatchFasonTextManageAjaxController extends AAjaxController
 
         $type = \Monkey::app()->router->request()->getRequestData('type');
 
-        $productBatchId = \Monkey::app()->router->request()->getRequestData('batchId');
+        $productBatchTextManageId = \Monkey::app()->router->request()->getRequestData('textManage');
 
         /** @var CProductBatchTextManageRepo $pbtmr */
         $pbtmr = \Monkey::app()->repoFactory->create('ProductBatchTextManage');
 
         /** @var CProductBatchTextManage $productBatchTextManage */
-        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId])->productBatchTextManage;
+        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatchTextManage')->findOneBy(['id'=>$productBatchTextManageId]);
 
         if($type == 'fasonOperation'){
             if(!is_null($productBatchTextManage->descriptionFason)){

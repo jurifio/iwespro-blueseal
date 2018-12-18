@@ -1,15 +1,21 @@
 ;(function () {
 
+
+    Dropzone.autoDiscover = false;
     $(document).ready(function () {
 
 
         //set initial state.
-        $('#photo').val(this.checked);
-        $('#photoSect').empty().append(`<button id="save">Salva</button>`);
+        $('.photo').val(this.checked);
 
-        $('#photo').change(function() {
+        $('.photoSect').each(function () {
+            $(this).empty().append(`<button class="saveB" id="save-${$(this).attr('id').split('-')[1]}">Salva</button>`);
+        });
+
+        $('.checkPhoto').change(function() {
+            let batchTextManageId = $(this).attr('id').split('-')[1];
             if(this.checked) {
-                $('#photoSect').empty().append(`
+                $(`#photoSect-${batchTextManageId}`).empty().append(`
                  <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
                        name="dropzonePhoto" action="POST">
                      <div class="fallback">
@@ -27,10 +33,9 @@
                     dictDefaultMessage: "Trascina qui le foto",
                     uploadMultiple: true,
                     sending: function(file, xhr, formData) {
-                        formData.append("productBatchId", $('#productBatchId').val());
-                        formData.append("theme", $('#theme').val());
-                        formData.append("description", $('#description').val());
-                        formData.append("txt", $('#fasonTxt').val());
+                        formData.append("productBatchId", window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
+                        formData.append("productBatchTextManageId", batchTextManageId);
+                        formData.append("txt", $(`#fasonTxt-${batchTextManageId}`).val());
                     }
                 });
 
@@ -40,17 +45,20 @@
                 });
             } else {
                // $('#photo').val(this.checked);
-                $('#photoSect').empty().append(`<button id="save">Salva</button>`);
+                $(`#photoSect-${batchTextManageId}`).empty().append(`<button class="saveB" id="save-${batchTextManageId}">Salva</button>`);
             }
 
         });
 
     });
 
-    $(document).on('click', '#save', function () {
+    $(document).on('click', '.saveB', function () {
+
+            let textManageId = $(this).attr('id').split('-')[1];
             const data = {
-                productBatchId: $('#productBatchId').val(),
-                txt: $('#fasonTxt').val()
+                productBatchId: window.location.href.substring(window.location.href.lastIndexOf('/') + 1),
+                productBatchTextManageId: textManageId,
+                txt: $(`#fasonTxt-${textManageId}`).val()
             };
                 $.ajax({
                     method: 'post',
@@ -76,7 +84,7 @@
 
     $(document).on('bs.end.text.manage', function () {
 
-        let productBatchId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        let activePTM = $('#mainBatchDiv').find('.active').attr('id');
 
         let bsModal = new $.bsModal('Conferma Normalizzazione Prodotti', {
             body: '<p>Confermi la fine della procedura di normalizzazione?</p>'
@@ -85,7 +93,7 @@
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {
-                batchId: productBatchId,
+                textManage: activePTM,
                 type: 'fasonOperation'
             };
             $.ajax({
@@ -110,8 +118,9 @@
 
     $(document).on('bs.status.text.manage', function () {
 
-        let workCategoryId = $('#workCategoryId').val();
-        let productBatchId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        let workCategoryId = $('.workCategoryId').val();
+
+        let activePTM = $('#mainBatchDiv').find('.active').attr('id');
 
         let bsModal = new $.bsModal('Cambia stato della lavorazione', {
             body: `<div>
@@ -142,7 +151,7 @@
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {
-                batchId: productBatchId,
+                textManage: activePTM,
                 step: $('#categories').val(),
                 type: 'masterOperation'
             };
@@ -168,7 +177,7 @@
 
     $(document).on('bs.note.text.manage', function () {
 
-        let productBatchId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        let activePTM = $('#mainBatchDiv').find('.active').attr('id');
 
         let bsModal = new $.bsModal('Aggiungi una nota per i prodotti selezionati', {
             body: `<p>Inserisci/accoda/sovrascrivi una nuova nota</p>
@@ -183,7 +192,7 @@
         bsModal.setOkEvent(function () {
 
             const data = {
-                batchId: productBatchId,
+                textManage: activePTM,
                 note: $('#newNote').val(),
                 type: $('#type').val()
             };

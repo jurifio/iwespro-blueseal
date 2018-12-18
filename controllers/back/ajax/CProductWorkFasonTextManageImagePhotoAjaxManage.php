@@ -43,13 +43,13 @@ class CProductWorkFasonTextManageImagePhotoAjaxManage extends AAjaxController
      */
     public function post()
     {
-        $productBatchId = \Monkey::app()->router->request()->getRequestData('productBatchId');
+        $productBatchTextManageId = \Monkey::app()->router->request()->getRequestData('productBatchTextManageId');
         $txt = \Monkey::app()->router->request()->getRequestData('txt');
 
         if(empty($txt)) return 'Non hai inserito nessun testo';
 
         /** @var CProductBatchTextManage $productBatchTextManage */
-        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchId])->productBatchTextManage;
+        $productBatchTextManage = \Monkey::app()->repoFactory->create('ProductBatchTextManage')->findOneBy(['id'=>$productBatchTextManageId]);
 
         \Monkey::app()->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
@@ -64,7 +64,7 @@ class CProductWorkFasonTextManageImagePhotoAjaxManage extends AAjaxController
                 throw new RedPandaException('Cannot move the uploaded Files');
             }
 
-            $fileName['name'] = $productBatchId . '.' . $productBatchTextManage->id . '.' . $_FILES['file']['name'][$i];
+            $fileName['name'] = $productBatchTextManage->productBatchId . '.' . $productBatchTextManage->id . '.' . $_FILES['file']['name'][$i];
             //$fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
 
 
