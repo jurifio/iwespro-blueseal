@@ -17,27 +17,36 @@
             <div class="container" style="margin-top: 90px">
                 <div class="panel-group" id="faqAccordion">
 
+                    <div>
+                        <div class="form-group"> <!-- Email field !-->
+                            <label for="search" class="control-label">Cerca</label>
+                            <input type="text" class="form-control" id="search" name="search" placeholder="Cerca qui">
+                        </div>
+                    </div>
 
-                    <?php foreach ($faqs as $faq): ?>
-                        <div class="panel panel-default ">
-                            <div class="panel-heading accordion-toggle question-toggle collapsed" data-toggle="collapse"
-                                 data-parent="#faqAccordion" data-target="#<?php echo $faq->id; ?>">
-                                <h4 class="panel-title">
-                                    <a href="#" class="ing">Q: <?php echo $faq->question; ?></a>
-                                </h4>
+                    <div id="allFaq">
+                        <?php foreach ($faqs as $faq): ?>
+                            <div class="panel panel-default ">
+                                <div class="panel-heading accordion-toggle question-toggle collapsed"
+                                     data-toggle="collapse"
+                                     data-parent="#faqAccordion" data-target="#<?php echo $faq->id; ?>">
+                                    <h4 class="panel-title">
+                                        <a href="#" class="ing">D: <?php echo $faq->question; ?></a>
+                                    </h4>
 
-                            </div>
-                            <div id="<?php echo $faq->id; ?>" class="panel-collapse collapse" style="height: 0px;">
-                                <div class="panel-body">
-                                    <h5><span class="label label-primary">Answer</span></h5>
+                                </div>
+                                <div id="<?php echo $faq->id; ?>" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body">
+                                        <h5><span class="label label-primary">Risposta</span></h5>
 
-                                    <p>
-                                        <?php echo $faq->answer; ?>
-                                    </p>
+                                        <p>
+                                            <?php echo $faq->answer; ?>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
                 <!--/panel-group-->
             </div>
@@ -47,5 +56,21 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
+<bs-toolbar class="toolbar-definition">
+    <?php if ($allShops): ?>
+        <bs-toolbar-group data-group-label="Faq">
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-plus"
+                    data-permission="/admin/product/add"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-event="bs.add.new.faq"
+                    data-title="Crea una nuova faq"
+                    data-placement="bottom"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
+    <?php endif; ?>
+</bs-toolbar>
 </body>
 </html>

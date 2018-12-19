@@ -37,11 +37,14 @@ class CProductWorkFaqListController extends ARestrictedAccessRootController
         /** @var CObjectCollection $faqs */
         $faqs = \Monkey::app()->repoFactory->create('Faq')->findBy(['faqTypeId'=> CFaqType::FASON]);
 
+        $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
-            'faqs' => $faqs
+            'faqs' => $faqs,
+            'allShops' => $allShops
         ]);
     }
 }
