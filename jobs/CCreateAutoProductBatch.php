@@ -73,15 +73,12 @@ class CCreateAutoProductBatch extends ACronJob
 
             $psNoDetails = \Monkey::app()->dbAdapter->query($sqlProductWithNoDetails, [])->fetchAll();
 
-            /** @var CProductRepo $prRepo */
-            $prRepo = \Monkey::app()->repoFactory->create('Product');
-
             /** @var CRepo $pDTR */
             $pDTR = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation');
 
             $productsArr = [];
 
-//Inserisco i prodotti
+            //Inserisco i prodotti
             foreach ($psNoDetails as $psNoDetail) {
 
                 //Se non ha la categoria salto
@@ -106,7 +103,9 @@ class CCreateAutoProductBatch extends ACronJob
 
                 $productsArr[$pHpC['minCat']][] = $psNoDetail['productId'] . '-' . $psNoDetail['productVariantId'];
             }
-            if (!empty($productsArr)) {
+
+
+            if (!empty($productsArr) && array_sum(array_map("count", $productsArr)) >= 100) {
 
                 $batchFirst = [];
                 $c = 0;
@@ -131,6 +130,8 @@ class CCreateAutoProductBatch extends ACronJob
                 $pCR = \Monkey::app()->repoFactory->create('ProductCategoryTranslation');
                 foreach ($batchFirst as $singleBatchFirst) {
 
+                    if(array_sum(array_map("count", $singleBatchFirst)) < 100) continue;
+
                     $keys = array_keys($singleBatchFirst);
 
                     $descr = 'Normalizzazione prodotti. Categorie interessate: ';
@@ -149,8 +150,10 @@ class CCreateAutoProductBatch extends ACronJob
                     }
                 }
             }
+
+
             \Monkey::app()->dbAdapter->commit();
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
             \Monkey::app()->dbAdapter->rollBack();
             $this->error('Error on creating batch', $e->getMessage());
 
