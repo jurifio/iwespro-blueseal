@@ -47,6 +47,7 @@ class CCreateAutoProductBatch extends ACronJob
     {
         $this->report('Create Product Batch', "Starting Creating");
         $this->createPB();
+        $this->report('Create Product Batch', "End Creating");
     }
 
     /**
@@ -154,5 +155,7 @@ class CCreateAutoProductBatch extends ACronJob
                 }
             }
         }
+
+        return true;
     }
 }
