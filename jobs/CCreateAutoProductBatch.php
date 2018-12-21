@@ -2,24 +2,15 @@
 
 namespace bamboo\blueseal\jobs;
 
-use bamboo\controllers\api\classes\products;
-use bamboo\core\base\CObjectCollection;
+
 use bamboo\core\db\pandaorm\repositories\CRepo;
-use bamboo\domain\entities\CCart;
-use bamboo\domain\entities\COrder;
 use bamboo\core\jobs\ACronJob;
-use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductBatch;
-use bamboo\domain\entities\CProductCategory;
 use bamboo\domain\entities\CProductCategoryTranslation;
 use bamboo\domain\entities\CProductDescriptionTranslation;
-use bamboo\domain\repositories\CEmailRepo;
-use bamboo\domain\repositories\CProductBatchDetailsRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
-use bamboo\domain\repositories\CProductCategoryRepo;
 use bamboo\domain\repositories\CProductRepo;
-use bamboo\utils\time\SDateToolbox;
-use bamboo\utils\time\STimeToolbox;
+
 
 /**
  * Class CCloseExpiredProductBatch
