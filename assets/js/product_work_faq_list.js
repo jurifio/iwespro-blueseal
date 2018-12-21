@@ -224,4 +224,42 @@
 
     });
 
+
+    $(document).on('bs.add.new.argument', function () {
+
+        // Bottone per aggiunta faq
+        let bsModal = new $.bsModal('Aggiungi un nuovo argomento', {
+            body: `
+                <div>
+                    <div>
+                        <p><strong>Testo:</strong></p>
+                        <textarea id="text" rows="10" cols="50"></textarea>
+                    </div>
+                </div>
+            `
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            const data = {
+                text: $('#text').val()
+            };
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/ProductWorkFaqArgumentAjaxController',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    window.location.reload();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+
+    });
 })();

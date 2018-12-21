@@ -108,6 +108,18 @@
                     data-placement="bottom"
             ></bs-toolbar-button>
         </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Argomenti">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.add.new.argument"
+                data-title="Crea un nuovo argomento"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
     <?php endif; ?>
 </bs-toolbar>
 </body>
