@@ -14,7 +14,7 @@ use bamboo\domain\repositories\CProductRepo;
 
 
 /**
- * Class CCloseExpiredProductBatch
+ * Class CCreateAutoProductBatch
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -23,7 +23,7 @@ use bamboo\domain\repositories\CProductRepo;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 24/08/2018
+ * @date 21/12/2018
  * @since 1.0
  */
 class CCreateAutoProductBatch extends ACronJob
