@@ -8,6 +8,7 @@ use bamboo\core\jobs\ACronJob;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductCategoryTranslation;
 use bamboo\domain\entities\CProductDescriptionTranslation;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
 use bamboo\domain\repositories\CProductRepo;
 
@@ -49,9 +50,11 @@ class CCreateAutoProductBatch extends ACronJob
      */
     public function createPB()
     {
-        //Query
-        $sqlProductWithNoDetails =
-            "
+        try {
+            \Monkey::app()->dbAdapter->beginTransaction();
+            //Query
+            $sqlProductWithNoDetails =
+                "
             SELECT p.id productId, p.productVariantId productVariantId, psaNotNull.productId sheetId, psaNotNull.productVariantId sheetVariantId
                 FROM Product p
                   LEFT JOIN (
@@ -68,21 +71,21 @@ class CCreateAutoProductBatch extends ACronJob
                 WHERE p.productStatusId = 6 AND pbd.productId IS NULL;
              ";
 
-        $psNoDetails = \Monkey::app()->dbAdapter->query($sqlProductWithNoDetails, [])->fetchAll();
+            $psNoDetails = \Monkey::app()->dbAdapter->query($sqlProductWithNoDetails, [])->fetchAll();
 
-        /** @var CProductRepo $prRepo */
-        $prRepo = \Monkey::app()->repoFactory->create('Product');
+            /** @var CProductRepo $prRepo */
+            $prRepo = \Monkey::app()->repoFactory->create('Product');
 
-        /** @var CRepo $pDTR */
-        $pDTR = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation');
+            /** @var CRepo $pDTR */
+            $pDTR = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation');
 
-        $productsArr = [];
+            $productsArr = [];
 
 //Inserisco i prodotti
-        foreach ($psNoDetails as $psNoDetail) {
+            foreach ($psNoDetails as $psNoDetail) {
 
-            //Se non ha la categoria salto
-            $pHpC = \Monkey::app()->dbAdapter->query('
+                //Se non ha la categoria salto
+                $pHpC = \Monkey::app()->dbAdapter->query('
                                                           SELECT min(phpc.productCategoryId) AS minCat
                                                           FROM ProductHasProductCategory phpc
                                                           JOIN Product p ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
@@ -90,61 +93,72 @@ class CCreateAutoProductBatch extends ACronJob
                                                           ', [$psNoDetail['productId'], $psNoDetail['productVariantId']])->fetch();
 
 
-            if (is_null($pHpC['minCat'])) continue;
+                if (is_null($pHpC['minCat'])) continue;
 
-            if (is_null($psNoDetail['sheetId']) && is_null($psNoDetail['sheetVariantId'])) {
+                if (is_null($psNoDetail['sheetId']) && is_null($psNoDetail['sheetVariantId'])) {
 
-                //Se non ha i dettagli e non ha la descrizione salto
-                /** @var CProductDescriptionTranslation $pDT */
-                $pDT = $pDTR->findOneBy(['productId' => $psNoDetail['productId'], 'productVariantId' => $psNoDetail['productVariantId']]);
+                    //Se non ha i dettagli e non ha la descrizione salto
+                    /** @var CProductDescriptionTranslation $pDT */
+                    $pDT = $pDTR->findOneBy(['productId' => $psNoDetail['productId'], 'productVariantId' => $psNoDetail['productVariantId']]);
 
-                if (is_null($pDT)) continue;
+                    if (is_null($pDT)) continue;
+                }
+
+                $productsArr[$pHpC['minCat']][] = $psNoDetail['productId'] . '-' . $psNoDetail['productVariantId'];
             }
+            if (!empty($productsArr)) {
 
-            $productsArr[$pHpC['minCat']][] = $psNoDetail['productId'].'-'.$psNoDetail['productVariantId'];
-        }
-        if(!empty($productsArr)) {
+                $batchFirst = [];
+                $c = 0;
+                $i = 0;
+                foreach ($productsArr as $k => $groupProduct) {
+                    foreach ($groupProduct as $product) {
+                        $c++;
+                        $batchFirst[$i][$k][] = $product;
+                        if ($c == 100) {
+                            $c = 0;
+                            $i++;
+                        }
+                    }
+                }
 
-            $batchFirst = [];
-            $c = 0;
-            $i = 0;
-            foreach ($productsArr as $k => $groupProduct) {
-                foreach ($groupProduct as $product) {
-                    $c++;
-                    $batchFirst[$i][$k][] = $product;
-                    if ($c == 100) {
-                        $c = 0;
-                        $i++;
+
+                /** @var CProductBatchRepo $pbRepo */
+                $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
+                /** @var \bamboo\domain\repositories\CProductBatchDetailsRepo $pbDRepo */
+                $pbDRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
+                /** @var CRepo $pCR */
+                $pCR = \Monkey::app()->repoFactory->create('ProductCategoryTranslation');
+                foreach ($batchFirst as $singleBatchFirst) {
+
+                    $keys = array_keys($singleBatchFirst);
+
+                    $descr = 'Normalizzazione prodotti. Categorie interessate: ';
+                    foreach ($keys as $key) {
+                        /** @var CProductCategoryTranslation $pC */
+                        $pC = $pCR->findOneBy(['productCategoryId' => $key, 'langId' => 1]);
+                        $catName = is_null($pC) ? 'Categoria non definita' : $pC->name;
+                        $descr .= $catName . ', ';
+                    }
+
+                    /** @var CProductBatch $pb */
+                    $pb = $pbRepo->createEmptyProductBatch(0.2, 'Normalizzazione prodotti', $descr, 1, 1, 1);
+
+                    foreach ($singleBatchFirst as $listProduct) {
+                        $pbDRepo->insertProductInEmptyProductBatch($pb->id, $listProduct);
                     }
                 }
             }
+            \Monkey::app()->dbAdapter->commit();
+        } catch (\Throwable $e){
+            \Monkey::app()->dbAdapter->rollBack();
+            $this->error('Error on creating batch', $e->getMessage());
 
+            /** @var CEmailRepo $mailRp */
+            $mailRp = \Monkey::app()->repoFactory->create('Email');
+            $mailRp->newMail('it@iwes.it', ['it@iwes.it'], [], [], 'Error while creating product batch', $e->getMessage());
 
-            /** @var CProductBatchRepo $pbRepo */
-            $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
-            /** @var \bamboo\domain\repositories\CProductBatchDetailsRepo $pbDRepo */
-            $pbDRepo = \Monkey::app()->repoFactory->create('ProductBatchDetails');
-            /** @var CRepo $pCR */
-            $pCR = \Monkey::app()->repoFactory->create('ProductCategoryTranslation');
-            foreach ($batchFirst as $singleBatchFirst) {
-
-                $keys = array_keys($singleBatchFirst);
-
-                $descr = 'Normalizzazione prodotti. Categorie interessate: ';
-                foreach ($keys as $key) {
-                    /** @var CProductCategoryTranslation $pC */
-                    $pC = $pCR->findOneBy(['productCategoryId' => $key, 'langId' => 1]);
-                    $catName = is_null($pC) ? 'Categoria non definita' : $pC->name;
-                    $descr .= $catName . ', ';
-                }
-
-                /** @var CProductBatch $pb */
-                $pb = $pbRepo->createEmptyProductBatch(0.2, 'Normalizzazione prodotti', $descr, 1, 1, 1);
-
-                foreach ($singleBatchFirst as $listProduct) {
-                    $pbDRepo->insertProductInEmptyProductBatch($pb->id, $listProduct);
-                }
-            }
+            return false;
         }
 
         return true;
