@@ -2,6 +2,7 @@
 
 namespace bamboo\domain\entities;
 
+use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\entities\AEntity;
 
 /**
@@ -17,13 +18,16 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  * @date 06/12/2018
  * @since 1.0
  *
- * @property CFaqArgument $faqArgument
+ *
+ *
+ *
+ * @property CObjectCollection $faq
  *
  *
  */
-class CFaq extends AEntity
+class CFaqArgument extends AEntity
 {
-    protected $entityTable = 'Faq';
+    protected $entityTable = 'FaqArgument';
     protected $primaryKeys = ['id'];
 
 }

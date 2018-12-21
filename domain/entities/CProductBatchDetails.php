@@ -20,6 +20,7 @@ use bamboo\core\db\pandaorm\entities\AEntity;
  *
  * @property CProductBatch $productBatch
  * @property CWorkCategorySteps $workCategorySteps
+ * @property CProduct $product
  */
 class CProductBatchDetails extends AEntity
 {

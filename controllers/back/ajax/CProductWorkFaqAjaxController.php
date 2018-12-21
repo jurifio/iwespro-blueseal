@@ -42,11 +42,14 @@ class CProductWorkFaqAjaxController extends AAjaxController
      */
     public function post() : string
     {
+        if(empty($this->data['arg'])) return 'Seleziona un argomento';
+
         /** @var CFaq $faq */
         $faq = \Monkey::app()->repoFactory->create('Faq')->getEmptyEntity();
         $faq->question = $this->data['q'];
         $faq->answer = $this->data['a'];
         $faq->faqTypeId = 1;
+        $faq->faqArgumentId = $this->data['arg'];
         $faq->smartInsert();
 
         return 'Faq inserita con successo';
@@ -61,5 +64,31 @@ class CProductWorkFaqAjaxController extends AAjaxController
         $faqs = $faqRepo->searchFaq($this->data['search']);
 
         return json_encode($faqs);
+    }
+
+    public function put() : string
+    {
+        /** @var CFaq $faq */
+        $faq = \Monkey::app()->repoFactory->create('Faq')->findOneBy(['id'=>$this->data['idFaq']]);
+
+        if(is_null($faq)) return 'La faq che vuoi modificare non esiste';
+
+        $faq->question = $this->data['q'];
+        $faq->answer = $this->data['a'];
+        $faq->update();
+
+        return 'Faq modificata con successo';
+    }
+
+    public function delete() : string
+    {
+        /** @var CFaq $faq */
+        $faq = \Monkey::app()->repoFactory->create('Faq')->findOneBy(['id'=>$this->data['idFaq']]);
+
+        if(is_null($faq)) return 'La faq che vuoi eliminare non esiste';
+
+        $faq->delete();
+
+        return 'Faq eliminata con successo';
     }
 }

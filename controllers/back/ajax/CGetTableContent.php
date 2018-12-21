@@ -38,7 +38,8 @@ class CGetTableContent extends AAjaxController
         'ProductSheetModelPrototypeCategoryGroup',
         'ProductSheetModelPrototypeMaterial',
         'Foison',
-        'UserAddress'
+        'UserAddress',
+        'Faq'
     ];
 
     public function get()

@@ -25,6 +25,7 @@ use bamboo\domain\repositories\CWorkCategoryStepsRepo;
  * @property CContractDetails $contractDetails
  * @property CWorkCategory $workCategory
  * @property CObjectCollection $productBatchTextManage
+ * @property CObjectCollection $productBatchDetails
  *
  *
  */

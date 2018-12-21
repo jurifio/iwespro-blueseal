@@ -43,6 +43,9 @@ class CProductSheetModelPrototypeManage extends AAjaxController
             $psmp->isVisible = 0;
             $psmp->categoryGroupId = null;
             $psmp->update();
+
+            $psmpS = $psmp->productSheetModelPrototypeSupport;
+            if(!is_null($psmpS)) $psmpS->delete();
         }
 
         return 'Il modello è stato nascosto';

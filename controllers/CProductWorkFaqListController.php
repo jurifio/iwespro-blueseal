@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\base\CObjectCollection;
+use bamboo\domain\entities\CFaqArgument;
 use bamboo\domain\entities\CFaqType;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
@@ -37,6 +38,9 @@ class CProductWorkFaqListController extends ARestrictedAccessRootController
         /** @var CObjectCollection $faqs */
         $faqs = \Monkey::app()->repoFactory->create('Faq')->findBy(['faqTypeId'=> CFaqType::FASON]);
 
+        /** @var CObjectCollection $faqArguments */
+        $faqArguments = \Monkey::app()->repoFactory->create('FaqArgument')->findBy(['faqTypeId' => 1]);
+
         $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
 
         return $view->render([
@@ -44,6 +48,7 @@ class CProductWorkFaqListController extends ARestrictedAccessRootController
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
             'faqs' => $faqs,
+            'faqArguments' => $faqArguments,
             'allShops' => $allShops
         ]);
     }

@@ -17,6 +17,8 @@
             <div class="container" style="margin-top: 90px">
                 <div class="panel-group" id="faqAccordion">
 
+                    <input type="hidden" value="<?php echo $allShops; ?>" id="permCheck">
+
                     <div>
                         <div class="form-group"> <!-- Email field !-->
                             <label for="search" class="control-label">Cerca</label>
@@ -25,27 +27,43 @@
                     </div>
 
                     <div id="allFaq">
-                        <?php foreach ($faqs as $faq): ?>
-                            <div class="panel panel-default ">
-                                <div class="panel-heading accordion-toggle question-toggle collapsed"
-                                     data-toggle="collapse"
-                                     data-parent="#faqAccordion" data-target="#<?php echo $faq->id; ?>">
-                                    <h4 class="panel-title">
-                                        <a href="#" class="ing">D: <?php echo $faq->question; ?></a>
-                                    </h4>
 
-                                </div>
-                                <div id="<?php echo $faq->id; ?>" class="panel-collapse collapse" style="height: 0px;">
-                                    <div class="panel-body">
-                                        <h5><span class="label label-primary">Risposta</span></h5>
+                        <?php
+                        /** @var \bamboo\domain\entities\CFaqArgument $faqArgument */
+                        foreach ($faqArguments as $faqArgument):
 
-                                        <p>
-                                            <?php echo $faq->answer; ?>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                            echo '
+                                  <div style="margin: 20px 0px 5px 0px">
+                                    <strong>'.$faqArgument->text.'</strong>
+                                  </div>
+                                    <div class="allArgs" id="sec-'. $faqArgument->id .'">';
+
+
+                           /** @var \bamboo\domain\entities\CFaq $faq */
+                           foreach ($faqArgument->faq as $faq): ?>
+
+                               <div class="panel panel-default ">
+                                   <div class="panel-heading accordion-toggle question-toggle collapsed"
+                                        data-toggle="collapse"
+                                        data-parent="#faqAccordion" data-target="#<?php echo $faq->id; ?>">
+                                       <h4 class="panel-title">
+                                           <a href="#" class="ing"><?php if($allShops) echo '(Id: '. $faq->id . ')'; ?> D: <?php echo $faq->question; ?></a>
+                                       </h4>
+                                   </div>
+                                   <div id="<?php echo $faq->id; ?>" class="panel-collapse collapse" style="height: 0px;">
+                                       <div class="panel-body">
+                                           <h5><span class="label label-primary">Risposta</span></h5>
+
+                                           <p>
+                                               <?php echo $faq->answer; ?>
+                                           </p>
+                                       </div>
+                                   </div>
+                               </div>
+
+                           <?php endforeach;
+                           echo '</div>';
+                           endforeach; ?>
                     </div>
                 </div>
                 <!--/panel-group-->
@@ -67,6 +85,26 @@
                     data-rel="tooltip"
                     data-event="bs.add.new.faq"
                     data-title="Crea una nuova faq"
+                    data-placement="bottom"
+            ></bs-toolbar-button>
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-pencil"
+                    data-permission="/admin/product/add"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-event="bs.modify.faq"
+                    data-title="Modifica Faq"
+                    data-placement="bottom"
+            ></bs-toolbar-button>
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-close"
+                    data-permission="/admin/product/add"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-event="bs.delete.faq"
+                    data-title="Elimina Faq"
                     data-placement="bottom"
             ></bs-toolbar-button>
         </bs-toolbar-group>

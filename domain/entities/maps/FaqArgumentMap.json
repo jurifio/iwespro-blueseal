@@ -1,0 +1,16 @@
+{
+    "entity": {
+        "name": "FaqArgument",
+        "keys": ["id"],
+        "cacheable" : "true",
+        "children": [
+            {
+                "name" : "faq",
+                "entity" : "Faq",
+                "parentKeys": ["id"],
+                "childKeys" : ["faqArgumentId"],
+                "type" : "OneToMany"
+            }
+        ]
+    }
+}

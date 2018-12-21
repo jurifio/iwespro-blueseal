@@ -32,7 +32,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
         if ($step == 1) {
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
 
-            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ?', [$genderId])->fetchAll();
+            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ? AND isVisible = 1 AND categoryGroupId IS NOT NULL', [$genderId])->fetchAll();
             if (empty($psmpS1)) return false;
 
 

@@ -37,20 +37,7 @@ class CEmptyProductBatchManage extends AAjaxController
             /** @var CProductBatchRepo $pbRepo */
             $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
-            /** @var CProductBatch $pb */
-            $pb = $pbRepo->getEmptyEntity();
-            $pb->paid = 0;
-            $pb->description = $d;
-            $pb->estimatedWorkDays = $deliveryTime;
-            $pb->name = $name;
-            $pb->workCategoryId = $workCat;
-            $pb->unitPrice = $unitPrice;
-            $pb->isUnassigned = 0;
-            if($mp != "false") $pb->marketplace = 1;
-
-            $pb->smartInsert();
-
-
+            $pbRepo->createEmptyProductBatch($unitPrice, $name, $d, $deliveryTime, $workCat, $mp);
         } else return "Inserisci i dati necessari";
 
         return true;

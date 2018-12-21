@@ -380,4 +380,22 @@ class CProductBatchRepo extends ARepo
         return ceil($oldDay * $newNumberElems / $oldNumberElems);
     }
 
+    public function createEmptyProductBatch($unitPrice, $name, $desc, $deliveryTime, $workCat, $mp) : CProductBatch
+    {
+
+        /** @var CProductBatch $pb */
+        $pb = $this->getEmptyEntity();
+        $pb->paid = 0;
+        $pb->description = $desc;
+        $pb->estimatedWorkDays = $deliveryTime;
+        $pb->name = $name;
+        $pb->workCategoryId = $workCat;
+        $pb->unitPrice = $unitPrice;
+        $pb->isUnassigned = 0;
+        if($mp != "false") $pb->marketplace = 1;
+
+        $pb->smartInsert();
+
+        return $pb;
+    }
 }

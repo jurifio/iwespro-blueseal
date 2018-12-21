@@ -16,6 +16,13 @@
                 "parentKeys": ["workCategoryStepsId"],
                 "childKeys" : ["id"],
                 "type" : "OneToOne"
+            },
+            {
+                "name" : "product",
+                "entity" : "Product",
+                "parentKeys": ["productId", "productVariantId"],
+                "childKeys" : ["id", "productVariantId"],
+                "type" : "OneToOne"
             }
         ]
     }
