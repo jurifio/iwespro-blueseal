@@ -1449,3 +1449,9 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     background-color: rgba(229, 239, 241, 0.5);
     flex-direction: column;
 }
+
+/* Marketplace lavoro */
+.styleAccept {
+    position: absolute;
+    bottom: 7%;
+}

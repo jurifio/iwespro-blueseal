@@ -38,7 +38,7 @@
                                         $pb->workCategory
                                         ?>
                                         <div class="col-xs-18 col-sm-6 col-md-3">
-                                            <div class="thumbnail">
+                                            <div class="thumbnail" style="height: 440px">
                                                 <img src="/assets/img/<?php echo $pb->workCategory->imgUrl; ?>.jpg">
                                                 <div class="caption">
                                                     <h4><?php echo $pb->name; ?></h4>
@@ -58,7 +58,7 @@
                                                     <?php
                                                         if(!is_null($user->foison)) $statusB = $user->foison->foisonHasInterest->findOneByKey('workCategoryId',$pb->workCategoryId)->foisonStatusId;
                                                     ?>
-                                                    <button class="btn btn-info btn-xs acceptPB <?php echo $pb->id;?>" <?php if ($foisonRank < \bamboo\domain\entities\CFoison::MININUM_RANK || $statusB == 1 || $statusB == 4 || $statusB == 5 || $el === 0 || $hasOpenedProductBatch) echo 'disabled' ?> data-pbId="<?php echo $pb->id;?>">
+                                                    <button class="btn btn-info btn-xs styleAccept acceptPB <?php echo $pb->id;?>" <?php if ($foisonRank < \bamboo\domain\entities\CFoison::MININUM_RANK || $statusB == 1 || $statusB == 4 || $statusB == 5 || $el === 0 || $hasOpenedProductBatch) echo 'disabled' ?> data-pbId="<?php echo $pb->id;?>">
                                                         Prenota
                                                     </button>
                                                 </div>
@@ -81,7 +81,7 @@
                                         $uEl = count($upb->getElements());
                                         ?>
                                         <div disabled class="col-xs-18 col-sm-6 col-md-3">
-                                            <div class="thumbnail" id="thumbnail>">
+                                            <div class="thumbnail" id="thumbnail>" style="height: 440px">
                                                 <img src="/assets/img/<?php echo $upb->workCategory->imgUrl; ?>.jpg">
                                                 <div class="caption">
                                                     <h4><?php echo $upb->name; ?></h4>
@@ -95,7 +95,7 @@
                                                         Prezzo
                                                         totale: <?php echo $uEl == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $upb->unitPrice * $uEl . "€</strong>" ?>
                                                     </p>
-                                                    <button class="btn btn-info btn-xs" disabled>Prenota</button>
+                                                    <button class="btn btn-info btn-xs styleAccept" disabled>Prenota</button>
                                                 </div>
                                             </div>
                                         </div>
