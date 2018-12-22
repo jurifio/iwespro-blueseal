@@ -34,7 +34,7 @@ class CAssignEanToMarketPlaceProductAssociate extends AAjaxController
             $productVariantId=$singleproduct[1];
 //assegnazione a prodotto Parente
 	    	$productMarketPlaceHasProductAssociate = \Monkey::app()->repoFactory->create('MarketPlaceHasProductAssociate')->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
-		    $shopId=$productMarketPlaceHasProductAssociate->shopId;
+		    //$shopId=$productMarketPlaceHasProductAssociate->shopId;
 
 		     $brandId=\Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$productId,'productVariantId'=>$productVariantId]);
 		    $brandAssociate=$brandId->productBrandId;
@@ -45,7 +45,7 @@ class CAssignEanToMarketPlaceProductAssociate extends AAjaxController
 		    $eanFree->usedForParent=1;
 		    $eanFree->used=1;
 		    $eanFree->brandAssociate=$brandAssociate;
-		    $eanFree->shopId=$shopId;
+		    $eanFree->shopId=1;
 		    $eanFree->update();
 		    $productsCount=$productsCount+1;
 
