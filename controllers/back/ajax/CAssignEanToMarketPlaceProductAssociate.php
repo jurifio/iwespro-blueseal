@@ -35,7 +35,8 @@ class CAssignEanToMarketPlaceProductAssociate extends AAjaxController
 //assegnazione a prodotto Parente
 	    	$productMarketPlaceHasProductAssociate = \Monkey::app()->repoFactory->create('MarketPlaceHasProductAssociate')->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
 		    $shopId=$productMarketPlaceHasProductAssociate->shopId;
-		    $brandId=\Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$productId,'productVariantId'=>$productVariantId]);
+
+		     $brandId=\Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$productId,'productVariantId'=>$productVariantId]);
 		    $brandAssociate=$brandId->productBrandId;
 		    $eanFree=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['used'=> 0]);
 		    $eanFree->productId=$productId;
@@ -48,7 +49,7 @@ class CAssignEanToMarketPlaceProductAssociate extends AAjaxController
 		    $eanFree->update();
 		    $productsCount=$productsCount+1;
 
-		    $productSku=\Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
+		    $productSku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
 		     foreach ($productSku as $productSkus){
 					if(empty($productSkus->ean)){
                         $eanFreeSkus=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['used'=> 0]);
