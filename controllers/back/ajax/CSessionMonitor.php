@@ -19,7 +19,7 @@ class CSessionMonitor extends AAjaxController
 	 */
 	public function get()
 	{
-	    $CORES = 6;
+	    $CORES = 10;
 	    $load = sys_getloadavg();
 	    $ret['load']['m1'] = round($load[0] / $CORES * 100,2);
 	    $ret['load']['m5'] = round($load[1] / $CORES * 100,2);
