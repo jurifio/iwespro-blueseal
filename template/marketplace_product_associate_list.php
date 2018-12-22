@@ -142,11 +142,25 @@
             data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Associa a MarketPlace Prestashop">
+    <bs-toolbar-group data-group-label="Associa Ean a Prodotti  per MarketPlace mancanti">
         <bs-toolbar-button
-
-                data-remote="bs.product.marketplaceprestashop.publish"
+                data-tag="a"
+                data-icon="fa-barcode fa-share"
+                data-permission="/admin/product/edit"
+                data-event="bs.product.associate.to.empty.ean"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Assegna nuovi Ean Prodotti"
+                data-placement="bottom"
+                data-toggle="modal"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.sku.associate.ean.brand"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.sku.associate.eanparent.brand"
+        ></bs-toolbar-button>
+
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

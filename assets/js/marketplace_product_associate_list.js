@@ -187,4 +187,56 @@ $(document).on('bs.product.retry', function (e, element, button) {
 
 	bsModal.modal();
 });
+$(document).on('bs.product.associate.to.empty.ean', function (e, element, button) {
 
+    var bsModal = $('#bsModal');
+    var header = $('.modal-header h4');
+    var body = $('.modal-body');
+    var cancelButton = $('.modal-footer .btn-default');
+    var okButton = $('.modal-footer .btn-success');
+
+    header.html('Associa Ean Prodotti');
+
+    var getVarsArray = [];
+    var selectedRows = $('.table').DataTable().rows('.selected').data();
+    var selectedRowsCount = selectedRows.length;
+
+    if (selectedRowsCount < 1) {
+        new Alert({
+            type: "warning",
+            message: "Devi selezionare uno o più Prodotti a cui associare Ean"
+        }).open();
+        return false;
+    }
+
+    $.each(selectedRows, function (k, v) {
+        getVarsArray.push(v.DT_RowId);
+    });
+
+    body.html('Vuoi associare nuovi ean ai prodotti selezionati?');
+
+    okButton.off().on('click',function () {
+        bsModal.modal('hide');
+        Pace.ignore(function () {
+            $.ajax({
+                url: '/blueseal/xhr/AssignEanToMarketPlaceProductAssociate',
+                type: "POST",
+                data: {
+                    rows: getVarsArray
+                }
+            }).done(function (resoult) {
+                resoult = JSON.parse(resoult);
+                new Alert({
+                    type: "success",
+                    message: "Associati "+resoult.skus+" nuovi Ean per "+resoult.products+" prodotti"
+                }).open();
+            }).fail(function (resoult) {
+                new Alert({
+                    type: "warning",
+                    message: "Errore: "+resoult
+                }).open();
+            });
+        });
+    });
+    bsModal.modal();
+});
