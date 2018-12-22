@@ -59,7 +59,7 @@ class CAssignEanToMarketPlaceProductAssociate extends AAjaxController
                         $eanFreeSkus->productSizeId=$productSkus->productSizeId;
                         $eanFreeSkus->used=1;
                         $eanFreeSkus->brandAssociate=$brandAssociate;
-                        $eanFreeSkus->shopId=$shopId;
+                        $eanFreeSkus->shopId=1;
                         $eanFreeSkus->update();
                         $productSkus->ean=$eanforVariant;
                         $productSkus->update();
