@@ -45,6 +45,21 @@ class CPrestashopProductImageGeneratorJob extends ACronJob
     public function run($args = null)
     {
 
+        /*
+         1 mi connetto al database
+         2  leggo gli id dei  prodotti esistenti tramite il reference
+         3  tiro fuori il recordset dei prodotti
+         4  per ogni prodotto ciclo la verifica del'esistenza delle  immagini nelle tabelle di prestashop
+            5 se esistono salto il ciclo
+            5 se non esistono eseguo la query sulle immagini di pickyshop
+            6 Ciclo
+              Per ogni immmagine del recordset inserisco una nuova riga sulle tabelle psz6_image, psz6_image_shop,psz6_image_lang del  database di prestashop
+            7  tengo l'id dell'immagine inserita attraverso la lettura dell'ultimo id.
+con questo faccio il chunk dell'id per ottenere la stringa del percorso di destinazione
+eseguo  il download dell'immagine con curl da amazon  e la trasferisco sul server via ftp sulle cartelle delle immagini con la destinazione ottenuta e rinominando il file con l'id dell'immagine
+         */
+
+
         set_time_limit(0);
         ini_set('memory_limit', '2048M');
 
