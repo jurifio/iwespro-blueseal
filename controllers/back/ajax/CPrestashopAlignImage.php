@@ -101,7 +101,7 @@ eseguo  il download dell'immagine con curl da amazon  e la trasferisco sul serve
             $stmtGetImage = $db_con->prepare("SELECT count(id_product) AS existImage FROM psz6_image WHERE id_product=" . $prestashopProductId);
             $stmtGetImage->execute();
             $rows = $stmtGetImage->fetchAll(PDO::FETCH_ASSOC);
-            if(empty($rows)) {
+            if($rows[0]['existImage']==0) {
 
                 $sql = "SELECT php.id AS productId, php.shopId AS shopId,  phpp.productPhotoId AS photoId, concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name) AS link , pp.name AS namefile, concat(phpp.productId,'-',phpp.productVariantId) AS product, pp.`order` as position  FROM ProductHasProductPhoto phpp
   JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
