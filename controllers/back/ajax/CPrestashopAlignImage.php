@@ -103,20 +103,21 @@ eseguo  il download dell'immagine con curl da amazon  e la trasferisco sul serve
             $rows = $stmtGetImage->fetchAll(PDO::FETCH_ASSOC);
             if(empty($rows)) {
 
-                $sql = "SELECT php.id AS productId, php.shopId AS shopId,  phpp.productPhotoId AS photoId, concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name) AS link , pp.name AS namefile, concat(phpp.productId,'-',phpp.productVariantId) AS product, pp.`order`  FROM ProductHasProductPhoto phpp
+                $sql = "SELECT php.id AS productId, php.shopId AS shopId,  phpp.productPhotoId AS photoId, concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name) AS link , pp.name AS namefile, concat(phpp.productId,'-',phpp.productVariantId) AS product, pp.`order` as position  FROM ProductHasProductPhoto phpp
   JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id
   JOIN MarketplaceHasProductAssociate php ON  phpp.productId =php.productId AND phpp.productVariantId=php.productVariantId
   JOIN  Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124.JPG%' AND phpp.productId=" . $productId . " AND phpp.productVariantId=" . $productVariantId . " ORDER BY
-product,`order` ASC";
+WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124.JPG%' and php.productId='".$productId."' and php.productVariantId = '".$productVariantId."' order by
+  product,position ASC";
+
                 $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
                 $countFirstImage = 0;
                 $cover = null;
                 foreach ($image_product as $image_products) {
                     $link = $image_products['link'];
-                    $position = $image_products['order'];
+                    $position = $image_products['position'];
                     $shopId = $image_products['shopId'];
                     $namefile = $image_products['namefile'];
                     $countFirstImage = $countFirstImage + 1;
@@ -216,7 +217,7 @@ product,`order` ASC";
 
         $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
-        $res = "Allineamento Stock Eseguito";
+        $res .= "Allineamento Immagini Eseguito";
         return $res;
     }
 }
