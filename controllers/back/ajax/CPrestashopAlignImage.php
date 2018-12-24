@@ -153,7 +153,7 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                     $fileUrl = $link;
 
 //The path & filename to save to.
-                    $saveTo = $save_to . $q;
+                    $saveTo = $save_to . $namefile;
 
 //Open file handler.
                     $fp = fopen($saveTo, 'w+');
@@ -179,6 +179,7 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                     }
                     $success = file_get_contents("http://iwes.shop/createdirImage.php?token=10210343943202393403&dir=".$q);
 
+
                     echo $success;  // "OK" or "FAIL"
                     /*****  trasferimento ftp ******/
                     $ftp_server = "ftp.iwes.shop";
@@ -186,7 +187,7 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                     $ftp_user_pass = "XtUWicJUrEXv";
                     $remote_file = "/public_html/img/p/".chunk_split($q, 1, '/');;
 
-                    $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $namefile;
+                    $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $q.".jpg";
                     $errorMsg = 'ftp fail connect';
                     $fileToSend = $saveTo;
 // ------- Upload file through FTP ---------------
