@@ -115,6 +115,12 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                 $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
                 $countFirstImage = 0;
                 $cover = null;
+                $stmtdeleteImage = $db_con->prepare("delete from  psz6_image where id_product=" .$prestashopProductId);
+                $stmtdeleteImage->execute();
+                $stmtdeleteImageShop = $db_con->prepare("delete from  psz6_image_shop where id_product=" .$prestashopProductId);
+                $stmtdeleteImageShop->execute();
+                $stmtdeleteImageLang= $db_con->prepare("delete from  psz6_image_lang where legend='" .$reference."'");
+                $stmtdeleteImageLang->execute();
                 foreach ($image_product as $image_products) {
                     $link = $image_products['link'];
                     $position = $image_products['position'];

@@ -42,7 +42,10 @@ class CPrestashopAlignQuantity extends AAjaxController
     {
         set_time_limit(0);
         ini_set('memory_limit', '2048M');
-
+        /* @var $productId*/
+        /* @var $productVariantId */
+        $productId='';
+        $productVariantId='';
 
         /* $sql = "DELETE FROM PrestashopHasProduct";
           $res_delete = \Monkey::app()->dbAdapter->query($sql, []);
@@ -85,6 +88,7 @@ class CPrestashopAlignQuantity extends AAjaxController
             $arrayproduct = implode('-', $array);
 
             $singleproduct = explode('-', $arrayproduct);
+
             $productId = $singleproduct[0];
             $productVariantId = $singleproduct[1];
         }
@@ -227,10 +231,34 @@ ORDER BY `p`.`id`";
             $stmtUpdateProduct = $db_con->prepare("UPDATE psz6_product SET quantity=" . $quantity_product . ",  price='".$price."',  ean13='".$ean13product."'
              WHERE id_product=" . $p);
             $stmtUpdateProduct->execute();
-
-            $stmtUpdateStockAvailable =$db_con->prepare("UPDATE psz6_stock_available set quantity=".$quantity_product." 
-             where id_product_attribute=0 and id_product=".$p);
-            $stmtUpdateStockAvailable->execute();
+            $stmtCheckStockAvailable =$db_con->prepare("select  count(id_stock_available) as checkStockExist from    psz6_stock_available where id_product=".$p);
+            $stmtCheckStockAvailable->execute();
+            $rows = $stmtCheckStockAvailable->fetchAll(PDO::FETCH_ASSOC);
+            if($rows[0]['checkStockExist']==0) {
+                $stmtInsertStockAvailable=$db_con->prepare("INSERT INTO psz6_stock_available (id_product,
+                                                                                                        id_product_attribute,
+                                                                                                        id_shop,
+                                                                                                        id_shop_group,
+                                                                                                        quantity,
+                                                                                                        physical_quantity,
+                                                                                                        reserved_quantity,
+                                                                                                        depends_on_stock,
+                                                                                                        out_of_stock)
+                                                                                                         VALUES (".$p.",
+                                                                                                                 '0',   
+                                                                                                                 ".$value_product['shopId'].",
+                                                                                                                 '0',
+                                                                                                                 ".$quantity_product.",
+                                                                                                                 '0',
+                                                                                                                 '0',
+                                                                                                                 '0',
+                                                                                                                 '0')");
+                $stmtInsertStockAvailable->execute();
+            }else {
+                $stmtUpdateStockAvailable = $db_con->prepare("UPDATE psz6_stock_available SET quantity=" . $quantity_product . " 
+             WHERE id_product_attribute=0 AND id_product=" . $p);
+                $stmtUpdateStockAvailable->execute();
+            }
             $res_product_attribute=\Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
             foreach($res_product_attribute as $value_attribute){
                 $stockQty=$value_attribute->stockQty;
@@ -252,14 +280,39 @@ ORDER BY `p`.`id`";
  where reference='".$reference."'");
                 $stmtGetProductAttribute->execute();
                 while ($rowGetProductAttribute = $stmtGetProductAttribute->fetch(PDO::FETCH_ASSOC)) {
-                                $product_stockAttribute=$rowGetProductAttribute['id_product_attribute'];
-                                $product_stock=$rowGetProductAttribute['id_product'];
-                                $stmtUpdateAttributeStockAvailable=$db_con->prepare("UPDATE psz6_stock_available set quantity=".$stockQty."
-                 where id_product=".$product_stock." and id_product_attribute=".$product_stockAttribute);
+                    $product_stockAttribute = $rowGetProductAttribute['id_product_attribute'];
+                    $product_stock = $rowGetProductAttribute['id_product'];
 
-                    $stmtUpdateAttributeStockAvailable->execute();
+                    $stmtCheckStockAvailable = $db_con->prepare("SELECT  count(id_stock_available) AS checkStockExist FROM    psz6_stock_available WHERE id_product=" .  $product_stock . " and id_product_attribute=".$product_stockAttribute);
+                    $stmtCheckStockAvailable->execute();
+                    $rows = $stmtCheckStockAvailable->fetchAll(PDO::FETCH_ASSOC);
+                    if ($rows[0]['checkStockExist'] == 0) {
+                        $stmtInsertStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (id_product,
+                                                                                                        id_product_attribute,
+                                                                                                        id_shop,
+                                                                                                        id_shop_group,
+                                                                                                        quantity,
+                                                                                                        physical_quantity,
+                                                                                                        reserved_quantity,
+                                                                                                        depends_on_stock,
+                                                                                                        out_of_stock)
+                                                                                                         VALUES (" .$product_stock . ",
+                                                                                                                 " .$product_stockAttribute . ",
+                                                                                                                 " . $value_product['shopId'] . ",
+                                                                                                                 '0',
+                                                                                                                 " . $stockQty . ",
+                                                                                                                 '0',
+                                                                                                                 '0',
+                                                                                                                 '0',
+                                                                                                                 '0')");
+                        $stmtInsertStockAvailable->execute();
+                    } else {
+                        $stmtUpdateAttributeStockAvailable = $db_con->prepare("UPDATE psz6_stock_available SET quantity=" . $stockQty . "
+                 WHERE id_product=" . $product_stock . " AND id_product_attribute=" . $product_stockAttribute);
+
+                        $stmtUpdateAttributeStockAvailable->execute();
+                    }
                 }
-
 
             }
                     }
