@@ -75,6 +75,22 @@ class CPrestashopAlignQuantity extends AAjaxController
             $save_to = '/home/pickyshop/public_html/temp-prestashop/';
         }
 
+        $stmtGetProduct = $db_con->prepare("SELECT id_product, reference FROM psz6_product");
+
+        $stmtGetProduct->execute();
+        while ($rowGetProduct = $stmtGetProduct->fetch(PDO::FETCH_ASSOC)) {
+            $prestashopProductId = $rowGetProduct['id_product'];
+            $reference = $rowGetProduct['reference'];
+            $array = array($reference);
+            $arrayproduct = implode('-', $array);
+
+            $singleproduct = explode('-', $arrayproduct);
+            $productId = $singleproduct[0];
+            $productVariantId = $singleproduct[1];
+        }
+
+
+
         /**
          * @var $db CMySQLAdapter
          */
@@ -185,7 +201,7 @@ FROM `Product` `p`
   LEFT  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   LEFT JOIN ProductName pn ON p.id = pn.id
   LEFT JOIN MarketplaceHasShop mpas ON php.shopId=mpas.shopId
-WHERE   php.statusPublished IN (2)  AND S3.price > 0 
+WHERE   p.id=".$productId." and p.productVariantId=".$productVariantId." and  php.statusPublished IN (2)  AND S3.price > 0 
 GROUP BY p.id,p.productVariantId
 ORDER BY `p`.`id`";
 
