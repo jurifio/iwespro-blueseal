@@ -86,7 +86,7 @@
 
                                         <th data-slug="<?php echo $field; ?>"
                                             data-searchable="true"
-                                            data-orderable="true" class="center">Categorie
+                                            data-orderable="true" class="center"><?php echo $field; ?>
                                         </th>
 
                                     <?php endforeach; }?>
