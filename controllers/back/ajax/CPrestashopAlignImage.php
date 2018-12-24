@@ -153,7 +153,7 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                     $fileUrl = $link;
 
 //The path & filename to save to.
-                    $saveTo = $save_to . $namefile;
+                    $saveTo = $save_to . $q;
 
 //Open file handler.
                     $fp = fopen($saveTo, 'w+');
@@ -177,7 +177,9 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                     } else {
                         echo "Status Code: " . $statusCode;
                     }
+                    $success = file_get_contents("http://iwes.shop/createdirImage.php?token=10210343943202393403&dir=".$q);
 
+                    echo $success;  // "OK" or "FAIL"
                     /*****  trasferimento ftp ******/
                     $ftp_server = "ftp.iwes.shop";
                     $ftp_user_name = "iwesshop";
