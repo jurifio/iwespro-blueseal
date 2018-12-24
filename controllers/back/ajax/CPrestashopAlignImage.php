@@ -205,7 +205,7 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                     $errorMsg = curl_error($ch);
                     $errorNumber = curl_errno($ch);
                     curl_close($ch);
-                    $success = file_get_contents("http://iwes.shopcreateThumbImage.php?token=10210343943202393403&dir=".$q);
+                    $success = file_get_contents("http://iwes.shop/createThumbImage.php?token=10210343943202393403&dir=".$q);
 
                 }
 
