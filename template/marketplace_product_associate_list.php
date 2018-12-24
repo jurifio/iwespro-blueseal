@@ -85,7 +85,15 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Pubblica Prodotto">
         <bs-toolbar-button
-            data-remote="bs.product.marketplace.publish"
+                data-tag="a"
+                data-icon="fa-exchange"
+                data-permission="/admin/product/edit"
+                data-event="bs-product-marketplaceprestashop-publish"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Pubblica Prodotti su marketPlace"
+                data-placement="bottom"
+                data-toggle="modal"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.product.marketplace.response"

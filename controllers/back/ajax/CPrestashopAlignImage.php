@@ -126,7 +126,7 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                     } else {
                         $cover = null;
                     }
-                    $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (id_product, position, cover) VALUES (" . $prestashopProductId . "," . $position . "," . $cover . ")");
+                    $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (id_product, position, cover) VALUES (".$prestashopProductId . "," . $position . "," . $cover . ")");
                     $stmtInsertImage->execute();
                     $stmtLastIdImageProduct = $db_con->prepare("SELECT max(id_image) AS maxIdImageProduct FROM psz6_image");
                     $stmtLastIdImageProduct->execute();
