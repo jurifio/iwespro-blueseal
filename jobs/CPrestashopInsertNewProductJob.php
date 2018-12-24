@@ -92,10 +92,7 @@ class CPrestashopInsertNewProductJob extends ACronJob
             $save_to = '/home/pickyshop/public_html/temp-prestashop/';
         }
 
-        $stmtLastIdImageProduct = $db_con->prepare("SELECT max(id_image) AS maxIdImageProduct FROM psz6_image");
-        $stmtLastIdImageProduct->execute();
-        $id_lastImage = $stmtLastIdImageProduct->fetch();
-        $q = $id_lastImage[0];
+
 
         /**
          * @var $db CMySQLAdapter
@@ -856,83 +853,10 @@ ORDER BY `p`.`id`";
             }
         }
 
-        /*** immagini   */
-
-        $sql = "SELECT php.id AS productId, php.shopId AS shopId, concat(php.productId,'-',php.productVariantId) AS reference,   concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
-FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
-  JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
-  JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
-  JOIN ProductBrand pb ON p.productBrandId = pb.id
-  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.statusPublished IN (0) GROUP BY picture  ORDER BY productId,position ASC";
-        $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-        $a = 0;
-
-        //popolamento aggiornamento tabella PrestashopHasProductImage
-        $current_productId = 0;
-
-
-        foreach ($image_product as $value_image_product) {
-            $q = $q + 1;
-            /* $prestashopHasProductImageInsert = \Monkey::app()->repoFactory->create('PrestashopHasProductImage')->getEmptyEntity();
-             $prestashopHasProductImageInsert->idImage=$q;
-             $prestashopHasProductImageInsert->prestaId = $value_image_product['productId'];
-             $prestashopHasProductImageInsert->position = $value_image_product['position'];
-             $prestashopHasProductImageInsert->picture = $value_image_product['picture'];
-             $prestashopHasProductImageInsert->cover = $value_image_product['cover'];
-             $prestashopHasProductImageInsert->smartInsert();*/
-            $cover=$value_image_product['position'];
-            $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_image`,`id_product`,`position`,`cover`) 
-                                                   VALUES ('" . $q . "',
-                                                           '" . $value_image_product['productId'] . "',
-                                                           '" . $value_image_product['position'] . "',
-                                                           '" . $value_image_product['position'] . "')");
-            $stmtInsertImage->execute();
-            if ($cover!=1) {
-                $cover = null;
-                $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
-                                                   VALUES ('" . $value_image_product['productId'] . "',
-                                                           '" . $q . "',
-                                                           '" . $value_image_product['shopId'] . "',null)");
-                $stmtInsertImageShop->execute();
-            }else{
-                $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
-                                                   VALUES ('" . $value_image_product['productId'] . "',
-                                                           '" . $q . "',
-                                                           '" . $value_image_product['shopId'] . "',
-                                                            '" . $cover . "')");
-                $stmtInsertImageShop->execute();
-            }
 
 
 
-            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
-                                                   VALUES ('" . $q . "',
-                                                           '1',
-                                                           '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
-            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
-                                                   VALUES ('" . $q . "',
-                                                           '2',
-                                                           '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
-            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
-                                                   VALUES ('" . $q . "',
-                                                           '3',
-                                                           '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
-            $data_image_single_link = array(
-                array($q,
-                    $value_image_product['productId'],
-                    $value_image_product['position'],
-                    $value_image_product['position'],
-                    $value_image_product['picture']));
 
-            foreach ($data_image_single_link as $row_image_product_link) {
-                fputcsv($image_single_link_csv, $row_image_product_link, ';');
-            }
-
-
-        }
 
 
         $sql = "
@@ -975,42 +899,137 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
             $stmtFeatureProduct->execute();
         }
+        /*** immagini   */
 
-        fclose($image_single_link_csv);
-        /*****  trasferimento ftp ******/
-        $ftp_server = "ftp.iwes.shop";
-        $ftp_user_name = "iwesshop";
-        $ftp_user_pass = "XtUWicJUrEXv";
-        $remote_file = "/public_html/tmp/";
+        $sql = "SELECT php.id AS productId, php.shopId AS shopId, concat(php.productId,'-',php.productVariantId) AS reference, concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name) AS link , pp.name AS namefile,  concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
+FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.productId =phpp.productId AND php.productVariantId = phpp.productVariantId
+  JOIN  Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
+  JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
+  JOIN ProductBrand pb ON p.productBrandId = pb.id
+  JOIN ProductPhoto pp ON phpp.productPhotoId = pp.id WHERE  LOCATE('-1124.jpg',pp.name)  AND p.productStatusId=6 AND p.qty>0 AND php.statusPublished IN (0) GROUP BY picture  ORDER BY productId,position ASC";
+        $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $a = 0;
 
-        $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $image_single_link_csv;
-        $errorMsg = 'ftp fail connect';
-        $fileToSend = $save_to . "psz6_image_single_link.csv";
+        //popolamento aggiornamento tabella PrestashopHasProductImage
+        $current_productId = 0;
+        foreach ($image_product as $value_image_product) {
+
+            $link = $value_image_product['link'];
+            $position = $value_image_product['position'];
+            $shopId = $value_image_product['shopId'];
+            $namefile = $value_image_product['namefile'];
+            $cover=$value_image_product['position'];
+            if ($cover!=1) {
+                $cover = 'null';
+            }
+            $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_product`,`position`,`cover`) 
+                                                   VALUES (
+                                                           '" . $value_image_product['productId'] . "',
+                                                           '" . $position . "',
+                                                           " . $cover . ")");
+            $stmtInsertImage->execute();
+
+
+            $stmtLastIdImageProduct = $db_con->prepare("SELECT max(id_image) AS maxIdImageProduct FROM psz6_image");
+            $stmtLastIdImageProduct->execute();
+            $id_lastImage = $stmtLastIdImageProduct->fetch();
+            $q = $id_lastImage[0];
+            if ($cover!=1) {
+                $cover = 'null';
+                $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
+                                                   VALUES ('" . $value_image_product['productId'] . "',
+                                                           '" . $q . "',
+                                                           '" . $shopId . "',".$cover.")");
+                $stmtInsertImageShop->execute();
+            }else{
+                $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
+                                                   VALUES ('" . $value_image_product['productId'] . "',
+                                                           '" . $q . "',
+                                                           '" . $value_image_product['shopId'] . "',
+                                                            '" . $cover . "')");
+                $stmtInsertImageShop->execute();
+            }
+
+
+
+            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                                                   VALUES ('" . $q . "',
+                                                           '1',
+                                                           '" . $value_image_product['reference'] . "')");
+            $stmtInsertImageLang->execute();
+            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                                                   VALUES ('" . $q . "',
+                                                           '2',
+                                                           '" . $value_image_product['reference'] . "')");
+            $stmtInsertImageLang->execute();
+            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                                                   VALUES ('" . $q . "',
+                                                           '3',
+                                                           '" . $value_image_product['reference'] . "')");
+            $stmtInsertImageLang->execute();
+
+
+
+
+
+
+            $fileUrl = $link;
+
+//The path & filename to save to.
+            $saveTo = $save_to . $namefile;
+
+//Open file handler.
+            $fp = fopen($saveTo, 'w+');
+
+//If $fp is FALSE, something went wrong.
+            if ($fp === false) {
+                throw new Exception('Could not open: ' . $saveTo);
+            }
+
+            $ch = curl_init($fileUrl);
+            curl_setopt($ch, CURLOPT_FILE, $fp);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+            curl_exec($ch);
+            if (curl_errno($ch)) {
+                throw new Exception(curl_error($ch));
+            }
+            $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if ($statusCode == 200) {
+                echo 'Downloaded!';
+            } else {
+                echo "Status Code: " . $statusCode;
+            }
+            $success = file_get_contents("http://iwes.shop/createdirImage.php?token=10210343943202393403&dir=".$q);
+
+
+            echo $success;  // "OK" or "FAIL"
+            /*****  trasferimento ftp ******/
+            $ftp_server = "ftp.iwes.shop";
+            $ftp_user_name = "iwesshop";
+            $ftp_user_pass = "XtUWicJUrEXv";
+            $remote_file = "/public_html/img/p/".chunk_split($q, 1, '/');;
+
+            $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $q.".jpg";
+            $errorMsg = 'ftp fail connect';
+            $fileToSend = $saveTo;
 // ------- Upload file through FTP ---------------
 
-        $ch = curl_init();
-        $fp = fopen($fileToSend, "r");
-        // we upload a TXT file
-        curl_setopt($ch, CURLOPT_URL, $ftp_url);
-        curl_setopt($ch, CURLOPT_UPLOAD, 1);
-        curl_setopt($ch, CURLOPT_INFILE, $fp);
-        // set size of the file, which isn't _mandatory_ but
-        // helps libcurl to do extra error checking on the upload.
-        curl_setopt($ch, CURLOPT_INFILESIZE, filesize($fileToSend));
-        $res = curl_exec($ch);
-        $errorMsg = curl_error($ch);
-        $errorNumber = curl_errno($ch);
-        curl_close($ch);
-
-        $url = 'https://iwes.shop/alignSingleImage.php';
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-
-
-        curl_close($ch);
+            $ch = curl_init();
+            $fp = fopen($fileToSend, "r");
+            // we upload a TXT file
+            curl_setopt($ch, CURLOPT_URL, $ftp_url);
+            curl_setopt($ch, CURLOPT_UPLOAD, 1);
+            curl_setopt($ch, CURLOPT_INFILE, $fp);
+            // set size of the file, which isn't _mandatory_ but
+            // helps libcurl to do extra error checking on the upload.
+            curl_setopt($ch, CURLOPT_INFILESIZE, filesize($fileToSend));
+            $res = curl_exec($ch);
+            $errorMsg = curl_error($ch);
+            $errorNumber = curl_errno($ch);
+            curl_close($ch);
+            $success = file_get_contents("http://iwes.shop/createThumbImage.php?token=10210343943202393403&dir=".$q);
+        }
 
         $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
@@ -1018,7 +1037,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         \Monkey::app()->dbAdapter->query($sql, []);
 
 
-        $res="esportazione Nuovi Prodotti eseguita file psz6_image_single_link.csv  finita alle ore ".date('Y-m-d H:i:s');
+        $res="esportazione Nuovi Prodotti eseguito  finito alle ore ".date('Y-m-d H:i:s');
         $this->report('Exporting to Prestashop ',$res,$res);
 
 
