@@ -89,11 +89,11 @@ class CProductCatalogListAjaxController extends AAjaxController
                 } else if ($shp->salePrice == 0){
                     $of = '100%';
                 } else {
-                    $of = round(100 - (100 * $shp->salePrice / $shp->price), 2);
+                    $of = round(100 - (100 * $shp->salePrice / $shp->price), 2) . '%';
                 }
 
-                $row['friendPrices'][] = $shp->price . '(' . $of . ')';
-                $row['friendSalePrices'][] = $shp->salePrice;
+                $row['friendPrices'][] = $shp->price;
+                $row['friendSalePrices'][] = $shp->salePrice . '(' . $of . ')';
             }
 
             $row['friendPrices'] = implode('<br />',$row['friendPrices']);
