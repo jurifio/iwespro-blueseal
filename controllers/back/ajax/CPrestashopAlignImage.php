@@ -124,7 +124,7 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                     if ($countFirstImage == 1) {
                         $cover = 1;
                     } else {
-                        $cover = '';
+                        $cover = "null";
                     }
                     $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (id_product, position, cover) VALUES (" .$prestashopProductId . ", " .  $position . "," . $cover . ")");
                     $stmtInsertImage->execute();
