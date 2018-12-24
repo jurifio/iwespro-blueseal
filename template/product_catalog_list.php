@@ -29,7 +29,8 @@
                                data-controller="ProductCatalogListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="100, 200, 500">
+                               data-length-menu-setup="100, 200, 500"
+                               data-fields=<?php echo json_encode($fields); ?>>
                             <thead>
                             <tr>
                                 <th data-slug="id"
@@ -74,6 +75,22 @@
                                 <th data-slug="friendSalePrices"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Prezzo in saldo</th>
+                                <th data-slug="categoryId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center categoryFilterType">Categorie
+                                </th>
+                                <?php
+                                if(!is_null($fields)){
+
+                                    foreach ($fields as $field): ?>
+
+                                        <th data-slug="<?php echo $field; ?>"
+                                            data-searchable="true"
+                                            data-orderable="true" class="center">Categorie
+                                        </th>
+
+                                    <?php endforeach; }?>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -88,5 +105,19 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
+<bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="Aggiungi campi">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.add.fields"
+                data-title="Aggiungi nuovi campi alla tabella"
+                data-placement="bottom">
+        </bs-toolbar-button>
+    </bs-toolbar-group>
+</bs-toolbar>
 </body>
 </html>

@@ -28,10 +28,15 @@ class CProductCatalogListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_catalog_list.php');
 
+        $fieldsD = \Monkey::app()->router->request()->getRequestData();
+
+        $fields = null;
+        if(!empty($fieldsD)) $fields = array_keys($fieldsD);
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'fields' => $fields,
             'sidebar' => $this->sidebar->build()
         ]);
     }
