@@ -324,7 +324,7 @@ ORDER BY `p`.`id`";
         $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2'";
         \Monkey::app()->dbAdapter->query($sql, []);
 
-        $res="Allineamento quantità Stock  eseguita  finita alle ore ".date('Y-m-d H:i:s');
+        $res="Allineamento quantità Stock  eseguita  finita alle ore ". date('Y-m-d H:i:s');
         $this->report('Align  to Prestashop Quantity ',$res,$res);
         return $res;
     }
