@@ -63,15 +63,25 @@ class CProductCatalogListAjaxController extends AAjaxController
                     switch ($field) {
                         case 'stock':
                             $sqlSelect .= ', psiz.name AS stock';
-                            $sqlFrom .= 'LEFT JOIN (ProductSku psk
-                                        JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
-                                        ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)';
+                            $sqlFrom .= ' LEFT JOIN (ProductSku psk
+                                         JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
+                                         ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)';
                             break;
-                        case 'origin':
+                        case 'externalId':
+                            $sqlSelect .= ', concat(ifnull(p.externalId, \'\'), \'-\', ifnull(dp.extId, \'\'), \'-\', ifnull(ds.extSkuId, \'\')) AS externalId';
+                            $sqlFrom .= ' LEFT JOIN (DirtyProduct dp
+                                         JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
+                                         ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)';
                             break;
                         case 'season':
+                            $sqlSelect .= ', concat(pse.name, \' \', pse.year) AS season';
+                            $sqlFrom .= ' JOIN ProductSeason pse ON p.productSeasonId = pse.id';
                             break;
-                        case 'details':
+                        case 'hasDetails':
+                            $sqlSelect .= ', if(((SELECT count(0)
+                       FROM ProductSheetActual
+                       WHERE ((ProductSheetActual.productId = p.id) AND
+                              (ProductSheetActual.productVariantId = p.productVariantId))) > 2), \'sì\', \'no\')    AS hasDetails';
                             break;
                     }
                 }
@@ -137,9 +147,29 @@ class CProductCatalogListAjaxController extends AAjaxController
             $row['shop'] = '<span class="small">' . $product->getShops('<br />', true) . '</span>';
             $row['categoryId'] = '<span class="small">' . $product->getLocalizedProductCategories(" ", "<br>") . '</span>';
 
+
             if(!empty($fields)) {
-                if (in_array('stock', $fields)) {
-                    $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $product->printId() . '"></table>';
+                foreach ($fields as $field) {
+                    switch ($field) {
+                        case 'stock':
+                            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $product->printId() . '"></table>';
+                            break;
+                        case 'externalId':
+                            $row['externalId'] = '<span class="small">' . $product->getShopExtenalIds('<br />') . '</span>';
+                            break;
+                        case 'season':
+                            $row['season'] = '<span class="small">' . $product->productSeason->name . " " . $product->productSeason->year . '</span>';
+                            break;
+                        case 'hasDetails':
+                            $row['hasDetails'] = (2 < $product->productSheetActual->count()) ? 'sì' : 'no';
+                            $row['details'] = "";
+                            foreach ($product->productSheetActual as $k => $v) {
+                                if (!is_null($v->productDetail) && !$v->productDetail->productDetailTranslation->isEmpty()) {
+                                    $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
+                                }
+                            }
+                            break;
+                    }
                 }
             }
 
