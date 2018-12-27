@@ -98,7 +98,7 @@
 
                 let allData = $(`#${prodId} td:first`);
 
-                if (data['sizes'] != undefined && $("#sizeField").length == 0) {
+                if (data['sizes'] != undefined && $("#sizeField-" + prodId).length == 0) {
 
                     if (data['sizes'].rows.length === 0) {
                         allData.append('Quantità non inserite');
@@ -136,23 +136,23 @@
                             body.append($(row));
                         }
 
-                        let sizes = '<div style="margin-bottom: 5px;" id="sizeField"><strong>Taglie</strong><br></div><table class="nested-table inner-size-table" data-product-id="' + prodId + '">' + thead + body[0].innerHTML + '</table></div>';
+                        let sizes = '<div style="margin-bottom: 5px;" id="sizeField-' + prodId + '"><strong>Taglie</strong><br></div><table class="nested-table inner-size-table" data-product-id="' + prodId + '">' + thead + body[0].innerHTML + '</table></div>';
                         allData.append(sizes);   //it doesn't exist
                     }
                 }
 
-                if (data['externalId'] != undefined && $("#externalField").length == 0) {
-                    let externalId = '<div style="margin-bottom: 5px;" id="externalField"><strong>External Id</strong><br>' + data['externalId'] + '</div>';
+                if (data['externalId'] != undefined && $("#externalField-" + prodId).length == 0) {
+                    let externalId = '<div style="margin-bottom: 5px;" id="externalField-' + prodId + '"><strong>External Id</strong><br>' + data['externalId'] + '</div>';
                     allData.append(externalId);
                 }
 
-                if (data['season'] != undefined && $("#seasonField").length == 0) {
-                    let season = '<div style="margin-bottom: 5px;" id="seasonField"><strong>Stagione</strong><br>' + data['season'] + '</div>';
+                if (data['season'] != undefined && $("#seasonField-" + prodId).length == 0) {
+                    let season = '<div style="margin-bottom: 5px;" id="seasonField-' + prodId + '"><strong>Stagione</strong><br>' + data['season'] + '</div>';
                     allData.append(season);
                 }
 
-                if (data['details'] != undefined && $("#detailField").length == 0) {
-                    let details = '<div style="margin-bottom: 5px;"  id="detailField>"><strong>Dettagli</strong><br>' + data['details'] +  '</div>';
+                if (data['details'] != undefined && $("#detailField-" + prodId).length == 0) {
+                    let details = '<div style="margin-bottom: 5px;"  id="detailField-' + prodId + '"><strong>Dettagli</strong><br>' + data['details'] +  '</div>';
                     allData.append(details);
                 }
 
