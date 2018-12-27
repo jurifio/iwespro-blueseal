@@ -146,15 +146,25 @@
                 data-placement="bottom">
         </bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Mostra contenuti aggiuntivi">
+    <bs-toolbar-group data-group-label="Gestisci contenuti aggiuntivi">
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-plus"
+                data-icon="fa-plus-circle"
                 data-permission="/admin/product/add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.information.add"
                 data-title="Richiedi informazioni aggiuntive"
+                data-placement="bottom">
+        </bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-times"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.information.delete"
+                data-title="Elimina informazioni aggiuntive"
                 data-placement="bottom">
         </bs-toolbar-button>
     </bs-toolbar-group>

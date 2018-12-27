@@ -136,23 +136,23 @@
                             body.append($(row));
                         }
 
-                        let sizes = '<div style="margin-bottom: 5px;" id="sizeField-' + prodId + '"><strong>Taglie</strong><br></div><table class="nested-table inner-size-table" data-product-id="' + prodId + '">' + thead + body[0].innerHTML + '</table></div>';
-                        allData.append(sizes);   //it doesn't exist
+                        let sizes = '<div style="margin-bottom: 5px;" class="remove-' + prodId + '" id="sizeField-' + prodId + '"><strong>Taglie</strong><br><table class="nested-table inner-size-table" data-product-id="' + prodId + '">' + thead + body[0].innerHTML + '</table></div>';
+                        allData.append(sizes);
                     }
                 }
 
                 if (data['externalId'] != undefined && $("#externalField-" + prodId).length == 0) {
-                    let externalId = '<div style="margin-bottom: 5px;" id="externalField-' + prodId + '"><strong>External Id</strong><br>' + data['externalId'] + '</div>';
+                    let externalId = '<div style="margin-bottom: 5px;" class="remove-' + prodId + '" id="externalField-' + prodId + '"><strong>External Id</strong><br>' + data['externalId'] + '</div>';
                     allData.append(externalId);
                 }
 
                 if (data['season'] != undefined && $("#seasonField-" + prodId).length == 0) {
-                    let season = '<div style="margin-bottom: 5px;" id="seasonField-' + prodId + '"><strong>Stagione</strong><br>' + data['season'] + '</div>';
+                    let season = '<div style="margin-bottom: 5px;" class="remove-' + prodId + '" id="seasonField-' + prodId + '"><strong>Stagione</strong><br>' + data['season'] + '</div>';
                     allData.append(season);
                 }
 
                 if (data['details'] != undefined && $("#detailField-" + prodId).length == 0) {
-                    let details = '<div style="margin-bottom: 5px;"  id="detailField-' + prodId + '"><strong>Dettagli</strong><br>' + data['details'] +  '</div>';
+                    let details = '<div style="margin-bottom: 5px;" class="remove-' + prodId + '"  id="detailField-' + prodId + '"><strong>Dettagli</strong><br>' + data['details'] +  '</div>';
                     allData.append(details);
                 }
 
@@ -162,6 +162,24 @@
                 bsModal.writeBody('Errore grave');
             })
         });
+    });
+
+    $(document).on('bs.information.delete', function () {
+
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if (selectedRows.length < 1) {
+            new Alert({
+                type: "warning",
+                message: "Seleziona almeno una riga"
+            }).open();
+            return false;
+        }
+
+        $.each(selectedRows, function (k,v) {
+            $(`.remove-${v.DT_RowId}`).empty();
+        });
+
     });
 
 })();
