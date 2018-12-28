@@ -2741,7 +2741,7 @@
         {
             "pattern": "/blueseal/prodotti/marketplace/associate/sale(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasProductAssociateSaleListcontroller"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasProductAssociateSaleListController"
             },
             "filters": {},
             "translations": {},
