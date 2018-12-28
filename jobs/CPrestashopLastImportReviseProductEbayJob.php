@@ -50,17 +50,7 @@ class CPrestashopLastImportReviseProductEbayJob extends ACronJob
 
 
 
-        /****sezione per lancio allineamento script su server prestashop*/
 
-        $url = 'https://iwes.shop/alignpresta.php';
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-
-
-        curl_close($ch);
 
         $url = 'https://iwes.shop/modules/fastbay1/ajax/fastbay1SyncCron.php?s=1&mp=101&token=be8124d84d1ba9e36cc84434373b38f8&reviselastimport=1';
         $ch = curl_init();
