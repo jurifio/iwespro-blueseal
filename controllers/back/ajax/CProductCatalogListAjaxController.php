@@ -27,7 +27,9 @@ class CProductCatalogListAjaxController extends AAjaxController
      */
     public function get()
     {
-        $sql = "
+        $fields = \Monkey::app()->router->request()->getRequestData('fields');
+
+            $sqlSelect = "
             SELECT 
               p.id,
               p.productVariantId,
@@ -39,8 +41,10 @@ class CProductCatalogListAjaxController extends AAjaxController
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummyPicture,
               p.isOnSale                                                                                        AS isOnSale,
               pb.name AS productBrand,
-              p.qty                                                                                             AS hasQty
-            FROM Product p
+              p.qty                                                                                             AS hasQty,
+              pc.id as categoryId";
+
+            $sqlFrom = "FROM Product p
               
               JOIN ProductStatus ps ON p.productStatusId = ps.id
               JOIN ProductBrand pb ON p.productBrandId = pb.id
@@ -49,7 +53,41 @@ class CProductCatalogListAjaxController extends AAjaxController
               LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
               JOIN ShopHasProduct sp
                 ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
-              JOIN Shop s ON s.id = sp.shopId";
+              JOIN Shop s ON s.id = sp.shopId
+              LEFT JOIN (ProductHasProductCategory ppc
+                              JOIN ProductCategory pc ON ppc.productCategoryId = pc.id
+                    ) ON (p.id, p.productVariantId) = (ppc.productId,ppc.productVariantId)";
+
+            if(!empty($fields)) {
+                foreach ($fields as $field) {
+                    switch ($field) {
+                        case 'stock':
+                            $sqlSelect .= ', psiz.name AS stock';
+                            $sqlFrom .= ' LEFT JOIN (ProductSku psk
+                                         JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
+                                         ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)';
+                            break;
+                        case 'externalId':
+                            $sqlSelect .= ', concat(ifnull(p.externalId, \'\'), \'-\', ifnull(dp.extId, \'\'), \'-\', ifnull(ds.extSkuId, \'\')) AS externalId';
+                            $sqlFrom .= ' LEFT JOIN (DirtyProduct dp
+                                         JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
+                                         ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)';
+                            break;
+                        case 'season':
+                            $sqlSelect .= ', concat(pse.name, \' \', pse.year) AS season';
+                            $sqlFrom .= ' JOIN ProductSeason pse ON p.productSeasonId = pse.id';
+                            break;
+                        case 'hasDetails':
+                            $sqlSelect .= ', if(((SELECT count(0)
+                       FROM ProductSheetActual
+                       WHERE ((ProductSheetActual.productId = p.id) AND
+                              (ProductSheetActual.productVariantId = p.productVariantId))) > 2), \'sì\', \'no\')    AS hasDetails';
+                            break;
+                    }
+                }
+            }
+
+         $sql = $sqlSelect . ' ' . $sqlFrom;
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
 
@@ -107,6 +145,33 @@ class CProductCatalogListAjaxController extends AAjaxController
             $row['colorNameManufacturer'] = $product->productVariant->description;
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
             $row['shop'] = '<span class="small">' . $product->getShops('<br />', true) . '</span>';
+            $row['categoryId'] = '<span class="small">' . $product->getLocalizedProductCategories(" ", "<br>") . '</span>';
+
+
+            if(!empty($fields)) {
+                foreach ($fields as $field) {
+                    switch ($field) {
+                        case 'stock':
+                            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $product->printId() . '"></table>';
+                            break;
+                        case 'externalId':
+                            $row['externalId'] = '<span class="small">' . $product->getShopExtenalIds('<br />') . '</span>';
+                            break;
+                        case 'season':
+                            $row['season'] = '<span class="small">' . $product->productSeason->name . " " . $product->productSeason->year . '</span>';
+                            break;
+                        case 'hasDetails':
+                            $row['hasDetails'] = (2 < $product->productSheetActual->count()) ? 'sì' : 'no';
+                            $row['details'] = "";
+                            foreach ($product->productSheetActual as $k => $v) {
+                                if (!is_null($v->productDetail) && !$v->productDetail->productDetailTranslation->isEmpty()) {
+                                    $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
 
             $datatable->setResponseDataSetRow($key, $row);
         }
