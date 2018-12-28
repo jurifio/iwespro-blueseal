@@ -2736,6 +2736,21 @@
                 "DELETE",
                 "PUT"
             ]
+        }
+    ,
+        {
+            "pattern": "/blueseal/prodotti/marketplace/associate/sale(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasProductAssociateSaleListcontroller"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         },
         {
             "pattern": "/blueseal/sitelist(/)?",

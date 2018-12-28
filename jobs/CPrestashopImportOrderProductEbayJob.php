@@ -47,11 +47,6 @@ class CPrestashopImportOrderProductEbayJob extends ACronJob
 
 
 
-
-
-
-
-
         $url = 'https://iwes.shop/modules/fastbay1/ajax/downloadOrders.php?s=1&mp=101&token=be8124d84d1ba9e36cc84434373b38f8';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
