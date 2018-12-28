@@ -4,27 +4,23 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CProduct;
-
-/**
- * Class CMarketplaceProductListAjaxController
- * @package bamboo\controllers\back\ajax
+/*
  *
- * @author Iwes Team <it@iwes.it>
- *
- * @copyright (c) Iwes  snc - All rights reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- *
- * @date 22/09/2018
- * @since 1.0
  */
+
 class CMarketplaceProductAssociateSaleListAjaxController extends AAjaxController
 {
     public function get()
     {
         $idmarketplaceshop = $this->data['rightid'];
+        if($idmarketplaceshop==''){
+            $condition="";
+        }else{
+            $condition= "and marketplaceHasShopId=".$idmarketplaceshop;
+        }
 
-        $sql="SELECT p.id as id,
+
+        $sql=" SELECT p.id as id,
        concat(`pps`.`productId`,'-',`pps`.`productVariantId`) AS `code`,
        s.name as  shop,
        pb.name as brand,
@@ -62,8 +58,7 @@ from ProductPublicSku pps
 
   join `ProductStatus` `ps` on((`p`.`productStatusId` = `ps`.`id`))
 
-where (`p`.`qty` > 0) and (p.productStatusId=6) and marketplaceHasShopId=".$idmarketplaceshop." 
-group by productId, productVariantId";
+where (`p`.`qty` > 0) and (p.productStatusId=6) ". $condition .  " group by productId, productVariantId";
 
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
