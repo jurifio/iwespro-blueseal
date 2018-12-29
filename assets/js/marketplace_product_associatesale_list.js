@@ -334,3 +334,42 @@ $(document).on('bs.product.associate.to.empty.ean', function (e, element, button
     });
     bsModal.modal();
 });
+
+$(document).on('bs.product.ebay.code', function (e, element, button) {
+    var bsModal = $('#bsModal');
+    var header = $('.modal-header h4');
+    var body = $('.modal-body');
+    var cancelButton = $('.modal-footer .btn-default');
+    var okButton = $('.modal-footer .btn-success');
+
+    header.html('Recupera id  prodotti Ebay Marketplace');
+
+
+
+    body.html('Esegui il Recupero?');
+
+    okButton.off().on('click',function () {
+        bsModal.modal('hide');
+        Pace.ignore(function () {
+            $.ajax({
+                url: '/blueseal/xhr/PrestashopGetProductIdEbayMarketPlace',
+                type: "POST",
+                data: {
+                    rows: 1
+                }
+            }).done(function (res) {
+                resoult = res;
+                new Alert({
+                    type: "success",
+                    message: resoult
+                }).open();
+            }).fail(function (res) {
+                new Alert({
+                    type: "warning",
+                    message: "Errore non è stato recuperato nessun id "
+                }).open();
+            });
+        });
+    });
+    bsModal.modal();
+});

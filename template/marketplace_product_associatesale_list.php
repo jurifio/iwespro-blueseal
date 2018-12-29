@@ -31,6 +31,11 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center"
                                         data-default-order="desc">Codice</th>
+                                    <th data-slug="marketplaceProductId"
+                                        data-required="true"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center"
+                                        data-default-order="desc">Codice Prodotto Marketplace</th>
                                     <th data-slug="ean"
                                         data-required="true"
                                         data-searchable="true"
@@ -163,8 +168,19 @@
                 data-placement="bottom"
                 data-toggle="modal"
         ></bs-toolbar-button>
-
-
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Recupero Id Prodotti Marketplace Ebay">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa fa-tag"
+                data-permission="/admin/product/edit"
+                data-event="bs.product.ebay.code"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Recupera id prodotti Ebay"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

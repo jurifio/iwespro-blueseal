@@ -39,7 +39,9 @@ class CMarketplaceProductAssociateSaleListAjaxController extends AAjaxController
 
 
        p.creationDate as creationDate,
-       '' as associatePrestashopMarketPlace
+       '' as associatePrestashopMarketPlace,
+       mhpa.marketplaceProductId as marketplaceProductId
+       
 
 
 
