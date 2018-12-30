@@ -39,6 +39,7 @@ class CMarketplaceProductAssociateSaleListAjaxController extends AAjaxController
        mhpa.id as prestashopProductId,
        mhpa.isOnSale as isOnSale,
        mhpa.priceSale as priceSale,
+       mhpa.typeSale as TypeSale,
 
 
        p.creationDate as creationDate,
@@ -114,7 +115,7 @@ where (`p`.`qty` > 0) and (p.productStatusId=6) ". $condition .  " group by prod
 
             }else{
                 $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price
-                            ,mphpa.isOnSale as isOnSale, mphpa.priceSale as priceSale, mphs.imgMarketPlace as icon, mphpa.statusPublished as statusPublished
+                            ,mphpa.isOnSale as isOnSale, mphpa.typeSale as typeSale, mphpa.priceSale as priceSale, mphs.imgMarketPlace as icon, mphpa.statusPublished as statusPublished
                                           FROM Marketplace m join MarketplaceHasProductAssociate mphpa
                                           on mphpa.marketplaceId =m.id
                                            join Shop s on mphpa.shopId=s.id
@@ -166,7 +167,26 @@ $status=$row['statusPublished'];
                         default:
                             $status = 'da Lavorare';
                     }
+                    Switch($marketplaces['isOnSale']){
+                        case 0:
+                            $row['isOnSale']='Prodotto non in Saldo';
+                            break;
+                        case 1:
+                            $row['isOnSale']='Prodotto in Saldo';
+                            break;
 
+                    }
+                    Switch($marketplaces['typeSale']) {
+                        case 1:
+                            $row['typeSale'] = 'Saldo Da Sito';
+                            break;
+                        case 2:
+                            $row['typeSale'] = 'Saldo Dedicato';
+                            break;
+                        case 0:
+                            $row['typeSale'] = 'non Applicato';
+                            break;
+                    }
                     if ($marketplaces['isOnSale'] == 1) {
                         $rowtablemarketplace .= "<tr><td><img width='80' src='" . $imgMarketPlacePath . $marketplaces['icon'] . "'</img></td><td>" . $marketplaces['nameShop'] . "-" . $marketplaces['name'] . "</td><td>" . $typeRetouchPrice . "</td><td>" . $marketplaces['priceSale'] . "</td></tr>";
                     }else{
@@ -177,6 +197,8 @@ $status=$row['statusPublished'];
                 $row["statusPublished"]=$status;
 
                 }
+
+
 
             $resprice=\Monkey::app()->repoFactory->create('ProductPublicSku')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
             $row['price']=$resprice->price;

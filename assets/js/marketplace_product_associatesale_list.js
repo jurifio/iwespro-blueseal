@@ -433,7 +433,11 @@ $(document).on('bs-product-marketplaceprestashop-publish-sale', function (e, ele
                 html+='</select>';
                 html+='</div>';
                 html+='<div class="form-group form-group-default"><label for="percentSale">Percentuale di Sconto %</label><input id="percentSale" type="text" value="0" aria-label="percentSale"/></div>';
-
+                    if ($('#typeSale').val()==1){
+                        $('#percentSale').prop('disabled', true);
+                    }else{
+                        $('#percentSale').prop('disabled', false);
+                    }
 
                 body.html($(html));
                 okButton.html('Esegui').off().on('click',function () {

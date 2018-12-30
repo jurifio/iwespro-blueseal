@@ -67,6 +67,12 @@
                                     <th data-slug="dummy"
                                         data-searchable="false"
                                         data-orderable="false" class="center">Immagine</th>
+                                    <th data-slug="isOnSale"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Stato Saldo</th>
+                                    <th data-slug="typeSale"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Tipo Saldo</th>
                                     <th data-slug="associatePrestashopMarketPlace"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Prestashop marketPlace</th>

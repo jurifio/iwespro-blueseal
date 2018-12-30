@@ -58,7 +58,9 @@ class CMarketplaceProductPrestashopSaleManageController extends AAjaxController
                 $priceSale = $price - ($price / 100 * $percentSale);
                 $updateMarketplaceHasProductAssociate->priceSale = $priceSale;
                 $updateMarketplaceHasProductAssociate->percentSale = $percentSale;
+                $updateMarketplaceHasProductAssociate->typeSale = $typeSale;
                 $updateMarketplaceHasProductAssociate->titleSale = $titleSale;
+                $updateMarketplaceHasProductAssociate->isOnSale = 1;
                 $updateMarketplaceHasProductAssociate->update();
                 $res .= "<br>PrestashopId" . $singleproduct[0] . " codice:" . $singleproduct[2] . "-" . $singleproduct[3] . $typeSaleText . $price . "Sconto applicato:" . $percentSale . "%" . " Prezzo Finale:" . $priceSale;
 
