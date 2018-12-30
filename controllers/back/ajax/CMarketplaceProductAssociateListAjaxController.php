@@ -136,7 +136,7 @@ $status=$row['statusPublished'];
                         case 4:
                             $typeRetouchPrice="prezzo scontato di Euro ".$marketplaces['amount'];
                             break;
-                        default:
+                        case 5:
                             $typeRetouchPrice="non applicato ";
                             break;
 

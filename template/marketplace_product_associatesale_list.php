@@ -52,9 +52,6 @@
                                     <th data-slug="brand"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Brand</th>
-                                    <th data-slug="category"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
                                     <th data-slug="stock"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stock</th>
@@ -78,13 +75,22 @@
                                         data-orderable="true" class="center">Prestashop marketPlace</th>
                                     <th data-slug="price"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Prezzo</th>
+                                        data-orderable="true" class="center">Prezzo Listino</th>
+                                    <th data-slug="priceSale"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Prezzo Scontato</th>
+                                    <th data-slug="percentSale"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Percentuale di sconto</th>
                                     <th data-slug="statusPublished"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>
                                     <th data-slug="creationDate"
                                         data-searchable="true"
                                         data-orderable="true" class="center dataFilterType">Creazione</th>
+                                    <th data-slug="category"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
                                 </tr>
                             </thead>
                             <tbody>

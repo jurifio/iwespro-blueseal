@@ -50,6 +50,7 @@ $(document).on('bs-product-marketplaceprestashop-publish', function (e, element,
                 '<label for="typeRetouchPrice">Modifica Prezzo</label>' +
                 '<select class="full-width" placeholder="Seleziona l\'account" ' +
                 'data-init-plugin="selectize" title="" name="typeRetouchPrice" id="typeRetouchPrice" required>' +
+                '<option value="5">Non Modificare</option>'+
                 '<option value="1">Percentuale +</option>'+
                 '<option value="2">Percentuale -</option>'+
                 '<option value="3">Fisso +</option>'+
