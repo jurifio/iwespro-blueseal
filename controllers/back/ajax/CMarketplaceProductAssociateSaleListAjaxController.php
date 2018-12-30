@@ -16,7 +16,7 @@ class CMarketplaceProductAssociateSaleListAjaxController extends AAjaxController
         if($idmarketplaceshop==''){
             $condition="";
         }else{
-            $condition= "and marketplaceHasShopId=".$idmarketplaceshop;
+            $condition= " and marketplaceHasShopId=".$idmarketplaceshop;
         }
 
 
@@ -36,6 +36,9 @@ class CMarketplaceProductAssociateSaleListAjaxController extends AAjaxController
        mhpa.typeRetouchPrice as TypeRetouchPrice,
        mhpa.marketPlaceHasShopId as marketplaceHasShopId,
        mhpa.price as priceMarketplace,
+       mhpa.id as prestashopProductId,
+       mhpa.isOnSale as isOnSale,
+       mhpa.priceSale as priceSale,
 
 
        p.creationDate as creationDate,
@@ -110,7 +113,8 @@ where (`p`.`qty` > 0) and (p.productStatusId=6) ". $condition .  " group by prod
                 $row['statusPublished']='non lavorato';
 
             }else{
-                $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price,mphs.imgMarketPlace as icon, mphpa.statusPublished as statusPublished
+                $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price
+                            ,mphpa.isOnSale as isOnSale, mphpa.priceSale as priceSale, mphs.imgMarketPlace as icon, mphpa.statusPublished as statusPublished
                                           FROM Marketplace m join MarketplaceHasProductAssociate mphpa
                                           on mphpa.marketplaceId =m.id
                                            join Shop s on mphpa.shopId=s.id
@@ -122,24 +126,24 @@ where (`p`.`qty` > 0) and (p.productStatusId=6) ". $condition .  " group by prod
                 $imgMarketPlacePath=\Monkey::app()->baseUrl(FALSE)."/images/imgorder/";
 $status=$row['statusPublished'];
                 foreach ($resmarketplacearray as $marketplaces) {
-                    switch($marketplaces['typeRetouchPrice']){
+                    switch ($marketplaces['typeRetouchPrice']) {
                         case 1:
-                            $typeRetouchPrice="prezzo maggiorato del ".$marketplaces['amount']."%";
+                            $typeRetouchPrice = "prezzo maggiorato del " . $marketplaces['amount'] . "%";
                             break;
 
                         case 2:
-                            $typeRetouchPrice="prezzo scontato del ".$marketplaces['amount']."%";
+                            $typeRetouchPrice = "prezzo scontato del " . $marketplaces['amount'] . "%";
                             break;
 
                         case 3:
-                            $typeRetouchPrice="prezzo maggiorato di Euro ".$marketplaces['amount'];
+                            $typeRetouchPrice = "prezzo maggiorato di Euro " . $marketplaces['amount'];
                             break;
 
                         case 4:
-                            $typeRetouchPrice="prezzo scontato di Euro ".$marketplaces['amount'];
+                            $typeRetouchPrice = "prezzo scontato di Euro " . $marketplaces['amount'];
                             break;
                         default:
-                            $typeRetouchPrice="non applicato ";
+                            $typeRetouchPrice = "non applicato ";
                             break;
 
                     }
@@ -163,8 +167,11 @@ $status=$row['statusPublished'];
                             $status = 'da Lavorare';
                     }
 
-
-                    $rowtablemarketplace .= "<tr><td><img width='80' src='".$imgMarketPlacePath.$marketplaces['icon']."'</img></td><td>".$marketplaces['nameShop'] ."-". $marketplaces['name'] . "</td><td>".$typeRetouchPrice."</td><td>".$marketplaces['price'] . "</td></tr>";
+                    if ($marketplaces['isOnSale'] == 1) {
+                        $rowtablemarketplace .= "<tr><td><img width='80' src='" . $imgMarketPlacePath . $marketplaces['icon'] . "'</img></td><td>" . $marketplaces['nameShop'] . "-" . $marketplaces['name'] . "</td><td>" . $typeRetouchPrice . "</td><td>" . $marketplaces['priceSale'] . "</td></tr>";
+                    }else{
+                        $rowtablemarketplace .= "<tr><td><img width='80' src='" . $imgMarketPlacePath . $marketplaces['icon'] . "'</img></td><td>" . $marketplaces['nameShop'] . "-" . $marketplaces['name'] . "</td><td>" . $typeRetouchPrice . "</td><td>" . $marketplaces['price'] . "</td></tr>";
+                    }
                 }
                 $row["associatePrestashopMarketPlace"] = '<table class="nested-table"><thead><th colspan="2">MarketPlace</th><th>Tipo ricalcolo</th><th>Prezzo Ricalcolato</th></thead><tbody>' . $rowtablemarketplace . '</tbody></table>';
                 $row["statusPublished"]=$status;

@@ -26,6 +26,11 @@
                                data-rightid="<?php echo $id; ?>" >
                             <thead>
                                 <tr>
+                                    <th data-slug="prestashopProductId"
+                                        data-required="true"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center"
+                                        data-default-order="desc">Codice Prestashop</th>
                                     <th data-slug="code"
                                         data-required="true"
                                         data-searchable="true"
@@ -102,6 +107,17 @@
                 data-toggle="modal"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-eur"
+                data-permission="/admin/product/edit"
+                data-event="bs-product-marketplaceprestashop-publish-sale"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Gestione Saldo  Prodotti su marketPlace"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.product.marketplace.response"
         ></bs-toolbar-button>
         <bs-toolbar-button
@@ -172,7 +188,7 @@
     <bs-toolbar-group data-group-label="Recupero Id Prodotti Marketplace Ebay">
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa fa-tag"
+                data-icon="fa-tag"
                 data-permission="/admin/product/edit"
                 data-event="bs.product.ebay.code"
                 data-class="btn btn-default"

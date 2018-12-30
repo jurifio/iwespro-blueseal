@@ -25,6 +25,11 @@
                                data-length-menu-setup="25,100, 200, 500">
                             <thead>
                                 <tr>
+                                    <th data-slug="prestashopProductId"
+                                        data-required="true"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center"
+                                        data-default-order="desc">id Prodotto Prestashop</th>
                                     <th data-slug="code"
                                         data-required="true"
                                         data-searchable="true"
