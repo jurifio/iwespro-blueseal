@@ -36,11 +36,6 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center"
                                         data-default-order="desc">Codice</th>
-                                    <th data-slug="marketplaceProductId"
-                                        data-required="true"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center"
-                                        data-default-order="desc">Codice Prodotto Marketplace</th>
                                     <th data-slug="ean"
                                         data-required="true"
                                         data-searchable="true"
@@ -82,6 +77,9 @@
                                     <th data-slug="percentSale"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Percentuale di sconto</th>
+                                    <th data-slug="titleTextSale"
+                                        data-searchable="true"
+                                        data-orderable="true" class="center">Titolo Prodotto MarketPlace</th>
                                     <th data-slug="statusPublished"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Stato</th>

@@ -41,6 +41,7 @@ class CMarketplaceProductAssociateSaleListAjaxController extends AAjaxController
        mhpa.priceSale as priceSale,
        mhpa.typeSale as TypeSale,
        mhpa.percentSale as percentSale,
+       mhpa.titleTextSale as titleTextSale,
 
 
        p.creationDate as creationDate,
@@ -74,10 +75,10 @@ where (`p`.`qty` > 0) and (p.productStatusId=6) ". $condition .  " group by prod
         foreach ($datatable->getResponseSetData() as $key => $row) {
            $resproductFindEan=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['productId'=>$row['productId'],'productVariantId'=>$row['productVariantId'],'productSizeId'=>'0','used'=>'1','usedForParent'=>'1'])  ;
             if($resproductFindEan!=null){
-                $row["ean"] = $resproductFindEan->ean;
+                $row['ean'] = $resproductFindEan->ean;
 
             }else{
-                $row["ean"]='Ean non presente';
+                $row['ean']='Ean non presente';
             }
             $product = \Monkey::app()->repoFactory->create('Product')->findOne([$row['productId'], $row['productVariantId']]);
             $row['code'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="/blueseal/prodotti/modifica?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
@@ -117,7 +118,8 @@ where (`p`.`qty` > 0) and (p.productStatusId=6) ". $condition .  " group by prod
             }else{
                 $resmarketplacearray=$this->app->dbAdapter->query("SELECT m.name as name,s.name as nameShop, mphpa.typeRetouchPrice as typeRetouchPrice, mphpa.amount as amount,mphpa.price as price, 
                              mphpa.priceMarketplace as priceMarketplace,
-                             mphpa.percentSale as percentSale
+                             mphpa.percentSale as percentSale,
+                             mphpa.marketplaceProductId as marketplaceProductId
                             ,mphpa.isOnSale as isOnSale, mphpa.typeSale as typeSale, mphpa.priceSale as priceSale, mphs.imgMarketPlace as icon, mphpa.statusPublished as statusPublished
                                           FROM Marketplace m join MarketplaceHasProductAssociate mphpa
                                           on mphpa.marketplaceId =m.id
@@ -192,16 +194,17 @@ $status=$row['statusPublished'];
                     }
                     if ($marketplaces['isOnSale'] == 1) {
                         $row["percentSale"]=$marketplaces['percentSale']." %";
-                        $rowtablemarketplace .= "<tr><td><img width='80' src='" . $imgMarketPlacePath . $marketplaces['icon'] . "'</img></td><td>" . $marketplaces['nameShop'] . "-" . $marketplaces['name'] . "</td><td>" . $typeRetouchPrice . "</td><td>" . $marketplaces['priceSale'] . "</td></tr>";
+                        $rowtablemarketplace .= "<tr><td align='center'><img width='80' src='" . $imgMarketPlacePath . $marketplaces['icon'] . "'</img></td align='center'><td>" . $marketplaces['nameShop'] . "-" . $marketplaces['name'] . "</td><td align='center'>" . $marketplaces['marketplaceProductId']. "</td><td align='center'>" . $typeRetouchPrice . "</td align='center'><td align='center'>" . $marketplaces['priceSale'] . "</td></tr>";
                     }else{
-                        $rowtablemarketplace .= "<tr><td><img width='80' src='" . $imgMarketPlacePath . $marketplaces['icon'] . "'</img></td><td>" . $marketplaces['nameShop'] . "-" . $marketplaces['name'] . "</td><td>" . $typeRetouchPrice . "</td><td>" . $marketplaces['priceMarketplace'] . "</td></tr>";
+                        $rowtablemarketplace .= "<tr><td align='center'><img width='80' src='" . $imgMarketPlacePath . $marketplaces['icon'] . "'</img></td><td align='center'>" . $marketplaces['nameShop'] . "-" . $marketplaces['name'] . "</td><td align='center'>" . $marketplaces['marketplaceProductId'] . "</td><td align='center'>" . $typeRetouchPrice . "</td><td align='center'>" . $marketplaces['priceMarketplace'] . "</td></tr>";
                         $row["percentSale"]='non Applicato';
                     }
                 }
-                $row["associatePrestashopMarketPlace"] = '<table class="nested-table"><thead><th colspan="2">MarketPlace</th><th>Tipo ricalcolo</th><th>Prezzo MarketPlace</th></thead><tbody>' . $rowtablemarketplace . '</tbody></table>';
+                $row["associatePrestashopMarketPlace"] = '<table class="nested-table"><thead><th colspan="2" align="center">MarketPlace</th><th align="center">IdMarketPlace</th><th align="center">Tipo ricalcolo</th><th align="center">Prezzo MarketPlace</th></thead><tbody>' . $rowtablemarketplace . '</tbody></table>';
                 $row["statusPublished"]=$status;
 
                 }
+
 
 
 

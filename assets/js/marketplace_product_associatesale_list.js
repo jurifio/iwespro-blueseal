@@ -1,6 +1,9 @@
 $(document).on('bs-product-marketplaceprestashop-publish', function (e, element, button) {
 
     let bsModal = $('#bsModal');
+    bsModal.css({width:'auto',
+        height:'auto',
+        'max-height':'100%'});
     let header = $('.modal-header h4');
     let body = $('.modal-body');
     let cancelButton = $('.modal-footer .btn-default');
