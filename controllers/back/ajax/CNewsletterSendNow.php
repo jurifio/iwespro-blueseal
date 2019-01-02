@@ -57,7 +57,7 @@ class CNewsletterSendNow extends AAjaxController
         if(empty($newsletters)) return;
        $res='Starting'.' Newsletters to send: '.count($newsletters);
         foreach ($newsletters as $newsletter) {
-             $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod',true);
+             $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod');
 
         }
 

@@ -66,7 +66,7 @@ class CNewsletterSend extends ACronJob
                 );
             }
 
-            $asd = $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod', true);
+            $asd = $newslettersRepo->sendNewsletterEmails($newsletter, ENV !== 'prod');
 
             $this->report('Esito Invio: ' . $newsletter->id, $asd);
         }
