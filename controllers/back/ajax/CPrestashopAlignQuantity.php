@@ -312,7 +312,7 @@ ORDER BY `p`.`id`";
                                                                                                         out_of_stock)
                                                                                                          VALUES (" . $p . ",
                                                                                                                  '0',   
-                                                                                                                 " . $value_product['shopId'] . ",
+                                                                                                                 " . $value_product['shopPrestashopId'] . ",
                                                                                                                  '0',
                                                                                                                  " . $quantity_product . ",
                                                                                                                  " . $quantity_product . ",
@@ -364,7 +364,7 @@ ORDER BY `p`.`id`";
                                                                                                         out_of_stock)
                                                                                                          VALUES (" . $product_stock . ",
                                                                                                                  " . $product_stockAttribute . ",
-                                                                                                                 " . $value_product['shopId'] . ",
+                                                                                                                 " . $value_product['shopPrestashopId'] . ",
                                                                                                                  '0',
                                                                                                                  " . $stockQty . ",
                                                                                                                  '0',
