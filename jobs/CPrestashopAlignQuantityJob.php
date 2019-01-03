@@ -263,12 +263,12 @@ ORDER BY `p`.`id`";
                 $dirtyProduct=\Monkey::app()->repoFactory->create('DirtyProduct')->findOneBy(['productId'=>$value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
                 $productitemnoName=$dirtyProduct->itemno;
                 $productcolorSupplierName=$dirtyProduct->var;
-                $titleTextSaleLang2 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sconto del " . $value_product['percentSale'] . " %  da Euro " . number_format($value_product['priceMarketplace'],2,",",".") . " a Euro " . number_format($value_product['salePrice'],2,",",".");
-                $titleTextSaleLang1 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From Euro " . number_format($value_product['priceMarketplace'],2,",",".") . " To Euro " . number_format($value_product['salePrice'],2,",",".");
-                $titleTextSaleLang3 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From Euro " . number_format($value_product['priceMarketplace'],2,",",".") . " To Euro " . number_format($value_product['salePrice'],2,",",".");
-                $descriptionTextSaleLang2= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Scontato del " . $value_product['percentSale'] . " %  da Euro " . number_format($value_product['priceMarketplace'],2,",",".") . " a Euro " . number_format($value_product['salePrice'],2,",",".");
-                $descriptionTextSaleLang1= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From Euro " . number_format($value_product['priceMarketplace'],2,",",".") . " To Euro " . number_format($value_product['salePrice'],2,",",".");
-                $descriptionTextSaleLang3= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From Euro " . number_format($value_product['priceMarketplace'],2,",",".") . " To Euro " . number_format($value_product['salePrice'],2,",",".");
+                $titleTextSaleLang2 = str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sconto del " . $value_product['percentSale'] . " %  da Euro " . number_format($value_product['priceMarketplace'],2,',','.') . " a Euro " . number_format($value_product['salePrice'],2,',','.');
+                $titleTextSaleLang1 = str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From Euro " . number_format($value_product['priceMarketplace'],2,',','.') . " To Euro " . number_format($value_product['salePrice'],2,',','.');
+                $titleTextSaleLang3 = str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From Euro " . number_format($value_product['priceMarketplace'],2,',','.') . " To Euro " . number_format($value_product['salePrice'],2,',','.');
+                $descriptionTextSaleLang2= str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Scontato del " . $value_product['percentSale'] . " %  da Euro " . number_format($value_product['priceMarketplace'],2,',','.') . " a Euro " . number_format($value_product['salePrice'],2,',','.');
+                $descriptionTextSaleLang1=str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From Euro " . number_format($value_product['priceMarketplace'],2,',','.') . " To Euro " . number_format($value_product['salePrice'],2,',','.');
+                $descriptionTextSaleLang3= str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From Euro " . number_format($value_product['priceMarketplace'],2,',','.') . " To Euro " . number_format($value_product['salePrice'],2,',','.');
                 $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang2."',description),`name`='".$titleTextSaleLang2."', meta_title='".$titleTextSaleLang2."' where id_product=".$p." and id_lang=2 and id_shop=".$value_product['shopPrestashopId']."  ");
                 $stmtUpdateProductLang->execute();
                 $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang1."',description),`name`='".$titleTextSaleLang1."', meta_title='".$titleTextSaleLang1."' where id_product=".$p." and id_lang=1 and id_shop=".$value_product['shopPrestashopId']."  ");
@@ -276,6 +276,32 @@ ORDER BY `p`.`id`";
                 $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang3."',description),`name`='".$titleTextSaleLang3."', meta_title='".$titleTextSaleLang3."' where id_product=".$p." and id_lang=3 and id_shop=".$value_product['shopPrestashopId']."  ");
                 $stmtUpdateProductLang->execute();
 
+
+            }else{
+                $findname=\Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
+                //concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)
+                $productbrandName=$findname->productBrand->name;
+                $findProductName=\Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId'=>$value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>1]);
+                if($findProductName==null){
+                    $productnameName='';
+                }else {
+                    $productnameName = $findProductName->name;
+                }
+                $dirtyProduct=\Monkey::app()->repoFactory->create('DirtyProduct')->findOneBy(['productId'=>$value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+                $productitemnoName=$dirtyProduct->itemno;
+                $productcolorSupplierName=$dirtyProduct->var;
+                $titleTextSaleLang2 = str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName ;
+                $titleTextSaleLang1 = str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName ;
+                $titleTextSaleLang3 = str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName ;
+                $descriptionTextSaleLang2= str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName ;
+                $descriptionTextSaleLang1=str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName ;
+                $descriptionTextSaleLang3= str_replace("'","\'",$productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName ;
+                $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang2."',description),`name`='".$titleTextSaleLang2."', meta_title='".$titleTextSaleLang2."' where id_product=".$p." and id_lang=2 and id_shop=".$value_product['shopPrestashopId']."  ");
+                $stmtUpdateProductLang->execute();
+                $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang1."',description),`name`='".$titleTextSaleLang1."', meta_title='".$titleTextSaleLang1."' where id_product=".$p." and id_lang=1 and id_shop=".$value_product['shopPrestashopId']."  ");
+                $stmtUpdateProductLang->execute();
+                $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang3."',description),`name`='".$titleTextSaleLang3."', meta_title='".$titleTextSaleLang3."' where id_product=".$p." and id_lang=3 and id_shop=".$value_product['shopPrestashopId']."  ");
+                $stmtUpdateProductLang->execute();
 
             }
             $stmtCheckStockAvailable =$db_con->prepare("select  count(id_stock_available) as checkStockExist from    psz6_stock_available where id_product=".$p);
