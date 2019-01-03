@@ -30,14 +30,10 @@
                                         <div class="post-image single">
                                             <a href="<?php echo $address; ?>"><img class="img-responsive" src="<?php echo $app->image($post->postTranslation->getFirst()->coverImage); ?>" alt="Blog"></a>
                                         </div>
-                                        <div class="post-content">
-                                            <h3><a href="<?php echo $address; ?>"><?php echo $post->postTranslation->getFirst()->title; ?></a></h3>
+                                        <div class="post-content text-center">
+                                            <h4><a href="<?php echo $address; ?>"><?php echo $post->postTranslation->getFirst()->title; ?></a></h4>
 
                                             <p><?php echo $post->postTranslation->getFirst()->subtitle;  ?></p>
-                                            <div class="post-meta post-meta-foot">
-                                                <span class="pull-left"><i class="fa fa-clock-o"></i><?php echo $post->publishDate;?></span>
-                                                <!--<span class="pull-right"><i class="fa fa-comment-o"></i> <a href="#">212 Comments</a></span>-->
-                                            </div>
                                         </div>
 
                                     </article>
@@ -53,10 +49,6 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
-<bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione post">
 
-    </bs-toolbar-group>
-</bs-toolbar>
 </body>
 </html>

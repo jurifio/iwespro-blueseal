@@ -1461,11 +1461,3 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     position: absolute;
     bottom: 7%;
 }
-
-.post-meta {
-    display: none;
-}
-.page-top-in > h1 {
-    font-weight: 600;
-    text-align: center;
-}
