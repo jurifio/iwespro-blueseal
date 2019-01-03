@@ -136,8 +136,7 @@
                                      class="img-responsive image-uploader"/>
                                 <div class="form-group form-group-default" style="display:none;">
                                     <label>Cover photo</label>
-                                    <input type="file" data-json="PostTranslation.coverImage" autocomplete="off"
-                                           class="form-control" title="Cover photo"/>
+
                                 </div>
                             </div>
                         </div>
