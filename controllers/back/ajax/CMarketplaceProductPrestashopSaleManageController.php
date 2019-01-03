@@ -77,7 +77,7 @@ class CMarketplaceProductPrestashopSaleManageController extends AAjaxController
                 $updateMarketplaceHasProductAssociate = \Monkey::app()->repoFactory->create('MarketplaceHasProductAssociate')->findOneBy(['id' => $singleproduct[0], 'productId' => $singleproduct[2], 'productVariantId' => $singleproduct[3], 'shopId' => $shopId, 'marketplaceId' => $marketplaceId, 'prestashopId' => $prestashopId]);
                 $updateMarketplaceHasProductAssociate->amount = $percentSale;
                 $updateMarketplaceHasProductAssociate->typeRetouchPrice = 2;
-                $updateMarketplaceHasProductAssociate->price = $price;
+                $updateMarketplaceHasProductAssociate->priceMarketplace = $price;
                 $updateMarketplaceHasProductAssociate->isOnSale = 1;
                 $priceSale = $price - ($price / 100 * $percentSale);
                 $updateMarketplaceHasProductAssociate->priceSale = $priceSale;

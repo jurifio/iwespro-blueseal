@@ -290,7 +290,7 @@ ORDER BY `p`.`id`";
                                                                                                                  ".$value_product['shopId'].",
                                                                                                                  '0',
                                                                                                                  ".$quantity_product.",
-                                                                                                                 '0',
+                                                                                                                 ".$quantity_product.",
                                                                                                                  '0',
                                                                                                                  '0',
                                                                                                                  '0')");
