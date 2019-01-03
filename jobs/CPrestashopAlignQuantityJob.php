@@ -132,12 +132,17 @@ class CPrestashopAlignQuantityJob extends ACronJob
   '1'                                                                            AS minimal_quantity,
   '1'                                                                            AS low_stock_threshold,
   '0'                                                                            AS low_stock_alert,
- S3.price  /122*22 AS vatfullprice,
-  S3.price AS full_price,
-  S3.salePrice AS salePrice,
-  S3.salePrice /122*22 AS vatsaleprice,
-  IF(`p`.isOnSale=1,'saldo','prezzopieno') AS tipoprezzo,
-  IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice *22/122),S3.price-(S3.price*22/122) )     AS price,
+  php.price  /122*22 AS vatfullprice,
+  php.price AS full_price,
+  php.priceSale AS salePrice,
+  php.priceSale /122*22 AS vatsaleprice,
+  php.priceMarketplace as priceMarketplace,
+  php.percentSale as percentSale,
+  php.amount as increaseAmountSale,  
+  IF(`php`.isOnSale=1,'saldo','prezzopieno') AS tipoprezzo,
+  php.price   AS price,
+  php.titleSale as titleSale,
+  php.prestashopId as shopPrestashopId,
   '0'                                                   AS wholesale_price,
   '0'                                                                            AS unity,
   '0.000000'                                                                     AS unit_price_ratio,
@@ -231,11 +236,47 @@ ORDER BY `p`.`id`";
             $productId=$value_product['productId'];
             $productVariantId=$value_product['productVariantId'];
             $quantity_product = $value_product['quantity'];
-            $price=$value_product['price'];
+            if($value_product['isOnSale']==0){
+                $price=$value_product['priceMarketplace']-($value_product['priceMarketplace']*22/122);
+            }else{
+
+                $price = $value_product['salePrice'] - ($value_product['salePrice'] * 22 / 122);
+
+            }
+
+
             round($price,1,PHP_ROUND_HALF_DOWN);
             $stmtUpdateProduct = $db_con->prepare("UPDATE psz6_product SET quantity=" . $quantity_product . ",  price='".$price."',  ean13='".$ean13product."'
              WHERE id_product=" . $p);
             $stmtUpdateProduct->execute();
+            if ($value_product['titleSale']==1){
+                $findname=\Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
+                //concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)
+                $productbrandName=$findname->productBrand->name;
+                $findProductName=\Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId'=>$value_product['productId'], 'productVariantId' => $value_product['productVariantId'],'langId'=>1]);
+                if($findProductName==null){
+                    $productnameName='';
+                }else {
+                    $productnameName = $findProductName->name;
+                }
+                $dirtyProduct=\Monkey::app()->repoFactory->create('DirtyProduct')->findOneBy(['productId'=>$value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+                $productitemnoName=$dirtyProduct->itemno;
+                $productcolorSupplierName=$dirtyProduct->var;
+                $titleTextSaleLang2 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sconto del " . $value_product['percentSale'] . " %  da € " . number_format($value_product['priceMarketplace'],2,",",".") . " a € " . number_format($value_product['priceSale'],2,",",".");
+                $titleTextSaleLang1 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['priceSale'],2,",",".");
+                $titleTextSaleLang3 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['priceSale'],2,",",".");
+                $descriptionTextSaleLang2= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Scontato del " . $value_product['percentSale'] . " %  da € " . number_format($value_product['priceMarketplace'],2,",",".") . " a € " . number_format($value_product['priceSale'],2,",",".");
+                $descriptionTextSaleLang1= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['priceSale'],2,",",".");
+                $descriptionTextSaleLang3= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['priceSale'],2,",",".");
+                $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang2."',description),`name`='".$titleTextSaleLang2."', meta_title='".$titleTextSaleLang2."' where id_product=".$p." and id_lang=2 and id_shop=".$value_product['shopPrestashopId']."  ");
+                $stmtUpdateProductLang->execute();
+                $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang1."',description),`name`='".$titleTextSaleLang1."', meta_title='".$titleTextSaleLang1."' where id_product=".$p." and id_lang=1 and id_shop=".$value_product['shopPrestashopId']."  ");
+                $stmtUpdateProductLang->execute();
+                $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang3."',description),`name`='".$titleTextSaleLang3."', meta_title='".$titleTextSaleLang3."' where id_product=".$p." and id_lang=3 and id_shop=".$value_product['shopPrestashopId']."  ");
+                $stmtUpdateProductLang->execute();
+
+
+            }
             $stmtCheckStockAvailable =$db_con->prepare("select  count(id_stock_available) as checkStockExist from    psz6_stock_available where id_product=".$p);
             $stmtCheckStockAvailable->execute();
             $rows = $stmtCheckStockAvailable->fetchAll(PDO::FETCH_ASSOC);
