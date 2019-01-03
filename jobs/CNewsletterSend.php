@@ -42,16 +42,16 @@ class CNewsletterSend extends ACronJob
 
             if ($newsletter->newsletterInsertion->newsletterEvent->newsletterCampaign->newsletterShopId != 1) {
                 $newsletterShopId = $newsletter->newsletterCampaign->newsletterShop->id;
-                $fieldName = $newsletterShopId != 2 ? 'NewsletterUser' : 'Newsletter';
+
                 $readExternalDb = new CReadExtDbTable($newsletterShopId);
                 $readExternalDb->insertData(
                     false,
-                    [$fieldName,
+                    ['NewsletterUser',
                         'UserDetails-Left' => [
                             'Self' => [
                                 'userId'
                             ],
-                            $fieldName => [
+                            'NewsletterUser' => [
                                 'userId'
                             ]
                         ]

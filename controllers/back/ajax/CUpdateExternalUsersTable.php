@@ -31,17 +31,15 @@ class CUpdateExternalUsersTable extends AAjaxController
 
         //$newsletterShop = \Monkey::app()->repoFactory->create('NewsletterShop')->findOneBy(['id'=>$newsletterShopId]);
 
-        $fieldName = $newsletterShopId != 2 ? 'NewsletterUser' : 'Newsletter';
-
         $readExternalDb = new CReadExtDbTable($newsletterShopId);
         $ins = $readExternalDb->insertData(
             false,
-            [$fieldName,
+            ['NewsletterUser',
                 'UserDetails-Left'=>[
                     'Self'=>[
                         'userId'
                     ],
-                    $fieldName=>[
+                    'NewsletterUser'=>[
                         'userId'
                     ]
                 ]
