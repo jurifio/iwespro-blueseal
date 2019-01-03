@@ -139,11 +139,11 @@ class CPrestashopAlignQuantityJob extends ACronJob
   php.priceMarketplace as priceMarketplace,
   php.percentSale as percentSale,
   php.amount as increaseAmountSale,  
+  php.isOnSale as isOnSale,
   IF(`php`.isOnSale=1,'saldo','prezzopieno') AS tipoprezzo,
   php.price   AS price,
   php.titleSale as titleSale,
   php.prestashopId as shopPrestashopId,
-  php.isOnSale as isOnSale,
   '0'                                                   AS wholesale_price,
   '0'                                                                            AS unity,
   '0.000000'                                                                     AS unit_price_ratio,
@@ -263,12 +263,12 @@ ORDER BY `p`.`id`";
                 $dirtyProduct=\Monkey::app()->repoFactory->create('DirtyProduct')->findOneBy(['productId'=>$value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
                 $productitemnoName=$dirtyProduct->itemno;
                 $productcolorSupplierName=$dirtyProduct->var;
-                $titleTextSaleLang2 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sconto del " . $value_product['percentSale'] . " %  da € " . number_format($value_product['priceMarketplace'],2,",",".") . " a € " . number_format($value_product['priceSale'],2,",",".");
-                $titleTextSaleLang1 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['priceSale'],2,",",".");
-                $titleTextSaleLang3 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['priceSale'],2,",",".");
-                $descriptionTextSaleLang2= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Scontato del " . $value_product['percentSale'] . " %  da € " . number_format($value_product['priceMarketplace'],2,",",".") . " a € " . number_format($value_product['priceSale'],2,",",".");
-                $descriptionTextSaleLang1= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['priceSale'],2,",",".");
-                $descriptionTextSaleLang3= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['priceSale'],2,",",".");
+                $titleTextSaleLang2 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sconto del " . $value_product['percentSale'] . " %  da € " . number_format($value_product['priceMarketplace'],2,",",".") . " a € " . number_format($value_product['salePrice'],2,",",".");
+                $titleTextSaleLang1 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['salePrice'],2,",",".");
+                $titleTextSaleLang3 = $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Sale " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['salePrice'],2,",",".");
+                $descriptionTextSaleLang2= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Scontato del " . $value_product['percentSale'] . " %  da € " . number_format($value_product['priceMarketplace'],2,",",".") . " a € " . number_format($value_product['salePrice'],2,",",".");
+                $descriptionTextSaleLang1= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['salePrice'],2,",",".");
+                $descriptionTextSaleLang3= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From € " . number_format($value_product['priceMarketplace'],2,",",".") . " To € " . number_format($value_product['salePrice'],2,",",".");
                 $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang2."',description),`name`='".$titleTextSaleLang2."', meta_title='".$titleTextSaleLang2."' where id_product=".$p." and id_lang=2 and id_shop=".$value_product['shopPrestashopId']."  ");
                 $stmtUpdateProductLang->execute();
                 $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`=concat('".$descriptionTextSaleLang1."',description),`name`='".$titleTextSaleLang1."', meta_title='".$titleTextSaleLang1."' where id_product=".$p." and id_lang=1 and id_shop=".$value_product['shopPrestashopId']."  ");
@@ -296,7 +296,7 @@ ORDER BY `p`.`id`";
                                                                                                                  ".$value_product['shopId'].",
                                                                                                                  '0',
                                                                                                                  ".$quantity_product.",
-                                                                                                                 '0',
+                                                                                                                 ".$quantity_product.",
                                                                                                                  '0',
                                                                                                                  '0',
                                                                                                                  '0')");
