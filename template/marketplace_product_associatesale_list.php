@@ -22,7 +22,7 @@
                                data-controller="MarketplaceProductAssociateSaleListAjaxController<?php echo $queryString ?>"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="25,100, 200, 500, 1000, 2000"
+                               data-length-menu-setup="25,100, 200, 500, 1000, 1500"
                                data-rightid="<?php echo $id; ?>" >
                             <thead>
                                 <tr>
