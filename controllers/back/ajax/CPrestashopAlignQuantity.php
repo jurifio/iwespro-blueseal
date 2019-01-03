@@ -384,8 +384,9 @@ ORDER BY `p`.`id`";
             }
             $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2' and id=".$prestashopProductId;
             \Monkey::app()->dbAdapter->query($sql, []);
+            $res.="Allineamento Stock Eseguito per il prodotto ".$prestashopProductId."<p>";
         }
-                    $res="Allineamento Stock Eseguito";
+
         return $res;
     }
 }
