@@ -143,6 +143,7 @@ class CPrestashopAlignQuantityJob extends ACronJob
   php.price   AS price,
   php.titleSale as titleSale,
   php.prestashopId as shopPrestashopId,
+  php.isOnSale as isOnSale,
   '0'                                                   AS wholesale_price,
   '0'                                                                            AS unity,
   '0.000000'                                                                     AS unit_price_ratio,
