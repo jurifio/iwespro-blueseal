@@ -172,7 +172,7 @@ $status=$row['statusPublished'];
                         default:
                             $status = 'da Lavorare';
                     }
-                    switch($marketplaces['isOnSale']){
+                    switch( $marketplaces['isOnSale']){
                         case 0:
                             $row['isOnSale']='Prodotto non in Saldo';
                             break;
@@ -181,7 +181,7 @@ $status=$row['statusPublished'];
                             break;
 
                     }
-                    switch($row['typeSale']) {
+                    switch ($marketplaces['typeSale']) {
                         case 1:
                             $row['typeSale'] = 'Saldo Da Sito';
                             break;
