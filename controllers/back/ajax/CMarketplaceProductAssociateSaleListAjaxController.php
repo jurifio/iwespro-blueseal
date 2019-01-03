@@ -181,7 +181,7 @@ $status=$row['statusPublished'];
                             break;
 
                     }
-                    switch($marketplaces['typeSale']) {
+                    switch($row['typeSale']) {
                         case 1:
                             $row['typeSale'] = 'Saldo Da Sito';
                             break;
