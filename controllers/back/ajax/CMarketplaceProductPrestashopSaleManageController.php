@@ -79,7 +79,15 @@ class CMarketplaceProductPrestashopSaleManageController extends AAjaxController
                 $updateMarketplaceHasProductAssociate->typeRetouchPrice = 2;
                 $updateMarketplaceHasProductAssociate->priceMarketplace = $price;
                 $updateMarketplaceHasProductAssociate->isOnSale = 1;
-                $priceSale = $price - ($price / 100 * $percentSale);
+                if($typeSale == 2) {
+                    $priceSale = $price - ($price / 100 * $percentSale);
+                }else {
+                    $findpriceSale = \Monkey::app()->repoFactory->create('ProductPublicSku')->findOneBy(['productId' => $singleproduct[2], 'productVariantId' => $singleproduct[3]]);
+                    $priceSale = $findpriceSale->salePrice;
+                    $fullprice = $findpriceSale->price;
+                    $percentSale = ($priceSale * 100 / $fullprice);
+
+                                    }
                 $updateMarketplaceHasProductAssociate->priceSale = $priceSale;
                 $updateMarketplaceHasProductAssociate->percentSale = $percentSale;
                 $updateMarketplaceHasProductAssociate->typeSale = $typeSale;
