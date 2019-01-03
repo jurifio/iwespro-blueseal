@@ -87,7 +87,6 @@ class CMarketplaceProductPrestashopSaleManageController extends AAjaxController
                     $fullprice = $findpriceSale->price;
                     $percentSale = 100-($priceSale * 100 / $fullprice);
 
-
                                     }
                 $updateMarketplaceHasProductAssociate->priceSale = $priceSale;
                 $updateMarketplaceHasProductAssociate->percentSale = $percentSale;
