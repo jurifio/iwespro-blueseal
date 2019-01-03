@@ -250,7 +250,7 @@ ORDER BY `p`.`id`";
             $stmtUpdateProduct = $db_con->prepare("UPDATE psz6_product SET quantity=" . $quantity_product . ",  price='".$price."',  ean13='".$ean13product."'
              WHERE id_product=" . $p);
             $stmtUpdateProduct->execute();
-            if ($value_product['titleSale']==1){
+            if ($value_product['titleSale']==1 && $value_product['isOnSale']!=0){
                 $findname=\Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$value_product['productId'],'productVariantId'=>$value_product['productVariantId']]);
                 //concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)
                 $productbrandName=$findname->productBrand->name;
