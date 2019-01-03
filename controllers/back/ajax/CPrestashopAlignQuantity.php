@@ -297,7 +297,7 @@ ORDER BY `p`.`id`";
                     $stmtUpdateProductLang->execute();
                 }
 
-                $stmtCheckStockAvailable = $db_con->prepare("SELECT  count(id_stock_available) AS checkStockExist FROM    psz6_stock_available WHERE id_product=" . $p);
+                $stmtCheckStockAvailable = $db_con->prepare("SELECT  count(id_stock_available) AS checkStockExist FROM    psz6_stock_available WHERE id_product_attribute=0 and id_product=" . $p);
                 $stmtCheckStockAvailable->execute();
                 $rows = $stmtCheckStockAvailable->fetchAll(PDO::FETCH_ASSOC);
                 if ($rows[0]['checkStockExist'] == 0) {
