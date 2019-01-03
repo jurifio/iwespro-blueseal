@@ -1055,6 +1055,12 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     flex-direction: column;
 }
 
+.align-center-simple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 /* blog */
 .blog .post h1, .blog .post h2, .blog .post h3 {
@@ -1454,4 +1460,12 @@ table.mini-traffic-display th, table.mini-traffic-display td {
 .styleAccept {
     position: absolute;
     bottom: 7%;
+}
+
+.post-meta {
+    display: none;
+}
+.page-top-in > h1 {
+    font-weight: 600;
+    text-align: center;
 }
