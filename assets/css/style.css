@@ -1055,6 +1055,12 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     flex-direction: column;
 }
 
+.align-center-simple{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 /* blog */
 .blog .post h1, .blog .post h2, .blog .post h3 {

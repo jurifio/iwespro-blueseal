@@ -17,7 +17,7 @@
             <!-- Begin page top -->
             <section class="page-top">
                 <div class="container">
-                    <div class="page-top-in">
+                    <div class="page-top-in text-center">
                         <h1>
                             <?php
                                 echo $post->postTranslation->getFirst()->title;
@@ -34,11 +34,6 @@
                         <div class="blog-posts single-post">
                                 <article class="post post-large blog-single-post">
                                     <h4><?php echo $post->postTranslation->getFirst()->subtitle; ?></h4>
-                                    <div class="post-meta">
-                                        <span>By <?php echo $post->author ?></span>
-                                        <span><i class="fa fa-clock-o"></i><?php echo $post->publishDate; ?></span>
-                                        <!--<span><i class="fa fa-comment-o"></i> <a href="#">212 Comments</a></span>-->
-                                    </div>
                                     <div class="post-image single">
                                         <img class="img-responsive"
                                              src="<?php echo $app->image($post->postTranslation->getFirst()->coverImage); ?>"
@@ -59,10 +54,5 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
-<bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione post">
-
-    </bs-toolbar-group>
-</bs-toolbar>
 </body>
 </html>
