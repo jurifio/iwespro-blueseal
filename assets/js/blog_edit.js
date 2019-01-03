@@ -44,9 +44,62 @@ summer.on('summernote.image.upload', function(we, files) {
 $('[data-toggle="popover"]').popover();
 
 $('#cover').on('click',function() {
-    $('[data-json="PostTranslation.coverImage"]').click();
+
+    let bsModal = $('#bsModal');
+
+    let header = bsModal.find('.modal-header h4');
+    let body = bsModal.find('.modal-body');
+    let cancelButton = bsModal.find('.modal-footer .btn-default');
+    let okButton = bsModal.find('.modal-footer .btn-success');
+
+    bsModal.modal();
+
+    header.html('Carica Foto');
+    okButton.html('Fatto').off().on('click', function () {
+        bsModal.modal('hide');
+        okButton.off();
+        $.refreshDataTable();
+    });
+    cancelButton.remove();
+    let bodyContent =
+        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
+        '<div class="fallback">'+
+        '<input name="file" type="file" multiple />' +
+        '</div>' +
+        '</form>';
+
+    let url = new URL(window.location.href);
+    let postId = url.searchParams.get("id");
+    let blogId = url.searchParams.get("blogId");
+    body.html(bodyContent);
+    let dropzone = new Dropzone("#dropzoneModal",{
+        url: "/blueseal/xhr/BlogPostCoverPhotoUploadAjaxController",
+        maxFilesize: 5,
+        maxFiles: 1,
+        parallelUploads: 1,
+        acceptedFiles: "image/*",
+        dictDefaultMessage: "Trascina qui l'immagine da impostare come cover",
+        uploadMultiple: true,
+        sending: function(file, xhr, formData) {
+            formData.append("postId", postId);
+            formData.append("blogId", blogId);
+        }
+    });
+
+    dropzone.on('addedfile',function(){
+        okButton.attr("disabled", "disabled");
+    });
+    dropzone.on('queuecomplete',function(){
+
+        okButton.removeAttr("disabled");
+        $(document).trigger('bs.load.photo');
+        window.location.reload();
+    });
+
+    //$('[data-json="PostTranslation.coverImage"]').click();
 });
 
+/*
 $('[data-json="PostTranslation.coverImage"]').on('change', function(){
     if (this.files && this.files[0]) {
         var reader = new FileReader();
@@ -56,6 +109,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         reader.readAsDataURL(this.files[0]);
     }
 });
+*/
 
 $(document).on('bs.post.save', function() {
 

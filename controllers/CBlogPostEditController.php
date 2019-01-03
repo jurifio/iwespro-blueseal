@@ -73,6 +73,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 
 			$Post->update();
 
+			/*
 			if(!empty($coverImageData) && isset($coverImageData['PostTranslation.coverImage'])) {
 				$s = new CSlugify();
 				$pathinfo = pathinfo($coverImageData['PostTranslation.coverImage']['name']);
@@ -80,7 +81,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
 				if (!rename($coverImageData['PostTranslation.coverImage']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
 				$PostTranslation->coverImage = $uploadfile;
 			}
-
+			*/
 			$PostTranslation->postId = $Post->id;
 			$PostTranslation->blogId = $newPostData['Post.blogId'];
 			$PostTranslation->update();
