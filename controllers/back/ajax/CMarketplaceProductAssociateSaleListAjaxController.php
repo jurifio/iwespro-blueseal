@@ -39,7 +39,7 @@ class CMarketplaceProductAssociateSaleListAjaxController extends AAjaxController
        mhpa.id as prestashopProductId,
        mhpa.isOnSale as isOnSale,
        mhpa.priceSale as priceSale,
-       mhpa.typeSale as TypeSale,
+       mhpa.typeSale as typeSale,
        mhpa.percentSale as percentSale,
        mhpa.titleTextSale as titleTextSale,
 
