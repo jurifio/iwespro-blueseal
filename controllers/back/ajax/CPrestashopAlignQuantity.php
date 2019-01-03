@@ -62,7 +62,6 @@ class CPrestashopAlignQuantity extends AAjaxController
         define("DATABASE", "iwesshop_pres848");
         $res = "";
         try {
-
             $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
             $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $res .= " connessione ok <br>";
@@ -264,8 +263,11 @@ ORDER BY `p`.`id`";
                 $descriptionTextSaleLang2= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Scontato del " . $value_product['percentSale'] . " %  da Euro " . $value_product['priceMarketplace'] . " a Euro " . $value_product['salePrice'];
                 $descriptionTextSaleLang1= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From Euro " . $value_product['priceMarketplace'] . " to Euro " . $value_product['salePrice'];
                 $descriptionTextSaleLang3= $productbrandName . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName . " Special Discount  " . $value_product['percentSale'] . " % OFF  From Euro " . $value_product['priceMarketplace'] . " to Euro " . $value_product['salePrice'];
+                $res= "UPDATE psz6_product_lang set `description`='".$descriptionTextSaleLang2."',`name`='".$titleTextSaleLang2."', meta_title='".$titleTextSaleLang2."' where id_product=".$p." and id_lang=2 and id_shop=".$value_product['shopPrestashopId'];
+                \Monkey::app()->applicationLog('Aggiornamento lingua prestashop', 'alta', 'inserimento aggiornamento prodotti', 'aggiorna quantità prestashop', $res);
+
                 $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`='".$descriptionTextSaleLang2."',`name`='".$titleTextSaleLang2."', meta_title='".$titleTextSaleLang2."' where id_product=".$p." and id_lang=2 and id_shop=".$value_product['shopPrestashopId']."  ");
-                echo "UPDATE psz6_product_lang set `description`='".$descriptionTextSaleLang2."',`name`='".$titleTextSaleLang2."', meta_title='".$titleTextSaleLang2."' where id_product=".$p." and id_lang=2 and id_shop=".$value_product['shopPrestashopId'];
+
                 $stmtUpdateProductLang->execute();
                 $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang set `description`='".$descriptionTextSaleLang1."',`name`='".$titleTextSaleLang1."', meta_title='".$titleTextSaleLang1."' where id_product=".$p." and id_lang=1 and id_shop=".$value_product['shopPrestashopId']."  ");
                 $stmtUpdateProductLang->execute();
