@@ -134,6 +134,7 @@ class CPrestashopAlignQuantity extends AAjaxController
   php.priceMarketplace as priceMarketplace,
   php.percentSale as percentSale,
   php.amount as increaseAmountSale,  
+  php.isOnSale as isOnSale,
   IF(`php`.isOnSale=1,'saldo','prezzopieno') AS tipoprezzo,
   php.price   AS price,
   php.titleSale as titleSale,
