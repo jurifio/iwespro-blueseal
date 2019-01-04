@@ -24,56 +24,71 @@
                                data-inner-setup="true"
                                data-length-menu-setup="25,100, 200, 500">
                             <thead>
-                                <tr>
-                                    <th data-slug="prestashopProductId"
-                                        data-required="true"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center"
-                                        data-default-order="desc">id Prodotto Prestashop</th>
-                                    <th data-slug="code"
-                                        data-required="true"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center"
-                                        data-default-order="desc">Codice</th>
-                                    <th data-slug="ean"
-                                        data-required="true"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center"
-                                       >ean</th>
-                                    <th data-slug="shop"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Shop</th>
-                                    <th data-slug="brand"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Brand</th>
-                                    <th data-slug="category"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center categoryFilterType">Categorie</th>
-                                    <th data-slug="stock"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Stock</th>
-                                    <th data-slug="season"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Season</th>
-                                    <th data-slug="itemno"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">CPF</th>
-                                    <th data-slug="dummy"
-                                        data-searchable="false"
-                                        data-orderable="false" class="center">Immagine</th>
-                                    <th data-slug="associatePrestashopMarketPlace"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Prestashop marketPlace</th>
-                                    <th data-slug="price"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Prezzo</th>
-                                    <th data-slug="statusPublished"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Stato</th>
-                                    <th data-slug="creationDate"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center dataFilterType">Creazione</th>
-                                </tr>
+                            <tr>
+                                <th data-slug="prestashopProductId"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Codice Prestashop</th>
+                                <th data-slug="code"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Codice</th>
+                                <th data-slug="ean"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                >ean</th>
+                                <th data-slug="shop"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop</th>
+                                <th data-slug="brand"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Brand</th>
+                                <th data-slug="stock"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stock</th>
+                                <th data-slug="season"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Season</th>
+                                <th data-slug="itemno"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">CPF</th>
+                                <th data-slug="dummy"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Immagine</th>
+                                <th data-slug="isOnSale"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato Saldo</th>
+                                <th data-slug="typeSale"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Tipo Saldo</th>
+                                <th data-slug="associatePrestashopMarketPlace"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Prestashop marketPlace</th>
+                                <th data-slug="price"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Prezzo Listino</th>
+                                <th data-slug="priceSale"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Prezzo Scontato</th>
+                                <th data-slug="percentSale"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Percentuale di sconto</th>
+                                <th data-slug="titleTextSale"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Titolo Prodotto MarketPlace</th>
+                                <th data-slug="statusPublished"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato</th>
+                                <th data-slug="creationDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center dataFilterType">Creazione</th>
+                                <th data-slug="category"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center categoryFilterType">Categorie</th>
+                            </tr>
                             </thead>
                             <tbody>
                             </tbody>
