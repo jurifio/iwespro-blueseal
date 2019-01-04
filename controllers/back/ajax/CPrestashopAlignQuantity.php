@@ -286,6 +286,7 @@ ORDER BY `p`.`id`";
                     }
                     $dirtyProduct = \Monkey::app()->repoFactory->create('DirtyProduct')->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
                     $productitemnoName = $dirtyProduct->itemno;
+
                     $productcolorSupplierName = $dirtyProduct->var;
                     $titleTextSaleLang2 = str_replace("'", "\'", $productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName;
                     $titleTextSaleLang1 = str_replace("'", "\'", $productbrandName) . " " . $productnameName . " " . $productitemnoName . " " . $productcolorSupplierName;

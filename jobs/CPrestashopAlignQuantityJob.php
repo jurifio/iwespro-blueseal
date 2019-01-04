@@ -289,6 +289,7 @@ ORDER BY `p`.`id`";
                         $productnameName = '';
                     } else {
                         $productnameName = $findProductName->name;
+
                     }
                     $dirtyProduct = \Monkey::app()->repoFactory->create('DirtyProduct')->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
                     $productitemnoName = $dirtyProduct->itemno;
