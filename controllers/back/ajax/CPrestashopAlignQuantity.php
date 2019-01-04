@@ -272,7 +272,7 @@ ORDER BY `p`.`id`";
                     $stmtUpdateProductLang->execute();
                     $stmtUpdateProductLang = $db_con->prepare("UPDATE psz6_product_lang SET description_short='".$descriptionshortTextSaleLang3."', `description`='" . $descriptionTextSaleLang3 . "',`name`='" . $titleTextSaleLang3 . "', meta_title='" . $titleTextSaleLang3 . "' WHERE id_product=" . $p . " AND id_lang=3 AND id_shop=" . $value_product['shopPrestashopId'] . "  ");
                     $stmtUpdateProductLang->execute();
-
+//
 
                 } else {
                     $findname = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
