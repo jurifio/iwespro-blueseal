@@ -100,7 +100,7 @@ class CPrestashopProductImageGeneratorJob extends ACronJob
   JOIN  Product p ON phpp.productId = p.id AND phpp.productVariantId = p.productVariantId
   JOIN ProductPublicSku S ON p.id = S.productId AND p.productVariantId = S.productVariantId
   JOIN ProductBrand pb ON p.productBrandId = pb.id
-WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124.JPG%' and php.productId='".$productId."' and php.productVariantId = '".$productVariantId."' order by
+WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124.JPG%' and php.productId='".$productId."' and php.productVariantId = '".$productVariantId."' group by link order by
   product,position ASC";
 
                 $image_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
@@ -176,7 +176,7 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
                     $ftp_server = "ftp.iwes.shop";
                     $ftp_user_name = "iwesshop";
                     $ftp_user_pass = "XtUWicJUrEXv";
-                    $remote_file = "/public_html/img/p/".chunk_split($q, 1, '/');;
+                    $remote_file = "/public_html/img/p/".chunk_split($q, 1, '/');
 
                     $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $q.".jpg";
                     $errorMsg = 'ftp fail connect';
@@ -202,7 +202,7 @@ WHERE concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)  LIKE '%-1124
 
             } else {
 
-                continue;
+
 
             }
 
