@@ -55,9 +55,13 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
         try {
             $data = $this->app->router->request()->getRequestData();
             $couponType = \Monkey::app()->repoFactory->create('CouponType')->getEmptyEntity();
-            foreach ($data as $k => $v) {
-                $couponType->{$k} = $v;
-            }
+            $couponType->name = $data['name'];
+            $couponType->amount = $data['amount'];
+            $couponType->amountType = $data['amountType'];
+            $couponType->validity = $data['validity'];
+            $couponType->validForCartTotal = $data['validForCartTotal'];
+            $couponType->hasFreeShipping = (isset($data['hasFreeShipping']) && $data['hasFreeShipping'] === 'on') ? 1 : 0;
+            $couponType->hasFreeReturn = (isset($data['hasFreeReturn']) && $data['hasFreeReturn'] === 'on') ? 1 : 0;
             $couponType->smartInsert();
 
             foreach ($data['tags'] ?? [] as $tag) {

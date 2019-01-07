@@ -93,7 +93,7 @@
             data-event="bs.name.to.batch"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Traduci nomi"
+            data-title="Assegna nomi al lotto"
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
