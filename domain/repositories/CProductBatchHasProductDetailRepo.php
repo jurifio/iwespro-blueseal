@@ -4,6 +4,7 @@ namespace bamboo\domain\repositories;
 
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\domain\entities\CLang;
+use bamboo\domain\entities\CProductBatchHasProductDetail;
 use bamboo\domain\entities\CWorkCategory;
 
 /**
@@ -38,14 +39,16 @@ class CProductBatchHasProductDetailRepo extends ARepo
 
         foreach ($productDetailIds as $productDetailId){
 
-            //Find existent detail in batch
-            $existOldBatch = $this->findOneBy([
+            //Find existent detail in batchs
+            $existOldBatchs = $this->findBy([
                 'productDetailId'   =>  $productDetailId,
                 'langId'            =>  $langId
             ]);
 
-            //If detail exist see next detail
-            if(!is_null($existOldBatch)) continue;
+            /** @var CProductBatchHasProductDetail $existOldBatch */
+            foreach ($existOldBatchs as $existOldBatch){
+                if ($existOldBatch->productBatch->isUnassigned == 0) continue;
+            }
 
             $productBatchHasProductDetails = $this->getEmptyEntity();
             $productBatchHasProductDetails->productBatchId = $productBatchId;
