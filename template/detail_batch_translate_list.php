@@ -83,6 +83,16 @@
             <bs-toolbar-button
                     data-remote="bs.change.product.status.batch"
             ></bs-toolbar-button>
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-close"
+                    data-permission="worker"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-event="bs.delete.product.detail.translation"
+                    data-title="Cancella i dettagli dal lotto"
+                    data-placement="bottom"
+            ></bs-toolbar-button>
         <?php endif; ?>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Notifica termine lotto">

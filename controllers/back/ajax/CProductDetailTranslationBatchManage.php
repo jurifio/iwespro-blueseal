@@ -64,9 +64,26 @@ class CProductDetailTranslationBatchManage extends AAjaxController
                 }
             }
         }
-
-
         return 'Steps aggiornati con successo';
+    }
+
+    public function delete(){
+        $details = \Monkey::app()->router->request()->getRequestData('details');
+        $lang = \Monkey::app()->router->request()->getRequestData('lang');
+        $pbId = \Monkey::app()->router->request()->getRequestData('batchId');
+
+        /** @var CProductBatchHasProductDetailRepo $pbhpdRepo */
+        $pbhpdRepo = \Monkey::app()->repoFactory->create('ProductBatchHasProductDetail');
+
+        foreach ($details as $detail){
+            /** @var CProductBatchHasProductDetail $pbhpd */
+            $pbhpd = $pbhpdRepo->findOneBy(['productBatchId'=>$pbId, 'productDetailId'=>$detail, 'langId'=>$lang]);
+
+            $pbhpd->delete();
+        }
+
+
+        return 'Elementi eliminati con successo';
 
     }
 
