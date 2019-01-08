@@ -8,6 +8,7 @@ use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CProductBatchHasProductBrand;
+use bamboo\domain\entities\CProductBatchHasProductDetail;
 use bamboo\domain\entities\CProductBatchHasProductName;
 use bamboo\domain\entities\CProductCategory;
 use bamboo\domain\entities\CProductName;
@@ -148,19 +149,17 @@ class CProductBatchListAjaxController extends AAjaxController
                     case CWorkCategory::TXT_FB:
                         $row["id"] = '<a href="'.$url.$pbr->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
                         break;
+                    case CWorkCategory::DET_ENG:
+                        $row["id"] = '<a href="'.$blueseal.$pbr->workCategory->slug . '/' . CProductBatchHasProductDetail::LANG_ENG . '?pbId='.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
+                    case CWorkCategory::DET_DTC:
+                        $row["id"] = '<a href="'.$blueseal.$pbr->workCategory->slug . '/' . CProductBatchHasProductDetail::LANG_DTC . '?pbId='.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
                 }
 
 
             } else {
-                if($pbr->contractDetails->workCategory->id != CWorkCategory::NAME_ENG && $pbr->contractDetails->workCategory->id != CWorkCategory::NAME_DTC ){
-                    //$row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
-
-                    if($pbr->isUnassigned == 1 && $isWorker && !$allShop){
-                        $row["id"] = $pbr->id;
-                    } else {
-                        $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
-                    }
-                } else if($pbr->contractDetails->workCategory->id == CWorkCategory::NAME_ENG || $pbr->contractDetails->workCategory->id == CWorkCategory::NAME_DTC) {
+                if($pbr->contractDetails->workCategory->id == CWorkCategory::NAME_ENG || $pbr->contractDetails->workCategory->id == CWorkCategory::NAME_DTC) {
 
                     if($pbr->isUnassigned == 1 && $isWorker && !$allShop){
                         $row["id"] = $pbr->id;
@@ -183,7 +182,24 @@ class CProductBatchListAjaxController extends AAjaxController
                         $row["id"] = '<a href="'.$blueseal.$pbr->contractDetails->workCategory->slug.'/'.$pLangId.'?' . 'pbId=' . $pbr->id . '&' .$parUrl.'" target="_blank">'.$pbr->id.'</a>';
                     }
 
+                } else if ($pbr->contractDetails->workCategory->id == CWorkCategory::DET_ENG || $pbr->contractDetails->workCategory->id == CWorkCategory::DET_DTC) {
+                    if($pbr->isUnassigned == 1 && $isWorker && !$allShop){
+                        $row["id"] = $pbr->id;
+                    } else {
+                        /** @var CObjectCollection $pBatchDetails */
+                        $pBatchDetails = $pbr->getElements();
+                        $pLangId = $pBatchDetails->getFirst()->langId;
 
+                        $row["id"] = '<a href="'.$blueseal.$pbr->contractDetails->workCategory->slug.'/'.$pLangId.'?' . 'pbId=' . $pbr->id . '" target="_blank">'.$pbr->id.'</a>';
+                    }
+                } else {
+                    //$row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+
+                    if($pbr->isUnassigned == 1 && $isWorker && !$allShop){
+                        $row["id"] = $pbr->id;
+                    } else {
+                        $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                    }
                 }
 
             }

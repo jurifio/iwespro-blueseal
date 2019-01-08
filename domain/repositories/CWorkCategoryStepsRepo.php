@@ -24,21 +24,12 @@ class CWorkCategoryStepsRepo extends ARepo
 {
     /**
      * @param $id
-     * @return CWorkCategorySteps|null
+     * @return \bamboo\core\db\pandaorm\entities\AEntity|CWorkCategorySteps|null
      */
     public function getFirstStepsFromCategoryId($id)
     {
-
-        $firstStep = null;
-        /** @var CObjectCollection $steps */
-        $steps = $this->findBy(['workCategoryId'=>$id]);
-
-
-        /** @var CWorkCategorySteps $step */
-        foreach ($steps as $step){
-            $firstStep = $step;
-            break;
-        }
+        /** @var CWorkCategorySteps $firstStep */
+        $firstStep = $this->findBy(['workCategoryId'=>$id])->getFirst();
 
         return $firstStep;
     }

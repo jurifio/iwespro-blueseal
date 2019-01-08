@@ -23,11 +23,13 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="detail_translate_list"
-                               data-controller="DetailTranslateListAjaxController"
+                               data-datatable-name="detail_batch_translate_list"
+                               data-controller="DetailBatchTranslateListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="50, 100, 200, 500">
+                               data-length-menu-setup="50, 100, 200, 500"
+                               data-lang="<?php echo $lang; ?>"
+                               data-pb="<?php echo $pb; ?>" >
                             <thead>
                             <tr>
                                 <th data-slug="id"
@@ -46,11 +48,11 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center sorting">Destinazione</th>
-                                <th data-slug="status"
-                                    data-name="translatedLangId"
+                                <th data-slug="workCategoryStepsId"
+                                    data-name="workCategoryStepsId"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center sorting">Stato</th>
+                                    class="center sorting">Stato della lavorazione</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -66,58 +68,27 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Filtri">
-        <bs-toolbar-button-toggle
-            data-tag="a"
-            data-icon="fa-cubes"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Mostra solo dettagli usati in prodotti con quantità disponibili"
-            data-placement="bottom"
-            data-event="bs.detailTranslation.filterByQty"
-            data-on="bs-button-toggle"
-            data-key="mustHaveQty"
-        ></bs-toolbar-button-toggle>
-        <bs-toolbar-button-toggle
-            data-tag="a"
-            data-icon="fa-language"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Mostra solo dettagli non tradotti nella lingua di destinazione corrente"
-            data-placement="bottom"
-            data-event="bs.detailTranslation.filterByUntranslated"
-            data-on="bs-button-toggle"
-            data-key="showOnlyUntranslated"
-        ></bs-toolbar-button-toggle>
-        <bs-toolbar-select
-            data-tag="select"
-            data-icon="fa-language"
-            data-permission="/admin/content/publish"
-            data-rel="tooltip"
-            data-button="false"
-            data-placement="bottom"
-            data-class="btn btn-default"
-            data-json="Post.postStatusId"
-            data-title="Cambia lingua di destinazione in"
-            data-event="bs.detailTranslation.changeTargetLanguage"
-            data-options='<?php echo json_encode($languages); ?>'
-        ></bs-toolbar-select>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Associa al lotto">
-        <bs-toolbar-button-toggle
+    <bs-toolbar-group data-group-label="Termina lavorazione sul dettagli">
+        <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-arrows"
-                data-permission="/admin/product/add"
+                data-icon="fa-step-forward"
+                data-permission="worker"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Associa i dettagli a un lotto"
+                data-event="bs.end.work.product.detail.translation"
+                data-title="Termina la lavorazione sui dettagli selezionati"
                 data-placement="bottom"
-                data-event="bs.detail.associate.product.batch"
-                data-on="bs-button-toggle"
-                data-key="mustHaveQty"
-        ></bs-toolbar-button-toggle>
+        ></bs-toolbar-button>
+        <?php if($allShops): ?>
+            <bs-toolbar-button
+                    data-remote="bs.change.product.status.batch"
+            ></bs-toolbar-button>
+        <?php endif; ?>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Notifica termine lotto">
+        <bs-toolbar-button
+                data-remote="bs.end.product.batch"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

@@ -170,6 +170,22 @@
             ]
         },
         {
+            "pattern": "/blueseal/traduzioni/dettagli/:langId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailBatchTranslateListController"
+            },
+            "filters": {
+                "langId": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/importatori/connettori/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CConnectorController"
@@ -1322,7 +1338,7 @@
         {
             "pattern": "/blueseal/traduzioni/nomi/lingua/:langId(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateLangListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateLangListControllerCNameTranslateLangListController"
             },
             "filters": {
                 "langId": "[0-9]+"
@@ -1883,6 +1899,28 @@
             "pattern": "/blueseal/prodotti/catalog(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCatalogListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/norm(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNormListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/prodotti/norm/colori(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNormColorListController"
             },
             "filters": {},
             "translations": {},

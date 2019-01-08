@@ -374,7 +374,8 @@
             method:'GET',
             url: '/blueseal/xhr/GetTableContent',
             data: {
-                table: 'Foison'
+                table: 'Foison',
+                fields: ['id','name']
             },
             dataType: 'json'
         }).done(function (res) {

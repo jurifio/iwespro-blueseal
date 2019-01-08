@@ -46,7 +46,17 @@ window.buttonSetup = {
                 $.each(selectedRows, function (k, v) {
                     selectedElement.push(v.name);
                 });
+
+                //pb = langId
                 pb = window.location.href.split('?')[0].substring(window.location.href.lastIndexOf('/') + 1);
+                break;
+            case 'dettagli':
+                $.each(selectedRows, function (k, v) {
+                    selectedElement.push(v.id);
+                });
+
+                //pb = langId + batchId
+                pb = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
                 break;
         }
 

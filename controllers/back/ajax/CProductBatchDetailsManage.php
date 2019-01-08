@@ -10,6 +10,7 @@ use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CProductBatchDetails;
 use bamboo\domain\entities\CProductBatchHasProductBrand;
+use bamboo\domain\entities\CProductBatchHasProductDetail;
 use bamboo\domain\entities\CProductBatchHasProductName;
 use bamboo\domain\entities\CProductBrand;
 use bamboo\domain\entities\CProductSizeGroup;
@@ -175,6 +176,9 @@ class CProductBatchDetailsManage extends AAjaxController
             case 'lingua':
                 $this->updStepNameTrans($catId, $ids, $pb);
                 break;
+            case 'dettagli':
+                $this->updStepDetTrans($catId, $ids, $pb);
+                break;
         }
 
 
@@ -261,6 +265,31 @@ class CProductBatchDetailsManage extends AAjaxController
             || ($lang == 3 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC)) {
             /** @var CProductBatch $pba */
             $pba = $pbhpn->productBatch;
+            $pba->isFixed = 0;
+            $pba->update();
+        }
+
+        return true;
+    }
+
+    private function updStepDetTrans($catId, $ids, $pb)
+    {
+
+        $lang = explode('?', $pb)[0];
+        $productBatchId = explode('=', explode('?', $pb)[1])[1];
+
+        foreach ($ids as $det) {
+            /** @var CProductBatchHasProductDetail $pbhpd */
+            $pbhpd = \Monkey::app()->repoFactory->create('ProductBatchHasProductDetail')->findOneBy(['productBatchId' => $productBatchId, 'productDetailId' => $det, 'langId' => $lang]);
+
+            $pbhpd->workCategoryStepsId = $catId;
+            $pbhpd->update();
+        }
+
+        if ((($lang == 2 && $catId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_ENG))
+            || ($lang == 3 && $catId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC)) {
+            /** @var CProductBatch $pba */
+            $pba = $pbhpd->productBatch;
             $pba->isFixed = 0;
             $pba->update();
         }

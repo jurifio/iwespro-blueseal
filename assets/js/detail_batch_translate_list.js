@@ -16,7 +16,7 @@ $(document).on('blur','.dt-input',function() {
     var $formControl = $(this).parent();
     $formControl.addClass('loading');
     $.ajax({
-        url: $('table[data-datatable-name]').data('url')+"/DetailTranslateListAjaxController",
+        url: $('table[data-datatable-name]').data('url')+"/DetailBatchTranslateListAjaxController",
         type: "PUT",
         data: {
             lang: $(this).data('lang'),
@@ -38,70 +38,48 @@ $(document).on('blur','.dt-input',function() {
     });
 });
 
-$(document).on('bs.detail.associate.product.batch', function () {
 
-    let pIds = [];
+$(document).on('bs.end.work.product.detail.translation', function () {
+
+    let selectedProductDetails = [];
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 
+    //id-variantId in array
     $.each(selectedRows, function (k, v) {
-        pIds.push(v.DT_RowId.split('__')[1]);
+        selectedProductDetails.push(v.id);
     });
 
-    if(selectedRows.length < 1){
-        new Alert({
-            type: "warning",
-            message: "Devi selezionare almeno un dettaglio"
-        }).open();
-        return false;
-    }
-
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Lang',
-        },
-        dataType: 'json'
-    }).done(function (res) {
-        var select = $('#lang');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            options: res
-        });
+    let bsModal = new $.bsModal('Conferma Traduzione Nomi', {
+        body: '<p>Confermi la fine della procedura di traduzione per i dettagli selezionati?</p>'
     });
 
-    let bsModal = new $.bsModal('Assegna nomi prodotto/lingua al lotto', {
-        body: `
-                <p>Inserisci il numero del lotto</p>
-                <input type="number" min="1" id="productBatchId">
-                <p>Seleziona la lingua</p>
-                <select id="lang" name="lang"></select>
-                `
-    });
+    let url = window.location.href;
+    let lang = url.substr(url.lastIndexOf('/') + 1).charAt(0);
 
+    let urlObj = new URL(url);
+    let batchId = urlObj.searchParams.get("pbId");
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
 
         const data = {
-            productBatchId: $('#productBatchId').val(),
-            langId: $('#lang').val(),
-            pIds: pIds
+            details: selectedProductDetails,
+            lang: lang,
+            batchId: batchId
         };
-
         $.ajax({
             method: 'post',
-            url: '/blueseal/xhr/ProductBatchDetailsTranslateManage',
+            url: '/blueseal/xhr/ProductDetailTranslationBatchManage',
             data: data
         }).done(function (res) {
             bsModal.writeBody(res);
-        }).fail(function () {
+        }).fail(function (res) {
             bsModal.writeBody('Errore grave');
-        }).always(function () {
+        }).always(function (res) {
             bsModal.setOkEvent(function () {
                 bsModal.hide();
+                $.refreshDataTable();
+                //window.location.reload();
             });
             bsModal.showOkBtn();
         });

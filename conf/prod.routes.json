@@ -181,6 +181,22 @@
             ]
         },
         {
+            "pattern": "/blueseal/traduzioni/dettagli/:langId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailBatchTranslateListController"
+            },
+            "filters": {
+                "langId": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/lista-ean(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductEanListController"
