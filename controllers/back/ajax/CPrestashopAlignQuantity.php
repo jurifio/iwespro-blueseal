@@ -357,7 +357,19 @@ ORDER BY `p`.`id`";
                         if ($res_product_ean != null) {
                             $ean = $res_product_ean->ean;
                         } else {
-                            $ean = '';
+                           $res_product_ean_assign=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['ProductId' => null, 'productVariantId' => null, 'productSizeId' => null,'used'=>0]);
+                           $res_product_ean_assign->productId=$value_attribute->productId;
+                           $res_product_ean_assign->productVariantId=$value_attribute->productVariantId;
+                           $res_product_ean_assign->productSizeId=$value_attribute->productSizeId;
+                           $res_product_ean_assign->usedForParent=0;
+                           $res_product_ean_assign->used=1;
+                           $findBrand=\Monkey::app()->repoFactory->create('Product')->findOneBY(['id'=>$value_attribute->productId,'productVariantId'=>$value_attribute->productVariantId]);
+                           $brandAssociate=$findBrand->productBrandId;
+                           $res_product_ean_assign->brandAssociate=$brandAssociate;
+                           $res_product_ean_assign->shopId=$value_product['shopPrestashopId'];
+                           $res_product_ean_assign->update();
+                           $res_product_ean_retry=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['ProductId' => $value_attribute->productId, 'productVariantId' => $value_attribute->productVariantId, 'productSizeId' => $value_attribute->productSizeId]);
+                            $ean=$res_product_ean_retry->ean;
                         }
                     }
 

@@ -77,6 +77,13 @@ class CPrestashopProductImageGeneratorJob extends ACronJob
         }
 
         /*leggo il reference dei prodotti*/
+        $stmtdeletepsz6_image=$db_con->prepare("truncate from psz6_image");
+        $stmtdeletepsz6_image->execute();
+        $stmtdeletepsz6_image_lang=$db_con->prepare("truncate from psz6_image_lang");
+        $stmtdeletepsz6_image_lang->execute();
+        $stmtdeletepsz6_image_shop=$db_con->prepare("truncate from psz6_image_shop");
+        $stmtdeletepsz6_image_shop->execute();
+
         $stmtGetProduct = $db_con->prepare("SELECT id_product, reference FROM psz6_product");
 
         $stmtGetProduct->execute();
