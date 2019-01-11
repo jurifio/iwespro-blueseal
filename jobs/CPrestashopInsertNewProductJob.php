@@ -1184,7 +1184,13 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                    VALUES (
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $position . "',
-                                                           " . $cover . ")");
+                                                           " . $cover . ")
+                                                           ON DUPLICATE KEY
+                                                           UPDATE
+                                                           `id_product`= '" . $value_image_product['productId'] . "',
+                                                           `position`='" . $position . "',
+                                                           `cover`=" . $cover
+                                                           );
                 $stmtInsertImage->execute();
 
 
@@ -1197,14 +1203,29 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                     $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
                                                    VALUES ('" . $value_image_product['productId'] . "',
                                                            '" . $q . "',
-                                                           '" . $shopId . "'," . $cover . ")");
+                                                           '" . $shopId . "',
+                                                           " . $cover . ")
+                                                           ON DUPLICATE KEY
+                                                           UPDATE
+                                                           `id_product`='" . $value_image_product['productId'] . "',
+                                                           `id_image`= '" . $q . "',
+                                                           `id_shop`='" . $shopId . "',
+                                                           `cover`=".$cover
+                                                           );
                     $stmtInsertImageShop->execute();
                 } else {
                     $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
                                                    VALUES ('" . $value_image_product['productId'] . "',
                                                            '" . $q . "',
                                                            '" . $value_image_product['shopId'] . "',
-                                                            '" . $cover . "')");
+                                                            '" . $cover . "')
+                                                             ON DUPLICATE KEY
+                                                           UPDATE
+                                                           `id_product`='" . $value_image_product['productId'] . "',
+                                                           `id_image`= '" . $q . "',
+                                                           `id_shop`='" . $shopId . "',
+                                                           `cover`=".$cover
+                                                           );
                     $stmtInsertImageShop->execute();
                 }
 
