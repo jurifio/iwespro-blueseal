@@ -1109,10 +1109,23 @@ ORDER BY `p`.`id`";
                                                            '" . $value_product['prestashopId'] . "',
                                                            '0',
                                                            '" . $res_value_quantity['quantity'] . "',
+                                                           '" . $res_value_quantity['quantity'] . "',
                                                            '0',
                                                            '0',
-                                                           '0',
-                                                           '0')");
+                                                           '0')
+                                                           ON DUPLICATE KEY 
+                                                           UPDATE
+                                                                `id_product` =     '" . $p . "',
+                                                                `id_product_attribute`='0',
+                                                                `id_shop`='" . $value_product['prestashopId'] . "',
+                                                                `id_shop_group`='0',
+                                                                `quantity`= '" . $res_value_quantity['quantity'] . "',
+                                                                `physical_quantity`='" . $res_value_quantity['quantity'] . "',
+                                                                `reserved_quantity`='0',
+                                                                `depends_on_stock`='0',
+                                                                `out_of_stock`='0'
+                                                           
+                                                           ");
                 $stmtInsertProductStockAvailable->execute();
             } catch (PDOException $e) {
                 $res .= $e->getMessage();
